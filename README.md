@@ -3,6 +3,8 @@
 rtables
 =======
 
+[![Build Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
+
 [project webpage](https://roche.github.io/rtables/)
 
 Reporting tables with R
