@@ -11,7 +11,8 @@ Depends:
 Imports:
   shiny
 Suggests:
-  testthat
+  testthat,
+  knitr
 License: Apache License 2
 Encoding: UTF-8
 LazyData: true
