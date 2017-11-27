@@ -1,0 +1,19 @@
+Package: rtables
+Title: Reporting Tables
+Version: 0.0.1
+Authors@R: c(
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
+  )
+Description: Reporting tables are useful to create formated tables with cells that
+  display multiple values. An rtable object will provide access to all the raw data
+  that make up the table.
+Depends:
+Imports:
+  shiny
+Suggests:
+  testthat
+License: Apache License 2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

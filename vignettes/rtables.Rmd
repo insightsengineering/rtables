@@ -1,0 +1,146 @@
+---
+title: "Introduction to rtables"
+author: "Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# Overview
+
+`rtable` is useful to create tables where multiple values are stored in a cell 
+with a particular format. An `rtable` object has access to the individual raw 
+values and prints the data with formatting rules such as rounding and pasting.
+`rtables` also allow for merging cells within a row.
+
+The main functions currently associated with `rtable`s are
+
+* `rtable`: collection of `rrow` objects, column header and default format
+* `rrow`: collection of `rcell` objects and default format
+* `rcell`: collection of data objects and cell format
+* `as_html` and `toString`: output an `rtable` as ascii or html
+
+# Simple Example
+
+
+```{r, message=FALSE}
+library(rtables)
+```
+```{r}
+tbl <- rtable(
+  col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+  format = "xx (xx.xx%)",
+  rrow("A", c(104, .2), c(100, .4)),
+  rrow("B", c(23, .4), c(43, .5)),
+  rrow(),
+  rrow("this is a very long section header"),
+  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+  rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+)
+
+tbl  
+```
+
+
+Before we go into explaining the individual components used to create this table
+we continue with the html conversion of the `rtable` object:
+
+
+```{r}
+as_html(tbl, width = "80%")
+```
+
+Next, the `[` operator lets you access the cell content.
+
+```{r}
+tbl[1, 1]
+```
+
+and to format that cell run `format_rcell(tbl[1,1])`=`r format_rcell(tbl[1,1])`.
+
+Note that `tbl[6, 1]` and `tbl[6, 2]` display both the same `rcell` because of
+the colspan.
+
+# Viewer
+
+The `Viewer` functions takes an `rtable` object and displays it with
+[bootstrap](https://getbootstrap.com/) styling in RStudio's Viewer pane.
+
+```{r, eval = FALSE}
+Viewer(tbl)
+```
+
+It is also possible to show two tables side by side
+
+```{r, eval = FALSE}
+Viewer(tbl, tbl)
+```
+
+
+# Formats
+
+Cell formats are inherited from `rtable` to `rrow` to `rcell` if there is not a
+more specific format argument (i.e. format arguments of `rcell` are more
+specific than those of `rrow` which are more specific than those of `rtable`.
+
+Two types of formats are supported:
+
+* format label, e.g. `xx.xx (xx.xx%)`
+
+* functions that take the element and output type as an argument and return a 
+formatted string or html object **note, we will eventually deprecate this**
+
+Formats labels are currently limited to the following predefined set:
+
+```{r}
+get_rcell_formats()
+```
+
+Here is an example of using functions for formatting cells:
+
+```{r}
+my_format <- function(x, output) {
+   paste(x, collapse = "/")
+}
+tbl3 <- rtable(
+  c("A", "B"),
+  format = my_format,
+  rrow("row1", c(1,2,3,4), letters[1:10])
+)
+tbl3
+```
+
+
+
+# Comparing two rtables
+
+Because we have the original data for each cell accessible for the `rtable` data
+structure it is possible to programmatically compare two tables:
+
+```{r}
+t1 <- rtable(col.name = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
+t2 <- rtable(col.name = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
+
+compare_rtables(object = t1, expected = t2) 
+```
+
+
+
+# Converting table objects
+
+You can also convert table objects to rtables:
+
+```{r}
+as.rtable(table(iris$Species))
+```
+
+or 
+
+```{r}
+print(as.rtable(with(mtcars, table(cyl, hp))), gap = 1)
+```

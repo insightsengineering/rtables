@@ -1,0 +1,8 @@
+home:
+  strip_header: true
+
+navbar:
+  type: default
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/roche/rtables
