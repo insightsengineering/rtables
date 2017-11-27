@@ -3,7 +3,7 @@
 rtables
 =======
 
-[project webpage](https://pages.github.com/rtables)
+[project webpage](https://roche.github.io/rtables/)
 
 Reporting tables with R
 -----------------------
