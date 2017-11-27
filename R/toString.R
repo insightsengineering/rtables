@@ -1,5 +1,5 @@
 #' @export
-toString.rtable <- function(x, gap = 8, indent.unit = 2) {
+toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
   
   nchar_rownames <- max(vapply(x, function(row) {
     rn <- attr(row, "row.name")

@@ -4,6 +4,7 @@
 #' The table will be displayed using the bootstrap styling for tables.
 #' 
 #' @inheritParams dim.rtable
+#' @param y optional second rtable object
 #' @param row.names.bold row.names.bold boolean, make rownames bold
 #' 
 #' 

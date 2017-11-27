@@ -16,7 +16,7 @@
 #' 
 #' @details 
 #' Rtable objects can be currently exported to text with
-#' \code{\link{toString.rtable}} and to html with \code{\link{as_html}}. In
+#' \code{\link{toString}} and to html with \code{\link{as_html}}. In
 #' future we would plan to add the \code{as_latex} and \code{as_gridGrob}
 #' outputting function.
 #' 

@@ -10,6 +10,8 @@ Viewer(x, y = NULL, row.names.bold = FALSE)
 \arguments{
 \item{x}{an \code{\link{rtable}} object}
 
+\item{y}{optional second rtable object}
+
 \item{row.names.bold}{row.names.bold boolean, make rownames bold}
 }
 \description{

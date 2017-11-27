@@ -9,11 +9,14 @@ Description: Reporting tables are useful to create formated tables with cells th
   that make up the table.
 Depends:
 Imports:
-  shiny
+  stats,
+  methods,
+  shiny,
+  htmltools
 Suggests:
   testthat,
   knitr
-License: Apache License 2
+License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
