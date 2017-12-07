@@ -8,7 +8,7 @@ formats_2d <- c(
   "xx / xx", "xx. / xx.", "xx.x / xx.x", "xx.xx / xx.xx",
   "xx (xx%)", "xx (xx.%)", "xx (xx.x%)", "xx (xx.xx%)", 
   "xx. (xx.%)", "xx.x (xx.x%)", "xx.xx (xx.xx%)",
-  "(xx, xx)", "(xx., xx.)", "(xx.x, xx.x)",
+  "(xx, xx)", "(xx., xx.)", "(xx.x, xx.x)", "(xx.xx, xx.xx)",
   "(xx.xxx, xx.xxx)", "(xx.xxxx, xx.xxxx)",
   "xx - xx", "xx.x - xx.x", "xx.xx - xx.xx",
   "xx.x (xx.x)", "xx.xx (xx.xx)",
