@@ -65,3 +65,8 @@ tbl
 #> estimate                                             55.23            
 #>   95% CI                                          (44.8, 67.4)
 ```
+
+Presentations
+-------------
+
+-   [baselR November 2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing)
