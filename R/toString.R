@@ -20,13 +20,8 @@ toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
     })
   }))))
   
-  
   txt_header <- row_to_str(header_row, nchar_rownames, nchar_col, gap, indent.unit)
-  
-  txt_cells <- lapply(x, function(row) {
-    row_to_str(row, nchar_rownames, nchar_col, gap, indent.unit)
-  })
-  
+  txt_cells <- lapply(x, row_to_str, nchar_rownames, nchar_col, gap, indent.unit)
   
   paste(
     c(
@@ -49,7 +44,6 @@ print.rtable <- function(x, ...) {
 }
 
 row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
-  
   row.name <-  if (is.null(attr(row, "row.name"))) {
     ""
   } else {
@@ -64,7 +58,7 @@ row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
       unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE))
     })
     
-    nlines <- max(vapply(cells,length, numeric(1)))
+    nlines <- max(vapply(cells, length, numeric(1)), 1)
     
     cells_same_length <- lapply(cells, function(x) {
       if (length(x) == nlines) {
@@ -75,6 +69,7 @@ row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
     })
     
     colspans <- vapply(row, function(cell) attr(cell, "colspan"), numeric(1))
+    
     lines <- as.matrix(Reduce(cbind, cells_same_length))
     
     row_char <- paste0(

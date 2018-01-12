@@ -16,8 +16,8 @@
 #' 
 #' @examples 
 #' 
-#' t1 <- rtable(col.name = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
-#' t2 <- rtable(col.name = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
+#' t1 <- rtable(rrow("row 1", 1, 2), headers = c("A", "B"), format = "xx")
+#' t2 <- rtable(rrow("row 1", 1, 2, 3), headers = c("A", "B", "C"), format = "xx")
 #'
 #' compare_rtables(object = t1, expected = t2) 
 #' 
@@ -26,12 +26,12 @@
 #' }
 #' 
 #' expected <- rtable(
-#'    col.names = c("ARM A\nN=100", "ARM B\nN=200"),
-#'    format = "xx",
 #'    rrow("row 1", 10, 15),
 #'    rrow(),
 #'    rrow("section title"),
-#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)")),
+#'    headers = c("ARM A\nN=100", "ARM B\nN=200"),
+#'    format = "xx"
 #' )
 #' 
 #' \dontrun{
@@ -39,11 +39,11 @@
 #' }
 #' 
 #' object <- rtable(
-#'    col.names = c("ARM A\nN=100", "ARM B\nN=200"),
-#'    format = "xx",
 #'    rrow("row 1", 10, 15),
 #'    rrow("section title"),
-#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)")),
+#'    headers = c("ARM A\nN=100", "ARM B\nN=200"),
+#'    format = "xx"
 #' )
 #' 
 #' compare_rtables(object, expected)
@@ -51,33 +51,33 @@
 #' compare_rtables(object, expected, comp.attr = FALSE)
 #' 
 #' object <- rtable(
-#'    col.names = c("ARM A\nN=100", "ARM B\nN=200"),
-#'    format = "xx",
 #'    rrow("row 1", 10, 15),
 #'    rrow(),
-#'    rrow("section title")
+#'    rrow("section title"),
+#'    headers = c("ARM A\nN=100", "ARM B\nN=200"),
+#'    format = "xx"
 #' )
 #' 
 #' compare_rtables(object, expected)
 #' 
 #' object <- rtable(
-#'    col.names = c("ARM A\nN=100", "ARM B\nN=200"),
-#'    format = "xx",
 #'    rrow("row 1", 14, 15.03),
 #'    rrow(),
 #'    rrow("section title"),
-#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)")),
+#'    headers = c("ARM A\nN=100", "ARM B\nN=200"),
+#'    format = "xx"
 #' )
 #' 
 #' compare_rtables(object, expected)
 #' 
 #' object <- rtable(
-#'    col.names = c("ARM A\nN=100", "ARM B\nN=200"),
-#'    format = "xx",
 #'    rrow("row 1", 10, 15),
 #'    rrow(),
 #'    rrow("section title"),
-#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)"))
+#'    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)")),
+#'    headers = c("ARM A\nN=100", "ARM B\nN=200"),
+#'    format = "xx"
 #' )
 #' 
 #' compare_rtables(object, expected)

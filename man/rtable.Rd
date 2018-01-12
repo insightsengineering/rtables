@@ -4,16 +4,16 @@
 \alias{rtable}
 \title{Create a Reporting Table}
 \usage{
-rtable(col.names, format = NULL, ...)
+rtable(...)
 }
 \arguments{
-\item{col.names}{vector with column names}
+\item{...}{each element is an \code{\link{rrow}} object}
+
+\item{headers}{vector with column names}
 
 \item{format}{a valid format string or a format function for
 \code{\link{rcell}}s. To get a list of all valid format strings use 
 \code{\link{get_rcell_formats}}.}
-
-\item{...}{each element is an \code{\link{rrow}} object}
 }
 \value{
 \code{rtable} object
@@ -34,14 +34,14 @@ Note that the formats propagate to the \code{\link{rrow}} and
 \examples{
 
 tbl <- rtable(
-  col.names = c("Treatement\\nN=100", "Comparison\\nN=300"),
-  format = "xx (xx.xx\%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
   rrow(),
   rrow("this is a very long section header"),
   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-  rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+  rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)),
+  headers = c("Treatement\\nN=100", "Comparison\\nN=300"),
+  format = "xx (xx.xx\%)"
 )
 
 tbl
@@ -72,10 +72,10 @@ Viewer(tbl)
 # colspans
 
 tbl2 <- rtable(
-  c("A", "B", "C", "D", "E"),
-  format = "xx",
   rrow("r1", 1, 2, 3, 4, 5),
-  rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
+  rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2)),
+  headers = c("A", "B", "C", "D", "E"),
+  format = "xx"
 )
 
 tbl2
@@ -97,12 +97,12 @@ my_format <- function(x, output) {
    paste(x, collapse = "/")
 }
 tbl3 <- rtable(
-  c("A", "B"),
-  format = my_format,
-  rrow("row1", c(1,2,3,4), letters[1:10])
+  rrow("row1", c(1,2,3,4), letters[1:10]),
+  headers = c("A", "B"),
+  format = my_format
 )
 tbl3
- 
+
 }
 \seealso{
 \code{\link{rrow}}, \code{\link{rcell}}
