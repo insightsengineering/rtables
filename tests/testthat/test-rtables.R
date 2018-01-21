@@ -13,7 +13,7 @@ test_that("rtable creation works", {
   
   
   tbl <- rtable(
-    col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+    col.names = c("Treatment\nN=100", "Comparison\nN=300"),
     format = "xx (xx.xx%)",
     rrow("A", c(104, .2), c(100, .4)),
     rrow("B", c(23, .4), c(43, .5)),
@@ -23,7 +23,7 @@ test_that("rtable creation works", {
     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
   )
   
-  expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
+  expect_identical(names(tbl), c("Treatment\nN=100", "Comparison\nN=300"))
   expect_identical(dim(tbl) , c(6L, 2L))
   expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header", "estimate", "95% CI"))
   

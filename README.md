@@ -45,7 +45,7 @@ Usage
 ``` r
 library(rtables)
 tbl <- rtable(
-  col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+  col.names = c("Treatment\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
@@ -55,7 +55,7 @@ tbl <- rtable(
   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
 tbl
-#>                                           Treatement        Comparison
+#>                                           Treatment         Comparison
 #>                                             N=100             N=300   
 #> ----------------------------------------------------------------------
 #> A                                         104 (20%)         100 (40%) 
