@@ -34,7 +34,7 @@
 #' @examples
 #' 
 #' tbl <- rtable(
-#'   col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+#'   header = c("Treatement\nN=100", "Comparison\nN=300"),
 #'   format = "xx (xx.xx%)",
 #'   rrow("A", c(104, .2), c(100, .4)),
 #'   rrow("B", c(23, .4), c(43, .5)),
@@ -91,6 +91,24 @@
 #' tbl2[2,4]
 #' tbl2[2,5]
 #' 
+#' # Multi-header table
+#' 
+#' iris
+#' 
+#' tbl <- rtable(
+#'   header = rheader(
+#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     rrow(NULL, "mean", "median", "mean", "median")
+#'   ),
+#'   rrow(
+#'     row.name = "All Species",
+#'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'     mean(iris$Petal.Length), median(iris$Petal.Length),
+#'     format = "xx.xx"
+#'   )
+#' )
+#' 
+#' tbl
 #' 
 #' # custom format
 #' my_format <- function(x, output) {
@@ -103,18 +121,28 @@
 #' )
 #' tbl3
 #'  
-rtable <- function(col.names, format = NULL, ...) {
+rtable <- function(header, ..., format = "xx") {
   
-  ncol <- length(col.names)
-  if (ncol <= 1) stop("table needs at least one 1 columns")
+  if (!is(header, 'rheader')) {
+    header <- rheader(header)
+  }
+  
+  ncol_header <- vapply(header, ncells, numeric(1))
+  
   
   ## check if n-cols correct
   rows <- list(...)
+  if (!all(vapply(rows, is, logical(1), "rrow"))) stop("not all arguments in ... are of class rrow")  
   
-  if (!all(vapply(rows, is, logical(1), "rrow"))) stop("not all arguments in ... are of class rrow")
   nrow <- length(rows)
   
-  check_consistent_ncols(rows, ncol)
+  ncol_body <- vapply(rows, ncells, numeric(1))
+  ncol <- max(ncol_header, ncol_body)
+  
+  if (!all(ncol_header %in% c(0, ncol))) stop(paste("not all header rows have", ncol, "columns"))
+  if (!all(ncol_body %in% c(0, ncol))) stop(paste("not all body rows have", ncol, "columns"))
+  
+  if (ncol < 1) stop("table needs at least one 1 columns")
   
   rows_formated <- lapply(rows, function(row) {
     
@@ -138,7 +166,7 @@ rtable <- function(col.names, format = NULL, ...) {
   
   structure(
     rows_formated,
-    col.names = col.names,
+    header = header,
     ncol = ncol,
     nrow = nrow,
     class = "rtable"
@@ -163,7 +191,7 @@ rtable <- function(col.names, format = NULL, ...) {
 #' 
 #' @examples 
 #' 
-#' rrow("ABC", c(1,2), c(3,2))
+#' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' 
 rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
@@ -190,11 +218,44 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   )
 }
 
+
+#' Create an rrow with cell-data stored within lists
+#' 
+#' The apply function family returns lists whose elements can be used as cell
+#' data with the \code{lrow} function.
+#' 
+#' @param ...
+#' 
+#' 
+#' @export
+#' 
+#' 
+#' @examples 
+#' 
+#' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
+#' 
+#' rrow(row.name = "row 1", x)
+#' rrow("ABC", 2, 3)
+#' 
+#' rrowl("row 1", c(1, 2), c(3,4))
+#' rrow("row 2", c(1, 2), c(3,4))
+#' 
+rrowl <- function(row.name = NULL, ...) {
+  
+  args <- list(...)
+  args_list <- c(list(row.name = row.name), unlist(lapply(args, as.list), recursive = FALSE))
+  do.call(rrow, args_list)
+  
+}
+
 # Number of non-empty cells in an \code{\link{rrow}} object
 # 
 # row <- rrow("ABC", rcell(3.23, format = "xx.x", colspan = 2))
 # 
 ncells <- function(row) {
+  
+  if (!is(row, "rrow")) stop("element is not of class rrow")
+  
   if (length(row) == 0) {
     0 
   } else {
@@ -240,15 +301,39 @@ rcell <- function(x, format = NULL, colspan=1) {
   )
 }
 
-check_consistent_ncols <- function(rows, ncols) {
-  lapply(rows, function(row) {
-    # zero length is possible (label only)
-    if (length(row) != 0 && ncells(row) != ncols) {
-      stop(paste("row", attr(row, "row.name"), "has", sum(ncells(row)), "cells instead of expected", ncols))
-    }
-  })
-  invisible(TRUE)
+
+#' Create a rheader object
+#' 
+#' @param ... elements that are either to be mapped to rrows
+#' 
+#' @export
+#' 
+#' @examples 
+#' h1 <- rheader(c("A", "B", "C"))
+#' h2 <- rheader(
+#'   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+#'   rrow(NULL, "A", "B", "A", "B")
+#' )
+rheader <- function(..., format = "xx") {
+  
+  args <- list(...)
+  
+  rows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
+    list(rrowl(row.name = NULL, args[[1]], format = format))
+  } else if (all(vapply(args, is, logical(1), "rrow"))) {
+    args
+  } else {
+    stop("either one one vector or only rrow objects can be passed to ...")
+  }
+  
+  
+  structure(
+    setNames(rows, NULL),
+    class = "rheader"
+  )
 }
+
+
 
 #' Dimension of rtable object
 #' 

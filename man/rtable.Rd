@@ -4,16 +4,16 @@
 \alias{rtable}
 \title{Create a Reporting Table}
 \usage{
-rtable(col.names, format = NULL, ...)
+rtable(header, ..., format = "xx")
 }
 \arguments{
-\item{col.names}{vector with column names}
+\item{...}{each element is an \code{\link{rrow}} object}
 
 \item{format}{a valid format string or a format function for
 \code{\link{rcell}}s. To get a list of all valid format strings use 
 \code{\link{get_rcell_formats}}.}
 
-\item{...}{each element is an \code{\link{rrow}} object}
+\item{col.names}{vector with column names}
 }
 \value{
 \code{rtable} object
@@ -34,7 +34,7 @@ Note that the formats propagate to the \code{\link{rrow}} and
 \examples{
 
 tbl <- rtable(
-  col.names = c("Treatement\\nN=100", "Comparison\\nN=300"),
+  header = c("Treatement\\nN=100", "Comparison\\nN=300"),
   format = "xx (xx.xx\%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
@@ -91,6 +91,24 @@ tbl2[2,3]
 tbl2[2,4]
 tbl2[2,5]
 
+# Multi-header table
+
+iris
+
+tbl <- rtable(
+  header = rheader(
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(NULL, "mean", "median", "mean", "median")
+  ),
+  rrow(
+    row.name = "All Species",
+    mean(iris$Sepal.Length), median(iris$Sepal.Length),
+    mean(iris$Petal.Length), median(iris$Petal.Length),
+    format = "xx.xx"
+  )
+)
+
+tbl
 
 # custom format
 my_format <- function(x, output) {

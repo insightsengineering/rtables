@@ -4,7 +4,7 @@
 \alias{rcell}
 \title{Reporting Table Cell}
 \usage{
-rcell(x, format = NULL, colspan = 1)
+rcell(x, format = "xx", colspan = 1)
 }
 \arguments{
 \item{x}{data object for the \code{rcell} object. Note that if the data

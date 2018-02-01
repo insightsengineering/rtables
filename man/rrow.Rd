@@ -4,7 +4,7 @@
 \alias{rrow}
 \title{Reporting Table Row}
 \usage{
-rrow(row.name, ..., format = NULL, indent = 0)
+rrow(row.name, ..., format = "xx", indent = 0)
 }
 \arguments{
 \item{row.name}{string with row name}
