@@ -106,7 +106,7 @@
 rtable <- function(col.names, format = NULL, ...) {
   
   ncol <- length(col.names)
-  if (ncol <= 1) stop("table needs at least one 1 columns")
+  if (ncol < 1) stop("table needs at least one 1 columns")
   
   ## check if n-cols correct
   rows <- list(...)
