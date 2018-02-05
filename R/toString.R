@@ -50,13 +50,15 @@ max_nchar_row.names <- function(rows, indent.unit) {
   if (is(rows, "rrow")) rows <- list(rows)
   
   max(vapply(rows, function(row) {
-    rn <- attr(row, "row.name")
-    if (is.null(rn)) {
-      0
-    } else {
-      nchar(rn) +  attr(row, "indent") * indent.unit
-    }
+   rn <- attr(row, "row.name")
+   if (is.null(rn)) {
+     0
+   } else {
+     nchar(rn) +  attr(row, "indent") * indent.unit
+   }
   }, numeric(1)))
+  
+  
 }
 
 

@@ -33,7 +33,7 @@ library(rtables)
 ```
 ```{r}
 tbl <- rtable(
-  col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
@@ -98,7 +98,7 @@ formatted string or html object **note, we will eventually deprecate this**
 Formats labels are currently limited to the following predefined set:
 
 ```{r}
-get_rcell_formats()
+list_rcell_format_labels()
 ```
 
 Here is an example of using functions for formatting cells:

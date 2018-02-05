@@ -11,8 +11,9 @@ format_rcell(x, format, output = c("html", "ascii"))
 \item{x}{an object of class \code{\link{rcell}}}
 
 \item{format}{a valid format string or a format function for
-\code{\link{rcell}}s. To get a list of all valid format strings use 
-\code{\link{get_rcell_formats}}.}
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
 
 \item{output}{output type}
 }

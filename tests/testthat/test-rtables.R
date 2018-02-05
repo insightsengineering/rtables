@@ -1,7 +1,25 @@
 
 context("rtables")
 
-test_that("rtable creation works", {
+test_that("rtable design decisions", {
+  
+  
+  # An rtable gets created with header amd body specification
+  
+  t1 <- rtable(
+    header = c("A", "B"),
+    rrow("row 1", 1, 2),
+    rrow("row 2", 3, 4),
+    rrow("row 3", 5, 6)
+  )
+  
+  t1
+  t1[c(),]
+  t1[1,]
+  t1[1:2,]
+  t1[c(1,3),]
+
+  
   t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
   
 #  expect_identical(names(t1), c("A", "B"))

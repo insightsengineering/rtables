@@ -4,10 +4,11 @@
 \alias{rrowl}
 \title{Create an rrow with cell-data stored within lists}
 \usage{
-rrowl(row.name = NULL, ...)
+rrowl(...)
 }
 \arguments{
-\item{...}{}
+\item{...}{lists that get concatenated and then flattened by one level of
+depth. If one elemenet is not a list then it gets placed into a list.}
 }
 \description{
 The apply function family returns lists whose elements can be used as cell
@@ -20,7 +21,7 @@ x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 rrow(row.name = "row 1", x)
 rrow("ABC", 2, 3)
 
-rrowl("row 1", c(1, 2), c(3,4))
-rrow("row 2", c(1, 2), c(3,4))
+rrowl(row.name = "row 1", c(1, 2), c(3,4))
+rrow(row.name = "row 2", c(1, 2), c(3,4))
 
 }

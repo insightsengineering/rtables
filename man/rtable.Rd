@@ -7,16 +7,19 @@
 rtable(header, ..., format = "xx")
 }
 \arguments{
+\item{header}{either a vector with column names or an object returned by
+\code{\link{rheader}} if special formating and multi-line headers are
+needed}
+
 \item{...}{each element is an \code{\link{rrow}} object}
 
 \item{format}{a valid format string or a format function for
-\code{\link{rcell}}s. To get a list of all valid format strings use 
-\code{\link{get_rcell_formats}}.}
-
-\item{col.names}{vector with column names}
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
 }
 \value{
-\code{rtable} object
+an \code{rtable} object
 }
 \description{
 Reporting tables allow multiple values per cell, cell formatting and merging
