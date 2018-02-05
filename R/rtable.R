@@ -36,6 +36,26 @@
 #' 
 #' @examples
 #' 
+#' # Table with multirow header
+#' mtbl <- rtable(
+#'   header = rheader(
+#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     rrow(NULL, "mean", "median", "mean", "median")
+#'   ),
+#'   rrow(
+#'     row.name = "All Species",
+#'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'     mean(iris$Petal.Length), median(iris$Petal.Length),
+#'     format = "xx.xx"
+#'   )
+#' )
+#' 
+#' mtbl
+#' 
+#' names(tbl) # always first row of header
+#' 
+#' # Single row header
+#' 
 #' tbl <- rtable(
 #'   header = c("Treatement\nN=100", "Comparison\nN=300"),
 #'   format = "xx (xx.xx%)",
@@ -53,26 +73,29 @@
 #' names(tbl)
 #' 
 #' 
+#' # Subsetting
 #' tbl[1,2]
-#' 
 #' tbl[3,2]
 #' tbl[5,1]
 #' tbl[5,2]
+#' tbl[1:3]
 #' 
 #' 
+#' # Data Structure methods
 #' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
+#' names(tbl)
 #' 
-#' tbl[[1]][[1]]
 #' 
+#' # Output: html
 #' as_html(tbl)
 #' 
 #' \dontrun{
 #' Viewer(tbl)
 #' }
 #' 
-#' # colspans
+#' # Colspans
 #' 
 #' tbl2 <- rtable(
 #'   c("A", "B", "C", "D", "E"),
@@ -83,37 +106,8 @@
 #' 
 #' tbl2
 #' 
-#' \dontrun{
-#' Viewer(tbl2)
-#' }
 #' 
-#' tbl2[1,3]
-#' tbl2[2,1]
-#' tbl2[2,2]
-#' tbl2[2,3]
-#' tbl2[2,4]
-#' tbl2[2,5]
-#' 
-#' # Multi-header table
-#' 
-#' iris
-#' 
-#' tbl <- rtable(
-#'   header = rheader(
-#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
-#'     rrow(NULL, "mean", "median", "mean", "median")
-#'   ),
-#'   rrow(
-#'     row.name = "All Species",
-#'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
-#'     mean(iris$Petal.Length), median(iris$Petal.Length),
-#'     format = "xx.xx"
-#'   )
-#' )
-#' 
-#' tbl
-#' 
-#' # custom format
+#' # Custom format with functions (might be deprecated soon)
 #' my_format <- function(x, output) {
 #'    paste(x, collapse = "/")
 #' }
@@ -184,11 +178,9 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
   rcells_formatted <- lapply(cells, function(cell) {
     if (is(cell, "rcell")) {
-      
       if (is.null(attr(cell, "format"))) {
         attr(cell, "format") <- format
       }
-      
       cell
     } else {
       rcell(cell, format = format)
@@ -288,19 +280,9 @@ rheader <- function(..., format = "xx") {
 #' rrowl(row.name = "row 1", c(1, 2), c(3,4))
 #' rrow(row.name = "row 2", c(1, 2), c(3,4))
 #' 
-rrowl <- function(...) {
-  args <- list(...)
-  
-  # row name is a required first argument and is set to NULL by default by rrowl
-  row.name <- if (is.null(args[['row.name']])) {
-    NULL
-  } else {
-    rn <- args[['row.name']]
-    args[['row.name']] <- NULL
-    rn
-  }
-  
-  args_list <- c(list(row.name = row.name), unlist(lapply(args, as.list), recursive = FALSE))
+rrowl <- function(row.name, ...) {
+  dots <- list(...)
+  args_list <- c(list(row.name = row.name), unlist(lapply(dots, as.list), recursive = FALSE))
   do.call(rrow, args_list)
 }
 
@@ -310,8 +292,8 @@ rrowl <- function(...) {
 #' rrows that are returned by the apply function family.
 #' 
 rtablel <- function(header, ...) {
-  args <- list(...)
-  args_list <- c(list(header = header), unlist(lapply(args, as.list), recursive = FALSE))
+  dots <- list(...)
+  args_list <- c(list(header = header), unlist(lapply(dots, as.list), recursive = FALSE))
   do.call(rtable, args_list)
 }
 
@@ -387,13 +369,12 @@ row.names.rtable <- function(x) {
 #' Retrieve the column names of an \code{\link{rtable}} object
 #' 
 #' @inheritParams dim.rtable
-#' @param index index of table header row to return
 #' 
 #' @return a vector with the column names 
 #' 
 #' @export
-names.rtable <- function(x, index = 1) {
-  row_i <- attr(x, "header")[[index]]
+names.rtable <- function(x) {
+  row_i <- attr(x, "header")[[1]]
   
   unlist(lapply(row_i, function(cell) {
     colspan <- attr(cell, "colspan")

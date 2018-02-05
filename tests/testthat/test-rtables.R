@@ -5,7 +5,6 @@ test_that("rtable design decisions", {
   
   
   # An rtable gets created with header amd body specification
-  
   t1 <- rtable(
     header = c("A", "B"),
     rrow("row 1", 1, 2),
@@ -13,23 +12,21 @@ test_that("rtable design decisions", {
     rrow("row 3", 5, 6)
   )
   
-  t1
-  t1[c(),]
-  t1[1,]
-  t1[1:2,]
-  t1[c(1,3),]
+  # t1
+  # t1[c(),]
+  # t1[1,]
+  # t1[1:2,]
+  # t1[c(1,3),]
 
   
   t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
   
-#  expect_identical(names(t1), c("A", "B"))
+  expect_identical(names(t1), c("A", "B"))
   expect_equal(dim(t1), c(1, 2))
   expect_identical(row.names(t1), "row 1")
   expect_identical(as.vector(t1[1,1]), 1)
   expect_identical(as.vector(t1[1,2]), 2)
 
-  
-  
   tbl <- rtable(
     header = c("Treatement\nN=100", "Comparison\nN=300"),
     format = "xx (xx.xx%)",
@@ -41,7 +38,7 @@ test_that("rtable design decisions", {
     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
   )
   
-  #expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
+  expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
   expect_equal(dim(tbl) , c(6, 2))
   expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header", "estimate", "95% CI"))
   
@@ -87,5 +84,6 @@ test_that("multi-header tables work", {
   
   expect_equal(nrow(t1), 2)
   expect_equal(ncol(t1), 4)
+  expect_equal(names(t1), c("A", "A", "B", "B"))
   
 })
