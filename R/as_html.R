@@ -93,7 +93,7 @@ as_html.rrow <- function(x, ncol, cell_tag = tags$td, ...) {
           cell_tag(cell_content, colspan = as.character(colspan), class = "text-center")
         }
       }),
-      replicate(ncol - ncells(x), cell_tag(), simplify = FALSE)
+      replicate(ncol - ncell(x), cell_tag(), simplify = FALSE)
     )
   }
   

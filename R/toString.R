@@ -6,7 +6,7 @@ toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
   
   header_body <- c(header, body)
   
-  nchar_rownames <- max_nchar_row.names(header_body, indent.unit = indent.unit)
+  nchar_rownames <- max_nchar_rownames(header_body, indent.unit = indent.unit)
 
   nchar_col <- max_nchar_cols(header_body)
   
@@ -45,19 +45,22 @@ max_nchar_cols <- function(rows) {
 }
 
 
-max_nchar_row.names <- function(rows, indent.unit) {
+max_nchar_rownames <- function(rows, indent.unit) {
   
   if (is(rows, "rrow")) rows <- list(rows)
   
-  max(vapply(rows, function(row) {
-   rn <- attr(row, "row.name")
-   if (is.null(rn)) {
-     0
-   } else {
-     nchar(rn) +  attr(row, "indent") * indent.unit
-   }
-  }, numeric(1)))
+  if (!all(vapply(rows, is, logical(1), "rrow"))) stop("not all elements are of class rrow")
   
+  nchar_rownames <- vapply(rows, function(row) {
+    rn <- attr(row, "row.name")
+    if (is.null(rn)) {
+      0
+    } else {
+      nchar(rn) +  attr(row, "indent") * indent.unit
+    }
+  }, numeric(1))
+  
+  max(0, nchar_rownames)
   
 }
 
@@ -77,7 +80,7 @@ print.rcell <- function(x, output = "ascii", ...) {
 
 #' @export
 print.rrow <- function(x, gap = 8, indent.unit = 2, ...) {
-  txt <- row_to_str(x, max_nchar_row.names(x, indent.unit = indent.unit), max_nchar_cols(x), gap = gap, indent.unit = indent.unit)
+  txt <- row_to_str(x, max_nchar_rownames(x, indent.unit = indent.unit), max_nchar_cols(x), gap = gap, indent.unit = indent.unit)
   cat(txt)
   cat("\n")
 }

@@ -139,11 +139,15 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
   
   if (output == "ascii") {
     txt
-  } else {
+  } else if (output == "html") {
+    ## convert to tagList
+    ## convert \n to <br/>
     els <- unlist(strsplit(txt, "\n", fixed = TRUE))
     Map(function(el, is.last) {
       tagList(el, if (!is.last) tags$br() else NULL)
     }, els, c(rep(FALSE, length(els) -1), TRUE))
+  } else {
+    txt
   }
   
 }
