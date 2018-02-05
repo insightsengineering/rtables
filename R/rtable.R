@@ -133,13 +133,11 @@ rtable <- function(header, ..., format = "xx") {
   body <- list(...)
   if (!are(body, "rrow")) stop("not all arguments in ... are of class rrow")  
   
-  ## Header and Body 
-  
   ncol_header <- vapply(header, ncell, numeric(1))
   ncol_body <- vapply(body, ncell, numeric(1))
 
   nrow <- length(body)  
-  ncol <- max(ncol_header, ncol_body)
+  ncol <- max(c(ncol_header, ncol_body, 0))
   
   if (ncol < 1) stop("table needs at least one 1 columns")
   # because empty rows have currently 0 cells
@@ -186,9 +184,11 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
   rcells_formatted <- lapply(cells, function(cell) {
     if (is(cell, "rcell")) {
+      
       if (is.null(attr(cell, "format"))) {
         attr(cell, "format") <- format
       }
+      
       cell
     } else {
       rcell(cell, format = format)
@@ -387,15 +387,19 @@ row.names.rtable <- function(x) {
 #' Retrieve the column names of an \code{\link{rtable}} object
 #' 
 #' @inheritParams dim.rtable
+#' @param index index of table header row to return
 #' 
 #' @return a vector with the column names 
 #' 
 #' @export
-names.rtable <- function(x) {
+names.rtable <- function(x, index = 1) {
+  row_i <- attr(x, "header")[[index]]
   
-#  warning("names is not implemented yet")
-  
-  character(0)
+  unlist(lapply(row_i, function(cell) {
+    colspan <- attr(cell, "colspan")
+    rep(cell, colspan)
+  }))
+
 }
 
 
