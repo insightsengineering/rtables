@@ -4,9 +4,11 @@
 \alias{rrowl}
 \title{Create an rrow with cell-data stored within lists}
 \usage{
-rrowl(...)
+rrowl(row.name, ...)
 }
 \arguments{
+\item{row.name}{string with row name}
+
 \item{...}{lists that get concatenated and then flattened by one level of
 depth. If one elemenet is not a list then it gets placed into a list.}
 }

@@ -17,6 +17,8 @@ single `rrow`  and by setting `row.name` to `NULL`.
 
 * accessor `[i,]` works now to subset a table.
 
+* `rbind` method for rtables
+
 ## rtable 0.0.1
 
 * Initial public release

@@ -36,6 +36,26 @@ Note that the formats propagate to the \code{\link{rrow}} and
 }
 \examples{
 
+# Table with multirow header
+mtbl <- rtable(
+  header = rheader(
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(NULL, "mean", "median", "mean", "median")
+  ),
+  rrow(
+    row.name = "All Species",
+    mean(iris$Sepal.Length), median(iris$Sepal.Length),
+    mean(iris$Petal.Length), median(iris$Petal.Length),
+    format = "xx.xx"
+  )
+)
+
+mtbl
+
+names(tbl) # always first row of header
+
+# Single row header
+
 tbl <- rtable(
   header = c("Treatement\\nN=100", "Comparison\\nN=300"),
   format = "xx (xx.xx\%)",
@@ -53,26 +73,29 @@ row.names(tbl)
 names(tbl)
 
 
+# Subsetting
 tbl[1,2]
-
 tbl[3,2]
 tbl[5,1]
 tbl[5,2]
+tbl[1:3]
 
 
+# Data Structure methods
 dim(tbl)
 nrow(tbl)
 ncol(tbl)
+names(tbl)
 
-tbl[[1]][[1]]
 
+# Output: html
 as_html(tbl)
 
 \dontrun{
 Viewer(tbl)
 }
 
-# colspans
+# Colspans
 
 tbl2 <- rtable(
   c("A", "B", "C", "D", "E"),
@@ -83,37 +106,8 @@ tbl2 <- rtable(
 
 tbl2
 
-\dontrun{
-Viewer(tbl2)
-}
 
-tbl2[1,3]
-tbl2[2,1]
-tbl2[2,2]
-tbl2[2,3]
-tbl2[2,4]
-tbl2[2,5]
-
-# Multi-header table
-
-iris
-
-tbl <- rtable(
-  header = rheader(
-    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
-    rrow(NULL, "mean", "median", "mean", "median")
-  ),
-  rrow(
-    row.name = "All Species",
-    mean(iris$Sepal.Length), median(iris$Sepal.Length),
-    mean(iris$Petal.Length), median(iris$Petal.Length),
-    format = "xx.xx"
-  )
-)
-
-tbl
-
-# custom format
+# Custom format with functions (might be deprecated soon)
 my_format <- function(x, output) {
    paste(x, collapse = "/")
 }
