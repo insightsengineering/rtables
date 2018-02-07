@@ -35,6 +35,7 @@ reference:
     contents:
     - starts_with("rtabulate")
     - no_by
+    - is.no_by
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:

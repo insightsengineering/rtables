@@ -24,9 +24,14 @@ rtabulate <- function(x, ...) {
 #' @export
 #' 
 no_by <- function(name) {
-  structure(name, class = "rtabulate_no_by")
+  structure(name, class = "no_by")
 }
 
+#' check if object is a no_by class
+#' @export
+is.no_by <- function(x) {
+  is(x, "no_by")
+}
 
 #' rtabulate default for vectors
 #' 
@@ -52,7 +57,9 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
   
   if (is.null(FUN)) stop("FUN is required")
   
-  xs <- if (is(col_by, "rtabulate_no_by")) {
+  stop_if_has_na(col_by)
+  
+  xs <- if (is.no_by(col_by)) {
     setNames(list(x), col_by)
   } else {
     if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
@@ -134,7 +141,8 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
                               FUN = function(x) sum(x) * c(1, 1/length(x)),
                               row_data_arg = FALSE,
                               format = "xx.xx (xx.xx%)",
-                              row.name = ""
+                              row.name = "",
+                              indent = 0
                               ) {
   if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
   rtabulate_default(x, col_by, FUN, row_data_arg, format, row.name, indent)
@@ -171,30 +179,48 @@ rtabulate.factor <- function(x,
                              format = "xx",
                              indent  = 0) {
 
+  stop_if_has_na(col_by)
+
+  if (any(is.na(x))) {
+    tmp <- as.character(x)
+    if ("<NA>" %in% tmp) stop("x currently cannot have NAs and levels called <NA>")
+    tmp[is.na(tmp)] <- "<NA>"
+    x <- factor(tmp, levels = c(levels(x), "<NA>"))
+    warning("NAs were turned into level <NA>")
+  }
+
+  ## note that splitting with empty-string creates a un-named list element
+  if (any(levels(x) == "")) {
+    if ("-" %in% levels(x)) stop("x currently cannot have '' and levels called -")
+    levels(x) <- gsub("^$", "-", levels(x))
+    warning("'' levels were turned into level -")
+  }
+    
   row_data_list <- split(x, x, drop = FALSE)
   
-  cell_data <- if (is(col_by, "rtabulate_no_by")) {
+  cell_data <- if (is.no_by(col_by)) {
     lapply(row_data_list, function(row_i) setNames(list(row_i), col_by))
   } else {
     if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
     
     df <- data.frame(
       x = x,
-      col_by = col_by
+      col_by = factor(col_by)
     )
-    lapply(split(df, x, drop = FALSE), function(row_i) {
-      split(row_i$x, row_i$col_by)
+    lapply(split(df, df$x, drop = FALSE), function(row_i) {
+      split(row_i$x, row_i$col_by, drop = FALSE)
     })
   }
   
   rrow_data <- if (!row_col_data_args) {
     lapply(cell_data, function(row_i) lapply(row_i, FUN)) 
   } else {
-    col_data_list <- if (is.null(col_by)) {
-      list(col_1 = x)
+    
+    col_data_list <- if (is.no_by(col_by)) {
+      setNames(list(x), col_by)
     } else {
       split(x, col_by, drop = FALSE)
-    }    
+    }
 
     rrow_data_tmp <- lapply(1:length(row_data_list), function(i) {
       rrow_data_i <- lapply(1:length(col_data_list), function(j) {
@@ -264,16 +290,16 @@ rtabulate.data.frame <- function(x,
                                  FUN = nrow, row_col_data_args = FALSE,
                                  format = "xx") {
   
-  if (!is(row_by_var, "rtabulate_no_by")  && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
-  if (!is(col_by_var, "rtabulate_no_by") && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
+  if (!is.no_by(row_by_var) && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
+  if (!is.no_by(col_by_var) && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
   
-  row_data <- if (is(row_by_var, "rtabulate_no_by")) {
+  row_data <- if (is.no_by(row_by_var)) {
     setNames(list(x), row_by_var)
   } else {
     split(x, x[[row_by_var]], drop = FALSE)
   }
   
-  cell_data <- if (is(col_by_var, "rtabulate_no_by")) {
+  cell_data <- if (is.no_by(col_by_var)) {
     lapply(row_data, function(row_i) setNames(list(row_i), col_by_var))
   } else {
     lapply(row_data, function(row_i) split(row_i, row_i[[col_by_var]], drop = FALSE))
@@ -305,5 +331,7 @@ rtabulate.data.frame <- function(x,
 
 
 
-
+stop_if_has_na <- function(x) {
+  if (any(is.na(x))) stop(paste0(deparse(substitute(x)), " does currently not support any NAs"))
+}
 
