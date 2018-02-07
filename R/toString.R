@@ -1,4 +1,11 @@
+#' Convert an rtable to ascii
+#' 
+#' @param x rtable object
+#' @param gap number of spaces between columns
+#' @param indent.unit number of spaces used for indentation of row.names
+#' 
 #' @export
+#' 
 toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
   
   header <- attr(x, "header")

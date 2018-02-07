@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reporting Table Row — rrow • rtables</title>
+<title>Convert an rtable to ascii — toString.rtable • rtables</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,60 +86,40 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Reporting Table Row</h1>
+    <h1>Convert an rtable to ascii</h1>
     </div>
 
     
-    <p>Defines a row for an <code><a href='rtable.html'>rtable</a></code></p>
+    <p>Convert an rtable to ascii</p>
     
 
-    <pre class="usage"><span class='fu'>rrow</span>(<span class='no'>row.name</span>, <span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for rtable</span>
+<span class='fu'>toString</span>(<span class='no'>x</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>8</span>, <span class='kw'>indent.unit</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>row.name</th>
-      <td><p>string with row name</p></td>
+      <th>x</th>
+      <td><p>rtable object</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>data objects which are wrapped into <code><a href='rcell.html'>rcell</a></code> if they
-aren't <code>rcell</code>s already</p></td>
+      <th>gap</th>
+      <td><p>number of spaces between columns</p></td>
     </tr>
     <tr>
-      <th>format</th>
-      <td><p>a valid format string or a format function for
-<code><a href='rcell.html'>rcell</a></code>s. To get a list of all valid format strings use
-<code><a href='list_rcell_format_labels.html'>list_rcell_format_labels</a></code>. If format is <code>NULL</code> then the elements
-of a cell get pasted separated by a comma.</p></td>
-    </tr>
-    <tr>
-      <th>indent</th>
-      <td><p>non-negative integer where 0 means that the row should not be
-indented</p></td>
+      <th>indent.unit</th>
+      <td><p>number of spaces used for indentation of row.names</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note the <code>rrow()</code> will return an empty row.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>rrow</span>(<span class='st'>"ABC"</span>, <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='fu'>c</span>(<span class='fl'>3</span>,<span class='fl'>2</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx (xx.%)"</span>)</div><div class='output co'>#&gt; ABC        1 (200%)        3 (200%)</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

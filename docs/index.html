@@ -40,6 +40,9 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -68,6 +71,7 @@
 <div id="rtables" class="section level1">
 
 
+<p><a href="https://roche.github.io/rtables/">project webpage</a></p>
 <div id="reporting-tables-with-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reporting-tables-with-r" class="anchor"></a>Reporting tables with R</h2>
@@ -100,7 +104,7 @@
 <a href="#usage" class="anchor"></a>Usage</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rtables)
 tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtable.html">rtable</a></span>(
-  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),
+  <span class="dt">header =</span> <span class="kw">c</span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),
   <span class="dt">format =</span> <span class="st">"xx (xx.xx%)"</span>,
   <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"A"</span>, <span class="kw">c</span>(<span class="dv">104</span>, .<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">100</span>, .<span class="dv">4</span>)),
   <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"B"</span>, <span class="kw">c</span>(<span class="dv">23</span>, .<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">43</span>, .<span class="dv">5</span>)),
@@ -113,12 +117,19 @@ tbl
 <span class="co">#&gt;                                           Treatement        Comparison</span>
 <span class="co">#&gt;                                             N=100             N=300   </span>
 <span class="co">#&gt; ----------------------------------------------------------------------</span>
-<span class="co">#&gt; A                                         104 (20%)         100 (40%) </span>
-<span class="co">#&gt; B                                          23 (40%)          43 (50%) </span>
+<span class="co">#&gt; A                                          104, 0.2          100, 0.4 </span>
+<span class="co">#&gt; B                                          23, 0.4           43, 0.5  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; this is a very long section header</span>
 <span class="co">#&gt; estimate                                             55.23            </span>
 <span class="co">#&gt;   95% CI                                          (44.8, 67.4)</span></code></pre></div>
+</div>
+<div id="presentations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#presentations" class="anchor"></a>Presentations</h2>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing">baselR November 2017</a></li>
+</ul>
 </div>
 </div>
 </div>
@@ -134,7 +145,7 @@ tbl
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://roche.github.io/rtables/">project webpage</a></li>
+<li><a href="https://travis-ci.org/Roche/rtables/"><img src="https://travis-ci.org/Roche/rtables.svg?branch=master" alt="Build Status"></a></li>
 </ul>
 </div>
 

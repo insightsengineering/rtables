@@ -63,6 +63,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -91,30 +94,33 @@
 cells. Currently an <code>rtable</code> can be converted to html and ascii.</p>
     
 
-    <pre class="usage"><span class='fu'>rtable</span>(<span class='no'>col.names</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>rtable</span>(<span class='no'>header</span>, <span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>col.names</th>
-      <td><p>vector with column names</p></td>
-    </tr>
-    <tr>
-      <th>format</th>
-      <td><p>a valid format string or a format function for
-<code><a href='rcell.html'>rcell</a></code>s. To get a list of all valid format strings use 
-<code><a href='get_rcell_formats.html'>get_rcell_formats</a></code>.</p></td>
+      <th>header</th>
+      <td><p>either a vector with column names or an object returned by
+<code><a href='rheader.html'>rheader</a></code> if special formating and multi-line headers are
+needed</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>each element is an <code><a href='rrow.html'>rrow</a></code> object</p></td>
     </tr>
+    <tr>
+      <th>format</th>
+      <td><p>a valid format string or a format function for
+<code><a href='rcell.html'>rcell</a></code>s. To get a list of all valid format strings use
+<code><a href='list_rcell_format_labels.html'>list_rcell_format_labels</a></code>. If format is <code>NULL</code> then the elements
+of a cell get pasted separated by a comma.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>rtable</code> object</p>
+    <p>an <code>rtable</code> object</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -132,8 +138,29 @@ outputting function.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'># Table with multirow header</span>
+<span class='no'>mtbl</span> <span class='kw'>&lt;-</span> <span class='fu'>rtable</span>(
+  <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span>(
+    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Petal.Length"</span>, <span class='kw'>colspan</span><span class='kw'>=</span><span class='fl'>2</span>)),
+    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>NULL</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>)
+  ),
+  <span class='fu'><a href='rrow.html'>rrow</a></span>(
+    <span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"All Species"</span>,
+    <span class='fu'>mean</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>), <span class='fu'>median</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>),
+    <span class='fu'>mean</span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>), <span class='fu'>median</span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>),
+    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx.xx"</span>
+  )
+)
+
+<span class='no'>mtbl</span></div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
+#&gt;                     mean         median         mean         median
+#&gt; -------------------------------------------------------------------
+#&gt; All Species         5.84          5.8           3.76          4.35 </div><div class='input'>
+<span class='fu'>names</span>(<span class='no'>tbl</span>) <span class='co'># always first row of header</span></div><div class='output co'>#&gt; [1] "col_1"</div><div class='input'>
+<span class='co'># Single row header</span>
+
 <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>rtable</span>(
-  <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Treatement\nN=100"</span>, <span class='st'>"Comparison\nN=300"</span>),
+  <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Treatement\nN=100"</span>, <span class='st'>"Comparison\nN=300"</span>),
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx (xx.xx%)"</span>,
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"A"</span>, <span class='fu'>c</span>(<span class='fl'>104</span>, <span class='fl'>.2</span>), <span class='fu'>c</span>(<span class='fl'>100</span>, <span class='fl'>.4</span>)),
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"B"</span>, <span class='fu'>c</span>(<span class='fl'>23</span>, <span class='fl'>.4</span>), <span class='fu'>c</span>(<span class='fl'>43</span>, <span class='fl'>.5</span>)),
@@ -146,8 +173,8 @@ outputting function.</p>
 <span class='no'>tbl</span></div><div class='output co'>#&gt;                                           Treatement        Comparison
 #&gt;                                             N=100             N=300   
 #&gt; ----------------------------------------------------------------------
-#&gt; A                                         104 (20%)         100 (40%) 
-#&gt; B                                          23 (40%)          43 (50%) 
+#&gt; A                                          104, 0.2          100, 0.4 
+#&gt; B                                          23, 0.4           43, 0.5  
 #&gt; 
 #&gt; this is a very long section header
 #&gt; estimate                                             55.23            
@@ -156,78 +183,61 @@ outputting function.</p>
 #&gt; [3] ""                                   "this is a very long section header"
 #&gt; [5] "estimate"                           "95% CI"                            </div><div class='input'><span class='fu'>names</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] "Treatement\nN=100" "Comparison\nN=300"</div><div class='input'>
 
-<span class='no'>tbl</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] 100.0   0.4
-#&gt; attr(,"colspan")
-#&gt; [1] 1
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx (xx.xx%)"</div><div class='input'>
-<span class='no'>tbl</span>[<span class='fl'>3</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>1</span>]</div><div class='output co'>#&gt; [1] 55.23
-#&gt; attr(,"format")
-#&gt; [1] "xx.xx"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] 55.23
-#&gt; attr(,"format")
-#&gt; [1] "xx.xx"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"</div><div class='input'>
+<span class='co'># Subsetting</span>
+<span class='no'>tbl</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 100, 0.4</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>3</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>1</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt;          Treatement        Comparison
+#&gt;            N=100             N=300   
+#&gt; -------------------------------------
+#&gt; A         104, 0.2          100, 0.4 
+#&gt; B         23, 0.4           43, 0.5  
+#&gt; </div><div class='input'>
 
-<span class='fu'>dim</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 6 2</div><div class='input'><span class='fu'>nrow</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 6</div><div class='input'><span class='fu'>ncol</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
-<span class='no'>tbl</span><span class='kw'>[[</span><span class='fl'>1</span>]]<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; [1] 104.0   0.2
-#&gt; attr(,"colspan")
-#&gt; [1] 1
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx (xx.xx%)"</div><div class='input'>
+<span class='co'># Data Structure methods</span>
+<span class='fu'>dim</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 6 2</div><div class='input'><span class='fu'>nrow</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 6</div><div class='input'><span class='fu'>ncol</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='fu'>names</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] "Treatement\nN=100" "Comparison\nN=300"</div><div class='input'>
+
+<span class='co'># Output: html</span>
 <span class='fu'><a href='as_html.html'>as_html</a></span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; &lt;table class="table table-condensed table-hover"&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;th&gt;&lt;/th&gt;
-#&gt;     &lt;th align="center" class="text-center"&gt;
+#&gt;     &lt;th class="rowname text-left"&gt;&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;
 #&gt;       Treatement
 #&gt;       &lt;br/&gt;
 #&gt;       N=100
 #&gt;     &lt;/th&gt;
-#&gt;     &lt;th align="center" class="text-center"&gt;
+#&gt;     &lt;th class="text-center"&gt;
 #&gt;       Comparison
 #&gt;       &lt;br/&gt;
 #&gt;       N=300
 #&gt;     &lt;/th&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td class="rowname" align="left"&gt;A&lt;/td&gt;
-#&gt;     &lt;td align="center"&gt;104 (20%)&lt;/td&gt;
-#&gt;     &lt;td align="center"&gt;100 (40%)&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left"&gt;A&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;104, 0.2&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;100, 0.4&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td class="rowname" align="left"&gt;B&lt;/td&gt;
-#&gt;     &lt;td align="center"&gt;23 (40%)&lt;/td&gt;
-#&gt;     &lt;td align="center"&gt;43 (50%)&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left"&gt;B&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;23, 0.4&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;43, 0.5&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td colspan="3" class="rowname" align="left"&gt;&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left" colspan="3"&gt;&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td colspan="3" class="rowname" align="left"&gt;this is a very long section header&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left" colspan="3"&gt;this is a very long section header&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td class="rowname" align="left"&gt;estimate&lt;/td&gt;
-#&gt;     &lt;td colspan="2" align="center"&gt;55.23&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left"&gt;estimate&lt;/td&gt;
+#&gt;     &lt;td colspan="2" class="text-center"&gt;55.23&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;td class="rowname" align="left" style="padding-left: 3ch"&gt;95% CI&lt;/td&gt;
-#&gt;     &lt;td colspan="2" align="center"&gt;(44.8, 67.4)&lt;/td&gt;
+#&gt;     &lt;td class="rowname text-left" style="padding-left: 3ch"&gt;95% CI&lt;/td&gt;
+#&gt;     &lt;td colspan="2" class="text-center"&gt;(44.8, 67.4)&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt; &lt;/table&gt;</div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>tbl</span>)
 <span class='co'># }</span><div class='input'>
-<span class='co'># colspans</span>
+<span class='co'># Colspans</span>
 
 <span class='no'>tbl2</span> <span class='kw'>&lt;-</span> <span class='fu'>rtable</span>(
   <span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span>, <span class='st'>"E"</span>),
@@ -240,48 +250,8 @@ outputting function.</p>
 #&gt; ---------------------------------------------------------
 #&gt; r1         1          2          3          4          5 
 #&gt; r2             sp2              sp1            sp2-2     </div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>tbl2</span>)
-<span class='co'># }</span><div class='input'>
-<span class='no'>tbl2</span>[<span class='fl'>1</span>,<span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] 3
-#&gt; attr(,"colspan")
-#&gt; [1] 1
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'><span class='no'>tbl2</span>[<span class='fl'>2</span>,<span class='fl'>1</span>]</div><div class='output co'>#&gt; [1] "sp2"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'><span class='no'>tbl2</span>[<span class='fl'>2</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] "sp2"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'><span class='no'>tbl2</span>[<span class='fl'>2</span>,<span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "sp1"
-#&gt; attr(,"colspan")
-#&gt; [1] 1
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'><span class='no'>tbl2</span>[<span class='fl'>2</span>,<span class='fl'>4</span>]</div><div class='output co'>#&gt; [1] "sp2-2"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'><span class='no'>tbl2</span>[<span class='fl'>2</span>,<span class='fl'>5</span>]</div><div class='output co'>#&gt; [1] "sp2-2"
-#&gt; attr(,"colspan")
-#&gt; [1] 2
-#&gt; attr(,"class")
-#&gt; [1] "rcell"
-#&gt; attr(,"format")
-#&gt; [1] "xx"</div><div class='input'>
 
-<span class='co'># custom format</span>
+<span class='co'># Custom format with functions (might be deprecated soon)</span>
 <span class='no'>my_format</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>output</span>) {
    <span class='fu'>paste</span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
 }
@@ -290,9 +260,9 @@ outputting function.</p>
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='no'>my_format</span>,
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row1"</span>, <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>), <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>])
 )
-<span class='no'>tbl3</span></div><div class='output co'>#&gt;                      A                          B         
-#&gt; ----------------------------------------------------------
-#&gt; row1              1/2/3/4              a/b/c/d/e/f/g/h/i/j</div><div class='input'> 
+<span class='no'>tbl3</span></div><div class='output co'>#&gt;                          A                                   B              
+#&gt; ----------------------------------------------------------------------------
+#&gt; row1                 1, 2, 3, 4                 a, b, c, d, e, f, g, h, i, j</div><div class='input'> 
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

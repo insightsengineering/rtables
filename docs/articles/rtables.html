@@ -40,6 +40,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -63,7 +66,7 @@
       <h1>Introduction to rtables</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2017-11-27</h4>
+            <h4 class="date">2018-02-07</h4>
           </div>
 
     
@@ -90,7 +93,7 @@
 <a href="#simple-example" class="anchor"></a>Simple Example</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rtables)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.html">rtable</a></span>(
-  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),
+  <span class="dt">header =</span> <span class="kw">c</span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),
   <span class="dt">format =</span> <span class="st">"xx (xx.xx%)"</span>,
   <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"A"</span>, <span class="kw">c</span>(<span class="dv">104</span>, .<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">100</span>, .<span class="dv">4</span>)),
   <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"B"</span>, <span class="kw">c</span>(<span class="dv">23</span>, .<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">43</span>, .<span class="dv">5</span>)),
@@ -104,63 +107,57 @@ tbl  </code></pre></div>
 <pre><code>##                                           Treatement        Comparison
 ##                                             N=100             N=300   
 ## ----------------------------------------------------------------------
-## A                                         104 (20%)         100 (40%) 
-## B                                          23 (40%)          43 (50%) 
+## A                                          104, 0.2          100, 0.4 
+## B                                          23, 0.4           43, 0.5  
 ## 
 ## this is a very long section header
 ## estimate                                             55.23            
 ##   95% CI                                          (44.8, 67.4)</code></pre>
 <p>Before we go into explaining the individual components used to create this table we continue with the html conversion of the <code>rtable</code> object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/as_html.html">as_html</a></span>(tbl, <span class="dt">width =</span> <span class="st">"80%"</span>)</code></pre></div>
-<table class="table" width="80%">
+<table class="table">
 <tr>
-<th></th>
-<th align="center" class="text-center">
+<th class="rowname text-left"></th>
+<th class="text-center">
 Treatement
 <br>
 N=100
 </th>
-<th align="center" class="text-center">
+<th class="text-center">
 Comparison
 <br>
 N=300
 </th>
 </tr>
 <tr>
-<td class="rowname" align="left">A</td>
-<td align="center">104 (20%)</td>
-<td align="center">100 (40%)</td>
+<td class="rowname text-left">A</td>
+<td class="text-center">104, 0.2</td>
+<td class="text-center">100, 0.4</td>
 </tr>
 <tr>
-<td class="rowname" align="left">B</td>
-<td align="center">23 (40%)</td>
-<td align="center">43 (50%)</td>
+<td class="rowname text-left">B</td>
+<td class="text-center">23, 0.4</td>
+<td class="text-center">43, 0.5</td>
 </tr>
 <tr>
-<td colspan="3" class="rowname" align="left"></td>
+<td class="rowname text-left" colspan="3"></td>
 </tr>
 <tr>
-<td colspan="3" class="rowname" align="left">this is a very long section header</td>
+<td class="rowname text-left" colspan="3">this is a very long section header</td>
 </tr>
 <tr>
-<td class="rowname" align="left">estimate</td>
-<td colspan="2" align="center">55.23</td>
+<td class="rowname text-left">estimate</td>
+<td colspan="2" class="text-center">55.23</td>
 </tr>
 <tr>
-<td class="rowname" align="left" style="padding-left: 3ch">95% CI</td>
-<td colspan="2" align="center">(44.8, 67.4)</td>
+<td class="rowname text-left" style="padding-left: 3ch">95% CI</td>
+<td colspan="2" class="text-center">(44.8, 67.4)</td>
 </tr>
 </table>
 <p>Next, the <code>[</code> operator lets you access the cell content.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tbl[<span class="dv">1</span>, <span class="dv">1</span>]</code></pre></div>
-<pre><code>## [1] 104.0   0.2
-## attr(,"colspan")
-## [1] 1
-## attr(,"class")
-## [1] "rcell"
-## attr(,"format")
-## [1] "xx (xx.xx%)"</code></pre>
-<p>and to format that cell run <code><a href="../reference/format_rcell.html">format_rcell(tbl[1,1])</a></code>=104 (20%).</p>
+<pre><code>## 104, 0.2</code></pre>
+<p>and to format that cell run <code><a href="../reference/format_rcell.html">format_rcell(tbl[1,1])</a></code>=104, 0.2.</p>
 <p>Note that <code>tbl[6, 1]</code> and <code>tbl[6, 2]</code> display both the same <code>rcell</code> because of the colspan.</p>
 </div>
 <div id="viewer" class="section level1">
@@ -181,18 +178,20 @@ N=300
 <li><p>functions that take the element and output type as an argument and return a formatted string or html object <strong>note, we will eventually deprecate this</strong></p></li>
 </ul>
 <p>Formats labels are currently limited to the following predefined set:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/get_rcell_formats.html">get_rcell_formats</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_rcell_format_labels.html">list_rcell_format_labels</a></span>()</code></pre></div>
 <pre><code>## $`1d`
 ##  [1] "xx"      "xx."     "xx.x"    "xx.xx"   "xx.xxx"  "xx.xxxx" "xx%"    
 ##  [8] "xx.x%"   "xx.xx%"  "xx.xxx%"
 ## 
 ## $`2d`
-##  [1] "xx / xx"        "xx. / xx."      "xx.x / xx.x"    "xx.xx / xx.xx" 
-##  [5] "xx (xx%)"       "xx (xx.%)"      "xx (xx.x%)"     "xx (xx.xx%)"   
-##  [9] "xx. (xx.%)"     "xx.x (xx.x%)"   "xx.xx (xx.xx%)" "(xx, xx)"      
-## [13] "(xx., xx.)"     "(xx.x, xx.x)"   "(xx.xx, xx.xx)" "xx - xx"       
-## [17] "xx.x - xx.x"    "xx.xx - xx.xx"  "xx.x (xx.x)"    "xx.xx (xx.xx)" 
-## [21] "xx.x, xx.x"     "xx.x to xx.x"  
+##  [1] "xx / xx"            "xx. / xx."          "xx.x / xx.x"       
+##  [4] "xx.xx / xx.xx"      "xx (xx%)"           "xx (xx.%)"         
+##  [7] "xx (xx.x%)"         "xx (xx.xx%)"        "xx. (xx.%)"        
+## [10] "xx.x (xx.x%)"       "xx.xx (xx.xx%)"     "(xx, xx)"          
+## [13] "(xx., xx.)"         "(xx.x, xx.x)"       "(xx.xx, xx.xx)"    
+## [16] "(xx.xxx, xx.xxx)"   "(xx.xxxx, xx.xxxx)" "xx - xx"           
+## [19] "xx.x - xx.x"        "xx.xx - xx.xx"      "xx.x (xx.x)"       
+## [22] "xx.xx (xx.xx)"      "xx.x, xx.x"         "xx.x to xx.x"      
 ## 
 ## attr(,"info")
 ## [1] "xx does not modify the element, and xx. rounds a number to 0 digits"</code></pre>
@@ -206,24 +205,22 @@ tbl3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable
   <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"row1"</span>, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])
 )
 tbl3</code></pre></div>
-<pre><code>##                      A                          B         
-## ----------------------------------------------------------
-## row1              1/2/3/4              a/b/c/d/e/f/g/h/i/j</code></pre>
+<pre><code>##                          A                                   B              
+## ----------------------------------------------------------------------------
+## row1                 1, 2, 3, 4                 a, b, c, d, e, f, g, h, i, j</code></pre>
 </div>
 <div id="comparing-two-rtables" class="section level1">
 <h1 class="hasAnchor">
 <a href="#comparing-two-rtables" class="anchor"></a>Comparing two rtables</h1>
 <p>Because we have the original data for each cell accessible for the <code>rtable</code> data structure it is possible to programmatically compare two tables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.html">rtable</a></span>(<span class="dt">col.name =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="dt">format =</span> <span class="st">"xx"</span>, <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"row 1"</span>, <span class="dv">1</span>, <span class="dv">2</span>))
-t2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.html">rtable</a></span>(<span class="dt">col.name =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dt">format =</span> <span class="st">"xx"</span>, <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"row 1"</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.html">rtable</a></span>(<span class="dt">header =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="dt">format =</span> <span class="st">"xx"</span>, <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"row 1"</span>, <span class="dv">1</span>, <span class="dv">2</span>))
+t2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.html">rtable</a></span>(<span class="dt">header =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dt">format =</span> <span class="st">"xx"</span>, <span class="kw"><a href="../reference/rrow.html">rrow</a></span>(<span class="st">"row 1"</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))
 
 <span class="kw"><a href="../reference/compare_rtables.html">compare_rtables</a></span>(<span class="dt">object =</span> t1, <span class="dt">expected =</span> t2) </code></pre></div>
-<pre><code>##   1   2   3  
-## 1 "." "." "+"
+<pre><code>##   1 2 3
+## 1 . . +
 ## attr(,"info")
-## [1] "column names are not the same"
-## attr(,"class")
-## [1] "rtable_diff" "matrix"</code></pre>
+## [1] column names are not the same</code></pre>
 </div>
 <div id="converting-table-objects" class="section level1">
 <h1 class="hasAnchor">

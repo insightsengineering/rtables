@@ -45,7 +45,7 @@ Usage
 ``` r
 library(rtables)
 tbl <- rtable(
-  col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
@@ -58,8 +58,8 @@ tbl
 #>                                           Treatement        Comparison
 #>                                             N=100             N=300   
 #> ----------------------------------------------------------------------
-#> A                                         104 (20%)         100 (40%) 
-#> B                                          23 (40%)          43 (50%) 
+#> A                                          104, 0.2          100, 0.4 
+#> B                                          23, 0.4           43, 0.5  
 #> 
 #> this is a very long section header
 #> estimate                                             55.23            
