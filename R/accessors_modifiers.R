@@ -28,6 +28,29 @@ row.names.rtable <- function(x) {
   }, character(1))
 }
 
+#' change row names of rtable
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' tbl <- rtable(header = c("A", "B"), rrow("row 1", 1, 2))
+#' tbl
+#' row.names(tbl) <- "Changed Row Name"
+#' tbl
+`row.names<-.rtable` <- function(x, value) {
+
+  nr <- nrow(x)
+  
+  if (length(value) != nr) stop("dimension missmatch")
+  
+  for (i in seq_along(x)) {
+    attr(x[[i]], "row.name") <- value[i]
+  }
+  
+  x
+}
+
 #' Get column names of an \code{\link{rtable}} object
 #' 
 #' Retrieve the column names of an \code{\link{rtable}} object

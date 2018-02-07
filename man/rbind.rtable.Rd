@@ -9,3 +9,36 @@
 \description{
 stack rtable objects
 }
+\examples{
+
+mtbl <- rtable(
+  header = rheader(
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(NULL, "mean", "median", "mean", "median")
+  ),
+  rrow(
+    row.name = "All Species",
+    mean(iris$Sepal.Length), median(iris$Sepal.Length),
+    mean(iris$Petal.Length), median(iris$Petal.Length),
+    format = "xx.xx"
+  )
+)
+
+mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
+  header = rheader(
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(NULL, "mean", "median", "mean", "median")
+  ),
+  rrow(
+    row.name = "Setosa",
+    mean(Sepal.Length), median(Sepal.Length),
+    mean(Petal.Length), median(Petal.Length),
+    format = "xx.xx"
+  )
+))
+
+tbl <- rbind(mtbl, mtbl2)
+
+tbl
+
+}

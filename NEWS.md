@@ -19,6 +19,12 @@ single `rrow`  and by setting `row.name` to `NULL`.
 
 * `rbind` method for rtables
 
+* `row.names<-.rtable` method
+
+* `rtabulate` added for creating tables
+
+
+
 ## rtable 0.0.1
 
 * Initial public release
