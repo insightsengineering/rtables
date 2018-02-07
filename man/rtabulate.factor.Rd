@@ -4,15 +4,15 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = NULL, FUN = function(cell_data,
-  row_data, col_data) length(cell_data) * c(1, 1/length(col_data)),
-  row_col_data_args = TRUE, format = "xx (xx.xx\%)", indent = 0)
+\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
+  row_col_data_args = FALSE, format = "xx", indent = 0)
 }
 \arguments{
 \item{x}{a vecor}
 
 \item{col_by}{a vector of length \code{nrow(x)} that defines which levels in
-\code{col_by} define a column.}
+\code{col_by} define a column. If data should not be split into columns use
+the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -28,11 +28,20 @@ indented}
 Tabulate Factors
 }
 \examples{
+
 rtabulate(x = iris$Species)
+
+rtabulate(x = iris$Species, no_by("sum"))
 
 col_by <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
 
 rtabulate(iris$Species, col_by)
+
+rtabulate(iris$Species, col_by,
+   FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 0) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
+   row_col_data_args = TRUE,
+   format = "xx (xx.xx\%)"
+)
 
 rtabulate(col_by, iris$Species)
 

@@ -12,6 +12,22 @@ rtabulate <- function(x, ...) {
   UseMethod("rtabulate", x)
 }
 
+
+#' Do not split data into columns or row in \code{rtabulate}
+#' 
+#' \code{\link{rtabulate}} has the arguments \code{col_by} and \code{row_by}
+#' which can either take a vector or if no splitting is needed the return value
+#' of \code{no_by}.
+#' 
+#' @param name row name or column name
+#' 
+#' @export
+#' 
+no_by <- function(name) {
+  structure(name, class = "rtabulate_no_by")
+}
+
+
 #' rtabulate default for vectors
 #' 
 #' this method is used for vectors of type \code{logical} and \code{numeric}
@@ -19,7 +35,8 @@ rtabulate <- function(x, ...) {
 #' @inheritParams rrow
 #' @param x a vecor
 #' @param col_by a vector of length \code{nrow(x)} that defines which levels in
-#'   \code{col_by} define a column.
+#'   \code{col_by} define a column. If data should not be split into columns use
+#'   the \code{\link{no_by}} function.
 #' @param FUN a function that processes the cell data, if \code{row_data_arg} is
 #'   set to \code{TRUE} the a second argument with the row data is passed to
 #'   \code{FUN}
@@ -31,11 +48,14 @@ rtabulate <- function(x, ...) {
 #'   \code{col_by}
 #' 
 #'
-rtabulate_default <- function(x, col_by, FUN, row_data_arg=FALSE, format = NULL, row.name = "", indent  = 0) {
+rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_arg=FALSE, format = NULL, row.name = "", indent  = 0) {
   
-  xs <- if (is.null(col_by)) {
-    list(col_1 = x)
+  if (is.null(FUN)) stop("FUN is required")
+  
+  xs <- if (is(col_by, "rtabulate_no_by")) {
+    setNames(list(x), col_by)
   } else {
+    if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
     split(x, col_by, drop = FALSE)
   }
 
@@ -66,9 +86,12 @@ rtabulate_default <- function(x, col_by, FUN, row_data_arg=FALSE, format = NULL,
 #' @export
 #' 
 #' @examples 
-#' 
-#' with(iris, rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
 #'
+#' rtabulate(iris$Sepal.Length)
+#'  
+#' rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
+#'  
+#' with(iris, rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
 #'
 #' SL <- iris$Sepal.Length
 #' Sp <- iris$Species
@@ -79,7 +102,7 @@ rtabulate_default <- function(x, col_by, FUN, row_data_arg=FALSE, format = NULL,
 #'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
 #'
-rtabulate.numeric <- function(x, col_by, FUN = fivenum, row_data_arg = FALSE, format = NULL, row.name = NULL, indent  = 0) {
+rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, row_data_arg = FALSE, format = NULL, row.name = NULL, indent  = 0) {
   if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
   rtabulate_default(x, col_by, FUN, row_data_arg, format, row.name, indent)
 }
@@ -95,6 +118,8 @@ rtabulate.numeric <- function(x, col_by, FUN = fivenum, row_data_arg = FALSE, fo
 #' @examples 
 #' rtabulate(iris$Species == "setosa")
 #' 
+#' rtabulate(iris$Species == "setosa", no_by("Species"), row.name = "n (n/N)")
+#' 
 #' # default: percentages equal \code{TRUE}
 #' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
 #'  
@@ -105,7 +130,7 @@ rtabulate.numeric <- function(x, col_by, FUN = fivenum, row_data_arg = FALSE, fo
 #'   row_data_arg = TRUE
 #' ))
 #' 
-rtabulate.logical <- function(x, col_by = NULL,
+rtabulate.logical <- function(x, col_by = no_by("col_1"),
                               FUN = function(x) sum(x) * c(1, 1/length(x)),
                               row_data_arg = FALSE,
                               format = "xx.xx (xx.xx%)",
@@ -122,42 +147,55 @@ rtabulate.logical <- function(x, col_by = NULL,
 #' @export
 #'
 #' @examples 
+#' 
 #' rtabulate(x = iris$Species)
+#' 
+#' rtabulate(x = iris$Species, no_by("sum"))
 #' 
 #' col_by <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
 #' 
 #' rtabulate(iris$Species, col_by)
 #' 
+#' rtabulate(iris$Species, col_by,
+#'    FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 0) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
+#'    row_col_data_args = TRUE,
+#'    format = "xx (xx.xx%)"
+#' )
+#' 
 #' rtabulate(col_by, iris$Species)
 #' 
-rtabulate.factor <- function(x, col_by = NULL, 
-                             FUN = function(cell_data, row_data, col_data) length(cell_data) * c(1, 1/length(col_data)),
-                             row_col_data_args = TRUE,
-                             format = "xx (xx.xx%)",
+rtabulate.factor <- function(x,
+                             col_by = no_by("col_1"), 
+                             FUN = length,
+                             row_col_data_args = FALSE,
+                             format = "xx",
                              indent  = 0) {
 
   row_data_list <- split(x, x, drop = FALSE)
   
-  rrow_data <- if (is.null(col_by)) {
-    cell_data <- lapply(row_data_list, function(row_i) list(col_1 = row_i))
-    lapply(cell_data, function(row) sapply(row, FUN))
+  cell_data <- if (is(col_by, "rtabulate_no_by")) {
+    lapply(row_data_list, function(row_i) setNames(list(row_i), col_by))
   } else {
-    
-    col_data_list <- if (is.null(col_by)) {
-      list(col_1 = x)
-    } else {
-      split(x, col_by, drop = FALSE)
-    }
+    if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
     
     df <- data.frame(
       x = x,
       col_by = col_by
     )
-    
-    cell_data <- lapply(split(df, x, drop = FALSE), function(row_i) {
+    lapply(split(df, x, drop = FALSE), function(row_i) {
       split(row_i$x, row_i$col_by)
     })
-    
+  }
+  
+  rrow_data <- if (!row_col_data_args) {
+    lapply(cell_data, function(row_i) lapply(row_i, FUN)) 
+  } else {
+    col_data_list <- if (is.null(col_by)) {
+      list(col_1 = x)
+    } else {
+      split(x, col_by, drop = FALSE)
+    }    
+
     rrow_data_tmp <- lapply(1:length(row_data_list), function(i) {
       rrow_data_i <- lapply(1:length(col_data_list), function(j) {
         FUN(cell_data[[i]][[j]], row_data_list[[i]], col_data_list[[j]])
@@ -169,10 +207,9 @@ rtabulate.factor <- function(x, col_by = NULL,
     rrow_data_tmp
   }
   
-  
   rrows <- Map(function(row, rowname) rrowl(rowname, row, format = format, indent = indent), rrow_data, names(rrow_data)) 
   
-  rtablel(header = names(col_data_list), rrows)
+  rtablel(header = names(cell_data[[1]]), rrows)
 }
 
 
@@ -183,11 +220,9 @@ rtabulate.factor <- function(x, col_by = NULL,
 #' @export
 #' 
 #' @examples 
-#' df <- expand.grid(row = c("A", "B"), col = c("X", "Y", "Z"))
+#' df <- expand.grid(row = factor(c("A", "B")), col = factor(c("X", "Y", "Z")))
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
-#' 
-#' df
 #' 
 #' rtabulate(
 #'   x = df,
@@ -198,7 +233,7 @@ rtabulate.factor <- function(x, col_by = NULL,
 #' 
 #' rtabulate(
 #'   x = iris,
-#'   row_by_var = NULL,
+#'   row_by_var = no_by("sum"),
 #'   col_by_var = "Species", 
 #'   FUN = function(x) sum(x$Sepal.Length)
 #' )
@@ -206,14 +241,12 @@ rtabulate.factor <- function(x, col_by = NULL,
 #' rtabulate(
 #'   x = iris,
 #'   row_by_var = "Species",
-#'   col_by_var = NULL, 
+#'   col_by_var = no_by("sum"), 
 #'   FUN = function(x) sum(x$Sepal.Length)
 #' )
 #' 
 #' tbl <- rtabulate(
 #'   x = iris,
-#'   row_by_var = NULL,
-#'   col_by_var = NULL, 
 #'   FUN = function(x) c(sum(x$Sepal.Length), sd(x$Sepal.Length)),
 #'   format = "xx.xx (xx.xx%)"
 #' )
@@ -225,19 +258,23 @@ rtabulate.factor <- function(x, col_by = NULL,
 #' 
 #' tbl
 #' 
-rtabulate.data.frame <- function(x, row_by_var=NULL, col_by_var=NULL, FUN = nrow, row_col_data_args = FALSE, format = "xx") {
+rtabulate.data.frame <- function(x,
+                                 row_by_var = no_by("row_1"),
+                                 col_by_var = no_by("col_1"),
+                                 FUN = nrow, row_col_data_args = FALSE,
+                                 format = "xx") {
   
-  if (!missing(row_by_var)) !is.factor(x[[row_by_var]]) || stop("x[[row_by_var]] currently needs to be a factor")
-  if (!missing(col_by_var)) !is.factor(x[[col_by_var]]) || stop("x[[col_by_var]] currently needs to be a factor")
+  if (!is(row_by_var, "rtabulate_no_by")  && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
+  if (!is(col_by_var, "rtabulate_no_by") && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
   
-  row_data <- if (is.null(row_by_var)) {
-    list(row_1 = x) 
+  row_data <- if (is(row_by_var, "rtabulate_no_by")) {
+    setNames(list(x), row_by_var)
   } else {
     split(x, x[[row_by_var]], drop = FALSE)
   }
   
-  cell_data <- if (is.null(col_by_var)) {
-    lapply(row_data, function(row_i) list(col_1 = row_i))
+  cell_data <- if (is(col_by_var, "rtabulate_no_by")) {
+    lapply(row_data, function(row_i) setNames(list(row_i), col_by_var))
   } else {
     lapply(row_data, function(row_i) split(row_i, row_i[[col_by_var]], drop = FALSE))
   }
@@ -263,7 +300,7 @@ rtabulate.data.frame <- function(x, row_by_var=NULL, col_by_var=NULL, FUN = nrow
     rrowl(row.name = rowname, row_dat, format = format)
   }, rrow_data, names(rrow_data))
   
-  rtablel(header = namnes(cell_data[[1]]), rrows)
+  rtablel(header = names(cell_data[[1]]), rrows)
 }
 
 

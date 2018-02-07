@@ -4,14 +4,15 @@
 \alias{rtabulate.numeric}
 \title{tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by, FUN = fivenum, row_data_arg = FALSE,
-  format = NULL, row.name = NULL, indent = 0)
+\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = fivenum,
+  row_data_arg = FALSE, format = NULL, row.name = NULL, indent = 0)
 }
 \arguments{
 \item{x}{a vecor}
 
 \item{col_by}{a vector of length \code{nrow(x)} that defines which levels in
-\code{col_by} define a column.}
+\code{col_by} define a column. If data should not be split into columns use
+the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -38,8 +39,11 @@ vectors associated to the cells
 }
 \examples{
 
+rtabulate(iris$Sepal.Length)
+ 
+rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
+ 
 with(iris, rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
-
 
 SL <- iris$Sepal.Length
 Sp <- iris$Species

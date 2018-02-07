@@ -4,15 +4,16 @@
 \alias{rtabulate.logical}
 \title{tabulate a logical vector}
 \usage{
-\method{rtabulate}{logical}(x, col_by = NULL, FUN = function(x) sum(x) *
-  c(1, 1/length(x)), row_data_arg = FALSE, format = "xx.xx (xx.xx\%)",
-  row.name = "")
+\method{rtabulate}{logical}(x, col_by = no_by("col_1"), FUN = function(x)
+  sum(x) * c(1, 1/length(x)), row_data_arg = FALSE,
+  format = "xx.xx (xx.xx\%)", row.name = "")
 }
 \arguments{
 \item{x}{a vecor}
 
 \item{col_by}{a vector of length \code{nrow(x)} that defines which levels in
-\code{col_by} define a column.}
+\code{col_by} define a column. If data should not be split into columns use
+the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -35,6 +36,8 @@ tabulate a logical vector
 }
 \examples{
 rtabulate(iris$Species == "setosa")
+
+rtabulate(iris$Species == "setosa", no_by("Species"), row.name = "n (n/N)")
 
 # default: percentages equal \\code{TRUE}
 with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))

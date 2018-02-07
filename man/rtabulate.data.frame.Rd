@@ -4,18 +4,17 @@
 \alias{rtabulate.data.frame}
 \title{Split data.frame and apply functions}
 \usage{
-\method{rtabulate}{data.frame}(x, row_by_var = NULL, col_by_var = NULL,
-  FUN = nrow, row_col_data_args = FALSE, format = "xx")
+\method{rtabulate}{data.frame}(x, row_by_var = no_by("row_1"),
+  col_by_var = no_by("col_1"), FUN = nrow, row_col_data_args = FALSE,
+  format = "xx")
 }
 \description{
 Split data.frame and apply functions
 }
 \examples{
-df <- expand.grid(row = c("A", "B"), col = c("X", "Y", "Z"))
+df <- expand.grid(row = factor(c("A", "B")), col = factor(c("X", "Y", "Z")))
 df <- rbind(df, df)
 df$val <- 1:nrow(df)
-
-df
 
 rtabulate(
   x = df,
@@ -26,7 +25,7 @@ rtabulate(
 
 rtabulate(
   x = iris,
-  row_by_var = NULL,
+  row_by_var = no_by("sum"),
   col_by_var = "Species", 
   FUN = function(x) sum(x$Sepal.Length)
 )
@@ -34,14 +33,12 @@ rtabulate(
 rtabulate(
   x = iris,
   row_by_var = "Species",
-  col_by_var = NULL, 
+  col_by_var = no_by("sum"), 
   FUN = function(x) sum(x$Sepal.Length)
 )
 
 tbl <- rtabulate(
   x = iris,
-  row_by_var = NULL,
-  col_by_var = NULL, 
   FUN = function(x) c(sum(x$Sepal.Length), sd(x$Sepal.Length)),
   format = "xx.xx (xx.xx\%)"
 )
