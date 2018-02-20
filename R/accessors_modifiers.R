@@ -172,7 +172,7 @@ set_rrow_attrs <- function(rrow, row.name, indent) {
 #' 
 rbind.rtable <- function(...) {
   
-  dots <- list(...)
+  dots <- Filter(Negate(is.null), list(...))
   
   if (!are(dots, "rtable")) stop("not all elements are of type rtable")
   
