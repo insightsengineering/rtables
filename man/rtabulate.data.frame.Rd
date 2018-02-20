@@ -50,4 +50,27 @@ row.names(tbl) <- "Sum of Sepal Length"
 
 tbl
 
+iris2 <- iris
+iris2$fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
+
+tbl <- rtabulate(
+  x = iris2,
+  row_by_var = "fsl5",
+  col_by_var = "Species", 
+  FUN = function(x_cell, x_row, x_col) {
+    if (nrow(x_cell) < 10) {
+      rcell("-")
+    } else {
+      fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
+      m_col <- mean(x_col$Sepal.Length)
+      m_row <- mean(x_row$Sepal.Length)
+    
+      rcell(list(fit, m_col, m_row), format = function(x, output) {
+        paste("df:", x[[1]]$df.residual,", and", round(x[[2]],1), ", and", round(x[[3]],2))
+      })
+    }
+  } ,
+  row_col_data_args = TRUE
+)
+tbl
 }

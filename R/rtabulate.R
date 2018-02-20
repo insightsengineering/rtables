@@ -108,7 +108,12 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
 #'   rtabulate(SL, Sp, median, row.name = "Median"),
 #'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
+#' 
+#' X <- data.frame(x = c(1.1, 1.2, 1.3, 1.22), y = c(1.1111,1.2222, 1.23434))
 #'
+#' rtabulate(X, format = "xx.xx", digits = 3)
+#' 
+#' 
 rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, row_data_arg = FALSE, format = NULL, row.name = NULL, indent  = 0) {
   if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
   rtabulate_default(x, col_by, FUN, row_data_arg, format, row.name, indent)
@@ -165,7 +170,7 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' rtabulate(iris$Species, col_by)
 #' 
 #' rtabulate(iris$Species, col_by,
-#'    FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 0) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
+#'    FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 10) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
 #'    row_col_data_args = TRUE,
 #'    format = "xx (xx.xx%)"
 #' )
@@ -254,7 +259,7 @@ rtabulate.factor <- function(x,
 #'   x = df,
 #'   row_by_var = "row",
 #'   col_by_var = "col",
-#'   FUN = function(x)sum(x$val)
+#'   FUN = function(x) { .GlobalEnv$iiii <- x ;sum(x$val)}
 #' )
 #' 
 #' rtabulate(
@@ -273,7 +278,7 @@ rtabulate.factor <- function(x,
 #' 
 #' tbl <- rtabulate(
 #'   x = iris,
-#'   FUN = function(x) c(sum(x$Sepal.Length), sd(x$Sepal.Length)),
+#'   FUN = function(cell_data) c(sum(cell_data$Sepal.Length), sd(cell_data$Sepal.Length)),
 #'   format = "xx.xx (xx.xx%)"
 #' )
 #' 
@@ -358,3 +363,31 @@ stop_if_has_na <- function(x) {
   if (any(is.na(x))) stop(paste0(deparse(substitute(x)), " does currently not support any NAs"))
 }
 
+
+# #' Create a table with formulation
+# #' 
+# #' Formula elements on the LHS connected by a + mean stacking
+# rtabulate.formula <- function(x, data) {
+#   x <- Sepal.Length ~ Species
+#   data <- iris
+#   
+#   # get model frame
+#   mf <- match.call(expand.dots = FALSE)
+#   names(mf) <- gsub("^x$", "formula", names(mf))
+#   m <- match(c("formula", "data"), names(mf), 0L)
+#   mf <- mf[c(1L, m)]
+#   mf[[1L]] <- quote(stats::model.frame)
+#   mf <- eval(mf, parent.frame())
+#   
+#   
+#   
+#   attributes(mf)
+#   
+#   mf <- match.call(lm, call = call("lm", x = Sepal.Length ~ Species, data = iris), expand.dots = FALSE)
+#   
+#   formula <- Sepal.Length ~ Species
+#   
+#   terms(formula)
+#   
+#   str(formula)
+# }
