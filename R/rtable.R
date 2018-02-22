@@ -118,7 +118,7 @@
 #' )
 #' tbl3
 #'  
-rtable <- function(header, ..., format = "xx") {
+rtable <- function(header, ..., format = NULL) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   
@@ -308,7 +308,7 @@ propagate_format_to_rcells <- function(rrow, format) {
     rcell
   })
   attributes(rrow_formatted) <- attributes(rrow) 
-  rrow
+  rrow_formatted
 }
 
 
