@@ -20,7 +20,7 @@ rtabulate(
   x = df,
   row_by_var = "row",
   col_by_var = "col",
-  FUN = function(x)sum(x$val)
+  FUN = function(x) { .GlobalEnv$iiii <- x ;sum(x$val)}
 )
 
 rtabulate(
@@ -39,7 +39,7 @@ rtabulate(
 
 tbl <- rtabulate(
   x = iris,
-  FUN = function(x) c(sum(x$Sepal.Length), sd(x$Sepal.Length)),
+  FUN = function(cell_data) c(sum(cell_data$Sepal.Length), sd(cell_data$Sepal.Length)),
   format = "xx.xx (xx.xx\%)"
 )
 

@@ -71,6 +71,26 @@ names.rtable <- function(x) {
 }
 
 
+#' change row names
+#' 
+#' @export
+#' 
+#' @examples 
+#' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
+#' rheader(x) <- rheader(rrow("a", "a", "b", "d"))
+#' x
+`rheader<-` <- function(x, value) {
+  if (!is(x, "rtable")) stop("x is not an rtable")
+  
+  if (!is(value, "rheader")) stop("value is not an rheader")
+  
+  if (ncell(attr(x, "header")[[1]]) != ncell(value[[1]])) stop("number of columns do not match")
+  
+  attr(x, "header") <- value
+  x
+}
+
+
 #' Access rcells in an \code{\link{rtable}}
 #' 
 #' Accessor function

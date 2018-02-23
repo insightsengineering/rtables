@@ -4,7 +4,7 @@
 \alias{rtable}
 \title{Create a Reporting Table}
 \usage{
-rtable(header, ..., format = "xx")
+rtable(header, ..., format = NULL)
 }
 \arguments{
 \item{header}{either a vector with column names or an object returned by

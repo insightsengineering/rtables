@@ -38,7 +38,7 @@ col_by <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L
 rtabulate(iris$Species, col_by)
 
 rtabulate(iris$Species, col_by,
-   FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 0) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
+   FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 10) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
    row_col_data_args = TRUE,
    format = "xx (xx.xx\%)"
 )

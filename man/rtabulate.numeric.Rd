@@ -54,4 +54,9 @@ rbind(
   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 )
 
+X <- data.frame(x = c(1.1, 1.2, 1.3, 1.22), y = c(1.1111,1.2222, 1.23434))
+
+rtabulate(X, format = "xx.xx", digits = 3)
+
+
 }
