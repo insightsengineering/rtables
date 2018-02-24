@@ -250,9 +250,13 @@ rheader <- function(..., format = "xx") {
     stop("either one one vector or rrow objects can be passed to ...")
   }
   
+  ncol <- vapply(rrows, ncell, numeric(1))
+  if (any(duplicated(ncol))) stop("number of columns to not match")
+  
   structure(
     setNames(rrows, NULL),
     nrow = length(rrows),
+    ncol = ncol[1],
     class = "rheader"
   )
 }

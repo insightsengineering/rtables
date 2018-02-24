@@ -9,7 +9,21 @@
 #' @export
 #' 
 dim.rtable <- function(x) {
-  as.vector(unlist(attributes(x)[c("nrow", "ncol")]))
+  c(attr(x, "nrow"), attr(x, "ncol"))
+}
+
+#' Dimension of rtable object
+#' 
+#' Retrieve or set the dimension of an \code{rtable} object
+#' 
+#' @param x an \code{\link{rtable}} object
+#' 
+#' @return vector of length two with number of rows and number of columns.
+#' 
+#' @export
+#' 
+dim.rheader <- function(x) {
+  c(attr(x, "nrow"), attr(x, "ncol"))
 }
 
 #' Row names of an \code{\link{rtable}} object
@@ -71,20 +85,37 @@ names.rtable <- function(x) {
 }
 
 
+#' Get Header ot Rtable
+#' 
+#' 
+#' @param x an rtable object
+#' 
+#' @export
+#' 
+#' @examples 
+#' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3)) 
+#' header(x)
+header <- function(x) {
+  
+  if (!is(x, "rtable")) stop("x is required to be an object of class rtable")
+  
+  attr(x, "header")
+}
+
 #' change row names
 #' 
 #' @export
 #' 
 #' @examples 
 #' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
-#' rheader(x) <- rheader(rrow("a", "a", "b", "d"))
+#' header(x) <- rheader(rrow("a", "a", "b", "d"))
 #' x
-`rheader<-` <- function(x, value) {
+`header<-` <- function(x, value) {
   if (!is(x, "rtable")) stop("x is not an rtable")
   
-  if (!is(value, "rheader")) stop("value is not an rheader")
+  if (!is(value, 'rheader')) value <- rheader(value)
   
-  if (ncell(attr(x, "header")[[1]]) != ncell(value[[1]])) stop("number of columns do not match")
+  if (ncol(x) != ncol(value)) stop("number of columns do not match")
   
   attr(x, "header") <- value
   x
