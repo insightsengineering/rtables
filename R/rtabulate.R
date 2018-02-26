@@ -181,19 +181,23 @@ rtabulate.factor <- function(x,
                              col_by = no_by("col_1"), 
                              FUN = length,
                              row_col_data_args = FALSE,
+                             useNA = c("no", "ifany", "always"),
                              format = "xx",
                              indent  = 0) {
 
   stop_if_has_na(col_by)
 
-  if (any(is.na(x))) {
-    tmp <- as.character(x)
-    if ("<NA>" %in% tmp) stop("x currently cannot have NAs and levels called <NA>")
-    tmp[is.na(tmp)] <- "<NA>"
-    x <- factor(tmp, levels = c(levels(x), "<NA>"))
-    warning("NAs were turned into level <NA>")
-  }
-
+  useNA <- match.arg(useNA)
+  
+  if (useNA %in% c("ifany", "always")) {
+    if (any("NA" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called NA")
+    
+    if (useNA == "always" || any(is.na(x))) {
+      levels(x) <- c(levels(x), "NA")
+      x[is.na(x)] <- "NA"
+    }
+  } 
+  
   ## note that splitting with empty-string creates a un-named list element
   if (any(levels(x) == "")) {
     if ("-" %in% levels(x)) stop("x currently cannot have '' and levels called -")

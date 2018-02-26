@@ -251,7 +251,7 @@ rheader <- function(..., format = "xx") {
   }
   
   ncol <- vapply(rrows, ncell, numeric(1))
-  if (any(duplicated(ncol))) stop("number of columns to not match")
+  if (!all(duplicated(ncol)[-1])) stop("number of columns to not match")
   
   structure(
     setNames(rrows, NULL),

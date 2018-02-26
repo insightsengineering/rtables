@@ -42,6 +42,29 @@ row.names.rtable <- function(x) {
   }, character(1))
 }
 
+#' Row names of an \code{\link{rtable}} object with spaces
+#' 
+#' Retrieve the row names of an \code{\link{rtable}} object
+#'   
+#' @inheritParams dim.rtable
+#' @param spaces numeric number of spaces per indent level
+#' 
+#' @return a vector with the row names
+#' 
+#' @export
+indented_row.names <- function(x, spaces = 2) {
+  
+  if (!is(x, "rtable") && !is(x, "rheader")) stop("x is required to be a rtable or a rheader")
+  
+  if (spaces < 0) stop("spaces needs to be >= 0")
+  
+  vapply(x, function(row) {
+    rn <- attr(row, "row.name")
+    indent <- strrep(" ", attr(row, "indent")*spaces)
+    if (is.null(rn)) "" else paste0(indent, rn)
+  }, character(1))
+}
+
 #' change row names of rtable
 #' 
 #' @export
@@ -64,6 +87,21 @@ row.names.rtable <- function(x) {
   
   x
 }
+
+#' Row names of an \code{\link{rheader}} object
+#' 
+#' Retrieve the row names of an \code{\link{rheader}} object
+#'   
+#' @inheritParams row.names.rtable
+#' 
+#' @return a vector with the row names
+#' 
+#' @export
+row.names.rheader <- function(x) {
+  row.names.rtable(x)
+}
+
+
 
 #' Get column names of an \code{\link{rtable}} object
 #' 
@@ -168,6 +206,13 @@ header <- function(x) {
 }
 
 
+#' access cell in rheader
+#' 
+#' 
+#' @export
+`[.rheader` <- function(x, i, j, ...) {
+  `[.rtable`(x, i, j, ...)
+}
 
 #' @export
 set_rrow_attrs <- function(rrow, row.name, indent) {
