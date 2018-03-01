@@ -255,14 +255,14 @@ rtabulate.factor <- function(x,
 #' @export
 #' 
 #' @examples 
-#' df <- expand.grid(row = factor(c("A", "B")), col = factor(c("X", "Y", "Z")))
+#' df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
 #' 
 #' rtabulate(
 #'   x = df,
-#'   row_by_var = "row",
-#'   col_by_var = "col",
+#'   row_by_var = "aaa",
+#'   col_by_var = "bbb",
 #'   FUN = function(x) { .GlobalEnv$iiii <- x ;sum(x$val)}
 #' )
 #' 
@@ -320,7 +320,8 @@ rtabulate.data.frame <- function(x,
                                  row_by_var = no_by("row_1"),
                                  col_by_var = no_by("col_1"),
                                  FUN = nrow, row_col_data_args = FALSE,
-                                 format = "xx") {
+                                 format = "xx",
+                                 indent = 0) {
   
   if (!is.no_by(row_by_var) && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
   if (!is.no_by(col_by_var) && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
@@ -355,7 +356,7 @@ rtabulate.data.frame <- function(x,
   }
   
   rrows <- Map(function(row_dat, rowname) {
-    rrowl(row.name = rowname, row_dat, format = format)
+    rrowl(row.name = rowname, row_dat, format = format, indent = indent)
   }, rrow_data, names(rrow_data))
   
   rtablel(header = names(cell_data[[1]]), rrows)
