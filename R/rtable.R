@@ -232,7 +232,7 @@ rtable.rrow <- function(..., headers = '', format = '') {
 #' }
 #'
 #' @export
-rtable.data.frame <- function(data, headers = '', format = '', indent = 0) {
+rtable.data.frame <- function(data, headers = '', format = '', rownames = NULL, indent = 0) {
   
   # pull unevaluated args (using names as header/format column name)
   args <- as.list(match.call())[-1]
@@ -259,16 +259,30 @@ rtable.data.frame <- function(data, headers = '', format = '', indent = 0) {
     indent <- rep(list(indent), nrow(data))
   }
   
+  # handle datatypes for rownames
+  if (is.name(args$rownames)) {
+    rownames <- Map(function(i) { 
+      if (is.null(i) || is.na(i)) NULL else i
+    }, data[[deparse(args$rownames)]])
+  } else if (is.character(rownames) && length(rownames) == 1) {
+    rownames <- rep(list(rownames), nrow(data))
+  } else if (!is.null(row.names(data))) {
+    rownames <- row.names(data)
+  } else {
+    rownames <- rep(NULL, nrow(data))
+  }
+  
   # construct table from rowwise formatting
-  rows_formatted <- Map(function(row_idx, row_format, row_indent) {
+  rows_formatted <- Map(function(row_idx, row_format, row_indent, row_name) {
     row_f <- Map(function(cell_format) {
+      req_vars <- unique(do.call('spf_varnames', as.list(cell_format)))
       rdata <- data[row_idx,]
-      rdata <- rdata[unique(do.call('spf_varnames', as.list(cell_format)))]
+      rdata <- rdata[]
       do.call('rcell', c(list(rdata), cell_format))
     }, row_format)
-    rrow_args <- c(row.names(data[row_idx,]), row_f, list(indent = row_indent))
+    rrow_args <- c(row_name, row_f, list(indent = row_indent))
     do.call('rrow', rrow_args)
-  }, row_idx = 1:nrow(data), row_format = format, row_indent = indent)
+  }, row_idx = 1:nrow(data), row_format = format, row_indent = indent, row_name = rownames)
   
   # build class structure
   structure(
@@ -278,6 +292,138 @@ rtable.data.frame <- function(data, headers = '', format = '', indent = 0) {
     nrow = nrow(data),
     class = "rtable"
   )
+}
+
+
+#' rtables constructor from grouped dataframe source
+#'
+#' @author Doug Kelkhoff \email{kelkhoff.douglas@gene.com}
+#'
+#' @param data a grouped_df containing one row per table row
+#' @param headers the headers to use for the resulting table
+#' @param format a single format string (parseable as a rtables format string
+#'   (e.g. 'xx.xx'), a \code{\link[rtables]{spf}()} format string), a list of
+#'   format strings, or a column name to reference for each row from the source
+#'   dataframe.
+#' @param indent a numeric value or a column name to reference for each row from
+#'   the source dataframe.
+#'
+#' @return \code{rtable} object with empty rowname headers inserted to indicate
+#'   dataframe groups
+#' 
+#' @examples
+#' mtcars %>% 
+#'   group_by(carb, gear, am) %>%
+#'   summarize(
+#'     n = n(), mpg.mean = mean(mpg), mpg.sd = sd(mpg), 
+#'     mpg.min = min(mpg), mpg.max = max(mpg)) %>%
+#'   mutate(
+#'     rownames = ifelse(am == 1, 'Automatic', 'Manual'),
+#'     format   = list(c('%(n)s', '%(mpg.mean).2f ± %(mpg.sd).2f', 
+#'       '%(mpg.min).1f ... %(mpg.max).1f'))) %>%
+#'   rtable(headers = c('N', 'MPG Mean ± SD', 'Min ... Max')) 
+#'
+#' iris %>%
+#'   mutate(Petal.Bin = ((Petal.Width + Petal.Length) / 2) %/% 0.5) %>%
+#'   group_by(Species, Petal.Bin) %>%
+#'   summarize_at(vars(matches('^Sepal')), 
+#'     funs(n = n(), mean = mean(.), sd = sd(.))) %>%
+#'   mutate(
+#'     pw.min = Petal.Bin * 0.5,
+#'     pw.max = (Petal.Bin + 1) * 0.5) %>%
+#'   mutate(
+#'     rownames = paste(pw.min, '≤ Petal <', pw.max),
+#'     format = list(c(
+#'       '%(Sepal.Width_n)s', 
+#'       '%(Sepal.Width_mean).2f ± %(Sepal.Width_sd).2f',
+#'       '%(Sepal.Length_mean).2f ± %(Sepal.Length_sd).2f'))) %>%
+#'  rtable(headers = c(
+#'    'Count', 
+#'    'Sepal Width\n(mean ± sd)', 
+#'    'Sepal Length\n(mean ± sd)'))
+#' 
+#' @export
+#'
+rtable.grouped_df <- function(data, headers = '', format = '', rownames = NULL, 
+    indent = 0) {
+  
+  # pull unevaluated args (using names as header/format column name)
+  args <- as.list(match.call())[-1]
+  
+  # handle datatypes for format
+  if (is.name(args$format)) {
+    format <- data[[deparse(args$format)]]
+    format <- Map(function(f) {
+      if (is.null(f) || is.na(f)) '' else f
+    }, format)
+  } else {
+    format <- Map(function(f) {
+      if (!length(names(f)) && is.character(f)) as.list(f) else f 
+    }, format)
+    format <- rep(list(format), nrow(data))
+  }
+  
+  # handle datatypes for indent
+  if (is.name(args$indent)) {
+    indent <- Map(function(i) { 
+      if (is.null(i) || is.na(i)) 0 else i
+    }, data[[deparse(args$indent)]])
+  } else {
+    indent <- rep(indent, nrow(data))
+  }
+  
+  # handle datatypes for rownames
+  if (is.name(args$rownames)) {
+    rownames <- Map(function(i) { 
+      if (is.null(i) || is.na(i)) NULL else i
+    }, data[[deparse(args$rownames)]])
+  } else if (is.character(rownames) && length(rownames) == 1) {
+    rownames <- rep(list(rownames), nrow(data))
+  } else if (!is.null(row.names(data))) {
+    rownames <- row.names(data)
+  } else {
+    rownames <- rep(NULL, nrow(data))
+  }
+  
+  # get group-by information
+  gb_vars <- attr(data, 'vars')
+  n_vars <- length(gb_vars)
+  gb_labels_df <- attr(data, 'labels')
+  indent <- indent + n_vars
+  
+  # determine when new group indent headers need to be added
+  top_lvls <- gb_labels_df %>% 
+    mutate_all(funs(. != lag(.))) %>% 
+    mutate(`_r_` = row_number()) %>% 
+    tidyr::gather('_k_', '_v_', gb_vars) %>% 
+    group_by(`_r_`) %>% 
+    filter(`_r_` == 1 | `_v_`) %>% 
+    slice(1) %>%
+    pull(`_k_`)
+  
+  # insert group indent headers above each group
+  data <- data %>% 
+    ungroup() %>%
+    mutate(format = format, indent = indent, rownames = rownames) %>%
+    group_by(.dots = gb_vars) %>%
+    do({
+      top_lvl  <- top_lvls[[1]]
+      top_lvls <- top_lvls[-1]
+      
+      top_lvl_idx <- which(gb_vars %in% top_lvl)
+      lvls <- gb_vars[top_lvl_idx:n_vars]
+      
+      header <- bind_rows(rep(list(head(., 1)), n_vars - top_lvl_idx + 1)) %>%
+        as.data.frame() %>% # to ensure factors get casted to character
+        mutate(
+          format = rep(list(c()), n_vars - top_lvl_idx + 1),
+          indent = top_lvl_idx + row_number() - 2,
+          rownames = paste(lvls, '=', .[1,lvls]))
+      rbind(header, .)
+    }) %>%
+    ungroup()
+  
+  rtable(data, headers, format = format, rownames = rownames, indent = indent)
 }
 
 
@@ -317,7 +463,6 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
       rcell(cell, format = format)
     }
   })
-  
   
   structure(
     cells_f,

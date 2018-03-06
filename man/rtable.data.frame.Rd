@@ -4,7 +4,8 @@
 \alias{rtable.data.frame}
 \title{rtables constructor from dataframe source}
 \usage{
-\method{rtable}{data.frame}(data, headers = "", format = "", indent = 0)
+\method{rtable}{data.frame}(data, headers = "", format = "",
+  rownames = NULL, indent = 0)
 }
 \arguments{
 \item{data}{a dataframe containing one row per table row}

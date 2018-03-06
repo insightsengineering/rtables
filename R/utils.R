@@ -95,5 +95,5 @@ spf_varnames <- function(s, re = NULL, re_group = NULL) {
     s <- substr(s, m + attr(m, 'match.length'), nchar(s))
   }
   
-  vars
+  as.character(vars)
 }
