@@ -5,7 +5,8 @@
 \title{Tabulate Factors}
 \usage{
 \method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
-  row_col_data_args = FALSE, format = "xx", indent = 0)
+  row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
+  format = "xx", indent = 0)
 }
 \arguments{
 \item{x}{a vecor}
@@ -33,11 +34,11 @@ rtabulate(x = iris$Species)
 
 rtabulate(x = iris$Species, no_by("sum"))
 
-col_by <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
+sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
 
-rtabulate(iris$Species, col_by)
+rtabulate(iris$Species, col_by=sl5)
 
-rtabulate(iris$Species, col_by,
+rtabulate(iris$Species, col_by=sl5,
    FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 10) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
    row_col_data_args = TRUE,
    format = "xx (xx.xx\%)"

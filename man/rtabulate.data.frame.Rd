@@ -6,21 +6,25 @@
 \usage{
 \method{rtabulate}{data.frame}(x, row_by_var = no_by("row_1"),
   col_by_var = no_by("col_1"), FUN = nrow, row_col_data_args = FALSE,
-  format = "xx")
+  format = "xx", indent = 0)
 }
 \description{
 Split data.frame and apply functions
 }
 \examples{
-df <- expand.grid(row = factor(c("A", "B")), col = factor(c("X", "Y", "Z")))
+df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
 df <- rbind(df, df)
 df$val <- 1:nrow(df)
 
+iiii <- list()
 rtabulate(
   x = df,
-  row_by_var = "row",
-  col_by_var = "col",
-  FUN = function(x) { .GlobalEnv$iiii <- x ;sum(x$val)}
+  row_by_var = "aaa",
+  col_by_var = "bbb",
+  FUN = function(x) {  
+     .GlobalEnv$iiii <- c(iiii, list(x))
+     sum(x$val)
+  }
 )
 
 rtabulate(

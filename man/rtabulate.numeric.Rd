@@ -43,7 +43,7 @@ rtabulate(iris$Sepal.Length)
  
 rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
  
-with(iris, rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
+with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
 
 SL <- iris$Sepal.Length
 Sp <- iris$Species

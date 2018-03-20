@@ -98,7 +98,7 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
 #'  
 #' rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
 #'  
-#' with(iris, rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
+#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
 #'
 #' SL <- iris$Sepal.Length
 #' Sp <- iris$Species
@@ -165,11 +165,11 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' 
 #' rtabulate(x = iris$Species, no_by("sum"))
 #' 
-#' col_by <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
+#' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
 #' 
-#' rtabulate(iris$Species, col_by)
+#' rtabulate(iris$Species, col_by=sl5)
 #' 
-#' rtabulate(iris$Species, col_by,
+#' rtabulate(iris$Species, col_by=sl5,
 #'    FUN = function(cell_data, row_data, col_data) if (length(cell_data) > 10) length(cell_data) * c(1, 1/length(col_data)) else rcell("-", format = "xx"),
 #'    row_col_data_args = TRUE,
 #'    format = "xx (xx.xx%)"
@@ -259,11 +259,15 @@ rtabulate.factor <- function(x,
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
 #' 
+#' iiii <- list()
 #' rtabulate(
 #'   x = df,
 #'   row_by_var = "aaa",
 #'   col_by_var = "bbb",
-#'   FUN = function(x) { .GlobalEnv$iiii <- x ;sum(x$val)}
+#'   FUN = function(x) {  
+#'      .GlobalEnv$iiii <- c(iiii, list(x))
+#'      sum(x$val)
+#'   }
 #' )
 #' 
 #' rtabulate(
