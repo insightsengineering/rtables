@@ -143,7 +143,7 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
     ## convert to tagList
     ## convert \n to <br/>
     
-    if (txt == "") {
+    if (identical(txt, "")) {
       txt
     } else {
       els <- unlist(strsplit(txt, "\n", fixed = TRUE))
