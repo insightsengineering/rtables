@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a table object to an <code><a href='rtable.html'>rtable</a></code> — as.rtable.table • rtables</title>
+<title>change row names — header&lt;- • rtables</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -98,55 +98,26 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a table object to an <code><a href='rtable.html'>rtable</a></code></h1>
+    <h1>change row names</h1>
     </div>
 
     
-    <p>Convert a table object to an <code><a href='rtable.html'>rtable</a></code></p>
+    <p>change row names</p>
     
 
-    <pre class="usage"><span class='co'># S3 method for table</span>
-<span class='fu'><a href='as.rtable.html'>as.rtable</a></span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>an <code><a href='rtable.html'>rtable</a></code> object</p></td>
-    </tr>
-    <tr>
-      <th>format</th>
-      <td><p>format of the cells</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'><a href='header.html'>header</a></span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+        
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='as.rtable.html'>as.rtable</a></span>(<span class='fu'>table</span>(<span class='no'>iris</span>$<span class='no'>Species</span>))
-<span class='no'>tbl</span></div><div class='output co'>#&gt;            setosa          versicolor        virginica 
-#&gt; -------------------------------------------------------
-#&gt; 1            50                50                50    </div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>tbl</span>)
-<span class='co'># }</span><div class='input'>
-
-<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='as.rtable.html'>as.rtable</a></span>(<span class='fu'>table</span>(<span class='fu'>sample</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>4</span>], <span class='fl'>200</span>, <span class='fl'>TRUE</span>), <span class='fu'>sample</span>(<span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>4</span>], <span class='fl'>200</span>, <span class='fl'>TRUE</span>)))
-<span class='no'>tbl</span></div><div class='output co'>#&gt;          A         B         C         D 
-#&gt; -----------------------------------------
-#&gt; a        12        8         15        13
-#&gt; b        13        6         12        17
-#&gt; c        14        10        10        17
-#&gt; d        16        7         14        16</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>tbl</span>, <span class='kw'>row.names.bold</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(<span class='kw'>header</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>))
+<span class='fu'><a href='header.html'>header</a></span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='rheader.html'>rheader</a></span>(<span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"d"</span>))
+<span class='no'>x</span></div><div class='output co'>#&gt; a            a        b        d
+#&gt; --------------------------------
+#&gt; row 1        1        2        3</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
             
       <li><a href="#examples">Examples</a></li>
     </ul>

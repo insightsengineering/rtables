@@ -2,10 +2,16 @@
 % Please edit documentation in R/rtabulate.R
 \name{is.no_by}
 \alias{is.no_by}
-\title{check if object is a no_by class}
+\title{Check if object inherits from the \code{no_by} Class}
 \usage{
 is.no_by(x)
 }
+\arguments{
+\item{x}{an object}
+}
+\value{
+\code{TRUE} or \code{FALSE}
+}
 \description{
-check if object is a no_by class
+Functions to test inheritance on \code{no_by}
 }

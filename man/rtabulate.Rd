@@ -6,9 +6,21 @@
 \usage{
 rtabulate(x, ...)
 }
+\arguments{
+\item{x}{}
+}
+\value{
+an \code{\link{rtable}} project
+}
 \description{
 \code{rtablulate} provides a number of methods to derive
-\code{\link{rtable}}s. The methods take a functional approach: the data is
-split into cell-data and a function can be specified that returns a data
-structre (or \code{\link{rcell}}).
+\code{\link{rtable}}s. Conceptually the \code{rtabulate} has it's origin in
+\code{\link{tapply}}.
+}
+\details{
+The data is split into cell-data and a function can be specified that return
+a data structre (or \code{\link{rcell}}).
+}
+\author{
+Adrian Waddell
 }

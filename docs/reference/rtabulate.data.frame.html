@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">Rtabulate</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -96,19 +108,25 @@
     <pre class="usage"><span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"row_1"</span>),
   <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"col_1"</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>nrow</span>, <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</pre>
+  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
         
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an <code><a href='rtable.html'>rtable</a></code> project</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>expand.grid</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>)), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='fu'>c</span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>, <span class='st'>"Z"</span>)))
+    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>expand.grid</span>(<span class='kw'>aaa</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>)), <span class='kw'>bbb</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='fu'>c</span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>, <span class='st'>"Z"</span>)))
 <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>rbind</span>(<span class='no'>df</span>, <span class='no'>df</span>)
 <span class='no'>df</span>$<span class='no'>val</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fu'>nrow</span>(<span class='no'>df</span>)
 
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>df</span>,
-  <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='st'>"row"</span>,
-  <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='st'>"col"</span>,
-  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>)<span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>val</span>)
+  <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='st'>"aaa"</span>,
+  <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='st'>"bbb"</span>,
+  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
+     <span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>val</span>)
+  }
 )</div><div class='output co'>#&gt;          X         Y         Z 
 #&gt; -------------------------------
 #&gt; A        8         12        16
@@ -133,7 +151,7 @@
 #&gt; virginica         329.4</div><div class='input'>
 <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>,
-  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>c</span>(<span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>), <span class='fu'>sd</span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>)),
+  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>) <span class='fu'>c</span>(<span class='fu'>sum</span>(<span class='no'>cell_data</span>$<span class='no'>Sepal.Length</span>), <span class='fu'>sd</span>(<span class='no'>cell_data</span>$<span class='no'>Sepal.Length</span>)),
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx.xx (xx.xx%)"</span>
 )
 
@@ -146,12 +164,39 @@
 <span class='no'>tbl</span></div><div class='output co'>#&gt;                                col_1     
 #&gt; -----------------------------------------
 #&gt; Sum of Sepal Length        876.5 (82.81%)</div><div class='input'>
-</div></pre>
+<span class='no'>iris2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
+<span class='no'>iris2</span>$<span class='no'>fsl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
+
+<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris2</span>,
+  <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='st'>"fsl5"</span>,
+  <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='st'>"Species"</span>,
+  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x_cell</span>, <span class='no'>x_row</span>, <span class='no'>x_col</span>) {
+    <span class='kw'>if</span> (<span class='fu'>nrow</span>(<span class='no'>x_cell</span>) <span class='kw'>&lt;</span> <span class='fl'>10</span>) {
+      <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"-"</span>)
+    } <span class='kw'>else</span> {
+      <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>lm</span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>x_cell</span>)
+      <span class='no'>m_col</span> <span class='kw'>&lt;-</span> <span class='fu'>mean</span>(<span class='no'>x_col</span>$<span class='no'>Sepal.Length</span>)
+      <span class='no'>m_row</span> <span class='kw'>&lt;-</span> <span class='fu'>mean</span>(<span class='no'>x_row</span>$<span class='no'>Sepal.Length</span>)
+
+      <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='fu'>list</span>(<span class='no'>fit</span>, <span class='no'>m_col</span>, <span class='no'>m_row</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>output</span>) {
+        <span class='fu'>paste</span>(<span class='st'>"df:"</span>, <span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='no'>df.residual</span>,<span class='st'>", and"</span>, <span class='fu'>round</span>(<span class='no'>x</span><span class='kw'>[[</span><span class='fl'>2</span>]],<span class='fl'>1</span>), <span class='st'>", and"</span>, <span class='fu'>round</span>(<span class='no'>x</span><span class='kw'>[[</span><span class='fl'>3</span>]],<span class='fl'>2</span>))
+      })
+    }
+  } ,
+  <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
+<span class='no'>tbl</span></div><div class='output co'>#&gt;                           setosa                           versicolor                          virginica         
+#&gt; -----------------------------------------------------------------------------------------------------------------
+#&gt; S.L &gt; 5          df: 20 , and 5 , and 6.13         df: 45 , and 5.9 , and 6.13        df: 47 , and 6.6 , and 6.13
+#&gt; S.L &lt;= 5         df: 26 , and 5 , and 4.79                      -                                  -             </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

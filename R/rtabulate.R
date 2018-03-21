@@ -2,12 +2,20 @@
 #' Tabulation Methods
 #'
 #' \code{rtablulate} provides a number of methods to derive
-#' \code{\link{rtable}}s. The methods take a functional approach: the data is
-#' split into cell-data and a function can be specified that returns a data
-#' structre (or \code{\link{rcell}}).
+#' \code{\link{rtable}}s. Conceptually the \code{rtabulate} has it's origin in
+#' \code{\link{tapply}}.
+#' 
+#' The data is split into cell-data and a function can be specified that return
+#' a data structre (or \code{\link{rcell}}).
 #'   
+#' @param x 
+#' 
+#' @return an \code{\link{rtable}} project
+#' 
+#' @author Adrian Waddell
+#'       
 #' @export
-#'  
+#' 
 rtabulate <- function(x, ...) {
   UseMethod("rtabulate", x)
 }
@@ -27,32 +35,25 @@ no_by <- function(name) {
   structure(name, class = "no_by")
 }
 
-#' check if object is a no_by class
+#' Check if object inherits from the \code{no_by} Class
+#' 
+#' Functions to test inheritance on \code{no_by}
+#' 
+#' @param x an object
+#' 
+#' @return \code{TRUE} or \code{FALSE}
+#' 
 #' @export
 is.no_by <- function(x) {
   is(x, "no_by")
 }
 
-#' rtabulate default for vectors
-#' 
-#' this method is used for vectors of type \code{logical} and \code{numeric}
-#' 
-#' @inheritParams rrow
-#' @param x a vecor
-#' @param col_by a vector of length \code{nrow(x)} that defines which levels in
-#'   \code{col_by} define a column. If data should not be split into columns use
-#'   the \code{\link{no_by}} function.
-#' @param FUN a function that processes the cell data, if \code{row_data_arg} is
-#'   set to \code{TRUE} the a second argument with the row data is passed to
-#'   \code{FUN}
-#' @param row_data_arg call \code{FUN} with the row data as the second argument 
-#' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
-#'   then the \code{format} is applied
-#' 
-#' @return a slingle \code{rrow} with columns according to the levels of
-#'   \code{col_by}
-#' 
-#'
+# rtabulate default for vectors
+# 
+# this method is used for vectors of type \code{logical} and \code{numeric}
+# 
+# see parameter descrition for rtabulate.numeric
+#
 rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_arg=FALSE, format = NULL, row.name = "", indent  = 0) {
   
   if (is.null(FUN)) stop("FUN is required")
@@ -83,12 +84,22 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
 #' by default the \code{\link[stats]{fivenum}} function is applied to the
 #' vectors associated to the cells
 #' 
-#' @inheritParams rtabulate_default
+#' 
+#' @inheritParams rrow
+#' @param x a vecor
+#' @param col_by a \code{\link{factor}} of length \code{nrow(x)} that defines
+#'   which levels in \code{col_by} define a column. If data should not be split
+#'   into columns use the \code{\link{no_by}} function.
+#' @param FUN a function that processes the cell data, if \code{row_data_arg} is
+#'   set to \code{TRUE} the a second argument with the row data is passed to
+#'   \code{FUN}
+#' @param row_data_arg call \code{FUN} with the row data as the second argument 
+#' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
+#'   then the \code{format} is applied
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
 #' 
-#' 
-#' @inherit rtabulate_default return
+#' @inherit rtabulate return
 #' 
 #' @export
 #' 
@@ -123,7 +134,7 @@ rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, row_dat
 #' 
 #' @inheritParams rtabulate.numeric
 #' 
-#' @inherit rtabulate_default return
+#' @inherit rtabulate return
 #' 
 #' @export
 #' 
@@ -156,7 +167,9 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' Tabulate Factors
 #' 
 #' @inheritParams rtabulate.numeric
-#'
+#' 
+#' @inherit rtabulate return
+#' 
 #' @export
 #'
 #' @examples 
@@ -175,7 +188,7 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #'    format = "xx (xx.xx%)"
 #' )
 #' 
-#' rtabulate(col_by, iris$Species)
+#' rtabulate(sl5, iris$Species)
 #' 
 rtabulate.factor <- function(x,
                              col_by = no_by("col_1"), 
@@ -252,20 +265,22 @@ rtabulate.factor <- function(x,
 
 #' Split data.frame and apply functions
 #' 
+#' 
+#' @inherit rtabulate return
+#' 
 #' @export
+#' 
 #' 
 #' @examples 
 #' df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
 #' 
-#' iiii <- list()
 #' rtabulate(
 #'   x = df,
 #'   row_by_var = "aaa",
 #'   col_by_var = "bbb",
 #'   FUN = function(x) {  
-#'      .GlobalEnv$iiii <- c(iiii, list(x))
 #'      sum(x$val)
 #'   }
 #' )

@@ -1,0 +1,73 @@
+---
+title: "rtabulate"
+author: "Adrian Waddell"
+date: "3/21/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = FALSE}
+library(rtables)
+```
+
+## Introduction
+
+`rtabulate` provides a number of methods to compute `rtables`. The idea behind
+`rtabulate` is to have a similar funtion to `tapply` that returns rtables
+instead of lists. For example, for the iris data we might be interested in the
+average `Sepal.Length` for each `Species` which can be answered with `tapply` as
+follows:
+
+```{r}
+attach(iris)
+tapply(X = Sepal.Length, INDEX = Species, FUN = mean)
+```
+
+and to get the same numbers with `rtabulate` we can run
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = mean)
+```
+
+Because rtables also provide formatting options we can pass that info to
+`rtabulate`
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = mean, format = "xx.xx")
+```
+
+This vignette will provide an overview of `rtabulate` and show how different
+types of tables can be derived with it.
+
+
+## Tabulation Methods
+
+The tabulation methods follow the split apply combine pattern. That is, for a
+vector `x`, a factor `col_by`, and a function `FUN` the steps are:
+
+1. split `x` by `col_by`
+   ```{r, eval = FALSE}
+   x_s <- split(x, col_by)
+   ```
+1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`, and  in the split data which is then
+treated as an `rcell`
+
+1. combine the reclls to an rrow and create an rtable
+
+
+
+
+### Tabulating Numerical Data
+
+### Tabulating Boolean Data
+
+### Tabulating Factors
+
+### Tabulation based on Data Frames
+

@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">Rtabulate</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -91,19 +103,45 @@
 
     
     <p><code>rtablulate</code> provides a number of methods to derive
-<code><a href='rtable.html'>rtable</a></code>s. The methods take a functional approach: the data is
-split into cell-data and a function can be specified that returns a data
-structre (or <code><a href='rcell.html'>rcell</a></code>).</p>
+<code><a href='rtable.html'>rtable</a></code>s. Conceptually the <code>rtabulate</code> has it's origin in
+<code>tapply</code>.</p>
     
 
     <pre class="usage"><span class='fu'>rtabulate</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an <code><a href='rtable.html'>rtable</a></code> project</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The data is split into cell-data and a function can be specified that return
+a data structre (or <code><a href='rcell.html'>rcell</a></code>).</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
+
+    <h2>Author</h2>
+    
+Adrian Waddell
 
   </div>
 </div>

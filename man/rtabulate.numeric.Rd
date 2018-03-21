@@ -10,9 +10,9 @@
 \arguments{
 \item{x}{a vecor}
 
-\item{col_by}{a vector of length \code{nrow(x)} that defines which levels in
-\code{col_by} define a column. If data should not be split into columns use
-the \code{\link{no_by}} function.}
+\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column. If data should not be split
+into columns use the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -30,8 +30,7 @@ used as \code{row.name} of the \code{\link{rrow}}}
 indented}
 }
 \value{
-a slingle \code{rrow} with columns according to the levels of
-  \code{col_by}
+an \code{\link{rtable}} project
 }
 \description{
 by default the \code{\link[stats]{fivenum}} function is applied to the

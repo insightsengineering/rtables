@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">Rtabulate</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -94,7 +106,7 @@
 cells. Currently an <code>rtable</code> can be converted to html and ascii.</p>
     
 
-    <pre class="usage"><span class='fu'>rtable</span>(<span class='no'>header</span>, <span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</pre>
+    <pre class="usage"><span class='fu'>rtable</span>(<span class='no'>header</span>, <span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +168,7 @@ outputting function.</p>
 #&gt;                     mean         median         mean         median
 #&gt; -------------------------------------------------------------------
 #&gt; All Species         5.84          5.8           3.76          4.35 </div><div class='input'>
-<span class='fu'>names</span>(<span class='no'>tbl</span>) <span class='co'># always first row of header</span></div><div class='output co'>#&gt; [1] "col_1"</div><div class='input'>
+<span class='fu'>names</span>(<span class='no'>tbl</span>) <span class='co'># always first row of header</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'tbl' not found</span></div><div class='input'>
 <span class='co'># Single row header</span>
 
 <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>rtable</span>(
@@ -173,8 +185,8 @@ outputting function.</p>
 <span class='no'>tbl</span></div><div class='output co'>#&gt;                                           Treatement        Comparison
 #&gt;                                             N=100             N=300   
 #&gt; ----------------------------------------------------------------------
-#&gt; A                                          104, 0.2          100, 0.4 
-#&gt; B                                          23, 0.4           43, 0.5  
+#&gt; A                                         104 (20%)         100 (40%) 
+#&gt; B                                          23 (40%)          43 (50%) 
 #&gt; 
 #&gt; this is a very long section header
 #&gt; estimate                                             55.23            
@@ -184,11 +196,11 @@ outputting function.</p>
 #&gt; [5] "estimate"                           "95% CI"                            </div><div class='input'><span class='fu'>names</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; [1] "Treatement\nN=100" "Comparison\nN=300"</div><div class='input'>
 
 <span class='co'># Subsetting</span>
-<span class='no'>tbl</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 100, 0.4</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>3</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>1</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt;          Treatement        Comparison
+<span class='no'>tbl</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 100 (40%)</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>3</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>1</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>5</span>,<span class='fl'>2</span>]</div><div class='output co'>#&gt; 55.23</div><div class='input'><span class='no'>tbl</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt;          Treatement        Comparison
 #&gt;            N=100             N=300   
 #&gt; -------------------------------------
-#&gt; A         104, 0.2          100, 0.4 
-#&gt; B         23, 0.4           43, 0.5  
+#&gt; A        104 (20%)         100 (40%) 
+#&gt; B         23 (40%)          43 (50%) 
 #&gt; </div><div class='input'>
 
 <span class='co'># Data Structure methods</span>
@@ -211,13 +223,13 @@ outputting function.</p>
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
 #&gt;     &lt;td class="rowname text-left"&gt;A&lt;/td&gt;
-#&gt;     &lt;td class="text-center"&gt;104, 0.2&lt;/td&gt;
-#&gt;     &lt;td class="text-center"&gt;100, 0.4&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;104 (20%)&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;100 (40%)&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
 #&gt;     &lt;td class="rowname text-left"&gt;B&lt;/td&gt;
-#&gt;     &lt;td class="text-center"&gt;23, 0.4&lt;/td&gt;
-#&gt;     &lt;td class="text-center"&gt;43, 0.5&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;23 (40%)&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;43 (50%)&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
 #&gt;     &lt;td class="rowname text-left" colspan="3"&gt;&lt;/td&gt;
@@ -260,9 +272,9 @@ outputting function.</p>
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='no'>my_format</span>,
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row1"</span>, <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>), <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>])
 )
-<span class='no'>tbl3</span></div><div class='output co'>#&gt;                          A                                   B              
-#&gt; ----------------------------------------------------------------------------
-#&gt; row1                 1, 2, 3, 4                 a, b, c, d, e, f, g, h, i, j</div><div class='input'> 
+<span class='no'>tbl3</span></div><div class='output co'>#&gt;                      A                          B         
+#&gt; ----------------------------------------------------------
+#&gt; row1              1/2/3/4              a/b/c/d/e/f/g/h/i/j</div><div class='input'> 
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

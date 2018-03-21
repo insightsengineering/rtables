@@ -8,6 +8,9 @@
   col_by_var = no_by("col_1"), FUN = nrow, row_col_data_args = FALSE,
   format = "xx", indent = 0)
 }
+\value{
+an \code{\link{rtable}} project
+}
 \description{
 Split data.frame and apply functions
 }
@@ -16,13 +19,11 @@ df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
 df <- rbind(df, df)
 df$val <- 1:nrow(df)
 
-iiii <- list()
 rtabulate(
   x = df,
   row_by_var = "aaa",
   col_by_var = "bbb",
   FUN = function(x) {  
-     .GlobalEnv$iiii <- c(iiii, list(x))
      sum(x$val)
   }
 )

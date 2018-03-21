@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">Rtabulate</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -95,7 +107,8 @@
 
     <pre class="usage"><span class='co'># S3 method for factor</span>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"col_1"</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>,
-  <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+  <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"no"</span>, <span class='st'>"ifany"</span>, <span class='st'>"always"</span>),
+  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -106,9 +119,9 @@
     </tr>
     <tr>
       <th>col_by</th>
-      <td><p>a vector of length <code>nrow(x)</code> that defines which levels in
-<code>col_by</code> define a column. If data should not be split into columns use
-the <code><a href='no_by.html'>no_by</a></code> function.</p></td>
+      <td><p>a <code>factor</code> of length <code>nrow(x)</code> that defines
+which levels in <code>col_by</code> define a column. If data should not be split
+into columns use the <code><a href='no_by.html'>no_by</a></code> function.</p></td>
     </tr>
     <tr>
       <th>FUN</th>
@@ -128,6 +141,10 @@ indented</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an <code><a href='rtable.html'>rtable</a></code> project</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -141,33 +158,32 @@ indented</p></td>
 #&gt; setosa            50 
 #&gt; versicolor        50 
 #&gt; virginica         50 </div><div class='input'>
-<span class='no'>col_by</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
+<span class='no'>sl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
 
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='no'>col_by</span>)</div><div class='output co'>#&gt;                   S.L &gt; 5         S.L &lt;= 5
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span><span class='kw'>=</span><span class='no'>sl5</span>)</div><div class='output co'>#&gt;                   S.L &gt; 5         S.L &lt;= 5
 #&gt; ------------------------------------------
 #&gt; setosa               22              28   
 #&gt; versicolor           47              3    
 #&gt; virginica            49              1    </div><div class='input'>
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='no'>col_by</span>,
-   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>, <span class='no'>row_data</span>, <span class='no'>col_data</span>) <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>cell_data</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>) <span class='fu'>length</span>(<span class='no'>cell_data</span>) * <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='fu'>length</span>(<span class='no'>col_data</span>)) <span class='kw'>else</span> <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"-"</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>),
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span><span class='kw'>=</span><span class='no'>sl5</span>,
+   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>, <span class='no'>row_data</span>, <span class='no'>col_data</span>) <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>cell_data</span>) <span class='kw'>&gt;</span> <span class='fl'>10</span>) <span class='fu'>length</span>(<span class='no'>cell_data</span>) * <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='fu'>length</span>(<span class='no'>col_data</span>)) <span class='kw'>else</span> <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"-"</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>),
    <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx (xx.xx%)"</span>
 )</div><div class='output co'>#&gt;                     S.L &gt; 5           S.L &lt;= 5  
 #&gt; ------------------------------------------------
 #&gt; setosa            22 (18.64%)        28 (87.5%) 
-#&gt; versicolor        47 (39.83%)         3 (9.38%) 
-#&gt; virginica         49 (41.53%)         1 (3.12%) </div><div class='input'>
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>col_by</span>, <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt;                   setosa          versicolor        virginica 
-#&gt; --------------------------------------------------------------
-#&gt; S.L &gt; 5             22                47                49    
-#&gt; S.L &lt;= 5            28                3                 1     </div><div class='input'>
+#&gt; versicolor        47 (39.83%)             -     
+#&gt; virginica         49 (41.53%)             -     </div><div class='input'>
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>col_by</span>, <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; <span class='error'>Error in rtabulate(col_by, iris$Species): object 'col_by' not found</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

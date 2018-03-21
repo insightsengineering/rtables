@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">Rtabulate</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -97,12 +109,16 @@
 <p>Version <code>0.0.2</code> is a major re-design with lots of internal refactoring and the following API changes:</p>
 <ul>
 <li><p>Redesign: <code>rtable</code> has now <code>header</code> argument instead of <code>col.names</code>. A <code>header</code> can be created with <code>rheader</code> and is a collection of <code>rrow</code>s. If <code>header</code> is set to <code>c("A", "B")</code> then <code>rtable</code> will create the <code>rheader</code> with a single <code>rrow</code> and by setting <code>row.name</code> to <code>NULL</code>.</p></li>
+<li><p><code>header</code> and <code>header&lt;-</code> function added</p></li>
 <li><p>renamed <code>get_rcell_formats</code> to <code>list_rcell_format_labels</code></p></li>
 <li><p>If <code>rcell</code> format is <code>NULL</code> then the cell content will be converted to a string with <code>paste(as.character(x), collapse = ', ')</code></p></li>
 <li><p>accessor <code>[i,]</code> works now to subset a table.</p></li>
 <li><p><code>rbind</code> method for rtables</p></li>
 <li><p><code>row.names&lt;-.rtable</code> method</p></li>
 <li><p><code>rtabulate</code> added for creating tables</p></li>
+<li><p><code>indented_row.names</code> function added</p></li>
+<li>
+</li>
 </ul>
 </div>
     <div id="rtable-0-0-1" class="section level2">

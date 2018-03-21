@@ -11,9 +11,9 @@
 \arguments{
 \item{x}{a vecor}
 
-\item{col_by}{a vector of length \code{nrow(x)} that defines which levels in
-\code{col_by} define a column. If data should not be split into columns use
-the \code{\link{no_by}} function.}
+\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column. If data should not be split
+into columns use the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -24,6 +24,9 @@ then the \code{format} is applied}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
+}
+\value{
+an \code{\link{rtable}} project
 }
 \description{
 Tabulate Factors

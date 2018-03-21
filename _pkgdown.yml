@@ -49,3 +49,8 @@ reference:
     contents:
     - Viewer
     - compare_rtables
+
+articles:
+  contents:
+  - rtabulate
+
