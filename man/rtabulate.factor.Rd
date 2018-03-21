@@ -47,6 +47,6 @@ rtabulate(iris$Species, col_by=sl5,
    format = "xx (xx.xx\%)"
 )
 
-rtabulate(col_by, iris$Species)
+rtabulate(sl5, iris$Species)
 
 }

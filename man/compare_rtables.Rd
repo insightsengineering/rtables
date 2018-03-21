@@ -22,8 +22,8 @@ should not be there.
 }
 \examples{
 
-t1 <- rtable(col.name = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
-t2 <- rtable(col.name = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
+t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
+t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
 compare_rtables(object = t1, expected = t2) 
 
@@ -32,7 +32,7 @@ Viewer(t1, t2)
 }
 
 expected <- rtable(
-   col.names = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),
@@ -45,7 +45,7 @@ Viewer(expected)
 }
 
 object <- rtable(
-   col.names = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow("section title"),
@@ -57,7 +57,7 @@ compare_rtables(object, expected)
 compare_rtables(object, expected, comp.attr = FALSE)
 
 object <- rtable(
-   col.names = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),
@@ -67,7 +67,7 @@ object <- rtable(
 compare_rtables(object, expected)
 
 object <- rtable(
-   col.names = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
    format = "xx",
    rrow("row 1", 14, 15.03),
    rrow(),
@@ -78,7 +78,7 @@ object <- rtable(
 compare_rtables(object, expected)
 
 object <- rtable(
-   col.names = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),

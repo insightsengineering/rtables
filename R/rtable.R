@@ -52,7 +52,7 @@
 #' 
 #' mtbl
 #' 
-#' names(tbl) # always first row of header
+#' names(mtbl) # always first row of header
 #' 
 #' # Single row header
 #' 

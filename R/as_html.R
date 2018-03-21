@@ -14,7 +14,7 @@
 #' @examples 
 #' 
 #' tbl <- rtable(
-#'   col.names = LETTERS[1:3],
+#'   header = LETTERS[1:3],
 #'   format = "xx",
 #'   rrow("r1", 1,2,3),
 #'   rrow("r2", 4,3,2, indent = 1),

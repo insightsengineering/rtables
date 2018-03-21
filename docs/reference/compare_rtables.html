@@ -71,7 +71,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/rtabulate.html">Rtabulate</a>
+      <a href="../articles/rtabulate.html">rtabulate</a>
     </li>
   </ul>
 </li>
@@ -133,57 +133,87 @@ should not be there.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(<span class='kw'>col.name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.name = c("A", "B"), format = "xx", rrow("row 1", 1,     2)): not all arguments in ... are of class rrow</span></div><div class='input'><span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(<span class='kw'>col.name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.name = c("A", "B", "C"), format = "xx", rrow("row 1",     1, 2, 3)): not all arguments in ... are of class rrow</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>t1</span>, <span class='kw'>expected</span> <span class='kw'>=</span> <span class='no'>t2</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 't1' not found</span></div><div class='input'>
+<span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(<span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>))
+<span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(<span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
+
+<span class='fu'>compare_rtables</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>t1</span>, <span class='kw'>expected</span> <span class='kw'>=</span> <span class='no'>t2</span>)</div><div class='output co'>#&gt;   1 2 3
+#&gt; 1 . . +
+#&gt; attr(,"info")
+#&gt; [1] column names are not the same</div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>)
 <span class='co'># }</span><div class='input'>
 <span class='no'>expected</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
-   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
+   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>,
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>10</span>, <span class='fl'>15</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"section title"</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row colspan"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='fu'>c</span>(<span class='fl'>.345543</span>, <span class='fl'>.4432423</span>), <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"(xx.xx, xx.xx)"</span>))
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.names = c("ARM A\nN=100", "ARM B\nN=200"), format = "xx",     rrow("row 1", 10, 15), rrow(), rrow("section title"), rrow("row colspan",         rcell(c(0.345543, 0.4432423), colspan = 2, format = "(xx.xx, xx.xx)"))): not all arguments in ... are of class rrow</span></div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
+)</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='Viewer.html'>Viewer</a></span>(<span class='no'>expected</span>)
 <span class='co'># }</span><div class='input'>
 <span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
-   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
+   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>,
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>10</span>, <span class='fl'>15</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"section title"</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row colspan"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='fu'>c</span>(<span class='fl'>.345543</span>, <span class='fl'>.4432423</span>), <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"(xx.xx, xx.xx)"</span>))
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.names = c("ARM A\nN=100", "ARM B\nN=200"), format = "xx",     rrow("row 1", 10, 15), rrow("section title"), rrow("row colspan",         rcell(c(0.345543, 0.4432423), colspan = 2, format = "(xx.xx, xx.xx)"))): not all arguments in ... are of class rrow</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 'object' not found</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>, <span class='kw'>comp.attr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 'object' not found</span></div><div class='input'>
+)
+
+<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt;   1 2
+#&gt; 1 . .
+#&gt; 2 . .
+#&gt; 3 X X
+#&gt; 4 + +</div><div class='input'>
+<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>, <span class='kw'>comp.attr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;   1 2
+#&gt; 1 . .
+#&gt; 2 . .
+#&gt; 3 X X
+#&gt; 4 + +
+#&gt; attr(,"info")
+#&gt; [1] cell attributes have not been compared</div><div class='input'>
 <span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
-   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
+   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>,
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>10</span>, <span class='fl'>15</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"section title"</span>)
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.names = c("ARM A\nN=100", "ARM B\nN=200"), format = "xx",     rrow("row 1", 10, 15), rrow(), rrow("section title")): not all arguments in ... are of class rrow</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 'object' not found</span></div><div class='input'>
+)
+
+<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt;   1 2
+#&gt; 1 . .
+#&gt; 2 . .
+#&gt; 3 . .
+#&gt; 4 + +</div><div class='input'>
 <span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
-   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
+   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>,
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>14</span>, <span class='fl'>15.03</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"section title"</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row colspan"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='fu'>c</span>(<span class='fl'>.345543</span>, <span class='fl'>.4432423</span>), <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"(xx.xx, xx.xx)"</span>))
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.names = c("ARM A\nN=100", "ARM B\nN=200"), format = "xx",     rrow("row 1", 14, 15.03), rrow(), rrow("section title"),     rrow("row colspan", rcell(c(0.345543, 0.4432423), colspan = 2,         format = "(xx.xx, xx.xx)"))): not all arguments in ... are of class rrow</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 'object' not found</span></div><div class='input'>
+)
+
+<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt;   1 2
+#&gt; 1 X .
+#&gt; 2 . .
+#&gt; 3 . .
+#&gt; 4 . .</div><div class='input'>
 <span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
-   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
+   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span>),
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>,
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row 1"</span>, <span class='fl'>10</span>, <span class='fl'>15</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"section title"</span>),
    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"row colspan"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='fu'>c</span>(<span class='fl'>.345543</span>, <span class='fl'>.4432423</span>), <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"(xx.x, xx.x)"</span>))
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtable(col.names = c("ARM A\nN=100", "ARM B\nN=200"), format = "xx",     rrow("row 1", 10, 15), rrow(), rrow("section title"), rrow("row colspan",         rcell(c(0.345543, 0.4432423), colspan = 2, format = "(xx.x, xx.x)"))): not all arguments in ... are of class rrow</span></div><div class='input'>
-<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is(object, "rtable"): object 'object' not found</span></div><div class='input'>
+)
+
+<span class='fu'>compare_rtables</span>(<span class='no'>object</span>, <span class='no'>expected</span>)</div><div class='output co'>#&gt;   1 2
+#&gt; 1 . .
+#&gt; 2 . .
+#&gt; 3 . .
+#&gt; 4 X X</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
