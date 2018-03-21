@@ -55,19 +55,59 @@ vector `x`, a factor `col_by`, and a function `FUN` the steps are:
    ```{r, eval = FALSE}
    x_s <- split(x, col_by)
    ```
-1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`, and  in the split data which is then
-treated as an `rcell`
+   
+1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`, which either
+should return an `rcell` or a data structure that gets wrapped into an `rcell`
 
-1. combine the reclls to an rrow and create an rtable
+1. combine the rcells to an rrow and create an rtable with a header according to
+the levels of `col_by`
+
+
+If the `x` should not be split then the `no_by` function can be used to specify
+a column name (as the returned object is still an rtable with one column):
+
+```{r}
+rtabulate(Sepal.Length, no_by("All Data"), sum)
+```
+
+
+### Cell Data Based Tabulation
+
+#### Tabulating Numerical Data
+
+`rtabulate.numeric` returns an `rtable` with one row and columns according to
+the levels of `col_by`.
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = median)
+```
+
+#### Tabulating Boolean Data
+
+Like `rtabulate.numeric`, `rtabulate.logical` returns an rtable with one row and
+columns according to the levels of `col_by`.
+
+
+```{r}
+is_SL_below_avg <- Sepal.Length < mean(Sepal.Length)
+
+rtabulate(x = is_SL_below_avg, col_by = Species, row.name = "count (percentage)")
+```
+
+By default `FUN=function(x) sum(x) * c(1, 1/length(x))`.
+
+#### Tabulating Factors
+
+`rtabulate.factor` returns an `rtable` with one row per factor level of `x`.
+
+```{r}
+rtabulate(x = esoph$agegp, col_by = esoph$alcgp)
+```
+
+#### Tabulation based on Data Frames
 
 
 
+### Cell Data, Row Data, Column Data based Tabulation
 
-### Tabulating Numerical Data
-
-### Tabulating Boolean Data
-
-### Tabulating Factors
-
-### Tabulation based on Data Frames
 

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rtabulate • rtables</title>
+<title>rtabulate • rtables</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -48,7 +48,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/rtabulate.html">Rtabulate</a>
+      <a href="../articles/rtabulate.html">rtabulate</a>
     </li>
   </ul>
 </li>
@@ -75,7 +75,7 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>Rtabulate</h1>
+      <h1>rtabulate</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
             <h4 class="date">3/21/2018</h4>
@@ -107,21 +107,67 @@
 <div id="tabulation-methods" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tabulation-methods" class="anchor"></a>Tabulation Methods</h2>
-<div id="tabulating-numerical-data" class="section level3">
+<p>The tabulation methods follow the split apply combine pattern. That is, for a vector <code>x</code>, a factor <code>col_by</code>, and a function <code>FUN</code> the steps are:</p>
+<ol style="list-style-type: decimal">
+<li>split <code>x</code> by <code>col_by</code>
+</li>
+</ol>
+<p><code>r    x_s &lt;- split(x, col_by)</code></p>
+<ol style="list-style-type: decimal">
+<li><p>apply the function <code>FUN</code> to each element, e.g. <code>FUN(x_s[[1]])</code>, which either should return an <code>rcell</code> or a data structure that gets wrapped into an <code>rcell</code></p></li>
+<li><p>combine the rcells to an rrow and create an rtable with a header according to the levels of <code>col_by</code></p></li>
+</ol>
+<p>If the <code>x</code> should not be split then the <code>no_by</code> function can be used to specify a column name (as the returned object is still an rtable with one column):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(Sepal.Length, <span class="kw"><a href="../reference/no_by.html">no_by</a></span>(<span class="st">"All Data"</span>), sum)</code></pre></div>
+<pre><code>##            All Data
+## -------------------
+## sum         876.5</code></pre>
+<div id="cell-data-based-tabulation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#tabulating-numerical-data" class="anchor"></a>Tabulating Numerical Data</h3>
+<a href="#cell-data-based-tabulation" class="anchor"></a>Cell Data Based Tabulation</h3>
+<div id="tabulating-numerical-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#tabulating-numerical-data" class="anchor"></a>Tabulating Numerical Data</h4>
+<p><code>rtabulate.numeric</code> returns an <code>rtable</code> with one row and columns according to the levels of <code>col_by</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">col_by =</span> Species, <span class="dt">FUN =</span> median)</code></pre></div>
+<pre><code>##                 setosa          versicolor        virginica 
+## ------------------------------------------------------------
+## median            5                5.9               6.5</code></pre>
 </div>
-<div id="tabulating-boolean-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#tabulating-boolean-data" class="anchor"></a>Tabulating Boolean Data</h3>
+<div id="tabulating-boolean-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#tabulating-boolean-data" class="anchor"></a>Tabulating Boolean Data</h4>
+<p>Like <code>rtabulate.numeric</code>, <code>rtabulate.logical</code> returns an rtable with one row and columns according to the levels of <code>col_by</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_SL_below_avg &lt;-<span class="st"> </span>Sepal.Length <span class="op">&lt;</span><span class="st"> </span><span class="kw">mean</span>(Sepal.Length)
+
+<span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> is_SL_below_avg, <span class="dt">col_by =</span> Species, <span class="dt">row.name =</span> <span class="st">"count (percentage)"</span>)</code></pre></div>
+<pre><code>##                             setosa          versicolor        virginica 
+## ------------------------------------------------------------------------
+## count (percentage)        50 (100%)          24 (48%)          6 (12%)</code></pre>
+<p>By default <code>FUN=function(x) sum(x) * c(1, 1/length(x))</code>.</p>
 </div>
-<div id="tabulating-factors" class="section level3">
-<h3 class="hasAnchor">
-<a href="#tabulating-factors" class="anchor"></a>Tabulating Factors</h3>
+<div id="tabulating-factors" class="section level4">
+<h4 class="hasAnchor">
+<a href="#tabulating-factors" class="anchor"></a>Tabulating Factors</h4>
+<p><code>rtabulate.factor</code> returns an <code>rtable</code> with one row per factor level of <code>x</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> esoph<span class="op">$</span>agegp, <span class="dt">col_by =</span> esoph<span class="op">$</span>alcgp)</code></pre></div>
+<pre><code>##              0-39g/day          40-79           80-119            120+   
+## -------------------------------------------------------------------------
+## 25-34            4                4                3                4    
+## 35-44            4                4                4                3    
+## 45-54            4                4                4                4    
+## 55-64            4                4                4                4    
+## 65-74            4                3                4                4    
+## 75+              3                4                2                2</code></pre>
 </div>
-<div id="tabulation-based-on-data-frames" class="section level3">
+<div id="tabulation-based-on-data-frames" class="section level4">
+<h4 class="hasAnchor">
+<a href="#tabulation-based-on-data-frames" class="anchor"></a>Tabulation based on Data Frames</h4>
+</div>
+</div>
+<div id="cell-data-row-data-column-data-based-tabulation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#tabulation-based-on-data-frames" class="anchor"></a>Tabulation based on Data Frames</h3>
+<a href="#cell-data-row-data-column-data-based-tabulation" class="anchor"></a>Cell Data, Row Data, Column Data based Tabulation</h3>
 </div>
 </div>
 </div>
