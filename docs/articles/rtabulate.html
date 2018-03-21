@@ -173,7 +173,8 @@
 ## 5   Qn1 Quebec nonchilled  500   35.3
 ## 6   Qn1 Quebec nonchilled  675   39.2</code></pre>
 <p>Say we want to calculate the total <code>uptake</code> for each <code>Type</code> and <code>Treatment</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> CO2, <span class="dt">row_by_var =</span> <span class="st">"Type"</span>, <span class="dt">col_by_var =</span> <span class="st">"Treatment"</span>, <span class="dt">FUN =</span> <span class="cf">function</span>(xi) <span class="kw">sum</span>(xi<span class="op">$</span>uptake))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> CO2, <span class="dt">row_by_var =</span> <span class="st">"Type"</span>, <span class="dt">col_by_var =</span> <span class="st">"Treatment"</span>,
+          <span class="dt">FUN =</span> <span class="cf">function</span>(xi) <span class="kw">sum</span>(xi<span class="op">$</span>uptake))</code></pre></div>
 <pre><code>##                    nonchilled         chilled  
 ## -----------------------------------------------
 ## Quebec                742              666.8   
@@ -183,6 +184,37 @@
 <div id="cell-data-row-data-column-data-based-tabulation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cell-data-row-data-column-data-based-tabulation" class="anchor"></a>Cell Data, Row Data, Column Data based Tabulation</h3>
+<p><code>rtabulate.numeric</code> and <code>rtabulate.logical</code> have the argument <code>row_data_arg</code> which is by default set to <code>FALSE</code>. If set to <code>TRUE</code> then <code>FUN</code> receives a second argument with a copy of the <code>x</code> argument (as the row-associated data is the whole data for a <code>numeric</code> and <code>logical</code> vector).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(
+  Sepal.Length, Species,
+  <span class="dt">FUN =</span> <span class="cf">function</span>(x_cell, x_row) <span class="kw">c</span>(<span class="kw">length</span>(x_cell), <span class="kw">length</span>(x_row)),
+  <span class="dt">row_data_arg =</span> <span class="ot">TRUE</span>,
+  <span class="dt">format =</span> <span class="st">"xx / xx"</span>, 
+  <span class="dt">row.name =</span> <span class="st">"length of cell and row data"</span>
+)</code></pre></div>
+<pre><code>##                                      setosa          versicolor        virginica 
+## ---------------------------------------------------------------------------------
+## length of cell and row data         50 / 150          50 / 150          50 / 150</code></pre>
+<p>Next, for <code>rtabulate.factor</code> and <code>rtabulate.data.frame</code> there is an <code>row_col_data_args</code> which when set to <code>TRUE</code> then the <code>FUN</code> function receives three argument, the data that is associated to a table cell, row, column, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars2 &lt;-<span class="st"> </span>mtcars
+mtcars2<span class="op">$</span>gear &lt;-<span class="st"> </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>gear)
+mtcars2<span class="op">$</span>carb &lt;-<span class="st"> </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>carb)
+
+<span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(
+  <span class="dt">x =</span> mtcars2, <span class="dt">row_by_var =</span> <span class="st">"carb"</span>, <span class="dt">col_by_var =</span> <span class="st">"gear"</span>,
+  <span class="dt">FUN =</span> <span class="cf">function</span>(x_cell, x_row, x_col) <span class="kw">c</span>(<span class="kw">nrow</span>(x_cell), <span class="kw">nrow</span>(x_row), <span class="kw">nrow</span>(x_col)),
+  <span class="dt">row_col_data_args =</span> <span class="ot">TRUE</span>,
+  <span class="dt">format =</span> <span class="ot">NULL</span>
+)</code></pre></div>
+<pre><code>##              3                4                5    
+## ----------------------------------------------------
+## 1        3, 7, 15         4, 7, 12          0, 7, 5 
+## 2        4, 10, 15        4, 10, 12        2, 10, 5 
+## 3        3, 3, 15         0, 3, 12          0, 3, 5 
+## 4        5, 10, 15        4, 10, 12        1, 10, 5 
+## 6        0, 1, 15         0, 1, 12          1, 1, 5 
+## 8        0, 1, 15         0, 1, 12          1, 1, 5</code></pre>
+<p>Note that <code>format=NULL</code> is equivalent to <code>paste(x, collapse = ", ")</code> on the cell data structure.</p>
 </div>
 </div>
 </div>
