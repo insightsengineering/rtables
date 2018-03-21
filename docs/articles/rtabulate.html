@@ -163,6 +163,21 @@
 <div id="tabulation-based-on-data-frames" class="section level4">
 <h4 class="hasAnchor">
 <a href="#tabulation-based-on-data-frames" class="anchor"></a>Tabulation based on Data Frames</h4>
+<p><code>rtabulate.data.frame</code> has a <code>data.frame</code> as <code>x</code> argument and the <code>col_by_var</code> and <code>row_by_var</code> need to specify which factor variables with <code>x</code> should be used to split the data for the table rows and columns. By default the argument to <code>FUN</code> is then a subset of <code>x</code> that is associated to a particular table cell. Let’s look at the <code>CO2</code> dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(CO2)</code></pre></div>
+<pre><code>##   Plant   Type  Treatment conc uptake
+## 1   Qn1 Quebec nonchilled   95   16.0
+## 2   Qn1 Quebec nonchilled  175   30.4
+## 3   Qn1 Quebec nonchilled  250   34.8
+## 4   Qn1 Quebec nonchilled  350   37.2
+## 5   Qn1 Quebec nonchilled  500   35.3
+## 6   Qn1 Quebec nonchilled  675   39.2</code></pre>
+<p>Say we want to calculate the total <code>uptake</code> for each <code>Type</code> and <code>Treatment</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rtabulate.html">rtabulate</a></span>(<span class="dt">x =</span> CO2, <span class="dt">row_by_var =</span> <span class="st">"Type"</span>, <span class="dt">col_by_var =</span> <span class="st">"Treatment"</span>, <span class="dt">FUN =</span> <span class="cf">function</span>(xi) <span class="kw">sum</span>(xi<span class="op">$</span>uptake))</code></pre></div>
+<pre><code>##                    nonchilled         chilled  
+## -----------------------------------------------
+## Quebec                742              666.8   
+## Mississippi           545              332.1</code></pre>
 </div>
 </div>
 <div id="cell-data-row-data-column-data-based-tabulation" class="section level3">

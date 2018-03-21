@@ -106,6 +106,21 @@ rtabulate(x = esoph$agegp, col_by = esoph$alcgp)
 
 #### Tabulation based on Data Frames
 
+`rtabulate.data.frame` has a `data.frame` as `x` argument and the `col_by_var`
+and `row_by_var` need to specify which factor variables with `x` should be used
+to split the data for the table rows and columns. By default the argument to
+`FUN` is then a subset of `x` that is associated to a particular table cell.
+Let's look at the `CO2` dataset:
+
+```{r}
+head(CO2)
+```
+
+Say we want to calculate the total `uptake` for each `Type` and `Treatment`
+
+```{r}
+rtabulate(x = CO2, row_by_var = "Type", col_by_var = "Treatment", FUN = function(xi) sum(xi$uptake))
+```
 
 
 ### Cell Data, Row Data, Column Data based Tabulation
