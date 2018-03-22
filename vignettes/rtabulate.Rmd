@@ -2,8 +2,10 @@
 title: "rtabulate"
 author: "Adrian Waddell"
 date: "3/21/2018"
-output: html_document
-editor_options: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 
@@ -18,11 +20,11 @@ library(rtables)
 
 ## Introduction
 
-`rtabulate` provides a number of methods to compute `rtables`. The idea behind
-`rtabulate` is to have a similar funtion to `tapply` that returns rtables
-instead of lists. For example, for the iris data we might be interested in the
-average `Sepal.Length` for each `Species` which can be answered with `tapply` as
-follows:
+`rtabulate` provides a number of methods to compute `rtable` tables. The idea
+behind `rtabulate` is to have a similar function to `tapply` which returns
+rtables instead of lists. For example, for the iris data we might be interested
+in the average `Sepal.Length` for each `Species` which can be answered with
+`tapply` as follows:
 
 ```{r}
 attach(iris)
@@ -52,19 +54,20 @@ The tabulation methods follow the split apply combine pattern. That is, for a
 vector `x`, a factor `col_by`, and a function `FUN` the steps are:
 
 1. split `x` by `col_by`
-   ```{r, eval = FALSE}
-   x_s <- split(x, col_by)
-   ```
+```{r, eval = FALSE}
+x_s <- split(x, col_by)
+```
    
-1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`, which either
-should return an `rcell` or a data structure that gets wrapped into an `rcell`
+1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`,
+`FUN(x_s[[2]])`, etc...,  which either should return an `rcell` or a data
+structure that gets wrapped into an `rcell`
 
 1. combine the rcells to an rrow and create an rtable with a header according to
 the levels of `col_by`
 
 
-If the `x` should not be split then the `no_by` function can be used to specify
-a column name (as the returned object is still an rtable with one column):
+If `x` should not be split then the `no_by` function can be used to specify a
+column name (as the returned object is still an rtable with one column):
 
 ```{r}
 rtabulate(Sepal.Length, no_by("All Data"), sum)

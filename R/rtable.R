@@ -26,7 +26,7 @@
 #' Note that the formats propagate to the \code{\link{rrow}} and 
 #' \code{\link{rcell}} if these do not specify their own format.
 #' 
-#' @importFrom shiny tags tagList
+#' @importFrom htmltools tags tagList
 #' 
 #' @export
 #' 

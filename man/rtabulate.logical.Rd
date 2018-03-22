@@ -5,7 +5,7 @@
 \title{tabulate a logical vector}
 \usage{
 \method{rtabulate}{logical}(x, col_by = no_by("col_1"), FUN = function(x)
-  sum(x) * c(1, 1/length(x)), row_data_arg = FALSE,
+  sum(x) * c(1, 1/length(x)), ..., row_data_arg = FALSE,
   format = "xx.xx (xx.xx\%)", row.name = "", indent = 0)
 }
 \arguments{
@@ -18,6 +18,8 @@ into columns use the \code{\link{no_by}} function.}
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
 \code{FUN}}
+
+\item{...}{arguments passed to \code{FUN}}
 
 \item{row_data_arg}{call \code{FUN} with the row data as the second argument}
 

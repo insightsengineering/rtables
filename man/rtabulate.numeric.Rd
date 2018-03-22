@@ -4,7 +4,7 @@
 \alias{rtabulate.numeric}
 \title{tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = fivenum,
+\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = fivenum, ...,
   row_data_arg = FALSE, format = NULL, row.name = NULL, indent = 0)
 }
 \arguments{
@@ -17,6 +17,8 @@ into columns use the \code{\link{no_by}} function.}
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
 \code{FUN}}
+
+\item{...}{arguments passed to \code{FUN}}
 
 \item{row_data_arg}{call \code{FUN} with the row data as the second argument}
 

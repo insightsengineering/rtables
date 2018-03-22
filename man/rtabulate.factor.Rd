@@ -4,7 +4,7 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
+\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length, ...,
   row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
   format = "xx", indent = 0)
 }
@@ -18,6 +18,8 @@ into columns use the \code{\link{no_by}} function.}
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
 \code{FUN}}
+
+\item{...}{arguments passed to \code{FUN}}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}

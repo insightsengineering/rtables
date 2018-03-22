@@ -54,7 +54,7 @@ is.no_by <- function(x) {
 # 
 # see parameter descrition for rtabulate.numeric
 #
-rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_arg=FALSE, format = NULL, row.name = "", indent  = 0) {
+rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, ..., row_data_arg=FALSE, format = NULL, row.name = "", indent  = 0) {
   
   if (is.null(FUN)) stop("FUN is required")
   
@@ -68,9 +68,9 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
   }
 
   col_data <- if (row_data_arg) {
-    lapply(xs, FUN, x)
+    lapply(xs, FUN, x, ...)
   } else {
-    lapply(xs, FUN)
+    lapply(xs, FUN, ...)
   }
   
   rr <- rrowl(row.name = row.name, col_data, format = format, indent = indent)
@@ -93,6 +93,7 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
 #' @param FUN a function that processes the cell data, if \code{row_data_arg} is
 #'   set to \code{TRUE} the a second argument with the row data is passed to
 #'   \code{FUN}
+#' @param ... arguments passed to \code{FUN}
 #' @param row_data_arg call \code{FUN} with the row data as the second argument 
 #' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
 #'   then the \code{format} is applied
@@ -122,9 +123,11 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, row_data_a
 #' 
 #' 
 #' 
-rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, row_data_arg = FALSE, format = NULL, row.name = NULL, indent  = 0) {
+rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, ...,
+                              row_data_arg = FALSE, format = NULL, row.name = NULL, indent  = 0) {
   if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
-  rtabulate_default(x, col_by, FUN, row_data_arg, format, row.name, indent)
+  rtabulate_default(x = x, col_by = col_by, FUN = FUN, ...,
+                    row_data_arg = row_data_arg, format = format, row.name = row.name, indent = indent)
 }
 
 #' tabulate a logical vector
@@ -152,13 +155,15 @@ rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = fivenum, row_dat
 #' 
 rtabulate.logical <- function(x, col_by = no_by("col_1"),
                               FUN = function(x) sum(x) * c(1, 1/length(x)),
+                              ...,
                               row_data_arg = FALSE,
                               format = "xx.xx (xx.xx%)",
                               row.name = "",
                               indent = 0
                               ) {
   if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
-  rtabulate_default(x, col_by, FUN, row_data_arg, format, row.name, indent)
+  rtabulate_default(x = x, col_by = col_by, FUN = FUN, ...,
+                    row_data_arg = row_data_arg, format = format, row.name = row.name, indent = indent)
 }
 
 #' Tabulate Factors
@@ -190,6 +195,7 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 rtabulate.factor <- function(x,
                              col_by = no_by("col_1"), 
                              FUN = length,
+                             ...,
                              row_col_data_args = FALSE,
                              useNA = c("no", "ifany", "always"),
                              format = "xx",
@@ -232,7 +238,7 @@ rtabulate.factor <- function(x,
   }
   
   rrow_data <- if (!row_col_data_args) {
-    lapply(cell_data, function(row_i) lapply(row_i, FUN)) 
+    lapply(cell_data, function(row_i) lapply(row_i, FUN, ...)) 
   } else {
     
     col_data_list <- if (is.no_by(col_by)) {
@@ -243,7 +249,7 @@ rtabulate.factor <- function(x,
 
     rrow_data_tmp <- lapply(1:length(row_data_list), function(i) {
       rrow_data_i <- lapply(1:length(col_data_list), function(j) {
-        FUN(cell_data[[i]][[j]], row_data_list[[i]], col_data_list[[j]])
+        FUN(cell_data[[i]][[j]], row_data_list[[i]], col_data_list[[j]], ...)
       })
       names(rrow_data_i) <- names(col_data_list)
       rrow_data_i
@@ -335,7 +341,9 @@ rtabulate.factor <- function(x,
 rtabulate.data.frame <- function(x,
                                  row_by_var = no_by("row_1"),
                                  col_by_var = no_by("col_1"),
-                                 FUN = nrow, row_col_data_args = FALSE,
+                                 FUN = nrow,
+                                 ...,
+                                 row_col_data_args = FALSE,
                                  format = "xx",
                                  indent = 0) {
   
@@ -355,14 +363,14 @@ rtabulate.data.frame <- function(x,
   }
   
   rrow_data <- if (!row_col_data_args) {
-    lapply(cell_data, function(row_i) lapply(row_i, FUN))
+    lapply(cell_data, function(row_i) lapply(row_i, FUN, ...))
   } else {
     
     col_data <- split(x, x[[col_by_var]], drop = FALSE)
     
     rrow_data_tmp <- lapply(1:length(row_data), function(i) {
       rrow_data_i <- lapply(1:length(col_data), function(j) {
-        FUN(cell_data[[i]][[j]], row_data[[i]], col_data[[j]])
+        FUN(cell_data[[i]][[j]], row_data[[i]], col_data[[j]], ...)
       })
       names(rrow_data_i) <- names(col_data)
       rrow_data_i
