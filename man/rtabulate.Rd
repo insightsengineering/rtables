@@ -7,7 +7,9 @@
 rtabulate(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{either a vector or \code{data.frame}}
+
+\item{...}{arguments passed to methods}
 }
 \value{
 an \code{\link{rtable}} project

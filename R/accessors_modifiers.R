@@ -67,6 +67,9 @@ indented_row.names <- function(x, spaces = 2) {
 
 #' change row names of rtable
 #' 
+#' @param x an \code{\link{rtable}} object
+#' @param value character vector with row names
+#' 
 #' @export
 #' 
 #' @examples 
@@ -214,6 +217,11 @@ header <- function(x) {
 #' access cell in rheader
 #' 
 #' 
+#' @param x an \code{\link{rtable}} object
+#' @param i row index
+#' @param j col index
+#' @param ... arguments passed forward to \code{\link{[.rtable}}
+#' 
 #' @export
 `[.rheader` <- function(x, i, j, ...) {
   `[.rtable`(x, i, j, ...)
@@ -236,6 +244,11 @@ set_rrow_attrs <- function(rrow, row.name, indent) {
 }
 
 #' stack rtable objects 
+#' 
+#' @param ... \code{\link{rtable}} objects
+#' 
+#' @return an \code{\link{rtable}} object
+#' 
 #' @export
 #' 
 #' @examples 

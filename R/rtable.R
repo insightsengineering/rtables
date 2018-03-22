@@ -229,6 +229,7 @@ rcell <- function(x, format = NULL, colspan=1) {
 #' Create a rheader object
 #' 
 #' @param ... elements that are either to be mapped to rrows
+#' @param format default format
 #' 
 #' @export
 #' 
@@ -294,6 +295,11 @@ rrowl <- function(row.name, ...) {
 #' 
 #' This function is useful to create \code{\link{rtable}} objects with lists of
 #' rrows that are returned by the apply function family.
+#' 
+#' @inheritParams rtable
+#' @param ... lists with \code{\link{rrow}} objects
+#' 
+#' @return \code{\link{rtable}} object
 #' 
 #' @export
 rtablel <- function(header, ...) {

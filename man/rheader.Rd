@@ -8,6 +8,8 @@ rheader(..., format = "xx")
 }
 \arguments{
 \item{...}{elements that are either to be mapped to rrows}
+
+\item{format}{default format}
 }
 \description{
 Create a rheader object

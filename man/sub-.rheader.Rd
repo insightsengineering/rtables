@@ -6,6 +6,15 @@
 \usage{
 \method{[}{rheader}(x, i, j, ...)
 }
+\arguments{
+\item{x}{an \code{\link{rtable}} object}
+
+\item{i}{row index}
+
+\item{j}{col index}
+
+\item{...}{arguments passed forward to \code{\link{[.rtable}}}
+}
 \description{
 access cell in rheader
 }

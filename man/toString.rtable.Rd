@@ -12,6 +12,8 @@
 \item{gap}{number of spaces between columns}
 
 \item{indent.unit}{number of spaces used for indentation of row.names}
+
+\item{...}{currently not used}
 }
 \description{
 Convert an rtable to ascii

@@ -6,6 +6,12 @@
 \usage{
 \method{rbind}{rtable}(...)
 }
+\arguments{
+\item{...}{\code{\link{rtable}} objects}
+}
+\value{
+an \code{\link{rtable}} object
+}
 \description{
 stack rtable objects
 }

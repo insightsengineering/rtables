@@ -21,6 +21,14 @@ set to \code{TRUE} the a second argument with the row data is passed to
 
 \item{...}{arguments passed to \code{FUN}}
 
+\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
+with the first three arguments being the cell, row, and column data,
+respectively}
+
+\item{useNA}{boolean, if \code{TRUE} then \code{NA} values in \code{x} get
+turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
+values in \code{x} get dropped.}
+
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 

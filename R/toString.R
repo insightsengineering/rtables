@@ -3,6 +3,8 @@
 #' @param x rtable object
 #' @param gap number of spaces between columns
 #' @param indent.unit number of spaces used for indentation of row.names
+#' @param ... currently not used
+#' 
 #' 
 #' @export
 #' 

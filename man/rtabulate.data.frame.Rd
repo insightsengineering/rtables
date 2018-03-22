@@ -8,6 +8,29 @@
   col_by_var = no_by("col_1"), FUN = nrow, ..., row_col_data_args = FALSE,
   format = "xx", indent = 0)
 }
+\arguments{
+\item{x}{a vecor}
+
+\item{row_by_var}{name of factor variable in \code{x}}
+
+\item{col_by_var}{name of factor variable in \code{x}}
+
+\item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
+set to \code{TRUE} the a second argument with the row data is passed to
+\code{FUN}}
+
+\item{...}{arguments passed to \code{FUN}}
+
+\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
+with the first three arguments being the cell, row, and column data,
+respectively}
+
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
+
+\item{indent}{non-negative integer where 0 means that the row should not be
+indented}
+}
 \value{
 an \code{\link{rtable}} project
 }

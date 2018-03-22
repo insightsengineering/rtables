@@ -8,7 +8,8 @@
 #' The data is split into cell-data and a function can be specified that return
 #' a data structre (or \code{\link{rcell}}).
 #'   
-#' @param x 
+#' @param x either a vector or \code{data.frame}
+#' @param ... arguments passed to methods
 #' 
 #' @return an \code{\link{rtable}} project
 #' 
@@ -169,6 +170,12 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' Tabulate Factors
 #' 
 #' @inheritParams rtabulate.numeric
+#' @param row_col_data_args boolean, if \code{TRUE} then \code{FUN} is called
+#'   with the first three arguments being the cell, row, and column data,
+#'   respectively
+#' @param useNA boolean, if \code{TRUE} then \code{NA} values in \code{x} get
+#'   turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
+#'   values in \code{x} get dropped.
 #' 
 #' @inherit rtabulate return
 #' 
@@ -274,6 +281,10 @@ rtabulate.factor <- function(x,
 
 
 #' Split data.frame and apply functions
+#' 
+#' @inheritParams rtabulate.factor
+#' @param row_by_var name of factor variable in \code{x}
+#' @param col_by_var name of factor variable in \code{x}
 #' 
 #' 
 #' @inherit rtabulate return

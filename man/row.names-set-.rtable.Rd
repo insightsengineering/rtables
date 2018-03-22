@@ -6,6 +6,11 @@
 \usage{
 \method{row.names}{rtable}(x) <- value
 }
+\arguments{
+\item{x}{an \code{\link{rtable}} object}
+
+\item{value}{character vector with row names}
+}
 \description{
 change row names of rtable
 }
