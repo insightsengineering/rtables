@@ -128,6 +128,8 @@ names.rtable <- function(x) {
 #' 
 #' @param x an rtable object
 #' 
+#' @return an \code{\link{rheader}} object
+#' 
 #' @export
 #' 
 #' @examples 
@@ -140,7 +142,10 @@ header <- function(x) {
   attr(x, "header")
 }
 
-#' change row names
+#' Change Header of Rtable
+#' 
+#' @inheritParams header
+#' @param value an \code{\link{rheader}} object
 #' 
 #' @export
 #' 
@@ -214,12 +219,11 @@ header <- function(x) {
   `[.rtable`(x, i, j, ...)
 }
 
-#' @export
 set_rrow_attrs <- function(rrow, row.name, indent) {
   if (!is(rrow, "rrow")) stop("object of class rrow expected") 
   
   if (!missing(row.name)) {
-    if (!is.character(row.name) || length(rowname) != 1) stop("row.name is expected to be a character string (vector of length 1)")
+    if (!is.character(row.name) || length(row.name) != 1) stop("row.name is expected to be a character string (vector of length 1)")
     attr(rrow, "row.name") <- row.name
   }
   

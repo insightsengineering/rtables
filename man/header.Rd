@@ -9,6 +9,9 @@ header(x)
 \arguments{
 \item{x}{an rtable object}
 }
+\value{
+an \code{\link{rheader}} object
+}
 \description{
 Get Header ot Rtable
 }

@@ -48,7 +48,7 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 
 get_format <- function(x) {
   if (!is(x, "rcell")) stop("rcell object required")
-  attr(x, "format") <- value
+  attr(x, "format")
 }
 
 set_format <- function(x, value) {

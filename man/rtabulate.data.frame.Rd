@@ -56,7 +56,8 @@ row.names(tbl) <- "Sum of Sepal Length"
 tbl
 
 iris2 <- iris
-iris2$fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE), labels = c("S.L > 5", "S.L <= 5"))
+iris2$fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+    labels = c("S.L > 5", "S.L <= 5"))
 
 tbl <- rtabulate(
   x = iris2,

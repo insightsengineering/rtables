@@ -2,12 +2,17 @@
 % Please edit documentation in R/accessors_modifiers.R
 \name{header<-}
 \alias{header<-}
-\title{change row names}
+\title{Change Header of Rtable}
 \usage{
 header(x) <- value
 }
+\arguments{
+\item{x}{an rtable object}
+
+\item{value}{an \code{\link{rheader}} object}
+}
 \description{
-change row names
+Change Header of Rtable
 }
 \examples{
 x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))

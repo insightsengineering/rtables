@@ -4,7 +4,7 @@
 \alias{rtabulate.numeric}
 \title{tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = fivenum, ...,
+\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean, ...,
   row_data_arg = FALSE, format = NULL, row.name = NULL, indent = 0)
 }
 \arguments{
