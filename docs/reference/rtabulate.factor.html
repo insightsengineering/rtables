@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Tabulate Factors — rtabulate.factor" />
+
+<meta property="og:description" content="Tabulate Factors" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,18 +53,22 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">rtables</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">rtables</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/rtables.html">Get Started</a>
+  <a href="../articles/rtables.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -76,7 +86,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -99,6 +109,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Tabulate Factors</h1>
+    
     </div>
 
     
@@ -106,11 +117,11 @@
     
 
     <pre class="usage"><span class='co'># S3 method for factor</span>
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"col_1"</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>,
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"col_1"</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>, <span class='no'>...</span>,
   <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"no"</span>, <span class='st'>"ifany"</span>, <span class='st'>"always"</span>),
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -128,6 +139,22 @@ into columns use the <code><a href='no_by.html'>no_by</a></code> function.</p></
       <td><p>a function that processes the cell data, if <code>row_data_arg</code> is
 set to <code>TRUE</code> the a second argument with the row data is passed to
 <code>FUN</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed to <code>FUN</code></p></td>
+    </tr>
+    <tr>
+      <th>row_col_data_args</th>
+      <td><p>boolean, if <code>TRUE</code> then <code>FUN</code> is called
+with the first three arguments being the cell, row, and column data,
+respectively</p></td>
+    </tr>
+    <tr>
+      <th>useNA</th>
+      <td><p>boolean, if <code>TRUE</code> then <code>NA</code> values in <code>x</code> get
+turned into a factor level <code>"NA"</code>, if <code>FALSE</code> then the <code>NA</code>
+values in <code>x</code> get dropped.</p></td>
     </tr>
     <tr>
       <th>format</th>
@@ -158,7 +185,8 @@ indented</p></td>
 #&gt; setosa            50 
 #&gt; versicolor        50 
 #&gt; virginica         50 </div><div class='input'>
-<span class='no'>sl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
+<span class='no'>sl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
+   <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
 
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span><span class='kw'>=</span><span class='no'>sl5</span>)</div><div class='output co'>#&gt;                   S.L &gt; 5         S.L &lt;= 5
 #&gt; ------------------------------------------
@@ -166,7 +194,13 @@ indented</p></td>
 #&gt; versicolor           47              3    
 #&gt; virginica            49              1    </div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span><span class='kw'>=</span><span class='no'>sl5</span>,
-   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>, <span class='no'>row_data</span>, <span class='no'>col_data</span>) <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>cell_data</span>) <span class='kw'>&gt;</span> <span class='fl'>10</span>) <span class='fu'>length</span>(<span class='no'>cell_data</span>) * <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='fu'>length</span>(<span class='no'>col_data</span>)) <span class='kw'>else</span> <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"-"</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>),
+   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>, <span class='no'>row_data</span>, <span class='no'>col_data</span>) {
+     <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>cell_data</span>) <span class='kw'>&gt;</span> <span class='fl'>10</span>) {
+        <span class='fu'>length</span>(<span class='no'>cell_data</span>) * <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='fu'>length</span>(<span class='no'>col_data</span>))
+     } <span class='kw'>else</span> {
+        <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"-"</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)
+     }
+   },
    <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx (xx.xx%)"</span>
 )</div><div class='output co'>#&gt;                     S.L &gt; 5           S.L &lt;= 5  
@@ -199,7 +233,7 @@ indented</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
@@ -207,3 +241,4 @@ indented</p></td>
 
   </body>
 </html>
+

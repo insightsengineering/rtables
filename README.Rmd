@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 The `rtables` R package is a prototype to create and display complex tables with
 R. The cells in an `rtable` may contain any high-dimensional data structure
-which can then be displayed with cell-specific formating instructions. Currently
+which can then be displayed with cell-specific formatting instructions. Currently,
 `rtables` can be outputted in `ascii` and `html`.
 
 Some of our requirements and reasons to create this new table package are:
@@ -31,7 +31,7 @@ Some of our requirements and reasons to create this new table package are:
 * multiple values displayed within a cell
 * values need to be programmatically accessible for cross-checking
 * flexible formatting (cell spans, rounding, alignment, etc.)
-* composition of an rtable from other rtable objects
+* composition of an `rtable` object from other rtable objects
 * multiple output formats (html, ascii, latex, pdf)
 * flexible pagination
 
@@ -42,7 +42,7 @@ requirements. We are looking for collaborators, see the next section.
 
 The current state of the `rtables` functionality is a first rough prototype. We
 will be changing the API significantly in the coming months without maintaining
-backwards compatibility. We will release the `rtable` package on
+backward compatibility. We will release the `rtable` package on
 [CRAN](https://cran.r-project.org/) once we have a stable version.
 
 We are looking for collaborators to help define and shape the `rtables` package.

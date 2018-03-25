@@ -112,7 +112,7 @@ rtabulate(x = esoph$agegp, col_by = esoph$alcgp)
 `rtabulate.data.frame` has a `data.frame` as `x` argument and the `col_by_var`
 and `row_by_var` need to specify which factor variables with `x` should be used
 to split the data for the table rows and columns. By default the argument to
-`FUN` is then a subset of `x` that is associated to a particular table cell.
+`FUN` is then a subset of `x` that is associated with a particular table cell.
 Let's look at the `CO2` dataset:
 
 ```{r}
@@ -148,7 +148,7 @@ rtabulate(
 
 Next, for `rtabulate.factor` and `rtabulate.data.frame` there is an
 `row_col_data_args` which when set to `TRUE` then the `FUN` function receives
-three argument, the data that is associated to a table cell, row, column,
+three arguments, the data that is associated with a table cell, row, column,
 respectively.
 
 ```{r}
