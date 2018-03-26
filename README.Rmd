@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
 
 
-[project webpage](https://roche.github.io/rtables/)
-
 ## Reporting tables with R
 
 The `rtables` R package is a prototype to create and display complex tables with
