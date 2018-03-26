@@ -6,3 +6,51 @@ navbar:
   right:
   - icon: fa-github fa-lg
     href: https://github.com/roche/rtables
+
+
+reference:
+  - title: Core Table Create Functions
+    desc:  These are the main functions needed to build an rtable.
+    contents:
+    - rtable
+    - rrow
+    - rcell
+    - rheader
+    - rtablel
+    - rrowl
+  - title: Cell Formatting related Functions
+    contents:
+    - format_rcell
+    - list_rcell_format_labels
+  - title: Accessor Functions
+    desc: Access and Modify Functions
+    contents:
+    - starts_with("nam")
+    - starts_with("row.name")
+    - "[.rtable"
+    - dim.rtable
+    - rbind.rtable
+  - title: Tabulation Functions
+    desc: rtabulate is a framework to derive rtables
+    contents:
+    - starts_with("rtabulate")
+    - no_by
+    - is.no_by
+  - title: Output Functions
+    desc: These functions create ascii or html representations of the table
+    contents:
+    - toString.rtable
+    - as_html
+  - title: Coercion Functions
+    contents:
+    - as.rtable
+    - as.rtable.table
+  - title: Utility Functions
+    contents:
+    - Viewer
+    - compare_rtables
+
+articles:
+  contents:
+  - rtabulate
+

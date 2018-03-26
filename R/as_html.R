@@ -14,7 +14,7 @@
 #' @examples 
 #' 
 #' tbl <- rtable(
-#'   col.names = LETTERS[1:3],
+#'   header = LETTERS[1:3],
 #'   format = "xx",
 #'   rrow("r1", 1,2,3),
 #'   rrow("r2", 4,3,2, indent = 1),
@@ -49,38 +49,38 @@ as_html.default <- function(x, ...) {
 # @return an object of class \code{shinyTag}
 
 #' @export
-as_html.rtable <- function(x, class = "table table-condensed table-hover", ...) {
+as_html.rtable <- function(x, class = "table table-condensed table-hover",
+                           body_cell_class = NULL,
+                           header_cell_class = NULL,
+                           ...) {
   
   ncol <- ncol(x)
   
-  # split header into lines
-  col_headers <- lapply(attr(x, "col.names"), function(colname) {
-    els <- unlist(strsplit(colname, "\n", fixed = TRUE))
-    Map(function(el, is.last) {
-      tagList(el, if (!is.last) tags$br() else NULL)
-    }, els, c(rep(FALSE, length(els) -1), TRUE))
-  })
+  header <- attr(x, "header")
+  body <- x
+
+
   
   tags$table(
     class = class,
-    ...,
-    tags$tr(tagList(tags$th(""), lapply(col_headers, tags$th, align="center", class="text-center"))), 
-    lapply(x, as_html, ncol = ncol)
+  #  tags$tr(tagList(tags$th(""), lapply(col_headers, tags$th, align="center", class="text-center"))), 
+    lapply(header, as_html, ncol = ncol, cell_tag = tags$th, ...),
+    lapply(x, as_html, ncol = ncol, ...)
   )
   
 }
 
 #' @export
-as_html.rrow <- function(x, ncol, ...) {
+as_html.rrow <- function(x, ncol, cell_tag = tags$td, ...) {
   
   indent <- attr(x, "indent")
   row.name <- attr(x,"row.name")
   
   cells <- if (length(x) == 0) {
-    tags$td(colspan = as.character(ncol+1), class="rowname", align="left", row.name)
+    cell_tag(row.name, class=paste("rowname", "text-left"), colspan = as.character(ncol+1))
   } else {
     tagList(
-      tags$td(class="rowname", align = "left", row.name),
+      cell_tag(row.name, class=paste("rowname", "text-left")),
       lapply(x, function(xi) {
         
         colspan <- attr(xi, "colspan")
@@ -88,12 +88,12 @@ as_html.rrow <- function(x, ncol, ...) {
         
         cell_content <- format_rcell(xi, output="html")
         if (colspan == 1) {
-          tags$td(cell_content, align = "center")
+          cell_tag(cell_content, class = "text-center")
         } else {
-          tags$td(cell_content, colspan = as.character(colspan), align = "center")
+          cell_tag(cell_content, colspan = as.character(colspan), class = "text-center")
         }
       }),
-      replicate(ncol - ncells(x), tags$td(), simplify = FALSE)
+      replicate(ncol - ncell(x), cell_tag(), simplify = FALSE)
     )
   }
   

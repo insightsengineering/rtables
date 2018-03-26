@@ -1,4 +1,10 @@
-library(testthat)
-library(rtables)
 
-test_check("rtables")
+
+if (requireNamespace("testthat", quietly = TRUE)) {
+
+  library(testthat)
+  library(rtables)
+  
+  test_check("rtables")
+  
+}

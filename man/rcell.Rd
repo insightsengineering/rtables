@@ -12,8 +12,9 @@ object has attributes then it needs to be encasultated in a list as
 \code{rcell} adds/modifies the attributes.}
 
 \item{format}{a valid format string or a format function for
-\code{\link{rcell}}s. To get a list of all valid format strings use 
-\code{\link{get_rcell_formats}}.}
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
 
 \item{colspan}{positive integer, number of columns that the cell should span.}
 }

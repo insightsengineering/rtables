@@ -26,9 +26,9 @@ formats_2d <- c(
 #' 
 #' @examples 
 #' 
-#' get_rcell_formats()
+#' list_rcell_format_labels()
 #' 
-get_rcell_formats <- function() {
+list_rcell_format_labels <- function() {
   structure(  
     list(
       "1d" = formats_1d,
@@ -37,6 +37,32 @@ get_rcell_formats <- function() {
     info = "xx does not modify the element, and xx. rounds a number to 0 digits"
   )
 }
+
+is_rcell_format <- function(x, stop_otherwise=FALSE) {
+  is_valid <- is.null(x) || (length(x) == 1 && (is.function(x) || x %in% unlist(list_rcell_format_labels()))) 
+  
+  if (stop_otherwise && !is_valid) stop("format needs to be a format label, a function, or NULL")
+  
+  is_valid
+}
+
+get_format <- function(x) {
+  if (!is(x, "rcell")) stop("rcell object required")
+  attr(x, "format")
+}
+
+set_format <- function(x, value) {
+  if (!is(x, "rcell")) stop("rcell object required")
+  is_rcell_format(format, stop_otherwise = TRUE)
+  attr(x, "format") <- value
+  x
+}
+
+
+# # @export
+# format.rcell <- function(x, ...) {
+#   format_rcell(x, ...)
+# }
 
 #' Convert the contets of an \code{\link{rcell}} to a string using the
 #' \code{format} information
@@ -54,24 +80,23 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
   
   output <- match.arg(output)
   
-  if (missing(format)) format <- attr(x, "format")
+  format <- if (!missing(format)) format else attr(x, "format")
   
-  if (is.null(format)) stop("format missing")
-  
-  
-  if (is.character(format)) {
+  txt <- if (is.null(format)) {
+    toString(x)
+  } else if (is.character(format)) {
     l <- if (format %in% formats_1d) {
       1
     } else if (format %in% formats_2d) {
       2
     } else {
-      stop("unknown format label: ", format, ". use get_rcell_formats() to get a list of all formats")
+      stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
     }
-    if (length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
+    if (format != "xx" && length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
     
     switch(
       format,
-      "xx" = if (is.na(x)) "NA" else as.character(x),
+      "xx" = if (all(is.na(x))) "NA" else as.character(x),
       "xx." = as.character(round(x, 0)),
       "xx.x" = as.character(round(x, 1)),
       "xx.xx" = as.character(round(x, 2)),
@@ -107,9 +132,28 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
       "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
       "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
       "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to ")
-    )  
+    )
   } else if (is.function(format)) {
     format(x, output = output)
+  }
+  
+  if (output == "ascii") {
+    txt
+  } else if (output == "html") {
+    ## convert to tagList
+    ## convert \n to <br/>
+    
+    if (identical(txt, "")) {
+      txt
+    } else {
+      els <- unlist(strsplit(txt, "\n", fixed = TRUE))
+      Map(function(el, is.last) {
+        tagList(el, if (!is.last) tags$br() else NULL)
+      }, els, c(rep(FALSE, length(els) -1), TRUE))
+    }
+
+  } else {
+    txt
   }
   
 }

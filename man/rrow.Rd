@@ -13,8 +13,9 @@ rrow(row.name, ..., format = NULL, indent = 0)
 aren't \code{rcell}s already}
 
 \item{format}{a valid format string or a format function for
-\code{\link{rcell}}s. To get a list of all valid format strings use 
-\code{\link{get_rcell_formats}}.}
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
@@ -27,6 +28,6 @@ Note the \code{rrow()} will return an empty row.
 }
 \examples{
 
-rrow("ABC", c(1,2), c(3,2))
+rrow("ABC", c(1,2), c(3,2), format = "xx (xx.\%)")
 
 }

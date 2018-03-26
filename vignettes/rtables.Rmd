@@ -33,7 +33,7 @@ library(rtables)
 ```
 ```{r}
 tbl <- rtable(
-  col.names = c("Treatement\nN=100", "Comparison\nN=300"),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
@@ -98,7 +98,7 @@ formatted string or html object **note, we will eventually deprecate this**
 Formats labels are currently limited to the following predefined set:
 
 ```{r}
-get_rcell_formats()
+list_rcell_format_labels()
 ```
 
 Here is an example of using functions for formatting cells:
@@ -123,8 +123,8 @@ Because we have the original data for each cell accessible for the `rtable` data
 structure it is possible to programmatically compare two tables:
 
 ```{r}
-t1 <- rtable(col.name = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
-t2 <- rtable(col.name = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
+t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
+t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
 compare_rtables(object = t1, expected = t2) 
 ```

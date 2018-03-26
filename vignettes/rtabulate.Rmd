@@ -1,0 +1,169 @@
+---
+title: "rtabulate"
+author: "Adrian Waddell"
+date: "3/21/2018"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = FALSE}
+library(rtables)
+```
+
+## Introduction
+
+`rtabulate` provides a number of methods to compute `rtable` tables. The idea
+behind `rtabulate` is to have a similar function to `tapply` which returns
+rtables instead of lists. For example, for the iris data we might be interested
+in the average `Sepal.Length` for each `Species` which can be answered with
+`tapply` as follows:
+
+```{r}
+attach(iris)
+tapply(X = Sepal.Length, INDEX = Species, FUN = mean)
+```
+
+and to get the same numbers with `rtabulate` we can run
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = mean)
+```
+
+Because rtables also provide formatting options we can pass that info to
+`rtabulate`
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = mean, format = "xx.xx")
+```
+
+This vignette will provide an overview of `rtabulate` and show how different
+types of tables can be derived with it.
+
+
+## Tabulation Methods
+
+The tabulation methods follow the split apply combine pattern. That is, for a
+vector `x`, a factor `col_by`, and a function `FUN` the steps are:
+
+1. split `x` by `col_by`
+```{r, eval = FALSE}
+x_s <- split(x, col_by)
+```
+   
+1. apply the function `FUN` to each element, e.g. `FUN(x_s[[1]])`,
+`FUN(x_s[[2]])`, etc...,  which either should return an `rcell` or a data
+structure that gets wrapped into an `rcell`
+
+1. combine the rcells to an rrow and create an rtable with a header according to
+the levels of `col_by`
+
+
+If `x` should not be split then the `no_by` function can be used to specify a
+column name (as the returned object is still an rtable with one column):
+
+```{r}
+rtabulate(Sepal.Length, no_by("All Data"), sum)
+```
+
+
+### Cell Data Based Tabulation
+
+#### Tabulating Numerical Data
+
+`rtabulate.numeric` returns an `rtable` with one row and columns according to
+the levels of `col_by`.
+
+```{r}
+rtabulate(x = Sepal.Length, col_by = Species, FUN = median)
+```
+
+#### Tabulating Boolean Data
+
+Like `rtabulate.numeric`, `rtabulate.logical` returns an rtable with one row and
+columns according to the levels of `col_by`.
+
+
+```{r}
+is_SL_below_avg <- Sepal.Length < mean(Sepal.Length)
+
+rtabulate(x = is_SL_below_avg, col_by = Species, row.name = "count (percentage)")
+```
+
+By default `FUN=function(x) sum(x) * c(1, 1/length(x))`.
+
+#### Tabulating Factors
+
+`rtabulate.factor` returns an `rtable` with one row per factor level of `x`.
+
+```{r}
+rtabulate(x = esoph$agegp, col_by = esoph$alcgp)
+```
+
+#### Tabulation based on Data Frames
+
+`rtabulate.data.frame` has a `data.frame` as `x` argument and the `col_by_var`
+and `row_by_var` need to specify which factor variables with `x` should be used
+to split the data for the table rows and columns. By default the argument to
+`FUN` is then a subset of `x` that is associated with a particular table cell.
+Let's look at the `CO2` dataset:
+
+```{r}
+head(CO2)
+```
+
+Say we want to calculate the total `uptake` for each `Type` and `Treatment`
+
+```{r}
+rtabulate(x = CO2, row_by_var = "Type", col_by_var = "Treatment",
+          FUN = function(xi) sum(xi$uptake))
+```
+
+
+### Cell Data, Row Data, Column Data based Tabulation
+
+`rtabulate.numeric` and `rtabulate.logical` have the argument `row_data_arg`
+which is by default set to `FALSE`. If set to `TRUE` then `FUN` receives a
+second argument with a copy of the `x` argument (as the row-associated data is
+the whole data for a `numeric` and `logical` vector).
+
+
+```{r}
+rtabulate(
+  Sepal.Length, Species,
+  FUN = function(x_cell, x_row) c(length(x_cell), length(x_row)),
+  row_data_arg = TRUE,
+  format = "xx / xx", 
+  row.name = "length of cell and row data"
+)
+```
+
+
+Next, for `rtabulate.factor` and `rtabulate.data.frame` there is an
+`row_col_data_args` which when set to `TRUE` then the `FUN` function receives
+three arguments, the data that is associated with a table cell, row, column,
+respectively.
+
+```{r}
+mtcars2 <- mtcars
+mtcars2$gear <- factor(mtcars2$gear)
+mtcars2$carb <- factor(mtcars2$carb)
+
+rtabulate(
+  x = mtcars2, row_by_var = "carb", col_by_var = "gear",
+  FUN = function(x_cell, x_row, x_col) c(nrow(x_cell), nrow(x_row), nrow(x_col)),
+  row_col_data_args = TRUE,
+  format = NULL
+)
+```
+
+Note that `format=NULL` is equivalent to `paste(x, collapse = ", ")` on the cell
+data structure.
+

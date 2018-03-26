@@ -6,13 +6,16 @@
 #' cells. Currently an \code{rtable} can be converted to html and ascii.
 #' 
 #' 
-#' @param col.names vector with column names
+#' @param header either a vector with column names or an object returned by
+#'   \code{\link{rheader}} if special formating and multi-line headers are
+#'   needed
 #' @param ... each element is an \code{\link{rrow}} object
 #' @param format a valid format string or a format function for
-#'   \code{\link{rcell}}s. To get a list of all valid format strings use 
-#'   \code{\link{get_rcell_formats}}.
+#'   \code{\link{rcell}}s. To get a list of all valid format strings use
+#'   \code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+#'   of a cell get pasted separated by a comma.
 #' 
-#' @return \code{rtable} object
+#' @return an \code{rtable} object
 #' 
 #' @details 
 #' Rtable objects can be currently exported to text with
@@ -23,7 +26,7 @@
 #' Note that the formats propagate to the \code{\link{rrow}} and 
 #' \code{\link{rcell}} if these do not specify their own format.
 #' 
-#' @importFrom shiny tags tagList
+#' @importFrom htmltools tags tagList
 #' 
 #' @export
 #' 
@@ -33,8 +36,28 @@
 #' 
 #' @examples
 #' 
+#' # Table with multirow header
+#' mtbl <- rtable(
+#'   header = rheader(
+#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     rrow(NULL, "mean", "median", "mean", "median")
+#'   ),
+#'   rrow(
+#'     row.name = "All Species",
+#'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'     mean(iris$Petal.Length), median(iris$Petal.Length),
+#'     format = "xx.xx"
+#'   )
+#' )
+#' 
+#' mtbl
+#' 
+#' names(mtbl) # always first row of header
+#' 
+#' # Single row header
+#' 
 #' tbl <- rtable(
-#'   col.names = c("Treatment\nN=100", "Comparison\nN=300"),
+#'   header = c("Treatement\nN=100", "Comparison\nN=300"),
 #'   format = "xx (xx.xx%)",
 #'   rrow("A", c(104, .2), c(100, .4)),
 #'   rrow("B", c(23, .4), c(43, .5)),
@@ -50,26 +73,29 @@
 #' names(tbl)
 #' 
 #' 
+#' # Subsetting
 #' tbl[1,2]
-#' 
 #' tbl[3,2]
 #' tbl[5,1]
 #' tbl[5,2]
+#' tbl[1:3]
 #' 
 #' 
+#' # Data Structure methods
 #' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
+#' names(tbl)
 #' 
-#' tbl[[1]][[1]]
 #' 
+#' # Output: html
 #' as_html(tbl)
 #' 
 #' \dontrun{
 #' Viewer(tbl)
 #' }
 #' 
-#' # colspans
+#' # Colspans
 #' 
 #' tbl2 <- rtable(
 #'   c("A", "B", "C", "D", "E"),
@@ -80,19 +106,8 @@
 #' 
 #' tbl2
 #' 
-#' \dontrun{
-#' Viewer(tbl2)
-#' }
 #' 
-#' tbl2[1,3]
-#' tbl2[2,1]
-#' tbl2[2,2]
-#' tbl2[2,3]
-#' tbl2[2,4]
-#' tbl2[2,5]
-#' 
-#' 
-#' # custom format
+#' # Custom format with functions (might be deprecated soon)
 #' my_format <- function(x, output) {
 #'    paste(x, collapse = "/")
 #' }
@@ -103,42 +118,31 @@
 #' )
 #' tbl3
 #'  
-rtable <- function(col.names, format = NULL, ...) {
+rtable <- function(header, ..., format = NULL) {
   
-  ncol <- length(col.names)
+  is_rcell_format(format, stop_otherwise = TRUE)
+  
+  if (!is(header, 'rheader')) header <- rheader(header)
+  
+  body <- list(...)
+  if (!are(body, "rrow")) stop("not all arguments in ... are of class rrow")  
+  
+  ncol_header <- vapply(header, ncell, numeric(1))
+  ncol_body <- vapply(body, ncell, numeric(1))
+
+  nrow <- length(body)  
+  ncol <- max(c(ncol_header, ncol_body, 0))
+  
   if (ncol < 1) stop("table needs at least one 1 columns")
+  # because empty rows have currently 0 cells
+  if (!all(ncol_header %in% c(0, ncol))) stop(paste("not all header rows have", ncol, "columns"))
+  if (!all(ncol_body %in% c(0, ncol))) stop(paste("not all body rows have", ncol, "columns"))
   
-  ## check if n-cols correct
-  rows <- list(...)
-  
-  if (!all(vapply(rows, is, logical(1), "rrow"))) stop("not all arguments in ... are of class rrow")
-  nrow <- length(rows)
-  
-  check_consistent_ncols(rows, ncol)
-  
-  rows_formated <- lapply(rows, function(row) {
+  body_formatted <- lapply(body, propagate_format_to_rcells, format = format)
     
-    row_f <- lapply(row, function(cell) {
-      rc <- if (is(cell, "rcell")) {
-        if (is.null(attr(cell, "format"))) {
-          structure(cell, format = format)
-        } else {
-          cell
-        }
-      } else {
-        rcell(cell, format = format)
-      }
-      if (is.null(attr(rc, "format"))) stop("NULL format for cell: ", rc)
-      rc
-    }) 
-    
-    attributes(row_f) <- attributes(row)
-    row_f
-  })
-  
   structure(
-    rows_formated,
-    col.names = col.names,
+    body_formatted,
+    header = header,
     ncol = ncol,
     nrow = nrow,
     class = "rtable"
@@ -163,19 +167,21 @@ rtable <- function(col.names, format = NULL, ...) {
 #' 
 #' @examples 
 #' 
-#' rrow("ABC", c(1,2), c(3,2))
+#' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' 
 rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
+  is_rcell_format(format, stop_otherwise = TRUE)
+  if (!is.numeric(indent) || indent < 0) stop("indent must be >= 0")
+  
   cells <- list(...)
   
-  cells_f <- lapply(cells, function(cell) {
+  rcells_formatted <- lapply(cells, function(cell) {
     if (is(cell, "rcell")) {
       if (is.null(attr(cell, "format"))) {
-        structure(cell, format = format)
-      } else {
-        cell
+        attr(cell, "format") <- format
       }
+      cell
     } else {
       rcell(cell, format = format)
     }
@@ -183,31 +189,13 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
   
   structure(
-    cells_f,
+    rcells_formatted,
     row.name = if (missing(row.name)) NULL else row.name,
     indent = indent,
     class = "rrow"
   )
 }
 
-# Number of non-empty cells in an \code{\link{rrow}} object
-# 
-# row <- rrow("ABC", rcell(3.23, format = "xx.x", colspan = 2))
-# 
-ncells <- function(row) {
-  if (length(row) == 0) {
-    0 
-  } else {
-    ni <- vapply(row, function(cell) {
-      if (is(cell, "rcell")) {
-        attr(cell, "colspan")
-      } else {
-        1
-      }
-    }, numeric(1))
-    sum(ni)
-  } 
-}
 
 #' Reporting Table Cell
 #' 
@@ -225,12 +213,9 @@ ncells <- function(row) {
 #' @export
 rcell <- function(x, format = NULL, colspan=1) {
   
-  if (!any(is.null(format), is.character(format) && length(format) == 1,
-           is.function(format))) {
-    stop("format needs to be a format label, a function, or NULL")
-  } 
+  is_rcell_format(format, stop_otherwise = TRUE)
   
-  if (missing(x) || is.null(x)) x <- list()
+  if (missing(x) || is.null(x)) x <- list() # empty cells
   
   structure(
     x,
@@ -240,88 +225,126 @@ rcell <- function(x, format = NULL, colspan=1) {
   )
 }
 
-check_consistent_ncols <- function(rows, ncols) {
-  lapply(rows, function(row) {
-    # zero length is possible (label only)
-    if (length(row) != 0 && ncells(row) != ncols) {
-      stop(paste("row", attr(row, "row.name"), "has", sum(ncells(row)), "cells instead of expected", ncols))
-    }
-  })
-  invisible(TRUE)
-}
 
-#' Dimension of rtable object
+#' Create a rheader object
 #' 
-#' Retrieve or set the dimension of an \code{rtable} object
-#' 
-#' @param x an \code{\link{rtable}} object
-#' 
-#' @return vector of length two with number of rows and number of columns.
+#' @param ... elements that are either to be mapped to rrows
+#' @param format default format
 #' 
 #' @export
 #' 
-dim.rtable <- function(x) {
-  as.vector(unlist(attributes(x)[c("nrow", "ncol")]))
-}
-
-#' Row names of an \code{\link{rtable}} object
-#' 
-#' Retrieve the row names of an \code{\link{rtable}} object
-#'   
-#' @inheritParams dim.rtable
-#' 
-#' @return a vector with the row names
-#' 
-#' @export
-row.names.rtable <- function(x) {
-  vapply(x, function(row) {
-    rn <- attr(row, "row.name")
-    if (is.null(rn)) "" else rn
-  }, character(1))
-}
-
-#' Get column names of an \code{\link{rtable}} object
-#' 
-#' Retrieve the column names of an \code{\link{rtable}} object
-#' 
-#' @inheritParams dim.rtable
-#' 
-#' @return a vector with the column names 
-#' 
-#' @export
-names.rtable <- function(x) {
-  attr(x, "col.names")
-}
-
-
-#' Access rcells in an \code{\link{rtable}}
-#' 
-#' Accessor function
-#' 
-#' @param x object of class \code{\link{rtable}}
-#' @param i row index
-#' @param j column index
-#' @param ... currently not used
-#'
-#' @details Note that if a cell spans multiple columns, e.g. the 3 columns
-#'   \code{j} to \code{j + 3} then the accessing then \code{x[i, j]}, \code{x[i,
-#'   j+1]}, \code{x[i, j+2]}, \code{x[i, j+3]} return the same
-#'   \code{\link{rcell}} object.
-#'
-#' @export
-`[.rtable` <- function(x, i, j, ...) {
+#' @examples 
+#' h1 <- rheader(c("A", "B", "C"))
+#' h2 <- rheader(
+#'   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+#'   rrow(NULL, "A", "B", "A", "B")
+#' )
+rheader <- function(..., format = "xx") {
   
-  if (missing(i) || missing(j)) stop("both i and j need to be defined to access elements in rtable")
+  args <- list(...)
   
-  row <- x[[i]]
-  if (length(row) == 0) {
-    NULL # no cell information
+  rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
+    list(rrowl(row.name = NULL, args[[1]], format = format))
+  } else if (are(args, "rrow")) {
+    lapply(args, propagate_format_to_rcells, format = format)
   } else {
-    nc <- ncol(x)
-    nci <- vapply(row, function(cell) attr(cell, "colspan") , numeric(1))
-    j2 <- rep(1:length(nci), nci)
-    
-    row[[j2[j]]]
+    stop("either one one vector or rrow objects can be passed to ...")
   }
+  
+  ncol <- vapply(rrows, ncell, numeric(1))
+  if (!all(duplicated(ncol)[-1])) stop("number of columns to not match")
+  
+  structure(
+    setNames(rrows, NULL),
+    nrow = length(rrows),
+    ncol = ncol[1],
+    class = "rheader"
+  )
 }
+
+#' Create an rrow with cell-data stored within lists
+#' 
+#' The apply function family returns lists whose elements can be used as cell
+#' data with the \code{lrow} function.
+#' 
+#' @inheritParams rrow
+#' @param ... lists that get concatenated and then flattened by one level of
+#'   depth. If one elemenet is not a list then it gets placed into a list.
+#' 
+#' 
+#' @export
+#' 
+#' 
+#' @examples 
+#' 
+#' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
+#' 
+#' rrow(row.name = "row 1", x)
+#' rrow("ABC", 2, 3)
+#' 
+#' rrowl(row.name = "row 1", c(1, 2), c(3,4))
+#' rrow(row.name = "row 2", c(1, 2), c(3,4))
+#' 
+rrowl <- function(row.name, ...) {
+  dots <- list(...)
+  args_list <- c(list(row.name = row.name), unlist(lapply(dots, as.list), recursive = FALSE))
+  do.call(rrow, args_list)
+}
+
+#' Create an rtable from rrows stored in a list
+#' 
+#' This function is useful to create \code{\link{rtable}} objects with lists of
+#' rrows that are returned by the apply function family.
+#' 
+#' @inheritParams rtable
+#' @param ... lists with \code{\link{rrow}} objects
+#' 
+#' @return \code{\link{rtable}} object
+#' 
+#' @export
+rtablel <- function(header, ...) {
+  dots <- list(...)
+  args_list <- c(list(header = header), unlist(lapply(dots, as.list), recursive = FALSE))
+  do.call(rtable, args_list)
+}
+
+# propageate default formats to the rcells
+propagate_format_to_rcells <- function(rrow, format) {
+  if (!is(rrow, "rrow")) stop("object of type rrow expected")
+  rrow_formatted <- lapply(rrow, function(rcell) {
+    if (is.null(attr(rcell, "format"))) {
+      attr(rcell, "format") <- format
+    } 
+    rcell
+  })
+  attributes(rrow_formatted) <- attributes(rrow) 
+  rrow_formatted
+}
+
+
+# Number of non-empty cells in an \code{\link{rrow}} object
+# 
+# row <- rrow("ABC", rcell(3.23, format = "xx.x", colspan = 2))
+# 
+ncell <- function(rrow) {
+  
+  if (!is(rrow, "rrow")) stop("element is not of class rrow")
+  
+  if (length(rrow) == 0) {
+    0 
+  } else {
+    ni <- vapply(rrow, function(cell) {
+      if (is(cell, "rcell")) {
+        attr(cell, "colspan")
+      } else {
+        1
+      }
+    }, numeric(1))
+    sum(ni)
+  } 
+}
+
+
+
+
 

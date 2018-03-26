@@ -1,29 +1,29 @@
+#' Convert an rtable to ascii
+#' 
+#' @param x rtable object
+#' @param gap number of spaces between columns
+#' @param indent.unit number of spaces used for indentation of row.names
+#' @param ... currently not used
+#' 
+#' 
 #' @export
+#' 
 toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
   
-  nchar_rownames <- max(vapply(x, function(row) {
-    rn <- attr(row, "row.name")
-    if (is.null(rn)) {
-      0
-    } else {
-      nchar(rn) +  attr(row, "indent") * indent.unit
-    }
-  }, numeric(1)))
+  header <- attr(x, "header")
+  body <- x
   
-  header_row <- do.call(rrow, as.list(c(row.name="", format = "xx", names(x))))
+  header_body <- c(header, body)
   
-  nchar_col <- ceiling(max(unlist(lapply(c(list(header_row), x), function(row) {
-    lapply(row, function(cell) {
-      nc <- nchar(unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE)))
-      nc[is.na(nc)] <- 0
-      nc / attr(cell, "colspan")
-    })
-  }))))
+  nchar_rownames <- max_nchar_rownames(header_body, indent.unit = indent.unit)
+
+  nchar_col <- max_nchar_cols(header_body)
   
+  txt_header <- lapply(header, function(row) {
+    row_to_str(row, nchar_rownames, nchar_col, gap, indent.unit)
+  })
   
-  txt_header <- row_to_str(header_row, nchar_rownames, nchar_col, gap, indent.unit)
-  
-  txt_cells <- lapply(x, function(row) {
+  txt_body <- lapply(x, function(row) {
     row_to_str(row, nchar_rownames, nchar_col, gap, indent.unit)
   })
   
@@ -32,21 +32,68 @@ toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
     c(
       txt_header,
       paste(rep("-", nchar_rownames + ncol(x)*(nchar_col + gap)), collapse = ""),
-      txt_cells
+      txt_body
     ),
     collapse = "\n"
   )  
 }
 
+# get the max 
+# rows is a list of rows
+max_nchar_cols <- function(rows) {
+  
+  if (is(rows, "rrow")) rows <- list(rows)
+  
+  ceiling(max(unlist(lapply(rows, function(row) {
+    lapply(row, function(cell) {
+      nc <- nchar(unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE)))
+      nc[is.na(nc)] <- 0
+      nc / attr(cell, "colspan")
+    })
+  }))))
+}
+
+
+max_nchar_rownames <- function(rows, indent.unit) {
+  
+  if (is(rows, "rrow")) rows <- list(rows)
+  
+  if (!all(vapply(rows, is, logical(1), "rrow"))) stop("not all elements are of class rrow")
+  
+  nchar_rownames <- vapply(rows, function(row) {
+    rn <- attr(row, "row.name")
+    if (is.null(rn)) {
+      0
+    } else {
+      nchar(rn) +  attr(row, "indent") * indent.unit
+    }
+  }, numeric(1))
+  
+  max(0, nchar_rownames)
+  
+}
+
 
 #' @export
 print.rtable <- function(x, ...) {
-  
   str <- toString.rtable(x, ...)
-  
   cat(str)
   cat("\n")
 }
+
+#' @export
+print.rcell <- function(x, output = "ascii", ...) {
+  cat(format_rcell(x, output = output))
+  cat("\n")
+}
+
+#' @export
+print.rrow <- function(x, gap = 8, indent.unit = 2, ...) {
+  txt <- row_to_str(x, max_nchar_rownames(x, indent.unit = indent.unit), max_nchar_cols(x), gap = gap, indent.unit = indent.unit)
+  cat(txt)
+  cat("\n")
+}
+
 
 row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
   

@@ -42,12 +42,12 @@ as.rtable.default <- function(x, format) {
 as.rtable.table <- function(x, format = "xx") {
   
   if (length(dim(x)) == 1) {
-    rtable(col.names = names(x), format = format, do.call(rrow, c(list(row.name = "1"), as.list(as.vector(x)))))
+    rtable(header = names(x), format = format, do.call(rrow, c(list(row.name = "1"), as.list(as.vector(x)))))
   } else {
     X <- as.data.frame.matrix(x)
     do.call(rtable,
             c(list(
-              col.names = names(X), format = format
+              header = names(X), format = format
             ),
             Map(function(row, row.name) {
               do.call(rrow, as.list(c(row.name=row.name, setNames(row, NULL))))

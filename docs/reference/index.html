@@ -18,13 +18,16 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,21 +50,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">rtables</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">rtables</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/rtables.html">Get Started</a>
+  <a href="../articles/rtables.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -83,10 +105,7 @@
       <div class="row">
   <div class="col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.0.1</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
     <div class="contents">
@@ -100,103 +119,229 @@
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+            <h2 id="section-core-table-create-functions" class="hasAnchor"><a href="#section-core-table-create-functions" class="anchor"></a>Core Table Create Functions</h2>
+            <p class="section-desc"><p>These are the main functions needed to build an rtable.</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rtable.html">rtable()</a></code> </p>
+          </td>
+          <td><p>Create a Reporting Table</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rrow.html">rrow()</a></code> </p>
+          </td>
+          <td><p>Reporting Table Row</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rcell.html">rcell()</a></code> </p>
+          </td>
+          <td><p>Reporting Table Cell</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rheader.html">rheader()</a></code> </p>
+          </td>
+          <td><p>Create a rheader object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rtablel.html">rtablel()</a></code> </p>
+          </td>
+          <td><p>Create an rtable from rrows stored in a list</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rrowl.html">rrowl()</a></code> </p>
+          </td>
+          <td><p>Create an rrow with cell-data stored within lists</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-cell-formatting-related-functions" class="hasAnchor"><a href="#section-cell-formatting-related-functions" class="anchor"></a>Cell Formatting related Functions</h2>
             <p class="section-desc"></p>
           </th>
         </tr>
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="as_html.default.html">as_html</a></code> </p>
+            <p><code><a href="format_rcell.html">format_rcell()</a></code> </p>
           </td>
-          <td><p>Generic for as_html</p></td>
+          <td><p>Convert the contets of an <code>rcell</code> to a string using the
+<code>format</code> information</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="as_html.html">as_html</a></code> </p>
+            <p><code><a href="list_rcell_format_labels.html">list_rcell_format_labels()</a></code> </p>
           </td>
-          <td><p>Convert an <code><a href='reference/rtable.html'>rtable</a></code> object to an <code>shiny.tag</code> html
-representation of the <code><a href='reference/rtable.html'>rtable</a></code></p></td>
+          <td><p>List with valid <code>rcell</code> formats labels grouped by 1d and 2d</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-accessor-functions" class="hasAnchor"><a href="#section-accessor-functions" class="anchor"></a>Accessor Functions</h2>
+            <p class="section-desc"><p>Access and Modify Functions</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="names.rtable.html">names(<i>&lt;rtable&gt;</i>)</a></code> </p>
+          </td>
+          <td><p>Get column names of an <code>rtable</code> object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="as.rtable.html">as.rtable</a></code> </p>
+            <p><code><a href="row.names-set-.rtable.html">`row.names<-`(<i>&lt;rtable&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Convert an object to an <code><a href='reference/rtable.html'>rtable</a></code> object</p></td>
+          <td><p>change row names of rtable</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="as.rtable.table.html">as.rtable</a></code> </p>
+            <p><code><a href="row.names.rheader.html">row.names(<i>&lt;rheader&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Convert a table object to an <code><a href='reference/rtable.html'>rtable</a></code></p></td>
+          <td><p>Row names of an <code>rheader</code> object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="compare_rtables.html">compare_rtables</a></code> </p>
+            <p><code><a href="row.names.rtable.html">row.names(<i>&lt;rtable&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Corpare two rtables</p></td>
+          <td><p>Row names of an <code>rtable</code> object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="dim.rtable.html">dim</a></code> </p>
+            <p><code><a href="sub-.rtable.html">`[`(<i>&lt;rtable&gt;</i>)</a></code> </p>
+          </td>
+          <td><p>Access rcells in an <code>rtable</code></p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="dim.rtable.html">dim(<i>&lt;rtable&gt;</i>)</a></code> </p>
           </td>
           <td><p>Dimension of rtable object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="format_rcell.html">format_rcell</a></code> </p>
+            <p><code><a href="rbind.rtable.html">rbind(<i>&lt;rtable&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Convert the contets of an <code><a href='reference/rcell.html'>rcell</a></code> to a string using the
-<code>format</code> information</p></td>
+          <td><p>stack rtable objects</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-tabulation-functions" class="hasAnchor"><a href="#section-tabulation-functions" class="anchor"></a>Tabulation Functions</h2>
+            <p class="section-desc"><p>rtabulate is a framework to derive rtables</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="rtabulate.html">rtabulate()</a></code> </p>
+          </td>
+          <td><p>Tabulation Methods</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="get_rcell_formats.html">get_rcell_formats</a></code> </p>
+            <p><code><a href="rtabulate.data.frame.html">rtabulate(<i>&lt;data.frame&gt;</i>)</a></code> </p>
           </td>
-          <td><p>List with valid <code><a href='reference/rcell.html'>rcell</a></code> formats labels grouped by 1d and 2d</p></td>
+          <td><p>Split data.frame and apply functions</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="names.rtable.html">names</a></code> </p>
+            <p><code><a href="rtabulate.factor.html">rtabulate(<i>&lt;factor&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Get column names of an <code><a href='reference/rtable.html'>rtable</a></code> object</p></td>
+          <td><p>Tabulate Factors</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="rcell.html">rcell</a></code> </p>
+            <p><code><a href="rtabulate.logical.html">rtabulate(<i>&lt;logical&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Reporting Table Cell</p></td>
+          <td><p>tabulate a logical vector</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="row.names.rtable.html">row.names</a></code> </p>
+            <p><code><a href="rtabulate.numeric.html">rtabulate(<i>&lt;numeric&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Row names of an <code><a href='reference/rtable.html'>rtable</a></code> object</p></td>
+          <td><p>tabulate a numeric vector</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="rrow.html">rrow</a></code> </p>
+            <p><code><a href="no_by.html">no_by()</a></code> </p>
           </td>
-          <td><p>Reporting Table Row</p></td>
+          <td><p>Do not split data into columns or row in <code>rtabulate</code></p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="rtable.html">rtable</a></code> </p>
+            <p><code><a href="is.no_by.html">is.no_by()</a></code> </p>
           </td>
-          <td><p>Create a Reporting Table</p></td>
+          <td><p>Check if object inherits from the <code>no_by</code> Class</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-output-functions" class="hasAnchor"><a href="#section-output-functions" class="anchor"></a>Output Functions</h2>
+            <p class="section-desc"><p>These functions create ascii or html representations of the table</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="toString.rtable.html">toString(<i>&lt;rtable&gt;</i>)</a></code> </p>
+          </td>
+          <td><p>Convert an rtable to ascii</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="sub-.rtable.html">[.rtable</a></code> </p>
+            <p><code><a href="as_html.html">as_html()</a></code> </p>
           </td>
-          <td><p>Access rcells in an <code><a href='reference/rtable.html'>rtable</a></code></p></td>
+          <td><p>Convert an <code>rtable</code> object to an <code>shiny.tag</code> html
+representation of the <code>rtable</code></p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-coercion-functions" class="hasAnchor"><a href="#section-coercion-functions" class="anchor"></a>Coercion Functions</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="as.rtable.html">as.rtable()</a></code> </p>
+          </td>
+          <td><p>Convert an object to an <code>rtable</code> object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="Viewer.html">Viewer</a></code> </p>
+            <p><code><a href="as.rtable.table.html">as.rtable(<i>&lt;table&gt;</i>)</a></code> </p>
           </td>
-          <td><p>Dispaly an <code><a href='reference/rtable.html'>rtable</a></code> object in the Viewer pane in RStudio or in a
+          <td><p>Convert a table object to an <code>rtable</code></p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-utility-functions" class="hasAnchor"><a href="#section-utility-functions" class="anchor"></a>Utility Functions</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="Viewer.html">Viewer()</a></code> </p>
+          </td>
+          <td><p>Dispaly an <code>rtable</code> object in the Viewer pane in RStudio or in a
 browser</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="compare_rtables.html">compare_rtables()</a></code> </p>
+          </td>
+          <td><p>Corpare two rtables</p></td>
         </tr>
       </tbody>
       </table>
@@ -206,7 +351,13 @@ browser</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-core-table-create-functions">Core Table Create Functions</a></li>
+      <li><a href="#section-cell-formatting-related-functions">Cell Formatting related Functions</a></li>
+      <li><a href="#section-accessor-functions">Accessor Functions</a></li>
+      <li><a href="#section-tabulation-functions">Tabulation Functions</a></li>
+      <li><a href="#section-output-functions">Output Functions</a></li>
+      <li><a href="#section-coercion-functions">Coercion Functions</a></li>
+      <li><a href="#section-utility-functions">Utility Functions</a></li>
     </ul>
   </div>
 </div>
@@ -217,7 +368,7 @@ browser</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
@@ -225,3 +376,4 @@ browser</p></td>
 
   </body>
 </html>
+
