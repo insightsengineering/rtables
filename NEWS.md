@@ -1,9 +1,9 @@
 
 
 
-## rtable 0.0.2
+## rtable 0.1.0
 
-Version `0.0.2` is a major re-design with lots of internal refactoring and the
+Version `0.1.0` is a major re-design with lots of internal refactoring and the
 following API changes:
 
 * Redesign: `rtable` has now `header` argument instead of `col.names`. A
@@ -27,7 +27,6 @@ single `rrow`  and by setting `row.name` to `NULL`.
 
 * `indented_row.names` function added
 
-* 
 
 ## rtable 0.0.1
 
