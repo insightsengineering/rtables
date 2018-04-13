@@ -76,6 +76,8 @@ tbl
 
 ## Presentations
 
+* [Presentation on v0.1.0 April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
+
 * [baselR November
 2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing),
 this presentation was written for version `v0.0.1`
