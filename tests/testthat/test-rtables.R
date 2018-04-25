@@ -87,3 +87,13 @@ test_that("multi-header tables work", {
   expect_equal(names(t1), c("A", "A", "B", "B"))
   
 })
+
+
+test_that("test sprintf based format", {
+  
+  expect_equal(format_rcell(rcell(12.213743534, sprintf_format("%.3f"))), "12.214")
+  expect_equal(format_rcell(rcell(12.2134543534, sprintf_format("%.3f"))), "12.213")
+  
+  expect_equal(format_rcell(rcell(c(12.21, 7.321), sprintf_format("%.1f and %.2f"))), "12.2 and 7.32")
+  
+})

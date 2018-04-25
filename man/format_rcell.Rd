@@ -5,7 +5,7 @@
 \title{Convert the contets of an \code{\link{rcell}} to a string using the
 \code{format} information}
 \usage{
-format_rcell(x, format, output = c("html", "ascii"))
+format_rcell(x, format, output = c("ascii", "html"))
 }
 \arguments{
 \item{x}{an object of class \code{\link{rcell}}}

@@ -1,5 +1,9 @@
 
+## rtable 0.1.1
 
+* added `sprintf_format` for formatting rcells (thanks to Doug Kelkhoff for the
+suggestion)
+* added `"(N=xx)"` and `">999.9" format labels
 
 ## rtable 0.1.0
 

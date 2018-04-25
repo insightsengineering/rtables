@@ -1,7 +1,7 @@
 
 formats_1d <- c(
   "xx", "xx.", "xx.x", "xx.xx", "xx.xxx", "xx.xxxx",
-  "xx%", "xx.x%", "xx.xx%", "xx.xxx%"
+  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9"
 )
 
 formats_2d <- c(
@@ -39,7 +39,11 @@ list_rcell_format_labels <- function() {
 }
 
 is_rcell_format <- function(x, stop_otherwise=FALSE) {
-  is_valid <- is.null(x) || (length(x) == 1 && (is.function(x) || x %in% unlist(list_rcell_format_labels()))) 
+  is_valid <- is.null(x) ||
+    (length(x) == 1 && 
+       (is.function(x) ||
+          identical(attr(x, "format_type"), "sprintf") || 
+          x %in% unlist(list_rcell_format_labels()))) 
   
   if (stop_otherwise && !is_valid) stop("format needs to be a format label, a function, or NULL")
   
@@ -58,6 +62,26 @@ set_format <- function(x, value) {
   x
 }
 
+#' Specify a rcell format based on sprintf formattig rules
+#'
+#' Format the rcell data with \code{\link[base]{sprintf}} formatting strings
+#'
+#' @inheritParams  base::sprintf
+#'
+#' @export
+#' 
+#' @seealso \code{\link[base]{sprintf}}
+#' 
+#' @examples 
+#' 
+#' rcell(100, format = sprintf_format("(N=%i)"))
+#' 
+#' rcell(c(4,9999999999), format = sprintf_format("(%.2f, >999.9)"))
+#' 
+sprintf_format <- function(fmt) {
+  structure(fmt, "format_type" = "sprintf")
+}
+
 
 # # @export
 # format.rcell <- function(x, ...) {
@@ -73,7 +97,7 @@ set_format <- function(x, value) {
 #' 
 #' 
 #' @export
-format_rcell <- function(x, format, output = c("html", "ascii")) {
+format_rcell <- function(x, format, output = c("ascii", "html")) {
   
   
   if (length(x) == 0) return("")
@@ -84,6 +108,8 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
   
   txt <- if (is.null(format)) {
     toString(x)
+  } else if (identical(attr(format, "format_type"), "sprintf")) {
+    do.call(sprintf, c(list(format), x))
   } else if (is.character(format)) {
     l <- if (format %in% formats_1d) {
       1
@@ -107,6 +133,8 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
       "xx.x%" = paste0(round(x * 100, 1), "%"),
       "xx.xx%" = paste0(round(x * 100, 2), "%"),
       "xx.xxx%" = paste0(round(x * 100, 3), "%"),
+      "(N=xx)" = paste0("(N=", x, ")"),
+      ">999.9" = ">999.9",
       "xx / xx" = paste(x, collapse = " / "),
       "xx. / xx." = paste(lapply(x, round, 0)),
       "xx.x / xx.x" = paste(lapply(x, round, 1)),
@@ -131,7 +159,8 @@ format_rcell <- function(x, format, output = c("html", "ascii")) {
       "xx.x (xx.x)" = paste0(round(x[1], 1), " (",round(x[2], 1), ")"),
       "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
       "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
-      "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to ")
+      "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to "),
+      paste("format string", format, "not found")
     )
   } else if (is.function(format)) {
     format(x, output = output)
