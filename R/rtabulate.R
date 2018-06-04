@@ -220,11 +220,11 @@ rtabulate.factor <- function(x,
   useNA <- match.arg(useNA)
   
   if (useNA %in% c("ifany", "always")) {
-    if (any("NA" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called NA")
+    if (any("<NA>" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called <NA>")
     
     if (useNA == "always" || any(is.na(x))) {
-      levels(x) <- c(levels(x), "NA")
-      x[is.na(x)] <- "NA"
+      levels(x) <- c(levels(x), "<NA>")
+      x[is.na(x)] <- "<NA>"
     }
   } 
   
