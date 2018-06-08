@@ -4,7 +4,7 @@
 \alias{rtablel}
 \title{Create an rtable from rrows stored in a list}
 \usage{
-rtablel(header, ...)
+rtablel(header, ..., format = NULL)
 }
 \arguments{
 \item{header}{either a vector with column names or an object returned by
@@ -12,6 +12,11 @@ rtablel(header, ...)
 needed}
 
 \item{...}{lists with \code{\link{rrow}} objects}
+
+\item{format}{a valid format string or a format function for
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
 }
 \value{
 \code{\link{rtable}} object

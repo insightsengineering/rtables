@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -80,20 +80,20 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Introduction to rtables</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2018-03-26</h4>
+            <h4 class="date">2018-06-07</h4>
       
-      <small>Source: <a href="https://github.com/roche/rtables/blob/master/vignettes/rtables.Rmd"><code>vignettes/rtables.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/vignettes/rtables.Rmd"><code>vignettes/rtables.Rmd</code></a></small>
+      <div class="hidden name"><code>rtables.Rmd</code></div>
 
     </div>
 
     
     
-<div class="contents">
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
@@ -203,7 +203,7 @@ N=300
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_rcell_format_labels.html">list_rcell_format_labels</a></span>()</code></pre></div>
 <pre><code>## $`1d`
 ##  [1] "xx"      "xx."     "xx.x"    "xx.xx"   "xx.xxx"  "xx.xxxx" "xx%"    
-##  [8] "xx.x%"   "xx.xx%"  "xx.xxx%"
+##  [8] "xx.x%"   "xx.xx%"  "xx.xxx%" "(N=xx)"  "&gt;999.9" 
 ## 
 ## $`2d`
 ##  [1] "xx / xx"            "xx. / xx."          "xx.x / xx.x"       
@@ -260,7 +260,6 @@ t2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.h
 ## 6  0   0   0   0   0   0   0   0   1   0   3   0   2   0   1   0   0   0   0   0   0   0 
 ## 8  0   0   0   0   0   0   0   0   0   0   0   0   0   2   2   3   1   1   1   2   1   1</code></pre>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -291,6 +290,8 @@ t2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rtable.h
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

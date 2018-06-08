@@ -18,6 +18,8 @@ rcell(100, format = sprintf_format("(N=\%i)"))
 
 rcell(c(4,9999999999), format = sprintf_format("(\%.2f, >999.9)"))
 
+rtable(LETTERS[1:2], rrow("", 1 ,2), format = sprintf_format("\%.2f"))
+
 }
 \seealso{
 \code{\link[base]{sprintf}}

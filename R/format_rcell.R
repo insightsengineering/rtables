@@ -45,7 +45,8 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
           identical(attr(x, "format_type"), "sprintf") || 
           x %in% unlist(list_rcell_format_labels()))) 
   
-  if (stop_otherwise && !is_valid) stop("format needs to be a format label, a function, or NULL")
+  if (stop_otherwise && !is_valid)
+    stop("format needs to be a format label, sprintf_format object, a function, or NULL")
   
   is_valid
 }
@@ -77,6 +78,8 @@ set_format <- function(x, value) {
 #' rcell(100, format = sprintf_format("(N=%i)"))
 #' 
 #' rcell(c(4,9999999999), format = sprintf_format("(%.2f, >999.9)"))
+#' 
+#' rtable(LETTERS[1:2], rrow("", 1 ,2), format = sprintf_format("%.2f"))
 #' 
 sprintf_format <- function(fmt) {
   structure(fmt, "format_type" = "sprintf")

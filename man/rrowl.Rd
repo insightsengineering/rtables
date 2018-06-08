@@ -4,19 +4,34 @@
 \alias{rrowl}
 \title{Create an rrow with cell-data stored within lists}
 \usage{
-rrowl(row.name, ...)
+rrowl(row.name, ..., format = NULL, indent = 0)
 }
 \arguments{
 \item{row.name}{string with row name}
 
 \item{...}{lists that get concatenated and then flattened by one level of
 depth. If one elemenet is not a list then it gets placed into a list.}
+
+\item{format}{a valid format string or a format function for
+\code{\link{rcell}}s. To get a list of all valid format strings use
+\code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
+of a cell get pasted separated by a comma.}
+
+\item{indent}{non-negative integer where 0 means that the row should not be
+indented}
 }
 \description{
 The apply function family returns lists whose elements can be used as cell
 data with the \code{lrow} function.
 }
 \examples{
+
+rrowl("a", c(1,2,3), format = "xx")
+rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+
+
+rrowl("N", tapply(iris$Species, iris$Species, length))
+rrowl("N", tapply(iris$Species, iris$Species, length), format = "xx")
 
 x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 

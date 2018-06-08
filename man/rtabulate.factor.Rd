@@ -6,7 +6,7 @@
 \usage{
 \method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length, ...,
   row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
-  format = "xx", indent = 0)
+  format = "xx", indent = 0, col_total = "(N=xx)")
 }
 \arguments{
 \item{x}{a vecor}
@@ -34,6 +34,10 @@ then the \code{format} is applied}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
+
+\item{col_total}{a format string for displaying the number of elements in the
+column header. If \code{NULL} then no header row for the column is
+displayed.}
 }
 \value{
 an \code{\link{rtable}} project

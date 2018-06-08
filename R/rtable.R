@@ -277,6 +277,13 @@ rheader <- function(..., format = "xx") {
 #' 
 #' @examples 
 #' 
+#' rrowl("a", c(1,2,3), format = "xx")
+#' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+#' 
+#' 
+#' rrowl("N", tapply(iris$Species, iris$Species, length))
+#' rrowl("N", tapply(iris$Species, iris$Species, length), format = "xx")
+#' 
 #' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 #' 
 #' rrow(row.name = "row 1", x)
@@ -285,9 +292,13 @@ rheader <- function(..., format = "xx") {
 #' rrowl(row.name = "row 1", c(1, 2), c(3,4))
 #' rrow(row.name = "row 2", c(1, 2), c(3,4))
 #' 
-rrowl <- function(row.name, ...) {
+rrowl <- function(row.name, ..., format = NULL, indent = 0) {
   dots <- list(...)
-  args_list <- c(list(row.name = row.name), unlist(lapply(dots, as.list), recursive = FALSE))
+  args_list <- c(
+    list(row.name = row.name, format = format, indent = indent), 
+    unlist(lapply(dots, as.list), recursive = FALSE)
+  )
+
   do.call(rrow, args_list)
 }
 
@@ -302,9 +313,9 @@ rrowl <- function(row.name, ...) {
 #' @return \code{\link{rtable}} object
 #' 
 #' @export
-rtablel <- function(header, ...) {
+rtablel <- function(header, ..., format = NULL) {
   dots <- list(...)
-  args_list <- c(list(header = header), unlist(lapply(dots, as.list), recursive = FALSE))
+  args_list <- c(list(header = header, format = format), unlist(lapply(dots, as.list), recursive = FALSE))
   do.call(rtable, args_list)
 }
 
