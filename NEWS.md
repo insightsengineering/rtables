@@ -4,6 +4,7 @@
 * added `sprintf_format` for formatting rcells (thanks to Doug Kelkhoff for the
 suggestion)
 * added `"(N=xx)"` and `">999.9"` format labels
+* `rtabulate` has now an argument `col_total` and shows by default the numbers of elements associated with a column
 
 ## rtable 0.1.0
 

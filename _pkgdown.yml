@@ -7,6 +7,8 @@ navbar:
   - icon: fa-github fa-lg
     href: https://github.com/roche/rtables
 
+development:
+  mode: devel
 
 reference:
   - title: Core Table Create Functions

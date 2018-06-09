@@ -25,9 +25,6 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
 <meta property="og:title" content="Split data.frame and apply functions — rtabulate.data.frame" />
 
 <meta property="og:description" content="Split data.frame and apply functions" />
@@ -58,7 +55,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -101,7 +98,6 @@
   </a>
 </li>
       </ul>
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -109,19 +105,16 @@
       
       </header>
 
-<div class="row">
+      <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Split data.frame and apply functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rtabulate.R'><code>R/rtabulate.R</code></a></small>
-    <div class="hidden name"><code>rtabulate.data.frame.Rd</code></div>
+    <small>Source: <a href='https://github.com/roche/rtables/blob/master/R/rtabulate.R'><code>R/rtabulate.R</code></a></small>
     </div>
 
-    <div class="ref-description">
     
     <p>Split data.frame and apply functions</p>
     
-    </div>
 
     <pre class="usage"><span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"row_1"</span>),
@@ -188,18 +181,16 @@ indented</p></td>
   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
      <span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>val</span>)
   }
-)</div><div class='output co'>#&gt;            X            Y            Z  
-#&gt;          (N=4)        (N=4)        (N=4)
-#&gt; ----------------------------------------
-#&gt; A          8           12           16  
-#&gt; B         10           14           18  </div><div class='input'>
+)</div><div class='output co'>#&gt;          X         Y         Z 
+#&gt; -------------------------------
+#&gt; A        8         12        16
+#&gt; B        10        14        18</div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>,
   <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"sum"</span>),
   <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='st'>"Species"</span>,
   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>)
 )</div><div class='output co'>#&gt;              setosa          versicolor        virginica 
-#&gt;              (N=50)            (N=50)            (N=50)  
 #&gt; ---------------------------------------------------------
 #&gt; sum          250.3             296.8             329.4   </div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
@@ -207,24 +198,26 @@ indented</p></td>
   <span class='kw'>row_by_var</span> <span class='kw'>=</span> <span class='st'>"Species"</span>,
   <span class='kw'>col_by_var</span> <span class='kw'>=</span> <span class='fu'><a href='no_by.html'>no_by</a></span>(<span class='st'>"sum"</span>),
   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>sum</span>(<span class='no'>x</span>$<span class='no'>Sepal.Length</span>)
-)</div><div class='output co'>#&gt; <span class='error'>Error in split.default(x = seq_len(nrow(x)), f = f, drop = drop, ...): group length is 0 but data length &gt; 0</span></div><div class='input'>
+)</div><div class='output co'>#&gt;                    sum 
+#&gt; -----------------------
+#&gt; setosa            250.3
+#&gt; versicolor        296.8
+#&gt; virginica         329.4</div><div class='input'>
 <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>,
   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>) <span class='fu'>c</span>(<span class='fu'>sum</span>(<span class='no'>cell_data</span>$<span class='no'>Sepal.Length</span>), <span class='fu'>sd</span>(<span class='no'>cell_data</span>$<span class='no'>Sepal.Length</span>)),
   <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx.xx (xx.xx%)"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in split.default(x = seq_len(nrow(x)), f = f, drop = drop, ...): group length is 0 but data length &gt; 0</span></div><div class='input'>
-<span class='no'>tbl</span></div><div class='output co'>#&gt;                           setosa                           versicolor                          virginica         
-#&gt;                           (N=50)                             (N=50)                             (N=50)           
-#&gt; -----------------------------------------------------------------------------------------------------------------
-#&gt; S.L &gt; 5          df: 20 , and 5 , and 6.13         df: 45 , and 5.9 , and 6.13        df: 47 , and 6.6 , and 6.13
-#&gt; S.L &lt;= 5         df: 26 , and 5 , and 4.79                      -                                  -             </div><div class='input'>
-<span class='fu'>row.names</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt;    S.L &gt; 5   S.L &lt;= 5 
-#&gt;  "S.L &gt; 5" "S.L &lt;= 5" </div><div class='input'><span class='fu'>row.names</span>(<span class='no'>tbl</span>) <span class='kw'>&lt;-</span> <span class='st'>"Sum of Sepal Length"</span></div><div class='output co'>#&gt; <span class='error'>Error in `row.names&lt;-.rtable`(`*tmp*`, value = "Sum of Sepal Length"): dimension missmatch</span></div><div class='input'>
-<span class='no'>tbl</span></div><div class='output co'>#&gt;                           setosa                           versicolor                          virginica         
-#&gt;                           (N=50)                             (N=50)                             (N=50)           
-#&gt; -----------------------------------------------------------------------------------------------------------------
-#&gt; S.L &gt; 5          df: 20 , and 5 , and 6.13         df: 45 , and 5.9 , and 6.13        df: 47 , and 6.6 , and 6.13
-#&gt; S.L &lt;= 5         df: 26 , and 5 , and 4.79                      -                                  -             </div><div class='input'>
+)
+
+<span class='no'>tbl</span></div><div class='output co'>#&gt;                  col_1     
+#&gt; ---------------------------
+#&gt; row_1        876.5 (82.81%)</div><div class='input'>
+<span class='fu'>row.names</span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt;   row_1 
+#&gt; "row_1" </div><div class='input'><span class='fu'>row.names</span>(<span class='no'>tbl</span>) <span class='kw'>&lt;-</span> <span class='st'>"Sum of Sepal Length"</span>
+
+<span class='no'>tbl</span></div><div class='output co'>#&gt;                                col_1     
+#&gt; -----------------------------------------
+#&gt; Sum of Sepal Length        876.5 (82.81%)</div><div class='input'>
 <span class='no'>iris2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='no'>iris2</span>$<span class='no'>fsl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
@@ -249,7 +242,6 @@ indented</p></td>
   <span class='kw'>row_col_data_args</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )
 <span class='no'>tbl</span></div><div class='output co'>#&gt;                           setosa                           versicolor                          virginica         
-#&gt;                           (N=50)                             (N=50)                             (N=50)           
 #&gt; -----------------------------------------------------------------------------------------------------------------
 #&gt; S.L &gt; 5          df: 20 , and 5 , and 6.13         df: 45 , and 5.9 , and 6.13        df: 47 , and 6.6 , and 6.13
 #&gt; S.L &lt;= 5         df: 26 , and 5 , and 4.79                      -                                  -             </div></pre>
@@ -278,8 +270,6 @@ indented</p></td>
 
       </footer>
    </div>
-
-  
 
   </body>
 </html>

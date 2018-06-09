@@ -51,11 +51,18 @@ repository and to send us pull requests with the suggested improvements.
 
 ## Installation
 
-To install the `rtables` package run the following command in `R`:
+To install the stable release of `rtables` package run the following command in `R`:
+
+```{r, eval = FALSE}
+devtools::install_github("roche/rtables", ref="v0.1.0")
+```
+
+To install the test version of `rtables` run
 
 ```{r, eval = FALSE}
 devtools::install_github("roche/rtables")
 ```
+
 
 ## Usage
 

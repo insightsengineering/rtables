@@ -31,7 +31,13 @@ We are looking for collaborators to help define and shape the `rtables` package.
 Installation
 ------------
 
-To install the `rtables` package run the following command in `R`:
+To install the stable release of `rtables` package run the following command in `R`:
+
+``` r
+devtools::install_github("roche/rtables", ref="v0.1.0")
+```
+
+To install the test version of `rtables` run
 
 ``` r
 devtools::install_github("roche/rtables")
