@@ -49,6 +49,24 @@ is.no_by <- function(x) {
   is(x, "no_by")
 }
 
+rtabulate_header <- function(col_by, Ntot, N=NULL, format="(N=xx)") {
+  if (!is.factor(col_by) && !is.no_by(col_by)) stop("col_by is required to be a factor or no_by object")
+  
+  lvls <- if (is.no_by(col_by)) as.vector(col_by) else levels(col_by)
+  
+  if (is.null(format)) {
+    rheader(lvls)
+  } else {
+    if (is.null(N)) {
+      N <- if (is.no_by(col_by)) Ntot else tapply(col_by, col_by, length)
+    }
+    rheader(
+      rrowl("", lvls),
+      rrowl("", unname(N), format = format)
+    )
+  }
+}
+
 # rtabulate default for vectors
 # 
 # this method is used for vectors of type \code{logical} and \code{numeric}
@@ -61,6 +79,8 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, ..., row_d
   if (is.null(FUN)) stop("FUN is required")
   
   stop_if_has_na(col_by)
+  
+  tbl_header <- rtabulate_header(col_by, length(x), format=col_total)
   
   xs <- if (is.no_by(col_by)) {
     setNames(list(x), col_by)
@@ -77,16 +97,7 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, ..., row_d
   
   rr <- rrowl(row.name = row.name, col_data, format = format, indent = indent)
   
-  rh <- if (is.null(col_total)) {
-    names(xs)
-  } else {
-    rheader(
-      rrowl("", names(xs)),
-      rrowl("", lapply(xs, length), format=col_total)
-    )  
-  }
-  
-  rtable(header = rh, rr)
+  rtable(header = tbl_header, rr)
   
 }
 
@@ -239,6 +250,8 @@ rtabulate.factor <- function(x,
 
   useNA <- match.arg(useNA)
   
+  tbl_header <- rtabulate_header(col_by, length(x), format=col_total)
+  
   if (useNA %in% c("ifany", "always")) {
     if (any("<NA>" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called <NA>")
     
@@ -292,18 +305,10 @@ rtabulate.factor <- function(x,
     rrow_data_tmp
   }
   
-  rrows <- Map(function(row, rowname) rrowl(rowname, row, format = format, indent = indent), rrow_data, names(rrow_data)) 
+  rrows <- Map(function(row, rowname) rrowl(rowname, row, format = format, indent = indent), 
+               rrow_data, names(rrow_data)) 
   
-  rh <- if (is.null(col_total)) {
-    names(cell_data[[1]])
-  } else {
-    rheader(
-      rrowl("", names(cell_data[[1]])),
-      rrowl("", if (is.no_by(col_by)) length(x) else tapply(x, col_by, length), format = col_total)
-    )
-  }
-  
-  rtablel(header = rh, rrows)
+  rtablel(header = tbl_header, rrows)
 }
 
 
@@ -393,10 +398,13 @@ rtabulate.data.frame <- function(x,
                                  ...,
                                  row_col_data_args = FALSE,
                                  format = "xx",
-                                 indent = 0) {
+                                 indent = 0,
+                                 col_total = "(N=xx)") {
   
   if (!is.no_by(row_by_var) && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
   if (!is.no_by(col_by_var) && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
+  
+  tbl_header <- rtabulate_header(if (is.no_by(col_by_var)) col_by_var else x[[col_by_var]], nrow(x), format=col_total)
   
   row_data <- if (is.no_by(row_by_var)) {
     setNames(list(x), row_by_var)
@@ -404,14 +412,17 @@ rtabulate.data.frame <- function(x,
     split(x, x[[row_by_var]], drop = FALSE)
   }
   
+  col_data <- if (is.no_by(col_by_var)) {
+    setNames(list(x), col_by_var)
+  } else {
+    split(x, x[[col_by_var]], drop = FALSE)
+  }
+  
   cell_data <- if (is.no_by(col_by_var)) {
     lapply(row_data, function(row_i) setNames(list(row_i), col_by_var))
   } else {
     lapply(row_data, function(row_i) split(row_i, row_i[[col_by_var]], drop = FALSE))
   }
-  
-  
-  col_data <- split(x, x[[col_by_var]], drop = FALSE)
   
   rrow_data <- if (!row_col_data_args) {
     lapply(cell_data, function(row_i) lapply(row_i, FUN, ...))
@@ -432,12 +443,7 @@ rtabulate.data.frame <- function(x,
     rrowl(row.name = rowname, row_dat, format = format, indent = indent)
   }, rrow_data, names(rrow_data))
   
-  rh <- rheader(
-    rrowl("", names(cell_data[[1]])),
-    rrowl("", if (is.no_by(col_by_var)) nrow(x) else lapply(col_data, nrow), format = col_total)
-  )
-  
-  rtablel(header = rh, rrows)
+  rtablel(header = tbl_header, rrows)
 }
 
 

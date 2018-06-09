@@ -289,15 +289,16 @@ rbind.rtable <- function(...) {
   
   if (!are(dots, "rtable")) stop("not all elements are of type rtable")
   
-  header <- attr(dots[[1]], "header")
+  headers <- lapply(dots, header)
+  ref_header <- headers[[1]]
   
-  same_headers <- vapply(dots[-1], function(x) {
-    identical(attr(x, "header"), header)
+  same_headers <- vapply(headers[-1], function(h) {
+    identical(h, ref_header)
   }, logical(1))
   
   if (!all(same_headers)) stop("not all rtables have the same header")
   
   body <- unlist(dots, recursive = FALSE)
   
-  rtablel(header = header, body)
+  rtablel(header = ref_header, body)
 }
