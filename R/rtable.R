@@ -281,8 +281,8 @@ rheader <- function(..., format = "xx") {
 #' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
 #' 
 #' 
-#' rrowl("N", tapply(iris$Species, iris$Species, length))
-#' rrowl("N", tapply(iris$Species, iris$Species, length), format = "xx")
+#' rrowl("N", table(iris$Species))
+#' rrowl("N", table(iris$Species), format = "xx")
 #' 
 #' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 #' 

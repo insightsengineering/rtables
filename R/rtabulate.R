@@ -58,7 +58,7 @@ rtabulate_header <- function(col_by, Ntot, N=NULL, format="(N=xx)") {
     rheader(lvls)
   } else {
     if (is.null(N)) {
-      N <- if (is.no_by(col_by)) Ntot else tapply(col_by, col_by, length)
+      N <- if (is.no_by(col_by)) Ntot else table(col_by)
     }
     rheader(
       rrowl("", lvls),
