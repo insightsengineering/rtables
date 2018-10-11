@@ -5,8 +5,9 @@
 \title{Split data.frame and apply functions}
 \usage{
 \method{rtabulate}{data.frame}(x, row_by_var = no_by("row_1"),
-  col_by_var = no_by("col_1"), FUN = nrow, ..., row_col_data_args = FALSE,
-  format = "xx", indent = 0, col_total = "(N=xx)")
+  col_by_var = no_by("col_1"), FUN = nrow, ...,
+  row_col_data_args = FALSE, format = NULL, indent = 0,
+  col_N = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -31,8 +32,9 @@ then the \code{format} is applied}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_total}{a format string for displaying the number of elements in the
-column header. If \code{NULL} then no header row for the column is
+\item{col_N}{The column total for each column. If specified then
+\code{\link{col_N}()} can be used on the cell data in order to retrieve the
+column total. If \code{NULL} then no header row for the column is
 displayed.}
 }
 \value{

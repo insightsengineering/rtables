@@ -4,9 +4,9 @@
 \alias{rtabulate.numeric}
 \title{tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean, ...,
-  row_data_arg = FALSE, format = NULL, row.name = NULL, indent = 0,
-  col_total = "(N=xx)")
+\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean,
+  ..., row_data_arg = FALSE, format = NULL, row.name = NULL,
+  indent = 0, col_N = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -32,8 +32,9 @@ used as \code{row.name} of the \code{\link{rrow}}}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_total}{a format string for displaying the number of elements in the
-column header. If \code{NULL} then no header row for the column is
+\item{col_N}{The column total for each column. If specified then
+\code{\link{col_N}()} can be used on the cell data in order to retrieve the
+column total. If \code{NULL} then no header row for the column is
 displayed.}
 }
 \value{
@@ -46,9 +47,9 @@ vectors associated to the cells
 \examples{
 
 rtabulate(iris$Sepal.Length)
- 
+
 rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
- 
+
 with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
 
 SL <- iris$Sepal.Length
