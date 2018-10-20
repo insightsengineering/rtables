@@ -284,6 +284,12 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' 
 #' rtabulate(sl5, iris$Species)
 #' 
+#' 
+#' x <- factor(LETTERS[1:4], levels = LETTERS[1:4])
+#' col_by <- factor(c("a", "a", "b", "c"), levels = letters[1:4])
+#' rtabulate(x, col_by, length)
+#' 
+#' 
 rtabulate.factor <- function(x,
                              col_by = no_by("col_1"), 
                              FUN = length,
