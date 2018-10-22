@@ -1,4 +1,9 @@
 
+## rtable 0.1.0.6
+
+* `Viewer` now also accepts objects of class `shiny.tag` (defined in package `htmltools`)
+* `as.html` accepts `class.table`, `class.tr`, `class.th`, and `class.td` as an argument
+
 ## rtable 0.1.0.5
 
 * added `sprintf_format` for formatting rcells (thanks to Doug Kelkhoff for the suggestion)

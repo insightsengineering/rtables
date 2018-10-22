@@ -5,15 +5,38 @@
 \title{Dispaly an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
 browser}
 \usage{
-Viewer(x, y = NULL, row.names.bold = FALSE)
+Viewer(x, y = NULL, row.names.bold = FALSE, ...)
 }
 \arguments{
-\item{x}{an \code{\link{rtable}} object}
+\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})}
 
-\item{y}{optional second rtable object}
+\item{y}{optional second argument of same type as \code{x}}
 
 \item{row.names.bold}{row.names.bold boolean, make rownames bold}
+
+\item{...}{arguments passed to \code{as_html}}
 }
 \description{
 The table will be displayed using the bootstrap styling for tables.
+}
+\examples{
+
+\dontrun{
+sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+   labels = c("S.L > 5", "S.L <= 5"))
+
+tbl <- rtabulate(iris$Species, col_by=sl5)
+
+Viewer(tbl)
+Viewer(tbl, tbl)
+
+
+tbl2 <-htmltools::tags$div(
+  class = "table-responsive",
+  as_html(tbl, class.table = "table")
+)
+
+Viewer(tbl, tbl2)
+
+}
 }

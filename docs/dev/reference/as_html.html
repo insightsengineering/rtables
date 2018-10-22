@@ -63,7 +63,7 @@ representation of the <code><a href='rtable.html'>rtable</a></code> — as_html"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.1.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.1.0.6</span>
       </span>
     </div>
 
@@ -180,6 +180,52 @@ representation of the <code><a href='rtable.html'>rtable</a></code></h1>
 #&gt;   &lt;/tr&gt;
 #&gt;   &lt;tr&gt;
 #&gt;     &lt;td class="rowname text-left" colspan="4" style="padding-left: 6ch"&gt;r3&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt; &lt;/table&gt;</div><div class='input'>
+<span class='fu'>as_html</span>(<span class='no'>tbl</span>, <span class='kw'>class.table</span> <span class='kw'>=</span> <span class='st'>"table"</span>, <span class='kw'>class.tr</span> <span class='kw'>=</span> <span class='st'>"row"</span>)</div><div class='output co'>#&gt; &lt;table class="table"&gt;
+#&gt;   &lt;tr class="row"&gt;
+#&gt;     &lt;th class="rowname text-left"&gt;&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;A&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;B&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;C&lt;/th&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr class="row"&gt;
+#&gt;     &lt;td class="rowname text-left"&gt;r1&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;1&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;2&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;3&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr class="row"&gt;
+#&gt;     &lt;td class="rowname text-left" style="padding-left: 3ch"&gt;r2&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;4&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;3&lt;/td&gt;
+#&gt;     &lt;td class="text-center"&gt;2&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr class="row"&gt;
+#&gt;     &lt;td class="rowname text-left" colspan="4" style="padding-left: 6ch"&gt;r3&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt; &lt;/table&gt;</div><div class='input'>
+<span class='fu'>as_html</span>(<span class='no'>tbl</span>, <span class='kw'>class.td</span> <span class='kw'>=</span> <span class='st'>"aaa"</span>)</div><div class='output co'>#&gt; &lt;table class="table table-condensed table-hover"&gt;
+#&gt;   &lt;tr&gt;
+#&gt;     &lt;th class="rowname text-left"&gt;&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;A&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;B&lt;/th&gt;
+#&gt;     &lt;th class="text-center"&gt;C&lt;/th&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr&gt;
+#&gt;     &lt;td class="aaa rowname text-left"&gt;r1&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;1&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;2&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;3&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr&gt;
+#&gt;     &lt;td class="aaa rowname text-left" style="padding-left: 3ch"&gt;r2&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;4&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;3&lt;/td&gt;
+#&gt;     &lt;td class="aaa text-center"&gt;2&lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr&gt;
+#&gt;     &lt;td class="aaa rowname text-left" colspan="4" style="padding-left: 6ch"&gt;r3&lt;/td&gt;
 #&gt;   &lt;/tr&gt;
 #&gt; &lt;/table&gt;</div><div class='input'>
 </div></pre>

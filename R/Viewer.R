@@ -3,31 +3,64 @@
 #' 
 #' The table will be displayed using the bootstrap styling for tables.
 #' 
-#' @inheritParams dim.rtable
-#' @param y optional second rtable object
+#' @param x object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})
+#' @param y optional second argument of same type as \code{x}
 #' @param row.names.bold row.names.bold boolean, make rownames bold
+#' @param ... arguments passed to \code{as_html}
 #' 
 #' 
 #' @export
-Viewer <- function(x, y = NULL, row.names.bold = FALSE) {
+#' 
+#' 
+#' @examples 
+#' 
+#' \dontrun{
+#' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#'    labels = c("S.L > 5", "S.L <= 5"))
+#' 
+#' tbl <- rtabulate(iris$Species, col_by=sl5)
+#' 
+#' Viewer(tbl)
+#' Viewer(tbl, tbl)
+#' 
+#' 
+#' tbl2 <-htmltools::tags$div(
+#'   class = "table-responsive",
+#'   as_html(tbl, class.table = "table")
+#' )
+#' 
+#' Viewer(tbl, tbl2)
+#' 
+#' }
+Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   
-  if (!is(x, "rtable")) stop("x is expected to be an rtable")
-  if (!is.null(y) && !is(y, "rtable")) stop("y is expected to be an rtable if specified")
+  check_convert <- function(x, name, accept_NULL = FALSE) {
+    if (accept_NULL && is.null(x)) {
+      NULL
+    } else if (is(x, "shiny.tag")) {
+      x
+    } else if (is(x, "rtable")) {
+      as_html(x, ...)
+    } else {
+      stop("object of class rtable or shiny tag excepted for ", name)
+    }
+  }
   
-  viewer <- getOption("viewer")
+  x_tag <- check_convert(x, "x", FALSE)
+  y_tag <- check_convert(y, "y", TRUE)
   
-  tbl_html <- if (is.null(y)) {
-    as_html(x)
+  html_output <- if (is.null(y)) {
+    x_tag
   } else {
     htmltools::tags$div(
       class = ".container-fluid",
       htmltools::tags$div(
         class= "col-xs-6",
-        as_html(x)
+        x_tag
       ),
       htmltools::tags$div(
         class= "col-xs-6",
-        as_html(y)
+        y_tag
       )
     )
   }
@@ -42,12 +75,13 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE) {
   }
   
   # get html name
-  for (i in 1:10000) {
+  n_try <- 10000
+  for (i in seq_len(n_try)) {
     htmlFile <- file.path(sandbox_folder, paste0("table", i, ".html"))
     
     if (!file.exists(htmlFile)) {
       break
-    } else if (i == 10000) {
+    } else if (i == n_try) {
       stop("too many html rtables created, restart your session")
     }
   }
@@ -62,7 +96,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE) {
       tags$link(href="css/bootstrap.min.css", rel="stylesheet")
     ),
     tags$body(
-      tbl_html
+      html_output
     )
   )
   
@@ -70,7 +104,6 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE) {
     paste("<!DOCTYPE html>\n",  htmltools::doRenderTags(html_bs)),
     file = htmlFile, append = FALSE
   )
-  
   
   viewer <- getOption("viewer")
   

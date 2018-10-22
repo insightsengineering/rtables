@@ -5,8 +5,9 @@
 \title{Split data.frame and apply functions}
 \usage{
 \method{rtabulate}{data.frame}(x, row_by_var = no_by("row_1"),
-  col_by_var = no_by("col_1"), FUN = nrow, ..., row_col_data_args = FALSE,
-  format = "xx", indent = 0, col_total = "(N=xx)")
+  col_by_var = no_by("col_1"), FUN = nrow, ...,
+  row_col_data_args = FALSE, format = "xx", indent = 0,
+  col_total = "(N=xx)")
 }
 \arguments{
 \item{x}{a vecor}

@@ -4,8 +4,8 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length, ...,
-  row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
+\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
+  ..., row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
   format = "xx", indent = 0, col_total = "(N=xx)")
 }
 \arguments{

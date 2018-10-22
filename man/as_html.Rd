@@ -30,4 +30,8 @@ tbl <- rtable(
 
 as_html(tbl)
 
+as_html(tbl, class.table = "table", class.tr = "row")
+
+as_html(tbl, class.td = "aaa")
+
 }

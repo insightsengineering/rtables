@@ -4,10 +4,10 @@
 \alias{rtabulate.logical}
 \title{tabulate a logical vector}
 \usage{
-\method{rtabulate}{logical}(x, col_by = no_by("col_1"), FUN = function(x)
-  sum(x) * c(1, 1/length(x)), ..., row_data_arg = FALSE,
-  format = "xx.xx (xx.xx\%)", row.name = "", indent = 0,
-  col_total = "(N=xx)")
+\method{rtabulate}{logical}(x, col_by = no_by("col_1"),
+  FUN = function(x) sum(x) * c(1, 1/length(x)), ...,
+  row_data_arg = FALSE, format = "xx.xx (xx.xx\%)", row.name = "",
+  indent = 0, col_total = "(N=xx)")
 }
 \arguments{
 \item{x}{a vecor}
