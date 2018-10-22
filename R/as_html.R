@@ -23,6 +23,10 @@
 #' 
 #' as_html(tbl)
 #' 
+#' as_html(tbl, class.table = "table", class.tr = "row")
+#' 
+#' as_html(tbl, class.td = "aaa")
+#' 
 as_html <- function(x, ...) {
   UseMethod("as_html", x)  
 }
@@ -43,38 +47,42 @@ as_html.default <- function(x, ...) {
 # Convert an rtable object to html
 # 
 # @param x an object of class \code{\link{rtable}}
-# @param class class attributes for the table in html
-# @param ... arguments passed on to \code{shiny::tags$table}
+# @param class.table class attributes for the table in html
+# @param ... arguments passed on to methods
 # 
 # @return an object of class \code{shinyTag}
 
 #' @export
-as_html.rtable <- function(x, class = "table table-condensed table-hover",
-                           body_cell_class = NULL,
-                           header_cell_class = NULL,
+as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
                            ...) {
   
   ncol <- ncol(x)
   
   header <- attr(x, "header")
   body <- x
-
-
   
   tags$table(
-    class = class,
-  #  tags$tr(tagList(tags$th(""), lapply(col_headers, tags$th, align="center", class="text-center"))), 
-    lapply(header, as_html, ncol = ncol, cell_tag = tags$th, ...),
-    lapply(x, as_html, ncol = ncol, ...)
+    class = class.table,
+    lapply(header, as_html, ncol = ncol, is_header = TRUE, ...),
+    lapply(body, as_html, ncol = ncol, is_header = FALSE, ...)
   )
   
 }
 
 #' @export
-as_html.rrow <- function(x, ncol, cell_tag = tags$td, ...) {
+as_html.rrow <- function(x, ncol, is_header, 
+                         class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
+  
+  (is.logical(is_header) && length(is_header) == 1) || stop("is_header is supposed to be a boolean")
+  
+  cell_tag <- if (is_header) {
+    function(...) tags$th(class = class.th, ...)
+  } else {
+    function(...) tags$td(class = class.td, ...)
+  }
   
   indent <- attr(x, "indent")
-  row.name <- attr(x,"row.name")
+  row.name <- attr(x, "row.name")
   
   cells <- if (length(x) == 0) {
     cell_tag(row.name, class=paste("rowname", "text-left"), colspan = as.character(ncol+1))
@@ -105,5 +113,5 @@ as_html.rrow <- function(x, ncol, cell_tag = tags$td, ...) {
     }
   }
   
-  tags$tr(cells)
+  tags$tr(cells, class = class.tr)
 }

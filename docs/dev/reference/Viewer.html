@@ -63,7 +63,7 @@ browser — Viewer" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.1.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.1.0.6</span>
       </span>
     </div>
 
@@ -129,32 +129,58 @@ browser</h1>
     
     </div>
 
-    <pre class="usage"><span class='fu'>Viewer</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.names.bold</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>Viewer</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.names.bold</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an <code><a href='rtable.html'>rtable</a></code> object</p></td>
+      <td><p>object of class <code>rtable</code> or <code>shiny.tag</code> (defined in <code>htmltools</code>)</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>optional second rtable object</p></td>
+      <td><p>optional second argument of same type as <code>x</code></p></td>
     </tr>
     <tr>
       <th>row.names.bold</th>
       <td><p>row.names.bold boolean, make rownames bold</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed to <code>as_html</code></p></td>
+    </tr>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='no'>sl5</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
+   <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
+
+<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span><span class='kw'>=</span><span class='no'>sl5</span>)
+
+<span class='fu'>Viewer</span>(<span class='no'>tbl</span>)
+<span class='fu'>Viewer</span>(<span class='no'>tbl</span>, <span class='no'>tbl</span>)
+
+
+<span class='no'>tbl2</span> <span class='kw'>&lt;-</span><span class='kw pkg'>htmltools</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/htmltools/topics/builder'>tags</a></span>$<span class='fu'>div</span>(
+  <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"table-responsive"</span>,
+  <span class='fu'><a href='as_html.html'>as_html</a></span>(<span class='no'>tbl</span>, <span class='kw'>class.table</span> <span class='kw'>=</span> <span class='st'>"table"</span>)
+)
+
+<span class='fu'>Viewer</span>(<span class='no'>tbl</span>, <span class='no'>tbl2</span>)
+
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

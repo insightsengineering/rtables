@@ -71,4 +71,10 @@ rtabulate(iris$Species, col_by=sl5,
 
 rtabulate(sl5, iris$Species)
 
+
+x <- factor(LETTERS[1:4], levels = LETTERS[1:4])
+col_by <- factor(c("a", "a", "b", "c"), levels = letters[1:4])
+rtabulate(x, col_by, length)
+
+
 }
