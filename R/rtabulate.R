@@ -285,9 +285,10 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #' rtabulate(sl5, iris$Species)
 #' 
 #' 
-#' x <- factor(LETTERS[1:4], levels = LETTERS[1:4])
-#' col_by <- factor(c("a", "a", "b", "c"), levels = letters[1:4])
-#' rtabulate(x, col_by, length)
+#' 
+#' rtabulate(x = factor(c("X", "Y"), c("X", "Y")), col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+#' 
+#' rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")), length)
 #' 
 #' 
 rtabulate.factor <- function(x,
@@ -305,9 +306,9 @@ rtabulate.factor <- function(x,
 
   useNA <- match.arg(useNA)
   
+  if (any("<NA>" %in% levels(x))) stop("factor with level '<NA>' is not valid in rtabulate.factor")
+  
   if (useNA %in% c("ifany", "always")) {
-    if (any("<NA>" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called <NA>")
-    
     if (useNA == "always" || any(is.na(x))) {
       levels(x) <- c(levels(x), "<NA>")
       x[is.na(x)] <- "<NA>"
@@ -329,10 +330,9 @@ rtabulate.factor <- function(x,
     lapply(row_data_list, function(row_i) setNames(list(row_i), col_by))
   } else {
     if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
-    
     df <- data.frame(
       x = x,
-      col_by = factor(col_by)
+      col_by = col_by
     )
     lapply(split(df, df$x, drop = FALSE), function(row_i) {
       split(row_i$x, row_i$col_by, drop = FALSE)
