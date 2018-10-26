@@ -5,8 +5,7 @@
 \title{tabulate a logical vector}
 \usage{
 \method{rtabulate}{logical}(x, col_by = no_by("col_1"), FUN = sum, ...,
-  row_data_arg = FALSE, format = NULL, row.name = "", indent = 0,
-  col_N = NULL)
+  format = NULL, row.name = NULL, indent = 0, col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -21,8 +20,6 @@ set to \code{TRUE} the a second argument with the row data is passed to
 
 \item{...}{arguments passed to \code{FUN}}
 
-\item{row_data_arg}{call \code{FUN} with the row data as the second argument}
-
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
@@ -31,11 +28,6 @@ used as \code{row.name} of the \code{\link{rrow}}}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
-
-\item{col_N}{The column total for each column. If specified then
-\code{\link{col_N}()} can be used on the cell data in order to retrieve the
-column total. If \code{NULL} then no header row for the column is
-displayed.}
 }
 \value{
 an \code{\link{rtable}} project
@@ -46,16 +38,21 @@ tabulate a logical vector
 \examples{
 rtabulate(iris$Species == "setosa")
 
-rtabulate(iris$Species == "setosa", no_by("Species"), row.name = "n (n/N)")
+rtabulate(iris$Species == "setosa", no_by("Species"),
+   FUN = function(x, N) list(sum(x), sum(x)/N),
+   row.name = "n (n/N)",
+   col_wise_args = list(N = 150))
 
 # default: percentages equal \\code{TRUE}
 with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
  
 # precentages with proportion of cell number of \\code{TRUE}s to overvall
 # number of \\code{TRUE}s
-with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5",
-  FUN = function(cell_data, row_data) sum(cell_data) * c(1, 1/sum(row_data)), 
-  row_data_arg = TRUE
+with(iris, rtabulate(Sepal.Length < 5, Species,
+  FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+  format = "xx.xx (xx.xx)",
+  row.name = "Sepal.Length < 5",
+  col_wise_args = list(N = table(cb))
 ))
 
 }

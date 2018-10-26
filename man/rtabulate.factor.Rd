@@ -5,8 +5,8 @@
 \title{Tabulate Factors}
 \usage{
 \method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
-  ..., row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
-  format = NULL, indent = 0, col_N = NULL)
+  ..., useNA = c("no", "ifany", "always"), format = NULL, indent = 0,
+  col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -21,10 +21,6 @@ set to \code{TRUE} the a second argument with the row data is passed to
 
 \item{...}{arguments passed to \code{FUN}}
 
-\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
-with the first three arguments being the cell, row, and column data,
-respectively}
-
 \item{useNA}{boolean, if \code{TRUE} then \code{NA} values in \code{x} get
 turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
 values in \code{x} get dropped.}
@@ -35,10 +31,9 @@ then the \code{format} is applied}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_N}{The column total for each column. If specified then
-\code{\link{col_N}()} can be used on the cell data in order to retrieve the
-column total. If \code{NULL} then no header row for the column is
-displayed.}
+\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
+with the first three arguments being the cell, row, and column data,
+respectively}
 }
 \value{
 an \code{\link{rtable}} project
@@ -58,23 +53,32 @@ sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 rtabulate(iris$Species, col_by=sl5)
 
 rtabulate(iris$Species, col_by=sl5,
-   FUN = function(cell_data, row_data, col_data) {
+   FUN = function(cell_data, N) {
      if (length(cell_data) > 10) {
-        length(cell_data) * c(1, 1/length(col_data))
+        length(cell_data) * c(1, 1/N)
      } else {
         rcell("-", format = "xx")
      }
    },
-   row_col_data_args = TRUE,
-   format = "xx (xx.xx\%)"
+   format = "xx (xx.xx\%)",
+   col_wise_args = list(N = table(sl5))
 )
 
 rtabulate(sl5, iris$Species)
 
 
-x <- factor(LETTERS[1:4], levels = LETTERS[1:4])
-col_by <- factor(c("a", "a", "b", "c"), levels = letters[1:4])
-rtabulate(x, col_by, length)
+
+rtabulate(x = factor(c("X", "Y"), c("X", "Y")), col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+
+rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")), length)
+
+
+rtabulate(
+  x = factor(c("Y", "Y"), c("X", "Y")),
+  col_by = factor(c("b", "b"), c("a", "b")),
+  FUN = function(x, N) list(length(x), N),
+  col_wise_args = list(N = c(1,2))
+)
 
 
 }

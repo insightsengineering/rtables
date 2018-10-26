@@ -5,8 +5,8 @@
 \title{tabulate a numeric vector}
 \usage{
 \method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean,
-  ..., row_data_arg = FALSE, format = NULL, row.name = NULL,
-  indent = 0, col_N = NULL)
+  ..., format = NULL, row.name = NULL, indent = 0,
+  col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -21,8 +21,6 @@ set to \code{TRUE} the a second argument with the row data is passed to
 
 \item{...}{arguments passed to \code{FUN}}
 
-\item{row_data_arg}{call \code{FUN} with the row data as the second argument}
-
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
@@ -31,6 +29,8 @@ used as \code{row.name} of the \code{\link{rrow}}}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
+
+\item{row_data_arg}{call \code{FUN} with the row data as the second argument}
 
 \item{col_N}{The column total for each column. If specified then
 \code{\link{col_N}()} can be used on the cell data in order to retrieve the
@@ -62,5 +62,13 @@ rbind(
 )
 
 
+x <- 1:100
+cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
+
+rtabulate(
+  x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
+  format = sprintf_format("\%.2f (\%.2f) and \%i"), row.name = "Mean (SD) and N",
+  col_wise_args = list(N = table(cb))
+)
 
 }

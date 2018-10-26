@@ -4,17 +4,15 @@
 \alias{rtabulate.data.frame}
 \title{Split data.frame and apply functions}
 \usage{
-\method{rtabulate}{data.frame}(x, row_by_var = no_by("row_1"),
-  col_by_var = no_by("col_1"), FUN = nrow, ...,
-  row_col_data_args = FALSE, format = NULL, indent = 0,
-  col_N = NULL)
+\method{rtabulate}{data.frame}(x, row_by, col_by, FUN, ...,
+  format = NULL, indent = 0, col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
 
-\item{row_by_var}{name of factor variable in \code{x}}
-
-\item{col_by_var}{name of factor variable in \code{x}}
+\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column. If data should not be split
+into columns use the \code{\link{no_by}} function.}
 
 \item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
 set to \code{TRUE} the a second argument with the row data is passed to
@@ -22,20 +20,15 @@ set to \code{TRUE} the a second argument with the row data is passed to
 
 \item{...}{arguments passed to \code{FUN}}
 
-\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
-with the first three arguments being the cell, row, and column data,
-respectively}
-
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_N}{The column total for each column. If specified then
-\code{\link{col_N}()} can be used on the cell data in order to retrieve the
-column total. If \code{NULL} then no header row for the column is
-displayed.}
+\item{row_by_var}{name of factor variable in \code{x}}
+
+\item{col_by_var}{name of factor variable in \code{x}}
 }
 \value{
 an \code{\link{rtable}} project
@@ -50,8 +43,8 @@ df$val <- 1:nrow(df)
 
 rtabulate(
   x = df,
-  row_by_var = "aaa",
-  col_by_var = "bbb",
+  row_by = df$aaa,
+  col_by = df$bbb,
   FUN = function(x) {  
      sum(x$val)
   }
@@ -59,53 +52,51 @@ rtabulate(
 
 rtabulate(
   x = iris,
-  row_by_var = no_by("sum"),
-  col_by_var = "Species", 
+  row_by = no_by("sum"),
+  col_by = iris$Species, 
   FUN = function(x) sum(x$Sepal.Length)
 )
 
 rtabulate(
   x = iris,
-  row_by_var = "Species",
-  col_by_var = no_by("sum"), 
+  row_by = iris$Species,
+  col_by = no_by("sum"), 
   FUN = function(x) sum(x$Sepal.Length)
 )
 
-tbl <- rtabulate(
-  x = iris,
-  FUN = function(cell_data) c(sum(cell_data$Sepal.Length), sd(cell_data$Sepal.Length)),
-  format = "xx.xx (xx.xx\%)"
-)
-
-tbl 
-
-row.names(tbl)
-row.names(tbl) <- "Sum of Sepal Length"
-
-tbl
-
-iris2 <- iris
-iris2$fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
     labels = c("S.L > 5", "S.L <= 5"))
 
 tbl <- rtabulate(
-  x = iris2,
-  row_by_var = "fsl5",
-  col_by_var = "Species", 
-  FUN = function(x_cell, x_row, x_col) {
+  x = iris,
+  row_by = fsl5,
+  col_by = iris$Species, 
+  FUN = function(x_cell) {
     if (nrow(x_cell) < 10) {
       rcell("-")
     } else {
       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
-      m_col <- mean(x_col$Sepal.Length)
-      m_row <- mean(x_row$Sepal.Length)
-    
-      rcell(list(fit, m_col, m_row), format = function(x, output) {
-        paste("df:", x[[1]]$df.residual,", and", round(x[[2]],1), ", and", round(x[[3]],2))
+           
+      rcell(list(fit), format = function(x, output) {
+        paste("df:", x[[1]]$df.residual)
       })
     }
-  } ,
-  row_col_data_args = TRUE
+  }
 )
 tbl
+
+
+
+rtabulate(
+  x = iris,
+  row_by = fsl5,
+  col_by = iris$Species, 
+  FUN = function(x_cell, N) {
+     N
+  },
+  col_wise_args = list(N = c(10, 100, 200))
+)
+
+ 
+
 }
