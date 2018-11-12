@@ -2,12 +2,19 @@
 % Please edit documentation in R/header_add_N.R
 \name{header_add_N}
 \alias{header_add_N}
-\title{add N=xx to header}
+\title{Add N=xx to header}
 \usage{
 header_add_N(x, N)
 }
+\arguments{
+\item{x}{\code{rtable}}
+
+\item{N}{vector with counts to be displayed in the header. The
+length must match the number of columns in \code{x}}
+}
 \description{
-add N=xx to header
+Helper function used to add the population total (N) in the 
+column header of \code{\link{rtable}} object.
 }
 \examples{
 

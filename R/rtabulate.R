@@ -5,13 +5,13 @@
 #' \code{\link{rtable}}s. Conceptually the \code{rtabulate} has it's origin in
 #' \code{\link{tapply}}.
 #' 
-#' The data is split into cell-data and a function can be specified that return
+#' The data is split into cell-data and a function can be specified that returns
 #' a data structre (or \code{\link{rcell}}).
 #'   
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to methods
 #' 
-#' @return an \code{\link{rtable}} project
+#' @return an \code{\link{rtable}} object
 #' 
 #' @author Adrian Waddell
 #'       
@@ -22,16 +22,21 @@ rtabulate <- function(x, ...) {
 }
 
 
-#' Do not split data into columns or row in \code{rtabulate}
+#' Do not split data into columns in \code{rtabulate}
 #' 
-#' \code{\link{rtabulate}} has the arguments \code{col_by} and \code{row_by}
+#' \code{\link{rtabulate}} has the argument \code{col_by}
 #' which can either take a vector or if no splitting is needed the return value
-#' of \code{no_by}.
+#' of \code{no_by}. Using \code{no_by} creates a table with a single 
+#' column.
 #' 
-#' @param name row name or column name
+#' @param name character column name to display in the table header
 #' 
 #' @export
 #' 
+#' @examples 
+#' 
+#' rtabulate(iris$Species, col_by = no_by("Total"))
+
 no_by <- function(name) {
   structure(name, class = "no_by")
 }
@@ -50,12 +55,19 @@ is.no_by <- function(x) {
   is(x, "no_by")
 }
 
+#' Access levels attribute for an object of \code{no_by} Class 
+#' 
+#' @param x \code{no_by} class object
+#' 
 #' @export
-levels.no_by <- function(x) as.vector(x)
+#'  
+levels.no_by <- function(x) {
+  as.vector(x)
+}
 
 # rtabulate default for vectors
 # 
-# this method is used for vectors of type \code{logical} and \code{numeric}
+# This method is used for vectors of type \code{logical} and \code{numeric}
 # 
 # see parameter descrition for rtabulate.numeric
 #
@@ -94,10 +106,9 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
 
 
 
-#' tabulate a numeric vector
+#' Tabulate a numeric vector
 #'
-#' by default the \code{\link[stats]{fivenum}} function is applied to the
-#' vectors associated to the cells
+#' By default each cell reports the mean based on the associated vector. 
 #'
 #'
 #' @inheritParams rrow
@@ -105,19 +116,15 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
 #' @param col_by a \code{\link{factor}} of length \code{nrow(x)} that defines
 #'   which levels in \code{col_by} define a column. If data should not be split
 #'   into columns use the \code{\link{no_by}} function.
-#' @param FUN a function that processes the cell data, if \code{row_data_arg} is
-#'   set to \code{TRUE} the a second argument with the row data is passed to
-#'   \code{FUN}
+#' @param FUN a function that processes the cell data
 #' @param ... arguments passed to \code{FUN}
-#' @param row_data_arg call \code{FUN} with the row data as the second argument
 #' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
 #'   then the \code{format} is applied
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
-#' @param col_N The column total for each column. If specified then
-#'   \code{\link{col_N}()} can be used on the cell data in order to retrieve the
-#'   column total. If \code{NULL} then no header row for the column is
-#'   displayed.
+#' @param col_wise_args a list containing vectors with data for each column that
+#'   is passed to \code{FUN}. The length and order of each vector must match the 
+#'   levels in \code{col_by}. See examples.
 #'
 #' @inherit rtabulate return
 #'
@@ -129,7 +136,7 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
 #'
 #' rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
 #'
-#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
+#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
 #'
 #' SL <- iris$Sepal.Length
 #' Sp <- iris$Species
@@ -139,7 +146,6 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
 #'   rtabulate(SL, Sp, median, row.name = "Median"),
 #'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
-#' 
 #' 
 #' x <- 1:100
 #' cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
@@ -163,7 +169,9 @@ rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = mean, ...,
   )
 }
 
-#' tabulate a logical vector
+#' Tabulate a logical vector
+#' 
+#' By default each cell reports the number of \code{TRUE} observations from the associated vector. 
 #' 
 #' @inheritParams rtabulate.numeric
 #' 
@@ -179,16 +187,16 @@ rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = mean, ...,
 #'    row.name = "n (n/N)",
 #'    col_wise_args = list(N = 150))
 #' 
-#' # default: percentages equal \code{TRUE}
+#' # default FUN is number of observations equal to TRUE
 #' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
 #'  
-#' # precentages with proportion of cell number of \code{TRUE}s to overvall
-#' # number of \code{TRUE}s
+#' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
+#' # in each column
 #' with(iris, rtabulate(Sepal.Length < 5, Species,
 #'   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
-#'   format = "xx.xx (xx.xx)",
+#'   format = "xx.xx (xx.xx%)",
 #'   row.name = "Sepal.Length < 5",
-#'   col_wise_args = list(N = table(cb))
+#'   col_wise_args = list(N = table(Species))
 #' ))
 #' 
 rtabulate.logical <- function(x, col_by = no_by("col_1"),
@@ -211,13 +219,14 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 
 #' Tabulate Factors
 #' 
+#' By default each cell reports the number of observations in
+#' each level of \code{x}. 
+#' 
 #' @inheritParams rtabulate.numeric
-#' @param row_col_data_args boolean, if \code{TRUE} then \code{FUN} is called
-#'   with the first three arguments being the cell, row, and column data,
-#'   respectively
-#' @param useNA boolean, if \code{TRUE} then \code{NA} values in \code{x} get
-#'   turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
-#'   values in \code{x} get dropped.
+#' @param useNA either one of ("no", "ifany", "always"). If \code{"no"} then \code{NA} values
+#'   in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is 
+#'   included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"} 
+#'   \code{NA} values are always included in the summary even if none exist in \code{x}. 
 #' 
 #' @inherit rtabulate return
 #' 
@@ -233,6 +242,7 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #'    labels = c("S.L > 5", "S.L <= 5"))
 #' 
 #' rtabulate(iris$Species, col_by=sl5)
+#' rtabulate(sl5, iris$Species)
 #' 
 #' rtabulate(iris$Species, col_by=sl5,
 #'    FUN = function(cell_data, N) {
@@ -246,14 +256,9 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #'    col_wise_args = list(N = table(sl5))
 #' )
 #' 
-#' rtabulate(sl5, iris$Species)
-#' 
-#' 
-#' 
 #' rtabulate(x = factor(c("X", "Y"), c("X", "Y")), col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
 #' 
 #' rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")), length)
-#' 
 #' 
 #' rtabulate(
 #'   x = factor(c("Y", "Y"), c("X", "Y")),
@@ -337,8 +342,9 @@ rtabulate.factor <- function(x,
 #' Split data.frame and apply functions
 #' 
 #' @inheritParams rtabulate.factor
-#' @param row_by_var name of factor variable in \code{x}
-#' @param col_by_var name of factor variable in \code{x}
+#' @param x data.frame 
+#' @param row_by name of factor variable in \code{x}
+#' @param col_by name of factor variable in \code{x}
 #' 
 #' 
 #' @inherit rtabulate return
@@ -394,8 +400,6 @@ rtabulate.factor <- function(x,
 #'   }
 #' )
 #' tbl
-#' 
-#' 
 #' 
 #' rtabulate(
 #'   x = iris,

@@ -8,15 +8,13 @@
   format = NULL, indent = 0, col_wise_args = NULL)
 }
 \arguments{
-\item{x}{a vecor}
+\item{x}{data.frame}
 
-\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column. If data should not be split
-into columns use the \code{\link{no_by}} function.}
+\item{row_by}{name of factor variable in \code{x}}
 
-\item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
-set to \code{TRUE} the a second argument with the row data is passed to
-\code{FUN}}
+\item{col_by}{name of factor variable in \code{x}}
+
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
 
@@ -26,12 +24,12 @@ then the \code{format} is applied}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{row_by_var}{name of factor variable in \code{x}}
-
-\item{col_by_var}{name of factor variable in \code{x}}
+\item{col_wise_args}{a list containing vectors with data for each column that
+is passed to \code{FUN}. The length and order of each vector must match the 
+levels in \code{col_by}. See examples.}
 }
 \value{
-an \code{\link{rtable}} project
+an \code{\link{rtable}} object
 }
 \description{
 Split data.frame and apply functions
@@ -84,8 +82,6 @@ tbl <- rtabulate(
   }
 )
 tbl
-
-
 
 rtabulate(
   x = iris,

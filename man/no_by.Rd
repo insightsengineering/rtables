@@ -2,15 +2,20 @@
 % Please edit documentation in R/rtabulate.R
 \name{no_by}
 \alias{no_by}
-\title{Do not split data into columns or row in \code{rtabulate}}
+\title{Do not split data into columns in \code{rtabulate}}
 \usage{
 no_by(name)
 }
 \arguments{
-\item{name}{row name or column name}
+\item{name}{character column name to display in the table header}
 }
 \description{
-\code{\link{rtabulate}} has the arguments \code{col_by} and \code{row_by}
+\code{\link{rtabulate}} has the argument \code{col_by}
 which can either take a vector or if no splitting is needed the return value
-of \code{no_by}.
+of \code{no_by}. Using \code{no_by} creates a table with a single 
+column.
+}
+\examples{
+
+rtabulate(iris$Species, col_by = no_by("Total"))
 }

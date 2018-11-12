@@ -2,7 +2,7 @@
 % Please edit documentation in R/rtabulate.R
 \name{rtabulate.numeric}
 \alias{rtabulate.numeric}
-\title{tabulate a numeric vector}
+\title{Tabulate a numeric vector}
 \usage{
 \method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean,
   ..., format = NULL, row.name = NULL, indent = 0,
@@ -15,9 +15,7 @@
 which levels in \code{col_by} define a column. If data should not be split
 into columns use the \code{\link{no_by}} function.}
 
-\item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
-set to \code{TRUE} the a second argument with the row data is passed to
-\code{FUN}}
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
 
@@ -30,19 +28,15 @@ used as \code{row.name} of the \code{\link{rrow}}}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{row_data_arg}{call \code{FUN} with the row data as the second argument}
-
-\item{col_N}{The column total for each column. If specified then
-\code{\link{col_N}()} can be used on the cell data in order to retrieve the
-column total. If \code{NULL} then no header row for the column is
-displayed.}
+\item{col_wise_args}{a list containing vectors with data for each column that
+is passed to \code{FUN}. The length and order of each vector must match the 
+levels in \code{col_by}. See examples.}
 }
 \value{
-an \code{\link{rtable}} project
+an \code{\link{rtable}} object
 }
 \description{
-by default the \code{\link[stats]{fivenum}} function is applied to the
-vectors associated to the cells
+By default each cell reports the mean based on the associated vector.
 }
 \examples{
 
@@ -50,7 +44,7 @@ rtabulate(iris$Sepal.Length)
 
 rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
 
-with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
+with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
 
 SL <- iris$Sepal.Length
 Sp <- iris$Species
@@ -60,7 +54,6 @@ rbind(
   rtabulate(SL, Sp, median, row.name = "Median"),
   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 )
-
 
 x <- 1:100
 cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))

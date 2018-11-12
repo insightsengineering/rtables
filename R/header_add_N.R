@@ -1,5 +1,13 @@
 
-#' add N=xx to header
+#' Add N=xx to header
+#' 
+#' Helper function used to add the population total (N) in the 
+#' column header of \code{\link{rtable}} object.
+#' 
+#' @param x \code{rtable}
+#' @param N vector with counts to be displayed in the header. The
+#'   length must match the number of columns in \code{x}
+#'   
 #' @export
 #' 
 #' @examples 
