@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tabulation Methods — rtabulate • rtables</title>
+<title>Add N=xx to header — header_add_N • rtables</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,11 +30,10 @@
 
 
 
-<meta property="og:title" content="Tabulation Methods — rtabulate" />
+<meta property="og:title" content="Add N=xx to header — header_add_N" />
 
-<meta property="og:description" content="rtablulate provides a number of methods to derive
-rtables. Conceptually the rtabulate has it's origin in
-tapply." />
+<meta property="og:description" content="Helper function used to add the population total (N) in the 
+column header of rtable object." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -117,58 +116,61 @@ tapply." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tabulation Methods</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rtabulate.R'><code>R/rtabulate.R</code></a></small>
-    <div class="hidden name"><code>rtabulate.Rd</code></div>
+    <h1>Add N=xx to header</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/header_add_N.R'><code>R/header_add_N.R</code></a></small>
+    <div class="hidden name"><code>header_add_N.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>rtablulate</code> provides a number of methods to derive
-<code><a href='rtable.html'>rtable</a></code>s. Conceptually the <code>rtabulate</code> has it's origin in
-<code>tapply</code>.</p>
+    <p>Helper function used to add the population total (N) in the 
+column header of <code><a href='rtable.html'>rtable</a></code> object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rtabulate</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>header_add_N</span>(<span class='no'>x</span>, <span class='no'>N</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>either a vector or <code>data.frame</code></p></td>
+      <td><p><code>rtable</code></p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed to methods</p></td>
+      <th>N</th>
+      <td><p>vector with counts to be displayed in the header. The
+length must match the number of columns in <code>x</code></p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an <code><a href='rtable.html'>rtable</a></code> object</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
+ <span class='kw'>header</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>3</span>],
+ <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"X"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
+ <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"Y"</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>)
+)
 
-    <p>The data is split into cell-data and a function can be specified that returns
-a data structre (or <code><a href='rcell.html'>rcell</a></code>).</p>
-    
-
+<span class='no'>tbl</span></div><div class='output co'>#&gt;          a        b        c
+#&gt; ----------------------------
+#&gt; X        1        2        3
+#&gt; Y        4        5        6</div><div class='input'>
+<span class='fu'>header_add_N</span>(<span class='no'>tbl</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt;            a            b            c  
+#&gt;          (N=1)        (N=2)        (N=3)
+#&gt; ----------------------------------------
+#&gt; X          1            2            3  
+#&gt; Y          4            5            6  </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-          </ul>
-
-    <h2>Author</h2>
-    
-Adrian Waddell
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

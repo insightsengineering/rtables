@@ -2,18 +2,21 @@
 % Please edit documentation in R/accessors_modifiers.R
 \name{rbind.rtable}
 \alias{rbind.rtable}
-\title{stack rtable objects}
+\title{Stack rtable objects}
 \usage{
-\method{rbind}{rtable}(...)
+\method{rbind}{rtable}(..., gap = 0)
 }
 \arguments{
 \item{...}{\code{\link{rtable}} objects}
+
+\item{gap}{number of empty rows to add between tables}
 }
 \value{
 an \code{\link{rtable}} object
 }
 \description{
-stack rtable objects
+Note that the columns order are not mached by the header: the first table
+header is taken as the reference.
 }
 \examples{
 
@@ -44,7 +47,12 @@ mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
 ))
 
 tbl <- rbind(mtbl, mtbl2)
-
 tbl
+
+tbl <- rbind(mtbl, mtbl2, gap = 1)
+tbl 
+
+tbl <- rbind(mtbl, mtbl2, gap = 2)
+tbl 
 
 }

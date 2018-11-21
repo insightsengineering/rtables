@@ -243,9 +243,13 @@ set_rrow_attrs <- function(rrow, row.name, indent) {
   rrow
 }
 
-#' stack rtable objects 
+#' Stack rtable objects 
+#' 
+#' Note that the columns order are not mached by the header: the first table
+#' header is taken as the reference.
 #' 
 #' @param ... \code{\link{rtable}} objects
+#' @param gap number of empty rows to add between tables
 #' 
 #' @return an \code{\link{rtable}} object
 #' 
@@ -280,25 +284,52 @@ set_rrow_attrs <- function(rrow, row.name, indent) {
 #' ))
 #' 
 #' tbl <- rbind(mtbl, mtbl2)
-#' 
 #' tbl
 #' 
-rbind.rtable <- function(...) {
-  
+#' tbl <- rbind(mtbl, mtbl2, gap = 1)
+#' tbl 
+#' 
+#' tbl <- rbind(mtbl, mtbl2, gap = 2)
+#' tbl 
+#' 
+rbind.rtable <- function(..., gap = 0) {
   dots <- Filter(Negate(is.null), list(...))
-  
-  if (!are(dots, "rtable")) stop("not all elements are of type rtable")
-  
-  headers <- lapply(dots, header)
-  ref_header <- headers[[1]]
-  
-  same_headers <- vapply(headers[-1], function(h) {
-    identical(h, ref_header)
-  }, logical(1))
-  
-  if (!all(same_headers)) stop("not all rtables have the same header")
-  
-  body <- unlist(dots, recursive = FALSE)
-  
-  rtablel(header = ref_header, body)
+  rbindl_rtable(dots, gap = gap)
 }
+
+#' Stack a list of rtables
+#' 
+#' See \code{\link{rbind.rtable}} for details
+#' 
+#' @param x a list of rtable objects
+#' @inheritParams rbind.rtable
+#' 
+#' @export
+#' 
+rbindl_rtable <- function(x, gap = 0) {
+  
+  stopifnot(are(x, "rtable"))
+  stopifnot(length(x) > 0)
+  stopifnot(is.numeric(gap), gap >= 0)
+  
+  if (!num_all_equal(vapply(x, ncol, numeric(1))) ||
+      !num_all_equal(vapply(x, nrow, numeric(1)))) {
+    stop("dimension missmatch between tables")
+  }
+  
+  tbl <- if (gap != 0) {
+    gap_rows <- replicate(gap, rrow(), simplify = FALSE)
+    Reduce(function(tbl1, tbl2) c(tbl1, gap_rows, tbl2), x)
+  } else {
+    unlist(x, recursive = FALSE)
+  }
+  
+  ref_header <- header(x[[1]])  
+  class(tbl) <- "rtable"
+  attr(tbl, "header") <- ref_header
+  attr(tbl, "nrow") <- length(tbl)
+  attr(tbl, "ncol") <- ncol(ref_header)
+  
+  tbl
+}  
+
