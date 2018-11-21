@@ -294,7 +294,7 @@ set_rrow_attrs <- function(rrow, row.name, indent) {
 #' 
 rbind.rtable <- function(..., gap = 0) {
   dots <- Filter(Negate(is.null), list(...))
-  rbindl_rtable(dots, gap = gap)
+  rbindl_rtables(dots, gap = gap)
 }
 
 #' Stack a list of rtables
@@ -306,7 +306,7 @@ rbind.rtable <- function(..., gap = 0) {
 #' 
 #' @export
 #' 
-rbindl_rtable <- function(x, gap = 0) {
+rbindl_rtables <- function(x, gap = 0) {
   
   stopifnot(are(x, "rtable"))
   stopifnot(length(x) > 0)
