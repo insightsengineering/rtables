@@ -308,14 +308,13 @@ rbind.rtable <- function(..., gap = 0) {
 #' 
 rbindl_rtables <- function(x, gap = 0) {
   
+  stopifnot(is.list(x))
   stopifnot(are(x, "rtable"))
   stopifnot(length(x) > 0)
   stopifnot(is.numeric(gap), gap >= 0)
   
-  if (!num_all_equal(vapply(x, ncol, numeric(1))) ||
-      !num_all_equal(vapply(x, nrow, numeric(1)))) {
-    stop("dimension missmatch between tables")
-  }
+  if (!num_all_equal(vapply(x, ncol, numeric(1))))
+    stop("non-matching number of columns between tables")
   
   tbl <- if (gap != 0) {
     gap_rows <- replicate(gap, rrow(), simplify = FALSE)
