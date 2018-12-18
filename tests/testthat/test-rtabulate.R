@@ -2,7 +2,7 @@ context("rtabulate")
 
 test_that("rtabulate length tests", {
   
-  cells <- function(x) as.vector(unlist(x)) # current implementation
+  cells <- function(x) as.vector(unlist(unclass(x))) # current implementation
   
   cb <- letters[1:2]
   cbf <- factor(cb, levels = cb)

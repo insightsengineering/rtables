@@ -1,4 +1,9 @@
 
+## devel
+
+* add functions `sort_rrows` and `sort_rtables_tree`
+* prevent `rtables` from being unlisted with `unlist`
+
 ## rtable 0.1.0.6
 
 * `Viewer` now also accepts objects of class `shiny.tag` (defined in package `htmltools`)

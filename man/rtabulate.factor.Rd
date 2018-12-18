@@ -65,9 +65,11 @@ rtabulate(iris$Species, col_by=sl5,
    col_wise_args = list(N = table(sl5))
 )
 
-rtabulate(x = factor(c("X", "Y"), c("X", "Y")), col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
+          col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
 
-rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")), length)
+rtabulate(factor(c("Y", "Y"), c("X", "Y")),
+          factor(c("b", "b"), c("a", "b")), length)
 
 rtabulate(
   x = factor(c("Y", "Y"), c("X", "Y")),
