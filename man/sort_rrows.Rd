@@ -39,7 +39,6 @@ sort_rrows(tbl, c(0, 1))
 sort_rrows(tbl, c(2, 3), decreasing = FALSE)
 sort_rrows(tbl, c(2, 3), decreasing = TRUE)
 
-sort_rrows(tbl, c(2, 4))
 
 sort_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
 

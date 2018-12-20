@@ -88,7 +88,15 @@ rbindl_rtables <- function(x, gap = 0) {
 }  
 
 
-
+#' The unlist method for rtables returns that rtable
+#' 
+#' Unlisting rtables will not affact the rtable
+#' 
+#' @inheritParams base::unlist
+#' 
+#' @return rtable object
+#' 
+#' @method unlist rtable
 #' @export
 unlist.rtable <- function(x, recursive = TRUE, use.names = TRUE) {
   x
