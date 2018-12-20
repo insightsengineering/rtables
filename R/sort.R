@@ -151,5 +151,5 @@ order_rtables <- function(x, indices = c(1,0,1), ...) {
 #' 
 #' 
 sort_rtables <- function(x, indices = c(1,0,1), ...) {
-  x[order_rtables(x, indices , ...), ]
+  x[order_rtables(x, indices , ...)]
 }
