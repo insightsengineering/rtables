@@ -12,7 +12,8 @@
 #'   extract the information based on which the rows are sorted.
 #' @param ... arguments passed on to \code{\link{order}}
 #'
-#'
+#' @export
+#' 
 #' @return order of rows
 order_rrows <- function(x, indices = c(1, 1), ...) {
   
