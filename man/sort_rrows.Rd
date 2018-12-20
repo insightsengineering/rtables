@@ -21,7 +21,7 @@ extract the information based on which the rows are sorted.}
 object of class rtable
 }
 \description{
-Sort rows in an rtables based on values derived from the cell within a row.
+Sort rows in an rtables based on values derived from values within a row.
 }
 \examples{
 tbl <- rtable(
