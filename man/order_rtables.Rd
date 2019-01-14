@@ -9,13 +9,16 @@ order_rtables(x, indices = c(1, 0, 1), ...)
 \arguments{
 \item{x}{a list of rtables}
 
-\item{indices}{of row, column, and cell to access a value within a row that
-is uused for sorting the rows. If the column index is 0 then a sum of the
-cell values over all columns within the row is taken. If indices is a
-function then the function argument is an rrow object and the user has to
-specify how to extract the information based on which the rows are sorted.}
+\item{indices}{of row, column, and cell to access a value within each rtable that
+is used for sorting the list \code{x}. If the column index is 0 then a sum of the
+cell values across all columns within the specified row is taken. If \code{indices}
+is a function then the function argument is rtable object and the user must
+specify how to extract the information required to sort \code{x}. See examples.}
 
 \item{...}{arguments passed on to \code{\link{order}}}
+}
+\value{
+order of rtables
 }
 \description{
 Return the order of rtables in a list based on values within the tables.
@@ -44,7 +47,13 @@ tbls <- list(
 )
 
 order_rtables(tbls, c(1,1,1))
+order_rtables(tbls, c(1,1,1), decreasing = TRUE)
+
 order_rtables(tbls, c(1,0,1))
 
-
+order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
+}
+\seealso{
+\code{\link{sort_rtables}}, \code{\link{sort_rrows}}, 
+  \code{\link{order_rrows}}
 }
