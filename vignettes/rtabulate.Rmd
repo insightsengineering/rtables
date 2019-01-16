@@ -152,11 +152,18 @@ For example:
 x <- c(1, 2, 3, NA, 3, 2)
 cb <- factor(c("A", "A", "A", "B", "B", "A"), levels = c("A", "B"))
 
-rtabulate(x, cb, FUN = function(xi, na.rm, N) {
+tbl <- rtabulate(x, cb, FUN = function(xi, na.rm, N) {
   list(mean(xi, na.rm=na.rm), N)
 }, na.rm = TRUE, col_wise_args = list(N = table(cb)), row.name = "mean, N")
+
+tbl
 ```
 
 Note that `format=NULL` is equivalent to `paste(x, collapse = ", ")` on the cell
 data structure.
 
+In order to add a `(N=xx)` type of row to the header we can add `header_add_N` function:
+
+```{r}
+header_add_N(tbl, table(cb))
+```

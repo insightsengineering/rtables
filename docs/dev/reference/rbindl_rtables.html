@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generic for as_html — as_html.default • rtables</title>
+<title>Stack a list of rtables — rbindl_rtables • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Generic for as_html — as_html.default" />
+<meta property="og:title" content="Stack a list of rtables — rbindl_rtables" />
 
-<meta property="og:description" content="Generic method for as_html" />
+<meta property="og:description" content="See rbind.rtable for details" />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -117,30 +117,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generic for as_html</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/as_html.R'><code>R/as_html.R</code></a></small>
-    <div class="hidden name"><code>as_html.default.Rd</code></div>
+    <h1>Stack a list of rtables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rbind.R'><code>R/rbind.R</code></a></small>
+    <div class="hidden name"><code>rbindl_rtables.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Generic method for as_html</p>
+    <p>See <code><a href='rbind.rtable.html'>rbind.rtable</a></code> for details</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for default</span>
-<span class='fu'><a href='as_html.html'>as_html</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>rbindl_rtables</span>(<span class='no'>x</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object</p></td>
+      <td><p>a list of rtable objects</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>additional arguments currently not used</p></td>
+      <th>gap</th>
+      <td><p>number of empty rows to add between tables</p></td>
     </tr>
     </table>
     

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generic for as_html — as_html.default • rtables</title>
+<title>The unlist method for rtables returns that rtable — unlist.rtable • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Generic for as_html — as_html.default" />
+<meta property="og:title" content="The unlist method for rtables returns that rtable — unlist.rtable" />
 
-<meta property="og:description" content="Generic method for as_html" />
+<meta property="og:description" content="Unlisting rtables will not affact the rtable" />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -117,32 +117,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generic for as_html</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/as_html.R'><code>R/as_html.R</code></a></small>
-    <div class="hidden name"><code>as_html.default.Rd</code></div>
+    <h1>The unlist method for rtables returns that rtable</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rbind.R'><code>R/rbind.R</code></a></small>
+    <div class="hidden name"><code>unlist.rtable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Generic method for as_html</p>
+    <p>Unlisting rtables will not affact the rtable</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for default</span>
-<span class='fu'><a href='as_html.html'>as_html</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for rtable</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unlist'>unlist</a></span>(<span class='no'>x</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object</p></td>
+      <td><p>an <span style="R">R</span> object, typically a list or vector.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>additional arguments currently not used</p></td>
+      <th>recursive</th>
+      <td><p>logical.  Should unlisting be applied to list
+    components of <code>x</code>?</p></td>
+    </tr>
+    <tr>
+      <th>use.names</th>
+      <td><p>logical.  Should names be preserved?</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>rtable object</p>
     
 
   </div>
@@ -150,7 +159,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>
