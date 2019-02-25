@@ -5,13 +5,13 @@
 #' \code{\link{rtable}}s. Conceptually the \code{rtabulate} has it's origin in
 #' \code{\link{tapply}}.
 #' 
-#' The data is split into cell-data and a function can be specified that return
+#' The data is split into cell-data and a function can be specified that returns
 #' a data structre (or \code{\link{rcell}}).
 #'   
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to methods
 #' 
-#' @return an \code{\link{rtable}} project
+#' @return an \code{\link{rtable}} object
 #' 
 #' @author Adrian Waddell
 #'       
@@ -22,19 +22,25 @@ rtabulate <- function(x, ...) {
 }
 
 
-#' Do not split data into columns or row in \code{rtabulate}
+#' Do not split data into columns in \code{rtabulate}
 #' 
-#' \code{\link{rtabulate}} has the arguments \code{col_by} and \code{row_by}
+#' \code{\link{rtabulate}} has the argument \code{col_by}
 #' which can either take a vector or if no splitting is needed the return value
-#' of \code{no_by}.
+#' of \code{no_by}. Using \code{no_by} creates a table with a single 
+#' column.
 #' 
-#' @param name row name or column name
+#' @param name character column name to display in the table header
 #' 
 #' @export
 #' 
+#' @examples 
+#' 
+#' rtabulate(iris$Species, col_by = no_by("Total"))
+
 no_by <- function(name) {
   structure(name, class = "no_by")
 }
+
 
 #' Check if object inherits from the \code{no_by} Class
 #' 
@@ -49,93 +55,90 @@ is.no_by <- function(x) {
   is(x, "no_by")
 }
 
-rtabulate_header <- function(col_by, Ntot, N=NULL, format="(N=xx)") {
-  if (!is.factor(col_by) && !is.no_by(col_by)) stop("col_by is required to be a factor or no_by object")
-  
-  lvls <- if (is.no_by(col_by)) as.vector(col_by) else levels(col_by)
-  
-  if (is.null(format)) {
-    rheader(lvls)
-  } else {
-    if (is.null(N)) {
-      N <- if (is.no_by(col_by)) Ntot else table(col_by)
-    }
-    rheader(
-      rrowl("", lvls),
-      rrowl("", unname(N), format = format)
-    )
-  }
+#' Access levels attribute for an object of \code{no_by} Class 
+#' 
+#' @param x \code{no_by} class object
+#' 
+#' @export
+#'  
+levels.no_by <- function(x) {
+  as.vector(x)
 }
 
 # rtabulate default for vectors
 # 
-# this method is used for vectors of type \code{logical} and \code{numeric}
+# This method is used for vectors of type \code{logical} and \code{numeric}
 # 
 # see parameter descrition for rtabulate.numeric
 #
-rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, ..., row_data_arg=FALSE,
-                              format = NULL, row.name = "", indent  = 0, col_total = "(N=xx)") {
+rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
+                              format = NULL, row.name = "", indent  = 0,
+                              col_wise_args = NULL) {
   
-  if (is.null(FUN)) stop("FUN is required")
+  force(FUN)
+  check_stop_col_by(col_by, col_wise_args)
   
-  stop_if_has_na(col_by)
-  
-  tbl_header <- rtabulate_header(col_by, length(x), format=col_total)
-  
-  xs <- if (is.no_by(col_by)) {
+  column_data <- if (is.no_by(col_by)) {
     setNames(list(x), col_by)
   } else {
     if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
     split(x, col_by, drop = FALSE)
   }
-
-  col_data <- if (row_data_arg) {
-    lapply(xs, FUN, x, ...)
+  
+  cells <- if (is.null(col_wise_args)) {
+    
+    lapply(column_data, FUN, ...)
+    
   } else {
-    lapply(xs, FUN, ...)
+    
+    dots <- list(...)
+    args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
+    
+    Map(function(xi, argsi) {
+      do.call(FUN, c(list(xi), argsi))
+    }, column_data, args)
   }
   
-  rr <- rrowl(row.name = row.name, col_data, format = format, indent = indent)
+  rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = tbl_header, rr)
-  
+  rtable(header = levels(col_by), rr)
 }
 
-#' tabulate a numeric vector
-#' 
-#' by default the \code{\link[stats]{fivenum}} function is applied to the
-#' vectors associated to the cells
-#' 
-#' 
+
+
+#' Tabulate a numeric vector
+#'
+#' By default each cell reports the mean based on the associated vector. 
+#'
+#'
 #' @inheritParams rrow
 #' @param x a vecor
 #' @param col_by a \code{\link{factor}} of length \code{nrow(x)} that defines
 #'   which levels in \code{col_by} define a column. If data should not be split
 #'   into columns use the \code{\link{no_by}} function.
-#' @param FUN a function that processes the cell data, if \code{row_data_arg} is
-#'   set to \code{TRUE} the a second argument with the row data is passed to
-#'   \code{FUN}
+#' @param FUN a function that processes the cell data
 #' @param ... arguments passed to \code{FUN}
-#' @param row_data_arg call \code{FUN} with the row data as the second argument 
 #' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
 #'   then the \code{format} is applied
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
-#' @param col_total a format string for displaying the number of elements in the
-#'   column header. If \code{NULL} then no header row for the column is
-#'   displayed.
-#' 
+#' @param col_wise_args a named list containing collections (e.g. vectors or
+#'   lists) with data elements for each column of the resulting table. The data
+#'   elements are then passed to the named argument \code{FUN} corresponding to
+#'   the element name of the outer list. Hence, the length and order of each
+#'   collection must match the levels in \code{col_by}. See examples.
+#'
 #' @inherit rtabulate return
-#' 
+#'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #'
 #' rtabulate(iris$Sepal.Length)
-#'  
+#'
 #' rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
-#'  
-#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "fivenum"))
+#'
+#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
 #'
 #' SL <- iris$Sepal.Length
 #' Sp <- iris$Species
@@ -146,19 +149,31 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN = NULL, ..., row_d
 #'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
 #' 
+#' x <- 1:100
+#' cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
 #' 
+#' rtabulate(
+#'   x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
+#'   format = sprintf_format("%.2f (%.2f) and %i"), row.name = "Mean (SD) and N",
+#'   col_wise_args = list(N = table(cb))
+#' )
 #' 
 rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = mean, ...,
-                              row_data_arg = FALSE, format = NULL, row.name = NULL,
-                              indent  = 0, col_total = "(N=xx)") {
-  if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
-  rtabulate_default(x = x, col_by = col_by, FUN = FUN, ...,
-                    row_data_arg = row_data_arg, format = format,
-                    row.name = row.name, indent = indent,
-                    col_total = col_total)
+                              format = NULL, row.name = NULL,
+                              indent  = 0, col_wise_args = NULL) {
+  
+  if (is.null(row.name)) row.name <- paste(deparse(substitute(FUN)), collapse = ";")
+  
+  rtabulate_default(
+    x = x, col_by = col_by, FUN = FUN, ...,
+    format = format, row.name = row.name, indent = indent,
+    col_wise_args = col_wise_args
+  )
 }
 
-#' tabulate a logical vector
+#' Tabulate a logical vector
+#' 
+#' By default each cell reports the number of \code{TRUE} observations from the associated vector. 
 #' 
 #' @inheritParams rtabulate.numeric
 #' 
@@ -169,43 +184,51 @@ rtabulate.numeric <- function(x, col_by = no_by("col_1"), FUN = mean, ...,
 #' @examples 
 #' rtabulate(iris$Species == "setosa")
 #' 
-#' rtabulate(iris$Species == "setosa", no_by("Species"), row.name = "n (n/N)")
+#' rtabulate(iris$Species == "setosa", no_by("Species"),
+#'    FUN = function(x, N) list(sum(x), sum(x)/N),
+#'    row.name = "n (n/N)",
+#'    col_wise_args = list(N = 150))
 #' 
-#' # default: percentages equal \code{TRUE}
+#' # default FUN is number of observations equal to TRUE
 #' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
 #'  
-#' # precentages with proportion of cell number of \code{TRUE}s to overvall
-#' # number of \code{TRUE}s
-#' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5",
-#'   FUN = function(cell_data, row_data) sum(cell_data) * c(1, 1/sum(row_data)), 
-#'   row_data_arg = TRUE
+#' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
+#' # in each column
+#' with(iris, rtabulate(Sepal.Length < 5, Species,
+#'   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+#'   format = "xx.xx (xx.xx%)",
+#'   row.name = "Sepal.Length < 5",
+#'   col_wise_args = list(N = table(Species))
 #' ))
 #' 
 rtabulate.logical <- function(x, col_by = no_by("col_1"),
-                              FUN = function(x) sum(x) * c(1, 1/length(x)),
+                              FUN = sum,
                               ...,
-                              row_data_arg = FALSE,
-                              format = "xx.xx (xx.xx%)",
-                              row.name = "",
+                              format = NULL,
+                              row.name = NULL,
                               indent = 0,
-                              col_total = "(N=xx)"
+                              col_wise_args = NULL
                               ) {
-  if (is.null(row.name)) row.name <- paste0(deparse(substitute(FUN)))
-  rtabulate_default(x = x, col_by = col_by, FUN = FUN, ...,
-                    row_data_arg = row_data_arg, format = format,
-                    row.name = row.name, indent = indent,
-                    col_total = col_total)
+  
+  if (is.null(row.name)) row.name <- paste(deparse(substitute(FUN)), collapse = ";")
+  
+  rtabulate_default(
+    x = x, col_by = col_by, FUN = FUN, ...,
+    format = format, row.name = row.name, indent = indent,
+    col_wise_args = col_wise_args
+  )
 }
 
 #' Tabulate Factors
 #' 
+#' By default each cell reports the number of observations in
+#' each level of \code{x}. 
+#' 
 #' @inheritParams rtabulate.numeric
-#' @param row_col_data_args boolean, if \code{TRUE} then \code{FUN} is called
-#'   with the first three arguments being the cell, row, and column data,
-#'   respectively
-#' @param useNA boolean, if \code{TRUE} then \code{NA} values in \code{x} get
-#'   turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
-#'   values in \code{x} get dropped.
+#' @param useNA either one of ("no", "ifany", "always"). If \code{"no"} then \code{NA} values
+#'   in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is 
+#'   included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"} 
+#'   \code{NA} values are always included in the summary even if none exist in \code{x}. 
 #' 
 #' @inherit rtabulate return
 #' 
@@ -221,40 +244,51 @@ rtabulate.logical <- function(x, col_by = no_by("col_1"),
 #'    labels = c("S.L > 5", "S.L <= 5"))
 #' 
 #' rtabulate(iris$Species, col_by=sl5)
+#' rtabulate(sl5, iris$Species)
 #' 
 #' rtabulate(iris$Species, col_by=sl5,
-#'    FUN = function(cell_data, row_data, col_data) {
+#'    FUN = function(cell_data, N) {
 #'      if (length(cell_data) > 10) {
-#'         length(cell_data) * c(1, 1/length(col_data))
+#'         length(cell_data) * c(1, 1/N)
 #'      } else {
 #'         rcell("-", format = "xx")
 #'      }
 #'    },
-#'    row_col_data_args = TRUE,
-#'    format = "xx (xx.xx%)"
+#'    format = "xx (xx.xx%)",
+#'    col_wise_args = list(N = table(sl5))
 #' )
 #' 
-#' rtabulate(sl5, iris$Species)
+#' rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
+#'           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+#' 
+#' rtabulate(factor(c("Y", "Y"), c("X", "Y")),
+#'           factor(c("b", "b"), c("a", "b")), length)
+#' 
+#' rtabulate(
+#'   x = factor(c("Y", "Y"), c("X", "Y")),
+#'   col_by = factor(c("b", "b"), c("a", "b")),
+#'   FUN = function(x, N) list(length(x), N),
+#'   col_wise_args = list(N = c(1,2))
+#' )
+#' 
 #' 
 rtabulate.factor <- function(x,
                              col_by = no_by("col_1"), 
                              FUN = length,
                              ...,
-                             row_col_data_args = FALSE,
                              useNA = c("no", "ifany", "always"),
-                             format = "xx",
+                             format = NULL,
                              indent  = 0,
-                             col_total = "(N=xx)") {
+                             col_wise_args = NULL) {
 
-  stop_if_has_na(col_by)
+  force(FUN)
+  check_stop_col_by(col_by, col_wise_args)
 
   useNA <- match.arg(useNA)
   
-  tbl_header <- rtabulate_header(col_by, length(x), format=col_total)
+  if (any("<NA>" %in% levels(x))) stop("factor with level '<NA>' is not valid in rtabulate.factor")
   
   if (useNA %in% c("ifany", "always")) {
-    if (any("<NA>" %in% levels(x))) stop("cannot use useNA='ifany' or 'always' if there any levels called <NA>")
-    
     if (useNA == "always" || any(is.na(x))) {
       levels(x) <- c(levels(x), "<NA>")
       x[is.na(x)] <- "<NA>"
@@ -267,48 +301,43 @@ rtabulate.factor <- function(x,
     levels(x) <- gsub("^$", "-", levels(x))
     warning("'' levels were turned into level -")
   }
-    
-  row_data_list <- split(x, x, drop = FALSE)
   
-  cell_data <- if (is.no_by(col_by)) {
-    lapply(row_data_list, function(row_i) setNames(list(row_i), col_by))
+  
+  # cell_data = list(row1 = list(col1, col2, ...), row2 = list(col1, col2, ...), ...)
+  cell_data_by_row <- if (is.no_by(col_by)) {
+    lapply(split(x, x, drop = FALSE), function(row_i) setNames(list(row_i), col_by))
   } else {
     if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
-    
     df <- data.frame(
       x = x,
-      col_by = factor(col_by)
+      col_by = col_by
     )
     lapply(split(df, df$x, drop = FALSE), function(row_i) {
       split(row_i$x, row_i$col_by, drop = FALSE)
     })
   }
   
-  rrow_data <- if (!row_col_data_args) {
-    lapply(cell_data, function(row_i) lapply(row_i, FUN, ...)) 
+  
+  cells_by_row <- if (is.null(col_wise_args)) {
+    
+    lapply(cell_data_by_row, function(row_i) lapply(row_i, FUN, ...)) 
+    
   } else {
     
-    col_data_list <- if (is.no_by(col_by)) {
-      setNames(list(x), col_by)
-    } else {
-      split(x, col_by, drop = FALSE)
-    }
-
-    rrow_data_tmp <- lapply(1:length(row_data_list), function(i) {
-      rrow_data_i <- lapply(1:length(col_data_list), function(j) {
-        FUN(cell_data[[i]][[j]], row_data_list[[i]], col_data_list[[j]], ...)
-      })
-      names(rrow_data_i) <- names(col_data_list)
-      rrow_data_i
+    dots <- list(...)
+    args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
+    
+    lapply(cell_data_by_row, function(row_i) {
+      Map(function(xi, argsi) {
+        do.call(FUN, c(list(xi), argsi))
+      }, row_i, args)
     })
-    names(rrow_data_tmp) <- names(row_data_list)
-    rrow_data_tmp
   }
   
   rrows <- Map(function(row, rowname) rrowl(rowname, row, format = format, indent = indent), 
-               rrow_data, names(rrow_data)) 
+               cells_by_row, names(cells_by_row)) 
   
-  rtablel(header = tbl_header, rrows)
+  rtablel(header = levels(col_by), rrows)
 }
 
 
@@ -317,8 +346,9 @@ rtabulate.factor <- function(x,
 #' Split data.frame and apply functions
 #' 
 #' @inheritParams rtabulate.factor
-#' @param row_by_var name of factor variable in \code{x}
-#' @param col_by_var name of factor variable in \code{x}
+#' @param x data.frame 
+#' @param row_by name of factor variable in \code{x}
+#' @param col_by name of factor variable in \code{x}
 #' 
 #' 
 #' @inherit rtabulate return
@@ -333,8 +363,8 @@ rtabulate.factor <- function(x,
 #' 
 #' rtabulate(
 #'   x = df,
-#'   row_by_var = "aaa",
-#'   col_by_var = "bbb",
+#'   row_by = df$aaa,
+#'   col_by = df$bbb,
 #'   FUN = function(x) {  
 #'      sum(x$val)
 #'   }
@@ -342,110 +372,118 @@ rtabulate.factor <- function(x,
 #' 
 #' rtabulate(
 #'   x = iris,
-#'   row_by_var = no_by("sum"),
-#'   col_by_var = "Species", 
+#'   row_by = no_by("sum"),
+#'   col_by = iris$Species, 
 #'   FUN = function(x) sum(x$Sepal.Length)
 #' )
 #' 
 #' rtabulate(
 #'   x = iris,
-#'   row_by_var = "Species",
-#'   col_by_var = no_by("sum"), 
+#'   row_by = iris$Species,
+#'   col_by = no_by("sum"), 
 #'   FUN = function(x) sum(x$Sepal.Length)
 #' )
 #' 
-#' tbl <- rtabulate(
-#'   x = iris,
-#'   FUN = function(cell_data) c(sum(cell_data$Sepal.Length), sd(cell_data$Sepal.Length)),
-#'   format = "xx.xx (xx.xx%)"
-#' )
-#' 
-#' tbl 
-#' 
-#' row.names(tbl)
-#' row.names(tbl) <- "Sum of Sepal Length"
-#' 
-#' tbl
-#' 
-#' iris2 <- iris
-#' iris2$fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#' fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'     labels = c("S.L > 5", "S.L <= 5"))
 #' 
 #' tbl <- rtabulate(
-#'   x = iris2,
-#'   row_by_var = "fsl5",
-#'   col_by_var = "Species", 
-#'   FUN = function(x_cell, x_row, x_col) {
+#'   x = iris,
+#'   row_by = fsl5,
+#'   col_by = iris$Species, 
+#'   FUN = function(x_cell) {
 #'     if (nrow(x_cell) < 10) {
 #'       rcell("-")
 #'     } else {
 #'       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
-#'       m_col <- mean(x_col$Sepal.Length)
-#'       m_row <- mean(x_row$Sepal.Length)
-#'     
-#'       rcell(list(fit, m_col, m_row), format = function(x, output) {
-#'         paste("df:", x[[1]]$df.residual,", and", round(x[[2]],1), ", and", round(x[[3]],2))
+#'            
+#'       rcell(list(fit), format = function(x, output) {
+#'         paste("df:", x[[1]]$df.residual)
 #'       })
 #'     }
-#'   } ,
-#'   row_col_data_args = TRUE
+#'   }
 #' )
 #' tbl
+#' 
+#' rtabulate(
+#'   x = iris,
+#'   row_by = fsl5,
+#'   col_by = iris$Species, 
+#'   FUN = function(x_cell, N) {
+#'      N
+#'   },
+#'   col_wise_args = list(N = c(10, 100, 200))
+#' )
+#' 
+#'  
+#' 
 rtabulate.data.frame <- function(x,
-                                 row_by_var = no_by("row_1"),
-                                 col_by_var = no_by("col_1"),
-                                 FUN = nrow,
+                                 row_by,
+                                 col_by,
+                                 FUN,
                                  ...,
-                                 row_col_data_args = FALSE,
-                                 format = "xx",
+                                 format = NULL,
                                  indent = 0,
-                                 col_total = "(N=xx)") {
+                                 col_wise_args = NULL) {
   
-  if (!is.no_by(row_by_var) && !is.factor(x[[row_by_var]])) stop("x[[row_by_var]] currently needs to be a factor")
-  if (!is.no_by(col_by_var) && !is.factor(x[[col_by_var]])) stop("x[[col_by_var]] currently needs to be a factor")
+  force(FUN)
+  check_stop_col_by(col_by, col_wise_args)
+  check_stop_col_by(row_by)
   
-  tbl_header <- rtabulate_header(if (is.no_by(col_by_var)) col_by_var else x[[col_by_var]], nrow(x), format=col_total)
-  
-  row_data <- if (is.no_by(row_by_var)) {
-    setNames(list(x), row_by_var)
+
+  # list(row1 = list(c1, c2, ...), row2 = list(c1, c2, ...), ...)
+  cell_data <- if (!is.no_by(row_by) && !is.no_by(col_by)) {
+    xs <- split(x, row_by, drop = FALSE)
+    cs <- split(col_by, row_by, drop = FALSE)
+    setNames(Map(function(xi, col_by_i) split(xi, col_by_i), xs, cs), levels(row_by))
+  } else if (is.no_by(row_by) && !is.no_by(col_by)) {
+    setNames(list(split(x, col_by, drop = FALSE)), row_by)
+  } else if (!is.no_by(row_by) && is.no_by(col_by)) {
+    lapply(split(x, row_by, drop = FALSE), function(xi) list(xi))
+  } else if (is.no_by(row_by) && is.no_by(col_by)) {
+    setNames(list(list(x)), row_by)
   } else {
-    split(x, x[[row_by_var]], drop = FALSE)
+    stop("unexpected col_by & row_by combination")
   }
+
   
-  col_data <- if (is.no_by(col_by_var)) {
-    setNames(list(x), col_by_var)
-  } else {
-    split(x, x[[col_by_var]], drop = FALSE)
-  }
-  
-  cell_data <- if (is.no_by(col_by_var)) {
-    lapply(row_data, function(row_i) setNames(list(row_i), col_by_var))
-  } else {
-    lapply(row_data, function(row_i) split(row_i, row_i[[col_by_var]], drop = FALSE))
-  }
-  
-  rrow_data <- if (!row_col_data_args) {
+  cells_by_row <- if (is.null(col_wise_args)) {
     lapply(cell_data, function(row_i) lapply(row_i, FUN, ...))
   } else {
     
-    rrow_data_tmp <- lapply(1:length(row_data), function(i) {
-      rrow_data_i <- lapply(1:length(col_data), function(j) {
-        FUN(cell_data[[i]][[j]], row_data[[i]], col_data[[j]], ...)
-      })
-      names(rrow_data_i) <- names(col_data)
-      rrow_data_i
+    dots <- list(...)
+    args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
+    
+    lapply(cell_data, function(row_i) {
+      Map(function(xi, argsi) {
+        do.call(FUN, c(list(xi), argsi))
+      }, row_i, args)
     })
-    names(rrow_data_tmp) <- names(row_data)
-    rrow_data_tmp
+    
   }
   
-  rrows <- Map(function(row_dat, rowname) {
-    rrowl(row.name = rowname, row_dat, format = format, indent = indent)
-  }, rrow_data, names(rrow_data))
+  rrows <- Map(function(cells_row, rowname) {
+    rrowl(row.name = rowname, cells_row, format = format, indent = indent)
+  }, cells_by_row, names(cells_by_row))
   
-  rtablel(header = tbl_header, rrows)
+  rtablel(header = levels(col_by), rrows)
 }
 
+
+
+check_stop_col_by <- function(col_by, col_wise_args = NULL) {
+  if (!is.factor(col_by) && !is.no_by(col_by)) stop("col_by is required to be a factor or no_by object")
+  if (any(is.na(col_by))) stop("col_by does currently not support any NAs")
+  
+  if (!is.null(col_wise_args)) {
+    if (!is.list(col_wise_args))
+      stop("col_wise_args needs to be either a list or NULL")
+    
+    if (!all(vapply(col_wise_args, length, numeric(1)) == nlevels(col_by)))
+      stop("not all elements in col_wise_args have length ", nlevels(col_by))
+  }
+  TRUE
+}
 
 
 stop_if_has_na <- function(x) {

@@ -97,3 +97,10 @@ test_that("test sprintf based format", {
   expect_equal(format_rcell(rcell(c(12.21, 7.321), sprintf_format("%.1f and %.2f"))), "12.2 and 7.32")
   
 })
+
+test_that("unlisting rtables has no effect on them", {
+  
+  t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
+  
+  expect_identical(t1, unlist(t1))
+})

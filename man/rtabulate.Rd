@@ -12,7 +12,7 @@ rtabulate(x, ...)
 \item{...}{arguments passed to methods}
 }
 \value{
-an \code{\link{rtable}} project
+an \code{\link{rtable}} object
 }
 \description{
 \code{rtablulate} provides a number of methods to derive
@@ -20,7 +20,7 @@ an \code{\link{rtable}} project
 \code{\link{tapply}}.
 }
 \details{
-The data is split into cell-data and a function can be specified that return
+The data is split into cell-data and a function can be specified that returns
 a data structre (or \code{\link{rcell}}).
 }
 \author{

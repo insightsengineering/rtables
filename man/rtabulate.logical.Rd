@@ -2,12 +2,10 @@
 % Please edit documentation in R/rtabulate.R
 \name{rtabulate.logical}
 \alias{rtabulate.logical}
-\title{tabulate a logical vector}
+\title{Tabulate a logical vector}
 \usage{
-\method{rtabulate}{logical}(x, col_by = no_by("col_1"),
-  FUN = function(x) sum(x) * c(1, 1/length(x)), ...,
-  row_data_arg = FALSE, format = "xx.xx (xx.xx\%)", row.name = "",
-  indent = 0, col_total = "(N=xx)")
+\method{rtabulate}{logical}(x, col_by = no_by("col_1"), FUN = sum, ...,
+  format = NULL, row.name = NULL, indent = 0, col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -16,13 +14,9 @@
 which levels in \code{col_by} define a column. If data should not be split
 into columns use the \code{\link{no_by}} function.}
 
-\item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
-set to \code{TRUE} the a second argument with the row data is passed to
-\code{FUN}}
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
-
-\item{row_data_arg}{call \code{FUN} with the row data as the second argument}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
@@ -33,29 +27,36 @@ used as \code{row.name} of the \code{\link{rrow}}}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_total}{a format string for displaying the number of elements in the
-column header. If \code{NULL} then no header row for the column is
-displayed.}
+\item{col_wise_args}{a named list containing collections (e.g. vectors or
+lists) with data elements for each column of the resulting table. The data
+elements are then passed to the named argument \code{FUN} corresponding to
+the element name of the outer list. Hence, the length and order of each
+collection must match the levels in \code{col_by}. See examples.}
 }
 \value{
-an \code{\link{rtable}} project
+an \code{\link{rtable}} object
 }
 \description{
-tabulate a logical vector
+By default each cell reports the number of \code{TRUE} observations from the associated vector.
 }
 \examples{
 rtabulate(iris$Species == "setosa")
 
-rtabulate(iris$Species == "setosa", no_by("Species"), row.name = "n (n/N)")
+rtabulate(iris$Species == "setosa", no_by("Species"),
+   FUN = function(x, N) list(sum(x), sum(x)/N),
+   row.name = "n (n/N)",
+   col_wise_args = list(N = 150))
 
-# default: percentages equal \\code{TRUE}
+# default FUN is number of observations equal to TRUE
 with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
  
-# precentages with proportion of cell number of \\code{TRUE}s to overvall
-# number of \\code{TRUE}s
-with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5",
-  FUN = function(cell_data, row_data) sum(cell_data) * c(1, 1/sum(row_data)), 
-  row_data_arg = TRUE
+# Custom FUN: number of TRUE records in a cell and precentages based on number of records
+# in each column
+with(iris, rtabulate(Sepal.Length < 5, Species,
+  FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+  format = "xx.xx (xx.xx\%)",
+  row.name = "Sepal.Length < 5",
+  col_wise_args = list(N = table(Species))
 ))
 
 }

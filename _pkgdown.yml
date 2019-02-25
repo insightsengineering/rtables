@@ -8,7 +8,7 @@ navbar:
     href: https://github.com/roche/rtables
 
 development:
-  mode: devel
+  mode: release
 
 reference:
   - title: Core Table Create Functions
@@ -22,27 +22,46 @@ reference:
     - rrowl
   - title: Cell Formatting related Functions
     contents:
+    - sprintf_format
     - format_rcell
     - list_rcell_format_labels
-  - title: Accessor Functions
+  - title: Accessor and Modification Functions
     desc: Access and Modify Functions
     contents:
     - starts_with("nam")
     - starts_with("row.name")
     - "[.rtable"
+    - "[.rheader"
     - dim.rtable
     - rbind.rtable
+    - rbindl_rtables
+    - header
+    - header<-
+    - dim.rheader
+    - header_add_N
+    - indented_row.names
+    - unlist.rtable
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
     contents:
     - starts_with("rtabulate")
     - no_by
     - is.no_by
+    - levels.no_by
+  - title: Table sorting functions
+    desc: funtions to sort rows within tables and list of tables
+    contents:
+    - order_rrows
+    - sort_rrows
+    - order_rtables
+    - sort_rtables
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
     - toString.rtable
     - as_html
+    - as_html.default
+    - as_html.rtable
   - title: Coercion Functions
     contents:
     - as.rtable
@@ -52,7 +71,4 @@ reference:
     - Viewer
     - compare_rtables
 
-articles:
-  contents:
-  - rtabulate
 

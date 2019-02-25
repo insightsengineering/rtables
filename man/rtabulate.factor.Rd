@@ -5,8 +5,8 @@
 \title{Tabulate Factors}
 \usage{
 \method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
-  ..., row_col_data_args = FALSE, useNA = c("no", "ifany", "always"),
-  format = "xx", indent = 0, col_total = "(N=xx)")
+  ..., useNA = c("no", "ifany", "always"), format = NULL, indent = 0,
+  col_wise_args = NULL)
 }
 \arguments{
 \item{x}{a vecor}
@@ -15,19 +15,14 @@
 which levels in \code{col_by} define a column. If data should not be split
 into columns use the \code{\link{no_by}} function.}
 
-\item{FUN}{a function that processes the cell data, if \code{row_data_arg} is
-set to \code{TRUE} the a second argument with the row data is passed to
-\code{FUN}}
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
 
-\item{row_col_data_args}{boolean, if \code{TRUE} then \code{FUN} is called
-with the first three arguments being the cell, row, and column data,
-respectively}
-
-\item{useNA}{boolean, if \code{TRUE} then \code{NA} values in \code{x} get
-turned into a factor level \code{"NA"}, if \code{FALSE} then the \code{NA}
-values in \code{x} get dropped.}
+\item{useNA}{either one of ("no", "ifany", "always"). If \code{"no"} then \code{NA} values
+in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is 
+included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"} 
+\code{NA} values are always included in the summary even if none exist in \code{x}.}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
@@ -35,15 +30,18 @@ then the \code{format} is applied}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_total}{a format string for displaying the number of elements in the
-column header. If \code{NULL} then no header row for the column is
-displayed.}
+\item{col_wise_args}{a named list containing collections (e.g. vectors or
+lists) with data elements for each column of the resulting table. The data
+elements are then passed to the named argument \code{FUN} corresponding to
+the element name of the outer list. Hence, the length and order of each
+collection must match the levels in \code{col_by}. See examples.}
 }
 \value{
-an \code{\link{rtable}} project
+an \code{\link{rtable}} object
 }
 \description{
-Tabulate Factors
+By default each cell reports the number of observations in
+each level of \code{x}.
 }
 \examples{
 
@@ -55,19 +53,32 @@ sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
    labels = c("S.L > 5", "S.L <= 5"))
 
 rtabulate(iris$Species, col_by=sl5)
+rtabulate(sl5, iris$Species)
 
 rtabulate(iris$Species, col_by=sl5,
-   FUN = function(cell_data, row_data, col_data) {
+   FUN = function(cell_data, N) {
      if (length(cell_data) > 10) {
-        length(cell_data) * c(1, 1/length(col_data))
+        length(cell_data) * c(1, 1/N)
      } else {
         rcell("-", format = "xx")
      }
    },
-   row_col_data_args = TRUE,
-   format = "xx (xx.xx\%)"
+   format = "xx (xx.xx\%)",
+   col_wise_args = list(N = table(sl5))
 )
 
-rtabulate(sl5, iris$Species)
+rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
+          col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+
+rtabulate(factor(c("Y", "Y"), c("X", "Y")),
+          factor(c("b", "b"), c("a", "b")), length)
+
+rtabulate(
+  x = factor(c("Y", "Y"), c("X", "Y")),
+  col_by = factor(c("b", "b"), c("a", "b")),
+  FUN = function(x, N) list(length(x), N),
+  col_wise_args = list(N = c(1,2))
+)
+
 
 }
