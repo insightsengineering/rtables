@@ -1,6 +1,6 @@
 
 
-## rtables 0.1.0.7.dev
+## rtables 0.1.1
 
 * `rtablulate` family of functions do not support the `row_*_data_args` arguments anymore. Instead, the `col_wise_args` argument is introduced.
 * add functions `order_rrows`, `sort_rrows`, `order_rtables`, and `sort_rtables` are introduced.

@@ -44,14 +44,13 @@ as_html.default <- function(x, ...) {
   stop("no as_html method for class ", class(x))
 }
 
-# Convert an rtable object to html
-# 
-# @param x an object of class \code{\link{rtable}}
-# @param class.table class attributes for the table in html
-# @param ... arguments passed on to methods
-# 
-# @return an object of class \code{shinyTag}
-
+#' Convert an rtable object to html
+#' 
+#' @inheritParams as_html
+#' @param class.table class attributes for \code{<table>} html object
+#' 
+#' @return an object of class \code{shinyTag}
+#' 
 #' @export
 as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
                            ...) {

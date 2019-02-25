@@ -122,9 +122,11 @@ rtabulate_default <- function(x, col_by = no_by("col_1"), FUN, ...,
 #'   then the \code{format} is applied
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
-#' @param col_wise_args a list containing vectors with data for each column that
-#'   is passed to \code{FUN}. The length and order of each vector must match the 
-#'   levels in \code{col_by}. See examples.
+#' @param col_wise_args a named list containing collections (e.g. vectors or
+#'   lists) with data elements for each column of the resulting table. The data
+#'   elements are then passed to the named argument \code{FUN} corresponding to
+#'   the element name of the outer list. Hence, the length and order of each
+#'   collection must match the levels in \code{col_by}. See examples.
 #'
 #' @inherit rtabulate return
 #'

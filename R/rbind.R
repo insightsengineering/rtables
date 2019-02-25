@@ -88,14 +88,15 @@ rbindl_rtables <- function(x, gap = 0) {
 }  
 
 
-#' The unlist method for rtables returns that rtable
-#' 
-#' Unlisting rtables will not affact the rtable
-#' 
+#' Unlist method for rtables
+#'
+#' rtable objects should not be unlisted. This allows us to create nested lists with rtables objects and then flatten
+#' them to a list of rtable objects.
+#'
 #' @inheritParams base::unlist
-#' 
+#'
 #' @return rtable object
-#' 
+#'
 #' @method unlist rtable
 #' @export
 unlist.rtable <- function(x, recursive = TRUE, use.names = TRUE) {
