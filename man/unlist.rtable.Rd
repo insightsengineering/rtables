@@ -2,7 +2,7 @@
 % Please edit documentation in R/rbind.R
 \name{unlist.rtable}
 \alias{unlist.rtable}
-\title{The unlist method for rtables returns that rtable}
+\title{Unlist method for rtables}
 \usage{
 \method{unlist}{rtable}(x, recursive = TRUE, use.names = TRUE)
 }
@@ -18,5 +18,6 @@
 rtable object
 }
 \description{
-Unlisting rtables will not affact the rtable
+rtable objects should not be unlisted. This allows us to create nested lists with rtables objects and then flatten
+them to a list of rtable objects.
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dimension of rtable object — dim.rheader • rtables</title>
+<title>Convert an rtable object to html — as_html.rtable • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Dimension of rtable object — dim.rheader" />
+<meta property="og:title" content="Convert an rtable object to html — as_html.rtable" />
 
-<meta property="og:description" content="Retrieve or set the dimension of an rtable object" />
+<meta property="og:description" content="Convert an rtable object to html" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,19 +117,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dimension of rtable object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/accessors_modifiers.R'><code>R/accessors_modifiers.R</code></a></small>
-    <div class="hidden name"><code>dim.rheader.Rd</code></div>
+    <h1>Convert an rtable object to html</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/as_html.R'><code>R/as_html.R</code></a></small>
+    <div class="hidden name"><code>as_html.rtable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Retrieve or set the dimension of an <code>rtable</code> object</p>
+    <p>Convert an rtable object to html</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for rheader</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/dim'>dim</a></span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for rtable</span>
+<span class='fu'><a href='as_html.html'>as_html</a></span>(<span class='no'>x</span>,
+  <span class='kw'>class.table</span> <span class='kw'>=</span> <span class='st'>"table table-condensed table-hover"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,11 +139,19 @@
       <th>x</th>
       <td><p>an <code><a href='rtable.html'>rtable</a></code> object</p></td>
     </tr>
+    <tr>
+      <th>class.table</th>
+      <td><p>class attributes for <code>&lt;table&gt;</code> html object</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed as attributes to the table html objet</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector of length two with number of rows and number of columns.</p>
+    <p>an object of class <code>shinyTag</code></p>
     
 
   </div>

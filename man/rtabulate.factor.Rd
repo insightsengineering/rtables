@@ -30,9 +30,11 @@ then the \code{format} is applied}
 \item{indent}{non-negative integer where 0 means that the row should not be
 indented}
 
-\item{col_wise_args}{a list containing vectors with data for each column that
-is passed to \code{FUN}. The length and order of each vector must match the 
-levels in \code{col_by}. See examples.}
+\item{col_wise_args}{a named list containing collections (e.g. vectors or
+lists) with data elements for each column of the resulting table. The data
+elements are then passed to the named argument \code{FUN} corresponding to
+the element name of the outer list. Hence, the length and order of each
+collection must match the levels in \code{col_by}. See examples.}
 }
 \value{
 an \code{\link{rtable}} object
