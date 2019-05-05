@@ -173,6 +173,7 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   if (!is.numeric(indent) || indent < 0) stop("indent must be >= 0")
+  if (missing(row.name)) row.name <- NULL
   
   cells <- list(...)
   
@@ -190,7 +191,7 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
   structure(
     rcells_formatted,
-    row.name = if (missing(row.name)) NULL else row.name,
+    row.name = row.name,
     indent = indent,
     class = "rrow"
   )

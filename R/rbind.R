@@ -1,11 +1,12 @@
-#' Stack rtable objects 
+#' Stack rtable and rrow objects 
 #' 
 #' Note that the columns order are not mached by the header: the first table
 #' header is taken as the reference.
 #' 
-#' @param ... \code{\link{rtable}} objects
+#' @param ... \code{\link{rtable}} or length 0 \code{\link{rcell}} objects, the first object must be an
+#'   \code{\link{rtable}} object
 #' @param gap number of empty rows to add between tables
-#' 
+#'   
 #' @return an \code{\link{rtable}} object
 #' 
 #' @export
@@ -38,14 +39,15 @@
 #'   )
 #' ))
 #' 
-#' tbl <- rbind(mtbl, mtbl2)
-#' tbl
+#' rbind(mtbl, mtbl2)
 #' 
-#' tbl <- rbind(mtbl, mtbl2, gap = 1)
-#' tbl 
+#' rbind(mtbl, rrow(), mtbl2)
 #' 
-#' tbl <- rbind(mtbl, mtbl2, gap = 2)
-#' tbl 
+#' rbind(mtbl, rrow("aaa"), indent(mtbl2))
+#' 
+#' rbind(mtbl, mtbl2, gap = 1)
+#' 
+#' rbind(mtbl, mtbl2, gap = 2)
 #' 
 rbind.rtable <- function(..., gap = 0) {
   dots <- Filter(Negate(is.null), list(...))
@@ -64,13 +66,26 @@ rbind.rtable <- function(..., gap = 0) {
 rbindl_rtables <- function(x, gap = 0) {
   
   stopifnot(is.list(x))
-  stopifnot(are(x, "rtable"))
   stopifnot(length(x) > 0)
   stopifnot(is.numeric(gap), gap >= 0)
   
-  if (!num_all_equal(vapply(x, ncol, numeric(1))))
+  is_rtable <- vapply(x, is, logical(1), "rtable")
+  is_rrow <- vapply(x, is, logical(1), "rrow")
+  # in order to get the reference header
+  if (!is_rtable[1] && is_rrow[1]) {
+    stop("first element needs to be an rtable not an rrow")
+  }
+  if (!all(is_rtable | is_rrow)) {
+    stop("elements are not all of class rtable or rrow")
+  }
+  if (!num_all_equal(vapply(x[is_rtable], ncol, numeric(1)))) {
     stop("non-matching number of columns between tables")
-  
+  }
+  if (any(vapply(x[is_rrow], length, numeric(1)) != 0)) {
+    stop("only rrows with no cells are allowed to be used in rbind")
+  }
+
+  x <- lapply(x, function(xi) if (is(xi, "rrow")) list(xi) else xi)
   tbl <- if (gap != 0) {
     gap_rows <- replicate(gap, rrow(), simplify = FALSE)
     Reduce(function(tbl1, tbl2) c(tbl1, gap_rows, tbl2), x)
@@ -90,8 +105,8 @@ rbindl_rtables <- function(x, gap = 0) {
 
 #' Unlist method for rtables
 #'
-#' rtable objects should not be unlisted. This allows us to create nested lists with rtables objects and then flatten
-#' them to a list of rtable objects.
+#' rtable, rrow, and rcell objects should not be unlisted. This allows us to create nested lists with rtables objects
+#' and then flatten them to a list of rtable objects.
 #'
 #' @inheritParams base::unlist
 #'
@@ -100,5 +115,35 @@ rbindl_rtables <- function(x, gap = 0) {
 #' @method unlist rtable
 #' @export
 unlist.rtable <- function(x, recursive = TRUE, use.names = TRUE) {
+  x
+}
+
+#' Unlist method for rrow
+#'
+#' rtable, rrow, and rcell objects should not be unlisted. This allows us to create nested lists with rtables objects
+#' and then flatten them to a list of rtable objects.
+#'
+#' @inheritParams base::unlist
+#'
+#' @return rrow object
+#'
+#' @method unlist rrow
+#' @export
+unlist.rrow <- function(x, recursive = TRUE, use.names = TRUE) {
+  x
+}
+
+#' Unlist method for rcell
+#'
+#' rtable, rrow, and rcell objects should not be unlisted. This allows us to create nested lists with rtables objects
+#' and then flatten them to a list of rtable objects.
+#'
+#' @inheritParams base::unlist
+#'
+#' @return rrow object
+#'
+#' @method unlist rcell
+#' @export
+unlist.rcell <- function(x, recursive = TRUE, use.names = TRUE) {
   x
 }
