@@ -2,7 +2,9 @@
 ## rtables 0.1.2
 
 * `rbind.rtable` now supports binding rtables with rows, e.g. `rbind(tbl1, rrow(), tbl2)` or `rbind(tbl1, rrow("row name"), tbl2)`.
+* `rbindl_rtables` supports `NULL` objects in the list (except for the first element)
 * add `indent` function
+* `header_add_N` deals gracefully with `NULL` objects
 
 ## rtables 0.1.1
 

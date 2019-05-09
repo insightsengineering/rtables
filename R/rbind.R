@@ -71,11 +71,13 @@ rbindl_rtables <- function(x, gap = 0) {
   
   is_rtable <- vapply(x, is, logical(1), "rtable")
   is_rrow <- vapply(x, is, logical(1), "rrow")
+  is_null <- vapply(x, is.null, logical(1))
+  
   # in order to get the reference header
-  if (!is_rtable[1] && is_rrow[1]) {
-    stop("first element needs to be an rtable not an rrow")
+  if (!is_rtable[1] && is_rrow[1] && is_null[1]) {
+    stop("first element needs to be an rtable not an rrow or NULL")
   }
-  if (!all(is_rtable | is_rrow)) {
+  if (!all(is_rtable | is_rrow | is_null)) {
     stop("elements are not all of class rtable or rrow")
   }
   if (!num_all_equal(vapply(x[is_rtable], ncol, numeric(1)))) {
