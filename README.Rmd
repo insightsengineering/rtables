@@ -67,7 +67,8 @@ devtools::install_github("roche/rtables")
 ## Usage
 
 ```{r}
-# library(rtables)
+library(rtables)
+
 tbl <- rtable(
   header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
