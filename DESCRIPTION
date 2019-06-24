@@ -8,6 +8,7 @@ Description: Reporting tables are useful to create formated tables with cells th
   display multiple values. An rtable object will provide access to all the raw data
   that make up the table.
 Depends:
+  R (>= 3.2)
 Imports:
   stats,
   methods,
