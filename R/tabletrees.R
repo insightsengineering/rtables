@@ -33,7 +33,10 @@ setClass("TableTree", contains = c("VTree"), representation(content = "Elementar
 })
 
 TableTree = function(cont = ElementaryTable(), kids = list(), lev = 1L, lab = "") {
-    new("TableTree", content = cont, children = kids, level = lev, label = lab)
+    if(nrow(cont) == 0 && all(sapply(kids, is, "TableRow")))
+        new("ElementaryTable", children = kids, level = lev, label = lab)
+    else 
+        new("TableTree", content = cont, children = kids, level = lev, label = lab)
 }
 
 
@@ -55,7 +58,8 @@ docat = function(obj) {
     if(!is(obj, "ElementaryTable") ){
         crows = nrow(obj@content)
         ccols = if(crows == 0) 0 else ncol(obj@content)
-        cat(rep("*", obj@level), sprintf(" [%d x %d]\n",
+        cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
+                                         obj@content@label,
                                          crows, ccols),
             sep = "")
         
@@ -67,7 +71,8 @@ docat = function(obj) {
         if(length(isr)) {
             r = kids[[isr[1]]]
             cat(rep("*", r@level),
-                sprintf(" [%d x %d]\n",
+                sprintf(" %s [%d x %d] \n",
+                        obj@label,
                         length(kids),
                         length(r@leaf_value)),
                 sep="")
@@ -80,6 +85,13 @@ docat = function(obj) {
 setMethod("show", "TableTree",
           function(object) {
     cat("\nA TableTree object\n")
+    docat(object)
+    
+})
+
+setMethod("show", "ElementaryTable",
+          function(object) {
+    cat("\nAn ElementaryTableTree object\n")
     docat(object)
     
 })

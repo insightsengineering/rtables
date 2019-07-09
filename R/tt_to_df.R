@@ -132,41 +132,87 @@ df_to_tt = function(df) {
 }
 
 
-recursive_split = function(df, i) {
+varsplit = function(df, level = 0L) {
+    if(anyNA(df$var)) stop("got NA var where I shouldn't have")
+    grp = cumsum(c(FALSE, head(df$var, -1) != tail(df$var, - 1)))
+    dfspl = split(df, grp)
+    lapply(dfspl, function(dat) {
+        lbl = unique(dat$varlbl)
+        stopifnot(length(lbl) == 1)
+        rows_to_el_table(dat, level = level, label = lbl, cont = NULL)
+    })
+}
+
+
+
+
+recursive_split = function(df, i = 1L) {
+ 
     rsplval = paste0("r", i, "value")
-    if(! (rsplval %in% names(df))) { # no more levels to split on
+    rspl = paste0("rsp_", i)
+    rvlbl = paste0("r", i, "vlbl")
+    levl = as.integer(i-1)
+    ## remember, that e.g., r2value CANNOT be non-NA if r1value is NA
+    if(! (rsplval %in% names(df)) || all(is.na(df[[rsplval]]))) { # no more levels to split on
         cinds = which(is.na(df$var))
-        if(length(cinds)) {
-            ctab = rows_to_el_table(df[cinds,], level = NA_integer_)
+        stopifnot(length(cinds) == 0 || length(cinds) == 1)
+
+        rsplblcol = paste0("rsplbl_",  i)
+        if(rsplblcol %in% names(df))
+            tlab = unique(df[[rsplblcol]])
+        else
+            tlab = unique(df[["varlbl"]])
+    
+        if(length(cinds) > 0) {
+            cdf = df[cinds,]
+            ctab = rows_to_el_table(cdf, level = NA_integer_, label = cdf$rowlbl)
             df = df[-cinds,]
-            ret = TableTree(cont = ctab, kids = tree_children(rows_to_el_table(df, level = as.integer(i+1))), lev = as.integer(i))
+            ## XXX I think this is wrong
+            ##tlab  =  cdf$rowlbl
         } else {
-            ret = rows_to_el_table(df, level = as.integer(i))
+            ctab = ElementaryTable()
+            ## XXX I think this is wrong
+          
+            
         }
+        ## if(length(unique(df$var)) > 1)
+        ##     kids = varsplit(fd, level = levl)
+        ## else
+        kids = varsplit(df, level = levl) ##tree_children(rows_to_el_table(df, levl+1L))
+
+        ret = TableTree(cont = ctab, kids = kids, lev = levl, lab  = tlab)
+        
     } else  {
         cinds = which(is.na(df[[rsplval]]) & is.na(df$var))
+        if(length(cinds) > 1) stop()
         if(length(cinds)) {
-            ctab = rows_to_el_table(df[cinds,], level = NA_integer_)
+            cdf = df[cinds,]
+            ctab = rows_to_el_table(df[cinds,], level = NA_integer_,
+                                    label = cdf$rowlbl)
             df = df[-cinds,]
         } else {
             ctab  = ElementaryTable()
         }
-        key = na_to_sentinel(df[[rsplval]])
+        vkey = na_to_sentinel(df[[rsplval]])
         ## declaring levels this way ensures they aren't sorted in a way we don't want.
-        key = factor(key, levels = unique(key))
+        vkey = factor(vkey, levels = unique(vkey))
+        spkey = na_to_sentinel(df[[rspl]])
+        
         ## XXX can't use split here because it sorts the levels of f
-        spl = split(df, key)
-        ret = TableTree(cont = ctab, kids = lapply(spl, recursive_split, i = i+1), lev = as.integer(i))
+        spl = split(df, vkey)
+        ret = TableTree(cont = ctab, kids = lapply(spl, recursive_split, i = i+1), lev = levl)
     }
 
     ret
 }
 
-rows_to_el_table = function(df, level, label = "", cont = NULL) {
+rows_to_el_table = function(df, level, label = "", lblcol = "varlbl", cont = NULL) {
+    if(nrow(df) == 0)
+        return(ElementaryTable())
     rowinds = seq(along = df[[1]])
     datacols = grep("___", names(df), value = TRUE)
     kids = lapply(rowinds, function(i) {
-        TableRow(lev = level, lab = as.character(df$rowlabel[i]), val = as.list(df[i, datacols]))
+        TableRow(lev = level, lab = as.character(df$rowlbl[i]), val = as.list(df[i, datacols]))
     })
     if(is.null(cont))
         ElementaryTable(kids = kids, lev = level, lab = label)
