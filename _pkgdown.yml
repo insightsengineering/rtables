@@ -8,7 +8,7 @@ navbar:
     href: https://github.com/roche/rtables
 
 development:
-  mode: release
+  mode: devel
 
 reference:
   - title: Core Table Create Functions
@@ -40,7 +40,10 @@ reference:
     - dim.rheader
     - header_add_N
     - indented_row.names
+    - indent
     - unlist.rtable
+    - unlist.rcell
+    - unlist.rrow
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
     contents:

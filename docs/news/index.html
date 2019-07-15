@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -118,6 +118,19 @@
       <small>Source: <a href='https://github.com/roche/rtables/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rtables-0-1-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-0-1-2" class="anchor"></a>rtables 0.1.2</h2>
+<ul>
+<li>
+<code>rbind.rtable</code> now supports binding rtables with rows, e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind(tbl1, rrow(), tbl2)</a></code> or <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind(tbl1, rrow("row name"), tbl2)</a></code>.</li>
+<li>
+<code>rbindl_rtables</code> supports <code>NULL</code> objects in the list (except for the first element)</li>
+<li>add <code>indent</code> function</li>
+<li>
+<code>header_add_N</code> deals gracefully with <code>NULL</code> objects</li>
+</ul>
+</div>
     <div id="rtables-0-1-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rtables-0-1-1" class="anchor"></a>rtables 0.1.1</h2>
@@ -179,6 +192,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rtables-0-1-2">0.1.2</a></li>
         <li><a href="#rtables-0-1-1">0.1.1</a></li>
         <li><a href="#rtables-0-1-0-6">0.1.0.6</a></li>
         <li><a href="#rtables-0-1-0-5">0.1.0.5</a></li>

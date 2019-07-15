@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Stack rtable and rrow objects — rbind.rtable • rtables</title>
+<title>Change indentation of all rrows in an rtable — indent • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Stack rtable and rrow objects — rbind.rtable" />
+<meta property="og:title" content="Change indentation of all rrows in an rtable — indent" />
 
-<meta property="og:description" content="Note that the columns order are not mached by the header: the first table
-header is taken as the reference." />
+<meta property="og:description" content="Change indentation of all rrows in an rtable" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,42 +117,36 @@ header is taken as the reference." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Stack rtable and rrow objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rbind.R'><code>R/rbind.R</code></a></small>
-    <div class="hidden name"><code>rbind.rtable.Rd</code></div>
+    <h1>Change indentation of all rrows in an rtable</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/indent.R'><code>R/indent.R</code></a></small>
+    <div class="hidden name"><code>indent.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Note that the columns order are not mached by the header: the first table
-header is taken as the reference.</p>
+    <p>Change indentation of all rrows in an rtable</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for rtable</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>...</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>indent</span>(<span class='no'>x</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p><code><a href='rtable.html'>rtable</a></code> or length 0 <code><a href='rcell.html'>rcell</a></code> objects, the first object must be an
-<code><a href='rtable.html'>rtable</a></code> object</p></td>
+      <th>x</th>
+      <td><p><code><a href='rtable.html'>rtable</a></code> object</p></td>
     </tr>
     <tr>
-      <th>gap</th>
-      <td><p>number of empty rows to add between tables</p></td>
+      <th>by</th>
+      <td><p>integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
+indentation is set to 0.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>an <code><a href='rtable.html'>rtable</a></code> object</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>is_setosa</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>$<span class='no'>Species</span> <span class='kw'>==</span> <span class='st'>"setosa"</span>
 <span class='no'>mtbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span>(
     <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Petal.Length"</span>, <span class='kw'>colspan</span><span class='kw'>=</span><span class='fl'>2</span>)),
@@ -164,51 +157,26 @@ header is taken as the reference.</p>
     <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>),
     <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>),
     <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx.xx"</span>
-  )
-)
-
-<span class='no'>mtbl2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/with'>with</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/subset'>subset</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span> <span class='kw'>==</span> <span class='st'>'setosa'</span>), <span class='fu'><a href='rtable.html'>rtable</a></span>(
-  <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span>(
-    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"Petal.Length"</span>, <span class='kw'>colspan</span><span class='kw'>=</span><span class='fl'>2</span>)),
-    <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>NULL</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>)
   ),
   <span class='fu'><a href='rrow.html'>rrow</a></span>(
     <span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"Setosa"</span>,
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>Sepal.Length</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>Sepal.Length</span>),
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>Petal.Length</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>Petal.Length</span>),
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>[<span class='no'>is_setosa</span>]), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>[<span class='no'>is_setosa</span>]),
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>[<span class='no'>is_setosa</span>]), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/median'>median</a></span>(<span class='no'>iris</span>$<span class='no'>Petal.Length</span>[<span class='no'>is_setosa</span>]),
     <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx.xx"</span>
   )
-))
-
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mtbl</span>, <span class='no'>mtbl2</span>)</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
+)
+<span class='fu'>indent</span>(<span class='no'>mtbl</span>)</div><div class='output co'>#&gt;                          Sepal.Length                Petal.Length    
+#&gt;                       mean         median         mean         median
+#&gt; ---------------------------------------------------------------------
+#&gt;   All Species         5.84          5.8           3.76          4.35 
+#&gt;   Setosa              5.01           5            1.46          1.5  </div><div class='input'><span class='fu'>indent</span>(<span class='no'>mtbl</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt;                            Sepal.Length                Petal.Length    
+#&gt;                         mean         median         mean         median
+#&gt; -----------------------------------------------------------------------
+#&gt;     All Species         5.84          5.8           3.76          4.35 
+#&gt;     Setosa              5.01           5            1.46          1.5  </div><div class='input'><span class='fu'>indent</span>(<span class='no'>mtbl</span>, -<span class='fl'>3</span>)</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
 #&gt;                     mean         median         mean         median
 #&gt; -------------------------------------------------------------------
 #&gt; All Species         5.84          5.8           3.76          4.35 
-#&gt; Setosa              5.01           5            1.46          1.5  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mtbl</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(), <span class='no'>mtbl2</span>)</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
-#&gt;                     mean         median         mean         median
-#&gt; -------------------------------------------------------------------
-#&gt; All Species         5.84          5.8           3.76          4.35 
-#&gt; 
-#&gt; Setosa              5.01           5            1.46          1.5  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mtbl</span>, <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"aaa"</span>), <span class='fu'><a href='indent.html'>indent</a></span>(<span class='no'>mtbl2</span>))</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
-#&gt;                     mean         median         mean         median
-#&gt; -------------------------------------------------------------------
-#&gt; All Species         5.84          5.8           3.76          4.35 
-#&gt; aaa
-#&gt;   Setosa            5.01           5            1.46          1.5  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mtbl</span>, <span class='no'>mtbl2</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
-#&gt;                     mean         median         mean         median
-#&gt; -------------------------------------------------------------------
-#&gt; All Species         5.84          5.8           3.76          4.35 
-#&gt; 
-#&gt; Setosa              5.01           5            1.46          1.5  </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mtbl</span>, <span class='no'>mtbl2</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;                        Sepal.Length                Petal.Length    
-#&gt;                     mean         median         mean         median
-#&gt; -------------------------------------------------------------------
-#&gt; All Species         5.84          5.8           3.76          4.35 
-#&gt; 
-#&gt; 
 #&gt; Setosa              5.01           5            1.46          1.5  </div><div class='input'>
 </div></pre>
   </div>
@@ -216,9 +184,7 @@ header is taken as the reference.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
