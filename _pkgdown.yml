@@ -8,7 +8,7 @@ navbar:
     href: https://github.com/roche/rtables
 
 development:
-  mode: release
+  mode: devel
 
 reference:
   - title: Core Table Create Functions
