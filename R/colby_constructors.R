@@ -82,7 +82,7 @@ setMethod("add_colby_subset", c(layout = "NULL"), function(layout, x, label) {
 
 setMethod("add_colby_subset", c(layout = "ColDominantLayout"), function(layout, x, label) {
     stopifnot(is(x, "logical"))
-    leaf = LayoutColLeaf(lab = label, sub = x, n = sum(x), lev = 1L)
+    leaf = LayoutColLeaf(lab = label, sub = x, lev = 1L)
     tree = col_tree(layout)
     layout_children(tree) = c(layout_children(tree), leaf)
     col_tree(layout) = tree
@@ -94,7 +94,7 @@ setMethod("add_colby_subset", c(layout = "RowDominantLayout"), function(layout, 
     if(empty_dominant_axis(layout))
         stop("Attempted to add colby layout data to empty row-dominant layout")
     tree = col_tree(layout)
-    leaf = LayoutColLeaf(lab = label, sub = x, n = sum(x), lev = tree@level + 1L)
+    leaf = LayoutColLeaf(lab = label, sub = x, lev = tree@level + 1L)
 
     layout_children(tree) = c(layout_children(tree), leaf)
     col_tree(layout) = tree
@@ -116,7 +116,7 @@ setMethod("add_colby_total", c(layout = "RowDominantLayout"), function(layout, l
     if(empty_dominant_axis(layout))
         stop("Attempted to add colby layout data to empty row-dominant layout")
     tree = col_tree(layout)
-    leaf = LayoutColLeaf(lab = label, sub = TRUE, n = NA_integer_, lev = tree@level + 1L)
+    leaf = LayoutColLeaf(lab = label, sub = TRUE, lev = tree@level + 1L)
  
     layout_children(tree) = c(layout_children(tree), leaf)
     col_tree(layout) = tree
@@ -127,7 +127,7 @@ setMethod("add_colby_total", c(layout = "RowDominantLayout"), function(layout, l
 ## XXX how do we get N_count here?!?!?
 setMethod("add_colby_total", c(layout = "ColDominantLayout"), function(layout, label = "Total") {
     tree = col_tree(layout)
-    leaf = LayoutColLeaf(lab = label, sub = TRUE, n = NA_integer_, lev = tree@level + 1L) 
+    leaf = LayoutColLeaf(lab = label, sub = TRUE, lev = tree@level + 1L) 
     layout_children(tree) = c(layout_children(tree), leaf)
     col_tree(layout) = tree
     layout
@@ -143,7 +143,7 @@ setMethod("add_rowby_subset", c(layout = "NULL"), function(layout, x, label) {
 
 setMethod("add_rowby_subset", c(layout = "RowDominantLayout"), function(layout, x, label) {
     stopifnot(is(x, "logical"))
-    leaf = LayoutRowLeaf(label = label, subset = x, N_count = sum(x), level = NA_integer_)
+    leaf = LayoutRowLeaf(lab = label, sub = x, n = sum(x), lev = NA_integer_)
     tree = row_tree(layout)
     layout_children(tree) = c(layout_children(tree), leaf)
     row_tree(layout) = tree
@@ -154,7 +154,7 @@ setMethod("add_rowby_subset", c(layout = "ColDominantLayout"), function(layout, 
     stopifnot(is(x, "logical"))
     if(empty_dominant_axis(layout))
         stop("Attempted to add rowby layout data to empty col-dominant layout")
-    leaf = LayoutRowLeaf(label = label, subset = x, N_count = sum(x), level = NA_integer_)
+    leaf = LayoutRowLeaf(lab = label, sub = x, n = sum(x), lev = NA_integer_)
     tree = row_tree(layout)
     layout_children(tree) = c(layout_children(tree), leaf)
     row_tree(layout) = tree

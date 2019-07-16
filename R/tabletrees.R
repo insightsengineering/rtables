@@ -6,37 +6,74 @@ setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"),
 ## Table Tree classes
 ##
 
+setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
+         representation(col_layout = "LayoutColTree",
+                        rowsplit_vars = "character",
+                        rowsplit_values = "ANY"))
+setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo"),
+         representation(children = "list",
+                        rowspans = "data.frame"
+                        ))
+setClass("VTableLeaf", contains = c("VIRTUAL", "VTableNodeInfo"),
+         representation(leaf_value = "ANY",
+                        var_analyzed = "character"))
+
 
 ## colspan and rowspan are not modeled here because I think they are layout
 ## and/or formatting, NOT table structure
-setClass("TableRow", contains = "VLeaf")
-TableRow = function(val = list(),  lev = 1L, lab = "") {
-    new("TableRow", leaf_value = val, level = lev, label = lab)
-}
-
-setClass("ElementaryTable", contains = "VTree",
+setClass("TableRow", contains = "VTableLeaf", representation(colspans = "integer"),
          validity = function(object) {
-    kids = tree_children(object)
-    all(sapply(kids, is, "TableRow"))
+    lcsp = length(object@colspans)
+    length(lcsp ==  0) || lcsp == length(object@leaf_value)
 })
 
-ElementaryTable = function(kids = list(), lev = 1L, lab = "") {
-    new("ElementaryTable", children = kids, level = lev, label = lab)
+TableRow = function(val = list(),  lev = 1L, lab = "", cspan = seq(along = val), clayout = LayoutColTree(), rs_vars = NA_character,
+                    rs_values = NA,
+                    var = NA_character_) {
+    new("TableRow", leaf_value = val, level = lev, label = lab, colspans = cspan, col_layout = clayout, var_analyzed = var,
+        rowsplit_vars = rs_vars,
+        rowsplit_values = rs_values)
+}
+
+setClassUnion("IntegerOrNull", c("integer", "NULL"))
+setClass("ElementaryTable", contains = "VTableTree",
+         validity = function(object) {
+    kids = tree_children(object)
+    all(sapply(kids, is, "TableRow")) && all(sapply(kids, function(k) identical(k@col_layout, object@col_layout)))
+})
+
+ElementaryTable = function(kids = list(), lev = 1L, lab = "", rspans = data.frame(), clayout = NULL, rs_vars = NA_character_,
+                           rs_values = NA) {
+    if(is.null(clayout)) {
+        if(length(kids) > 0)
+            clayout = kids[[1]]@col_layout
+        else
+            clayout = LayoutColTree()
+    }
+    new("ElementaryTable", children = kids, level = lev, label = lab, rowspans = rspans, col_layout = clayout, rowsplit_vars = rs_vars,
+        rowsplit_values = rs_values)
 }
 
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live 
 
-setClass("TableTree", contains = c("VTree"), representation(content = "ElementaryTable"),
+setClass("TableTree", contains = c("VTableTree"),
+         representation(content = "ElementaryTable"),
          validity = function(object) {
-    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
+    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow"))) &&
+        all((!is.na(object@rowsplit_vars)) |
+            is.na(object@rowsplit_values))
 })
 
-TableTree = function(cont = ElementaryTable(), kids = list(), lev = 1L, lab = "") {
+TableTree = function(cont = ElementaryTable(), kids = list(), lev = 1L, lab = "", rspan = data.frame(), rs_vars = NA_character_, rs_values = NA,
+                     clayout = cont@col_layout) {
+    rs_values[sapply(rs_values, function(x) x == nasentinel)] = NA
     if(nrow(cont) == 0 && all(sapply(kids, is, "TableRow")))
-        new("ElementaryTable", children = kids, level = lev, label = lab)
+        new("ElementaryTable", children = kids, level = lev, label = lab, rowspans = rpsan, col_layout = clayout, rowsplit_vars = rs_vars,
+            rowsplit_values = rs_values)
     else 
-        new("TableTree", content = cont, children = kids, level = lev, label = lab)
+        new("TableTree", content = cont, children = kids, level = lev, label = lab, rowspans = rspan, rowsplit_vars = rs_vars, rowsplit_values = rs_values,
+            col_layout = clayout)
 }
 
 
@@ -55,7 +92,7 @@ setMethod("ncol", "ElementaryTable",
 
 
 docat = function(obj) {
-    if(!is(obj, "ElementaryTable") ){
+    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
         crows = nrow(obj@content)
         ccols = if(crows == 0) 0 else ncol(obj@content)
         cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
@@ -64,13 +101,15 @@ docat = function(obj) {
             sep = "")
         
     }
-    if(is(obj, "VTree") && length(tree_children(obj))) {
+    if(is(obj, "VTableTree") && length(tree_children(obj))) {
         kids = tree_children(obj)
         isr = which(sapply(kids, is, "TableRow"))
         ## can they ever be inteerspersed, I don't think so
         if(length(isr)) {
             r = kids[[isr[1]]]
-            cat(rep("*", r@level),
+            lv = r@level
+            if(is.na(lv)) lv = 0
+            cat(rep("*", lv),
                 sprintf(" %s [%d x %d] \n",
                         obj@label,
                         length(kids),
@@ -109,15 +148,18 @@ setOldClass("NULL")
 setClassUnion("FunctionOrNULL", c("function", "NULL"))
 
 setOldClass("expression")
-setClassUnion("LeafSubsetDef", c("expression", "logical", "integer", "numeric"))
+setClassUnion("LayoutSubsetDef", c("expression", "logical", "integer", "numeric"))
+
 
 setClass("LayoutAxisTree", contains= "VTree",
-         representation(summary_func = "FunctionOrNULL"),
-         validity = function(object) all(lapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf"))))
+         representation(summary_func = "FunctionOrNULL",
+                        subset = "LayoutSubsetDef",
+                        splitvar = "ANY"), ## because what about quantile cuts...),
+         validity = function(object) all(sapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf"))))
 
 setClass("LayoutAxisLeaf", contains = "VNodeInfo",
          representation(func = "function",
-                        subset = "LeafSubsetDef"))
+                        subset = "LayoutSubsetDef"))
 
 setClass("LayoutColTree", contains = "LayoutAxisTree")
 ##setClass("LayoutColBranch", contains = "LayoutAxisBranch")
@@ -125,17 +167,31 @@ setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
 setClass("LayoutRowTree", contains = "LayoutAxisTree")
 ##setClass("LayoutRowBranch", contains = "LayoutAxisBranch")
 setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
-LayoutColTree = function(lev = 0L, kids = list(), summary_function = NULL) {
+LayoutColTree = function(lev = 0L,
+                         lab = "",
+                         kids = list(),
+                         summary_function = NULL,
+                         sub = expression(TRUE),
+                         svar = NA_character_) {
     new("LayoutColTree", level = lev, children = kids,
-        summary_func = summary_function)
+        summary_func = summary_function,
+        subset = sub,
+        splitvar = svar,
+        label = lab)
 }
 
 ## LayoutColBranch = function(lev = 0L, kids = list(), lab = "") {
 ##     new("LayoutColBranch", level = lev, children = kids, label = lab)
 ## }
 
-LayoutColLeaf = function(lev = 0L, lab = "", sub, n) {
-    new("LayoutColLeaf", level = lev, label = lab, subset = sub, N_count = n)
+LayoutColLeaf = function(lev = 0L, lab = "", sub#,
+                        ## n = NA_integer_,
+                         #svar = NA_character_
+                         ) {
+    new("LayoutColLeaf", level = lev, label = lab, subset = sub#,
+        ##N_count = n,
+        ##splitvar = svar
+        )
 }
 
 LayoutRowTree = function(lev = 0L, kids = list()) {
@@ -175,8 +231,17 @@ setGeneric("tree_children", function(x) standardGeneric("tree_children"))
 setMethod("tree_children", c(x = "VTree"),
           function(x) x@children)
 
+setMethod("tree_children", c(x = "VTableTree"),
+          function(x) x@children)
+
 setGeneric("tree_children<-", function(x, value) standardGeneric("tree_children<-"))
 setMethod("tree_children<-", c(x = "VTree"),
+          function(x, value){
+    x@children = value
+    x
+})
+
+setMethod("tree_children<-", c(x = "VTableTree"),
           function(x, value){
     x@children = value
     x
