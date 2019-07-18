@@ -1,0 +1,18 @@
+var,varlbl,valtype,rowlbl,r1value,r1vlbl,r2value,r2vlbl,ARM1___M,ARM1___F,ARM2___M,ARM2___F,rsp_1,rsplbl_1,rsp_2,rsplbl_2,csp_1,csplbl_1,csp_2,csplbl_2
+NA,NA,N,Overall (N),NA,NA,NA,NA,10,12,14,16,NA,NA,NA,NA,ARM,Arm,SEX,Gender
+NA,NA,n,White (n),WHITE,White,NA,NA,7,8,9,10,RACE,Ethnicity,NA,NA,ARM,Arm,SEX,Gender
+NA,NA,n,Level A (n),WHITE,White,A,Level A,4,6,4,9,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,mean,Mean,WHITE,White,A,Level A,6.8,7.8,8.8,9.8,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,median,Median,WHITE,White,A,Level A,6,7,8,9,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+NA,NA,n,Level B (n),WHITE,White,B,Level  B,3,2,5,1,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,mean,Mean,WHITE,White,B,Level  B,6.5,7.5,8.5,9.5,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,median,Median,WHITE,White,B,Level  B,5,6,7,8,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+NA,NA,n,Black (n),BLACK,Black,NA,NA,7,8,9,10,RACE,Ethnicity,NA,NA,ARM,Arm,SEX,Gender
+NA,NA,n,Level A (n),BLACK,Black,A,Level A,4,6,4,9,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,mean,Mean,BLACK,Black,A,Level A,6.8,7.8,8.8,9.8,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,median,Median,BLACK,Black,A,Level A,6,7,8,9,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+NA,NA,n,Level B (n),BLACK,Black,B,Level  B,3,2,5,1,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,mean,Mean,BLACK,Black,B,Level  B,6.5,7.5,8.5,9.5,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+AGE,Age,median,Median,BLACK,Black,B,Level  B,5,6,7,8,RACE,Ethnicity,FACTOR2,Factor2 label,ARM,Arm,SEX,Gender
+Var3,Third Cat. Var,level1,level1 (n),NA,NA,NA,NA,4,3,2,1,NA,NA,NA,NA,ARM,Arm,SEX,Gender
+Var3,Third Cat. Var,level2,level2 (n),NA,NA,NA,NA,6,9,12,15,NA,NA,NA,NA,ARM,Arm,SEX,Gender
