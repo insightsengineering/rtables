@@ -18,7 +18,7 @@
 #' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'    labels = c("S.L > 5", "S.L <= 5"))
 #' 
-#' tbl <- rtabulate(iris$Species, col_by=sl5)
+#' tbl <- rtabulate(iris$Species, col_by = sl5)
 #' 
 #' Viewer(tbl)
 #' Viewer(tbl, tbl)

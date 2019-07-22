@@ -4,16 +4,18 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = no_by("col_1"), FUN = length,
+\method{rtabulate}{factor}(x, col_by = by_all("col_1"), FUN = length,
   ..., useNA = c("no", "ifany", "always"), format = NULL, indent = 0,
   col_wise_args = NULL)
 }
 \arguments{
-\item{x}{a vecor}
+\item{x}{a vector}
 
-\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column. If data should not be split
-into columns use the \code{\link{no_by}} function.}
+\item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
+if a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column.
+can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
+can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}})}
 
 \item{FUN}{a function that processes the cell data}
 
@@ -47,15 +49,15 @@ each level of \code{x}.
 
 rtabulate(x = iris$Species)
 
-rtabulate(x = iris$Species, no_by("sum"))
+rtabulate(x = iris$Species, by_all("sum"))
 
 sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
    labels = c("S.L > 5", "S.L <= 5"))
 
-rtabulate(iris$Species, col_by=sl5)
+rtabulate(iris$Species, col_by = sl5)
 rtabulate(sl5, iris$Species)
 
-rtabulate(iris$Species, col_by=sl5,
+rtabulate(iris$Species, col_by = sl5,
    FUN = function(cell_data, N) {
      if (length(cell_data) > 10) {
         length(cell_data) * c(1, 1/N)
@@ -79,6 +81,5 @@ rtabulate(
   FUN = function(x, N) list(length(x), N),
   col_wise_args = list(N = c(1,2))
 )
-
 
 }

@@ -11,7 +11,9 @@ Depends:
 Imports:
   stats,
   methods,
-  htmltools
+  htmltools,
+  purrr,
+  utils.nest
 Suggests:
   testthat,
   knitr
