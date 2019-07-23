@@ -49,24 +49,9 @@ col_by_to_matrix <- function(col_by, x = NULL) {
   new_col_by
 }
 
-#todo: put to utils.nest
-is.logical.vector_modif <- function(x, min_size = 1) {
-  #todo: take from utils.nest
-  all_true <- function(lst, fcn) {
-    all(vapply(lst, fcn, TRUE))
-  }
-  #todo: check min_size
-  
-  !is.null(x) &&
-    is.atomic(x) &&
-    length(x) >= min_size &&
-    all_true(x, utils.nest::is.logical.single)
-}
-
-
 #' Adds column to matrix that corresponds to taking all entries (column of all TRUE)
 #' 
-#' @param mat matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
+#' @param mat factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
 #' @param label label of new column
 #' 
 #' @return new matrix with one column added
@@ -77,9 +62,10 @@ is.logical.vector_modif <- function(x, min_size = 1) {
 #' x <- factor(c("a", "b", "a", "a", "b"))
 #' mat <- by_factor_to_matrix(x)
 #' by_add_total(mat, label = "tot")
-by_add_total <- function(mat, label = "total") {
-  stopifnot(is.data.frame(mat))
-  stopifnot(all(vapply(mat, function(col) is.logical(col), logical(1))))
+#' by_add_total(x, label = "tot")
+by_add_total <- function(x, label = "total") {
+  stopifnot(is.data.frame(x) || is.factor(x))
+  mat <- col_by_to_matrix(x)
   old_names <- names(mat)
   res <- cbind(mat, rep(TRUE, nrow(mat)))
   names(res) <- c(old_names, label)
@@ -103,28 +89,3 @@ by_add_total <- function(mat, label = "total") {
 by_all <- function(name) {
   structure(name, class = "by_all")
 }
-
-
-# todo: remove
-#' #' Check if object inherits from the \code{by_all} Class
-#' #' 
-#' #' Functions to test inheritance on \code{by_all}
-#' #' 
-#' #' @param x an object
-#' #' 
-#' #' @return \code{TRUE} or \code{FALSE}
-#' #' 
-#' #' @export
-#' by_all <- function(x) {
-#'   is(x, "by_all")
-#' }
-
-#' #' Access levels attribute for an object of \code{by_all} Class 
-#' #' 
-#' #' @param x \code{by_all} class object
-#' #' 
-#' #' @export
-#' #'  
-#' levels.by_all <- function(x) {
-#'   as.vector(x)
-#' }

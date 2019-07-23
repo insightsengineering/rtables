@@ -264,58 +264,6 @@ rtabulate.factor <- function(x,
             col_wise_args = col_wise_args,
             ...
   )
-  
-  # todo: remove below
-  # force(FUN)
-  # col_by <- col_by_to_matrix(col_by, x)
-  # check_colwise_args(col_by, col_wise_args)
-  # 
-  # useNA <- match.arg(useNA)
-  # 
-  # if (any("<NA>" %in% levels(x))) stop("factor with level '<NA>' is not valid in rtabulate.factor")
-  # 
-  # if (useNA %in% c("ifany", "always")) {
-  #   if (useNA == "always" || any(is.na(x))) {
-  #     levels(x) <- c(levels(x), "<NA>")
-  #     x[is.na(x)] <- "<NA>"
-  #   }
-  # } 
-  # 
-  # ## note that splitting with empty-string creates a un-named list element
-  # if (any(levels(x) == "")) {
-  #   if ("-" %in% levels(x)) {
-  #     stop("x currently cannot have '' and levels called -")
-  #   }
-  #   levels(x) <- gsub("^$", "-", levels(x)) # replace "" -> "-"
-  #   warning("'' levels were turned into level -")
-  # }
-  # 
-  # # cell_data = list(row1 = list(col1, col2, ...), row2 = list(col1, col2, ...), ...)
-  # # creates one row for each factor in x, each column only applies to elements x[col] where col is a column in col_by
-  # cell_data_per_column <- lapply(col_by, function(rows) {
-  #   x_subset <- x[rows]
-  #   # this is trivial, it just creates a list of factors each with only a single value -> only length function on it makes sense
-  #   split(x_subset, x_subset)
-  # })
-  # cell_data_by_row <- transpose(cell_data_per_column)
-  # 
-  # cells_by_row <- if (is.null(col_wise_args)) {
-  #   lapply(cell_data_by_row, function(row_i) lapply(row_i, FUN, ...)) 
-  # } else {
-  #   dots <- list(...)
-  #   args <- lapply(transpose(col_wise_args), function(args) c(dots, args))
-  #   
-  #   lapply(cell_data_by_row, function(row_i) {
-  #     Map(function(xi, argsi) {
-  #       do.call(FUN, c(list(xi), argsi))
-  #     }, row_i, args)
-  #   })
-  # }
-  # 
-  # rrows <- Map(function(row, rowname) rrowl(rowname, row, format = format, indent = indent), 
-  #              cells_by_row, names(cells_by_row)) 
-  # 
-  # rtablel(header = colnames(col_by), rrows)
 }
 
 

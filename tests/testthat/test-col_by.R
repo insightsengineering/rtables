@@ -21,6 +21,12 @@ test_that("by_add_total works", {
       tot = c(TRUE, TRUE, TRUE, TRUE, TRUE)
     )
   )
+  
+  x <- iris$Species
+  expect_equal(
+    by_add_total(by_factor_to_matrix(x)),
+    by_add_total(x)
+  )
 })
 
 test_that("col_by_to_matrix works", {
@@ -39,3 +45,4 @@ test_that("col_by_to_matrix works", {
     data.frame(my_total = c(TRUE, TRUE, TRUE))
   )
 })
+
