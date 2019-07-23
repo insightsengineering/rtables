@@ -4,10 +4,10 @@
 \alias{by_add_total}
 \title{Adds column to matrix that corresponds to taking all entries (column of all TRUE)}
 \usage{
-by_add_total(mat, label = "total")
+by_add_total(x, label = "total")
 }
 \arguments{
-\item{mat}{matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}}
+\item{x}{factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}}
 
 \item{label}{label of new column}
 }
@@ -21,4 +21,5 @@ Adds column to matrix that corresponds to taking all entries (column of all TRUE
 x <- factor(c("a", "b", "a", "a", "b"))
 mat <- by_factor_to_matrix(x)
 by_add_total(mat, label = "tot")
+by_add_total(x, label = "tot")
 }

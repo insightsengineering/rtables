@@ -51,7 +51,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 
 #' Adds column to matrix that corresponds to taking all entries (column of all TRUE)
 #' 
-#' @param mat factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
+#' @param x factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
 #' @param label label of new column
 #' 
 #' @return new matrix with one column added
