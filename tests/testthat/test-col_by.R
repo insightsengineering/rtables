@@ -27,6 +27,11 @@ test_that("by_add_total works", {
     by_add_total(by_factor_to_matrix(x)),
     by_add_total(x)
   )
+  
+  expect_equal(
+    by_add_total(NULL, "tot", n = 3),
+    data.frame(tot = c(TRUE, TRUE, TRUE))
+  )
 })
 
 test_that("col_by_to_matrix works", {
@@ -42,6 +47,10 @@ test_that("col_by_to_matrix works", {
   expect_error(col_by_to_matrix(by_all("my_total")), "is.null")
   expect_equal(
     col_by_to_matrix(by_all("my_total"), x = 1:3),
+    data.frame(my_total = c(TRUE, TRUE, TRUE))
+  )
+  expect_equal(
+    col_by_to_matrix(by_all("my_total"), x = data.frame(var1 = 1:3)),
     data.frame(my_total = c(TRUE, TRUE, TRUE))
   )
 })

@@ -18,15 +18,27 @@ by_factor_to_matrix <- function(x) {
   for (level in levels(x)) {
     res[x == level, level] <- TRUE
   }
-  data.frame(res)
+  res <- data.frame(res)
+  colnames(res) <- levels(x) # doing this after data.frame call makes sure that special chars are preserved
+  res
 }
 
-#' converts to matrix if needed (if it is a factor)
-#' handles case when it is of class by_all as well
+#' Converts col_by to matrix if needed (if it is a factor)
+#' Also handles case when it is of class by_all
 #' x can be NULL if col_by is not of class by_all
 #' returns transformed col_by as a matrix
+#' 
 #' @param col_by factor or data.frame to convert
-#' @param x object that col_by is applied to, necessary if col_by is of class by_all to select all elements from x
+#' @param x object that col_by is applied to, must be non-NULL if col_by is of class by_all to select all elements from x
+#' 
+#' @return matrix col_by
+#' 
+#' @export
+#' 
+#' @examples 
+#' col_by <- c("a", "b", "a", "a", "b")
+#' col_by <- col_by_to_matrix(col_by)
+#' col_by_to_matrix(by_all("tot"), 1:5)
 col_by_to_matrix <- function(col_by, x = NULL) {
   new_col_by <- if (is.factor(col_by)) {
     by_factor_to_matrix(col_by)
@@ -34,14 +46,15 @@ col_by_to_matrix <- function(col_by, x = NULL) {
     col_by
   } else if (is(col_by, "by_all")) {
     stopifnot(!is.null(x))
-    res <- data.frame(rep(TRUE, length(x)))
+    res <- data.frame(rep(TRUE, `if`(is.data.frame(x), nrow(x), length(x))))
     colnames(res) <- col_by
     res
   } else {
     stop(paste("unknown class to convert", class(col_by)))
   }
   if (!is.null(x)) {
-    stopifnot(nrow(col_by) == length(x))
+    # safety check
+    stopifnot(nrow(new_col_by) == nrow(x))
   }
   stopifnot(
     all(vapply(new_col_by, function(col) is.logical.vector_modif(col, min_size = 0), logical(1)))
@@ -51,8 +64,9 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 
 #' Adds column to matrix that corresponds to taking all entries (column of all TRUE)
 #' 
-#' @param x factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
+#' @param col_by factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}
 #' @param label label of new column
+#' @param n number of rows in data vector, e.g. \code{length(x)}, useful when col_by can also be NULL
 #' 
 #' @return new matrix with one column added
 #' 
@@ -63,13 +77,21 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 #' mat <- by_factor_to_matrix(x)
 #' by_add_total(mat, label = "tot")
 #' by_add_total(x, label = "tot")
-by_add_total <- function(x, label = "total") {
-  stopifnot(is.data.frame(x) || is.factor(x))
-  mat <- col_by_to_matrix(x)
-  old_names <- names(mat)
-  res <- cbind(mat, rep(TRUE, nrow(mat)))
-  names(res) <- c(old_names, label)
-  res
+#' todo: maybe remove N, but this does not give enough flexibility because col_by may be NULL
+by_add_total <- function(col_by, label = "total", n = NULL) {
+  if (is.null(col_by)) {
+    mat <- data.frame(rep(TRUE, n))
+    colnames(mat) <- label
+    mat
+  } else {
+    stopifnot(is.data.frame(col_by) || is.factor(col_by))
+    mat <- col_by_to_matrix(col_by)
+    n <- nrow(mat)
+    old_names <- colnames(mat)
+    res <- cbind(mat, rep(TRUE, n))
+    colnames(res) <- c(old_names, label)
+    res
+  }
 }
 
 #' Do not split data into columns in \code{rtabulate}

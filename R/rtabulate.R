@@ -255,6 +255,7 @@ rtabulate.factor <- function(x,
     warning("'' levels were turned into level -")
   }
   
+  columns <- levels(x)
   rtabulate(as.data.frame(x), 
             row_by = x, 
             col_by = col_by, 

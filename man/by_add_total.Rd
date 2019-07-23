@@ -4,12 +4,14 @@
 \alias{by_add_total}
 \title{Adds column to matrix that corresponds to taking all entries (column of all TRUE)}
 \usage{
-by_add_total(x, label = "total")
+by_add_total(col_by, label = "total", n = NULL)
 }
 \arguments{
-\item{x}{factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}}
+\item{col_by}{factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}}
 
 \item{label}{label of new column}
+
+\item{n}{number of rows in data vector, e.g. \code{length(x)}, useful when col_by can also be NULL}
 }
 \value{
 new matrix with one column added
@@ -22,4 +24,5 @@ x <- factor(c("a", "b", "a", "a", "b"))
 mat <- by_factor_to_matrix(x)
 by_add_total(mat, label = "tot")
 by_add_total(x, label = "tot")
+todo: maybe remove N, but this does not give enough flexibility because col_by may be NULL
 }
