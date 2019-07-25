@@ -114,6 +114,32 @@
 
 
 
+
+## second reference table
+##
+##                        ARM1                       ARM2
+##                 Var          PctDiff       Var           PctDiff
+##
+##  Baseline
+##       n         20                         40
+##     median      5                          10                
+##
+##  Followup
+##       n        12              12          30            30
+##     median     8               60          5             -50
+
+
+## Note the variables analyzed are in the **columns** here
+##
+## df (minus labeling cols)
+##
+## var   valtype    r1value    ARM1___Var  ARM1___PctDiff    ARM2___Var   ARM2____PctDiff   rsp_1   csp_1   csp1_type  csp_2    csp2_type
+## NA    n          Baseline   20          NA                40           NA                visit   ARM     value      NA       var_analyzed
+## NA    median     Baseline    5          NA                10           NA                visit   ARM     value      NA       var_analyzed     
+## NA    n          Followup   12          12                30           30                visit   ARM     value      NA       var_analyzed
+## NA    median     Followup    8          60                 5           -50               visit   ARM     value      NA       var_analyzed     
+
+
 ## returns a (flat) list of TableRow objects
 ## Note  that trow_to_dfrow will result in
 ## different numbers of columns for different

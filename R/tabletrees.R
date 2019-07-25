@@ -1,3 +1,45 @@
+
+##Split types
+## variable: split on distinct values of a variable
+## all: include all observations (root 'split')
+## rawcut: cut on static values of a variable
+## quantilecut: cut on quantiles of observed values for a variable
+## missing: split obs based on missingness of a variable/observation. This could be used for compare to baseline??
+## multicolumn: each child analyzes a different column
+## arbitrary: children are not related to eachother in any systematic fashion.
+
+
+setOldClass("expression")
+setClassUnion("SubsetDef", c("expression", "logical", "integer", "numeric"))
+
+setClass("Split", contains = "VIRTUAL",
+         representation(
+             children = "list",
+             type = "character",
+             variable = "character",
+             subset = "SubsetDef",
+             branches_in_parents = "list"))
+setClass("VarSplit", contains = "Split",
+         representation(value = "ANY"))
+
+VarSplit = function(var, val, prevsubset = expression(TRUE))
+{
+    ## see .makesubsetexpr and .combine_subset_expr
+    ## currently in df_to_tt.R
+    subexpr = .combine_subset_exprs(prevsubset,
+                                    .makesubsetexpr(var, val))
+
+    new("VarSplit", type = "variable",
+        variable = var,
+        value = val,
+        subset = 
+
+
+
+}
+
+
+
 setClass("VNodeInfo", contains = "VIRTUAL", representation(level = "integer", label = "character"))
 setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"), representation(children = "list"))
 setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"),
@@ -204,8 +246,13 @@ setOldClass("function")
 setOldClass("NULL")
 setClassUnion("FunctionOrNULL", c("function", "NULL"))
 
-setOldClass("expression")
-setClassUnion("LayoutSubsetDef", c("expression", "logical", "integer", "numeric"))
+
+setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"),
+         representation(subset = "LayoutSubsetDef"))
+## Careful here. Is this multiple-inheritence ok?
+setClass("VLayoutTree", contains = c("VIRTUAL", "VTtree", "VLayoutNode"))
+         
+        
 
 
 setClass("LayoutAxisTree", contains= "VTree",
@@ -218,6 +265,7 @@ setClass("LayoutAxisTree", contains= "VTree",
 setClass("LayoutAxisLeaf", contains = "VNodeInfo",
          representation(func = "function",
                         subset = "LayoutSubsetDef"))
+
 
 setClass("LayoutColTree", contains = "LayoutAxisTree")
 ##setClass("LayoutColBranch", contains = "LayoutAxisBranch")
