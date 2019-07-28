@@ -24,7 +24,7 @@ x can be NULL if col_by is not of class by_all
 returns transformed col_by as a matrix
 }
 \examples{
-col_by <- c("a", "b", "a", "a", "b")
+col_by <- factor(c("a", "b", "a", "a", "b"))
 col_by <- col_by_to_matrix(col_by)
 col_by_to_matrix(by_all("tot"), 1:5)
 }

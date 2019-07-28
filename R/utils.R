@@ -18,9 +18,15 @@ num_all_equal <- function(x, tol = .Machine$double.eps ^ 0.5) {
 all_true <- function(lst, fcn) {
   all(vapply(lst, fcn, TRUE))
 }
+is.logical.single <- function(x) {
+  !is.null(x) &&
+    is.logical(x) &&
+    length(x) == 1 &&
+    !is.na(x)
+}
 is.logical.vector_modif <- function(x, min_size = 1) {
   !is.null(x) &&
     is.atomic(x) &&
     length(x) >= min_size &&
-    all_true(x, utils.nest::is.logical.single)
+    all_true(x, is.logical.single)
 }

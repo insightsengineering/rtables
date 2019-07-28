@@ -357,13 +357,13 @@ ncell <- function(rrow) {
 }
 
 
-# todo: This must be properly implemented, we have these functions for the transition phase.
 #' Create an empty rtable
+#' todo: This must be properly implemented, we have these functions for the transition phase.
 #'
 #' @export
 empty_rtable <- function() {
-  # we add "rtable" for inheritance so that checks with is(x, "rtable") work
-  #todo: we don't currently do the inheritance because not all functions work with it yet
+  # we add "rtable" for inheritance so that checks with is(x, "rtable") work and S3 method dispatching works
+  #todo: not all functions are working with empty rtable yet, please double check
   structure("empty rtable", class = c("empty_rtable", "rtable"))
 }
 

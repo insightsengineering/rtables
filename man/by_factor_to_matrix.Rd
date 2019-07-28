@@ -18,5 +18,5 @@ where factor equals this factor level
 }
 \examples{
 x <- factor(c("a", "b", "a", "a", "b"))
-by_factor_to_matrix(x)
+rtables:::by_factor_to_matrix(x)
 }

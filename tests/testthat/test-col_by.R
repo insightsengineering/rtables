@@ -1,13 +1,13 @@
 context("test-col_by")
 
 test_that("by_factor_to_matrix works", {
-  x <- factor(c("a", "b", "a", "a", "b"))
+  x <- with_label(factor(c("a", "b", "a", "a", "b")), "exampleLabel")
   expect_equal(
     by_factor_to_matrix(x),
-    data.frame(
+    structure(data.frame(
       a = c(TRUE, FALSE, TRUE, TRUE, FALSE), 
       b = c(FALSE, TRUE, FALSE, FALSE, TRUE)
-    )
+    ), label = "exampleLabel")
   )
 })
 

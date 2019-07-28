@@ -7,7 +7,7 @@
 by_add_total(col_by, label = "total", n = NULL)
 }
 \arguments{
-\item{col_by}{factor or matrix to add column to, e.g. output of \code{\link{by_factor_to_matrix}}}
+\item{col_by}{factor or matrix to add column to, e.g. output of \code{\link{col_by_to_matrix}}}
 
 \item{label}{label of new column}
 
@@ -21,14 +21,14 @@ Adds column to matrix that corresponds to taking all entries (column of all TRUE
 }
 \examples{
 x <- factor(c("a", "b", "a", "a", "b"))
-mat <- by_factor_to_matrix(x)
+mat <- col_by_to_matrix(x)
 by_add_total(mat, label = "tot")
 by_add_total(x, label = "tot")
-todo: maybe remove N, but this does not give enough flexibility because col_by may be NULL
+
+if (requireNamespace("testthat", quietly = TRUE)) {
+  library(dplyr)
+  mat \%>\% by_add_total(label = "tot")
+}
 
 by_add_total(NULL, "total", n = 3)
-
-library(random.cdisc.data)
-ADSL <- cadsl # radsl(N = 100, seed = 1)
-ADSL$ARM \%>\% by_add_total("All Patients")
 }

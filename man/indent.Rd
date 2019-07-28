@@ -4,13 +4,15 @@
 \alias{indent}
 \title{Change indentation of all rrows in an rtable}
 \usage{
-indent(x, by = 1)
+indent(x, by = 1, truncate_at_zero = FALSE)
 }
 \arguments{
 \item{x}{\code{\link{rtable}} object}
 
 \item{by}{integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
 indentation is set to 0.}
+
+\item{truncate_at_zero}{whether to truncate indent at zero or raise an error}
 }
 \description{
 Change indentation of all rrows in an rtable
@@ -37,6 +39,6 @@ mtbl <- rtable(
 )
 indent(mtbl)
 indent(mtbl, 2)
-indent(mtbl, -3)
+indent(mtbl, -3, truncate_at_zero = TRUE)
 
 }

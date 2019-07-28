@@ -6,6 +6,9 @@
 \usage{
 by_all(name)
 }
+\arguments{
+\item{name}{name of column in col_by (either in factor or in matrix)}
+}
 \value{
 col_by matrix
 }

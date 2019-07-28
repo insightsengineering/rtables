@@ -68,11 +68,13 @@ rbind.rtable <- function(..., gap = 0) {
 #' 
 #' @param x a list of rtable objects
 #' @inheritParams rbind.rtable
+#' @param check_headers whether to check that headers of involved rtables are identical
+#'   this may lead to performance problems
 #' 
 #' @export
 #' 
 #' @importFrom purrr compact
-rbindl_rtables <- function(x, gap = 0) {
+rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
   stopifnot(is.list(x))
   x <- compact(x[!vapply(x, is_empty_rtable, logical(1))])
   if (length(x) == 0) {
@@ -103,10 +105,19 @@ rbindl_rtables <- function(x, gap = 0) {
     unlist(x, recursive = FALSE)
   }
   
-  # todo: check that headers are all the same
-  # stopifnot(all(vapply(x[is_rtable], function(tbl) {
-  #   identical(header(tbl), header(x[[1]]))
-  # }, logical(1))))
+  # commented out for performance reasons
+  stopifnot(!check_headers) # todo: currently not working because headers have attributes in random order -> identical not working
+  #nolintr start
+  # if (check_headers) {
+  #   stopifnot(all(vapply(
+  #     x[is_rtable], 
+  #     function(tbl) {
+  #       identical(header(tbl), header(x[[1]]))
+  #     }, 
+  #     logical(1)
+  #   ))) 
+  # }
+  #nolintr end
   ref_header <- header(x[[ which(is_rtable)[[1]] ]])  
   class(tbl) <- "rtable"
   attr(tbl, "header") <- ref_header

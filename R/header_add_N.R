@@ -27,7 +27,7 @@ header_add_N <- function(x, N) {
   stopifnot(length(N) == ncol(x))
   
   header(x) <- rheader(
-    header(x)[[1]], # todo: why is it a list: can there be multiple headers?
+    header(x)[[1]], # todo: also work for multi-line headers
     rrowl("", N, format = "(N=xx)")
   )
   x

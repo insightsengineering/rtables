@@ -11,8 +11,6 @@
 #'
 #' @return rtable
 #'
-#' @template author_waddella
-#'
 #' @noRd
 #'
 #' @examples
@@ -101,34 +99,16 @@ unlist_rtables <- function(x) {
   
 }
 
-# todo: document what this is doing
-shift_label_table <- function(tbl, term) {
-  t_grade <- rtablel(rheader(rrow("", "."), rrow("", "Grade")), c(lapply(row.names(tbl), function(xi) rrow("", xi))))
-  attr(t_grade[[1]], "row.name") <- term
-  cbind_rtables(t_grade, tbl)
-}
-
-
-row_names_as_col <- function(tbl, header_label) {
-  
-  nr_h <- nrow(header(tbl))
-  
-  if (missing(header_label)) {
-    header_label <- rep("", nr_h)
-  } else if (length(header_label) != nr_h) {
-    stop("dimension mismatch")
-  }
-  
-  h <- do.call(rheader, lapply(header_label, function(x) rrow("", x)))
-  
-  tbl_rn <- rtablel(header = h, c(lapply(row.names(tbl), function(xi) rrow("", xi))))
-  cbind_rtables(tbl_rn, tbl)
-}
-
 
 #' insert rrows at a specific location
 #'
-#' @noRd
+#' @param tbl rtable
+#' @param rrow rrow to append to rtable
+#' @param at position into which to put the rrow, defaults to beginning
+#' 
+#' @return rtable
+#' 
+#' @export
 #'
 #' @examples
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
@@ -165,7 +145,11 @@ insert_rrow <- function(tbl, rrow, at = 1) {
 }
 
 #' cbind two rtables
-#' @noRd
+#' 
+#' @param x table 1
+#' @param y table 2
+#' 
+#' @export
 #'
 #' @examples
 #' x <- rtable(c("A", "B"), rrow("x row 1", 1,2), rrow("x row 2", 3, 4))
@@ -193,11 +177,16 @@ cbind_rtables <- function(x, y) {
   rtablel(header, body)
 }
 
+#' Combines two lists of rrows to a list of rrows
+#' 
+#' @param x first list of rows, row.names are taken from this list
+#' @param y second list
+#' 
+#' @return list of combined rows
+#' 
 combine_rrows <- function(x, y) {
-  
   Map(function(xi, yi) {
     #todo: optionally check row names are the same
     rrowl(attr(xi, "row.name"), c(xi, yi))
   }, x, y)
-  
 }

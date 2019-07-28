@@ -26,7 +26,6 @@ label <- function(x) {
 #' @examples
 #' x <- with_label(c(1,2,3), label = "Test")
 #' label(x)
-#' # todo: rename to with_column_label, same for functions below
 with_label <- function(x, label) {
   attr(x, "label") <- label
   x
