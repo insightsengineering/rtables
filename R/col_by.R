@@ -6,8 +6,6 @@
 #' 
 #' @return matrix of size length(x) times nlevels(x)
 #' 
-#' @export
-#' 
 #' @examples 
 #' x <- factor(c("a", "b", "a", "a", "b"))
 #' by_factor_to_matrix(x)
@@ -21,6 +19,55 @@ by_factor_to_matrix <- function(x) {
   res <- data.frame(res)
   colnames(res) <- levels(x) # doing this after data.frame call makes sure that special chars are preserved
   res
+}
+
+#' Convert a col_by to a factor, works for factors and matrices
+#' 
+#' This is the opposite of the function \code{\link{col_by_to_matrix}}. Only works when columns of matrix are disjoint.
+#' 
+#' 
+#' @param x matrix or factor
+#' 
+#' @return factor
+#' 
+#' @export
+#' 
+#' @examples 
+#' col_by_to_factor(data.frame(
+#' x1 = c(TRUE, TRUE, FALSE, FALSE),
+#' x2 = c(FALSE, FALSE, TRUE, FALSE),
+#' x3 = c(FALSE, FALSE, FALSE, TRUE)
+#' ))
+col_by_to_factor <- function(x) {
+  if (is.factor(x)) {
+    return(x)
+  }
+  stopifnot(is.data.frame(x))
+  if (!all(rowSums(x) - 1 == 0)) {
+    stop(paste("Columns are not disjoint in ", x))
+  }
+  f <- rep(-1, nrow(x))
+  for (i in seq_along(x)) {
+    f[x[, i]] <- colnames(x)[[i]]
+  }
+  factor(f, levels = colnames(x))
+}
+
+#' Drop empty columns from matrix-version of by
+#' 
+#' @param by factor or matrix
+#' 
+#' @return matrix with dropped columns
+#' 
+#' @export
+#' 
+#' @examples 
+#' by <- factor(c("a", "b"), levels = c("a", "b", "c"))
+#' col_by_to_matrix(by)
+#' by_drop_empty_cols(by)
+by_drop_empty_cols <- function(by) {
+  by <- col_by_to_matrix(by)
+  by[, vapply(by, any, logical(1)), drop = FALSE]
 }
 
 #' Converts col_by to matrix if needed (if it is a factor)
@@ -49,6 +96,8 @@ col_by_to_matrix <- function(col_by, x = NULL) {
     res <- data.frame(rep(TRUE, `if`(is.data.frame(x), nrow(x), length(x))))
     colnames(res) <- col_by
     res
+    #stopifnot(!is.null(attr(col_by, "n"))) # you must set n because col_by is empty
+    #data.frame(rep(TRUE, attr(col_by, "n")))
   } else {
     stop(paste("unknown class to convert", class(col_by)))
   }
@@ -78,6 +127,12 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 #' by_add_total(mat, label = "tot")
 #' by_add_total(x, label = "tot")
 #' todo: maybe remove N, but this does not give enough flexibility because col_by may be NULL
+#' 
+#' by_add_total(NULL, "total", n = 3)
+#' 
+#' library(random.cdisc.data)
+#' ADSL <- cadsl # radsl(N = 100, seed = 1)
+#' ADSL$ARM %>% by_add_total("All Patients")
 by_add_total <- function(col_by, label = "total", n = NULL) {
   if (is.null(col_by)) {
     mat <- data.frame(rep(TRUE, n))
@@ -94,20 +149,34 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
   }
 }
 
-#' Do not split data into columns in \code{rtabulate}
+#' Select all rows
 #' 
-#' \code{\link{rtabulate}} has the argument \code{col_by}
-#' which can either take a factor, a data frame. To select all rows, use
-#' \code{by_all} which is equivalent to selecting all rows
+#' This is the analog to \code{\link{by_add_total}} to start a dplyr pipeline.
 #' 
-#' @param name character column name to display in the table header
+#' @return col_by matrix
 #' 
 #' @export
 #' 
 #' @examples 
-#' 
-#' rtabulate(iris$Species, col_by = by_all("Total"))
-
+#' by_all("total")
+#' col_by_to_matrix(by_all("total"), x = 1:3)
 by_all <- function(name) {
   structure(name, class = "by_all")
 }
+
+# headers is a list of rows to insert at the top of the table
+hierarchical_col_by <- function(by_lst) {
+  # old: to simplify, we only accept factors for now
+  subres <- hierarchical_col_by(by_lst[-1])
+  by <- col_by_to_matrix(by_lst[1])
+  list(
+    headers = rbind(
+      rrowl(
+        row.name = label(by), lapply(colnames(by), function(col_name) rcell(col_name, colspan = ncell(subres$headers[[1]])))),
+      Reduce(combine_rrows, lapply(by, function(discard) subres$headers))
+    ), 
+    col_by = cbind(lapply(by, function(rows) cbind(lapply(subres$col_by, function(subrows) (rows & subrows)))))
+  )
+}
+#by_lst <- list(factor(c("M", "M", "F", "F", "F")), factor(c("O", "Y", "Y", "Y", "Y")))
+#hierarchical_col_by(by_lst)

@@ -23,8 +23,6 @@
 #' header_add_N(tbl, 1:3)
 #' 
 header_add_N <- function(x, N) {
-  if (is.null(x)) return(NULL)
-  
   stopifnot(is(x, "rtable"))
   stopifnot(length(N) == ncol(x))
   

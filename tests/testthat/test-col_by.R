@@ -55,3 +55,25 @@ test_that("col_by_to_matrix works", {
   )
 })
 
+test_that("col_by_to_factor works", {
+  x <- factor(c("a", "b", "a", "a", "b"))
+  expect_equal(col_by_to_factor(x), x)
+  expect_equal(col_by_to_factor(col_by_to_matrix(x)), x)
+  expect_equal(
+    col_by_to_factor(data.frame(
+      x1 = c(TRUE, TRUE, FALSE, FALSE),
+      x2 = c(FALSE, FALSE, TRUE, FALSE),
+      x3 = c(FALSE, FALSE, FALSE, TRUE)
+    )),
+    factor(c("x1", "x1", "x2", "x3"))
+  )
+  
+  expect_error(
+    col_by_to_factor(data.frame(
+      x1 = c(TRUE, TRUE, TRUE, FALSE),
+      x2 = c(FALSE, FALSE, TRUE, FALSE),
+      x3 = c(FALSE, FALSE, FALSE, TRUE)
+    )),
+    "not disjoint"
+  )
+})

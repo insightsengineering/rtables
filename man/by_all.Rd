@@ -2,19 +2,17 @@
 % Please edit documentation in R/col_by.R
 \name{by_all}
 \alias{by_all}
-\title{Do not split data into columns in \code{rtabulate}}
+\title{Select all rows}
 \usage{
 by_all(name)
 }
-\arguments{
-\item{name}{character column name to display in the table header}
+\value{
+col_by matrix
 }
 \description{
-\code{\link{rtabulate}} has the argument \code{col_by}
-which can either take a factor, a data frame. To select all rows, use
-\code{by_all} which is equivalent to selecting all rows
+This is the analog to \code{\link{by_add_total}} to start a dplyr pipeline.
 }
 \examples{
-
-rtabulate(iris$Species, col_by = by_all("Total"))
+by_all("total")
+col_by_to_matrix(by_all("total"), x = 1:3)
 }

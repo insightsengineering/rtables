@@ -13,4 +13,13 @@ rbindl_rtables(x, gap = 0)
 }
 \description{
 See \code{\link{rbind.rtable}} for details
+The difference is that this function takes a list of rtables as an argument whereas
+rbind.rtable takes a list of arguments (...), each corresponding to an rtable.
+}
+\details{
+empty rtables list elements are filtered out at first.
+To bind rtables, you must make sure that the list contains at least one rtable and the header
+of the first rtable will be taken. (Note that every rtable must contain a header). We do not test
+that all rtable headers are identical for performance reasons.
+When the list has zero length, return an empty rtable
 }

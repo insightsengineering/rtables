@@ -357,6 +357,42 @@ ncell <- function(rrow) {
 }
 
 
+# todo: This must be properly implemented, we have these functions for the transition phase.
+#' Create an empty rtable
+#'
+#' @export
+empty_rtable <- function() {
+  # we add "rtable" for inheritance so that checks with is(x, "rtable") work
+  #todo: we don't currently do the inheritance because not all functions work with it yet
+  structure("empty rtable", class = c("empty_rtable", "rtable"))
+}
 
+#' If rtable is empty
+#'
+#' @param x object
+#'
+#' @return if rtable is empty
+#'
+#' @export
+is_empty_rtable <- function(x) {
+  is(x, "empty_rtable")
+}
 
+#' Whether object is an rtable
+#' 
+#' @param x object
+#' 
+#' @export
+is_rtable <- function(x) {
+  is(x, "rtable") #|| is(x, "empty_rtable")
+}
+
+#' Whether object is anon-empty rtable
+#' 
+#' @param x object
+#' 
+#' @export
+is_non_empty_rtable <- function(x) {
+  is(x, "rtable") && !is(x, "empty_rtable")
+}
 

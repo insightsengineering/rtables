@@ -25,4 +25,10 @@ mat <- by_factor_to_matrix(x)
 by_add_total(mat, label = "tot")
 by_add_total(x, label = "tot")
 todo: maybe remove N, but this does not give enough flexibility because col_by may be NULL
+
+by_add_total(NULL, "total", n = 3)
+
+library(random.cdisc.data)
+ADSL <- cadsl # radsl(N = 100, seed = 1)
+ADSL$ARM \%>\% by_add_total("All Patients")
 }

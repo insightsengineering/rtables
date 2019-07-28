@@ -6,6 +6,7 @@
 #' @param x \code{\link{rtable}} object
 #' @param by integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
 #'   indentation is set to 0.
+#' @param truncate_at_zero whether to truncate indent at zero or raise an error
 #' 
 #' @export
 #' 
@@ -31,14 +32,20 @@
 #' )
 #' indent(mtbl)
 #' indent(mtbl, 2)
-#' indent(mtbl, -3)
+#' indent(mtbl, -3, truncate_at_zero = TRUE)
 #' 
-indent <- function(x, by = 1) {
-  stopifnot(is(x, "rtable"))
+indent <- function(x, by = 1, truncate_at_zero = FALSE) {
+  stopifnot(is_rtable(x))
   stopifnot(length(by) == 1, is.numeric(by))
+  stopifnot(is.logical(truncate_at_zero))
+  
+  if (is_empty_rtable(x)) {
+    return(x)
+  }
   
   for (i in 1:nrow(x)) {
     ind <- attr(x[[i]], "indent")
+    stopifnot(truncate_at_zero || (ind + by >= 0))
     attr(x[[i]], "indent") <- max(0, ind + by)
   }
   x

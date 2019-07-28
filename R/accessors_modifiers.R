@@ -82,7 +82,7 @@ indented_row.names <- function(x, spaces = 2) {
 
   nr <- nrow(x)
   
-  if (length(value) != nr) stop("dimension missmatch")
+  if (length(value) != nr) stop("dimension mismatch")
   
   for (i in seq_along(x)) {
     attr(x[[i]], "row.name") <- value[i]

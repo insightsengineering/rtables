@@ -30,7 +30,7 @@ rtabulate <- function(x, ...) {
 rtabulate_default <- function(x, col_by = by_all("col_1"), FUN, ...,
                               format = NULL, row.name = "", indent  = 0,
                               col_wise_args = NULL) {
-  
+  stopifnot(is.atomic(x)) # x[rows] only works for factors, not for data.frames
   force(FUN)
   col_by <- col_by_to_matrix(col_by, x)
   check_colwise_args(col_by, col_wise_args)
@@ -352,7 +352,7 @@ rtabulate.data.frame <- function(x,
                                  indent = 0,
                                  col_wise_args = NULL) {
   
-  force(FUN)
+  force(FUN) #todo: remove this everywhere as it is bad style
   row_by <- col_by_to_matrix(row_by, x)
   col_by <- col_by_to_matrix(col_by, x)
   check_colwise_args(col_by, col_wise_args)
