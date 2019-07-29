@@ -14,6 +14,7 @@ NULL
 #' rtables:::by_factor_to_matrix(x)
 by_factor_to_matrix <- function(x) {
   stopifnot(is.factor(x))
+  stopifnot(!any(is.na(x)))
   res <- matrix(FALSE, nrow = length(x), ncol = nlevels(x))
   colnames(res) <- levels(x)
   for (level in levels(x)) {
