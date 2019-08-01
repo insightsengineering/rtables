@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^\.travis\.yml$
+^\.httr-oauth$

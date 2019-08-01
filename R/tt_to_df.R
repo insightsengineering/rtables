@@ -202,8 +202,8 @@ trow_to_dfrow = function(trow) {
     names(cspvarlbl) = paste0("csplbl_", seq_along(cspvar))
     
     
-    ret = as.list(c(var = trow@var_analyzed, ##a_var(trow),
-                    varlbl = trow@var_label,
+    ret = as.list(c(row_var = row_variable(trow),
+                    varlbl = rowvar_label(trow), 
                     valtype = trow@value_type,
                     rowlbl = trow@label,
                     rsvalues,
