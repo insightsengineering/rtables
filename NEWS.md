@@ -1,5 +1,8 @@
 # rtables next release
 
+* `cbing_rtables`
+* `col_by` in `rtabulate` now accepts matrices. `col_by_to_matrix`
+
 ## rtables 0.1.2
 
 * `rbind.rtable` now supports binding rtables with rows, e.g. `rbind(tbl1, rrow(), tbl2)` or `rbind(tbl1, rrow("row name"), tbl2)`.

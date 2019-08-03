@@ -25,11 +25,6 @@ by_factor_to_matrix <- function(x) {
   with_label(res, label(x))
 }
 
-# removeAttributes <- function(x) {
-#   attributes(x) <- NULL
-#   x
-# }
-
 #' Convert a col_by to a factor, works for factors and matrices
 #' 
 #' This is the opposite of the function \code{\link{col_by_to_matrix}}. Only works when columns of matrix are disjoint.
@@ -93,7 +88,8 @@ by_drop_empty_cols <- function(by) {
 #' 
 #' @examples 
 #' col_by <- factor(c("a", "b", "a", "a", "b"))
-#' col_by <- col_by_to_matrix(col_by)
+#' col_by
+#' col_by_to_matrix(col_by)
 #' col_by_to_matrix(by_all("tot"), 1:5)
 col_by_to_matrix <- function(col_by, x = NULL) {
   #todo: rename col_by_to_matrix to by_to_matrix, similarly for col_by_to_factor

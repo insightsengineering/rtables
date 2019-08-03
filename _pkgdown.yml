@@ -20,6 +20,7 @@ reference:
     - rheader
     - rtablel
     - rrowl
+    - empty_rtable
   - title: Cell Formatting related Functions
     contents:
     - sprintf_format
@@ -35,6 +36,7 @@ reference:
     - dim.rtable
     - rbind.rtable
     - rbindl_rtables
+    - cbind_rtables
     - header
     - header<-
     - dim.rheader
@@ -44,13 +46,22 @@ reference:
     - unlist.rtable
     - unlist.rcell
     - unlist.rrow
+    - insert_rrow
+    - is_empty_rtable
+    - is_non_empty_rtable
+    - is_rtable
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
     contents:
     - starts_with("rtabulate")
-    - no_by
-    - is.no_by
-    - levels.no_by
+    - by_add_total
+    - by_all
+    - by_drop_empty_cols
+    - by_factor_to_matrix
+    - col_by_to_factor
+    - by_hierarchical
+    - col_by_to_matrix
+    - combine_rrows
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
     contents:
