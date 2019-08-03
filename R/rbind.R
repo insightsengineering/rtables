@@ -73,10 +73,9 @@ rbind.rtable <- function(..., gap = 0) {
 #' 
 #' @export
 #' 
-#' @importFrom purrr compact
 rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
   stopifnot(is.list(x))
-  x <- compact(x[!vapply(x, is_empty_rtable, logical(1))])
+  x <- x[!vapply(x, is_empty_rtable, logical(1))]
   if (length(x) == 0) {
     return(empty_rtable())
   }
