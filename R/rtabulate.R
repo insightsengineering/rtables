@@ -187,10 +187,13 @@ rtabulate.logical <- function(x, col_by = by_all("col_1"),
 #' @inherit rtabulate return
 #' 
 #' @export
-#'
+#' @importFrom purrr transpose
+#' 
 #' @examples 
 #' 
 #' rtabulate(x = iris$Species)
+#' rtabulate(x = iris$Species, useNA = "always")
+#' rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
 #' 
 #' rtabulate(x = iris$Species, by_all("sum"))
 #' 
@@ -224,27 +227,25 @@ rtabulate.logical <- function(x, col_by = by_all("col_1"),
 #'   FUN = function(x, N) list(length(x), N),
 #'   col_wise_args = list(N = c(1,2))
 #' )
-#' 
-#' @importFrom purrr transpose
+#'
+#'  
 rtabulate.factor <- function(x,
-                             col_by = by_all("col_1"), 
+                             col_by = by_all("All"), 
                              FUN = length,
                              ...,
-                             useNA = c("no", "ifany", "always"),
+                             useNA = c("ifany", "no", "always"),
                              format = NULL,
                              indent  = 0,
                              col_wise_args = NULL) {
   
   useNA <- match.arg(useNA)
   
-  if (any("<NA>" %in% levels(x))) stop("factor with level '<NA>' is not valid in rtabulate.factor")
-  
-  if (useNA %in% c("ifany", "always")) {
-    if (useNA == "always" || any(is.na(x))) {
-      levels(x) <- c(levels(x), "<NA>")
-      x[is.na(x)] <- "<NA>"
-    }
-  } 
+  if (any("<NA>" %in% levels(x))) {
+    stop("factor with level '<NA>' is not valid in rtabulate.factor") 
+  }
+  has_na <- any(is.na(x))
+  levels(x) <- c(levels(x), "<NA>")
+  x[is.na(x)] <- "<NA>"
   
   ## note that splitting with empty-string creates a un-named list element
   if (any(levels(x) == "")) {
@@ -256,7 +257,7 @@ rtabulate.factor <- function(x,
   }
   
   columns <- levels(x)
-  rtabulate(as.data.frame(x), 
+  tbl <- rtabulate(as.data.frame(x), 
             row_by = x, 
             col_by = col_by, 
             FUN = FUN, 
@@ -265,6 +266,13 @@ rtabulate.factor <- function(x,
             col_wise_args = col_wise_args,
             ...
   )
+  
+  if (useNA == "always" || useNA == "ifany" && has_na) {
+    tbl
+  } else {
+    tbl[-nrow(tbl), ]
+  }
+
 }
 
 
