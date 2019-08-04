@@ -25,8 +25,8 @@ setMethod("make_subset_expr", "character",
 })
 
 .combine_subset_exprs = function(ex1, ex2) {
-    if(is.null(ex1) && is.expresssion(ex2))
-        return(exb2)
+    if(is.null(ex1) && is.expression(ex2))
+        return(ex2)
     
     stopifnot(is.expression(ex1), is.expression(ex2))
     as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))

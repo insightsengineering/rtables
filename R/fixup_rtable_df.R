@@ -54,9 +54,13 @@
     rspcols = .rsvar_colnames(df)
     ncols = length(rspcols)
     typcols = paste0("rsptype_", seq_along(rspcols))
-    for(tc in typcols) {
-        if(is.null(df[[tc]]))
-            df[[tc]] = "varlevels"
+    for(i in seq_along(rspcols)) {
+        tc = typcols[i]
+        if(is.null(df[[ tc ]])) {
+            df[[tc]] = NA_character_
+            df[[tc]][!is.na(df[[ rspcols[i] ]])] = "varlevels"
+        }
+            
     }
     df
 }
@@ -65,9 +69,13 @@
     cspcols = .csvar_colnames(df)
     ncols = length(cspcols)
     typcols = paste0("csptype_", seq_along(cspcols))
-    for(tc in typcols) {
-        if(is.null(df[[tc]]))
-            df[[tc]] = "varlevels"
+    for(i in seq_along(cspcols)) {
+        tc = typcols[i]
+        if(is.null(df[[ tc ]])) {
+            df[[tc]] = NA_character_
+            df[[tc]][!is.na(df[[ cspcols[i] ]])] = "varlevels"
+        }
+            
     }
     df
 }

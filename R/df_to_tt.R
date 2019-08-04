@@ -29,6 +29,10 @@ cs_lbl_pat = "^csplbl_[0-9]+$"
 cspan_col = "c__colspans__c"
 rspan_col_pat = "^rspan_col_[0-9]+$"
 
+avar_col = "rowvar"
+avarlbl_col = "rowvarlbl"
+rowlbl_col = "rowlbl"
+
 
 .rsvar_colnames = function(df) 
     grep(rsvar_pat, names(df), value = TRUE)
@@ -71,6 +75,7 @@ na_to_sentinel = function(v) {
 
 df_to_tt = function(df) {
     stopifnot(nrow(df) > 0)
+    df = fixup_rtable_df(df)
     tab = recursive_split(df, 1)
     #layout = recursive_layout(df, 1)
     tab
@@ -78,11 +83,11 @@ df_to_tt = function(df) {
 
 
 varsplit = function(df, level = 0L) {
-    if(anyNA(df$var)) stop("got NA var where I shouldn't have")
-    grp = cumsum(c(FALSE, head(df$var, -1) != tail(df$var, - 1)))
+    if(anyNA(df[[avar_col]])) stop("got NA var where I shouldn't have")
+    grp = cumsum(c(FALSE, head(df[[avar_col]], -1) != tail(df[[avar_col]], - 1)))
     dfspl = split(df, grp)
     lapply(dfspl, function(dat) {
-        lbl = unique(dat$varlbl)
+        lbl = unique(dat$rowvarlbl)
         stopifnot(length(lbl) == 1)
         dfrows_to_table(dat, lvl = level, label = lbl, cont = NULL)
     })
@@ -123,7 +128,7 @@ varsplit = function(df, level = 0L) {
 .get_rsvalue_vec = function(df, i) {
     mycols = .get_rscols_helper(df, i, rsvalue_pat, NA)
     if(is.na(mycols) || length(mycols) == 0)
-        return(mycols)
+        return(as.list(mycols))
     
     lapply(mycols,
            function(x) {
@@ -135,7 +140,7 @@ varsplit = function(df, level = 0L) {
 
 .get_rstype_vec = function(df, i) {
     
-    mycols = .get_rscols_helper(df, i, rsvartype_pat, NA_character_)
+    mycols = .get_rscols_helper(df, i, rstype_pat, NA_character_)
     if(is.na(mycols) || length(mycols) == 0)
         return(mycols)
     
@@ -175,14 +180,14 @@ varsplit = function(df, level = 0L) {
     }, character(1))
 }
 
-.get_ravar = function(df) { unique(df$var)}
+.get_ravar = function(df) { unique(df[[avar_col]])}
 
-.get_ravar_lbl = function(df) { unique(df$varlbl)}
+.get_ravar_lbl = function(df) { unique(df[[avarlbl_col]])}
 
-.get_val_type = function(df) { unique(df$valtype)}
+.get_val_type = function(df) { unique(df$rowvaltype)}
 
 recursive_split = function(df, i = 1L) {
-    df = .fixup_df_crspans(df)
+ 
     
     rsplval = paste0("r", i, "value")
     rspl = paste0("rsp_", i)
@@ -191,23 +196,24 @@ recursive_split = function(df, i = 1L) {
     rsplblcol = paste0("rsplbl_",  i)
     ## remember, that e.g., r2value CANNOT be non-NA if r1value is NA
     if(! (rsplval %in% names(df)) || all(is.na(df[[rsplval]]))) { # no more levels to split on
-        cinds = which(is.na(df$var))
+        cinds = which(is.na(df[[avar_col]]))
         stopifnot(length(cinds) == 0 || length(cinds) == 1)
 
 
         if(rsplblcol %in% names(df))
             tlab = unique(df[[rsplblcol]])
         else
-            tlab = unique(df[["varlbl"]])
+            tlab = unique(df[[avarlbl_col]])
     
         if(length(cinds) > 0) {
             cdf = df[cinds,]
-            ctab = dfrows_to_table(cdf, levl, label = cdf$rowlbl)
+            ctab = dfrows_to_table(cdf, levl, label = cdf$rowlbl,
+                                   iscontent = TRUE)
             df = df[-cinds,]
             ## XXX I think this is wrong
             ##tlab  =  cdf$rowlbl
         } else {
-            ctab = ElementaryTable()
+            ctab = ElementaryTable(iscontent = TRUE)
             ## XXX I think this is wrong
           
             
@@ -220,26 +226,18 @@ recursive_split = function(df, i = 1L) {
             l = levl + 1L
         }
         kids = varsplit(df, level = l) ##tree_children(rows_to_el_table(df, levl+1L))
-
-        ## ret = TableTree(cont = ctab, kids = kids,
-        ##                 lev = levl, lab  = tlab,
-        ##                 rs_vars = .get_rsvar_vec(df, levl),
-        ##                 rs_var_lbls = .get_rs_lbls(df, levl),
-                        
-        ##                 rs_values = .get_rsvalue_vec(df, levl),
-        ##                 rs_value_lbls = .get_rsvalue_lbls(df, levl))
-        
     } else  {
         tlab = unique(df[[rsplblcol]])
-        cinds = which(is.na(df[[rsplval]]) & is.na(df$var))
+        cinds = which(is.na(df[[rsplval]]) & is.na(df[[avar_col]]))
         if(length(cinds) > 1) stop()
         if(length(cinds)) {
             cdf = df[cinds,]
             ctab = dfrows_to_table(df[cinds,], lvl = levl,
-                                    label = cdf$rowlbl)
+                                   label = cdf$rowlbl,
+                                   iscontent = TRUE)
             df = df[-cinds,]
         } else {
-            ctab  = ElementaryTable()
+            ctab  = ElementaryTable(iscontent = TRUE)
         }
         vkey = na_to_sentinel(df[[rsplval]])
         ## declaring levels this way ensures they aren't sorted in a way we don't want.
@@ -249,19 +247,28 @@ recursive_split = function(df, i = 1L) {
         ## for the splitting factor
         spl = split(df, vkey)
         kids = lapply(spl, recursive_split, i = i+1)
-        ## ret = TableTree(cont = ctab,
-        ##                 kids = kids,
-        ##                 lev = levl,
-        ##                 rs_vars = .get_rsvar_vec(df, levl),
-        ##                 rs_values = .get_rsvalue_vec(df, levl))
     }
-
+    tpos = .tpos_from_dfrows(df, levl, iscontent = FALSE)
+    thisspl = .nextsplit_from_drows(df, levl)
+    vuniq = .get_ravar(df)
+    if(all(is.na(vuniq)) || length(vuniq) > 1) {
+        var = NA_character_
+        varlbl = NA_character_
+    } else {
+        var = vuniq
+        varlbl = .get_ravar_lbl(df)
+    }
     ret = TableTree(cont = ctab, kids = kids,
                     lev = levl, lab  = tlab,
-                    rs_vars = .get_rsvar_vec(df, levl),
-                    rs_var_lbls = .get_rs_lbls(df, levl),
-                    rs_values = .get_rsvalue_vec(df, levl),
-                    rs_value_lbls = .get_rsvalue_lbls(df, levl))
+                    tpos = tpos,
+                    spl = thisspl,
+                    iscontent = FALSE,
+                    var = var,
+                    var_lbl = varlbl,
+                    ## FIXME this is gonna be needlessly called
+                    ## a bunch of times so if its slow, fix this
+                    clayout = dfrow_to_clayout(df[1,])
+                    )
     
     ret
 }
@@ -374,63 +381,74 @@ dfrow_to_clayout = function(dfrow) {
                        c(strsplit(datcols, "___"),
                          stringsAsFactors = FALSE))
     names(csplvals) = unlist(dfrow[, paste0("csp_", 1:ncspl)])
-    csplvals = cbind.data.frame(csplvals, dfrow[,grep("csptype_", names(dfrow))])
+    cstypedf = dfrow[,.csvartype_colnames(dfrow)]
+    row.names(cstypedf) = NULL
+    csplvals = cbind.data.frame(csplvals, cstypedf)
     recursive_build_clayout(csplvals)
 }
 
 
+.stripNA = function(v) {
+    v[!is.na(v)]
+}
 
-.tpos_from_dfrows = function(rows, lvl) {
-    rsvars = .get_rsvar_vec(rows, lvl)
-    rstypes = .get_rstype_vec(rows, lvl)
-    rsvalues = .get_rsvalue_vec(rows, lvl)
-    rsvallbls = .get_rsvalue_lbls(rows, lvl)
-    rslbls = .get_rs_lbls(rows, lvl)
+.tpos_from_dfrows = function(rows, lvl, iscontent = NULL) {
+    rsvars = .stripNA(.get_rsvar_vec(rows, lvl))
+    rstypes = .stripNA(.get_rstype_vec(rows, lvl))
+    rsvalues = .stripNA(.get_rsvalue_vec(rows, lvl))
+    rsvallbls = .stripNA(.get_rsvalue_lbls(rows, lvl))
+    rslbls = .stripNA(.get_rs_lbls(rows, lvl))
     spls = mapply(Split, var = rsvars,
                   type = rstypes,
                   lbl = rslbls)
-    TreePosition(spls, rsvalues, expression())
+    if(is.null(iscontent))
+        TreePos(spls, rsvalues, expression())
+    else
+        TableTreePos(spls = spls, svals  = rsvalues, svlbls = rsvallbls,
+                     sub = expression(), iscontent = iscontent)
 }
 
-dfrows_to_table = function(df, lvl, label = "", cont = NULL) {
+## lvl is the level we're currently at, we're  effectively looking
+## for what the split will be at curlvl +1
+.nextsplit_from_drows = function(rows, curlvl) {
+    targlvl = curlvl + 1L
+    tp = .tpos_from_dfrows(rows[1,], targlvl)
+    allspls = pos_splits(tp)
+    if(length(allspls) >= targlvl)
+        allspls[[targlvl]]
+    else
+        NULLSplit()
+}
+
+dfrows_to_table = function(df, lvl, label = "", cont = NULL, iscontent = FALSE) {
     if(nrow(df) == 0)
         return(ElementaryTable())
     rowinds = seq(along = df[[1]])
+    tpos = .tpos_from_dfrows(df, lvl, iscontent)
+    spl = .nextsplit_from_drows(df, lvl)
     
     datacols = .data_colnames(df)
     kids = lapply(rowinds, function(i) {
+        rowpos = make_rowpos(tpos, i)
         TableRow(lev = lvl,
                  lab = as.character(df$rowlbl[i]),
                  val = as.list(df[i, datacols]),
-                 cspan = df$c__colspans__c[[i]],
+                 cspan = df[[cspan_col]][[i]],
                  ## is the clayout always constant in df? if so could move this out
                  ## I think it is, but why prematurely optimize?
                  clayout = dfrow_to_clayout(df[i,]),
-                 rs_vars = .get_rsvar_vec(df[i,], lvl),## - 1L),
-                 rs_var_lbls = .get_rs_lbls(df[i,], lvl),## - 1L),
-                 rs_values = .get_rsvalue_vec(df[i,], lvl),
-                 rs_value_lbls = .get_rsvalue_lbls(df[i,], lvl),
+                 tpos = rowpos,
                  var = .get_ravar(df),
                  var_lbl = .get_ravar_lbl(df),
                  v_type = .get_val_type(df)
                  )
     })
     rspan = df[,grep("rspan_col_", names(df))]
-    if(is.null(cont))
-        ElementaryTable(kids = kids, lev = lvl, lab = label, rspan = rspan,
-                        rs_vars = .get_rsvar_vec(df, lvl),
-                        rs_var_lbls = .get_rs_lbls(df, lvl),## - 1L),
-                        rs_values = .get_rsvalue_vec(df, lvl),
-                        rs_value_lbls = .get_rsvalue_lbls(df, lvl),
-                        var = .get_ravar(df),
-                        var_lbl = .get_ravar_lbl(df)
-                        )
-    else
-        TableTree(cont = cont, lev = lvl, lab = label, kids = kids, rspan = rspan,
-                  rs_vars = .get_rsvar_vec(df, lvl),
-                  rs_var_lbls = .get_rs_lbls(df, lvl),## - 1L),
-                  rs_values = .get_rsvalue_vec(df, lvl),
-                  rs_value_lbls = .get_rsvalue_lbls(df, lvl))
+    TableTree(cont = cont, kids = kids, lev = lvl,
+              lab = label, rspans = rspan,
+              tpos = tpos, spl = spl,
+              var = .get_ravar(df),
+              var_lbl = .get_ravar_lbl(df))
 }
 
 
@@ -484,3 +502,4 @@ layout_from_df = function(df) {
 ## }
 
     
+
