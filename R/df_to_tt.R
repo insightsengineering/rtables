@@ -184,7 +184,9 @@ varsplit = function(df, level = 0L) {
 
 .get_ravar_lbl = function(df) { unique(df[[avarlbl_col]])}
 
-.get_val_type = function(df) { unique(df$rowvaltype)}
+## XXX this was rowvaltype, but now its rowvartype are these different?
+## if so which is correct?
+.get_val_type = function(df) { unique(df$rowvartype)}
 
 recursive_split = function(df, i = 1L) {
  
@@ -299,9 +301,16 @@ recursive_split = function(df, i = 1L) {
     ret
 }
 
+
+.get_clbl_clodf = function(clodf, i) {
+    ret = unique(clodf[[paste0("csplbl_", i)]])
+    stopifnot(length(ret) == 1 && !is.na(ret))
+    ret
+}
+
 recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRUE), label = "") {
   
-    ndcols = min(grep("csptype_", names(clodf))) -1L
+    ndcols = min(grep("csplbl_", names(clodf))) -1L
     clodatdf = clodf[,1:ndcols]
     nuniqs  = sapply(clodatdf, function(x) length(unique(x)))
     if(all(nuniqs == 1))
@@ -309,9 +318,10 @@ recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRU
     else {
         firstvary = min(which(nuniqs  >  1))
         thistyp = .get_ctyp_clodf(clodf, firstvary)
+        thislbl = .get_clbl_clodf(clodf, firstvary)
         thiscolnm = names(clodf)[firstvary]
         ## TODO lbl
-        thisspl = Split(thiscolnm, thistyp, lbl = thiscolnm)
+        thisspl = Split(thiscolnm, thistyp, lbl = thislbl)
         
     }
     lastinvar = firstvary - 1L
@@ -323,15 +333,17 @@ recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRU
             ## unique() calls below are len 1 guaranteed
             payload = unique(clodf[[lastinvar]]) 
             typ = .get_ctyp_clodf(clodf,  lastinvar)
+            lbl = .get_clbl_clodf(clodf, lastinvar)
             ## TODO lbl value
-            newspl = Split(colnm, typ, lbl = colnm)
+            newspl = Split(colnm, typ, lbl = lbl)
             tpos = make_child_pos(parpos, newspl, payload)
         } else {
             tspls = lapply(1:lastinvar, function(i) {
                 colnm = names(clodf)[i]
                 payload = unique(clodf[[i]]) # this is len 1
                 typ = .get_ctype_clodf(clodf, i)
-                Split(colnm, typ, colnm)
+                lbl = .get_clbl_clodf(clodf, i)
+                Split(colnm, typ, lbl)
             })
             tspvals = lapply(1:lastinvar, function(i) {
                 unique(clodf[[i]]) # this is len 1
@@ -381,7 +393,8 @@ dfrow_to_clayout = function(dfrow) {
                        c(strsplit(datcols, "___"),
                          stringsAsFactors = FALSE))
     names(csplvals) = unlist(dfrow[, paste0("csp_", 1:ncspl)])
-    cstypedf = dfrow[,.csvartype_colnames(dfrow)]
+    cstypedf = dfrow[,c(.csvarlbl_colnames(dfrow),
+                        .csvartype_colnames(dfrow))]
     row.names(cstypedf) = NULL
     csplvals = cbind.data.frame(csplvals, cstypedf)
     recursive_build_clayout(csplvals)
@@ -397,15 +410,23 @@ dfrow_to_clayout = function(dfrow) {
     rstypes = .stripNA(.get_rstype_vec(rows, lvl))
     rsvalues = .stripNA(.get_rsvalue_vec(rows, lvl))
     rsvallbls = .stripNA(.get_rsvalue_lbls(rows, lvl))
+    if(length(rsvallbls) == 0)
+        rsvallbls = as.character(rsvalues)
+    
     rslbls = .stripNA(.get_rs_lbls(rows, lvl))
+    if(length(rslbls) == 0)
+        rslbls = vapply(rsvars, function(x) paste(x, collapse = ":"),
+                        character(1))
     spls = mapply(Split, var = rsvars,
                   type = rstypes,
                   lbl = rslbls)
+    sub = make_pos_subset(spls = spls,
+                          svals = rsvalues)
     if(is.null(iscontent))
-        TreePos(spls, rsvalues, expression())
+        TreePos(spls = spls, svals = rsvalues, svlbls = rsvallbls, sub =  sub)
     else
         TableTreePos(spls = spls, svals  = rsvalues, svlbls = rsvallbls,
-                     sub = expression(), iscontent = iscontent)
+                     sub = sub, iscontent = iscontent)
 }
 
 ## lvl is the level we're currently at, we're  effectively looking
@@ -438,9 +459,9 @@ dfrows_to_table = function(df, lvl, label = "", cont = NULL, iscontent = FALSE) 
                  ## I think it is, but why prematurely optimize?
                  clayout = dfrow_to_clayout(df[i,]),
                  tpos = rowpos,
-                 var = .get_ravar(df),
-                 var_lbl = .get_ravar_lbl(df),
-                 v_type = .get_val_type(df)
+                 var = .get_ravar(df[i,]),
+                 var_lbl = .get_ravar_lbl(df[i,]),
+                 v_type = .get_val_type(df[i,])
                  )
     })
     rspan = df[,grep("rspan_col_", names(df))]

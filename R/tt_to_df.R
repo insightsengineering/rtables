@@ -170,49 +170,64 @@ setMethod("recursive_row_collect", "TableRow",
     ttree
 })
 
+safepaste0 = function(bef, x, after = "") {
+    if(length(x) == 0)
+        return(character(0))
+
+    paste0(bef, x, after)
+}
+
+
+
+## 
+ploads_to_str = function(x, collapse = ":") sapply(x,
+                                                   paste,
+                                                   collapse = collapse)
+
+
+
+
 trow_to_dfrow = function(trow) {
-    nrowsplit = length(rs_values(trow))
-    rsvalues = rs_values(trow)
-    names(rsvalues) = paste0("r", seq_along(rsvalues), "value")
+    nrowsplit = length(pos_splits(trow))
+    rsvalues = pos_splvals(trow)
+    names(rsvalues) = safepaste0("r", seq_along(rsvalues), "value")
     datvals = trow@leaf_value ##leaf_values(trow)
     names(datvals) = df_datcol_names(trow)
-    rsvars = rs_vars(trow)
-    names(rsvars) = paste0("rsp_", seq_along(rsvars))
-    rsvarlbls = rs_var_lbls(trow)
-    names(rsvarlbls) = paste0("rsplbl_", seq_along(rsvarlbls))
-    rsvaluelbls = rs_value_lbls(trow)
-    names(rsvaluelbls) = paste0("r",
+    rsvars = ploads_to_str(pos_payloads(trow))
+    names(rsvars) = safepaste0("rsp_", seq_along(rsvars))
+    rsvarlbls = pos_split_lbls(trow)
+    names(rsvarlbls) = safepaste0("rsplbl_", seq_along(rsvarlbls))
+    rsvaluelbls = pos_splval_lbls(trow)
+    names(rsvaluelbls) = safepaste0("r",
                                 seq_along(rsvaluelbls),
                                 "vlbl")
-                                
-    cspvar = character()
-    cspvarlbl = character()
-    cl = clayout(trow)
-    tmp = cl
-    while(!is(tmp, "LayoutColLeaf")) {
-        cspvar = c(cspvar, tmp@splitvar)
-        tmplbl =  tmp@splitlbl
-        if(length(tmplbl) == 0 || is.na(tmplbl))
-            tmplbl = tmp@splitvar
-        
-        cspvarlbl = c(cspvarlbl, tmplbl)
-        tmp = tree_children(tmp)[[1]]
-    }
-    names(cspvar) = paste0("csp_", seq_along(cspvar))
-    names(cspvarlbl) = paste0("csplbl_", seq_along(cspvar))
+
+    rstypes = pos_spltypes(trow)
+    names(rstypes) = safepaste0("rsptype_", seq_along(rstypes))
+    clspls = clayout_splits(trow)
+    cspvar = ploads_to_str(lapply(clspls, spl_payload))
+    
+    cspvarlbl = sapply(clspls, spl_label)
+
+    csptypes = sapply(clspls, split_texttype)
+    names(cspvar) = safepaste0("csp_", seq_along(cspvar))
+    names(cspvarlbl) = safepaste0("csplbl_", seq_along(cspvar))
+    names(csptypes) = safepaste0("csptype_", seq_along(cspvar))
     
     
-    ret = as.list(c(row_var = row_variable(trow),
-                    varlbl = rowvar_label(trow), 
-                    valtype = trow@value_type,
+    ret = as.list(c(rowvar = row_variable(trow),
+                    rowvarlbl = rowvar_label(trow), 
+                    rowvartype = trow@value_type,
                     rowlbl = trow@label,
                     rsvalues,
                     rsvaluelbls,
                     datvals,
                     rsvars,
+                    rstypes,
                     rsvarlbls,
                     cspvar,
-                    cspvarlbl))
+                    cspvarlbl,
+                    csptypes))
     as.data.frame(ret, stringsAsFactors = FALSE)
 
 }
@@ -263,5 +278,6 @@ tt_to_df = function(ttree) {
 
     ret = do.call(rbind.data.frame, dfrws)
     rownames(ret) = seq_along(ret[[1]])
+    ret = cbind.data.frame(rownum = seq_along(ret[[1]]), ret)
     ret
 }

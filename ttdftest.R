@@ -4,8 +4,8 @@ dfrow = df[4,]
 library(rtables)
 dfrow_to_clayout(dfrow)
 res = df_to_tt(df)
-ls(res
 
+identical(df, tt_to_df(res))
 rws = recursive_row_collect(res)
 
 

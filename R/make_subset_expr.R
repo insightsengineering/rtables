@@ -32,3 +32,14 @@ setMethod("make_subset_expr", "character",
     as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
  
+
+make_pos_subset = function(spls = pos_splits(pos),
+                           svals = pos_splvals(pos),
+                           pos) {
+    expr = NULL
+    for(i in seq_along(spls)) {
+        newexpr = make_subset_expr(spls[[i]], svals[[i]])
+        expr = .combine_subset_exprs(expr, newexpr)
+    }
+    expr
+}

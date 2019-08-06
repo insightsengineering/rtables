@@ -79,14 +79,14 @@ Split = function(var, type, lbl) {
 TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = NULL) {
     if(is.null(sub)) {
         if(length(spls) > 0) {
-            for(i in 1:length(spls)) {
-                sub = .combine_subset_exprs(sub, make_subset_expr(spls[[i]], svals[[i]]))
-            }
+            sub = make_pos_subset(spls = spls,
+                                  svals = svals)
         } else {
             sub = expression(TRUE)
         }
     }
     new("TreePos", splits = spls, s_values = svals,
+        sval_labels = svlbls,
         subset = sub)
 }
 
@@ -96,7 +96,7 @@ make_child_pos = function(parpos, newspl, newval, newlab = newval) {
     newpos = TreePos(
         spls = c(pos_splits(parpos), newspl),
         svals = c(pos_splvals(parpos), newval),
-        svlbls = c(pos_spval_lbls(parpos), newlab),
+        svlbls = c(pos_splval_lbls(parpos), newlab),
         sub = .combine_subset_exprs(pos_subset(parpos),
                                     make_subset_expr(newspl, newval)))
 }
