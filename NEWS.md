@@ -3,7 +3,7 @@
 
 * `col_by` in `rtabulate` now accepts matrices
   - `col_by_to_matrix`, `col_by_to_factor`, `by_factor_to_matrix`, 
-  - `by_add_total`, `by_all`, `by_hierarchical`, `by_drop_empty_cols`
+  - `by_add_total`, `by_all`, `by_combine`, `by_quartile`, `by_compare_subset`,  `by_hierarchical`, `by_drop_empty_cols`
   
 * New utility functions to deal with variable lables
   - `label`, `var_labels<-`, `var_labels`, `var_labels_remove`, `var_relabel`, `with_label`

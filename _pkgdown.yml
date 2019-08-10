@@ -62,6 +62,9 @@ reference:
     - col_by_to_factor
     - by_add_total
     - by_all
+    - by_combine
+    - by_quartile
+    - by_compare_subset
     - by_drop_empty_cols
     - by_factor_to_matrix
 
@@ -77,6 +80,7 @@ reference:
     desc: These functions create ascii or html representations of the table
     contents:
     - toString.rtable
+    - toString.empty_rtable
     - as_html
     - as_html.default
     - as_html.rtable

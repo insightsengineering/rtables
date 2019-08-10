@@ -379,7 +379,7 @@ empty_rtable <- function() {
   )
 }
 
-#' Print an empty rtable
+#' convert an empty rtable to a string
 #' 
 #' @param x and \code{empty_rtable} object
 #' @param ... arguments not used
@@ -388,8 +388,8 @@ empty_rtable <- function() {
 #' 
 #' @examples 
 #' empty_rtable()
-print.empty_rtable <- function(x, ...) {
-  cat("empty rtable\n")
+toString.empty_rtable <- function(x, ...) {
+  "empty rtable"
 }
 
 #' If rtable is empty

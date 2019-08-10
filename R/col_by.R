@@ -174,6 +174,111 @@ by_all <- function(name) {
   structure(name, class = "by_all")
 }
 
+
+#' Combine levels
+#' 
+#' @inheritParams by_add_total
+#' @param ... a series of named character vectors
+#' 
+#' @export
+#' 
+#' @examples 
+#' # note partial arument matching, in this case col_by has to be written
+#' head(by_combine(col_by = iris$Species, a = c("setosa", "versicolor"),
+#'            b =  c("setosa", "virginica"), c = "setosa"))
+by_combine <- function(col_by, ...) {
+  lst <- list(...)
+  if (is.null(names(lst)) || any(names(lst) == "")) {
+    stop("named character vectors are required")
+  }
+  
+  mat <- col_by_to_matrix(col_by)
+  if (!all(unlist(lst) %in% names(mat))) {
+    stop("not all levels exist in col_by")
+  }
+   
+  as.data.frame(setNames(lapply(lst, function(levels) {
+    apply(mat[, levels, drop = FALSE], 1, any)
+  }), names(lst)))
+  
+}
+
+
+#' Cut by quartiles
+#' 
+#' @param x a numerical vector
+#' @param cumulative logical, if cumulative col_by should be returned
+#' 
+#' @importFrom stats quantile
+#' @export
+#' 
+#' @examples 
+#' head(by_quartile(iris$Sepal.Length))
+#' head(by_quartile(iris$Sepal.Length, TRUE))
+#' 
+#' rtabulate(x = iris$Sepal.Length, col_by = by_quartile(iris$Sepal.Width), 
+#'           FUN = mean, format = "xx.xx")
+#' 
+by_quartile <- function(x, cumulative = FALSE) {
+  stopifnot(is.numeric(x), is.logical.single(cumulative), !any(is.na(x)))
+  
+  fct <- cut(x, breaks = quantile(x, probs = c(0, 0.25, 0.5, 0.75, 1)), include.lowest=TRUE,
+             labels = c("[min, Q1]", "(Q1, Med]", "(Med, Q3]", "(Q3,  max]"))
+
+  mat <- col_by_to_matrix(fct)
+  
+  if (!cumulative) {
+    mat
+  } else {
+    data.frame(
+      "[min, Q1]" = mat[[1]],
+      "[min, Med]" = apply(mat[, 1:2], 1, any),
+      "[min, Q3]" = apply(mat[, 1:3], 1, any),
+      "[min, max]" = rep(TRUE, nrow(mat)),
+      check.names = FALSE
+    )
+  }
+}
+
+
+#' Compare Subset to Current col_by Levels
+#' 
+#' @inheritParams by_combine
+#' @param subset logical
+#' @param label_all character, label appended to level of \code{col_by}
+#' @param label_subset character, label appended to the subset of the corresponding level of \code{col_by}
+#' @param sep separator of new labels
+#' 
+#' 
+#' TODO: make hierarchical headers
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
+#'                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+#' 
+by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = "subset", sep = " - ") {
+  
+  mat <- col_by_to_matrix(col_by)
+  
+  stopifnot(is.logical(subset), nrow(mat) == length(subset), 
+            is.character(label_all), is.character(label_subset), is.character(sep))
+  
+  lst <- lapply(mat, function(x) {
+    list(
+      x,
+      x & subset
+    )
+  })
+  
+  df <- as.data.frame(do.call(`c`, lst))
+  names(df) <- paste(rep(names(mat), each = 2), rep(c(label_all, label_subset), ncol(mat)), sep = sep)
+  
+  df
+}
+
 #' Hierarchical col_by
 #' 
 #' @param ... factors or col_by matrices. When a by element in the list is a matrix, it allows for non-disjoint columns
