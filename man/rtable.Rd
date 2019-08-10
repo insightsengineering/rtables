@@ -2,7 +2,7 @@
 % Please edit documentation in R/rtable.R
 \name{rtable}
 \alias{rtable}
-\title{Create a Reporting Table}
+\title{Create a Table}
 \usage{
 rtable(header, ..., format = NULL)
 }
@@ -22,8 +22,8 @@ of a cell get pasted separated by a comma.}
 an \code{rtable} object
 }
 \description{
-Reporting tables allow multiple values per cell, cell formatting and merging
-cells. Currently an \code{rtable} can be converted to html and ascii.
+Reporting tables allow multiple values per cell, cell formatting and colspans.
+Currently an \code{rtable} can be converted to html and ascii.
 }
 \details{
 Rtable objects can be currently exported to text with

@@ -4,8 +4,8 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = by_all("col_1"), FUN = length,
-  ..., useNA = c("no", "ifany", "always"), format = NULL, indent = 0,
+\method{rtabulate}{factor}(x, col_by = by_all("All"), FUN = length,
+  ..., useNA = c("ifany", "no", "always"), format = NULL, indent = 0,
   col_wise_args = NULL)
 }
 \arguments{
@@ -48,6 +48,8 @@ each level of \code{x}.
 \examples{
 
 rtabulate(x = iris$Species)
+rtabulate(x = iris$Species, useNA = "always")
+rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
 
 rtabulate(x = iris$Species, by_all("sum"))
 
@@ -82,4 +84,5 @@ rtabulate(
   col_wise_args = list(N = c(1,2))
 )
 
+ 
 }

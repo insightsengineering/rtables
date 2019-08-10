@@ -106,9 +106,9 @@ row.names.rheader <- function(x) {
 
 
 
-#' Get column names of an \code{\link{rtable}} object
+#' Get content of first header row of an \code{\link{rtable}} object
 #' 
-#' Retrieve the column names of an \code{\link{rtable}} object
+#' Retrieve the content of the first header row of an \code{\link{rtable}} object
 #' 
 #' @inheritParams dim.rtable
 #' 

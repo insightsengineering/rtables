@@ -176,22 +176,22 @@ by_all <- function(name) {
 
 #' Hierarchical col_by
 #' 
-#' @param by_lst recursive list of bys (either factors or matrices)
-#'   when a by element in the list is a matrix, it allows for non-disjoint columns
+#' @param ... factors or col_by matrices. When a by element in the list is a matrix, it allows for non-disjoint columns
 #'
 #' todo: returned col_by column names are not correct
 #' 
 #' @return list(headers, col_by matrix) a list of labelled headers (one per row), col_by matrix corresponding to all combinations
 #' 
 #' @examples
-#' by_lst <- list(with_label(factor(c("M", "M", "F", "F", "F")), "Sex"))
-#' rtables:::by_hierarchical(by_lst)
-#' by_lst <- list(
-#'   with_label(factor(c("M", "M", "F", "F", "F")), "Sex"), 
-#'   with_label(factor(c("O", "Y", "Y", "Y", "Y")), "Age")
-#' )
-#' rtables:::by_hierarchical(by_lst)
-by_hierarchical <- function(by_lst) {
+#' SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
+#' AGEC <- with_label(factor(c("<40", ">40", "<40", ">40", "<40")), "Age Category")
+#' VAL <- c(5, 4, 4, 6, 2, 1)
+#' 
+#' rtables:::by_hierarchical(SEX)
+#' rtables:::by_hierarchical(SEX, AGEC)
+#' 
+by_hierarchical <- function(...) {
+  by_lst <- list(...)
   # old: to simplify, we only accept factors for now
   by <- col_by_to_matrix(by_lst[[1]])
   if (length(by_lst) == 1) {
@@ -200,7 +200,7 @@ by_hierarchical <- function(by_lst) {
       col_by = by
     )
   } else {
-    subres <- by_hierarchical(by_lst[-1])
+    subres <- do.call(by_hierarchical, by_lst[-1])
     list(
       headers = do.call(
         rheader,

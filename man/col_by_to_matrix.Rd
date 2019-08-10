@@ -25,6 +25,7 @@ returns transformed col_by as a matrix
 }
 \examples{
 col_by <- factor(c("a", "b", "a", "a", "b"))
-col_by <- col_by_to_matrix(col_by)
+col_by
+col_by_to_matrix(col_by)
 col_by_to_matrix(by_all("tot"), 1:5)
 }

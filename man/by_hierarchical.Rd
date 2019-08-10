@@ -4,11 +4,10 @@
 \alias{by_hierarchical}
 \title{Hierarchical col_by}
 \usage{
-by_hierarchical(by_lst)
+by_hierarchical(...)
 }
 \arguments{
-\item{by_lst}{recursive list of bys (either factors or matrices)
-  when a by element in the list is a matrix, it allows for non-disjoint columns
+\item{...}{factors or col_by matrices. When a by element in the list is a matrix, it allows for non-disjoint columns
 
 todo: returned col_by column names are not correct}
 }
@@ -19,11 +18,11 @@ list(headers, col_by matrix) a list of labelled headers (one per row), col_by ma
 Hierarchical col_by
 }
 \examples{
-by_lst <- list(with_label(factor(c("M", "M", "F", "F", "F")), "Sex"))
-rtables:::by_hierarchical(by_lst)
-by_lst <- list(
-  with_label(factor(c("M", "M", "F", "F", "F")), "Sex"), 
-  with_label(factor(c("O", "Y", "Y", "Y", "Y")), "Age")
-)
-rtables:::by_hierarchical(by_lst)
+SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
+AGEC <- with_label(factor(c("<40", ">40", "<40", ">40", "<40")), "Age Category")
+VAL <- c(5, 4, 4, 6, 2, 1)
+
+rtables:::by_hierarchical(SEX)
+rtables:::by_hierarchical(SEX, AGEC)
+
 }

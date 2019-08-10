@@ -1,7 +1,18 @@
-# rtables next release
 
-* `cbing_rtables`
-* `col_by` in `rtabulate` now accepts matrices. `col_by_to_matrix`
+## rtables 0.1.2.9000
+
+* `col_by` in `rtabulate` now accepts matrices
+  - `col_by_to_matrix`, `col_by_to_factor`, `by_factor_to_matrix`, 
+  - `by_add_total`, `by_all`, `by_hierarchical`, `by_drop_empty_cols`
+  
+* New utility functions to deal with variable lables
+  - `label`, `var_labels<-`, `var_labels`, `var_labels_remove`, `var_relabel`, `with_label`
+
+* Other new functions:
+  - `cbing_rtables`
+  - `empty_rtables`, `is_empty_rtable`, `is_non_empty_rtable`, `is_rtable`
+  - `indent`
+  - `insert_rrow`
 
 ## rtables 0.1.2
 

@@ -1,9 +1,9 @@
 
 
-#' Create a Reporting Table
+#' Create a Table
 #' 
-#' Reporting tables allow multiple values per cell, cell formatting and merging
-#' cells. Currently an \code{rtable} can be converted to html and ascii.
+#' Reporting tables allow multiple values per cell, cell formatting and colspans.
+#' Currently an \code{rtable} can be converted to html and ascii.
 #' 
 #' 
 #' @param header either a vector with column names or an object returned by
@@ -358,13 +358,38 @@ ncell <- function(rrow) {
 
 
 #' Create an empty rtable
+#' 
+#' 
 #' todo: This must be properly implemented, we have these functions for the transition phase.
 #'
 #' @export
+#' 
+#' @examples 
+#' empty_rtable()
 empty_rtable <- function() {
   # we add "rtable" for inheritance so that checks with is(x, "rtable") work and S3 method dispatching works
   #todo: not all functions are working with empty rtable yet, please double check
-  structure("empty rtable", class = c("empty_rtable", "rtable"))
+  
+  structure(
+    vector(mode = "list"),
+    header = vector(mode = "list"),
+    ncol = 0,
+    nrow = 0,
+    class = c("empty_rtable", "rtable")
+  )
+}
+
+#' Print an empty rtable
+#' 
+#' @param x and \code{empty_rtable} object
+#' @param ... arguments not used
+#' 
+#' @export
+#' 
+#' @examples 
+#' empty_rtable()
+print.empty_rtable <- function(x, ...) {
+  cat("empty rtable\n")
 }
 
 #' If rtable is empty

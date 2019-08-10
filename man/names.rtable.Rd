@@ -2,7 +2,7 @@
 % Please edit documentation in R/accessors_modifiers.R
 \name{names.rtable}
 \alias{names.rtable}
-\title{Get column names of an \code{\link{rtable}} object}
+\title{Get content of first header row of an \code{\link{rtable}} object}
 \usage{
 \method{names}{rtable}(x)
 }
@@ -13,5 +13,5 @@
 a vector with the column names
 }
 \description{
-Retrieve the column names of an \code{\link{rtable}} object
+Retrieve the content of the first header row of an \code{\link{rtable}} object
 }

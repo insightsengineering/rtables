@@ -21,11 +21,13 @@ reference:
     - rtablel
     - rrowl
     - empty_rtable
+
   - title: Cell Formatting related Functions
     contents:
     - sprintf_format
     - format_rcell
     - list_rcell_format_labels
+
   - title: Accessor and Modification Functions
     desc: Access and Modify Functions
     contents:
@@ -36,6 +38,7 @@ reference:
     - dim.rtable
     - rbind.rtable
     - rbindl_rtables
+    - combine_rrows
     - cbind_rtables
     - header
     - header<-
@@ -50,18 +53,18 @@ reference:
     - is_empty_rtable
     - is_non_empty_rtable
     - is_rtable
+
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
     contents:
     - starts_with("rtabulate")
+    - col_by_to_matrix
+    - col_by_to_factor
     - by_add_total
     - by_all
     - by_drop_empty_cols
     - by_factor_to_matrix
-    - col_by_to_factor
-    - by_hierarchical
-    - col_by_to_matrix
-    - combine_rrows
+
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
     contents:
@@ -69,6 +72,7 @@ reference:
     - sort_rrows
     - order_rtables
     - sort_rtables
+
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
@@ -76,6 +80,7 @@ reference:
     - as_html
     - as_html.default
     - as_html.rtable
+
   - title: Coercion Functions
     contents:
     - as.rtable
@@ -84,5 +89,15 @@ reference:
     contents:
     - Viewer
     - compare_rtables
+    - label
+    - var_labels<-
+    - var_labels
+    - var_labels_remove
+    - var_relabel
+    - with_label
 
+  - title: Under Development
+    desc: these functions are under development and not yet exported
+    contents:
+    - by_hierarchical
 
