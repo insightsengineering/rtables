@@ -11,7 +11,7 @@
 * Other new functions:
   - `cbing_rtables`
   - `empty_rtables`, `is_empty_rtable`, `is_non_empty_rtable`, `is_rtable`
-  - `indent`
+  - `header_indent`, `header_indent<-`, `header_row.names`, `header_row.names<-`
   - `insert_rrow`
 
 ## rtables 0.1.2
