@@ -13,6 +13,32 @@ setMethod("make_subset_expr", "MultiVarSplit",
     as.expression(bquote(!is.na(.(a)), list(a = val)))
 })
 
+setMethod("make_subset_expr", "AnalyzeVarSplit",
+          function(spl, val) {
+    as.expression(bquote(!is.na(.(a)),
+                         list(a = as.name(spl_payload(spl)))))
+})
+
+## XXX these are going to be ridiculously slow
+## FIXME
+
+setMethod("make_subset_expr", "VarStaticCutSplit",
+          function(spl, val) {
+    as.expression(bquote(cut(.(a)) == .(b)),
+                  list(a = as.name(spl_payload(spl)),
+                       b = val))
+})
+
+setMethod("make_subset_expr", "VarDynCutSplit",
+          function(spl, val) {
+    as.expression(bquote(.(fun)(.(a)) == .(b)),
+                  list(a = as.name(spl_payload(spl)),
+                       b = val,
+                       fun = spl@cut_fun))
+})
+
+
+
 ## probably don't need this
 
 setMethod("make_subset_expr", "expression",

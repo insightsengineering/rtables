@@ -31,44 +31,119 @@ setClass("TreePos", representation(splits = "list",
 ##                         is_content = "logical",
 ##                         local_rownum = "numeric"))
                         
+setClassUnion("functionOrNULL", c("function", "NULL"))
 
 setClass("Split", contains = "VIRTUAL",
          representation(
              payload = "character",
              ## type = "character",
-             split_label = "character"))
+             split_label = "character",
+             content_fun = "functionOrNULL"))
+
+
+
 setClass("VarLevelSplit", contains = "Split",
-         representation())
+         representation(value_lbl_var = "character"))
 
-VarLevelSplit = function(var, lbl )
-    new("VarLevelSplit", payload = var, split_label = lbl)
-
+VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL) {
+    if(is.null(valuelblvar))
+        valuelblvar = var
+    new("VarLevelSplit", payload = var, split_label = splbl,
+        value_lbl_var = valuelblvar,
+        content_fun = cfun)
+}
 setClass("NULLSplit", contains = "Split",
          validity = function(object) {
 length(object@payload) == 0 && length(object@split_label) == 0})
  
 NULLSplit = function(...) {
     ## only(!!) valid instantiation of NULLSplit class
-    new("NULLSplit", payload = character(), split_label = character())
+    new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL)
+}
+
+setClass("AllSplit", contains = "Split",
+         validity = function(object) length(object@payload) == 0
+         )
+
+AllSplit = function(splbl = "", cfun = NULL,  ...) {
+    new("AllSplit", split_label = splbl,
+        content_fun = cfun)
 }
 
 
-## splits across which variables are being analyzed
+## splits across which variables are being analynzed
 setClass("MultiVarSplit", contains = "Split",
-         validity = function(object) length(object@payload) > 1 && all(!is.na(object@payload)))
+         representation(var_labels = "character"),
+         validity = function(object) length(object@payload) > 1 && all(!is.na(object@payload)) && length(object@payload) == length(object@var_labels))
 
 
-MultiVarSplit = function(vars, lbl) {
+MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL) {
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
-    new("MultiVarSplit", payload = vars, split_label = lbl)
+    if(length(varlbls) == 0) ## covers NULL and character()
+       varlbls = vars
+    new("MultiVarSplit", payload = vars, split_label = splbl,
+        var_labels = varlbls, content_fun = cfun)
 }
 
-Split = function(var, type, lbl) {
+
+setClass("VarStaticCutSplit",
+         representation(cuts = "numeric",
+                        cut_labels = "character"))
+
+VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL) {
+    if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+       is.character(cuts[[2]]) &&
+       length(cuts[[1]]) == length(cuts[[2]])) {
+        cutlbls = cuts[[2]]
+        cuts = cuts[[1]]
+    }
+    if(is.unsorted(cuts, strictly = TRUE))
+        stop("invalid cuts vector. not sorted unique values.")
+    
+    if(is.null(cutlbls) && !is.null(names(cuts)))
+        cutlbls = names(cuts)
+    new("VarStaticCutSplit", payload = var,
+        split_label = splbl,
+        cuts = cuts,
+        cut_labels = cutlbls,
+        content_fun = cfun)
+}
+
+## cut_funct must take avector and no other arguments
+## and return a named vector of cut points
+setClass("VarDynCutSplit",
+         representation(cut_fun = "function"))
+                        
+VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL) {
+    new("VarDynCutSplit", payload = var,
+        split_label = splbl,
+        cut_fun = cutfun,
+        content_fun = cfun)
+}
+
+setClass("AnalyzeVarSplit",
+         representation(analysis_fun = "function"))
+
+AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL) {
+    new("AnalyzeVarSplit",
+        payload = var,
+        split_label = splbl,
+        content_fun = cfun,
+        analysis_fun = afun)
+}
+
+
+
+        
+Split = function(var, type, lbl, cfun = NULL,  extra = NULL) {
     switch(type,
-           varlevels = VarLevelSplit(var, lbl),
-           multivar = MultiVarSplit(var, lbl),
+           varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun),
+           multivar = MultiVarSplit(var, lbl, extra, cfun = cfun),
            null = NULLSplit(),
+           all = AllSplit(splbl = lbl, cfun = cfun),
+           staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun),
+           dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun),
            stop("Don't know how to make a split of type ", type)
            )
 }
@@ -100,7 +175,6 @@ make_child_pos = function(parpos, newspl, newval, newlab = newval) {
         sub = .combine_subset_exprs(pos_subset(parpos),
                                     make_subset_expr(newspl, newval)))
 }
-
 
 
 
@@ -314,54 +388,6 @@ TableTree = function(cont = ElementaryTable(),
 
 
 
-docat = function(obj) {
-    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
-        crows = nrow(obj@content)
-        ccols = if(crows == 0) 0 else ncol(obj@content)
-        cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
-                                         obj@content@label,
-                                         crows, ccols),
-            sep = "")
-        
-    }
-    if(is(obj, "VTableTree") && length(tree_children(obj))) {
-        kids = tree_children(obj)
-        isr = which(sapply(kids, is, "TableRow"))
-        ## can they ever be inteerspersed, I don't think so
-        if(length(isr)) {
-            r = kids[[isr[1]]]
-            lv = r@level
-            if(is.na(lv)) lv = 0
-            cat(rep("*", lv),
-                sprintf(" %s [%d x %d] \n",
-                        obj@label,
-                        length(kids),
-                        length(r@leaf_value)),
-                sep="")
-            kids = kids[-isr]
-        }
-        lapply(kids, docat)
-    }
-}
-    
-setMethod("show", "TableTree",
-          function(object) {
-    cat("\nA TableTree object\n")
-    docat(object)
-    
-})
-
-setMethod("show", "ElementaryTable",
-          function(object) {
-    cat("\nAn ElementaryTableTree object\n")
-    docat(object)
-    
-})
-
-
-
-
-
 ##
 ## LayoutAxisTree classes 
 ##
@@ -471,56 +497,57 @@ rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
     }
 }
 
-spldesc = function(spl, value = "") {
-    payloadmsg = switch(class(spl),
-                        VarLevelSplit = spl@payload,
-                        MultiVarSplit = "variable",
-                        stop("dunno"))
-    fmt = "%s (%s)"
-    sprintf(fmt,
-            value,
-            payloadmsg)
-            
-
-}
 
 
-
-docatlayout = function(obj) {
-    if(!is(obj, "VLayoutNode"))
-        stop("how did a non layoutnode object get in docatlayout??")
-
-    pos = tree_pos(obj)
-    spllst = pos_splits(pos)
-    spvallst = pos_splvals(pos)
-    if(istree <- is(obj, "LayoutAxisTree")) {
-        kids = tree_children(obj)
-        lapply(kids, docatlayout)
-        return(NULL)
-        
-    }
-    
-    msg = paste(collapse = " -> ",
-                mapply(spldesc, 
-                       spl = spllst,
-                       value = spvallst))
-    cat(msg,
-        "\n")
-    NULL
-}
-
-
-
-
-
-
-setMethod("show", "LayoutAxisTree",
-          function(object) {
-    docatlayout(object)
-    invisible(object)
-
-
-
-
-
+setClass("SplitVector", contains="list",
+         validity = function(object) {
+    all(sapply(object, is, "Split"))
 })
+
+SplitVector = function(x = AllSplit(),
+                       ...,
+                       lst = list(x, ...)) {
+    new("SplitVector", lst)
+}
+
+avar_noneorlast = function(vec) {
+    isavar = which(sapply(vec, is, "AnalyzeVarSplit"))
+    (length(isavar) == 0) || (length(isavar) == 1 && isavar == length(vec))
+}
+
+setClass("PreDataAxisLayout", contains = "list",
+         validity = function(object) {
+     allleafs = unlist(object, recursive = TRUE)
+     all(sapply(object, is, "SplitVector")) && all(sapply(allleafs, is, "Split")) && all(sapply(object, avar_noneorlast))
+})
+
+
+
+setClass("PreDataColLayout", contains = "PreDataAxisLayout")
+setClass("PreDataRowLayout", contains = "PreDataAxisLayout")
+
+PreDataColLayout = function(x = SplitVector(),
+                            ...,
+                            lst = list(x, ...)) {
+    new("PreDataColLayout", lst)
+}
+
+
+PreDataRowLayout = function(x = SplitVector(),
+                            ...,
+                            lst = list(x, ...)) {
+    new("PreDataRowLayout", lst)
+}
+
+
+setClass("PreDataTableLayouts",
+         representation(row_layout = "PreDataRowLayout",
+                        col_layout = "PreDataColLayout"))
+
+PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
+                               clayout = PreDataColLayout()) {
+    new("PreDataTableLayouts",
+        row_layout = rlayout,
+        col_layout = clayout)
+}
+        

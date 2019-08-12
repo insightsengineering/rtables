@@ -1,0 +1,160 @@
+
+docat = function(obj) {
+    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
+        crows = nrow(obj@content)
+        ccols = if(crows == 0) 0 else ncol(obj@content)
+        cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
+                                         obj@content@label,
+                                         crows, ccols),
+            sep = "")
+        
+    }
+    if(is(obj, "VTableTree") && length(tree_children(obj))) {
+        kids = tree_children(obj)
+        isr = which(sapply(kids, is, "TableRow"))
+        ## can they ever be inteerspersed, I don't think so
+        if(length(isr)) {
+            r = kids[[isr[1]]]
+            lv = r@level
+            if(is.na(lv)) lv = 0
+            cat(rep("*", lv),
+                sprintf(" %s [%d x %d] \n",
+                        obj@label,
+                        length(kids),
+                        length(r@leaf_value)),
+                sep="")
+            kids = kids[-isr]
+        }
+        lapply(kids, docat)
+    }
+}
+    
+setMethod("show", "TableTree",
+          function(object) {
+    cat("\nA TableTree object\n")
+    docat(object)
+    
+})
+
+setMethod("show", "ElementaryTable",
+          function(object) {
+    cat("\nAn ElementaryTableTree object\n")
+    docat(object)
+    
+})
+
+
+
+spldesc = function(spl, value = "") {
+    payloadmsg = switch(class(spl),
+                        VarLevelSplit = spl@payload,
+                        MultiVarSplit = "variable",
+                        stop("dunno"))
+    fmt = "%s (%s)"
+    sprintf(fmt,
+            value,
+            payloadmsg)
+            
+
+}
+
+
+docatlayout = function(obj) {
+    if(!is(obj, "VLayoutNode"))
+        stop("how did a non layoutnode object get in docatlayout??")
+
+    pos = tree_pos(obj)
+    spllst = pos_splits(pos)
+    spvallst = pos_splvals(pos)
+    if(istree <- is(obj, "LayoutAxisTree")) {
+        kids = tree_children(obj)
+        lapply(kids, docatlayout)
+        return(NULL)
+        
+    }
+    
+    msg = paste(collapse = " -> ",
+                mapply(spldesc, 
+                       spl = spllst,
+                       value = spvallst))
+    cat(msg,
+        "\n")
+    NULL
+}
+
+setMethod("show", "LayoutAxisTree",
+          function(object) {
+    docatlayout(object)
+    invisible(object)
+})
+
+
+setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
+
+setMethod("spltype_abbrev", "VarLevelSplit",
+          function(obj) "lvls")
+
+setMethod("spltype_abbrev", "MultiVarSplit",
+          function(obj) "vars")
+
+setMethod("spltype_abbrev", "VarStaticCutSplit",
+          function(obj) "scut")
+
+setMethod("spltype_abbrev", "VarDynCutSplit",
+          function(obj) "dcut")
+setMethod("spltype_abbrev", "AllSplit",
+          function(obj) "all obs")
+setMethod("spltype_abbrev", "NULLSplit",
+          function(obj) "no obs")
+
+           
+
+
+docat_splitvec = function(object, indent = 0) {
+    if(indent > 0)
+        cat(rep(" ", times = indent), sep = "")
+
+    plds = ploads_to_str(lapply(object, spl_payload))
+    tabbrev = sapply(object, spltype_abbrev)
+    msg = paste(collapse = " -> ",
+                paste0(plds, " (", tabbrev, ")"))
+    cat(msg, "\n")
+}
+
+setMethod("show", "SplitVector",
+          function(object) {
+
+    cat("A SplitVector Pre-defining a Tree Structure\n\n")
+    docat_splitvec(object)
+    cat("\n")
+    invisible(object)
+})
+
+
+docat_predataxis = function(object, indent = 0) {
+    lapply(object, docat_splitvec)
+}
+
+setMethod("show", "PreDataColLayout",
+          function(object) {
+    cat("A Pre-data Column Layout Object\n\n")
+    docat_predataxis(object)
+})
+
+
+setMethod("show", "PreDataRowLayout",
+          function(object) {
+    cat("A Pre-data Row Layout Object\n\n")
+    docat_predataxis(object)
+})
+
+
+setMethod("show", "PreDataTableLayouts",
+          function(object) {
+    cat("A Pre-data Table Layout\n")
+    cat("\nColumn-Split Structure:\n")
+    docat_predataxis(object@col_layout)
+    cat("\nRow-Split Structure:\n")
+    docat_predataxis(object@row_layout)
+    cat("\n")
+})

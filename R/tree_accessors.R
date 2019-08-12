@@ -71,6 +71,7 @@ setMethod("clayout_splits", "VTableNodeInfo",
           function(obj) clayout_splits(clayout(obj)))
 
 
+
 ## setGeneric("rs_values", function(obj) standardGeneric("rs_values"))
 
 ## setMethod("rs_values", "VTableNodeInfo",
@@ -96,6 +97,31 @@ setGeneric("clayout", function(obj) standardGeneric("clayout"))
 setMethod("clayout", "VTableNodeInfo",
           function(obj) obj@col_layout)
 
+setMethod("clayout", "PreDataTableLayouts",
+          function(obj) obj@col_layout)
+
+
+setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
+setMethod("clayout<-", "PreDataTableLayouts",
+          function(object, value) {
+    object@col_layout = value
+    object
+})
+
+
+
+setGeneric("rlayout", function(obj) standardGeneric("rlayout"))
+
+setMethod("rlayout", "PreDataTableLayouts",
+          function(obj) obj@row_layout)
+
+setGeneric("rlayout<-", function(object, value) standardGeneric("rlayout<-"))
+setMethod("rlayout<-", "PreDataTableLayouts",
+          function(object, value) {
+    object@row_layout = value
+    object
+})
+
 
 setGeneric("df_datcol_names", function(obj) standardGeneric("df_datcol_names"))
 setMethod("df_datcol_names",
@@ -109,6 +135,8 @@ setMethod("df_datcol_names", "LayoutColTree",
     ret[inds] = gsub("___$",  "", ret[inds])
     ret
 })
+
+
 setMethod("df_datcol_names", "LayoutColLeaf",
           function(obj) "")
 
