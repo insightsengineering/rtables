@@ -23,13 +23,11 @@
 #' header_add_N(tbl, 1:3)
 #' 
 header_add_N <- function(x, N) {
-  if (is.null(x)) return(NULL)
-  
-  is(x, "rtable") || stop("x is expected to be an rtable")
-  length(N) == ncol(x) || stop("dimension missmatch")
+  stopifnot(is(x, "rtable"))
+  stopifnot(length(N) == ncol(x))
   
   header(x) <- rheader(
-    header(x)[[1]],
+    header(x)[[1]], # todo: also work for multi-line headers
     rrowl("", N, format = "(N=xx)")
   )
   x

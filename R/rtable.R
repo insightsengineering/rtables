@@ -1,9 +1,9 @@
 
 
-#' Create a Reporting Table
+#' Create a Table
 #' 
-#' Reporting tables allow multiple values per cell, cell formatting and merging
-#' cells. Currently an \code{rtable} can be converted to html and ascii.
+#' Reporting tables allow multiple values per cell, cell formatting and colspans.
+#' Currently an \code{rtable} can be converted to html and ascii.
 #' 
 #' 
 #' @param header either a vector with column names or an object returned by
@@ -357,6 +357,67 @@ ncell <- function(rrow) {
 }
 
 
+#' Create an empty rtable
+#' 
+#' 
+#' todo: This must be properly implemented, we have these functions for the transition phase.
+#'
+#' @export
+#' 
+#' @examples 
+#' empty_rtable()
+empty_rtable <- function() {
+  # we add "rtable" for inheritance so that checks with is(x, "rtable") work and S3 method dispatching works
+  #todo: not all functions are working with empty rtable yet, please double check
+  
+  structure(
+    vector(mode = "list"),
+    header = vector(mode = "list"),
+    ncol = 0,
+    nrow = 0,
+    class = c("empty_rtable", "rtable")
+  )
+}
 
+#' convert an empty rtable to a string
+#' 
+#' @param x and \code{empty_rtable} object
+#' @param ... arguments not used
+#' 
+#' @export
+#' 
+#' @examples 
+#' empty_rtable()
+toString.empty_rtable <- function(x, ...) {
+  "empty rtable"
+}
 
+#' If rtable is empty
+#'
+#' @param x object
+#'
+#' @return if rtable is empty
+#'
+#' @export
+is_empty_rtable <- function(x) {
+  is(x, "empty_rtable")
+}
+
+#' Whether object is an rtable
+#' 
+#' @param x object
+#' 
+#' @export
+is_rtable <- function(x) {
+  is(x, "rtable") #|| is(x, "empty_rtable")
+}
+
+#' Whether object is anon-empty rtable
+#' 
+#' @param x object
+#' 
+#' @export
+is_non_empty_rtable <- function(x) {
+  is(x, "rtable") && !is(x, "empty_rtable")
+}
 

@@ -2,7 +2,8 @@ Package: rtables
 Title: Reporting Tables
 Version: 0.1.2.9000
 Authors@R: c(
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
+  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut")
   )
 Description: Reporting tables are useful to create formated tables with cells that
   display multiple values. An rtable object will provide access to all the raw data
@@ -11,8 +12,10 @@ Depends:
 Imports:
   stats,
   methods,
-  htmltools
+  htmltools,
+  purrr
 Suggests:
+  dplyr,
   testthat,
   knitr
 License: Apache License 2.0 | file LICENSE
@@ -22,3 +25,21 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
 BugReports: https://github.com/roche/rtables/issues
+Collate: 
+    'Viewer.R'
+    'accessors_modifiers.R'
+    'as_html.R'
+    'coercion.R'
+    'utils.R'
+    'col_by.R'
+    'compare_rtables.R'
+    'for_rtables.R'
+    'format_rcell.R'
+    'header_add_N.R'
+    'indent.R'
+    'labels.R'
+    'rbind.R'
+    'rtable.R'
+    'rtabulate.R'
+    'sort.R'
+    'toString.R'

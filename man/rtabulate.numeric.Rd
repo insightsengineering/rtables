@@ -4,16 +4,18 @@
 \alias{rtabulate.numeric}
 \title{Tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by = no_by("col_1"), FUN = mean,
+\method{rtabulate}{numeric}(x, col_by = by_all("col_1"), FUN = mean,
   ..., format = NULL, row.name = NULL, indent = 0,
   col_wise_args = NULL)
 }
 \arguments{
-\item{x}{a vecor}
+\item{x}{a vector}
 
-\item{col_by}{a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column. If data should not be split
-into columns use the \code{\link{no_by}} function.}
+\item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
+if a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column.
+can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
+can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}})}
 
 \item{FUN}{a function that processes the cell data}
 
@@ -44,7 +46,7 @@ By default each cell reports the mean based on the associated vector.
 
 rtabulate(iris$Sepal.Length)
 
-rtabulate(iris$Sepal.Length, col_by = no_by("Sepal.Length"))
+rtabulate(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
 
 with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
 
