@@ -27,7 +27,8 @@ by_factor_to_matrix <- function(x) {
 
 #' Convert a col_by to a factor, works for factors and matrices
 #' 
-#' This is the opposite of the function \code{\link{col_by_to_matrix}}. Only works when columns of matrix are disjoint.
+#' This is the opposite of the function \code{\link{col_by_to_matrix}}. 
+#' Only works when columns of matrix are disjoint.
 #' 
 #' 
 #' @param x matrix or factor
@@ -51,10 +52,14 @@ col_by_to_factor <- function(x) {
     stop(paste("Columns are not disjoint in ", x))
   }
   f <- rep(-1, nrow(x))
+  levelnames <- by_header_to_string(by_header(x))
   for (i in seq_along(x)) {
-    f[x[, i]] <- colnames(x)[[i]]
+    f[x[, i]] <- levelnames[[i]]
   }
-  with_label(factor(f, levels = colnames(x)), label(x))
+  with_label(
+    factor(f, levels = levelnames), 
+    label(x)
+  )
 }
 
 #' Drop empty columns from matrix-version of by
@@ -80,7 +85,8 @@ by_drop_empty_cols <- function(by) {
 #' returns transformed col_by as a matrix
 #' 
 #' @param col_by factor or data.frame to convert
-#' @param x object that col_by is applied to, must be non-NULL if col_by is of class by_all to select all elements from x
+#' @param x object that col_by is applied to, must be non-NULL if col_by is of class by_all 
+#'   to select all elements from x
 #' 
 #' @return matrix col_by
 #' 
@@ -281,11 +287,13 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 
 #' Hierarchical col_by
 #' 
-#' @param ... factors or col_by matrices. When a by element in the list is a matrix, it allows for non-disjoint columns
+#' @param ... factors or col_by matrices. When a by element in the list 
+#'   is a matrix, it allows for non-disjoint columns
 #'
 #' todo: returned col_by column names are not correct
 #' 
-#' @return list(headers, col_by matrix) a list of labelled headers (one per row), col_by matrix corresponding to all combinations
+#' @return structure(col_by matrix, header = ) a list of labelled headers (one per row), 
+#'   col_by matrix corresponding to all combinations
 #' 
 #' @examples
 #' SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
@@ -293,33 +301,72 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 #' VAL <- c(5, 4, 4, 6, 2, 1)
 #' 
 #' rtables:::by_hierarchical(SEX)
-#' rtables:::by_hierarchical(SEX, AGEC)
-#' 
+#' col_by <- rtables:::by_hierarchical(SEX, AGEC)
+#' col_by
+#' colnames(col_by)
+#' attr(col_by, "header")
+#' rtables:::by_header_to_string(attr(col_by, "header"))
 by_hierarchical <- function(...) {
   by_lst <- list(...)
-  # old: to simplify, we only accept factors for now
+  stopifnot(length(by_lst) > 0)
   by <- col_by_to_matrix(by_lst[[1]])
   if (length(by_lst) == 1) {
-    list(
-      headers = list(rrowl(row.name = label(by), colnames(by))),
-      col_by = by
+    structure(
+      by,
+      header = list(rrowl(row.name = label(by), colnames(by)))
     )
   } else {
     subres <- do.call(by_hierarchical, by_lst[-1])
-    list(
-      headers = do.call(
-        rheader,
-        c(
-          list(rrowl(
-            row.name = label(by), 
-            lapply(colnames(by), function(col_name) rcell(col_name, colspan = ncell(subres$headers[[1]])))
-          )),
-          Reduce(combine_rrows, lapply(by, function(discard) subres$headers))
-        )
-      ), 
-      col_by = do.call(cbind, lapply(by, function(rows) {
-        do.call(cbind, lapply(subres$col_by, function(subrows) (rows & subrows))) 
-      }))
+    header <- do.call(
+      rheader,
+      c(
+        list(rrowl(
+          row.name = label(by), 
+          lapply(
+            colnames(by), 
+            function(col_name) rcell(col_name, colspan = ncell(attr(subres, "header")[[1]]))
+          )
+        )),
+        Reduce(combine_rrows, lapply(by, function(discard) attr(subres, "header")))
+      )
     )
+    by_combined <- as.data.frame(do.call(cbind, lapply(by, function(rows) subres & rows)))
+    colnames(by_combined) <- by_header_to_string(header)
+    structure(
+      by_combined,
+      header = header
+    )
+  }
+}
+
+# todo: maybe put as S3 function, but then create a class from by functions
+# This function is not currently used in tern
+#' Get names to use for header
+#' 
+#' 
+#' @param x object
+#' 
+#' @return header attribute if existent, otherwise colnames
+#' 
+#' @export
+#' 
+#' @importFrom rlang "%||%"
+by_header <- function(x) {
+  attr(x, "header") %||% colnames(x)
+}
+
+#' Convert the header to string
+#' 
+#' Useful to agnostically handle normal headers and hierarchical ones
+#' 
+#' @param x rheader or regular list
+by_header_to_string <- function(x) {
+  if (is(x, "rheader")) {
+    do.call(
+      function(...) paste(..., sep = ","),
+      lapply(x, function(elem) rep(elem, each = ncol(x) / length(elem)))
+    )
+  } else {
+    x
   }
 }

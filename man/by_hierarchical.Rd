@@ -7,12 +7,14 @@
 by_hierarchical(...)
 }
 \arguments{
-\item{...}{factors or col_by matrices. When a by element in the list is a matrix, it allows for non-disjoint columns
+\item{...}{factors or col_by matrices. When a by element in the list 
+  is a matrix, it allows for non-disjoint columns
 
 todo: returned col_by column names are not correct}
 }
 \value{
-list(headers, col_by matrix) a list of labelled headers (one per row), col_by matrix corresponding to all combinations
+structure(col_by matrix, header = ) a list of labelled headers (one per row), 
+  col_by matrix corresponding to all combinations
 }
 \description{
 Hierarchical col_by
@@ -23,6 +25,9 @@ AGEC <- with_label(factor(c("<40", ">40", "<40", ">40", "<40")), "Age Category")
 VAL <- c(5, 4, 4, 6, 2, 1)
 
 rtables:::by_hierarchical(SEX)
-rtables:::by_hierarchical(SEX, AGEC)
-
+col_by <- rtables:::by_hierarchical(SEX, AGEC)
+col_by
+colnames(col_by)
+attr(col_by, "header")
+rtables:::by_header_to_string(attr(col_by, "header"))
 }

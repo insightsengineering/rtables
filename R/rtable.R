@@ -168,6 +168,7 @@ rtable <- function(header, ..., format = NULL) {
 #' @examples 
 #' 
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
+#' rrow()
 #' 
 rrow <- function(row.name, ..., format = NULL, indent = 0) {
   
@@ -212,7 +213,7 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
 #' @return an object of class \code{rcell}
 #' 
 #' @export
-rcell <- function(x, format = NULL, colspan=1) {
+rcell <- function(x, format = NULL, colspan = 1) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   
@@ -241,7 +242,7 @@ rcell <- function(x, format = NULL, colspan=1) {
 #'   rrow(NULL, "A", "B", "A", "B")
 #' )
 rheader <- function(..., format = "xx") {
-  
+  #todo: change this so that each item of ... can be either rrow or plain text
   args <- list(...)
   
   rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
@@ -249,11 +250,13 @@ rheader <- function(..., format = "xx") {
   } else if (are(args, "rrow")) {
     lapply(args, propagate_format_to_rcells, format = format)
   } else {
-    stop("either one one vector or rrow objects can be passed to ...")
+    stop("either one vector or rrow objects can be passed to ...")
   }
   
   ncol <- vapply(rrows, ncell, numeric(1))
-  if (!all(duplicated(ncol)[-1])) stop("number of columns to not match")
+  if (!all(duplicated(ncol)[-1])) {
+    stop("number of columns do not match")
+  }
   
   structure(
     setNames(rrows, NULL),
@@ -409,7 +412,7 @@ is_empty_rtable <- function(x) {
 #' 
 #' @export
 is_rtable <- function(x) {
-  is(x, "rtable") #|| is(x, "empty_rtable")
+  is(x, "rtable")
 }
 
 #' Whether object is anon-empty rtable

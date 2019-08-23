@@ -30,7 +30,7 @@
 #'   )
 #' )
 #'
-#' tern:::recursive_stack_rtables(l_tbls)
+#' rtables:::recursive_stack_rtables(l_tbls)
 #'
 recursive_stack_rtables <- function(x) {
   tbls <- unlist_rtables(x)
@@ -61,7 +61,7 @@ recursive_stack_rtables <- function(x) {
 #'   )
 #' )
 #'
-#' tern:::unlist_rtables(l_tbls)
+#' rtables:::unlist_rtables(l_tbls)
 #'
 unlist_rtables <- function(x) {
   

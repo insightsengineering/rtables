@@ -13,7 +13,8 @@ col_by_to_factor(x)
 factor
 }
 \description{
-This is the opposite of the function \code{\link{col_by_to_matrix}}. Only works when columns of matrix are disjoint.
+This is the opposite of the function \code{\link{col_by_to_matrix}}. 
+Only works when columns of matrix are disjoint.
 }
 \examples{
 col_by_to_factor(data.frame(

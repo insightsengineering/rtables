@@ -12,7 +12,8 @@ col_by_to_matrix(col_by, x = NULL)
 \arguments{
 \item{col_by}{factor or data.frame to convert}
 
-\item{x}{object that col_by is applied to, must be non-NULL if col_by is of class by_all to select all elements from x}
+\item{x}{object that col_by is applied to, must be non-NULL if col_by is of class by_all 
+to select all elements from x}
 }
 \value{
 matrix col_by

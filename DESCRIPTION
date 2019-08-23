@@ -13,7 +13,8 @@ Imports:
   stats,
   methods,
   htmltools,
-  purrr
+  purrr,
+  rlang
 Suggests:
   dplyr,
   testthat,
