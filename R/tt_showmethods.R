@@ -107,6 +107,9 @@ setMethod("spltype_abbrev", "AllSplit",
 setMethod("spltype_abbrev", "NULLSplit",
           function(obj) "no obs")
 
+setMethod("spltype_abbrev", "AnalyzeVarSplit",
+          function(obj) "** analyzed var **")
+
            
 
 

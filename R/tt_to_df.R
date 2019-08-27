@@ -207,7 +207,7 @@ trow_to_dfrow = function(trow) {
     clspls = clayout_splits(trow)
     cspvar = ploads_to_str(lapply(clspls, spl_payload))
     
-    cspvarlbl = sapply(clspls, spl_label)
+    cspvarlbl = sapply(clspls, obj_label)
 
     csptypes = sapply(clspls, split_texttype)
     names(cspvar) = safepaste0("csp_", seq_along(cspvar))

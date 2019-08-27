@@ -37,6 +37,9 @@ setMethod("make_subset_expr", "VarDynCutSplit",
                        fun = spl@cut_fun))
 })
 
+setMethod("make_subset_expr", "AllSplit",
+          function(spl, val) expression(TRUE))
+
 
 
 ## probably don't need this

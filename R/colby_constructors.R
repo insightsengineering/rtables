@@ -118,9 +118,6 @@ setMethod("add_col_split", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a col split to that (", class(lyt), "). contact the maintaner.")
           )
 
-
-
-
 add_new_rowtree = function(lyt, spl) {
     add_row_split(lyt, spl, length(lyt) + 1)
 }
@@ -138,8 +135,11 @@ add_colby_varlevels = function(lyt,  var, lbl, valuelblvar = var,  newtoplev = F
 }
 
 
-add_rowby_varlevels = function(lyt,  var, lbl,  valuelblvar, newtoplev = FALSE) {
-    spl = VarLevelSplit(var = var, splbl = lbl)
+add_rowby_varlevels = function(lyt,  var, lbl,  vlblvar = var, splfun = NULL, newtoplev = FALSE) {
+    spl = VarLevelSplit(var = var,
+                        splbl = lbl,
+                        valuelblvar = vlblvar,
+                        splfun = splfun)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -150,8 +150,6 @@ add_colby_multivar = function(lyt, vars, lbl, varlbls,
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
     pos = length(lyt) + as.numeric(newtoplev)
     add_col_split(lyt, spl, pos)
-
-
 }
 
 
@@ -161,8 +159,6 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
-
-
 
 add_colby_staticcut = function(lyt, var, lbl, cuts,
                             cutlbls = NULL,
@@ -196,13 +192,67 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 }
 
 
+add_analyzed_var = function(lyt, var, lbl, afun,
+                            newtoplev = FALSE) {
+    spl = AnalyzeVarSplit(var, lbl, afun = afun)
+    pos = length(lyt) + as.numeric(newtoplev)
+    add_row_split(lyt, spl, pos)
+}
 
 
+setGeneric("add_summary",
+           function(lyt, lbl, cfun) standardGeneric("add_summary"))
+setMethod("add_summary", "PreDataTableLayouts",
+          function(lyt, lbl, cfun) {
+    tmp = add_summary(rlayout(lyt), lbl, cfun)
+    rlayout(lyt) = tmp
+    lyt
+})
 
+setMethod("add_summary", "PreDataRowLayout",
+          function(lyt, lbl, cfun) {
+    if(length(lyt) == 0 ||
+       (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
+        rt = root_spl(lyt)
+        rt = add_summary(rt, lbl, cfun)
+        root_spl(lyt) = rt
+    } else {
+        ind = length(lyt)
+        tmp = add_summary(lyt[[ind]], lbl, cfun)
+        lyt[[ind]] = tmp
+    }
+    lyt
+})
 
+setMethod("add_summary", "SplitVector",
+          function(lyt, lbl, cfun) {
+    ind = length(lyt)
+    if(ind == 0) stop("no split to add content rows at")
+    spl = lyt[[ind]]
+    ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
+    tmp = add_summary(spl, lbl, cfun)
+    lyt[[ind]] = tmp
+    lyt
+})
 
+setMethod("add_summary", "Split",
+          function(lyt, lbl, cfun) {
+    content_fun(lyt) = cfun
+    lyt
+})
 
-
+add_summary_count = function(lyt, var = NULL, lblfmt = "%s (n)"){
+    fun = function(df, lblstr = "") {
+        lbl = sprintf(lblfmt, lblstr)
+        if(!is.null(var))
+            ret = sum(!is.na(df[[var]]))
+        else
+            ret = nrow(df)
+        names(ret) = lbl
+        ret
+    }
+    add_summary(lyt, lbl = lbl, cfun = fun)
+}
 
 
 
@@ -248,61 +298,193 @@ rtabulate_layout <- function(x, layout, FUN, ...,
   rtable(header = sapply(layout_children(col_tree(layout)), function(leaf) leaf@label), rr)
 }
 
-setGeneric("apply_split", 
-           function(spl, df, curexpr = NULL) standardGeneric("apply_split"))
 
-setMethod("apply_split", "VarLevelSplit",
-          function(spl, df) {
-    varvec = df[[spl_payload(spl)]]
-    fct = factor(varvec, levels = unique(varvec))
-    spl = split(df, fct)
-})
 
-setMethod("apply_split", "MultiVarSplit",
-          function(spl, df) {
-    vars = spl_payload(spl)
-    lst = lapply(vars, function(v) {
-        df[!is.na(df[[v]]),]
+.make_tablerows = function(dfpart, func, colexprs, coltree, tabpos, datcol = NULL, lev = 1L, rvlab = NA_character_, rvtypes = NULL) {
+    if(is.null(datcol) && !is.na(rvlab))
+        stop("NULL datcol but non-na rowvar label")
+    rawvals = lapply(colexprs,
+                     function(csub) {
+        inds = eval(csub, envir = dfpart)
+        dat = dfpart[inds,]
+        if(!is.null(datcol))
+            dat = dat[[datcol]]
+        func(dat)
     })
-    names(lst) = vars
-    lst
-})
-
-setMethod("apply_split", "AllSplit",
-          function(spl, df) list(df))
-
-setMethod("apply_split", "NULLSplit",
-          function(spl, df) list(df[0,]))
-    
-
-setMethod("apply_split", "AnalyzeVarSplit",
-          function(spl, df) {
-    dat = df[!is.na(df[[spl_payload(spl)]]),]
-    list(dat)
-})
-
-
-setGeneric("build_table", function(spl, df, colexprs) standardGeneric("build_table"))
-
-setMethod("build_table", "Split",
-          function(spl, df, colexprs) {
-    if(!is.null(content_fun(spl))) {
-        rawvals = lapply(colexprs,
-                         function(csub) {
-            content_fun(spl)(df[csub,])
-        })
-        ncrows = max(sapply(rawvals, length))
-        stopifnot(ncrows > 0)
-        valrows = lapply(1:ncrows, function(i) {
-            lapply(rawvals, function(colvals) colvals[[i]])
-        })
+    rowvar = if(!is.null(datcol)) datcol else NA_character_
+    if(is.null(rvtypes))
+        rvtypes = rep(NA_character_, length(rawvals))
+    lens = sapply(rawvals, length)
+    stopifnot(length(unique(lens)) == 1)
+    lbls = names(rawvals[[1]])
+    ncrows = lens[1]
+    stopifnot(ncrows > 0)
+    trows = lapply(1:ncrows, function(i) {
+        rowvals = lapply(rawvals, function(colvals) colvals[[i]])
+        TableRow(val = rowvals,tpos = make_rowpos(tabpos, i),
+                 clayout = coltree,
+                 lev = lev,
+                 lab = lbls[i],
+                 var = rowvar,
+                 var_lbl = rvlab,
+                 v_type = rvtypes[i]
+                 ##XXX TODO label!!!!
+                 ## lab = spl@label)
+                 )
         
+    })
+    trows
+}
 
+.make_ctab = function(df, lvl, spl, treepos, colexprs, coltree) {
+
+ 
+    ctpos = make_tablepos(treepos, iscontent = TRUE)
+    if(!is.null(content_fun(spl))) {
+        splabs = pos_splval_lbls(ctpos)
+        if(length(splabs) >= 1)
+            clblstr = tail(splabs, 1)
+        else
+            clblstr = ""
+        contkids = .make_tablerows(df,
+                                   function(df2) content_fun(spl)(df2, clblstr),
+                                   colexprs,
+                                   coltree,
+                                   ctpos)
+    } else {
+        contkids = list()
     }
+    clbl = if(length(contkids) == 1) {
+               obj_label(contkids[[1]])
+           } else {
+               obj_label(spl)
+           }
+    
+    ctab = ElementaryTable(kids = contkids,
+                           lev = lvl,
+                           tpos = ctpos,
+                           clayout = coltree,
+                           iscontent = TRUE,
+                           lab = clbl)
+    ctab
+}
+
+recursive_applysplit = function( df, lvl = 1L, splvec, treepos = NULL, colexprs, coltree) {
+    
+    stopifnot(lvl <= length(splvec),
+              is(splvec, "SplitVector"))
+    spl = splvec[[lvl]]
+
+    ctab = .make_ctab(df, lvl, spl, treepos, colexprs, coltree)
+    if(lvl < length(splvec)) { ## there's more depth, recurse
+        rawpart = apply_split(spl, df)
+        dataspl = rawpart[["datasplit"]]
+        splvals = rawpart[["values"]]
+        partlbls = rawpart[["labels"]]
+        kids = unlist(mapply(function(dfpart, val, lbl) {
+            newpos = make_child_pos(treepos,
+                                    spl,
+                                    val,
+                                    lbl)
+            
+            recursive_applysplit(dfpart,
+                                 lvl = lvl+1L,
+                                 splvec = splvec,
+                                 treepos = newpos,
+                                 colexprs = colexprs,
+                                 coltree = coltree)
+        }, dfpart = dataspl, val = splvals,
+        lbl = partlbls,
+        SIMPLIFY=FALSE))
+    } else { ## we're at full depth, analyze
+        stopifnot(is(spl, "AnalyzeVarSplit"))
+        kids = .make_tablerows(df,
+                               analysis_fun(spl),
+                               colexprs,
+                               coltree,
+                               tabpos = make_tablepos(treepos, iscontent = FALSE),
+                               datcol = spl_payload(spl),
+                               lev = lvl,
+                               rowvar )
+    }
+    TableTree(cont = ctab, kids = kids,
+              lev = lvl,
+              tpos = make_tablepos(treepos = treepos,
+                                   iscontent = FALSE),
+              iscontent = FALSE,
+              spl = splvec[[lvl]],
+              clayout = coltree)
+}
 
 
-})
+build_table = function(lyt, df, ...) {
+    rtpos = TreePos()
+    
+    ctree = splitvec_to_coltree(df, clayout(lyt)[[1]],
+                                rtpos)
+    cexprs = build_splits_expr(clayout(lyt)[[1]], rawdat)
 
+    rlyt = rlayout(lyt)
+    rtspl = root_spl(rlyt)
+    ctab = .make_ctab(df, 1L, root_spl(rlayout(lyt)),
+                      rtpos, cexprs, ctree)
+    kids = lapply(seq_along(rlyt), function(i) {
+        pos = TreePos(list(rtspl), list(i), as.character(i)) 
+        recursive_applysplit(df = df, lvl = 1L,
+                             splvec = rlyt[[i]],
+                             treepos = pos,
+                             colexprs = cexprs,
+                             coltree = ctree)
+        })
+                             
+    tab = TableTree(cont = ctab,
+                    kids = kids,
+                    lev = 1L,
+                    tpos = make_tablepos(rtpos, FALSE),
+                    iscontent = FALSE,
+                    spl = rtspl,
+                    clayout = ctree)
+    tab
+}
+
+## setGeneric("build_table", function(splvec, level = 1, df, coltree, colexprs, treepos) standardGeneric("build_table"))
+
+## setMethod("build_table", "SplitVector",
+##           function(spl, df, coltree, colexprs, treepos) {
+ 
+## ##    rawpart = apply(
+
+
+## })
+
+
+splitvec_to_coltree = function(df, splvec, pos = NULL,
+                               lvl = 1L, lbl = "") {
+    stopifnot(lvl <= length(splvec) + 1L,
+              is(splvec, "SplitVector"))
+    
+    if(lvl == length(splvec) + 1L) {
+        LayoutColLeaf(lev = lvl - 1L,
+                      lab = lbl,
+                      tpos = pos)
+    } else {
+        spl = splvec[[lvl]]
+        rawpart = apply_split(spl, df)
+        datparts = rawpart[["datasplit"]]
+        vals = rawpart[["values"]]
+        kids = mapply(function(dfpart, value) {
+            ## XXX TODO label
+            partlab = ""
+            newpos = make_child_pos(pos, spl, value, partlab) 
+            splitvec_to_coltree(dfpart, splvec, newpos,
+                                lvl + 1L, partlab)
+        }, dfpart = datparts, value = vals, SIMPLIFY=FALSE)
+        LayoutColTree(lev = lvl, lab = lbl,
+                      spl = spl,
+                      kids = kids, tpos = pos,
+                      summary_function = content_fun(spl))
+    }
+}
 
 
 
@@ -317,8 +499,10 @@ setGeneric("expr_stubs", function(spl, df) standardGeneric("expr_stubs"))
 
 setMethod("expr_stubs", "VarLevelSplit",
           function(spl, df) {
-    var = spl_payload(spl)
-    values = unique(df[[var]])
+    sdat = apply_split(spl, df)
+    values = sdat$values
+    ## var = spl_payload(spl)
+    ## values = unique(df[[var]])
     lapply(values, function(val) make_subset_expr(spl, val))
 })
 
@@ -375,7 +559,7 @@ tmpfun = function(lyt, df) {
 setGeneric("fix_dyncuts", function(spl, df) standardGeneric("fix_dyncuts"))
 
 setMethod("fix_dyncuts", "Split", function(spl, df) spl)
-setMethod("fix_dyncuts", "VarDyCutSplit",
+setMethod("fix_dyncuts", "VarDynCutSplit",
           function(spl, df) {
 
     var = spl_payload(spl)

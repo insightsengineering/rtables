@@ -204,6 +204,12 @@ setMethod("pos_split_lbls", "VLayoutNode",
 setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
 setMethod("split_texttype", "VarLevelSplit", function(obj) "varlevels")
 setMethod("split_texttype", "MultiVarSplit", function(obj) "multivar")
+setMethod("split_texttype", "AllSplit", function(obj) "allobs")
+setMethod("split_texttype", "RootSplit", function(obj) "root")
+setMethod("split_texttype", "NULLSplit", function(obj) "null")
+setMethod("split_texttype", "VarStaticCutSplit", function(obj) "scut")
+setMethod("split_texttype", "VarDynCutSplit", function(obj) "dyncut")
+
 setMethod("split_texttype", "ANY", function(obj) stop("unknown split type"))
 
 setGeneric("pos_spltypes", function(obj) standardGeneric("pos_spltypes"))
@@ -257,7 +263,41 @@ setMethod("is_content_pos<-", "TableTreePos",
 setGeneric("spl_payload", function(obj) standardGeneric("spl_payload"))
 setMethod("spl_payload", "Split", function(obj) obj@payload)
 
-setGeneric("spl_label", function(obj) standardGeneric("spl_label"))
-setMethod("spl_label", "Split", function(obj) obj@split_label)
+setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
+setMethod("obj_label", "Split", function(obj) obj@split_label)
+setMethod("obj_label", "VNodeInfo", function(obj) obj@label)
 
+
+
+setGeneric("content_fun", function(obj) standardGeneric("content_fun"))
+setMethod("content_fun", "Split", function(obj) obj@content_fun)
+
+
+setGeneric("content_fun<-", function(object, value) standardGeneric("content_fun<-"))
+setMethod("content_fun<-", "Split", function(object, value) {
+    object@content_fun = value
+    object
+})
+
+
+setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
+setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
+
+setGeneric("split_fun", function(obj) standardGeneric("split_fun"))
+setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
+
+setGeneric("spl_lblvar", function(obj) standardGeneric("spl_lblvar"))
+setMethod("spl_lblvar", "VarLevelSplit", function(obj) obj@value_lbl_var)
+
+setGeneric("root_spl", function(obj) standardGeneric("root_spl"))
+setMethod("root_spl", "PreDataAxisLayout",
+          function(obj) obj@root_split)
+
+
+setGeneric("root_spl<-", function(obj, value) standardGeneric("root_spl<-"))
+setMethod("root_spl<-", "PreDataAxisLayout",
+          function(obj, value) {
+    obj@root_split <- value
+    obj
+})
 
