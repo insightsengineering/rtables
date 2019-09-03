@@ -128,18 +128,19 @@ add_new_coltree = function(lyt, spl) {
 }
 
 
-add_colby_varlevels = function(lyt,  var, lbl, valuelblvar = var,  newtoplev = FALSE) {
-    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar)
+add_colby_varlevels = function(lyt,  var, lbl, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
+    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
 
-add_rowby_varlevels = function(lyt,  var, lbl,  vlblvar = var, splfun = NULL, newtoplev = FALSE) {
+add_rowby_varlevels = function(lyt,  var, lbl,  vlblvar = var, splfun = NULL, splfmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
                         valuelblvar = vlblvar,
-                        splfun = splfun)
+                        splfun = splfun,
+                        splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -154,8 +155,10 @@ add_colby_multivar = function(lyt, vars, lbl, varlbls,
 
 
 add_rowby_multivar = function(lyt, vars, lbl, varlbls,
+                              splfmt = NULL,
                               newtoplev = FALSE) {
-    spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
+    spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls,
+                        splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -169,75 +172,86 @@ add_colby_staticcut = function(lyt, var, lbl, cuts,
 }
 
 add_rowby_staticcut = function(lyt, var, lbl, cuts,
-                            cutlbls = NULL,
+                               cutlbls = NULL,
+                               splfmt = NULL,
                             newtoplev = FALSE) {
-    spl = VarStaticCutSplit(var, lbl, cuts, cutlbls)
+    spl = VarStaticCutSplit(var, lbl, cuts, cutlbls,
+                            splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
 
 add_colby_dyncut = function(lyt, var, lbl, cutfun,
+                            splfmt = NULL,
                             newtoplev = FALSE) {
-    spl = VarDynCutSplit(var, lbl, cutfun)
+    spl = VarDynCutSplit(var, lbl, cutfun,
+                         splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
 
 add_rowby_dyncut = function(lyt, var, lbl, cutfun,
+                            splfmt = NULL,
                             newtoplev = FALSE) {
-    spl = VarDynCutSplit(var, lbl, cutfun)
+    spl = VarDynCutSplit(var, lbl, cutfun,
+                         splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
 
 
 add_analyzed_var = function(lyt, var, lbl, afun,
+                            splfmt = NULL,
                             newtoplev = FALSE) {
-    spl = AnalyzeVarSplit(var, lbl, afun = afun)
+    spl = AnalyzeVarSplit(var, lbl, afun = afun,
+                          splfmt = splfmt)
     pos = length(lyt) + as.numeric(newtoplev)
     add_row_split(lyt, spl, pos)
 }
 
 
 setGeneric("add_summary",
-           function(lyt, lbl, cfun) standardGeneric("add_summary"))
+           function(lyt, lbl, cfun, cfmt = NULL) standardGeneric("add_summary"))
 setMethod("add_summary", "PreDataTableLayouts",
-          function(lyt, lbl, cfun) {
-    tmp = add_summary(rlayout(lyt), lbl, cfun)
+          function(lyt, lbl, cfun, cfmt = NULL) {
+    tmp = add_summary(rlayout(lyt), lbl, cfun,
+                      cfmt = cfmt)
     rlayout(lyt) = tmp
     lyt
 })
 
 setMethod("add_summary", "PreDataRowLayout",
-          function(lyt, lbl, cfun) {
+          function(lyt, lbl, cfun, cfmt = NULL) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         rt = root_spl(lyt)
-        rt = add_summary(rt, lbl, cfun)
+        rt = add_summary(rt, lbl, cfun, cfmt = cfmt)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
-        tmp = add_summary(lyt[[ind]], lbl, cfun)
+        tmp = add_summary(lyt[[ind]], lbl, cfun,
+                          cfmt = cfmt)
         lyt[[ind]] = tmp
     }
     lyt
 })
 
 setMethod("add_summary", "SplitVector",
-          function(lyt, lbl, cfun) {
+          function(lyt, lbl, cfun, cfmt = NULL) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = add_summary(spl, lbl, cfun)
+    tmp = add_summary(spl, lbl, cfun, cfmt = cfmt)
     lyt[[ind]] = tmp
     lyt
 })
 
 setMethod("add_summary", "Split",
-          function(lyt, lbl, cfun) {
+          function(lyt, lbl, cfun, cfmt = NULL) {
     content_fun(lyt) = cfun
+    obj_fmt(lyt) = cfmt
     lyt
 })
 
@@ -369,14 +383,21 @@ rtabulate_layout <- function(x, layout, FUN, ...,
     ctab
 }
 
-recursive_applysplit = function( df, lvl = 1L, splvec, treepos = NULL, colexprs, coltree) {
+
+
+recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs, coltree) {
     
-    stopifnot(lvl <= length(splvec),
+
+    ## lvl is level of indentation, which starts at 0
+    ## pos, is position in the splvec, which starts at 1
+    ## because R is 1-indexed, so pos = lvl + 1L
+    pos = lvl + 1L;
+    stopifnot(pos <= length(splvec),
               is(splvec, "SplitVector"))
-    spl = splvec[[lvl]]
+    spl = splvec[[pos]]
 
     ctab = .make_ctab(df, lvl, spl, treepos, colexprs, coltree)
-    if(lvl < length(splvec)) { ## there's more depth, recurse
+    if(pos < length(splvec)) { ## there's more depth, recurse
         rawpart = apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
         splvals = rawpart[["values"]]
@@ -404,21 +425,22 @@ recursive_applysplit = function( df, lvl = 1L, splvec, treepos = NULL, colexprs,
                                coltree,
                                tabpos = make_tablepos(treepos, iscontent = FALSE),
                                datcol = spl_payload(spl),
-                               lev = lvl,
-                               rowvar )
+                               lev = lvl + 1L )
     }
     TableTree(cont = ctab, kids = kids,
               lev = lvl,
               tpos = make_tablepos(treepos = treepos,
                                    iscontent = FALSE),
               iscontent = FALSE,
-              spl = splvec[[lvl]],
+              spl = spl,
+              lab = obj_label(spl),
               clayout = coltree)
 }
 
 
 build_table = function(lyt, df, ...) {
     rtpos = TreePos()
+    lyt = set_def_child_ord(lyt, df)
     
     ctree = splitvec_to_coltree(df, clayout(lyt)[[1]],
                                 rtpos)
@@ -426,11 +448,11 @@ build_table = function(lyt, df, ...) {
 
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
-    ctab = .make_ctab(df, 1L, root_spl(rlayout(lyt)),
+    ctab = .make_ctab(df, 0L, root_spl(rlayout(lyt)),
                       rtpos, cexprs, ctree)
     kids = lapply(seq_along(rlyt), function(i) {
         pos = TreePos(list(rtspl), list(i), as.character(i)) 
-        recursive_applysplit(df = df, lvl = 1L,
+        recursive_applysplit(df = df, lvl = 0L,
                              splvec = rlyt[[i]],
                              treepos = pos,
                              colexprs = cexprs,
@@ -439,7 +461,7 @@ build_table = function(lyt, df, ...) {
                              
     tab = TableTree(cont = ctab,
                     kids = kids,
-                    lev = 1L,
+                    lev = 0L,
                     tpos = make_tablepos(rtpos, FALSE),
                     iscontent = FALSE,
                     spl = rtspl,
@@ -457,6 +479,43 @@ build_table = function(lyt, df, ...) {
 
 ## })
 
+
+setGeneric("set_def_child_ord", function(lyt, df) standardGeneric("set_def_child_ord"))
+
+setMethod("set_def_child_ord", "PreDataTableLayouts",
+          function(lyt, df) {
+    clayout(lyt) = set_def_child_ord(clayout(lyt), df)
+    rlayout(lyt) = set_def_child_ord(rlayout(lyt), df)
+    lyt
+})
+
+setMethod("set_def_child_ord", "PreDataAxisLayout",
+          function(lyt, df) {
+    lyt[] = lapply(lyt, set_def_child_ord, df = df)
+    lyt
+})
+
+setMethod("set_def_child_ord", "SplitVector",
+          function(lyt, df) {
+    lyt[] = lapply(lyt, set_def_child_ord, df = df)
+    lyt
+})
+
+## for most split types, don't do anything
+## becuause their ordering already isn't data-based
+setMethod("set_def_child_ord", "Split",
+          function(lyt, df) lyt)
+
+setMethod("set_def_child_ord", "VarLevelSplit",
+          function(lyt, df) {
+    if(!is.null(spl_child_order(lyt)))
+        return(lyt)
+    
+    vec = df[[spl_payload(lyt)]]
+    vals = unique(vec)
+    spl_child_order(lyt) = vals
+    lyt
+})
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, lbl = "") {

@@ -45,7 +45,7 @@ max_nchar_cols <- function(rows) {
   if (is(rows, "rrow")) rows <- list(rows)
   
   ceiling(max(unlist(lapply(rows, function(row) {
-    lapply(row, function(cell) {
+    lapply(row, function(cell) { 
       nc <- nchar(unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE)))
       nc[is.na(nc)] <- 0
       nc / attr(cell, "colspan")

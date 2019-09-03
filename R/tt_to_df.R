@@ -146,29 +146,30 @@
 ## levels of the tree, so we can't just
 ## do rbind.data.frame willy-nilly
 
-setGeneric("recursive_row_collect",
-           function(ttree)
-    standardGeneric("recursive_row_collect"))
+## setGeneric("recursive_row_collect",
+##            function(ttree)
+##     standardGeneric("recursive_row_collect"))
 
-setMethod("recursive_row_collect", "TableTree",
-          function(ttree) {
-    ret = c(tree_children(content_table(ttree)),
-      lapply(tree_children(ttree),
-             recursive_row_collect))
-    unlist(ret, recursive = TRUE)
-})
+## setMethod("recursive_row_collect", "TableTree",
+##           function(ttree) {
+##     ret = c(tree_children(content_table(ttree)),
+##       lapply(tree_children(ttree),
+##              recursive_row_collect))
+##     unlist(ret, recursive = TRUE)
+## })
 
-setMethod("recursive_row_collect", "ElementaryTable",
-          function(ttree) {
-    ret = lapply(tree_children(ttree),
-                 recursive_row_collect)
-    unlist(ret, recursive = TRUE)
-})
+## setMethod("recursive_row_collect", "ElementaryTable",
+##           function(ttree) {
+##     ret = lapply(tree_children(ttree),
+##                  recursive_row_collect)
+##     unlist(ret, recursive = TRUE)
+## })
 
-setMethod("recursive_row_collect", "TableRow",
-          function(ttree) { 
-    ttree
-})
+## setMethod("recursive_row_collect", "TableRow",
+##           function(ttree) { 
+##     ttree
+## })
+
 
 safepaste0 = function(bef, x, after = "") {
     if(length(x) == 0)
@@ -255,7 +256,7 @@ ttrows_to_df = function(rows, prevsplitss = character(), prevsplvals = list()) {
 
 tt_to_df = function(ttree) {
     
-    rws = recursive_row_collect(ttree)
+    rws = collect_leaves(ttree, incl.cont = TRUE) ##recursive_row_collect(ttree)
     dfrws = lapply(rws, trow_to_dfrow)
     cnamevecs = lapply(dfrws, names)
     frowind = min(which.max(sapply(cnamevecs, length)))

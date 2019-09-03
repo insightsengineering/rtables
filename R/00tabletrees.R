@@ -30,30 +30,40 @@ setClass("TreePos", representation(splits = "list",
 ##          representation(parent_pos = "TableTreePos",
 ##                         is_content = "logical",
 ##                         local_rownum = "numeric"))
-                        
+
+## these default to NULL even though NULL does not appear first
 setClassUnion("functionOrNULL", c("function", "NULL"))
+setClassUnion("FormatSpec",c( "character", "function", "NULL"))
+
 
 setClass("Split", contains = "VIRTUAL",
          representation(
              payload = "character",
              ## type = "character",
              split_label = "character",
-             content_fun = "functionOrNULL"))
+             split_format = "FormatSpec",
+             content_fun = "functionOrNULL",
+             content_format = "FormatSpec"))
 
 
 setClass("CustomizableSplit", contains = "Split",
          representation( split_fun = "functionOrNULL"))
 
 setClass("VarLevelSplit", contains = "CustomizableSplit",
-         representation(value_lbl_var = "character"))
+         representation(value_lbl_var = "character",
+                        value_order = "ANY"))
 
-VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, splfun = NULL) {
+VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, cfmt = NULL, splfun = NULL, splfmt = NULL, valorder = NULL ) {
     if(is.null(valuelblvar))
         valuelblvar = var
     new("VarLevelSplit", payload = var, split_label = splbl,
         value_lbl_var = valuelblvar,
         content_fun = cfun,
-        split_fun = splfun)
+        content_format = cfmt,
+        split_fun = splfun,
+        split_format = splfmt,
+        value_order = NULL
+        )
 }
 setClass("NULLSplit", contains = "Split",
          validity = function(object) {
@@ -61,23 +71,27 @@ length(object@payload) == 0 && length(object@split_label) == 0})
  
 NULLSplit = function(...) {
     ## only(!!) valid instantiation of NULLSplit class
-    new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL)
+    new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL, content_format= NULL, split_format = NULL)
 }
 
 setClass("AllSplit", contains = "Split",
          validity = function(object) length(object@payload) == 0
          )
 
-AllSplit = function(splbl = "", cfun = NULL,  ...) {
+AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, ...) {
     new("AllSplit", split_label = splbl,
-        content_fun = cfun)
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
 }
 
 setClass("RootSplit", contains = "AllSplit")
 
-RootSplit = function(splbl = "", cfun = NULL, ...) {
+RootSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt= NULL, ...) {
     new("RootSplit", split_label = splbl,
-        content_fun = cfun)
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
 }
 
 
@@ -87,13 +101,14 @@ setClass("MultiVarSplit", contains = "Split",
          validity = function(object) length(object@payload) > 1 && all(!is.na(object@payload)) && length(object@payload) == length(object@var_labels))
 
 
-MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL) {
+MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL) {
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
     if(length(varlbls) == 0) ## covers NULL and character()
        varlbls = vars
     new("MultiVarSplit", payload = vars, split_label = splbl,
-        var_labels = varlbls, content_fun = cfun)
+        var_labels = varlbls, content_fun = cfun,
+        content_format = cfmt, split_format = splfmt)
 }
 
 
@@ -101,7 +116,7 @@ setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
 
-VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL) {
+VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
        length(cuts[[1]]) == length(cuts[[2]])) {
@@ -117,7 +132,9 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL) {
         split_label = splbl,
         cuts = cuts,
         cut_labels = cutlbls,
-        content_fun = cfun)
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
 }
 
 
@@ -128,41 +145,57 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL) {
 setClass("VarDynCutSplit", contains = "Split",
          representation(cut_fun = "function"))
                         
-VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL) {
+VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL, cfmt = NULL, splfmt = NULL) {
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
-        content_fun = cfun)
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
 }
 
 setClass("AnalyzeVarSplit", contains = "Split",
          representation(analysis_fun = "function"))
 
-AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL) {
+AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = NULL) {
     new("AnalyzeVarSplit",
         payload = var,
         split_label = splbl,
         content_fun = cfun,
-        analysis_fun = afun)
+        analysis_fun = afun,
+        content_format = cfmt,
+        split_format = splfmt)
 }
 
 
 
+## TODO in the future 
+## setClass("BaselineCompSplit", contains = "Split",
+##          representation(
+##              factor_var = "character",
+##              baseline_level = "character"))
+
         
-Split = function(var, type, lbl, cfun = NULL,  extra = NULL) {
+Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra = NULL) {
     switch(type,
-           varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun),
-           multivar = MultiVarSplit(var, lbl, extra, cfun = cfun),
+           varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+           multivar = MultiVarSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
            null = NULLSplit(),
-           all = AllSplit(splbl = lbl, cfun = cfun),
-           staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun),
-           dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun),
+           all = AllSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+           staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+           dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+           root = RootSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
            stop("Don't know how to make a split of type ", type)
            )
 }
 
 
-
+###
+### Tree Position Representation
+###
+### Class(es) that represent position with in a
+### tree as parallel vectors of Split objects and
+### values chosen at that split, plus labeling info
 
 TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = NULL) {
     if(is.null(sub)) {
@@ -179,35 +212,6 @@ TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = N
 }
 
 
-## convenience
-make_child_pos = function(parpos, newspl, newval, newlab = newval) {
-    newpos = TreePos(
-        spls = c(pos_splits(parpos), newspl),
-        svals = c(pos_splvals(parpos), newval),
-        svlbls = c(pos_splval_lbls(parpos), newlab),
-        sub = .combine_subset_exprs(pos_subset(parpos),
-                                    make_subset_expr(newspl, newval)))
-}
-
-
-
-
-## TODO in the future 
-## setClass("BaselineCompSplit", contains = "Split",
-##          representation(
-##              factor_var = "character",
-##              baseline_level = "character"))
-
-
-
-setClass("VNodeInfo", contains = "VIRTUAL", representation(level = "integer", label = "character"))
-setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"), representation(children = "list"))
-setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"),
-         representation(leaf_value = "ANY"))
-##
-## Table Tree classes
-##
-
 setClass("TableTreePos", contains = "TreePos",
          representation(is_content="logical"),
          prototype = list(is_content = FALSE))
@@ -221,43 +225,176 @@ setClass("TableRowPos", contains = "TableTreePos",
          representation(local_rownum = "numeric"),
          prototype = list(is_content = FALSE))
 
-make_tablepos= function(treepos, iscontent) {
-    ttpos = new("TableTreePos", treepos,
-                is_content = iscontent)
-}
 
 TableRowPos = function(localrow, iscontent = FALSE, ...) {
     ttpos = TableTreePos(iscontent, ...)
     new("TableRowPos", ttpos, local_rownum = localrow)
 }
 
+
+##
+## Tree position convenience functions
+##
+
+make_child_pos = function(parpos, newspl, newval, newlab = newval) {
+    newpos = TreePos(
+        spls = c(pos_splits(parpos), newspl),
+        svals = c(pos_splvals(parpos), newval),
+        svlbls = c(pos_splval_lbls(parpos), newlab),
+        sub = .combine_subset_exprs(pos_subset(parpos),
+                                    make_subset_expr(newspl, newval)))
+}
+
+make_tablepos= function(treepos, iscontent) {
+    ttpos = new("TableTreePos", treepos,
+                is_content = iscontent)
+}
+
+
 make_rowpos = function(tp, rownum) {
     new("TableRowPos", tp,
         local_rownum = rownum)
 }
-                        
+
+
+
+
+
+### 
+### Virtual Classes
+###
+### Virtual class hiearchy for the various types of
+### trees in use in the S4 implementation of the TableTree
+### machinery
+###
+
+## core basics
+setClass("VNodeInfo", contains = "VIRTUAL",
+         representation(level = "integer",
+                        label = "character",
+                        pos_in_tree = "TreePos"))
+setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"), representation(children = "list"))
+setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
+
+
+## Layout trees
+#setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
+setClass("VLayoutLeaf", contains = c("VIRTUAL", "VLeaf"))
+setClass("VLayoutTree", contains = c("VIRTUAL", "VTree"),
+         representation(split = "Split"))
+setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
+
+## TableTrees
 setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
-         representation(col_layout = "VLayoutNode",
-                        pos_in_tree = "TreePos")) ## ,rowsplit_vars = "character",
-##                         rowsplit_var_lbls = "character",
-##                         rowsplit_values = "ANY",
-##                         rowsplit_value_lbls = "character"))
-setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo"),
+         representation(col_layout = "VLayoutNode"))
+
+setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
          representation(children = "list",
                         rowspans = "data.frame"
                         ))
-setClass("VTableLeaf", contains = c("VIRTUAL", "VTableNodeInfo"),
+setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
          representation(leaf_value = "ANY",
                         var_analyzed = "character",
                         var_label = "character",
                         value_type = "ANY"))
 
 
-## colspan and rowspan are not modeled here because I think they are layout
-## and/or formatting, NOT table structure
-setClass("TableRow", contains = "VTableLeaf",
+##
+## LayoutAxisTree classes 
+##
+
+setOldClass("function")
+setOldClass("NULL")
+setClassUnion("FunctionOrNULL", c("function", "NULL"))
+
+setClass("LayoutAxisTree", contains= "VLayoutTree",
+         representation(summary_func = "FunctionOrNULL"),
+         validity = function(object) all(sapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf"))))
+
+setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ##"VNodeInfo",
+         representation(func = "function"))
+
+
+setClass("LayoutColTree", contains = "LayoutAxisTree")
+setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
+setClass("LayoutRowTree", contains = "LayoutAxisTree")
+setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
+LayoutColTree = function(lev = 0L,
+                         lab = "",
+                         kids = list(),
+                         spl = NULL, 
+                         tpos = TreePos(), 
+                         summary_function = NULL ){## ,
+                         ## sub = expression(TRUE),
+                         ## svar = NA_character_,
+    ## slab = NA_character_) {
+    if(!is.null(spl)) {
+        new("LayoutColTree", level = lev, children = kids,
+            summary_func = summary_function,
+            pos_in_tree = tpos,
+            split = spl,
+            ## subset = sub,
+            ## splitvar = svar,
+            label = lab)
+    } else {
+        new("LayoutColLeaf", level = lev, 
+            func = if(is.null(summary_function)) length else summary_function,
+            pos_in_tree = tpos,
+            label = lab)
+    }        
+}
+
+LayoutColLeaf = function(lev = 0L, lab = "", tpos#,
+                        ## n = NA_integer_,
+                         #svar = NA_character_
+                         ) {
+    new("LayoutColLeaf", level = lev, label = lab,
+        pos_in_tree = tpos##, 
+        ##subset = sub#,
+        ##N_count = n,
+        ##splitvar = svar
+        )
+}
+
+LayoutRowTree = function(lev = 0L, kids = list()) {
+    new("LayoutRowTree", level = lev, children = kids)
+}
+
+LayoutRowLeaf = function(lev = 0L, lab = "",
+                       pos){##, sub, n) {
+    new("LayoutRowLeaf", level = lev, label = lab,
+        pos_in_tree = pos)##subset = sub, N_count = n)
+}
+
+setClass("RTablesLayout", contains="VIRTUAL", representation(col_layout = "LayoutColTree", row_layout = "LayoutRowTree"))
+
+## dominant here means which subset is taken first to define the subset for
+## a particular cell, the one associated with the table column or the one associated
+## with the table row
+
+setClass("RowDominantLayout", contains = "RTablesLayout")
+setClass("ColDominantLayout", contains = "RTablesLayout")
+
+rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
+                  coltree = LayoutColTree()) {
+    
+    if(row_dominant) {
+        new("RowDominantLayout", col_layout = coltree, row_layout = rowtree)
+    } else {
+        new("ColDominantLayout", col_layout = coltree, row_layout = rowtree)
+    }
+}
+
+
+
+
+### TableTree Core non-virtual Classes
+
+              
+setClass("TableRow", contains = "VTableLeafInfo",
          representation(colspans = "integer",
-                        pos_in_tree = "TableRowPos" ),
+                        pos_in_tree = "TableRowPos",
+                        format = "FormatSpec"),
          validity = function(object) {
     lcsp = length(object@colspans)
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
@@ -297,10 +434,6 @@ ElementaryTable = function(kids = list(),
                            lab = "",
                            rspans = data.frame(),
                            clayout = NULL,
-                           ## rs_vars = NA_character_,
-                           ## rs_var_lbls = rs_vars,
-                           ## rs_values = NA,
-                           ## rs_value_lbls = as.character(rs_values),
                            tpos = TableTreePos(),
                            iscontent = NA,
                            var = NA_character_,
@@ -323,11 +456,6 @@ ElementaryTable = function(kids = list(),
         rowspans = rspans,
         col_layout = clayout,
         pos_in_tree = tpos,
-        ## rowsplit_vars = rs_vars,
-        ## rowsplit_var_lbls = rs_var_lbls,
-        ## rowsplit_values = rs_values,
-        ## rowsplit_value_lbls = rs_value_lbls,
-        
         var_analyzed = var,
         var_label = var_lbl)
 }
@@ -405,117 +533,13 @@ TableTree = function(cont = ElementaryTable(),
 }
 
 
-
-##
-## LayoutAxisTree classes 
-##
-
-setOldClass("function")
-setOldClass("NULL")
-setClassUnion("FunctionOrNULL", c("function", "NULL"))
-
-
-setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"),
-         representation(pos_in_tree = "TreePos"))
-## Careful here. Is this multiple-inheritence ok?
-setClass("VLayoutTree", contains = c("VIRTUAL", "VTree", "VLayoutNode"), representation(split = "Split"))
-         
-        
-
-
-setClass("LayoutAxisTree", contains= "VLayoutTree",
-         representation(summary_func = "FunctionOrNULL"),
-                        
-                        ## subset = "LayoutSubsetDef",
-                        ## splitvar = "ANY",
-                        ## splitlbl = "character"), ## because what about quantile cuts...),
-         validity = function(object) all(sapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf"))))
-
-setClass("LayoutAxisLeaf", contains = "VLayoutNode", ##"VNodeInfo",
-         representation(func = "function"))
-
-
-setClass("LayoutColTree", contains = "LayoutAxisTree")
-##setClass("LayoutColBranch", contains = "LayoutAxisBranch")
-setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
-setClass("LayoutRowTree", contains = "LayoutAxisTree")
-##setClass("LayoutRowBranch", contains = "LayoutAxisBranch")
-setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
-LayoutColTree = function(lev = 0L,
-                         lab = "",
-                         kids = list(),
-                         spl = NULL, 
-                         tpos = TreePos(), 
-                         summary_function = NULL ){## ,
-                         ## sub = expression(TRUE),
-                         ## svar = NA_character_,
-    ## slab = NA_character_) {
-    if(!is.null(spl)) {
-        new("LayoutColTree", level = lev, children = kids,
-            summary_func = summary_function,
-            pos_in_tree = tpos,
-            split = spl,
-            ## subset = sub,
-            ## splitvar = svar,
-            label = lab)
-    } else {
-        new("LayoutColLeaf", level = lev, 
-            func = if(is.null(summary_function)) length else summary_function,
-            pos_in_tree = tpos,
-            label = lab)
-    }        
-}
-
-## LayoutColBranch = function(lev = 0L, kids = list(), lab = "") {
-##     new("LayoutColBranch", level = lev, children = kids, label = lab)
-## }
-
-LayoutColLeaf = function(lev = 0L, lab = "", tpos#,
-                        ## n = NA_integer_,
-                         #svar = NA_character_
-                         ) {
-    new("LayoutColLeaf", level = lev, label = lab,
-        pos_in_tree = tpos##, 
-        ##subset = sub#,
-        ##N_count = n,
-        ##splitvar = svar
-        )
-}
-
-LayoutRowTree = function(lev = 0L, kids = list()) {
-    new("LayoutRowTree", level = lev, children = kids)
-}
-
-## LayoutRowBranch = function(lev = 0L, kids = list(), lab = "") {
-##     new("LayoutRowBranch", level = lev, children = kids, label = lab)
-## }
-
-LayoutRowLeaf = function(lev = 0L, lab = "",
-                       pos){##, sub, n) {
-    new("LayoutRowLeaf", level = lev, label = lab,
-        pos_in_tree = pos)##subset = sub, N_count = n)
-}
-
-setClass("RTablesLayout", contains="VIRTUAL", representation(col_layout = "LayoutColTree", row_layout = "LayoutRowTree"))
-
-## dominant here means which subset is taken first to define the subset for
-## a particular cell, the one associated with the table column or the one associated
-## with the table row
-
-setClass("RowDominantLayout", contains = "RTablesLayout")
-setClass("ColDominantLayout", contains = "RTablesLayout")
-
-rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
-                  coltree = LayoutColTree()) {
-    
-    if(row_dominant) {
-        new("RowDominantLayout", col_layout = coltree, row_layout = rowtree)
-    } else {
-        new("ColDominantLayout", col_layout = coltree, row_layout = rowtree)
-    }
-}
-
-
+###
+### Pre-Data Layout Declaration Classes
+###
+### Notably these are NOT represented as trees
+### because without data we cannot know what the
+### children should be.
+###
 
 setClass("SplitVector", contains="list",
          validity = function(object) {

@@ -60,8 +60,8 @@ spldesc = function(spl, value = "") {
 
 
 docatlayout = function(obj) {
-    if(!is(obj, "VLayoutNode"))
-        stop("how did a non layoutnode object get in docatlayout??")
+    ## if(!is(obj, "VLayoutNode"))
+    ##     stop("how did a non layoutnode object get in docatlayout??")
 
     pos = tree_pos(obj)
     spllst = pos_splits(pos)

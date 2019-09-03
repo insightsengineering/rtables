@@ -7,8 +7,11 @@
     }
     if(is.null(lbls))
         lbls = sapply(vals, function(v) {
-            unique(df[df[[spl_payload(spl)]] == v,
-                      spl_lblvar(spl), drop = TRUE])
+            vlbl = unique(df[df[[spl_payload(spl)]] == v,
+                             spl_lblvar(spl), drop = TRUE])
+            if(length(vlbl) == 0)
+                vlbl = ""
+            vlbl
         })
     fct = factor(varvec, levels = vals)
     spl = split(df, fct)
@@ -17,19 +20,21 @@
 }
 
 excl_levs_sfun = function(excl) {
-    function(df, spl) {
+    function(df, spl, vals = NULL, lbls = NULL) {
         var = spl_payload(spl)
         df2 = df[!(df[[var]] %in% excl),]
-        .apply_split_inner(spl, df2)
+        .apply_split_inner(spl, df2, vals = vals,
+                           lbls = lbls)
     }
 }
 
 
 only_levs_sfun = function(only) {
-    function(df, spl) {
+    function(df, spl, vals = NULL, lbls = NULL) {
         var = spl_payload(spl)
         df2 = df[df[[var]] %in% only,]
-        .apply_split_inner(spl, df2)
+        .apply_split_inner(spl, df2, vals = vals,
+                           lbls = lbls)
     }
 }
 
@@ -41,17 +46,18 @@ reord_levs_sfun = function(neworder, newlbls = neworder) {
 
 
 setGeneric("apply_split", 
-           function(spl, df, curexpr = NULL) standardGeneric("apply_split"))
+           function(spl, df, vals = NULL, lbls = NULL) standardGeneric("apply_split"))
 
 setMethod("apply_split", "VarLevelSplit",
-          function(spl, df) {
+          function(spl, df, vals = NULL, lbls = NULL) {
     if(!is.null(split_fun(spl))) 
-        return(split_fun(spl)(df, spl))
-    .apply_split_inner(spl, df)
+        return(split_fun(spl)(df, spl,
+            vals = vals, lbls = lbls))
+    .apply_split_inner(spl, df, vals = vals, lbls = lbls)
 })
 
 setMethod("apply_split", "MultiVarSplit",
-          function(spl, df) {
+          function(spl, df, vals = NULL, lbls = NULL) {
     vars = spl_payload(spl)
     lst = lapply(vars, function(v) {
         df[!is.na(df[[v]]),]
@@ -63,18 +69,22 @@ setMethod("apply_split", "MultiVarSplit",
 })
 
 setMethod("apply_split", "AllSplit",
-          function(spl, df) list(values = TRUE,
+          function(spl, df,
+                   vals = NULL,
+                   lbls = NULL) list(values = TRUE,
                                  datasplit = list(df),
                                  labels = obj_label(spl)))
 
 setMethod("apply_split", "NULLSplit",
-          function(spl, df) list(values = FALSE,
+          function(spl, df,
+                   vals = NULL,
+                   lbls = NULL) list(values = FALSE,
                                  datasplits = list(df[0,]),
                                  labels = ""))
     
 
 setMethod("apply_split", "AnalyzeVarSplit",
-          function(spl, df) {
+          function(spl, df, vals = NULL, lbls = NULL) {
     dat = df[!is.na(df[[spl_payload(spl)]]),]
     list(values = spl_payload(spl),
          datasplit = list(dat),
