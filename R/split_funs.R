@@ -51,9 +51,17 @@ setGeneric("apply_split",
 setMethod("apply_split", "VarLevelSplit",
           function(spl, df, vals = NULL, lbls = NULL) {
     if(!is.null(split_fun(spl))) 
-        return(split_fun(spl)(df, spl,
-            vals = vals, lbls = lbls))
-    .apply_split_inner(spl, df, vals = vals, lbls = lbls)
+        ret = split_fun(spl)(df, spl,
+            vals = vals, lbls = lbls)
+    else
+        ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls)
+    if(!is.null(spl_child_order(spl))) {
+        vord = spl_child_order(spl)
+        vord = vord[vord %in% ret$values]
+        ret$values = as.character(reorder(ret$values, vord))
+    }
+    ret
+    
 })
 
 setMethod("apply_split", "MultiVarSplit",

@@ -33,15 +33,17 @@ setClass("TreePos", representation(splits = "list",
 
 ## these default to NULL even though NULL does not appear first
 setClassUnion("functionOrNULL", c("function", "NULL"))
-setClassUnion("FormatSpec",c( "character", "function", "NULL"))
+setClassUnion("FormatSpec",c("NULL", "character", "function"))
 
 
 setClass("Split", contains = "VIRTUAL",
          representation(
              payload = "character",
-             ## type = "character",
              split_label = "character",
              split_format = "FormatSpec",
+             ## NB this is the function which is applied to
+             ## get the content rows for the CHILDREN of this
+             ## split!!!
              content_fun = "functionOrNULL",
              content_format = "FormatSpec"))
 
@@ -286,7 +288,8 @@ setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
 ## TableTrees
 setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
-         representation(col_layout = "VLayoutNode"))
+         representation(col_layout = "VLayoutNode",
+                        format = "FormatSpec"))
 
 setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
          representation(children = "list",
@@ -393,8 +396,7 @@ rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
               
 setClass("TableRow", contains = "VTableLeafInfo",
          representation(colspans = "integer",
-                        pos_in_tree = "TableRowPos",
-                        format = "FormatSpec"),
+                        pos_in_tree = "TableRowPos"),
          validity = function(object) {
     lcsp = length(object@colspans)
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
@@ -403,13 +405,14 @@ setClass("TableRow", contains = "VTableLeafInfo",
 TableRow = function(val = list(),
                     lev = 1L,
                     lab = "",
-                    cspan = seq(along = val),
+                    cspan = rep(1L, length(val)),
                     clayout = LayoutColTree(),
                     tpos = TableRowPos(),
                     var = NA_character_,
                     var_lbl = NA_character_,
-                    v_type = NA_character_) {
-    new("TableRow", leaf_value = val,
+                    v_type = NA_character_,
+                    fmt = NULL) {
+    rw = new("TableRow", leaf_value = val,
         level = lev,
         label = lab,
         colspans = cspan,
@@ -417,7 +420,10 @@ TableRow = function(val = list(),
         pos_in_tree = tpos,
         var_analyzed = var,
         var_label = var_lbl,
-        value_type = v_type)
+        value_type = v_type,
+        format = NULL)
+    rw = set_fmt_recursive(rw, fmt, FALSE)
+    rw
 }
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
@@ -437,7 +443,8 @@ ElementaryTable = function(kids = list(),
                            tpos = TableTreePos(),
                            iscontent = NA,
                            var = NA_character_,
-                           var_lbl = var) {
+                           var_lbl = var,
+                           fmt = NULL) {
     if(is.null(clayout)) {
         if(length(kids) > 0)
             clayout = kids[[1]]@col_layout
@@ -449,7 +456,7 @@ ElementaryTable = function(kids = list(),
     else if(iscontent != is_content_pos(tpos)) {
         is_content_pos(tpos) = iscontent
     }
-    new("ElementaryTable",
+    tab = new("ElementaryTable",
         children = kids,
         level = lev,
         label = lab,
@@ -457,7 +464,10 @@ ElementaryTable = function(kids = list(),
         col_layout = clayout,
         pos_in_tree = tpos,
         var_analyzed = var,
-        var_label = var_lbl)
+        var_label = var_lbl,
+        format = NULL)
+    tab = set_fmt_recursive(tab, fmt, FALSE)
+    tab
 }
 
 ## under this model, non-leaf nodes can have a content table where rollup
@@ -475,16 +485,13 @@ TableTree = function(cont = ElementaryTable(),
                      lev = 1L,
                      lab = "",
                      rspans = data.frame(),
-                     ## rs_vars = NA_character_,
-                     ## rs_var_lbls = rs_vars,
-                     ## rs_values = NA,
-                     ## rs_value_lbls = as.character(rs_values),
                      tpos = TableTreePos(),
                      iscontent = NA,
                      spl = NULL,
                      var = NA_character_,
                      var_lbl = var,
-                     clayout = NULL) {
+                     clayout = NULL,
+                     fmt = NULL) {
     if(is.null(clayout)) {
         if(!is.null(cont)) {
             clayout = clayout(cont)
@@ -502,33 +509,28 @@ TableTree = function(cont = ElementaryTable(),
     if(iscontent && !is.null(cont) && nrow(cont) > 0)
         stop("Got table tree with content table and content position")
     ## rs_values[sapply(rs_values, function(x) x == nasentinel)] = NA
-    if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "TableRow")))
+    if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "TableRow"))) {
+        ## constructor takes care of recursive format application
         ElementaryTable(kids = kids, lev = lev, lab = lab,
                         rspans = rspans,
                         clayout = clayout,
-                        ## rs_vars = rs_vars,
-                        ## rs_var_lbls = rs_var_lbls,
-                        ## rs_values = rs_values,
-                        ## rs_value_lbls = rs_value_lbls,
                         tpos = tpos,
                         var = var,
-                        var_lbl = var_lbl)
-    ## new("ElementaryTable", children = kids, level = lev, label = lab, rowspans = rpsan, col_layout = clayout, rowsplit_vars = rs_vars,
-    ##         rowsplit_values = rs_values,)
-    else {
-        new("TableTree", content = cont,
+                        var_lbl = var_lbl,
+                        fmt = fmt)
+    } else {
+        tab = new("TableTree", content = cont,
             children = kids,
             level = lev,
             label = lab,
             rowspans = rspans,
-            ## rowsplit_vars = rs_vars,
-            ## rowsplit_var_lbls = rs_var_lbls,
-            ## rowsplit_values = rs_values,
-            ## rowsplit_value_lbls = rs_value_lbls,
             pos_in_tree = tpos,
             split = spl,
-            col_layout = clayout)## ,
-            ## var_label = var_lbl)
+            col_layout = clayout,
+            format = NULL)## ,
+        ## var_label = var_lbl)
+        tab = set_fmt_recursive(tab, fmt, FALSE)
+        tab
     }
 }
 
@@ -541,16 +543,32 @@ TableTree = function(cont = ElementaryTable(),
 ### children should be.
 ###
 
+##
+## Vector (ordered list) of splits.
+##
+## This is a vector (ordered list) of splits to be
+## applied recursively to the data when provided.
+##
+## For convenience, if this is length 1, it can contain
+## a pre-existing TableTree/ElementaryTable.
+## This is used for add_existing_table in
+## colby_constructors.R
+##
+
 setClass("SplitVector", contains="list",
          validity = function(object) {
-    all(sapply(object, is, "Split"))
+    if(length(object)  >= 1)
+        lst = tail(object, 1)[[1]]
+    else
+        lst = NULL
+    all(sapply(head(object, -1), is, "Split")) && (is.null(lst) || is(lst, "Split") || is(lst, "VTableNodeInfo"))
 })
 
 SplitVector = function(x = NULL,
                        ...,
                        lst = list(...)) {
     if(!is.null(x))
-        lst = unlist(c(x, lst))
+        lst = unlist(c(list(x), lst), recursive = FALSE)
     new("SplitVector", lst)
 }
 

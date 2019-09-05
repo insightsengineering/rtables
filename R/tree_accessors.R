@@ -100,6 +100,10 @@ setMethod("clayout", "VTableNodeInfo",
 setMethod("clayout", "PreDataTableLayouts",
           function(obj) obj@col_layout)
 
+## useful convenience for the cascading methods in colby_constructors
+setMethod("clayout", "ANY", function(obj) PreDataColLayout())
+
+
 
 setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
 setMethod("clayout<-", "PreDataTableLayouts",
@@ -108,12 +112,50 @@ setMethod("clayout<-", "PreDataTableLayouts",
     object
 })
 
+setGeneric("next_rpos", function(obj, newtree = FALSE) standardGeneric("next_rpos"))
+
+setMethod("next_rpos", "PreDataTableLayouts",
+          function(obj, newtree) next_rpos(rlayout(obj), newtree))
+
+setMethod("next_rpos", "PreDataRowLayout",
+          function(obj, newtree) {
+    if(newtree)
+        length(obj) + 1L
+    else
+        length(obj)
+})
+
+## setMethod("next_rpos", "PreDataColLayout", function(obj, newtree) stop("can't get next row position from a column layout object"))
+
+setMethod("next_rpos", "ANY", function(obj, newtree) 1L)
+
+setGeneric("next_cpos", function(obj, newtree = FALSE) standardGeneric("next_cpos"))
+
+setMethod("next_cpos", "PreDataTableLayouts",
+          function(obj, newtree) next_cpos(rlayout(obj), newtree))
+
+setMethod("next_cpos", "PreDataColLayout",
+          function(obj, newtree) {
+    if(newtree)
+        length(obj) + 1L
+    else
+        length(obj)
+})
+
+setMethod("next_cpos", "ANY", function(obj, newtree) 1L)
+
+## setMethod("next_cpos", "PreDataRowLayout", function(obj, newtree) stop("can't get next column position from a row layout object"))
+
+
+
 
 
 setGeneric("rlayout", function(obj) standardGeneric("rlayout"))
 
 setMethod("rlayout", "PreDataTableLayouts",
           function(obj) obj@row_layout)
+
+setMethod("rlayout", "ANY", function(obj) PreDataRowLayout())
 
 setGeneric("rlayout<-", function(object, value) standardGeneric("rlayout<-"))
 setMethod("rlayout<-", "PreDataTableLayouts",
@@ -320,14 +362,21 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 
 
 setGeneric("row_values", function(obj) standardGeneric("row_values"))
-setMethod("row_values", "TableRow", function(obj) obj@leaf_values)
+setMethod("row_values", "TableRow", function(obj) obj@leaf_value)
+
+setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
+setMethod("row_values<-", "TableRow",
+          function(obj, value) {
+    obj@leaf_value = value
+    obj
+})
 
 
 setGeneric("obj_fmt", function(obj) standardGeneric("obj_fmt"))
 ## this covers rcell, etc
 setMethod("obj_fmt", "ANY", function(obj) attr(obj, "format"))
-setMethod("obj_fmt", "TableRow", function(obj) obj@format)
-setMethod("obj_fmt", "Split", function(obj) obj@format)
+setMethod("obj_fmt", "VTableNodeInfo", function(obj) obj@format)
+setMethod("obj_fmt", "Split", function(obj) obj@split_format)
 
 setGeneric("obj_fmt<-", function(obj, value) standardGeneric("obj_fmt<-"))
 ## this covers rcell, etc
@@ -335,7 +384,7 @@ setMethod("obj_fmt<-", "ANY", function(obj, value) {
     attr(obj, "format") = value
     obj
 })
-setMethod("obj_fmt<-", "TableRow", function(obj, value) {
+setMethod("obj_fmt<-", "VTableNodeInfo", function(obj, value) {
     obj@format = value
     obj
 })
@@ -345,11 +394,44 @@ setMethod("obj_fmt<-", "Split", function(obj, value) {
     obj
 })
 
+setGeneric("set_fmt_recursive", function(obj, fmt, override = FALSE) standardGeneric("set_fmt_recursive"))
+setMethod("set_fmt_recursive", "TableRow",
+          function(obj, fmt) {
+    if(is.null(fmt))
+        return(obj)
+    if(is.null(obj_fmt(obj)) || override)
+        obj_fmt(obj) = fmt
+    lvals = row_values(obj)
+    lvals = lapply(lvals, function(x) {
+        if(is.null(attr(x, "format")))
+            attr(x, "format") = obj_fmt(obj)
+        x
+    })
+    row_values(obj) = lvals
+    obj
+})
+
+setMethod("set_fmt_recursive", "VTableTree",
+          function(obj, fmt, override = FALSE) {
+    force(fmt)
+    if(is.null(fmt))
+        return(obj)
+    
+    if(is.null(obj_fmt(obj)) || override)
+        obj_fmt(obj) = fmt
+    
+    kids = tree_children(obj)
+    kids = lapply(kids, function(x, fmt2, oride) set_fmt_recursive(x,
+                                                                      fmt = fmt2, override = oride),
+                  fmt2 = obj_fmt(obj), oride = override)
+    tree_children(obj) = kids
+    obj
+})
 
 
 
 setGeneric("content_fmt", function(obj) standardGeneric("content_fmt"))
-setMethod("content_fmt", "Split", function(obj) obj@format)
+setMethod("content_fmt", "Split", function(obj) obj@content_format)
 
 setGeneric("content_fmt<-", function(obj, value) standardGeneric("content_fmt<-"))
 
@@ -390,3 +472,9 @@ setMethod("collect_leaves", "ANY",
     stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
 
 
+setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
+setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
+
+setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
+## this will hit everything via inheritence
+setMethod("tt_level", "VNodeInfo", function(obj) obj@level)

@@ -228,7 +228,7 @@ rcell <- function(x, format = NULL, colspan=1) {
 
 #' Create a rheader object
 #' 
-#' @param ... elements that are either to be mapped to rrows
+#' @param ... elements that are either to be mapped to rrows or a list of rr
 #' @param format default format
 #' 
 #' @export
@@ -261,6 +261,35 @@ rheader <- function(..., format = "xx") {
     class = "rheader"
   )
 }
+
+rheaderl <- function(lst, format = "xx") {
+    stopifnot(are(lst, "rrow"))
+    do.call(rheader, c(list(format = format), lst))
+}
+
+
+#' Create an rheader with header-cell data stored within lists
+#' 
+#' The apply function family returns lists whose elements can be used as cell
+#' data with the \code{lrow} function.
+#' 
+#' @inheritParams rheader
+#' @param ... lists that get concatenated and then flattened by one level of
+#'   depth. If one elemenet is not a list then it gets placed into a list.
+#' 
+#' 
+#' @export
+#' 
+#' 
+
+
+rheaderl <-  function(..., format = NULL) {
+  dots <- list(...)
+  args_list <- c(list(format = format), unlist(lapply(dots, as.list), recursive = FALSE))
+  do.call(rheader, args_list)
+}
+
+
 
 #' Create an rrow with cell-data stored within lists
 #' 

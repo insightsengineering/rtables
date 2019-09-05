@@ -74,8 +74,11 @@ setMethod("toString", "ANY", base:::toString)
     ## cumsum trick to build a factor that increments
     ## anytime a logical vector is true, thus creating
     ## categorical variable from TRUE/FALSE event data
-    inds = cumsum(mapply(identical, x = rvals[-1], y = rvals[-n]))
-    inds = c(inds, max(inds)) ## last element is always ok
+    ##
+    ## the meaning of inds is
+    ## (2nd different from first, 3rd diff from as second, ...)
+    diffinds = cumsum(!mapply(identical, x = rvals[-1], y = rvals[-n]))
+    inds = c(1, diffinds + 1) ## first element is always a new entry
 
     spl = split(rvals, inds)
     cells = lapply(spl,
@@ -89,7 +92,7 @@ setMethod("toString", "ANY", base:::toString)
 }
 
 
-.make_header_rrows = function(tt) {
+.make_s3_header = function(tt) {
     clyt = clayout(tt)
     leaves = collect_leaves(clyt, incl.cont = FALSE)
     vals = lapply(seq_along(leaves),
@@ -105,13 +108,75 @@ setMethod("toString", "ANY", base:::toString)
                             .collapse_cspans(lapply(vals, function(vlst) vlst[[i]])))
                     do.call(rrow, lst)
                     }) 
-    rrows
+    rheaderl(rrows)
 }
 
 
+## temporary compatability layer to leverage existing
+## ascii-rendering functionality
+##
+## We will want to replace this is if the S4 approach is
+## adopted fully
+
+setGeneric("to_s3compat", function(obj, ...) standardGeneric("to_s3compat"))
+setMethod("to_s3compat", "TableRow",
+           function(obj, ...)
+{
+    cells = mapply( function(val, span) {
+        fmt = attr(val, "format")
+        if(is.null(fmt))
+            fmt = obj_fmt(obj)
+        rcell(val, format = fmt, colspan = span)
+    }, val = row_values(obj),
+    span = row_cspans(obj),
+    SIMPLIFY = FALSE)
+    rrowl(row.name = obj_label(obj),
+          cells, 
+          indent = tt_level(obj),
+          format = obj_fmt(obj))
+    
+})
+
+setMethod("to_s3compat", "TableTree",
+          function(obj, ...) {
+    header = .make_s3_header(obj)
+    rows = lapply(collect_leaves(obj, incl.cont = TRUE),
+                  to_s3compat)
+    rtablel(header = header, rows, format = obj_fmt(obj))
+})
+## this is currently implemented as a
+## light-as-possible compatibility layer on top
+## of the existing toString logic.
+##
+## That will likely eventually want to change, but for now
+## it is sufficient.
 setMethod("toString", "TableTree",
           function(x, ...) {
 
-
-
+    header <- .make_header_rrows(x)
+    body <- x
+    
+    header_body <- c(header, body)
+    
+    nchar_rownames <- max_nchar_rownames(header_body, indent.unit = indent.unit)
+    
+    nchar_col <- max_nchar_cols(header_body)
+    
+    txt_header <- lapply(header, function(row) {
+        row_to_str(row, nchar_rownames, nchar_col, gap, indent.unit)
+    })
+    
+    txt_body <- lapply(x, function(row) {
+        row_to_str(row, nchar_rownames, nchar_col, gap, indent.unit)
+    })
+    
+    
+    paste(
+        c(
+            txt_header,
+            paste(rep("-", nchar_rownames + ncol(x)*(nchar_col + gap)), collapse = ""),
+            txt_body
+        ),
+        collapse = "\n"
+    )  
 })

@@ -27,6 +27,7 @@ docat = function(obj) {
         }
         lapply(kids, docat)
     }
+    invisible(NULL)
 }
     
 setMethod("show", "TableTree",
@@ -116,11 +117,17 @@ setMethod("spltype_abbrev", "AnalyzeVarSplit",
 docat_splitvec = function(object, indent = 0) {
     if(indent > 0)
         cat(rep(" ", times = indent), sep = "")
+    if(length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
+        tab = object[[1]]
+        msg = sprintf("A Pre-Existing Table [%d x %d]",
+                      nrow(tab), ncol(tab))
+    } else {
 
-    plds = ploads_to_str(lapply(object, spl_payload))
-    tabbrev = sapply(object, spltype_abbrev)
-    msg = paste(collapse = " -> ",
-                paste0(plds, " (", tabbrev, ")"))
+        plds = ploads_to_str(lapply(object, spl_payload))
+        tabbrev = sapply(object, spltype_abbrev)
+        msg = paste(collapse = " -> ",
+                    paste0(plds, " (", tabbrev, ")"))
+    }
     cat(msg, "\n")
 }
 

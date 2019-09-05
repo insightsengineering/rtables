@@ -22,9 +22,7 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_summary_count(lbl = "Overall (N)") %>%
     ## add a new subtable that splits on RACE, value labels from ethn_lbl
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    ## This would add a summary content row of the count of non-NA
-    ## RACE observations
-    ##    add_summary_count("RACE", lblfmt = "Ethnicity (n)") %>%
+    add_summary_count("RACE", lblfmt = "%s (n)") %>%
     ##
     ## Add nested row split within Race categories for FACTOR2
     ## using a split function that excludes level C
@@ -39,8 +37,6 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## this will create 2 data rows
     add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                            median = median(x))) %>%
-    ## Add 
-    add_summary_count("Age") %>%
     ## Note newtoplev=TRUE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
@@ -49,7 +45,6 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 
 
 makefakedat = function(n  = 1000) {
-
     datadf = data.frame(stringsAsFactors = FALSE,
                         ARM = c("ARM1", sample(c("ARM1", "ARM2"), n -1, replace = TRUE)),
                         SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
@@ -78,6 +73,32 @@ stuff = recursive_applysplit(rawdat, splvec = rlayout(thing)[[1]],
 
 
 tab = build_table(thing, rawdat)
+
+## generate a little table that we want to add onto another table
+## that we're going to build
+thing2 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+    ## add nested column split on SEX with value lables from gend_lbl
+    add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
+    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                                    median = median(x)), fmt = "xx.xx")
+
+tab2 = build_table(thing2, rawdat)
+
+
+thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+    ## add nested column split on SEX with value lables from gend_lbl
+    add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
+    add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
+    add_summary_count("RACE", lblfmt = "%s (n)") %>%
+    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                                    median = median(x)), fmt = "xx.xx") %>%
+
+    ## stack an existing table onto the layout and thus the generated table
+    add_existing_table(tab2)
+
+
+tab3 = build_table(thing3, rawdat)
+
 
 nms = c("rownum", "rowvar", "rowvarlbl", "valtype", "rowlbl", "r1value", "r2value", 
 "r1vlbl", "r2vlbl", "ARM1___M", "ARM1___F", "ARM2___M", "ARM2___F", 
