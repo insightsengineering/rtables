@@ -96,7 +96,7 @@ setMethod("toString", "ANY", base:::toString)
     clyt = clayout(tt)
     leaves = collect_leaves(clyt, incl.cont = FALSE)
     vals = lapply(seq_along(leaves),
-                  function(i) pos_splvals(leaves[[i]]))
+                  function(i) splv_rawvalues(pos_splvals(leaves[[i]])))
     
     nvals = length(vals[[1]])
     numcols = length(vals)

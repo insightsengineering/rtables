@@ -190,7 +190,7 @@ ploads_to_str = function(x, collapse = ":") sapply(x,
 
 trow_to_dfrow = function(trow) {
     nrowsplit = length(pos_splits(trow))
-    rsvalues = pos_splvals(trow)
+    rsvalues = splv_rawvalues(pos_splvals(trow))
     names(rsvalues) = safepaste0("r", seq_along(rsvalues), "value")
     datvals = trow@leaf_value ##leaf_values(trow)
     names(datvals) = df_datcol_names(trow)

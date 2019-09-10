@@ -1,16 +1,17 @@
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
-
+    v = splv_rawvalues(val)
     as.expression(bquote(.(a) == .(b), list(a = as.name(spl_payload(spl)),
-                              b = val)))
+                              b = v)))
 
 
 })
 
 setMethod("make_subset_expr", "MultiVarSplit",
           function(spl, val) {
-    as.expression(bquote(!is.na(.(a)), list(a = val)))
+    v = splv_rawvalues(val)
+    as.expression(bquote(!is.na(.(a)), list(a = v)))
 })
 
 setMethod("make_subset_expr", "AnalyzeVarSplit",
@@ -24,16 +25,18 @@ setMethod("make_subset_expr", "AnalyzeVarSplit",
 
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
+    v = splv_rawvalues(val)
     as.expression(bquote(cut(.(a)) == .(b)),
                   list(a = as.name(spl_payload(spl)),
-                       b = val))
+                       b = v))
 })
 
 setMethod("make_subset_expr", "VarDynCutSplit",
           function(spl, val) {
+    v = splv_rawvalues(val)
     as.expression(bquote(.(fun)(.(a)) == .(b)),
                   list(a = as.name(spl_payload(spl)),
-                       b = val,
+                       b = v,
                        fun = spl@cut_fun))
 })
 
@@ -71,4 +74,39 @@ make_pos_subset = function(spls = pos_splits(pos),
         expr = .combine_subset_exprs(expr, newexpr)
     }
     expr
+}
+
+
+get_pos_extra = function(svals = pos_splvals(pos),
+                         pos) {
+    ret = list()
+    for(i in seq_along(svals)) {
+        tmp = splv_extra(svals[[i]])
+        if(length(tmp) > 0) {
+            if(length(ret) > 0)
+                stop("'extra' splitting info found at multiple levels of nesting. not currently supported.")
+            ret = tmp
+        }
+    }
+    ret
+}
+
+get_col_extras = function(ctree) {
+    leaves = collect_leaves(ctree)
+    lapply(leaves,
+           function(x) get_pos_extra(pos = tree_pos(x)))
+}
+
+create_colinfo = function(clayout, df, rtpos = TreePos()) {
+    ## this will work whether clayout is pre or post
+    ## data
+    ctree = coltree(clayout, df = df, rtpos = rtpos)
+
+    cexprs = make_col_subsets(ctree, df)
+    cextras = cextra_args(ctree)
+    new("InstantiatedColumnInfo",
+        tree_layout = ctree,
+        subset_exprs = cexprs,
+        cextra_args = cextras)
+
 }

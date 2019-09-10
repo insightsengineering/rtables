@@ -21,8 +21,8 @@
 
 empty_dominant_axis = function(layout) {
     stopifnot(is(layout, "RTablesLayout"))
-    ((is(layout, "RowDominantLayout") && n_leaves(row_tree(layout)) == 0L) ||
-     (is(layout, "ColDominantLayout") && n_leaves(col_tree(layout)) == 0L))
+    ((is(layout, "RowDominantLayout") && n_leaves(rowtree(layout)) == 0L) ||
+     (is(layout, "ColDominantLayout") && n_leaves(coltree(layout)) == 0L))
 
 }
 
@@ -348,14 +348,18 @@ rtabulate_layout <- function(x, layout, FUN, ...,
   
   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = sapply(layout_children(col_tree(layout)), function(leaf) leaf@label), rr)
+  rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
 }
 
 
 
-.make_tablerows = function(dfpart, func, colexprs, coltree, tabpos, datcol = NULL, lev = 1L, rvlab = NA_character_, rvtypes = NULL, format = NULL) {
+.make_tablerows = function(dfpart, func,
+                           ##colexprs, coltree,
+                           cinfo,
+                           tabpos, datcol = NULL, lev = 1L, rvlab = NA_character_, rvtypes = NULL, format = NULL) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
+    colexprs = col_exprs(cinfo)
     rawvals = lapply(colexprs,
                      function(csub) {
         inds = eval(csub, envir = dfpart)
@@ -375,7 +379,7 @@ rtabulate_layout <- function(x, layout, FUN, ...,
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
         TableRow(val = rowvals,tpos = make_rowpos(tabpos, i),
-                 clayout = coltree,
+                 clayout = coltree(cinfo),
                  lev = lev,
                  lab = lbls[i],
                  var = rowvar,
@@ -390,7 +394,10 @@ rtabulate_layout <- function(x, layout, FUN, ...,
     trows
 }
 
-.make_ctab = function(df, lvl, spl, treepos, colexprs, coltree, parent_cfun = NULL, format = NULL) {
+.make_ctab = function(df, lvl, spl, treepos,
+                      ##colexprs, coltree,
+                      cinfo,
+                      parent_cfun = NULL, format = NULL) {
 
  
     ctpos = make_tablepos(treepos, iscontent = TRUE)
@@ -406,8 +413,9 @@ rtabulate_layout <- function(x, layout, FUN, ...,
         contkids = .make_tablerows(df,
                                    lev = lvl,
                                    function(df2) parent_cfun(df2, clblstr),
-                                   colexprs,
-                                   coltree,
+                                   ## colexprs,
+                                   ## coltree,
+                                   cinfo,
                                    ctpos)
     } else {
         contkids = list()
@@ -421,7 +429,7 @@ rtabulate_layout <- function(x, layout, FUN, ...,
     ctab = ElementaryTable(kids = contkids,
                            lev = lvl,
                            tpos = ctpos,
-                           clayout = coltree,
+                           clayout = coltree(cinfo),
                            iscontent = TRUE,
                            lab = clbl,
                            fmt = format)
@@ -430,7 +438,10 @@ rtabulate_layout <- function(x, layout, FUN, ...,
 
 
 
-recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs, coltree, parent_cfun = NULL, cformat = NULL) {
+recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
+                                ##colexprs, coltree,
+                                cinfo,
+                                parent_cfun = NULL, cformat = NULL) {
     
 
     ## lvl is level of indentation, which starts at 0
@@ -448,7 +459,10 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs,
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
     ## declaring layouts much more sane.
-    ctab = .make_ctab(df, lvl, spl, treepos, colexprs, coltree, parent_cfun, format = cformat)
+    ctab = .make_ctab(df, lvl, spl, treepos,
+                      ##colexprs, coltree,
+                      cinfo = cinfo,
+                      parent_cfun, format = cformat)
     if(pos < length(splvec)) { ## there's more depth, recurse
         rawpart = apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
@@ -464,8 +478,9 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs,
                                  lvl = lvl+1L,
                                  splvec = splvec,
                                  treepos = newpos,
-                                 colexprs = colexprs,
-                                 coltree = coltree,
+                                 ## colexprs = colexprs,
+                                 ## coltree = coltree,
+                                 cinfo = cinfo,
                                  parent_cfun = content_fun(spl),
                                  cformat = content_fmt(spl))
         }, dfpart = dataspl, val = splvals,
@@ -475,8 +490,9 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs,
         stopifnot(is(spl, "AnalyzeVarSplit"))
         kids = .make_tablerows(df,
                                analysis_fun(spl),
-                               colexprs,
-                               coltree,
+                               ## colexprs,
+                               ## coltree,
+                               cinfo = cinfo,
                                tabpos = make_tablepos(treepos, iscontent = FALSE),
                                datcol = spl_payload(spl),
                                lev = lvl + 1L,
@@ -489,30 +505,35 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL, colexprs,
               iscontent = FALSE,
               spl = spl,
               lab = obj_label(spl),
-              clayout = coltree)
+              clayout = coltree(cinfo))
 }
 
 
 build_table = function(lyt, df, ...) {
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
-    
-    ctree = splitvec_to_coltree(df, clayout(lyt)[[1]],
-                                rtpos)
-    cexprs = build_splits_expr(clayout(lyt)[[1]], rawdat)
 
+    ## I really don't like that we need 2 different
+    ## representations of the columns here....
+    ## ctree = splitvec_to_coltree(df, clayout(lyt)[[1]],
+    ##                             rtpos)
+    ## cexprs = build_splits_expr(clayout(lyt)[[1]], rawdat)
+    ## cextras = get_col_extras(ctree)
+    cinfo = create_colinfo(clayout(lyt), df, rtpos)
+    
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L, rtspl,
-                      rtpos, cexprs, ctree,
+                      rtpos, cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         pos = TreePos(list(rtspl), list(i), as.character(i)) 
         recursive_applysplit(df = df, lvl = 0L,
                              splvec = rlyt[[i]],
                              treepos = pos,
-                             colexprs = cexprs,
-                             coltree = ctree,
+                             cinfo = cinfo,
+                             ## colexprs = cexprs,
+                             ## coltree = ctree,
                              ## XXX is this ALWAYS right?
                              parent_cfun = NULL)
         })
@@ -523,7 +544,7 @@ build_table = function(lyt, df, ...) {
                     tpos = make_tablepos(rtpos, FALSE),
                     iscontent = FALSE,
                     spl = rtspl,
-                    clayout = ctree,
+                    clayout = coltree(cinfo),
                     fmt = obj_fmt(rtspl))
     tab
 }
@@ -661,6 +682,8 @@ setMethod("build_splits_expr", "SplitVector",
     ret
 })
 
+
+
 tmpfun = function(lyt, df) {
 
 }
@@ -704,6 +727,12 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
     spl
 })
 
+
+## XXX do I really need two generics, make_col_subsets
+## AND build_splits_expr???
+
+
+
 setGeneric("make_col_subsets",function(lyt, df) standardGeneric("make_col_subsets"))
 setMethod("make_col_subsets", "PreDataTableLayouts",
           function(lyt, df) {
@@ -711,11 +740,25 @@ setMethod("make_col_subsets", "PreDataTableLayouts",
 })
 setMethod("make_col_subsets", "PreDataColLayout",
           function(lyt, df) {
-    unlist(lapply(lyt, make_col_subsets))
+    unlist(lapply(lyt, make_col_subsets, df = df))
 })
 
 setMethod("make_col_subsets", "SplitVector",
           function(lyt, df) {
+    build_splits_expr(lyt, df)
+    
+})
+
+
+setMethod("make_col_subsets", "LayoutColTree",
+          function(lyt, df) {
+    leaves = collect_leaves(lyt)
+    lapply(leaves, make_col_subsets)
+})
+
+setMethod("make_col_subsets", "LayoutColLeaf",
+          function(lyt, df) {
+    make_pos_subset(pos = tree_pos(lyt))
 })
 
 rtabulate_layout2 =  function(x, layout, FUN, ...,
@@ -725,13 +768,13 @@ rtabulate_layout2 =  function(x, layout, FUN, ...,
   force(FUN)
  # check_stop_col_by(col_by, col_wise_args)
   
-  column_data <- if (n_leaves(col_tree(layout)) == 0L) {
+  column_data <- if (n_leaves(coltree(layout)) == 0L) {
     setNames(list(x), "noname(for now FIXME)")
   } else {
       ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
 
       ## not handling nesting right now at all
-      leaves = layout_children(col_tree(layout))
+      leaves = layout_children(coltree(layout))
       setNames(lapply(leaves,
                       function(leaf) x[leaf@subset]),
                sapply(leaves,
@@ -755,7 +798,7 @@ rtabulate_layout2 =  function(x, layout, FUN, ...,
   
   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = sapply(layout_children(col_tree(layout)), function(leaf) leaf@label), rr)
+  rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
 }
 
     

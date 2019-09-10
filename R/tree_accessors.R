@@ -478,3 +478,95 @@ setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
 setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 ## this will hit everything via inheritence
 setMethod("tt_level", "VNodeInfo", function(obj) obj@level)
+
+setGeneric("splv_rawvalues", function(obj) standardGeneric("splv_rawvalues"))
+setMethod("splv_rawvalues", "SplitValue",
+          function(obj) obj@value)
+setMethod("splv_rawvalues", "list",
+          function(obj) lapply(obj, splv_rawvalues))
+
+setGeneric("splv_extra", function(obj) standardGeneric("splv_extra"))
+setMethod("splv_extra", "SplitValue",
+          function(obj) obj@extra)
+
+
+
+
+setGeneric("coltree", function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree"))
+setMethod("coltree", "InstantiatedColumnInfo",
+          function(obj, df = NULL, rtpos = TreePos()) {
+    if(!is.null(df))
+        warning("Ignoring df argument and retrieving already-computed LayoutColTree")
+    obj@tree_layout
+})
+
+setMethod("coltree", "PreDataTableLayouts",
+          function(obj, df, rtpos) coltree(clayout(obj), df, rtpos))
+
+setMethod("coltree", "PreDataColLayout",
+          function(obj, df, rtpos) {
+    ## ## XXX this [[1]] is WRONG!!
+    ## ## XXXXXXXX
+    ## if(length(obj) == 1L)
+    ##     splitvec_to_coltree(df, obj[[1]], rtpos)
+    ## else
+    kids = lapply(obj, function(x) splitvec_to_coltree(df = df, splvec = x, pos = rtpos))
+    if(length(kids) == 1)
+        kids[[1]]
+    else
+        LayoutColTree(lev = 0L,
+                  kids = kids,
+                  tpos = rtpos,
+                  spl = RootSplit())
+})
+
+
+setMethod("coltree", "LayoutColTree",
+          function(obj, df, rtpos) obj)
+
+
+
+setGeneric("col_exprs", function(obj, df = NULL) standardGeneric("col_exprs"))
+
+setMethod("col_exprs", "PreDataTableLayouts",
+          function(obj, df = NULL) col_exprs(clayout(obj), df))
+
+setMethod("col_exprs", "PreDataColLayout",
+          function(obj, df = NULL) {
+    unlist(recursive = FALSE,
+           lapply(obj, build_splits_expr,
+                  df = df))
+})
+
+setMethod("col_exprs", "InstantiatedColumnInfo",
+          function(obj, df = NULL) {
+    if(!is.null(df))
+        warning("Ignoring df method when extracted precomputed column subsetting expressions.")
+    obj@subset_exprs
+})
+
+setGeneric("cextra_args", function(obj, df = NULL) standardGeneric("cextra_args"))
+
+setMethod("cextra_args", "InstantiatedColumnInfo",
+          function(obj, df) {
+    if(!is.null(df))
+        warning("Ignorning df when retrieving already-computed column extra arguments.")
+    obj@cextra_args
+})
+
+
+setMethod("cextra_args", "PreDataTableLayouts",
+          function(obj, df) cextra_args(clayout(obj), df))
+
+setMethod("cextra_args", "PreDataColLayout",
+          function(obj, df) {
+    cextra_args(coltree(obj, df), NULL)
+})
+
+
+setMethod("cextra_args", "LayoutColTree",
+          function(obj, df) {
+    if(!is.null(df))
+        warning("Ignoring df argument and returning already calculated extra arguments")
+    get_col_extras(obj)
+})

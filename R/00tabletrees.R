@@ -35,6 +35,23 @@ setClass("TreePos", representation(splits = "list",
 setClassUnion("functionOrNULL", c("function", "NULL"))
 setClassUnion("FormatSpec",c("NULL", "character", "function"))
 
+## heavier-weight than I'd like but I think we need
+## this to carry around thee subsets for
+## comparison-based splits
+
+setClass("SplitValue",
+         representation(
+             value = "ANY",
+             extra = "list"))
+
+SplitValue = function(val, extr =list()) {
+    if(is(val, "SplitValue"))
+        stop("SplitValue  object passed to SplitValue constructor")
+    
+    new("SplitValue", value = val,
+        extra = extr)
+}
+
 
 setClass("Split", contains = "VIRTUAL",
          representation(
@@ -170,12 +187,57 @@ AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = 
 }
 
 
+## This is what will bee used to generate the parallel
+## lists of subsets to be pair/element-wise compared
+## function should take the data.frame and return a
+## list of subsets,
+## character should name a categorical column in
+## the dataframe that it should be split on
+setClassUnion("VarOrFactory", c("function", "character"))
 
+## this contains "AllSplit" because wee need all
+## of the data to be accessibe  from all of the children
+## so that they can perform the comparison
+
+setClass("ComparisonSplit", contains = "AllSplit",
+         representation(subset1_gen = "VarOrFactory",
+                        subset2_gen = "VarOrFactory",
+                        label_format = "character"))
+
+ComparisonSplit = function(factory1, factory2, lbl_fmt = "%s - %s",
+                           ## not needed i think...
+                           cfun = NULL, cfmt = NULL, splfmt = NULL) {
+    new("ComparisonSplit",
+        subset1_gen = factory1,
+        subset2_gen = factory2,
+        label_format = lbl_fmt,
+        split_label = splbl,
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
+}
+
+                        
 ## TODO in the future 
 ## setClass("BaselineCompSplit", contains = "Split",
 ##          representation(
 ##              factor_var = "character",
 ##              baseline_level = "character"))
+
+
+setClass("CompSubsetVectors",
+         representation(subset1 = "list",
+                        subset2 = "list"),
+         validity = function(object) length(object@subset1) == length(object@subset2))
+
+
+
+
+
+
+
+
+
 
         
 Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra = NULL) {
@@ -620,3 +682,19 @@ PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
         col_layout = clayout)
 }
         
+## Instantiated column info class
+##
+## This is so we don't need multiple arguments
+## in the recursive functions that track
+## various aspects of the column layout
+## once its applied to the data.
+
+setClass("InstantiatedColumnInfo",
+         representation(tree_layout = "LayoutColTree",
+                        subset_exprs = "list",
+                        cextra_args = "list"),
+         validity = function(object) {
+    nleaves = length(collect_leaves(object@tree_layout))
+    length(object@subset_exprs) == nleaves &&
+        length(object@cextra_args) == nleaves
+    })

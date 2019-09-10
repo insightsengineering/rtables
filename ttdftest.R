@@ -1,5 +1,6 @@
 library(magrittr)
 library(rtables)
+options(error=recover)
 
 df = read.csv("tabledfex.dat", stringsAsFactors = FALSE)
 dfrow = df[4,]
@@ -66,10 +67,10 @@ ctree = splitvec_to_coltree(rawdat, clayout(thing)[[1]], TreePos())
 
 cexprs = build_splits_expr(clayout(thing)[[1]], rawdat)
 
-stuff = recursive_applysplit(rawdat, splvec = rlayout(thing)[[1]],
-                             treepos = TreePos(),
-                             colexprs = cexprs,
-                             coltree = ctree)
+## stuff = recursive_applysplit(rawdat, splvec = rlayout(thing)[[1]],
+##                              treepos = TreePos(),
+##                              colexprs = cexprs,
+##                              coltree = ctree)
 
 
 tab = build_table(thing, rawdat)

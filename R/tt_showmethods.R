@@ -47,6 +47,8 @@ setMethod("show", "ElementaryTable",
 
 
 spldesc = function(spl, value = "") {
+    if(is(value, "SplitValue"))
+        value = splv_rawvalues(value)
     payloadmsg = switch(class(spl),
                         VarLevelSplit = spl@payload,
                         MultiVarSplit = "variable",
