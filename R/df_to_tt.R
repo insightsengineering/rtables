@@ -1,68 +1,3 @@
-##
-## Patterns and constants for for the column naming
-##
-##
-
-rsvar_pat = "^rsp_[0-9]+$"
-rsvalue_pat = "^r[0-9]+value$"
-rsvalue_lbl_pat = "^r[0-9]+vlbl$"
-rsvar_lbl_pat = "^rsplbl_[0-9]+$"
-rstype_pat = "^rsptype_[0-9]+$"
-
-## if theres only one colsplit the col is still <splitval>___
-## for detection purposes e.g.,
-## single and nested VarLevel splits
-## ARM1___, ARM2___
-## ARM1___M, ARM1___F, ARM2___M, ARM2___F
-## Single MultiVar split
-## Value___, PCTDiff___ (this is a multivariable split)
-## Multivar split nested inside VarLevel split
-## ARM1___Value, ARM1___PCTDiff, ARM2___Value, ARM2___PCTDiff
-datacol_pat = "^([[:alnum:]_]+___)+[[:alnum:]_]*$" 
-
-
-csvar_pat = "^csp_[0-9]+$"
-cstype_pat = "^csptype_[0-9]+$"
-cs_lbl_pat = "^csplbl_[0-9]+$"
-
-
-cspan_col = "c__colspans__c"
-rspan_col_pat = "^rspan_col_[0-9]+$"
-
-avar_col = "rowvar"
-avarlbl_col = "rowvarlbl"
-rowlbl_col = "rowlbl"
-
-
-.rsvar_colnames = function(df) 
-    grep(rsvar_pat, names(df), value = TRUE)
-
-.rsvarlbl_colnames = function(df)
-    grep(rsvar_lbl_pat, names(df), value = TRUE)
-
-.rsvalue_colnames = function(df)
-    grep(rsvalue_pat, names(df), value = TRUE)
-
-.rsvaluelbl_colnames = function(df)
-    grep(rsvalue_lbl_pat, names(df), value = TRUE)
-
-.rsvartype_colnames = function(df)
-    grep(rstype_pat, names(df), value = TRUE)
-
-.data_colnames = function(df)
-    grep(datacol_pat, names(df), value = TRUE)
-
-.csvar_colnames = function(df)
-    grep(csvar_pat, names(df), value = TRUE)
-
-.csvartype_colnames = function(df)
-    grep(cstype_pat, names(df), value = TRUE)
-
-.csvarlbl_colnames = function(df)
-    grep(cs_lbl_pat, names(df), value = TRUE)
-
-.rspan_colnames = function(df)
-    grep(rspan_col_pat, names(df), value = TRUE)
 
 
 
@@ -94,108 +29,15 @@ varsplit = function(df, level = 0L) {
 }
 
 
-
-.get_rscols_helper = function(df, i, colpat, naret) {
-    if(i < 1)
-        return(naret)
-    if(nrow(df) == 0)
-        return(character())
-    allcols = grep(colpat, names(df), value = TRUE)
-    if(i > length(allcols)) { ## this happens in varsplit
-        i = length(allcols)
-    }
-    mycols = allcols[1:i]
-    mycols
-}
-    
-
-
-
-    
-.get_rsvar_vec = function(df, i) {
-    mycols = .get_rscols_helper(df, i, rsvar_pat, NA_character_)
-    if(is.na(mycols) || length(mycols) == 0)
-        return(mycols)
-    vapply(mycols,
-           function(x) {
-        ret = unique(df[[x]])
-        stopifnot(length(ret) == 1)
-        ret
-        }, character(1))
-}
-
-
-.get_rsvalue_vec = function(df, i) {
-    mycols = .get_rscols_helper(df, i, rsvalue_pat, NA)
-    if(is.na(mycols) || length(mycols) == 0)
-        return(as.list(mycols))
-    
-    lapply(mycols,
-           function(x) {
-        ret = unique(df[[x]])
-        stopifnot(length(ret) == 1)
-        ret
-        })
-}
-
-.get_rstype_vec = function(df, i) {
-    
-    mycols = .get_rscols_helper(df, i, rstype_pat, NA_character_)
-    if(is.na(mycols) || length(mycols) == 0)
-        return(mycols)
-    
-    vapply(mycols,
-           function(x) {
-        ret = unique(df[[x]])
-        stopifnot(length(ret) == 1)
-        ret
-    },
-    character(1))
-}
-
-.get_rs_lbls = function(df, i) {
-    mycols = .get_rscols_helper(df, i, rsvar_lbl_pat, NA_character_)
-    if(is.na(mycols) || length(mycols) == 0)
-        return(mycols)
-
-    vapply(mycols,
-           function(x) {
-        ret = unique(df[[x]])
-        stopifnot(length(ret) == 1)
-        ret
-    }, character(1))
-    
-}
-
-.get_rsvalue_lbls = function(df, i) {
-    mycols = .get_rscols_helper(df, i, rsvalue_lbl_pat, NA_character_)
-    if(is.na(mycols) || length(mycols) == 0)
-        return(mycols)
-     
-    vapply(mycols,
-           function(x) {
-        ret = unique(df[[x]])
-        stopifnot(length(ret) == 1)
-        ret
-    }, character(1))
-}
-
-.get_ravar = function(df) { unique(df[[avar_col]])}
-
-.get_ravar_lbl = function(df) { unique(df[[avarlbl_col]])}
-
-## XXX this was rowvaltype, but now its rowvartype are these different?
-## if so which is correct?
-.get_val_type = function(df) { unique(df$rowvartype)}
-
 recursive_split = function(df, i = 1L) {
  
     
-    rsplval = paste0("r", i, "value")
-    rspl = paste0("rsp_", i)
-    rvlbl = paste0("r", i, "vlbl")
+    rsplval = sprintf(rsvalue_templ, i)
+    rspl = sprintf(rsvar_templ, i)
+    rvlbl = sprintf(rsvalue_lbl_templ, i)
+    rsplblcol = sprintf(rsvar_lbl_templ, i)
     levl = as.integer(i-1)
-    rsplblcol = paste0("rsplbl_",  i)
+    
     ## remember, that e.g., r2value CANNOT be non-NA if r1value is NA
     if(! (rsplval %in% names(df)) || all(is.na(df[[rsplval]]))) { # no more levels to split on
         cinds = which(is.na(df[[avar_col]]))
@@ -308,12 +150,20 @@ recursive_split = function(df, i = 1L) {
     ret
 }
 
+
 recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRUE), label = "") {
-  
+
+    ## data columns are guaranteed to be first here, followed
+    ## directly by colsplit label columns, so we find the first
+    ## colsplit label column and go back one.
+    ##
+    ## XXX TODO: write a better, proper accessor for this
+    ## instead of this ugly hack
+    
     ndcols = min(grep("csplbl_", names(clodf))) -1L
     clodatdf = clodf[,1:ndcols]
     nuniqs  = sapply(clodatdf, function(x) length(unique(x)))
-    if(all(nuniqs == 1))
+    if(all(nuniqs == 1)) 
         firstvary = ndcols + 1L
     else {
         firstvary = min(which(nuniqs  >  1))
@@ -326,12 +176,21 @@ recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRU
     }
     lastinvar = firstvary - 1L
 
+
+    ## if we're not all the way descended we ignore extras
+    ## XXX This may be wrong in some corner cases
+    ## FIXME
+    if(nrow(clodf) == 1)
+        extr = clodf[["__colextra__"]]
+    else
+        extr = list()
+        
     
     if(firstvary > 1) {
         if(!is.null(parpos)) {
             colnm = names(clodf)[lastinvar]
             ## unique() calls below are len 1 guaranteed
-            payload = unique(clodf[[lastinvar]]) 
+            payload = unique(clodf[[lastinvar]])
             typ = .get_ctyp_clodf(clodf,  lastinvar)
             lbl = .get_clbl_clodf(clodf, lastinvar)
             ## TODO lbl value
@@ -348,7 +207,8 @@ recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRU
             tspvals = lapply(1:lastinvar, function(i) {
                 unique(clodf[[i]]) # this is len 1
             })
-            tpos = TreePos(spls = tspls, svals = tspvals, NULL)
+            svals = make_splvalue_vec(tspvals, c(rep(list(list()), length(tspvals) - 1L), extr))
+            tpos = TreePos(spls = tspls, svals = svals, NULL)
         }
     } else {
         tpos = TreePos()
@@ -362,13 +222,18 @@ recursive_build_clayout = function(clodf, parpos= NULL, curexpr = expression(TRU
     }
     kids = lapply(seq(along = spldf), function(i) {
         thisdf = spldf[[i]]
+        if(nrow(thisdf) == 1L) {
+            thisextra = thisdf[["__colextra__"]]
+        } else {
+            thisextra = list()
+        }
         colnm = names(clodf)[firstvary]
-        colval = unique(thisdf[[colnm]])
+        colval = SplitValue(unique(thisdf[[colnm]]), extr = thisextra)
         thisexpr = make_subset_expr(colnm, colval)
         recursive_build_clayout(thisdf,
                                 parpos = tpos,
                                 curexpr = .combine_subset_exprs(curexpr, thisexpr),
-                                label = as.character(colval))
+                                label = as.character(splv_rawvalues(colval)))
     })
     names(kids) = names(spldf)
     if(length(kids)) {
@@ -396,7 +261,8 @@ dfrow_to_clayout = function(dfrow) {
     cstypedf = dfrow[,c(.csvarlbl_colnames(dfrow),
                         .csvartype_colnames(dfrow))]
     row.names(cstypedf) = NULL
-    csplvals = cbind.data.frame(csplvals, cstypedf)
+    csplvals = cbind.data.frame(csplvals, cstypedf,
+                                "__colextra__" = I(as.list(dfrow[,.csvalextra_colnames(dfrow)])))
     recursive_build_clayout(csplvals)
 }
 
@@ -405,11 +271,17 @@ dfrow_to_clayout = function(dfrow) {
     v[!is.na(v)]
 }
 
+.stripNULL = function(l) {
+    l[!sapply(l, is.null)]
+
+}
+
 .tpos_from_dfrows = function(rows, lvl, iscontent = NULL) {
     rsvars = .stripNA(.get_rsvar_vec(rows, lvl))
     rstypes = .stripNA(.get_rstype_vec(rows, lvl))
     rsvalues = .stripNA(.get_rsvalue_vec(rows, lvl))
     rsvallbls = .stripNA(.get_rsvalue_lbls(rows, lvl))
+    rsextras = rows[[rowextra_col]]
     if(length(rsvallbls) == 0)
         rsvallbls = as.character(rsvalues)
     
@@ -420,12 +292,19 @@ dfrow_to_clayout = function(dfrow) {
     spls = mapply(Split, var = rsvars,
                   type = rstypes,
                   lbl = rslbls)
+    if(length(rsvalues) > 0) {
+        splvals = make_splvalue_vec(rsvalues, rsextras)
+    } else {
+        splvals = list()
+    }
+    
+  
     sub = make_pos_subset(spls = spls,
-                          svals = rsvalues)
+                          svals = splvals)
     if(is.null(iscontent))
-        TreePos(spls = spls, svals = rsvalues, svlbls = rsvallbls, sub =  sub)
+        TreePos(spls = spls, svals = splvals, svlbls = rsvallbls, sub =  sub)
     else
-        TableTreePos(spls = spls, svals  = rsvalues, svlbls = rsvallbls,
+        TableTreePos(spls = spls, svals  = splvals, svlbls = rsvallbls,
                      sub = sub, iscontent = iscontent)
 }
 

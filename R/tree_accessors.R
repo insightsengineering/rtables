@@ -485,10 +485,19 @@ setMethod("splv_rawvalues", "SplitValue",
 setMethod("splv_rawvalues", "list",
           function(obj) lapply(obj, splv_rawvalues))
 
+## These two are similar enough we could probably combine
+## them but conceptually they are pretty different
+## split_exargs is a list of extra arguments that apply
+## to *all the chidlren*,
+## while splv_extra is for *child-specific* extra arguments,
+## associated with specific values of the split
 setGeneric("splv_extra", function(obj) standardGeneric("splv_extra"))
 setMethod("splv_extra", "SplitValue",
           function(obj) obj@extra)
 
+setGeneric("split_exargs", function(obj) standardGeneric("split_exargs"))
+setMethod("split_exargs", "Split",
+          function(obj) obj@extra_args)
 
 
 

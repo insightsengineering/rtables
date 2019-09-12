@@ -3,7 +3,7 @@
     ndatcols = length(.data_colnames(df))
     if(is.null(df[[cspan_col]])) {
         
-        df[[cspan_col]] = I(replicate(nrow(df), seq(1, ndatcols), simplify= FALSE))
+        df[[cspan_col]] = I(replicate(nrow(df), rep(1L, ndatcols), simplify= FALSE))
     }
     df
 }
@@ -80,6 +80,27 @@
     df
 }
 
+.make_csvextra_cols = function(df) {
+    datcols = .data_colnames(df)
+    ncolumns = length(datcols)
+    ncseq = seq(1, ncolumns)
+    extcols = sprintf(cextras_templ, ncseq)
+    for(col in extcols)
+        df[[col]] = I(list(list()))
+    df
+}
+
+.make_rowextra_col = function(df) {
+    if(!(rowextra_col %in% names(df)))
+        df[[rowextra_col]] = I(list(list()))
+    df
+}
+
+
+
+
+
+
 .make_vartype_cols = function(df) {
     if(is.null(df$rowvartype))
         df$rowvartype = "varlevels"
@@ -87,17 +108,19 @@
 }
 
 .order_rtablesdf_cols = function(df) {
-    nmord = c("rownum",
-              "rowvar",
-              "rowvarlbl",
-              "rowvartype",
-              "rowlbl",
+    nmord = c(rnum_col,
+              rvar_col,
+              rvarlbl_col,
+              rvartype_col, 
+              rlbl_col,
+              rowextra_col,
               .rsvar_colnames(df),
               .rsvarlbl_colnames(df),
               .rsvalue_colnames(df),
               .rsvaluelbl_colnames(df),
               .rsvartype_colnames(df),
               .data_colnames(df),
+              .csvalextra_colnames(df),
               .csvar_colnames(df),
               .csvarlbl_colnames(df),
               .csvartype_colnames(df),
@@ -151,6 +174,10 @@ fixup_rtable_df = function(df) {
     df = .make_cstype_cols(df)
     df = .make_rstype_cols(df)
     df = .make_vartype_cols(df)
+
+    ## add column and row extra args information
+    df = .make_csvextra_cols(df)
+    df = .make_rowextra_col(df)
 
     ## reorder columns so that the added columns appear in
     ## the right order,  just incase.

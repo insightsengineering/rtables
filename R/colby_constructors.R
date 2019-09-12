@@ -4,7 +4,7 @@
 ## e.g.
 ##
 ## add_colby_total() %>%>
-##   add_colby("colname") %>%
+##   add_colby("colname")g %>%
 ##   add_colby_cumulcuts("colname", cuts) %>%
 ##   add_colby_collapse_levs("colname",
 ##                           list(c("lev1a", "lev1b"),
@@ -464,8 +464,9 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
                       cinfo = cinfo,
                       parent_cfun, format = cformat)
     if(pos < length(splvec)) { ## there's more depth, recurse
-        rawpart = apply_split(spl, df)
+        rawpart = do_split(spl, df) ##apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
+        ## these are SplitValue objects
         splvals = rawpart[["values"]]
         partlbls = rawpart[["labels"]]
         kids = unlist(mapply(function(dfpart, val, lbl) {
@@ -600,7 +601,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       tpos = pos)
     } else {
         spl = splvec[[lvl]]
-        rawpart = apply_split(spl, df)
+        rawpart = do_split(spl,df) ##apply_split(spl, df)
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         kids = mapply(function(dfpart, value) {
@@ -630,7 +631,7 @@ setGeneric("expr_stubs", function(spl, df) standardGeneric("expr_stubs"))
 
 setMethod("expr_stubs", "VarLevelSplit",
           function(spl, df) {
-    sdat = apply_split(spl, df)
+    sdat = do_split(spl, df) ##apply_split(spl, df)
     values = sdat$values
     ## var = spl_payload(spl)
     ## values = unique(df[[var]])

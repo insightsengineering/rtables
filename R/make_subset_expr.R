@@ -81,12 +81,10 @@ get_pos_extra = function(svals = pos_splvals(pos),
                          pos) {
     ret = list()
     for(i in seq_along(svals)) {
-        tmp = splv_extra(svals[[i]])
-        if(length(tmp) > 0) {
-            if(length(ret) > 0)
-                stop("'extra' splitting info found at multiple levels of nesting. not currently supported.")
-            ret = tmp
-        }
+        extrs = splv_extra(svals[[i]])
+        if(any(names(ret) %in% names(extrs)))
+            stop("same extra argument specified at multiple levels of nesting. Not currently supported")
+        ret = c(ret, extrs)
     }
     ret
 }

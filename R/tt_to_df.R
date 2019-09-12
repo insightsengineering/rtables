@@ -178,6 +178,16 @@ safepaste0 = function(bef, x, after = "") {
     paste0(bef, x, after)
 }
 
+##' @param vals Values for a single row of the resulting dataframe, as a list or vector
+##' @param templ Template for the column names, e.g. a const from df_to_tt.R ending in _templ
+##' @return vals, with names generated from templ
+.put_colnames = function(vals, templ) {
+    ## sprintf already returns length 0 character if the "data" part is len 0
+    sq = seq_along(vals)
+    names(vals) = sprintf(templ, sq)
+    vals
+}
+
 
 
 ## 
@@ -190,36 +200,70 @@ ploads_to_str = function(x, collapse = ":") sapply(x,
 
 trow_to_dfrow = function(trow) {
     nrowsplit = length(pos_splits(trow))
-    rsvalues = splv_rawvalues(pos_splvals(trow))
-    names(rsvalues) = safepaste0("r", seq_along(rsvalues), "value")
+    rsvalues = .put_colnames(splv_rawvalues(pos_splvals(trow)),
+                           rsvalue_templ)
+    
+    ## names(rsvalues) = sprintf(safepaste0("r", seq_along(rsvalues), "value")
     datvals = trow@leaf_value ##leaf_values(trow)
     names(datvals) = df_datcol_names(trow)
-    rsvars = ploads_to_str(pos_payloads(trow))
-    names(rsvars) = safepaste0("rsp_", seq_along(rsvars))
-    rsvarlbls = pos_split_lbls(trow)
-    names(rsvarlbls) = safepaste0("rsplbl_", seq_along(rsvarlbls))
-    rsvaluelbls = pos_splval_lbls(trow)
-    names(rsvaluelbls) = safepaste0("r",
-                                seq_along(rsvaluelbls),
-                                "vlbl")
+    rsvars = .put_colnames(ploads_to_str(pos_payloads(trow)),
+                         rsvar_templ)
+    ## names(rsvars) = safepaste0("rsp_", seq_along(rsvars))
+    rsvarlbls = .put_colnames(pos_split_lbls(trow),
+                            rsvar_lbl_templ)
+    ## names(rsvarlbls) = safepaste0("rsplbl_", seq_along(rsvarlbls))
+    rsvaluelbls = .put_colnames(pos_splval_lbls(trow),
+                              rsvalue_lbl_templ)
+    ## names(rsvaluelbls) = safepaste0("r",
+    ##                             seq_along(rsvaluelbls),
+    ##                             "vlbl")
 
-    rstypes = pos_spltypes(trow)
-    names(rstypes) = safepaste0("rsptype_", seq_along(rstypes))
+    rstypes = .put_colnames(pos_spltypes(trow),
+                            rstype_templ)
+
+    ## column stuff, repetitive, and could probably be moved out, none of this
+    ## stuff is varying at the row level
+    ##
+    ## not currently worth the refactor, revisit if doing this lots of
+    ## times ends up costing enough to actually be an issue
     clspls = clayout_splits(trow)
-    cspvar = ploads_to_str(lapply(clspls, spl_payload))
+    cspvar = .put_colnames(ploads_to_str(lapply(clspls, spl_payload)),
+                           csvar_templ)
     
-    cspvarlbl = sapply(clspls, obj_label)
+    cspvarlbl = .put_colnames(sapply(clspls, obj_label),
+                              cs_lbl_templ)
+    
+    csptypes = .put_colnames(sapply(clspls, split_texttype),
+                             cstype_templ)
+    
+    cextras = I(get_col_extras(clayout(trow))) ##I() for a list col
+    
+    ## names(cspvar) = safepaste0("csp_", seq_along(cspvar))
+    ## names(cspvarlbl) = safepaste0("csplbl_", seq_along(cspvar))
+    ## names(csptypes) = safepaste0("csptype_", seq_along(cspvar))
+    
 
-    csptypes = sapply(clspls, split_texttype)
-    names(cspvar) = safepaste0("csp_", seq_along(cspvar))
-    names(cspvarlbl) = safepaste0("csplbl_", seq_along(cspvar))
-    names(csptypes) = safepaste0("csptype_", seq_along(cspvar))
-    
-    
-    ret = as.list(c(rowvar = row_variable(trow),
-                    rowvarlbl = rowvar_label(trow), 
-                    rowvartype = trow@value_type,
-                    rowlbl = trow@label,
+    ## annoying, but still better to have a single place to change
+    ## colnmaes
+    rinfolst = list(NA_integer_, ## row number, replaced elsewhere
+                    row_variable(trow),
+                    rowvar_label(trow),
+                    trow@value_type,
+                    trow@label,
+                    I(get_pos_extra(pos = tree_pos(trow))))
+    names(rinfolst) = c(rnum_col,
+                        rvar_col,
+                        rvarlbl_col,
+                        rvartype_col,
+                        rlbl_col,
+                        rowextra_col)
+
+    ## don't worry terribly about order here, we fix it below
+    ret = as.list(c(rinfolst,
+                    ## rowvar = row_variable(trow),
+                    ## rowvarlbl = rowvar_label(trow), 
+                    ## rowvartype = trow@value_type,
+                    ## rowlbl = trow@label,
                     rsvalues,
                     rsvaluelbls,
                     datvals,
@@ -228,8 +272,12 @@ trow_to_dfrow = function(trow) {
                     rsvarlbls,
                     cspvar,
                     cspvarlbl,
-                    csptypes))
-    as.data.frame(ret, stringsAsFactors = FALSE)
+                    csptypes,
+                    cextras))
+    ret = as.data.frame(ret, stringsAsFactors = FALSE)
+
+    ## enforce the correct order
+    .order_rtablesdf_cols(ret)
 
 }
 
@@ -279,6 +327,8 @@ tt_to_df = function(ttree) {
 
     ret = do.call(rbind.data.frame, dfrws)
     rownames(ret) = seq_along(ret[[1]])
-    ret = cbind.data.frame(rownum = seq_along(ret[[1]]), ret)
+    rndf = data.frame(seq_along(ret[[1]]))
+    names(rndf) = rnum_col
+    ret = cbind.data.frame(rndf, ret)
     ret
 }

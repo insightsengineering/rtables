@@ -47,6 +47,12 @@ setClass("SplitValue",
 SplitValue = function(val, extr =list()) {
     if(is(val, "SplitValue"))
         stop("SplitValue  object passed to SplitValue constructor")
+    ## this might happen if its coming out of the
+    ## data.frame form.
+    if(is(extr, "AsIs"))
+        extr = unclass(extr)
+    if(is(val, "AsIs"))
+        val = unclass(val)
     
     new("SplitValue", value = val,
         extra = extr)
@@ -62,7 +68,8 @@ setClass("Split", contains = "VIRTUAL",
              ## get the content rows for the CHILDREN of this
              ## split!!!
              content_fun = "functionOrNULL",
-             content_format = "FormatSpec"))
+             content_format = "FormatSpec",
+             extra_args = "list"))
 
 
 setClass("CustomizableSplit", contains = "Split",
@@ -300,13 +307,18 @@ TableRowPos = function(localrow, iscontent = FALSE, ...) {
 ## Tree position convenience functions
 ##
 
-make_child_pos = function(parpos, newspl, newval, newlab = newval) {
+make_child_pos = function(parpos, newspl, newval, newlab = newval, newextra = list()) {
+    if(!is(newval, "SplitValue"))
+        nsplitval = SplitValue(newval, newextra)
+    else
+        nsplitval = newval
+    
     newpos = TreePos(
         spls = c(pos_splits(parpos), newspl),
-        svals = c(pos_splvals(parpos), newval),
+        svals = c(pos_splvals(parpos), nsplitval),
         svlbls = c(pos_splval_lbls(parpos), newlab),
         sub = .combine_subset_exprs(pos_subset(parpos),
-                                    make_subset_expr(newspl, newval)))
+                                    make_subset_expr(newspl, nsplitval)))
 }
 
 make_tablepos= function(treepos, iscontent) {
