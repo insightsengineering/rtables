@@ -137,7 +137,7 @@ insert_rrow <- function(tbl, rrow, at = 1) {
   } else if (at == (nr + 1)) {
     c(tbl, list(rrow))
   } else {
-    c(tbl[1:(at - 1)], rrow, tbl[(at + 1):nr])
+    c(tbl[1:(at - 1)], list(rrow), tbl[at:nr])
   }
   
   rtablel(header, body)
