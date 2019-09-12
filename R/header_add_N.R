@@ -17,18 +17,24 @@
 #'  rrow("X", 1, 2, 3),
 #'  rrow("Y", 4, 5, 6)
 #' )
-#' 
 #' tbl
-#' 
 #' header_add_N(tbl, 1:3)
 #' 
+#' # multiline header
+#' tbl <- rtable(
+#'   header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),
+#'   rrow("X", 1, 2, 3),
+#'   rrow("Y", 4, 5, 6)
+#' )
+#' tbl
+#' header_add_N(tbl, 1:3)
 header_add_N <- function(x, N) {
   stopifnot(is(x, "rtable"))
   stopifnot(length(N) == ncol(x))
   
-  header(x) <- rheader(
-    header(x)[[1]], # todo: also work for multi-line headers
-    rrowl("", N, format = "(N=xx)")
-  )
+  header(x) <- do.call(rheader, c(
+    header(x),
+    list(rrowl("", N, format = "(N=xx)"))
+  ))
   x
 }

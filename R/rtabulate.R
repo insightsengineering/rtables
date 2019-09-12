@@ -52,7 +52,7 @@ rtabulate_default <- function(x, col_by = by_all("col_1"), FUN, ...,
   
   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = colnames(col_by), rr)
+  rtable(header = by_header(col_by), rr)
 }
 
 
@@ -390,7 +390,7 @@ rtabulate.data.frame <- function(x,
     rrowl(row.name = rowname, cells_row, format = format, indent = indent)
   }, cells_by_row, names(cells_by_row))
   
-  rtablel(header = colnames(col_by), rrows)
+  rtablel(header = by_header(col_by), rrows)
 }
 
 check_colwise_args <- function(col_by, col_wise_args) {

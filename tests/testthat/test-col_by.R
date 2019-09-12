@@ -11,14 +11,19 @@ test_that("by_factor_to_matrix works", {
   )
 })
 
+# todo: expand tests
+
 test_that("by_add_total works", {
   x <- factor(c("a", "b", "a", "a", "b"))
   expect_equal(
     by_add_total(by_factor_to_matrix(x), label = "tot"),
-    data.frame(
-      a = c(TRUE, FALSE, TRUE, TRUE, FALSE), 
-      b = c(FALSE, TRUE, FALSE, FALSE, TRUE), 
-      tot = c(TRUE, TRUE, TRUE, TRUE, TRUE)
+    with_by_header(
+      data.frame(
+        a = c(TRUE, FALSE, TRUE, TRUE, FALSE), 
+        b = c(FALSE, TRUE, FALSE, FALSE, TRUE), 
+        tot = c(TRUE, TRUE, TRUE, TRUE, TRUE)
+      ),
+      rheader(c("a", "b", "tot"))
     )
   )
   

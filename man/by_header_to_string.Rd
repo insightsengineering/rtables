@@ -4,11 +4,22 @@
 \alias{by_header_to_string}
 \title{Convert the header to string}
 \usage{
-by_header_to_string(x)
+by_header_to_string(x, sep = ",")
 }
 \arguments{
 \item{x}{rheader or regular list}
+
+\item{sep}{separator between hierarchical levels}
+}
+\value{
+1d list of header names
+rtables:::by_header_to_string(
+  rheader(
+    rrow(NULL, rcell("F", colspan = 2), rcell("M", colspan = 2)),
+    rrow(NULL, "<40", ">40", "<40", ">40")
+  )
+)
 }
 \description{
-Useful to agnostically handle normal headers and hierarchical ones
+Useful to agnostically handle normal headers and hierarchical ones.
 }

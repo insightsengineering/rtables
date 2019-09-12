@@ -67,6 +67,7 @@ reference:
     - by_add_total
     - by_all
     - by_combine
+    - by_hierarchical
     - by_quartile
     - by_compare_subset
     - by_drop_empty_cols
@@ -93,6 +94,7 @@ reference:
     contents:
     - as.rtable
     - as.rtable.table
+    
   - title: Utility Functions
     contents:
     - Viewer
@@ -104,8 +106,8 @@ reference:
     - var_relabel
     - with_label
 
-  - title: Under Development
-    desc: these functions are under development and not yet exported
+  - title: Unexported Functions used by Developers
     contents:
-    - by_hierarchical
-
+    - by_header
+    - by_header_to_string
+    - with_by_header
