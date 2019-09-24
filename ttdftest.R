@@ -3,11 +3,11 @@ library(rtables)
 options(error=recover)
 
 df = read.csv("tabledfex.dat", stringsAsFactors = FALSE)
-dfrow = df[4,]
-dfrow_to_clayout(dfrow)
-res = df_to_tt(df)
 
-identical(df, tt_to_df(res))
+res = df_to_tt(df)
+dfredux = tt_to_df(res)
+
+identical(fixup_rtable_df(df), tt_to_df(res))
 ## #rws = recursive_row_collect(res)
 
 

@@ -235,22 +235,34 @@ trow_to_dfrow = function(trow) {
     
     csptypes = .put_colnames(sapply(clspls, split_texttype),
                              cstype_templ)
-    
-    cextras = I(get_col_extras(clayout(trow))) ##I() for a list col
-    
+
+    ##I() for a list col
+    ## list() to insure it only makes 1 row
+
+    cextras = .put_colnames(lapply(get_col_extras(clayout(trow)),
+                                   function(x) I(list(x))),
+                            cextras_templ)
+
+    ## outer list() is to hold the name, its "one column"
+
+    ## I() is to indicate its a list column
+    ## inner list() is to indicate the first and only element
+    ## row_cspans returns the vector that goes in
+    ## that one element in the list column
+    cspan = .put_colnames(list(I(list(row_cspans(trow)))), cspan_col) 
     ## names(cspvar) = safepaste0("csp_", seq_along(cspvar))
     ## names(cspvarlbl) = safepaste0("csplbl_", seq_along(cspvar))
     ## names(csptypes) = safepaste0("csptype_", seq_along(cspvar))
     
 
     ## annoying, but still better to have a single place to change
-    ## colnmaes
+    ## colnames
     rinfolst = list(NA_integer_, ## row number, replaced elsewhere
                     row_variable(trow),
                     rowvar_label(trow),
                     trow@value_type,
                     trow@label,
-                    I(get_pos_extra(pos = tree_pos(trow))))
+                    I(list(get_pos_extra(pos = tree_pos(trow)))))
     names(rinfolst) = c(rnum_col,
                         rvar_col,
                         rvarlbl_col,
@@ -258,12 +270,9 @@ trow_to_dfrow = function(trow) {
                         rlbl_col,
                         rowextra_col)
 
+    
     ## don't worry terribly about order here, we fix it below
     ret = as.list(c(rinfolst,
-                    ## rowvar = row_variable(trow),
-                    ## rowvarlbl = rowvar_label(trow), 
-                    ## rowvartype = trow@value_type,
-                    ## rowlbl = trow@label,
                     rsvalues,
                     rsvaluelbls,
                     datvals,
@@ -273,7 +282,8 @@ trow_to_dfrow = function(trow) {
                     cspvar,
                     cspvarlbl,
                     csptypes,
-                    cextras))
+                    cextras,
+                    cspan))
     ret = as.data.frame(ret, stringsAsFactors = FALSE)
 
     ## enforce the correct order
@@ -327,8 +337,11 @@ tt_to_df = function(ttree) {
 
     ret = do.call(rbind.data.frame, dfrws)
     rownames(ret) = seq_along(ret[[1]])
-    rndf = data.frame(seq_along(ret[[1]]))
-    names(rndf) = rnum_col
-    ret = cbind.data.frame(rndf, ret)
+    ## rndf = data.frame(seq_along(ret[[1]]))
+    ## names(rndf) = rnum_col
+    ## ret = cbind.data.frame(rndf, ret)
+    ret[[rnum_col]] = seq_along(ret[[1]])
+    ## this pads the fake rowspans and ensures order
+    ret = fixup_rtable_df(ret)
     ret
 }

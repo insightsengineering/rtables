@@ -86,13 +86,13 @@
     ncseq = seq(1, ncolumns)
     extcols = sprintf(cextras_templ, ncseq)
     for(col in extcols)
-        df[[col]] = I(list(list()))
+        df[[col]] = I(rep(list(list()), nrow(df)))
     df
 }
 
 .make_rowextra_col = function(df) {
     if(!(rowextra_col %in% names(df)))
-        df[[rowextra_col]] = I(list(list()))
+        df[[rowextra_col]] = I(rep(list(list()), nrow(df)))
     df
 }
 

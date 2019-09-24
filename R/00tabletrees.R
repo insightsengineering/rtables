@@ -361,6 +361,11 @@ setClass("VLayoutTree", contains = c("VIRTUAL", "VTree"),
 setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
 ## TableTrees
+## XXX Rowspans as implemented dont really work
+## they're aren't attached to the right data structures
+## during conversions.
+
+## FIXME: if we ever actually need row spanning
 setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
          representation(col_layout = "VLayoutNode",
                         format = "FormatSpec"))
