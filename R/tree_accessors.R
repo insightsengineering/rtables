@@ -330,6 +330,11 @@ setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 setGeneric("split_fun", function(obj) standardGeneric("split_fun"))
 setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
 
+## Only that type of split currently has the slot
+## this should probably change? for now  define
+## an accessor that just returns NULL
+setMethod("split_fun", "Split", function(obj) NULL)
+
 setGeneric("spl_lblvar", function(obj) standardGeneric("spl_lblvar"))
 setMethod("spl_lblvar", "VarLevelSplit", function(obj) obj@value_lbl_var)
 

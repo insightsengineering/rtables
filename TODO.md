@@ -1,5 +1,6 @@
 
 # nesting and order
+
 NULL %>% add_colby_varlevels("ARM") %>% add_col_total() %>% add_colby_varlevels("SEX")
 
  A       B       Tot  M  F
@@ -10,11 +11,39 @@ NULL %>% add_colby_varlevels("ARM") %>% add_colby_varlevels("SEX") %>% add_col_t
 M F     M  F    Tot
 
 
-#subset comparison
-NULL %>% add_colby_varlevels("ARM") %>% add_colby_subset("BEP") %>% add_col_total()
+# Comparisons
+## subset sidebyside "comparison" (not a comparison under our model)
 
-  A       B        Tot
-BEP ALL  BEP ALL
+Note this is not a comparison under our model, just specialized subsets for the columns,
+the "comparison" happens in the viewer's head when they look across a row
+
+NULL %>% add_colby_varlevels("ARM") %>% add_colby_subset_vall("BEP") %>% add_col_total()
+
+  A       B        
+BEP ALL  BEP ALL   Tot
+
+
+NULL %>% add_colby_varlevels("ARM") %>% add_colby_subset_vnon("BEP") %>% add_col_total()
+
+
+    A              B        
+BEP   NONBEP   BEP   NONBEP   Tot
+
+
+## 
+
+
+
+## 
+
+
+
+
+
+
+
+
+
 
 
 # rendering with gt?

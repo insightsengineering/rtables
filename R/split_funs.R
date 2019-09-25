@@ -55,7 +55,7 @@ setGeneric(".applysplit_partlbls",
         return(partinfo)
     }
 
-    ## vals elemeents are not  SplitValue objects from here down
+    ## vals elements are not  SplitValue objects from here down
     if(is.null(extr))
         extr = rep(list(list()), length(vals))
     vals = make_splvalue_vec(vals, extr)
@@ -131,7 +131,7 @@ setMethod(".applysplit_rawvals", "NULLSplit",
 
 ## this returns null because we actually use
 ## the extra arguments to know how many splits
-## there need to be. .fixupvals catchs and takes
+## there need to be. .fixupvals catches and takes
 ## care of this case.
 setMethod(".applysplit_rawvals", "ComparisonSplit",
           function(spl, df) NULL)
@@ -220,10 +220,25 @@ make_comp_extargs = function(spl, df) {
     stopifnot(is(spl, "ComparisonSplit"))
     ssets1 = subsets_from_factory(df, spl@subset1_gen)
     ssets2 = subsets_from_factory(df, spl@subset2_gen)
-    mapply(function(s1, s2) c( list(subset1 = s1, subset2 = s2), split_exargs(spl)),
+    if(is.null(names(ssets2)))
+        names(ssets2) = names(ssets1)
+    
+    mapply(function(s1, s2, s1name, s2name) c( list(subset1 = s1, subset1name = s1name, subset2 = s2, subset2name), split_exargs(spl)),
+           s1 = ssets1,
+           s2 = ssets2,
+           s1name = names(ssets1),
+           s2name = names(ssets2),
            SIMPLIFY=FALSE)
 }
 
+
+make_blinecomp_extargs = function(spl, df) {
+    incall = blsplit_incall(spl)
+    var = blsplit_var(spl)
+    
+
+
+}
 
 
 

@@ -194,6 +194,32 @@ AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = 
 }
 
 
+
+
+## A comparison split is one where the analysis value (e.g., mean)
+## will neeed to be calculated on two different subsets and further
+## computed on (by calling comparison_func on them, default is just
+## `-` meaning subtraction) to get the final single cell value
+##
+## Note that traditional, side-by-side displays such as
+##
+##      A          B
+##  BEP  ALL   BEP   ALL
+##
+## are NOT comparisons, each of the individual cell values here
+## is derived from applying the analysis function to only a
+## single subset.
+##
+##   A Table that IS an actual comparison split is
+##
+##           A                                    B
+## Baseline    (Followup - Baseline)    Baseline     (Followup - Baseline)
+##
+
+
+setClass("VCompSplit", contains = c("VIRTUAL", "AllSplit"),
+         representation(comparison_func = "function",
+                        label_format = "character"))
 ## This is what will bee used to generate the parallel
 ## lists of subsets to be pair/element-wise compared
 ## function should take the data.frame and return a
@@ -203,27 +229,75 @@ AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = 
 setClassUnion("VarOrFactory", c("function", "character"))
 
 ## this contains "AllSplit" because wee need all
-## of the data to be accessibe  from all of the children
+## of the data to be accessible  from all of the children
 ## so that they can perform the comparison
 
-setClass("ComparisonSplit", contains = "AllSplit",
+setClass("MultiSubsetCompSplit", contains = "VCompSplit",
          representation(subset1_gen = "VarOrFactory",
-                        subset2_gen = "VarOrFactory",
-                        label_format = "character"))
+                        subset2_gen = "VarOrFactory"))
 
-ComparisonSplit = function(factory1, factory2, lbl_fmt = "%s - %s",
+MultiSubsetCompSplit = function(factory1, factory2, lbl_fmt = "%s - %s",
+                           splbl = "",
+                           comparison = `-`,
                            ## not needed i think...
                            cfun = NULL, cfmt = NULL, splfmt = NULL) {
-    new("ComparisonSplit",
+    new("MultiSubsetCompSplit",
         subset1_gen = factory1,
         subset2_gen = factory2,
         label_format = lbl_fmt,
         split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        comparison_func = comparison)
 }
 
+setClass("SubsetSplit", contains = "Split",
+         representation(subset_gen = "VarOrFactory",
+                        vs_all = "logical",
+                        vs_non = "logical",
+                        child_order = "character"),
+         validity = function(object) object@vs_all || object@vs_non,
+         prototype = prototype(vs_all = TRUE,
+                               vs_non = FALSE))
+
+SubsetSplit = function(subset, vall = TRUE, vnon = FALSE,
+                       order = c("subset", if(vnon) "non", if(vall) "all"),
+                       splbl,
+                       cfun = NULL, cfmt = NULL, splfmt = NULL) {
+    new("SubsetSplit",
+        split_label = splbl,
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt,
+        subset_gen = subset,
+        vs_all = vall,
+        vs_non = vnon,
+        child_order = order)
+}
+
+
+setClass("BaselineCompSplit", contains = "VCompSplit",
+         representation(var = "character",
+                        baseline_value = "character",
+                        incl_allcategory = "logical"))
+
+BaselineCompSplit = function(var, baseline, incl_all = FALSE,
+                             comparison = `-`,
+                             lbl_fmt = "%s - %s",
+                             ## not needed I Think...
+                             cfun =  NULL, cfmt = NULL, splfmt = NULL) {
+    new("BaselineCompSplit",
+        var = var,
+        basline_value = basline,
+        incl_allcategory = incl_all,
+        comparison_func = comparison,
+        label_format = lbl_fmt,
+        split_label = splbl,
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt)
+}
                         
 ## TODO in the future 
 ## setClass("BaselineCompSplit", contains = "Split",

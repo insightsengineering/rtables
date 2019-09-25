@@ -131,3 +131,46 @@ df2 = df[,c("X",
            "csplbl_2",
            "csptype_1",
            "csptype_2")]
+
+
+
+blfun = function(df) {
+    nonbase = unique(subset(df, cat != "base")$cat)
+    
+    ret = rep(list(df[df$cat == "base",]), length(unique(df[df$cat != "base", "cat"])) + 1)
+    names(ret) = c("all", nonbase)
+    ret
+}
+
+csetfun = function(df)
+{
+    nonbase = unique(subset(df, cat != "base")$cat)
+    c(all = list(df), sapply(nonbase, function(i) df[df$cat == i,], simplify=FALSE))
+}
+
+
+compspl = ComparisonSplit(blfun, csetfun)
+
+
+catvar = sample(c("base", "set1", "set2"), 100, replace = TRUE)
+x = rnorm(100, as.integer(factor(catvar))*5, 10)
+compdf = data.frame(val = x, cat = catvar, stringsAsFactors = FALSE)
+
+do_split(compspl, compdf)
+
+## what should it look like
+
+
+
+
+
+
+
+complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+    add_colby_blinecomp(var = "visit", baseline = "baseline",
+                        all = TRUE,
+                        valuecomp = `-`) %>%
+    add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
+    add_summary_count("RACE", lblfmt = "%s (n)") %>%
+    add_analyzed_var("weight", mean, fmt = "xx.xx")
+    
