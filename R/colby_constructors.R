@@ -160,7 +160,7 @@ add_rowby_varlevels = function(lyt,  var, lbl,  vlblvar = var, splfun = NULL, fm
 }
 
 
-add_colby_multivar = function(lyt, vars, lbl, varlbls,
+add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
                               newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
     pos = next_cpos(lyt, newtoplev)
@@ -227,6 +227,17 @@ add_analyzed_var = function(lyt, var, lbl, afun,
                           splfmt = fmt)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
+}
+
+add_analyzed_colvars = function(lyt, lbl, afun,
+                                fmt = NULL,
+                                newtoplev = FALSE) {
+    spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
+                          splfmt = fmt)
+    pos = next_rpos(lyt, newtoplev)
+    add_row_split(lyt, spl, pos)
+
+
 }
 
 ## Add a total column at the next **top level** spot in
@@ -352,6 +363,55 @@ rtabulate_layout <- function(x, layout, FUN, ...,
 }
 
 
+gen_rowvalues = function(dfpart, datcol, cinfo, func) {
+    colexprs = col_exprs(cinfo)
+
+    if(!is.null(datcol) && is.na(datcol)) {
+        colleaves =  collect_leaves(cinfo@tree_layout)
+        datcol = sapply(colleaves,
+                        function(x) {
+            pos = tree_pos(x)
+            spls = pos_splits(pos)
+            splvals = splv_rawvalues(pos_splvals(pos))
+            n = length(spls)
+            if(is(spls[[n]], "MultiVarSplit"))
+                splvals[n]
+            else
+                NA_character_
+        })
+        if(all(is.na(datcol)))
+            datcol = list(NULL)
+        else if(any(is.na(datcol)))
+            stop("mix of var and non-var columns with NA analysis rowvara")
+    } else if(!is.null(datcol)) {
+        datcol = rep(datcol, length(colexprs))
+    } else {
+        datcol = list(NULL)
+    }
+
+
+    rawvals = mapply(function(csub, col) {
+
+
+        inds = eval(csub, envir = dfpart)
+        dat = dfpart[inds,]
+        if(!is.null(col))
+            dat = dat[[col]]
+        func(dat)
+    }, csub = colexprs, col = datcol,
+    SIMPLIFY= FALSE)
+
+    names(rawvals) = names(colexprs)
+    rawvals
+    ## rawvals = lapply(colexprs,
+    ##                  function(csub) {
+    ##     inds = eval(csub, envir = dfpart)
+    ##     dat = dfpart[inds,]
+    ##     if(!is.null(datcol))
+    ##         dat = dat[[datcol]]
+    ##     func(dat)
+    ## })
+}
 
 .make_tablerows = function(dfpart, func,
                            ##colexprs, coltree,
@@ -359,17 +419,27 @@ rtabulate_layout <- function(x, layout, FUN, ...,
                            tabpos, datcol = NULL, lev = 1L, rvlab = NA_character_, rvtypes = NULL, format = NULL) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
+    if(!is.null(datcol) && !is.na(datcol)) {
+        if(! all(datcol %in% names(dfpart)))
+            stop("specified analysis variable (", datcol, ") not present in data")
+        
+        rowvar = datcol
+    } else {
+        rowvar  = NA_character_
+    }
     colexprs = col_exprs(cinfo)
-    rawvals = lapply(colexprs,
-                     function(csub) {
-        inds = eval(csub, envir = dfpart)
-        dat = dfpart[inds,]
-        if(!is.null(datcol))
-            dat = dat[[datcol]]
-        func(dat)
-    })
-    rowvar = if(!is.null(datcol)) datcol else NA_character_
-    if(is.null(rvtypes))
+    
+    ## rawvals = lapply(colexprs,
+    ##                  function(csub) {
+    ##     inds = eval(csub, envir = dfpart)
+    ##     dat = dfpart[inds,]
+    ##     if(!is.null(datcol))
+    ##         dat = dat[[datcol]]
+    ##     func(dat)
+    ## })
+    rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
+    ## rowvar = if(!is.null(datcol) && !is.na(datcol)) datcol else NA_character_
+      if(is.null(rvtypes))
         rvtypes = rep(NA_character_, length(rawvals))
     lens = sapply(rawvals, length)
     stopifnot(length(unique(lens)) == 1)
@@ -489,6 +559,7 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
         SIMPLIFY=FALSE))
     } else { ## we're at full depth, analyze
         stopifnot(is(spl, "AnalyzeVarSplit"))
+        check_validsplit(spl, df)
         kids = .make_tablerows(df,
                                analysis_fun(spl),
                                ## colexprs,
@@ -601,7 +672,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       tpos = pos)
     } else {
         spl = splvec[[lvl]]
-        rawpart = do_split(spl,df) ##apply_split(spl, df)
+        rawpart = do_split(spl,df)
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         kids = mapply(function(dfpart, value) {

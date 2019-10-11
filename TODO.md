@@ -21,16 +21,22 @@ NULL %>% add_colby_varlevels("ARM") %>% add_colby_subset_vall("BEP") %>% add_col
 
   A       B        
 BEP ALL  BEP ALL   Tot
-
+3   6    5   5     5 
 
 NULL %>% add_colby_varlevels("ARM") %>% add_colby_subset_vnon("BEP") %>% add_col_total()
 
 
     A              B        
 BEP   NONBEP   BEP   NONBEP   Tot
+3     7        5     5        5
 
+## Modelled comparisons
 
-## 
+Here the value of a cell is actually two aggregated values, typically based on
+two different subsets (though it could be 2 different columns and the same subset),
+computed on by a function
+
+NULL %>% add_colby_varlevels("ARM") %>% 
 
 
 

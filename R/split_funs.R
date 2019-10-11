@@ -1,10 +1,14 @@
 ## Generics and how they are used directly
 
+## check_validsplit - Check if the split is valid for the data, error if not
+
 ## .apply_spl_extras - Generate Extras
 
 ## .apply_spl_datapart - generate data partition
 
 ## .apply_spl_rawvals - Generate raw (ie non SplitValue object) partition values
+
+
 
 setGeneric(".applysplit_rawvals",
            function(spl, df) standardGeneric(".applysplit_rawvals"))
@@ -17,6 +21,11 @@ setGeneric(".applysplit_extras",
 
 setGeneric(".applysplit_partlbls",
            function(spl, df, vals, lbls) standardGeneric(".applysplit_partlbls"))
+
+setGeneric("check_validsplit",
+           function(spl, df) standardGeneric("check_validsplit"))
+
+
 
 
 
@@ -74,6 +83,10 @@ setGeneric(".applysplit_partlbls",
                    
 
 do_split = function(spl, df, vals = NULL, lbls = NULL) {
+    ## this will error if, e.g., df doesn't have columns
+    ## required by spl, or generally any time the spl
+    ## can't be applied to df
+    check_validsplit(spl, df)
     ## note the <- here!!!
     if(!is.null(splfun<-split_fun(spl))) {
         ## Currently the contract is that split_functions take df, vals, lbls and
@@ -90,13 +103,29 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
         ## values until after we know the extra args, since the values
         ## themselves are meaningless. If this is the case, fix them
         ## before generating the data partition
-        if(is.null(vals) && length(extr) > 0)
+        if(is.null(vals) && length(extr) > 0) {
             vals = seq_along(extr)
+            names(vals) = names(extr)
+        }
         
         dpart = .applysplit_datapart(spl, df, vals)
 
         if(is.null(lbls))
             lbls = .applysplit_partlbls(spl, df, vals, lbls)
+        else
+            stopifnot(names(lbls)== names(vals))
+
+                ## get rid of columns that would not have any
+        ## observations.
+        hasdata = sapply(dpart, function(x) nrow(x) >0)
+        if(length(dpart) > sum(hasdata)) { #some empties
+            dpart = dpart[hasdata]
+            vals = vals[hasdata]
+            extr = extr[hasdata]
+            lbls = lbls[hasdata]
+        }
+        
+
         ## FIXME: should be an S4 object, not a list
         ret = list(values = vals,
                    datasplit = dpart,
@@ -110,6 +139,50 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
     ret = .fixupvals(ret)
     ret
 }
+
+
+
+.checkvarsok = function(spl, df) {
+
+    vars = spl_payload(spl)
+    ## could be multiple vars in the future?
+    ## no reason not to make that work here now.
+    if(!all(vars %in% names(df)))
+        stop( " variable(s) [",
+             paste(setdiff(vars, names(df)),
+                   collapse = ", "),
+             "] not present in data. (",
+             class(spl), ")")
+    invisible(NULL)   
+
+}
+
+
+setMethod("check_validsplit", "VarLevelSplit",
+          function(spl, df) {
+    .checkvarsok(spl, df)
+})
+
+
+setMethod("check_validsplit", "MultiVarSplit",
+          
+          function(spl, df) {
+    .checkvarsok(spl, df)
+})
+
+setMethod("check_validsplit", "AnalyzeVarSplit",
+          
+          function(spl, df) {
+    .checkvarsok(spl, df)
+})
+
+
+## default does nothing, add methods as they become
+## required
+setMethod("check_validsplit", "Split",
+          function(spl, df)
+    invisible(NULL))
+
 
 
 setMethod(".applysplit_rawvals", "VarLevelSplit",
@@ -142,6 +215,9 @@ setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
 
 setMethod(".applysplit_datapart", "VarLevelSplit",
           function(spl, df, vals) {
+    if(!(spl_payload(spl) %in% names(df))) {
+        stop("Attempted to split on values of column (", spl_payload(spl), ") not present in the data")
+    }
     ret = lapply(seq_along(vals), function(i) {
         df[df[[spl_payload(spl)]] == vals[[i]],]
     })
@@ -170,7 +246,14 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
           function(spl, df, vals) {
     ## for now, this will work later
     stopifnot(length(vals) == 1L)
-    list(df[!is.na(df[[vals]]),])
+    if(!is.na(vals) && !all(vals %in% names(df))) {
+        badcols = setdiff(vals, names(df))
+        stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
+    }
+    ret = df
+    if(!is.na(vals))
+        ret = df[!is.na(df[[vals]]),] 
+    list(ret)
 })
 
 setMethod(".applysplit_datapart", "ComparisonSplit",
@@ -235,6 +318,8 @@ make_comp_extargs = function(spl, df) {
 make_blinecomp_extargs = function(spl, df) {
     incall = blsplit_incall(spl)
     var = blsplit_var(spl)
+    blvalue = blsplit_baseline(spl)
+    
     
 
 
@@ -397,8 +482,7 @@ setMethod("apply_split", "AnalyzeVarSplit",
     dat = df[!is.na(df[[spl_payload(spl)]]),]
     list(values = make_splvalue_vec(spl_payload(spl)),
          datasplit = list(dat),
-         labels = obj_label(spl),
-         extras = )
+         labels = obj_label(spl))
 })
 
 

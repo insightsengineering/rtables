@@ -69,7 +69,7 @@ setMethod("toString", "TableRow",
 ## preserve S3 behavior
 setMethod("toString", "ANY", base:::toString)
 
-.collapse_cspans = function(rvals) {
+.collapse_cspans = function(rvals, breakpts) {
     n = length(rvals)
     ## cumsum trick to build a factor that increments
     ## anytime a logical vector is true, thus creating
@@ -77,16 +77,20 @@ setMethod("toString", "ANY", base:::toString)
     ##
     ## the meaning of inds is
     ## (2nd different from first, 3rd diff from as second, ...)
-    diffinds = cumsum(!mapply(identical, x = rvals[-1], y = rvals[-n]))
-    inds = c(1, diffinds + 1) ## first element is always a new entry
-
+    breaklgl = !mapply(identical, x = rvals[-1], y = rvals[-n])
+    ## add ones we've already found
+    breaklgl[breakpts - 1] = TRUE
+    #0 combines with first run
+    inds = c(0,cumsum(breaklgl)) 
+    breakpts = which(breaklgl) + 1 
+    
     spl = split(rvals, inds)
     cells = lapply(spl,
                    function(x) rcell(x[[1]], colspan = length(x),
                                      format = NULL))
     
 
-    cells
+    list(cells = cells, breakpts = breakpts)
     
 
 }
@@ -100,14 +104,25 @@ setMethod("toString", "ANY", base:::toString)
     
     nvals = length(vals[[1]])
     numcols = length(vals)
-    
-    rrows = lapply(seq(1, nvals),
-                   function(i) {
+
+
+    breakpts = 1 ## first value is always a "new" value
+    rrows = vector("list",length = nvals)
+    for(i in seq(1, nvals)) {
+        ret = .collapse_cspans(lapply(vals, function(vlst) vlst[[i]]), breakpts)
+        breakpts = ret$breakpts
+        args = c(list(row.name = NULL, format = NULL),
+                                        ret$cells)
+        rrows[[i]] = do.call(rrow, args)
+    }
         
-                    lst = c( row.name = NULL, format = NULL,
-                            .collapse_cspans(lapply(vals, function(vlst) vlst[[i]])))
-                    do.call(rrow, lst)
-                    }) 
+    ## rrows = lapply(seq(1, nvals),
+    ##                function(i) {
+        
+    ##                 lst = c( row.name = NULL, format = NULL,
+    ##                         .collapse_cspans(lapply(vals, function(vlst) vlst[[i]])))
+    ##                 do.call(rrow, lst)
+    ##                 }) 
     rheaderl(rrows)
 }
 
