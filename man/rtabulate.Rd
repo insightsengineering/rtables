@@ -21,7 +21,7 @@ an \code{\link{rtable}} object
 }
 \details{
 The data is split into cell-data and a function can be specified that returns
-a data structre (or \code{\link{rcell}}).
+a data structure (or \code{\link{rcell}}).
 }
 \author{
 Adrian Waddell

@@ -66,11 +66,11 @@ structure that gets wrapped into an `rcell`
 the levels of `col_by`
 
 
-If `x` should not be split then the `no_by` function can be used to specify a
+If `x` should not be split, i.e. all should be taken, then the `by_all` function can be used to specify a
 column name (as the returned object is still an rtable with one column):
 
 ```{r}
-rtabulate(Sepal.Length, no_by("All Data"), sum)
+rtabulate(Sepal.Length, by_all("All Data"), sum)
 ```
 
 

@@ -17,20 +17,24 @@
 #'  rrow("X", 1, 2, 3),
 #'  rrow("Y", 4, 5, 6)
 #' )
-#' 
 #' tbl
-#' 
 #' header_add_N(tbl, 1:3)
 #' 
+#' # multiline header
+#' tbl <- rtable(
+#'   header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),
+#'   rrow("X", 1, 2, 3),
+#'   rrow("Y", 4, 5, 6)
+#' )
+#' tbl
+#' header_add_N(tbl, 1:3)
 header_add_N <- function(x, N) {
-  if (is.null(x)) return(NULL)
+  stopifnot(is(x, "rtable"))
+  stopifnot(length(N) == ncol(x))
   
-  is(x, "rtable") || stop("x is expected to be an rtable")
-  length(N) == ncol(x) || stop("dimension missmatch")
-  
-  header(x) <- rheader(
-    header(x)[[1]],
-    rrowl("", N, format = "(N=xx)")
-  )
+  header(x) <- do.call(rheader, c(
+    header(x),
+    list(rrowl("", N, format = "(N=xx)"))
+  ))
   x
 }

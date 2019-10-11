@@ -57,27 +57,36 @@ rbind.rtable <- function(..., gap = 0) {
 #' Stack a list of rtables
 #' 
 #' See \code{\link{rbind.rtable}} for details
+#' The difference is that this function takes a list of rtables as an argument whereas
+#' rbind.rtable takes a list of arguments (...), each corresponding to an rtable.
+#' 
+#' empty rtables and NULLs in list are filtered out at first.
+#' To bind rtables, you must make sure that the list contains at least one rtable and the header
+#' of the first rtable will be taken. (Note that every rtable must contain a header). We do not test
+#' that all rtable headers are identical for performance reasons.
+#' When the list has zero length, return an empty rtable
 #' 
 #' @param x a list of rtable objects
 #' @inheritParams rbind.rtable
+#' @param check_headers whether to check that headers of involved rtables are identical
+#'   this may lead to performance problems
 #' 
 #' @export
 #' 
-rbindl_rtables <- function(x, gap = 0) {
-  
+rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
   stopifnot(is.list(x))
-  stopifnot(length(x) > 0)
+  x <- x[!vapply(x, is_empty_rtable, logical(1))]
+  if (length(x) == 0) {
+    return(empty_rtable())
+  }
   stopifnot(is.numeric(gap), gap >= 0)
   
   is_rtable <- vapply(x, is, logical(1), "rtable")
   is_rrow <- vapply(x, is, logical(1), "rrow")
-  is_null <- vapply(x, is.null, logical(1))
   
   # in order to get the reference header
-  if (!is_rtable[1] && is_rrow[1] && is_null[1]) {
-    stop("first element needs to be an rtable not an rrow or NULL")
-  }
-  if (!all(is_rtable | is_rrow | is_null)) {
+  stopifnot(sum(is_rtable) > 0)
+  if (!all(is_rtable | is_rrow)) {
     stop("elements are not all of class rtable or rrow")
   }
   if (!num_all_equal(vapply(x[is_rtable], ncol, numeric(1)))) {
@@ -95,7 +104,20 @@ rbindl_rtables <- function(x, gap = 0) {
     unlist(x, recursive = FALSE)
   }
   
-  ref_header <- header(x[[1]])  
+  # commented out for performance reasons
+  stopifnot(!check_headers) # todo: currently not working because headers have attributes in random order -> identical not working
+  #nolintr start
+  # if (check_headers) {
+  #   stopifnot(all(vapply(
+  #     x[is_rtable], 
+  #     function(tbl) {
+  #       identical(header(tbl), header(x[[1]]))
+  #     }, 
+  #     logical(1)
+  #   ))) 
+  # }
+  #nolintr end
+  ref_header <- header(x[[ which(is_rtable)[[1]] ]])  
   class(tbl) <- "rtable"
   attr(tbl, "header") <- ref_header
   attr(tbl, "nrow") <- length(tbl)
