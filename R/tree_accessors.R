@@ -448,32 +448,57 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
 
 
 setGeneric("collect_leaves",
-           function(ttree, incl.cont = TRUE)
+           function(ttree, incl.cont = TRUE, add.labrows = FALSE)
     standardGeneric("collect_leaves"), signature = "ttree")
 
+
+.controws = function(tr, add.labrows) {
+    rows = tree_children(content_table(tr))
+    if(add.labrows) {
+        lab = obj_label(tr@split)
+        if(length(lab) > 0 && !is.na(lab) && nzchar(lab))
+            ## rows is first because the label is
+            ## for the split at the next level of nesting
+            rows = c( rows, TableRow(lab = lab, lev = tt_level(tr)))
+    }
+    rows
+}
 ##handle the ext
 setMethod("collect_leaves", "TableTree",
-          function(ttree, incl.cont = TRUE) {
-    ret = c(if(incl.cont) {tree_children(content_table(ttree))},
+          function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
+    ret = c(#if(incl.cont) {tree_children(content_table(ttree))},
+        if(incl.cont) {.controws(ttree, add.labrows)},
       lapply(tree_children(ttree),
-             collect_leaves))
+             collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)
 })
 
+
+setMethod("collect_leaves", "ElementaryTable",
+          function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
+    ret = tree_children(ttree)
+    if(add.labrows) {
+        rl = obj_label(ttree)
+        if(length(rl) >0 && !is.na(rl) && nzchar(rl))
+            ret = c(TableRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl), ret)
+    }
+    ret
+
+})
 setMethod("collect_leaves", "VTree",
-          function(ttree, incl.cont) {
+          function(ttree, incl.cont, add.labrows) {
     ret = lapply(tree_children(ttree),
                  collect_leaves)
     unlist(ret, recursive = TRUE)
 })
 
 setMethod("collect_leaves", "VLeaf",
-          function(ttree, incl.cont) {
+          function(ttree, incl.cont, add.labrows) {
     ttree
 })
 
 setMethod("collect_leaves", "ANY",
-          function(ttree, incl.cont)
+          function(ttree, incl.cont, add.labrows)
     stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
 
 

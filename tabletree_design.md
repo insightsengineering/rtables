@@ -34,6 +34,7 @@ Then
 `NULL %>% add_colby_varlevels("ARM") %>% add_colby_varlevels("SEX")`
 
 would give us something like
+
 ```
           A      B
         M  F    M  F
@@ -187,6 +188,7 @@ The add_analyzed_colvars here indicates that the variables whose data are
 ultimately processed by afun are specified at the highest-depth level of nesting
 in the column structure, rather than at the row level. 
 
+
 We may want to change `add_analyzed_var` to `add_analyzed_rowvar` if we go this route
 to ensure clarity
 
@@ -197,3 +199,59 @@ but need to think a bit harder first.
 Note: we also probably want to change the name of `add_colby_multivar` to indicate that it is 
 specifying an analysis. And we need to think about whether we would want (need) the ability to specify the analysis function on the column(s) instead of on rows.
 
+## Compound splits
+
+The current design calls for layouts (in both the row and column direction)  to be lists of split vectors. Max brought up the possibility of wanting to add splits at the current level of nesting, instead of either descending or jumping back up to the top. I don't want to complicate the pre-data layout structure by making it a full tree, though.
+
+Current plan is to support this with "compound splits" which are just splits that hold 2 or more splits that should all be applied at the given level of nesting. 
+
+NOTE: some possible issues with labeling in display.
+
+One question is how to declare/add compound splits
+
+### Option 1
+
+```
+NULL %>% add_colby_varlevels("ARM", "arm") %>%
+     add_colby_compound(NULL %>% add_colby_all() %>% add_colby_varlevels("SEX", "sex")) %>%
+     add_analyzed_var("AGE", summary)
+```
+
+Pros: no new syntax or grammar elements
+
+Cons: I really hate the whole nesting pipes thing.
+      A lot of useless work being done and undone internally here, the inner pipe would build up a PreDataLayouts object only to extract the split vector and ignore the rest.
+
+### Option 2
+
+```
+NULL %>% add_colby_varlevels("ARM", "arm") %>%
+     add_colby_compound(AllSplit(), VarLevelSplit("SEX", "gender")) %>%
+     add_analyzed_var("AGE", summary)
+```
+
+Pros: no nested pipes. 
+      Clear what it does. 
+
+Cons: Not using the same declarative style grammer as everything else. 'Manual' construction of individual split objects via constructors
+
+### Option 3
+
+replace `newtoplevel` argument with `nestlevel` which can take:
+
+- `"next"` (the default), 
+- `"current"` (create or add to compound split at current nesting level), or
+- `"top"` ( new top level)
+
+
+```
+NULL %>% add_colby_varlevels("ARM", "arm") %>%
+     add_colby_all() %>% add_colby_varlevels("SEX", "gender", nestlevel = "current") %>%
+     add_analyzed_var("AGE", summary)
+```
+
+Pros: same ux/"formfeel" as the before
+      users don't need to know about the concept of compound split objects at all
+
+Cons: adds complexity to parameter space
+      non-logical argument

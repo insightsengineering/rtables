@@ -38,7 +38,8 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## Note afun is a function that returns 2 values in a named list
     ## this will create 2 data rows
     add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                           median = median(x))) %>%
+                                                                    median = median(x)),
+                     fmt = "xx.xx") %>%
     ## Note newtoplev=TRUE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
@@ -48,7 +49,7 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 
 makefakedat = function(n  = 1000) {
     datadf = data.frame(stringsAsFactors = FALSE,
-                        ARM = c("ARM1", sample(c("ARM1", "ARM2"), n -1, replace = TRUE)),
+                        ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),
                         SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
                         FACTOR2 = c("A", sample(c("A", "B", "C"), n - 1, replace = TRUE)),
                         RACE = c("WHITE", sample(c("WHITE", "BLACK"), n - 1, replace = TRUE)),

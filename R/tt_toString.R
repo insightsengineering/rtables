@@ -155,7 +155,7 @@ setMethod("to_s3compat", "TableRow",
 setMethod("to_s3compat", "TableTree",
           function(obj, ...) {
     header = .make_s3_header(obj)
-    rows = lapply(collect_leaves(obj, incl.cont = TRUE),
+    rows = lapply(collect_leaves(obj, incl.cont = TRUE, add.labrows = TRUE),
                   to_s3compat)
     rtablel(header = header, rows, format = obj_fmt(obj))
 })

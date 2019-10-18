@@ -371,7 +371,7 @@ setClass("TableRowPos", contains = "TableTreePos",
          prototype = list(is_content = FALSE))
 
 
-TableRowPos = function(localrow, iscontent = FALSE, ...) {
+TableRowPos = function(localrow = NA_real_, iscontent = FALSE, ...) {
     ttpos = TableTreePos(iscontent, ...)
     new("TableRowPos", ttpos, local_rownum = localrow)
 }
