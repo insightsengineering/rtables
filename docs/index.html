@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reporting Tables • rtables</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Reporting Tables">
 <meta property="og:description" content="Reporting tables are useful to create formated tables with cells that
   display multiple values. An rtable object will provide access to all the raw data
@@ -20,7 +21,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -32,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,13 +83,9 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+      </header><div class="row">
+  <div class="contents col-md-9">
 <div id="rtables" class="section level1">
 
 
@@ -117,35 +114,34 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install the stable release of <code>rtables</code> package run the following command in <code>R</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"roche/rtables"</span>, <span class="dt">ref=</span><span class="st">"v0.1.1"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"roche/rtables"</span>, <span class="dt">ref=</span><span class="st">"v0.1.0"</span>)</span></code></pre></div>
 <p>To install the test version of <code>rtables</code> run</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"roche/rtables"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"roche/rtables"</span>)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rtables)
-
-tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtable.html">rtable</a></span>(
-  <span class="dt">header =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),
-  <span class="dt">format =</span> <span class="st">"xx (xx.xx%)"</span>,
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"A"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">104</span>, .<span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">100</span>, .<span class="dv">4</span>)),
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"B"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">23</span>, .<span class="dv">4</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">43</span>, .<span class="dv">5</span>)),
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(),
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"this is a very long section header"</span>),
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"estimate"</span>, <span class="kw"><a href="reference/rcell.html">rcell</a></span>(<span class="fl">55.23</span>, <span class="st">"xx.xx"</span>, <span class="dt">colspan =</span> <span class="dv">2</span>)),
-  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"95% CI"</span>, <span class="dt">indent =</span> <span class="dv">1</span>, <span class="kw"><a href="reference/rcell.html">rcell</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">44.8</span>, <span class="fl">67.4</span>), <span class="dt">format =</span> <span class="st">"(xx.x, xx.x)"</span>, <span class="dt">colspan =</span> <span class="dv">2</span>))
-)
-tbl
-<span class="co">#&gt;                                           Treatement        Comparison</span>
-<span class="co">#&gt;                                             N=100             N=300   </span>
-<span class="co">#&gt; ----------------------------------------------------------------------</span>
-<span class="co">#&gt; A                                         104 (20%)         100 (40%) </span>
-<span class="co">#&gt; B                                          23 (40%)          43 (50%) </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; this is a very long section header</span>
-<span class="co">#&gt; estimate                                             55.23            </span>
-<span class="co">#&gt;   95% CI                                          (44.8, 67.4)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rtables)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/rtable.html">rtable</a></span>(</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="dt">header =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Treatement</span><span class="ch">\n</span><span class="st">N=100"</span>, <span class="st">"Comparison</span><span class="ch">\n</span><span class="st">N=300"</span>),</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">format =</span> <span class="st">"xx (xx.xx%)"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"A"</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">104</span>, <span class="fl">.2</span>), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">100</span>, <span class="fl">.4</span>)),</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"B"</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">23</span>, <span class="fl">.4</span>), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">43</span>, <span class="fl">.5</span>)),</span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(),</span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"this is a very long section header"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"estimate"</span>, <span class="kw"><a href="reference/rcell.html">rcell</a></span>(<span class="fl">55.23</span>, <span class="st">"xx.xx"</span>, <span class="dt">colspan =</span> <span class="dv">2</span>)),</span>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="kw"><a href="reference/rrow.html">rrow</a></span>(<span class="st">"95% CI"</span>, <span class="dt">indent =</span> <span class="dv">1</span>, <span class="kw"><a href="reference/rcell.html">rcell</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">44.8</span>, <span class="fl">67.4</span>), <span class="dt">format =</span> <span class="st">"(xx.x, xx.x)"</span>, <span class="dt">colspan =</span> <span class="dv">2</span>))</span>
+<span id="cb3-11"><a href="#cb3-11"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a>tbl</span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;                                           Treatement        Comparison</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt;                                             N=100             N=300   </span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt; ----------------------------------------------------------------------</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt; A                                         104 (20%)         100 (40%) </span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; B                                          23 (40%)          43 (50%) </span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; </span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt; this is a very long section header</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; estimate                                             55.23            </span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;   95% CI                                          (44.8, 67.4)</span></span></code></pre></div>
 </div>
 <div id="presentations" class="section level2">
 <h2 class="hasAnchor">
@@ -179,31 +175,33 @@ tbl
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Adrian Waddell <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Maximilian Mordig <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/Roche/rtables/"><img src="https://travis-ci.org/Roche/rtables.svg?branch=master" alt="Build Status"></a></li>
 </ul>
 </div>
 </div>
-
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Adrian Waddell.</p>
+  <p>Developed by Adrian Waddell, Maximilian Mordig.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
