@@ -102,9 +102,14 @@ create_colinfo = function(clayout, df, rtpos = TreePos()) {
 
     cexprs = make_col_subsets(ctree, df)
     cextras = cextra_args(ctree)
+    counts = sapply(cexprs, function(ex) {
+        sum(eval(ex, envir = df))
+    })
+    
     new("InstantiatedColumnInfo",
         tree_layout = ctree,
         subset_exprs = cexprs,
-        cextra_args = cextras)
+        cextra_args = cextras,
+        counts = counts)
 
 }

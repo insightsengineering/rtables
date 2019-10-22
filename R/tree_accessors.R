@@ -401,7 +401,7 @@ setMethod("obj_fmt<-", "Split", function(obj, value) {
 
 setGeneric("set_fmt_recursive", function(obj, fmt, override = FALSE) standardGeneric("set_fmt_recursive"))
 setMethod("set_fmt_recursive", "TableRow",
-          function(obj, fmt) {
+          function(obj, fmt, override = FALSE) {
     if(is.null(fmt))
         return(obj)
     if(is.null(obj_fmt(obj)) || override)
@@ -456,10 +456,14 @@ setGeneric("collect_leaves",
     rows = tree_children(content_table(tr))
     if(add.labrows) {
         lab = obj_label(tr@split)
-        if(length(lab) > 0 && !is.na(lab) && nzchar(lab))
+        if(length(lab) > 0 && !is.na(lab) && nzchar(lab)) {
             ## rows is first because the label is
             ## for the split at the next level of nesting
-            rows = c( rows, TableRow(lab = lab, lev = tt_level(tr)))
+            lrowpos = if(length(rows)) tree_pos(rows[[1]]) else TableRowPos(iscontent = TRUE, islabel = TRUE)
+            is_labrow(lrowpos) = TRUE
+            rows = c( rows, TTLabelRow(lab = lab, lev = tt_level(tr),
+                                     tpos = lrowpos))
+        }
     }
     rows
 }
@@ -480,10 +484,9 @@ setMethod("collect_leaves", "ElementaryTable",
     if(add.labrows) {
         rl = obj_label(ttree)
         if(length(rl) >0 && !is.na(rl) && nzchar(rl))
-            ret = c(TableRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl), ret)
+            ret = c(TTLabelRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl), ret)
     }
     ret
-
 })
 setMethod("collect_leaves", "VTree",
           function(ttree, incl.cont, add.labrows) {
@@ -609,3 +612,26 @@ setMethod("cextra_args", "LayoutColTree",
         warning("Ignoring df argument and returning already calculated extra arguments")
     get_col_extras(obj)
 })
+
+
+setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
+
+setMethod("is_labrow", "TableRowPos",
+          function(obj) obj@is_label_row)
+
+setMethod("is_labrow", "TableRow",
+          function(obj) is_labrow(tree_pos(obj)))
+
+
+setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
+
+setMethod("is_labrow<-", "TableRowPos",
+          function(obj, value) {
+    obj@is_label_row = value
+    obj
+})
+
+
+
+
+           

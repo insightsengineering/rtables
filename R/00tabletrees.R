@@ -367,13 +367,15 @@ TableTreePos = function(iscontent = FALSE, ...) {
 }
 
 setClass("TableRowPos", contains = "TableTreePos",
-         representation(local_rownum = "numeric"),
-         prototype = list(is_content = FALSE))
+         representation(local_rownum = "numeric",
+                        is_label_row = "logical"),
+         prototype = list(is_content = FALSE,
+                          is_label_row = FALSE))
 
 
-TableRowPos = function(localrow = NA_real_, iscontent = FALSE, ...) {
+TableRowPos = function(localrow = NA_real_, iscontent = FALSE, islabel = FALSE,...) {
     ttpos = TableTreePos(iscontent, ...)
-    new("TableRowPos", ttpos, local_rownum = localrow)
+    new("TableRowPos", ttpos, local_rownum = localrow, is_label_row = islabel)
 }
 
 
@@ -471,7 +473,10 @@ setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ##"VNodeInfo",
          representation(func = "function"))
 
 
-setClass("LayoutColTree", contains = "LayoutAxisTree")
+setClass("LayoutColTree", contains = "LayoutAxisTree",
+         representation(display_columncounts = "logical",
+                        columncount_format = "character"))
+
 setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
 setClass("LayoutRowTree", contains = "LayoutAxisTree")
 setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
@@ -480,7 +485,9 @@ LayoutColTree = function(lev = 0L,
                          kids = list(),
                          spl = NULL, 
                          tpos = TreePos(), 
-                         summary_function = NULL ){## ,
+                         summary_function = NULL,
+                         vis_colcounts = FALSE,
+                         colcount_fmt = "(N=xx)"){## ,
                          ## sub = expression(TRUE),
                          ## svar = NA_character_,
     ## slab = NA_character_) {
@@ -491,12 +498,11 @@ LayoutColTree = function(lev = 0L,
             split = spl,
             ## subset = sub,
             ## splitvar = svar,
-            label = lab)
+            label = lab,
+            display_columncounts = vis_colcounts,
+            columncount_format = colcount_fmt)
     } else {
-        new("LayoutColLeaf", level = lev, 
-            func = if(is.null(summary_function)) length else summary_function,
-            pos_in_tree = tpos,
-            label = lab)
+        LayoutColLeaf(lev = lev, lab = lab, tpos = tpos)
     }        
 }
 
@@ -554,6 +560,20 @@ setClass("TableRow", contains = "VTableLeafInfo",
     lcsp = length(object@colspans)
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
 })
+
+setClass("TTLabelRow", contains = "TableRow",
+         validity = function(object) identical(object@leaf_value, list()))
+
+
+TTLabelRow = function(lev = 1L,
+                      lab = "",
+                      clayout = LayoutColTree(),
+                      tpos = TableRowPos()) {
+    is_labrow(tpos) = TRUE
+    is_content_pos(tpos) = TRUE
+    new("TTLabelRow", TableRow(lev = lev, lab = lab, clayout = clayout, tpos = tpos))
+}
+                      
 
 TableRow = function(val = list(),
                     lev = 1L,
@@ -741,14 +761,18 @@ setClass("PreDataAxisLayout", contains = "list",
 
 
 
-setClass("PreDataColLayout", contains = "PreDataAxisLayout")
+setClass("PreDataColLayout", contains = "PreDataAxisLayout",
+         representation(display_columncounts = "logical",
+                        colcount_fmt = "character"))
 setClass("PreDataRowLayout", contains = "PreDataAxisLayout")
 
 PreDataColLayout = function(x = SplitVector(),
                             rtsp = RootSplit(),
                             ...,
-                            lst = list(x, ...)) {
-    ret =  new("PreDataColLayout", lst)
+                            lst = list(x, ...),
+                            disp_colcounts = FALSE,
+                            colcount_fmt = "(N=xx)") {
+    ret =  new("PreDataColLayout", lst, display_columncounts = disp_colcounts)
     ret@root_split = rtsp
     ret
 }
@@ -783,9 +807,15 @@ PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
 setClass("InstantiatedColumnInfo",
          representation(tree_layout = "LayoutColTree",
                         subset_exprs = "list",
-                        cextra_args = "list"),
+                        cextra_args = "list",
+                        counts = "integer",
+                        display_columncounts = "logical",
+                        columcount_format = "character"),
          validity = function(object) {
     nleaves = length(collect_leaves(object@tree_layout))
+    counts = object@counts
     length(object@subset_exprs) == nleaves &&
-        length(object@cextra_args) == nleaves
-    })
+        length(object@cextra_args) == nleaves &&
+        length(counts) == nleaves &&
+        (all(is.na(counts)) || all(!is.na(counts) & counts > 0))
+})

@@ -293,7 +293,7 @@ setMethod("add_summary", "Split",
     lyt
 })
 
-add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "(N=xx)" ){
+add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "(n=xx)" ){
     fun = function(df, lblstr = "") {
         lbl = sprintf(lblfmt, lblstr)
         if(!is.null(var))
@@ -304,9 +304,16 @@ add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "(N=xx)" )
         names(ret) = lbl
         ret
     }
-    add_summary(lyt, lbl = lbl, cfun = fun)
+    add_summary(lyt, lbl = lbl, cfun = fun, cfmt = valfmt)
 }
 
+
+add_colcounts = function(lyt, fmt = "(N=xx)") {
+    display_ccounts(lyt) = TRUE
+    colcount_format(lyt) = fmt
+    lyt
+
+}
     
 ## Currently existing tables can ONLY be added 
 ## as new entries at the top level, never at any

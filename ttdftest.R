@@ -21,7 +21,7 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
     ## add_colby_total(lbl = "All") %>%
-    add_summary_count(lbl = "Overall (N)") %>%
+    add_summary_count(lbl = "Overall (N)", valfmt = "(N=xx)") %>%
     ## add a new subtable that splits on RACE, value labels from ethn_lbl
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", lblfmt = "%s (n)") %>%
@@ -99,9 +99,10 @@ makefakedat2 =  function(n  = 1000) {
 
     
 rawdat = makefakedat()
-ctree = splitvec_to_coltree(rawdat, clayout(thing)[[1]], TreePos())
 
-cexprs = build_splits_expr(clayout(thing)[[1]], rawdat)
+## ctree = splitvec_to_coltree(rawdat, clayout(thing)[[1]], TreePos())
+
+## cexprs = build_splits_expr(clayout(thing)[[1]], rawdat)
 
 ## stuff = recursive_applysplit(rawdat, splvec = rlayout(thing)[[1]],
 ##                              treepos = TreePos(),
