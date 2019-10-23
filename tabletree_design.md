@@ -255,3 +255,114 @@ Pros: same ux/"formfeel" as the before
 
 Cons: adds complexity to parameter space
       non-logical argument
+
+
+# Pagination
+
+A first pass of the pagination algorithm is working and can be seen in `tt_paginate.R`
+
+Pagination is currently defined/modeled as a _rendering_ activity, meaning it is /not/ formally modelled in the TableTree object model. Rather, it is done transiently to a TableTree object in the process of also doing other preparation for it to be printed. There are some downsides to this but it is both much simpler than formally modelling pagination and, I think, conceptually correct. I don't think we want the TableTree objects themselves to know about pagination because other output backends (e.g., html) will either not have pagination at all or will haandle it very differently.
+
+## Definitions
+
+- Row - a single row in the table, can be the following types
+  - Label row - a row with no data tehre to display a varaible or other label for a position in the nesting structure
+  - Content row - a row within the content table at a positioni within the tree, contains summary or aggregate data for that nesting level
+  - Data row - a row containing the result(s) of the tabulation (e.g., mean of AGE) for a subset of the data defined by position in the tree structure
+- Header lines - The multi-row defnition of the column layout and the dividing "row" displayed between the the columns and the table rows
+- Repeat Row - A label or content row which must be repeated after pagination to correctly display the position/context of the first row in the new page.
+- Pagination at row - The row will be the _last_ row displayed on a given page, with a page break after  it (or in the future, after any footnotes/footer material)
+
+Row types example with 15 lines maximum per page:
+(R) indicates a repeated row
+(P) indicates a pagination row
+
+```
+                 [[1]]
+Header                                            ARM1                          ARM2         
+Header                                      M              F              F              M   
+Header           ----------------------------------------------------------------------------
+Content Row      Overall (N)             (N=241)        (N=265)        (N=257)        (N=237)
+Label Row        Ethnicity
+Content Row        WHITE (n)             (N=123)        (N=129)        (N=133)        (N=114)
+Label Row          Factor2
+Content Row          Level A             (N=48)         (N=42)         (N=44)         (N=36) 
+Label Row            Age Analysis
+Data Row               mean               51.46          52.99          55.76          54.32 
+Data Row               median             48.15          51.25          56.53          52.1  
+Content Row          Level B             (N=40)         (N=43)         (N=38)         (N=49) 
+Label Row            Age Analysis
+Data Row               mean               55.33          54.47          53.47          55.01 
+(P) Data Row           median             56.64          55.13          52.24          54.88 
+                 
+                 [[2]]
+ Header                                            ARM1                          ARM2         
+ Header                                      M              F              F              M   
+ Header           ----------------------------------------------------------------------------
+(R) Content Row  Overall (N)             (N=241)        (N=265)        (N=257)        (N=237)
+(R) Label Row    Ethnicity
+Content Row         BLACK (n)             (N=118)        (N=136)        (N=124)        (N=123)
+Label Row           Factor2
+Content Row           Level B             (N=47)         (N=42)         (N=46)         (N=42) 
+Label Row             Age Analysis
+Data Row                mean               55.84          53.93          56.35          58.52 
+Data Row                median             55.29          55.58          55.84          59.9  
+Content Row           Level A             (N=42)         (N=47)         (N=47)         (N=37) 
+Label Row             Age Analysis
+Data Row                mean               56.55          57.03          56.51          54.29 
+(P) Data Row            median             56.77          57.56          56.61          54.24 
+                 
+                 [[3]]
+Header                                       ARM1                          ARM2         
+Header                                 M              F              F              M   
+Header           -----------------------------------------------------------------------
+Label Row        Var3 Counts
+Data Row           level1           (N=124)        (N=126)        (N=131)        (N=117)
+Data Row           level2           (N=117)        (N=139)        (N=126)        (N=120)
+                 
+                 
+                 
+
+```
+
+## Pagination Rules
+
+Pagination is defined to happen at (after) a row if that row will be the _last_ row on a page, with a page break directly after it (or after any footnotes which currently are not modelled, but will be). This is mostly for convenience when coding and could be changed  if it ends up being problematic.
+
+Pagination is performed with respect to a customizable but fixed maximum number of lines per page (`lpp`). All lines are assumed to be the same height.
+
+For a given iteration,  pagination will occur at the latest row position (`pos`) such that the following conditions are met:
+
+1. The header lines, repeated rows, and rows between `pos` (inclusive) and the last page break (non inclusive) together require no more than `lpp` lines
+2. pos points to a Data Row (i.e., NOT a Label or Content Row)
+3. _Either_ the Data Row at `pos` does not have any Data Row siblings, OR pos does not point to the first Data Row data that position in the tree structure
+
+
+### The Algorithm.
+
+The algorithm in pseudocode
+
+```
+
+ok_pag_position = functoin(rows, pos, lastpag, reprows, lpp, nhlines) {
+     ## not content row
+     !is_contentrow(rows[[pos]]) &&
+     	 ## not label row
+         !is_labelrow(rows[[pos]]) &&
+	 ## all required lines fit on page
+	 (pos - lastpag + length(reprows) + nhlines) <= lpp &&
+	 ## only data row at that tree position, or not first one
+	 (is_datarow(rows[[pos - 1]]) || !is_datarow(rows[[pos + 1]]))
+}
+ 	 
+get_next_paginate = function(allrows, lpp, lastpag, nhlines) 
+	pos = lastpag + lpp - nhlines
+	reprows = getreprows(allrows, lastpag)
+	while(pos > lastpag && !ok_pag_position(allrows, pos, lastpag, reprows, lpp, nhlines)) {
+	     pos = pos - 1
+	}
+	if(pos == lastpag) stop("unable to find valid pagination positionb between rows", lastpag, "and", lastpag+lpp)
+        list(pos = pos, reprows = reprows)
+}
+```
+ 

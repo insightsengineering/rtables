@@ -61,47 +61,61 @@ paginate_ttree = function(ttree, perpage = 80,
     ## if(p <= perpage)
     ##     return(list(pos = p, repros = list()))
 
-    ##hyper lame haxors
-    reprows = NULL
+    ## reprows only depends on the FIRST row on a page!
+    reprows = getreprows(lastpag, rows, perpage, incl.crows)
 
     
     stopifnot(p > lastpag || p == length(rows))
 
-    ## we have to figure out the rows that would need to be repeated
-    ## reassess because that could change where the break needs to be
-    cnt = 1
-    while( is.null(reprows) ||
-           (p > lastpag &&
-       #    (p - lastpag) + length(reprows) >= perpage &&
-           cnt < 1000)
+    ## walk backwards until we are in an ok spot or there is nowhere else to look
+    while( p > lastpag &&
+           ## check total lines required
+           ((p - lastpag) + length(reprows) > perpage ||
+            ## check if we are at a content row
+            is_content_pos(rows[[p]]) ||
+            ## check if we're at a first and not only data row
+            (is_content_pos(rows[[p - 1]]) && !is_content_pos(rows[[p + 1]])))
           ) {
-              print(paste("trying", p))
-              ## we try hard not to paginate between content and
-              ## data rows at the same nesting level
-              while(is_content_pos(rows[[p]]) && p > lastpag + 1) {
-                  p = p - 1L
-                  
-              }
-              
-              newreprows = getreprows(p, rows, perpage, lastpag, incl.crows)
-              reprows = newreprows
-              ## are we in a state we like?
-              if((p - lastpag) + length(reprows) <= perpage)
-                  break
-              
-              p = p - 1 #length(reprows)
-              cnt = cnt +1
+              p = p -1
           }
-    stopifnot(cnt < 1000)
-    if(p <= lastpag)
-        stop("oopsie daisy")
+
+    if(p == lastpag) stop("Unable to find pagination position between rows", lastpag, " and ", lastpag + perpage)
+    
+    ## while((p > lastpag &&
+    ##        (p - lastpag) + length(reprows) >= perpage &&
+    ##        cnt < 1000)
+    ##       ) {
+    ##           ## we try hard not to paginate between content and
+    ##           ## data rows at the same nesting level
+    ##           while(is_content_pos(rows[[p]]) && p > lastpag + 1) {
+    ##               p = p - 1L
+                  
+    ##           }
+              
+          
+    ##           reprows = newreprows
+    ##           ## are we in a state we like?
+    ##           if((p - lastpag) + length(reprows) <= perpage)
+    ##               break
+              
+    ##           p = p - 1 #length(reprows)
+    ##           cnt = cnt +1
+    ##       }
+    ## stopifnot(cnt < 1000)
+    ## if(p <= lastpag)
+    ##     stop("oopsie daisy")
     
     list(pos = p, reprows = reprows)
 }
 
-getreprows = function(p, allrows, perpage, lastpag, incl.crows = TRUE) {
 
-    if(p <= perpage || lastpag >= length(allrows))
+## Repeat rows only depend on the FIRST row in a table, not on where
+## we think the next pagination might occur!!!
+getreprows = function(lastpag, allrows, perpage, incl.crows = TRUE) {
+
+    ## If we're on the first page, no repeated rows
+    ## also if we already paginated the whole thing (this should never happen)
+    if(lastpag == 0 || lastpag >= length(allrows))
         return(list())
 
 
@@ -119,9 +133,7 @@ getreprows = function(p, allrows, perpage, lastpag, incl.crows = TRUE) {
     rows = allrows[1:lastpag]
 
     ret = list()
-    curpos = p - 1
-    
-
+ 
     rowlevs = sapply(rows, tt_level)
     labrows = sapply(rows, is, "TTLabelRow")
     labinds = which(labrows)
@@ -129,10 +141,6 @@ getreprows = function(p, allrows, perpage, lastpag, incl.crows = TRUE) {
     repcontrows = numeric()
 
     for(l in seq(0, curlev)) {
-        ## linds = which(rowlevs == l)
-        ## lupinds = which(rowlevs > l)
-        
-        ## inefficient but shouldn't matter at all
         lablevpos = max(which(labrows & rowlevs == l))
         if(is.finite(lablevpos)) {
             contstart = lablevpos
@@ -149,6 +157,7 @@ getreprows = function(p, allrows, perpage, lastpag, incl.crows = TRUE) {
             
         }
     }
+    ## this should be completely redundant right?
     repcontrows = unique(repcontrows[repcontrows <= lastpag])
     allrows[repcontrows]
 }
