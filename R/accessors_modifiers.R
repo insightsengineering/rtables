@@ -65,6 +65,69 @@ indented_row.names <- function(x, spaces = 2) {
   }, character(1))
 }
 
+#' Return Indentation of Header Rows
+#' 
+#' @inheritParams header
+#' 
+#' @export
+#' 
+#' @examples 
+#' tbl <- rtable(
+#'   header = rheader(
+#'     rrow("", "A", "B"),
+#'     rrow("", "X", "Y")
+#'   ),
+#'   rrow("row 1", 1, 2)
+#' )
+#' 
+#' tbl
+#' header_indent(tbl)
+header_indent <- function(x) {
+  stopifnot(is(x, "rtable"))
+  
+  h <- header(x)
+  vapply(h, function(xi) attr(xi, "indent"), numeric(1))
+}
+
+#' Return Indentation of Header Rows
+#' 
+#' @inheritParams header
+#' @param value non-negative inegers of indent of header rows
+#' 
+#' @export
+#' 
+#' @examples 
+#' tbl <- rtable(
+#'   header = rheader(
+#'     rrow("A", "A", "B"),
+#'     rrow("B", "X", "Y")
+#'   ),
+#'   rrow("row 1", 1, 2)
+#' )
+#' 
+#' tbl
+#' header_indent(tbl) <- c(0, 1)
+#' tbl
+`header_indent<-` <- function(x, value) {
+  stopifnot(
+    is(x, "rtable"), 
+    is.numeric(value),
+    all(value >= 0),
+    length(value) == length(header(x))
+  )
+  
+  h <- header(x)
+  
+  for (i in seq_along(value)) {
+    attr(h[[i]], "indent") <- value[i]
+  }
+  header(x) <- h
+  x
+}
+
+
+
+
 #' change row names of rtable
 #' 
 #' @param x an \code{\link{rtable}} object
@@ -82,7 +145,7 @@ indented_row.names <- function(x, spaces = 2) {
 
   nr <- nrow(x)
   
-  if (length(value) != nr) stop("dimension missmatch")
+  if (length(value) != nr) stop("dimension mismatch")
   
   for (i in seq_along(x)) {
     attr(x[[i]], "row.name") <- value[i]
@@ -106,9 +169,9 @@ row.names.rheader <- function(x) {
 
 
 
-#' Get column names of an \code{\link{rtable}} object
+#' Get content of first header row of an \code{\link{rtable}} object
 #' 
-#' Retrieve the column names of an \code{\link{rtable}} object
+#' Retrieve the content of the first header row of an \code{\link{rtable}} object
 #' 
 #' @inheritParams dim.rtable
 #' 
@@ -164,6 +227,69 @@ header <- function(x) {
   if (ncol(x) != ncol(value)) stop("number of columns do not match")
   
   attr(x, "header") <- value
+  x
+}
+
+
+#' Access Header Row Names
+#' 
+#' @inheritParams header
+#' 
+#' @export
+#' 
+#' @examples 
+#' tbl <- rtable(
+#'   header = rheader(
+#'     rrow("", "A", "B"),
+#'     rrow("", "X", "Y")
+#'   ),
+#'   rrow("row 1", 1, 2)
+#' )
+#' 
+#' tbl
+#' header_row.names(tbl)
+header_row.names <- function(x) {
+  stopifnot(is(x, "rtable"))
+  
+  row.names(header(x))
+}
+
+#' Modify Header Row Names
+#' 
+#' @inheritParams header
+#' @param value vector with new row names
+#' 
+#' @export
+#' 
+#' @examples 
+#' tbl <- rtable(
+#'   header = rheader(
+#'     rrow("", "A", "B"),
+#'     rrow("", "X", "Y")
+#'   ),
+#'   rrow("row 1", 1, 2)
+#' )
+#' 
+#' tbl
+#' header_row.names(tbl) <- c("S", "T")
+#' tbl
+`header_row.names<-` <- function(x, value) {
+  stopifnot(
+    is(x, "rtable"), 
+    is.character(value) # note cannot delete them with NULL
+  )
+  
+  h <- header(x)
+  
+  if (length(h) != length(value)) {
+    stop("length of assigned value does not match number of rows in header")
+  }
+  
+  for (i in seq_along(value)) {
+    attr(h[[i]], "row.name") <- value[i]
+  }
+  
+  header(x) <- h
   x
 }
 

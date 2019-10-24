@@ -10,9 +10,11 @@
 \arguments{
 \item{x}{data.frame}
 
-\item{row_by}{name of factor variable in \code{x}}
+\item{row_by}{rows to take per row}
 
-\item{col_by}{name of factor variable in \code{x}}
+\item{col_by}{rows to take per column
+
+For cell in (row, column), it takes the intersection of the corresponding row_by & col_by}
 
 \item{FUN}{a function that processes the cell data}
 
@@ -52,7 +54,7 @@ rtabulate(
 
 rtabulate(
   x = iris,
-  row_by = no_by("sum"),
+  row_by = by_all("sum"),
   col_by = iris$Species, 
   FUN = function(x) sum(x$Sepal.Length)
 )
@@ -60,7 +62,7 @@ rtabulate(
 rtabulate(
   x = iris,
   row_by = iris$Species,
-  col_by = no_by("sum"), 
+  col_by = by_all("sum"), 
   FUN = function(x) sum(x$Sepal.Length)
 )
 

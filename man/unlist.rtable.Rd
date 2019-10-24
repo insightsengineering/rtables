@@ -18,6 +18,6 @@
 rtable object
 }
 \description{
-rtable objects should not be unlisted. This allows us to create nested lists with rtables objects and then flatten
-them to a list of rtable objects.
+rtable, rrow, and rcell objects should not be unlisted. This allows us to create nested lists with rtables objects
+and then flatten them to a list of rtable objects.
 }

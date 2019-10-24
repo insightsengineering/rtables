@@ -13,3 +13,20 @@ num_all_equal <- function(x, tol = .Machine$double.eps ^ 0.5) {
   y <- range(x) / mean(x)
   isTRUE(all.equal(y[1], y[2], tolerance = tol))
 }
+
+# copied over from utils.nest which is not open-source
+all_true <- function(lst, fcn) {
+  all(vapply(lst, fcn, TRUE))
+}
+is.logical.single <- function(x) {
+  !is.null(x) &&
+    is.logical(x) &&
+    length(x) == 1 &&
+    !is.na(x)
+}
+is.logical.vector_modif <- function(x, min_size = 1) {
+  !is.null(x) &&
+    is.atomic(x) &&
+    length(x) >= min_size &&
+    all_true(x, is.logical.single)
+}

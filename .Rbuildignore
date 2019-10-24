@@ -1,3 +1,5 @@
+^\.CI-FORCE-RELEASE-VERSION$
+^\.drone\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
@@ -6,4 +8,4 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^\.travis\.yml$
-^\.httr-oauth$
+^Jenkinsfile$

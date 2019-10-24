@@ -7,9 +7,6 @@ navbar:
   - icon: fa-github fa-lg
     href: https://github.com/roche/rtables
 
-development:
-  mode: release
-
 reference:
   - title: Core Table Create Functions
     desc:  These are the main functions needed to build an rtable.
@@ -20,11 +17,14 @@ reference:
     - rheader
     - rtablel
     - rrowl
+    - empty_rtable
+
   - title: Cell Formatting related Functions
     contents:
     - sprintf_format
     - format_rcell
     - list_rcell_format_labels
+
   - title: Accessor and Modification Functions
     desc: Access and Modify Functions
     contents:
@@ -35,19 +35,41 @@ reference:
     - dim.rtable
     - rbind.rtable
     - rbindl_rtables
+    - combine_rrows
+    - cbind_rtables
     - header
     - header<-
     - dim.rheader
     - header_add_N
     - indented_row.names
+    - indent
     - unlist.rtable
+    - unlist.rcell
+    - unlist.rrow
+    - insert_rrow
+    - is_empty_rtable
+    - is_non_empty_rtable
+    - is_rtable
+    - header_indent
+    - header_indent<-
+    - header_row.names
+    - header_row.names<-
+
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
     contents:
     - starts_with("rtabulate")
-    - no_by
-    - is.no_by
-    - levels.no_by
+    - col_by_to_matrix
+    - col_by_to_factor
+    - by_add_total
+    - by_all
+    - by_combine
+    - by_hierarchical
+    - by_quartile
+    - by_compare_subset
+    - by_drop_empty_cols
+    - by_factor_to_matrix
+
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
     contents:
@@ -55,20 +77,34 @@ reference:
     - sort_rrows
     - order_rtables
     - sort_rtables
+
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
     - toString.rtable
+    - toString.empty_rtable
     - as_html
     - as_html.default
     - as_html.rtable
+
   - title: Coercion Functions
     contents:
     - as.rtable
     - as.rtable.table
+    
   - title: Utility Functions
     contents:
     - Viewer
     - compare_rtables
+    - label
+    - var_labels<-
+    - var_labels
+    - var_labels_remove
+    - var_relabel
+    - with_label
 
-
+  - title: Unexported Functions used by Developers
+    contents:
+    - by_header
+    - by_header_to_string
+    - with_by_header

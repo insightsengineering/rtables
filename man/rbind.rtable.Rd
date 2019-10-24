@@ -2,12 +2,13 @@
 % Please edit documentation in R/rbind.R
 \name{rbind.rtable}
 \alias{rbind.rtable}
-\title{Stack rtable objects}
+\title{Stack rtable and rrow objects}
 \usage{
 \method{rbind}{rtable}(..., gap = 0)
 }
 \arguments{
-\item{...}{\code{\link{rtable}} objects}
+\item{...}{\code{\link{rtable}} or length 0 \code{\link{rcell}} objects, the first object must be an
+\code{\link{rtable}} object}
 
 \item{gap}{number of empty rows to add between tables}
 }
@@ -46,13 +47,14 @@ mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
   )
 ))
 
-tbl <- rbind(mtbl, mtbl2)
-tbl
+rbind(mtbl, mtbl2)
 
-tbl <- rbind(mtbl, mtbl2, gap = 1)
-tbl 
+rbind(mtbl, rrow(), mtbl2)
 
-tbl <- rbind(mtbl, mtbl2, gap = 2)
-tbl 
+rbind(mtbl, rrow("aaa"), indent(mtbl2))
+
+rbind(mtbl, mtbl2, gap = 1)
+
+rbind(mtbl, mtbl2, gap = 2)
 
 }

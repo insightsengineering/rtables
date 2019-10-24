@@ -76,7 +76,7 @@ max_nchar_rownames <- function(rows, indent.unit) {
 
 #' @export
 print.rtable <- function(x, ...) {
-  str <- toString.rtable(x, ...)
+  str <- toString(x, ...)
   cat(str)
   cat("\n")
 }

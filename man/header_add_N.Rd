@@ -23,9 +23,15 @@ tbl <- rtable(
  rrow("X", 1, 2, 3),
  rrow("Y", 4, 5, 6)
 )
-
 tbl
-
 header_add_N(tbl, 1:3)
 
+# multiline header
+tbl <- rtable(
+  header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),
+  rrow("X", 1, 2, 3),
+  rrow("Y", 4, 5, 6)
+)
+tbl
+header_add_N(tbl, 1:3)
 }
