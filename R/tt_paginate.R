@@ -58,12 +58,9 @@ paginate_ttree = function(ttree, perpage = 80,
         warning("extra iteration, lastpag is already > length(rows) - perpage")
         return(list(pos = p, reprows = list()))
     }
-    ## if(p <= perpage)
-    ##     return(list(pos = p, repros = list()))
 
     ## reprows only depends on the FIRST row on a page!
     reprows = getreprows(lastpag, rows, perpage, incl.crows)
-
     
     stopifnot(p > lastpag || p == length(rows))
 
@@ -80,30 +77,6 @@ paginate_ttree = function(ttree, perpage = 80,
           }
 
     if(p == lastpag) stop("Unable to find pagination position between rows", lastpag, " and ", lastpag + perpage)
-    
-    ## while((p > lastpag &&
-    ##        (p - lastpag) + length(reprows) >= perpage &&
-    ##        cnt < 1000)
-    ##       ) {
-    ##           ## we try hard not to paginate between content and
-    ##           ## data rows at the same nesting level
-    ##           while(is_content_pos(rows[[p]]) && p > lastpag + 1) {
-    ##               p = p - 1L
-                  
-    ##           }
-              
-          
-    ##           reprows = newreprows
-    ##           ## are we in a state we like?
-    ##           if((p - lastpag) + length(reprows) <= perpage)
-    ##               break
-              
-    ##           p = p - 1 #length(reprows)
-    ##           cnt = cnt +1
-    ##       }
-    ## stopifnot(cnt < 1000)
-    ## if(p <= lastpag)
-    ##     stop("oopsie daisy")
     
     list(pos = p, reprows = reprows)
 }
