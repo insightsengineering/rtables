@@ -70,10 +70,11 @@ as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
 
 #' @export
 as_html.rrow <- function(x, ncol, is_header, 
-                         class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
+                         class.tr = NULL, class.td = NULL, class.th = NULL,
+                         align = NULL, ...) {
   
   (is.logical(is_header) && length(is_header) == 1) || stop("is_header is supposed to be a boolean")
-  
+  if(!is.null(align) & length(align) != ncol+1) stop("Align should be equal to number of cols+1")
   cell_tag <- if (is_header) {
     function(...) tags$th(class = class.th, ...)
   } else {
@@ -83,23 +84,28 @@ as_html.rrow <- function(x, ncol, is_header,
   indent <- attr(x, "indent")
   row.name <- attr(x, "row.name")
   
+  if(is.null(align)){
+    align <- c("text-left", rep("text-center", ncol))
+  }
+  
   cells <- if (length(x) == 0) {
-    cell_tag(row.name, class=paste("rowname", "text-left"), colspan = as.character(ncol+1))
+    cell_tag(row.name, class=paste("rowname", align[1]), colspan = as.character(ncol+1))
   } else {
     tagList(
-      cell_tag(row.name, class=paste("rowname", "text-left")),
-      lapply(x, function(xi) {
+      cell_tag(row.name, class=paste("rowname", align[1])),
+      Map(function(xi, align) {
         
         colspan <- attr(xi, "colspan")
         if (is.null(colspan)) stop("colspan for rcell is NULL")
         
         cell_content <- format_rcell(xi, output="html")
         if (colspan == 1) {
-          cell_tag(cell_content, class = "text-center")
+          cell_tag(cell_content, class = align)
         } else {
-          cell_tag(cell_content, colspan = as.character(colspan), class = "text-center")
+          cell_tag(cell_content, colspan = as.character(colspan), class = align)
         }
-      }),
+      },
+      xi = x, align = align[-1]),
       replicate(ncol - ncell(x), cell_tag(), simplify = FALSE)
     )
   }
