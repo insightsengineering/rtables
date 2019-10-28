@@ -293,17 +293,46 @@ setMethod("add_summary", "Split",
     lyt
 })
 
-add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "(n=xx)" ){
-    fun = function(df, lblstr = "") {
+.count_raw_constr = function(var, valfmt, lblfmt) {
+    function(df, lblstr = "") {
         lbl = sprintf(lblfmt, lblstr)
         if(!is.null(var))
-            ret = sum(!is.na(df[[var]]))
+            cnt = sum(!is.na(df[[var]]))
         else
-            ret = nrow(df)
+            cnt = nrow(df)
+
+        ret = cnt
+        
         attr(ret, "format") = valfmt
         names(ret) = lbl
         ret
     }
+}
+
+.count_wpcts_constr = function(var, valfmt, lblfmt) {
+    function(df, lblstr = "", .N_col) {
+        lbl = sprintf(lblfmt, lblstr)
+        if(!is.null(var))
+            cnt = sum(!is.na(df[[var]]))
+        else
+            cnt = nrow(df)
+
+        ## the formatter does the *100 so we don't here.
+        ret = list(c(cnt, cnt/.N_col))
+        
+        attr(ret, "format") = valfmt
+        names(ret) = lbl
+        ret
+    }
+}
+
+
+add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "xx (xx.x%)" ){
+
+    if(length(gregexpr("xx", valfmt)[[1]]) == 2)
+        fun = .count_wpcts_constr(var, valfmt, lblfmt)
+    else
+        fun = .count_raw_constr(var,valfmt, lblfmt)
     add_summary(lyt, lbl = lbl, cfun = fun, cfmt = valfmt)
 }
 
@@ -370,9 +399,32 @@ rtabulate_layout <- function(x, layout, FUN, ...,
 }
 
 
+takes_coln = function(f) {
+    stopifnot(is(f, "function"))
+    forms = names(formals(f))
+    res = ".N_col" %in% forms
+    if(res)
+        print("function takes .N_col")
+    res
+}
+
+takes_totn = function(f) {
+    stopifnot(is(f, "function"))
+    forms = names(formals(f))
+    res = ".N_total" %in% forms 
+    if(res)
+        print("function takes .N_total")
+    res
+}
+
+
 gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     colexprs = col_exprs(cinfo)
-
+    colcounts = col_counts(cinfo)
+    ## XXX this is an assumption that could???? be
+    ## wrong in certain really weird corner cases?
+    totcount = sum(colcounts)
+    
     if(!is.null(datcol) && is.na(datcol)) {
         colleaves =  collect_leaves(cinfo@tree_layout)
         datcol = sapply(colleaves,
@@ -397,29 +449,30 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     }
 
 
-    rawvals = mapply(function(csub, col) {
+    rawvals = mapply(function(csub, col, count) {
 
 
         inds = eval(csub, envir = dfpart)
         dat = dfpart[inds,]
         if(!is.null(col))
             dat = dat[[col]]
-        func(dat)
+        args = list(dat)
+        
+        if(takes_coln(func))
+            args = c(args, list(.N_col = count))
+
+        if(takes_totn(func))
+            args = c(args, list(.N_total = totcount))
+        
+        do.call(func, args)
     }, csub = colexprs, col = datcol,
+    count = colcounts,
     SIMPLIFY= FALSE)
 
     names(rawvals) = names(colexprs)
     rawvals
-    ## rawvals = lapply(colexprs,
-    ##                  function(csub) {
-    ##     inds = eval(csub, envir = dfpart)
-    ##     dat = dfpart[inds,]
-    ##     if(!is.null(datcol))
-    ##         dat = dat[[datcol]]
-    ##     func(dat)
-    ## })
 }
-
+ 
 .make_tablerows = function(dfpart, func,
                            ##colexprs, coltree,
                            cinfo,
@@ -434,16 +487,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     } else {
         rowvar  = NA_character_
     }
-    colexprs = col_exprs(cinfo)
     
-    ## rawvals = lapply(colexprs,
-    ##                  function(csub) {
-    ##     inds = eval(csub, envir = dfpart)
-    ##     dat = dfpart[inds,]
-    ##     if(!is.null(datcol))
-    ##         dat = dat[[datcol]]
-    ##     func(dat)
-    ## })
     rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
     ## rowvar = if(!is.null(datcol) && !is.na(datcol)) datcol else NA_character_
       if(is.null(rvtypes))
@@ -453,6 +497,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     lbls = names(rawvals[[1]])
     ncrows = lens[1]
     stopifnot(ncrows > 0)
+    ##recycle formats
+    fmtvec = rep(format, length.out = ncrows)
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
         TableRow(val = rowvals,tpos = make_rowpos(tabpos, i),
@@ -462,7 +508,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
                  var = rowvar,
                  var_lbl = rvlab,
                  v_type = rvtypes[i],
-                 fmt = format
+                 fmt = fmtvec[i]
                  ##XXX TODO label!!!!
                  ## lab = spl@label)
                  )
@@ -487,11 +533,31 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
         ## no need to include the format here because
         ## it will be set recursively by the
         ## ElementaryTable constructor below.
+
+        ## XXX Ugh. Combinatorial explosion X.X
+        ## This is what I get for abusing scope to do
+        ## the content label thing. Bad design.
+        if(takes_coln(parent_cfun)) {
+            if(takes_totn(parent_cfun)) {
+                caller = function(df2, .N_col, .N_total, ...)
+                    parent_cfun(df2, clblstr, .N_col = .N_col, .N_total = .N_total, ...)
+            } else {
+                 caller = function(df2, .N_col, ...)
+                     parent_cfun(df2, clblstr, .N_col = .N_col, ...)
+            }
+        } else {
+           if(takes_totn(parent_cfun)) {
+                caller = function(df2, .N_total, ...)
+                    parent_cfun(df2, clblstr, .N_total = .N_total, ...)
+            } else {
+                 caller = function(df2,x, ...)
+                     parent_cfun(df2, clblstr, ...)
+            }
+        }
+            
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   function(df2) parent_cfun(df2, clblstr),
-                                   ## colexprs,
-                                   ## coltree,
+                                   caller, 
                                    cinfo,
                                    ctpos)
     } else {
@@ -560,7 +626,7 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
                                  ## coltree = coltree,
                                  cinfo = cinfo,
                                  parent_cfun = content_fun(spl),
-                                 cformat = content_fmt(spl))
+                                 cformat = obj_fmt(spl))
         }, dfpart = dataspl, val = splvals,
         lbl = partlbls,
         SIMPLIFY=FALSE))
@@ -604,7 +670,8 @@ build_table = function(lyt, df, ...) {
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L, rtspl,
                       rtpos, cinfo, ##cexprs, ctree,
-                      parent_cfun = content_fun(rtspl))
+                      parent_cfun = content_fun(rtspl),
+                      format = content_fmt(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         pos = TreePos(list(rtspl), list(i), as.character(i)) 
         recursive_applysplit(df = df, lvl = 0L,
@@ -614,7 +681,8 @@ build_table = function(lyt, df, ...) {
                              ## colexprs = cexprs,
                              ## coltree = ctree,
                              ## XXX is this ALWAYS right?
-                             parent_cfun = NULL)
+                             parent_cfun = NULL,
+                             cformat = obj_fmt(rlyt[[i]][[1]]))
         })
                              
     tab = TableTree(cont = ctab,

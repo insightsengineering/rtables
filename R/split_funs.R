@@ -398,9 +398,16 @@ only_levs_sfun = function(only) {
     }
 }
 
-reord_levs_sfun = function(neworder, newlbls = neworder) {
-    function(spl, df) {
-        .apply_split_inner(spl, df, vals = neworder, lbls = newlbls)
+reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {n
+    function(df, spl,  ...) {
+        df2 = df
+        df2[[spl_payload(spl)]] = factor(df[[spl_payload(spl)]], levels = neworder)
+        if(drlevels) {
+            df2[[spl_payload(spl)]] = droplevels(df2[[spl_payload(spl)]] )
+            neworder = levels(df2[[spl_payload(spl)]])
+            newlbls = newlbls[newlbls %in% neworder]
+        }
+        .apply_split_inner(spl, df2, vals = neworder, lbls = newlbls)
     }
 }
 

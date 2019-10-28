@@ -102,6 +102,11 @@ create_colinfo = function(clayout, df, rtpos = TreePos()) {
 
     cexprs = make_col_subsets(ctree, df)
     cextras = cextra_args(ctree)
+
+    ## calculate the counts based on the df
+    ## This presumes that it is called on the WHOLE dataset,
+    ## NOT after any splitting has occured. Otherwise
+    ## the counts will obviously be wrong.
     counts = sapply(cexprs, function(ex) {
         sum(eval(ex, envir = df))
     })

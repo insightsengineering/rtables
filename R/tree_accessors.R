@@ -614,6 +614,11 @@ setMethod("cextra_args", "LayoutColTree",
 })
 
 
+setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
+
+setMethod("col_counts",  "InstantiatedColumnInfo",
+          function(obj) obj@counts)
+
 setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
 
 setMethod("is_labrow", "TableRowPos",
