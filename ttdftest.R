@@ -3,12 +3,17 @@ library(rtables)
 library(tern)
 options(error=recover)
 
-df = read.csv("tabledfex.dat", stringsAsFactors = FALSE)
+### This is currently broken until I adapt
+### the roundtrip code for InstantiatedColumnInfo
+### instead of just LayoutColTree
+##
 
-res = df_to_tt(df)
-dfredux = tt_to_df(res)
+## df = read.csv("tabledfex.dat", stringsAsFactors = FALSE)
 
-identical(fixup_rtable_df(df), tt_to_df(res))
+## res = df_to_tt(df)
+## dfredux = tt_to_df(res)
+
+## identical(fixup_rtable_df(df), tt_to_df(res))
 ## #rws = recursive_row_collect(res)
 
 
@@ -270,7 +275,7 @@ complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
  ADRS <- radrs(cached = TRUE)
 ADRS_f <- subset(ADRS, PARAMCD == "BESRSPI")
 
-ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR"),
+ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR")
 
  # Example 1 - ARM B as reference
  #    "NON CR/PD" response category dropped from partition section since no observations
@@ -292,3 +297,8 @@ ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR"),
    partition_rsp_by = droplevels(factor(
      ADRS_f$AVALC, levels = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE")
    )))
+
+
+rsplyt = tt_rsp_lyt("ARMCD")
+rsptab2  = build_table(rsplyt, ADRS_f)
+to_s3compat(rsptab2)

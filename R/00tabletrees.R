@@ -436,25 +436,7 @@ setClass("VLayoutTree", contains = c("VIRTUAL", "VTree"),
          representation(split = "Split"))
 setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
-## TableTrees
-## XXX Rowspans as implemented dont really work
-## they're aren't attached to the right data structures
-## during conversions.
 
-## FIXME: if we ever actually need row spanning
-setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
-         representation(col_layout = "VLayoutNode",
-                        format = "FormatSpec"))
-
-setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
-         representation(children = "list",
-                        rowspans = "data.frame"
-                        ))
-setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
-         representation(leaf_value = "ANY",
-                        var_analyzed = "character",
-                        var_label = "character",
-                        value_type = "ANY"))
 
 
 ##
@@ -550,6 +532,74 @@ rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
 
 
 
+
+## Instantiated column info class
+##
+## This is so we don't need multiple arguments
+## in the recursive functions that track
+## various aspects of the column layout
+## once its applied to the data.
+
+setClass("InstantiatedColumnInfo",
+         representation(tree_layout = "VLayoutNode", ##LayoutColTree",
+                        subset_exprs = "list",
+                        cextra_args = "list",
+                        counts = "integer",
+                        display_columncounts = "logical",
+                        columncount_format = "FormatSpec"),
+         validity = function(object) {
+    nleaves = length(collect_leaves(object@tree_layout))
+    counts = object@counts
+    length(object@subset_exprs) == nleaves &&
+        length(object@cextra_args) == nleaves &&
+        length(counts) == nleaves &&
+        (all(is.na(counts)) || all(!is.na(counts) & counts > 0))
+})
+
+InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
+                                  csubs = list(expression(TRUE)),
+                                  extras = list(list()),
+                                  cnts = NA_integer_,
+                                  dispcounts = FALSE,
+                                  countfmt = "(N=xx)") {
+    new("InstantiatedColumnInfo",
+        tree_layout = treelyt,
+        subset_exprs = csubs,
+        cextra_args = extras,
+        counts = cnts,
+        display_columncounts = dispcounts,
+        columncount_format = countfmt)
+}
+
+
+
+
+
+## TableTrees
+## XXX Rowspans as implemented dont really work
+## they're aren't attached to the right data structures
+## during conversions.
+
+## FIXME: if we ever actually need row spanning
+setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
+         representation(
+             ##col_layout = "VLayoutNode",
+             col_info = "InstantiatedColumnInfo",
+             format = "FormatSpec"))
+
+setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
+         representation(children = "list",
+                        rowspans = "data.frame"
+                        ))
+setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
+         representation(leaf_value = "ANY",
+                        var_analyzed = "character",
+                        var_label = "character",
+                        value_type = "ANY"))
+
+
+
+
 ### TableTree Core non-virtual Classes
 
               
@@ -567,11 +617,14 @@ setClass("TTLabelRow", contains = "TableRow",
 
 TTLabelRow = function(lev = 1L,
                       lab = "",
-                      clayout = LayoutColTree(),
+                      ##clayout = LayoutColTree(),
+                      cinfo = InstantiatedColumnInfo(),
                       tpos = TableRowPos()) {
     is_labrow(tpos) = TRUE
     is_content_pos(tpos) = TRUE
-    new("TTLabelRow", TableRow(lev = lev, lab = lab, clayout = clayout, tpos = tpos))
+    new("TTLabelRow", TableRow(lev = lev, lab = lab, cinfo = cinfo,
+                               ##clayout = clayout,
+                               tpos = tpos))
 }
                       
 
@@ -579,7 +632,8 @@ TableRow = function(val = list(),
                     lev = 1L,
                     lab = "",
                     cspan = rep(1L, length(val)),
-                    clayout = LayoutColTree(),
+                    ##clayout = LayoutColTree(),
+                    cinfo = InstantiatedColumnInfo(),
                     tpos = TableRowPos(),
                     var = NA_character_,
                     var_lbl = NA_character_,
@@ -589,7 +643,8 @@ TableRow = function(val = list(),
         level = lev,
         label = lab,
         colspans = cspan,
-        col_layout = clayout,
+        col_info = cinfo,
+        ##  col_layout = clayout,
         pos_in_tree = tpos,
         var_analyzed = var,
         var_label = var_lbl,
@@ -605,24 +660,24 @@ setClass("ElementaryTable", contains = "VTableTree",
                         var_label = "character"),
          validity = function(object) {
     kids = tree_children(object)
-    all(sapply(kids, is, "TableRow")) && all(sapply(kids, function(k) identical(k@col_layout, object@col_layout)))
+    all(sapply(kids, is, "TableRow")) && all(sapply(kids, function(k) identical(k@col_info, object@col_info)))
 })
 
 ElementaryTable = function(kids = list(),
                            lev = 1L,
                            lab = "",
                            rspans = data.frame(),
-                           clayout = NULL,
+                           cinfo = NULL,
                            tpos = TableTreePos(),
                            iscontent = NA,
                            var = NA_character_,
                            var_lbl = var,
                            fmt = NULL) {
-    if(is.null(clayout)) {
+    if(is.null(cinfo)) {
         if(length(kids) > 0)
-            clayout = kids[[1]]@col_layout
+            cinfo = col_info(kids[[1]])
         else
-            clayout = LayoutColTree()
+            cinfo = InstantiatedColumnInfo()
     }
     if(is.na(iscontent))
         iscontent = is_content_pos(tpos)
@@ -634,7 +689,8 @@ ElementaryTable = function(kids = list(),
         level = lev,
         label = lab,
         rowspans = rspans,
-        col_layout = clayout,
+        ##col_layout = clayout,
+        col_info = cinfo,
         pos_in_tree = tpos,
         var_analyzed = var,
         var_label = var_lbl,
@@ -663,15 +719,15 @@ TableTree = function(cont = ElementaryTable(),
                      spl = NULL,
                      var = NA_character_,
                      var_lbl = var,
-                     clayout = NULL,
+                     cinfo = NULL,
                      fmt = NULL) {
     if(is.null(clayout)) {
         if(!is.null(cont)) {
-            clayout = clayout(cont)
+            cinfo = col_info(cont)
         } else if(length(kids) > 0) {
-            clayout = clayout(kids[[1]])
+            cinfo = col_info(kids[[1]])
         } else {
-            stop("unable to determine column layout")
+            stop("unable to determine column structure information")
         }
     }
     if(is.na(iscontent))
@@ -686,7 +742,7 @@ TableTree = function(cont = ElementaryTable(),
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids, lev = lev, lab = lab,
                         rspans = rspans,
-                        clayout = clayout,
+                        cinfo = cinfo,
                         tpos = tpos,
                         var = var,
                         var_lbl = var_lbl,
@@ -699,7 +755,7 @@ TableTree = function(cont = ElementaryTable(),
             rowspans = rspans,
             pos_in_tree = tpos,
             split = spl,
-            col_layout = clayout,
+            col_info = cinfo,
             format = NULL)## ,
         ## var_label = var_lbl)
         tab = set_fmt_recursive(tab, fmt, FALSE)
@@ -797,25 +853,3 @@ PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
         col_layout = clayout)
 }
         
-## Instantiated column info class
-##
-## This is so we don't need multiple arguments
-## in the recursive functions that track
-## various aspects of the column layout
-## once its applied to the data.
-
-setClass("InstantiatedColumnInfo",
-         representation(tree_layout = "LayoutColTree",
-                        subset_exprs = "list",
-                        cextra_args = "list",
-                        counts = "integer",
-                        display_columncounts = "logical",
-                        columcount_format = "character"),
-         validity = function(object) {
-    nleaves = length(collect_leaves(object@tree_layout))
-    counts = object@counts
-    length(object@subset_exprs) == nleaves &&
-        length(object@cextra_args) == nleaves &&
-        length(counts) == nleaves &&
-        (all(is.na(counts)) || all(!is.na(counts) & counts > 0))
-})

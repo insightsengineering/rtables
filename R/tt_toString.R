@@ -97,7 +97,9 @@ setMethod("toString", "ANY", base:::toString)
 
 
 .make_s3_header = function(tt) {
-    clyt = clayout(tt)
+    clyt = coltree(tt)
+    dispcounts = disp_ccounts(tt)
+    
     leaves = collect_leaves(clyt, incl.cont = FALSE)
     vals = lapply(seq_along(leaves),
                   function(i) splv_rawvalues(pos_splvals(leaves[[i]])))
@@ -107,13 +109,20 @@ setMethod("toString", "ANY", base:::toString)
 
 
     breakpts = 1 ## first value is always a "new" value
-    rrows = vector("list",length = nvals)
+    rrows = vector("list",length = nvals + as.integer(dispcounts))
     for(i in seq(1, nvals)) {
         ret = .collapse_cspans(lapply(vals, function(vlst) vlst[[i]]), breakpts)
         breakpts = ret$breakpts
         args = c(list(row.name = NULL, format = NULL),
                                         ret$cells)
         rrows[[i]] = do.call(rrow, args)
+    }
+    if(dispcounts) {
+        ccounts = col_counts(tt)
+        countcells = lapply(ccounts, rcell,
+                            format = colcount_fmt(tt))                            
+        rrows[[nvals + 1L]] = do.call(rrow, c(countcells, row.name = NULL, format = NULL))
+
     }
         
     ## rrows = lapply(seq(1, nvals),

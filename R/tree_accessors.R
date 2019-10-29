@@ -93,9 +93,14 @@ setGeneric("content_table", function(obj) standardGeneric("content_table"))
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
 
+## XXX this seems bad. the class that is returned
+## depends on whether we are pre or post data.
+## should be a different accessor
+##
+## FIXME
 setGeneric("clayout", function(obj) standardGeneric("clayout"))
 setMethod("clayout", "VTableNodeInfo",
-          function(obj) obj@col_layout)
+          function(obj) obj@col_info@tree_layout)
 
 setMethod("clayout", "PreDataTableLayouts",
           function(obj) obj@col_layout)
@@ -533,6 +538,21 @@ setMethod("split_exargs", "Split",
           function(obj) obj@extra_args)
 
 
+setGeneric("col_info", function(obj) standardGeneric("col_info"))
+setMethod("col_info", "VTableNodeInfo",
+          function(obj) obj@col_info)
+
+setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
+setMethod("col_info<-", "VTableNodeInfo",
+          function(obj, value) {
+    obj@col_info = value
+    obj
+})
+
+
+
+
+
 
 setGeneric("coltree", function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree"))
 setMethod("coltree", "InstantiatedColumnInfo",
@@ -566,7 +586,8 @@ setMethod("coltree", "PreDataColLayout",
 setMethod("coltree", "LayoutColTree",
           function(obj, df, rtpos) obj)
 
-
+setMethod("coltree", "TableTree",
+          function(obj, df, rtpos) coltree(col_info(obj)))
 
 setGeneric("col_exprs", function(obj, df = NULL) standardGeneric("col_exprs"))
 
@@ -618,6 +639,46 @@ setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
 
 setMethod("col_counts",  "InstantiatedColumnInfo",
           function(obj) obj@counts)
+
+setMethod("col_counts", "VTableNodeInfo",
+          function(obj) col_counts(col_info(obj)))
+
+setGeneric("disp_ccounts", function(obj) standardGeneric("disp_ccounts"))
+
+setMethod("disp_ccounts", "VTableTree",
+          function(obj) disp_ccounts(col_info(obj)))
+
+setMethod("disp_ccounts", "InstantiatedColumnInfo",
+          function(obj) obj@display_columncounts)
+
+
+setGeneric("disp_ccounts<-", function(obj, value) standardGeneric("disp_ccounts<-"))
+
+setMethod("disp_ccounts<-", "VTableTree",
+          function(obj, value) {
+    cinfo = col_info(obj)
+    disp_ccounts(cinfo) = value
+    col_info(obj) = cinfo
+    obj
+})
+
+setMethod("disp_ccounts<-", "InstantiatedColumnInfo",
+          function(obj, value) {
+    obj@display_columncounts = value
+    obj
+})
+
+
+
+
+setGeneric("colcount_fmt", function(obj) standardGeneric("colcount_fmt"))
+
+setMethod("colcount_fmt", "InstantiatedColumnInfo",
+          function(obj) obj@columncount_format)
+
+setMethod("colcount_fmt", "VTableTree",
+          function(obj) colcount_fmt(col_info(obj)))
+
 
 setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
 

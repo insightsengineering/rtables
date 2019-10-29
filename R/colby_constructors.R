@@ -502,8 +502,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
         TableRow(val = rowvals,tpos = make_rowpos(tabpos, i),
-                 clayout = coltree(cinfo),
-                 lev = lev,
+                 ##clayout = coltree(cinfo),
+                 cinfo = cinfo,                 lev = lev,
                  lab = lbls[i],
                  var = rowvar,
                  var_lbl = rvlab,
@@ -572,7 +572,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func) {
     ctab = ElementaryTable(kids = contkids,
                            lev = lvl,
                            tpos = ctpos,
-                           clayout = coltree(cinfo),
+                           ##  clayout = coltree(cinfo),
+                           cinfo = cinfo,
                            iscontent = TRUE,
                            lab = clbl,
                            fmt = format)
@@ -650,7 +651,8 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
               iscontent = FALSE,
               spl = spl,
               lab = obj_label(spl),
-              clayout = coltree(cinfo))
+              ##clayout = coltree(cinfo))
+              cinfo = cinfo)
 }
 
 
@@ -691,7 +693,8 @@ build_table = function(lyt, df, ...) {
                     tpos = make_tablepos(rtpos, FALSE),
                     iscontent = FALSE,
                     spl = rtspl,
-                    clayout = coltree(cinfo),
+                    ##clayout = coltree(cinfo),
+                    cinfo = cinfo,
                     fmt = obj_fmt(rtspl))
     tab
 }

@@ -110,11 +110,9 @@ create_colinfo = function(clayout, df, rtpos = TreePos()) {
     counts = sapply(cexprs, function(ex) {
         sum(eval(ex, envir = df))
     })
+    InstantiatedColumnInfo(treelyt = ctree,
+                           csubs = cexprs,
+                           extras = cextras,
+                           cnts = counts)
     
-    new("InstantiatedColumnInfo",
-        tree_layout = ctree,
-        subset_exprs = cexprs,
-        cextra_args = cextras,
-        counts = counts)
-
 }
