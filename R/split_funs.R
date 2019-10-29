@@ -398,7 +398,7 @@ only_levs_sfun = function(only) {
     }
 }
 
-reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {n
+reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     function(df, spl,  ...) {
         df2 = df
         df2[[spl_payload(spl)]] = factor(df[[spl_payload(spl)]], levels = neworder)

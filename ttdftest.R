@@ -268,7 +268,9 @@ complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
  ADSL <- radsl(cached = TRUE)
 
  ADRS <- radrs(cached = TRUE)
- ADRS_f <- subset(ADRS, PARAMCD == "BESRSPI")
+ADRS_f <- subset(ADRS, PARAMCD == "BESRSPI")
+
+ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR"),
 
  # Example 1 - ARM B as reference
  #    "NON CR/PD" response category dropped from partition section since no observations
