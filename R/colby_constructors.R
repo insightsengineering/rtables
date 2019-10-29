@@ -338,8 +338,8 @@ add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "xx (xx.x%
 
 
 add_colcounts = function(lyt, fmt = "(N=xx)") {
-    display_ccounts(lyt) = TRUE
-    colcount_format(lyt) = fmt
+    disp_ccounts(lyt) = TRUE
+    colcount_fmt(lyt) = fmt
     lyt
 
 }
@@ -666,7 +666,7 @@ build_table = function(lyt, df, ...) {
     ##                             rtpos)
     ## cexprs = build_splits_expr(clayout(lyt)[[1]], rawdat)
     ## cextras = get_col_extras(ctree)
-    cinfo = create_colinfo(clayout(lyt), df, rtpos)
+    cinfo = create_colinfo(lyt, df, rtpos)
     
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)

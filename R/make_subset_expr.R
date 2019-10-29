@@ -95,9 +95,11 @@ get_col_extras = function(ctree) {
            function(x) get_pos_extra(pos = tree_pos(x)))
 }
 
-create_colinfo = function(clayout, df, rtpos = TreePos()) {
+create_colinfo = function(lyt, df, rtpos = TreePos()) {
     ## this will work whether clayout is pre or post
     ## data
+    clayout = clayout(lyt)
+    
     ctree = coltree(clayout, df = df, rtpos = rtpos)
 
     cexprs = make_col_subsets(ctree, df)
@@ -113,6 +115,8 @@ create_colinfo = function(clayout, df, rtpos = TreePos()) {
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = cextras,
-                           cnts = counts)
+                           cnts = counts,
+                           dispcounts = disp_ccounts(lyt),
+                           countfmt = colcount_fmt(lyt))
     
 }

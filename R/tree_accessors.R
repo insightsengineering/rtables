@@ -651,6 +651,12 @@ setMethod("disp_ccounts", "VTableTree",
 setMethod("disp_ccounts", "InstantiatedColumnInfo",
           function(obj) obj@display_columncounts)
 
+setMethod("disp_ccounts", "PreDataTableLayouts",
+          function(obj) disp_ccounts(clayout(obj)))
+
+setMethod("disp_ccounts", "PreDataColLayout",
+          function(obj) obj@display_columncounts)
+
 
 setGeneric("disp_ccounts<-", function(obj, value) standardGeneric("disp_ccounts<-"))
 
@@ -668,7 +674,21 @@ setMethod("disp_ccounts<-", "InstantiatedColumnInfo",
     obj
 })
 
+setMethod("disp_ccounts<-", "PreDataColLayout",
+          function(obj, value) {
+    obj@display_columncounts = value
+    obj
+})
 
+
+
+setMethod("disp_ccounts<-", "PreDataTableLayouts",
+          function(obj, value) {
+    clyt = clayout(obj)
+    disp_ccounts(clyt) = value
+    clayout(obj) = clyt
+    obj
+})
 
 
 setGeneric("colcount_fmt", function(obj) standardGeneric("colcount_fmt"))
@@ -678,6 +698,48 @@ setMethod("colcount_fmt", "InstantiatedColumnInfo",
 
 setMethod("colcount_fmt", "VTableTree",
           function(obj) colcount_fmt(col_info(obj)))
+
+
+setMethod("colcount_fmt", "PreDataColLayout",
+          function(obj) obj@columncount_format)
+
+setMethod("colcount_fmt", "PreDataTableLayouts",
+          function(obj) colcount_fmt(clayout(obj)))
+
+
+
+setGeneric("colcount_fmt<-", function(obj,value) standardGeneric("colcount_fmt<-"))
+
+setMethod("colcount_fmt<-", "InstantiatedColumnInfo",
+          function(obj, value) {
+    obj@columncount_formatvalue
+    obj
+})
+
+setMethod("colcount_fmt<-", "VTableTree",
+          function(obj, value) {
+    cinfo = col_info(obj)
+    colcount_fmt(cinfo) = value
+    col_info(obj) = cinfo
+    obj
+})
+
+
+setMethod("colcount_fmt<-", "PreDataColLayout",
+          function(obj, value) {
+    obj@columncount_format = value
+    obj
+})
+
+setMethod("colcount_fmt<-", "PreDataTableLayouts",
+          function(obj, value) {
+    clyt = clayout(obj)
+    colcount_fmt(clyt) = value
+    clayout(obj) = clyt
+    obj
+})
+
+
 
 
 setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))

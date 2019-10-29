@@ -819,7 +819,7 @@ setClass("PreDataAxisLayout", contains = "list",
 
 setClass("PreDataColLayout", contains = "PreDataAxisLayout",
          representation(display_columncounts = "logical",
-                        colcount_fmt = "character"))
+                        columncount_format = "character"))
 setClass("PreDataRowLayout", contains = "PreDataAxisLayout")
 
 PreDataColLayout = function(x = SplitVector(),
@@ -828,7 +828,8 @@ PreDataColLayout = function(x = SplitVector(),
                             lst = list(x, ...),
                             disp_colcounts = FALSE,
                             colcount_fmt = "(N=xx)") {
-    ret =  new("PreDataColLayout", lst, display_columncounts = disp_colcounts)
+    ret =  new("PreDataColLayout", lst, display_columncounts = disp_colcounts,
+               columncount_format = colcount_fmt)
     ret@root_split = rtsp
     ret
 }
