@@ -660,12 +660,6 @@ build_table = function(lyt, df, ...) {
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
 
-    ## I really don't like that we need 2 different
-    ## representations of the columns here....
-    ## ctree = splitvec_to_coltree(df, clayout(lyt)[[1]],
-    ##                             rtpos)
-    ## cexprs = build_splits_expr(clayout(lyt)[[1]], rawdat)
-    ## cextras = get_col_extras(ctree)
     cinfo = create_colinfo(lyt, df, rtpos)
     
     rlyt = rlayout(lyt)
@@ -680,8 +674,6 @@ build_table = function(lyt, df, ...) {
                              splvec = rlyt[[i]],
                              treepos = pos,
                              cinfo = cinfo,
-                             ## colexprs = cexprs,
-                             ## coltree = ctree,
                              ## XXX is this ALWAYS right?
                              parent_cfun = NULL,
                              cformat = obj_fmt(rlyt[[i]][[1]]))
@@ -745,6 +737,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
               is(splvec, "SplitVector"))
     
     if(lvl == length(splvec) + 1L) {
+        ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,
                       lab = lbl,
                       tpos = pos)
