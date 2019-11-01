@@ -85,7 +85,8 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
     ## add_colby_total(lbl = "All") %>%
-    add_summary_count(lbl = "Overall (N)", valfmt = "(N=xx)") %>%
+    ##    add_summary_count(lbl = "Overall (N)", valfmt = "(N=xx)") %>%
+    add_colcounts() %>%
     ## add a new subtable that splits on RACE, value labels from ethn_lbl
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", lblfmt = "%s (n)") %>%
@@ -142,6 +143,13 @@ thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 tab3 = build_table(thing3, rawdat)
 
 
+
+
+### baseline stuff?????
+
+blthing = NULL %>% add_colby_varwbline("ARM", "ARM1", lbl = "Arm") %>%
+    add_analyzed_blinecomp(var = "AGE", lbl = "Age",
+                           afun = mean)
 
 
 

@@ -80,8 +80,9 @@ setGeneric("check_validsplit",
     partinfo$extras = NULL
     partinfo
 }
-                   
 
+
+### NB This is called at EACH level of recursive splitting 
 do_split = function(spl, df, vals = NULL, lbls = NULL) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
@@ -157,6 +158,14 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
 
 }
 
+### Methods to verify a split appears to be valid, applicable
+### to the ***current subset*** of the df.
+###
+### This is called at each level of recursive splitting so
+### do NOT make it check, e.g., if the baseline level of
+### a factor is present in the data, because it may not be.
+
+                                        
 
 setMethod("check_validsplit", "VarLevelSplit",
           function(spl, df) {
@@ -175,6 +184,8 @@ setMethod("check_validsplit", "AnalyzeVarSplit",
           function(spl, df) {
     .checkvarsok(spl, df)
 })
+
+
 
 
 ## default does nothing, add methods as they become
@@ -256,11 +267,11 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
     list(ret)
 })
 
-setMethod(".applysplit_datapart", "ComparisonSplit",
-          function(spl, df, vals) {
-    stopifnot(length(vals) > 0)
-    rep(list(df), times = length(vals))
-})
+## setMethod(".applysplit_datapart", "ComparisonSplit",
+##           function(spl, df, vals) {
+##     stopifnot(length(vals) > 0)
+##     rep(list(df), times = length(vals))
+## })
 
 ## XXX TODO *CutSplit Methods
 
@@ -268,15 +279,22 @@ setMethod(".applysplit_datapart", "ComparisonSplit",
 setMethod(".applysplit_extras", "Split",
           function(spl, df, vals) {
     stopifnot(length(vals) > 0)
-    rep(list(split_exargs(spl)), times = length(vals))
+    replicate(list(split_exargs(spl)), n = length(vals))
 })
 
-setMethod(".applysplit_extras", "ComparisonSplit",
+## setMethod(".applysplit_extras", "ComparisonSplit",
+##           function(spl, df, vals) {
+##     make_comp_extargs(spl, df)
+## })
+
+
+setMethod(".applysplit_extras", "VarLevWBaselineSplit",
           function(spl, df, vals) {
-    make_comp_extargs(spl, df)
+    var = spl_payload(spl)
+    bl_level = spl@baseline_value #XXX XXX
+    bldata = df[df[[var]] == bl_level,]
+    replicate(c(list(.baselinedata = bldata), split_exargs(spl)), n = length(vals))
 })
-
-
 
 ## XXX TODO FIXME
 setMethod(".applysplit_partlbls", "Split",

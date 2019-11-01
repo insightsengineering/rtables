@@ -1,4 +1,19 @@
 
+# General Definitions
+
+These definitions will be used throughout this document. Other sections may contain further definitions specific to their topic
+
+- Table - An collection of Rows which share a common column structure, with a unique ordering of rows defined on it. These can have 2 forms
+  - Flat table - ordered list of rows which define a standard rectangular dataset/table
+  - Table tree - A nested hierarchical structure in which nesting represents relationships between rows. 
+- Row - a single row in the table, can be the following types
+  - Label row - a row with no data tehre to display a varaible or other label for a position in the nesting structure
+  - Content row - a row within the content table at a positioni within the tree, contains summary or aggregate data for that nesting level
+  - Data row - a row containing the result(s) of the tabulation (e.g., mean of AGE) for a subset of the data defined by position in the tree structure
+- Tabulation functions - A functiohn which is applied to appropriate subsets of data in ordere to generate row contents
+  - Analysis function - A tabulation function used to generate thee values for one or more _Data_ rows
+  - Summary Function - A tabulataion function used to generate values for a _Content_ rows.
+- 
 
 
 # Layouts
@@ -126,6 +141,22 @@ A table tree is a nested structure of `TableTree` objects, each of which has a `
 
 Position (on either of the table's axes) is tracked by a `TreePos` (or subclass) object. A `TreePos` contains a list of Splits and a parallel list of `SplitValue` objects which define the child "selected" at each split to get to the current position. Each subtree and row within the full tree is aware of its position (in row space).
 
+### InstantiatedColumnInfo
+
+A populated table (and all of its subtables) carry around an `InstantiatedColumnInfo` object, which contains all of the various representations of the column structure necessary for the machinery to work
+
+This includes
+
+- A `LayoutColTree` object which contains the tree/graph structure of the hierarchical columns
+- A list of subsetting expressions for each "leaf column", ie the columns ultimately representing the length of the row data vectors (leaves of the tree representation)
+- a list of extra arguments associated with each leaf column.
+- a vector of counts for the leaf columns
+- Whether the counts should be displayed, and if so what format should be used.
+
+We can look at a table's column info via the `col_info` accessor (at time of writing there's no nice show method, but there likely will be someday).
+
+NB: This has grown organically over time, and honestly it is an open question how much we actually need the tree structure representation for once a table has been created from layout + data.
+
 
 
 ## Pre-Data
@@ -171,11 +202,56 @@ RACE (lvls) -> AGE (** analyzed var **)
 
 Note this layout is then usable with any dataset that has the `ARM`, `SEX`, `RACE`, and `AGE` variables present.
 
+
+## Analyzed Variables
+
+
+Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding calls to `add_analyzed_var` and/or `add_analyzed_colvar` into our layout pipeline. As with adding further splitting, the tabulation will occur at the current/next level of nesting by default, so
+
+```
+layout <- NULL %>%  %>% add_colby_varlevels("ARM", "arm") %>%
+     add_colby_varlevels("SEX", "gender") %>%
+     add_analyzed_var("AGE", summary)
+
+```
+Will tabulate values of `AGE` after grouping/splitting by `ARM` and then `SEX` by calling `summary()`. 
+
+## Tabulation functions
+
+Tabulation functions should return a list or vector with one element per row to be created. Row labels are taken from the names of the list, so
+
+```
+tworows = function(x,...) {
+		list(mean = mean(x),
+	             sd = sd(x))
+}
+```
+
+Will create _two_ rows, one for mean and one for sd, at each tabulation position. 
+
+In order to have multi-valued cells, the tabulation function should return a list containing vectors for any multi-valued rows. So to create the standard mean(sd) syle row, instead of the above we would do
+
+```
+onerow = function(x, ...) {
+       list("mean (sd)" = c(mean = mean(x), sd = sd(x)))
+}
+```
+
+### Tabulation Function Signatures
+
+Tabulation functions, both analysis and summaaray, must take the daata to be analyzed as their first argument. This will either be a subset data.frame (in the case of summary functions generating content rows) or vector data (in the case of most analysis functions generating data rows), depending on context. 
+
+Additionally, tabulation functions can optionally take 2 extra named arguments: `.N_col` and `.N_total`. If these arguments are present within the formals of the function, the number of observations *represented overall in the current column*, and the number of observations *total in the dataset*, will be passed to them, respectively.
+
+There is also currently experimental support for tabulation functions being passed column-specific `extra` arguments, which I will document here once it is more concrete and actually used in the test script.
+
 ## Variable columns
 
 In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. 
 
-Currently the way that row structure and column structure are handled aren't fully symmetric. As such, my current plan is to do this via something along the lines of
+When we need columns to reflect _different variables entirely_, rather than different levels of a single variable, we use `add_colby_multivar`, which places a `MultiVarSplit` within the column structure. 
+
+By default, this simply makes the subset associated with each column the set of observations which are non-NA for that column's variable. In order to maake the cell contents within the column reflect tabulation/analysis of those variables, we need to use `add_analyzed_colvars` instead of `add_analyzed_var` when specifying the tabulation, like so.
 
 ```
 layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
@@ -188,6 +264,10 @@ The add_analyzed_colvars here indicates that the variables whose data are
 ultimately processed by afun are specified at the highest-depth level of nesting
 in the column structure, rather than at the row level. 
 
+Each row can /either/ represent a tabulation of a single, row associated variable across multiple column-associated data subsets, OR represent the analysis/tabulataion of multiple column associated variables, but not both. 
+
+NOTE: it would be unusual, but is allowed, to mix rows that have each of the above modalities in the same table. It is important to note, however, that currently all rows in the same table MUST have the same formal column structuree, which would severely limit thee utility of doing this in practice.
+
 
 We may want to change `add_analyzed_var` to `add_analyzed_rowvar` if we go this route
 to ensure clarity
@@ -196,8 +276,29 @@ Open question: does it ever make sense to have columns that specify a variable A
 analysis variables specified at the row level? I think these would always be in conflict
 but need to think a bit harder first.
 
-Note: we also probably want to change the name of `add_colby_multivar` to indicate that it is 
-specifying an analysis. And we need to think about whether we would want (need) the ability to specify the analysis function on the column(s) instead of on rows.
+
+## Column Counts
+
+Column counts can be displayed a couple of ways, one is as a content summary row on the root split, but the more common one is as part of the header material. We  declare this when building up the layout with the`add_colcounts()` function. The default format is `"(N=xx)"` so generally an emepty call within the pipe workflow is sufficient.
+
+```
+layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+       add_colby_multivar(c("value", "pctdiff")) %>%
+       add_colcounts() %>%
+       add_rowby_varlevels("RACE", "ethnicity") %>%
+       add_analyzed_colvars(afun = mean)
+```
+
+The call can appear anywhere in the pipelien, but is perhaps easiest to understand at the end of the column structure declaration part of the pipeline, as above.
+
+We can also change column count rendering behavior (they are always calculated and available) after creating eitehr a layout or a TableTree via the `disp_ccounts<-` getter, like so
+
+```
+disp_ccounts(layout) = FALSE
+tab = build_table(layout, dat)
+disp_ccounts(tab) = TRUE
+```
+
 
 ## Compound splits
 
@@ -257,6 +358,18 @@ Cons: adds complexity to parameter space
       non-logical argument
 
 
+### Different variables summarized per column
+
+The above `add_analyzed_var` method for declaring tabulation does so at the row level: each data row reprents a (partial) tabulation of single variable within the context of the different columns. Sometimes, however, we want different columns to display values/summaries of _different variables_. We do this by declaring the columns via `add_colby_multivar` and then adding tabulation via `add_analyzed_colvar`.
+
+`add_analyzed_colvar` declares that a data cell's value is a tabulation of the variable associated with the _column_ it is in, grouped according to the row and column splitting, rather than associating a variable with the row. Note that unlike `add_analyzed_var` we do not specify a variable to be analyzed here, only a tabulation function, as the column variable will have already been declared via a call to `add_colby_multivar`. tabulation should be done with respect to the variable/subset associated with the column, rather than 
+
+
+
+
+		     
+
+
 # Pagination
 
 A first pass of the pagination algorithm is working and can be seen in `tt_paginate.R`
@@ -265,10 +378,6 @@ Pagination is currently defined/modeled as a _rendering_ activity, meaning it is
 
 ## Definitions
 
-- Row - a single row in the table, can be the following types
-  - Label row - a row with no data tehre to display a varaible or other label for a position in the nesting structure
-  - Content row - a row within the content table at a positioni within the tree, contains summary or aggregate data for that nesting level
-  - Data row - a row containing the result(s) of the tabulation (e.g., mean of AGE) for a subset of the data defined by position in the tree structure
 - Header lines - The multi-row defnition of the column layout and the dividing "row" displayed between the the columns and the table rows
 - Repeat Row - A label or content row which must be repeated after pagination to correctly display the position/context of the first row in the new page.
 - Pagination at row - The row will be the _last_ row displayed on a given page, with a page break after  it (or in the future, after any footnotes/footer material)

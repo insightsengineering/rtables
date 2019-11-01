@@ -193,8 +193,48 @@ AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = 
         split_format = splfmt)
 }
 
+setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
+         representation(comparison_fun = "function"))
+
+## this is just a sentinel class so we hit different methods
+setClass("AVarBaselineComp", contains = "VAnalyzeVarComp")
+
+AVarBaselineComp = function(var,
+                            splbl,
+                            afun,
+                            compfun = `-`,
+                            valuelblvar = NULL,
+                            cfun = NULL,
+                            cfmt = NULL,
+                            splfun = NULL,
+                            splfmt = NULL,
+                            valorder = NULL ) {
+    if(is.null(valuelblvar))
+        valuelblvar = var
+    new("AVarBaselineComp", payload = var, split_label = splbl,
+        value_lbl_var = valuelblvar,
+        content_fun = cfun,
+        content_format = cfmt,
+        split_fun = splfun,
+        split_format = splfmt,
+        value_order = valorder,
+        comparison_fun = compfun,
+        )
+}
 
 
+## splbl, afun, cfun = NULL, cfmt = NULL, splfmt = NULL, compfun = `-`) {
+##     if(is.character(compfun))
+##         compfun = get(compfun, mode = "function")
+##     new("AnalyzeVarSplit",
+##         payload = var,
+##         split_label = splbl,
+##         content_fun = cfun,
+##         analysis_fun = afun,
+##         content_format = cfmt,
+##         split_format = splfmt,
+##         comparison_fun = compfun)
+## }
 
 ## A comparison split is one where the analysis value (e.g., mean)
 ## will neeed to be calculated on two different subsets and further
@@ -217,7 +257,7 @@ AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = 
 ##
 
 
-setClass("VCompSplit", contains = c("VIRTUAL", "AllSplit"),
+setClass("VCompSplit", contains = c("VIRTUAL", "Split"),
          representation(comparison_func = "function",
                         label_format = "character"))
 ## This is what will bee used to generate the parallel
@@ -276,34 +316,38 @@ SubsetSplit = function(subset, vall = TRUE, vnon = FALSE,
         child_order = order)
 }
 
+### This is HARD. do we want this to inherit from VCompSplit
+### or VarLevelSplit????
+###
+### Is it safe to have it inherit from both? I think no?
 
-setClass("BaselineCompSplit", contains = "VCompSplit",
+
+setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
          representation(var = "character",
                         baseline_value = "character",
                         incl_allcategory = "logical"))
 
-BaselineCompSplit = function(var, baseline, incl_all = FALSE,
-                             comparison = `-`,
+VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALSE,
+                                splbl,
+#                             comparison = `-`,
                              lbl_fmt = "%s - %s",
                              ## not needed I Think...
-                             cfun =  NULL, cfmt = NULL, splfmt = NULL) {
-    new("BaselineCompSplit",
-        var = var,
-        basline_value = basline,
+                             cfun =  NULL, cfmt = NULL, splfmt = NULL,
+                             valorder = NULL) {
+    new("VarLevWBaselineSplit",
+        payload = var,
+        baseline_value = baseline,
         incl_allcategory = incl_all,
-        comparison_func = comparison,
-        label_format = lbl_fmt,
+        ## This will occur ata theee row level not on the column split, for now
+        ## TODO revisit this to confirm its right
+        ##        comparison_func = comparison,
+  #      label_format = lbl_fmt,
         split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt)
 }
                         
-## TODO in the future 
-## setClass("BaselineCompSplit", contains = "Split",
-##          representation(
-##              factor_var = "character",
-##              baseline_level = "character"))
 
 
 setClass("CompSubsetVectors",
@@ -807,6 +851,8 @@ avar_noneorlast = function(vec) {
     isavar = which(sapply(vec, is, "AnalyzeVarSplit"))
     (length(isavar) == 0) || (length(isavar) == 1 && isavar == length(vec))
 }
+
+
 
 setClass("PreDataAxisLayout", contains = "list",
          representation(root_split = "ANY"),
