@@ -181,16 +181,20 @@ VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL, cfmt = NULL, splfmt =
 }
 
 setClass("AnalyzeVarSplit", contains = "Split",
-         representation(analysis_fun = "function"))
+         representation(analysis_fun = "function",
+                        default_rowlabel = "character"))
 
-AnalyzeVarSplit = function(var, splbl, afun, cfun = NULL, cfmt = NULL, splfmt = NULL) {
+AnalyzeVarSplit = function(var, splbl, afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL) {
+    if(!nzchar(defrowlab))
+        defrowlab = as.character(substitute(afun))
     new("AnalyzeVarSplit",
         payload = var,
         split_label = splbl,
         content_fun = cfun,
         analysis_fun = afun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        default_rowlabel = defrowlab)
 }
 
 setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),

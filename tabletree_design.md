@@ -10,10 +10,13 @@ These definitions will be used throughout this document. Other sections may cont
   - Label row - a row with no data tehre to display a varaible or other label for a position in the nesting structure
   - Content row - a row within the content table at a positioni within the tree, contains summary or aggregate data for that nesting level
   - Data row - a row containing the result(s) of the tabulation (e.g., mean of AGE) for a subset of the data defined by position in the tree structure
-- Tabulation functions - A functiohn which is applied to appropriate subsets of data in ordere to generate row contents
+- Tabulation functions - A function which is applied to appropriate subsets of data in ordere to generate row contents
   - Analysis function - A tabulation function used to generate thee values for one or more _Data_ rows
   - Summary Function - A tabulataion function used to generate values for a _Content_ rows.
-- 
+- Comparison Tabulation - Tabulation which compares the data subsets corresponding to 2 (or more??? not currently) columns in the table.
+- Comparison function - A function which accepts a one or two objects calculated from the data subsets being compared
+  - Direct Comparison Function - a comparison function which takes two values, one calculated from each subset under comparison, and returns values which should populate the data cell
+  - Table-based Comparison Function - a comparison function which accepts a 2d (2xk) contingency table representing the subset (baseline vs comparison column) by the value of the variable being analyzed. 
 
 
 # Layouts
@@ -300,6 +303,7 @@ disp_ccounts(tab) = TRUE
 ```
 
 
+
 ## Compound splits
 
 The current design calls for layouts (in both the row and column direction)  to be lists of split vectors. Max brought up the possibility of wanting to add splits at the current level of nesting, instead of either descending or jumping back up to the top. I don't want to complicate the pre-data layout structure by making it a full tree, though.
@@ -366,6 +370,55 @@ The above `add_analyzed_var` method for declaring tabulation does so at the row 
 
 
 
+# Comparison-based tabulation
+
+Comparison-based values are where the tabulated value of a cell depends on data from two (or more?) columns. For example, the difference in mean measurements between the current column and a declared baseline column.
+
+Like single column tabulations, these comparison calculations are declared without our layout and then performed automatically by the tabulation machinery. In fact, currently they are implemented as a special case of non-comparison tabulation. 
+
+## Declaring a column-split with a Baseline level
+
+Which value should be considered the baseline when performing automatic comparisons is done in the column split. Instead of doing `add_colby_varlevels` we simply do `add_colby_varwbline` (the last portion means "variable with baseline"), like so
+
+```
+layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
+       add_rowby_varlevels("RACE", "ethnicity") %>%
+       add_analyzed_var("AGE", afun = mean)
+```
+
+Note that the above layout does not actually perform any comparisons, because `add_analyzed_var` declares non-comparing tabulation.
+
+For non-comparing tabulations `add_colby_varwbline` and the corresponding `VarLevWBaselineSplit` split object which is added to the layout, behave identically to `add_colby_varlevels` and its corresponding `VarLevelSplit`.
+
+NOTE: In light of the above, we can probably just always have the deepest columnsplit have a baseline of the first level so people don't even need to declare it. This is NOT what happens now, though, and some care is needed because we only want comparisons at the deepest level of nesting, I think. TODO(?)
+
+## Declaring comparison-based tabulation
+
+With a baseline value defined on our column split we can declare comparison tabulations with our layout.
+
+### Declaring direct comparisons
+
+We declare direct comparisons with `add_analyzed_blcomp`, which take `compfun` (defaulting to simple subtraction) in addition to `afun` so to declare we want differences in means in our table we would do
+
+```
+layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
+       add_rowby_varlevels("RACE", "ethnicity") %>%
+       add_analyzed_blinecomp("AGE", afun = mean)
+```
+
+Everything is then done by the rtables machinery internally and we get a row with no value for Arm A, and the differences in mean beteween Arm A and each of Arms B and C. 
+
+### Declaring Table-based comparisons
+
+We provide a convenience function which declares that the comparisons are table-based. In this case, calculating the contingency table is done automatically and only the comparison function is specified by the user, like so
+
+```
+layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
+       add_analyzed_blinecomp("rsp", 
+       		compfun = function(tab) list("CI" = prop.test(tab)$conf.int*100))
+```
+
+See `tt_rsp` in `R/tt_rsp.R` for an example of table-based comparison used in practice.
 
 		     
 

@@ -69,9 +69,14 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 }
  
 .make_tablerows = function(dfpart, func,
-                           ##colexprs, coltree,
                            cinfo,
-                           tabpos, datcol = NULL, lev = 1L, rvlab = NA_character_, rvtypes = NULL, format = NULL) {
+                           tabpos,
+                           datcol = NULL,
+                           lev = 1L,
+                           rvlab = NA_character_,
+                           rvtypes = NULL,
+                           format = NULL,
+                           defrowlabs = NULL) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -85,12 +90,19 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     
     rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
     ## rowvar = if(!is.null(datcol) && !is.na(datcol)) datcol else NA_character_
-      if(is.null(rvtypes))
+    if(is.null(rvtypes))
         rvtypes = rep(NA_character_, length(rawvals))
     lens = sapply(rawvals, length)
-    stopifnot(length(unique(lens)) == 1)
-    lbls = names(rawvals[[1]])
-    ncrows = lens[1]
+    unqlens = unique(lens)
+    stopifnot(length(unqlens) == 1 ||
+              (0 %in% unqlens && length(unqlens) == 2))
+    maxind = match(max(unqlens), lens)
+    
+    lbls = names(rawvals[[maxind]])
+    if(is.null(lbls) && length(rawvals[[maxind]]) == length(defrowlabs))
+        lbls = defrowlabs
+        
+    ncrows = max(unqlens)
     stopifnot(ncrows > 0)
     ##recycle formats
     fmtvec = rep(format, length.out = ncrows)
@@ -231,8 +243,7 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
         check_validsplit(spl, df)
         kids = .make_tablerows(df,
                                analysis_fun(spl),
-                               ## colexprs,
-                               ## coltree,
+                               defrowlabs = spl@default_rowlabel, ##XXX XXX
                                cinfo = cinfo,
                                tabpos = make_tablepos(treepos, iscontent = FALSE),
                                datcol = spl_payload(spl),
@@ -325,6 +336,27 @@ setMethod("set_def_child_ord", "VarLevelSplit",
     spl_child_order(lyt) = vals
     lyt
 })
+
+setMethod("set_def_child_ord", "VarLevWBaselineSplit",
+          function(lyt, df) {
+    bline = spl_baseline(lyt)
+    if(!is.null(spl_child_order(lyt)) &&
+       match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
+        return(lyt)
+    
+    vec = df[[spl_payload(lyt)]]
+    vals = unique(vec)
+    if(is.factor(vals))
+        vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
+  
+    stopifnot(bline %in% vals)
+    pos = match(bline, vals)
+    ## same order except baseline always first
+    vals = c(bline, vals[-pos])
+    spl_child_order(lyt) = vals
+    lyt
+})
+
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, lbl = "") {

@@ -149,13 +149,20 @@ tab3 = build_table(thing3, rawdat)
 
 blthing = NULL %>% add_colby_varwbline("ARM", "ARM1", lbl = "Arm") %>%
     add_analyzed_blinecomp(var = "AGE", lbl = "Age",
-                           afun = mean)
+                           afun = mean) %>%
+    add_analyzed_var("AGE", lbl = "Age v2",
+                     afun = mean,
+                     newtoplev = TRUE)
+## function(x) list(mean = mean(x)))
+
+
+bltab = build_table(blthing, rawdat)
+
+
 
 
 
 longdat = makefakedat2()
-
-
 ## 'comparison' where different variables are displayed sidebyside
 simplecomp = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varlevels("VISIT", "Visit") %>%
@@ -303,10 +310,11 @@ ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR")
    rsp = ADRS_f$AVALC %in% c("CR", "PR"),
    col_by = relevel(factor(ADRS_f$ARMCD), "ARM B"),
    partition_rsp_by = droplevels(factor(
-     ADRS_f$AVALC, levels = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE")
-   )))
+       ADRS_f$AVALC, levels = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"))),
+   strata_data = ADRS_f[c("RACE")]
+   )
 
 
-rsplyt = tt_rsp_lyt("ARMCD")
+rsplyt = tt_rsp_lyt("ARMCD", "ARM B")
 rsptab2  = build_table(rsplyt, ADRS_f)
 to_s3compat(rsptab2)

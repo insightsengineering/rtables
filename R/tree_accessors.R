@@ -413,7 +413,7 @@ setMethod("set_fmt_recursive", "TableRow",
         obj_fmt(obj) = fmt
     lvals = row_values(obj)
     lvals = lapply(lvals, function(x) {
-        if(is.null(attr(x, "format")))
+        if(!is.null(x) && is.null(attr(x, "format")))
             attr(x, "format") = obj_fmt(obj)
         x
     })
@@ -759,7 +759,10 @@ setMethod("is_labrow<-", "TableRowPos",
     obj
 })
 
-
+spl_baseline = function(obj) {
+    stopifnot(is(obj, "VarLevWBaselineSplit"))
+    obj@baseline_value
+}
 
 
            

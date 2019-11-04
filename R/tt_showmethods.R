@@ -45,14 +45,30 @@ setMethod("show", "ElementaryTable",
 })
 
 
+setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
+
+setMethod("payloadmsg", "VarLevelSplit",
+          function(spl) {
+    spl_payload(spl)
+})
+
+setMethod("payloadmsg", "MultiVarSplit",
+          function(spl) "variable")
+
+setMethod("payloadmsg", "VarLevWBaselineSplit",
+          function(spl) paste0(spl_payload(spl), "[baseline ",
+                               spl@baseline_value, # XXX XXX
+                               "]"))
+setMethod("payloadmsg", "ANY",
+          function(spl) {
+    warning("don't nkow how to make payload print message for Split of class", class(spl))
+    "XXX"
+})
 
 spldesc = function(spl, value = "") {
     if(is(value, "SplitValue"))
         value = splv_rawvalues(value)
-    payloadmsg = switch(class(spl),
-                        VarLevelSplit = spl@payload,
-                        MultiVarSplit = "variable",
-                        stop("dunno"))
+    payloadmsg = payloadmsg(spl)
     fmt = "%s (%s)"
     sprintf(fmt,
             value,
@@ -96,6 +112,10 @@ setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
 
 setMethod("spltype_abbrev", "VarLevelSplit",
           function(obj) "lvls")
+
+setMethod("spltype_abbrev", "VarLevWBaselineSplit", 
+          function(obj) paste("baseline", obj@baseline_value))
+
 
 setMethod("spltype_abbrev", "MultiVarSplit",
           function(obj) "vars")

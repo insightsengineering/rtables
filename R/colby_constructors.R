@@ -150,7 +150,12 @@ add_colby_varlevels = function(lyt,  var, lbl, valuelblvar = var, splfmt = NULL,
 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
 
-    spl = VarLevWBaselineSplit(var = var, baseline = baseline, incl_all = incl_all, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
+    spl = VarLevWBaselineSplit(var = var,
+                               baseline = baseline,
+                               incl_all = incl_all,
+                               splbl = lbl,
+                               valuelblvar = valuelblvar,
+                               splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
@@ -229,9 +234,10 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 ## a further partition of the data.
 add_analyzed_var = function(lyt, var, lbl, afun,
                             fmt = NULL,
+                            rowlabs = as.character(substitute(afun)),
                             newtoplev = FALSE) {
     spl = AnalyzeVarSplit(var, lbl, afun = afun,
-                          splfmt = fmt)
+                          splfmt = fmt, defrowlab = rowlabs)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -247,17 +253,30 @@ add_analyzed_colvars = function(lyt, lbl, afun,
 
 }
 
-add_analyzed_blinecomp = function(lyt, var, lbl, afun,
+add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl, afun,
                                    compfun = `-`,
                                    fmt = NULL,
                                   newtoplev = FALSE) {
-
+    if(is.character(afun)) {
+        afnm = afun
+        afun = get(afun, mode = "function")
+    } else {
+        afnm = as.character(substitute(afun))
+    }
+    
     if(is.character(compfun))
         compfun = get(compfun, mode = "function")
-
+    print(compfun)
     afun2 = function(x, .baseline_data = NULL, .N_col, .N_total, ...) {
         if(is.null(.baseline_data))
             stop("did not receive baseline aggregataion value required for comparison")
+        if(!is.na(var))
+            blinevardat = .baseline_data[[var]]
+        else
+            blinevardat = .baseline_data
+        if(identical(x, blinevardat))
+            return(NULL) ## we are in the baseline
+        
         args = list()
         if(takes_coln(afun))
             args = c(args, list(.N_col = .N_col))
@@ -265,20 +284,55 @@ add_analyzed_blinecomp = function(lyt, var, lbl, afun,
             args = c(args, list(.N_total = .N_total))
         ##XXX totdo extras
         datvalue = do.call(afun, c(list(x), args))
-        blvalue = do.call(afun, c(list(.baseline_data), args))
-### TODO(?) compfun cmight need .N_col or .N_total??
+        blvalue = do.call(afun, c(list(blinevardat), args))
+        ## TODO(?) compfun cmight need .N_col or .N_total??
         compargs = list(datvalue, blvalue)
-        do.call(compfun, compargs)
+        ret = do.call(compfun, compargs)
+        if(length(ret) == 1 && is.null(names(ret)))
+            names(ret) = afnm
+        ret
     }
 
-    ## spl = AVarBaselineComp(var, lbl, afun = afun,
-    ##                      compfun = compfun,
-    ##                      splfmt = fmt)
-    spl = AnalyzeVarSplit(var, lbl, afun = afun,
+    spl = AnalyzeVarSplit(var, lbl, afun = afun2,
                           splfmt = fmt)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
+
+add_2dtable_blinecomp = function(lyt,
+                                 var = NA_character_,
+                                 lbl = var,
+                                 compfun,
+                                 fmt = NULL,
+                                 newtoplev = FALSE) {
+
+    if(is.character(compfun)) {
+        cfnm = compfun
+        compfun = get(compfun, mode = "function")
+    } else {
+        cfnm = as.character(substitute(compfun))
+    }
+    
+
+    
+    compfun2 = function(colvardat, blinevardat) {
+        if(identical(colvardat, blinevardat))
+            return(NULL)
+            
+        ## TODO(?) compfun cmight need .N_col or .N_total??
+        tab = .make_2xk_tab(colvardat, blinevardat)
+        ret = compfun(tab)
+        if(length(ret) == 1 && is.null(names(ret)))
+            names(ret) = cfnm
+        ret
+    }
+    add_analyzed_blinecomp(lyt = lyt, var = var, lbl = lbl,
+                           afun = function(x) x,
+                           compfun = compfun2,
+                           fmt = fmt,
+                           newtoplev = newtoplev)
+}
+
 
 ## Add a total column at the next **top level** spot in
 ## the column layout. 
