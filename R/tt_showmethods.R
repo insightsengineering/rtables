@@ -30,20 +30,22 @@ docat = function(obj) {
     invisible(NULL)
 }
     
-setMethod("show", "TableTree",
-          function(object) {
-    cat("\nA TableTree object\n")
-    docat(object)
+## setMethod("show", "TableTree",
+##           function(object) {
+##     cat("\nA TableTree object\n")
+##     docat(object)
     
-})
+## })
 
-setMethod("show", "ElementaryTable",
-          function(object) {
-    cat("\nAn ElementaryTableTree object\n")
-    docat(object)
+## setMethod("show", "ElementaryTable",
+##           function(object) {
+##     cat("\nAn ElementaryTableTree object\n")
+##     docat(object)
     
-})
+## })
 
+setMethod("show", "VTableTree",
+          function(object) print(to_s3compat(object)))
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
 

@@ -266,7 +266,6 @@ add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl, afun,
     
     if(is.character(compfun))
         compfun = get(compfun, mode = "function")
-    print(compfun)
     afun2 = function(x, .baseline_data = NULL, .N_col, .N_total, ...) {
         if(is.null(.baseline_data))
             stop("did not receive baseline aggregataion value required for comparison")
@@ -555,3 +554,32 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
     spl
 })
 
+
+
+
+## Manual column construction in a simple (seeming
+## to the user) way.
+
+#' @param dots One or more vectors of levels to appear
+#' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
+#' @examples
+#' # simple one level column space
+#' rows = lapply(1:5, function(i) {
+#'    TableRow(rep(i, times  = 3))})
+#' tab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
+#'
+#' # manually declared nesting
+#' tab2 = TableTree(kids = list(TableRow(as.list(1:4))),
+#'                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
+#'                                      Gender = c("M", "F")))
+
+
+manual_cols = function(...) {
+    args = list(...)
+    if(is.null(names(args)))
+        names(args) = paste("colsplit", seq_along(args))
+    
+    splvec = SplitVector(lst = mapply(ManualSplit, levs = args, lbl = names(args)))
+    ctree = splitvec_to_coltree(data.frame(), splvec=splvec, pos = TreePos())
+    InstantiatedColumnInfo(treelyt = ctree)
+}

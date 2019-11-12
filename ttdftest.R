@@ -115,7 +115,7 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 
 tab = build_table(thing, rawdat)
 
-to_s3compat(tab)
+
 
 ## generate a little table that we want to add onto another table
 ## that we're going to build
@@ -206,63 +206,6 @@ missavar =  NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 build_table(missavar, rawdat)
 
 
-nms = c("rownum", "rowvar", "rowvarlbl", "valtype", "rowlbl", "r1value", "r2value", 
-"r1vlbl", "r2vlbl", "ARM1___M", "ARM1___F", "ARM2___M", "ARM2___F", 
-"rsp_1", "rsp_2", "rsplbl_1", "rsplbl_2", "csp_1", "csp_2", "csplbl_1", 
-"csplbl_2", "csptype_1", "csptype_2", "rsptype_1", "rsptype_2")
-
-df2 = df[,c("X",
-           "rowvar",
-           "rowvarlbl",
-           "valtype",
-           "rowlbl",
-           "r1value",
-           "r2value",
-           "r1vlbl",
-           "r2vlbl",
-           "ARM1___M",
-           "ARM1___F",
-           "ARM2___M",
-           "ARM2___F", 
-           "rsp_1",
-           "rsp_2",
-           "rsptype_1",
-           "rsptype_2",
-           "rsplbl_1",
-           "rsplbl_2",
-           "csp_1",
-           "csp_2",
-           "csplbl_1", 
-           "csplbl_2",
-           "csptype_1",
-           "csptype_2")]
-
-
-
-blfun = function(df) {
-    nonbase = unique(subset(df, cat != "base")$cat)
-    
-    ret = rep(list(df[df$cat == "base",]), length(unique(df[df$cat != "base", "cat"])) + 1)
-    names(ret) = c("all", nonbase)
-    ret
-}
-
-csetfun = function(df)
-{
-    nonbase = unique(subset(df, cat != "base")$cat)
-    c(all = list(df), sapply(nonbase, function(i) df[df$cat == i,], simplify=FALSE))
-}
-
-
-compspl = ComparisonSplit(blfun, csetfun)
-
-
-catvar = sample(c("base", "set1", "set2"), 100, replace = TRUE)
-x = rnorm(100, as.integer(factor(catvar))*5, 10)
-compdf = data.frame(val = x, cat = catvar, stringsAsFactors = FALSE)
-
-do_split(compspl, compdf)
-
 ## what should it look like
 
 
@@ -310,11 +253,38 @@ ADRS_f$rsp = ADRS_f$AVALC %in% c("CR", "PR")
    rsp = ADRS_f$AVALC %in% c("CR", "PR"),
    col_by = relevel(factor(ADRS_f$ARMCD), "ARM B"),
    partition_rsp_by = droplevels(factor(
-       ADRS_f$AVALC, levels = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"))),
-   strata_data = ADRS_f[c("RACE")]
+       ADRS_f$AVALC, levels = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE")))
+##   strata_data = ADRS_f[c("RACE")]
    )
 
 
 rsplyt = tt_rsp_lyt("ARMCD", "ARM B")
 rsptab2  = build_table(rsplyt, ADRS_f)
 to_s3compat(rsptab2)
+
+
+
+
+### manual construction
+
+rows = lapply(1:5, function(i) {
+    TableRow(rep(i, times  = 3))})
+mtab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
+mtab
+
+### access/replacement
+mtab2 = mtab
+mtab2[3:5, 2:3] = c(7, 8)
+
+mtab
+mtab2
+
+
+nesttab = tab
+do_recursive_replace(nesttab, list(1, "WHITE", "A"), rows = 1:2, cols = 1, value = 5)
+
+
+do_recursive_replace(nesttab, list(1, "WHITE"), incontent = TRUE, cols = 3:4, value = list(c(10, 2), c(20, 7)))
+
+
+## 

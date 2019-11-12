@@ -161,7 +161,7 @@ setMethod("to_s3compat", "TableRow",
     
 })
 
-setMethod("to_s3compat", "TableTree",
+setMethod("to_s3compat", "VTableTree",
           function(obj, ...) {
     header = .make_s3_header(obj)
     rows = lapply(collect_leaves(obj, incl.cont = TRUE, add.labrows = TRUE),

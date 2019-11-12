@@ -120,6 +120,17 @@ RootSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt= NULL, ...) {
         split_format = splfmt)
 }
 
+setClass("ManualSplit", contains = "AllSplit",
+         representation(levels = "character"))
+
+
+ManualSplit = function(levs, lbl) {
+    new("ManualSplit",
+        split_label = lbl,
+        levels = levs)
+    
+}
+
 
 ## splits across which variables are being analynzed
 setClass("MultiVarSplit", contains = "Split",
@@ -391,6 +402,7 @@ Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra
 ### values chosen at that split, plus labeling info
 
 TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = NULL) {
+    svals = make_splvalue_vec(vals = svals)
     if(is.null(sub)) {
         if(length(spls) > 0) {
             sub = make_pos_subset(spls = spls,
@@ -513,7 +525,7 @@ setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree = function(lev = 0L,
                          lab = "",
                          kids = list(),
-                         spl = NULL, 
+                         spl = if(length(kids) == 0) NULL else AllSplit(), 
                          tpos = TreePos(), 
                          summary_function = NULL,
                          vis_colcounts = FALSE,
@@ -536,7 +548,7 @@ LayoutColTree = function(lev = 0L,
     }        
 }
 
-LayoutColLeaf = function(lev = 0L, lab = "", tpos#,
+LayoutColLeaf = function(lev = 0L, lab = "", tpos = TreePos()#,
                         ## n = NA_integer_,
                          #svar = NA_character_
                          ) {
@@ -610,6 +622,12 @@ InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
                                   cnts = NA_integer_,
                                   dispcounts = FALSE,
                                   countfmt = "(N=xx)") {
+    leaves = collect_leaves(treelyt)
+    nl = length(leaves)
+    extras = rep(extras, length.out = nl)
+    cnts = rep(cnts, length.out = nl)
+    csubs = rep(csubs, length.out = nl)
+    
     new("InstantiatedColumnInfo",
         tree_layout = treelyt,
         subset_exprs = csubs,
@@ -727,6 +745,14 @@ ElementaryTable = function(kids = list(),
         else
             cinfo = InstantiatedColumnInfo()
     }
+
+    ## for the hand construction case
+    
+    kids = lapply(kids, function(x) {
+        if(identical(col_info(x), InstantiatedColumnInfo()))
+            col_info(x) = cinfo
+        x
+    })
     if(is.na(iscontent))
         iscontent = is_content_pos(tpos)
     else if(iscontent != is_content_pos(tpos)) {
@@ -757,8 +783,8 @@ setClass("TableTree", contains = c("VTableTree"),
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
 })
 
-TableTree = function(cont = ElementaryTable(),
-                     kids = list(),
+TableTree = function(kids = list(),
+                     cont = ElementaryTable(),
                      lev = 1L,
                      lab = "",
                      rspans = data.frame(),
@@ -769,14 +795,21 @@ TableTree = function(cont = ElementaryTable(),
                      var_lbl = var,
                      cinfo = NULL,
                      fmt = NULL) {
-    if(is.null(clayout)) {
+    if(is.null(cinfo)) {
         if(!is.null(cont)) {
             cinfo = col_info(cont)
         } else if(length(kids) > 0) {
             cinfo = col_info(kids[[1]])
         } else {
-            stop("unable to determine column structure information")
+            cinfo = InstantiatedColumnInfo()
         }
+    } else {
+        if(nrow(cont) && no_colinfo(cont))
+            col_info(cont) = cinfo
+        kids = lapply(kids, function(k) {
+            if(no_colinfo(k)) col_info(k) = cinfo
+            k
+        })
     }
     if(is.na(iscontent))
         iscontent = is_content_pos(tpos)

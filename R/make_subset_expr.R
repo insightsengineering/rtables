@@ -95,6 +95,35 @@ get_col_extras = function(ctree) {
            function(x) get_pos_extra(pos = tree_pos(x)))
 }
 
+setGeneric("make_col_subsets",function(lyt, df) standardGeneric("make_col_subsets"))
+setMethod("make_col_subsets", "PreDataTableLayouts",
+          function(lyt, df) {
+    make_col_subsets(clayout(lyt), df)
+})
+setMethod("make_col_subsets", "PreDataColLayout",
+          function(lyt, df) {
+    unlist(lapply(lyt, make_col_subsets, df = df))
+})
+
+setMethod("make_col_subsets", "SplitVector",
+          function(lyt, df) {
+    build_splits_expr(lyt, df)
+    
+})
+
+setMethod("make_col_subsets", "LayoutColTree",
+          function(lyt, df) {
+    leaves = collect_leaves(lyt)
+    lapply(leaves, make_col_subsets)
+})
+
+setMethod("make_col_subsets", "LayoutColLeaf",
+          function(lyt, df) {
+    make_pos_subset(pos = tree_pos(lyt))
+})
+
+
+
 create_colinfo = function(lyt, df, rtpos = TreePos()) {
     ## this will work whether clayout is pre or post
     ## data
@@ -120,3 +149,4 @@ create_colinfo = function(lyt, df, rtpos = TreePos()) {
                            countfmt = colcount_fmt(lyt))
     
 }
+

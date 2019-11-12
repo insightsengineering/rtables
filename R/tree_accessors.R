@@ -2,14 +2,15 @@
 
 setMethod("nrow", "ElementaryTable",
           function(x) length(tree_children(x)))
-setMethod("ncol", "ElementaryTable",
+## XXX Do we want add.labrows here or no?
+## we have to choose one and stick to it.
+setMethod("nrow", "VTableTree",
+          function(x) length(collect_leaves(x)))
+
+setMethod("ncol", "VTableNodeInfo",
           function(x) {
-    rs = tree_children(x)
-    if(length(rs) > 0)
-        max(sapply(tree_children(x),
-                   function(x) length(x@leaf_value)))
-    else
-        0
+    ci = col_info(x)
+    length(col_exprs(ci))
 })
 
 setGeneric("tree_children", function(x) standardGeneric("tree_children"))
@@ -54,21 +55,6 @@ setMethod("pos_payloads", "VNodeInfo",
 ## setMethod("pos_payloads", "VLayoutNode",
 ##           function(obj) pos_payloads(tree_pos(obj)))
 
-## XXX this is probably not thee right model for column layouts because
-## we don't find ourselves consuming/walking a layout as a tree often
-##
-setGeneric("clayout_splits", function(obj) standardGeneric("clayout_splits"))
-setMethod("clayout_splits", "LayoutColTree", function(obj) {
-    ##this is going to descend to the first ("leftmost") leaf
-    clayout_splits(tree_children(obj)[[1]])
-})
-
-setMethod("clayout_splits", "LayoutColLeaf", function(obj) {
-    pos_splits(tree_pos(obj))
-})
-
-setMethod("clayout_splits", "VTableNodeInfo",
-          function(obj) clayout_splits(clayout(obj)))
 
 
 
@@ -93,29 +79,13 @@ setGeneric("content_table", function(obj) standardGeneric("content_table"))
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
 
-## XXX this seems bad. the class that is returned
-## depends on whether we are pre or post data.
-## should be a different accessor
-##
-## FIXME
-setGeneric("clayout", function(obj) standardGeneric("clayout"))
-setMethod("clayout", "VTableNodeInfo",
-          function(obj) obj@col_info@tree_layout)
-
-setMethod("clayout", "PreDataTableLayouts",
-          function(obj) obj@col_layout)
-
-## useful convenience for the cascading methods in colby_constructors
-setMethod("clayout", "ANY", function(obj) PreDataColLayout())
-
-
-
-setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
-setMethod("clayout<-", "PreDataTableLayouts",
-          function(object, value) {
-    object@col_layout = value
-    object
+setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
+setMethod("content_table<-", c("TableTree", "ElementaryTable"),
+          function(obj, value) {
+    obj@content = value
+    obj
 })
+
 
 setGeneric("next_rpos", function(obj, newtree = FALSE) standardGeneric("next_rpos"))
 
@@ -354,6 +324,10 @@ setMethod("spl_child_order<-", "VarLevelSplit",
     obj
 })
 
+setMethod("spl_child_order",
+          "ManualSplit",
+          function(obj) obj@levels)
+
 
 
 
@@ -450,7 +424,8 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
     obj
 })
 
-
+setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
+setMethod("current_spl", "VTableTree", function(obj) obj@split)
 
 setGeneric("collect_leaves",
            function(ttree, incl.cont = TRUE, add.labrows = FALSE)
@@ -538,16 +513,122 @@ setMethod("split_exargs", "Split",
           function(obj) obj@extra_args)
 
 
+
+
+
+
+setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
+
+setMethod("is_labrow", "TableRowPos",
+          function(obj) obj@is_label_row)
+
+setMethod("is_labrow", "TableRow",
+          function(obj) is_labrow(tree_pos(obj)))
+
+
+setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
+
+setMethod("is_labrow<-", "TableRowPos",
+          function(obj, value) {
+    obj@is_label_row = value
+    obj
+})
+
+spl_baseline = function(obj) {
+    stopifnot(is(obj, "VarLevWBaselineSplit"))
+    obj@baseline_value
+}
+
+
+           
+
+
+
+### column info
+
+
+## XXX this is probably not thee right model for column layouts because
+## we don't find ourselves consuming/walking a layout as a tree often
+##
+setGeneric("clayout_splits", function(obj) standardGeneric("clayout_splits"))
+setMethod("clayout_splits", "LayoutColTree", function(obj) {
+    ##this is going to descend to the first ("leftmost") leaf
+    clayout_splits(tree_children(obj)[[1]])
+})
+
+setMethod("clayout_splits", "LayoutColLeaf", function(obj) {
+    pos_splits(tree_pos(obj))
+})
+
+setMethod("clayout_splits", "VTableNodeInfo",
+          function(obj) clayout_splits(clayout(obj)))
+
+## XXX this seems bad. the class that is returned
+## depends on whether we are pre or post data.
+## should be a different accessor
+##
+## FIXME
+setGeneric("clayout", function(obj) standardGeneric("clayout"))
+setMethod("clayout", "VTableNodeInfo",
+          function(obj) obj@col_info@tree_layout)
+
+setMethod("clayout", "PreDataTableLayouts",
+          function(obj) obj@col_layout)
+
+## useful convenience for the cascading methods in colby_constructors
+setMethod("clayout", "ANY", function(obj) PreDataColLayout())
+
+
+
+setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
+setMethod("clayout<-", "PreDataTableLayouts",
+          function(object, value) {
+    object@col_layout = value
+    object
+})
+
+
 setGeneric("col_info", function(obj) standardGeneric("col_info"))
 setMethod("col_info", "VTableNodeInfo",
           function(obj) obj@col_info)
 
+### XXX I've made this recursive. Do we ALWAYS want it to be?
+###
+### I think we do.
 setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
-setMethod("col_info<-", "VTableNodeInfo",
+setMethod("col_info<-", "TableRow",
           function(obj, value) {
     obj@col_info = value
     obj
 })
+
+.set_cinfo_kids = function(obj) {
+    kids = lapply(tree_children(obj),
+                  function(x) {
+        col_info(x) = value
+        x
+    })
+    tree_children(obj) = kids
+    obj
+}
+setMethod("col_info<-", "ElementaryTable",
+          function(obj, value) {
+    obj@col_info = value
+    .set_cinfo_kids(obj)
+    
+})
+
+setMethod("col_info<-", "TableTree",
+          function(obj, value) {
+    obj@col_info = value
+    if(nrow(content_table(obj))) {
+        ct = content_tab(obj)
+        col_info(ct) = value
+        content_tab(obj) = ct
+    }
+    .set_cinfo_kids(obj)
+})
+
 
 
 
@@ -586,7 +667,7 @@ setMethod("coltree", "PreDataColLayout",
 setMethod("coltree", "LayoutColTree",
           function(obj, df, rtpos) obj)
 
-setMethod("coltree", "TableTree",
+setMethod("coltree", "VTableTree",
           function(obj, df, rtpos) coltree(col_info(obj)))
 
 setGeneric("col_exprs", function(obj, df = NULL) standardGeneric("col_exprs"))
@@ -696,7 +777,7 @@ setGeneric("colcount_fmt", function(obj) standardGeneric("colcount_fmt"))
 setMethod("colcount_fmt", "InstantiatedColumnInfo",
           function(obj) obj@columncount_format)
 
-setMethod("colcount_fmt", "VTableTree",
+setMethod("colcount_fmt", "VTableNodeInfo",
           function(obj) colcount_fmt(col_info(obj)))
 
 
@@ -716,7 +797,7 @@ setMethod("colcount_fmt<-", "InstantiatedColumnInfo",
     obj
 })
 
-setMethod("colcount_fmt<-", "VTableTree",
+setMethod("colcount_fmt<-", "VTableNodeInfo",
           function(obj, value) {
     cinfo = col_info(obj)
     colcount_fmt(cinfo) = value
@@ -740,29 +821,9 @@ setMethod("colcount_fmt<-", "PreDataTableLayouts",
 })
 
 
+setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
+setMethod("no_colinfo", "VTableNodeInfo",
+          function(obj) no_colinfo(col_info(obj)))
 
-
-setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
-
-setMethod("is_labrow", "TableRowPos",
-          function(obj) obj@is_label_row)
-
-setMethod("is_labrow", "TableRow",
-          function(obj) is_labrow(tree_pos(obj)))
-
-
-setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
-
-setMethod("is_labrow<-", "TableRowPos",
-          function(obj, value) {
-    obj@is_label_row = value
-    obj
-})
-
-spl_baseline = function(obj) {
-    stopifnot(is(obj, "VarLevWBaselineSplit"))
-    obj@baseline_value
-}
-
-
-           
+seteMethod("no_colinfo", "InstantiatedColumnInfo",
+           function(obj) identical(obj, InstantiatedColumnInfo()))

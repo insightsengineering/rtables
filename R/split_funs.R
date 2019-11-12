@@ -118,10 +118,14 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
         else
             stopifnot(names(lbls)== names(vals))
 
-                ## get rid of columns that would not have any
+        ## get rid of columns that would not have any
         ## observations.
+        ##
+        ## But only if there were any rows to start with
+        ## if not we're in a manually constructed table
+        ## column tree
         hasdata = sapply(dpart, function(x) nrow(x) >0)
-        if(length(dpart) > sum(hasdata)) { #some empties
+        if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
             dpart = dpart[hasdata]
             vals = vals[hasdata]
             extr = extr[hasdata]
@@ -219,6 +223,10 @@ setMethod(".applysplit_rawvals", "MultiVarSplit",
 setMethod(".applysplit_rawvals", "AllSplit",
           function(spl, df) TRUE)
 
+setMethod(".applysplit_rawvals", "ManualSplit",
+          function(spl, df) spl@levels)
+
+
 setMethod(".applysplit_rawvals", "NULLSplit",
           function(spl, df) FALSE)
 
@@ -257,6 +265,12 @@ setMethod(".applysplit_datapart", "MultiVarSplit",
 
 setMethod(".applysplit_datapart", "AllSplit",
           function(spl, df, vals) list(df))
+
+## not sure I need this
+setMethod(".applysplit_datapart", "ManualSplit",
+          function(spl, df, vals) rep(list(df), times = length(vals)))
+
+
 
 setMethod(".applysplit_datapart", "NULLSplit",
           function(spl, df, vals) list(df[FALSE,]))
@@ -374,7 +388,6 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
     if(is(extrs, "AsIs"))
         extrs = unclass(extrs)
     if(are(vals, "SplitValue")) {
-        warning("attempted to make SplitValue vector out of existing SplitValue objects")
         return(vals)
     }
     mapply(SplitValue, val = vals, extr = extrs,

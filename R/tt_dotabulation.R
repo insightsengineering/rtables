@@ -459,34 +459,6 @@ setMethod("build_splits_expr", "SplitVector",
 
 
 
-setGeneric("make_col_subsets",function(lyt, df) standardGeneric("make_col_subsets"))
-setMethod("make_col_subsets", "PreDataTableLayouts",
-          function(lyt, df) {
-    make_col_subsets(clayout(lyt), df)
-})
-setMethod("make_col_subsets", "PreDataColLayout",
-          function(lyt, df) {
-    unlist(lapply(lyt, make_col_subsets, df = df))
-})
-
-setMethod("make_col_subsets", "SplitVector",
-          function(lyt, df) {
-    build_splits_expr(lyt, df)
-    
-})
-
-
-setMethod("make_col_subsets", "LayoutColTree",
-          function(lyt, df) {
-    leaves = collect_leaves(lyt)
-    lapply(leaves, make_col_subsets)
-})
-
-setMethod("make_col_subsets", "LayoutColLeaf",
-          function(lyt, df) {
-    make_pos_subset(pos = tree_pos(lyt))
-})
-
 rtabulate_layout2 =  function(x, layout, FUN, ...,
                               format = NULL, row.name = "", indent  = 0,
                               col_wise_args = NULL) {
