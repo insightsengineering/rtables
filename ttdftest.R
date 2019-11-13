@@ -79,7 +79,7 @@ rawdat = makefakedat()
 
 ## starting will NULL causes it to construct a PreDataLayouts object
 ## add top level column split on ARM
-thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
     add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
     ## No row splits have been introduced, so this adds
@@ -113,7 +113,7 @@ thing = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 
 
 
-tab = build_table(thing, rawdat)
+tab = build_table(lyt, rawdat)
 
 
 

@@ -96,6 +96,35 @@ setMethod("toString", "ANY", base:::toString)
 }
 
 
+.make_s3_header2 = function(tt) {
+    clyt = coltree(tt)
+
+    atrow = 1
+    rows = list()
+    kids = tree_children(clyt)
+    while(length(kids) > 0 && atrow < 1000) { #we will break from this
+   
+        labs = names(kids)
+        cells = lapply(names(kids), function(x) {
+            rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
+        })
+        rows[[atrow]] = rrowl(row.name = "",
+                              cells)
+        atrow = atrow + 1
+        kids = unlist(lapply(kids,
+                             function(k) {
+            if(is(k, "LayoutColLeaf"))
+                NULL
+            else
+                tree_children(k)
+        }),
+        recursive = FALSE)
+     }
+    rheaderl(rows)
+}
+
+
+
 .make_s3_header = function(tt) {
     clyt = coltree(tt)
     dispcounts = disp_ccounts(tt)
@@ -163,7 +192,7 @@ setMethod("to_s3compat", "TableRow",
 
 setMethod("to_s3compat", "VTableTree",
           function(obj, ...) {
-    header = .make_s3_header(obj)
+    header = .make_s3_header2(obj)
     rows = lapply(collect_leaves(obj, incl.cont = TRUE, add.labrows = TRUE),
                   to_s3compat)
     rtablel(header = header, rows, format = obj_fmt(obj))

@@ -285,6 +285,27 @@ setMethod("spl_payload", "Split", function(obj) obj@payload)
 setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
 setMethod("obj_label", "Split", function(obj) obj@split_label)
 setMethod("obj_label", "VNodeInfo", function(obj) obj@label)
+setMethod("obj_label", "TableTree", function(obj) obj_label(obj@split))
+
+
+
+setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
+setMethod("obj_label<-", "Split", function(obj, value) {
+    obj@split_label <- value
+    obj
+})
+setMethod("obj_label<-", "VNodeInfo", function(obj, value){
+    obj@label = value
+    obj
+})
+
+setMethod("obj_label<-", "TableTree", function(obj, value) {
+    spl = obj@split
+    obj_label(spl) = value
+    obj@split = spl
+    obj
+})
+    
 
 
 
@@ -427,6 +448,14 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
 setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
 setMethod("current_spl", "VTableTree", function(obj) obj@split)
 
+
+setGeneric("current_spl<-", function(obj, value) standardGeneric("current_spl<-"))
+setMethod("current_spl<-", "VTableTree", function(obj, value)  {
+    obj@split = value
+    obj
+})
+
+
 setGeneric("collect_leaves",
            function(ttree, incl.cont = TRUE, add.labrows = FALSE)
     standardGeneric("collect_leaves"), signature = "ttree")
@@ -442,7 +471,7 @@ setGeneric("collect_leaves",
             lrowpos = if(length(rows)) tree_pos(rows[[1]]) else TableRowPos(iscontent = TRUE, islabel = TRUE)
             is_labrow(lrowpos) = TRUE
             rows = c( rows, TTLabelRow(lab = lab, lev = tt_level(tr),
-                                     tpos = lrowpos))
+                                     tpos = lrowpos, cinfo = col_info(tr)))
         }
     }
     rows
@@ -464,7 +493,7 @@ setMethod("collect_leaves", "ElementaryTable",
     if(add.labrows) {
         rl = obj_label(ttree)
         if(length(rl) >0 && !is.na(rl) && nzchar(rl))
-            ret = c(TTLabelRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl), ret)
+            ret = c(TTLabelRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl, cinfo = col_info(ttree)), ret)
     }
     ret
 })
@@ -487,6 +516,12 @@ setMethod("collect_leaves", "ANY",
 
 setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
 setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
+
+setGeneric("row_cspans<-", function(obj, value) standardGeneric("row_cspans<-"))
+setMethod("row_cspans<-", "TableRow", function(obj, value) {
+    obj@colspans = value
+    obj
+})
 
 setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 ## this will hit everything via inheritence
@@ -605,7 +640,7 @@ setMethod("col_info<-", "TableRow",
 .set_cinfo_kids = function(obj) {
     kids = lapply(tree_children(obj),
                   function(x) {
-        col_info(x) = value
+        col_info(x) = col_info(obj)
         x
     })
     tree_children(obj) = kids
@@ -622,9 +657,9 @@ setMethod("col_info<-", "TableTree",
           function(obj, value) {
     obj@col_info = value
     if(nrow(content_table(obj))) {
-        ct = content_tab(obj)
+        ct = content_table(obj)
         col_info(ct) = value
-        content_tab(obj) = ct
+        content_table(obj) = ct
     }
     .set_cinfo_kids(obj)
 })
@@ -825,5 +860,5 @@ setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
 setMethod("no_colinfo", "VTableNodeInfo",
           function(obj) no_colinfo(col_info(obj)))
 
-seteMethod("no_colinfo", "InstantiatedColumnInfo",
+setMethod("no_colinfo", "InstantiatedColumnInfo",
            function(obj) identical(obj, InstantiatedColumnInfo()))

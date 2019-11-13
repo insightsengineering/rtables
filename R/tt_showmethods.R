@@ -192,3 +192,16 @@ setMethod("show", "PreDataTableLayouts",
     docat_predataxis(object@row_layout)
     cat("\n")
 })
+
+
+setMethod("show", "TreePos",
+          function(object) {
+    chars = mapply(function(lbl, val)
+        {
+            paste0(lbl, " [", val, "]")
+        }, lbl = pos_split_lbls(object),
+        val = pos_splval_lbls(object))
+        
+    msg = paste(chars, collapse = " -> ")
+    cat("An object of class ", class(object), "\n\n", msg)
+})

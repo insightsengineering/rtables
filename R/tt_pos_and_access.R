@@ -153,28 +153,229 @@ setMethod("[<-", "VTableTree",
 })
         
         
+## this is going to be hard :( :( :(
+
+### selecting/removing columns
+
+## we have two options here: path like we do with rows and positional
+## in leaf space. 
+
+setGeneric("subset_cols", function(tt, j, newcinfo = NULL, ...) standardGeneric("subset_cols"))
+
+setMethod("subset_cols", c("TableTree", "numeric"),
+          function(tt, j, newcinfo = NULL, ...) {
+    j = .j_to_posj(j, ncol(tt))
+    if(is.null(newcinfo)) {
+        cinfo = col_info(tt)
+        newcinfo = subset_cols(cinfo, j, ...)
+    }
+    kids = tree_children(tt)
+    newkids = lapply(kids, subset_cols, j= j, newcinfo = newcinfo,  ...)
+    cont = content_table(tt)
+    newcont = subset_cols(cont, j, newcinfo = newcinfo,  ...)
+    tt2 = tt
+    col_info(tt2) <- newcinfo
+    content_table(tt2) <- newcont
+    tree_children(tt2) <- newkids
+    tt2
+})
+
+setMethod("subset_cols", c("ElementaryTable", "numeric"),
+          function(tt, j, newcinfo = NULL, ...) {
+    j = .j_to_posj(j, ncol(tt))
+    if(is.null(newcinfo)) {
+        cinfo = col_info(tt)
+        newcinfo = subset_cols(cinfo, j, ...)
+    }
+    kids = tree_children(tt)
+    newkids = lapply(kids, subset_cols, j= j, newcinfo = newcinfo,  ...)
+    tt2 = tt
+    col_info(tt2) <- newcinfo
+    tree_children(tt2) <- newkids
+    tt2
+})
 
 
+## small utility to transform any negative
+## indices into positive ones, given j
+## and total length
+.j_to_posj = function(j, n) {
+    if(any(j < 0))
+        j = seq_len(n)[j]
+    j
+}
 
-trow_to_pathdf = function(tr, i) {
-    path = dput(pos_splvals(tr))
+## fix column spans that would be invalid
+## after some columns are no longer there
+.fix_rowcspans = function(rw, j) {
+    cspans = row_cspans(rw)
+    nc = sum(cspans)
+    j = .j_to_posj(j, nc)
+    ## this is overly complicated
+    ## we need the starting indices
+    ## but the first span might not be 1, so
+    ## we pad with 1 and then take off the last
+    start = cumsum(c(1,head(cspans, -1)))
+    ends = c(tail(start, -1) -1, nc)
+    res = mapply(function(st, en) {
+        sum(j >= st & j <= en)
+    }, st = start, en = ends)
+    res = res[res>0]
+    stopifnot(sum(res) == length(j))
+    res
     
-    data.frame(row.names = path, check.rows = FALSE, 
+}
+setMethod("subset_cols", c("TableRow", "numeric"),
+          function(tt, j, newcinfo = NULL,  ...) {
+    j = .j_to_posj(j, ncol(tt))
+    if(is.null(newcinfo)) {
+        cinfo = col_info(tt)
+        newcinfo = subset_cols(cinfo, j, ...)
+    }
+    tt2 = tt
+    row_values(tt2) = row_values(tt2)[j]
+    if(length(row_cspans(tt2)) > 0) 
+        row_cspans(tt2) = .fix_rowcspans(tt2, j)
+    col_info(tt2) = newcinfo
+    tt2
+})
+
+
+setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
+          function(tt, j, newcinfo = NULL,  ...) {
+    if(!is.null(newcinfo))
+        return(newcinfo)
+    j = .j_to_posj(j, length(length(col_exprs(tt))))
+    newctree = subset_cols(coltree(tt), j, NULL)
+    newcextra = cextra_args(tt)[j]
+    newcsubs = col_exprs(tt)[j]
+    newcounts = col_counts(tt)[j]
+    InstantiatedColumnInfo(treelyt = newctree,
+                           csubs = newcsubs,
+                           extras = newcextra,
+                           cnts = newcounts,
+                           dispcounts = disp_ccounts(tt),
+                           countfmt = colcount_fmt(tt))
+})
+
+setMethod("subset_cols", c("LayoutColTree", "numeric"),
+          function(tt, j, newcinfo = NULL, ...) {
+    lst = collect_leaves(tt)
+    j = .j_to_posj(j, length(lst))
+    
+    ## j has only non-negative values from
+    ## this point on
+    counter = 0
+    prune_children = function(x, j) {
+        kids = tree_children(x)
+        newkids = kids
+         for(i in seq_along(newkids)) {
+            if(is(newkids[[i]], "LayoutColLeaf")) {
+                counter <<- counter + 1
+                if(!(counter %in% j))
+                    newkids[[i]] = list() ## NULL removes the position entirely
+            } else {
+                newkids[[i]] = prune_children(newkids[[i]], j)
+            }
+        }
+
+        newkids = newkids[sapply(newkids, function(thing) length(thing) > 0)]
+        if(length(newkids) > 0){
+            tree_children(x) = newkids
+            x
+        } else {
+            NULL
+        }
+    }
+    prune_children(tt, j)
+})
 
 
 
+numrows = function(tt, labs = TRUE) length(collect_leaves(tt, TRUE, labs))
+## TODO: we really should choose whether
+## label rows are counted or not here, I think
+## allowing it both ways is probably just too
+## much complexity
+subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
+    stopifnot(is(tt, "VTableNodeInfo"))
+    counter = 0
+    nr = numrows(tt, inc.labrows)
+    i = .j_to_posj(i, nr)
+
+    prune_rowsbynum = function(x, i, valifnone = NULL) {
+        maxi = max(i)
+        if(counter >= maxi)
+            return(valifnone)
+        
+        if(inc.labrows && nzchar(obj_label(x))) {
+            counter <<- counter + 1
+            if(!(counter %in% i)) {
+                ## XXX this should do whatever
+                ## is required to 'remove' the Label Row
+                ## (currently implicit based on
+                ## the value of the label but
+                ## that shold really probably change)
+                obj_label(x) = ""
+            }
+        }
+        if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
+            ctab = content_table(x)
+            
+            content_table(x) = prune_rowsbynum(ctab, i, valifnone = ElementaryTable(cinfo = col_info(ctab), tpos = tree_pos(ctab), iscontent = TRUE))
+        }
+        kids = tree_children(x)
+        if(counter >= maxi) { #already done
+            kids = list()
+        } else if(length(kids) > 0) {
+            for(pos in seq_along(kids)) {
+                if(is(kids[[pos]], "TableRow")) {
+                    counter <<- counter + 1
+                    if(!(counter %in% i)) {
+                        kids[[pos]] = list()
+                    }
+                } else {
+                    kids[[pos]] = prune_rowsbynum(kids[[pos]], i, list())
+                }
+            }
+            kids = kids[sapply(kids, function(x) length(x) > 0)]
+        }
+        tree_children(x) = kids
+        if(length(kids) == 0) {
+            if(is(x, "TableTree"))
+                current_spl(x) = NULLSplit()
+            else
+                return(valifnone)
+        }
+        if(is(x, "VTableTree") && numrows(x, inc.labrows) > 0) {
+            x
+        } else {
+            valifnone
+        }
+    }
+    prune_rowsbynum(tt, i)
 }
 
 
+## trow_to_pathdf = function(tr, i) {
+##     path = dput(pos_splvals(tr))
+    
+##     data.frame(row.names = path, check.rows = FALSE, 
 
 
-pathmap = function(tt) {
-    leaves = collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
-    do.call(rbind.data.frame,
-            lapply(leaves, 
+
+## }
+
+
+
+
+## pathmap = function(tt) {
+##     leaves = collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+##     do.call(rbind.data.frame,
+##             lapply(leaves, 
     
 
 
 
 
-}
+## }
