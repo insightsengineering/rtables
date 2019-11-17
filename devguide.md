@@ -11,6 +11,45 @@ Data values (what appears in non-empty "cells" of the table) live _only_ in `Tab
 They are stored in a `list` on the `TableRow` object and generally have no restrictions on their contents other than that the renderer is unable to
 
 
+# Cheat Sheet
+
+## Classes
+See `R/00tabletrees.R` for all classes and constructor functions defined in the S4 TableTree framework.
+
+**ALL non-virtual classes have constructor functions with identical names (including capitalization) which obfuscate the current names of the slots.**
+
+`TableTree` - A populated (post data) Table tree node which has 0 or more `TableTree`, `ElementaryTable` or `TableRow` objecs children and a (possibly empty) content table
+
+`ElementaryTable` - A populated Table tree node which has 0 or more children which must be `TableRow` objects
+
+`VTableTree` - A virtual class which covers `TableTree` and `ElementaryTable`, guaranteed to have slot for children. 
+
+`TableRow` - A populated single Row which contains a list of (possibly list/vector) values, one for each column.
+
+`Split` - Virtual class representing a pre-data split of data defining structure/nesting in either columns or rows. See the design document for details on types of split I won't recreate them here.
+
+`SplitVector` - a list of `Split` objects which defines a nested (sub)tree structure in either row or column space.
+
+`InstantiatedColumnInfo` - Post-data column info which caches the column structure in tree and corresponding subset forms, as well as metadata about the columns (counts, associated extra arguments).
+
+`PreDataColLayout`, `PreDataRowLayout` - Pre-data definitions of column/row structure 
+
+## Accessors
+
+See `R/tree_accessors.R` for all defined accessors within the S4 TableTree framework.
+
+Most getters have setters with the corresponding `<-`ed version of their name. Those that don't can if we need them to in most cases. I will mention only the getters here.
+
+`tree_children` - Get the list of children for anything modeled as a tree structure
+
+`content_table` - Get the content table from a `TableTree` object
+
+`obj_fmt` - a general accessor which retrieves the format associated with any supported object
+
+`obj_label` - a general accessor which retrieves the label associated with any supported object. NOTE - some care is needed here there are currently too many concepts of label in some cases.
+
+
+
 # Getting the Tabulation You Want
 
 We can specify arbitrary functions in tabulation. This should allow us to get any cell contents we want provided they are they can be computed as a function of the "raw" data at tabulation time.
@@ -62,6 +101,18 @@ layout2 = collyt %>%
        add_rowby_varlevels("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = function(x) list(mean = mean(x), median = median(x)), fmt = "xx.xx")
 
+```
+
+## Including NAs in data to be tabulated
+
+By default rows with NAs in the variable being analyzed are automatically dropped *before* tabulation takes place. We can disable this by calling `add_analyzed_var()` with `inclNAs = TRUE`
+
+Example (this is VERY silly since the mean will be NA if any NA are in the data)
+
+```
+layout = collyt %>%
+       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx", inclNAs = TRUE)
 ```
 
 ## Incorporating column or dataset totals
@@ -187,6 +238,76 @@ Example
 ```
 collyt3  = collyt2 %>% add_colcounts()
 ```
+
+
+# Recursively Traversing, Subsetting and Modifying Trees
+
+Walking trees trees, either to find or modify data or aspects of the tree, is typically a recursive operation.
+
+Always do depth-first traversal when walking or modifying a tree (typically via recursion).  This translates to 3 rules:
+
+1. A node should be processed before ANY of its children (e.g., process content rows)
+2. A node's children should be processed before any of it's following siblings, and
+3. A node's childen should be processed in order from first to last.
+
+
+This is true when propogating an attribute through a tree (e.g., format) or when modifying a tree's content or row- or column- structure (both of which are represented as trees).
+
+## A simple worked example
+
+Here we will use recursion and S4 methods to write a `square2nd()` function which squares the value in the second column of every data and content row in a tree. Note we're squaring counts here so its a terrible idea but it illustrates the process.
+
+
+The `TableTree` and `ElementaryTable` methods simply call `square2nd` again on any (content table and) children of the object and replace the old values with updated ones before returning it.
+
+```
+setGeneric("square2nd", function(obj) standardGeneric("square2nd"))
+## TableTree objects (can) have content Rows
+## process the content, then the children by recursive call
+setMethod("square2nd", "TableTree",
+	function(obj) {
+    ct = content_table(obj)
+    if(nrow(ct))
+        content_table(obj) = square2nd(ct)
+    kids = tree_children(obj)
+    if(length(kids)) { 
+    	newkids = lapply(kids, square2nd)
+        names(newkids) = names(kids)
+        tree_children(obj) = newkids
+    }
+    obj
+})
+## this will hit all Content tables as well
+## as any subtrees that happen to be
+## Elementary
+setMethod("square2nd", "ElementaryTable",
+	function(obj) {
+    kids = tree_children(obj)
+    if(length(kids)) {
+        newkids = lapply(kids, square2nd)
+        names(newkids) = names(kids)
+        tree_children(obj) = newkids
+    }
+    obj
+})
+```
+
+All of the actuaal value modification occurs in the `TableRow` method, which simply replaces the 2nd elemenent of the values list with its square and returns the modified `TableRow`
+
+```
+setMethod("square2nd", "TableRow",
+	function(obj) {
+    vals = row_values(obj)
+    vals[[2]] = vals[[2]]^2
+    row_values(obj) = vals
+    obj
+})
+```
+
+This "cascading methods" approach to recursion allows us to consolodate the actual modification logic within a single method we know will eventually be hit. 
+The same pattern, with some additional logic, is how formats can be recursively on any node in a tree, how rows can be selected and modified more generally, and how column structure can be set or modified on an existing tree.
+
+See, e.g., the code of `subset_cols()` and `subset_by_rownum()` for this pattern being implemented in practice.
 
 
 

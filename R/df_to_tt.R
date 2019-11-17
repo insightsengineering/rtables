@@ -363,43 +363,5 @@ layout_from_df = function(df) {
 
 
 }
-
-
-
-
-## ### XXXX I think the level stuff in here is all wrong, needs careful checking ones
-## ## this bit is plugged in
-## recursive_row_layout = function(df, i) {
-    
-##     rsplval = paste0("r", i, "value")
-##     if(! (rsplval %in% names(df))) { # no more levels to split on
-##         cinds = which(is.na(df$var))
-##         if(length(cinds)) {
-##             ctab = dfrows_to_table(df[cinds,], lvl = as.integer(i))
-##             df = df[-cinds,]
-##             ret = TableTree(cont = ctab, kids = tree_children(dfrows_to_table(df, lvl = as.integer(i+1))), lev = as.integer(i))
-##         } else {
-##             ret = dfrows_to_table(df, lvl = as.integer(i+1))
-##         }
-##     } else  {
-##         cinds = which(is.na(df[[rsplval]]) & is.na(df$var))
-##         if(length(cinds)) {
-##             ctab = dfrows_to_table(df[cinds,], lvl = as.integer(i+1))
-##             df = df[-cinds,]
-##         } else {
-##             ctab  = ElementaryTable()
-##         }
-##         key = na_to_sentinel(df[[rsplval]])
-##         ## declaring levels this way ensures they aren't sorted in a way we don't want.
-##         key = factor(key, levels = unique(key))
-##         ## XXX can't use split here because it sorts the levels of f
-##         spl = split(df, key)
-##         ret = TableTree(cont = ctab,
-##                         kids = lapply(spl, recursive_split, i = i+1), lev = as.integer(i))
-##     }
-
-##     ret
-## }
-
     
 

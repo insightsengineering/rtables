@@ -285,7 +285,7 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
         stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
     }
     ret = df
-    if(!is.na(vals))
+    if(!is.na(vals) && avar_includeNA(spl))
         ret = df[!is.na(df[[vals]]),] 
     list(ret)
 })

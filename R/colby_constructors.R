@@ -232,12 +232,16 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 ## specified, because it defines an anlaysis
 ## that will generate rows, rather than
 ## a further partition of the data.
-add_analyzed_var = function(lyt, var, lbl, afun,
+add_analyzed_var = function(lyt, var, lbl = var, afun,
                             fmt = NULL,
                             rowlabs = as.character(substitute(afun)),
-                            newtoplev = FALSE) {
-    spl = AnalyzeVarSplit(var, lbl, afun = afun,
-                          splfmt = fmt, defrowlab = rowlabs)
+                            newtoplev = FALSE,
+                            inclNAs = FALSE) {
+    spl = AnalyzeVarSplit(var, lbl,
+                          afun = afun,
+                          splfmt = fmt,
+                          defrowlab = rowlabs,
+                          inclNAs = inclNAs)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
