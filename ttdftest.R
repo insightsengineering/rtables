@@ -265,7 +265,7 @@ to_s3compat(rsptab2)
 
 
 
-### manual construction
+### manual construction and manipulation
 
 rows = lapply(1:5, function(i) {
     TableRow(rep(i, times  = 3))})
@@ -275,16 +275,24 @@ mtab
 ### access/replacement
 mtab2 = mtab
 mtab2[3:5, 2:3] = c(7, 8)
-
-mtab
 mtab2
 
 
+## note we're using tab here, so need to make it above
 nesttab = tab
 do_recursive_replace(nesttab, list(1, "WHITE", "A"), rows = 1:2, cols = 1, value = 5)
 
 
 do_recursive_replace(nesttab, list(1, "WHITE"), incontent = TRUE, cols = 3:4, value = list(c(10, 2), c(20, 7)))
+
+
+## cols by absolute position
+subset_cols(tab, -3)
+
+## rows by absolute row number
+subset_by_rownum(tab, -(4:8))
+
+
 
 
 ## 
