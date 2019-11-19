@@ -60,3 +60,4 @@ Collate:
     'tt_rsp.R'
     'tt_dotabulation.R'
     'tt_pos_and_access.R'
+    'tt_compatibility.R'

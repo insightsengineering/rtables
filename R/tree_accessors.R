@@ -324,11 +324,11 @@ setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
 setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 
 setGeneric("avar_inclNAs", function(obj) standardGeneric("avar_inclNAs"))
-setMethod("avar_inclNAs", "AnalyzedVarSplit",
+setMethod("avar_inclNAs", "AnalyzeVarSplit",
           function(obj) obj@include_NAs)
 
 setGeneric("avar_inclNAs<-", function(obj, value) standardGeneric("avar_inclNAs<-"))
-setMethod("avar_inclNAs<-", "AnalyzedVarSplit",
+setMethod("avar_inclNAs<-", "AnalyzeVarSplit",
           function(obj, value) {
     obj@include_NAs = value
 })

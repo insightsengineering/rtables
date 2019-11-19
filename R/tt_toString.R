@@ -111,6 +111,9 @@ setMethod("toString", "ANY", base:::toString)
         rows[[atrow]] = rrowl(row.name = "",
                               cells)
         atrow = atrow + 1
+        ## otherwise its pasted with the next level...
+        ## XXX todo figure out a better way to do this
+        names(kids) = NULL
         kids = unlist(lapply(kids,
                              function(k) {
             if(is(k, "LayoutColLeaf"))
@@ -119,7 +122,7 @@ setMethod("toString", "ANY", base:::toString)
                 tree_children(k)
         }),
         recursive = FALSE)
-     }
+    }
     rheaderl(rows)
 }
 

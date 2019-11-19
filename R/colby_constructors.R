@@ -578,12 +578,12 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #'                                      Gender = c("M", "F")))
 
 
-manual_cols = function(...) {
-    args = list(...)
-    if(is.null(names(args)))
-        names(args) = paste("colsplit", seq_along(args))
+manual_cols = function(..., .lst = list(...)) {
+    if(is.null(names(.lst)))
+        names(.lst) = paste("colsplit", seq_along(.lst))
     
-    splvec = SplitVector(lst = mapply(ManualSplit, levs = args, lbl = names(args)))
+    splvec = SplitVector(lst = mapply(ManualSplit, levs = .lst, lbl = names(.lst)))
     ctree = splitvec_to_coltree(data.frame(), splvec=splvec, pos = TreePos())
     InstantiatedColumnInfo(treelyt = ctree)
 }
+

@@ -295,4 +295,20 @@ subset_by_rownum(tab, -(4:8))
 
 
 
-## 
+## compatibility layer
+
+mtbl <- tt_rtable(
+    header = tt_rheader(
+        tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2),
+                tt_rcell("Petal.Length", colspan=2)),
+        tt_rrow(NULL, "mean", "median", "mean", "median")
+    ),
+    tt_rrow(
+        row.name = "All Species",
+        mean(iris$Sepal.Length), median(iris$Sepal.Length),
+        mean(iris$Petal.Length), median(iris$Petal.Length),
+        format = "xx.xx"
+    )
+)
+ 
+
