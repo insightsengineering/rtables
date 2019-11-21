@@ -704,7 +704,7 @@ TTLabelRow = function(lev = 1L,
                       
 
 TableRow = function(val = list(),
-                    name,
+                    name = "",
                     lev = 1L,
                     lab = name,
                     cspan = rep(1L, length(val)),
@@ -798,7 +798,7 @@ setClass("TableTree", contains = c("VTableTree"),
 })
 
 TableTree = function(kids = list(),
-                     name,
+                     name = "",
                      cont = ElementaryTable(),
                      lev = 1L,
                      lab = name,
