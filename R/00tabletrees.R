@@ -240,6 +240,8 @@ AVarBaselineComp = function(var,
 }
 
 
+
+
 ## splbl, afun, cfun = NULL, cfmt = NULL, splfmt = NULL, compfun = `-`) {
 ##     if(is.character(compfun))
 ##         compfun = get(compfun, mode = "function")
@@ -740,7 +742,7 @@ setClass("ElementaryTable", contains = "VTableTree",
 })
 
 ElementaryTable = function(kids = list(),
-                           name,
+                           name = "",
                            lev = 1L,
                            lab = name,
                            rspans = data.frame(),
