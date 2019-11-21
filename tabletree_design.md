@@ -11,23 +11,23 @@ sections may contain further definitions specific to their topic
   - Table tree - A nested hierarchical structure in which nesting
     represents relationships between rows. 
 - Row - a single row in the table, can be the following types
-  - Label row - a row with no data tehre to display a varaible or
+  - Label row - a row with no data there to display a variable or
     other label for a position in the nesting structure
-  - Content row - a row within the content table at a positioni within
+  - Content row - a row within the content table at a position within
     the tree, contains summary or aggregate data for that nesting
     level
   - Data row - a row containing the result(s) of the tabulation (e.g.,
     mean of AGE) for a subset of the data defined by position in the
     tree structure
 - Tabulation functions - A function which is applied to appropriate
-  subsets of data in ordere to generate row contents
-  - Analysis function - A tabulation function used to generate thee
+  subsets of data in order to generate row contents
+  - Analysis function - A tabulation function used to generate the
     values for one or more _Data_ rows
   - Summary Function - A tabulataion function used to generate values
-    for a _Content_ rows.
+    for a _Content_ row.
 - Comparison Tabulation - Tabulation which compares the data subsets
   corresponding to 2 (or more??? not currently) columns in the table.
-- Comparison function - A function which accepts a one or two objects
+- Comparison function - A function which accepts one or two objects
   calculated from the data subsets being compared
   - Direct Comparison Function - a comparison function which takes two
     values, one calculated from each subset under comparison, and
@@ -169,7 +169,13 @@ XXX I have an email in to Adrian about whether this is even something
     we want. If we want aggregation of patient level comparisons and
     the comparison is already calculated this is way easier
       
-
+      
+      AW: why don't you just ask for a function with two arguments
+       `xb`, `xc` so that it is left to the user to define what to 
+       calculate?
+       The baseline changes are usually calculated before tabulations\
+       but test based comparisons are not.
+       
 
 ## Populated Table Structure
 
