@@ -44,11 +44,23 @@ Most getters have setters with the corresponding `<-`ed version of their name. T
 
 `content_table` - Get the content table from a `TableTree` object
 
+`row_values` - retrieve the values from a `TableRow` object (as a list).
+
 `obj_fmt` - a general accessor which retrieves the format associated with any supported object
 
 `obj_label` - a general accessor which retrieves the label associated with any supported object. NOTE - some care is needed here there are currently too many concepts of label in some cases.
 
+`tree_pos` - retrieve the position within the full tree for the current node
 
+`is_content_pos` - Is the current object (table, row) part of the *content* of another node.
+
+# Formats
+
+Formats are specified by character values or functions in a way that is backwards compatible. For currently supported string formats call `list_rcell_format_labels()`. Formats are modelled in the S4 framework with the `FormatSpec` class union, which can take `NULL`, character values, or functions.
+
+- `obj_fmt` - get (/set) the format of associated with an individual object
+
+- `set_fmt_recursive` - recursively set the format of an object and any content/children  of the object that. By default, only children/content with no format (ie `NULL` receive the format, `override=TRUE` causes existing formats to be overridden as well.
 
 # Getting the Tabulation You Want
 
