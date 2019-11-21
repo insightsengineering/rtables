@@ -108,10 +108,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     fmtvec = rep(format, length.out = ncrows)
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
-        TableRow(val = rowvals,tpos = make_rowpos(tabpos, i),
+        TableRow(val = rowvals,
+                 ##tpos = make_rowpos(tabpos, i),
                  ##clayout = coltree(cinfo),
                  cinfo = cinfo,                 lev = lev,
                  lab = lbls[i],
+                 name = lbls[i], ## XXX this is probably the wrong thing!
                  var = rowvar,
                  var_lbl = rvlab,
                  v_type = rvtypes[i],
@@ -124,19 +126,20 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     trows
 }
 
-.make_ctab = function(df, lvl, spl, treepos,
+.make_ctab = function(df, lvl, spl, ##treepos,
+                      name,
                       ##colexprs, coltree,
                       cinfo,
                       parent_cfun = NULL, format = NULL) {
 
  
-    ctpos = make_tablepos(treepos, iscontent = TRUE)
+    ctpos = NULL ##make_tablepos(treepos, iscontent = TRUE)
     if(!is.null(parent_cfun)) {
-        splabs = pos_splval_lbls(ctpos)
-        if(length(splabs) >= 1)
-            clblstr = tail(splabs, 1)
-        else
-            clblstr = ""
+        ## splabs = pos_splval_lbls(ctpos)
+        ## if(length(splabs) >= 1)
+        ##     clblstr = tail(splabs, 1)
+        ## else
+        clblstr = name
         ## no need to include the format here because
         ## it will be set recursively by the
         ## ElementaryTable constructor below.
@@ -177,6 +180,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
            }
     
     ctab = ElementaryTable(kids = contkids,
+                           name = paste0(name, "@content"),
                            lev = lvl,
                            tpos = ctpos,
                            ##  clayout = coltree(cinfo),
@@ -189,7 +193,11 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 
 
 
-recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
+recursive_applysplit = function( df,
+                                lvl = 0L,
+                                splvec,
+                                treepos = NULL,
+                                name,
                                 ##colexprs, coltree,
                                 cinfo,
                                 parent_cfun = NULL, cformat = NULL) {
@@ -210,10 +218,11 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
     ## declaring layouts much more sane.
-    ctab = .make_ctab(df, lvl, spl, treepos,
+    ctab = .make_ctab(df, lvl, spl, #treepos,
+                      name = name, 
                       ##colexprs, coltree,
                       cinfo = cinfo,
-                      parent_cfun, format = cformat)
+                      parent_cfun = parent_cfun, format = cformat)
     if(pos < length(splvec)) { ## there's more depth, recurse
         rawpart = do_split(spl, df) ##apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
@@ -227,6 +236,7 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
                                     lbl)
             
             recursive_applysplit(dfpart,
+                                 name = splv_rawvalues(val),
                                  lvl = lvl+1L,
                                  splvec = splvec,
                                  treepos = newpos,
@@ -245,15 +255,16 @@ recursive_applysplit = function( df, lvl = 0L, splvec, treepos = NULL,
                                analysis_fun(spl),
                                defrowlabs = spl@default_rowlabel, ##XXX XXX
                                cinfo = cinfo,
-                               tabpos = make_tablepos(treepos, iscontent = FALSE),
+                               tabpos = NULL, ##make_tablepos(treepos, iscontent = FALSE),
                                datcol = spl_payload(spl),
                                lev = lvl + 1L,
                                format = obj_fmt(spl))
     }
     TableTree(cont = ctab, kids = kids,
+              name = name,
               lev = lvl,
-              tpos = make_tablepos(treepos = treepos,
-                                   iscontent = FALSE),
+              tpos = NULL, ## make_tablepos(treepos = treepos,
+                                   ## iscontent = FALSE),
               iscontent = FALSE,
               spl = spl,
               lab = obj_label(spl),
@@ -271,12 +282,15 @@ build_table = function(lyt, df, ...) {
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L, rtspl,
-                      rtpos, cinfo, ##cexprs, ctree,
+                      name = "root",
+                      ##rtpos,
+                      cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
                       format = content_fmt(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         pos = TreePos(list(rtspl), list(i), as.character(i)) 
         recursive_applysplit(df = df, lvl = 0L,
+                             name = as.character(i), #XXX this is wrooonnngggg
                              splvec = rlyt[[i]],
                              treepos = pos,
                              cinfo = cinfo,
@@ -288,7 +302,8 @@ build_table = function(lyt, df, ...) {
     tab = TableTree(cont = ctab,
                     kids = kids,
                     lev = 0L,
-                    tpos = make_tablepos(rtpos, FALSE),
+                    name = "root",
+                    tpos = NULL, ##make_tablepos(rtpos, FALSE),
                     iscontent = FALSE,
                     spl = rtspl,
                     ##clayout = coltree(cinfo),

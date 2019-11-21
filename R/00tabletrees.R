@@ -419,26 +419,26 @@ TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = N
 }
 
 
-setClass("TableTreePos", contains = "TreePos",
-         representation(is_content="logical"),
-         prototype = list(is_content = FALSE))
+## setClass("TableTreePos", contains = "TreePos",
+##          representation(is_content="logical"),
+##          prototype = list(is_content = FALSE))
 
-TableTreePos = function(iscontent = FALSE, ...) {
-    tp = TreePos(...)
-    new("TableTreePos", tp, is_content = iscontent)
-}
+## TableTreePos = function(iscontent = FALSE, ...) {
+##     tp = TreePos(...)
+##     new("TableTreePos", tp, is_content = iscontent)
+## }
 
-setClass("TableRowPos", contains = "TableTreePos",
-         representation(local_rownum = "numeric",
-                        is_label_row = "logical"),
-         prototype = list(is_content = FALSE,
-                          is_label_row = FALSE))
+## setClass("TableRowPos", contains = "TableTreePos",
+##          representation(local_rownum = "numeric",
+##                         is_label_row = "logical"),
+##          prototype = list(is_content = FALSE,
+##                           is_label_row = FALSE))
 
 
-TableRowPos = function(localrow = NA_real_, iscontent = FALSE, islabel = FALSE,...) {
-    ttpos = TableTreePos(iscontent, ...)
-    new("TableRowPos", ttpos, local_rownum = localrow, is_label_row = islabel)
-}
+## TableRowPos = function(localrow = NA_real_, iscontent = FALSE, islabel = FALSE,...) {
+##     ttpos = TableTreePos(iscontent, ...)
+##     new("TableRowPos", ttpos, local_rownum = localrow, is_label_row = islabel)
+## }
 
 
 ##
@@ -459,16 +459,16 @@ make_child_pos = function(parpos, newspl, newval, newlab = newval, newextra = li
                                     make_subset_expr(newspl, nsplitval)))
 }
 
-make_tablepos= function(treepos, iscontent) {
-    ttpos = new("TableTreePos", treepos,
-                is_content = iscontent)
-}
+## make_tablepos= function(treepos, iscontent) {
+##     ttpos = new("TableTreePos", treepos,
+##                 is_content = iscontent)
+## }
 
 
-make_rowpos = function(tp, rownum) {
-    new("TableRowPos", tp,
-        local_rownum = rownum)
-}
+## make_rowpos = function(tp, rownum) {
+##     new("TableRowPos", tp,
+##         local_rownum = rownum)
+## }
 
 
 
@@ -485,17 +485,20 @@ make_rowpos = function(tp, rownum) {
 ## core basics
 setClass("VNodeInfo", contains = "VIRTUAL",
          representation(level = "integer",
-                        label = "character",
-                        pos_in_tree = "TreePos"))
+                        name = "character",
+                        label = "character"))
+##,                        pos_in_tree = "TreePos"))
 setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"), representation(children = "list"))
 setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
 
 
 ## Layout trees
 #setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
-setClass("VLayoutLeaf", contains = c("VIRTUAL", "VLeaf"))
+setClass("VLayoutLeaf", contains = c("VIRTUAL", "VLeaf"),
+         representation(pos_in_tree = "TreePos"))
 setClass("VLayoutTree", contains = c("VIRTUAL", "VTree"),
-         representation(split = "Split"))
+         representation(split = "Split",
+                        pos_in_tree = "TreePos"))
 setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
 
@@ -572,24 +575,24 @@ LayoutRowLeaf = function(lev = 0L, lab = "",
         pos_in_tree = pos)##subset = sub, N_count = n)
 }
 
-setClass("RTablesLayout", contains="VIRTUAL", representation(col_layout = "LayoutColTree", row_layout = "LayoutRowTree"))
+## setClass("RTablesLayout", contains="VIRTUAL", representation(col_layout = "LayoutColTree", row_layout = "LayoutRowTree"))
 
-## dominant here means which subset is taken first to define the subset for
-## a particular cell, the one associated with the table column or the one associated
-## with the table row
+## ## dominant here means which subset is taken first to define the subset for
+## ## a particular cell, the one associated with the table column or the one associated
+## ## with the table row
 
-setClass("RowDominantLayout", contains = "RTablesLayout")
-setClass("ColDominantLayout", contains = "RTablesLayout")
+## setClass("RowDominantLayout", contains = "RTablesLayout")
+## setClass("ColDominantLayout", contains = "RTablesLayout")
 
-rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
-                  coltree = LayoutColTree()) {
+## rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
+##                   coltree = LayoutColTree()) {
     
-    if(row_dominant) {
-        new("RowDominantLayout", col_layout = coltree, row_layout = rowtree)
-    } else {
-        new("ColDominantLayout", col_layout = coltree, row_layout = rowtree)
-    }
-}
+##     if(row_dominant) {
+##         new("RowDominantLayout", col_layout = coltree, row_layout = rowtree)
+##     } else {
+##         new("ColDominantLayout", col_layout = coltree, row_layout = rowtree)
+##     }
+## }
 
 
 
@@ -672,8 +675,8 @@ setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 
               
 setClass("TableRow", contains = "VTableLeafInfo",
-         representation(colspans = "integer",
-                        pos_in_tree = "TableRowPos"),
+         representation(colspans = "integer"),
+                        ##pos_in_tree = "TableRowPos"),
          validity = function(object) {
     lcsp = length(object@colspans)
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
@@ -687,18 +690,21 @@ TTLabelRow = function(lev = 1L,
                       lab = "",
                       ##clayout = LayoutColTree(),
                       cinfo = InstantiatedColumnInfo(),
-                      tpos = TableRowPos()) {
-    is_labrow(tpos) = TRUE
-    is_content_pos(tpos) = TRUE
+                       tpos = TableRowPos()
+                      ) {
+    ## is_labrow(tpos) = TRUE
+    ## is_content_pos(tpos) = TRUE
     new("TTLabelRow", TableRow(lev = lev, lab = lab, cinfo = cinfo,
                                ##clayout = clayout,
-                               tpos = tpos))
+                               ##tpos = tpos
+                               ))
 }
                       
 
 TableRow = function(val = list(),
+                    name,
                     lev = 1L,
-                    lab = "",
+                    lab = name,
                     cspan = rep(1L, length(val)),
                     ##clayout = LayoutColTree(),
                     cinfo = InstantiatedColumnInfo(),
@@ -707,13 +713,15 @@ TableRow = function(val = list(),
                     var_lbl = NA_character_,
                     v_type = NA_character_,
                     fmt = NULL) {
+    if(missing(name) && !missing(lab))
+        name = lab
     rw = new("TableRow", leaf_value = val,
-        level = lev,
+             name = name,        level = lev,
         label = lab,
         colspans = cspan,
         col_info = cinfo,
         ##  col_layout = clayout,
-        pos_in_tree = tpos,
+        ##     pos_in_tree = tpos,
         var_analyzed = var,
         var_label = var_lbl,
         value_type = v_type,
@@ -732,8 +740,9 @@ setClass("ElementaryTable", contains = "VTableTree",
 })
 
 ElementaryTable = function(kids = list(),
+                           name,
                            lev = 1L,
-                           lab = "",
+                           lab = name,
                            rspans = data.frame(),
                            cinfo = NULL,
                            tpos = TableTreePos(),
@@ -755,22 +764,23 @@ ElementaryTable = function(kids = list(),
             col_info(x) = cinfo
         x
     })
-    if(is.na(iscontent))
-        iscontent = is_content_pos(tpos)
-    else if(iscontent != is_content_pos(tpos)) {
-        is_content_pos(tpos) = iscontent
-    }
+    ## if(is.na(iscontent))
+    ##     iscontent = is_content_pos(tpos)
+    ## else if(iscontent != is_content_pos(tpos)) {
+    ##     is_content_pos(tpos) = iscontent
+    ## }
     tab = new("ElementaryTable",
-        children = kids,
-        level = lev,
-        label = lab,
-        rowspans = rspans,
-        ##col_layout = clayout,
-        col_info = cinfo,
-        pos_in_tree = tpos,
-        var_analyzed = var,
-        var_label = var_lbl,
-        format = NULL)
+              children = kids,
+              name = name,
+              level = lev,
+              label = lab,
+              rowspans = rspans,
+              ##col_layout = clayout,
+              col_info = cinfo,
+              ##      pos_in_tree = tpos,
+              var_analyzed = var,
+              var_label = var_lbl,
+              format = NULL)
     tab = set_fmt_recursive(tab, fmt, FALSE)
     tab
 }
@@ -786,9 +796,10 @@ setClass("TableTree", contains = c("VTableTree"),
 })
 
 TableTree = function(kids = list(),
+                     name,
                      cont = ElementaryTable(),
                      lev = 1L,
-                     lab = "",
+                     lab = name,
                      rspans = data.frame(),
                      tpos = TableTreePos(),
                      iscontent = NA,
@@ -813,33 +824,37 @@ TableTree = function(kids = list(),
             k
         })
     }
-    if(is.na(iscontent))
-        iscontent = is_content_pos(tpos)
-    else if(iscontent != is_content_pos(tpos))
-        is_content_pos(tpos) = iscontent
+    ## if(is.na(iscontent))
+    ##     iscontent = is_content_pos(tpos)
+    ## else if(iscontent != is_content_pos(tpos))
+    ##     is_content_pos(tpos) = iscontent
     
     if(iscontent && !is.null(cont) && nrow(cont) > 0)
         stop("Got table tree with content table and content position")
     ## rs_values[sapply(rs_values, function(x) x == nasentinel)] = NA
     if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "TableRow"))) {
         ## constructor takes care of recursive format application
-        ElementaryTable(kids = kids, lev = lev, lab = lab,
+        ElementaryTable(kids = kids,
+                        name = name,
+                        lev = lev,
+                        lab = lab,
                         rspans = rspans,
                         cinfo = cinfo,
-                        tpos = tpos,
+    ##                    tpos = tpos,
                         var = var,
                         var_lbl = var_lbl,
                         fmt = fmt)
     } else {
         tab = new("TableTree", content = cont,
-            children = kids,
-            level = lev,
-            label = lab,
-            rowspans = rspans,
-            pos_in_tree = tpos,
-            split = spl,
-            col_info = cinfo,
-            format = NULL)## ,
+                  children = kids,
+                  name = name,
+                  level = lev,
+                  label = lab,
+                  rowspans = rspans,
+                  ##         pos_in_tree = tpos,
+                  split = spl,
+                  col_info = cinfo,
+                  format = NULL)## ,
         ## var_label = var_lbl)
         tab = set_fmt_recursive(tab, fmt, FALSE)
         tab

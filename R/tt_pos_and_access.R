@@ -96,7 +96,9 @@ setMethod("replace_rows", c(value = "list"),
         newrows = lapply(i,
                          function(ind) {
             TableRow(value[[ind]],
-                     cinfo = col_info(x), tpos = make_rowpos(tree_pos(x),i[ind]))
+                     cinfo = col_info(x),
+                     ##tpos = make_rowpos(tree_pos(x),i[ind])
+                     )
         })
     }
     
@@ -322,7 +324,8 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
             ctab = content_table(x)
             
-            content_table(x) = prune_rowsbynum(ctab, i, valifnone = ElementaryTable(cinfo = col_info(ctab), tpos = tree_pos(ctab), iscontent = TRUE))
+            content_table(x) = prune_rowsbynum(ctab, i, valifnone = ElementaryTable(cinfo = col_info(ctab),
+                                                                                    tpos = tree_pos(ctab), iscontent = TRUE))
         }
         kids = tree_children(x)
         if(counter >= maxi) { #already done

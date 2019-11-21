@@ -254,28 +254,29 @@ setMethod("pos_splval_lbls", "VNodeInfo",
 
 
 
-setGeneric("is_content_pos", function(obj) standardGeneric("is_content_pos"))
-## this covers TableRowPos too via inheritence
-setMethod("is_content_pos", "TableTreePos",
-          function(obj) obj@is_content)
 
-setMethod("is_content_pos", "ElementaryTable",
-          function(obj) is_content_pos(tree_pos(obj)))
-setMethod("is_content_pos", "TableTree",
-          function(obj) FALSE) ## if it were true it'd have to be an ElementaryTable
+## setGeneric("is_content_pos", function(obj) standardGeneric("is_content_pos"))
+## ## this covers TableRowPos too via inheritence
+## setMethod("is_content_pos", "TableTreePos",
+##           function(obj) obj@is_content)
 
-setMethod("is_content_pos", "TableRow",
-          function(obj) is_content_pos(tree_pos(obj))) ## if it were true it'd have to be an Elementar
+## setMethod("is_content_pos", "ElementaryTable",
+##           function(obj) is_content_pos(tree_pos(obj)))
+## setMethod("is_content_pos", "TableTree",
+##           function(obj) FALSE) ## if it were true it'd have to be an ElementaryTable
+
+## setMethod("is_content_pos", "TableRow",
+##           function(obj) is_content_pos(tree_pos(obj))) ## if it were true it'd have to be an Elementar
 
 
 
-setGeneric("is_content_pos<-", function(obj, value) standardGeneric("is_content_pos<-"))
-## this covers TableRowPos too via inheritence
-setMethod("is_content_pos<-", "TableTreePos",
-          function(obj, value) {
-    obj@is_content = value
-    obj
-})
+## setGeneric("is_content_pos<-", function(obj, value) standardGeneric("is_content_pos<-"))
+## ## this covers TableRowPos too via inheritence
+## setMethod("is_content_pos<-", "TableTreePos",
+##           function(obj, value) {
+##     obj@is_content = value
+##     obj
+## })
 
 setGeneric("spl_payload", function(obj) standardGeneric("spl_payload"))
 setMethod("spl_payload", "Split", function(obj) obj@payload)
@@ -480,10 +481,11 @@ setGeneric("collect_leaves",
         if(length(lab) > 0 && !is.na(lab) && nzchar(lab)) {
             ## rows is first because the label is
             ## for the split at the next level of nesting
-            lrowpos = if(length(rows)) tree_pos(rows[[1]]) else TableRowPos(iscontent = TRUE, islabel = TRUE)
-            is_labrow(lrowpos) = TRUE
+            ## lrowpos = if(length(rows)) tree_pos(rows[[1]]) else TableRowPos(iscontent = TRUE, islabel = TRUE)
+            ## is_labrow(lrowpos) = TRUE
             rows = c( rows, TTLabelRow(lab = lab, lev = tt_level(tr),
-                                     tpos = lrowpos, cinfo = col_info(tr)))
+                                       ##tpos = lrowpos,
+                                       cinfo = col_info(tr)))
         }
     }
     rows
@@ -505,7 +507,7 @@ setMethod("collect_leaves", "ElementaryTable",
     if(add.labrows) {
         rl = obj_label(ttree)
         if(length(rl) >0 && !is.na(rl) && nzchar(rl))
-            ret = c(TTLabelRow(lev = max(0L,length(pos_splits(ttree)) - 2L), lab = rl, cinfo = col_info(ttree)), ret)
+            ret = c(TTLabelRow(lev = max(0L,tt_level(ttree) - 2L), lab = rl, cinfo = col_info(ttree)), ret)
     }
     ret
 })
@@ -562,24 +564,24 @@ setMethod("split_exargs", "Split",
 
 
 
+is_labrow = function(obj) is(obj, "TTLabelRow")
+
+## setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
+
+## setMethod("is_labrow", "TableRowPos",
+##           function(obj) obj@is_label_row)
+
+## setMethod("is_labrow", "TableRow",
+##           function(obj) is_labrow(tree_pos(obj)))
 
 
-setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
+## setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
 
-setMethod("is_labrow", "TableRowPos",
-          function(obj) obj@is_label_row)
-
-setMethod("is_labrow", "TableRow",
-          function(obj) is_labrow(tree_pos(obj)))
-
-
-setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
-
-setMethod("is_labrow<-", "TableRowPos",
-          function(obj, value) {
-    obj@is_label_row = value
-    obj
-})
+## setMethod("is_labrow<-", "TableRowPos",
+##           function(obj, value) {
+##     obj@is_label_row = value
+##     obj
+## })
 
 spl_baseline = function(obj) {
     stopifnot(is(obj, "VarLevWBaselineSplit"))
