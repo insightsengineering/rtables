@@ -566,28 +566,6 @@ LayoutRowLeaf = function(lev = 0L, lab = "",
         pos_in_tree = pos)##subset = sub, N_count = n)
 }
 
-## setClass("RTablesLayout", contains="VIRTUAL", representation(col_layout = "LayoutColTree", row_layout = "LayoutRowTree"))
-
-## ## dominant here means which subset is taken first to define the subset for
-## ## a particular cell, the one associated with the table column or the one associated
-## ## with the table row
-
-## setClass("RowDominantLayout", contains = "RTablesLayout")
-## setClass("ColDominantLayout", contains = "RTablesLayout")
-
-## rtables_layout = function(row_dominant = FALSE, rowtree = LayoutRowTree(),
-##                   coltree = LayoutColTree()) {
-    
-##     if(row_dominant) {
-##         new("RowDominantLayout", col_layout = coltree, row_layout = rowtree)
-##     } else {
-##         new("ColDominantLayout", col_layout = coltree, row_layout = rowtree)
-##     }
-## }
-
-
-
-
 
 ## Instantiated column info class
 ##
