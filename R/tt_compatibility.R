@@ -21,6 +21,8 @@ tt_rowl = function (row.name, ..., format = NULL, indent = 0)
 }
 
 tt_rcell = function(x, format = NULL, colspan = NULL) {
+    if(length(x) != 1)
+        x = list(x)
     if(!is.null(format))
         attr(x, "format") = format
     if(!is.null(colspan))
