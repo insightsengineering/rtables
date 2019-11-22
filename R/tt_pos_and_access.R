@@ -95,9 +95,9 @@ setMethod("replace_rows", c(value = "list"),
     } else {
         newrows = lapply(i,
                          function(ind) {
-            TableRow(value[[ind]],
+            .tablerow(value[[ind]],
                      cinfo = col_info(x),
-                     ##tpos = make_rowpos(tree_pos(x),i[ind])
+                     klass = class(tree_children(x)[[ind]]),
                      )
         })
     }
@@ -242,6 +242,11 @@ setMethod("subset_cols", c("TableRow", "numeric"),
     tt2
 })
 
+setMethod("subset_cols", c("LabelRow", "numeric"),
+          function(tt, j, newcinfo = NULL,  ...) {
+    tt
+})
+
 
 setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
@@ -304,13 +309,13 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
     counter = 0
     nr = numrows(tt, inc.labrows)
     i = .j_to_posj(i, nr)
-
+    
     prune_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)
         if(counter >= maxi)
             return(valifnone)
         
-        if(inc.labrows && nzchar(obj_label(x))) {
+        if(labrow_visible(x)) {
             counter <<- counter + 1
             if(!(counter %in% i)) {
                 ## XXX this should do whatever
@@ -318,14 +323,14 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
                 ## (currently implicit based on
                 ## the value of the label but
                 ## that shold really probably change)
-                obj_label(x) = ""
+                labrow_visible(x) <- FALSE
             }
         }
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
             ctab = content_table(x)
             
-            content_table(x) = prune_rowsbynum(ctab, i, valifnone = ElementaryTable(cinfo = col_info(ctab),
-                                                                                    tpos = tree_pos(ctab), iscontent = TRUE))
+            content_table(x) = prune_rowsbynum(ctab, i,
+                                               valifnone = ElementaryTable(cinfo = col_info(ctab), iscontent = TRUE))
         }
         kids = tree_children(x)
         if(counter >= maxi) { #already done
@@ -359,26 +364,3 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
     prune_rowsbynum(tt, i)
 }
 
-
-## trow_to_pathdf = function(tr, i) {
-##     path = dput(pos_splvals(tr))
-    
-##     data.frame(row.names = path, check.rows = FALSE, 
-
-
-
-## }
-
-
-
-
-## pathmap = function(tt) {
-##     leaves = collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
-##     do.call(rbind.data.frame,
-##             lapply(leaves, 
-    
-
-
-
-
-## }

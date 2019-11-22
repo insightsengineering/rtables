@@ -193,6 +193,16 @@ setMethod("to_s3compat", "TableRow",
     
 })
 
+setMethod("to_s3compat", "LabelRow",
+           function(obj, ...)
+{
+    rrowl(row.name = obj_label(obj),
+          list(), 
+          indent = tt_level(obj),
+          format = obj_fmt(obj))
+    
+})
+
 setMethod("to_s3compat", "VTableTree",
           function(obj, ...) {
     header = .make_s3_header2(obj)

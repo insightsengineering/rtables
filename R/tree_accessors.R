@@ -143,7 +143,7 @@ setMethod("rlayout<-", "PreDataTableLayouts",
 
 
 
-## setGeneric("tree_pos", function(obj) standardGeneric("tree_pos"))
+setGeneric("tree_pos", function(obj) standardGeneric("tree_pos"))
 ## setMethod("tree_pos", "VNodeInfo",
 ##           function(obj) obj@pos_in_tree)
 setMethod("tree_pos", "VLayoutNode",
@@ -280,7 +280,7 @@ setMethod("labrow_visible", "VTableTree",
           function(obj) {
     labrow_visible(tt_labelrow(obj))
 })
-setMethod("labrow_visible", "TTLabelRow",
+setMethod("labrow_visible", "LabelRow",
           function(obj) obj@visible)
 
 setGeneric("labrow_visible<-", function(obj, value) standardGeneric("labrow_visible<-"))
@@ -291,7 +291,7 @@ setMethod("labrow_visible<-", "VTableTree",
     tt_labelrow(obj) = lr
     obj
 })
-setMethod("labrow_visible<-", "TTLabelRow",
+setMethod("labrow_visible<-", "LabelRow",
           function(obj, value) {
     obj@visible = value
     obj
@@ -384,6 +384,10 @@ setMethod("row_values<-", "TableRow",
           function(obj, value) {
     obj@leaf_value = value
     obj
+})
+setMethod("row_values<-", "LabelRow",
+          function(obj, value) {
+    stop("LabelRows cannot have row values.")
 })
 
 ### Format manipulation
@@ -480,9 +484,9 @@ setGeneric("collect_leaves",
 setMethod("collect_leaves", "TableTree",
           function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
-        if(incl.cont) {tree_children(content_table(tr))},
-        if(add.labrows && has_vis_label(tr)) {
-            tt_labelrow(tr)
+        if(incl.cont) {tree_children(content_table(ttree))},
+        if(add.labrows && labrow_visible(ttree)) {
+            tt_labelrow(ttree)
         },
         lapply(tree_children(ttree),
                collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
@@ -493,8 +497,8 @@ setMethod("collect_leaves", "TableTree",
 setMethod("collect_leaves", "ElementaryTable",
           function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
     ret = tree_children(ttree)
-    if(add.labrows && has_vis_label(ttree) {
-        ret = c(tt_labelrow(tree), ret)
+    if(add.labrows && labrow_visible(ttree)) {
+        ret = c(tt_labelrow(ttree), ret)
     }
     ret
 })
@@ -519,11 +523,16 @@ setMethod("collect_leaves", "ANY",
 
 setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
 setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
+setMethod("row_cspans", "LabelRow",
+          function(obj) stop("attempted to get colspans of LabelRow"))
 
 setGeneric("row_cspans<-", function(obj, value) standardGeneric("row_cspans<-"))
 setMethod("row_cspans<-", "TableRow", function(obj, value) {
     obj@colspans = value
     obj
+})
+setMethod("row_cspans<-", "LabelRow", function(obj, value) {
+    stop("attempted to set colspans for LabelRow")
 })
 
 ### Level (indent) in tree structure
@@ -554,7 +563,7 @@ setMethod("split_exargs", "Split",
 
 
 
-is_labrow = function(obj) is(obj, "TTLabelRow")
+is_labrow = function(obj) is(obj, "LabelRow")
 
 
 spl_baseline = function(obj) {

@@ -3,21 +3,6 @@ library(rtables)
 library(tern)
 options(error=recover)
 
-### This is currently broken until I adapt
-### the roundtrip code for InstantiatedColumnInfo
-### instead of just LayoutColTree
-##
-
-## df = read.csv("tabledfex.dat", stringsAsFactors = FALSE)
-
-## res = df_to_tt(df)
-## dfredux = tt_to_df(res)
-
-## identical(fixup_rtable_df(df), tt_to_df(res))
-## #rws = recursive_row_collect(res)
-
-
-
 
 
 makefakedat = function(n  = 1000) {

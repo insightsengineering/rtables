@@ -70,13 +70,13 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
  
 .make_tablerows = function(dfpart, func,
                            cinfo,
-                           tabpos,
                            datcol = NULL,
                            lev = 1L,
                            rvlab = NA_character_,
-                           rvtypes = NULL,
+##                           rvtypes = NULL,
                            format = NULL,
-                           defrowlabs = NULL) {
+                           defrowlabs = NULL,
+                           rowconstr = DataRow) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -90,8 +90,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     
     rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
 
-    if(is.null(rvtypes))
-        rvtypes = rep(NA_character_, length(rawvals))
+    ## if(is.null(rvtypes))
+    ##     rvtypes = rep(NA_character_, length(rawvals))
     lens = sapply(rawvals, length)
     unqlens = unique(lens)
     stopifnot(length(unqlens) == 1 ||
@@ -110,17 +110,15 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     fmtvec = rep(format, length.out = ncrows)
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
-        TableRow(val = rowvals,
-                 ##tpos = make_rowpos(tabpos, i),
-                 ##clayout = coltree(cinfo),
-                 cinfo = cinfo,                 lev = lev,
-                 lab = lbls[i],
-                 name = lbls[i], ## XXX this is probably the wrong thing!
-                 var = rowvar,
-                 ##var_lbl = rvlab,
-                 v_type = rvtypes[i],
-                 fmt = fmtvec[i]
-                 )
+        rowconstr(val = rowvals,
+                  cinfo = cinfo,                 lev = lev,
+                  lab = lbls[i],
+                  name = lbls[i], ## XXX this is probably the wrong thing!
+                  var = rowvar,
+                  ##var_lbl = rvlab,
+                  ##v_type = rvtypes[i],
+                  fmt = fmtvec[i]
+                  )
         
     })
     trows
@@ -133,10 +131,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                       parent_cfun = NULL, format = NULL) {
 
  
-    ctpos = NULL ##make_tablepos(treepos, iscontent = TRUE)
     if(!is.null(parent_cfun)) {
         clblstr = name
-
+        
         ## XXX Ugh. Combinatorial explosion X.X
         ## This is what I get for abusing scope to do
         ## the content label thing. Bad design.
@@ -160,24 +157,17 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
             
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   caller, 
-                                   cinfo,
-                                   ctpos)
+                                   func = caller, 
+                                   cinfo = cinfo,
+                                   rowconstr = ContentRow)
     } else {
         contkids = list()
     }
-    clbl = if(length(contkids) == 1) {
-               obj_label(contkids[[1]])
-           } else {
-               obj_label(spl)
-           }
     
     ctab = ElementaryTable(kids = contkids,
                            name = paste0(name, "@content"),
                            lev = lvl,
-                           labrow = TTLabelRow(),
-                           tpos = ctpos,
-                           ##  clayout = coltree(cinfo),
+                           labrow = LabelRow(),
                            cinfo = cinfo,
                            iscontent = TRUE,
                            fmt = format)
@@ -189,7 +179,6 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 recursive_applysplit = function( df,
                                 lvl = 0L,
                                 splvec,
-                                treepos = NULL,
                                 name,
                                 ##colexprs, coltree,
                                 cinfo,
@@ -211,9 +200,10 @@ recursive_applysplit = function( df,
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
     ## declaring layouts much more sane.
-    ctab = .make_ctab(df, lvl, spl, #treepos,
+    ctab = .make_ctab(df,
+                      lvl = lvl,
+                      spl = spl,
                       name = name, 
-                      ##colexprs, coltree,
                       cinfo = cinfo,
                       parent_cfun = parent_cfun, format = cformat)
     if(pos < length(splvec)) { ## there's more depth, recurse
@@ -223,18 +213,11 @@ recursive_applysplit = function( df,
         splvals = rawpart[["values"]]
         partlbls = rawpart[["labels"]]
         kids = unlist(mapply(function(dfpart, val, lbl) {
-            newpos = make_child_pos(treepos,
-                                    spl,
-                                    val,
-                                    lbl)
-            
+      
             recursive_applysplit(dfpart,
                                  name = splv_rawvalues(val),
                                  lvl = lvl+1L,
                                  splvec = splvec,
-                                 treepos = newpos,
-                                 ## colexprs = colexprs,
-                                 ## coltree = coltree,
                                  cinfo = cinfo,
                                  parent_cfun = content_fun(spl),
                                  cformat = obj_fmt(spl))
@@ -245,10 +228,9 @@ recursive_applysplit = function( df,
         stopifnot(is(spl, "AnalyzeVarSplit"))
         check_validsplit(spl, df)
         kids = .make_tablerows(df,
-                               analysis_fun(spl),
+                               func = analysis_fun(spl),
                                defrowlabs = spl@default_rowlabel, ##XXX XXX
                                cinfo = cinfo,
-                               tabpos = NULL, ##make_tablepos(treepos, iscontent = FALSE),
                                datcol = spl_payload(spl),
                                lev = lvl + 1L,
                                format = obj_fmt(spl))
@@ -256,12 +238,9 @@ recursive_applysplit = function( df,
     TableTree(cont = ctab, kids = kids,
               name = name,
               lev = lvl,
-              tpos = NULL, ## make_tablepos(treepos = treepos,
-                                   ## iscontent = FALSE),
               iscontent = FALSE,
               spl = spl,
               lab = obj_label(spl),
-              ##clayout = coltree(cinfo))
               cinfo = cinfo)
 }
 
@@ -276,7 +255,6 @@ build_table = function(lyt, df, ...) {
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L, rtspl,
                       name = "root",
-                      ##rtpos,
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
                       format = content_fmt(rtspl))
@@ -286,11 +264,9 @@ build_table = function(lyt, df, ...) {
         firstspl = splvec[[1]]
         nm = obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
-        pos = TreePos(list(rtspl), nm, lab)
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm, 
                              splvec = splvec,
-                             treepos = pos,
                              cinfo = cinfo,
                              ## XXX is this ALWAYS right?
                              parent_cfun = NULL,
@@ -301,8 +277,7 @@ build_table = function(lyt, df, ...) {
                     kids = kids,
                     lev = 0L,
                     name = "root",
-                    label="",
-                    tpos = NULL, ##make_tablepos(rtpos, FALSE),
+                    lab="",
                     iscontent = FALSE,
                     spl = rtspl,
                     ##clayout = coltree(cinfo),

@@ -2,7 +2,7 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
         row.name = ""
-    TableRow(val = vals, lev = as.integer(indent), lab = row.name,
+    DataRow(val = vals, lev = as.integer(indent), lab = row.name,
              cspan = as.integer(sapply(vals, function(x) {
                  sp = attr(x, "colspan")
                  if(is.null(sp))

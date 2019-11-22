@@ -108,7 +108,7 @@ getreprows = function(lastpag, allrows, perpage, incl.crows = TRUE) {
     ret = list()
  
     rowlevs = sapply(rows, tt_level)
-    labrows = sapply(rows, is, "TTLabelRow")
+    labrows = sapply(rows, is, "LabelRow")
     labinds = which(labrows)
     
     repcontrows = numeric()
