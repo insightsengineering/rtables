@@ -102,6 +102,7 @@ setMethod("toString", "ANY", base:::toString)
     atrow = 1
     rows = list()
     kids = tree_children(clyt)
+    dispcounts = disp_ccounts(tt)
     while(length(kids) > 0 && atrow < 1000) { #we will break from this
    
         labs = names(kids)
@@ -123,6 +124,13 @@ setMethod("toString", "ANY", base:::toString)
         }),
         recursive = FALSE)
     }
+    ## add column counts row if necessary
+    if(dispcounts) {
+        ccounts = col_counts(tt)
+        countcells = lapply(ccounts, rcell,
+                            format = colcount_fmt(tt))                            
+        rows[[length(rows) + 1L]] = do.call(rrow, c(countcells, row.name = NULL, format = NULL))
+    }
     rheaderl(rows)
 }
 
@@ -130,7 +138,7 @@ setMethod("toString", "ANY", base:::toString)
 
 .make_s3_header = function(tt) {
     clyt = coltree(tt)
-    dispcounts = disp_ccounts(tt)
+ 
     
     leaves = collect_leaves(clyt, incl.cont = FALSE)
     vals = lapply(seq_along(leaves),
