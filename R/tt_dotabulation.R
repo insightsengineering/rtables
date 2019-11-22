@@ -89,7 +89,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     }
     
     rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
-    ## rowvar = if(!is.null(datcol) && !is.na(datcol)) datcol else NA_character_
+
     if(is.null(rvtypes))
         rvtypes = rep(NA_character_, length(rawvals))
     lens = sapply(rawvals, length)
@@ -97,7 +97,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     stopifnot(length(unqlens) == 1 ||
               (0 %in% unqlens && length(unqlens) == 2))
     maxind = match(max(unqlens), lens)
-    
+
+    ## look if we got labels, if not apply the
+    ## default row labels
     lbls = names(rawvals[[maxind]])
     if(is.null(lbls) && length(rawvals[[maxind]]) == length(defrowlabs))
         lbls = defrowlabs
@@ -115,11 +117,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                  lab = lbls[i],
                  name = lbls[i], ## XXX this is probably the wrong thing!
                  var = rowvar,
-                 var_lbl = rvlab,
+                 ##var_lbl = rvlab,
                  v_type = rvtypes[i],
                  fmt = fmtvec[i]
-                 ##XXX TODO label!!!!
-                 ## lab = spl@label)
                  )
         
     })
@@ -135,14 +135,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
  
     ctpos = NULL ##make_tablepos(treepos, iscontent = TRUE)
     if(!is.null(parent_cfun)) {
-        ## splabs = pos_splval_lbls(ctpos)
-        ## if(length(splabs) >= 1)
-        ##     clblstr = tail(splabs, 1)
-        ## else
         clblstr = name
-        ## no need to include the format here because
-        ## it will be set recursively by the
-        ## ElementaryTable constructor below.
 
         ## XXX Ugh. Combinatorial explosion X.X
         ## This is what I get for abusing scope to do
@@ -182,11 +175,11 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     ctab = ElementaryTable(kids = contkids,
                            name = paste0(name, "@content"),
                            lev = lvl,
+                           labrow = TTLabelRow(),
                            tpos = ctpos,
                            ##  clayout = coltree(cinfo),
                            cinfo = cinfo,
                            iscontent = TRUE,
-                           lab = clbl,
                            fmt = format)
     ctab
 }
@@ -288,21 +281,27 @@ build_table = function(lyt, df, ...) {
                       parent_cfun = content_fun(rtspl),
                       format = content_fmt(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
-        pos = TreePos(list(rtspl), list(i), as.character(i)) 
+        
+        splvec = rlyt[[i]]
+        firstspl = splvec[[1]]
+        nm = obj_label(firstspl) ## XXX this should be name!
+        lab = obj_label(firstspl)
+        pos = TreePos(list(rtspl), nm, lab)
         recursive_applysplit(df = df, lvl = 0L,
-                             name = as.character(i), #XXX this is wrooonnngggg
-                             splvec = rlyt[[i]],
+                             name = nm, 
+                             splvec = splvec,
                              treepos = pos,
                              cinfo = cinfo,
                              ## XXX is this ALWAYS right?
                              parent_cfun = NULL,
-                             cformat = obj_fmt(rlyt[[i]][[1]]))
+                             cformat = obj_fmt(firstspl))
         })
                              
     tab = TableTree(cont = ctab,
                     kids = kids,
                     lev = 0L,
                     name = "root",
+                    label="",
                     tpos = NULL, ##make_tablepos(rtpos, FALSE),
                     iscontent = FALSE,
                     spl = rtspl,

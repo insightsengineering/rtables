@@ -242,19 +242,6 @@ AVarBaselineComp = function(var,
 
 
 
-## splbl, afun, cfun = NULL, cfmt = NULL, splfmt = NULL, compfun = `-`) {
-##     if(is.character(compfun))
-##         compfun = get(compfun, mode = "function")
-##     new("AnalyzeVarSplit",
-##         payload = var,
-##         split_label = splbl,
-##         content_fun = cfun,
-##         analysis_fun = afun,
-##         content_format = cfmt,
-##         split_format = splfmt,
-##         comparison_fun = compfun)
-## }
-
 ## A comparison split is one where the analysis value (e.g., mean)
 ## will neeed to be calculated on two different subsets and further
 ## computed on (by calling comparison_func on them, default is just
@@ -488,8 +475,8 @@ make_child_pos = function(parpos, newspl, newval, newlab = newval, newextra = li
 setClass("VNodeInfo", contains = "VIRTUAL",
          representation(level = "integer",
                         name = "character",
-                        label = "character"))
-##,                        pos_in_tree = "TreePos"))
+                        ##label = "character"
+                        ))
 setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"), representation(children = "list"))
 setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
 
@@ -497,10 +484,12 @@ setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
 ## Layout trees
 #setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
 setClass("VLayoutLeaf", contains = c("VIRTUAL", "VLeaf"),
-         representation(pos_in_tree = "TreePos"))
+         representation(pos_in_tree = "TreePos",
+                        label = "character"))
 setClass("VLayoutTree", contains = c("VIRTUAL", "VTree"),
          representation(split = "Split",
-                        pos_in_tree = "TreePos"))
+                        pos_in_tree = "TreePos",
+                        label = "character"))
 setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
 
@@ -662,13 +651,14 @@ setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
 
 setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
          representation(children = "list",
-                        rowspans = "data.frame"
+                        rowspans = "data.frame",
+                        labelrow = "TTLabelRow"
                         ))
-setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
+setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
          representation(leaf_value = "ANY",
                         var_analyzed = "character",
-                        var_label = "character",
-                        value_type = "ANY"))
+               ##         var_label = "character",
+                        label = "character"))
 
 
 
@@ -676,7 +666,7 @@ setClass("VTableLeafInfo", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 ### TableTree Core non-virtual Classes
 
               
-setClass("TableRow", contains = "VTableLeafInfo",
+setClass("DataRow", contains = "TableRow",
          representation(colspans = "integer"),
                         ##pos_in_tree = "TableRowPos"),
          validity = function(object) {
@@ -684,22 +674,30 @@ setClass("TableRow", contains = "VTableLeafInfo",
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
 })
 
-setClass("TTLabelRow", contains = "TableRow",
-         validity = function(object) identical(object@leaf_value, list()))
+SetClass("ContentRow", contains = "TableRow",
+         representation(colspans = "integer"),
+                        ##pos_in_tree = "TableRowPos"),
+         validity = function(object) {
+    lcsp = length(object@colspans)
+    length(lcsp ==  0) || lcsp == length(object@leaf_value)
+})
+
+setClass("LabelRow", contains = "TableRow",
+         representation(visible = "logical"),
+         validity = function(object) {
+    identical(object@leaf_value, list()) &&
+        is.na(obj@var_analyzed) &&
+        )
 
 
 TTLabelRow = function(lev = 1L,
                       lab = "",
-                      ##clayout = LayoutColTree(),
-                      cinfo = InstantiatedColumnInfo(),
-                       tpos = TableRowPos()
-                      ) {
-    ## is_labrow(tpos) = TRUE
-    ## is_content_pos(tpos) = TRUE
-    new("TTLabelRow", TableRow(lev = lev, lab = lab, cinfo = cinfo,
-                               ##clayout = clayout,
-                               ##tpos = tpos
-                               ))
+                      vis = nzchar(lab),
+                      cinfo = InstantiatedColumnInfo()) {
+    new("TTLabelRow", TableRow(lev = lev,
+                               lab = lab,
+                               cinfo = cinfo),
+        visible = vis)
 }
                       
 
@@ -712,8 +710,8 @@ TableRow = function(val = list(),
                     cinfo = InstantiatedColumnInfo(),
                     tpos = TableRowPos(),
                     var = NA_character_,
-                    var_lbl = NA_character_,
-                    v_type = NA_character_,
+ ##                   var_lbl = NA_character_,
+ ##                   v_type = NA_character_,
                     fmt = NULL) {
     if(missing(name) && !missing(lab))
         name = lab
@@ -725,8 +723,8 @@ TableRow = function(val = list(),
         ##  col_layout = clayout,
         ##     pos_in_tree = tpos,
         var_analyzed = var,
-        var_label = var_lbl,
-        value_type = v_type,
+##        var_label = var_lbl,
+##        value_type = v_type,
         format = NULL)
     rw = set_fmt_recursive(rw, fmt, FALSE)
     rw
@@ -734,8 +732,8 @@ TableRow = function(val = list(),
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
 setClass("ElementaryTable", contains = "VTableTree",
-         representation(var_analyzed = "character",
-                        var_label = "character"),
+         representation(var_analyzed = "character"),
+                        ##var_label = "character"),
          validity = function(object) {
     kids = tree_children(object)
     all(sapply(kids, is, "TableRow")) && all(sapply(kids, function(k) identical(k@col_info, object@col_info)))
@@ -744,13 +742,16 @@ setClass("ElementaryTable", contains = "VTableTree",
 ElementaryTable = function(kids = list(),
                            name = "",
                            lev = 1L,
-                           lab = name,
+                           lab = ""
+                           labrow = TTLabelRow(lev = lev,
+                                               lab = lab,
+                                               cinfo = cinfo),
                            rspans = data.frame(),
                            cinfo = NULL,
                            tpos = TableTreePos(),
                            iscontent = NA,
                            var = NA_character_,
-                           var_lbl = var,
+##                           var_lbl = var,
                            fmt = NULL) {
     if(is.null(cinfo)) {
         if(length(kids) > 0)
@@ -775,13 +776,13 @@ ElementaryTable = function(kids = list(),
               children = kids,
               name = name,
               level = lev,
-              label = lab,
+              labelrow = lab,
               rowspans = rspans,
               ##col_layout = clayout,
               col_info = cinfo,
               ##      pos_in_tree = tpos,
               var_analyzed = var,
-              var_label = var_lbl,
+##              var_label = var_lbl,
               format = NULL)
     tab = set_fmt_recursive(tab, fmt, FALSE)
     tab
@@ -798,16 +799,19 @@ setClass("TableTree", contains = c("VTableTree"),
 })
 
 TableTree = function(kids = list(),
-                     name = "",
+                     name = if(!is.na(var)) var else "",
                      cont = ElementaryTable(),
                      lev = 1L,
                      lab = name,
+                     labrow = TTLabelRow(lev = lev,
+                                         lab = lab,
+                                         cinfo = cinfo),
                      rspans = data.frame(),
                      tpos = TableTreePos(),
                      iscontent = NA,
                      spl = NULL,
                      var = NA_character_,
-                     var_lbl = var,
+##                     var_lbl = var,
                      cinfo = NULL,
                      fmt = NULL) {
     if(is.null(cinfo)) {
@@ -839,19 +843,19 @@ TableTree = function(kids = list(),
         ElementaryTable(kids = kids,
                         name = name,
                         lev = lev,
-                        lab = lab,
+                        labrow = labrow,
                         rspans = rspans,
                         cinfo = cinfo,
     ##                    tpos = tpos,
                         var = var,
-                        var_lbl = var_lbl,
+##                        var_lbl = var_lbl,
                         fmt = fmt)
     } else {
         tab = new("TableTree", content = cont,
                   children = kids,
                   name = name,
                   level = lev,
-                  label = lab,
+                  labelrow = labrow,
                   rowspans = rspans,
                   ##         pos_in_tree = tpos,
                   split = spl,

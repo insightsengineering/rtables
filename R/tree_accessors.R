@@ -42,15 +42,15 @@ n_leaves = function(tree) {
 }
 
 
-setGeneric("pos_payloads", function(obj) standardGeneric("pos_payloads"))
-setMethod("pos_payloads", "TreePos",
-          function(obj) {
-    spls = pos_splits(obj)
-    lapply(spls, function(x) x@payload)
-})
+## setGeneric("pos_payloads", function(obj) standardGeneric("pos_payloads"))
+## setMethod("pos_payloads", "TreePos",
+##           function(obj) {
+##     spls = pos_splits(obj)
+##     lapply(spls, function(x) x@payload)
+## })
 
-setMethod("pos_payloads", "VNodeInfo",
-          function(obj) pos_payloads(tree_pos(obj)))
+## setMethod("pos_payloads", "VNodeInfo",
+##           function(obj) pos_payloads(tree_pos(obj)))
 
 ## setMethod("pos_payloads", "VLayoutNode",
 ##           function(obj) pos_payloads(tree_pos(obj)))
@@ -140,67 +140,42 @@ setMethod("rlayout<-", "PreDataTableLayouts",
 })
 
 
-setGeneric("df_datcol_names", function(obj) standardGeneric("df_datcol_names"))
-setMethod("df_datcol_names",
-          "VTableNodeInfo",
-          function(obj) df_datcol_names(clayout(obj)))
-setMethod("df_datcol_names", "LayoutColTree",
-          function(obj) {
-    kids = tree_children(obj)
-    ret = unlist(lapply(names(kids),  function(nm) paste(nm, df_datcol_names(kids[[nm]]), sep = "___")))
-    inds = grep("([[:alnum:]]+___)+[[:alnum:]]*$", ret)
-    ret[inds] = gsub("___$",  "", ret[inds])
-    ret
-})
 
 
-setMethod("df_datcol_names", "LayoutColLeaf",
-          function(obj) "")
 
-setGeneric("row_variable", function(obj) standardGeneric("row_variable"))
-setMethod("row_variable", "TableTree", function(obj) NA_character_)
-setMethod("row_variable", "ElementaryTable", function(obj) obj@var_analyzed)
-setMethod("row_variable", "TableRow", function(obj) obj@var_analyzed)
-
-setGeneric("rowvar_label", function(obj) standardGeneric("rowvar_label"))
-setMethod("rowvar_label", "TableTree", function(obj) NA_character_)
-setMethod("rowvar_label", "ElementaryTable", function(obj) obj@var_label)
-setMethod("rowvar_label", "TableRow", function(obj) obj@var_label)
-
-
-setGeneric("tree_pos", function(obj) standardGeneric("tree_pos"))
-setMethod("tree_pos", "VNodeInfo",
-          function(obj) obj@pos_in_tree)
-## setMethod("tree_pos", "VLayoutNode",
+## setGeneric("tree_pos", function(obj) standardGeneric("tree_pos"))
+## setMethod("tree_pos", "VNodeInfo",
 ##           function(obj) obj@pos_in_tree)
+setMethod("tree_pos", "VLayoutNode",
+          function(obj) obj@pos_in_tree)
 
 
 
 setGeneric("pos_subset", function(obj) standardGeneric("pos_subset"))
 setMethod("pos_subset", "TreePos",
           function(obj) obj@subset)
-setMethod("pos_subset", "VNodeInfo",
-          function(obj) pos_subset(tree_pos(obj)))
-## setMethod("pos_subset", "VLayoutNode",
+## setMethod("pos_subset", "VNodeInfo",
 ##           function(obj) pos_subset(tree_pos(obj)))
+setMethod("pos_subset", "VLayoutNode",
+          function(obj) pos_subset(tree_pos(obj)))
 
 setGeneric("pos_splits", function(obj) standardGeneric("pos_splits"))
 setMethod("pos_splits", "TreePos",
           function(obj) obj@splits)
-setMethod("pos_splits", "VNodeInfo",
-          function(obj) pos_splits(tree_pos(obj)))
-## setMethod("pos_splits", "VLayoutNode",
+## setMethod("pos_splits", "VNodeInfo",
 ##           function(obj) pos_splits(tree_pos(obj)))
+setMethod("pos_splits", "VLayoutNode",
+          function(obj) pos_splits(tree_pos(obj)))
 
 
 setGeneric("pos_splvals", function(obj) standardGeneric("pos_splvals"))
 setMethod("pos_splvals", "TreePos",
           function(obj) obj@s_values)
 
-setMethod("pos_splvals", "VNodeInfo",
-          function(obj) pos_splvals(tree_pos(obj)))
-## setMethod("pos_splvals", "VLayoutNode",
+## setMethod("pos_splvals", "VNodeInfo",
 ##           function(obj) pos_splvals(tree_pos(obj)))
+setMethod("pos_splvals", "VLayoutNode",
+          function(obj) pos_splvals(tree_pos(obj)))
 
 
          
@@ -212,10 +187,10 @@ setMethod("pos_split_lbls", "TreePos",
     sapply(spls, function(x) x@split_label)
 })
 
-setMethod("pos_split_lbls", "VNodeInfo",
-           function(obj) pos_split_lbls(tree_pos(obj)))
-## setMethod("pos_split_lbls", "VLayoutNode",
+## setMethod("pos_split_lbls", "VNodeInfo",
 ##            function(obj) pos_split_lbls(tree_pos(obj)))
+setMethod("pos_split_lbls", "VLayoutNode",
+           function(obj) pos_split_lbls(tree_pos(obj)))
 
 
 setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
@@ -226,6 +201,7 @@ setMethod("split_texttype", "RootSplit", function(obj) "root")
 setMethod("split_texttype", "NULLSplit", function(obj) "null")
 setMethod("split_texttype", "VarStaticCutSplit", function(obj) "scut")
 setMethod("split_texttype", "VarDynCutSplit", function(obj) "dyncut")
+setMethod("split_texttype", "ManualSplit", function(obj) "manual")
 
 setMethod("split_texttype", "ANY", function(obj) stop("unknown split type"))
 
@@ -236,79 +212,94 @@ setMethod("pos_spltypes", "TreePos",
     sapply(spls, split_texttype)
 })
 
-setMethod("pos_spltypes", "VNodeInfo",
-          function(obj) pos_spltypes(tree_pos(obj)))
-## setMethod("pos_spltypes", "VLayoutNode",
+## setMethod("pos_spltypes", "VNodeInfo",
 ##           function(obj) pos_spltypes(tree_pos(obj)))
-
-
-          
+setMethod("pos_spltypes", "VLayoutNode",
+          function(obj) pos_spltypes(tree_pos(obj)))
 
 setGeneric("pos_splval_lbls", function(obj) standardGeneric("pos_splval_lbls"))
 setMethod("pos_splval_lbls", "TreePos",
           function(obj) obj@sval_labels)
-setMethod("pos_splval_lbls", "VNodeInfo",
-           function(obj) pos_splval_lbls(tree_pos(obj)))
-## setMethod("pos_splval_lbls", "VLayoutNode",
+## setMethod("pos_splval_lbls", "VNodeInfo",
 ##            function(obj) pos_splval_lbls(tree_pos(obj)))
+setMethod("pos_splval_lbls", "VLayoutNode",
+           function(obj) pos_splval_lbls(tree_pos(obj)))
 
 
-
-
-## setGeneric("is_content_pos", function(obj) standardGeneric("is_content_pos"))
-## ## this covers TableRowPos too via inheritence
-## setMethod("is_content_pos", "TableTreePos",
-##           function(obj) obj@is_content)
-
-## setMethod("is_content_pos", "ElementaryTable",
-##           function(obj) is_content_pos(tree_pos(obj)))
-## setMethod("is_content_pos", "TableTree",
-##           function(obj) FALSE) ## if it were true it'd have to be an ElementaryTable
-
-## setMethod("is_content_pos", "TableRow",
-##           function(obj) is_content_pos(tree_pos(obj))) ## if it were true it'd have to be an Elementar
-
-
-
-## setGeneric("is_content_pos<-", function(obj, value) standardGeneric("is_content_pos<-"))
-## ## this covers TableRowPos too via inheritence
-## setMethod("is_content_pos<-", "TableTreePos",
-##           function(obj, value) {
-##     obj@is_content = value
-##     obj
-## })
 
 setGeneric("spl_payload", function(obj) standardGeneric("spl_payload"))
 setMethod("spl_payload", "Split", function(obj) obj@payload)
 
 
-
+### Label related things
 setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
 setMethod("obj_label", "Split", function(obj) obj@split_label)
-setMethod("obj_label", "VNodeInfo", function(obj) obj@label)
-setMethod("obj_label", "TableTree", function(obj) obj_label(obj@split))
+setMethod("obj_label", "TableRow", function(obj) obj@label)
+## XXX Do we want a convenience for VTableTree that
+## grabs the label from the LabelRow or will
+## that just muddy the waters?
+setMethod("obj_label", "VTableTree",
+          function(obj) obj_label(tt_labelrow(obj)))
 
 
 
 setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
-setMethod("obj_label<-", "Split", function(obj, value) {
+setMethod("obj_label<-", "Split",
+          function(obj, value) {
     obj@split_label <- value
     obj
 })
-setMethod("obj_label<-", "VNodeInfo", function(obj, value){
+setMethod("obj_label<-", "TableRow",
+          function(obj, value){
     obj@label = value
     obj
 })
 
-setMethod("obj_label<-", "TableTree", function(obj, value) {
-    spl = obj@split
-    obj_label(spl) = value
-    obj@split = spl
+setMethod("obj_label<-", "VTableTree",
+          function(obj, value) {
+    lr = tt_labelrow(obj)
+    obj_label(lr) = value
+    tt_labelrow(obj) = lr
     obj
 })
-    
+
+### Label rows.
+setGeneric("tt_labelrow", function(obj) standardGeneric("tt_labelrow"))
+setMethod("tt_labelrow", "VTableTree",
+          function(obj) obj@labelrow)
+
+setGeneric("tt_labelrow<-", function(obj, value) standardGeneric("tt_labelrow<-"))
+setMethod("tt_labelrow<-", "VTableTree",
+          function(obj, value) {
+    obj@labelrow = value
+    obj
+})
+
+setGeneric("labrow_visible", function(obj) standardGeneric("labrow_visible"))
+setMethod("labrow_visible", "VTableTree",
+          function(obj) {
+    labrow_visible(tt_labelrow(obj))
+})
+setMethod("labrow_visible", "TTLabelRow",
+          function(obj) obj@visible)
+
+setGeneric("labrow_visible<-", function(obj, value) standardGeneric("labrow_visible<-"))
+setMethod("labrow_visible<-", "VTableTree",
+          function(obj, value) {
+    lr = tt_labelrow(obj)
+    labrow_visible(lr) = value
+    tt_labelrow(obj) = lr
+    obj
+})
+setMethod("labrow_visible<-", "TTLabelRow",
+          function(obj, value) {
+    obj@visible = value
+    obj
+})
 
 
+
+### Function acessors (summary, tabulation and split)
 
 setGeneric("content_fun", function(obj) standardGeneric("content_fun"))
 setMethod("content_fun", "Split", function(obj) obj@content_fun)
@@ -324,15 +315,6 @@ setMethod("content_fun<-", "Split", function(object, value) {
 setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
 setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 
-setGeneric("avar_inclNAs", function(obj) standardGeneric("avar_inclNAs"))
-setMethod("avar_inclNAs", "AnalyzeVarSplit",
-          function(obj) obj@include_NAs)
-
-setGeneric("avar_inclNAs<-", function(obj, value) standardGeneric("avar_inclNAs<-"))
-setMethod("avar_inclNAs<-", "AnalyzeVarSplit",
-          function(obj, value) {
-    obj@include_NAs = value
-})
 
 
 
@@ -343,6 +325,21 @@ setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
 ## this should probably change? for now  define
 ## an accessor that just returns NULL
 setMethod("split_fun", "Split", function(obj) NULL)
+
+
+
+### Miscelaneous accessors
+
+setGeneric("avar_inclNAs", function(obj) standardGeneric("avar_inclNAs"))
+setMethod("avar_inclNAs", "AnalyzeVarSplit",
+          function(obj) obj@include_NAs)
+
+setGeneric("avar_inclNAs<-", function(obj, value) standardGeneric("avar_inclNAs<-"))
+setMethod("avar_inclNAs<-", "AnalyzeVarSplit",
+          function(obj, value) {
+    obj@include_NAs = value
+})
+
 
 setGeneric("spl_lblvar", function(obj) standardGeneric("spl_lblvar"))
 setMethod("spl_lblvar", "VarLevelSplit", function(obj) obj@value_lbl_var)
@@ -389,6 +386,8 @@ setMethod("row_values<-", "TableRow",
     obj
 })
 
+### Format manipulation
+### obj_format<- is not recursive
 
 setGeneric("obj_fmt", function(obj) standardGeneric("obj_fmt"))
 ## this covers rcell, etc
@@ -446,8 +445,6 @@ setMethod("set_fmt_recursive", "VTableTree",
     obj
 })
 
-
-
 setGeneric("content_fmt", function(obj) standardGeneric("content_fmt"))
 setMethod("content_fmt", "Split", function(obj) obj@content_format)
 
@@ -468,35 +465,27 @@ setMethod("current_spl<-", "VTableTree", function(obj, value)  {
     obj
 })
 
+### Collect all leaves of a current tree
+### This is a workhorse function in various
+### places
+### NB this is written generally enought o
+### be used on all tree-based structures in the
+### framework.
 
 setGeneric("collect_leaves",
            function(ttree, incl.cont = TRUE, add.labrows = FALSE)
     standardGeneric("collect_leaves"), signature = "ttree")
 
 
-.controws = function(tr, add.labrows) {
-    rows = tree_children(content_table(tr))
-    if(add.labrows) {
-        lab = obj_label(tr@split)
-        if(length(lab) > 0 && !is.na(lab) && nzchar(lab)) {
-            ## rows is first because the label is
-            ## for the split at the next level of nesting
-            ## lrowpos = if(length(rows)) tree_pos(rows[[1]]) else TableRowPos(iscontent = TRUE, islabel = TRUE)
-            ## is_labrow(lrowpos) = TRUE
-            rows = c( rows, TTLabelRow(lab = lab, lev = tt_level(tr),
-                                       ##tpos = lrowpos,
-                                       cinfo = col_info(tr)))
-        }
-    }
-    rows
-}
-##handle the ext
 setMethod("collect_leaves", "TableTree",
           function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
-    ret = c(#if(incl.cont) {tree_children(content_table(ttree))},
-        if(incl.cont) {.controws(ttree, add.labrows)},
-      lapply(tree_children(ttree),
-             collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
+    ret = c(
+        if(incl.cont) {tree_children(content_table(tr))},
+        if(add.labrows && has_vis_label(tr)) {
+            tt_labelrow(tr)
+        },
+        lapply(tree_children(ttree),
+               collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)
 })
 
@@ -504,10 +493,8 @@ setMethod("collect_leaves", "TableTree",
 setMethod("collect_leaves", "ElementaryTable",
           function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
     ret = tree_children(ttree)
-    if(add.labrows) {
-        rl = obj_label(ttree)
-        if(length(rl) >0 && !is.na(rl) && nzchar(rl))
-            ret = c(TTLabelRow(lev = max(0L,tt_level(ttree) - 2L), lab = rl, cinfo = col_info(ttree)), ret)
+    if(add.labrows && has_vis_label(ttree) {
+        ret = c(tt_labelrow(tree), ret)
     }
     ret
 })
@@ -528,6 +515,8 @@ setMethod("collect_leaves", "ANY",
     stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
 
 
+### Spanning information
+
 setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
 setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
 
@@ -537,6 +526,7 @@ setMethod("row_cspans<-", "TableRow", function(obj, value) {
     obj
 })
 
+### Level (indent) in tree structure
 setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 ## this will hit everything via inheritence
 setMethod("tt_level", "VNodeInfo", function(obj) obj@level)
@@ -566,22 +556,6 @@ setMethod("split_exargs", "Split",
 
 is_labrow = function(obj) is(obj, "TTLabelRow")
 
-## setGeneric("is_labrow", function(obj) standardGeneric("is_labrow"))
-
-## setMethod("is_labrow", "TableRowPos",
-##           function(obj) obj@is_label_row)
-
-## setMethod("is_labrow", "TableRow",
-##           function(obj) is_labrow(tree_pos(obj)))
-
-
-## setGeneric("is_labrow<-", function(obj, value) standardGeneric("is_labrow<-"))
-
-## setMethod("is_labrow<-", "TableRowPos",
-##           function(obj, value) {
-##     obj@is_label_row = value
-##     obj
-## })
 
 spl_baseline = function(obj) {
     stopifnot(is(obj, "VarLevWBaselineSplit"))
