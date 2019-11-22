@@ -500,8 +500,6 @@ takes_coln = function(f) {
     stopifnot(is(f, "function"))
     forms = names(formals(f))
     res = ".N_col" %in% forms
-    if(res)
-        print("function takes .N_col")
     res
 }
 
@@ -509,8 +507,6 @@ takes_totn = function(f) {
     stopifnot(is(f, "function"))
     forms = names(formals(f))
     res = ".N_total" %in% forms 
-    if(res)
-        print("function takes .N_total")
     res
 }
 

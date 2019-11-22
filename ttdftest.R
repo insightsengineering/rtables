@@ -195,10 +195,6 @@ build_table(missavar, rawdat)
 
 
 
-
-
-
-
 complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_blinecomp(var = "visit", baseline = "baseline",
                         all = TRUE,
@@ -253,7 +249,7 @@ to_s3compat(rsptab2)
 ### manual construction and manipulation
 
 rows = lapply(1:5, function(i) {
-    TableRow(rep(i, times  = 3))})
+    DataRow(rep(i, times  = 3))})
 mtab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
 mtab
 
@@ -265,7 +261,7 @@ mtab2
 
 ## note we're using tab here, so need to make it above
 nesttab = tab
-do_recursive_replace(nesttab, list(1, "WHITE", "A"), rows = 1:2, cols = 1, value = 5)
+do_recursive_replace(nesttab, list("Ethnicity", "WHITE", "Factor2", "A"), rows = 1:2, cols = 1, value = 5)
 
 
 do_recursive_replace(nesttab, list(1, "WHITE"), incontent = TRUE, cols = 3:4, value = list(c(10, 2), c(20, 7)))

@@ -195,7 +195,11 @@ setMethod("check_validsplit", "MultiVarSplit",
 setMethod("check_validsplit", "AnalyzeVarSplit",
           
           function(spl, df) {
-    .checkvarsok(spl, df)
+    if(!is.na(spl_payload(spl))) {
+        .checkvarsok(spl, df)
+    } else {
+        TRUE
+    }
 })
 
 

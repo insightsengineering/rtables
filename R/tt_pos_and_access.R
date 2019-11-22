@@ -84,8 +84,17 @@ setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows")
 setMethod("replace_rows", c(value = "list"),
           function(x, i, value) {
 
-    if(is.null(i))
+    
+    if(is.null(i)) {
         i = seq_along(tree_children(x))
+        if(labrow_visible(x))
+            i = i[-1]
+    } else if(is.logical(i)) {
+        i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
+    }
+
+    if(labrow_visible(x) && 1 %in% i && !are(value, "TableRow"))
+        stop("attempted to assign values into a LabelRow")
     
     if(length(value) != length(i))
         value = rep(value, length.out = length(i))
@@ -299,15 +308,12 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 
 
 
-numrows = function(tt, labs = TRUE) length(collect_leaves(tt, TRUE, labs))
-## TODO: we really should choose whether
-## label rows are counted or not here, I think
-## allowing it both ways is probably just too
-## much complexity
-subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
+numrows = function(tt) length(collect_leaves(tt, TRUE, TRUE))
+## label rows ARE included in the count
+subset_by_rownum = function(tt, i, ...) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter = 0
-    nr = numrows(tt, inc.labrows)
+    nr = numrows(tt)
     i = .j_to_posj(i, nr)
     
     prune_rowsbynum = function(x, i, valifnone = NULL) {
@@ -355,7 +361,7 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
             else
                 return(valifnone)
         }
-        if(is(x, "VTableTree") && numrows(x, inc.labrows) > 0) {
+        if(is(x, "VTableTree") && numrows(x) > 0) {
             x
         } else {
             valifnone
@@ -364,3 +370,13 @@ subset_by_rownum = function(tt, i, inc.labrows = FALSE, ...) {
     prune_rowsbynum(tt, i)
 }
 
+
+setMethod("[", c("VTableTree", "numeric", "numeric"),
+          function(x, i, j, ..., drop = FALSE) {
+    
+    if(!missing(j))
+        x = subset_cols(x, j)
+    if(!missing(i))
+        x = subset_by_rownum(x, i)
+    x
+})

@@ -230,6 +230,19 @@ setMethod("pos_splval_lbls", "VLayoutNode",
 setGeneric("spl_payload", function(obj) standardGeneric("spl_payload"))
 setMethod("spl_payload", "Split", function(obj) obj@payload)
 
+### name related things
+
+setGeneric("obj_name", function(obj) standardGeneric("obj_name"))
+setMethod("obj_name", "VNodeInfo",
+          function(obj) obj@name)
+
+setGeneric("obj_name<-", function(obj, value) standardGeneric("obj_name<-"))
+setMethod("obj_name<-", "VNodeInfo",
+          function(obj, value) {
+    obj@name = value
+    name
+})
+
 
 ### Label related things
 setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
@@ -358,6 +371,10 @@ setMethod("spl_child_order<-", "VarLevelSplit",
 setMethod("spl_child_order",
           "ManualSplit",
           function(obj) obj@levels)
+
+setMethod("spl_child_order",
+          "MultiVarSplit",
+          function(obj) spl_payload(obj))
 
 
 

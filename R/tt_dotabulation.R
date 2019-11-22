@@ -107,7 +107,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
     ##recycle formats
-    fmtvec = rep(format, length.out = ncrows)
+    if(!is.null(format))
+        fmtvec = rep(format, length.out = ncrows)
+    else
+        fmtvec = NULL
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
         rowconstr(val = rowvals,
@@ -286,7 +289,8 @@ build_table = function(lyt, df, ...) {
                              ## XXX is this ALWAYS right?
                              parent_cfun = NULL,
                              cformat = obj_fmt(firstspl))
-        })
+    })
+    names(kids) = sapply(kids, obj_name)
                              
     tab = TableTree(cont = ctab,
                     kids = kids,
