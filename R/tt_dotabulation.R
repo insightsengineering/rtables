@@ -67,7 +67,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     names(rawvals) = names(colexprs)
     rawvals
 }
- 
+
 .make_tablerows = function(dfpart, func,
                            cinfo,
                            datcol = NULL,
@@ -115,8 +115,6 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                   lab = lbls[i],
                   name = lbls[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
-                  ##var_lbl = rvlab,
-                  ##v_type = rvtypes[i],
                   fmt = fmtvec[i]
                   )
         
@@ -188,14 +186,16 @@ recursive_applysplit = function( df,
     ## lvl is level of indentation, which starts at 0
     ## pos, is position in the splvec, which starts at 1
     ## because R is 1-indexed, so pos = lvl + 1L
-    pos = lvl + 1L;
-    stopifnot(pos <= length(splvec),
-              is(splvec, "SplitVector"))
-    spl = splvec[[pos]]
+    ## pos = lvl + 1L;
+    ## stopifnot(pos <= length(splvec),
+    ##           is(splvec, "SplitVector"))
+    spl = splvec[[1]]
+    splvec = splvec[-1]
 
     ## pre-existing table was added to the layout
     if(is(spl, "VTableNodeInfo"))
         return(spl)
+    lab = obj_label(spl)
     ## the content function is the one from the PREVIOUS
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
@@ -206,17 +206,19 @@ recursive_applysplit = function( df,
                       name = name, 
                       cinfo = cinfo,
                       parent_cfun = parent_cfun, format = cformat)
-    if(pos < length(splvec)) { ## there's more depth, recurse
+    if(length(splvec) > 0) { ## there's more depth, recurse
         rawpart = do_split(spl, df) ##apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
         ## these are SplitValue objects
         splvals = rawpart[["values"]]
         partlbls = rawpart[["labels"]]
-        kids = unlist(mapply(function(dfpart, val, lbl) {
-      
+        nonroot = lvl != 0L
+        innerlev = lvl + 1L
+        if(nonroot) innerlev = innerlev + 1L
+        inner = unlist(mapply(function(dfpart, val, lbl) {
             recursive_applysplit(dfpart,
                                  name = splv_rawvalues(val),
-                                 lvl = lvl+1L,
+                                 lvl = innerlev,
                                  splvec = splvec,
                                  cinfo = cinfo,
                                  parent_cfun = content_fun(spl),
@@ -224,6 +226,19 @@ recursive_applysplit = function( df,
         }, dfpart = dataspl, val = splvals,
         lbl = partlbls,
         SIMPLIFY=FALSE))
+        if(nonroot) {
+            kids = list(TableTree(kids = inner,
+                                  name = lab, ##XXX wrong
+                                  lab = lab,
+                                  lev = innerlev - 1L,
+                                  cinfo = cinfo,
+                                  spl = spl,
+                                  fmt = obj_fmt(spl)))
+            names(kids) = lab ## XXX wrong again.
+            lab = ""
+        } else {
+            kids = inner
+        }
     } else { ## we're at full depth, analyze
         stopifnot(is(spl, "AnalyzeVarSplit"))
         check_validsplit(spl, df)
@@ -240,7 +255,7 @@ recursive_applysplit = function( df,
               lev = lvl,
               iscontent = FALSE,
               spl = spl,
-              lab = obj_label(spl),
+              lab = lab,
               cinfo = cinfo)
 }
 
