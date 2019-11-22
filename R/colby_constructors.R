@@ -142,7 +142,7 @@ add_new_coltree = function(lyt, spl) {
 ## Pipe-able functions to add the various types of splits to the current layout for both
 ## row and column.  These all act as wrappers to the add_col_split and add_row_split
 ## method stacks.
-add_colby_varlevels = function(lyt,  var, lbl, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
+add_colby_varlevels = function(lyt,  var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
@@ -161,7 +161,7 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 }
 
 
-add_rowby_varlevels = function(lyt,  var, lbl,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE) {
+add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
                         valuelblvar = vlblvar,
