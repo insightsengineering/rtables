@@ -29,6 +29,10 @@ docat = function(obj) {
     }
     invisible(NULL)
 }
+
+ploads_to_str = function(x, collapse = ":") sapply(x,
+                                                   paste,
+                                                   collapse = collapse)
     
 ## setMethod("show", "TableTree",
 ##           function(object) {

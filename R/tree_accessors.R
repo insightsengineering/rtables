@@ -125,10 +125,19 @@ setMethod("last_rowsplit", "NULL",
           function(obj) NULL)
 
 setMethod("last_rowsplit", "SplitVector",
-          function(obj) obj[[length(obj)]])
-
+          function(obj) {
+    if(length(obj) == 0)
+        NULL
+    else
+        obj[[length(obj)]]
+})
 setMethod("last_rowsplit", "PreDataRowLayout",
-          function(obj) last_rowsplit(obj[[ length( obj ) ]]) )
+          function(obj) {
+    if(length(obj) == 0)
+        NULL
+    else
+        last_rowsplit(obj[[ length( obj ) ]]) 
+})
 
 setMethod("last_rowsplit", "PreDataTableLayouts",
           function(obj) last_rowsplit(rlayout(obj)))

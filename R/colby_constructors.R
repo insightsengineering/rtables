@@ -350,7 +350,7 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
                           splfmt = fmt,
                           defrowlab = rowlabs,
                           inclNAs = inclNAs)
-    
+    .Deprecated("add_analyzed_vars")
     
     if(!newtoplev &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
