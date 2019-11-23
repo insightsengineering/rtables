@@ -336,7 +336,7 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 #' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
 #' rows, rather than a further partition of the data.
 #' 
-#' @inheritParams 
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
