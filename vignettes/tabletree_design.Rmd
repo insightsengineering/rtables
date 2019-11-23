@@ -1,3 +1,22 @@
+---
+title: "TableTree Design"
+author: "Gabriel Becker"
+date: "November 2019"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rtabulate}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = FALSE}
+library(rtables)
+```
 
 # General Definitions
 
@@ -6,7 +25,7 @@ sections may contain further definitions specific to their topic
 
 - Table - An collection of Rows which share a common column structure,
   with a unique ordering of rows defined on it. These can have 2 forms
-  - Flat table - ordered list of rows which define a standard
+  - Flat table **??Elementary Tables??** - ordered list of rows which define a standard
     rectangular dataset/table
   - Table tree - A nested hierarchical structure in which nesting
     represents relationships between rows. 
@@ -23,7 +42,7 @@ sections may contain further definitions specific to their topic
   subsets of data in order to generate row contents
   - Analysis function - A tabulation function used to generate the
     values for one or more _Data_ rows
-  - Summary Function - A tabulataion function used to generate values
+  - Summary Function - A tabulation function used to generate values
     for a _Content_ row.
 - Comparison Tabulation - Tabulation which compares the data subsets
   corresponding to 2 (or more??? not currently) columns in the table.
@@ -40,7 +59,7 @@ sections may contain further definitions specific to their topic
 
 # Layouts
 
-Layouts are declared /pre-data/ as the structure the table and
+Layouts are declared *pre-data* as the structure the table and
 associated aggregation will have once it is applied to data.
 
 This allows us to re-use layouts for different datasets (that have
@@ -102,7 +121,7 @@ space by my estimation).
 # The Object Model
 ## Core Pieces - Splits
 
-Table structure is modelled via declaring "splits", formally
+Table structure is modeled via declaring "splits", formally
 modeled by the `Split` S4 virtual class and its non-virtual
 subclasses.
 
@@ -123,7 +142,7 @@ a nested (sub) structure in row or column space.
   categorical variable
 - `AllSplit` - Will generate one child containing the full set of data
   (at the current level of nesting)
-- `RootSplit` - An AllSplit that is explictly the root of the full
+- `RootSplit` - An AllSplit that is explicitly the root of the full
   row/column structure for the table
 - `MultiVarSplit` - Will generate a child for each specified variable
 - `VarStaticCutSplit` - Will generate children based on 'cutting' the
@@ -240,7 +259,7 @@ not likely to affect anything in most cases.
 
 # Declaring layout
 
-Table structure is declared (pre-data) via a set ofsequential
+Table structure is declared (pre-data) via a set of sequential
 `add_colby_*`, `add_rowby_*`, `add_analyzed_var` and `add_summary_*`
 calls within a layout pipeline (which currently starts with NULL as an
 artifact).
@@ -263,7 +282,7 @@ layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 Will generate a layout where each arm of the trial has a column for
 each value of the SEX variable present (in the overall dataset, not in
 that arm). For row structure, it will have a top level `content` row
-wiith overall count, then for each level of RACE, it will have a sub
+with overall count, then for each level of RACE, it will have a sub
 count, then an `analysis` of AGE (the mean) within that ethnicity.
 
 ``` 
@@ -328,7 +347,7 @@ onerow = function(x, ...) {
 
 ### Tabulation Function Signatures
 
-Tabulation functions, both analysis and summaray, must take the data
+Tabulation functions, both analysis and summary, must take the data
 to be analyzed as their first argument. This will either be a subset
 data.frame (in the case of summary functions generating content rows)
 or vector data (in the case of most analysis functions generating data
@@ -369,20 +388,20 @@ layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
        add_analyzed_colvars(afun = mean)
 ```
 
-The add_analyzed_colvars here indicates that the variables whose data
-are ultimately processed by afun are specified at the highest-depth
+The `add_analyzed_colvars` here indicates that the variables whose data
+are ultimately processed by `afun` are specified at the highest-depth
 level of nesting in the column structure, rather than at the row
 level.
 
 Each row can /either/ represent a tabulation of a single, row
 associated variable across multiple column-associated data subsets, OR
-represent the analysis/tabulataion of multiple column associated
+represent the analysis/tabulation of multiple column associated
 variables, but not both.
 
 NOTE: it would be unusual, but is allowed, to mix rows that have each
 of the above modalities in the same table. It is important to note,
 however, that currently all rows in the same table MUST have the same
-formal column structuree, which would severely limit thee utility of
+formal column structure, which would severely limit thee utility of
 doing this in practice.
 
 
@@ -401,7 +420,7 @@ Column counts can be displayed a couple of ways, one is as a content
 summary row on the root split, but the more common one is as part of
 the header material. We declare this when building up the layout with
 the`add_colcounts()` function. The default format is `"(N=xx)"` so
-generally an emepty call within the pipe workflow is sufficient.
+generally an empty call within the pipe workflow is sufficient.
 
 ```
 layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
@@ -411,12 +430,12 @@ layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
        add_analyzed_colvars(afun = mean)
 ```
 
-The call can appear anywhere in the pipelien, but is perhaps easiest
+The call can appear anywhere in the pipeline, but is perhaps easiest
 to understand at the end of the column structure declaration part of
 the pipeline, as above.
 
 We can also change column count rendering behavior (they are always
-calculated and available) after creating eitehr a layout or a
+calculated and available) after creating either a layout or a
 TableTree via the `disp_ccounts<-` getter, like so
 
 ```
@@ -502,7 +521,7 @@ Cons: adds complexity to parameter space
 ### Different variables summarized per column
 
 The above `add_analyzed_var` method for declaring tabulation does so
-at the row level: each data row reprents a (partial) tabulation of
+at the row level: each data row represents a (partial) tabulation of
 single variable within the context of the different
 columns. Sometimes, however, we want different columns to display
 values/summaries of _different variables_. We do this by declaring the
@@ -555,7 +574,7 @@ the layout, behave identically to `add_colby_varlevels` and its
 corresponding `VarLevelSplit`.
 
 NOTE: In light of the above, we can probably just always have the
-deepest columnsplit have a baseline of the first level so people don't
+deepest column-split have a baseline of the first level so people don't
 even need to declare it. This is NOT what happens now, though, and
 some care is needed because we only want comparisons at the deepest
 level of nesting, I think. TODO(?)
@@ -578,7 +597,7 @@ layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
 ```
 
 Everything is then done by the rtables machinery internally and we get
-a row with no value for Arm A, and the differences in mean beteween
+a row with no value for Arm A, and the differences in mean between
 Arm A and each of Arms B and C.
 
 ### Declaring Table-based comparisons
@@ -626,7 +645,7 @@ object based approach.
 
 Typically column structure in a `TableTree` reflects aspects of the
 data and tabulation performed by the tabulation machinery, but the
-structure can be declared manually in a data-indepedent way when
+structure can be declared manually in a data-independent way when
 required.
 
 We provide the `manual_cols` function which takes any number of
@@ -690,8 +709,6 @@ column structure.
 
 ### Constructing ElementaryTables
 
-`
-
 
 # Pagination
 
@@ -699,18 +716,18 @@ A first pass of the pagination algorithm is working and can be seen in
 `tt_paginate.R`
 
 Pagination is currently defined/modeled as a _rendering_ activity,
-meaning it is /not/ formally modelled in the TableTree object
+meaning it is /not/ formally modeled in the TableTree object
 model. Rather, it is done transiently to a TableTree object in the
 process of also doing other preparation for it to be printed. There
 are some downsides to this but it is both much simpler than formally
-modelling pagination and, I think, conceptually correct. I don't think
+modeling pagination and, I think, conceptually correct. I don't think
 we want the TableTree objects themselves to know about pagination
 because other output backends (e.g., html) will either not have
-pagination at all or will haandle it very differently.
+pagination at all or will handle it very differently.
 
 ## Definitions
 
-- Header lines - The multi-row defnition of the column layout and the
+- Header lines - The multi-row definition of the column layout and the
   dividing "row" displayed between the the columns and the table rows
 - Repeat Row - A label or content row which must be repeated after
   pagination to correctly display the position/context of the first
@@ -842,7 +859,7 @@ Var3 Counts
 
 Pagination is defined to happen at (after) a row if that row will be
 the _last_ row on a page, with a page break directly after it (or
-after any footnotes which currently are not modelled, but will
+after any footnotes which currently are not modeled, but will
 be). This is mostly for convenience when coding and could be changed
 if it ends up being problematic.
 
@@ -864,7 +881,7 @@ tree structure
 
 ### The Algorithm.
 
-The algorithm in pseudocode
+The algorithm in pseudo code
 
 ```
 
@@ -889,4 +906,3 @@ get_next_paginate = function(allrows, lpp, lastpag, nhlines)
         list(pos = pos, reprows = reprows)
 }
 ```
- 

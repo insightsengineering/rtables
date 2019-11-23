@@ -8,6 +8,14 @@ navbar:
     href: https://github.com/roche/rtables
 
 reference:
+
+  - title: Table Tree Tabulation
+    contents:
+    - build_table
+    - add_colby_varlevels
+    - add_analyzed_var
+
+
   - title: Core Table Create Functions
     desc:  These are the main functions needed to build an rtable.
     contents:

@@ -17,6 +17,7 @@ Imports:
   purrr,
   rlang
 Suggests:
+  magrittr,
   dplyr,
   testthat,
   knitr
@@ -29,31 +30,32 @@ URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
 BugReports: https://github.com/roche/rtables/issues
 Collate:
     '00tabletrees.R'
-    'colby_constructors.R'
-    'make_subset_expr.R'
-    'split_funs.R'
-    'tree_accessors.R'
-    'tt_paginate.R'
-    'tt_showmethods.R'
-    'tt_toString.R'
     'Viewer.R'
     'accessors_modifiers.R'
+    'argument_conventions.R'
     'as_html.R'
     'coercion.R'
     'utils.R'
     'col_by.R'
+    'colby_constructors.R'
     'compare_rtables.R'
     'for_rtables.R'
     'format_rcell.R'
     'header_add_N.R'
     'indent.R'
     'labels.R'
+    'make_subset_expr.R'
     'rbind.R'
     'rtable.R'
     'rtabulate.R'
     'sort.R'
+    'split_funs.R'
     'toString.R'
-    'tt_rsp.R'
-    'tt_dotabulation.R'
-    'tt_pos_and_access.R'
+    'tree_accessors.R'
     'tt_compatibility.R'
+    'tt_dotabulation.R'
+    'tt_paginate.R'
+    'tt_pos_and_access.R'
+    'tt_rsp.R'
+    'tt_showmethods.R'
+    'tt_toString.R'

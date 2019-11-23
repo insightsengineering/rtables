@@ -9,3 +9,5 @@
 ^README-.*\.png$
 ^\.travis\.yml$
 ^Jenkinsfile$
+^redesign$
+^man-roxygen$
