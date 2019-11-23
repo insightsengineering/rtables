@@ -87,9 +87,16 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## Add analysis/data rows by analyzing AGE variable
     ## Note afun is a function that returns 2 values in a named list
     ## this will create 2 data rows
-    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)),
                      fmt = "xx.xx") %>%
+    ## adding more analysis vars "compounds them", placing them at the same
+    ## level of nesting as all previous analysis blocks, rather than
+    ## attempting to further nest them
+    add_analyzed_vars("AGE", "Age Analysis redux", afun = function(x) list(sd = sd(x),
+                                                                    range = range(x)),
+                     fmt = c("xx.x", "xx.x - xx.x")) %>%
+
     ## Note newtoplev=TRUE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of

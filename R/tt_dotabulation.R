@@ -176,6 +176,23 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 }
 
 
+.make_analyzed_tab = function(df, spl, cinfo, name, lab, ctab, lvl) {
+    stopifnot(is(spl, "AnalyzeVarSplit"))
+    check_validsplit(spl, df)
+    kids = .make_tablerows(df,
+                           func = analysis_fun(spl),
+                           defrowlabs = spl@default_rowlabel, ##XXX XXX
+                           cinfo = cinfo,
+                           datcol = spl_payload(spl),
+                           lev = lvl + 1L,
+                           format = obj_fmt(spl))
+    TableTree(kids = kids,
+              name = spl_payload(spl),
+              lab = obj_label(spl),
+              lev = lvl,
+              cinfo = cinfo,
+              fmt = obj_fmt(spl))
+}
 
 recursive_applysplit = function( df,
                                 lvl = 0L,
@@ -242,24 +259,32 @@ recursive_applysplit = function( df,
         } else {
             kids = inner
         }
-    } else { ## we're at full depth, analyze
-        stopifnot(is(spl, "AnalyzeVarSplit"))
-        check_validsplit(spl, df)
-        kids = .make_tablerows(df,
-                               func = analysis_fun(spl),
-                               defrowlabs = spl@default_rowlabel, ##XXX XXX
-                               cinfo = cinfo,
-                               datcol = spl_payload(spl),
-                               lev = lvl + 1L,
-                               format = obj_fmt(spl))
+    } else if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
+        ## XXX TODO rework this ifelse chain so we don't have an
+        lab = ""
+        kids = list(.make_analyzed_tab(df = df,
+                                spl = spl,
+                                cinfo = cinfo,
+                                lvl = lvl + 1L))
+    } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
+        lab = ""
+        kids = lapply(spl_payload(spl),
+                     function(sp) {
+            .make_analyzed_tab(df = df,
+                              spl = sp,
+                              cinfo = cinfo,
+                              lvl = lvl + 1L
+                              )}
+            )
     }
-    TableTree(cont = ctab, kids = kids,
-              name = name,
-              lev = lvl,
-              iscontent = FALSE,
-              spl = spl,
-              lab = lab,
-              cinfo = cinfo)
+    ret = TableTree(cont = ctab, kids = kids,
+                    name = name,
+                    lev = lvl,
+                    iscontent = FALSE,
+                    spl = spl,
+                    lab = lab,
+                    cinfo = cinfo)
+    
 }
 
 

@@ -202,6 +202,11 @@ setMethod("check_validsplit", "AnalyzeVarSplit",
     }
 })
 
+setMethod("check_validsplit", "CompoundSplit",
+          function(spl, df) {
+    all(sapply(spl_payload(spl), df))
+})
+
 
 
 

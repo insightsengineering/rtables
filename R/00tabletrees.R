@@ -61,7 +61,7 @@ SplitValue = function(val, extr =list()) {
 
 setClass("Split", contains = "VIRTUAL",
          representation(
-             payload = "character",
+             payload = "ANY",
              split_label = "character",
              split_format = "FormatSpec",
              ## NB this is the function which is applied to
@@ -203,6 +203,7 @@ setClass("AnalyzeVarSplit", contains = "Split",
                         default_rowlabel = "character",
                         include_NAs = "logical"))
 
+
 AnalyzeVarSplit = function(var, splbl, afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE) {
     if(!any(nzchar(defrowlab)))
         defrowlab = as.character(substitute(afun))
@@ -215,6 +216,62 @@ AnalyzeVarSplit = function(var, splbl, afun, defrowlab = "", cfun = NULL, cfmt =
         split_format = splfmt,
         default_rowlabel = defrowlab,
         include_NAs = inclNAs)
+}
+
+setClass("CompoundSplit", contains = "Split",
+         validity = function(object) are(object@payload, "Split"))
+
+
+setClass("AnalyzeMultiVars", contains = "CompoundSplit")
+.repoutlst = function(x, nv) {
+    if(!is(x, "list"))
+        x = list(x)
+    rep(x, length.out = nv)
+}
+
+AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE,
+                            .payload = NULL) {
+    if(is.null(.payload)) {
+        nv = length(var)
+        defrowlab = .repoutlst(defrowlab, nv)
+        afun = .repoutlst(afun, nv)
+        splbl = .repoutlst(splbl, nv)
+        cfun = .repoutlst(cfun, nv)
+        cfmt = .repoutlst(cfmt, nv)
+        splfmt = .repoutlst(splfmt, nv)
+        inclNAs = .repoutlst(inclNAs, nv)
+        pld = mapply(AnalyzeVarSplit,
+                     var = var,
+                     splbl =splbl,
+                     afun = afun,
+                     defrowlab = defrowlab,
+                     cfun = cfun,
+                     cfmt = cfmt,
+                     splfmt = splfmt,
+                     inclNAs = inclNAs,
+                     SIMPLIFY = FALSE)
+    } else {
+        .payload = unlist(lapply(.payload,
+                                 function(x) {
+            if(is(x, "CompoundSplit")) {
+                spl_payload(x)
+            } else {
+                x
+            }
+        }))
+        pld = .payload
+    }
+    
+    if(length(pld) == 1) {
+            return(pld[[1]])
+    } else {
+        new("AnalyzeMultiVars",
+            payload = pld,
+            split_label = "",
+            split_format = NULL,
+            content_fun = NULL,
+            content_format = NULL)
+    }
 }
 
 setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),

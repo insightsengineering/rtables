@@ -91,6 +91,49 @@ setMethod("add_row_split", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a row split to that (", class(lyt), "). contact the maintaner.")
           )
 
+
+setGeneric("cmpnd_last_rowsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_rowsplit"))
+
+setMethod("cmpnd_last_rowsplit", "NULL", function(lyt, spl, constructor) {
+    stop("no existing splits to compound with. contact the maintainer")
+})
+
+setMethod("cmpnd_last_rowsplit", "PreDataRowLayout",
+          function(lyt, spl, constructor) {
+    pos = length(lyt)
+    tmp = cmpnd_last_rowsplit(lyt[[pos]], spl, constructor)
+    lyt[[pos]] = tmp
+    lyt
+})
+setMethod("cmpnd_last_rowsplit", "SplitVector",
+          function(lyt, spl, constructor) {
+    pos = length(lyt)
+    lst = lyt[[pos]]
+    tmp = if(is(lst, "CompoundSplit")) {
+              spl_payload(lst) = c(spl_payload(lst), spl)
+              lst
+          } else {
+              constructor(.payload = list(lst, spl))
+          }
+    lyt[[pos]] = tmp
+    lyt
+})
+    
+
+setMethod("cmpnd_last_rowsplit", "PreDataTableLayouts",
+          function(lyt, spl, constructor){
+    rlyt = rlayout(lyt)
+    rlyt = cmpnd_last_rowsplit(rlyt, spl, constructor)
+    rlayout(lyt)= rlyt
+    lyt
+})
+
+setMethod("cmpnd_last_rowsplit", "ANY",
+          function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_rowsplit to that (", class(lyt), "). contact the maintaner.")
+          )
+
+
+
 setGeneric("add_col_split", function(lyt = NULL, spl, pos) standardGeneric("add_col_split"))
 
 setMethod("add_col_split", "NULL", function(lyt, spl, pos) {
@@ -101,7 +144,7 @@ setMethod("add_col_split", "NULL", function(lyt, spl, pos) {
 
 setMethod("add_col_split", "PreDataColLayout",
           function(lyt, spl, pos) {
-    stopifnot(pos >0 && pos <= length(lyt) + 1)
+    stopifnot(pos > 0 && pos <= length(lyt) + 1)
     tmp  = if (pos <= length(lyt)) {
                add_col_split(lyt[[pos]], spl, pos)
            } else {
@@ -128,6 +171,51 @@ setMethod("add_col_split", "PreDataTableLayouts",
 setMethod("add_col_split", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a col split to that (", class(lyt), "). contact the maintaner.")
           )
+
+
+
+setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
+
+setMethod("cmpnd_last_colsplit", "NULL", function(lyt, spl, constructor) {
+    stop("no existing splits to compound with. contact the maintainer")
+})
+
+setMethod("cmpnd_last_colsplit", "PreDataColLayout",
+          function(lyt, spl, constructor) {
+    pos = length(lyt)
+    tmp = cmpnd_last_colsplit(lyt[[pos]], spl, constructor)
+    lyt[[pos]] = tmp
+    lyt
+})
+setMethod("cmpnd_last_colsplit", "SplitVector",
+          function(lyt, spl, constructor) {
+    pos = length(lyt)
+    lst = lyt[[pos]]
+    tmp = if(is(lst, "CompoundSplit")) {
+              spl_payload(lst) = c(spl_payload(lst), spl)
+              lst
+          } else {
+              constructor(.payload = list(lst, spl))
+          }
+    lyt[[pos]] = tmp
+    lyt
+})
+    
+
+setMethod("cmpnd_last_colsplit", "PreDataTableLayouts",
+          function(lyt, spl, constructor){
+    clyt = clayout(lyt)
+    clyt = cmpnd_last_colsplit(clyt, spl, constructor)
+    clayout(lyt)= clyt
+    lyt
+})
+
+setMethod("cmpnd_last_colsplit", "ANY",
+          function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_colsplit to that (", class(lyt), "). contact the maintaner.")
+          )
+
+
+
 
 add_new_rowtree = function(lyt, spl) {
     add_row_split(lyt, spl, next_rpos(lyt, TRUE))
@@ -242,9 +330,44 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
                           splfmt = fmt,
                           defrowlab = rowlabs,
                           inclNAs = inclNAs)
-    pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    
+    
+    if(!newtoplev &&
+       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+        cmpnd_last_rowsplit(lyt, spl)
+    } else {
+        pos = next_rpos(lyt, newtoplev)
+        add_row_split(lyt, spl, pos)
+    }
 }
+
+
+add_analyzed_vars = function(lyt,
+                             var,
+                             lbl = var,
+                             afun,
+                             fmt = NULL,
+                             rowlabs = "",
+                             newtoplev = FALSE,
+                             inclNAs = FALSE) {
+    spl = AnalyzeMultiVars(var, lbl,
+                          afun = afun,
+                          splfmt = fmt,
+                          defrowlab = rowlabs,
+                          inclNAs = inclNAs)
+
+    if(!newtoplev &&
+       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
+    } else {
+        pos = next_rpos(lyt, newtoplev)
+        add_row_split(lyt, spl, pos)
+    }
+}
+
+
 
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,

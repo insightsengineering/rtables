@@ -119,6 +119,21 @@ setMethod("next_cpos", "PreDataColLayout",
 
 setMethod("next_cpos", "ANY", function(obj, newtree) 1L)
 
+
+setGeneric("last_rowsplit", function(obj) standardGeneric("last_rowsplit"))
+setMethod("last_rowsplit", "NULL",
+          function(obj) NULL)
+
+setMethod("last_rowsplit", "SplitVector",
+          function(obj) obj[[length(obj)]])
+
+setMethod("last_rowsplit", "PreDataRowLayout",
+          function(obj) last_rowsplit(obj[[ length( obj ) ]]) )
+
+setMethod("last_rowsplit", "PreDataTableLayouts",
+          function(obj) last_rowsplit(rlayout(obj)))
+
+
 ## setMethod("next_cpos", "PreDataRowLayout", function(obj, newtree) stop("can't get next column position from a row layout object"))
 
 
