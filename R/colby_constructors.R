@@ -4,7 +4,7 @@
 ## e.g.
 ##
 ## add_colby_total() %>%>
-##   add_colby("colname")g %>%
+##   add_colby("colname") %>%
 ##   add_colby_cumulcuts("colname", cuts) %>%
 ##   add_colby_collapse_levs("colname",
 ##                           list(c("lev1a", "lev1b"),
@@ -230,6 +230,22 @@ add_new_coltree = function(lyt, spl) {
 ## Pipe-able functions to add the various types of splits to the current layout for both
 ## row and column.  These all act as wrappers to the add_col_split and add_row_split
 ## method stacks.
+
+
+#' Declaring a column-split based on levels of a variable
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM")
+#' 
+#' 
+#' 
+#' 
 add_colby_varlevels = function(lyt,  var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
@@ -315,11 +331,15 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 }
 
 
-## add an anlysis split. this will be the
-## end of the SplitVector at the position
-## specified, because it defines an anlaysis
-## that will generate rows, rather than
-## a further partition of the data.
+#' Add an anlysis split
+#' 
+#' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
+#' rows, rather than a further partition of the data.
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
 add_analyzed_var = function(lyt, var, lbl = var, afun,
                             fmt = NULL,
                             rowlabs = as.character(substitute(afun)),

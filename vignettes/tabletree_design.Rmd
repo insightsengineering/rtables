@@ -25,7 +25,7 @@ sections may contain further definitions specific to their topic
 
 - Table - An collection of Rows which share a common column structure,
   with a unique ordering of rows defined on it. These can have 2 forms
-  - Flat table - ordered list of rows which define a standard
+  - Flat table **??Elementary Tables??** - ordered list of rows which define a standard
     rectangular dataset/table
   - Table tree - A nested hierarchical structure in which nesting
     represents relationships between rows. 

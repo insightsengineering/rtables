@@ -7,7 +7,7 @@ library(rtables)
 
 ADSL <- radsl()
 
-a_summary <- function(x) {
+asummary <- function(x) {
   
   if (is.numeric(x)) {
     list(
@@ -22,6 +22,10 @@ a_summary <- function(x) {
   }
 }
 
+
+NULL %>% 
+  add_colby_varlevels(var = "ARM", lbl = "ARM") %>%
+  add_analyzed_vars(c("AGE", "SEX"), afun = asummary)
 
 dm_layout <- NULL %>% 
   add_colby_varlevels(var = "ARM", lbl = "ARM") %>%

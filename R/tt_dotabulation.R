@@ -288,6 +288,16 @@ recursive_applysplit = function( df,
 }
 
 
+#' Create a table from a layout and data
+#' 
+#' Layouts are used to describe a table pre-data. `build_rable` is used to create a table using a layout and a dataset.
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @template examples_layout_tabulation
+#' 
 build_table = function(lyt, df, ...) {
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
