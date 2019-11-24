@@ -1,17 +1,17 @@
-pos_from_values = function(vals, tab) {
-    splvec = list()
-    curtree = tab
-    for(v in vals) {
-        if(is.factor(v)) v = levels(v)[v]
-        kids = tree_children(curtree)
-        stopifnot(v %in% names(kids))
-        splvec = c(splvec, list(current_spl(curtree)))
-        curtree = kids[[v]]
-    }
+## pos_from_values = function(vals, tab) {
+##     splvec = list()
+##     curtree = tab
+##     for(v in vals) {
+##         if(is.factor(v)) v = levels(v)[v]
+##         kids = tree_children(curtree)
+##         stopifnot(v %in% names(kids))
+##         splvec = c(splvec, list(current_spl(curtree)))
+##         curtree = kids[[v]]
+##     }
     
 
 
-}
+## }
 
 do_recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL,
                                 cols = NULL, value) {

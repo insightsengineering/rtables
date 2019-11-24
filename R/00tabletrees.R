@@ -842,8 +842,9 @@ ElementaryTable = function(kids = list(),
 ## analyses live 
 
 setClass("TableTree", contains = c("VTableTree"),
-         representation(content = "ElementaryTable",
-                        split = "Split"),
+         representation(content = "ElementaryTable"##,
+                     ##   split = "Split"
+                        ),
          validity = function(object) {
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
 })
@@ -908,7 +909,7 @@ TableTree = function(kids = list(),
                   labelrow = labrow,
                   rowspans = rspans,
                   ##         pos_in_tree = tpos,
-                  split = spl,
+       ##           split = spl,
                   col_info = cinfo,
                   format = NULL)## ,
         ## var_label = var_lbl)

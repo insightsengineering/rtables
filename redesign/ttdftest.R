@@ -203,12 +203,11 @@ build_table(missavar, rawdat)
 
 
 complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-    add_colby_blinecomp(var = "visit", baseline = "baseline",
-                        all = TRUE,
-                        valuecomp = `-`) %>%
+    add_colby_varwbline(var = "visit",lbl = "Visit", baseline = "baseline",
+                        incl_all = TRUE) %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", lblfmt = "%s (n)") %>%
-    add_analyzed_var("weight", mean, fmt = "xx.xx")
+    add_analyzed_blinecomp("weight", lbl = "weight", afun = mean, fmt = "xx.xx")
     
 
 
@@ -268,7 +267,7 @@ mtab2
 
 ## note we're using tab here, so need to make it above
 nesttab = tab
-do_recursive_replace(nesttab, list("Ethnicity", "WHITE", "Factor2", "A"), rows = 1:2, cols = 1, value = 5)
+do_recursive_replace(nesttab, list("Ethnicity", "WHITE", "Factor2", "A", "AGE"), rows = 1:2, cols = 1, value = 5)
 
 
 do_recursive_replace(nesttab, list(1, "WHITE"), incontent = TRUE, cols = 3:4, value = list(c(10, 2), c(20, 7)))

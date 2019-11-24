@@ -500,15 +500,15 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
     obj
 })
 
-setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
-setMethod("current_spl", "VTableTree", function(obj) obj@split)
+## setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
+## setMethod("current_spl", "VTableTree", function(obj) obj@split)
 
 
-setGeneric("current_spl<-", function(obj, value) standardGeneric("current_spl<-"))
-setMethod("current_spl<-", "VTableTree", function(obj, value)  {
-    obj@split = value
-    obj
-})
+## setGeneric("current_spl<-", function(obj, value) standardGeneric("current_spl<-"))
+## setMethod("current_spl<-", "VTableTree", function(obj, value)  {
+##     obj@split = value
+##     obj
+## })
 
 ### Collect all leaves of a current tree
 ### This is a workhorse function in various

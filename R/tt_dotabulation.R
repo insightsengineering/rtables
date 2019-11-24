@@ -276,6 +276,10 @@ recursive_applysplit = function( df,
                               lvl = lvl + 1L
                               )}
             )
+        ## this will be the variables
+        nms = sapply(spl_payload(spl), spl_payload)
+        nms[is.na(nms)] = ""
+        names(kids) = nms
     }
     ret = TableTree(cont = ctab, kids = kids,
                     name = name,
