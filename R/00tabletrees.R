@@ -224,6 +224,8 @@ setClass("CompoundSplit", contains = "Split",
 
 setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 .repoutlst = function(x, nv) {
+    if(!is.function(x) && length(x) == nv)
+        return(x)
     if(!is(x, "list"))
         x = list(x)
     rep(x, length.out = nv)

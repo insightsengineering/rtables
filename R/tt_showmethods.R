@@ -4,7 +4,7 @@ docat = function(obj) {
         crows = nrow(obj@content)
         ccols = if(crows == 0) 0 else ncol(obj@content)
         cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
-                                         obj@content@label,
+                                         obj_label(content_table(obj)),
                                          crows, ccols),
             sep = "")
         
@@ -19,9 +19,9 @@ docat = function(obj) {
             if(is.na(lv)) lv = 0
             cat(rep("*", lv),
                 sprintf(" %s [%d x %d] \n",
-                        obj@label,
+                        obj_label(obj),
                         length(kids),
-                        length(r@leaf_value)),
+                        length(row_values(r))),
                 sep="")
             kids = kids[-isr]
         }
@@ -30,9 +30,19 @@ docat = function(obj) {
     invisible(NULL)
 }
 
-ploads_to_str = function(x, collapse = ":") sapply(x,
-                                                   paste,
-                                                   collapse = collapse)
+ploads_to_str = function(x, collapse = ":") {
+    if(is(x, "Split")) {
+        sapply(spl_payload(x), ploads_to_str)
+    } else if (is.list(x) && are(x, "list")) {
+        paste0(c("(", paste(sapply(x, ploads_to_str), collapse = ", "), ")"))
+    } else if(is.list(x) && are(x, "Split")) {
+        ploads_to_str(lapply(x, spl_payload))
+    } else {
+        sapply(x,
+               paste,
+               collapse = collapse)
+    }
+}
     
 ## setMethod("show", "TableTree",
 ##           function(object) {
@@ -137,7 +147,13 @@ setMethod("spltype_abbrev", "NULLSplit",
           function(obj) "no obs")
 
 setMethod("spltype_abbrev", "AnalyzeVarSplit",
-          function(obj) "** analyzed var **")
+          function(obj) "** analysis **")
+
+setMethod("spltype_abbrev", "CompoundSplit",
+          function(obj) paste("compound", paste(sapply(spl_payload(obj), spltype_abbrev), collapse = " ")))
+
+setMethod("spltype_abbrev", "AnalyzeMultiVars",
+          function(obj) "** multivar analysis **")
 
            
 
@@ -152,6 +168,7 @@ docat_splitvec = function(object, indent = 0) {
     } else {
 
         plds = ploads_to_str(lapply(object, spl_payload))
+              
         tabbrev = sapply(object, spltype_abbrev)
         msg = paste(collapse = " -> ",
                     paste0(plds, " (", tabbrev, ")"))

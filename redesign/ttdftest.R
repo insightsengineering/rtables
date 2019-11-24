@@ -114,7 +114,7 @@ tab = build_table(lyt, rawdat)
 thing2 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
     add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
-    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"), afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 tab2 = build_table(thing2, rawdat)
