@@ -214,11 +214,13 @@ tt_rheader = function(..., format = "xx") {
 #'         format = "xx.xx"
 #'     )
 #' )
+#' 
+#' #TODO format propagation
 #' mtbl
 #' 
 #' 
 #' # Table with multirow header
-#' mtbl <- rtable(
+#' mtbl <- tt_rtable(
 #'   header = tt_rheader(
 #'     tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2), tt_rcell("Petal.Length", colspan=2)),
 #'     tt_rrow(NULL, "mean", "median", "mean", "median")
@@ -231,6 +233,8 @@ tt_rheader = function(..., format = "xx") {
 #'   )
 #' )
 #' 
+#' # TODO Warning message:
+#' 
 #' mtbl
 #' 
 #' names(mtbl) # always first row of header
@@ -238,7 +242,7 @@ tt_rheader = function(..., format = "xx") {
 #' # Single row header
 #' 
 #' tbl <- tt_rtable(
-#'   header = tt_rheader("Treatement\nN=100", "Comparison\nN=300"),
+#'   header = tt_rheader(tt_rrow(NULL, tt_rcell("Treatement N=100"), tt_rcell("Comparison N=300"))),
 #'   format = "xx (xx.xx%)",
 #'   tt_rrow("A", c(104, .2), c(100, .4)),
 #'   tt_rrow("B", c(23, .4), c(43, .5)),
@@ -247,15 +251,20 @@ tt_rheader = function(..., format = "xx") {
 #'   tt_rrow("estimate", tt_rcell(55.23, "xx.xx", colspan = 2)),
 #'   tt_rrow("95% CI", indent = 1, tt_rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 #' )
-#' 
+#' # TODO: fix
+#' # TODO: coerce c(...) to tt_rheader
 #' tbl
 #' 
-#' row.names(tbl)
+#' row.names(tbl) # TODO # row.lables
 #' names(tbl)
 #' 
 #' 
 #' # Subsetting
 #' tbl[1,2]
+#' tbl[2, 1]
+#' # TODO access to the cell
+#' tbl[[2, 1]] # cell ?
+#' tbl[[c("All Species"), 1]]
 #' tbl[3,2]
 #' tbl[5,1]
 #' tbl[5,2]
@@ -263,18 +272,11 @@ tt_rheader = function(..., format = "xx") {
 #' 
 #' 
 #' # Data Structure methods
-#' dim(tbl)
+#' dim(tbl) # TODO
 #' nrow(tbl)
 #' ncol(tbl)
 #' names(tbl)
 #' 
-#' 
-#' # Output: html
-#' as_html(tbl)
-#' 
-#' \dontrun{
-#' Viewer(tbl)
-#' }
 #' 
 #' # Colspans
 #' 
