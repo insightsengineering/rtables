@@ -385,8 +385,8 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
 ## indices into positive ones, given j
 ## and total length
 .j_to_posj = function(j, n) {
-    if(any(j < 0))
-        j = seq_len(n)[j]
+    ## This will work for logicals, numerics, integers
+    j = seq_len(n)[j]
     j
 }
 
@@ -543,13 +543,40 @@ subset_by_rownum = function(tt, i, ... ) {
 }
 
 
+
+setMethod("[", c("VTableTree", "logical", "logical"),
+          function(x, i, j, ..., drop = FALSE) {
+    i = .j_to_posj(i, nrow(x))
+    j = .j_to_posj(j, ncol(x))
+    x[i,j, ..., drop = drop]
+})
+
+setMethod("[", c("VTableTree", "logical", "ANY"),
+          function(x, i, j, ..., drop = FALSE) {
+    i = .j_to_posj(i, nrow(x))
+    x[i,j, ..., drop = drop]
+})
+
+setMethod("[", c("VTableTree", "ANY", "logical"),
+          function(x, i, j, ..., drop = FALSE) {
+    j = .j_to_posj(j, ncol(x))
+    x[i,j, ..., drop = drop]
+})
+
+
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
+    i = .j_to_posj(i, nrow(x))
+    j = .j_to_posj(j, ncol(x))
     
     if(!missing(j))
         x = subset_cols(x, j)
     if(!missing(i))
         x = subset_by_rownum(x, i)
+    if(length(j) == 1L &&
+       length(i) == 1L &&
+       drop) 
+        x = row_values(collect_leaves(x)[[1]] )[[1]]
     x
 })
 

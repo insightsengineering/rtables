@@ -216,7 +216,6 @@ tt_rheader = function(..., format = "xx") {
 #'     )
 #' )
 #' 
-#' #TODO format propagation
 #' mtbl
 #' 
 #' 
@@ -303,6 +302,8 @@ tt_rheader = function(..., format = "xx") {
 #' tbl3
 #' 
 tt_rtable = function(header, ..., format = NULL) {
+    if(is.character(header))
+        header = list(as.list(header))
     if(is.list(header)) {
         if(are(header, "TableRow"))
             colinfo = hrows_to_colinfo(rrows)

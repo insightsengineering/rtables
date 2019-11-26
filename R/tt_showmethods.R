@@ -75,6 +75,11 @@ setMethod("payloadmsg", "VarLevWBaselineSplit",
           function(spl) paste0(spl_payload(spl), "[baseline ",
                                spl@baseline_value, # XXX XXX
                                "]"))
+
+setMethod("payloadmsg", "ManualSplit",
+          function(spl) "manual")
+
+
 setMethod("payloadmsg", "ANY",
           function(spl) {
     warning("don't nkow how to make payload print message for Split of class", class(spl))
