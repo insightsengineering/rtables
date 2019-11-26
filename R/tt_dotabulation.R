@@ -77,7 +77,6 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                            format = NULL,
                            defrowlabs = NULL,
                            rowconstr = DataRow) {
-    browser()
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
