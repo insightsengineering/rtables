@@ -309,10 +309,9 @@ pipeline. As with adding further splitting, the tabulation will occur
 at the current/next level of nesting by default, so
 
 ```
-layout <- NULL %>%  %>% add_colby_varlevels("ARM", "arm") %>%
+layout <- NULL %>% add_colby_varlevels("ARM", "arm") %>%
      add_colby_varlevels("SEX", "gender") %>%
      add_analyzed_vars("AGE", summary)
-
 ``` 
 
 Will tabulate values of `AGE` after grouping/splitting by `ARM` and

@@ -220,11 +220,13 @@ setMethod("cmpnd_last_colsplit", "ANY",
 
 # constructors ----
 
+
+# TODO: consider to remove
 add_new_rowtree = function(lyt, spl) {
     add_row_split(lyt, spl, next_rpos(lyt, TRUE))
 }
 
-
+# TODO: consider to remove
 add_new_coltree = function(lyt, spl) {
     add_col_split(lyt, spl, next_cpos(lyt, TRUE))
 }
@@ -273,6 +275,20 @@ add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = 
 
 
 
+#' Declaring a column-split with a Baseline level
+#' 
+#' Which value should be considered the baseline when performing automatic comparisons is done in the column split.
+#' Instead of doing \link{\code{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
+#' baseline")
+#' 
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
@@ -319,6 +335,36 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 }
 
 
+
+#' Associate Multiple Variables with Columns
+#' 
+#' In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
+#' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
+#' \code{add_colby_multivar}
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{add_analyzed_colvars}}
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' library(dplyr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   add_rowby_varlevels("RACE", "ethnicity") %>%
+#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' 
+#' l
+#' 
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' build_table(l, ANL)
+#'   
+#'   
 add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
                               newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
@@ -398,10 +444,11 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 }
 
 
-#' Add an anlysis split
+#' Generate Rows Analyzing Variables Across Columns
 #' 
-#' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
-#' rows, rather than a further partition of the data.
+#' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
+#' calls to \link{\code{add_analyzed_vars}} and/or \link{\code{add_analyzed_colvar}} into our layout pipeline. As with
+#' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
 #' @inheritParams argument_conventions
 #' 
@@ -459,6 +506,33 @@ add_analyzed_vars = function(lyt,
 
 
 
+#' Generate Rows Analyzing Different Variables Across Columns
+#' 
+#' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
+#' level of nesting in the column structure, rather than at the row level.
+#' 
+#' @inheritParams  
+#' 
+#' @export
+#' 
+#' @seealso \link{\code{add_colby_multivar}}
+#' 
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' library(dplyr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   add_rowby_varlevels("RACE", "ethnicity") %>%
+#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' 
+#' l
+#' 
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' build_table(l, ANL)
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {
