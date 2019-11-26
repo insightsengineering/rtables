@@ -7,12 +7,17 @@ setMethod("nrow", "ElementaryTable",
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE ,TRUE)))
 
+setMethod("nrow", "TableTree",
+          function(x) 1L)
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
     ci = col_info(x)
     length(col_exprs(ci))
 })
 
+
+setMethod("dim", "VTableNodeInfo",
+          function(x) c(nrow(x), ncol(x)))
 setGeneric("tree_children", function(x) standardGeneric("tree_children"))
 setMethod("tree_children", c(x = "VTree"),
           function(x) x@children)
