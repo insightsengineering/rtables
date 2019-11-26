@@ -26,6 +26,8 @@ empty_dominant_axis = function(layout) {
 
 }
 
+# Method Definitions ----
+
 ## pre-data layouts:
 ## structured as lists of lists of splits
 ## e.g. reference table 1 would have column  proto-layout
@@ -216,12 +218,15 @@ setMethod("cmpnd_last_colsplit", "ANY",
 
 
 
+# constructors ----
 
+
+# TODO: consider to remove
 add_new_rowtree = function(lyt, spl) {
     add_row_split(lyt, spl, next_rpos(lyt, TRUE))
 }
 
-
+# TODO: consider to remove
 add_new_coltree = function(lyt, spl) {
     add_col_split(lyt, spl, next_cpos(lyt, TRUE))
 }
@@ -234,24 +239,56 @@ add_new_coltree = function(lyt, spl) {
 
 #' Declaring a column-split based on levels of a variable
 #' 
+#' Will generate children for each subset of a categorical variable
+#' 
 #' @inheritParams argument_conventions
 #' 
 #' @export
-#' 
+#'
 #' @examples 
+#' 
 #' library(magrittr)
 #' 
-#' l <- NULL %>% add_colby_varlevels("ARM")
+#' l <- NULL %>% add_colby_varlevels("ARM") 
+#' l
 #' 
+#' # add an analysis (summary)
+#' l2 <- l %>% 
+#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#' l2
 #' 
+#' build_table(l2, DM)
 #' 
+#' # By default sequentially adding layouts results in nesting
+#' l3 <- NULL %>% add_colby_varlevels("ARM") %>%
+#'   add_colby_varlevels("SEX") %>%
+#'   add_analyzed_vars("AGE", afun = lstwrap(summary), fmt = "xx.xx")
+#' l3
 #' 
-add_colby_varlevels = function(lyt,  var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
+#' build_table(l3, DM)
+#' 
+add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
+
+
+#' Declaring a column-split with a Baseline level
+#' 
+#' Which value should be considered the baseline when performing automatic comparisons is done in the column split.
+#' Instead of doing \link{\code{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
+#' baseline")
+#' 
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
@@ -265,6 +302,28 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 }
 
 
+#' Add Rows according to levels of a variable
+#' 
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_varlevels("SEX", "Gender") %>%
+#'   add_summary_count(lbl = "Overall (N)") %>%
+#'   add_rowby_varlevels("RACE", "Ethnicity") %>%
+#'   add_summary_count("RACE", lblfmt = "%s (n)") %>%
+#'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+#'   
+#' l
+#' 
+#' build_table(l, DM)
+#'   
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
@@ -276,6 +335,36 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 }
 
 
+
+#' Associate Multiple Variables with Columns
+#' 
+#' In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
+#' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
+#' \code{add_colby_multivar}
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{add_analyzed_colvars}}
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' library(dplyr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   add_rowby_varlevels("RACE", "ethnicity") %>%
+#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' 
+#' l
+#' 
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' build_table(l, ANL)
+#'   
+#'   
 add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
                               newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
@@ -331,15 +420,7 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 }
 
 
-#' Add an anlysis split
-#' 
-#' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
-#' rows, rather than a further partition of the data.
-#' 
-#' @inheritParams argument_conventions
-#' 
-#' @export
-#' 
+
 add_analyzed_var = function(lyt, var, lbl = var, afun,
                             fmt = NULL,
                             rowlabs = "",
@@ -363,6 +444,26 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 }
 
 
+#' Generate Rows Analyzing Variables Across Columns
+#' 
+#' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
+#' calls to \link{\code{add_analyzed_vars}} and/or \link{\code{add_analyzed_colvar}} into our layout pipeline. As with
+#' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
+#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#' l
+#' 
+#' build_table(l, DM)
+#' 
 add_analyzed_vars = function(lyt,
                              var,
                              lbl = var,
@@ -405,6 +506,33 @@ add_analyzed_vars = function(lyt,
 
 
 
+#' Generate Rows Analyzing Different Variables Across Columns
+#' 
+#' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
+#' level of nesting in the column structure, rather than at the row level.
+#' 
+#' @inheritParams  
+#' 
+#' @export
+#' 
+#' @seealso \link{\code{add_colby_multivar}}
+#' 
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' library(dplyr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   add_rowby_varlevels("RACE", "ethnicity") %>%
+#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' 
+#' l
+#' 
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' build_table(l, ANL)
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {
@@ -583,6 +711,25 @@ setMethod("add_summary", "Split",
 }
 
 
+#' Count number of observations
+#' 
+#' @inheritParams 
+#' 
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
+#'     add_rowby_varlevels("RACE") %>% 
+#'     add_summary_count(lblfmt = "%s (n)") %>% 
+#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#' l
+#' 
+#' build_table(l, DM)
+#' 
 add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "xx (xx.x%)" ){
 
     if(length(gregexpr("xx", valfmt)[[1]]) == 2)
@@ -593,11 +740,29 @@ add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "xx (xx.x%
 }
 
 
+#' Add the column population counts
+#' 
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
+#'     add_colcounts() %>% 
+#'     add_rowby_varlevels("RACE") %>% 
+#'     add_analyzed_vars("AGE", afun = function(x) list(min = min(x), max = max(x)))
+#' l
+#' 
+#' build_table(l, DM)
+#' 
 add_colcounts = function(lyt, fmt = "(N=xx)") {
     disp_ccounts(lyt) = TRUE
     colcount_fmt(lyt) = fmt
     lyt
-
 }
     
 ## Currently existing tables can ONLY be added 
@@ -743,6 +908,18 @@ manual_cols = function(..., .lst = list(...)) {
 }
 
 
+#' Returns a function that coerces the return values of f to a list
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' summary(iris$Sepal.Length)
+#' 
+#' library(magrittr)
+#' f <- lstwrap(summary)
+#' f(iris$Sepal.Length)
+#' 
 lstwrap = function(f) {
     function(...) as.list(f(...))
 }

@@ -170,7 +170,7 @@ NULL %>% add_colby_blinecomp(var = "visit",
      	 	             baseline = "BASE",
 			     comparison = '-',
 			     rawvalcol = TRUE) %>%
-      add_analyzed_var("BP", "Blood pressure)
+      add_analyzed_vars("BP", "Blood pressure)
 `
 
 Would give us something like
@@ -276,7 +276,7 @@ layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
        add_summary_count(lbl = "Overall (N)") %>%
        add_rowby_varlevels("RACE", "Ethnicity") %>%
        add_summary_count("RACE", lblfmt = "%s (n)") %>%
-       add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx")
+       add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
 ```
 
 Will generate a layout where each arm of the trial has a column for
@@ -309,10 +309,9 @@ pipeline. As with adding further splitting, the tabulation will occur
 at the current/next level of nesting by default, so
 
 ```
-layout <- NULL %>%  %>% add_colby_varlevels("ARM", "arm") %>%
+layout <- NULL %>% add_colby_varlevels("ARM", "arm") %>%
      add_colby_varlevels("SEX", "gender") %>%
-     add_analyzed_var("AGE", summary)
-
+     add_analyzed_vars("AGE", summary)
 ``` 
 
 Will tabulate values of `AGE` after grouping/splitting by `ARM` and
@@ -469,7 +468,7 @@ One question is how to declare/add compound splits
 NULL %>% add_colby_varlevels("ARM", "arm") %>%
      add_colby_compound(NULL %>% add_colby_all() %>%
      add_colby_varlevels("SEX", "sex")) %>%
-     add_analyzed_var("AGE", summary)
+     add_analyzed_vars("AGE", summary)
 ```
 
 Pros: no new syntax or grammar elements
@@ -484,7 +483,7 @@ Cons: I really hate the whole nesting pipes thing.
 ```
 NULL %>% add_colby_varlevels("ARM", "arm") %>%
      add_colby_compound(AllSplit(), VarLevelSplit("SEX", "gender")) %>%
-     add_analyzed_var("AGE", summary)
+     add_analyzed_vars("AGE", summary)
 ```
 
 Pros: no nested pipes. 
@@ -508,7 +507,7 @@ replace `newtoplevel` argument with `nestlevel` which can take:
 NULL %>% add_colby_varlevels("ARM", "arm") %>%
      add_colby_all() %>% 
      add_colby_varlevels("SEX", "gender", nestlevel = "current") %>%
-     add_analyzed_var("AGE", summary)
+     add_analyzed_vars("AGE", summary)
 ```
 
 Pros: same ux/"formfeel" as the before
@@ -562,7 +561,7 @@ portion means "variable with baseline"), like so
 ```
 layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
        add_rowby_varlevels("RACE", "ethnicity") %>%
-       add_analyzed_var("AGE", afun = mean)
+       add_analyzed_vars("AGE", afun = mean)
 ```
 
 Note that the above layout does not actually perform any comparisons,

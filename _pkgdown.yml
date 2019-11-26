@@ -9,11 +9,33 @@ navbar:
 
 reference:
 
-  - title: Table Tree Tabulation
+  - title: Table Trees
+    contents:
+    - argument_conventions
+
+  - title: Layouts Simple Tabulation
     contents:
     - build_table
     - add_colby_varlevels
-    - add_analyzed_var
+    - add_colcounts
+    - add_analyzed_vars
+    - add_rowby_varlevels
+    - add_summary_count
+    - add_colby_multivar
+    - add_analyzed_colvars
+    
+
+  - title: Table Tree Untility Functions
+    contents:
+    - lstwrap
+
+  - title: Compatibility Layer
+    contents:
+    - tt_rtable
+    - tt_rrow
+    - tt_rowl
+    - tt_rcell
+    
 
 
   - title: Core Table Create Functions
@@ -23,6 +45,7 @@ reference:
     - rrow
     - rcell
     - rheader
+    - rheaderl
     - rtablel
     - rrowl
     - empty_rtable
