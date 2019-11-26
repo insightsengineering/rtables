@@ -38,10 +38,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
         datcol = list(NULL)
     }
 
-
     rawvals = mapply(function(csub, col, count, cextr) {
-
-
         inds = eval(csub, envir = dfpart)
         dat = dfpart[inds,]
         if(!is.null(col))
@@ -58,7 +55,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
         ## if(takes_totn(func))
         ##     args = c(args, list(.N_total = totcount))
         
-        do.call(func, args)
+        ret = do.call(func, args)
+        if(!is.list(ret) && length(ret) > 1)
+            ret = list(ret)
+        ret
     }, csub = colexprs, col = datcol,
     count = colcounts,
     cextr = colextras,
@@ -77,6 +77,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                            format = NULL,
                            defrowlabs = NULL,
                            rowconstr = DataRow) {
+    browser()
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -114,7 +115,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
         rowconstr(val = rowvals,
-                  cinfo = cinfo,                 lev = lev,
+                  cinfo = cinfo,
+                  lev = lev,
                   lab = lbls[i],
                   name = lbls[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
@@ -266,6 +268,7 @@ recursive_applysplit = function( df,
                                 spl = spl,
                                 cinfo = cinfo,
                                 lvl = lvl + 1L))
+        names(kids) = sapply(kids, obj_name)
     } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
         lab = ""
         kids = lapply(spl_payload(spl),

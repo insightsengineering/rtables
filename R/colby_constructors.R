@@ -374,7 +374,7 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 
 add_analyzed_var = function(lyt, var, lbl = var, afun,
                             fmt = NULL,
-                            rowlabs = as.character(substitute(afun)),
+                            rowlabs = "",
                             newtoplev = FALSE,
                             inclNAs = FALSE) {
     spl = AnalyzeVarSplit(var, lbl,
@@ -414,12 +414,28 @@ add_analyzed_vars = function(lyt,
                              rowlabs = "",
                              newtoplev = FALSE,
                              inclNAs = FALSE) {
+
+    subafun = substitute(afun)
+    if(is.name(subafun) &&
+       missing(rowlabs) &&
+       is.function(afun) &&
+       ## this is gross. basically testing
+       ## if the symbol we have corresponds
+       ## in some meaningful way to the function
+       ## we will be calling.
+       identical(mget(as.character(subafun),
+                      mode = "function",
+                      ifnotfound = list(NULL),
+                      inherits = TRUE
+                      )[[1]], afun)) {
+        rowlabs = as.character(subafun)
+    }
     spl = AnalyzeMultiVars(var, lbl,
                           afun = afun,
                           splfmt = fmt,
                           defrowlab = rowlabs,
                           inclNAs = inclNAs)
-
+ 
     if(!newtoplev &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
@@ -769,3 +785,7 @@ manual_cols = function(..., .lst = list(...)) {
     InstantiatedColumnInfo(treelyt = ctree)
 }
 
+
+lstwrap = function(f) {
+    function(...) as.list(f(...))
+}

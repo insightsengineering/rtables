@@ -239,13 +239,6 @@ setMethod(".applysplit_rawvals", "ManualSplit",
 setMethod(".applysplit_rawvals", "NULLSplit",
           function(spl, df) FALSE)
 
-## this returns null because we actually use
-## the extra arguments to know how many splits
-## there need to be. .fixupvals catches and takes
-## care of this case.
-setMethod(".applysplit_rawvals", "ComparisonSplit",
-          function(spl, df) NULL)
-
 setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
           function(spl, df) spl_payload(spl))
 
@@ -299,12 +292,6 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
     list(ret)
 })
 
-## setMethod(".applysplit_datapart", "ComparisonSplit",
-##           function(spl, df, vals) {
-##     stopifnot(length(vals) > 0)
-##     rep(list(df), times = length(vals))
-## })
-
 ## XXX TODO *CutSplit Methods
 
 ## Extras generation methods
@@ -313,11 +300,6 @@ setMethod(".applysplit_extras", "Split",
     stopifnot(length(vals) > 0)
     replicate(list(split_exargs(spl)), n = length(vals))
 })
-
-## setMethod(".applysplit_extras", "ComparisonSplit",
-##           function(spl, df, vals) {
-##     make_comp_extargs(spl, df)
-## })
 
 
 setMethod(".applysplit_extras", "VarLevWBaselineSplit",
@@ -349,20 +331,20 @@ subsets_from_factory = function(df, fact) {
 }
 
 
-make_comp_extargs = function(spl, df) {
-    stopifnot(is(spl, "ComparisonSplit"))
-    ssets1 = subsets_from_factory(df, spl@subset1_gen)
-    ssets2 = subsets_from_factory(df, spl@subset2_gen)
-    if(is.null(names(ssets2)))
-        names(ssets2) = names(ssets1)
+## make_comp_extargs = function(spl, df) {
+##     stopifnot(is(spl, "ComparisonSplit"))
+##     ssets1 = subsets_from_factory(df, spl@subset1_gen)
+##     ssets2 = subsets_from_factory(df, spl@subset2_gen)
+##     if(is.null(names(ssets2)))
+##         names(ssets2) = names(ssets1)
     
-    mapply(function(s1, s2, s1name, s2name) c( list(subset1 = s1, subset1name = s1name, subset2 = s2, subset2name), split_exargs(spl)),
-           s1 = ssets1,
-           s2 = ssets2,
-           s1name = names(ssets1),
-           s2name = names(ssets2),
-           SIMPLIFY=FALSE)
-}
+##     mapply(function(s1, s2, s1name, s2name) c( list(subset1 = s1, subset1name = s1name, subset2 = s2, subset2name), split_exargs(spl)),
+##            s1 = ssets1,
+##            s2 = ssets2,
+##            s1name = names(ssets1),
+##            s2name = names(ssets2),
+##            SIMPLIFY=FALSE)
+## }
 
 
 make_blinecomp_extargs = function(spl, df) {

@@ -93,9 +93,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## adding more analysis vars "compounds them", placing them at the same
     ## level of nesting as all previous analysis blocks, rather than
     ## attempting to further nest them
-    add_analyzed_vars("AGE", "Age Analysis redux", afun = function(x) list(sd = sd(x),
-                                                                    range = range(x)),
-                     fmt = c("xx.x", "xx.x - xx.x")) %>%
+    add_analyzed_vars("AGE", "Age Analysis redux", afun = range, fmt = "xx.x - xx.x") %>%
 
     ## Note newtoplev=TRUE, this creates a NEW subtable directly under the
     ## root split
