@@ -167,22 +167,109 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
     
     
 
-setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
+## setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
+##           function(x, i, j, ...,  value) {
+
+
+##     nr = nrow(x)
+##     i = .j_to_posj(i, nr)
+##     nc = ncol(x)
+##     if(are(value, "TableRow"))
+##         value = rep(value, length.out = length(i))
+##     else
+        
+##     counter = 0
+##     vrow = 1
+
+##     ## this has access to value, i, and j by scoping
+##     replace_rowsbynum = function(x) {
+##         maxi = max(i)
+##         if(counter >= maxi)
+##             return(valifnone)
+        
+##         if(labrow_visible(x)) {
+##             counter <<- counter + 1
+##             if(counter %in% i) {
+##                 nxtval = value[[1]]
+##                 if(is(nxtval, "character") &&
+##                    length(nxtval) == 1L) {
+##                     obj_label(x) = nxtval
+##                 } else if(is(nxtrow, "LabelRow")) {
+##                     tt_labelrow(x) = nxtval
+##                 } else {
+##                     stop("can't replace label with value of class", class(nxtval))
+##                 }
+##                 ## we're done with this one move to
+##                 ## the next
+##                 value <<- value[-1]
+##             }
+##         }
+##         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
+##             ctab = content_table(x)
+            
+##             content_table(x) = replace_rowsbynum(ctab, i)
+##         }
+##         if(counter >= maxi) { #already done
+##             return(x)
+##         }
+##         kids = tree_children(x)
+        
+##         if(length(kids) > 0) {
+##             for(pos in seq_along(kids)) {
+##                 curkid = kids[[pos]]
+##                 if(is(curkid, "TableRow")) {
+##                     counter <<- counter + 1
+##                     if(!(counter %in% i)) {
+##                         nxtval = value[[1]]
+##                         if(is(nxtval, class(curkid))) {
+##                             curkid = nxtval
+##                         } else {
+##                             row_values(curkid) = rep(value[[vrow]], length.out = ncol(x))
+##                         }
+##                         vrow <<- vrow + 1
+##                         kids[[pos]] = curkid
+##                     }
+##                 } else {
+##                     kids[[pos]] = replace_rowsbynum(curkid)
+##                 }
+##                 if(counter >= maxi)
+##                     break
+##             }
+##         }
+##         tree_children(x) = kids
+##         x
+##     }
+##     replace_rowsbynum(tt, i)
+## })
+
+
+
+
+
+setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
 
     nr = nrow(x)
     i = .j_to_posj(i, nr)
-    nc = ncol(x)
+    if(missing(j)) {
+        j = seq_along(col_exprs(col_info(tab)))
+    } else {
+        j = .j_to_posj(j, ncol(x))
+    }
+
+    if(length(i) > 1 && length(j) < ncol(x))
+        stop("cannot modify multiple rows in not all columns.")
+
     if(are(value, "TableRow"))
+        
         value = rep(value, length.out = length(i))
     else
-        
+        value = rep(value, length.out = length(i) * length(j))
+    
     counter = 0
-    vrow = 1
-
     ## this has access to value, i, and j by scoping
-    replace_rowsbynum = function(x) {
+    replace_rowsbynum = function(x, i) {
         maxi = max(i)
         if(counter >= maxi)
             return(valifnone)
@@ -191,10 +278,7 @@ setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
             counter <<- counter + 1
             if(counter %in% i) {
                 nxtval = value[[1]]
-                if(is(nxtval, "character") &&
-                   length(nxtval) == 1L) {
-                    obj_label(x) = nxtval
-                } else if(is(nxtrow, "LabelRow")) {
+                if(is(nxtrow, "LabelRow")) {
                     tt_labelrow(x) = nxtval
                 } else {
                     stop("can't replace label with value of class", class(nxtval))
@@ -219,18 +303,26 @@ setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
                 curkid = kids[[pos]]
                 if(is(curkid, "TableRow")) {
                     counter <<- counter + 1
-                    if(!(counter %in% i)) {
+                    if(counter %in% i) {
                         nxtval = value[[1]]
                         if(is(nxtval, class(curkid))) {
+                            if(no_colinfo(nxtval) &&
+                               length(row_values(nxtval)) == ncol(x)) {
+                                col_info(nxtval) = col_info(x)
+                            }
+                            stopifnot(identical(col_info(x), col_info(nxtval)))
                             curkid = nxtval
+                            value = value[-1]
                         } else {
-                            row_values(curkid) = rep(value[[vrow]], length.out = ncol(x))
+                            rvs = row_values(curkid)
+                            rvs[j] = value[1:length(j)]
+                            row_values(curkid) = rvs
+                            value = value[-(1:length(j))]
                         }
-                        vrow <<- vrow + 1
                         kids[[pos]] = curkid
                     }
                 } else {
-                    kids[[pos]] = replace_rowsbynum(curkid)
+                    kids[[pos]] = replace_rowsbynum(curkid, i)
                 }
                 if(counter >= maxi)
                     break
@@ -239,83 +331,7 @@ setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
         tree_children(x) = kids
         x
     }
-    replace_rowsbynum(tt, i)
-})
-
-
-
-
-
-setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
-          function(x, i, j, ...,  value) {
-
-
-    nr = nrow(x)
-    i = .j_to_posj(i, nr)
-    value = rep(value, length.out = length(i))
-  
-    counter = 0
-    vrow = 1
-
-    ## this has access to value, i, and j by scoping
-    replace_rowsbynum = function(x) {
-        maxi = max(i)
-        if(counter >= maxi)
-            return(valifnone)
-        
-        if(labrow_visible(x)) {
-            counter <<- counter + 1
-            if(counter %in% i) {
-                nxtval = value[[1]]
-                if(is(nxtval, "character") &&
-                   length(nxtval) == 1L) {
-                    obj_label(x) = nxtval
-                } else if(is(nxtrow, "LabelRow")) {
-                    tt_labelrow(x) = nxtval
-                } else {
-                    stop("can't replace label with value of class", class(nxtval))
-                }
-                ## we're done with this one move to
-                ## the next
-                value <<- value[-1]
-            }
-        }
-        if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
-            ctab = content_table(x)
-            
-            content_table(x) = replace_rowsbynum(ctab, i)
-        }
-        if(counter >= maxi) { #already done
-            return(x)
-        }
-        kids = tree_children(x)
-        
-        if(length(kids) > 0) {
-            for(pos in seq_along(kids)) {
-                curkid = kids[[pos]]
-                if(is(curkid, "TableRow")) {
-                    counter <<- counter + 1
-                    if(!(counter %in% i)) {
-                        nxtval = value[[1]]
-                        if(is(nxtval, class(curkid))) {
-                            curkid = nxtval
-                        } else {
-                            row_values(curkid) = rep(value[[vrow]], length.out = ncol(x))
-                        }
-                        vrow <<- vrow + 1
-                        kids[[pos]] = curkid
-                    }
-                } else {
-                    kids[[pos]] = replace_rowsbynum(curkid)
-                }
-                if(counter >= maxi)
-                    break
-            }
-        }
-        tree_children(x) = kids
-        x
-    }
-    replace_rowsbynum(tt, i)
+    replace_rowsbynum(x, i)
 })
 
 
