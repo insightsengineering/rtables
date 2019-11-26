@@ -50,7 +50,7 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
 tt_rrowl = function (row.name, ..., format = NULL, indent = 0)  {
     dots <- list(...)
     args_list <- c(list(row.name = row.name, format = format, 
-        indent = indent), unlist(lapply(dots, as.list), recursive = FALSE))
+        indent = indent), val = unlist(lapply(dots, as.list), recursive = FALSE))
     do.call(tt_rrow, args_list)
 }
 
@@ -101,7 +101,7 @@ hrows_to_colinfo = function(rows) {
     ## XXX could one row but cspan ever make sense????
     ## I don't think so?
     if(nr == 1) { ## && all(cspans == 1L)) {
-        ret = manual_cols( vals[[ 1 ]] )
+        ret = manual_cols( unlist(vals[[ 1 ]] ) )
         if(!is.null(counts)) {
             col_counts(ret) = counts
             disp_ccounts(ret) = TRUE
@@ -183,7 +183,7 @@ hrows_to_colinfo = function(rows) {
 tt_rheader = function(..., format = "xx") {
     args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
-        list(tt_rrowl(row.name = NULL, args[[1]], format = format))
+        list(tt_rrowl(row.name = NULL, val = args[[1]], format = format))
     } else if (are(args, "TableRow")) {
         args
     }
@@ -303,10 +303,10 @@ tt_rheader = function(..., format = "xx") {
 #' 
 tt_rtable = function(header, ..., format = NULL) {
     if(is.character(header))
-        header = list(as.list(header))
+        header = list(tt_rrowl(NULL, header))
     if(is.list(header)) {
         if(are(header, "TableRow"))
-            colinfo = hrows_to_colinfo(rrows)
+            colinfo = hrows_to_colinfo(header)
         else if(are(header, "list"))
             colinfo = do.call(tt_rheader, header)
     } else if(is(header, "InstantiatedColumnInfo")) {
@@ -317,5 +317,6 @@ tt_rtable = function(header, ..., format = NULL) {
     }
         
     body = list(...)
-    TableTree(kids = body, fmt = format, cinfo = colinfo)
+    TableTree(kids = body, fmt = format, cinfo = colinfo,
+              labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
 }

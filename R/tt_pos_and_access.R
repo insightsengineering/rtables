@@ -435,7 +435,7 @@ setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
     if(!is.null(newcinfo))
         return(newcinfo)
-    j = .j_to_posj(j, length(length(col_exprs(tt))))
+    j = .j_to_posj(j, length(col_exprs(tt)))
     newctree = subset_cols(coltree(tt), j, NULL)
     newcextra = cextra_args(tt)[j]
     newcsubs = col_exprs(tt)[j]
@@ -563,15 +563,22 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
     x[i,j, ..., drop = drop]
 })
 
+setMethod("[", c("VTableTree", "ANY", "missing"),
+          function(x, i, j, ..., drop = FALSE) {
+    j = seq_len(ncol(x))
+    x[i = i,j = j, ..., drop = drop]
+})
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
-    i = .j_to_posj(i, nrow(x))
-    j = .j_to_posj(j, ncol(x))
+    nr = nrow(x)
+    nc = ncol(x)
+    i = .j_to_posj(i, nr)
+    j = .j_to_posj(j, nc)
     
-    if(!missing(j))
+    if(!missing(j) && length(j) < nc)
         x = subset_cols(x, j)
-    if(!missing(i))
+    if(!missing(i) && length(i) < nr)
         x = subset_by_rownum(x, i)
     if(length(j) == 1L &&
        length(i) == 1L &&
@@ -612,3 +619,9 @@ setMethod("[[", c("VTableTree", "list", "ANY"),
     
 
 })
+
+extract_colvals = function(tt, j) {
+    
+
+
+}
