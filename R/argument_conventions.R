@@ -10,6 +10,8 @@
 #' @param newtoplev boolean, return to root of resprective layout
 #' @param spl ???
 #' @param pos ??
+#' @param inclNAs boolean
+#' @param fmt format string for cells
 #' 
 argument_conventions <- function(lyt, var, lbl, valuelblvar, splfmt, newtoplev, spl, pos) {
   NULL

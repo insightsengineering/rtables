@@ -234,24 +234,42 @@ add_new_coltree = function(lyt, spl) {
 
 #' Declaring a column-split based on levels of a variable
 #' 
+#' Will generate children for each subset of a categorical variable
+#' 
 #' @inheritParams argument_conventions
 #' 
 #' @export
-#' 
+#'
 #' @examples 
+#' 
 #' library(magrittr)
 #' 
-#' l <- NULL %>% add_colby_varlevels("ARM")
+#' l <- NULL %>% add_colby_varlevels("ARM") 
+#' l
 #' 
+#' # add an analysis (summary)
+#' l2 <- l %>% 
+#'     add_analyzed_vars("AGE", afun = summary, fmt = "xx.xx")
+#' l2
 #' 
+#' build_table(l2, DM)
 #' 
+#' # By default sequentially adding layouts results in nesting
+#' l3 <- NULL %>% add_colby_varlevels("ARM") %>%
+#'   add_colby_varlevels("SEX") %>%
+#'   add_analyzed_vars("AGE", afun = summary, fmt = "xx.xx")
+#' l3
 #' 
-add_colby_varlevels = function(lyt,  var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
+#' build_table(l3, DM)
+#' 
+add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
+
+#' 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
@@ -265,6 +283,28 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 }
 
 
+#' Add Rows according to levels of a variable
+#' 
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(magrittr)
+#' 
+#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+#'   add_colby_varlevels("SEX", "Gender") %>%
+#'   add_summary_count(lbl = "Overall (N)") %>%
+#'   add_rowby_varlevels("RACE", "Ethnicity") %>%
+#'   add_summary_count("RACE", lblfmt = "%s (n)") %>%
+#'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+#'   
+#' l
+#' 
+#' build_table(l, DM)
+#'   
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
@@ -331,15 +371,7 @@ add_rowby_dyncut = function(lyt, var, lbl, cutfun,
 }
 
 
-#' Add an anlysis split
-#' 
-#' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
-#' rows, rather than a further partition of the data.
-#' 
-#' @inheritParams argument_conventions
-#' 
-#' @export
-#' 
+
 add_analyzed_var = function(lyt, var, lbl = var, afun,
                             fmt = NULL,
                             rowlabs = as.character(substitute(afun)),
@@ -363,6 +395,17 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 }
 
 
+#' Add an anlysis split
+#' 
+#' This will be the end of the SplitVector at the position specified, because it defines an anlaysis that will generate
+#' rows, rather than a further partition of the data.
+#' 
+#' @inheritParams argument_conventions
+#' 
+#' @export
+#' 
+#' @template examples_layout_tabulation
+#' 
 add_analyzed_vars = function(lyt,
                              var,
                              lbl = var,
