@@ -560,7 +560,7 @@ add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl, afun,
     afun2 = function(x, .baseline_data = NULL, .N_col, .N_total, ...) {
         if(is.null(.baseline_data))
             stop("did not receive baseline aggregataion value required for comparison")
-        if(!is.na(var))
+        if(!is.na(var) && !.takes_df(afun))
             blinevardat = .baseline_data[[var]]
         else
             blinevardat = .baseline_data

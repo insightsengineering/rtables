@@ -7,6 +7,8 @@ match_extrargs = function(f, .N_col, .N_total, extras) {
 }
 
 
+.takes_df = function(f) !is.null(formals(f)) && names(formals(f))[1] == "df"
+
 gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
@@ -41,19 +43,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     rawvals = mapply(function(csub, col, count, cextr) {
         inds = eval(csub, envir = dfpart)
         dat = dfpart[inds,]
-        if(!is.null(col))
+        if(!is.null(col) && !.takes_df(func))
             dat = dat[[col]]
         args = list(dat)
 
         args = c(args,
                  match_extrargs(func, count, totcount, cextr))
-        
-        
-        ## if(takes_coln(func))
-        ##     args = c(args, list(.N_col = count))
-
-        ## if(takes_totn(func))
-        ##     args = c(args, list(.N_total = totcount))
         
         ret = do.call(func, args)
         if(!is.list(ret) && length(ret) > 1)
