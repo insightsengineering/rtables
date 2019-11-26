@@ -782,7 +782,6 @@ DataRow = function(...) .tablerow(..., klass = "DataRow")
 ContentRow = function(...) .tablerow(..., klass = "ContentRow")
 
 
-
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character"),

@@ -5,7 +5,7 @@ setMethod("nrow", "ElementaryTable",
 ## XXX Do we want add.labrows here or no?
 ## we have to choose one and stick to it.
 setMethod("nrow", "VTableTree",
-          function(x) length(collect_leaves(x)))
+          function(x) length(collect_leaves(x, TRUE ,TRUE)))
 
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
