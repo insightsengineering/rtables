@@ -1,3 +1,15 @@
+
+#' row
+#' 
+#' @inheritParams rrow
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' tt_rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
+#' tt_rrow("")
+#' 
 tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
@@ -12,14 +24,41 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
 }
 
 
-tt_rowl = function (row.name, ..., format = NULL, indent = 0) 
-{
+#' rrowl
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
+#' @examples 
+#' tt_rrowl("a", c(1,2,3), format = "xx")
+#' tt_rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+#' 
+#' 
+#' tt_rrowl("N", table(iris$Species))
+#' tt_rrowl("N", table(iris$Species), format = "xx")
+#' 
+#' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
+#' 
+#' tt_rrow(row.name = "row 1", x)
+#' tt_rrow("ABC", 2, 3)
+#' 
+#' tt_rrowl(row.name = "row 1", c(1, 2), c(3,4))
+#' tt_rrow(row.name = "row 2", c(1, 2), c(3,4))
+tt_rrowl = function (row.name, ..., format = NULL, indent = 0)  {
     dots <- list(...)
     args_list <- c(list(row.name = row.name, format = format, 
         indent = indent), unlist(lapply(dots, as.list), recursive = FALSE))
     do.call(tt_rrow, args_list)
 }
 
+
+#' Rcell
+#' 
+#' @inheritParams 
+#' 
+#' @export
+#' 
 tt_rcell = function(x, format = NULL, colspan = NULL) {
     if(length(x) != 1)
         x = list(x)
@@ -120,6 +159,25 @@ hrows_to_colinfo = function(rows) {
 }
 
 
+#' Create a header
+#' 
+#' @inheritParams rheader
+#' 
+#' @export
+#' 
+#' @examples
+#' 
+#' h1 <- tt_rheader(c("A", "B", "C"))
+#' 
+#' h2 <- tt_rheader(
+#'   tt_rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+#'   tt_rrow(NULL, "A", "B", "A", "B")
+#' )
+#' 
+#' h1
+#' 
+#' h2
+#' 
 tt_rheader = function(..., format = "xx") {
     args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
@@ -130,7 +188,116 @@ tt_rheader = function(..., format = "xx") {
 
     hrows_to_colinfo(rrows)
 }
-    
+
+
+#' Create a Table
+#' 
+#' @inheritParams rtable
+#' 
+#' 
+#' @export
+#' 
+#' 
+#' @examples 
+#' 
+#' mtbl <- tt_rtable(
+#'     header = tt_rheader(
+#'         tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2),
+#'                 tt_rcell("Petal.Length", colspan=2)),
+#'         tt_rrow(NULL, "mean", "median", "mean", "median")
+#'     ),
+#'     tt_rrow(
+#'         row.name = "All Species",
+#'         mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'         mean(iris$Petal.Length), median(iris$Petal.Length),
+#'         format = "xx.xx"
+#'     )
+#' )
+#' mtbl
+#' 
+#' 
+#' # Table with multirow header
+#' mtbl <- rtable(
+#'   header = tt_rheader(
+#'     tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2), tt_rcell("Petal.Length", colspan=2)),
+#'     tt_rrow(NULL, "mean", "median", "mean", "median")
+#'   ),
+#'   tt_rrow(
+#'     row.name = "All Species",
+#'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'     mean(iris$Petal.Length), median(iris$Petal.Length),
+#'     format = "xx.xx"
+#'   )
+#' )
+#' 
+#' mtbl
+#' 
+#' names(mtbl) # always first row of header
+#' 
+#' # Single row header
+#' 
+#' tbl <- tt_rtable(
+#'   header = tt_rheader("Treatement\nN=100", "Comparison\nN=300"),
+#'   format = "xx (xx.xx%)",
+#'   tt_rrow("A", c(104, .2), c(100, .4)),
+#'   tt_rrow("B", c(23, .4), c(43, .5)),
+#'   tt_rrow(""),
+#'   tt_rrow("this is a very long section header"),
+#'   tt_rrow("estimate", tt_rcell(55.23, "xx.xx", colspan = 2)),
+#'   tt_rrow("95% CI", indent = 1, tt_rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#' )
+#' 
+#' tbl
+#' 
+#' row.names(tbl)
+#' names(tbl)
+#' 
+#' 
+#' # Subsetting
+#' tbl[1,2]
+#' tbl[3,2]
+#' tbl[5,1]
+#' tbl[5,2]
+#' tbl[1:3]
+#' 
+#' 
+#' # Data Structure methods
+#' dim(tbl)
+#' nrow(tbl)
+#' ncol(tbl)
+#' names(tbl)
+#' 
+#' 
+#' # Output: html
+#' as_html(tbl)
+#' 
+#' \dontrun{
+#' Viewer(tbl)
+#' }
+#' 
+#' # Colspans
+#' 
+#' tbl2 <- tt_rtable(
+#'   c("A", "B", "C", "D", "E"),
+#'   format = "xx",
+#'   tt_rrow("r1", 1, 2, 3, 4, 5),
+#'   tt_rrow("r2", tt_rcell("sp2", colspan = 2), "sp1", tt_rcell("sp2-2", colspan = 2))
+#' )
+#' 
+#' tbl2
+#' 
+#' 
+#' # Custom format with functions (might be deprecated soon)
+#' my_format <- function(x, output) {
+#'    paste(x, collapse = "/")
+#' }
+#' tbl3 <- tt_rtable(
+#'   c("A", "B"),
+#'   format = my_format,
+#'   tt_rrow("row1", c(1,2,3,4), letters[1:10])
+#' )
+#' tbl3
+#' 
 tt_rtable = function(header, ..., format = NULL) {
     if(is.list(header)) {
         if(are(header, "TableRow"))
