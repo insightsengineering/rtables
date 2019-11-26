@@ -15,6 +15,7 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
     if(is.null(row.name))
         row.name = ""
     DataRow(val = vals, lev = as.integer(indent), lab = row.name,
+            name = row.name, ## XXX TODO
              cspan = as.integer(sapply(vals, function(x) {
                  sp = attr(x, "colspan")
                  if(is.null(sp))

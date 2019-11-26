@@ -828,6 +828,7 @@ setClass("ElementaryTable", contains = "VTableTree",
                 col_info(x) = colinfo
             else if(!identical(colinfo, col_info(x)))
                 stop("attempted to add child with non-matching, non-empty column info to an existing table")
+            x
         })
     }
 
