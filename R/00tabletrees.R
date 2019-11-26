@@ -62,6 +62,7 @@ SplitValue = function(val, extr =list()) {
 setClass("Split", contains = "VIRTUAL",
          representation(
              payload = "ANY",
+             name = "character",
              split_label = "character",
              split_format = "FormatSpec",
              ## NB this is the function which is applied to
@@ -79,10 +80,12 @@ setClass("VarLevelSplit", contains = "CustomizableSplit",
          representation(value_lbl_var = "character",
                         value_order = "ANY"))
 
-VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, cfmt = NULL, splfun = NULL, splfmt = NULL, valorder = NULL ) {
+VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, cfmt = NULL, splfun = NULL, splfmt = NULL, valorder = NULL, splname = var ) {
     if(is.null(valuelblvar))
         valuelblvar = var
-    new("VarLevelSplit", payload = var, split_label = splbl,
+    new("VarLevelSplit", payload = var,
+        split_label = splbl,
+        name = splname,
         value_lbl_var = valuelblvar,
         content_fun = cfun,
         content_format = cfmt,
@@ -97,18 +100,19 @@ length(object@payload) == 0 && length(object@split_label) == 0})
  
 NULLSplit = function(...) {
     ## only(!!) valid instantiation of NULLSplit class
-    new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL, content_format= NULL, split_format = NULL)
+    new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL, content_format= NULL, split_format = NULL, name  = "")
 }
 
 setClass("AllSplit", contains = "Split",
          validity = function(object) length(object@payload) == 0
          )
 
-AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, ...) {
+AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname = "ALL", ...) {
     new("AllSplit", split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        name = splname)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -117,17 +121,19 @@ RootSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt= NULL, ...) {
     new("RootSplit", split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        name = "root")
 }
 
 setClass("ManualSplit", contains = "AllSplit",
          representation(levels = "character"))
 
 
-ManualSplit = function(levs, lbl) {
+ManualSplit = function(levs, lbl, name = "manual") {
     new("ManualSplit",
         split_label = lbl,
-        levels = levs)
+        levels = levs,
+        name = name)
     
 }
 
@@ -142,7 +148,7 @@ setClass("MultiVarSplit", contains = "Split",
 })
 
 
-MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL) {
+MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = paste(vars, collapse = ":")) {
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
     if(length(varlbls) == 0) ## covers NULL and character()
@@ -160,7 +166,7 @@ setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
 
-VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL) {
+VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = var) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
        length(cuts[[1]]) == length(cuts[[2]])) {
@@ -178,7 +184,8 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt
         cut_labels = cutlbls,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        name = splname)
 }
 
 
@@ -189,13 +196,14 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt
 setClass("VarDynCutSplit", contains = "Split",
          representation(cut_fun = "function"))
                         
-VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL, cfmt = NULL, splfmt = NULL) {
+VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = var) {
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        name = splname)
 }
 
 setClass("AnalyzeVarSplit", contains = "Split",
@@ -204,7 +212,15 @@ setClass("AnalyzeVarSplit", contains = "Split",
                         include_NAs = "logical"))
 
 
-AnalyzeVarSplit = function(var, splbl, afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE) {
+AnalyzeVarSplit = function(var,
+                           splbl,
+                           afun,
+                           defrowlab = "",
+                           cfun = NULL,
+                           cfmt = NULL,
+                           splfmt = NULL,
+                           inclNAs = FALSE,
+                           splname = var) {
     if(!any(nzchar(defrowlab)))
         defrowlab = as.character(substitute(afun))
     new("AnalyzeVarSplit",
@@ -215,7 +231,8 @@ AnalyzeVarSplit = function(var, splbl, afun, defrowlab = "", cfun = NULL, cfmt =
         content_format = cfmt,
         split_format = splfmt,
         default_rowlabel = defrowlab,
-        include_NAs = inclNAs)
+        include_NAs = inclNAs,
+        name = splname)
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -232,7 +249,8 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 }
 
 AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE,
-                            .payload = NULL) {
+                            .payload = NULL,
+                            splname = NULL) {
     if(is.null(.payload)) {
         nv = length(var)
         defrowlab = .repoutlst(defrowlab, nv)
@@ -263,17 +281,19 @@ AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, c
         }))
         pld = .payload
     }
-    
-    if(length(pld) == 1) {
+     if(length(pld) == 1) {
             return(pld[[1]])
-    } else {
-        new("AnalyzeMultiVars",
-            payload = pld,
-            split_label = "",
-            split_format = NULL,
-            content_fun = NULL,
-            content_format = NULL)
-    }
+     } else {
+         if(is.null(splname))
+             splname = paste(.payload, collapse = ":")
+         
+         new("AnalyzeMultiVars",
+             payload = pld,
+             split_label = "",
+             split_format = NULL,
+             content_fun = NULL,
+             content_format = NULL)
+     }
 }
 
 setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
@@ -291,7 +311,8 @@ AVarBaselineComp = function(var,
                             cfmt = NULL,
                             splfun = NULL,
                             splfmt = NULL,
-                            valorder = NULL ) {
+                            valorder = NULL,
+                            splname = var) {
     if(is.null(valuelblvar))
         valuelblvar = var
     new("AVarBaselineComp", payload = var, split_label = splbl,
@@ -302,6 +323,7 @@ AVarBaselineComp = function(var,
         split_format = splfmt,
         value_order = valorder,
         comparison_fun = compfun,
+        name = splname
         )
 }
 
@@ -405,7 +427,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
                              lbl_fmt = "%s - %s",
                              ## not needed I Think...
                              cfun =  NULL, cfmt = NULL, splfmt = NULL,
-                             valorder = NULL) {
+                             valorder = NULL,
+                             splname = var) {
     new("VarLevWBaselineSplit",
         payload = var,
         baseline_value = baseline,
@@ -417,7 +440,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
         split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        name = splname)
 }
                         
 
@@ -795,13 +819,38 @@ setClass("ElementaryTable", contains = "VTableTree",
     }))
 })
 
+.enforce_valid_kids = function(lst, colinfo) {
+    ## colinfo
+    if(!no_colinfo(colinfo)) {
+        lst = lapply(lst,
+                 function(x) {
+            if(no_colinfo(x))
+                col_info(x) = colinfo
+            else if(!identical(colinfo, col_info(x)))
+                stop("attempted to add child with non-matching, non-empty column info to an existing table")
+        })
+    }
+
+    ## names
+    realnames = sapply(lst, obj_name)
+    lstnames = names(lst)
+    if(is.null(lstnames)) {
+        names(lst) = realnames
+    } else if(!identical(realnames, lstnames)) {
+        warning("non-null names of child list didn't match names of child objects. overriding list names")
+        names(lst) = realnames
+    }
+    lst
+
+}
+            
 ElementaryTable = function(kids = list(),
                            name = "",
                            lev = 1L,
                            lab = "",
                            labrow = LabelRow(lev = lev,
-                                               lab = lab,
-                                               cinfo = cinfo),
+                                             lab = lab,
+                                             vis = !isTRUE(iscontent)),
                            rspans = data.frame(),
                            cinfo = NULL,
                            tpos = TableTreePos(),
@@ -816,13 +865,9 @@ ElementaryTable = function(kids = list(),
             cinfo = InstantiatedColumnInfo()
     }
 
-    ## for the hand construction case
-    
-    kids = lapply(kids, function(x) {
-        if(identical(col_info(x), InstantiatedColumnInfo()))
-            col_info(x) = cinfo
-        x
-    })
+    if(no_colinfo(labrow))
+        col_info(labrow) = cinfo
+    kids = .enforce_valid_kids(kids, cinfo)
     tab = new("ElementaryTable",
               children = kids,
               name = name,
@@ -854,8 +899,8 @@ TableTree = function(kids = list(),
                      lev = 1L,
                      lab = name,
                      labrow = LabelRow(lev = lev,
-                                         lab = lab,
-                                         cinfo = cinfo),
+                                       lab = lab,
+                                       vis = nrow(cont)== 0),
                      rspans = data.frame(),
                      tpos = TableTreePos(),
                      iscontent = NA,
@@ -872,22 +917,12 @@ TableTree = function(kids = list(),
         } else {
             cinfo = InstantiatedColumnInfo()
         }
-    } else {
-        if(nrow(cont) && no_colinfo(cont))
-            col_info(cont) = cinfo
-        kids = lapply(kids, function(k) {
-            if(no_colinfo(k)) col_info(k) = cinfo
-            k
-        })
-    }
-    ## if(is.na(iscontent))
-    ##     iscontent = is_content_pos(tpos)
-    ## else if(iscontent != is_content_pos(tpos))
-    ##     is_content_pos(tpos) = iscontent
-    
+    } 
+    kids = .enforce_valid_kids(kids, cinfo)
     if(iscontent && !is.null(cont) && nrow(cont) > 0)
         stop("Got table tree with content table and content position")
-    ## rs_values[sapply(rs_values, function(x) x == nasentinel)] = NA
+    if(no_colinfo(labrow))
+        col_info(labrow) = cinfo
     if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids,

@@ -260,8 +260,17 @@ setGeneric("obj_name", function(obj) standardGeneric("obj_name"))
 setMethod("obj_name", "VNodeInfo",
           function(obj) obj@name)
 
+setMethod("obj_name", "Split",
+          function(obj) obj@name)
+
 setGeneric("obj_name<-", function(obj, value) standardGeneric("obj_name<-"))
 setMethod("obj_name<-", "VNodeInfo",
+          function(obj, value) {
+    obj@name = value
+    name
+})
+
+setMethod("obj_name<-", "Split",
           function(obj, value) {
     obj@name = value
     name

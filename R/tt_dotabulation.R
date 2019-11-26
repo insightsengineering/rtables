@@ -199,6 +199,7 @@ recursive_applysplit = function( df,
                                 lvl = 0L,
                                 splvec,
                                 name,
+                                label,
                                 ##colexprs, coltree,
                                 cinfo,
                                 parent_cfun = NULL, cformat = NULL) {
@@ -216,7 +217,9 @@ recursive_applysplit = function( df,
     ## pre-existing table was added to the layout
     if(is(spl, "VTableNodeInfo"))
         return(spl)
+    nonroot = lvl != 0L
     lab = obj_label(spl)
+        
     ## the content function is the one from the PREVIOUS
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
@@ -227,18 +230,45 @@ recursive_applysplit = function( df,
                       name = name, 
                       cinfo = cinfo,
                       parent_cfun = parent_cfun, format = cformat)
-    if(length(splvec) > 0) { ## there's more depth, recurse
+    ## XXX TODO is this right??!?!?
+    if(nrow(ctab) > 0)
+        label = ""
+    ##    if(length(splvec) > 0) { ## there's more depth, recurse
+    if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
+        ## XXX TODO rework this ifelse chain so we don't have an
+        ##       lab = ""
+        kids = list(.make_analyzed_tab(df = df,
+                                       spl = spl,
+                                       cinfo = cinfo,
+                                       lvl = lvl + 1L))
+        names(kids) = sapply(kids, obj_name)
+    } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
+        ##     lab = ""
+        kids = lapply(spl_payload(spl),
+                      function(sp) {
+            .make_analyzed_tab(df = df,
+                               spl = sp,
+                               cinfo = cinfo,
+                               lvl = lvl + 1L
+                               )}
+            )
+        ## this will be the variables
+        nms = sapply(spl_payload(spl), spl_payload)
+        nms[is.na(nms)] = ""
+        names(kids) = nms
+    } else {
         rawpart = do_split(spl, df) ##apply_split(spl, df)
         dataspl = rawpart[["datasplit"]]
         ## these are SplitValue objects
         splvals = rawpart[["values"]]
         partlbls = rawpart[["labels"]]
-        nonroot = lvl != 0L
+  
         innerlev = lvl + 1L
         if(nonroot) innerlev = innerlev + 1L
         inner = unlist(mapply(function(dfpart, val, lbl) {
             recursive_applysplit(dfpart,
                                  name = splv_rawvalues(val),
+                                 label = lbl,
                                  lvl = innerlev,
                                  splvec = splvec,
                                  cinfo = cinfo,
@@ -249,46 +279,28 @@ recursive_applysplit = function( df,
         SIMPLIFY=FALSE))
         if(nonroot) {
             kids = list(TableTree(kids = inner,
-                                  name = lab, ##XXX wrong
-                                  lab = lab,
+                                  name = obj_name(spl),
+                                  lab = obj_label(spl),
                                   lev = innerlev - 1L,
                                   cinfo = cinfo,
                                   spl = spl,
                                   fmt = obj_fmt(spl)))
-            names(kids) = lab ## XXX wrong again.
-            lab = ""
+            ## I'm enforcing this in the TableTree
+            ## constructor now
+            ##names(kids) = obj_name(spl)
         } else {
             kids = inner
         }
-    } else if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
-        ## XXX TODO rework this ifelse chain so we don't have an
-        lab = ""
-        kids = list(.make_analyzed_tab(df = df,
-                                spl = spl,
-                                cinfo = cinfo,
-                                lvl = lvl + 1L))
-        names(kids) = sapply(kids, obj_name)
-    } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
-        lab = ""
-        kids = lapply(spl_payload(spl),
-                     function(sp) {
-            .make_analyzed_tab(df = df,
-                              spl = sp,
-                              cinfo = cinfo,
-                              lvl = lvl + 1L
-                              )}
-            )
-        ## this will be the variables
-        nms = sapply(spl_payload(spl), spl_payload)
-        nms[is.na(nms)] = ""
-        names(kids) = nms
     }
     ret = TableTree(cont = ctab, kids = kids,
                     name = name,
                     lev = lvl,
                     iscontent = FALSE,
                     spl = spl,
-                    lab = lab,
+                    labrow = LabelRow(lev = lvl,
+                                      lab = label,
+                                      vis = nrow(ctab) == 0,
+                                      cinfo = cinfo),
                     cinfo = cinfo)
     
 }
@@ -324,7 +336,8 @@ build_table = function(lyt, df, ...) {
         nm = obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
-                             name = nm, 
+                             name = nm,
+                             label = lab,
                              splvec = splvec,
                              cinfo = cinfo,
                              ## XXX is this ALWAYS right?

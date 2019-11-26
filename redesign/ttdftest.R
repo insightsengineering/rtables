@@ -297,3 +297,15 @@ mtbl <- tt_rtable(
 )
  
 
+
+
+
+
+
+l <- NULL %>% add_colby_varlevels("ARM") %>%
+    add_colcounts() %>%
+    add_rowby_varlevels("RACE", "Ethnicity") %>%
+    add_analyzed_vars("AGE", afun = range , fmt = "xx.xx - xx.xx")
+l
+
+build_table(l, DM)
