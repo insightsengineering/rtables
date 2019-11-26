@@ -99,7 +99,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
     ## levels of VAR3, in this case 2.
-    add_analyzed_var("VAR3", "Var3 Counts", afun = table, newtoplev = TRUE)
+    add_analyzed_vars("VAR3", "Var3 Counts", afun = table, newtoplev = TRUE)
 
 
 
@@ -123,7 +123,7 @@ thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", lblfmt = "%s (n)") %>%
-    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx") %>%
 
     ## stack an existing table onto the layout and thus the generated table
@@ -140,7 +140,7 @@ tab3 = build_table(thing3, rawdat)
 blthing = NULL %>% add_colby_varwbline("ARM", "ARM1", lbl = "Arm") %>%
     add_analyzed_blinecomp(var = "AGE", lbl = "Age",
                            afun = mean) %>%
-    add_analyzed_var("AGE", lbl = "Age v2",
+    add_analyzed_vars("AGE", lbl = "Age v2",
                      afun = mean,
                      newtoplev = TRUE)
 ## function(x) list(mean = mean(x)))
@@ -173,7 +173,7 @@ tab3 = build_table(simplecomp, longdat)
 
 misscol = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varlevels("SX", "Gender") %>%
-    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 build_table(misscol, rawdat)
@@ -182,7 +182,7 @@ build_table(misscol, rawdat)
 missrsplit =  NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varlevels("SEX", "Gender") %>%
     add_rowby_varlevels("RACER", "ethn") %>%
-    add_analyzed_var("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 build_table(missrsplit, rawdat)
@@ -190,7 +190,7 @@ build_table(missrsplit, rawdat)
 missavar =  NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varlevels("SEX", "Gender") %>%
     add_rowby_varlevels("RACE", "ethn") %>%
-    add_analyzed_var("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+    add_analyzed_vars("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 build_table(missavar, rawdat)
