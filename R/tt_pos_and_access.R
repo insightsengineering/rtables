@@ -530,9 +530,7 @@ subset_by_rownum = function(tt, i, ... ) {
         }
         tree_children(x) = kids
         if(length(kids) == 0) {
-            if(is(x, "TableTree"))
-                current_spl(x) = NULLSplit()
-            else
+            if(!is(x, "TableTree"))
                 return(valifnone)
         }
         if(is(x, "VTableTree") && nrow(x) > 0) {
