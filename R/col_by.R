@@ -124,7 +124,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
     stopifnot(nrow(new_col_by) == `if`(is.data.frame(x), nrow(x), length(x)))
   }
   stopifnot(
-    all(vapply(new_col_by, function(col) is_logical_vector_modif(col, min_size = 0), logical(1)))
+    all_true(new_col_by, is_logical_vector_modif, min_length = 0)
   )
   new_col_by
 }

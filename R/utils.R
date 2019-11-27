@@ -15,8 +15,8 @@ num_all_equal <- function(x, tol = .Machine$double.eps ^ 0.5) {
 }
 
 # copied over from utils.nest which is not open-source
-all_true <- function(lst, fcn) {
-  all(vapply(lst, fcn, TRUE))
+all_true <- function(lst, fcn, ...) {
+  all(vapply(lst, fcn, logical(1), ...))
 }
 is_logical_single <- function(x) {
   !is.null(x) &&
@@ -24,9 +24,10 @@ is_logical_single <- function(x) {
     length(x) == 1 &&
     !is.na(x)
 }
-is_logical_vector_modif <- function(x, min_size = 1) {
+is_logical_vector_modif <- function(x, min_length = 1) {
   !is.null(x) &&
+    is.logical(x) &&
     is.atomic(x) &&
-    length(x) >= min_size &&
-    all_true(x, is_logical_single)
+    !anyNA(x) &&
+    ifelse(min_length > 0, length(x) >= min_length, TRUE)
 }
