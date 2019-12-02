@@ -569,6 +569,15 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
     x[i = i,j = j, ..., drop = drop]
 })
 
+
+setMethod("[", c("VTableTree", "missing", "numeric"),
+          function(x, i, j, ..., drop = FALSE) {
+    i = seq_len(nrow(x))
+    x[i,j, drop = drop]
+})
+
+
+
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     nr = nrow(x)

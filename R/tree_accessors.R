@@ -7,7 +7,7 @@ setMethod("nrow", "ElementaryTable",
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE ,TRUE)))
 
-setMethod("nrow", "TableTree",
+setMethod("nrow", "TableRow",
           function(x) 1L)
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
@@ -512,6 +512,36 @@ setGeneric("content_fmt<-", function(obj, value) standardGeneric("content_fmt<-"
 setMethod("content_fmt<-", "Split", function(obj, value) {
     obj@content_format = value
     obj
+})
+
+`%||%` = function(L, R) if(is.null(L)) R else L
+setGeneric("value_fmts", function(obj, default = obj_fmt(obj)) standardGeneric("value_fmts"))
+setMethod("value_fmts", "ANY",
+          function(obj, default) {
+    attr(obj, "format") %||% default
+})
+
+setMethod("value_fmts", "TableRow",
+          function(obj, default) {
+    fmts = lapply(row_values(obj), function(x)
+        value_fmts(x) %||% default)
+    fmts
+})
+
+setMethod("value_fmts", "LabelRow",
+          function(obj, default) {
+    rep(list(NULL), ncol(obj))
+})
+
+
+
+setMethod("value_fmts", "VTableTree",
+          function(obj, default) {
+    rws = collect_leaves(obj, TRUE, TRUE)
+    fmtrws = lapply(rws, value_fmts)
+    mat = do.call(rbind, fmtrws)
+    row.names(mat) = NULL
+    mat
 })
 
 ## setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
