@@ -287,7 +287,14 @@ add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = 
 #' @export
 #' 
 #' @examples 
+#' library(magrittr)
 #' 
+#' l <- NULL %>%
+#'   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") %>%
+#'   add_rowby_varlevels("RACE", "ethnicity") %>% 
+#'   add_analyzed_vars("AGE", afun = mean)
+#' 
+#' build_table(l, DM)
 #' 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
 

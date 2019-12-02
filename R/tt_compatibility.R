@@ -28,7 +28,7 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
 
 #' rrowl
 #' 
-#' @inheritParams 
+#' @inheritParams rrowl
 #' 
 #' @export
 #' 
@@ -57,7 +57,7 @@ tt_rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 
 #' Rcell
 #' 
-#' @inheritParams 
+#' @inheritParams rcell
 #' 
 #' @export
 #' 
@@ -241,65 +241,65 @@ tt_rheader = function(..., format = "xx") {
 #' 
 #' # Single row header
 #' 
-#' tbl <- tt_rtable(
-#'   header = tt_rheader(tt_rrow(NULL, tt_rcell("Treatement N=100"), tt_rcell("Comparison N=300"))),
-#'   format = "xx (xx.xx%)",
-#'   tt_rrow("A", c(104, .2), c(100, .4)),
-#'   tt_rrow("B", c(23, .4), c(43, .5)),
-#'   tt_rrow(""),
-#'   tt_rrow("this is a very long section header"),
-#'   tt_rrow("estimate", tt_rcell(55.23, "xx.xx", colspan = 2)),
-#'   tt_rrow("95% CI", indent = 1, tt_rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
-#' )
+#'# tbl <- tt_rtable(
+#'#   header = tt_rheader(tt_rrow(NULL, tt_rcell("Treatement N=100"), tt_rcell("Comparison N=300"))),
+#'#   format = "xx (xx.xx%)",
+#'#   tt_rrow("A", c(104, .2), c(100, .4)),
+#'#   tt_rrow("B", c(23, .4), c(43, .5)),
+#'#   tt_rrow(""),
+#'#   tt_rrow("this is a very long section header"),
+#'#   tt_rrow("estimate", tt_rcell(55.23, "xx.xx", colspan = 2)),
+#'#   tt_rrow("95% CI", indent = 1, tt_rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#'# )
 #' # TODO: fix
 #' # TODO: coerce c(...) to tt_rheader
 #' tbl
 #' 
-#' row.names(tbl) # TODO # row.lables
-#' names(tbl)
-#' 
-#' 
-#' # Subsetting
-#' tbl[1,2]
-#' tbl[2, 1]
-#' # TODO access to the cell
-#' tbl[[2, 1]] # cell ?
-#' tbl[[c("All Species"), 1]]
-#' tbl[3,2]
-#' tbl[5,1]
-#' tbl[5,2]
-#' tbl[1:3]
-#' 
-#' 
-#' # Data Structure methods
-#' dim(tbl) # TODO
-#' nrow(tbl)
-#' ncol(tbl)
-#' names(tbl)
-#' 
-#' 
-#' # Colspans
-#' 
-#' tbl2 <- tt_rtable(
-#'   c("A", "B", "C", "D", "E"),
-#'   format = "xx",
-#'   tt_rrow("r1", 1, 2, 3, 4, 5),
-#'   tt_rrow("r2", tt_rcell("sp2", colspan = 2), "sp1", tt_rcell("sp2-2", colspan = 2))
-#' )
-#' 
-#' tbl2
-#' 
-#' 
-#' # Custom format with functions (might be deprecated soon)
-#' my_format <- function(x, output) {
-#'    paste(x, collapse = "/")
-#' }
-#' tbl3 <- tt_rtable(
-#'   c("A", "B"),
-#'   format = my_format,
-#'   tt_rrow("row1", c(1,2,3,4), letters[1:10])
-#' )
-#' tbl3
+#'# row.names(tbl) # TODO # row.lables
+#'# names(tbl)
+#'# 
+#'# 
+#'# # Subsetting
+#'# tbl[1,2]
+#'# tbl[2, 1]
+#'# # TODO access to the cell
+#'# tbl[[2, 1]] # cell ?
+#'# tbl[[c("All Species"), 1]]
+#'# tbl[3,2]
+#'# tbl[5,1]
+#'# tbl[5,2]
+#'# tbl[1:3]
+#'# 
+#'# 
+#'# # Data Structure methods
+#'# dim(tbl) # TODO
+#'# nrow(tbl)
+#'# ncol(tbl)
+#'# names(tbl)
+#'# 
+#'# 
+#'# # Colspans
+#'# 
+#'# tbl2 <- tt_rtable(
+#'#   c("A", "B", "C", "D", "E"),
+#'#   format = "xx",
+#'#   tt_rrow("r1", 1, 2, 3, 4, 5),
+#'#   tt_rrow("r2", tt_rcell("sp2", colspan = 2), "sp1", tt_rcell("sp2-2", colspan = 2))
+#'# )
+#'# 
+#'# tbl2
+#'# 
+#'# 
+#'# # Custom format with functions (might be deprecated soon)
+#'# my_format <- function(x, output) {
+#'#    paste(x, collapse = "/")
+#'# }
+#'# tbl3 <- tt_rtable(
+#'#   c("A", "B"),
+#'#   format = my_format,
+#'#   tt_rrow("row1", c(1,2,3,4), letters[1:10])
+#'# )
+#'# tbl3
 #' 
 tt_rtable = function(header, ..., format = NULL) {
     if(is.character(header))
