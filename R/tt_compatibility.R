@@ -182,7 +182,7 @@ hrows_to_colinfo = function(rows) {
 #' 
 tt_rheader = function(..., format = "xx") {
     args = list(...)
-    rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
+    rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
         list(tt_rrowl(row.name = NULL, val = args[[1]], format = format))
     } else if (are(args, "TableRow")) {
         args
