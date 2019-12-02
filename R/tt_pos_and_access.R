@@ -582,8 +582,13 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
         x = subset_by_rownum(x, i)
     if(length(j) == 1L &&
        length(i) == 1L &&
-       drop) 
-        x = row_values(collect_leaves(x)[[1]] )[[1]]
+       drop) {
+        rw = collect_leaves(x, TRUE, TRUE)[[1]]
+        if(is(rw, "LabelRow"))
+            x = NULL
+        else
+            x = row_values(rw)[[1]]
+    }
     x
 })
 
