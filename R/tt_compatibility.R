@@ -89,11 +89,11 @@ rcell = function(x, format = NULL, colspan = NULL) {
 
 
 ##inefficient trash
-paste_em_n = function(lst, n) {
+paste_em_n = function(lst, n, sep = ".") {
     ret = lst[[1]]
     if(n > 1) {
         for(i in 2:n) {
-            ret = paste(ret, lst[[i]])
+            ret = paste(ret, lst[[i]], sep = sep)
         }
     }
     ret
@@ -161,19 +161,20 @@ hrows_to_colinfo = function(rows) {
     ## based on the columns we actually want.
 
  
-    fullbusiness = unqvals[[1]]
-    for(i in 2:nr) {
-        nvi = length(unqvals[[i]])
-        nfb = length(fullbusiness)
-        fullbusiness = paste(rep(fullbusiness, length.out = nvi*nfb),
-                             rep(unqvals[[i]], times = rep(nfb, nvi)))
-    }
-
+    ## fullbusiness = unqvals[[1]]
+    ## for(i in 2:nr) {
+    ##     nvi = length(unqvals[[i]])
+    ##     nfb = length(fullbusiness)
+    ##     fullbusiness = paste(rep(fullbusiness, length.out = nvi*nfb),
+    ##                          rep(unqvals[[i]], times = rep(nfb, nvi)))
+    ## }
+    fullcolinfo = manual_cols(.lst = unqvals)
+    fullbusiness = names(collect_leaves(coltree(fullcolinfo)))
     wanted = paste_em_n(repvals, nr)
     wantcols = match(wanted, fullbusiness)
     stopifnot(all(!is.na(wantcols)))
     
-    fullcolinfo = manual_cols(.lst = unqvals)
+   
     subset_cols(fullcolinfo, wantcols)
 }
 

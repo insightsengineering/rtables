@@ -19,7 +19,7 @@ ttrow_to_str = function(ttrow, nchar_rownames = 20, nchar_col = 5, gap =1 , inde
             if(is.null(fmt) && !is.null(rowfmt))
                 fmt = rowfmt
             ## compatibility layer hack. do this right eventually
-            cell = rcell(val, fmt)
+            cell = old_rcell(val, fmt)
             unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE))
     }, rwfmt = rowfmt)
     
@@ -86,7 +86,7 @@ setMethod("toString", "ANY", base:::toString)
     
     spl = split(rvals, inds)
     cells = lapply(spl,
-                   function(x) rcell(x[[1]], colspan = length(x),
+                   function(x) old_rcell(x[[1]], colspan = length(x),
                                      format = NULL))
     
 
@@ -107,7 +107,7 @@ setMethod("toString", "ANY", base:::toString)
    
         labs = names(kids)
         cells = lapply(names(kids), function(x) {
-            rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
+            old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
         })
         rows[[atrow]] = old_rrowl(row.name = "",
                               cells)
@@ -127,7 +127,7 @@ setMethod("toString", "ANY", base:::toString)
     ## add column counts row if necessary
     if(dispcounts) {
         ccounts = col_counts(tt)
-        countcells = lapply(ccounts, rcell,
+        countcells = lapply(ccounts, old_rcell,
                             format = colcount_fmt(tt),
                             colspan = 1L)                            
         rows[[length(rows) + 1L]] = do.call(old_rrow, c(countcells, row.name = "", format = NULL))
@@ -160,7 +160,7 @@ setMethod("toString", "ANY", base:::toString)
     }
     if(dispcounts) {
         ccounts = col_counts(tt)
-        countcells = lapply(ccounts, rcell,
+        countcells = lapply(ccounts, old_rcell,
                             format = colcount_fmt(tt))                            
         rrows[[nvals + 1L]] = do.call(old_rrow, c(countcells, row.name = NULL, format = NULL))
 
