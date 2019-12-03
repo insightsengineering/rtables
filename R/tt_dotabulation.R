@@ -257,20 +257,26 @@ recursive_applysplit = function( df,
         ## these are SplitValue objects
         splvals = rawpart[["values"]]
         partlbls = rawpart[["labels"]]
+        if(is.factor(partlbls))
+            partlbls = as.character(partlbls)
+        nms = unlist(splv_rawvalues(splvals))
+        if(is.factor(nms))
+            nms = as.character(nms)
   
         innerlev = lvl + 1L
         if(nonroot) innerlev = innerlev + 1L
-        inner = unlist(mapply(function(dfpart, val, lbl) {
+        inner = unlist(mapply(function(dfpart,  nm, lbl) {
             recursive_applysplit(dfpart,
-                                 name = splv_rawvalues(val),
+                                 name = nm, 
                                  label = lbl,
                                  lvl = innerlev,
                                  splvec = splvec,
                                  cinfo = cinfo,
                                  parent_cfun = content_fun(spl),
                                  cformat = obj_fmt(spl))
-        }, dfpart = dataspl, val = splvals,
+        }, dfpart = dataspl,
         lbl = partlbls,
+        nm = nms,
         SIMPLIFY=FALSE))
         if(nonroot) {
             kids = list(TableTree(kids = inner,

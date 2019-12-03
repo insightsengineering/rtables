@@ -9,7 +9,7 @@
 #' @param header either a vector with column names or an object returned by
 #'   \code{\link{rheader}} if special formating and multi-line headers are
 #'   needed
-#' @param ... each element is an \code{\link{rrow}} object
+#' @param ... each element is an \code{\link{old_rrow}} object
 #' @param format a valid format string or a format function for
 #'   \code{\link{rcell}}s. To get a list of all valid format strings use
 #'   \code{\link{list_rcell_format_labels}}. If format is \code{NULL} then the elements
@@ -23,7 +23,7 @@
 #' future we would plan to add the \code{as_latex} and \code{as_gridGrob}
 #' outputting function.
 #' 
-#' Note that the formats propagate to the \code{\link{rrow}} and 
+#' Note that the formats propagate to the \code{\link{old_rrow}} and 
 #' \code{\link{rcell}} if these do not specify their own format.
 #' 
 #' @importFrom htmltools tags tagList
@@ -32,17 +32,17 @@
 #' 
 #' @author Adrian Waddell \email{adrian.waddell@roche.com}
 #' 
-#' @seealso \code{\link{rrow}}, \code{\link{rcell}}
+#' @seealso \code{\link{old_rrow}}, \code{\link{rcell}}
 #' 
 #' @examples
 #' 
 #' # Table with multirow header
 #' mtbl <- rtable(
-#'   header = rheader(
-#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
-#'     rrow(NULL, "mean", "median", "mean", "median")
+#'   header = old_rheader(
+#'     old_rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     old_rrow(NULL, "mean", "median", "mean", "median")
 #'   ),
-#'   rrow(
+#'   old_rrow(
 #'     row.name = "All Species",
 #'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
 #'     mean(iris$Petal.Length), median(iris$Petal.Length),
@@ -59,12 +59,12 @@
 #' tbl <- rtable(
 #'   header = c("Treatement\nN=100", "Comparison\nN=300"),
 #'   format = "xx (xx.xx%)",
-#'   rrow("A", c(104, .2), c(100, .4)),
-#'   rrow("B", c(23, .4), c(43, .5)),
-#'   rrow(),
-#'   rrow("this is a very long section header"),
-#'   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-#'   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#'   old_rrow("A", c(104, .2), c(100, .4)),
+#'   old_rrow("B", c(23, .4), c(43, .5)),
+#'   old_rrow(),
+#'   old_rrow("this is a very long section header"),
+#'   old_rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+#'   old_rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 #' )
 #' 
 #' tbl
@@ -97,11 +97,11 @@
 #' 
 #' # Colspans
 #' 
-#' tbl2 <- rtable(
+#' tbl2 <- old_rtable(
 #'   c("A", "B", "C", "D", "E"),
 #'   format = "xx",
-#'   rrow("r1", 1, 2, 3, 4, 5),
-#'   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
+#'   old_rrow("r1", 1, 2, 3, 4, 5),
+#'   old_rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 #' )
 #' 
 #' tbl2
@@ -111,18 +111,18 @@
 #' my_format <- function(x, output) {
 #'    paste(x, collapse = "/")
 #' }
-#' tbl3 <- rtable(
+#' tbl3 <- old_rtable(
 #'   c("A", "B"),
 #'   format = my_format,
-#'   rrow("row1", c(1,2,3,4), letters[1:10])
+#'   old_rrow("row1", c(1,2,3,4), letters[1:10])
 #' )
 #' tbl3
 #'  
-rtable <- function(header, ..., format = NULL) {
+old_rtable <- function(header, ..., format = NULL) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   
-  if (!is(header, 'rheader')) header <- rheader(header)
+  if (!is(header, 'rheader')) header <- old_rheader(header)
   
   body <- list(...)
   if (!are(body, "rrow")) stop("not all arguments in ... are of class rrow")  
@@ -151,30 +151,30 @@ rtable <- function(header, ..., format = NULL) {
 
 #' Reporting Table Row
 #' 
-#' Defines a row for an \code{\link{rtable}}
+#' Defines a row for an \code{\link{old_rtable}}
 #'
 #' @param row.name string with row name
-#' @inheritParams rtable 
+#' @inheritParams old_rtable 
 #' @param ... data objects which are wrapped into \code{\link{rcell}} if they
 #'   aren't \code{rcell}s already
 #' @param indent non-negative integer where 0 means that the row should not be
 #'   indented
 #' 
 #' @details 
-#' Note the \code{rrow()} will return an empty row.
+#' Note the \code{old_rrow()} will return an empty row.
 #' 
 #' @export
 #' 
 #' @examples 
 #' 
-#' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
-#' rrow()
+#' old_rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
+#' old_rrow()
 #' 
-rrow <- function(row.name, ..., format = NULL, indent = 0) {
+old_rrow <- function(row.name = NULL, ..., format = NULL, indent = 0) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   if (!is.numeric(indent) || indent < 0) stop("indent must be >= 0")
-  if (missing(row.name)) row.name <- NULL
+
   
   cells <- list(...)
   
@@ -201,19 +201,19 @@ rrow <- function(row.name, ..., format = NULL, indent = 0) {
 
 #' Reporting Table Cell
 #' 
-#' \code{\link{rcell}}s compose an \code{\link{rtable}}. An \code{rcell}
+#' \code{\link{rcell}}s compose an \code{\link{old_rtable}}. An \code{rcell}
 #' contains the encapsulated data object, a format and column span attributes.
 #' 
 #' @param x data object for the \code{rcell} object. Note that if the data
 #'   object has attributes then it needs to be encasultated in a list as 
 #'   \code{rcell} adds/modifies the attributes.
-#' @inheritParams rtable
+#' @inheritParams old_rtable
 #' @param colspan positive integer, number of columns that the cell should span.
 #' 
 #' @return an object of class \code{rcell}
 #' 
 #' @export
-rcell <- function(x, format = NULL, colspan = 1) {
+old_rcell <- function(x, format = NULL, colspan = 1) {
   
   is_rcell_format(format, stop_otherwise = TRUE)
   
@@ -228,7 +228,7 @@ rcell <- function(x, format = NULL, colspan = 1) {
 }
 
 
-#' Create a rheader object
+#' Create a old_rheader object
 #' 
 #' @param ... elements that are either to be mapped to rrows or a list of rr
 #' @param format default format
@@ -236,17 +236,17 @@ rcell <- function(x, format = NULL, colspan = 1) {
 #' @export
 #' 
 #' @examples 
-#' h1 <- rheader(c("A", "B", "C"))
-#' h2 <- rheader(
-#'   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
-#'   rrow(NULL, "A", "B", "A", "B")
+#' h1 <- old_rheader(c("A", "B", "C"))
+#' h2 <- old_rheader(
+#'   old_rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+#'   old_rrow(NULL, "A", "B", "A", "B")
 #' )
-rheader <- function(..., format = "xx") {
+old_rheader <- function(..., format = "xx") {
   #todo: change this so that each item of ... can be either rrow or plain text
   args <- list(...)
   
   rrows <- if (length(args) == 1 && !is(args[[1]], "rrow")) {
-    list(rrowl(row.name = NULL, args[[1]], format = format))
+    list(old_rrowl(row.name = NULL, args[[1]], format = format))
   } else if (are(args, "rrow")) {
     lapply(args, propagate_format_to_rcells, format = format)
   } else {
@@ -266,9 +266,9 @@ rheader <- function(..., format = "xx") {
   )
 }
 
-rheaderl <- function(lst, format = "xx") {
+old_rheaderl <- function(lst, format = "xx") {
     stopifnot(are(lst, "rrow"))
-    do.call(rheader, c(list(format = format), lst))
+    do.call(old_rheader, c(list(format = format), lst))
 }
 
 
@@ -277,7 +277,7 @@ rheaderl <- function(lst, format = "xx") {
 #' The apply function family returns lists whose elements can be used as cell
 #' data with the \code{lrow} function.
 #' 
-#' @inheritParams rheader
+#' @inheritParams old_rheader
 #' @param ... lists that get concatenated and then flattened by one level of
 #'   depth. If one elemenet is not a list then it gets placed into a list.
 #' 
@@ -287,10 +287,10 @@ rheaderl <- function(lst, format = "xx") {
 #' 
 
 
-rheaderl <-  function(..., format = NULL) {
+old_rheaderl <-  function(..., format = NULL) {
   dots <- list(...)
   args_list <- c(list(format = format), unlist(lapply(dots, as.list), recursive = FALSE))
-  do.call(rheader, args_list)
+  do.call(old_rheader, args_list)
 }
 
 
@@ -310,46 +310,46 @@ rheaderl <-  function(..., format = NULL) {
 #' 
 #' @examples 
 #' 
-#' rrowl("a", c(1,2,3), format = "xx")
-#' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+#' old_rrowl("a", c(1,2,3), format = "xx")
+#' old_rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
 #' 
 #' 
-#' rrowl("N", table(iris$Species))
-#' rrowl("N", table(iris$Species), format = "xx")
+#' old_rrowl("N", table(iris$Species))
+#' old_rrowl("N", table(iris$Species), format = "xx")
 #' 
 #' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 #' 
-#' rrow(row.name = "row 1", x)
-#' rrow("ABC", 2, 3)
+#' old_rrow(row.name = "row 1", x)
+#' old_rrow("ABC", 2, 3)
 #' 
-#' rrowl(row.name = "row 1", c(1, 2), c(3,4))
-#' rrow(row.name = "row 2", c(1, 2), c(3,4))
+#' old_rrowl(row.name = "row 1", c(1, 2), c(3,4))
+#' old_rrow(row.name = "row 2", c(1, 2), c(3,4))
 #' 
-rrowl <- function(row.name, ..., format = NULL, indent = 0) {
+old_rrowl <- function(row.name, ..., format = NULL, indent = 0) {
   dots <- list(...)
   args_list <- c(
     list(row.name = row.name, format = format, indent = indent), 
     unlist(lapply(dots, as.list), recursive = FALSE)
   )
 
-  do.call(rrow, args_list)
+  do.call(old_rrow, args_list)
 }
 
-#' Create an rtable from rrows stored in a list
+#' Create an old_rtable from rrows stored in a list
 #' 
-#' This function is useful to create \code{\link{rtable}} objects with lists of
+#' This function is useful to create \code{\link{old_rtable}} objects with lists of
 #' rrows that are returned by the apply function family.
 #' 
-#' @inheritParams rtable
-#' @param ... lists with \code{\link{rrow}} objects
+#' @inheritParams old_rtable
+#' @param ... lists with \code{\link{old_rrow}} objects
 #' 
-#' @return \code{\link{rtable}} object
+#' @return \code{\link{old_rtable}} object
 #' 
 #' @export
-rtablel <- function(header, ..., format = NULL) {
+old_rtablel <- function(header, ..., format = NULL) {
   dots <- list(...)
   args_list <- c(list(header = header, format = format), unlist(lapply(dots, as.list), recursive = FALSE))
-  do.call(rtable, args_list)
+  do.call(old_rtable, args_list)
 }
 
 # propageate default formats to the rcells
@@ -389,7 +389,7 @@ ncell <- function(rrow) {
 }
 
 
-#' Create an empty rtable
+#' Create an empty old_rtable
 #' 
 #' 
 #' todo: This must be properly implemented, we have these functions for the transition phase.
@@ -397,23 +397,23 @@ ncell <- function(rrow) {
 #' @export
 #' 
 #' @examples 
-#' empty_rtable()
-empty_rtable <- function() {
-  # we add "rtable" for inheritance so that checks with is(x, "rtable") work and S3 method dispatching works
-  #todo: not all functions are working with empty rtable yet, please double check
+#' empty_old_rtable()
+empty_old_rtable <- function() {
+  # we add "old_rtable" for inheritance so that checks with is(x, "old_rtable") work and S3 method dispatching works
+  #todo: not all functions are working with empty old_rtable yet, please double check
   
   structure(
     vector(mode = "list"),
     header = vector(mode = "list"),
     ncol = 0,
     nrow = 0,
-    class = c("empty_rtable", "rtable")
+    class = c("empty_old_rtable", "rtable")
   )
 }
 
-#' convert an empty rtable to a string
+#' convert an empty old_rtable to a string
 #' 
-#' @param x and \code{empty_rtable} object
+#' @param x and \code{empty_old_rtable} object
 #' @param ... arguments not used
 #' 
 #' @export
@@ -440,8 +440,8 @@ is_empty_rtable <- function(x) {
 #' @param x object
 #' 
 #' @export
-is_rtable <- function(x) {
-  is(x, "rtable")
+is_old_rtable <- function(x) {
+  is(x, "rtable") || is(x, "VTableTree")
 }
 
 #' Whether object is anon-empty rtable

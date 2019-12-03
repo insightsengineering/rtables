@@ -34,7 +34,7 @@ ttrow_to_str = function(ttrow, nchar_rownames = 20, nchar_col = 5, gap =1 , inde
     })
 
         ##XXX TODO do this for real
-    colspans <- rep(1, length(cells)) ##vapply(ttrow, function(cell) attr(cell, "colspan"), numeric(1))
+    colspans <- rep(1L, length(cells)) ##vapply(ttrow, function(cell) attr(cell, "colspan"), numeric(1))
     lines <- as.matrix(Reduce(cbind, cells_same_length))
     
     row_char <- paste0(
@@ -109,7 +109,7 @@ setMethod("toString", "ANY", base:::toString)
         cells = lapply(names(kids), function(x) {
             rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
         })
-        rows[[atrow]] = rrowl(row.name = "",
+        rows[[atrow]] = old_rrowl(row.name = "",
                               cells)
         atrow = atrow + 1
         ## otherwise its pasted with the next level...
@@ -128,10 +128,11 @@ setMethod("toString", "ANY", base:::toString)
     if(dispcounts) {
         ccounts = col_counts(tt)
         countcells = lapply(ccounts, rcell,
-                            format = colcount_fmt(tt))                            
-        rows[[length(rows) + 1L]] = do.call(rrow, c(countcells, row.name = NULL, format = NULL))
+                            format = colcount_fmt(tt),
+                            colspan = 1L)                            
+        rows[[length(rows) + 1L]] = do.call(old_rrow, c(countcells, row.name = "", format = NULL))
     }
-    rheaderl(rows)
+    old_rheaderl(rows)
 }
 
 
@@ -155,13 +156,13 @@ setMethod("toString", "ANY", base:::toString)
         breakpts = ret$breakpts
         args = c(list(row.name = NULL, format = NULL),
                                         ret$cells)
-        rrows[[i]] = do.call(rrow, args)
+        rrows[[i]] = do.call(old_rrow, args)
     }
     if(dispcounts) {
         ccounts = col_counts(tt)
         countcells = lapply(ccounts, rcell,
                             format = colcount_fmt(tt))                            
-        rrows[[nvals + 1L]] = do.call(rrow, c(countcells, row.name = NULL, format = NULL))
+        rrows[[nvals + 1L]] = do.call(old_rrow, c(countcells, row.name = NULL, format = NULL))
 
     }
         
@@ -172,7 +173,7 @@ setMethod("toString", "ANY", base:::toString)
     ##                         .collapse_cspans(lapply(vals, function(vlst) vlst[[i]])))
     ##                 do.call(rrow, lst)
     ##                 }) 
-    rheaderl(rrows)
+    old_rheaderl(rrows)
 }
 
 
@@ -187,14 +188,16 @@ setMethod("to_s3compat", "TableRow",
            function(obj, ...)
 {
     cells = mapply( function(val, span) {
+        if(is.null(span))
+            span = 1L #XXX
         fmt = attr(val, "format")
         if(is.null(fmt))
             fmt = obj_fmt(obj)
-        rcell(val, format = fmt, colspan = span)
+        old_rcell(val, format = fmt, colspan = span)
     }, val = row_values(obj),
     span = row_cspans(obj),
     SIMPLIFY = FALSE)
-    rrowl(row.name = obj_label(obj),
+    old_rrowl(row.name = obj_label(obj),
           cells, 
           indent = tt_level(obj),
           format = obj_fmt(obj))
@@ -204,7 +207,7 @@ setMethod("to_s3compat", "TableRow",
 setMethod("to_s3compat", "LabelRow",
            function(obj, ...)
 {
-    rrowl(row.name = obj_label(obj),
+    old_rrowl(row.name = obj_label(obj),
           list(), 
           indent = tt_level(obj),
           format = obj_fmt(obj))
@@ -216,7 +219,7 @@ setMethod("to_s3compat", "VTableTree",
     header = .make_s3_header2(obj)
     rows = lapply(collect_leaves(obj, incl.cont = TRUE, add.labrows = TRUE),
                   to_s3compat)
-    rtablel(header = header, rows, format = obj_fmt(obj))
+    old_rtablel(header = header, rows, format = obj_fmt(obj))
 })
 ## this is currently implemented as a
 ## light-as-possible compatibility layer on top

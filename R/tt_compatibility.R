@@ -8,12 +8,14 @@
 #' @examples 
 #' 
 #' tt_rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
-#' tt_rrow("")
+#' rrow("")
 #' 
-tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
+rrow = function(row.name, ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
         row.name = ""
+    else if (!is(row.name, "character"))
+        stop() #row.name = as.character(row.name)
     if(length(vals) == 0L) {
         LabelRow(lev = as.integer(indent),
                  lab = row.name)
@@ -21,13 +23,16 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
         csps = as.integer(sapply(vals, function(x) {
             attr(x, "colspan") %||% 1L
         }))
-        vals = mapply(function(v, sp) {
-            attr(v, "colspan") = NULL
-            rep(list(v), sp)
-        }, v = vals, sp = csps,
-        SIMPLIFY=FALSE)
-        vals = unlist(vals,
-                      recursive = FALSE)
+        ## vals = mapply(function(v, sp) {
+        ##     attr(v, "colspan") = NULL
+        ##     rep(list(v), sp)
+        ## }, v = vals, sp = csps,
+        ## SIMPLIFY=FALSE)
+        ## vals = unlist(vals,
+        ##               recursive = FALSE)
+        fmts = sapply(vals, obj_fmt)
+        if(is.character(fmts) && length(unique(fmts)) == 1L && is.null(format))
+            format = unique(fmts)
         DataRow(val = vals, lev = as.integer(indent), lab = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
@@ -43,25 +48,25 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
 #' @export
 #' 
 #' @examples 
-#' tt_rrowl("a", c(1,2,3), format = "xx")
-#' tt_rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+#' rrowl("a", c(1,2,3), format = "xx")
+#' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
 #' 
 #' 
-#' tt_rrowl("N", table(iris$Species))
-#' tt_rrowl("N", table(iris$Species), format = "xx")
+#' rrowl("N", table(iris$Species))
+#' rrowl("N", table(iris$Species), format = "xx")
 #' 
 #' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 #' 
-#' tt_rrow(row.name = "row 1", x)
-#' tt_rrow("ABC", 2, 3)
+#' rrow(row.name = "row 1", x)
+#' rrow("ABC", 2, 3)
 #' 
-#' tt_rrowl(row.name = "row 1", c(1, 2), c(3,4))
-#' tt_rrow(row.name = "row 2", c(1, 2), c(3,4))
-tt_rrowl = function (row.name, ..., format = NULL, indent = 0)  {
+#' rrowl(row.name = "row 1", c(1, 2), c(3,4))
+#' rrow(row.name = "row 2", c(1, 2), c(3,4))
+rrowl = function (row.name, ..., format = NULL, indent = 0)  {
     dots <- list(...)
     args_list <- c(list(row.name = row.name, format = format, 
         indent = indent), val = unlist(lapply(dots, as.list), recursive = FALSE))
-    do.call(tt_rrow, args_list)
+    do.call(rrow, args_list)
 }
 
 
@@ -71,7 +76,7 @@ tt_rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' 
 #' @export
 #' 
-tt_rcell = function(x, format = NULL, colspan = NULL) {
+rcell = function(x, format = NULL, colspan = NULL) {
     if(length(x) != 1)
         x = list(x)
     if(!is.null(format))
@@ -179,21 +184,21 @@ hrows_to_colinfo = function(rows) {
 #' 
 #' @examples
 #' 
-#' h1 <- tt_rheader(c("A", "B", "C"))
+#' h1 <- rheader(c("A", "B", "C"))
 #' 
-#' h2 <- tt_rheader(
-#'   tt_rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
-#'   tt_rrow(NULL, "A", "B", "A", "B")
+#' h2 <- rheader(
+#'   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+#'   rrow(NULL, "A", "B", "A", "B")
 #' )
 #' 
 #' h1
 #' 
 #' h2
 #' 
-tt_rheader = function(..., format = "xx") {
+rheader = function(..., format = "xx") {
     args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
-        list(tt_rrowl(row.name = NULL, val = args[[1]], format = format))
+        list(rrowl(row.name = NULL, val = args[[1]], format = format))
     } else if (are(args, "TableRow")) {
         args
     }
@@ -212,13 +217,13 @@ tt_rheader = function(..., format = "xx") {
 #' 
 #' @examples 
 #' 
-#' mtbl <- tt_rtable(
-#'     header = tt_rheader(
-#'         tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2),
-#'                 tt_rcell("Petal.Length", colspan=2)),
-#'         tt_rrow(NULL, "mean", "median", "mean", "median")
+#' mtbl <- rtable(
+#'     header = rheader(
+#'         rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
+#'                 rcell("Petal.Length", colspan=2)),
+#'         rrow(NULL, "mean", "median", "mean", "median")
 #'     ),
-#'     tt_rrow(
+#'     rrow(
 #'         row.name = "All Species",
 #'         mean(iris$Sepal.Length), median(iris$Sepal.Length),
 #'         mean(iris$Petal.Length), median(iris$Petal.Length),
@@ -230,12 +235,12 @@ tt_rheader = function(..., format = "xx") {
 #' 
 #' 
 #' # Table with multirow header
-#' mtbl <- tt_rtable(
-#'   header = tt_rheader(
-#'     tt_rrow(row.name = NULL, tt_rcell("Sepal.Length", colspan = 2), tt_rcell("Petal.Length", colspan=2)),
-#'     tt_rrow(NULL, "mean", "median", "mean", "median")
+#' mtbl <- rtable(
+#'   header = rheader(
+#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     rrow(NULL, "mean", "median", "mean", "median")
 #'   ),
-#'   tt_rrow(
+#'   rrow(
 #'     row.name = "All Species",
 #'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
 #'     mean(iris$Petal.Length), median(iris$Petal.Length),
@@ -251,18 +256,18 @@ tt_rheader = function(..., format = "xx") {
 #' 
 #' # Single row header
 #' 
-#'# tbl <- tt_rtable(
-#'#   header = tt_rheader(tt_rrow(NULL, tt_rcell("Treatement N=100"), tt_rcell("Comparison N=300"))),
+#'# tbl <- rtable(
+#'#   header = rheader(rrow(NULL, rcell("Treatement N=100"), rcell("Comparison N=300"))),
 #'#   format = "xx (xx.xx%)",
-#'#   tt_rrow("A", c(104, .2), c(100, .4)),
-#'#   tt_rrow("B", c(23, .4), c(43, .5)),
-#'#   tt_rrow(""),
-#'#   tt_rrow("this is a very long section header"),
-#'#   tt_rrow("estimate", tt_rcell(55.23, "xx.xx", colspan = 2)),
-#'#   tt_rrow("95% CI", indent = 1, tt_rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#'#   rrow("A", c(104, .2), c(100, .4)),
+#'#   rrow("B", c(23, .4), c(43, .5)),
+#'#   rrow(""),
+#'#   rrow("this is a very long section header"),
+#'#   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+#'#   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 #'# )
 #' # TODO: fix
-#' # TODO: coerce c(...) to tt_rheader
+#' # TODO: coerce c(...) to rheader
 #' tbl
 #' 
 #'# row.names(tbl) # TODO # row.lables
@@ -290,11 +295,11 @@ tt_rheader = function(..., format = "xx") {
 #'# 
 #'# # Colspans
 #'# 
-#'# tbl2 <- tt_rtable(
+#'# tbl2 <- rtable(
 #'#   c("A", "B", "C", "D", "E"),
 #'#   format = "xx",
-#'#   tt_rrow("r1", 1, 2, 3, 4, 5),
-#'#   tt_rrow("r2", tt_rcell("sp2", colspan = 2), "sp1", tt_rcell("sp2-2", colspan = 2))
+#'#   rrow("r1", 1, 2, 3, 4, 5),
+#'#   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 #'# )
 #'# 
 #'# tbl2
@@ -304,21 +309,21 @@ tt_rheader = function(..., format = "xx") {
 #'# my_format <- function(x, output) {
 #'#    paste(x, collapse = "/")
 #'# }
-#'# tbl3 <- tt_rtable(
+#'# tbl3 <- rtable(
 #'#   c("A", "B"),
 #'#   format = my_format,
-#'#   tt_rrow("row1", c(1,2,3,4), letters[1:10])
+#'#   rrow("row1", c(1,2,3,4), letters[1:10])
 #'# )
 #'# tbl3
 #' 
-tt_rtable = function(header, ..., format = NULL) {
+rtable = function(header, ..., format = NULL) {
     if(is.character(header))
-        header = list(tt_rrowl(NULL, header))
+        header = list(rrowl(NULL, header))
     if(is.list(header)) {
         if(are(header, "TableRow"))
             colinfo = hrows_to_colinfo(header)
         else if(are(header, "list"))
-            colinfo = do.call(tt_rheader, header)
+            colinfo = do.call(rheader, header)
     } else if(is(header, "InstantiatedColumnInfo")) {
         colinfo = header
     } else {
@@ -333,4 +338,23 @@ tt_rtable = function(header, ..., format = NULL) {
         )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
               labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
+}
+
+rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
+    if(!check_headers)
+        warning("check_headers = FALSE is no longer supported, ignoring.")
+
+    firstcols = col_info(x[[1]])
+    if(!all(sapply(x, function(xi) identical(col_info(xi), firstcols))))
+        stop("column structure didn't match in rbindl_rtables call. This is no longer supported")
+
+    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", lab = "")
+    
+}
+
+header_add_N = function(x, N) {
+    col_counts(x) = as.integer(N)
+    colcount_fmt(x) = "(N=xx)"
+    disp_ccounts(x) = TRUE
+    x
 }

@@ -32,6 +32,9 @@ setGeneric("check_validsplit",
 ## do various cleaning, and naming, plus
 ## ensure partinfo$values contains SplitValue objects only
 .fixupvals = function(partinfo) {
+    if(is.factor(partinfo$lbls))
+        partinfo$lbls = as.character(partinifo$lbls)
+
     vals = partinfo$values
     if(is.factor(vals))
         vals = levels(vals)[vals]
@@ -77,6 +80,8 @@ setGeneric("check_validsplit",
         names(dpart) = lbls
         partinfo$datasplit = dpart
     }
+
+    partinfo$labels = lbls
     
     ## we're done with this so take it off
     partinfo$extras = NULL
@@ -150,6 +155,7 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
     ## - guarantees that ret$values contains SplitValue objects
     ## - removes the extras element since its redundant after the above
     ## - Ensures datasplit and values lists are named according to labels
+    ## - ensures lbls are character not factor
     ret = .fixupvals(ret)
     ret
 }
@@ -331,48 +337,11 @@ subsets_from_factory = function(df, fact) {
 }
 
 
-## make_comp_extargs = function(spl, df) {
-##     stopifnot(is(spl, "ComparisonSplit"))
-##     ssets1 = subsets_from_factory(df, spl@subset1_gen)
-##     ssets2 = subsets_from_factory(df, spl@subset2_gen)
-##     if(is.null(names(ssets2)))
-##         names(ssets2) = names(ssets1)
-    
-##     mapply(function(s1, s2, s1name, s2name) c( list(subset1 = s1, subset1name = s1name, subset2 = s2, subset2name), split_exargs(spl)),
-##            s1 = ssets1,
-##            s2 = ssets2,
-##            s1name = names(ssets1),
-##            s2name = names(ssets2),
-##            SIMPLIFY=FALSE)
-## }
-
-
 make_blinecomp_extargs = function(spl, df) {
     incall = blsplit_incall(spl)
     var = blsplit_var(spl)
     blvalue = blsplit_baseline(spl)
-    
-    
-
-
 }
-
-
-
-## setGeneric("make_extras", function(spl, partinfo) standardGeneric("make_extras"))
-
-## setMethod("make_extras", "Split",
-##           function(spl, partinfo) {
-##     rep(list(list()), times = length(partinfo$values))
-## })
-
-## ## currently only ComparisonSplit
-## setMethod("add_extras", "ComparisonSplit",
-##           function(spl, partinfo){
-##     ## the partitions are all the whole df here so this is ok
-##     make_comp_extargs(spl, df = partinfo$datasplit[[1]])
-## })
-
 
 
 make_splvalue_vec = function(vals, extrs = list(list())) {
@@ -406,6 +375,7 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
     ## should always be true or the above would have broken
     if(!are(vals, "SplitValue"))
         vals = make_splvalue_vec(vals)
+    
     list(values = vals, datasplit = spl,
          labels = lbls)
 }
@@ -455,87 +425,3 @@ reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     partinfo
 
 }
-
-
-
-## setGeneric("apply_split", 
-##            function(spl, df, vals = NULL, lbls = NULL) standardGeneric("apply_split"))
-
-## setMethod("apply_split", "VarLevelSplit",
-##           function(spl, df, vals = NULL, lbls = NULL) {
-##     if(!is.null(split_fun(spl))) 
-##         ret = split_fun(spl)(df, spl,
-##             vals = vals, lbls = lbls)
-##     else
-##         ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls)
-##     if(!is.null(spl_child_order(spl))) {
-##         if(are(ret$values, "SplitValue"))
-##             retrawvals = lapply(ret$values, splv_rawvalues)
-##         else
-##             retrawvals = ret$values
-##         vord = spl_child_order(spl)
-##         ## this trick is a bit brain hurty but it works
-##         ## y[match(x,y)] will return only the values of y
-##         ## which appeared in x, in the order they appear in
-##         ## y
-##         neword = match(vord, retrawvals)
-##         neword = neword[!is.na(neword)]
-##         ret$values = ret$values[neword] ##as.character(reorder(ret$values, vord))
-##     }
-##     if(!are(ret$values, "SplitValue"))
-##         ret$values = make_splvalue_vec(ret$values)
-##     ret
-    
-## })
-
-## setMethod("apply_split", "MultiVarSplit",
-##           function(spl, df, vals = NULL, lbls = NULL) {
-##     vars = spl_payload(spl)
-##     lst = lapply(vars, function(v) {
-##         df[!is.na(df[[v]]),]
-##     })
-##     names(lst) = vars
-##     list(values = make_splvalue_vec(vars),
-##          datasplit = lst,
-##          labels = spl_varlbls(spl))
-## })
-
-## setMethod("apply_split", "AllSplit",
-##           function(spl, df,
-##                    vals = NULL,
-##                    lbls = NULL) list(values = SplitValue(TRUE),
-##                                  datasplit = list(df),
-##                                  labels = obj_label(spl)))
-
-## setMethod("apply_split", "NULLSplit",
-##           function(spl, df,
-##                    vals = NULL,
-##                    lbls = NULL) list(values = SplitValue(FALSE),
-##                                  datasplits = list(df[0,]),
-##                                  labels = ""))
-    
-
-## setMethod("apply_split", "AnalyzeVarSplit",
-##           function(spl, df, vals = NULL, lbls = NULL) {
-##     dat = df[!is.na(df[[spl_payload(spl)]]),]
-##     list(values = make_splvalue_vec(spl_payload(spl)),
-##          datasplit = list(dat),
-##          labels = obj_label(spl))
-## })
-
-
-
- 
-## setMethod("apply_split", "ComparisonSplit",
-##           function(spl, df, vals = NULL, lbls = NULL) {
-
-##     lbls = make_comp_labels(spl, df)
-##     extras = make_comp_extargs(spl, df)
-##     values = make_splvalue_vec(seq_along(extras), extrs = extras)
-##     list(values = values,
-##          datasplit = rep(df, length(values)),
-##          labels = lbls,
-##          extras = extras)
-## })
-          
-    

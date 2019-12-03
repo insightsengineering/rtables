@@ -431,20 +431,17 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 })
 
 
-setGeneric("raw_values", function(obj) standardGeneric("raw_values"))
-setMethod("raw_values", "TableRow", function(obj) obj@leaf_value)
+setGeneric("row_values", function(obj) standardGeneric("row_values"))
+setMethod("row_values", "TableRow", function(obj) obj@leaf_value)
 
-setGeneric("raw_values<-", function(obj, spans, value) standardGeneric("raw_values<-"))
-setMethod("raw_values<-", "TableRow",
-          function(obj, spans = row_cspans(obj),  value) {
-    stopifnot(length(value) == length(spans))
+setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
+setMethod("row_values<-", "TableRow",
+          function(obj, value) {
     obj@leaf_value = value
-    if(!identical(row_cspans(obj), spans))
-        row_cspans(obj) = spans
     obj
 })
-setMethod("raw_values<-", "LabelRow",
-          function(obj,spans,  value) {
+setMethod("row_values<-", "LabelRow",
+          function(obj, value) {
     stop("LabelRows cannot have row values.")
 })
 
@@ -452,7 +449,7 @@ setGeneric("spanned_values", function(obj) standardGeneric("spanned_values"))
 setMethod("spanned_values", "TableRow",
           function(obj) {
     sp = row_cspans(obj)
-    rvals = raw_values(obj)
+    rvals = row_values(obj)
     unlist(mapply(function(v, s) rep(list(v), times = s)),
            recursive = FALSE)
 })
@@ -475,7 +472,7 @@ setMethod("spanned_values<-", "TableRow",
         stopifnot(length(unique(v)) == 1L)
         unique(v)
     })
-    raw_values(obj) = rvals
+    row_values(obj) = rvals
     obj
 })
 
@@ -884,6 +881,25 @@ setMethod("col_counts",  "InstantiatedColumnInfo",
 setMethod("col_counts", "VTableNodeInfo",
           function(obj) col_counts(col_info(obj)))
 
+setGeneric("col_counts<-", function(obj, value) standardGeneric("col_counts<-"))
+
+setMethod("col_counts<-",  "InstantiatedColumnInfo",
+          function(obj, value) {
+    obj@counts = value
+    obj
+})
+
+setMethod("col_counts<-", "VTableNodeInfo",
+          function(obj, value) {
+    cinfo = col_info(obj)
+    col_counts(cinfo) = value
+    col_info(obj) = cinfo
+    obj
+    
+})
+
+
+
 setGeneric("disp_ccounts", function(obj) standardGeneric("disp_ccounts"))
 
 setMethod("disp_ccounts", "VTableTree",
@@ -953,7 +969,7 @@ setGeneric("colcount_fmt<-", function(obj,value) standardGeneric("colcount_fmt<-
 
 setMethod("colcount_fmt<-", "InstantiatedColumnInfo",
           function(obj, value) {
-    obj@columncount_formatvalue
+    obj@columncount_format = value
     obj
 })
 
