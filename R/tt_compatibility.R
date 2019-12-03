@@ -10,7 +10,7 @@
 #' tt_rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' rrow("")
 #' 
-rrow = function(row.name, ..., format = NULL, indent = 0) {
+rrow = function(row.name = "", ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
         row.name = ""
@@ -90,9 +90,11 @@ rcell = function(x, format = NULL, colspan = NULL) {
 
 ##inefficient trash
 paste_em_n = function(lst, n) {
-    ret = character()
-    for(i in seq_len(n)) {
-        ret = paste(ret, lst[[i]])
+    ret = lst[[1]]
+    if(n > 1) {
+        for(i in 2:n) {
+            ret = paste(ret, lst[[i]])
+        }
     }
     ret
 }
@@ -159,7 +161,7 @@ hrows_to_colinfo = function(rows) {
     ## based on the columns we actually want.
 
  
-    fullbusiness = unqvals
+    fullbusiness = unqvals[[1]]
     for(i in 2:nr) {
         nvi = length(unqvals[[i]])
         nfb = length(fullbusiness)
@@ -195,8 +197,11 @@ hrows_to_colinfo = function(rows) {
 #' 
 #' h2
 #' 
-rheader = function(..., format = "xx") {
-    args = list(...)
+rheader = function(..., format = "xx", .rowlist = NULL) {
+    if(!is.null(rowlist))
+        args = .rowlist
+    else 
+        args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
         list(rrowl(row.name = NULL, val = args[[1]], format = format))
     } else if (are(args, "TableRow")) {
@@ -326,6 +331,8 @@ rtable = function(header, ..., format = NULL) {
             colinfo = do.call(rheader, header)
     } else if(is(header, "InstantiatedColumnInfo")) {
         colinfo = header
+    } else if (is(header, "TableRow")) {
+        colinfo = hrows_to_colinfo(list(header))
     } else {
         stop("problems")
 
@@ -358,3 +365,23 @@ header_add_N = function(x, N) {
     disp_ccounts(x) = TRUE
     x
 }
+
+
+`header<-` = function(x, value) {
+    if(is(value, "list")) {
+        value = header(.rowlist = value)
+    } else if(!is(value, "InstantiatedColumnInfo")) {
+        ## XXX we could be more defensive here, some
+        ## bad invalid values could get through.
+        value = header(value)
+    }
+
+    stopifnot(ncol(value) == ncol(x))
+    ## value must be an InstantiatedColumnInfo object
+    ## by this point.
+
+    ## this is recursive so its all we need here.
+    col_info(x) = value
+    x
+}
+
