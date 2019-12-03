@@ -4,13 +4,11 @@
 \alias{by_hierarchical}
 \title{Hierarchical col_by}
 \usage{
-by_hierarchical(..., sep = ",")
+by_hierarchical(...)
 }
 \arguments{
 \item{...}{factors or col_by matrices. When a by element in the list 
-is a matrix, it allows for non-disjoint columns}
-
-\item{sep}{separator between hierarchical levels
+  is a matrix, it allows for non-disjoint columns
 
 todo: returned col_by column names are not correct}
 }
@@ -24,20 +22,10 @@ Hierarchical col_by
 \examples{
 SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
 AGEC <- with_label(factor(c("<40", ">40", "<40", ">40", "<40")), "Age Category")
-VAL <- c(5, 4, 4, 6, 2)
+VAL <- c(5, 4, 4, 6, 2, 1)
 
-rtabulate(x = VAL, col_by = by_hierarchical(SEX, AGEC))
-
-library(dplyr)
-rtabulate(
-  x = VAL,
-  col_by = by_hierarchical(SEX, AGEC) \%>\%
-      by_add_total()
-)
-
-
-by_hierarchical(SEX)
-col_by <- by_hierarchical(SEX, AGEC)
+rtables:::by_hierarchical(SEX)
+col_by <- rtables:::by_hierarchical(SEX, AGEC)
 col_by
 colnames(col_by)
 attr(col_by, "header")

@@ -32,9 +32,9 @@ header_add_N <- function(x, N) {
   stopifnot(is(x, "rtable"))
   stopifnot(length(N) == ncol(x))
   
-  header(x) <- do.call(rheader, c(
-    header(x),
-    list(rrowl("", N, format = "(N=xx)"))
-  ))
+  header(x) <- rheader(
+    header(x)[[1]], # todo: also work for multi-line headers
+    rrowl("", N, format = "(N=xx)")
+  )
   x
 }

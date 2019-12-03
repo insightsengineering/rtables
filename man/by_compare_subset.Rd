@@ -16,15 +16,17 @@ by_compare_subset(col_by, subset, label_all = "all",
 
 \item{label_subset}{character, label appended to the subset of the corresponding level of \code{col_by}}
 
-\item{sep}{separator of new labels}
+\item{sep}{separator of new labels
+
+
+TODO: make hierarchical headers}
 }
 \description{
 Compare Subset to Current col_by Levels
 }
 \examples{
 
-res <- by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
+by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
-res
-attr(res, "header")
+
 }

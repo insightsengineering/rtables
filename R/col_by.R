@@ -52,7 +52,7 @@ col_by_to_factor <- function(x) {
     stop(paste("Columns are not disjoint in ", x))
   }
   f <- rep(-1, nrow(x))
-  levelnames <- colnames(x) #by_header_to_string(by_header(x))
+  levelnames <- by_header_to_string(by_header(x))
   for (i in seq_along(x)) {
     f[x[, i]] <- levelnames[[i]]
   }
@@ -76,13 +76,7 @@ col_by_to_factor <- function(x) {
 #' by_drop_empty_cols(by)
 by_drop_empty_cols <- function(by) {
   by <- col_by_to_matrix(by)
-  cols_keep <- vapply(by, any, logical(1))
-  if (!all(cols_keep)) {
-    with_label(by[, cols_keep, drop = FALSE], label(by)) 
-  } else {
-    # to avoid losing the header attribute
-    by
-  }
+  with_label(by[, vapply(by, any, logical(1)), drop = FALSE], label(by))
 }
 
 #' Converts col_by to matrix if needed (if it is a factor)
@@ -121,7 +115,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
   }
   if (!is.null(x)) {
     # safety check
-    stopifnot(nrow(new_col_by) == `if`(is.data.frame(x), nrow(x), length(x)))
+    stopifnot(nrow(new_col_by) == nrow(x))
   }
   stopifnot(
     all(vapply(new_col_by, function(col) is.logical.vector_modif(col, min_size = 0), logical(1)))
@@ -151,11 +145,6 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 #' }
 #' 
 #' by_add_total(NULL, "total", n = 3)
-#' 
-#' attr(by_add_total(
-#' by_hierarchical(factor(c("F", "F", "M", "M")), factor(c("<40", ">40", "<40", ">40"))),
-#' label = "All"
-#' ), "header")
 by_add_total <- function(col_by, label = "total", n = NULL) {
   # todo: maybe remove n, but this does not give enough flexibility because col_by may be NULL
   if (is.null(col_by)) {
@@ -163,18 +152,12 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
     colnames(mat) <- label
     mat
   } else {
-    col_by <- col_by_to_matrix(col_by) # col_by not NULL
-    n <- nrow(col_by)
-    res <- cbind(col_by, rep(TRUE, n))
-    colnames(res) <- c(colnames(col_by), label)
-    
-    # add hierarchical header correctly
-    existing_header <- by_header(col_by)
-    # bug when label is "" currently, so we take " "
-    total_header <- replicate(nrow(existing_header), rrow(NULL, " "), simplify = FALSE)
-    total_header[[1]] <- label # total_header has length >= 1
-    res <- with_by_header(res, do.call(rheader, combine_rrows(existing_header, total_header)))
-    
+    stopifnot(is.data.frame(col_by) || is.factor(col_by))
+    mat <- col_by_to_matrix(col_by)
+    n <- nrow(mat)
+    old_names <- colnames(mat)
+    res <- cbind(mat, rep(TRUE, n))
+    colnames(res) <- c(old_names, label)
     res <- with_label(res, label(col_by))
     res
   }
@@ -272,61 +255,58 @@ by_quartile <- function(x, cumulative = FALSE) {
 #' @param label_subset character, label appended to the subset of the corresponding level of \code{col_by}
 #' @param sep separator of new labels
 #' 
+#' 
+#' TODO: make hierarchical headers
+#' 
 #' @export
 #' 
 #' @examples 
 #' 
-#' cb <- by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
+#' by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
 #'                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
-#' cb
-#' attr(cb, "header")
-#' 
-#' 
-#' rtabulate(1:5, cb, mean, format = "xx.xx")
 #' 
 by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = "subset", sep = " - ") {
-  stopifnot(is.logical(subset), is.character(label_all), is.character(label_subset), is.character(sep))
   
-  by_all_subset <- data.frame(all = rep(TRUE, length(subset)), subset = subset)
-  colnames(by_all_subset) <- c(label_all, label_subset)
-  by_hierarchical(col_by, by_all_subset, sep = sep)
+  mat <- col_by_to_matrix(col_by)
+  
+  stopifnot(is.logical(subset), nrow(mat) == length(subset), 
+            is.character(label_all), is.character(label_subset), is.character(sep))
+  
+  lst <- lapply(mat, function(x) {
+    list(
+      x,
+      x & subset
+    )
+  })
+  
+  df <- as.data.frame(do.call(`c`, lst))
+  names(df) <- paste(rep(names(mat), each = 2), rep(c(label_all, label_subset), ncol(mat)), sep = sep)
+  
+  df
 }
 
 #' Hierarchical col_by
 #' 
 #' @param ... factors or col_by matrices. When a by element in the list 
 #'   is a matrix, it allows for non-disjoint columns
-#' @param sep separator between hierarchical levels
 #'
 #' todo: returned col_by column names are not correct
 #' 
 #' @return structure(col_by matrix, header = ) a list of labelled headers (one per row), 
 #'   col_by matrix corresponding to all combinations
 #' 
-#' @export
-#' 
 #' @examples
 #' SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
 #' AGEC <- with_label(factor(c("<40", ">40", "<40", ">40", "<40")), "Age Category")
-#' VAL <- c(5, 4, 4, 6, 2)
+#' VAL <- c(5, 4, 4, 6, 2, 1)
 #' 
-#' rtabulate(x = VAL, col_by = by_hierarchical(SEX, AGEC))
-#' 
-#' library(dplyr)
-#' rtabulate(
-#'   x = VAL,
-#'   col_by = by_hierarchical(SEX, AGEC) %>%
-#'       by_add_total()
-#' )
-#' 
-#' 
-#' by_hierarchical(SEX)
-#' col_by <- by_hierarchical(SEX, AGEC)
+#' rtables:::by_hierarchical(SEX)
+#' col_by <- rtables:::by_hierarchical(SEX, AGEC)
 #' col_by
 #' colnames(col_by)
 #' attr(col_by, "header")
 #' rtables:::by_header_to_string(attr(col_by, "header"))
-by_hierarchical <- function(..., sep = ",") {
+by_hierarchical <- function(...) {
   by_lst <- list(...)
   stopifnot(length(by_lst) > 0)
   by <- col_by_to_matrix(by_lst[[1]])
@@ -336,7 +316,7 @@ by_hierarchical <- function(..., sep = ",") {
       header = list(rrowl(row.name = label(by), colnames(by)))
     )
   } else {
-    subres <- do.call(function(...) by_hierarchical(..., sep = sep), by_lst[-1])
+    subres <- do.call(by_hierarchical, by_lst[-1])
     header <- do.call(
       rheader,
       c(
@@ -351,7 +331,7 @@ by_hierarchical <- function(..., sep = ",") {
       )
     )
     by_combined <- as.data.frame(do.call(cbind, lapply(by, function(rows) subres & rows)))
-    colnames(by_combined) <- by_header_to_string(header, sep = sep)
+    colnames(by_combined) <- by_header_to_string(header)
     structure(
       by_combined,
       header = header
@@ -372,42 +352,18 @@ by_hierarchical <- function(..., sep = ",") {
 #' 
 #' @importFrom rlang "%||%"
 by_header <- function(x) {
-  stopifnot(is(x, "data.frame"))
-  attr(x, "header") %||% rheader(colnames(x))
-}
-
-#' Add header to x
-#' 
-#' @param x by object
-#' @param header header to add
-#' 
-#' @return new by object
-#' 
-#' @export
-with_by_header <- function(x, header) {
-  stopifnot(is(header, "rheader"))
-  attr(x, "header") <- header
-  x
+  attr(x, "header") %||% colnames(x)
 }
 
 #' Convert the header to string
 #' 
-#' Useful to agnostically handle normal headers and hierarchical ones.
+#' Useful to agnostically handle normal headers and hierarchical ones
 #' 
 #' @param x rheader or regular list
-#' @param sep separator between hierarchical levels
-#' 
-#' @return 1d list of header names
-#' rtables:::by_header_to_string(
-#'   rheader(
-#'     rrow(NULL, rcell("F", colspan = 2), rcell("M", colspan = 2)),
-#'     rrow(NULL, "<40", ">40", "<40", ">40")
-#'   )
-#' )
-by_header_to_string <- function(x, sep = ",") {
+by_header_to_string <- function(x) {
   if (is(x, "rheader")) {
     do.call(
-      function(...) paste(..., sep = sep),
+      function(...) paste(..., sep = ","),
       lapply(x, function(elem) rep(elem, each = ncol(x) / length(elem)))
     )
   } else {

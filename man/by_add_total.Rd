@@ -31,9 +31,4 @@ if (requireNamespace("testthat", quietly = TRUE)) {
 }
 
 by_add_total(NULL, "total", n = 3)
-
-attr(by_add_total(
-by_hierarchical(factor(c("F", "F", "M", "M")), factor(c("<40", ">40", "<40", ">40"))),
-label = "All"
-), "header")
 }
