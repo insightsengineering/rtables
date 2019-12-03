@@ -14,15 +14,25 @@ tt_rrow = function(row.name, ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
         row.name = ""
-    DataRow(val = vals, lev = as.integer(indent), lab = row.name,
-            name = row.name, ## XXX TODO
-            cspan = as.integer(sapply(vals, function(x) {
-                sp = attr(x, "colspan")
-                if(is.null(sp))
-                    sp = 1L
-                sp
-            })),
-            fmt = format)
+    if(length(vals) == 0L) {
+        LabelRow(lev = as.integer(indent),
+                 lab = row.name)
+    } else {
+        csps = as.integer(sapply(vals, function(x) {
+            attr(x, "colspan") %||% 1L
+        }))
+        vals = mapply(function(v, sp) {
+            attr(v, "colspan") = NULL
+            rep(list(v), sp)
+        }, v = vals, sp = csps,
+        SIMPLIFY=FALSE)
+        vals = unlist(vals,
+                      recursive = FALSE)
+        DataRow(val = vals, lev = as.integer(indent), lab = row.name,
+                name = row.name, ## XXX TODO
+                cspan = csps,
+                fmt = format)
+    }
 }
 
 
@@ -317,6 +327,10 @@ tt_rtable = function(header, ..., format = NULL) {
     }
         
     body = list(...)
+    lapply(body, function(x)
+        if(any(row_cspans(x) > 1))
+            stop("colspans in TableTree bodies are currently not supported.")
+        )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
               labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
 }

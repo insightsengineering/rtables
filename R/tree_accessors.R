@@ -431,18 +431,59 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 })
 
 
-setGeneric("row_values", function(obj) standardGeneric("row_values"))
-setMethod("row_values", "TableRow", function(obj) obj@leaf_value)
+setGeneric("raw_values", function(obj) standardGeneric("raw_values"))
+setMethod("raw_values", "TableRow", function(obj) obj@leaf_value)
 
-setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
-setMethod("row_values<-", "TableRow",
-          function(obj, value) {
+setGeneric("raw_values<-", function(obj, spans, value) standardGeneric("raw_values<-"))
+setMethod("raw_values<-", "TableRow",
+          function(obj, spans = row_cspans(obj),  value) {
+    stopifnot(length(value) == length(spans))
     obj@leaf_value = value
+    if(!identical(row_cspans(obj), spans))
+        row_cspans(obj) = spans
     obj
 })
-setMethod("row_values<-", "LabelRow",
-          function(obj, value) {
+setMethod("raw_values<-", "LabelRow",
+          function(obj,spans,  value) {
     stop("LabelRows cannot have row values.")
+})
+
+setGeneric("spanned_values", function(obj) standardGeneric("spanned_values"))
+setMethod("spanned_values", "TableRow",
+          function(obj) {
+    sp = row_cspans(obj)
+    rvals = raw_values(obj)
+    unlist(mapply(function(v, s) rep(list(v), times = s)),
+           recursive = FALSE)
+})
+
+setMethod("spanned_values", "LabelRow",
+          function(obj) {
+    rep(list(NULL), ncol(obj))
+})
+
+
+setGeneric("spanned_values<-", function(obj, value) standardGeneric("spanned_values<-"))
+setMethod("spanned_values<-", "TableRow",
+          function(obj, value) {
+    sp = row_cspans(obj)
+    ## this is 3 times too clever!!!
+    splvec = cumsum(unlist(lapply(sp, function(x) c(1, rep(0, x - 1)))))
+    
+    rvals = lapply(split(value, splvec),
+                   function(v) {
+        stopifnot(length(unique(v)) == 1L)
+        unique(v)
+    })
+    raw_values(obj) = rvals
+    obj
+})
+
+setMethod("spanned_values<-", "LabelRow",
+          function(obj, value) {
+    if(!is.null(value))
+        stop("Label rows can't have non-null cell values, got", value)
+    obj
 })
 
 ### Format manipulation
@@ -487,6 +528,8 @@ setMethod("set_fmt_recursive", "TableRow",
     obj
 })
 
+setMethod("set_fmt_recursive", "LabelRow",
+          function(obj, fmt, override = FALSE) obj)
 setMethod("set_fmt_recursive", "VTableTree",
           function(obj, fmt, override = FALSE) {
     force(fmt)
@@ -609,7 +652,7 @@ setMethod("collect_leaves", "ANY",
 setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
 setMethod("row_cspans", "TableRow", function(obj) obj@colspans)
 setMethod("row_cspans", "LabelRow",
-          function(obj) stop("attempted to get colspans of LabelRow"))
+          function(obj) rep(1L, ncol(obj)))
 
 setGeneric("row_cspans<-", function(obj, value) standardGeneric("row_cspans<-"))
 setMethod("row_cspans<-", "TableRow", function(obj, value) {
