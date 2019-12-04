@@ -201,7 +201,7 @@ names.rtable <- function(x) {
 #' @examples 
 #' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3)) 
 #' header(x)
-header <- function(x) {
+old_header <- function(x) {
   
   if (!is(x, "rtable")) stop("x is required to be an object of class rtable")
   
@@ -219,7 +219,7 @@ header <- function(x) {
 #' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
 #' header(x) <- rheader(rrow("a", "a", "b", "d"))
 #' x
-`header<-` <- function(x, value) {
+`old_header<-` <- function(x, value) {
   if (!is(x, "rtable")) stop("x is not an rtable")
   
   if (!is(value, 'rheader')) value <- rheader(value)

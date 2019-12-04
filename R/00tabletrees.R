@@ -832,15 +832,24 @@ setClass("ElementaryTable", contains = "VTableTree",
         })
     }
 
+    if(are(lst, "ElementaryTable") &&
+       all(sapply(lst, function(tb) {
+           nrow(tb) <= 1 && obj_name(tb) == ""
+       }))) {
+        lst = unlist(lapply(lst, function(tb) tree_children(tb)[[1]]))
+    }
+    if(length(lst) == 0)
+        return(list())
     ## names
     realnames = sapply(lst, obj_name)
     lstnames = names(lst)
     if(is.null(lstnames)) {
         names(lst) = realnames
     } else if(!identical(realnames, lstnames)) {
-        warning("non-null names of child list didn't match names of child objects. overriding list names")
+        ##        warning("non-null names of child list didn't match names of child objects. overriding list names")
         names(lst) = realnames
     }
+    
     lst
 
 }
@@ -918,9 +927,10 @@ TableTree = function(kids = list(),
         } else {
             cinfo = InstantiatedColumnInfo()
         }
-    } 
+    }
+
     kids = .enforce_valid_kids(kids, cinfo)
-    if(iscontent && !is.null(cont) && nrow(cont) > 0)
+    if(isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0)
         stop("Got table tree with content table and content position")
     if(no_colinfo(labrow))
         col_info(labrow) = cinfo

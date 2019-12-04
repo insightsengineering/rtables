@@ -24,6 +24,8 @@ setMethod("tree_children", c(x = "VTree"),
 
 setMethod("tree_children", c(x = "VTableTree"),
           function(x) x@children)
+setMethod("tree_children", c(x = "VLeaf"),
+          function(x) list())
 
 setGeneric("tree_children<-", function(x, value) standardGeneric("tree_children<-"))
 setMethod("tree_children<-", c(x = "VTree"),
@@ -272,13 +274,13 @@ setGeneric("obj_name<-", function(obj, value) standardGeneric("obj_name<-"))
 setMethod("obj_name<-", "VNodeInfo",
           function(obj, value) {
     obj@name = value
-    name
+    obj
 })
 
 setMethod("obj_name<-", "Split",
           function(obj, value) {
     obj@name = value
-    name
+    obj
 })
 
 
@@ -310,6 +312,9 @@ setMethod("obj_label<-", "VTableTree",
           function(obj, value) {
     lr = tt_labelrow(obj)
     obj_label(lr) = value
+    if( !is.na(value) && nzchar(value))
+        labrow_visible(lr) = TRUE
+ 
     tt_labelrow(obj) = lr
     obj
 })
@@ -639,6 +644,11 @@ setMethod("collect_leaves", "VLeaf",
     ttree
 })
 
+setMethod("collect_leaves", "NULL",
+          function(ttree, incl.cont, add.labrows) {
+    list()
+})
+
 setMethod("collect_leaves", "ANY",
           function(ttree, incl.cont, add.labrows)
     stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
@@ -664,6 +674,25 @@ setMethod("row_cspans<-", "LabelRow", function(obj, value) {
 setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 ## this will hit everything via inheritence
 setMethod("tt_level", "VNodeInfo", function(obj) obj@level)
+
+
+setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
+## this will hit everything via inheritence
+setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
+    obj@level = as.integer(value)
+    obj
+})
+
+setMethod("tt_level<-", "VTableTree",
+          function(obj, value) {
+    obj@level = as.integer(value)
+    tree_children(obj) = lapply(tree_children(obj),
+                                `tt_level<-`, value = as.integer(value) + 1L)
+    obj
+})
+          
+          
+
 
 setGeneric("splv_rawvalues", function(obj) standardGeneric("splv_rawvalues"))
 setMethod("splv_rawvalues", "SplitValue",
