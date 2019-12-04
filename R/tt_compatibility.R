@@ -77,8 +77,8 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' @export
 #' 
 rcell = function(x, format = NULL, colspan = NULL) {
-    if(length(x) != 1)
-        x = list(x)
+    ## if(length(x) != 1)
+    ##     x = list(x)
     if(!is.null(format))
         attr(x, "format") = format
     if(!is.null(colspan))
@@ -340,12 +340,30 @@ rtable = function(header, ..., format = NULL) {
     }
         
     body = list(...)
+    ## XXX this shouldn't be needed. hacky
+    if(length(body) == 1 && is.list(body[[1]]))
+        body = body[[1]]
+    if(are(body, "ElementaryTable") &&
+       all(sapply(body, function(tb) {
+           nrow(tb) == 1 && obj_name(tb) == ""
+       }))) {
+        body = lapply(body, function(tb) tree_children(tb)[[1]])
+    }
+        
     lapply(body, function(x)
         if(any(row_cspans(x) > 1))
             stop("colspans in TableTree bodies are currently not supported.")
         )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
               labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
+}
+
+rtablel = function (header, ..., format = NULL) 
+{
+    dots <- list(...)
+    args_list <- c(list(header = header, format = format), unlist(lapply(dots, 
+        as.list), recursive = FALSE))
+    do.call(rtable, args_list)
 }
 
 rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
@@ -356,9 +374,29 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     if(!all(sapply(x, function(xi) identical(col_info(xi), firstcols))))
         stop("column structure didn't match in rbindl_rtables call. This is no longer supported")
 
+    if(are(x, "ElementaryTable") &&
+       all(sapply(x, function(tb) {
+           nrow(tb) == 1 && obj_name(tb) == ""
+       }))) {
+        body = lapply(x, function(tb) tree_children(tb)[[1]])
+    }
+
+    
+    
     TableTree(kids = x, cinfo = firstcols, name = "rbind_root", lab = "")
     
 }
+
+setMethod("rbind", "VTableTree",
+          function(..., deparse.level = 1) {
+    rbindl_rtables(list(...))
+})
+
+setMethod("rbind2", "VTableTree",
+          function(x, y) {
+    rbindl_rtables(list(x, y))
+})
+
 
 header_add_N = function(x, N) {
     col_counts(x) = as.integer(N)
@@ -374,7 +412,7 @@ header_add_N = function(x, N) {
     } else if(!is(value, "InstantiatedColumnInfo")) {
         ## XXX we could be more defensive here, some
         ## bad invalid values could get through.
-        value = header(value)
+        value = rheader(value)
     }
 
     stopifnot(ncol(value) == ncol(x))
@@ -386,3 +424,4 @@ header_add_N = function(x, N) {
     x
 }
 
+header = col_info

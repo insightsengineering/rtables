@@ -463,7 +463,7 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
             if(is(newkids[[i]], "LayoutColLeaf")) {
                 counter <<- counter + 1
                 if(!(counter %in% j))
-                    newkids[i] = list() ## NULL removes the position entirely
+                    newkids[[i]] = list() ## NULL removes the position entirely
             } else {
                 newkids[[i]] = prune_children(newkids[[i]], j)
             }

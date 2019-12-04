@@ -440,7 +440,7 @@ is_empty_rtable <- function(x) {
 #' @param x object
 #' 
 #' @export
-is_old_rtable <- function(x) {
+is_rtable <- function(x) {
   is(x, "rtable") || is(x, "VTableTree")
 }
 
