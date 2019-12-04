@@ -173,12 +173,18 @@ setMethod("get_formated_rows", "TableRow",
             stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
             stopifnot(length(row_values(obj)) == ncol(obj))
             
-            # why?
-            format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
+            default_format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
             
-            format <- rep(format, length.out = ncol(obj))
-            
-            c(indent_string(obj_label(obj), indent), unlist(Map(format_rcell, row_values(obj), format)))
+            format <- lapply(row_values(obj), function(x) {
+              fmt <- attr(x, "format")
+              if (is.null(fmt))
+                default_format
+              else
+                fmt
+            })
+
+            c(indent_string(obj_label(obj), indent), unlist(Map(function(val, fmt)
+              paste(format_rcell(val, fmt), collapse = ", "), row_values(obj), format)))
             
           })
 

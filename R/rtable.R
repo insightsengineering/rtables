@@ -61,10 +61,7 @@
 #'   format = "xx (xx.xx%)",
 #'   old_rrow("A", c(104, .2), c(100, .4)),
 #'   old_rrow("B", c(23, .4), c(43, .5)),
-#'   old_rrow(),
-#'   old_rrow("this is a very long section header"),
-#'   old_rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-#'   old_rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#'   old_rrow()
 #' )
 #' 
 #' tbl
@@ -100,8 +97,7 @@
 #' tbl2 <- old_rtable(
 #'   c("A", "B", "C", "D", "E"),
 #'   format = "xx",
-#'   old_rrow("r1", 1, 2, 3, 4, 5),
-#'   old_rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
+#'   old_rrow("r1", 1, 2, 3, 4, 5)
 #' )
 #' 
 #' tbl2
