@@ -199,7 +199,7 @@ hrows_to_colinfo = function(rows) {
 #' h2
 #' 
 rheader = function(..., format = "xx", .rowlist = NULL) {
-    if(!is.null(rowlist))
+    if(!is.null(.rowlist))
         args = .rowlist
     else 
         args = list(...)
