@@ -113,6 +113,9 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   }
   
   
+  
+  
+  
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
     cs <- attr(x, "colspan")
@@ -125,6 +128,14 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
     if (is.null(cs)) cs <- 1
     rep(cs, cs)
   }), ncol = nc, byrow = TRUE)
+  
+  
+  if (col_info(tt)@display_columncounts) {
+    counts <- col_info(tt)@counts
+    cformat <- col_info(tt)@columncount_format
+    body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
+    span <- rbind(span, rep(1, nc))
+  }
   
   list(body = cbind("", body), span = cbind(1, span))
 }
