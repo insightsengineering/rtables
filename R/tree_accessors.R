@@ -649,6 +649,8 @@ setMethod("collect_leaves", "NULL",
     list()
 })
 
+
+
 setMethod("collect_leaves", "ANY",
           function(ttree, incl.cont, add.labrows)
     stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
