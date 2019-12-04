@@ -27,6 +27,8 @@ rtabulate <- function(x, ...) {
 # 
 # see parameter descrition for rtabulate.numeric
 #
+
+#' @importFrom purrr transpose
 rtabulate_default <- function(x, col_by = by_all("col_1"), FUN, ...,
                               format = NULL, row.name = "", indent  = 0,
                               col_wise_args = NULL) {

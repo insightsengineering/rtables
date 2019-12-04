@@ -99,7 +99,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
     ## levels of VAR3, in this case 2.
-    add_analyzed_vars("VAR3", "Var3 Counts", afun = table, newtoplev = TRUE)
+    add_analyzed_vars("VAR3", "Var3 Counts", afun = lstwrap(table), newtoplev = TRUE)
 
 
 
