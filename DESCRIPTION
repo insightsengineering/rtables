@@ -59,4 +59,3 @@ Collate:
     'tt_rsp.R'
     'tt_showmethods.R'
     'tt_toString.R'
-    'toStringTableTree.R'
