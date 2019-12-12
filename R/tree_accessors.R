@@ -101,10 +101,11 @@ setMethod("next_rpos", "PreDataTableLayouts",
 
 setMethod("next_rpos", "PreDataRowLayout",
           function(obj, newtree) {
-    if(newtree)
-        length(obj) + 1L
-    else
-        length(obj)
+    l = length(obj)
+    if(newtree && length(obj[[l]]) > 0L)
+        l = l + 1L
+
+    l
 })
 
 ## setMethod("next_rpos", "PreDataColLayout", function(obj, newtree) stop("can't get next row position from a column layout object"))
@@ -351,6 +352,18 @@ setMethod("labrow_visible<-", "LabelRow",
           function(obj, value) {
     obj@visible = value
     obj
+})
+
+
+## TRUE is always, FALSE is never, NA is only when no
+## content function is present
+setGeneric("label_kids", function(spl) standardGeneric("label_kids"))
+setMethod("label_kids", "Split", function(spl) spl@label_children)
+
+setGeneric("label_kids<-", function(spl, value) standardGeneric("label_kids<-"))
+setMethod("label_kids<-", "Split", function(spl, value) {
+    spl@label_children = value
+    spl
 })
 
 

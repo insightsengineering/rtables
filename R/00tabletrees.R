@@ -70,6 +70,7 @@ setClass("Split", contains = "VIRTUAL",
              ## split!!!
              content_fun = "functionOrNULL",
              content_format = "FormatSpec",
+             label_children = "logical",
              extra_args = "list"))
 
 
@@ -80,7 +81,16 @@ setClass("VarLevelSplit", contains = "CustomizableSplit",
          representation(value_lbl_var = "character",
                         value_order = "ANY"))
 
-VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, cfmt = NULL, splfun = NULL, splfmt = NULL, valorder = NULL, splname = var ) {
+VarLevelSplit = function(var,
+                         splbl,
+                         valuelblvar = NULL,
+                         cfun = NULL,
+                         cfmt = NULL,
+                         splfun = NULL,
+                         splfmt = NULL,
+                         valorder = NULL,
+                         splname = var,
+                         kid_labs = NA) {
     if(is.null(valuelblvar))
         valuelblvar = var
     new("VarLevelSplit", payload = var,
@@ -91,7 +101,8 @@ VarLevelSplit = function(var, splbl, valuelblvar = NULL, cfun = NULL, cfmt = NUL
         content_format = cfmt,
         split_fun = splfun,
         split_format = splfmt,
-        value_order = NULL
+        value_order = NULL,
+        label_children = kid_labs
         )
 }
 setClass("NULLSplit", contains = "Split",
@@ -112,7 +123,8 @@ AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        name = splname)
+        name = splname,
+        label_children = FLASE)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -122,7 +134,8 @@ RootSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt= NULL, ...) {
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        name = "root")
+        name = "root",
+        label_children = FALSE)
 }
 
 setClass("ManualSplit", contains = "AllSplit",
@@ -133,7 +146,8 @@ ManualSplit = function(levs, lbl, name = "manual") {
     new("ManualSplit",
         split_label = lbl,
         levels = levs,
-        name = name)
+        name = name,
+        label_children = FALSE)
     
 }
 
@@ -148,7 +162,15 @@ setClass("MultiVarSplit", contains = "Split",
 })
 
 
-MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = paste(vars, collapse = ":")) {
+MultiVarSplit = function(vars,
+                         splbl,
+                         varlbls = NULL,
+                         cfun = NULL,
+                         cfmt = NULL,
+                         splfmt = NULL,
+                         splname = paste(vars, collapse = ":"),
+                         kid_labs = NA) {
+
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
     if(length(varlbls) == 0) ## covers NULL and character()
@@ -158,7 +180,8 @@ MultiVarSplit = function(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL, 
         var_labels = varlbls,
         content_fun = cfun,
         content_format = cfmt,
-        split_format = splfmt)
+        split_format = splfmt,
+        label_children = kid_labs)
 }
 
 
@@ -166,7 +189,15 @@ setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
 
-VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = var) {
+VarStaticCutSplit = function(var,
+                             splbl,
+                             cuts,
+                             cutlbls = NULL,
+                             cfun = NULL,
+                             cfmt = NULL,
+                             splfmt = NULL,
+                             splname = var,
+                             kid_labs = NA) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
        length(cuts[[1]]) == length(cuts[[2]])) {
@@ -185,7 +216,8 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        name = splname)
+        name = splname,
+        label_children = kid_labs)
 }
 
 
@@ -196,14 +228,22 @@ VarStaticCutSplit = function(var, splbl, cuts, cutlbls = NULL, cfun = NULL, cfmt
 setClass("VarDynCutSplit", contains = "Split",
          representation(cut_fun = "function"))
                         
-VarDynCutSplit = function(var, splbl, cutfun, cfun = NULL, cfmt = NULL, splfmt = NULL, splname = var) {
+VarDynCutSplit = function(var,
+                          splbl,
+                          cutfun,
+                          cfun = NULL,
+                          cfmt = NULL,
+                          splfmt = NULL,
+                          splname = var,
+                          kid_labs = NA) {
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        name = splname)
+        name = splname,
+        label_children = kid_labs)
 }
 
 setClass("AnalyzeVarSplit", contains = "Split",
@@ -232,7 +272,8 @@ AnalyzeVarSplit = function(var,
         split_format = splfmt,
         default_rowlabel = defrowlab,
         include_NAs = inclNAs,
-        name = splname)
+        name = splname,
+        label_children = FALSE)
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -292,7 +333,8 @@ AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, c
              split_label = "",
              split_format = NULL,
              content_fun = NULL,
-             content_format = NULL)
+             content_format = NULL,
+             label_children = TRUE)
      }
 }
 
@@ -441,7 +483,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        name = splname)
+        name = splname,
+        label_children = FALSE) ## this is always a column split
 }
                         
 

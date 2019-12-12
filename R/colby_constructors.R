@@ -268,7 +268,7 @@ add_new_coltree = function(lyt, spl) {
 #' build_table(l3, DM)
 #' 
 add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
-    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt)
+    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt, kid_labs = FALSE)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
@@ -331,12 +331,13 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #' 
 #' build_table(l, DM)
 #'   
-add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE) {
+add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, kidlbls = NA) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
                         valuelblvar = vlblvar,
                         splfun = splfun,
-                        splfmt = fmt)
+                        splfmt = fmt,
+                        kid_labs = kidlbls)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -382,9 +383,11 @@ add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
 
 add_rowby_multivar = function(lyt, vars, lbl, varlbls,
                               splfmt = NULL,
-                              newtoplev = FALSE) {
+                              newtoplev = FALSE,
+                              kidlbls = NA) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls,
-                        splfmt = splfmt)
+                        splfmt = splfmt,
+                        kid_labs = kidlbls)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -400,9 +403,11 @@ add_colby_staticcut = function(lyt, var, lbl, cuts,
 add_rowby_staticcut = function(lyt, var, lbl, cuts,
                                cutlbls = NULL,
                                splfmt = NULL,
-                            newtoplev = FALSE) {
+                               newtoplev = FALSE,
+                               kidlbls = NA) {
     spl = VarStaticCutSplit(var, lbl, cuts, cutlbls,
-                            splfmt = splfmt)
+                            splfmt = splfmt,
+                            kid_labs = kidlbls)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -419,9 +424,11 @@ add_colby_dyncut = function(lyt, var, lbl, cutfun,
 
 add_rowby_dyncut = function(lyt, var, lbl, cutfun,
                             splfmt = NULL,
-                            newtoplev = FALSE) {
+                            newtoplev = FALSE,
+                            kidlbls = NA) {
     spl = VarDynCutSplit(var, lbl, cutfun,
-                         splfmt = splfmt)
+                         splfmt = splfmt,
+                         kid_labs = kidlbls)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -641,25 +648,27 @@ add_col_total = function(lyt, lbl) {
 }
 
 setGeneric("add_summary",
-           function(lyt, lbl, cfun, cfmt = NULL) standardGeneric("add_summary"))
+           function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) standardGeneric("add_summary"))
 setMethod("add_summary", "PreDataTableLayouts",
-          function(lyt, lbl, cfun, cfmt = NULL) {
+          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
     tmp = add_summary(rlayout(lyt), lbl, cfun,
+                      kidlbls = kidlbls,
                       cfmt = cfmt)
     rlayout(lyt) = tmp
     lyt
 })
 
 setMethod("add_summary", "PreDataRowLayout",
-          function(lyt, lbl, cfun, cfmt = NULL) {
+          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         rt = root_spl(lyt)
-        rt = add_summary(rt, lbl, cfun, cfmt = cfmt)
+        rt = add_summary(rt, lbl, cfun, kidlbls = kidlbls, cfmt = cfmt)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
         tmp = add_summary(lyt[[ind]], lbl, cfun,
+                          kidlbls = kidlbls,
                           cfmt = cfmt)
         lyt[[ind]] = tmp
     }
@@ -667,20 +676,22 @@ setMethod("add_summary", "PreDataRowLayout",
 })
 
 setMethod("add_summary", "SplitVector",
-          function(lyt, lbl, cfun, cfmt = NULL) {
+          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = add_summary(spl, lbl, cfun, cfmt = cfmt)
+    tmp = add_summary(spl, lbl, cfun, kidlbls = kidlbls, cfmt = cfmt)
     lyt[[ind]] = tmp
     lyt
 })
 
 setMethod("add_summary", "Split",
-          function(lyt, lbl, cfun, cfmt = NULL) {
+          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
     content_fun(lyt) = cfun
     obj_fmt(lyt) = cfmt
+    if(!identical(kidlbls, label_kids(lyt)))
+        label_kids(lyt) = kidlbls
     lyt
 })
 

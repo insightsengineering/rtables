@@ -125,7 +125,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     trows
 }
 
-.make_ctab = function(df, lvl, spl, ##treepos,
+.make_ctab = function(df, lvl, ##treepos,
                       name,
                       ##colexprs, coltree,
                       cinfo,
@@ -176,7 +176,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 }
 
 
-.make_analyzed_tab = function(df, spl, cinfo, name, lab, ctab, lvl) {
+.make_analyzed_tab = function(df, spl, cinfo, name, dolab = TRUE, ctab, lvl) {
     stopifnot(is(spl, "AnalyzeVarSplit"))
     check_validsplit(spl, df)
     kids = .make_tablerows(df,
@@ -186,9 +186,13 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
                            format = obj_fmt(spl))
+    if(dolab)
+        lab = obj_label(spl)
+    else
+        lab = ""
     TableTree(kids = kids,
               name = spl_payload(spl),
-              lab = obj_label(spl),
+              lab = lab,
               lev = lvl,
               cinfo = cinfo,
               fmt = obj_fmt(spl))
@@ -199,25 +203,16 @@ recursive_applysplit = function( df,
                                 splvec,
                                 name,
                                 label,
+                                make_lrow,
                                 ##colexprs, coltree,
                                 cinfo,
-                                parent_cfun = NULL, cformat = NULL) {
+                                parent_cfun = NULL,
+                                cformat = NULL) {
     
 
-    ## lvl is level of indentation, which starts at 0
-    ## pos, is position in the splvec, which starts at 1
-    ## because R is 1-indexed, so pos = lvl + 1L
-    ## pos = lvl + 1L;
-    ## stopifnot(pos <= length(splvec),
-    ##           is(splvec, "SplitVector"))
-    spl = splvec[[1]]
-    splvec = splvec[-1]
-
     ## pre-existing table was added to the layout
-    if(is(spl, "VTableNodeInfo"))
+    if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(spl)
-    nonroot = lvl != 0L
-    lab = obj_label(spl)
         
     ## the content function is the one from the PREVIOUS
     ## split, ie the one whose children we are now constructing
@@ -225,88 +220,110 @@ recursive_applysplit = function( df,
     ## declaring layouts much more sane.
     ctab = .make_ctab(df,
                       lvl = lvl,
-                      spl = spl,
                       name = name, 
                       cinfo = cinfo,
                       parent_cfun = parent_cfun, format = cformat)
     ## XXX TODO is this right??!?!?
-    if(nrow(ctab) > 0)
+    if((is.na(make_lrow) && nrow(ctab) > 0) ||
+       identical(make_lrow, FALSE))
         label = ""
     ##    if(length(splvec) > 0) { ## there's more depth, recurse
-    if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
-        ## XXX TODO rework this ifelse chain so we don't have an
-        ##       lab = ""
-        kids = list(.make_analyzed_tab(df = df,
-                                       spl = spl,
-                                       cinfo = cinfo,
-                                       lvl = lvl + 1L))
-        names(kids) = sapply(kids, obj_name)
-    } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
-        ##     lab = ""
-        kids = lapply(spl_payload(spl),
-                      function(sp) {
-            .make_analyzed_tab(df = df,
-                               spl = sp,
-                               cinfo = cinfo,
-                               lvl = lvl + 1L
-                               )}
-            )
-        ## this will be the variables
-        nms = sapply(spl_payload(spl), spl_payload)
-        nms[is.na(nms)] = ""
-        names(kids) = nms
+        ## lvl is level of indentation, which starts at 0
+    ## pos, is position in the splvec, which starts at 1
+    ## because R is 1-indexed, so pos = lvl + 1L
+    ## pos = lvl + 1L;
+    ## stopifnot(pos <= length(splvec),
+    ##           is(splvec, "SplitVector"))
+    if(length(splvec) == 0L) {
+        kids = list()
     } else {
-        rawpart = do_split(spl, df) ##apply_split(spl, df)
-        dataspl = rawpart[["datasplit"]]
-        ## these are SplitValue objects
-        splvals = rawpart[["values"]]
-        partlbls = rawpart[["labels"]]
-        if(is.factor(partlbls))
-            partlbls = as.character(partlbls)
-        nms = unlist(splv_rawvalues(splvals))
-        if(is.factor(nms))
-            nms = as.character(nms)
-  
-        innerlev = lvl + 1L
-        if(nonroot) innerlev = innerlev + 1L
-        inner = unlist(mapply(function(dfpart,  nm, lbl) {
-            recursive_applysplit(dfpart,
-                                 name = nm, 
-                                 label = lbl,
-                                 lvl = innerlev,
-                                 splvec = splvec,
-                                 cinfo = cinfo,
-                                 parent_cfun = content_fun(spl),
-                                 cformat = obj_fmt(spl))
-        }, dfpart = dataspl,
-        lbl = partlbls,
-        nm = nms,
-        SIMPLIFY=FALSE))
-        if(nonroot) {
-            kids = list(TableTree(kids = inner,
-                                  name = obj_name(spl),
-                                  lab = obj_label(spl),
-                                  lev = innerlev - 1L,
-                                  cinfo = cinfo,
-                                  spl = spl,
-                                  fmt = obj_fmt(spl)))
-            ## I'm enforcing this in the TableTree
-            ## constructor now
-            ##names(kids) = obj_name(spl)
-        } else {
-            kids = inner
-        }
-    }
-    ret = TableTree(cont = ctab, kids = kids,
-                    name = name,
-                    lev = lvl,
-                    iscontent = FALSE,
+        
+        spl = splvec[[1]]
+        splvec = splvec[-1]
+        nonroot = lvl != 0L
+        lab = obj_label(spl)
+
+        if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
+            kids = list(.make_analyzed_tab(df = df,
+                                           spl = spl,
+                                           cinfo = cinfo,
+                                           lvl = lvl + 1L,
+                                           dolab = nonroot))
+            names(kids) = sapply(kids, obj_name)
+        } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
+            ##     lab = ""
+            kids = lapply(spl_payload(spl),
+                          function(sp) {
+                .make_analyzed_tab(df = df,
+                                   spl = sp,
+                                   cinfo = cinfo,
+                                   lvl = lvl + 1L
+                               )}
+                )
+            ## this will be the variables
+            nms = sapply(spl_payload(spl), spl_payload)
+            nms[is.na(nms)] = ""
+            names(kids) = nms
+        } else { #not Analyze(Multi)Var(s)
+            rawpart = do_split(spl, df) ##apply_split(spl, df)
+            dataspl = rawpart[["datasplit"]]
+            ## these are SplitValue objects
+            splvals = rawpart[["values"]]
+            partlbls = rawpart[["labels"]]
+            if(is.factor(partlbls))
+                partlbls = as.character(partlbls)
+            nms = unlist(splv_rawvalues(splvals))
+            if(is.factor(nms))
+                nms = as.character(nms)
+            
+            innerlev = lvl + 1L
+            if(nonroot)
+                innerlev = innerlev + 1L
+            inner = unlist(mapply(function(dfpart,  nm, lbl) {
+                recursive_applysplit(dfpart,
+                                     name = nm, 
+                                     label = lbl,
+                                     lvl = innerlev,
+                                     splvec = splvec,
+                                     cinfo = cinfo,
+                                     make_lrow = label_kids(spl),
+                                     parent_cfun = content_fun(spl),
+                                     cformat = obj_fmt(spl))
+            }, dfpart = dataspl,
+            lbl = partlbls,
+            nm = nms,
+            SIMPLIFY=FALSE))
+            if(nonroot) {
+                kids = list(TableTree(kids = inner,
+                                      name = obj_name(spl),
+                                      lab = obj_label(spl),
+                                      lev = innerlev - 1L,
+                                      cinfo = cinfo,
+                                      spl = spl,
+                                      fmt = obj_fmt(spl)))
+                ## I'm enforcing this in the TableTree
+                ## constructor now
+                ##names(kids) = obj_name(spl)
+            } else { ## is root
+                kids = inner
+            } ## end nonroot
+        } ## end split type
+    } ## end length(splvec)
+
+    if(nrow(ctab) > 0L || length(kids) > 0L) {
+        ret = TableTree(cont = ctab, kids = kids,
+                        name = name,
+                        lev = lvl,
+                    iscontent = FALSE, 
                     spl = spl,
                     labrow = LabelRow(lev = lvl,
                                       lab = label,
-                                      vis = nrow(ctab) == 0,
                                       cinfo = cinfo),
                     cinfo = cinfo)
+    } else {
+        ret = NULL
+    }
+    ret
     
 }
 
@@ -340,7 +357,7 @@ build_table = function(lyt, df, ...) {
     
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
-    ctab = .make_ctab(df, 0L, rtspl,
+    ctab = .make_ctab(df, 0L,
                       name = "root",
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
@@ -356,7 +373,8 @@ build_table = function(lyt, df, ...) {
                              label = lab,
                              splvec = splvec,
                              cinfo = cinfo,
-                             ## XXX is this ALWAYS right?
+                             ## XXX are these ALWAYS right?
+                             make_lrow = NA,
                              parent_cfun = NULL,
                              cformat = obj_fmt(firstspl))
     })
