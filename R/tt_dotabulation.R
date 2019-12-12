@@ -43,6 +43,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     rawvals = mapply(function(csub, col, count, cextr) {
         inds = eval(csub, envir = dfpart)
         dat = dfpart[inds,]
+        if(nrow(dat) == 0L)
+            return(NULL)
+        
         if(!is.null(col) && !.takes_df(func))
             dat = dat[[col]]
         args = list(dat)
@@ -59,6 +62,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     cextr = colextras,
     SIMPLIFY= FALSE)
 
+    
     names(rawvals) = names(colexprs)
     rawvals
 }
@@ -444,7 +448,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       tpos = pos)
     } else {
         spl = splvec[[lvl]]
-        rawpart = do_split(spl,df)
+        rawpart = do_split(spl,df, trim = )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         kids = mapply(function(dfpart, value) {

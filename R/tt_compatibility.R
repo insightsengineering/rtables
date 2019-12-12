@@ -408,7 +408,7 @@ header_add_N = function(x, N) {
 
 `header<-` = function(x, value) {
     if(is(value, "list")) {
-        value = header(.rowlist = value)
+        value = rheader(.rowlist = value)
     } else if(!is(value, "InstantiatedColumnInfo")) {
         ## XXX we could be more defensive here, some
         ## bad invalid values could get through.

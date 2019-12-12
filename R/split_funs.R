@@ -90,7 +90,7 @@ setGeneric("check_validsplit",
 
 
 ### NB This is called at EACH level of recursive splitting 
-do_split = function(spl, df, vals = NULL, lbls = NULL) {
+do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
     ## can't be applied to df
@@ -129,12 +129,14 @@ do_split = function(spl, df, vals = NULL, lbls = NULL) {
         ## But only if there were any rows to start with
         ## if not we're in a manually constructed table
         ## column tree
-        hasdata = sapply(dpart, function(x) nrow(x) >0)
-        if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
-            dpart = dpart[hasdata]
-            vals = vals[hasdata]
-            extr = extr[hasdata]
-            lbls = lbls[hasdata]
+        if(trim) {
+            hasdata = sapply(dpart, function(x) nrow(x) >0)
+            if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
+                dpart = dpart[hasdata]
+                vals = vals[hasdata]
+                extr = extr[hasdata]
+                lbls = lbls[hasdata]
+            }
         }
 
         if(is.null(spl_child_order(spl)))
@@ -425,3 +427,31 @@ reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     partinfo
 
 }
+
+droplevsinner = function(innervar) {
+  myfun = function(df, spl, vals = NULL, lbls = NULL) {
+    ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls)
+    
+    ret$datasplit = lapply(ret$datasplit, function(x) {
+        coldat = x[[innervar]]
+        if(is(coldat, "character")) {
+            if(!is.null(vals))
+                lvs = vals
+            else
+                lvs = unique(coldat)
+            coldat = factor(coldat, levels = lvs) ## otherwise
+        } else {
+            coldat = droplevels(coldat)
+        }
+      x[[innervar]] = coldat
+      
+      x
+    })
+    
+    ret$labels <- as.character(ret$labels) # TODO
+    ret
+  }
+  myfun
+  
+}
+
