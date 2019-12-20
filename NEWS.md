@@ -1,3 +1,7 @@
+## rtables 0.1.4
+
+* Replaced dots to underscore in class checking functions.
+
 ## rtables 0.1.3
 
 * `col_by` in `rtabulate` now accepts matrices
