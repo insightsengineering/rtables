@@ -1,19 +1,11 @@
+## rtables 0.1.4.9000
+*
+
+## rtables 0.1.4
+
+* Replaced dots to underscore in class checking functions.
+
 ## rtables 0.1.3
-
-* `col_by` in `rtabulate` now accepts matrices
-  - `col_by_to_matrix`, `col_by_to_factor`, `by_factor_to_matrix`, 
-  - `by_add_total`, `by_all`, `by_combine`, `by_quartile`, `by_compare_subset`,  `by_hierarchical`, `by_drop_empty_cols`
-  
-* New utility functions to deal with variable lables
-  - `label`, `var_labels<-`, `var_labels`, `var_labels_remove`, `var_relabel`, `with_label`
-
-* Other new functions:
-  - `cbing_rtables`
-  - `empty_rtables`, `is_empty_rtable`, `is_non_empty_rtable`, `is_rtable`
-  - `header_indent`, `header_indent<-`, `header_row.names`, `header_row.names<-`
-  - `insert_rrow`
-
-## rtables 0.1.2.9000
 
 * `col_by` in `rtabulate` now accepts matrices
   - `col_by_to_matrix`, `col_by_to_factor`, `by_factor_to_matrix`, 
