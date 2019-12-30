@@ -57,7 +57,7 @@ names(mtbl) # always first row of header
 # Single row header
 
 tbl <- rtable(
-  header = c("Treatement\\nN=100", "Comparison\\nN=300"),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx\%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),

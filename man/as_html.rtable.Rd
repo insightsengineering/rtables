@@ -4,8 +4,7 @@
 \alias{as_html.rtable}
 \title{Convert an rtable object to html}
 \usage{
-\method{as_html}{rtable}(x,
-  class.table = "table table-condensed table-hover", ...)
+\method{as_html}{rtable}(x, class.table = "table table-condensed table-hover", ...)
 }
 \arguments{
 \item{x}{an \code{\link{rtable}} object}

@@ -4,9 +4,16 @@
 \alias{rtabulate.numeric}
 \title{Tabulate a numeric vector}
 \usage{
-\method{rtabulate}{numeric}(x, col_by = by_all("col_1"), FUN = mean,
-  ..., format = NULL, row.name = NULL, indent = 0,
-  col_wise_args = NULL)
+\method{rtabulate}{numeric}(
+  x,
+  col_by = by_all("col_1"),
+  FUN = mean,
+  ...,
+  format = NULL,
+  row.name = NULL,
+  indent = 0,
+  col_wise_args = NULL
+)
 }
 \arguments{
 \item{x}{a vector}
