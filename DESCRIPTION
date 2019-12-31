@@ -1,6 +1,6 @@
 Package: rtables
 Title: Reporting Tables
-Date: 2019-12-20
+Date: 2019-12-30
 Version: 0.1.4.9000
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
@@ -23,7 +23,7 @@ Suggests:
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
 BugReports: https://github.com/roche/rtables/issues

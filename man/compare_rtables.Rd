@@ -32,7 +32,7 @@ Viewer(t1, t2)
 }
 
 expected <- rtable(
-   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\nN=100", "ARM B\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),
@@ -45,7 +45,7 @@ Viewer(expected)
 }
 
 object <- rtable(
-   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\nN=100", "ARM B\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow("section title"),
@@ -57,7 +57,7 @@ compare_rtables(object, expected)
 compare_rtables(object, expected, comp.attr = FALSE)
 
 object <- rtable(
-   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\nN=100", "ARM B\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),
@@ -67,7 +67,7 @@ object <- rtable(
 compare_rtables(object, expected)
 
 object <- rtable(
-   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\nN=100", "ARM B\nN=200"),
    format = "xx",
    rrow("row 1", 14, 15.03),
    rrow(),
@@ -78,7 +78,7 @@ object <- rtable(
 compare_rtables(object, expected)
 
 object <- rtable(
-   header = c("ARM A\\nN=100", "ARM B\\nN=200"),
+   header = c("ARM A\nN=100", "ARM B\nN=200"),
    format = "xx",
    rrow("row 1", 10, 15),
    rrow(),
