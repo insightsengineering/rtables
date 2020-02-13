@@ -145,7 +145,7 @@
       <tr>
         
         <td>
-          <p><code><a href="argument_conventions.html">argument_conventions()</a></code> </p>
+          <p><code><a href="argument_conventions.html">argument_conventions</a></code> </p>
         </td>
         <td><p>Dummy Function with aruments that are used throughout the framework</p></td>
       </tr>
@@ -304,6 +304,12 @@
         </th>
       </tr>
       <tr>
+        
+        <td>
+          <p><code><a href="names.html">names(<i>&lt;VTableNodeInfo&gt;</i>)</a></code> <code><a href="names.html">names(<i>&lt;InstantiatedColumnInfo&gt;</i>)</a></code> <code><a href="names.html">names(<i>&lt;LayoutColTree&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Names of a TableTree</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="names.rtable.html">names(<i>&lt;rtable&gt;</i>)</a></code> </p>
@@ -465,6 +471,30 @@
           <p><code><a href="header_row.names-set.html">`header_row.names<-`()</a></code> </p>
         </td>
         <td><p>Modify Header Row Names</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="brackets.html">`[<-`(<i>&lt;VTableTree&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;list&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;logical&gt;</i>,<i>&lt;logical&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;logical&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;logical&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;missing&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;missing&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;numeric&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="brackets.html">`[[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;list&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>retrieve and assign elements of a TableTree</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tree_children.html">tree_children()</a></code> <code><a href="tree_children.html">`tree_children<-`()</a></code> </p>
+        </td>
+        <td><p>Retrieve or set tthe direct children of a Tree-style objecgt</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dim-VTableNodeInfo-method.html">dim(<i>&lt;VTableNodeInfo&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Dim of a TableTree-related Object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="c-SplitVector-method.html">c(<i>&lt;SplitVector&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>combine SplitVector objects</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -803,6 +833,90 @@ browser</p></td>
         </td>
         <td><p>Create an old_rtable from rrows stored in a list</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tabletree-framework-constructors-and-s-classes" class="hasAnchor"><a href="#section-tabletree-framework-constructors-and-s-classes" class="anchor"></a>TableTree Framework Constructors and S4 Classes</h2>
+          <p class="section-desc"><p>S4 classes and constructors</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="ManualSplit.html">ManualSplit()</a></code> </p>
+        </td>
+        <td><p>Manually defined split</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="MultiVarSplit.html">MultiVarSplit()</a></code> </p>
+        </td>
+        <td><p>Split between two or more different variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="VarLevelSplit.html">VarLevelSplit()</a></code> <code><a href="VarLevelSplit.html">VarLevWBaselineSplit()</a></code> </p>
+        </td>
+        <td><p>Split on levels within a variable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="avarspl.html">AnalyzeVarSplit()</a></code> <code><a href="avarspl.html">AnalyzeMultiVars()</a></code> <code><a href="avarspl.html">AVarBaselineComp()</a></code> </p>
+        </td>
+        <td><p>Define a subset tabulation/analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rowclasses.html">LabelRow()</a></code> <code><a href="rowclasses.html">DataRow()</a></code> <code><a href="rowclasses.html">ContentRow()</a></code> </p>
+        </td>
+        <td><p>Row constructors and Classes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tabclasses.html">ElementaryTable()</a></code> <code><a href="tabclasses.html">TableTree()</a></code> </p>
+        </td>
+        <td><p>Table Constructors and Classes</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-pagination" class="hasAnchor"><a href="#section-pagination" class="anchor"></a>Pagination</h2>
+          <p class="section-desc"><p>Pagination related functionality</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="pag_tt_indices.html">pag_tt_indices()</a></code> </p>
+        </td>
+        <td><p>Determine pagination of a TableTree</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="make_pagdf.html">make_pagdf()</a></code> </p>
+        </td>
+        <td><p>Make layout summary  data.frame for use during pagination</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gfr.html">get_formatted_rows()</a></code> </p>
+        </td>
+        <td><p>Get formatted rows</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-included-data" class="hasAnchor"><a href="#section-included-data" class="anchor"></a>Included Data</h2>
+          <p class="section-desc"><p>Included datasets</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="DM.html">DM</a></code> </p>
+        </td>
+        <td><p>DM data</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -823,6 +937,9 @@ browser</p></td>
       <li><a href="#section-utility-functions">Utility Functions</a></li>
       <li><a href="#section-unexported-functions-used-by-developers">Unexported Functions used by Developers</a></li>
       <li><a href="#section-old-legacy-s-classes">old legacy S3 classes</a></li>
+      <li><a href="#section-tabletree-framework-constructors-and-s-classes">TableTree Framework Constructors and S4 Classes</a></li>
+      <li><a href="#section-pagination">Pagination</a></li>
+      <li><a href="#section-included-data">Included Data</a></li>
     </ul>
   </div>
 </div>
@@ -830,7 +947,7 @@ browser</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Adrian Waddell, Maximilian Mordig.</p>
+  <p>Developed by Adrian Waddell, Gabriel Becker, Maximilian Mordig.</p>
 </div>
 
 <div class="pkgdown">

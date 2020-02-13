@@ -92,6 +92,10 @@ reference:
     - header_indent<-
     - header_row.names
     - header_row.names<-
+    - "[<-,VTableTree,ANY,ANY,list-method"
+    - tree_children
+    - starts_with("dim")
+    - "c,SplitVector-method"
 
   - title: Tabulation Functions
     desc: rtabulate is a framework to derive rtables
@@ -155,3 +159,21 @@ reference:
     contents:
     - empty_old_rtable
     - starts_with("old_")
+
+  - title: TableTree Framework Constructors and S4 Classes
+    desc: S4 classes and constructors
+    contents:
+    - ends_with("Split")
+    - ends_with("class")
+
+  - title: Pagination
+    desc: Pagination related functionality
+    contents:
+    - pag_tt_indices
+    - make_pagdf
+    - get_formatted_rows
+
+  - title: Included Data
+    desc: Included datasets
+    contents:
+    - DM
