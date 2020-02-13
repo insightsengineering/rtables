@@ -15,25 +15,44 @@ setMethod("ncol", "VTableNodeInfo",
     length(col_exprs(ci))
 })
 
-
+#' Dim of a TableTree-related Object
+#' @param x The Object
+#' @exportMethod dim
 setMethod("dim", "VTableNodeInfo",
           function(x) c(nrow(x), ncol(x)))
+#' Retrieve or set tthe direct children of a Tree-style objecgt
+#'
+#' @param x An object with a Tree structure
+#' @param value New list of children.
+#' @return List of direct children of \code{x}
+#' @export
+#' @rdname tree_children
 setGeneric("tree_children", function(x) standardGeneric("tree_children"))
+#' @exportMethod tree_children
+#' @rdname tree_children
 setMethod("tree_children", c(x = "VTree"),
           function(x) x@children)
-
+#' @exportMethod tree_children
+#' @rdname tree_children
 setMethod("tree_children", c(x = "VTableTree"),
           function(x) x@children)
-setMethod("tree_children", c(x = "VLeaf"),
+#' @exportMethod tree_children
+#' @rdname tree_children
+ setMethod("tree_children", c(x = "VLeaf"),
           function(x) list())
 
+#' @export
+#' @rdname tree_children
 setGeneric("tree_children<-", function(x, value) standardGeneric("tree_children<-"))
+#' @exportMethod tree_children<-
+#' @rdname tree_children
 setMethod("tree_children<-", c(x = "VTree"),
           function(x, value){
     x@children = value
     x
 })
-
+#' @exportMethod tree_children<-
+#' @rdname tree_children
 setMethod("tree_children<-", c(x = "VTableTree"),
           function(x, value){
     x@children = value
@@ -43,10 +62,10 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 
 
 ## not worth the S4 dispatch to do it "right"... probably
-n_leaves = function(tree) {
-    kids = layout_children(tree)
-    length(unlist(lapply(kids, function(x) if(is(x, "VLeaf")) TRUE else n_leaves(x))))
-}
+## n_leaves = function(tree) {
+##     kids = layout_children(tree)
+##     length(unlist(lapply(kids, function(x) if(is(x, "VLeaf")) TRUE else n_leaves(x))))
+## }
 
 
 ## setGeneric("pos_payloads", function(obj) standardGeneric("pos_payloads"))
@@ -261,6 +280,13 @@ setMethod("pos_splval_lbls", "VLayoutNode",
 
 setGeneric("spl_payload", function(obj) standardGeneric("spl_payload"))
 setMethod("spl_payload", "Split", function(obj) obj@payload)
+
+setGeneric("spl_payload<-", function(obj, value) standardGeneric("spl_payload<-"))
+setMethod("spl_payload<-", "Split", function(obj, value) {
+    obj@payload <- value
+    obj
+})
+
 
 ### name related things
 
@@ -620,55 +646,58 @@ setMethod("value_fmts", "VTableTree",
 ### framework.
 
 setGeneric("collect_leaves",
-           function(ttree, incl.cont = TRUE, add.labrows = FALSE)
-    standardGeneric("collect_leaves"), signature = "ttree")
+           function(tt, incl.cont = TRUE, add.labrows = FALSE)
+    standardGeneric("collect_leaves"), signature = "tt")
 
 
 setMethod("collect_leaves", "TableTree",
-          function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
+          function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
-        if(incl.cont) {tree_children(content_table(ttree))},
-        if(add.labrows && labrow_visible(ttree)) {
-            tt_labelrow(ttree)
+        if(incl.cont) {tree_children(content_table(tt))},
+        if(add.labrows && labrow_visible(tt)) {
+            tt_labelrow(tt)
         },
-        lapply(tree_children(ttree),
+        lapply(tree_children(tt),
                collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)
 })
 
 
 setMethod("collect_leaves", "ElementaryTable",
-          function(ttree, incl.cont = TRUE, add.labrows = FALSE) {
-    ret = tree_children(ttree)
-    if(add.labrows && labrow_visible(ttree)) {
-        ret = c(tt_labelrow(ttree), ret)
+          function(tt, incl.cont = TRUE, add.labrows = FALSE) {
+    ret = tree_children(tt)
+    if(add.labrows && labrow_visible(tt)) {
+        ret = c(tt_labelrow(tt), ret)
     }
     ret
 })
 setMethod("collect_leaves", "VTree",
-          function(ttree, incl.cont, add.labrows) {
-    ret = lapply(tree_children(ttree),
+          function(tt, incl.cont, add.labrows) {
+    ret = lapply(tree_children(tt),
                  collect_leaves)
     unlist(ret, recursive = TRUE)
 })
 
 setMethod("collect_leaves", "VLeaf",
-          function(ttree, incl.cont, add.labrows) {
-    ttree
+          function(tt, incl.cont, add.labrows) {
+    tt
 })
 
 setMethod("collect_leaves", "NULL",
-          function(ttree, incl.cont, add.labrows) {
+          function(tt, incl.cont, add.labrows) {
     list()
 })
 
 
 
 setMethod("collect_leaves", "ANY",
-          function(ttree, incl.cont, add.labrows)
-    stop("class ", class(ttree), " does not inherit from VTree or VLeaf"))
+          function(tt, incl.cont, add.labrows)
+    stop("class ", class(tt), " does not inherit from VTree or VLeaf"))
 
 
+n_leaves <- function(tt, ...) {
+    length(collect_leaves(tt, ...))
+}
 ### Spanning information
 
 setGeneric("row_cspans", function(obj) standardGeneric("row_cspans"))
@@ -714,6 +743,9 @@ setMethod("splv_rawvalues", "SplitValue",
           function(obj) obj@value)
 setMethod("splv_rawvalues", "list",
           function(obj) lapply(obj, splv_rawvalues))
+setMethod("splv_rawvalues", "TreePos",
+          function(obj) splv_rawvalues(pos_splvals(obj)))
+          
 
 ## These two are similar enough we could probably combine
 ## them but conceptually they are pretty different
@@ -1047,3 +1079,29 @@ setMethod("no_colinfo", "VTableNodeInfo",
 
 setMethod("no_colinfo", "InstantiatedColumnInfo",
            function(obj) identical(obj, InstantiatedColumnInfo()))
+
+
+#' Names of a TableTree
+#'
+#' @param x the object.
+#' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level split values repped out across the columns that they span.
+#' @rdname names
+#' @exportMethod names
+setMethod("names", "VTableNodeInfo",
+          function(x) names(col_info(x)))
+
+#' @rdname names
+#' @exportMethod names
+
+setMethod("names", "InstantiatedColumnInfo",
+          function(x) names(coltree(x)))
+#' @rdname names
+#' @exportMethod names
+setMethod("names", "LayoutColTree",
+          function(x) {
+    unname(unlist(lapply(tree_children(x),
+                  function(obj) {
+        nm <- obj_name(obj)
+        rep(nm, n_leaves(obj))
+    })))
+})

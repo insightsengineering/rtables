@@ -8,13 +8,11 @@
 
 <title>Add N=xx to header — header_add_N • rtables</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,12 +32,11 @@
 
 
 
-
 <meta property="og:title" content="Add N=xx to header — header_add_N" />
+
 <meta property="og:description" content="Helper function used to add the population total (N) in the 
 column header of rtable object." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -96,7 +93,13 @@ column header of rtable object." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -104,6 +107,7 @@ column header of rtable object." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -130,12 +134,14 @@ column header of rtable object." />
     </div>
 
     <div class="ref-description">
+    
     <p>Helper function used to add the population total (N) in the 
 column header of <code><a href='rtable.html'>rtable</a></code> object.</p>
+    
     </div>
 
     <pre class="usage"><span class='fu'>header_add_N</span>(<span class='no'>x</span>, <span class='no'>N</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -149,7 +155,7 @@ column header of <code><a href='rtable.html'>rtable</a></code> object.</p>
 length must match the number of columns in <code>x</code></p></td>
     </tr>
     </table>
-
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -158,35 +164,36 @@ length must match the number of columns in <code>x</code></p></td>
  <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"X"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
  <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"Y"</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>)
 )
-<span class='no'>tbl</span></div><div class='output co'>#&gt;          a        b        c
-#&gt; ----------------------------
-#&gt; X        1        2        3
-#&gt; Y        4        5        6</div><div class='input'><span class='fu'>header_add_N</span>(<span class='no'>tbl</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt;            a            b            c  
-#&gt;          (N=1)        (N=2)        (N=3)
-#&gt; ----------------------------------------
-#&gt; X          1            2            3  
-#&gt; Y          4            5            6  </div><div class='input'>
+<span class='no'>tbl</span></div><div class='output co'>#&gt;     a   b   c
+#&gt; -------------
+#&gt; X   1   2   3
+#&gt; Y   4   5   6</div><div class='input'><span class='fu'>header_add_N</span>(<span class='no'>tbl</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt;       a       b       c  
+#&gt;     (N=1)   (N=2)   (N=3)
+#&gt; -------------------------
+#&gt; X     1       2       3  
+#&gt; Y     4       5       6  </div><div class='input'>
 <span class='co'># multiline header</span>
 <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span>(
   <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span>(<span class='fu'><a href='rrowl.html'>rrowl</a></span>(<span class='kw'>NULL</span>, <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]), <span class='fu'><a href='rrowl.html'>rrowl</a></span>(<span class='kw'>NULL</span>, <span class='no'>letters</span>[<span class='fl'>4</span>:<span class='fl'>6</span>])),
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"X"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"Y"</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>)
 )
-<span class='no'>tbl</span></div><div class='output co'>#&gt;          a        b        c
-#&gt;          d        e        f
-#&gt; ----------------------------
-#&gt; X        1        2        3
-#&gt; Y        4        5        6</div><div class='input'><span class='fu'>header_add_N</span>(<span class='no'>tbl</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt;            a            b            c  
-#&gt;            d            e            f  
-#&gt;          (N=1)        (N=2)        (N=3)
-#&gt; ----------------------------------------
-#&gt; X          1            2            3  
-#&gt; Y          4            5            6  </div></pre>
+<span class='no'>tbl</span></div><div class='output co'>#&gt;     a   b   c
+#&gt;     d   e   f
+#&gt; -------------
+#&gt; X   1   2   3
+#&gt; Y   4   5   6</div><div class='input'><span class='fu'>header_add_N</span>(<span class='no'>tbl</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt;       a       b       c  
+#&gt;       d       e       f  
+#&gt;     (N=1)   (N=2)   (N=3)
+#&gt; -------------------------
+#&gt; X     1       2       3  
+#&gt; Y     4       5       6  </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

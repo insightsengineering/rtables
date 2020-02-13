@@ -8,13 +8,11 @@
 
 <title>Function reference • rtables</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,9 +32,7 @@
 
 
 
-
 <meta property="og:title" content="Function reference" />
-
 
 
 
@@ -93,7 +89,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -101,6 +103,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -135,14 +138,110 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-core-table-create-functions" class="hasAnchor"><a href="#section-core-table-create-functions" class="anchor"></a>Core Table Create Functions</h2>
+          <h2 id="section-table-trees" class="hasAnchor"><a href="#section-table-trees" class="anchor"></a>Table Trees</h2>
+          <p class="section-desc"><p>Table Trees</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="argument_conventions.html">argument_conventions()</a></code> </p>
+        </td>
+        <td><p>Dummy Function with aruments that are used throughout the framework</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-layouts-simple-tabulation" class="hasAnchor"><a href="#section-layouts-simple-tabulation" class="anchor"></a>Layouts Simple Tabulation</h2>
+          <p class="section-desc"><p>Functions for declaring layout and tabulatioin</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="add_analyzed_colvars.html">add_analyzed_colvars()</a></code> </p>
+        </td>
+        <td><p>Generate Rows Analyzing Different Variables Across Columns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_analyzed_vars.html">add_analyzed_vars()</a></code> </p>
+        </td>
+        <td><p>Generate Rows Analyzing Variables Across Columns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_colby_multivar.html">add_colby_multivar()</a></code> </p>
+        </td>
+        <td><p>Associate Multiple Variables with Columns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_colby_varlevels.html">add_colby_varlevels()</a></code> </p>
+        </td>
+        <td><p>Declaring a column-split based on levels of a variable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_colby_varwbline.html">add_colby_varwbline()</a></code> </p>
+        </td>
+        <td><p>Declaring a column-split with a Baseline level</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_colcounts.html">add_colcounts()</a></code> </p>
+        </td>
+        <td><p>Add the column population counts to the header</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_rowby_varlevels.html">add_rowby_varlevels()</a></code> </p>
+        </td>
+        <td><p>Add Rows according to levels of a variable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_summary_count.html">add_summary_count()</a></code> </p>
+        </td>
+        <td><p>Add a content row of summary counts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="build_table.html">build_table()</a></code> </p>
+        </td>
+        <td><p>Create a table from a layout and data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="manual_cols.html">manual_cols()</a></code> </p>
+        </td>
+        <td><p>Manual column declaration</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-table-tree-untility-functions" class="hasAnchor"><a href="#section-table-tree-untility-functions" class="anchor"></a>Table Tree Untility Functions</h2>
+          <p class="section-desc"><p>Utility functions</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="lstwrap.html">lstwrap()</a></code> </p>
+        </td>
+        <td><p>Returns a function that coerces the return values of f to a list</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-manual-table-creation-functions" class="hasAnchor"><a href="#section-manual-table-creation-functions" class="anchor"></a>Manual Table Creation Functions</h2>
           <p class="section-desc"><p>These are the main functions needed to build an rtable.</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="rtable.html">rtable()</a></code> </p>
+          <p><code><a href="rtable.html">rtable()</a></code> <code><a href="rtable.html">rtablel()</a></code> </p>
         </td>
         <td><p>Create a Table</p></td>
       </tr><tr>
@@ -150,43 +249,31 @@
         <td>
           <p><code><a href="rrow.html">rrow()</a></code> </p>
         </td>
-        <td><p>Reporting Table Row</p></td>
+        <td><p>row</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rcell.html">rcell()</a></code> </p>
         </td>
-        <td><p>Reporting Table Cell</p></td>
+        <td><p>Rcell</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rheader.html">rheader()</a></code> </p>
         </td>
-        <td><p>Create a rheader object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rtablel.html">rtablel()</a></code> </p>
-        </td>
-        <td><p>Create an rtable from rrows stored in a list</p></td>
+        <td><p>Create a header</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rrowl.html">rrowl()</a></code> </p>
         </td>
-        <td><p>Create an rrow with cell-data stored within lists</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="empty_rtable.html">empty_rtable()</a></code> </p>
-        </td>
-        <td><p>Create an empty rtable</p></td>
+        <td><p>rrowl</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-cell-formatting-related-functions" class="hasAnchor"><a href="#section-cell-formatting-related-functions" class="anchor"></a>Cell Formatting related Functions</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>cell formatting.</p></p>
         </th>
       </tr>
       <tr>
@@ -261,7 +348,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="rbind.rtable.html">rbind(<i>&lt;rtable&gt;</i>)</a></code> </p>
+          <p><code><a href="rbind.rtable.html">rbind.rtable()</a></code> </p>
         </td>
         <td><p>Stack rtable and rrow objects</p></td>
       </tr><tr>
@@ -285,15 +372,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="header.html">header()</a></code> </p>
+          <p><code><a href="compatability.html">`header<-`()</a></code> <code><a href="compatability.html">col_info()</a></code> </p>
         </td>
-        <td><p>Get Header ot Rtable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="header-set.html">`header<-`()</a></code> </p>
-        </td>
-        <td><p>Change Header of Rtable</p></td>
+        <td><p>export</p></td>
       </tr><tr>
         
         <td>
@@ -528,15 +609,15 @@ returns transformed col_by as a matrix</p></td>
       <tr>
         
         <td>
-          <p><code><a href="toString.rtable.html">toString(<i>&lt;rtable&gt;</i>)</a></code> </p>
+          <p><code><a href="toString.rtable.html">toString.rtable()</a></code> </p>
         </td>
         <td><p>Convert an rtable to ascii</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="toString.empty_rtable.html">toString(<i>&lt;empty_rtable&gt;</i>)</a></code> </p>
+          <p><code><a href="toString.empty_rtable.html">toString.empty_rtable()</a></code> </p>
         </td>
-        <td><p>convert an empty rtable to a string</p></td>
+        <td><p>convert an empty old_rtable to a string</p></td>
       </tr><tr>
         
         <td>
@@ -561,7 +642,7 @@ representation of the <code>rtable</code></p></td>
       <tr>
         <th colspan="2">
           <h2 id="section-coercion-functions" class="hasAnchor"><a href="#section-coercion-functions" class="anchor"></a>Coercion Functions</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>coercion functions</p></p>
         </th>
       </tr>
       <tr>
@@ -581,7 +662,7 @@ representation of the <code>rtable</code></p></td>
       <tr>
         <th colspan="2">
           <h2 id="section-utility-functions" class="hasAnchor"><a href="#section-utility-functions" class="anchor"></a>Utility Functions</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>utility functions</p></p>
         </th>
       </tr>
       <tr>
@@ -638,7 +719,7 @@ browser</p></td>
       <tr>
         <th colspan="2">
           <h2 id="section-unexported-functions-used-by-developers" class="hasAnchor"><a href="#section-unexported-functions-used-by-developers" class="anchor"></a>Unexported Functions used by Developers</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>internal functions</p></p>
         </th>
       </tr>
       <tr>
@@ -653,12 +734,74 @@ browser</p></td>
           <p><code><a href="by_header_to_string.html">by_header_to_string()</a></code> </p>
         </td>
         <td><p>Convert the header to string</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-old-legacy-s-classes" class="hasAnchor"><a href="#section-old-legacy-s-classes" class="anchor"></a>old legacy S3 classes</h2>
+          <p class="section-desc"><p>Legacy s3 constructors and manipulation</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="empty_old_rtable.html">empty_old_rtable()</a></code> </p>
+        </td>
+        <td><p>Create an empty old_rtable</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="with_by_header.html">with_by_header()</a></code> </p>
+          <p><code><a href="old_header-set.html">`old_header<-`()</a></code> </p>
         </td>
-        <td><p>Add header to x</p></td>
+        <td><p>Change Header of Rtable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_header.html">old_header()</a></code> </p>
+        </td>
+        <td><p>Get Header ot Rtable</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rcell.html">old_rcell()</a></code> </p>
+        </td>
+        <td><p>Reporting Table Cell</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rheader.html">old_rheader()</a></code> </p>
+        </td>
+        <td><p>Create a old_rheader object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rheaderl.html">old_rheaderl()</a></code> </p>
+        </td>
+        <td><p>Create an rheader with header-cell data stored within lists</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rrow.html">old_rrow()</a></code> </p>
+        </td>
+        <td><p>Reporting Table Row</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rrowl.html">old_rrowl()</a></code> </p>
+        </td>
+        <td><p>Create an rrow with cell-data stored within lists</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rtable.html">old_rtable()</a></code> </p>
+        </td>
+        <td><p>Create a Table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="old_rtablel.html">old_rtablel()</a></code> </p>
+        </td>
+        <td><p>Create an old_rtable from rrows stored in a list</p></td>
       </tr>
     </tbody>
     </table>
@@ -667,7 +810,10 @@ browser</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-core-table-create-functions">Core Table Create Functions</a></li>
+      <li><a href="#section-table-trees">Table Trees</a></li>
+      <li><a href="#section-layouts-simple-tabulation">Layouts Simple Tabulation</a></li>
+      <li><a href="#section-table-tree-untility-functions">Table Tree Untility Functions</a></li>
+      <li><a href="#section-manual-table-creation-functions">Manual Table Creation Functions</a></li>
       <li><a href="#section-cell-formatting-related-functions">Cell Formatting related Functions</a></li>
       <li><a href="#section-accessor-and-modification-functions">Accessor and Modification Functions</a></li>
       <li><a href="#section-tabulation-functions">Tabulation Functions</a></li>
@@ -676,6 +822,7 @@ browser</p></td>
       <li><a href="#section-coercion-functions">Coercion Functions</a></li>
       <li><a href="#section-utility-functions">Utility Functions</a></li>
       <li><a href="#section-unexported-functions-used-by-developers">Unexported Functions used by Developers</a></li>
+      <li><a href="#section-old-legacy-s-classes">old legacy S3 classes</a></li>
     </ul>
   </div>
 </div>

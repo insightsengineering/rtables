@@ -4,7 +4,7 @@
 \alias{rbind.rtable}
 \title{Stack rtable and rrow objects}
 \usage{
-\method{rbind}{rtable}(..., gap = 0)
+rbind.rtable(..., gap = 0)
 }
 \arguments{
 \item{...}{\code{\link{rtable}} or length 0 \code{\link{rcell}} objects, the first object must be an

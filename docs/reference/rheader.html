@@ -6,15 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a rheader object — rheader • rtables</title>
-
+<title>Create a header — rheader • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,11 +32,10 @@
 
 
 
+<meta property="og:title" content="Create a header — rheader" />
 
-<meta property="og:title" content="Create a rheader object — rheader" />
-<meta property="og:description" content="Create a rheader object" />
+<meta property="og:description" content="Create a header" />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -95,7 +92,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -103,6 +106,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -123,42 +127,116 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a rheader object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rtable.R'><code>R/rtable.R</code></a></small>
+    <h1>Create a header</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/tt_compatibility.R'><code>R/tt_compatibility.R</code></a></small>
     <div class="hidden name"><code>rheader.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a rheader object</p>
+    
+    <p>Create a header</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>rheader</span>(<span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>elements that are either to be mapped to rrows</p></td>
-    </tr>
-    <tr>
-      <th>format</th>
-      <td><p>default format</p></td>
-    </tr>
-    </table>
-
+    <pre class="usage"><span class='fu'>rheader</span>(<span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>, <span class='kw'>.rowlist</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+        
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>h1</span> <span class='kw'>&lt;-</span> <span class='fu'>rheader</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>))
+    <pre class="examples"><div class='input'>
+<span class='no'>h1</span> <span class='kw'>&lt;-</span> <span class='fu'>rheader</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>))
+
 <span class='no'>h2</span> <span class='kw'>&lt;-</span> <span class='fu'>rheader</span>(
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"group 1"</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='fu'><a href='rcell.html'>rcell</a></span>(<span class='st'>"group 2"</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>2</span>)),
   <span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>NULL</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
-)</div></pre>
+)
+
+<span class='no'>h1</span></div><div class='output co'>#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; A (manual) 
+#&gt; B (manual) 
+#&gt; C (manual) 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; [[2]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; [[3]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; [[2]]
+#&gt; list()
+#&gt; 
+#&gt; [[3]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA NA NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; </div><div class='input'>
+<span class='no'>h2</span></div><div class='output co'>#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; group 1 (manual) -&gt; A (manual) 
+#&gt; group 1 (manual) -&gt; B (manual) 
+#&gt; group 2 (manual) -&gt; A (manual) 
+#&gt; group 2 (manual) -&gt; B (manual) 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; [[2]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; [[3]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; [[4]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; [[2]]
+#&gt; list()
+#&gt; 
+#&gt; [[3]]
+#&gt; list()
+#&gt; 
+#&gt; [[4]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA NA NA NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

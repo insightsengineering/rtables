@@ -20,7 +20,6 @@ as.rtable.default <- function(x, format) {
 #' 
 #' @inheritParams as.rtable
 #' 
-#' @importFrom stats setNames
 #' @export
 #' 
 #' @examples 

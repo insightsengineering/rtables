@@ -6,9 +6,6 @@
 \usage{
 header_row.names(x)
 }
-\arguments{
-\item{x}{an rtable object}
-}
 \description{
 Access Header Row Names
 }

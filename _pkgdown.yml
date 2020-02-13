@@ -10,47 +10,54 @@ navbar:
 reference:
 
   - title: Table Trees
+    desc: Table Trees
     contents:
     - argument_conventions
 
   - title: Layouts Simple Tabulation
+    desc: Functions for declaring layout and tabulatioin
     contents:
+    - starts_with("add_")
     - build_table
-    - add_colby_varlevels
-    - add_colcounts
-    - add_analyzed_vars
-    - add_rowby_varlevels
-    - add_summary_count
-    - add_colby_multivar
-    - add_analyzed_colvars
+    - manual_cols
+    # - add_colby_varlevels
+    # - add_colcounts
+    # - add_analyzed_vars
+    # - add_rowby_varlevels
+    # - add_summary_count
+    # - add_colby_multivar
+    # - add_analyzed_colvars
     
 
   - title: Table Tree Untility Functions
+    desc: Utility functions
     contents:
     - lstwrap
 
-  - title: Compatibility Layer
-    contents:
-    - tt_rtable
-    - tt_rrow
-    - tt_rowl
-    - tt_rcell
+  # - title: Compatibility Layer
+  #   desc: Compatibility layer.
+  #   contents:
+  #   - tt_rtable
+  #   - tt_rrow
+  #   - tt_rowl
+  #   - tt_rcell
     
 
 
-  - title: Core Table Create Functions
+  - title: Manual Table Creation Functions
     desc:  These are the main functions needed to build an rtable.
     contents:
     - rtable
     - rrow
     - rcell
     - rheader
-    - rheaderl
+#    - rheaderl
     - rtablel
     - rrowl
-    - empty_rtable
+#    - empty_rtable
 
   - title: Cell Formatting related Functions
+    desc: cell formatting.
     contents:
     - sprintf_format
     - format_rcell
@@ -119,11 +126,13 @@ reference:
     - as_html.rtable
 
   - title: Coercion Functions
+    desc: coercion functions
     contents:
     - as.rtable
     - as.rtable.table
     
   - title: Utility Functions
+    desc: utility functions
     contents:
     - Viewer
     - compare_rtables
@@ -135,7 +144,14 @@ reference:
     - with_label
 
   - title: Unexported Functions used by Developers
+    desc: internal functions
     contents:
     - by_header
     - by_header_to_string
-    - with_by_header
+#    - with_by_header
+
+  - title: old legacy S3 classes
+    desc: Legacy s3 constructors and manipulation
+    contents:
+    - empty_old_rtable
+    - starts_with("old_")

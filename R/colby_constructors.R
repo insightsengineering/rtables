@@ -19,12 +19,12 @@
 ##                           list(c("lev1a", "lev1b"),
 ##                                c("lev2a", "lev2b", "lev2c")) 
 
-empty_dominant_axis = function(layout) {
-    stopifnot(is(layout, "RTablesLayout"))
-    ((is(layout, "RowDominantLayout") && n_leaves(rowtree(layout)) == 0L) ||
-     (is(layout, "ColDominantLayout") && n_leaves(coltree(layout)) == 0L))
+## empty_dominant_axis = function(layout) {
+##     stopifnot(is(layout, "RTablesLayout"))
+##     ((is(layout, "RowDominantLayout") && n_leaves(rowtree(layout)) == 0L) ||
+##      (is(layout, "ColDominantLayout") && n_leaves(coltree(layout)) == 0L))
 
-}
+## }
 
 # Method Definitions ----
 
@@ -37,6 +37,10 @@ empty_dominant_axis = function(layout) {
 ##       list(VarSplit("RACE"),  VarSplit("Factor2")),
 ##       list(AllSplit()) ## remember var3  is the variable analyzed
 
+#' combine SplitVector objects
+#' @param x SplitVecttor
+#' @param ... Splits or SplitVector objects
+#' @exportMethod c
 setMethod("c", "SplitVector", function(x, ...) {
     arglst = list(...)
     stopifnot(all(sapply(arglst, is, "Split")))
@@ -278,7 +282,7 @@ add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = 
 #' Declaring a column-split with a Baseline level
 #' 
 #' Which value should be considered the baseline when performing automatic comparisons is done in the column split.
-#' Instead of doing \link{\code{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
+#' Instead of doing \code{\link{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
 #' baseline")
 #' 
 #' 
@@ -324,7 +328,7 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #'   add_colby_varlevels("SEX", "Gender") %>%
 #'   add_summary_count(lbl = "Overall (N)") %>%
 #'   add_rowby_varlevels("RACE", "Ethnicity") %>%
-#'   add_summary_count("RACE", lblfmt = "%s (n)") %>%
+#'   add_summary_count("RACE", rowlblf = "%s (n)") %>%
 #'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
 #'   
 #' l
@@ -461,7 +465,7 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 #' Generate Rows Analyzing Variables Across Columns
 #' 
 #' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
-#' calls to \link{\code{add_analyzed_vars}} and/or \link{\code{add_analyzed_colvar}} into our layout pipeline. As with
+#' calls to \code{add_analyzed_vars} and/or \code{\link{add_analyzed_colvars}} into our layout pipeline. As with
 #' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
 #' @inheritParams argument_conventions
@@ -529,7 +533,7 @@ add_analyzed_vars = function(lyt,
 #' 
 #' @export
 #' 
-#' @seealso \link{\code{add_colby_multivar}}
+#' @seealso \code{\link{add_colby_multivar}}
 #' 
 #' 
 #' @examples 
@@ -695,9 +699,9 @@ setMethod("add_summary", "Split",
     lyt
 })
 
-.count_raw_constr = function(var, valfmt, lblfmt) {
+.count_raw_constr = function(var, fmt, rowlblf) {
     function(df, lblstr = "") {
-        lbl = sprintf(lblfmt, lblstr)
+        lbl = sprintf(rowlblf, lblstr)
         if(!is.null(var))
             cnt = sum(!is.na(df[[var]]))
         else
@@ -705,15 +709,15 @@ setMethod("add_summary", "Split",
 
         ret = cnt
         
-        attr(ret, "format") = valfmt
+        attr(ret, "format") = fmt
         names(ret) = lbl
         ret
     }
 }
 
-.count_wpcts_constr = function(var, valfmt, lblfmt) {
+.count_wpcts_constr = function(var, fmt, rowlblf) {
     function(df, lblstr = "", .N_col) {
-        lbl = sprintf(lblfmt, lblstr)
+        lbl = sprintf(rowlblf, lblstr)
         if(!is.null(var))
             cnt = sum(!is.na(df[[var]]))
         else
@@ -722,17 +726,18 @@ setMethod("add_summary", "Split",
         ## the formatter does the *100 so we don't here.
         ret = list(c(cnt, cnt/.N_col))
         
-        attr(ret, "format") = valfmt
+        attr(ret, "format") = fmt
         names(ret) = lbl
         ret
     }
 }
 
 
-#' Count number of observations
+#' Add a content row of summary counts
 #' 
 #' @inheritParams 
 #' 
+#' @details if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
 #' 
 #' @export
 #' 
@@ -742,23 +747,24 @@ setMethod("add_summary", "Split",
 #' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
-#'     add_summary_count(lblfmt = "%s (n)") %>% 
+#'     add_summary_count(rowlblf = "%s (n)") %>% 
 #'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
 #' 
-add_summary_count = function(lyt, var = NULL, lblfmt = "%s", valfmt = "xx (xx.x%)" ){
+add_summary_count = function(lyt, var = NULL, rowlblf = "%s", fmt = "xx (xx.x%)" ){
 
-    if(length(gregexpr("xx", valfmt)[[1]]) == 2)
-        fun = .count_wpcts_constr(var, valfmt, lblfmt)
+    if(length(gregexpr("xx", fmt)[[1]]) == 2)
+        fun = .count_wpcts_constr(var, fmt, rowlblf)
     else
-        fun = .count_raw_constr(var,valfmt, lblfmt)
-    add_summary(lyt, lbl = lbl, cfun = fun, cfmt = valfmt)
+        fun = .count_raw_constr(var,fmt, rowlblf)
+    add_summary(lyt,# lbl = lbl,
+                cfun = fun, cfmt = fmt)
 }
 
 
-#' Add the column population counts
+#' Add the column population counts to the header
 #' 
 #' 
 #' @inheritParams 
@@ -797,45 +803,45 @@ add_existing_table = function(lyt, tab) {
 
 ## playground, once done modify rtabulate_default etc
 
-rtabulate_layout <- function(x, layout, FUN, ...,
-                              format = NULL, row.name = "", indent  = 0,
-                              col_wise_args = NULL) {
+## rtabulate_layout <- function(x, layout, FUN, ...,
+##                               format = NULL, row.name = "", indent  = 0,
+##                               col_wise_args = NULL) {
   
-  force(FUN)
- # check_stop_col_by(col_by, col_wise_args)
+##   force(FUN)
+##  # check_stop_col_by(col_by, col_wise_args)
   
-  column_data <- if (n_leaves(col_tree(layout)) == 0L) {
-    setNames(list(x), "noname(for now FIXME)")
-  } else {
-      ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
+##   column_data <- if (n_leaves(col_tree(layout)) == 0L) {
+##     setNames(list(x), "noname(for now FIXME)")
+##   } else {
+##       ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
 
-      ## not handling nesting right now at all
-      leaves = layout_children(col_tree(layout))
-      setNames(lapply(leaves,
-                      function(leaf) x[leaf@subset]),
-               sapply(leaves,
-                      function(leaf) leaf@label)
-               )
-  }
+##       ## not handling nesting right now at all
+##       leaves = layout_children(col_tree(layout))
+##       setNames(lapply(leaves,
+##                       function(leaf) x[leaf@subset]),
+##                sapply(leaves,
+##                       function(leaf) leaf@label)
+##                )
+##   }
     
-  cells <- if (is.null(col_wise_args)) {
+##   cells <- if (is.null(col_wise_args)) {
     
-    lapply(column_data, FUN, ...)
+##     lapply(column_data, FUN, ...)
     
-  } else {
+##   } else {
     
-    dots <- list(...)
-    args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
+##     dots <- list(...)
+##     args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
     
-    Map(function(xi, argsi) {
-      do.call(FUN, c(list(xi), argsi))
-    }, column_data, args)
-  }
+##     Map(function(xi, argsi) {
+##       do.call(FUN, c(list(xi), argsi))
+##     }, column_data, args)
+##   }
   
-  rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
+##   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
-}
+##   rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
+## }
 
 
 takes_coln = function(f) {
@@ -869,7 +875,7 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
 
     cfun = spl@cut_fun
     cuts = cfun(varvec)
-    VarStaticCutSplit(var = var, splbl = spl_lbl(spl),
+    VarStaticCutSplit(var = var, splbl = obj_label(spl),
                       cuts = cuts, cutlbls = names(cuts))
 })
 
@@ -901,7 +907,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 
 ## Manual column construction in a simple (seeming
 ## to the user) way.
-
+#' Manual column declaration
 #' @param dots One or more vectors of levels to appear
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
 #' @examples
@@ -914,7 +920,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #' tab2 = TableTree(kids = list(DataRow(as.list(1:4))),
 #'                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
 #'                                      Gender = c("M", "F")))
-
+#' @export
 
 manual_cols = function(..., .lst = list(...)) {
     if(is.null(names(.lst)))

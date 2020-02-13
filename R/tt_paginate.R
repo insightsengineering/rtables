@@ -15,125 +15,125 @@
 
 
 
-paginate_ttree = function(ttree, perpage = 80,
-                          reprint.controws = TRUE) {
+## paginate_ttree = function(ttree, perpage = 80,
+##                           reprint.controws = TRUE) {
 
 
-    hdr = .make_s3_header(ttree)
-    ## +1 for the --------- divider line
-    ncolheader = length(hdr) + 1L
+##     hdr = .make_s3_header(ttree)
+##     ## +1 for the --------- divider line
+##     ncolheader = length(hdr) + 1L
 
-    realppage = perpage - ncolheader
+##     realppage = perpage - ncolheader
     
-    allrows = collect_leaves(ttree, TRUE, TRUE)
+##     allrows = collect_leaves(ttree, TRUE, TRUE)
 
-    ##no pagination required
-    if(length(allrows) <= realppage)
-        return(to_s3compat(ttree))
+##     ##no pagination required
+##     if(length(allrows) <= realppage)
+##         return(to_s3compat(ttree))
 
-    levs = sapply(allrows, tt_level)
-    pos = realppage 
-    lastpag = 0
-    ret = list()
-    while(lastpag < length(allrows)) {
+##     levs = sapply(allrows, tt_level)
+##     pos = realppage 
+##     lastpag = 0
+##     ret = list()
+##     while(lastpag < length(allrows)) {
 
-        lst = .fixpaginatepos(pos, allrows, lastpag, perpage = realppage, incl.crows = reprint.controws )
-        pos = lst[["pos"]]
-        reprows = lst[["reprows"]]
-        rws = c(reprows, allrows[seq(lastpag + 1, pos)])
-        s3rtab = rtablel(header = hdr, lapply(rws, to_s3compat), format = obj_fmt(ttree))
-        ret = c(ret, list(s3rtab))
-        lastpag = pos
-        pos = min(length(allrows), pos + realppage)
-    }
+##         lst = .fixpaginatepos(pos, allrows, lastpag, perpage = realppage, incl.crows = reprint.controws )
+##         pos = lst[["pos"]]
+##         reprows = lst[["reprows"]]
+##         rws = c(reprows, allrows[seq(lastpag + 1, pos)])
+##         s3rtab = rtablel(header = hdr, lapply(rws, to_s3compat), format = obj_fmt(ttree))
+##         ret = c(ret, list(s3rtab))
+##         lastpag = pos
+##         pos = min(length(allrows), pos + realppage)
+##     }
 
-    ret
-}
+##     ret
+## }
 
 
 
-.fixpaginatepos = function(p, rows, lastpag = 0, perpage, incl.crows) {
+## .fixpaginatepos = function(p, rows, lastpag = 0, perpage, incl.crows) {
 
-    if(lastpag >= length(rows)) {
-        warning("extra iteration, lastpag is already > length(rows) - perpage")
-        return(list(pos = p, reprows = list()))
-    }
+##     if(lastpag >= length(rows)) {
+##         warning("extra iteration, lastpag is already > length(rows) - perpage")
+##         return(list(pos = p, reprows = list()))
+##     }
 
-    ## reprows only depends on the FIRST row on a page!
-    reprows = getreprows(lastpag, rows, perpage, incl.crows)
+##     ## reprows only depends on the FIRST row on a page!
+##     reprows = getreprows(lastpag, rows, perpage, incl.crows)
     
-    stopifnot(p > lastpag || p == length(rows))
+##     stopifnot(p > lastpag || p == length(rows))
 
-    ## walk backwards until we are in an ok spot or there is nowhere else to look
-    while( p > lastpag &&
-           ## check total lines required
-           ((p - lastpag) + length(reprows) > perpage ||
-            ## check if we are at a content row
-            is_content_pos(rows[[p]]) ||
-            ## check if we're at a first and not only data row
-            (is_content_pos(rows[[p - 1]]) && !is_content_pos(rows[[p + 1]])))
-          ) {
-              p = p -1
-          }
+##     ## walk backwards until we are in an ok spot or there is nowhere else to look
+##     while( p > lastpag &&
+##            ## check total lines required
+##            ((p - lastpag) + length(reprows) > perpage ||
+##             ## check if we are at a content row
+##             is_content_pos(rows[[p]]) ||
+##             ## check if we're at a first and not only data row
+##             (is_content_pos(rows[[p - 1]]) && !is_content_pos(rows[[p + 1]])))
+##           ) {
+##               p = p -1
+##           }
 
-    if(p == lastpag) stop("Unable to find pagination position between rows", lastpag, " and ", lastpag + perpage)
+##     if(p == lastpag) stop("Unable to find pagination position between rows", lastpag, " and ", lastpag + perpage)
     
-    list(pos = p, reprows = reprows)
-}
+##     list(pos = p, reprows = reprows)
+## }
 
 
-## Repeat rows only depend on the FIRST row in a table, not on where
-## we think the next pagination might occur!!!
-getreprows = function(lastpag, allrows, perpage, incl.crows = TRUE) {
+## ## Repeat rows only depend on the FIRST row in a table, not on where
+## ## we think the next pagination might occur!!!
+## getreprows = function(lastpag, allrows, perpage, incl.crows = TRUE) {
 
-    ## If we're on the first page, no repeated rows
-    ## also if we already paginated the whole thing (this should never happen)
-    if(lastpag == 0 || lastpag >= length(allrows))
-        return(list())
+##     ## If we're on the first page, no repeated rows
+##     ## also if we already paginated the whole thing (this should never happen)
+##     if(lastpag == 0 || lastpag >= length(allrows))
+##         return(list())
 
 
-    ## We only need to repeat things that won't be
-    ## in the rows in our page, that translates to
-    ## the things of a lower level than we start at
-    ## at lastpag + 1
-    curlev = tt_level(allrows[[lastpag + 1]]) - 1
-    if(curlev < 0)
-        return(list())
+##     ## We only need to repeat things that won't be
+##     ## in the rows in our page, that translates to
+##     ## the things of a lower level than we start at
+##     ## at lastpag + 1
+##     curlev = tt_level(allrows[[lastpag + 1]]) - 1
+##     if(curlev < 0)
+##         return(list())
     
-    ## we know lastpag is > 1 here because
-    ## we would have hit the early escape if
-    ## we were in the first page
-    rows = allrows[1:lastpag]
+##     ## we know lastpag is > 1 here because
+##     ## we would have hit the early escape if
+##     ## we were in the first page
+##     rows = allrows[1:lastpag]
 
-    ret = list()
+##     ret = list()
  
-    rowlevs = sapply(rows, tt_level)
-    labrows = sapply(rows, is, "LabelRow")
-    labinds = which(labrows)
+##     rowlevs = sapply(rows, tt_level)
+##     labrows = sapply(rows, is, "LabelRow")
+##     labinds = which(labrows)
     
-    repcontrows = numeric()
+##     repcontrows = numeric()
 
-    for(l in seq(0, curlev)) {
-        lablevpos = max(which(labrows & rowlevs == l))
-        if(is.finite(lablevpos)) {
-            contstart = lablevpos
-            while(incl.crows &&
-                  contstart > 1 &&
-                  is_content_pos(rows[[contstart - 1]]) &&
-                  tt_level(rows[[contstart - 1]]) == l) {
-                      contstart = contstart -1
-                  }
+##     for(l in seq(0, curlev)) {
+##         lablevpos = max(which(labrows & rowlevs == l))
+##         if(is.finite(lablevpos)) {
+##             contstart = lablevpos
+##             while(incl.crows &&
+##                   contstart > 1 &&
+##                   is_content_pos(rows[[contstart - 1]]) &&
+##                   tt_level(rows[[contstart - 1]]) == l) {
+##                       contstart = contstart -1
+##                   }
             
-            ## the sequence includes the label row!!
-            repcontrows = c(repcontrows, seq(contstart, lablevpos))
+##             ## the sequence includes the label row!!
+##             repcontrows = c(repcontrows, seq(contstart, lablevpos))
 
             
-        }
-    }
-    ## this should be completely redundant right?
-    repcontrows = unique(repcontrows[repcontrows <= lastpag])
-    allrows[repcontrows]
-}
+##         }
+##     }
+##     ## this should be completely redundant right?
+##     repcontrows = unique(repcontrows[repcontrows <= lastpag])
+##     allrows[repcontrows]
+## }
 
 ## this is where we will take wordwrapping
 ## into account when it is added
@@ -201,6 +201,9 @@ pagdfrow = function(row,
                stringsAsFactors = FALSE)
 }
 
+#' Make layout summary  data.frame for use during pagination
+#' @inheritParams argument_conventions
+#' @export
 make_pagdf = function(tt, colwidths = NULL) {
     rownum = 0
     pag_df = function(tree, path, incontent = FALSE,
@@ -247,7 +250,7 @@ make_pagdf = function(tt, colwidths = NULL) {
                 ret = c(ret, list(pagdfrow(k, rnum = rownum,
                                          colwidths = cwidths,
                                          sibpos = i,
-                                         nsib = nk,
+                                         nsibs = nk,
                                          pth = path,
                                          repext = repr_ext,
                                          repind = repr_inds)))
@@ -286,11 +289,21 @@ valid_pag = function(pagdf,
     }
 
     sibpos = rw[["pos_in_siblings"]]
+    nsib = rw[["n_siblings"]]
     okpos = min(min_sibs + 1, rw[["n_siblings"]])
-    if( sibpos < okpos)  {
-        if(verbose)
-            message("\t....................... FAIL: last row had sibling position ", sibpos, " required ", okpos)
-        return(FALSE)
+    if( sibpos != nsib){
+        retfalse = FALSE
+        if(sibpos < min_sibs + 1) {
+            retfalse = TRUE
+            if(verbose)
+                message("\t....................... FAIL: last row had only ", sibpos - 1, "preceeding siblings, needed ", min_sibs)
+        } else if (nsib - sibpos < min_sibs + 1) {
+            retfalse = TRUE
+            if(verbose)
+                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, "following siblings, needed ", min_sibs)
+        }
+        if(retfalse)
+            return(FALSE)
     }
     if(guess < nrow(pagdf)) {
         curpth = unlist(rw$path)
@@ -328,17 +341,22 @@ find_pag = function(pagdf,
     guess
 }
 
-pag_tt_indices = function(ttree, lpp = 15,
+#' Determine pagination of a TableTree
+#' @inheritParams argument_conventions
+#' @param lpp numeric. Maximum lines per page including (re)printed header and context rows
+#' @param min_siblings. numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.
+#' @export
+pag_tt_indices = function(tt, lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
                            colwidths = NULL,
                            verbose = FALSE) {
 
     
-    hlines = nlines(col_info(ttree))
+    hlines = nlines(col_info(tt))
     ## row lines per page
     rlpp = lpp - hlines
-    pagdf = make_pagdf(ttree, colwidths)
+    pagdf = make_pagdf(tt, colwidths)
   
     
     start = 1
@@ -347,7 +365,7 @@ pag_tt_indices = function(ttree, lpp = 15,
     while(start < nr) {
         adjrlpp = rlpp - pagdf$par_extent[start]
         stopifnot(adjrlpp > 0)
-        guess = min(nrow(pagdf), start + adjrlpp - 1)
+        guess = min(nr, start + adjrlpp - 1)
         end = find_pag(pagdf, start, guess,
                        rlpp = adjrlpp,
                        min_siblings = min_siblings,

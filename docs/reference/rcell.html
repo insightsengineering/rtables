@@ -6,15 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reporting Table Cell — rcell • rtables</title>
-
+<title>Rcell — rcell • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,12 +32,10 @@
 
 
 
+<meta property="og:title" content="Rcell — rcell" />
 
-<meta property="og:title" content="Reporting Table Cell — rcell" />
-<meta property="og:description" content="rcells compose an rtable. An rcell
-contains the encapsulated data object, a format and column span attributes." />
+<meta property="og:description" content="Rcell" />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -96,7 +92,13 @@ contains the encapsulated data object, a format and column span attributes." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -104,6 +106,7 @@ contains the encapsulated data object, a format and column span attributes." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -124,51 +127,25 @@ contains the encapsulated data object, a format and column span attributes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Reporting Table Cell</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rtable.R'><code>R/rtable.R</code></a></small>
+    <h1>Rcell</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/tt_compatibility.R'><code>R/tt_compatibility.R</code></a></small>
     <div class="hidden name"><code>rcell.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>rcell</code>s compose an <code><a href='rtable.html'>rtable</a></code>. An <code>rcell</code>
-contains the encapsulated data object, a format and column span attributes.</p>
+    
+    <p>Rcell</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>rcell</span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>data object for the <code>rcell</code> object. Note that if the data
-object has attributes then it needs to be encasultated in a list as 
-<code>rcell</code> adds/modifies the attributes.</p></td>
-    </tr>
-    <tr>
-      <th>format</th>
-      <td><p>a valid format string or a format function for
-<code>rcell</code>s. To get a list of all valid format strings use
-<code><a href='list_rcell_format_labels.html'>list_rcell_format_labels</a></code>. If format is <code>NULL</code> then the elements
-of a cell get pasted separated by a comma.</p></td>
-    </tr>
-    <tr>
-      <th>colspan</th>
-      <td><p>positive integer, number of columns that the cell should span.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>an object of class <code>rcell</code></p>
+    <pre class="usage"><span class='fu'>rcell</span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colspan</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+        
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

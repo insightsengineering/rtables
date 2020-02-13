@@ -22,7 +22,7 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   hspans <- tmp$span
     
   ## table body
-  tbody <- matrix(unname(unlist(get_formated_rows(x))), ncol = ncol(x) + 1, byrow = TRUE)
+  tbody <- matrix(unname(unlist(get_formatted_rows(x))), ncol = ncol(x) + 1, byrow = TRUE)
   tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
   
   body <- rbind(hbody, tbody)
@@ -33,7 +33,7 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   aligns[, 1] <- "left" # row names
   
   if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-    stop("no \n allowed at the moment")
+    stop("no \\n allowed at the moment")
   
   space <- matrix(mapply(body, spans, FUN = function(txt, span) {
     max(vapply(txt, nchar, numeric(1))) / span
@@ -142,21 +142,25 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
 
 
 
-#' @exportMethod get_formated_rows
-setGeneric("get_formated_rows", function(obj, depth = 0, indent = 0) standardGeneric("get_formated_rows"))
+#' Get formatted rows
+#' @inheritParams argument_conventions
+#' @rdname gfr
+#' @export
+setGeneric("get_formatted_rows", function(obj, depth = 0, indent = 0) standardGeneric("get_formatted_rows"))
 
 ## TableTree objects (can) have content Rows
 ## process the content, then the children by recursive call
-
-setMethod("get_formated_rows", "TableTree",
+#' @rdname gfr
+#' @exportMethod get_formatted_rows
+setMethod("get_formatted_rows", "TableTree",
           function(obj, depth = 0, indent = 0) {
             
-            lr <- get_formated_rows(obj@labelrow, depth, indent)
+            lr <- get_formatted_rows(obj@labelrow, depth, indent)
             
             indent <- indent + !is.null(lr)
             
-            ct <- unlist(get_formated_rows(content_table(obj), depth = depth, indent = indent))
-            els <- lapply(tree_children(obj), get_formated_rows, depth = depth + 1, indent = indent + (length(ct) > 0))
+            ct <- unlist(get_formatted_rows(content_table(obj), depth = depth, indent = indent))
+            els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + (length(ct) > 0))
             
             list(lr, ct, els)
           })
@@ -165,20 +169,23 @@ setMethod("get_formated_rows", "TableTree",
 ## this will hit all Content tables as well
 ## as any subtrees that happen to be
 ## Elementary
-setMethod("get_formated_rows", "ElementaryTable",
+#' @rdname gfr
+#' @exportMethod get_formatted_rows
+setMethod("get_formatted_rows", "ElementaryTable",
           function(obj, depth = 0, indent = 0) {
             
-            lr <- get_formated_rows(obj@labelrow, depth, indent)
+            lr <- get_formatted_rows(obj@labelrow, depth, indent)
             #lr <- NULL
             
-            els <- lapply(tree_children(obj), get_formated_rows, depth = depth + 1, indent = indent + !is.null(lr))
+            els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + !is.null(lr))
             
             list(lr, els)
             
           })
 
-
-setMethod("get_formated_rows", "TableRow",
+#' @rdname gfr
+#' @exportMethod get_formatted_rows
+setMethod("get_formatted_rows", "TableRow",
           function(obj, depth = 0, indent = 0) {
             
             stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
@@ -198,8 +205,10 @@ setMethod("get_formated_rows", "TableRow",
               paste(format_rcell(val, fmt), collapse = ", "), row_values(obj), format)))
             
           })
+#' @rdname gfr
+#' @exportMethod get_formatted_rows
 
-setMethod("get_formated_rows", "LabelRow",
+setMethod("get_formatted_rows", "LabelRow",
           function(obj, depth = 0, indent = 0) {
             
             if (obj@visible) 

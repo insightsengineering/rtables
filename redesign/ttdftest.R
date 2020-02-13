@@ -70,11 +70,11 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
     ## add_colby_total(lbl = "All") %>%
-    ##    add_summary_count(lbl = "Overall (N)", valfmt = "(N=xx)") %>%
+    ##    add_summary_count(lbl = "Overall (N)", fmt = "(N=xx)") %>%
     add_colcounts() %>%
     ## add a new subtable that splits on RACE, value labels from ethn_lbl
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", lblfmt = "%s (n)") %>%
+    add_summary_count("RACE", rowlblf = "%s (n)") %>%
     ##
     ## Add nested row split within Race categories for FACTOR2
     ## using a split function that excludes level C
@@ -122,7 +122,7 @@ thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
     add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", lblfmt = "%s (n)") %>%
+    add_summary_count("RACE", rowlblf = "%s (n)") %>%
     add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx") %>%
 
@@ -204,7 +204,7 @@ complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varwbline(var = "visit",lbl = "Visit", baseline = "baseline",
                         incl_all = TRUE) %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", lblfmt = "%s (n)") %>%
+    add_summary_count("RACE", rowlblf = "%s (n)") %>%
     add_analyzed_blinecomp("weight", lbl = "weight", afun = mean, fmt = "xx.xx")
     
 

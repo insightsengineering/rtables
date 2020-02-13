@@ -4,7 +4,7 @@
 \alias{toString.rtable}
 \title{Convert an rtable to ascii}
 \usage{
-\method{toString}{rtable}(x, gap = 8, indent.unit = 2, ...)
+toString.rtable(x, gap = 8, indent.unit = 2, ...)
 }
 \arguments{
 \item{x}{rtable object}

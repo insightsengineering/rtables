@@ -33,7 +33,7 @@ setGeneric("check_validsplit",
 ## ensure partinfo$values contains SplitValue objects only
 .fixupvals = function(partinfo) {
     if(is.factor(partinfo$lbls))
-        partinfo$lbls = as.character(partinifo$lbls)
+        partinfo$lbls = as.character(partinfo$lbls)
 
     vals = partinfo$values
     if(is.factor(vals))
@@ -295,7 +295,7 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
         stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
     }
     ret = df
-    if(!is.na(vals) && avar_inclNA(spl))
+    if(!is.na(vals) && avar_inclNAs(spl))
         ret = df[!is.na(df[[vals]]),] 
     list(ret)
 })
@@ -339,12 +339,11 @@ subsets_from_factory = function(df, fact) {
 }
 
 
-make_blinecomp_extargs = function(spl, df) {
-    incall = blsplit_incall(spl)
-    var = blsplit_var(spl)
-    blvalue = blsplit_baseline(spl)
-}
-
+## make_blinecomp_extargs = function(spl, df) {
+##     incall = blsplit_incall(spl)
+##     var = blsplit_var(spl)
+##     blvalue = blsplit_baseline(spl)
+## }
 
 make_splvalue_vec = function(vals, extrs = list(list())) {
     if(is(extrs, "AsIs"))

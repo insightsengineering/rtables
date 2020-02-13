@@ -7,8 +7,6 @@
 header_indent(x) <- value
 }
 \arguments{
-\item{x}{an rtable object}
-
 \item{value}{non-negative inegers of indent of header rows}
 }
 \description{

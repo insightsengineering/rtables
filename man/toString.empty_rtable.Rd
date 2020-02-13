@@ -2,17 +2,17 @@
 % Please edit documentation in R/rtable.R
 \name{toString.empty_rtable}
 \alias{toString.empty_rtable}
-\title{convert an empty rtable to a string}
+\title{convert an empty old_rtable to a string}
 \usage{
-\method{toString}{empty_rtable}(x, ...)
+toString.empty_rtable(x, ...)
 }
 \arguments{
-\item{x}{and \code{empty_rtable} object}
+\item{x}{and \code{empty_old_rtable} object}
 
 \item{...}{arguments not used}
 }
 \description{
-convert an empty rtable to a string
+convert an empty old_rtable to a string
 }
 \examples{
 empty_rtable()

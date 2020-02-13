@@ -1,4 +1,5 @@
 
+
 ##Split types
 ## variable: split on distinct values of a variable
 ## all: include all observations (root 'split')
@@ -77,10 +78,15 @@ setClass("Split", contains = "VIRTUAL",
 setClass("CustomizableSplit", contains = "Split",
          representation( split_fun = "functionOrNULL"))
 
+#' @exportClass VarLevelSplit
+#' @rdname VarLevelSplit
 setClass("VarLevelSplit", contains = "CustomizableSplit",
          representation(value_lbl_var = "character",
                         value_order = "ANY"))
-
+#' Split on levels within a variable
+#'
+#' @inheritParams argument_conventions
+#' @export
 VarLevelSplit = function(var,
                          splbl,
                          valuelblvar = NULL,
@@ -124,7 +130,7 @@ AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = FLASE)
+        label_children = FALSE)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -141,7 +147,10 @@ RootSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt= NULL, ...) {
 setClass("ManualSplit", contains = "AllSplit",
          representation(levels = "character"))
 
-
+#' Manually defined split
+#'
+#' @inheritParams argument_conventions
+#' @export
 ManualSplit = function(levs, lbl, name = "manual") {
     new("ManualSplit",
         split_label = lbl,
@@ -161,7 +170,10 @@ setClass("MultiVarSplit", contains = "Split",
         length(object@payload) == length(object@var_labels)
 })
 
-
+#' Split between two or more different variables
+#'
+#' @inheritParams argument_conventions
+#' @export
 MultiVarSplit = function(vars,
                          splbl,
                          varlbls = NULL,
@@ -252,6 +264,11 @@ setClass("AnalyzeVarSplit", contains = "Split",
                         include_NAs = "logical"))
 
 
+#' Define a subset tabulation/analysis
+#' 
+#' @inheritParams argument_conventions
+#' @rdname avarspl
+#' @export
 AnalyzeVarSplit = function(var,
                            splbl,
                            afun,
@@ -289,6 +306,8 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
     rep(x, length.out = nv)
 }
 
+#' @rdname avarspl
+#' @export
 AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE,
                             .payload = NULL,
                             splname = NULL) {
@@ -344,6 +363,8 @@ setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
 ## this is just a sentinel class so we hit different methods
 setClass("AVarBaselineComp", contains = "VAnalyzeVarComp")
 
+## do we want a separate rd for this?
+#' @rdname avarspl
 AVarBaselineComp = function(var,
                             splbl,
                             afun,
@@ -458,11 +479,13 @@ SubsetSplit = function(subset, vall = TRUE, vnon = FALSE,
 ### Is it safe to have it inherit from both? I think no?
 
 
+
 setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
          representation(var = "character",
                         baseline_value = "character",
                         incl_allcategory = "logical"))
-
+#' @rdname VarLevelSplit
+#' @export
 VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALSE,
                                 splbl,
 #                             comparison = `-`,
@@ -652,6 +675,7 @@ setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
 setClass("LayoutRowTree", contains = "LayoutAxisTree")
 setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree = function(lev = 0L,
+                         name = lab,
                          lab = "",
                          kids = list(),
                          spl = if(length(kids) == 0) NULL else AllSplit(), 
@@ -664,6 +688,7 @@ LayoutColTree = function(lev = 0L,
     ## slab = NA_character_) {
     if(!is.null(spl)) {
         new("LayoutColTree", level = lev, children = kids,
+            name = name,
             summary_func = summary_function,
             pos_in_tree = tpos,
             split = spl,
@@ -673,15 +698,16 @@ LayoutColTree = function(lev = 0L,
             display_columncounts = vis_colcounts,
             columncount_format = colcount_fmt)
     } else {
-        LayoutColLeaf(lev = lev, lab = lab, tpos = tpos)
+        LayoutColLeaf(lev = lev, lab = lab, tpos = tpos,
+                      name = name)
     }        
 }
 
-LayoutColLeaf = function(lev = 0L, lab = "", tpos = TreePos()#,
+LayoutColLeaf = function(lev = 0L, name = lab, lab = "", tpos = TreePos()#,
                         ## n = NA_integer_,
                          #svar = NA_character_
                          ) {
-    new("LayoutColLeaf", level = lev, label = lab,
+    new("LayoutColLeaf", level = lev, name = name, label = lab,
         pos_in_tree = tpos##, 
         ##subset = sub#,
         ##N_count = n,
@@ -762,8 +788,8 @@ setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
 
 setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
          representation(children = "list",
-                        rowspans = "data.frame",
-                        labelrow = "LabelRow"
+                        rowspans = "data.frame"#,
+                        ##labelrow = "LabelRow"
                         ))
 setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
          representation(leaf_value = "ANY",
@@ -776,7 +802,9 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 
 ### TableTree Core non-virtual Classes
 
-              
+#' Row constructors and Classes
+#' @rdname rowclasses
+#' @exportClass DataRow
 setClass("DataRow", contains = "TableRow",
          representation(colspans = "integer"),
                         ##pos_in_tree = "TableRowPos"),
@@ -785,6 +813,8 @@ setClass("DataRow", contains = "TableRow",
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
 })
 
+#' @rdname rowclasses
+#' @exportClass ContentRow
 setClass("ContentRow", contains = "TableRow",
          representation(colspans = "integer"),
                         ##pos_in_tree = "TableRowPos"),
@@ -793,6 +823,8 @@ setClass("ContentRow", contains = "TableRow",
     length(lcsp ==  0) || lcsp == length(object@leaf_value)
 })
 
+#' @rdname rowclasses
+#' @exportClass LabelRow
 setClass("LabelRow", contains = "TableRow",
          representation(visible = "logical"),
          validity = function(object) {
@@ -800,7 +832,8 @@ setClass("LabelRow", contains = "TableRow",
         (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
 })
 
-
+#' @rdname rowclasses
+#' @export
 LabelRow = function(lev = 1L,
                       lab = "",
                       vis = !is.na(lab) && nzchar(lab),
@@ -821,7 +854,7 @@ LabelRow = function(lev = 1L,
                     cspan = rep(1L, length(val)),
                     ##clayout = LayoutColTree(),
                     cinfo = InstantiatedColumnInfo(),
-                    tpos = TableRowPos(),
+                    #tpos = TableRowPos(),
                     var = NA_character_,
  ##                   var_lbl = NA_character_,
  ##                   v_type = NA_character_,
@@ -845,13 +878,23 @@ LabelRow = function(lev = 1L,
     rw
 }
 
+#' @rdname rowclasses
+#' @export
 DataRow = function(...) .tablerow(..., klass = "DataRow")
+#' @rdname rowclasses
+#' @export
 ContentRow = function(...) .tablerow(..., klass = "ContentRow")
 
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
+#' Table Constructors and Classes
+#' @inheritParams argument_conventions
+#' @rdname tabclasses
+#' @exportClass ElementaryTable
 setClass("ElementaryTable", contains = "VTableTree",
-         representation(var_analyzed = "character"),
+         representation(var_analyzed = "character",
+                        labelrow = "LabelRow"),
+         
                         ##var_label = "character"),
          validity = function(object) {
     kids = tree_children(object)
@@ -896,7 +939,9 @@ setClass("ElementaryTable", contains = "VTableTree",
     lst
 
 }
-            
+
+#' @rdname tabclasses
+#' @export
 ElementaryTable = function(kids = list(),
                            name = "",
                            lev = 1L,
@@ -906,7 +951,7 @@ ElementaryTable = function(kids = list(),
                                              vis = !isTRUE(iscontent) && !is.na(lab) && nzchar(lab)),
                            rspans = data.frame(),
                            cinfo = NULL,
-                           tpos = TableTreePos(),
+                           #tpos = TableTreePos(),
                            iscontent = NA,
                            var = NA_character_,
 ##                           var_lbl = var,
@@ -937,15 +982,19 @@ ElementaryTable = function(kids = list(),
 
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live 
-
+#' @rdname tabclasses
+#' @exportClass TableTree
 setClass("TableTree", contains = c("VTableTree"),
-         representation(content = "ElementaryTable"##,
+         representation(content = "ElementaryTable",
+                       labelrow = "LabelRow"##,
                      ##   split = "Split"
                         ),
          validity = function(object) {
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
 })
 
+#' @rdname tabclasses
+#' @export
 TableTree = function(kids = list(),
                      name = if(!is.na(var)) var else "",
                      cont = ElementaryTable(),
@@ -955,7 +1004,7 @@ TableTree = function(kids = list(),
                                        lab = lab,
                                        vis = nrow(cont)== 0 && !is.na(lab) && nzchar(lab)),
                      rspans = data.frame(),
-                     tpos = TableTreePos(),
+                     #tpos = TableTreePos(),
                      iscontent = NA,
                      spl = NULL,
                      var = NA_character_,

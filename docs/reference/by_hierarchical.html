@@ -8,13 +8,11 @@
 
 <title>Hierarchical col_by — by_hierarchical • rtables</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,11 +32,10 @@
 
 
 
-
 <meta property="og:title" content="Hierarchical col_by — by_hierarchical" />
+
 <meta property="og:description" content="Hierarchical col_by" />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -95,7 +92,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -103,6 +106,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -129,79 +133,49 @@
     </div>
 
     <div class="ref-description">
+    
     <p>Hierarchical col_by</p>
+    
     </div>
 
-    <pre class="usage"><span class='fu'>by_hierarchical</span>(<span class='no'>...</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>","</span>)</pre>
-
+    <pre class="usage"><span class='fu'>by_hierarchical</span>(<span class='no'>...</span>)</pre>
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
       <td><p>factors or col_by matrices. When a by element in the list 
-is a matrix, it allows for non-disjoint columns</p></td>
-    </tr>
-    <tr>
-      <th>sep</th>
-      <td><p>separator between hierarchical levels</p>
+  is a matrix, it allows for non-disjoint columns</p>
 <p>todo: returned col_by column names are not correct</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>structure(col_by matrix, header = ) a list of labelled headers (one per row), 
   col_by matrix corresponding to all combinations</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>SEX</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='with_label.html'>with_label</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"M"</span>, <span class='st'>"M"</span>, <span class='st'>"F"</span>, <span class='st'>"F"</span>, <span class='st'>"F"</span>)), <span class='st'>"Sex"</span>)
 <span class='no'>AGEC</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='with_label.html'>with_label</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"&lt;40"</span>, <span class='st'>"&gt;40"</span>, <span class='st'>"&lt;40"</span>, <span class='st'>"&gt;40"</span>, <span class='st'>"&lt;40"</span>)), <span class='st'>"Age Category"</span>)
-<span class='no'>VAL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>2</span>)
+<span class='no'>VAL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>2</span>, <span class='fl'>1</span>)
 
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>VAL</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>by_hierarchical</span>(<span class='no'>SEX</span>, <span class='no'>AGEC</span>))</div><div class='output co'>#&gt; Sex                       F                     M       
-#&gt; Age Category        &lt;40        &gt;40        &lt;40        &gt;40
-#&gt; --------------------------------------------------------
-#&gt; mean                 3          6          5          4 </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>VAL</span>,
-  <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>by_hierarchical</span>(<span class='no'>SEX</span>, <span class='no'>AGEC</span>) <span class='kw'>%&gt;%</span>
-      <span class='fu'><a href='by_add_total.html'>by_add_total</a></span>()
-)</div><div class='output co'>#&gt; Sex                         F                         M                 total
-#&gt; Age Category         &lt;40          &gt;40          &lt;40          &gt;40              
-#&gt; -----------------------------------------------------------------------------
-#&gt; mean                  3            6            5            4           4.2 </div><div class='input'>
-
-<span class='fu'>by_hierarchical</span>(<span class='no'>SEX</span>)</div><div class='output co'>#&gt;       F     M
+<span class='kw pkg'>rtables</span><span class='kw ns'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/rtables/man/by_hierarchical.html'>by_hierarchical</a></span>(<span class='no'>SEX</span>)</div><div class='output co'>#&gt;       F     M
 #&gt; 1 FALSE  TRUE
 #&gt; 2 FALSE  TRUE
 #&gt; 3  TRUE FALSE
 #&gt; 4  TRUE FALSE
-#&gt; 5  TRUE FALSE</div><div class='input'><span class='no'>col_by</span> <span class='kw'>&lt;-</span> <span class='fu'>by_hierarchical</span>(<span class='no'>SEX</span>, <span class='no'>AGEC</span>)
-<span class='no'>col_by</span></div><div class='output co'>#&gt;   F,&lt;40 F,&gt;40 M,&lt;40 M,&gt;40
-#&gt; 1 FALSE FALSE  TRUE FALSE
-#&gt; 2 FALSE FALSE FALSE  TRUE
-#&gt; 3  TRUE FALSE FALSE FALSE
-#&gt; 4 FALSE  TRUE FALSE FALSE
-#&gt; 5  TRUE FALSE FALSE FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>col_by</span>)</div><div class='output co'>#&gt; [1] "F,&lt;40" "F,&gt;40" "M,&lt;40" "M,&gt;40"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>col_by</span>, <span class='st'>"header"</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; Sex            F                 M     
-#&gt; 
-#&gt; [[2]]
-#&gt; Age Category        &lt;40        &gt;40        &lt;40        &gt;40
-#&gt; 
-#&gt; attr(,"nrow")
-#&gt; [1] 2
-#&gt; attr(,"ncol")
-#&gt; [1] 4
-#&gt; attr(,"class")
-#&gt; [1] "rheader"</div><div class='input'><span class='kw pkg'>rtables</span><span class='kw ns'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/rtables/man/by_header_to_string.html'>by_header_to_string</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>col_by</span>, <span class='st'>"header"</span>))</div><div class='output co'>#&gt; [1] "F,&lt;40" "F,&gt;40" "M,&lt;40" "M,&gt;40"</div></pre>
+#&gt; 5  TRUE FALSE</div><div class='input'><span class='no'>col_by</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rtables</span><span class='kw ns'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/rtables/man/by_hierarchical.html'>by_hierarchical</a></span>(<span class='no'>SEX</span>, <span class='no'>AGEC</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ncell(attr(subres, "header")[[1]]): element is not of class rrow</span></div><div class='input'><span class='no'>col_by</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'col_by' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>col_by</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is.data.frame(x): object 'col_by' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>col_by</span>, <span class='st'>"header"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'col_by' not found</span></div><div class='input'><span class='kw pkg'>rtables</span><span class='kw ns'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/rtables/man/by_header_to_string.html'>by_header_to_string</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>col_by</span>, <span class='st'>"header"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in is(x, "rheader"): object 'col_by' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      
       <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

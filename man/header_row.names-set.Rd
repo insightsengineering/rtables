@@ -7,8 +7,6 @@
 header_row.names(x) <- value
 }
 \arguments{
-\item{x}{an rtable object}
-
 \item{value}{vector with new row names}
 }
 \description{

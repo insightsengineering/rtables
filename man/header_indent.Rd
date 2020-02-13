@@ -6,9 +6,6 @@
 \usage{
 header_indent(x)
 }
-\arguments{
-\item{x}{an rtable object}
-}
 \description{
 Return Indentation of Header Rows
 }

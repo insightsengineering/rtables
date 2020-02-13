@@ -339,6 +339,14 @@ by_hierarchical <- function(...) {
   }
 }
 
+## credit: rlang, Henry and Wickham.
+## this one tiny utility function is NOT worth a dependency.
+`%||%` <- function (x, y) {
+    if (is_null(x)) 
+        y
+    else x
+}
+
 # todo: maybe put as S3 function, but then create a class from by functions
 # This function is not currently used in tern
 #' Get names to use for header
@@ -349,8 +357,6 @@ by_hierarchical <- function(...) {
 #' @return header attribute if existent, otherwise colnames
 #' 
 #' @export
-#' 
-#' @importFrom rlang "%||%"
 by_header <- function(x) {
   attr(x, "header") %||% colnames(x)
 }

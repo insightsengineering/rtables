@@ -8,13 +8,11 @@
 
 <title>Sort rtables within a list — sort_rtables • rtables</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,11 +32,10 @@
 
 
 
-
 <meta property="og:title" content="Sort rtables within a list — sort_rtables" />
+
 <meta property="og:description" content="Return a sorted list of rtables in a list based on values within the tables." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -95,7 +92,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -103,6 +106,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -129,11 +133,13 @@
     </div>
 
     <div class="ref-description">
+    
     <p>Return a sorted list of rtables in a list based on values within the tables.</p>
+    
     </div>
 
     <pre class="usage"><span class='fu'>sort_rtables</span>(<span class='no'>x</span>, <span class='kw'>indices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>), <span class='no'>...</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -154,14 +160,16 @@ specify how to extract the information required to sort <code>x</code>. See exam
       <td><p>arguments passed on to <code><a href='https://rdrr.io/r/base/order.html'>order</a></code></p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>list of rtables</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='order_rtables.html'>order_rtables</a></code>, <code><a href='sort_rrows.html'>sort_rrows</a></code>, 
   <code><a href='order_rrows.html'>order_rrows</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -186,97 +194,20 @@ specify how to extract the information required to sort <code>x</code>. See exam
    )
 )
 
-<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))</div><div class='output co'>#&gt; $`Table C`
-#&gt;               A                 B     
-#&gt; --------------------------------------
-#&gt; r1           1, 1           100, 0, 19
-#&gt; r2          5, -1            8, 1, 21 
-#&gt; r3           1, 3            3, 1, 22 
-#&gt; 
-#&gt; $`Table A`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          4, 1          9, 1, 19
-#&gt; r2         5, -1          8, 3, 21
-#&gt; r3          1, 3          3, 4, 22
-#&gt; 
-#&gt; $`Table B`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          6, 1          9, 2, 19
-#&gt; r2         5, -1          8, 4, 21
-#&gt; r3          1, 3          3, 5, 22
-#&gt; </div><div class='input'><span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $`Table B`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          6, 1          9, 2, 19
-#&gt; r2         5, -1          8, 4, 21
-#&gt; r3          1, 3          3, 5, 22
-#&gt; 
-#&gt; $`Table A`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          4, 1          9, 1, 19
-#&gt; r2         5, -1          8, 3, 21
-#&gt; r3          1, 3          3, 4, 22
-#&gt; 
-#&gt; $`Table C`
-#&gt;               A                 B     
-#&gt; --------------------------------------
-#&gt; r1           1, 1           100, 0, 19
-#&gt; r2          5, -1            8, 1, 21 
-#&gt; r3           1, 3            3, 1, 22 
-#&gt; </div><div class='input'>
-<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))</div><div class='output co'>#&gt; $`Table A`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          4, 1          9, 1, 19
-#&gt; r2         5, -1          8, 3, 21
-#&gt; r3          1, 3          3, 4, 22
-#&gt; 
-#&gt; $`Table B`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          6, 1          9, 2, 19
-#&gt; r2         5, -1          8, 4, 21
-#&gt; r3          1, 3          3, 5, 22
-#&gt; 
-#&gt; $`Table C`
-#&gt;               A                 B     
-#&gt; --------------------------------------
-#&gt; r1           1, 1           100, 0, 19
-#&gt; r2          5, -1            8, 1, 21 
-#&gt; r3           1, 3            3, 1, 22 
-#&gt; </div><div class='input'>
-<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='kw'>function</span>(<span class='no'>tbl</span>) <span class='no'>tbl</span><span class='kw'>[[</span><span class='fl'>1</span>]]<span class='kw'>[[</span><span class='fl'>2</span>]][<span class='fl'>3</span>] - <span class='no'>tbl</span><span class='kw'>[[</span><span class='fl'>1</span>]]<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>]  )</div><div class='output co'>#&gt; $`Table B`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          6, 1          9, 2, 19
-#&gt; r2         5, -1          8, 4, 21
-#&gt; r3          1, 3          3, 5, 22
-#&gt; 
-#&gt; $`Table A`
-#&gt;              A               B    
-#&gt; ----------------------------------
-#&gt; r1          4, 1          9, 1, 19
-#&gt; r2         5, -1          8, 3, 21
-#&gt; r3          1, 3          3, 4, 22
-#&gt; 
-#&gt; $`Table C`
-#&gt;               A                 B     
-#&gt; --------------------------------------
-#&gt; r1           1, 1           100, 0, 19
-#&gt; r2          5, -1            8, 1, 21 
-#&gt; r3           1, 3            3, 1, 22 
-#&gt; </div><div class='input'>
+<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))</div><div class='output co'>#&gt; <span class='error'>Error in order_rtables(x, indices, ...): is.list(x) &amp;&amp; are(x, "rtable") is not TRUE</span></div><div class='input'><span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in order_rtables(x, indices, ...): is.list(x) &amp;&amp; are(x, "rtable") is not TRUE</span></div><div class='input'>
+<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>1</span>))</div><div class='output co'>#&gt; <span class='error'>Error in order_rtables(x, indices, ...): is.list(x) &amp;&amp; are(x, "rtable") is not TRUE</span></div><div class='input'>
+<span class='fu'>sort_rtables</span>(<span class='no'>tbls</span>, <span class='kw'>function</span>(<span class='no'>tbl</span>) <span class='no'>tbl</span><span class='kw'>[[</span><span class='fl'>1</span>]]<span class='kw'>[[</span><span class='fl'>2</span>]][<span class='fl'>3</span>] - <span class='no'>tbl</span><span class='kw'>[[</span><span class='fl'>1</span>]]<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>]  )</div><div class='output co'>#&gt; <span class='error'>Error in order_rtables(x, indices, ...): is.list(x) &amp;&amp; are(x, "rtable") is not TRUE</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      
       <li><a href="#value">Value</a></li>
+
       <li><a href="#see-also">See also</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -6,15 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create an rrow with cell-data stored within lists — rrowl • rtables</title>
-
+<title>rrowl — rrowl • rtables</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,12 +32,10 @@
 
 
 
+<meta property="og:title" content="rrowl — rrowl" />
 
-<meta property="og:title" content="Create an rrow with cell-data stored within lists — rrowl" />
-<meta property="og:description" content="The apply function family returns lists whose elements can be used as cell
-data with the lrow function." />
+<meta property="og:description" content="rrowl" />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -96,7 +92,13 @@ data with the lrow function." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -104,6 +106,7 @@ data with the lrow function." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -124,60 +127,641 @@ data with the lrow function." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create an rrow with cell-data stored within lists</h1>
-    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/rtable.R'><code>R/rtable.R</code></a></small>
+    <h1>rrowl</h1>
+    <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/tt_compatibility.R'><code>R/tt_compatibility.R</code></a></small>
     <div class="hidden name"><code>rrowl.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The apply function family returns lists whose elements can be used as cell
-data with the <code>lrow</code> function.</p>
+    
+    <p>rrowl</p>
+    
     </div>
 
     <pre class="usage"><span class='fu'>rrowl</span>(<span class='no'>row.name</span>, <span class='no'>...</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>row.name</th>
-      <td><p>string with row name</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>lists that get concatenated and then flattened by one level of
-depth. If one elemenet is not a list then it gets placed into a list.</p></td>
-    </tr>
-    <tr>
-      <th>format</th>
-      <td><p>a valid format string or a format function for
-<code><a href='rcell.html'>rcell</a></code>s. To get a list of all valid format strings use
-<code><a href='list_rcell_format_labels.html'>list_rcell_format_labels</a></code>. If format is <code>NULL</code> then the elements
-of a cell get pasted separated by a comma.</p></td>
-    </tr>
-    <tr>
-      <th>indent</th>
-      <td><p>non-negative integer where 0 means that the row should not be
-indented</p></td>
-    </tr>
-    </table>
-
+        
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>rrowl</span>(<span class='st'>"a"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; a        1        2        3</div><div class='input'><span class='fu'>rrowl</span>(<span class='st'>"a"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>5</span>,<span class='fl'>6</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; a        1        2        3        4        5        6</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>rrowl</span>(<span class='st'>"a"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; $val1
+#&gt; [1] 1
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val2
+#&gt; [1] 2
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val3
+#&gt; [1] 3
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "a"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "a"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; [1] "xx"
+#&gt; </div><div class='input'><span class='fu'>rrowl</span>(<span class='st'>"a"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>5</span>,<span class='fl'>6</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1 1 1 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; $val1
+#&gt; [1] 1
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val2
+#&gt; [1] 2
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val3
+#&gt; [1] 3
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val4
+#&gt; [1] 4
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val5
+#&gt; [1] 5
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val6
+#&gt; [1] 6
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "a"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "a"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; [1] "xx"
+#&gt; </div><div class='input'>
 
-<span class='fu'>rrowl</span>(<span class='st'>"N"</span>, <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>))</div><div class='output co'>#&gt; N        50        50        50</div><div class='input'><span class='fu'>rrowl</span>(<span class='st'>"N"</span>, <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; N        50        50        50</div><div class='input'>
+<span class='fu'>rrowl</span>(<span class='st'>"N"</span>, <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>))</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; $val.setosa
+#&gt; [1] 50
+#&gt; 
+#&gt; $val.versicolor
+#&gt; [1] 50
+#&gt; 
+#&gt; $val.virginica
+#&gt; [1] 50
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "N"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "N"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; NULL
+#&gt; </div><div class='input'><span class='fu'>rrowl</span>(<span class='st'>"N"</span>, <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx"</span>)</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; $val.setosa
+#&gt; [1] 50
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val.versicolor
+#&gt; [1] 50
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; $val.virginica
+#&gt; [1] 50
+#&gt; attr(,"format")
+#&gt; [1] "xx"
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "N"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "N"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; [1] "xx"
+#&gt; </div><div class='input'>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tapply.html'>tapply</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span>, <span class='no'>iris</span>$<span class='no'>Species</span>, <span class='no'>mean</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 1"</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; row 1        5.006, 5.936, 6.588</div><div class='input'><span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"ABC"</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; ABC        2        3</div><div class='input'>
-<span class='fu'>rrowl</span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>))</div><div class='output co'>#&gt; row 1        1        2        3        4</div><div class='input'><span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 2"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>))</div><div class='output co'>#&gt; row 2        1, 2        3, 4</div><div class='input'>
-</div></pre>
+<span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 1"</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; [[1]]
+#&gt; [[1]]$setosa
+#&gt; [1] 5.006
+#&gt; 
+#&gt; [[1]]$versicolor
+#&gt; [1] 5.936
+#&gt; 
+#&gt; [[1]]$virginica
+#&gt; [1] 6.588
+#&gt; 
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "row 1"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "row 1"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; NULL
+#&gt; </div><div class='input'><span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='st'>"ABC"</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; [[1]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 3
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "ABC"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "ABC"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; NULL
+#&gt; </div><div class='input'>
+<span class='fu'>rrowl</span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>))</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; $val1
+#&gt; [1] 1
+#&gt; 
+#&gt; $val2
+#&gt; [1] 2
+#&gt; 
+#&gt; $val3
+#&gt; [1] 3
+#&gt; 
+#&gt; $val4
+#&gt; [1] 4
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "row 1"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "row 1"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; NULL
+#&gt; </div><div class='input'><span class='fu'><a href='rrow.html'>rrow</a></span>(<span class='kw'>row.name</span> <span class='kw'>=</span> <span class='st'>"row 2"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>))</div><div class='output co'>#&gt; An object of class "DataRow"
+#&gt; Slot "colspans":
+#&gt; [1] 1 1
+#&gt; 
+#&gt; Slot "leaf_value":
+#&gt; [[1]]
+#&gt; [1] 1 2
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 3 4
+#&gt; 
+#&gt; 
+#&gt; Slot "var_analyzed":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "label":
+#&gt; [1] "row 2"
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; [1] "row 2"
+#&gt; 
+#&gt; Slot "col_info":
+#&gt; An object of class "InstantiatedColumnInfo"
+#&gt; Slot "tree_layout":
+#&gt; An object of class "LayoutColLeaf"
+#&gt; Slot "func":
+#&gt; function () 
+#&gt; NULL
+#&gt; &lt;bytecode: 0x7fb895aa4f88&gt;
+#&gt; 
+#&gt; Slot "pos_in_tree":
+#&gt; An object of class  TreePos 
+#&gt; 
+#&gt;  
+#&gt; Slot "label":
+#&gt; [1] ""
+#&gt; 
+#&gt; Slot "level":
+#&gt; [1] 0
+#&gt; 
+#&gt; Slot "name":
+#&gt; character(0)
+#&gt; 
+#&gt; 
+#&gt; Slot "subset_exprs":
+#&gt; [[1]]
+#&gt; expression(TRUE)
+#&gt; 
+#&gt; 
+#&gt; Slot "cextra_args":
+#&gt; [[1]]
+#&gt; list()
+#&gt; 
+#&gt; 
+#&gt; Slot "counts":
+#&gt; [1] NA
+#&gt; 
+#&gt; Slot "display_columncounts":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "columncount_format":
+#&gt; [1] "(N=xx)"
+#&gt; 
+#&gt; 
+#&gt; Slot "format":
+#&gt; NULL
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -10,8 +10,6 @@
 #' @param comp.attr boolean compare attributes
 #' 
 #' 
-#' @importFrom methods is
-#' @importFrom stats na.omit
 #' @export
 #' 
 #' @examples 

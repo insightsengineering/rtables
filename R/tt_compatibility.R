@@ -213,9 +213,11 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 }
 
 
+
+
 #' Create a Table
 #' 
-#' @inheritParams rtable
+#' @inheritParams argument_conventions
 #' 
 #' 
 #' @export
@@ -321,7 +323,7 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #'#   rrow("row1", c(1,2,3,4), letters[1:10])
 #'# )
 #'# tbl3
-#' 
+#' @rdname rtable
 rtable = function(header, ..., format = NULL) {
     if(is.character(header))
         header = list(rrowl(NULL, header))
@@ -358,6 +360,8 @@ rtable = function(header, ..., format = NULL) {
               labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
 }
 
+#' @rdname rtable
+#' @export
 rtablel = function (header, ..., format = NULL) 
 {
     dots <- list(...)
@@ -405,7 +409,8 @@ header_add_N = function(x, N) {
     x
 }
 
-
+#' export
+#' @rdname compatability
 `header<-` = function(x, value) {
     if(is(value, "list")) {
         value = rheader(.rowlist = value)
@@ -424,4 +429,6 @@ header_add_N = function(x, N) {
     x
 }
 
+#' export
+#' @rdname compatability
 header = col_info

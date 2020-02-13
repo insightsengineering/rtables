@@ -8,13 +8,11 @@
 
 <title>Tabulate Factors — rtabulate.factor • rtables</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,12 +32,11 @@
 
 
 
-
 <meta property="og:title" content="Tabulate Factors — rtabulate.factor" />
+
 <meta property="og:description" content="By default each cell reports the number of observations in
 each level of x." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -96,7 +93,13 @@ each level of x." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/devguide.html">Developers Guide</a>
+    </li>
+    <li>
       <a href="../articles/rtabulate.html">rtabulate</a>
+    </li>
+    <li>
+      <a href="../articles/tabletree_design.html">TableTree Design</a>
     </li>
   </ul>
 </li>
@@ -104,6 +107,7 @@ each level of x." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/roche/rtables">
@@ -130,15 +134,17 @@ each level of x." />
     </div>
 
     <div class="ref-description">
+    
     <p>By default each cell reports the number of observations in
 each level of <code>x</code>.</p>
+    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for factor</span>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>x</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='by_all.html'>by_all</a></span>(<span class='st'>"All"</span>), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>,
   <span class='no'>...</span>, <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"no"</span>, <span class='st'>"always"</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indent</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>col_wise_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -175,11 +181,6 @@ included in the summary if any <code>NA</code>s exist in <code>x</code>. For opt
 then the <code>format</code> is applied</p></td>
     </tr>
     <tr>
-      <th>indent</th>
-      <td><p>non-negative integer where 0 means that the row should not be
-indented</p></td>
-    </tr>
-    <tr>
       <th>col_wise_args</th>
       <td><p>a named list containing collections (e.g. vectors or
 lists) with data elements for each column of the resulting table. The data
@@ -188,43 +189,44 @@ the element name of the outer list. Hence, the length and order of each
 collection must match the levels in <code>col_by</code>. See examples.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an <code><a href='rtable.html'>rtable</a></code> object</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt;                   All
-#&gt; ---------------------
-#&gt; setosa            50 
-#&gt; versicolor        50 
-#&gt; virginica         50 </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='st'>"always"</span>)</div><div class='output co'>#&gt;                   All
-#&gt; ---------------------
-#&gt; setosa            50 
-#&gt; versicolor        50 
-#&gt; virginica         50 
-#&gt; &lt;NA&gt;               0 </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='fl'>NA</span>, <span class='st'>"b"</span>)), <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='st'>"ifany"</span>)</div><div class='output co'>#&gt;             All
-#&gt; ---------------
-#&gt; a            2 
-#&gt; b            1 
-#&gt; &lt;NA&gt;         1 </div><div class='input'>
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>, <span class='fu'><a href='by_all.html'>by_all</a></span>(<span class='st'>"sum"</span>))</div><div class='output co'>#&gt;                   sum
-#&gt; ---------------------
-#&gt; setosa            50 
-#&gt; versicolor        50 
-#&gt; virginica         50 </div><div class='input'>
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt;              All
+#&gt; ----------------
+#&gt; setosa       50 
+#&gt; versicolor   50 
+#&gt; virginica    50 </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='st'>"always"</span>)</div><div class='output co'>#&gt;              All
+#&gt; ----------------
+#&gt; setosa       50 
+#&gt; versicolor   50 
+#&gt; virginica    50 
+#&gt; &lt;NA&gt;          0 </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='fl'>NA</span>, <span class='st'>"b"</span>)), <span class='kw'>useNA</span> <span class='kw'>=</span> <span class='st'>"ifany"</span>)</div><div class='output co'>#&gt;        All
+#&gt; ----------
+#&gt; a       2 
+#&gt; b       1 
+#&gt; &lt;NA&gt;    1 </div><div class='input'>
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>, <span class='fu'><a href='by_all.html'>by_all</a></span>(<span class='st'>"sum"</span>))</div><div class='output co'>#&gt;              sum
+#&gt; ----------------
+#&gt; setosa       50 
+#&gt; versicolor   50 
+#&gt; virginica    50 </div><div class='input'>
 <span class='no'>sl5</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>iris</span>$<span class='no'>Sepal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>5</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
    <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S.L &gt; 5"</span>, <span class='st'>"S.L &lt;= 5"</span>))
 
-<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='no'>sl5</span>)</div><div class='output co'>#&gt;                   S.L &gt; 5         S.L &lt;= 5
+<span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='no'>sl5</span>)</div><div class='output co'>#&gt;              S.L &gt; 5   S.L &lt;= 5
+#&gt; -------------------------------
+#&gt; setosa         22         28   
+#&gt; versicolor     47         3    
+#&gt; virginica      49         1    </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>sl5</span>, <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt;            setosa   versicolor   virginica
 #&gt; ------------------------------------------
-#&gt; setosa               22              28   
-#&gt; versicolor           47              3    
-#&gt; virginica            49              1    </div><div class='input'><span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>sl5</span>, <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt;                   setosa          versicolor        virginica 
-#&gt; --------------------------------------------------------------
-#&gt; S.L &gt; 5             22                47                49    
-#&gt; S.L &lt;= 5            28                3                 1     </div><div class='input'>
+#&gt; S.L &gt; 5      22         47          49    
+#&gt; S.L &lt;= 5     28         3            1    </div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='no'>iris</span>$<span class='no'>Species</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='no'>sl5</span>,
    <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>cell_data</span>, <span class='no'>N</span>) {
      <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>cell_data</span>) <span class='kw'>&gt;</span> <span class='fl'>10</span>) {
@@ -235,30 +237,30 @@ collection must match the levels in <code>col_by</code>. See examples.</p></td>
    },
    <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"xx (xx.xx%)"</span>,
    <span class='kw'>col_wise_args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>sl5</span>))
-)</div><div class='output co'>#&gt;                     S.L &gt; 5           S.L &lt;= 5  
-#&gt; ------------------------------------------------
-#&gt; setosa            22 (18.64%)        28 (87.5%) 
-#&gt; versicolor        47 (39.83%)             -     
-#&gt; virginica         49 (41.53%)             -     </div><div class='input'>
+)</div><div class='output co'>#&gt;                S.L &gt; 5      S.L &lt;= 5 
+#&gt; -------------------------------------
+#&gt; setosa       22 (18.64%)   28 (87.5%)
+#&gt; versicolor   47 (39.83%)       -     
+#&gt; virginica    49 (41.53%)       -     </div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>)),
-          <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>)</div><div class='output co'>#&gt;          a        b
-#&gt; -------------------
-#&gt; X        1        0
-#&gt; Y        1        0</div><div class='input'>
+          <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)), <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>length</span>)</div><div class='output co'>#&gt;     a   b
+#&gt; ---------
+#&gt; X   1   0
+#&gt; Y   1   0</div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>)),
-          <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"b"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)), <span class='no'>length</span>)</div><div class='output co'>#&gt;          a        b
-#&gt; -------------------
-#&gt; X        0        0
-#&gt; Y        0        2</div><div class='input'>
+          <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"b"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)), <span class='no'>length</span>)</div><div class='output co'>#&gt;     a   b
+#&gt; ---------
+#&gt; X   0   0
+#&gt; Y   0   2</div><div class='input'>
 <span class='fu'><a href='rtabulate.html'>rtabulate</a></span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X"</span>, <span class='st'>"Y"</span>)),
   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"b"</span>, <span class='st'>"b"</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)),
   <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>N</span>) <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>), <span class='no'>N</span>),
   <span class='kw'>col_wise_args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-)</div><div class='output co'>#&gt;           a           b  
-#&gt; -------------------------
-#&gt; X        0, 1        0, 2
-#&gt; Y        0, 1        2, 2</div><div class='input'>
+)</div><div class='output co'>#&gt;      a      b  
+#&gt; ---------------
+#&gt; X   0, 1   0, 2
+#&gt; Y   0, 1   2, 2</div><div class='input'>
  
 </div></pre>
   </div>
@@ -266,7 +268,9 @@ collection must match the levels in <code>col_by</code>. See examples.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      
       <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

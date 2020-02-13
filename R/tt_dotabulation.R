@@ -125,6 +125,54 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     trows
 }
 
+.both_caller = function(pcfun, lblstr) {
+    function(df2, .N_col, .N_total, ...) {
+        pcfun(df2, lblstr, .N_col = .N_col, .N_total = .N_total, ...)
+    }
+}
+
+.ncol_caller = function(pcfun, lblstr) {
+    function(df2, .N_col, ...) {
+        pcfun(df2, lblstr, .N_col = .N_col, ...)
+    }
+}
+
+.ntot_caller  = function(pcfun, lblstr) {
+    function(df2, .N_total, ...) {
+        pcfun(df2, lblstr, .N_total = .N_total, ...)
+    }
+}
+
+.neither_caller = .ntot_caller  = function(pcfun, lblstr) {
+    function(df2,  ...) {
+        pcfun(df2, lblstr, ...)
+    }
+}
+
+
+.make_caller = function(parent_cfun, clblstr) {
+    ## XXX Ugh. Combinatorial explosion X.X
+    ## This is what I get for abusing scope to do
+    ## the content label thing. Bad design.
+
+    ## Ugh number 2. If we assign each of htese to the same name
+    ## R CMD check complains so we return them as anon funcs to sneak
+    ## by. Yet mr
+    if(takes_coln(parent_cfun)) {
+        if(takes_totn(parent_cfun)) {
+            .both_caller(parent_cfun, clblstr)
+        } else {
+            .ncol_caller(parent_cfun, clblstr)
+        }
+    } else {
+        if(takes_totn(parent_cfun)) {
+            .ntot_caller(parent_cfun, clblstr)
+        } else {
+            .neither_caller(parent_cfun, clblstr)
+        }
+    }
+}
+
 .make_ctab = function(df, lvl, ##treepos,
                       name,
                       ##colexprs, coltree,
@@ -133,32 +181,11 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 
  
     if(!is.null(parent_cfun)) {
-        clblstr = name
-        
-        ## XXX Ugh. Combinatorial explosion X.X
-        ## This is what I get for abusing scope to do
-        ## the content label thing. Bad design.
-        if(takes_coln(parent_cfun)) {
-            if(takes_totn(parent_cfun)) {
-                caller = function(df2, .N_col, .N_total, ...)
-                    parent_cfun(df2, clblstr, .N_col = .N_col, .N_total = .N_total, ...)
-            } else {
-                 caller = function(df2, .N_col, ...)
-                     parent_cfun(df2, clblstr, .N_col = .N_col, ...)
-            }
-        } else {
-           if(takes_totn(parent_cfun)) {
-                caller = function(df2, .N_total, ...)
-                    parent_cfun(df2, clblstr, .N_total = .N_total, ...)
-            } else {
-                 caller = function(df2,x, ...)
-                     parent_cfun(df2, clblstr, ...)
-            }
-        }
+         
             
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   func = caller, 
+                                   func = .make_caller(parent_cfun, name), 
                                    cinfo = cinfo,
                                    rowconstr = ContentRow)
     } else {
@@ -334,8 +361,6 @@ recursive_applysplit = function( df,
 #' 
 #' @inheritParams argument_conventions
 #' 
-#' @export
-#' 
 #' @examples
 #' 
 #' library(magrittr)
@@ -348,7 +373,7 @@ recursive_applysplit = function( df,
 #' l
 #' 
 #' build_table(l, DM) 
-#' 
+#' @export
 build_table = function(lyt, df, ...) {
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
@@ -458,12 +483,15 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, lbl = "") {
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
-    
+
+    nm = unlist(tail(splv_rawvalues(pos), 1)) %||% ""
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,
                       lab = lbl,
-                      tpos = pos)
+                      tpos = pos,
+                      name = nm
+                      )
     } else {
         spl = splvec[[lvl]]
         rawpart = do_split(spl,df, trim = )
@@ -479,6 +507,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
         LayoutColTree(lev = lvl, lab = lbl,
                       spl = spl,
                       kids = kids, tpos = pos,
+                      name = nm, 
                       summary_function = content_fun(spl))
     }
 }
@@ -555,44 +584,44 @@ setMethod("build_splits_expr", "SplitVector",
 
 
 
-rtabulate_layout2 =  function(x, layout, FUN, ...,
-                              format = NULL, row.name = "", indent  = 0,
-                              col_wise_args = NULL) {
+## rtabulate_layout2 =  function(x, layout, FUN, ...,
+##                               format = NULL, row.name = "", indent  = 0,
+##                               col_wise_args = NULL) {
   
-  force(FUN)
- # check_stop_col_by(col_by, col_wise_args)
+##   force(FUN)
+##  # check_stop_col_by(col_by, col_wise_args)
   
-  column_data <- if (n_leaves(coltree(layout)) == 0L) {
-    setNames(list(x), "noname(for now FIXME)")
-  } else {
-      ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
+##   column_data <- if (n_leaves(coltree(layout)) == 0L) {
+##     setNames(list(x), "noname(for now FIXME)")
+##   } else {
+##       ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
 
-      ## not handling nesting right now at all
-      leaves = layout_children(coltree(layout))
-      setNames(lapply(leaves,
-                      function(leaf) x[leaf@subset]),
-               sapply(leaves,
-                      function(leaf) leaf@label)
-               )
-  }
+##       ## not handling nesting right now at all
+##       leaves = layout_children(coltree(layout))
+##       setNames(lapply(leaves,
+##                       function(leaf) x[leaf@subset]),
+##                sapply(leaves,
+##                       function(leaf) leaf@label)
+##                )
+##   }
     
-  cells <- if (is.null(col_wise_args)) {
+##   cells <- if (is.null(col_wise_args)) {
     
-    lapply(column_data, FUN, ...)
+##     lapply(column_data, FUN, ...)
     
-  } else {
+##   } else {
     
-    dots <- list(...)
-    args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
+##     dots <- list(...)
+##     args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
     
-    Map(function(xi, argsi) {
-      do.call(FUN, c(list(xi), argsi))
-    }, column_data, args)
-  }
+##     Map(function(xi, argsi) {
+##       do.call(FUN, c(list(xi), argsi))
+##     }, column_data, args)
+##   }
   
-  rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
+##   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
   
-  rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
-}
+##   rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
+## }
 
     

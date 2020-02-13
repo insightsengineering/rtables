@@ -1,3 +1,6 @@
+
+
+
 ## pos_from_values = function(vals, tab) {
 ##     splvec = list()
 ##     curtree = tab
@@ -245,7 +248,14 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 
 
 
-
+#' retrieve and assign elements of a TableTree
+#' @param x TableTree
+#' @param i index
+#' @param j index
+#' @param ... ignored
+#' @param value Replacement value (list, TableRow, or TableTree)
+#' @exportMethod [<-
+#' @rdname brackets
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
@@ -253,7 +263,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
     nr = nrow(x)
     i = .j_to_posj(i, nr)
     if(missing(j)) {
-        j = seq_along(col_exprs(col_info(tab)))
+        j = seq_along(col_exprs(col_info(x)))
     } else {
         j = .j_to_posj(j, ncol(x))
     }
@@ -269,7 +279,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
     
     counter = 0
     ## this has access to value, i, and j by scoping
-    replace_rowsbynum = function(x, i) {
+    replace_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)
         if(counter >= maxi)
             return(valifnone)
@@ -278,7 +288,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
             counter <<- counter + 1
             if(counter %in% i) {
                 nxtval = value[[1]]
-                if(is(nxtrow, "LabelRow")) {
+                if(is(nxtval, "LabelRow")) {
                     tt_labelrow(x) = nxtval
                 } else {
                     stop("can't replace label with value of class", class(nxtval))
@@ -331,7 +341,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
         tree_children(x) = kids
         x
     }
-    replace_rowsbynum(x, i)
+    replace_rowsbynum(x, i, ...)
 })
 
 
@@ -543,6 +553,8 @@ subset_by_rownum = function(tt, i, ... ) {
 }
 
 
+#' @exportMethod [
+#' @rdname brackets
 
 setMethod("[", c("VTableTree", "logical", "logical"),
           function(x, i, j, ..., drop = FALSE) {
@@ -551,11 +563,17 @@ setMethod("[", c("VTableTree", "logical", "logical"),
     x[i,j, ..., drop = drop]
 })
 
+#' @exportMethod [
+#' @rdname brackets
+
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
     x[i,j, ..., drop = drop]
 })
+
+#' @exportMethod [
+#' @rdname brackets
 
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
@@ -563,12 +581,17 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
     x[i,j, ..., drop = drop]
 })
 
+#' @exportMethod [
+#' @rdname brackets
+
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
     x[i = i,j = j, ..., drop = drop]
 })
 
+#' @exportMethod [
+#' @rdname brackets
 
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
@@ -577,6 +600,8 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 })
 
 
+#' @exportMethod [
+#' @rdname brackets
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
@@ -601,6 +626,8 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     x
 })
 
+#' @exportMethod [[
+#' @rdname brackets
 
 setMethod("[[", c("VTableTree", "list", "ANY"),
           function(x, i, j, ...) {
