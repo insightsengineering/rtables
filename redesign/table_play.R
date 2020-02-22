@@ -29,8 +29,8 @@ NULL %>%
 
 dm_layout <- NULL %>% 
   add_colby_varlevels(var = "ARM", lbl = "ARM") %>%
-  add_analyzed_var(var = "AGE", afun = asummary) %>%
-  add_analyzed_var(var = "SEX", afun = asummary) 
+  add_analyzed_vars(var = "AGE", afun = asummary) %>%
+  add_analyzed_vars(var = "SEX", afun = asummary) 
   
   
   add_analyzed_var(var = "AGE", afun =  function(x) {
@@ -44,7 +44,7 @@ dm_layout <- NULL %>%
 dm_layout <- NULL %>% 
   add_colby_varlevels(var = "ARM", lbl = "ARM") %>%
   add_colcounts() %>%
-  add_analyzed_var(var = "SEX", afun =  function(x, .N_col) {
+  add_analyzed_vars(var = "SEX", afun =  function(x, .N_col) {
     c(list(n = structure(sum(is.na(x)), format = "xx")),
            lapply(table(x), function(xi) xi * c(1, 1/.N_col))
       )
@@ -56,6 +56,9 @@ dm_layout
 
 tbl <- build_table(dm_layout, ADSL)  
 tbl
+
+
+
 
 add_analyzed_var(var = c("AGE", "SEX", "BMRKR1"), afun = a_summary)
 

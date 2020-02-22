@@ -35,9 +35,10 @@ NULL
 #' @param baseline character. Value of \code{var} to be taken as the baseline/control to be compared against.
 #' @param compfun function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.
 #' @param rowlblf string. An sprintf style format string containing up to one \code{"\%s"} which takes the current split value and generates the row label for the summary.
-#' @param tt TableTree. A TableTree object representing a populated table.
+#' @param tt TableTree (or related class). A TableTree object representing a populated table.
 #' @param verbose logical. Should additional information be displayed to the user. Defaults to FALSE.
 #' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
+#' @param obj ANY. The object for the accessor to access or modify
 #' @rdname argument_conventions
 NULL
 argument_conventions <- function(lyt, var, lbl, valuelblvar, splfmt, newtoplev, spl, pos) {

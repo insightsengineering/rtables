@@ -18,7 +18,8 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         stop() #row.name = as.character(row.name)
     if(length(vals) == 0L) {
         LabelRow(lev = as.integer(indent),
-                 lab = row.name)
+                 lab = row.name,
+                 name = row.name)
     } else {
         csps = as.integer(sapply(vals, function(x) {
             attr(x, "colspan") %||% 1L

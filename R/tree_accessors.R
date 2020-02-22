@@ -645,10 +645,19 @@ setMethod("value_fmts", "VTableTree",
 ### be used on all tree-based structures in the
 ### framework.
 
+#' Collect leaves of a table tree
+#' @inheritParams argument_conventions
+#' @param incl.cont logical. Include rows from content tables within the tree. Defaults to \code{TRUE}
+#' @param add.labrows logical. Include label rows. Defaults to \code{FALSE}
+#' @return A list of \code{TableRow} objects for all rows in the table
+#' @rdname collect_leaves
+#' @export
 setGeneric("collect_leaves",
            function(tt, incl.cont = TRUE, add.labrows = FALSE)
     standardGeneric("collect_leaves"), signature = "tt")
 
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
 
 setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
@@ -662,6 +671,8 @@ setMethod("collect_leaves", "TableTree",
     unlist(ret, recursive = TRUE)
 })
 
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
 
 setMethod("collect_leaves", "ElementaryTable",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
@@ -671,6 +682,10 @@ setMethod("collect_leaves", "ElementaryTable",
     }
     ret
 })
+
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
+
 setMethod("collect_leaves", "VTree",
           function(tt, incl.cont, add.labrows) {
     ret = lapply(tree_children(tt),
@@ -678,18 +693,23 @@ setMethod("collect_leaves", "VTree",
     unlist(ret, recursive = TRUE)
 })
 
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
 setMethod("collect_leaves", "VLeaf",
           function(tt, incl.cont, add.labrows) {
     tt
 })
 
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
 setMethod("collect_leaves", "NULL",
           function(tt, incl.cont, add.labrows) {
     list()
 })
 
 
-
+#' @rdname collect_leaves
+#' @exportMethod collect_leaves
 setMethod("collect_leaves", "ANY",
           function(tt, incl.cont, add.labrows)
     stop("class ", class(tt), " does not inherit from VTree or VLeaf"))
@@ -801,19 +821,38 @@ setMethod("clayout_splits", "VTableNodeInfo",
 ## should be a different accessor
 ##
 ## FIXME
+
+#' Column information/structure accessors
+#' @inheritParams argument_conventions
+#' @param df data.frame/NULL. Data to use if the column information is being generated from a  Pre-Data layout object
+#' @param rtpos TreePos. Root position.
+#' @return A \code{LayoutColTree} object.
+#' @rdname col_accessors
+#' @export 
 setGeneric("clayout", function(obj) standardGeneric("clayout"))
+#'@rdname col_accessors
+#' @exportMethod clayout
 setMethod("clayout", "VTableNodeInfo",
           function(obj) obj@col_info@tree_layout)
 
+#'@rdname col_accessors
+#' @exportMethod clayout
 setMethod("clayout", "PreDataTableLayouts",
           function(obj) obj@col_layout)
 
 ## useful convenience for the cascading methods in colby_constructors
+#'@rdname col_accessors
+#' @exportMethod clayout
 setMethod("clayout", "ANY", function(obj) PreDataColLayout())
 
 
 
+#'@rdname col_accessors
+#' @export
 setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
+
+#'@rdname col_accessors
+#' @exportMethod clayout<-
 setMethod("clayout<-", "PreDataTableLayouts",
           function(object, value) {
     object@col_layout = value
@@ -821,14 +860,23 @@ setMethod("clayout<-", "PreDataTableLayouts",
 })
 
 
+#'@rdname col_accessors
+#' @export
 setGeneric("col_info", function(obj) standardGeneric("col_info"))
+
+#'@rdname col_accessors
+#' @exportMethod col_info
 setMethod("col_info", "VTableNodeInfo",
           function(obj) obj@col_info)
 
 ### XXX I've made this recursive. Do we ALWAYS want it to be?
 ###
 ### I think we do.
+#'@rdname col_accessors
+#' @export
 setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
+#'@rdname col_accessors
+#' @exportMethod col_info<-
 setMethod("col_info<-", "TableRow",
           function(obj, value) {
     obj@col_info = value
@@ -844,6 +892,9 @@ setMethod("col_info<-", "TableRow",
     tree_children(obj) = kids
     obj
 }
+
+#'@rdname col_accessors
+#' @exportMethod col_info<-
 setMethod("col_info<-", "ElementaryTable",
           function(obj, value) {
     obj@col_info = value
@@ -851,6 +902,8 @@ setMethod("col_info<-", "ElementaryTable",
     
 })
 
+#'@rdname col_accessors
+#' @exportMethod col_info<-
 setMethod("col_info<-", "TableTree",
           function(obj, value) {
     obj@col_info = value
@@ -866,9 +919,13 @@ setMethod("col_info<-", "TableTree",
 
 
 
-
-
+#' @rdname col_accessors
+#' @export
 setGeneric("coltree", function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree"))
+
+
+#' @rdname col_accessors
+#' @exportMethod coltree
 setMethod("coltree", "InstantiatedColumnInfo",
           function(obj, df = NULL, rtpos = TreePos()) {
     if(!is.null(df))
@@ -876,9 +933,14 @@ setMethod("coltree", "InstantiatedColumnInfo",
     obj@tree_layout
 })
 
+#' @rdname col_accessors
+#' @export coltree
+
 setMethod("coltree", "PreDataTableLayouts",
           function(obj, df, rtpos) coltree(clayout(obj), df, rtpos))
 
+#' @rdname col_accessors
+#' @export coltree
 setMethod("coltree", "PreDataColLayout",
           function(obj, df, rtpos) {
     ## ## XXX this [[1]] is WRONG!!
@@ -897,17 +959,26 @@ setMethod("coltree", "PreDataColLayout",
 })
 
 
+#' @rdname col_accessors
+#' @export coltree
 setMethod("coltree", "LayoutColTree",
           function(obj, df, rtpos) obj)
 
+#' @rdname col_accessors
+#' @export coltree
 setMethod("coltree", "VTableTree",
           function(obj, df, rtpos) coltree(col_info(obj)))
-
+#' @rdname col_accessors
+#' @export
 setGeneric("col_exprs", function(obj, df = NULL) standardGeneric("col_exprs"))
 
+#' @rdname col_accessors
+#' @export col_exprs
 setMethod("col_exprs", "PreDataTableLayouts",
           function(obj, df = NULL) col_exprs(clayout(obj), df))
 
+#' @rdname col_accessors
+#' @export col_exprs
 setMethod("col_exprs", "PreDataColLayout",
           function(obj, df = NULL) {
     unlist(recursive = FALSE,
@@ -915,6 +986,8 @@ setMethod("col_exprs", "PreDataColLayout",
                   df = df))
 })
 
+#' @rdname col_accessors
+#' @export col_exprs
 setMethod("col_exprs", "InstantiatedColumnInfo",
           function(obj, df = NULL) {
     if(!is.null(df))
@@ -1104,4 +1177,14 @@ setMethod("names", "LayoutColTree",
         nm <- obj_name(obj)
         rep(nm, n_leaves(obj))
     })))
+})
+
+#' @rdname names
+#' @exportMethod row.names
+setMethod("row.names", "VTableTree",
+          function(x) {
+    sapply(collect_leaves(x, add.labrows = TRUE),
+           obj_label) ## XXXX this should probably be obj_name???
+
+
 })

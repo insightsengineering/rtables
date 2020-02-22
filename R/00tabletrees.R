@@ -520,8 +520,15 @@ setClass("CompSubsetVectors",
 
 
 
-
-
+.chkname = function(nm) {
+    if(length(nm) != 1) {
+        stop("name is not of length one")
+    } else if( is.na(nm)) {
+        warning("Got missing value for name, converting to characters '<NA>'")
+        nm = "<NA>"
+    }
+    nm
+}
 
 
 
@@ -688,7 +695,7 @@ LayoutColTree = function(lev = 0L,
     ## slab = NA_character_) {
     if(!is.null(spl)) {
         new("LayoutColTree", level = lev, children = kids,
-            name = name,
+            name = .chkname(name),
             summary_func = summary_function,
             pos_in_tree = tpos,
             split = spl,
@@ -699,7 +706,7 @@ LayoutColTree = function(lev = 0L,
             columncount_format = colcount_fmt)
     } else {
         LayoutColLeaf(lev = lev, lab = lab, tpos = tpos,
-                      name = name)
+                      name = .chkname(name))
     }        
 }
 
@@ -707,7 +714,7 @@ LayoutColLeaf = function(lev = 0L, name = lab, lab = "", tpos = TreePos()#,
                         ## n = NA_integer_,
                          #svar = NA_character_
                          ) {
-    new("LayoutColLeaf", level = lev, name = name, label = lab,
+    new("LayoutColLeaf", level = lev, name = .chkname(name), label = lab,
         pos_in_tree = tpos##, 
         ##subset = sub#,
         ##N_count = n,
@@ -835,13 +842,17 @@ setClass("LabelRow", contains = "TableRow",
 #' @rdname rowclasses
 #' @export
 LabelRow = function(lev = 1L,
-                      lab = "",
+                    lab = "",
+                    name = lab,
                       vis = !is.na(lab) && nzchar(lab),
                       cinfo = InstantiatedColumnInfo()) {
     new("LabelRow",
         leaf_value = list(),
         level = lev,
         label = lab,
+        ## XXX this means that a label row and its talbe can have the same name....that is bad but how bad remains to be seen
+        ## XXX
+        name = .chkname(name),
         col_info = cinfo,
         visible = vis)
 }
@@ -864,7 +875,7 @@ LabelRow = function(lev = 1L,
        !missing(lab))
         name = lab
     rw = new(klass, leaf_value = val,
-             name = name,        level = lev,
+             name = .chkname(name),        level = lev,
         label = lab,
         colspans = cspan,
         col_info = cinfo,
@@ -920,7 +931,7 @@ setClass("ElementaryTable", contains = "VTableTree",
 
     if(are(lst, "ElementaryTable") &&
        all(sapply(lst, function(tb) {
-           nrow(tb) <= 1 && obj_name(tb) == ""
+           nrow(tb) <= 1 && identical(obj_name(tb), "")
        }))) {
         lst = unlist(lapply(lst, function(tb) tree_children(tb)[[1]]))
     }
@@ -968,7 +979,7 @@ ElementaryTable = function(kids = list(),
     kids = .enforce_valid_kids(kids, cinfo)
     tab = new("ElementaryTable",
               children = kids,
-              name = name,
+              name = .chkname(name),
               level = lev,
               labelrow = labrow,
               rowspans = rspans,
@@ -1029,7 +1040,7 @@ TableTree = function(kids = list(),
     if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids,
-                        name = name,
+                        name = .chkname(name),
                         lev = lev,
                         labrow = labrow,
                         rspans = rspans,
@@ -1041,7 +1052,7 @@ TableTree = function(kids = list(),
     } else {
         tab = new("TableTree", content = cont,
                   children = kids,
-                  name = name,
+                  name = .chkname(name),
                   level = lev,
                   labelrow = labrow,
                   rowspans = rspans,

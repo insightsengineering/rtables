@@ -5,6 +5,7 @@
 \alias{names,VTableNodeInfo-method}
 \alias{names,InstantiatedColumnInfo-method}
 \alias{names,LayoutColTree-method}
+\alias{row.names,VTableTree-method}
 \title{Names of a TableTree}
 \usage{
 \S4method{names}{VTableNodeInfo}(x)
@@ -12,6 +13,8 @@
 \S4method{names}{InstantiatedColumnInfo}(x)
 
 \S4method{names}{LayoutColTree}(x)
+
+\S4method{row.names}{VTableTree}(x)
 }
 \arguments{
 \item{x}{the object.}

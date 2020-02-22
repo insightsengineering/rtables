@@ -2,7 +2,8 @@ context("rtabulate")
 
 test_that("rtabulate length tests", {
   
-  cells <- function(x) as.vector(unlist(unclass(x))) # current implementation
+    ##cells <- function(x) as.vector(unlist(unclass(x))) # current implementation
+    cells <- function(x) as.vector(unlist(lapply(rtables:::collect_leaves(x, add.labrows=TRUE), rtables:::row_values)))
   
   cb <- letters[1:2]
   cbf <- factor(cb, levels = cb)
@@ -43,8 +44,8 @@ test_that("rtabulate length tests", {
 test_that("rtabulate: col_wise_args argument", {
   
   get_elmts <- function(x, i) {
-    stopifnot(is(x, "rtable") && nrow(x) == 1)
-    as.vector(sapply(x[[1]], `[[`, i))
+    stopifnot(is(x, "VTableTree") && nrow(x) == 1)
+    as.vector(sapply(row_values(collect_leaves(x)[[1]]), '[[', i))
   }
   
   check_row1 <- function(x) {

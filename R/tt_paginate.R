@@ -184,7 +184,8 @@ pagdfrow = function(row,
                     extent = nlines(row, colwidths),
                     colwidths = NULL,
                     repext = 0L,
-                    repind = integer()
+                    repind = integer(),
+                    indent = 0L
                     ) {
      
     data.frame(label = lab,
@@ -197,6 +198,7 @@ pagdfrow = function(row,
                par_extent = repext,
                reprint_inds = I(list(unlist(repind))),
                row_class = class(row),
+               indent = indent,
                
                stringsAsFactors = FALSE)
 }
@@ -206,10 +208,12 @@ pagdfrow = function(row,
 #' @export
 make_pagdf = function(tt, colwidths = NULL) {
     rownum = 0
+    indent = 0L
     pag_df = function(tree, path, incontent = FALSE,
                       cwidths,
                       repr_ext = 0L,
-                      repr_inds = integer()) {
+                      repr_inds = integer(),
+                      indent = 0L) {
         ret = list()
         if(labrow_visible(tree)) {
             lr = tt_labelrow(tree)
@@ -221,9 +225,11 @@ make_pagdf = function(tt, colwidths = NULL) {
                                     pth = path,
                                     colwidths = cwidths,
                                     repext = repr_ext,
-                                    repind = list(repr_inds) )))
+                                    repind = list(repr_inds),
+                                    indent = indent)))
             repr_ext = repr_ext + 1L
             repr_inds = c(repr_inds, rownum)
+            indent <- indent + 1L
         }
         if(is(tree, "TableTree") &&
            nrow(content_table(tree)) > 0) {
@@ -234,12 +240,14 @@ make_pagdf = function(tt, colwidths = NULL) {
                            path = path,
                            cwidths = cwidths,
                            repr_ext = repr_ext,
-                           repr_inds = repr_inds)
+                           repr_inds = repr_inds,
+                           indent = indent)
             if(is(crows, "data.frame"))
                 crows = list(crows)
             ret = c(ret, crows)
             repr_ext = repr_ext + nlines(ctab)
             repr_inds = c(repr_inds, rnbef:rownum)
+            indent = indent + 1L
         }
         kids = tree_children(tree)
         nk = length(kids)
@@ -253,11 +261,13 @@ make_pagdf = function(tt, colwidths = NULL) {
                                          nsibs = nk,
                                          pth = path,
                                          repext = repr_ext,
-                                         repind = repr_inds)))
+                                         repind = repr_inds,
+                                         indent = indent)))
             } else {
                 newrows = pag_df(k, path = c(path, obj_name(k)),
                                  cwidths = cwidths, repr_ext = repr_ext,
-                                 repr_inds = repr_inds)
+                                 repr_inds = repr_inds,
+                                 indent = indent)
                 if(is(newrows, "data.frame")) {
                     newrows = list(newrows)
                 }

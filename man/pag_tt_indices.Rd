@@ -8,7 +8,7 @@ pag_tt_indices(tt, lpp = 15, min_siblings = 2,
   nosplitin = character(), colwidths = NULL, verbose = FALSE)
 }
 \arguments{
-\item{tt}{TableTree. A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 

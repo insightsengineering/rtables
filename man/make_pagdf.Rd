@@ -7,7 +7,7 @@
 make_pagdf(tt, colwidths = NULL)
 }
 \arguments{
-\item{tt}{TableTree. A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 }

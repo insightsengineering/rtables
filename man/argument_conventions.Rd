@@ -52,11 +52,13 @@
 
 \item{rowlblf}{string. An sprintf style format string containing up to one \code{"\%s"} which takes the current split value and generates the row label for the summary.}
 
-\item{tt}{TableTree. A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
 \item{verbose}{logical. Should additional information be displayed to the user. Defaults to FALSE.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+
+\item{obj}{ANY. The object for the accessor to access or modify}
 }
 \description{
 Dummy Function with aruments that are used throughout the framework

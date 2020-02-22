@@ -60,8 +60,8 @@ Next, the `[` operator lets you access the cell content.
 ```{r}
 tbl[1, 1]
 ```
-
-and to format that cell run `format_rcell(tbl[1,1])`=`r format_rcell(tbl[1,1])`.
+XXX 
+and to format that cell run `format_rcell(tbl[1,1])`=`r #format_rcell(tbl[1,1])`.
 
 Note that `tbl[6, 1]` and `tbl[6, 2]` display both the same `rcell` because of
 the colspan.
@@ -119,6 +119,7 @@ tbl3
 
 # Comparing two rtables
 
+XXX 
 Because we have the original data for each cell accessible for the `rtable` data
 structure it is possible to programmatically compare two tables:
 
@@ -126,7 +127,7 @@ structure it is possible to programmatically compare two tables:
 t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
 t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
-compare_rtables(object = t1, expected = t2) 
+##compare_rtables(object = t1, expected = t2) 
 ```
 
 

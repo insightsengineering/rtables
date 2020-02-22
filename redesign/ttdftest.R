@@ -80,7 +80,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## using a split function that excludes level C
     ## value labels from fac2_lbl
     add_rowby_varlevels("FACTOR2", "Factor2",
-                        splfun = excl_levs_sfun("C"),
+                        splfun = rtables:::excl_levs_sfun("C"),
                         vlblvar = "fac2_lbl") %>%
     ## Add count summary within FACTOR2 categories
     add_summary_count("FACTOR2") %>%

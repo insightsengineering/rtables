@@ -4,7 +4,7 @@
 \alias{row.names.rtable}
 \title{Row names of an \code{\link{rtable}} object}
 \usage{
-\method{row.names}{rtable}(x)
+row.names.rtable(x)
 }
 \arguments{
 \item{x}{an \code{\link{rtable}} object}
