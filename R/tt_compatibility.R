@@ -185,6 +185,7 @@ hrows_to_colinfo = function(rows) {
 #' @inheritParams rheader
 #' 
 #' @export
+#'
 #' 
 #' @examples
 #' 
@@ -433,3 +434,33 @@ header_add_N = function(x, N) {
 #' export
 #' @rdname compatability
 header = col_info
+
+
+#' Add column representing all rows
+#' 
+#' @export
+#' @rdname compatability
+
+by_all <- function(name) {
+    NULL %>% rtables:::add_col_total(lbl = name)
+}
+
+## XXX this is named this only for testing
+## replace with better name once all ttestts are passing
+
+setGeneric("col_by_to_matrix", function(col_by, x)
+    standardGeneric("col_by_to_matrix"))
+
+setMethod("col_by_to_matrix", "PreDataTableLayouts",
+          function(col_by, x) x)
+
+setMethod("col_by_to_matrix",
+          "character",
+          function(col_by, x) {
+
+    ret = NULL
+    for(col in col_by) {
+        ret <- ret %>% add_colby_varlevels(col)
+    }
+    ret
+})

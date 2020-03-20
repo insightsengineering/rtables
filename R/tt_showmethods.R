@@ -69,15 +69,15 @@ setMethod("payloadmsg", "VarLevelSplit",
 })
 
 setMethod("payloadmsg", "MultiVarSplit",
-          function(spl) "variable")
+          function(spl) "var")
 
 setMethod("payloadmsg", "VarLevWBaselineSplit",
-          function(spl) paste0(spl_payload(spl), "[baseline ",
+          function(spl) paste0(spl_payload(spl), "[bsl ",
                                spl@baseline_value, # XXX XXX
                                "]"))
 
 setMethod("payloadmsg", "ManualSplit",
-          function(spl) "manual")
+          function(spl) "mnl")
 
 
 setMethod("payloadmsg", "ANY",
@@ -99,7 +99,7 @@ spldesc = function(spl, value = "") {
 }
 
 
-docatlayout = function(obj) {
+layoutmsg = function(obj) {
     ## if(!is(obj, "VLayoutNode"))
     ##     stop("how did a non layoutnode object get in docatlayout??")
 
@@ -108,8 +108,7 @@ docatlayout = function(obj) {
     spvallst = pos_splvals(pos)
     if(istree <- is(obj, "LayoutAxisTree")) {
         kids = tree_children(obj)
-        lapply(kids, docatlayout)
-        return(NULL)
+        return(unlist(lapply(kids, layoutmsg)))
         
     }
     
@@ -117,14 +116,13 @@ docatlayout = function(obj) {
                 mapply(spldesc, 
                        spl = spllst,
                        value = spvallst))
-    cat(msg,
-        "\n")
-    NULL
+    msg
 }
 
 setMethod("show", "LayoutAxisTree",
           function(object) {
-    docatlayout(object)
+    msg = layoutmsg(object)
+    cat(msg, "\n")
     invisible(object)
 })
 
@@ -230,4 +228,31 @@ setMethod("show", "TreePos",
         
     msg = paste(chars, collapse = " -> ")
     cat("An object of class ", class(object), "\n\n", msg)
+})
+
+
+setMethod("show", "InstantiatedColumnInfo",
+          function(object) {
+    layoutmsg = layoutmsg( coltree(object))
+    cat("An InstantiatedColumnInfo object",
+        "Columns:",
+        layoutmsg,
+        if(disp_ccounts(object))
+            paste("ColumnCounts:\n",
+                  paste(col_counts(object),
+                        collapse = ", ")),
+        "",
+        sep = "\n")
+    
+    ## tmpdf = data.frame(col_layout = layoutmsg,
+    ##            count = col_counts(object),
+    ##            expr = vapply(col_exprs(object),
+    ##                          as.character,
+    ##                          ""),
+               
+    ##            col_args = I(cextra_args(object)),
+    ##            stringsAsFactors = FALSE)
+    ## row.names(tmpdf) = NULL
+    ## print(tmpdf)
+    invisible(object)
 })

@@ -139,13 +139,13 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
             }
         }
 
-        if(is.null(spl_child_order(spl)))
+        if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
             vord = seq_along(vals)
-        else {
+        } else {
             vord = match(spl_child_order(spl),
                          vals)
             vord = vord[!is.na(vord)]
-        }
+        } 
                 
         ## FIXME: should be an S4 object, not a list
         ret = list(values = vals[vord],
@@ -238,14 +238,14 @@ setMethod(".applysplit_rawvals", "MultiVarSplit",
 })
 
 setMethod(".applysplit_rawvals", "AllSplit",
-          function(spl, df) TRUE)
+          function(spl, df) "all obs")
 
 setMethod(".applysplit_rawvals", "ManualSplit",
           function(spl, df) spl@levels)
 
 
 setMethod(".applysplit_rawvals", "NULLSplit",
-          function(spl, df) FALSE)
+          function(spl, df) "")
 
 setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
           function(spl, df) spl_payload(spl))

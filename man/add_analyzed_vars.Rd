@@ -4,8 +4,16 @@
 \alias{add_analyzed_vars}
 \title{Generate Rows Analyzing Variables Across Columns}
 \usage{
-add_analyzed_vars(lyt, var, lbl = var, afun, fmt = NULL,
-  rowlabs = "", newtoplev = FALSE, inclNAs = FALSE)
+add_analyzed_vars(
+  lyt,
+  var,
+  lbl = var,
+  afun,
+  fmt = NULL,
+  rowlabs = "",
+  newtoplev = FALSE,
+  inclNAs = FALSE
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}

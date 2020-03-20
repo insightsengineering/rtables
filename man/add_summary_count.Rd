@@ -4,8 +4,7 @@
 \alias{add_summary_count}
 \title{Add a content row of summary counts}
 \usage{
-add_summary_count(lyt, var = NULL, rowlblf = "\%s",
-  fmt = "xx (xx.x\%)")
+add_summary_count(lyt, var = NULL, rowlblf = "\%s", fmt = "xx (xx.x\%)")
 }
 \description{
 Add a content row of summary counts

@@ -7,7 +7,7 @@ Also handles case when it is of class by_all
 x can be NULL if col_by is not of class by_all
 returns transformed col_by as a matrix}
 \usage{
-col_by_to_matrix(col_by, x = NULL)
+col_by_to_matrix(col_by, x)
 }
 \arguments{
 \item{col_by}{factor or data.frame to convert}

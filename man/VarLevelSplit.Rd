@@ -7,13 +7,32 @@
 \alias{VarLevWBaselineSplit}
 \title{Split on levels within a variable}
 \usage{
-VarLevelSplit(var, splbl, valuelblvar = NULL, cfun = NULL,
-  cfmt = NULL, splfun = NULL, splfmt = NULL, valorder = NULL,
-  splname = var, kid_labs = NA)
+VarLevelSplit(
+  var,
+  splbl,
+  valuelblvar = NULL,
+  cfun = NULL,
+  cfmt = NULL,
+  splfun = NULL,
+  splfmt = NULL,
+  valorder = NULL,
+  splname = var,
+  kid_labs = NA
+)
 
-VarLevWBaselineSplit(var, baseline, valuelblvar = var,
-  incl_all = FALSE, splbl, lbl_fmt = "\%s - \%s", cfun = NULL,
-  cfmt = NULL, splfmt = NULL, valorder = NULL, splname = var)
+VarLevWBaselineSplit(
+  var,
+  baseline,
+  valuelblvar = var,
+  incl_all = FALSE,
+  splbl,
+  lbl_fmt = "\%s - \%s",
+  cfun = NULL,
+  cfmt = NULL,
+  splfmt = NULL,
+  valorder = NULL,
+  splname = var
+)
 }
 \arguments{
 \item{var}{string, variable name}

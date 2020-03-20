@@ -4,9 +4,16 @@
 \alias{MultiVarSplit}
 \title{Split between two or more different variables}
 \usage{
-MultiVarSplit(vars, splbl, varlbls = NULL, cfun = NULL, cfmt = NULL,
-  splfmt = NULL, splname = paste(vars, collapse = ":"),
-  kid_labs = NA)
+MultiVarSplit(
+  vars,
+  splbl,
+  varlbls = NULL,
+  cfun = NULL,
+  cfmt = NULL,
+  splfmt = NULL,
+  splname = paste(vars, collapse = ":"),
+  kid_labs = NA
+)
 }
 \arguments{
 \item{vars}{character vector. Multiple variable names.}

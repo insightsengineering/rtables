@@ -4,8 +4,13 @@
 \alias{by_compare_subset}
 \title{Compare Subset to Current col_by Levels}
 \usage{
-by_compare_subset(col_by, subset, label_all = "all",
-  label_subset = "subset", sep = " - ")
+by_compare_subset(
+  col_by,
+  subset,
+  label_all = "all",
+  label_subset = "subset",
+  sep = " - "
+)
 }
 \arguments{
 \item{col_by}{factor or matrix to add column to, e.g. output of \code{\link{col_by_to_matrix}}}

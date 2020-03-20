@@ -10,8 +10,13 @@
 \alias{ContentRow}
 \title{Row constructors and Classes}
 \usage{
-LabelRow(lev = 1L, lab = "", name = lab, vis = !is.na(lab) &&
-  nzchar(lab), cinfo = InstantiatedColumnInfo())
+LabelRow(
+  lev = 1L,
+  lab = "",
+  name = lab,
+  vis = !is.na(lab) && nzchar(lab),
+  cinfo = InstantiatedColumnInfo()
+)
 
 DataRow(...)
 

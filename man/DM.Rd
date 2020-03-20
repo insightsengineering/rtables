@@ -4,7 +4,9 @@
 \name{DM}
 \alias{DM}
 \title{DM data}
-\format{rds (data.frame)}
+\format{
+rds (data.frame)
+}
 \usage{
 DM
 }

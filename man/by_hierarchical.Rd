@@ -2,22 +2,18 @@
 % Please edit documentation in R/col_by.R
 \name{by_hierarchical}
 \alias{by_hierarchical}
-\title{Hierarchical col_by}
+\title{DEFUNCT Hierarchical col_by}
 \usage{
 by_hierarchical(...)
 }
 \arguments{
-\item{...}{factors or col_by matrices. When a by element in the list 
-  is a matrix, it allows for non-disjoint columns
-
-todo: returned col_by column names are not correct}
+\item{...}{DEFUNCT}
 }
 \value{
-structure(col_by matrix, header = ) a list of labelled headers (one per row), 
-  col_by matrix corresponding to all combinations
+DEFUNCT
 }
 \description{
-Hierarchical col_by
+DEFUNCT Hierarchical col_by
 }
 \examples{
 SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
@@ -30,4 +26,7 @@ col_by
 colnames(col_by)
 attr(col_by, "header")
 rtables:::by_header_to_string(attr(col_by, "header"))
+}
+\seealso{
+\code{\link{manual_cols}}
 }

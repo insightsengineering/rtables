@@ -4,9 +4,16 @@
 \alias{rtabulate.factor}
 \title{Tabulate Factors}
 \usage{
-\method{rtabulate}{factor}(x, col_by = by_all("All"), FUN = length,
-  ..., useNA = c("ifany", "no", "always"), format = NULL, indent = 0,
-  col_wise_args = NULL)
+\method{rtabulate}{factor}(
+  x,
+  col_by = by_all("All"),
+  FUN = length,
+  ...,
+  useNA = c("ifany", "no", "always"),
+  format = NULL,
+  indent = 0,
+  col_wise_args = NULL
+)
 }
 \arguments{
 \item{x}{a vector}

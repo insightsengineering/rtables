@@ -4,9 +4,16 @@
 \alias{rtabulate.logical}
 \title{Tabulate a logical vector}
 \usage{
-\method{rtabulate}{logical}(x, col_by = by_all("col_1"), FUN = sum,
-  ..., format = NULL, row.name = NULL, indent = 0,
-  col_wise_args = NULL)
+\method{rtabulate}{logical}(
+  x,
+  col_by = by_all("col_1"),
+  FUN = sum,
+  ...,
+  format = NULL,
+  row.name = NULL,
+  indent = 0,
+  col_wise_args = NULL
+)
 }
 \arguments{
 \item{x}{a vector}

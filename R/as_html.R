@@ -1,16 +1,12 @@
+
 #' Convert an \code{\link{rtable}} object to an \code{shiny.tag} html
 #' representation of the \code{\link{rtable}}
 #' 
 #' The returned html object can be immediately used in shiny and rmarkdown
 #' 
-#' @inheritParams dim.rtable
-#' @param ... arguments passed as attributes to the table html objet
-#' 
-#' @return an object of class \code{shiny.tag}
-#' 
-#' 
-#' @export
-#' 
+#' @param x object
+#' @param ... additional arguments currently not used
+#' @rdname as_html
 #' @examples 
 #' 
 #' tbl <- rtable(
@@ -26,19 +22,6 @@
 #' as_html(tbl, class.table = "table", class.tr = "row")
 #' 
 #' as_html(tbl, class.td = "aaa")
-#' 
-## as_html <- function(x, ...) {
-##   UseMethod("as_html", x)  
-## }
-
-
-#' Generic for as_html
-#' 
-#' Generic method for as_html
-#' 
-#' @param x object
-#' @param ... additional arguments currently not used
-#' 
 #' @export
 setGeneric("as_html", function(x, ...) standardGeneric("as_html"))
 

@@ -4,8 +4,16 @@
 \alias{add_rowby_varlevels}
 \title{Add Rows according to levels of a variable}
 \usage{
-add_rowby_varlevels(lyt, var, lbl = var, vlblvar = var,
-  splfun = NULL, fmt = NULL, newtoplev = FALSE, kidlbls = NA)
+add_rowby_varlevels(
+  lyt,
+  var,
+  lbl = var,
+  vlblvar = var,
+  splfun = NULL,
+  fmt = NULL,
+  newtoplev = FALSE,
+  kidlbls = NA
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -29,7 +37,7 @@ library(magrittr)
 
 l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_colby_varlevels("SEX", "Gender") \%>\%
-  add_summary_count(lbl = "Overall (N)") \%>\%
+  add_summary_count(rowlblf = "Overall (N)") \%>\%
   add_rowby_varlevels("RACE", "Ethnicity") \%>\%
   add_summary_count("RACE", rowlblf = "\%s (n)") \%>\%
   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")

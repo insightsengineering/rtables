@@ -176,7 +176,7 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
 #' @examples 
 #' by_all("total")
 #' col_by_to_matrix(by_all("total"), x = 1:3)
-by_all <- function(name) {
+by_all_old <- function(name) {
   structure(name, class = "by_all")
 }
 
@@ -285,15 +285,13 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
   df
 }
 
-#' Hierarchical col_by
+#' DEFUNCT Hierarchical col_by
 #' 
-#' @param ... factors or col_by matrices. When a by element in the list 
-#'   is a matrix, it allows for non-disjoint columns
+#' @param ... DEFUNCT
+#' 
+#' @return DEFUNCT
 #'
-#' todo: returned col_by column names are not correct
-#' 
-#' @return structure(col_by matrix, header = ) a list of labelled headers (one per row), 
-#'   col_by matrix corresponding to all combinations
+#' @seealso \code{\link{manual_cols}}
 #' 
 #' @examples
 #' SEX <- with_label(factor(c("M", "M", "F", "F", "F")), "Sex")
@@ -307,36 +305,46 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 #' attr(col_by, "header")
 #' rtables:::by_header_to_string(attr(col_by, "header"))
 by_hierarchical <- function(...) {
-  by_lst <- list(...)
-  stopifnot(length(by_lst) > 0)
-  by <- col_by_to_matrix(by_lst[[1]])
-  if (length(by_lst) == 1) {
-    structure(
-      by,
-      header = list(rrowl(row.name = label(by), colnames(by)))
-    )
-  } else {
-    subres <- do.call(by_hierarchical, by_lst[-1])
-    header <- do.call(
-      rheader,
-      c(
-        list(rrowl(
-          row.name = label(by), 
-          lapply(
-            colnames(by), 
-            function(col_name) rcell(col_name, colspan = ncell(attr(subres, "header")[[1]]))
-          )
-        )),
-        Reduce(combine_rrows, lapply(by, function(discard) attr(subres, "header")))
-      )
-    )
-    by_combined <- as.data.frame(do.call(cbind, lapply(by, function(rows) subres & rows)))
-    colnames(by_combined) <- by_header_to_string(header)
-    structure(
-      by_combined,
-      header = header
-    )
-  }
+    .Deprecated("manual_cols", package = "rtables", msg = "Use manual_cols to create nested, hierarchical column layouts")
+    
+    by_lst <- list(...)
+    by_lst <- lapply(by_lst, function(vc) {
+        if(is(vc, "factor"))
+            levels(vc)
+        else
+            unique(vc)
+    })
+    return(manual_cols(.lst = by_lst))
+    
+  ## stopifnot(length(by_lst) > 0)
+  ## by <- col_by_to_matrix(by_lst[[1]])
+  ## if (length(by_lst) == 1) {
+  ##   structure(
+  ##     by,
+  ##     header = list(old_rrowl(row.name = label(by), colnames(by)))
+  ##   )
+  ## } else {
+  ##   subres <- do.call(by_hierarchical, by_lst[-1])
+  ##   header <- do.call(
+  ##     old_rheader,
+  ##     c(
+  ##       list(old_rrowl(
+  ##         row.name = label(by), 
+  ##         lapply(
+  ##           colnames(by), 
+  ##           function(col_name) old_rcell(col_name, colspan = ncell(attr(subres, "header")[[1]]))
+  ##         )
+  ##       )),
+  ##       Reduce(combine_rrows, lapply(by, function(discard) attr(subres, "header")))
+  ##     )
+  ##   )
+  ##   by_combined <- as.data.frame(do.call(cbind, lapply(by, function(rows) subres & rows)))
+  ##   colnames(by_combined) <- by_header_to_string(header)
+  ##   structure(
+  ##     by_combined,
+  ##     header = header
+  ##   )
+  ## }
 }
 
 ## credit: rlang, Henry and Wickham.

@@ -4,8 +4,14 @@
 \alias{add_colby_varlevels}
 \title{Declaring a column-split based on levels of a variable}
 \usage{
-add_colby_varlevels(lyt, var, lbl = var, valuelblvar = var,
-  splfmt = NULL, newtoplev = FALSE)
+add_colby_varlevels(
+  lyt,
+  var,
+  lbl = var,
+  valuelblvar = var,
+  splfmt = NULL,
+  newtoplev = FALSE
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}

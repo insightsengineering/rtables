@@ -139,7 +139,12 @@ create_colinfo = function(lyt, df, rtpos = TreePos()) {
     ## NOT after any splitting has occured. Otherwise
     ## the counts will obviously be wrong.
     counts = sapply(cexprs, function(ex) {
-        sum(eval(ex, envir = df))
+        if(identical(ex, expression(TRUE)))
+            nrow(df)
+        else if (identical(ex, expression(FALSE)))
+            0
+        else
+            sum(eval(ex, envir = df))
     })
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,

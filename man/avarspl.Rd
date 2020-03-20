@@ -6,16 +6,44 @@
 \alias{AVarBaselineComp}
 \title{Define a subset tabulation/analysis}
 \usage{
-AnalyzeVarSplit(var, splbl, afun, defrowlab = "", cfun = NULL,
-  cfmt = NULL, splfmt = NULL, inclNAs = FALSE, splname = var)
+AnalyzeVarSplit(
+  var,
+  splbl,
+  afun,
+  defrowlab = "",
+  cfun = NULL,
+  cfmt = NULL,
+  splfmt = NULL,
+  inclNAs = FALSE,
+  splname = var
+)
 
-AnalyzeMultiVars(var, splbl = "", afun, defrowlab = "", cfun = NULL,
-  cfmt = NULL, splfmt = NULL, inclNAs = FALSE, .payload = NULL,
-  splname = NULL)
+AnalyzeMultiVars(
+  var,
+  splbl = "",
+  afun,
+  defrowlab = "",
+  cfun = NULL,
+  cfmt = NULL,
+  splfmt = NULL,
+  inclNAs = FALSE,
+  .payload = NULL,
+  splname = NULL
+)
 
-AVarBaselineComp(var, splbl, afun, compfun = `-`, valuelblvar = NULL,
-  cfun = NULL, cfmt = NULL, splfun = NULL, splfmt = NULL,
-  valorder = NULL, splname = var)
+AVarBaselineComp(
+  var,
+  splbl,
+  afun,
+  compfun = `-`,
+  valuelblvar = NULL,
+  cfun = NULL,
+  cfmt = NULL,
+  splfun = NULL,
+  splfmt = NULL,
+  valorder = NULL,
+  splname = var
+)
 }
 \arguments{
 \item{var}{string, variable name}

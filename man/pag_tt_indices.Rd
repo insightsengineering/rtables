@@ -4,8 +4,14 @@
 \alias{pag_tt_indices}
 \title{Determine pagination of a TableTree}
 \usage{
-pag_tt_indices(tt, lpp = 15, min_siblings = 2,
-  nosplitin = character(), colwidths = NULL, verbose = FALSE)
+pag_tt_indices(
+  tt,
+  lpp = 15,
+  min_siblings = 2,
+  nosplitin = character(),
+  colwidths = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}

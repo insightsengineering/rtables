@@ -326,7 +326,7 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_varlevels("SEX", "Gender") %>%
-#'   add_summary_count(lbl = "Overall (N)") %>%
+#'   add_summary_count(rowlblf = "Overall (N)") %>%
 #'   add_rowby_varlevels("RACE", "Ethnicity") %>%
 #'   add_summary_count("RACE", rowlblf = "%s (n)") %>%
 #'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")

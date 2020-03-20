@@ -134,7 +134,7 @@ setMethod("next_rpos", "ANY", function(obj, newtree) 1L)
 setGeneric("next_cpos", function(obj, newtree = FALSE) standardGeneric("next_cpos"))
 
 setMethod("next_cpos", "PreDataTableLayouts",
-          function(obj, newtree) next_cpos(rlayout(obj), newtree))
+          function(obj, newtree) next_cpos(clayout(obj), newtree))
 
 setMethod("next_cpos", "PreDataColLayout",
           function(obj, newtree) {
@@ -457,6 +457,10 @@ setMethod("spl_child_order",
 setMethod("spl_child_order",
           "MultiVarSplit",
           function(obj) spl_payload(obj))
+
+setMethod("spl_child_order",
+          "AllSplit",
+          function(obj) character())
 
 
 
@@ -1145,7 +1149,9 @@ setMethod("colcount_fmt<-", "PreDataTableLayouts",
     obj
 })
 
-
+#' Exported for use in tern
+#' @rdname fortern
+#' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
 setMethod("no_colinfo", "VTableNodeInfo",
           function(obj) no_colinfo(col_info(obj)))
@@ -1183,8 +1189,34 @@ setMethod("names", "LayoutColTree",
 #' @exportMethod row.names
 setMethod("row.names", "VTableTree",
           function(x) {
-    sapply(collect_leaves(x, add.labrows = TRUE),
-           obj_label) ## XXXX this should probably be obj_name???
+    unname(sapply(collect_leaves(x, add.labrows = TRUE),
+           obj_label, USE.NAMES = FALSE)) ## XXXX this should probably be obj_name???
 
 
 })
+
+
+
+
+#' convert to a vector
+#'@rdname asvec
+#' @exportMethod as.vector
+setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
+#'@rdname asvec
+#' @exportMethod as.vector
+setMethod("as.vector", "ElementaryTable", function(x, mode) {
+    stopifnot(nrow(x) == 1L)
+    as.vector(tree_children(x)[[1]], mode = mode)
+})
+
+#'@rdname asvec
+#' @exportMethod as.vector
+setMethod("as.vector", "VTableTree", function(x, mode) {
+    stopifnot(nrow(x) == 1L)
+    if(nrow(content_table(x)) == 1L)
+        tab = content_table(x)
+    else
+        tab = x
+    as.vector(tree_children(tab)[[1]], mode = mode)
+})
+

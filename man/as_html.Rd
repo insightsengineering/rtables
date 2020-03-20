@@ -10,12 +10,7 @@ as_html(x, ...)
 \arguments{
 \item{x}{object}
 
-\item{...}{arguments passed as attributes to the table html objet}
-
 \item{...}{additional arguments currently not used}
-}
-\value{
-an object of class \code{shiny.tag}
 }
 \description{
 The returned html object can be immediately used in shiny and rmarkdown
@@ -35,9 +30,4 @@ as_html(tbl)
 as_html(tbl, class.table = "table", class.tr = "row")
 
 as_html(tbl, class.td = "aaa")
-
-Generic for as_html
-
-Generic method for as_html
-
 }

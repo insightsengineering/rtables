@@ -4,8 +4,16 @@
 \alias{rtabulate.data.frame}
 \title{Split data.frame and apply functions}
 \usage{
-\method{rtabulate}{data.frame}(x, row_by, col_by, FUN, ...,
-  format = NULL, indent = 0, col_wise_args = NULL)
+\method{rtabulate}{data.frame}(
+  x,
+  row_by,
+  col_by,
+  FUN,
+  ...,
+  format = NULL,
+  indent = 0,
+  col_wise_args = NULL
+)
 }
 \arguments{
 \item{x}{data.frame}

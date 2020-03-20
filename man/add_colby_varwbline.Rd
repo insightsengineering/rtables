@@ -4,8 +4,16 @@
 \alias{add_colby_varwbline}
 \title{Declaring a column-split with a Baseline level}
 \usage{
-add_colby_varwbline(lyt, var, baseline, incl_all = FALSE, lbl,
-  valuelblvar, splfmt = NULL, newtoplev = FALSE)
+add_colby_varwbline(
+  lyt,
+  var,
+  baseline,
+  incl_all = FALSE,
+  lbl,
+  valuelblvar,
+  splfmt = NULL,
+  newtoplev = FALSE
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
