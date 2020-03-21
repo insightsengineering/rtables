@@ -304,17 +304,22 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 #' colnames(col_by)
 #' attr(col_by, "header")
 #' rtables:::by_header_to_string(attr(col_by, "header"))
+#' @export
 by_hierarchical <- function(...) {
     .Deprecated("manual_cols", package = "rtables", msg = "Use manual_cols to create nested, hierarchical column layouts")
     
-    by_lst <- list(...)
+    by_lst <- data.frame(...) ##list(...)
+    return(by_lst)
     by_lst <- lapply(by_lst, function(vc) {
         if(is(vc, "factor"))
             levels(vc)
         else
             unique(vc)
     })
-    return(manual_cols(.lst = by_lst))
+    lyt = NULL
+    for(stuff in by_lst)
+        lyt <- add_col_split(lyt, ManualSplit(stuff, lbl = ""), pos = next_cpos(lyt))
+    return(lyt)
     
   ## stopifnot(length(by_lst) > 0)
   ## by <- col_by_to_matrix(by_lst[[1]])

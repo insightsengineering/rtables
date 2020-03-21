@@ -851,6 +851,8 @@ setMethod("clayout", "ANY", function(obj) PreDataColLayout())
 
 
 
+
+
 #'@rdname col_accessors
 #' @export
 setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
@@ -1025,6 +1027,13 @@ setMethod("cextra_args", "LayoutColTree",
     get_col_extras(obj)
 })
 
+setMethod("cextra_args", "LayoutColLeaf",
+          function(obj, df) {
+    if(!is.null(df))
+        warning("Ignoring df argument and returning already calculated extra arguments")
+
+    get_pos_extra(pos = tree_pos(obj))
+    })
 
 setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
 
@@ -1219,4 +1228,5 @@ setMethod("as.vector", "VTableTree", function(x, mode) {
         tab = x
     as.vector(tree_children(tab)[[1]], mode = mode)
 })
+
 
