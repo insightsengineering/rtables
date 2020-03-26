@@ -10,7 +10,8 @@ add_colby_varlevels(
   lbl = var,
   valuelblvar = var,
   splfmt = NULL,
-  newtoplev = FALSE
+  newtoplev = FALSE,
+  extrargs = list()
 )
 }
 \arguments{

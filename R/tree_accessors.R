@@ -1035,6 +1035,12 @@ setMethod("cextra_args", "LayoutColLeaf",
     get_pos_extra(pos = tree_pos(obj))
     })
 
+
+
+
+
+
+
 setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
 
 setMethod("col_counts",  "InstantiatedColumnInfo",

@@ -156,6 +156,7 @@ setMethod("add_col_split", "PreDataColLayout",
            } else {
                SplitVector(spl)
            }
+
     lyt[[pos]] = tmp
     lyt
 })
@@ -271,7 +272,8 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' build_table(l3, DM)
 #' 
-add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE) {
+add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE,
+                               extrargs = list()) {
     spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt, kid_labs = FALSE)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)

@@ -229,7 +229,10 @@ setMethod("check_validsplit", "Split",
 setMethod(".applysplit_rawvals", "VarLevelSplit",
           function(spl, df) {
     varvec = df[[spl_payload(spl)]]
-    unique(varvec)
+    if(is.factor(varvec))
+        levels(varvec)
+    else
+        unique(varvec)
 })
 
 setMethod(".applysplit_rawvals", "MultiVarSplit",
@@ -238,7 +241,7 @@ setMethod(".applysplit_rawvals", "MultiVarSplit",
 })
 
 setMethod(".applysplit_rawvals", "AllSplit",
-          function(spl, df) "all obs")
+          function(spl, df) obj_name(spl)) #"all obs")
 
 setMethod(".applysplit_rawvals", "ManualSplit",
           function(spl, df) spl@levels)
@@ -359,18 +362,25 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
     varvec = df[[spl_payload(spl)]]
     lblvec = df[[spl_lblvar(spl)]]
     if(is.null(vals)) {
-
-        vals = unique(varvec)
+        vals = if(is.factor(varvec))
+                   levels(varvec)
+               else
+                   unique(varvec)
     }
  
-    if(is.null(lbls))
-        lbls = sapply(vals, function(v) {
-            vlbl = unique(df[df[[spl_payload(spl)]] == v,
-                             spl_lblvar(spl), drop = TRUE])
-            if(length(vlbl) == 0)
-                vlbl = ""
-            vlbl
-        })
+    if(is.null(lbls)) {
+        ##XXX dangerous
+        if(is.factor(varvec))
+            lbls = vals
+        else
+            lbls = sapply(vals, function(v) {
+                vlbl = unique(df[df[[spl_payload(spl)]] == v,
+                                 spl_lblvar(spl), drop = TRUE])
+                if(length(vlbl) == 0)
+                    vlbl = ""
+                vlbl
+            })
+    }
     fct = factor(varvec, levels = vals)
     spl = split(df, fct)
     ## should always be true or the above would have broken

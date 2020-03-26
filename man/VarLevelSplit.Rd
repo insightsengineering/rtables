@@ -17,7 +17,8 @@ VarLevelSplit(
   splfmt = NULL,
   valorder = NULL,
   splname = var,
-  kid_labs = NA
+  kid_labs = NA,
+  extrargs = list()
 )
 
 VarLevWBaselineSplit(
@@ -31,7 +32,8 @@ VarLevWBaselineSplit(
   cfmt = NULL,
   splfmt = NULL,
   valorder = NULL,
-  splname = var
+  splname = var,
+  extrargs = list()
 )
 }
 \arguments{

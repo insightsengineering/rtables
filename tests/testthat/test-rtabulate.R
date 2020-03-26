@@ -22,7 +22,6 @@ test_that("rtabulate length tests", {
   
   rt_test(seq_along(cb)) # numeric
   rt_test(rep(TRUE, length(cb))) # logical
-  
   # factor
   
   tbl <- rtabulate(cbf, cbf)

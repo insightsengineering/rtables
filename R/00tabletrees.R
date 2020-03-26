@@ -96,7 +96,8 @@ VarLevelSplit = function(var,
                          splfmt = NULL,
                          valorder = NULL,
                          splname = var,
-                         kid_labs = NA) {
+                         kid_labs = NA,
+                         extrargs = list()) {
     if(is.null(valuelblvar))
         valuelblvar = var
     new("VarLevelSplit", payload = var,
@@ -108,7 +109,8 @@ VarLevelSplit = function(var,
         split_fun = splfun,
         split_format = splfmt,
         value_order = NULL,
-        label_children = kid_labs
+        label_children = kid_labs,
+        extra_args = extrargs
         )
 }
 setClass("NULLSplit", contains = "Split",
@@ -124,13 +126,14 @@ setClass("AllSplit", contains = "Split",
          validity = function(object) length(object@payload) == 0
          )
 
-AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname = "ALL", ...) {
+AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname = if(!missing(splbl) && nzchar(splbl)) splbl else "all obs", extrargs = list(), ...) {
     new("AllSplit", split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = FALSE)
+        label_children = FALSE,
+        extra_args = extrargs)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -151,12 +154,14 @@ setClass("ManualSplit", contains = "AllSplit",
 #'
 #' @inheritParams argument_conventions
 #' @export
-ManualSplit = function(levs, lbl, name = "manual") {
+ManualSplit = function(levs, lbl, name = "manual",
+                       extrargs = list()) {
     new("ManualSplit",
         split_label = lbl,
         levels = levs,
         name = name,
-        label_children = FALSE)
+        label_children = FALSE,
+        extra_args = extrargs)
     
 }
 
@@ -181,7 +186,8 @@ MultiVarSplit = function(vars,
                          cfmt = NULL,
                          splfmt = NULL,
                          splname = paste(vars, collapse = ":"),
-                         kid_labs = NA) {
+                         kid_labs = NA,
+                         extrargs = list()) {
 
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
@@ -193,7 +199,8 @@ MultiVarSplit = function(vars,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        label_children = kid_labs)
+        label_children = kid_labs,
+        extra_args = extrargs)
 }
 
 
@@ -209,7 +216,8 @@ VarStaticCutSplit = function(var,
                              cfmt = NULL,
                              splfmt = NULL,
                              splname = var,
-                             kid_labs = NA) {
+                             kid_labs = NA,
+                             extrargs = list()) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
        length(cuts[[1]]) == length(cuts[[2]])) {
@@ -229,7 +237,8 @@ VarStaticCutSplit = function(var,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = kid_labs)
+        label_children = kid_labs,
+        extra_args = extrargs)
 }
 
 
@@ -247,7 +256,8 @@ VarDynCutSplit = function(var,
                           cfmt = NULL,
                           splfmt = NULL,
                           splname = var,
-                          kid_labs = NA) {
+                          kid_labs = NA,
+                          extrargs = list()) {
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
@@ -255,7 +265,8 @@ VarDynCutSplit = function(var,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = kid_labs)
+        label_children = kid_labs,
+        extra_args = extrargs)
 }
 
 setClass("AnalyzeVarSplit", contains = "Split",
@@ -277,7 +288,8 @@ AnalyzeVarSplit = function(var,
                            cfmt = NULL,
                            splfmt = NULL,
                            inclNAs = FALSE,
-                           splname = var) {
+                           splname = var,
+                           extrargs = list()) {
     if(!any(nzchar(defrowlab)))
         defrowlab = as.character(substitute(afun))
     new("AnalyzeVarSplit",
@@ -290,7 +302,8 @@ AnalyzeVarSplit = function(var,
         default_rowlabel = defrowlab,
         include_NAs = inclNAs,
         name = splname,
-        label_children = FALSE)
+        label_children = FALSE,
+        extra_args = extrargs)
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -310,7 +323,9 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 #' @export
 AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE,
                             .payload = NULL,
-                            splname = NULL) {
+                            splname = NULL,
+                            extrargs = list()
+                            ) {
     if(is.null(.payload)) {
         nv = length(var)
         defrowlab = .repoutlst(defrowlab, nv)
@@ -353,7 +368,8 @@ AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, c
              split_format = NULL,
              content_fun = NULL,
              content_format = NULL,
-             label_children = TRUE)
+             label_children = TRUE,
+             extra_args = extrargs)
      }
 }
 
@@ -375,7 +391,9 @@ AVarBaselineComp = function(var,
                             splfun = NULL,
                             splfmt = NULL,
                             valorder = NULL,
-                            splname = var) {
+                            splname = var,
+                            extrargs = list()
+                            ) {
     if(is.null(valuelblvar))
         valuelblvar = var
     new("AVarBaselineComp", payload = var, split_label = splbl,
@@ -386,7 +404,8 @@ AVarBaselineComp = function(var,
         split_format = splfmt,
         value_order = valorder,
         comparison_fun = compfun,
-        name = splname
+        name = splname,
+        extra_args = extrargs
         )
 }
 
@@ -493,7 +512,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
                              ## not needed I Think...
                              cfun =  NULL, cfmt = NULL, splfmt = NULL,
                              valorder = NULL,
-                             splname = var) {
+                             splname = var,
+                             extrargs = list()) {
     new("VarLevWBaselineSplit",
         payload = var,
         baseline_value = baseline,
@@ -507,7 +527,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = FALSE) ## this is always a column split
+        label_children = FALSE,
+        extra_args = extrargs) ## this is always a column split
 }
                         
 
@@ -532,20 +553,21 @@ setClass("CompSubsetVectors",
 
 
 
-
+### XXX I think this was out of datte and wrong so
+### I commented it out
         
-Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra = NULL) {
-    switch(type,
-           varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           multivar = MultiVarSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           null = NULLSplit(),
-           all = AllSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           root = RootSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-           stop("Don't know how to make a split of type ", type)
-           )
-}
+## Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra = NULL) {
+##     switch(type,
+##            varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            multivar = MultiVarSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            null = NULLSplit(),
+##            all = AllSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            root = RootSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
+##            stop("Don't know how to make a split of type ", type)
+##            )
+## }
 
 
 ###
@@ -753,7 +775,7 @@ setClass("InstantiatedColumnInfo",
     length(object@subset_exprs) == nleaves &&
         length(object@cextra_args) == nleaves &&
         length(counts) == nleaves &&
-        (all(is.na(counts)) || all(!is.na(counts) & counts > 0))
+        (all(is.na(counts)) || all(!is.na(counts)))
 })
 
 InstantiatedColumnInfo = function(treelyt = LayoutColTree(),

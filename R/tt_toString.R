@@ -73,7 +73,8 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   txt_head <- apply(head(content, nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
   
-  paste(c(txt_head, div, txt_body), collapse = "\n")
+  paste0(paste(c(txt_head, div, txt_body), collapse = "\n"),
+           "\n")
   
 })
 

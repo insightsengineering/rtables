@@ -12,7 +12,8 @@ MultiVarSplit(
   cfmt = NULL,
   splfmt = NULL,
   splname = paste(vars, collapse = ":"),
-  kid_labs = NA
+  kid_labs = NA,
+  extrargs = list()
 )
 }
 \arguments{

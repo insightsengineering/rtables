@@ -46,6 +46,7 @@ Collate:
     'rbind.R'
     'rtable.R'
     'rtabulate.R'
+    'rtabulate_refactor.R'
     'sort.R'
     'split_funs.R'
     'toString.R'

@@ -42,9 +42,11 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 
     rawvals = mapply(function(csub, col, count, cextr) {
         inds = eval(csub, envir = dfpart)
-        dat = dfpart[inds,]
-        if(nrow(dat) == 0L)
-            return(NULL)
+
+        dat = dfpart[inds,,drop = FALSE]
+                
+        ## if(nrow(dat) == 0L)
+        ##     return(list(NULL))
         
         if(!is.null(col) && !.takes_df(func))
             dat = dat[[col]]
@@ -102,6 +104,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     lbls = names(rawvals[[maxind]])
     if(is.null(lbls) && length(rawvals[[maxind]]) == length(defrowlabs))
         lbls = defrowlabs
+    ## else ## XXX WHY WAS I DOINIG THIS??!?!?!?!?!
+    ##     lbls = rep("", length(rawvals[[maxind]]))
         
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
@@ -374,11 +378,15 @@ recursive_applysplit = function( df,
 #' 
 #' build_table(l, DM) 
 #' @export
-build_table = function(lyt, df, ...) {
+build_table = function(lyt, df,
+                       col_args = NULL,
+                       col_counts = NULL,
+                       ...) {
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
 
-    cinfo = create_colinfo(lyt, df, rtpos)
+    cinfo = create_colinfo(lyt, df, rtpos,
+                           counts = col_counts)
     
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
@@ -453,7 +461,10 @@ setMethod("set_def_child_ord", "VarLevelSplit",
         return(lyt)
     
     vec = df[[spl_payload(lyt)]]
-    vals = unique(vec)
+    vals <- if(is.factor(vec))
+                levels(vec)
+            else
+                unique(vec)
     spl_child_order(lyt) = vals
     lyt
 })

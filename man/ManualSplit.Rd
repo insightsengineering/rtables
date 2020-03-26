@@ -4,7 +4,7 @@
 \alias{ManualSplit}
 \title{Manually defined split}
 \usage{
-ManualSplit(levs, lbl, name = "manual")
+ManualSplit(levs, lbl, name = "manual", extrargs = list())
 }
 \arguments{
 \item{lbl}{string, label, often variable label}

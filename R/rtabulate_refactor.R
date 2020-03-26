@@ -1,34 +1,180 @@
-
-#' Tabulation Methods
+#' Default tabulation
 #'
-#' \code{rtablulate} provides a number of methods to derive
-#' \code{\link{rtable}}s. Conceptually the \code{rtabulate} has it's origin in
-#' \code{\link{tapply}}.
+#'
+#' This function is used when \code{\link{rtabulate}} is invoked
+#'
+#' @param x the \emph{already split} data being tabulated for a particular cell/set of cells
+#' @param \dots passed on directly
+#'
+#' @details This function has the following behavior given particular types of inputs:
+#' \describe{
+#' \item{numeric}{calls \code{\link{mean}} on \code{x}}
+#' \item{logical}{calls \code{\link{sum}} on \code{x}}
+#' \item{factor}{calls \code{\link{length}} on \code{x}}
+#' }
+#'
+#' All other classes of input currently lead to an error.
+#' @export
+#' @rdname rtinner
+#' @author Gabriel Becker and Adrian Waddell
+setGeneric("rtab_inner", function(x, ...) standardGeneric("rtab_inner"))
+#' @rdname rtinner
+#' @exportMethod rtab_inner
+setMethod("rtab_inner", "numeric", function(x, ...) mean(x,...))
+#' @rdname rtinner
+#' @exportMethod rtab_inner
+setMethod("rtab_inner", "logical", function(x, ...) sum(x,...))
+#' @rdname rtinner
+#' @exportMethod rtab_inner
+setMethod("rtab_inner", "factor", function(x, ...) as.list(table(x, ...)))
+#' @rdname rtinner
+#' @exportMethod rtab_inner
+setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behavior for class ", class(x), " please specify FUN  explicitly."))
+
+
+
+#' Direct Tabulation
+#'
+#' \code{rtablulate} provides a direct tabulation API conceptually derived from \code{\link{tapply}}.
 #' 
-#' The data is split into cell-data and a function can be specified that returns
-#' a data structure (or \code{\link{rcell}}).
+#' In practice, a Pre-data layout is built up based on the
+#' arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{rtab_inner}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
 #'   
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to methods
 #' 
 #' @return an \code{\link{rtable}} object
+#' @note For backwards compatibility, all paramters other than \code{x}, \code{col_by} and \code{FUN} appear after \dots so must be specified by full argument name.
 #' 
-#' @author Adrian Waddell
+#' @author Gabriel Becker and Adrian Waddell
 #'       
 #' @export
 #' 
-rtabulate_old <- function(x, ...) {
-  UseMethod("rtabulate_old")
+#' 
+rtabulate <- function(x,
+                     col_by = by_all("col_1"),
+                     FUN = rtab_inner,
+                     ...,
+                     row_by = NULL,                   
+                     format = NULL,
+                     row.name = "",
+                     indent = 0,
+                     col_wise_args = list(),
+                     total = NULL,
+                     col_N = NULL
+                     )  {
+
+    if(indent != 0) {
+        .Deprecated("Setting indent directly in rtabulate calls is no longer supported. Ingoring.")
+
+    }
+    usexnms = FALSE
+    lyt = NULL
+    
+    if(!inherits(x, "data.frame")) {
+        if(is(x, "list")) {
+            ## gotta guess whether this is many things to summarize or one...
+            ## XXX this is a fast first pass, revisit this
+            
+            if(length(unique(sapply(x, length))) != 1)
+                x = data.frame(.xvar = AsIs(x))
+            else {
+                x = as.data.frame(x, stringsAsFactors = TRUE)
+                usexnms = TRUE
+            }
+        } else {
+            ## SAF=TRUE since that is what the inner
+            ## method does anyway
+            x = as.data.frame(x, stringsAsFactors = TRUE)
+        }
+    } else {
+        usexnms = TRUE
+    }
+    lyt = NULL
+    xcols = names(x)
+    if(!is(col_by, "PreDataTableLayouts")) {
+        cby_df = as.data.frame(col_by)
+        cby_nms = paste0(".xxx_cby_", seq_along(cby_df))
+        names(cby_df) = cby_nms
+    
+    
+        fulld = cbind(x, cby_df)
+        lyt = NULL
+        newtop = FALSE
+        if(!is.null(total)) {
+            lyt <- rtables:::add_col_total(lyt, lbl = total)
+            newtop = TRUE
+        }
+        ## columns
+        
+        ## wrap it if there's only one to preserve old behavior
+        if(length(cby_nms) == 1 && length(col_wise_args) > 0)
+            col_wise_args <- list(col_wise_args)
+        
+        for(i in seq_along(cby_nms) ){
+            ex = if(length(col_wise_args) > i) col_wise_args[[i]] else list()
+            lyt <- add_colby_varlevels(lyt, cby_nms[i], newtoplev = newtop, extrargs = ex)
+            newtop = FALSE
+        }
+        
+    } else {
+        ## XXX todo this doesn't adhere too col_wise_args
+        ## but only happens currently if using by_all
+        ## so thats ... ok?
+        lyt = col_by
+        fulld = as.data.frame(x) ## is this safe???
+    }
+    
+    if(!is.null(row_by)) {
+        rdf <- as.data.frame(row_by,
+                             stringsAsFactors = FALSE)
+        fulld <- cbind(fulld,
+                       rdf)
+
+        for(rspl in names(rdf)) {
+            lyt <- add_rowby_varlevels(lyt,
+                                       rspl)
+        }
+    }
+    ## rows
+    lbls = if(usexnms) xcols else ""
+    lyt <- add_analyzed_vars(lyt,
+                             var = xcols,
+                             lbl = lbls,
+                             rowlabs = row.name,
+                             afun = FUN,
+                             fmt = format)
+    ## XXX a way to just return the layout?
+    ## but x needs to be padded with the relevant
+    ## columns so not sure...
+    build_table(lyt, fulld)    
 }
 
-# rtabulate_old default for vectors
+
+## rtabulate_ <- function(x,
+##                       col_by = by_all("col_1"),
+##                       row_by = NULL,
+##                       FUN, ...,
+##                       format = NULL,
+##                       row.name = "",
+##                       indent = 0,
+##                       col_wise_args = NULL) {
+
+ 
+
+
+    
+##   UseMethod("rtabulate")
+## }
+NULL
+# rtabulate default for vectors
 # 
 # This method is used for vectors of type \code{logical} and \code{numeric}
 # 
 # see parameter descrition for rtabulate.numeric
 #
 
-rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
+rtabulate_default <- function(x, col_by = by_all("col_1"), FUN, ...,
                               format = NULL, row.name = "", indent  = 0,
                               col_wise_args = NULL) {
   stopifnot(is.atomic(x)) # x[rows] only works for factors, not for data.frames
@@ -82,43 +228,43 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #'   the element name of the outer list. Hence, the length and order of each
 #'   collection must match the levels in \code{col_by}. See examples.
 #'
-#' @inherit rtabulate_old return
+#' @inherit rtabulate return
 #'
 #' @export
 #'
 #' @examples
 #'
-#' rtabulate_old(iris$Sepal.Length)
+#' rtabulate(iris$Sepal.Length)
 #'
-#' rtabulate_old(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
+#' rtabulate(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
 #'
-#' with(iris,  rtabulate_old(x = Sepal.Length, col_by = Species, row.name = "mean"))
+#' with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
 #'
 #' SL <- iris$Sepal.Length
 #' Sp <- iris$Species
 #' rbind(
-#'   rtabulate_old(SL, Sp, length, row.name = "n"),
-#'   rtabulate_old(SL, Sp, function(x)c(mean(x), sd(x)), format = "xx.xx (xx.xx)", row.name = "Mean (SD)"),
-#'   rtabulate_old(SL, Sp, median, row.name = "Median"),
-#'   rtabulate_old(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
+#'   rtabulate(SL, Sp, length, row.name = "n"),
+#'   rtabulate(SL, Sp, function(x)c(mean(x), sd(x)), format = "xx.xx (xx.xx)", row.name = "Mean (SD)"),
+#'   rtabulate(SL, Sp, median, row.name = "Median"),
+#'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
 #' 
 #' x <- 1:100
 #' cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
 #'   format = sprintf_format("%.2f (%.2f) and %i"), row.name = "Mean (SD) and N",
 #'   col_wise_args = list(N = table(cb))
 #' )
 #' 
-rtabulate_old.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
+rtabulate.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
                               format = NULL, row.name = NULL,
                               indent  = 0, col_wise_args = NULL) {
   
   if (is.null(row.name)) row.name <- paste(deparse(substitute(FUN)), collapse = ";")
   
-  rtabulate_old_default(
+  rtabulate_default(
     x = x, col_by = col_by, FUN = FUN, ...,
     format = format, row.name = row.name, indent = indent,
     col_wise_args = col_wise_args
@@ -129,34 +275,34 @@ rtabulate_old.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
 #' 
 #' By default each cell reports the number of \code{TRUE} observations from the associated vector. 
 #' 
-#' @inheritParams rtabulate_old.numeric
+#' @inheritParams rtabulate.numeric
 #' 
-#' @inherit rtabulate_old return
+#' @inherit rtabulate return
 #' 
 #' @export
 #' 
 #' @examples 
-#' rtabulate_old(iris$Species == "setosa")
+#' rtabulate(iris$Species == "setosa")
 #' 
-#' rtabulate_old(iris$Species == "setosa", by_all("Species"),
+#' rtabulate(iris$Species == "setosa", by_all("Species"),
 #'    FUN = function(x, N) list(sum(x), sum(x)/N),
 #'    row.name = "n (n/N)",
 #'    col_wise_args = list(N = 150)
 #' )
 #' 
 #' # default FUN is number of observations equal to TRUE
-#' with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
+#' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
 #'  
 #' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
 #' # in each column
-#' with(iris, rtabulate_old(Sepal.Length < 5, Species,
+#' with(iris, rtabulate(Sepal.Length < 5, Species,
 #'   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
 #'   format = "xx.xx (xx.xx%)",
 #'   row.name = "Sepal.Length < 5",
 #'   col_wise_args = list(N = table(Species))
 #' ))
 #' 
-rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
+rtabulate.logical <- function(x, col_by = by_all("col_1"),
                               FUN = sum,
                               ...,
                               format = NULL,
@@ -167,7 +313,7 @@ rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
   
   if (is.null(row.name)) row.name <- paste(deparse(substitute(FUN)), collapse = ";")
   
-  rtabulate_old_default(
+  rtabulate_default(
     x = x, col_by = col_by, FUN = FUN, ...,
     format = format, row.name = row.name, indent = indent,
     col_wise_args = col_wise_args
@@ -179,31 +325,31 @@ rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
 #' By default each cell reports the number of observations in
 #' each level of \code{x}. 
 #' 
-#' @inheritParams rtabulate_old.numeric
+#' @inheritParams rtabulate.numeric
 #' @param useNA either one of ("no", "ifany", "always"). If \code{"no"} then \code{NA} values
 #'   in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is 
 #'   included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"} 
 #'   \code{NA} values are always included in the summary even if none exist in \code{x}. 
 #' 
-#' @inherit rtabulate_old return
+#' @inherit rtabulate return
 #' 
 #' @export
 #' 
 #' @examples 
 #' 
-#' rtabulate_old(x = iris$Species)
-#' rtabulate_old(x = iris$Species, useNA = "always")
-#' rtabulate_old(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+#' rtabulate(x = iris$Species)
+#' rtabulate(x = iris$Species, useNA = "always")
+#' rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
 #' 
-#' rtabulate_old(x = iris$Species, by_all("sum"))
+#' rtabulate(x = iris$Species, by_all("sum"))
 #' 
 #' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'    labels = c("S.L > 5", "S.L <= 5"))
 #' 
-#' rtabulate_old(iris$Species, col_by = sl5)
-#' rtabulate_old(sl5, iris$Species)
+#' rtabulate(iris$Species, col_by = sl5)
+#' rtabulate(sl5, iris$Species)
 #' 
-#' rtabulate_old(iris$Species, col_by = sl5,
+#' rtabulate(iris$Species, col_by = sl5,
 #'    FUN = function(cell_data, N) {
 #'      if (length(cell_data) > 10) {
 #'         length(cell_data) * c(1, 1/N)
@@ -215,13 +361,13 @@ rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
 #'    col_wise_args = list(N = table(sl5))
 #' )
 #' 
-#' rtabulate_old(x = factor(c("X", "Y"), c("X", "Y")),
+#' rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
 #'           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
 #' 
-#' rtabulate_old(factor(c("Y", "Y"), c("X", "Y")),
+#' rtabulate(factor(c("Y", "Y"), c("X", "Y")),
 #'           factor(c("b", "b"), c("a", "b")), length)
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = factor(c("Y", "Y"), c("X", "Y")),
 #'   col_by = factor(c("b", "b"), c("a", "b")),
 #'   FUN = function(x, N) list(length(x), N),
@@ -229,7 +375,7 @@ rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
 #' )
 #'
 #'  
-rtabulate_old.factor <- function(x,
+rtabulate.factor <- function(x,
                              col_by = by_all("All"), 
                              FUN = length,
                              ...,
@@ -241,7 +387,7 @@ rtabulate_old.factor <- function(x,
   useNA <- match.arg(useNA)
   
   if (any("<NA>" %in% levels(x))) {
-    stop("factor with level '<NA>' is not valid in rtabulate_old.factor") 
+    stop("factor with level '<NA>' is not valid in rtabulate.factor") 
   }
   has_na <- any(is.na(x))
   levels(x) <- c(levels(x), "<NA>")
@@ -257,7 +403,7 @@ rtabulate_old.factor <- function(x,
   }
   
   columns <- levels(x)
-  tbl <- rtabulate_old(as.data.frame(x), 
+  tbl <- rtabulate(as.data.frame(x), 
             row_by = x, 
             col_by = col_by, 
             FUN = FUN, 
@@ -278,14 +424,14 @@ rtabulate_old.factor <- function(x,
 
 #' Split data.frame and apply functions
 #' 
-#' @inheritParams rtabulate_old.factor
+#' @inheritParams rtabulate.factor
 #' @param x data.frame 
 #' @param row_by rows to take per row
 #' @param col_by rows to take per column
 #' 
 #' For cell in (row, column), it takes the intersection of the corresponding row_by & col_by
 #' 
-#' @inherit rtabulate_old return
+#' @inherit rtabulate return
 #' 
 #' @export
 #' 
@@ -295,7 +441,7 @@ rtabulate_old.factor <- function(x,
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = df,
 #'   row_by = df$aaa,
 #'   col_by = df$bbb,
@@ -304,14 +450,14 @@ rtabulate_old.factor <- function(x,
 #'   }
 #' )
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = iris,
 #'   row_by = by_all("sum"),
 #'   col_by = iris$Species, 
 #'   FUN = function(x) sum(x$Sepal.Length)
 #' )
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = iris,
 #'   row_by = iris$Species,
 #'   col_by = by_all("sum"), 
@@ -321,7 +467,7 @@ rtabulate_old.factor <- function(x,
 #' fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'     labels = c("S.L > 5", "S.L <= 5"))
 #' 
-#' tbl <- rtabulate_old(
+#' tbl <- rtabulate(
 #'   x = iris,
 #'   row_by = fsl5,
 #'   col_by = iris$Species, 
@@ -339,7 +485,7 @@ rtabulate_old.factor <- function(x,
 #' )
 #' tbl
 #' 
-#' rtabulate_old(
+#' rtabulate(
 #'   x = iris,
 #'   row_by = fsl5,
 #'   col_by = iris$Species, 
@@ -351,7 +497,7 @@ rtabulate_old.factor <- function(x,
 #' 
 #'  
 #' 
-rtabulate_old.data.frame <- function(x,
+rtabulate.data.frame <- function(x,
                                  row_by,
                                  col_by,
                                  FUN,
@@ -409,7 +555,7 @@ check_colwise_args <- function(col_by, col_wise_args) {
 # #' Create a table with formulation
 # #' 
 # #' Formula elements on the LHS connected by a + mean stacking
-# rtabulate_old.formula <- function(x, data) {
+# rtabulate.formula <- function(x, data) {
 #   x <- Sepal.Length ~ Species
 #   data <- iris
 #   

@@ -4,7 +4,7 @@
 \alias{build_table}
 \title{Create a table from a layout and data}
 \usage{
-build_table(lyt, df, ...)
+build_table(lyt, df, col_args = NULL, col_counts = NULL, ...)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}

@@ -124,7 +124,8 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 
 
-create_colinfo = function(lyt, df, rtpos = TreePos()) {
+create_colinfo = function(lyt, df, rtpos = TreePos(),
+                          counts = NULL) {
     ## this will work whether clayout is pre or post
     ## data
     clayout = clayout(lyt)
@@ -138,14 +139,16 @@ create_colinfo = function(lyt, df, rtpos = TreePos()) {
     ## This presumes that it is called on the WHOLE dataset,
     ## NOT after any splitting has occured. Otherwise
     ## the counts will obviously be wrong.
-    counts = sapply(cexprs, function(ex) {
-        if(identical(ex, expression(TRUE)))
-            nrow(df)
-        else if (identical(ex, expression(FALSE)))
-            0
-        else
-            sum(eval(ex, envir = df))
-    })
+    if(is.null(counts)) {
+        counts = sapply(cexprs, function(ex) {
+            if(identical(ex, expression(TRUE)))
+                nrow(df)
+            else if (identical(ex, expression(FALSE)))
+                0
+            else
+                sum(eval(ex, envir = df))
+        })
+    }
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = cextras,
