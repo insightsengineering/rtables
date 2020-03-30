@@ -64,6 +64,8 @@ rtabulate <- function(x,
                      col_N = NULL
                      )  {
 
+    if(missing(FUN) && row.name == "")
+        row.name = paste(deparse(substitute(FUN)), collapse = ";")
     if(indent != 0) {
         .Deprecated("Setting indent directly in rtabulate calls is no longer supported. Ingoring.")
 
@@ -77,7 +79,7 @@ rtabulate <- function(x,
             ## XXX this is a fast first pass, revisit this
             
             if(length(unique(sapply(x, length))) != 1)
-                x = data.frame(.xvar = AsIs(x))
+                x = data.frame(.xvar = I(x))
             else {
                 x = as.data.frame(x, stringsAsFactors = TRUE)
                 usexnms = TRUE

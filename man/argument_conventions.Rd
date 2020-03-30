@@ -58,7 +58,21 @@
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{x}{An object}
+
+\item{obj}{the object.}
+
+\item{row.name}{The default row name to use}
+
+\item{format}{format string for cells.}
+
+\item{indent}{deprecated.}
+
+\item{\dots}{Passed on to metthods or tabulation functions.}
+
+\item{value}{The new value}
+
+\item{object}{The object to modify in-place}
 }
 \description{
 Dummy Function with aruments that are used throughout the framework

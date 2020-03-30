@@ -70,7 +70,11 @@ col_exprs(obj, df = NULL)
 \S4method{col_exprs}{InstantiatedColumnInfo}(obj, df = NULL)
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{the object.}
+
+\item{object}{The object to modify in-place}
+
+\item{value}{The new value}
 
 \item{df}{data.frame/NULL. Data to use if the column information is being generated from a  Pre-Data layout object}
 

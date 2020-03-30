@@ -6,6 +6,15 @@
 \usage{
 rrow(row.name = "", ..., format = NULL, indent = 0)
 }
+\arguments{
+\item{row.name}{The default row name to use}
+
+\item{...}{Passed on to metthods or tabulation functions.}
+
+\item{format}{format string for cells.}
+
+\item{indent}{deprecated.}
+}
 \description{
 row
 }

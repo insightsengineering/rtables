@@ -6,6 +6,11 @@
 \usage{
 add_colcounts(lyt, fmt = "(N=xx)")
 }
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{fmt}{format string for cells}
+}
 \description{
 Add the column population counts to the header
 }

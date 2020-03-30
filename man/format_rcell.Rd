@@ -10,6 +10,8 @@ format_rcell(x, format, output = c("ascii", "html"))
 \arguments{
 \item{x}{an object of class \code{\link{rcell}}}
 
+\item{format}{format string for cells.}
+
 \item{output}{output type}
 }
 \description{

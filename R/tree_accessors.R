@@ -462,6 +462,10 @@ setMethod("spl_child_order",
           "AllSplit",
           function(obj) character())
 
+setMethod("spl_child_order",
+          "VarStaticCutSplit",
+          function(obj) spl_cutlbls(obj))
+
 
 
 
@@ -956,12 +960,14 @@ setMethod("coltree", "PreDataColLayout",
     ## else
     kids = lapply(obj, function(x) splitvec_to_coltree(df = df, splvec = x, pos = rtpos))
     if(length(kids) == 1)
-        kids[[1]]
+        res = kids[[1]]
     else
-        LayoutColTree(lev = 0L,
+        res = LayoutColTree(lev = 0L,
                   kids = kids,
                   tpos = rtpos,
                   spl = RootSplit())
+    disp_ccounts(res) = disp_ccounts(obj)
+    res
 })
 
 
@@ -1105,6 +1111,12 @@ setMethod("disp_ccounts<-", "PreDataColLayout",
     obj
 })
 
+setMethod("disp_ccounts<-", "LayoutColTree",
+          function(obj, value) {
+    obj@display_columncounts = value
+    obj
+})
+
 
 
 setMethod("disp_ccounts<-", "PreDataTableLayouts",
@@ -1234,5 +1246,25 @@ setMethod("as.vector", "VTableTree", function(x, mode) {
         tab = x
     as.vector(tree_children(tab)[[1]], mode = mode)
 })
+
+
+## cuts
+
+setGeneric("spl_cuts", function(obj) standardGeneric("spl_cuts"))
+setMethod("spl_cuts", "VarStaticCutSplit",
+          function(obj) obj@cuts)
+
+setGeneric("spl_cutlbls", function(obj) standardGeneric("spl_cutlbls"))
+setMethod("spl_cutlbls", "VarStaticCutSplit",
+          function(obj) obj@cut_labels)
+
+
+setGeneric("spl_cutfun", function(obj) standardGeneric("spl_cutfun"))
+setMethod("spl_cutfun", "VarDynCutSplit",
+          function(obj) obj@cut_fun)
+
+setGeneric("spl_cutlblfun", function(obj) standardGeneric("spl_cutlblfun"))
+setMethod("spl_cutlblfun", "VarDynCutSplit",
+          function(obj) obj@cut_label_fun)
 
 

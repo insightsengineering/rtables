@@ -7,8 +7,14 @@
 old_rrowl(row.name, ..., format = NULL, indent = 0)
 }
 \arguments{
+\item{row.name}{The default row name to use}
+
 \item{...}{lists that get concatenated and then flattened by one level of
 depth. If one elemenet is not a list then it gets placed into a list.}
+
+\item{format}{format string for cells.}
+
+\item{indent}{deprecated.}
 }
 \description{
 The apply function family returns lists whose elements can be used as cell

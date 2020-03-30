@@ -31,6 +31,8 @@ For cell in (row, column), it takes the intersection of the corresponding row_by
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
+\item{indent}{deprecated.}
+
 \item{col_wise_args}{a named list containing collections (e.g. vectors or
 lists) with data elements for each column of the resulting table. The data
 elements are then passed to the named argument \code{FUN} corresponding to

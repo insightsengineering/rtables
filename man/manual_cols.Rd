@@ -9,6 +9,8 @@ manual_cols(..., .lst = list(...))
 \arguments{
 \item{dots}{One or more vectors of levels to appear
 in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.}
+
+\item{.list}{A list of sets of levels, by default populated via \code{list(...)}.}
 }
 \description{
 Manual column declaration

@@ -6,6 +6,15 @@
 \usage{
 add_summary_count(lyt, var = NULL, rowlblf = "\%s", fmt = "xx (xx.x\%)")
 }
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{var}{string, variable name}
+
+\item{rowlblf}{string. An sprintf style format string containing up to one \code{"\%s"} which takes the current split value and generates the row label for the summary.}
+
+\item{fmt}{format string for cells}
+}
 \description{
 Add a content row of summary counts
 }

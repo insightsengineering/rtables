@@ -2,15 +2,32 @@
 % Please edit documentation in R/as_html.R
 \name{as_html}
 \alias{as_html}
+\alias{as_html,VTableTree-method}
+\alias{as_html,TableRow-method}
 \title{Convert an \code{\link{rtable}} object to an \code{shiny.tag} html
 representation of the \code{\link{rtable}}}
 \usage{
 as_html(x, ...)
+
+\S4method{as_html}{VTableTree}(
+  x,
+  class.table = "table table-condensed table-hover",
+  class.tr = NULL,
+  class.td = NULL,
+  class.th = NULL,
+  ...
+)
+
+\S4method{as_html}{TableRow}(x, class.tr = NULL, class.td = NULL, class.th = NULL, indent, ...)
 }
 \arguments{
 \item{x}{object}
 
 \item{...}{additional arguments currently not used}
+
+\item{class.tr}{class for th tag}
+
+\item{indent}{amount it should be indented}
 }
 \description{
 The returned html object can be immediately used in shiny and rmarkdown

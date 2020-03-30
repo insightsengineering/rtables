@@ -1,8 +1,9 @@
+
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
     v = splv_rawvalues(val)
-    as.expression(bquote(.(a) == .(b), list(a = as.name(spl_payload(spl)),
+    as.expression(bquote(which(.(a) == .(b)), list(a = as.name(spl_payload(spl)),
                               b = v)))
 
 
@@ -26,18 +27,21 @@ setMethod("make_subset_expr", "AnalyzeVarSplit",
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
     v = splv_rawvalues(val)
-    as.expression(bquote(cut(.(a)) == .(b)),
+    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(lbls),
+                                   include.lowest = TRUE) == .(b)),
                   list(a = as.name(spl_payload(spl)),
-                       b = v))
+                       b = v,
+                       brk = spl_cuts(spl),
+                       lbls = spl_cutlbls(spl))))
 })
 
 setMethod("make_subset_expr", "VarDynCutSplit",
           function(spl, val) {
     v = splv_rawvalues(val)
-    as.expression(bquote(.(fun)(.(a)) == .(b)),
+    as.expression(bquote(which(.(fun)(.(a)) == .(b)),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
-                       fun = spl@cut_fun))
+                       fun = spl@cut_fun)))
 })
 
 setMethod("make_subset_expr", "AllSplit",
@@ -52,7 +56,7 @@ setMethod("make_subset_expr", "expression",
 
 setMethod("make_subset_expr", "character",
           function(spl, val) {
-    newspl = Split(spl, type = "varlevels", spl)
+    newspl = VarLevelSplit(spl, spl)
     make_subset_expr(newspl, val)
 })
 
@@ -146,7 +150,7 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
             else if (identical(ex, expression(FALSE)))
                 0
             else
-                sum(eval(ex, envir = df))
+                sum(eval(ex, envir = df), na.rm = TRUE)
         })
     }
     InstantiatedColumnInfo(treelyt = ctree,

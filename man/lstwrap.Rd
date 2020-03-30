@@ -6,6 +6,9 @@
 \usage{
 lstwrap(f)
 }
+\arguments{
+\item{f}{The function to wrap.}
+}
 \description{
 Returns a function that coerces the return values of f to a list
 }

@@ -1,7 +1,7 @@
 
 #' row
 #' 
-#' @inheritParams rrow
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
@@ -44,7 +44,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
 
 #' rrowl
 #' 
-#' @inheritParams rrowl
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
@@ -73,7 +73,7 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 
 #' Rcell
 #' 
-#' @inheritParams rcell
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
@@ -182,7 +182,7 @@ hrows_to_colinfo = function(rows) {
 
 #' Create a header
 #' 
-#' @inheritParams rheader
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #'
@@ -448,15 +448,15 @@ by_all <- function(name) {
 ## XXX this is named this only for testing
 ## replace with better name once all ttestts are passing
 
-setGeneric("col_by_to_matrix", function(col_by, x)
+setGeneric("col_by_to_matrix", function(col_by, x = NULL)
     standardGeneric("col_by_to_matrix"))
 
 setMethod("col_by_to_matrix", "PreDataTableLayouts",
-          function(col_by, x) x)
+          function(col_by, x = NULL) col_by)
 
 setMethod("col_by_to_matrix",
           "character",
-          function(col_by, x) {
+          function(col_by, x = NULL) {
 
     ret = NULL
     for(col in col_by) {

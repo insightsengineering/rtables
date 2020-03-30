@@ -10,6 +10,8 @@ build_table(lyt, df, col_args = NULL, col_counts = NULL, ...)
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{df}{dataset}
+
+\item{...}{Passed on to metthods or tabulation functions.}
 }
 \description{
 Layouts are used to describe a table pre-data. `build_rable` is used to create a table using a layout and a dataset.

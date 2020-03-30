@@ -254,6 +254,14 @@ setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
           function(spl, df) spl_payload(spl))
 
 
+## formfactor here is gross we're gonna have ot do this
+## all again in tthe data split part :-/
+setMethod(".applysplit_rawvals", "VarStaticCutSplit",
+          function(spl, df) {
+    spl_cutlbls(spl)
+})
+
+
 setMethod(".applysplit_datapart", "VarLevelSplit",
           function(spl, df, vals) {
     if(!(spl_payload(spl) %in% names(df))) {
@@ -303,6 +311,16 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
     list(ret)
 })
 
+setMethod(".applysplit_datapart", "VarStaticCutSplit",
+          function(spl, df, vals) {
+  #  lbs = spl_cutlbls(spl)
+    var = spl_payload(spl)
+    varvec = df[[var]]
+    cts = spl_cuts(spl)
+    cfct = cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
+    split(df, cfct, drop = FALSE)
+
+})
 ## XXX TODO *CutSplit Methods
 
 ## Extras generation methods

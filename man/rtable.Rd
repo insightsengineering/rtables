@@ -9,6 +9,11 @@ rtable(header, ..., format = NULL)
 
 rtablel(header, ..., format = NULL)
 }
+\arguments{
+\item{...}{Passed on to metthods or tabulation functions.}
+
+\item{format}{format string for cells.}
+}
 \description{
 Create a Table
 }

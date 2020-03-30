@@ -6,6 +6,17 @@
 \usage{
 add_analyzed_colvars(lyt, lbl, afun, fmt = NULL, newtoplev = FALSE)
 }
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{lbl}{string, label, often variable label}
+
+\item{afun}{function. Analysis function.}
+
+\item{fmt}{format string for cells}
+
+\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+}
 \description{
 TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
 level of nesting in the column structure, rather than at the row level.

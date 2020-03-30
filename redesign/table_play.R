@@ -58,6 +58,20 @@ tbl <- build_table(dm_layout, ADSL)
 tbl
 
 
+lolz = function(x) {browser(); length(x)}
+
+lyt2 = NULL %>%
+    rtables:::add_colby_dyncut("AGE") %>%
+    add_analyzed_vars("AGE", afun = length, rowlabs = "silly n")
+
+build_table(lyt2, ADSL)
+    
+
+
+
+
+
+
 
 
 add_analyzed_var(var = c("AGE", "SEX", "BMRKR1"), afun = a_summary)

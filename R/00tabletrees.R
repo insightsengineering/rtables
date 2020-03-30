@@ -13,6 +13,12 @@
 setOldClass("expression")
 setClassUnion("SubsetDef", c("expression", "logical", "integer", "numeric"))
 
+setClassUnion("functionOrNULL", c("NULL", "function"))
+
+
+
+
+
 ## should XXX [splits, s_values, sval_labels, subset(?)] be a data.frame?
 setClass("TreePos", representation(splits = "list",
                                    s_values = "list",
@@ -204,6 +210,7 @@ MultiVarSplit = function(vars,
 }
 
 
+
 setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
@@ -228,7 +235,7 @@ VarStaticCutSplit = function(var,
         stop("invalid cuts vector. not sorted unique values.")
     
     if(is.null(cutlbls) && !is.null(names(cuts)))
-        cutlbls = names(cuts)
+        cutlbls = names(cuts)[-1] ## XXX is this always right?
     new("VarStaticCutSplit", payload = var,
         split_label = splbl,
         cuts = cuts,
@@ -247,11 +254,13 @@ VarStaticCutSplit = function(var,
 ## cut_funct must take avector and no other arguments
 ## and return a named vector of cut points
 setClass("VarDynCutSplit", contains = "Split",
-         representation(cut_fun = "function"))
+         representation(cut_fun = "function",
+                        cut_label_fun = "function"))
                         
 VarDynCutSplit = function(var,
                           splbl,
                           cutfun,
+                          cutlblfun = function(x) NULL,
                           cfun = NULL,
                           cfmt = NULL,
                           splfmt = NULL,
@@ -261,6 +270,7 @@ VarDynCutSplit = function(var,
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
+        cut_label_fun = cutlblfun,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
@@ -707,10 +717,11 @@ LayoutColTree = function(lev = 0L,
                          name = lab,
                          lab = "",
                          kids = list(),
-                         spl = if(length(kids) == 0) NULL else AllSplit(), 
+                         ##spl = if(length(kids) == 0) NULL else AllSplit(),
+                         spl = AllSplit(), 
                          tpos = TreePos(), 
                          summary_function = NULL,
-                         vis_colcounts = FALSE,
+                         disp_colcounts = FALSE,
                          colcount_fmt = "(N=xx)"){## ,
                          ## sub = expression(TRUE),
                          ## svar = NA_character_,
@@ -724,9 +735,10 @@ LayoutColTree = function(lev = 0L,
             ## subset = sub,
             ## splitvar = svar,
             label = lab,
-            display_columncounts = vis_colcounts,
+            display_columncounts = disp_colcounts,
             columncount_format = colcount_fmt)
     } else {
+        stop("problema my manitar")
         LayoutColLeaf(lev = lev, lab = lab, tpos = tpos,
                       name = .chkname(name))
     }        

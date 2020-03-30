@@ -6,6 +6,11 @@
 \usage{
 rcell(x, format = NULL, colspan = NULL)
 }
+\arguments{
+\item{x}{An object}
+
+\item{format}{format string for cells.}
+}
 \description{
 Rcell
 }

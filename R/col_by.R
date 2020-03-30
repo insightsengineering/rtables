@@ -354,8 +354,9 @@ by_hierarchical <- function(...) {
 
 ## credit: rlang, Henry and Wickham.
 ## this one tiny utility function is NOT worth a dependency.
+## modified it so any length 0 x grabs y
 `%||%` <- function (x, y) {
-    if (is_null(x)) 
+    if (length(x) == 0L) 
         y
     else x
 }

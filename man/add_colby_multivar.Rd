@@ -6,6 +6,17 @@
 \usage{
 add_colby_multivar(lyt, vars, lbl, varlbls = vars, newtoplev = FALSE)
 }
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{vars}{character vector. Multiple variable names.}
+
+\item{lbl}{string, label, often variable label}
+
+\item{varlbls}{character vector. Labels for \code{vars}}
+
+\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+}
 \description{
 In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
 need columns to reflect different variables entirely, rather than different levels of a single variable, we use

@@ -34,6 +34,8 @@ then the \code{format} is applied}
 \item{row.name}{if \code{NULL} then the \code{FUN} argument is deparsed and
 used as \code{row.name} of the \code{\link{rrow}}}
 
+\item{indent}{The indent level (deprecated in refactor)}
+
 \item{col_wise_args}{a named list containing collections (e.g. vectors or
 lists) with data elements for each column of the resulting table. The data
 elements are then passed to the named argument \code{FUN} corresponding to

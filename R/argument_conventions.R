@@ -39,8 +39,17 @@ NULL
 #' @param verbose logical. Should additional information be displayed to the user. Defaults to FALSE.
 #' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
 #' @param obj ANY. The object for the accessor to access or modify
+#' @param x An object
+#' @param obj the object.
+#' @param row.name The default row name to use
+#' @param format format string for cells.
+#' @param indent deprecated.
+#' @param \dots Passed on to metthods or tabulation functions.
+#' @param value The new value
+#' @param object The object to modify in-place
 #' @rdname argument_conventions
 NULL
+
 argument_conventions <- function(lyt, var, lbl, valuelblvar, splfmt, newtoplev, spl, pos) {
   NULL
 }

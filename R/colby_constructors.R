@@ -356,7 +356,7 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
 #' \code{add_colby_multivar}
 #' 
-#' @inheritParams 
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
@@ -418,7 +418,8 @@ add_rowby_staticcut = function(lyt, var, lbl, cuts,
     add_row_split(lyt, spl, pos)
 }
 
-add_colby_dyncut = function(lyt, var, lbl, cutfun,
+add_colby_dyncut = function(lyt, var, lbl = var,
+                            cutfun = qtile_cuts,
                             splfmt = NULL,
                             newtoplev = FALSE) {
     spl = VarDynCutSplit(var, lbl, cutfun,
@@ -428,7 +429,16 @@ add_colby_dyncut = function(lyt, var, lbl, cutfun,
 }
 
 
-add_rowby_dyncut = function(lyt, var, lbl, cutfun,
+qtile_cuts = function(x) {
+    ret = quantile(x)
+    levels(ret) = c("1st qtile",
+                    "2nd qtile",
+                    "3rd qtile",
+                    "4th qtile")
+    ret
+}
+add_rowby_dyncut = function(lyt, var, lbl = var,
+                            cutfun = qtile_cuts,
                             splfmt = NULL,
                             newtoplev = FALSE,
                             kidlbls = NA) {
@@ -531,7 +541,7 @@ add_analyzed_vars = function(lyt,
 #' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
 #' level of nesting in the column structure, rather than at the row level.
 #' 
-#' @inheritParams  
+#' @inheritParams  argument_conventions
 #' 
 #' @export
 #' 
@@ -737,7 +747,7 @@ setMethod("add_summary", "Split",
 
 #' Add a content row of summary counts
 #' 
-#' @inheritParams 
+#' @inheritParams argument_conventions
 #' 
 #' @details if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
 #' 
@@ -769,7 +779,7 @@ add_summary_count = function(lyt, var = NULL, rowlblf = "%s", fmt = "xx (xx.x%)"
 #' Add the column population counts to the header
 #' 
 #' 
-#' @inheritParams 
+#' @inheritParams argument_conventions
 #' 
 #' @export
 #' 
@@ -875,10 +885,16 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
     var = spl_payload(spl)
     varvec = df[[var]]
 
-    cfun = spl@cut_fun
+    cfun = spl_cutfun(spl)
     cuts = cfun(varvec)
+    cutlbls <- spl_cutlblfun(spl)(cuts)
+    if(length(cutlbls) != length(cuts) - 1  &&
+       !is.null(names(cuts))) {
+        cutlbls <- names(cuts)[-1]
+    }
+    
     VarStaticCutSplit(var = var, splbl = obj_label(spl),
-                      cuts = cuts, cutlbls = names(cuts))
+                      cuts = cuts, cutlbls = cutlbls)
 })
 
 
@@ -887,10 +903,23 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
     as(lst, class(spl))
 }
        
-setMethod("fix_dyncuts", "PreDataAxisLayout",
+setMethod("fix_dyncuts", "PreDataRowLayout",
           function(spl, df) {
-    .fd_helper(spl, df)
+    rt = root_spl(spl)
+    ret = .fd_helper(spl, df)
+    root_spl(ret) = rt
+    ret
 })
+
+setMethod("fix_dyncuts", "PreDataColLayout",
+          function(spl, df) {
+    rt = root_spl(spl)
+    ret = .fd_helper(spl, df)
+    root_spl(ret) = rt
+    disp_ccounts(ret) = disp_ccounts(spl)
+    ret
+})
+
 setMethod("fix_dyncuts", "SplitVector",
           function(spl, df) {
     .fd_helper(spl, df)
@@ -912,6 +941,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #' Manual column declaration
 #' @param dots One or more vectors of levels to appear
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
+#' @param .list A list of sets of levels, by default populated via \code{list(...)}.
 #' @examples
 #' # simple one level column space
 #' rows = lapply(1:5, function(i) {
@@ -935,7 +965,8 @@ manual_cols = function(..., .lst = list(...)) {
 
 
 #' Returns a function that coerces the return values of f to a list
-#' 
+#'
+#' @param f The function to wrap.
 #' @export
 #' 
 #' @examples 

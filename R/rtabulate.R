@@ -63,7 +63,7 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #' By default each cell reports the mean based on the associated vector. 
 #'
 #'
-#' @inheritParams rrow
+#' @inheritParams argument_conventions
 #' @param x a vector
 #' @param col_by (\code{\link{factor}} or \code{\link{data.frame}}
 #'   if a \code{\link{factor}} of length \code{nrow(x)} that defines
@@ -76,6 +76,7 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #'   then the \code{format} is applied
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
+#' @param indent The indent level (deprecated in refactor)
 #' @param col_wise_args a named list containing collections (e.g. vectors or
 #'   lists) with data elements for each column of the resulting table. The data
 #'   elements are then passed to the named argument \code{FUN} corresponding to

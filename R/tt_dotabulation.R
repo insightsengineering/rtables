@@ -3,12 +3,36 @@ match_extrargs = function(f, .N_col, .N_total, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
     formargs = formals(f)
-    possargs[names(possargs) %in% names(formargs)]
+    if(is.null(formargs))
+        NULL
+    else
+        possargs[names(possargs) %in% names(formargs)]
 }
 
 
 .takes_df = function(f) !is.null(formals(f)) && names(formals(f))[1] == "df"
 
+
+gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount) {
+        inds = eval(csub, envir = dfpart)
+
+        dat = dfpart[inds,,drop = FALSE]
+                
+        ## if(nrow(dat) == 0L)
+        ##     return(list(NULL))
+        
+        if(!is.null(col) && !.takes_df(func))
+            dat = dat[[col]]
+        args = list(dat)
+
+        args = c(args,
+                 match_extrargs(func, count, totcount, cextr))
+        
+        ret = do.call(func, args)
+        if(!is.list(ret) && length(ret) > 1)
+            ret = list(ret)
+        ret
+    }
 gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
@@ -40,28 +64,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
         datcol = list(NULL)
     }
 
-    rawvals = mapply(function(csub, col, count, cextr) {
-        inds = eval(csub, envir = dfpart)
-
-        dat = dfpart[inds,,drop = FALSE]
-                
-        ## if(nrow(dat) == 0L)
-        ##     return(list(NULL))
-        
-        if(!is.null(col) && !.takes_df(func))
-            dat = dat[[col]]
-        args = list(dat)
-
-        args = c(args,
-                 match_extrargs(func, count, totcount, cextr))
-        
-        ret = do.call(func, args)
-        if(!is.list(ret) && length(ret) > 1)
-            ret = list(ret)
-        ret
-    }, csub = colexprs, col = datcol,
+    rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
     count = colcounts,
     cextr = colextras,
+    MoreArgs = list(dfpart = dfpart,
+                    func = func,
+                    totcount = totcount),
     SIMPLIFY= FALSE)
 
     
@@ -382,6 +390,7 @@ build_table = function(lyt, df,
                        col_args = NULL,
                        col_counts = NULL,
                        ...) {
+    lyt = fix_dyncuts(lyt, df)
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
 
