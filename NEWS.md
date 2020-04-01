@@ -1,3 +1,7 @@
+## rtables 0.1.5
+
+* Changed testing approach to fit internal pipelines
+
 ## rtables 0.1.4
 
 * Replaced dots to underscore in class checking functions.
