@@ -67,7 +67,7 @@ indented_row.names <- function(x, spaces = 2) {
 
 #' Return Indentation of Header Rows
 #' 
-#' @inheritParams header
+#' @param x object representing the table header.
 #' 
 #' @export
 #' 
@@ -91,7 +91,7 @@ header_indent <- function(x) {
 
 #' Return Indentation of Header Rows
 #' 
-#' @inheritParams header
+#' @param x object representing the table header.
 #' @param value non-negative inegers of indent of header rows
 #' 
 #' @export
@@ -210,7 +210,7 @@ old_header <- function(x) {
 
 #' Change Header of Rtable
 #' 
-#' @inheritParams header
+#' @param x object representing the table header.
 #' @param value an \code{\link{rheader}} object
 #' 
 #' @export
@@ -233,7 +233,7 @@ old_header <- function(x) {
 
 #' Access Header Row Names
 #' 
-#' @inheritParams header
+#' @param x object representing the table header.
 #' 
 #' @export
 #' 
@@ -256,7 +256,7 @@ header_row.names <- function(x) {
 
 #' Modify Header Row Names
 #' 
-#' @inheritParams header
+#' @param x object representing the table header.
 #' @param value vector with new row names
 #' 
 #' @export

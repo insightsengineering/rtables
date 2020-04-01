@@ -7,6 +7,30 @@ library(rtables)
 
 ADSL <- radsl()
 
+
+
+lolz = function(x) {browser(); length(x)}
+
+lyt2 = NULL %>%
+    add_colby_qrtiles("AGE") %>%
+    add_analyzed_vars("AGE", afun = length, rowlabs = "silly n")
+
+build_table(lyt2, ADSL)
+
+
+lyt3  = NULL %>%
+    add_colby_cmlqrtiles("AGE") %>%
+    add_analyzed_vars("AGE", lbl = "", afun = length, rowlabs = "silly n")
+
+build_table(lyt3, ADSL)
+
+rtabulate(ADSL$AGE, by_quartile(ADSL$AGE))
+
+rtabulate(ADSL$AGE, by_quartile(ADSL$AGE), FUN = length)
+rtabulate(ADSL$AGE, by_quartile(ADSL$AGE, cumulative = TRUE), FUN = length)
+
+
+
 asummary <- function(x) {
   
   if (is.numeric(x)) {
@@ -58,14 +82,7 @@ tbl <- build_table(dm_layout, ADSL)
 tbl
 
 
-lolz = function(x) {browser(); length(x)}
 
-lyt2 = NULL %>%
-    rtables:::add_colby_dyncut("AGE") %>%
-    add_analyzed_vars("AGE", afun = length, rowlabs = "silly n")
-
-build_table(lyt2, ADSL)
-    
 
 
 

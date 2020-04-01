@@ -35,6 +35,22 @@ setMethod("make_subset_expr", "VarStaticCutSplit",
                        lbls = spl_cutlbls(spl))))
 })
 
+## NB this assumes spl_cutlbls(spl) is in order!!!!!!
+setMethod("make_subset_expr", "CumulativeCutSplit",
+          function(spl, val) {
+    v = splv_rawvalues(val)
+    as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
+                                              labels = .(lbls),
+                                              include.lowest = TRUE)) <=
+                               as.integer(factor(.(b), levels = .(lbls)))),
+                  list(a = as.name(spl_payload(spl)),
+                       b = v,
+                       brk = spl_cuts(spl),
+                       lbls = spl_cutlbls(spl))))
+})
+
+
+
 setMethod("make_subset_expr", "VarDynCutSplit",
           function(spl, val) {
     v = splv_rawvalues(val)
@@ -149,16 +165,28 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                 nrow(df)
             else if (identical(ex, expression(FALSE)))
                 0
-            else
-                sum(eval(ex, envir = df), na.rm = TRUE)
+            else {
+                vec = eval(ex, envir = df)
+                if(is(vec, "numeric"))
+                    length(vec) ## sum(is.na(.)) ????
+                else if(is(vec, "logical"))
+                    sum(vec, na.rm= TRUE)
+            }
         })
     }
+    ## this is a monkeypatch, shouldn't be happening
+    ## in the first place :(
+    fmt =  if(length(colcount_fmt(lyt))  == 1L)
+               colcount_fmt(lyt)
+           else
+               "xx"
+    
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = cextras,
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
-                           countfmt = colcount_fmt(lyt))
+                           countfmt = fmt)
     
 }
 

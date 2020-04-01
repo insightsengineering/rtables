@@ -227,24 +227,40 @@ by_combine <- function(col_by, ...) {
 #' 
 by_quartile <- function(x, cumulative = FALSE) {
   stopifnot(is.numeric(x), is.logical.single(cumulative), !any(is.na(x)))
-  
-  fct <- cut(x, breaks = quantile(x, probs = c(0, 0.25, 0.5, 0.75, 1)), include.lowest=TRUE,
-             labels = c("[min, Q1]", "(Q1, Med]", "(Med, Q3]", "(Q3,  max]"))
 
-  mat <- col_by_to_matrix(fct)
-  
-  if (!cumulative) {
-    mat
-  } else {
-    data.frame(
-      "[min, Q1]" = mat[[1]],
-      "[min, Med]" = apply(mat[, 1:2], 1, any),
-      "[min, Q3]" = apply(mat[, 1:3], 1, any),
-      "[min, max]" = rep(TRUE, nrow(mat)),
-      check.names = FALSE
-    )
-  }
+
+  ret <- data.frame(x)
+  class(ret) <- c(if(cumulative) "cmlquartcut_df" else "quartcut_df", class(ret))
+  return(ret)
 }
+
+    
+
+    
+  
+##   labs <- if(cumulative) c("[min, Q1]",
+##                            "[min, Q2]",
+##                            "[min, Q3]",
+##                            "[min, max]") 
+##   fct <- cut(x, breaks = quantile(x, probs = c(0, 0.25, 0.5, 0.75, 1)), include.lowest=TRUE,
+##              labels = labs)
+##   return(
+    
+
+##   mat <- col_by_to_matrix(fct)
+  
+##   if (!cumulative) {
+##     data.frame(.xx_quartcols_xx. = fct)
+##   } else {
+##     data.frame(
+##       "[min, Q1]" = mat[[1]],
+##       "[min, Med]" = apply(mat[, 1:2], 1, any),
+##       "[min, Q3]" = apply(mat[, 1:3], 1, any),
+##       "[min, max]" = rep(TRUE, nrow(mat)),
+##       check.names = FALSE
+##     )
+##   }
+## }
 
 
 #' Compare Subset to Current col_by Levels

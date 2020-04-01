@@ -6,6 +6,9 @@
 \usage{
 header_row.names(x)
 }
+\arguments{
+\item{x}{object representing the table header.}
+}
 \description{
 Access Header Row Names
 }

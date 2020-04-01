@@ -7,6 +7,8 @@
 old_header(x) <- value
 }
 \arguments{
+\item{x}{object representing the table header.}
+
 \item{value}{an \code{\link{rheader}} object}
 }
 \description{

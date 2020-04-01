@@ -33,6 +33,32 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 
 
 
+.rtab_colby_helper <- function(lyt,
+                               cbyclass,
+                               var = NA_character_,
+                               newtoplev = FALSE,
+                               extrargs = list()) {
+    ## sadly takes different argument signature...
+    ## TODO fix this?
+    if(identical(cbyclass, "total"))
+       return(add_col_total(lyt, lbl = var))
+
+    addfun = switch(cbyclass,
+                    quartcut_df = add_colby_qrtiles,
+                    cmlquartcut_df = add_colby_cmlqrtiles,
+                    add_colby_varlevels)
+    lyt <- addfun(lyt, var = var,
+                  newtoplev = nwetoplev,
+                  extrargs = extrargs)
+    lyt
+}
+                               
+                               
+                               
+                               
+                               
+                               
+
 #' Direct Tabulation
 #'
 #' \code{rtablulate} provides a direct tabulation API conceptually derived from \code{\link{tapply}}.
@@ -64,8 +90,14 @@ rtabulate <- function(x,
                      col_N = NULL
                      )  {
 
-    if(missing(FUN) && row.name == "")
+    if(missing(FUN) && missing(row.name)) {
+        if(inherits(x, "numeric"))
+            row.name = "mean"
+        else if (inherits(x, "logical"))
+            row.name = "count"
+    } else if (!missing(FUN) && missing(row.name)) {
         row.name = paste(deparse(substitute(FUN)), collapse = ";")
+    }
     if(indent != 0) {
         .Deprecated("Setting indent directly in rtabulate calls is no longer supported. Ingoring.")
 
@@ -94,38 +126,42 @@ rtabulate <- function(x,
     }
     lyt = NULL
     xcols = names(x)
-    if(!is(col_by, "PreDataTableLayouts")) {
+    fulld = as.data.frame(x)
+
+    if(is(col_by, "PreDataTableLayouts")) {
+        ## we're done already
+        lyt <- col_by
+    } else {
+        cby_class = class(col_by)[1]
         cby_df = as.data.frame(col_by)
         cby_nms = paste0(".xxx_cby_", seq_along(cby_df))
         names(cby_df) = cby_nms
-    
-    
-        fulld = cbind(x, cby_df)
-        lyt = NULL
+        fulld = cbind(fulld, cby_df)
         newtop = FALSE
         if(!is.null(total)) {
-            lyt <- rtables:::add_col_total(lyt, lbl = total)
+            lyt <- .rtab_colby_helper(lyt, "total", total)
             newtop = TRUE
         }
-        ## columns
+        
         
         ## wrap it if there's only one to preserve old behavior
         if(length(cby_nms) == 1 && length(col_wise_args) > 0)
             col_wise_args <- list(col_wise_args)
-        
+
+        ## columns
         for(i in seq_along(cby_nms) ){
-            ex = if(length(col_wise_args) > i) col_wise_args[[i]] else list()
-            lyt <- add_colby_varlevels(lyt, cby_nms[i], newtoplev = newtop, extrargs = ex)
+            ex = if(length(col_wise_args) > i)
+                     col_wise_args[[i]]
+                 else list()
+            
+            lyt <- .rtab_colby_helper(lyt, cby_class,
+                                      var = cby_nms[i],
+                                      newtoplev = newtop,
+                                      extrargs = ex)
             newtop = FALSE
         }
         
-    } else {
-        ## XXX todo this doesn't adhere too col_wise_args
-        ## but only happens currently if using by_all
-        ## so thats ... ok?
-        lyt = col_by
-        fulld = as.data.frame(x) ## is this safe???
-    }
+    } 
     
     if(!is.null(row_by)) {
         rdf <- as.data.frame(row_by,

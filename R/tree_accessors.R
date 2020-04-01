@@ -1268,3 +1268,6 @@ setMethod("spl_cutlblfun", "VarDynCutSplit",
           function(obj) obj@cut_label_fun)
 
 
+setGeneric("spl_is_cmlcuts", function(obj) standardGeneric("spl_is_cmlcuts"))
+setMethod("spl_is_cmlcuts", "VarDynCutSplit",
+          function(obj) obj@cumulative_cuts)

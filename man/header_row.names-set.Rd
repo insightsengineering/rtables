@@ -7,6 +7,8 @@
 header_row.names(x) <- value
 }
 \arguments{
+\item{x}{object representing the table header.}
+
 \item{value}{vector with new row names}
 }
 \description{

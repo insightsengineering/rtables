@@ -1,9 +1,11 @@
 context("rtabulate")
 
+cells <- function(x) as.vector(unlist(lapply(rtables:::collect_leaves(x, add.labrows=TRUE), rtables:::row_values)))
+
 test_that("rtabulate length tests", {
   
     ##cells <- function(x) as.vector(unlist(unclass(x))) # current implementation
-    cells <- function(x) as.vector(unlist(lapply(rtables:::collect_leaves(x, add.labrows=TRUE), rtables:::row_values)))
+ 
   
   cb <- letters[1:2]
   cbf <- factor(cb, levels = cb)
@@ -86,4 +88,15 @@ test_that("rtabulate: col_wise_args argument", {
   
   check_all_rows(tbl4)
   
+})
+
+test_that("rtabulate:by_quartile works", {
+    AGE = sample(1:80, 400, replace = TRUE)
+    dat = data.frame(AGE = AGE,
+                     RSP = rnorm(400, AGE/20))
+    tbl1 = rtabulate(dat$RSP, by_quartile(dat$AGE), length)
+    expect_identical(sum(cells(tbl1)), 400L)
+
+    tbl2 = rtabulate(dat$RSP, by_quartile(dat$AGE, cumulative = TRUE), length, row.name = "")
+    expect_identical(cumsum(cells(tbl1)), cells(tbl2))
 })

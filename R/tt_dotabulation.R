@@ -110,11 +110,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     ## look if we got labels, if not apply the
     ## default row labels
     lbls = names(rawvals[[maxind]])
-    if(is.null(lbls) && length(rawvals[[maxind]]) == length(defrowlabs))
-        lbls = defrowlabs
-    ## else ## XXX WHY WAS I DOINIG THIS??!?!?!?!?!
-    ##     lbls = rep("", length(rawvals[[maxind]]))
-        
+    if(is.null(lbls)) {
+        if(length(rawvals[[maxind]]) == length(defrowlabs))
+            lbls = defrowlabs
+        else
+            lbls = rep("", length(rawvals[[maxind]]))
+    }
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
     ##recycle formats

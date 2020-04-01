@@ -6,6 +6,9 @@
 \usage{
 header_indent(x)
 }
+\arguments{
+\item{x}{object representing the table header.}
+}
 \description{
 Return Indentation of Header Rows
 }

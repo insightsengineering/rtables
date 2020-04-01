@@ -274,7 +274,8 @@ add_new_coltree = function(lyt, spl) {
 #' 
 add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE,
                                extrargs = list()) {
-    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt, kid_labs = FALSE)
+    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt, kid_labs = FALSE,
+                        extrargs = extrargs)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
@@ -398,53 +399,124 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
     add_row_split(lyt, spl, pos)
 }
 
+#' Split on static or dynamic cuts of the data
+#'
+#' Create columns (or row splits) based on values (such as quartiles) of \code{var}.
+#'
+#' @inheritParams argument_conventions
+#' @param cuts numeric. Cuts to use
+#' @param cutlbls character (or NULL). Labels for the cutst
+#' @param cumulative logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}
+#' @param cutfun function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.
+#' 
+#'
+#' @details
+#' For dynamic cuts, the cut is transformed into a static cut by
+#' \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+#' @export
+#' @rdname varcuts
 add_colby_staticcut = function(lyt, var, lbl, cuts,
                             cutlbls = NULL,
-                            newtoplev = FALSE) {
+                            newtoplev = FALSE,
+                            cumulative = FALSE) {
     spl = VarStaticCutSplit(var, lbl, cuts, cutlbls)
+    if(cumulative)
+        spl = as(spl, "CumulativeCutSplit")
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
+#' @export
+#' @rdname varcuts
 add_rowby_staticcut = function(lyt, var, lbl, cuts,
                                cutlbls = NULL,
                                splfmt = NULL,
                                newtoplev = FALSE,
-                               kidlbls = NA) {
+                               kidlbls = NA,
+                               cumulative = FALSE) {
     spl = VarStaticCutSplit(var, lbl, cuts, cutlbls,
                             splfmt = splfmt,
                             kid_labs = kidlbls)
+    if(cumulative)
+        spl = as(spl, "CumulativeCutSplit")
+
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
 
+#' @export
+#' @rdname varcuts
 add_colby_dyncut = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
                             splfmt = NULL,
-                            newtoplev = FALSE) {
+                            newtoplev = FALSE,
+                            extrargs = list(),
+                            cumulative = FALSE) {
     spl = VarDynCutSplit(var, lbl, cutfun,
-                         splfmt = splfmt)
+                         splfmt = splfmt,
+                         extrargs = extrargs,
+                         cumulative = cumulative)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
 }
 
+#' @export
+#' @rdname varcuts
+add_colby_qrtiles = function(lyt, var, lbl = var,
+                             splfmt = NULL,
+                             newtoplev = FALSE,
+                             extrargs = list()) {
+    spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
+                         cutlblfun = function(x) c("[min, Q1]",
+                                                   "(Q1, Q2]",
+                                                   "(Q2, Q3]",
+                                                   "(Q3, max]"),
+                         splfmt = splfmt,
+                         extrargs = extrargs)
+    pos = next_cpos(lyt, newtoplev)
+    add_col_split(lyt, spl, pos)
+}
 
+#' @export
+#' @rdname varcuts
+add_colby_cmlqrtiles = function(lyt, var, lbl = var,
+                               splfmt = NULL,
+                               newtoplev = FALSE,
+                               extrargs = list()) {
+    spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
+                         splfmt = splfmt,
+                         cutlblfun = function(x) c("[min, Q1]",
+                                                   "[min, Q2]",
+                                                   "[min, Q3]",
+                                                   "[min, max]"),
+                         cumulative = TRUE,
+                         extrargs = extrargs)
+    pos = next_cpos(lyt, newtoplev)
+    add_col_split(lyt, spl, pos)
+}
+
+    
 qtile_cuts = function(x) {
     ret = quantile(x)
-    levels(ret) = c("1st qtile",
-                    "2nd qtile",
-                    "3rd qtile",
-                    "4th qtile")
+    levels(ret) = c("1st qrtile",
+                    "2nd qrtile",
+                    "3rd qrtile",
+                    "4th qrtile")
     ret
 }
+
+#' @export
+#' @rdname varcuts
 add_rowby_dyncut = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
                             splfmt = NULL,
                             newtoplev = FALSE,
-                            kidlbls = NA) {
-    spl = VarDynCutSplit(var, lbl, cutfun,
+                            kidlbls = NA,
+                            cumulative = FALSE) {
+    spl = VarDynCutSplit(var, lbl, cutfun = cutfun,
                          splfmt = splfmt,
-                         kid_labs = kidlbls)
+                         kid_labs = kidlbls,
+                         cumulative = cumulative)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -893,8 +965,14 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
         cutlbls <- names(cuts)[-1]
     }
     
-    VarStaticCutSplit(var = var, splbl = obj_label(spl),
+    ret = VarStaticCutSplit(var = var, splbl = obj_label(spl),
                       cuts = cuts, cutlbls = cutlbls)
+    ## classes are tthe same structurally CumulativeCutSplit
+    ## is just a sentinal so it can hit different make_subset_expr
+    ## method
+    if(spl_is_cmlcuts(spl))
+        ret = as(ret, "CumulativeCutSplit")
+    ret
 })
 
 

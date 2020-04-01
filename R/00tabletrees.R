@@ -249,13 +249,55 @@ VarStaticCutSplit = function(var,
 }
 
 
+
+
+
+setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
+
+CumulativeCutSplit = function(var,
+                             splbl,
+                             cuts,
+                             cutlbls = NULL,
+                             cfun = NULL,
+                             cfmt = NULL,
+                             splfmt = NULL,
+                             splname = var,
+                             kid_labs = NA,
+                             extrargs = list()) {
+    if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+       is.character(cuts[[2]]) &&
+       length(cuts[[1]]) == length(cuts[[2]])) {
+        cutlbls = cuts[[2]]
+        cuts = cuts[[1]]
+    }
+    if(is.unsorted(cuts, strictly = TRUE))
+        stop("invalid cuts vector. not sorted unique values.")
+    
+    if(is.null(cutlbls) && !is.null(names(cuts)))
+        cutlbls = names(cuts)[-1] ## XXX is this always right?
+    new("CumulativeCutSplit", payload = var,
+        split_label = splbl,
+        cuts = cuts,
+        cut_labels = cutlbls,
+        content_fun = cfun,
+        content_format = cfmt,
+        split_format = splfmt,
+        name = splname,
+        label_children = kid_labs,
+        extra_args = extrargs)
+}
+
+
+
+
 ## do we want this to be a CustomizableSplit instead of
 ## taking cut_fun?
 ## cut_funct must take avector and no other arguments
 ## and return a named vector of cut points
 setClass("VarDynCutSplit", contains = "Split",
          representation(cut_fun = "function",
-                        cut_label_fun = "function"))
+                        cut_label_fun = "function",
+                        cumulative_cuts = "logical"))
                         
 VarDynCutSplit = function(var,
                           splbl,
@@ -266,10 +308,12 @@ VarDynCutSplit = function(var,
                           splfmt = NULL,
                           splname = var,
                           kid_labs = NA,
-                          extrargs = list()) {
+                          extrargs = list(),
+                          cumulative = FALSE) {
     new("VarDynCutSplit", payload = var,
         split_label = splbl,
         cut_fun = cutfun,
+        cumulative_cuts = cumulative,
         cut_label_fun = cutlblfun,
         content_fun = cfun,
         content_format = cfmt,
@@ -552,6 +596,8 @@ setClass("CompSubsetVectors",
 
 
 .chkname = function(nm) {
+    if(is.null(nm))
+        nm = ""
     if(length(nm) != 1) {
         stop("name is not of length one")
     } else if( is.na(nm)) {
@@ -905,12 +951,12 @@ LabelRow = function(lev = 1L,
  ##                   v_type = NA_character_,
                     fmt = NULL,
                     klass) {
-    if((missing(name) || nchar(name) == 0) &&
+    if((missing(name) || is.null(name) || nchar(name) == 0) &&
        !missing(lab))
         name = lab
     rw = new(klass, leaf_value = val,
              name = .chkname(name),        level = lev,
-        label = lab,
+        label = .chkname(lab),
         colspans = cspan,
         col_info = cinfo,
         ##  col_layout = clayout,
