@@ -12,7 +12,8 @@ add_analyzed_vars(
   fmt = NULL,
   rowlabs = "",
   newtoplev = FALSE,
-  inclNAs = FALSE
+  inclNAs = FALSE,
+  extrargs = list()
 )
 }
 \arguments{
@@ -40,7 +41,7 @@ adding further splitting, the tabulation will occur at the current/next level of
 library(magrittr)
 
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
-    add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+    add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 
 build_table(l, DM)

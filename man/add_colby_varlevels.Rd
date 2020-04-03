@@ -39,7 +39,7 @@ l
 
 # add an analysis (summary)
 l2 <- l \%>\% 
-    add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+    add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l2
 
 build_table(l2, DM)
@@ -47,7 +47,7 @@ build_table(l2, DM)
 # By default sequentially adding layouts results in nesting
 l3 <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
   add_colby_varlevels("SEX") \%>\%
-  add_analyzed_vars("AGE", afun = lstwrap(summary), fmt = "xx.xx")
+  add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 l3
 
 build_table(l3, DM)

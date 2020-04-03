@@ -215,6 +215,20 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 }
 
 
+.char_to_hrows = function(hdr) {
+    nlfnd = grep("\n", hdr, fixed = TRUE)
+    if(length(nlfnd) == 0)
+        return(list(rrowl(NULL, hdr)))
+
+    stopifnot(length(nlfnd) == length(hdr))
+    raw = strsplit(hdr, "\n", fixed = TRUE)
+    lens = unique(sapply(raw, length))
+    stopifnot(length(lens) == 1L)
+    lapply(seq(1, lens),
+           function(i) {
+        rrowl(NULL, vapply(raw, `[`, NA_character_, i = i))
+    })
+}
 
 
 #' Create a Table
@@ -309,6 +323,7 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #'#   c("A", "B", "C", "D", "E"),
 #'#   format = "xx",
 #'#   rrow("r1", 1, 2, 3, 4, 5),
+#' 
 #'#   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 #'# )
 #'# 
@@ -328,7 +343,7 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #' @rdname rtable
 rtable = function(header, ..., format = NULL) {
     if(is.character(header))
-        header = list(rrowl(NULL, header))
+        header = .char_to_hrows(header) #list(rrowl(NULL, header))
     if(is.list(header)) {
         if(are(header, "TableRow"))
             colinfo = hrows_to_colinfo(header)
@@ -464,3 +479,61 @@ setMethod("col_by_to_matrix",
     }
     ret
 })
+
+
+
+combine_cinfo = function(ci1, ci2) {
+    stopifnot(is(ci1, "InstantiatedColumnInfo"),
+              is(ci2, "InstantiatedColumnInfo"))
+
+    ctree1 = coltree(ci1)
+    ctree2 = coltree(ci2)
+    newctree = LayoutColTree(kids = list(ctree1, ctree2))
+    ## c(tree_children(ctree1),
+    ##                                   tree_children(ctree2)))
+    
+    newcounts = c(col_counts(ci1), col_counts(ci2))
+    newexprs = c(col_exprs(ci1), col_exprs(ci2))
+    newexargs = c(cextra_args(ci1),cextra_args(ci2))
+    newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
+    InstantiatedColumnInfo(treelyt = newctre,
+                           csubs = newexprs,
+                           extras = newexargs,
+                           cnts = newcounts,
+                           dispcounts = newdisp,
+                           countfmt = colcount_fmt(ci1))
+}
+
+
+cbind_rtables <-  function(x,y) {
+    stopifnot(is(x, "VTableTree"),
+              is(y, "VTableTree"))
+
+    rnx = row.names(x)
+    rny = row.names(y)
+    if(!identical(rnx, rny))
+        stop("Row names not identical in x and y")
+    lvsx = collect_leaves(x, add.labrows = TRUE)
+    lvsy = collect_leaves(y, add.labrows = TRUE)
+    if(!identical(sapply(lvsx, class),
+                  sapply(lvsy, class)))
+        stop("Row classes not identical for all rows of x and y")
+    
+
+    newci = combine_cinfo(col_info(x), col_info(y))
+
+    recurse_cbind(tree_children(x), tree_children(y),
+                  content_table(x),
+                  content_table(y),
+                  orig = x,
+                  cinfo = newci)
+
+
+}
+
+recurse_cbind = function(k1, k2, cont1, cont2, orig, cinfo) {
+    constr = get(class(ki1), new
+    
+
+
+}

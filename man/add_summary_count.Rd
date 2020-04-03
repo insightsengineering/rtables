@@ -28,7 +28,7 @@ library(magrittr)
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
     add_rowby_varlevels("RACE") \%>\% 
     add_summary_count(rowlblf = "\%s (n)") \%>\% 
-    add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+    add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 
 build_table(l, DM)

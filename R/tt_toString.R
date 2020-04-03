@@ -21,8 +21,11 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   hbody <- tmp$body
   hspans <- tmp$span
     
-  ## table body
-  tbody <- matrix(unname(unlist(get_formatted_rows(x))), ncol = ncol(x) + 1, byrow = TRUE)
+    ## table body
+    matdata <- unname(unlist(get_formatted_rows(x)))
+    if(is.null(matdata))
+        matdata <- ""
+  tbody <- matrix(matdata, ncol = ncol(x) + 1, byrow = TRUE)
   tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
   
   body <- rbind(hbody, tbody)

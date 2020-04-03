@@ -259,7 +259,7 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' # add an analysis (summary)
 #' l2 <- l %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l2
 #' 
 #' build_table(l2, DM)
@@ -267,7 +267,7 @@ add_new_coltree = function(lyt, spl) {
 #' # By default sequentially adding layouts results in nesting
 #' l3 <- NULL %>% add_colby_varlevels("ARM") %>%
 #'   add_colby_varlevels("SEX") %>%
-#'   add_analyzed_vars("AGE", afun = lstwrap(summary), fmt = "xx.xx")
+#'   add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 #' l3
 #' 
 #' build_table(l3, DM)
@@ -561,7 +561,7 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 #' library(magrittr)
 #' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
@@ -573,7 +573,8 @@ add_analyzed_vars = function(lyt,
                              fmt = NULL,
                              rowlabs = "",
                              newtoplev = FALSE,
-                             inclNAs = FALSE) {
+                             inclNAs = FALSE,
+                             extrargs = list()) {
 
     subafun = substitute(afun)
     if(is.name(subafun) &&
@@ -594,7 +595,8 @@ add_analyzed_vars = function(lyt,
                           afun = afun,
                           splfmt = fmt,
                           defrowlab = rowlabs,
-                          inclNAs = inclNAs)
+                          inclNAs = inclNAs,
+                          extrargs = extrargs)
  
     if(!newtoplev &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
@@ -832,7 +834,7 @@ setMethod("add_summary", "Split",
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
 #'     add_summary_count(rowlblf = "%s (n)") %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrap(summary) , fmt = "xx.xx")
+#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
@@ -1046,15 +1048,27 @@ manual_cols = function(..., .lst = list(...)) {
 #'
 #' @param f The function to wrap.
 #' @export
+#'
+#' @details \code{lstwrapx} generates a wrapper which takes \code{x} as its first argument, while \code{lstwrapdf} generates an otherwise identical wrapper function whose first argument is named \code{df}.
+#'
+#' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{add_analyzed_vars}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
 #' 
 #' @examples 
 #' 
 #' summary(iris$Sepal.Length)
 #' 
 #' library(magrittr)
-#' f <- lstwrap(summary)
+#' f <- lstwrapx(summary)
 #' f(iris$Sepal.Length)
-#' 
-lstwrap = function(f) {
-    function(...) as.list(f(...))
+#' @rdname lstwrap
+lstwrapx = function(f) {
+    function(x,...) as.list(f(x,...))
 }
+
+#' @rdname lstwrap
+#' @export
+lstwrapdf = function(f) {
+    function(df,...) as.list(f(df,...))
+}
+
+

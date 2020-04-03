@@ -24,9 +24,11 @@ setMethod("rtab_inner", "numeric", function(x, ...) mean(x,...))
 #' @rdname rtinner
 #' @exportMethod rtab_inner
 setMethod("rtab_inner", "logical", function(x, ...) sum(x,...))
+
+
 #' @rdname rtinner
 #' @exportMethod rtab_inner
-setMethod("rtab_inner", "factor", function(x, ...) as.list(table(x, ...)))
+setMethod("rtab_inner", "factor", lstwrapx(table))#function(x, ...) as.list(table(x, ...)))
 #' @rdname rtinner
 #' @exportMethod rtab_inner
 setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behavior for class ", class(x), " please specify FUN  explicitly."))
@@ -81,7 +83,7 @@ rtabulate <- function(x,
                      col_by = by_all("col_1"),
                      FUN = rtab_inner,
                      ...,
-                     row_by = NULL,                   
+                     row_by = NULL,
                      format = NULL,
                      row.name = "",
                      indent = 0,
@@ -105,28 +107,32 @@ rtabulate <- function(x,
     usexnms = FALSE
     lyt = NULL
     
+    
     if(!inherits(x, "data.frame")) {
         if(is(x, "list")) {
             ## gotta guess whether this is many things to summarize or one...
             ## XXX this is a fast first pass, revisit this
             
             if(length(unique(sapply(x, length))) != 1)
-                x = data.frame(.xvar = I(x))
+                xdf = data.frame(.xvar = I(x))
             else {
-                x = as.data.frame(x, stringsAsFactors = TRUE)
+                xdf = as.data.frame(x, stringsAsFactors = TRUE)
                 usexnms = TRUE
             }
         } else {
             ## SAF=TRUE since that is what the inner
             ## method does anyway
-            x = as.data.frame(x, stringsAsFactors = TRUE)
+            xdf = as.data.frame(x, stringsAsFactors = TRUE)
         }
+        xcols = names(xdf)
     } else {
-        usexnms = TRUE
+        ## ensure there are NO NAs...
+        xdf = cbind(x, ".xx_xproxy_xx." = TRUE)
+        xcols = ".xx_xproxy_xx."
     }
     lyt = NULL
-    xcols = names(x)
-    fulld = as.data.frame(x)
+    
+    fulld = xdf
 
     if(is(col_by, "PreDataTableLayouts")) {
         ## we're done already
@@ -150,7 +156,7 @@ rtabulate <- function(x,
 
         ## columns
         for(i in seq_along(cby_nms) ){
-            ex = if(length(col_wise_args) > i)
+            ex = if(length(col_wise_args) >= i)
                      col_wise_args[[i]]
                  else list()
             
@@ -171,7 +177,8 @@ rtabulate <- function(x,
 
         for(rspl in names(rdf)) {
             lyt <- add_rowby_varlevels(lyt,
-                                       rspl)
+                                       rspl,
+                                       lbl ="")
         }
     }
     ## rows
@@ -181,7 +188,8 @@ rtabulate <- function(x,
                              lbl = lbls,
                              rowlabs = row.name,
                              afun = FUN,
-                             fmt = format)
+                             fmt = format,
+                             extrargs = list(...))
     ## XXX a way to just return the layout?
     ## but x needs to be padded with the relevant
     ## columns so not sure...

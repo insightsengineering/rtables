@@ -29,13 +29,13 @@ test_that("rtabulate length tests", {
   tbl <- rtabulate(cbf, cbf)
   expect_identical(cells(tbl), c(1L, 0L, 0L, 1L), "factor")
   
-  tbl <- rtabulate(factor(c("X", "X"), c("X", "Y")), cbf, length)
+  tbl <- rtabulate(factor(c("X", "X"), c("X", "Y")), cbf) ##, length)
   expect_identical(cells(tbl), c(1L, 1L, 0L, 0L), "factor")
   
-  tbl <- rtabulate(factor(c("X", "Y"), c("X", "Y")), factor(c("a", "a"), c("a", "b")), length)
+  tbl <- rtabulate(factor(c("X", "Y"), c("X", "Y")), factor(c("a", "a"), c("a", "b"))) ##, length)
   expect_identical(cells(tbl), c(1L, 0L, 1L, 0L), "factor")
   
-  tbl <- rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")), length)
+  tbl <- rtabulate(factor(c("Y", "Y"), c("X", "Y")), factor(c("b", "b"), c("a", "b")))#, length)
   expect_identical(cells(tbl), c(0L, 0L, 0L, 2L), "factor")
   
   
@@ -99,4 +99,13 @@ test_that("rtabulate:by_quartile works", {
 
     tbl2 = rtabulate(dat$RSP, by_quartile(dat$AGE, cumulative = TRUE), length, row.name = "")
     expect_identical(cumsum(cells(tbl1)), cells(tbl2))
+})
+
+
+test_that("rtabulate:... passed on correctly", {
+    x <- c(1, 2, 3, NA, 3, 2)
+    cb <- factor(c("A", "B", "A", "B", "B", "A"))
+
+    tbl <- rtabulate(x, cb, mean, na.rm = TRUE)
+    expect_identical(cells(tbl), c(2, 2.5))
 })

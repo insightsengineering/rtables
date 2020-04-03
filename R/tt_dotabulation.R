@@ -3,17 +3,20 @@ match_extrargs = function(f, .N_col, .N_total, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
     formargs = formals(f)
+    formnms = names(formargs)
     if(is.null(formargs))
-        NULL
-    else
-        possargs[names(possargs) %in% names(formargs)]
+        return(NULL)
+    else if("..." %in% names(formargs))
+        formnms = c(formnms, names(extras))
+    
+    possargs[names(possargs) %in% formnms]
 }
 
 
 .takes_df = function(f) !is.null(formals(f)) && names(formals(f))[1] == "df"
 
 
-gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount) {
+gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) {
         inds = eval(csub, envir = dfpart)
 
         dat = dfpart[inds,,drop = FALSE]
@@ -26,14 +29,14 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount) {
         args = list(dat)
 
         args = c(args,
-                 match_extrargs(func, count, totcount, cextr))
+                 match_extrargs(func, count, totcount, extras = c(cextr, splextra)))
         
         ret = do.call(func, args)
         if(!is.list(ret) && length(ret) > 1)
             ret = list(ret)
         ret
     }
-gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
+gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
     colextras = cextra_args(cinfo, NULL)
@@ -65,11 +68,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     }
 
     rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
-    count = colcounts,
-    cextr = colextras,
-    MoreArgs = list(dfpart = dfpart,
-                    func = func,
-                    totcount = totcount),
+                     count = colcounts,
+                     cextr = colextras,
+                     MoreArgs = list(dfpart = dfpart,
+                                     func = func,
+                                     totcount = totcount,
+                                     splextra= splextra),
     SIMPLIFY= FALSE)
 
     
@@ -77,7 +81,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
     rawvals
 }
 
-.make_tablerows = function(dfpart, func,
+.make_tablerows = function(dfpart,
+                           func,
                            cinfo,
                            datcol = NULL,
                            lev = 1L,
@@ -85,7 +90,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
 ##                           rvtypes = NULL,
                            format = NULL,
                            defrowlabs = NULL,
-                           rowconstr = DataRow) {
+                           rowconstr = DataRow,
+                           splextra = list()) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -97,7 +103,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
         rowvar  = NA_character_
     }
     
-    rawvals = gen_rowvalues(dfpart, datcol, cinfo, func)
+    rawvals = gen_rowvalues(dfpart, datcol, cinfo, func,splextra =  splextra)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
@@ -225,7 +231,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, spl) {
                            cinfo = cinfo,
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
-                           format = obj_fmt(spl))
+                           format = obj_fmt(spl),
+                           splextra = split_exargs(spl))
     if(dolab)
         lab = obj_label(spl)
     else

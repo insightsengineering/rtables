@@ -122,7 +122,7 @@ Say we want to calculate the total `uptake` for each `Type` and `Treatment`
 
 ```{r}
 rtabulate(x = CO2, row_by = CO2$Type, col_by = CO2$Treatment,
-          FUN = function(xi) sum(xi$uptake))
+          FUN = function(df) sum(df$uptake), row.name = "sum")
 ```
 
 

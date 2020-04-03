@@ -101,6 +101,7 @@ tbl
 #   c("A", "B", "C", "D", "E"),
 #   format = "xx",
 #   rrow("r1", 1, 2, 3, 4, 5),
+
 #   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 # )
 # 

@@ -398,6 +398,7 @@ AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, c
                      cfmt = cfmt,
                      splfmt = splfmt,
                      inclNAs = inclNAs,
+                     MoreArgs = list(extrargs = extrargs),
                      SIMPLIFY = FALSE)
     } else {
         .payload = unlist(lapply(.payload,
