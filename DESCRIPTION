@@ -18,7 +18,7 @@ Imports:
   rlang
 Suggests:
   dplyr,
-  testthat,
+  testthat (>= 2.0),
   knitr
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
