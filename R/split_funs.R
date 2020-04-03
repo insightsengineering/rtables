@@ -323,13 +323,32 @@ setMethod(".applysplit_datapart", "VarStaticCutSplit",
 })
 ## XXX TODO *CutSplit Methods
 
+
+setClass("NullSentinel", contains = "NULL")
+nullsentinel = new("NullSentinel")
+noarg = function() nullsentinel
+
 ## Extras generation methods
 setMethod(".applysplit_extras", "Split",
           function(spl, df, vals) {
-    stopifnot(length(vals) > 0)
-    replicate(list(split_exargs(spl)), n = length(vals))
+    splex <- split_exargs(spl)
+    nextr <- length(splex)
+    nvals <- length(vals)
+    stopifnot(nvals > 0,
+              nextr <= nvals)
+    lapply(seq_len(nvals), function(vpos) {
+        one_ex <- lapply(splex, function(arg) {
+            if(length(arg) >= vpos)
+                arg[[vpos]]
+            else
+                noarg()
+            })
+        names(one_ex) <- names(splex)
+        one_ex <- one_ex[!sapply(one_ex, is, "NullSentinel")]
+        one_ex
+    })
+                 
 })
-
 
 setMethod(".applysplit_extras", "VarLevWBaselineSplit",
           function(spl, df, vals) {
@@ -441,19 +460,20 @@ reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     }
 }
 
-.raw_to_splvals = function(partinfo, extrs) {
-    if(are(partinfo$rawvalues, "SplitValue")) {
-        if(any(sapply(extrs, length) > 0))
-            warning(" values are already SplitValues but extrs contained non-empty arguments. please contact the maintainer")
-        partinfo$values = partinfo$rawvalues
+## not called from anywhere???
+## .raw_to_splvals = function(partinfo, extrs) {
+##     if(are(partinfo$rawvalues, "SplitValue")) {
+##         if(any(sapply(extrs, length) > 0))
+##             warning(" values are already SplitValues but extrs contained non-empty arguments. please contact the maintainer")
+##         partinfo$values = partinfo$rawvalues
         
-        return(partinfo)
-    }
-    partinfo$values = make_splvalue_vec(partinfo$rawvalues,
-                                        extrs)
-    partinfo
+##         return(partinfo)
+##     }
+##     partinfo$values = make_splvalue_vec(partinfo$rawvalues,
+##                                         extrs)
+##     partinfo
 
-}
+## }
 
 droplevsinner = function(innervar) {
   myfun = function(df, spl, vals = NULL, lbls = NULL) {

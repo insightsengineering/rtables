@@ -38,7 +38,10 @@ test_that("rtable design decisions", {
 #    rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
   )
   
-  expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
+    ## see redesign/breaking_changes.md
+    ## expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
+    expect_identical(names(tbl), c("Treatement", "Comparison"))
+    
     ## replace once the colspan rows are uncommented
     ##expect_equal(dim(tbl) , c(6, 2))
     expect_equal(dim(tbl) , c(4, 2))

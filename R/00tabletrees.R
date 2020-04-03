@@ -54,12 +54,17 @@ setClass("SplitValue",
 SplitValue = function(val, extr =list()) {
     if(is(val, "SplitValue"))
         stop("SplitValue  object passed to SplitValue constructor")
-    ## this might happen if its coming out of the
-    ## data.frame form.
-    if(is(extr, "AsIs"))
-        extr = unclass(extr)
-    if(is(val, "AsIs"))
-        val = unclass(val)
+    ## data.frame roundtrip has been abandoned
+    ## ## this might happen if its coming out of the
+    ## ## data.frame form.
+    ## if(is(extr, "AsIs"))
+    ##     extr = unclass(extr)
+    ## if(is(val, "AsIs"))
+    ##     val = unclass(val)
+
+    if(!is(extr, "list"))
+        extr <- list(extr)
+        
     
     new("SplitValue", value = val,
         extra = extr)

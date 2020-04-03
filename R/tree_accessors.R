@@ -482,16 +482,26 @@ setMethod("root_spl<-", "PreDataAxisLayout",
     obj
 })
 
-
+#' Row attribute accessors
+#' @inheritParams argument_conventions
+#' @rdname row_accessors
+#' @export
 setGeneric("row_values", function(obj) standardGeneric("row_values"))
+#' @rdname row_accessors
+#' @exportMethod row_values
 setMethod("row_values", "TableRow", function(obj) obj@leaf_value)
-
+#' @rdname row_accessors
+#' @exportMethod row_values<-
 setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
+#' @rdname row_accessors
+#' @exportMethod row_values<-
 setMethod("row_values<-", "TableRow",
           function(obj, value) {
     obj@leaf_value = value
     obj
 })
+#' @rdname row_accessors
+#' @exportMethod row_values<-
 setMethod("row_values<-", "LabelRow",
           function(obj, value) {
     stop("LabelRows cannot have row values.")

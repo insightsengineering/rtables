@@ -531,9 +531,9 @@ cbind_rtables <-  function(x,y) {
 
 }
 
-recurse_cbind = function(k1, k2, cont1, cont2, orig, cinfo) {
-    constr = get(class(ki1), new
+## recurse_cbind = function(k1, k2, cont1, cont2, orig, cinfo) {
+##     constr = get(class(ki1), new
     
 
 
-}
+## }
