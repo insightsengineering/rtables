@@ -11,6 +11,15 @@ rtabulate(df, factor(LETTERS[1:3]), factor(LETTERS[1:3]))
 
 Will no longer work. They did work in the3e previous framework.
 
+## rtables compatability
+### header as a collection of rows
+Tthe 'header' of a TableTree (or similar) object is no longer a collection of rows in the rtables sense. This means that multiple (hopefully rarely used) accessors for manipulating the header as they were no longer work, including:
+
+ - `header_indent` throws a deprecation warning and always returns 0s
+ - `header_indent<-` throws a deprecation warning and returns x unmodified
+ - `header_row.naames` throws a deprecation warning and returns `NULL`
+ - `header_row.naames<-` throws a deprecation warning and x unmodified
+ 
 # FOR DISCUSSION
 ## row_by
 Specifying `row_by` uses the layout framework which will generate label rows for each level AND data rows corrersponding to them.

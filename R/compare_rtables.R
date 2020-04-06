@@ -84,8 +84,8 @@ compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
   
   # if (identical(object, expected)) return(invisible(TRUE))
   
-  if (!is(object, "rtable")) stop("argument object is expected to be of class rtable")
-  if (!is(expected, "rtable")) stop("argument expected is expected to be of class rtable")
+  if (!is(object, "VTableTree")) stop("argument object is expected to be of class rtable")
+  if (!is(expected, "VTableTree")) stop("argument expected is expected to be of class rtable")
   
   dim_out <- apply(rbind(dim(object), dim(expected)), 2, max)
   
@@ -111,8 +111,8 @@ compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
       
       is_equivalent <- TRUE
       if (i <= nro && i <= nre && j <= nco && j <= nce) {
-        x <- object[i,j]
-        y <- expected[i, j]
+        x <- object[i,j, drop = TRUE]
+        y <- expected[i,j, drop = TRUE]
         
         attr_x <- attributes(x)
         attr_y <- attributes(y)

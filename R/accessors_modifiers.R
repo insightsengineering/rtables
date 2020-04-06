@@ -70,19 +70,15 @@ indented_row.names <- function(x, spaces = 2) {
 #' @param x object representing the table header.
 #' 
 #' @export
-#' 
-#' @examples 
-#' tbl <- rtable(
-#'   header = rheader(
-#'     rrow("", "A", "B"),
-#'     rrow("", "X", "Y")
-#'   ),
-#'   rrow("row 1", 1, 2)
-#' )
-#' 
-#' tbl
-#' header_indent(tbl)
+#' @rdname deprecated
 header_indent <- function(x) {
+    .Deprecation("The concept of the table header being made up of rows is no longer supported.")
+    stopifnot(is(x, "VTableTree"))
+    hdr = .tbl_header_mat(x)
+    rep(0, nrow(hdr$body))
+}
+
+header_indent_old <- function(x) {
   stopifnot(is(x, "rtable"))
   
   h <- header(x)
@@ -96,33 +92,11 @@ header_indent <- function(x) {
 #' 
 #' @export
 #' 
-#' @examples 
-#' tbl <- rtable(
-#'   header = rheader(
-#'     rrow("A", "A", "B"),
-#'     rrow("B", "X", "Y")
-#'   ),
-#'   rrow("row 1", 1, 2)
-#' )
-#' 
-#' tbl
-#' header_indent(tbl) <- c(0, 1)
-#' tbl
+#' @rdname deprecated
 `header_indent<-` <- function(x, value) {
-  stopifnot(
-    is(x, "rtable"), 
-    is.numeric(value),
-    all(value >= 0),
-    length(value) == length(header(x))
-  )
-  
-  h <- header(x)
-  
-  for (i in seq_along(value)) {
-    attr(h[[i]], "indent") <- value[i]
-  }
-  header(x) <- h
-  x
+    .Deprecated("The concept of header indentation is not currently supported in the new TableTree framework")
+    return(x)
+ 
 }
 
 
@@ -236,22 +210,22 @@ old_header <- function(x) {
 #' @param x object representing the table header.
 #' 
 #' @export
+#' @rdname deprecated
 #' 
-#' @examples 
-#' tbl <- rtable(
-#'   header = rheader(
-#'     rrow("", "A", "B"),
-#'     rrow("", "X", "Y")
-#'   ),
-#'   rrow("row 1", 1, 2)
-#' )
-#' 
-#' tbl
-#' header_row.names(tbl)
+## ' @examples 
+## ' tbl <- rtable(
+## '   header = rheader(
+## '     rrow("", "A", "B"),
+## '     rrow("", "X", "Y")
+## '   ),
+## '   rrow("row 1", 1, 2)
+## ' )
+## ' 
+## ' tbl
+## ' header_row.names(tbl)
 header_row.names <- function(x) {
-  stopifnot(is(x, "rtable"))
-  
-  row.names(header(x))
+    .Deprecated("The concept of header row.names is no longer supported")
+    NULL
 }
 
 #' Modify Header Row Names
@@ -260,39 +234,25 @@ header_row.names <- function(x) {
 #' @param value vector with new row names
 #' 
 #' @export
+#' @rdname deprecated
 #' 
-#' @examples 
-#' tbl <- rtable(
-#'   header = rheader(
-#'     rrow("", "A", "B"),
-#'     rrow("", "X", "Y")
-#'   ),
-#'   rrow("row 1", 1, 2)
-#' )
-#' 
-#' tbl
-#' header_row.names(tbl) <- c("S", "T")
-#' tbl
+## ' @examples 
+## ' tbl <- rtable(
+## '   header = rheader(
+## '     rrow("", "A", "B"),
+## '     rrow("", "X", "Y")
+## '   ),
+## '   rrow("row 1", 1, 2)
+## ' )
+## ' 
+## ' tbl
+## ' header_row.names(tbl) <- c("S", "T")
+## ' tbl
 `header_row.names<-` <- function(x, value) {
-  stopifnot(
-    is(x, "rtable"), 
-    is.character(value) # note cannot delete them with NULL
-  )
-  
-  h <- header(x)
-  
-  if (length(h) != length(value)) {
-    stop("length of assigned value does not match number of rows in header")
-  }
-  
-  for (i in seq_along(value)) {
-    attr(h[[i]], "row.name") <- value[i]
-  }
-  
-  header(x) <- h
-  x
+    .Deprecated("The concept of header row.names is no longer supported")
+    x
 }
-
+ 
 
 #' Access rcells in an \code{\link{rtable}}
 #' 

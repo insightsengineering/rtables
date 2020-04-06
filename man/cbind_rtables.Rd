@@ -15,9 +15,9 @@ cbind_rtables(x, y)
 cbind two rtables
 }
 \examples{
-x <- rtable(c("A", "B"), rrow("x row 1", 1,2), rrow("x row 2", 3, 4))
+x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 
-y <- rtable("C", rrow("y row 1", 5), rrow("y row 2", 6))
+y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 
 cbind_rtables(x, y)
 }

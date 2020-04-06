@@ -496,7 +496,7 @@ combine_cinfo = function(ci1, ci2) {
     newexprs = c(col_exprs(ci1), col_exprs(ci2))
     newexargs = c(cextra_args(ci1),cextra_args(ci2))
     newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
-    InstantiatedColumnInfo(treelyt = newctre,
+    InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
                            extras = newexargs,
                            cnts = newcounts,
@@ -505,35 +505,144 @@ combine_cinfo = function(ci1, ci2) {
 }
 
 
-cbind_rtables <-  function(x,y) {
-    stopifnot(is(x, "VTableTree"),
-              is(y, "VTableTree"))
 
+chk_cbindable <- function(x,y) {
+    if(is(x, "TableRow") &&
+       is(y, class(x)))
+        return(TRUE)
+    
+    if(!is(x, "VTableTree"))
+        stop("x must be a TableTree or ElementaryTableTree, got class ", class(x))
+    if(!is(y, class(x)))
+        stop("y must be of a class that inherits from the class of x (", class(x), ") got ", class(y))
+    if(nrow(x) != nrow(y))
+        stop("x and y must have the same number of rows, got different row counts (", nrow(x), " / ", nrow(y), ")")
     rnx = row.names(x)
     rny = row.names(y)
-    if(!identical(rnx, rny))
-        stop("Row names not identical in x and y")
-    lvsx = collect_leaves(x, add.labrows = TRUE)
-    lvsy = collect_leaves(y, add.labrows = TRUE)
-    if(!identical(sapply(lvsx, class),
-                  sapply(lvsy, class)))
-        stop("Row classes not identical for all rows of x and y")
+    if(!all(rnx == rny || !nzchar(rny))) 
+        stop("Non-empty row.names in y do not match row.names of x")
     
+    rwsx = collect_leaves(x, add.labrows = TRUE)
+    rwsy = collect_leaves(y, add.labrows = TRUE)
+    rwclsx = sapply(rwsx, class)
+    rwclsy = sapply(rwsy, class)
+    if(!identical(rwclsx, rwclsy)) {
+        misses = which(rwclsx != rwclsy)
+        frstmiss = min(misses)
+        stop("Row object classes do not match (",
+             length(misses), " of ", nrow(x),
+             " rows). First mismatch:\n x rowname: ",
+             rnx[frstmiss], " x row class: ",
+             rwclsx[frstmiss], " y row class: ",
+             rwclsy[frstmiss])
+    }
+    TRUE
+}
 
-    newci = combine_cinfo(col_info(x), col_info(y))
-
-    recurse_cbind(tree_children(x), tree_children(y),
-                  content_table(x),
-                  content_table(y),
-                  orig = x,
-                  cinfo = newci)
+cbind_rtables <-  function(x,y) {
+    
+    recurse_cbind(x, y, NULL)
 
 
 }
+setGeneric("recurse_cbind", function(x,y, cinfo = NULL) standardGeneric("recurse_cbind"))
 
-## recurse_cbind = function(k1, k2, cont1, cont2, orig, cinfo) {
-##     constr = get(class(ki1), new
+setMethod("recurse_cbind", c("VTableNodeInfo",
+                             "VTableNodeInfo",
+                             "NULL"),
+          function(x,y, cinfo) {
+    recurse_cbind(x,y, combine_cinfo(col_info(x),
+                                     col_info(y)))
+})
+
+setMethod("recurse_cbind", c("TableTree",
+                             "TableTree",
+                             "InstantiatedColumnInfo"),
+          function(x, y, cinfo) {
+    chk_cbindable(x, y)
+    if(nrow(content_table(x)) == 0 && 
+       nrow(content_table(y)) == 0) {
+        cont = ElementaryTable(cinfo = cinfo)
+    } else {
+        cont = recurse_cbind(content_table(x),
+                             content_table(y),
+                             cinfo = cinfo)
+    }
+
+    kids = mapply(recurse_cbind,
+                  x = tree_children(x),
+                  y = tree_children(y),
+                  MoreArgs = list(cinfo = cinfo),
+                  SIMPLIFY = FALSE)
+    names(kids) = names(tree_children(x))
+    TableTree(kids = kids, labrow = tt_labelrow(x),
+              cont = cont,
+              name = obj_name(x),
+              lev = tt_level(x),
+              cinfo = cinfo,
+              fmt = obj_fmt(x))
+})
+
+setMethod("recurse_cbind", c("ElementaryTable",
+                             "ElementaryTable",
+                             "InstantiatedColumnInfo"),
+          function(x, y, cinfo) {
+    chk_cbindable(x,y)
+    if(nrow(x) == 0 &&
+       nrow(y) == 0)
+        return(x) ## this needs testing...
     
+    kids = mapply(recurse_cbind,
+                  x = tree_children(x),
+                  y = tree_children(y),
+                  MoreArgs = list(cinfo = cinfo),
+                  SIMPLIFY = FALSE)
+    names(kids) = names(tree_children(x))
+    ElementaryTable(kids = kids, labrow = tt_labelrow(x),
+                  name = obj_name(x),
+                  lev = tt_level(x),
+                  cinfo = cinfo,
+                  fmt = obj_fmt(x),
+                  var = obj_avar(x))
+})
 
 
-## }
+setMethod("recurse_cbind", c("TableRow", "TableRow",
+                             "InstantiatedColumnInfo"),
+          function(x,y, cinfo = NULL) {
+    if(!identical(obj_avar(x), obj_avar(y)))
+        stop("Got rows that don't analyze the same variable")
+    vx <- row_values(x)
+    vy <- row_values(y)
+
+    cspx <- row_cspans(x)
+    cspy <- row_cspans(y)
+    ## combine the spans IFF they are already
+    ## bigger than 1 and x ends with the same
+    ## value y begins with
+    if(vx[[length(vx)]] == vy[[1]] && 
+       (tail(cspx, 1) > 1 || head(cspy, 1) > 1)) {
+        retv <- c(vx, vy[-1])
+        retcsp <- c(head(cspx, -1),
+                    tail(cspx,1) + head(cspy, 1),
+                    cspy[-1])
+    } else {
+        retv <- c(vx, vy)
+        retcsp <- c(cspx, cspy)
+    }
+
+    ## Could be DataRow or ContentRow
+    ## This is ok because LabelRow is special cased
+    constr_fun <- get(class(x), mode = "function")
+    constr_fun(val = retv,
+               cspan = retcsp,
+               cinfo = cinfo,
+               var = obj_avar(x),
+               fmt = obj_fmt(x),
+               name = obj_name(x),
+               lab = obj_label(x))
+})
+
+setMethod("recurse_cbind", c("LabelRow", "LabelRow",
+                             "InstantiatedColumnInfo"),
+          function(x,y, cinfo = NULL) x)

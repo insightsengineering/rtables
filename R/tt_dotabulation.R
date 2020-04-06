@@ -346,7 +346,6 @@ recursive_applysplit = function( df,
                                       lab = obj_label(spl),
                                       lev = innerlev - 1L,
                                       cinfo = cinfo,
-                                      spl = spl,
                                       fmt = obj_fmt(spl)))
                 ## I'm enforcing this in the TableTree
                 ## constructor now
@@ -362,7 +361,6 @@ recursive_applysplit = function( df,
                         name = name,
                         lev = lvl,
                     iscontent = FALSE, 
-                    spl = spl,
                     labrow = LabelRow(lev = lvl,
                                       lab = label,
                                       cinfo = cinfo),
@@ -436,8 +434,6 @@ build_table = function(lyt, df,
                     name = "root",
                     lab="",
                     iscontent = FALSE,
-                    spl = rtspl,
-                    ##clayout = coltree(cinfo),
                     cinfo = cinfo,
                     fmt = obj_fmt(rtspl))
     tab

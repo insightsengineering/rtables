@@ -32,7 +32,6 @@ TableTree(
     nzchar(lab)),
   rspans = data.frame(),
   iscontent = NA,
-  spl = NULL,
   var = NA_character_,
   cinfo = NULL,
   fmt = NULL
@@ -42,8 +41,6 @@ TableTree(
 \item{var}{string, variable name}
 
 \item{fmt}{format string for cells}
-
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
 }
 \description{
 Table Constructors and Classes

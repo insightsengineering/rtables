@@ -486,6 +486,18 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 #' @inheritParams argument_conventions
 #' @rdname row_accessors
 #' @export
+#'
+setGeneric("obj_avar", function(obj) standardGeneric("obj_avar"))
+#'@rdname row_accessors
+#' @exportMethod obj_avar
+setMethod("obj_avar", "TableRow", function(obj) obj@var_analyzed)
+
+#'@rdname row_accessors
+#' @exportMethod obj_avar
+setMethod("obj_avar", "ElementaryTable", function(obj) obj@var_analyzed)
+
+#' @export
+#' @rdname row_accessors
 setGeneric("row_values", function(obj) standardGeneric("row_values"))
 #' @rdname row_accessors
 #' @exportMethod row_values
@@ -544,6 +556,8 @@ setMethod("spanned_values<-", "LabelRow",
         stop("Label rows can't have non-null cell values, got", value)
     obj
 })
+
+
 
 ### Format manipulation
 ### obj_format<- is not recursive

@@ -35,18 +35,49 @@
 #' indent(mtbl, -3, truncate_at_zero = TRUE)
 #' 
 indent <- function(x, by = 1, truncate_at_zero = FALSE) {
-  stopifnot(is_rtable(x))
-  stopifnot(length(by) == 1, is.numeric(by))
-  stopifnot(is.logical(truncate_at_zero))
-  
-  if (is_empty_rtable(x)) {
-    return(x)
-  }
-  
-  for (i in 1:nrow(x)) {
-    ind <- attr(x[[i]], "indent")
-    stopifnot(truncate_at_zero || (ind + by >= 0))
-    attr(x[[i]], "indent") <- max(0, ind + by)
-  }
-  x
+    if(nrow(x) == 0)
+        return(x)
+
+    recurse_indent(x, by = 1)
 }
+
+setGeneric("recurse_indent", function(x, by = 1, truncate_at_zero = FALSE) 
+    standardGeneric("recurse_indent"))
+
+
+setMethod("recurse_indent", "TableTree",
+          function(x, by = 1, truncate_at_zero = FALSE) {
+    newlev = tt_level(x) + by
+    stopifnot(truncate_at_zero || (newlev >= 0))
+    tt_level(x) = newlev
+    ct <- content_table(x)
+    if(nrow(ct) > 0) {
+        ct <- recurse_indent(ct, by, truncate_at_zero)
+        content_table(x) <- ct
+
+    }
+    kids = lapply(tree_children(x), recurse_indent, by = by, truncate_at_zero = truncate_at_zero)
+    if(length(kids) > 0)
+        tree_children(x) <- kids
+    x
+})
+
+setMethod("recurse_indent", "ElementaryTable",
+          function(x, by = 1, truncate_at_zero = FALSE) {
+    newlev = tt_level(x) + by
+    stopifnot(truncate_at_zero || (newlev >= 0))
+    tt_level(x) = newlev
+    kids = lapply(tree_children(x), recurse_indent, by = by, truncate_at_zero = truncate_at_zero)
+    if(length(kids) > 0)
+        tree_children(x) <- kids
+    x
+})
+
+setMethod("recurse_indent", "TableRow",
+          function(x, by = 1, truncate_at_zero = FALSE) {
+    newlev = tt_level(x) + by
+    stopifnot(truncate_at_zero || (newlev >= 0))
+    tt_level(x) = newlev
+    x
+})
+

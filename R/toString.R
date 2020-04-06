@@ -41,6 +41,8 @@ toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
 # get the max 
 # rows is a list of rows
 max_nchar_cols <- function(rows) {
+    if(length(rows) == 0)
+        return(0)
   
   if (is(rows, "rrow")) rows <- list(rows)
   
