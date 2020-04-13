@@ -601,6 +601,7 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 
 #' @exportMethod [
+#' @param drop logical. Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
 #' @rdname brackets
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),

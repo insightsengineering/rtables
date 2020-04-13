@@ -30,6 +30,8 @@ add_analyzed_vars(
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
+
+\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding

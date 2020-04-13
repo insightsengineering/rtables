@@ -6,6 +6,9 @@
 \usage{
 no_colinfo(obj)
 }
+\arguments{
+\item{obj}{the object.}
+}
 \description{
-Exported for use in tern
+Does the table/row/InstantiatedColumnInfo object contain no column structure information?
 }

@@ -8,7 +8,7 @@ add_colby_varlevels(
   lyt,
   var,
   lbl = var,
-  valuelblvar = var,
+  vlblvar = var,
   splfmt = NULL,
   newtoplev = FALSE,
   extrargs = list()
@@ -21,11 +21,13 @@ add_colby_varlevels(
 
 \item{lbl}{string, label, often variable label}
 
-\item{valuelblvar}{string, name of variable containing split value display lables}
+\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{splfmt}{format spec. Format associated with this split.}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Will generate children for each subset of a categorical variable

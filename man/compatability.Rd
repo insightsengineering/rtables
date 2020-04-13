@@ -2,21 +2,25 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{header<-}
 \alias{header<-}
-\alias{col_info}
 \alias{header}
 \alias{by_all}
-\title{export}
+\title{Miscellaneous Compatability methods for the old API}
 \usage{
 header(x) <- value
 
-col_info(obj)
+header(x)
 
 by_all(name)
 }
-\description{
-export
+\arguments{
+\item{x}{An object}
 
-export
+\item{value}{The new value}
+
+\item{name}{character(1). Label for the added all/total column}
+}
+\description{
+Miscellaneous Compatability methods for the old API
 
 Add column representing all rows
 }

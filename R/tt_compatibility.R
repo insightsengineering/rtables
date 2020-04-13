@@ -438,7 +438,9 @@ header_add_N = function(x, N) {
     x
 }
 
-#' export
+#' Miscellaneous Compatability methods for the old API
+#' @inheritParams argument_conventions
+#' @export
 #' @rdname compatability
 `header<-` = function(x, value) {
     if(is(value, "list")) {
@@ -458,12 +460,14 @@ header_add_N = function(x, N) {
     x
 }
 
-#' export
+
+#' @export
 #' @rdname compatability
-header = col_info
+header <- function(x) col_info(obj = x)
 
 
 #' Add column representing all rows
+#' @param name character(1). Label for the added all/total column
 #' 
 #' @export
 #' @rdname compatability
@@ -699,6 +703,7 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' @param tbl rtable
 #' @param rrow rrow to append to rtable
 #' @param at position into which to put the rrow, defaults to beginning (ie 1)
+#' @param ascontent logical. Currently ignored.
 #' 
 #' @return A TableTree of the same specific class as \code{tbl}
 #' 

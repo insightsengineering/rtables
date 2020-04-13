@@ -3,45 +3,8 @@
 \docType{class}
 \name{ElementaryTable-class}
 \alias{ElementaryTable-class}
-\alias{ElementaryTable}
 \alias{TableTree-class}
-\alias{TableTree}
-\title{Table Constructors and Classes}
-\usage{
-ElementaryTable(
-  kids = list(),
-  name = "",
-  lev = 1L,
-  lab = "",
-  labrow = LabelRow(lev = lev, lab = lab, vis = !isTRUE(iscontent) && !is.na(lab) &&
-    nzchar(lab)),
-  rspans = data.frame(),
-  cinfo = NULL,
-  iscontent = NA,
-  var = NA_character_,
-  fmt = NULL
-)
-
-TableTree(
-  kids = list(),
-  name = if (!is.na(var)) var else "",
-  cont = ElementaryTable(),
-  lev = 1L,
-  lab = name,
-  labrow = LabelRow(lev = lev, lab = lab, vis = nrow(cont) == 0 && !is.na(lab) &&
-    nzchar(lab)),
-  rspans = data.frame(),
-  iscontent = NA,
-  var = NA_character_,
-  cinfo = NULL,
-  fmt = NULL
-)
-}
-\arguments{
-\item{var}{string, variable name}
-
-\item{fmt}{format string for cells}
-}
+\title{TableTree classes}
 \description{
-Table Constructors and Classes
+TableTree classes
 }

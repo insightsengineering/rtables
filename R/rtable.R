@@ -417,6 +417,7 @@ empty_old_rtable <- function() {
 #' @param x and \code{empty_old_rtable} object
 #' @param ... arguments not used
 #' 
+#' @method toString empty_rtable
 #' @export
 #' 
 #' @examples 

@@ -14,7 +14,7 @@
 
 \item{df}{dataset}
 
-\item{valuelblvar}{string, name of variable containing split value display lables}
+\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{varlbls}{character vector. Labels for \code{vars}}
 
@@ -73,6 +73,22 @@
 \item{value}{The new value}
 
 \item{object}{The object to modify in-place}
+
+\item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
+
+\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+
+\item{kids}{list. List of direct children.}
+
+\item{cont}{ElementaryTable. Content table.}
+
+\item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+
+\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed the content table for another TableTree.}
+
+\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
+
+\item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 }
 \description{
 Dummy Function with aruments that are used throughout the framework

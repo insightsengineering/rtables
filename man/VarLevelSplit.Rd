@@ -10,21 +10,21 @@
 VarLevelSplit(
   var,
   splbl,
-  valuelblvar = NULL,
+  vlblvar = NULL,
   cfun = NULL,
   cfmt = NULL,
   splfun = NULL,
   splfmt = NULL,
   valorder = NULL,
   splname = var,
-  kid_labs = NA,
+  lblkids = NA,
   extrargs = list()
 )
 
 VarLevWBaselineSplit(
   var,
   baseline,
-  valuelblvar = var,
+  vlblvar = var,
   incl_all = FALSE,
   splbl,
   lbl_fmt = "\%s - \%s",
@@ -41,7 +41,7 @@ VarLevWBaselineSplit(
 
 \item{splbl}{string. Labe associated with this split}
 
-\item{valuelblvar}{string, name of variable containing split value display lables}
+\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows}
 
@@ -54,6 +54,10 @@ VarLevWBaselineSplit(
 \item{valorder}{character vector. Order that the split children should appear in resulting table.}
 
 \item{splname}{string. Name associiated with this split (for pathing, etc)}
+
+\item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
+
+\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{baseline}{character. Value of \code{var} to be taken as the baseline/control to be compared against.}
 }

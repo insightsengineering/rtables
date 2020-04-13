@@ -27,7 +27,7 @@ add_rowby_staticcut(
   cutlbls = NULL,
   splfmt = NULL,
   newtoplev = FALSE,
-  kidlbls = NA,
+  lblkids = NA,
   cumulative = FALSE
 )
 
@@ -67,7 +67,7 @@ add_rowby_dyncut(
   cutfun = qtile_cuts,
   splfmt = NULL,
   newtoplev = FALSE,
-  kidlbls = NA,
+  lblkids = NA,
   cumulative = FALSE
 )
 }
@@ -88,7 +88,11 @@ add_rowby_dyncut(
 
 \item{splfmt}{format spec. Format associated with this split.}
 
+\item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
+
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
+
+\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Create columns (or row splits) based on values (such as quartiles) of \code{var}.

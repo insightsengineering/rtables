@@ -50,7 +50,7 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
                     cmlquartcut_df = add_colby_cmlqrtiles,
                     add_colby_varlevels)
     lyt <- addfun(lyt, var = var,
-                  newtoplev = nwetoplev,
+                  newtoplev = newtoplev,
                   extrargs = extrargs)
     lyt
 }

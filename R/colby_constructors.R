@@ -273,9 +273,9 @@ add_new_coltree = function(lyt, spl) {
 #' # TODO: fix
 #' # build_table(l3, DM)
 #' 
-add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE,
+add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE,
                                extrargs = list()) {
-    spl = VarLevelSplit(var = var, splbl = lbl, valuelblvar = valuelblvar, splfmt = splfmt, kid_labs = FALSE,
+    spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = FALSE,
                         extrargs = extrargs)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
@@ -304,13 +304,13 @@ add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = 
 #' 
 #' build_table(l, DM)
 #' 
-add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuelblvar, splfmt = NULL, newtoplev = FALSE) {
+add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
                                baseline = baseline,
                                incl_all = incl_all,
                                splbl = lbl,
-                               valuelblvar = valuelblvar,
+                               vlblvar = vlblvar,
                                splfmt = splfmt)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
@@ -340,13 +340,13 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #' # TODO: fix
 #' # build_table(l, DM)
 #'   
-add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, kidlbls = NA) {
+add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
-                        valuelblvar = vlblvar,
+                        vlblvar = vlblvar,
                         splfun = splfun,
                         splfmt = fmt,
-                        kid_labs = kidlbls)
+                        lblkids = lblkids)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -394,10 +394,10 @@ add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
 add_rowby_multivar = function(lyt, vars, lbl, varlbls,
                               splfmt = NULL,
                               newtoplev = FALSE,
-                              kidlbls = NA) {
+                              lblkids = NA) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls,
                         splfmt = splfmt,
-                        kid_labs = kidlbls)
+                        lblkids = lblkids)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 }
@@ -435,11 +435,11 @@ add_rowby_staticcut = function(lyt, var, lbl, cuts,
                                cutlbls = NULL,
                                splfmt = NULL,
                                newtoplev = FALSE,
-                               kidlbls = NA,
+                               lblkids = NA,
                                cumulative = FALSE) {
     spl = VarStaticCutSplit(var, lbl, cuts, cutlbls,
                             splfmt = splfmt,
-                            kid_labs = kidlbls)
+                            lblkids = lblkids)
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
 
@@ -514,11 +514,11 @@ add_rowby_dyncut = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
                             splfmt = NULL,
                             newtoplev = FALSE,
-                            kidlbls = NA,
+                            lblkids = NA,
                             cumulative = FALSE) {
     spl = VarDynCutSplit(var, lbl, cutfun = cutfun,
                          splfmt = splfmt,
-                         kid_labs = kidlbls,
+                         lblkids = lblkids,
                          cumulative = cumulative)
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
@@ -742,27 +742,27 @@ add_col_total = function(lyt, lbl) {
 }
 
 setGeneric("add_summary",
-           function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) standardGeneric("add_summary"))
+           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric("add_summary"))
 setMethod("add_summary", "PreDataTableLayouts",
-          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
+          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     tmp = add_summary(rlayout(lyt), lbl, cfun,
-                      kidlbls = kidlbls,
+                      lblkids = lblkids,
                       cfmt = cfmt)
     rlayout(lyt) = tmp
     lyt
 })
 
 setMethod("add_summary", "PreDataRowLayout",
-          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
+          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         rt = root_spl(lyt)
-        rt = add_summary(rt, lbl, cfun, kidlbls = kidlbls, cfmt = cfmt)
+        rt = add_summary(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
         tmp = add_summary(lyt[[ind]], lbl, cfun,
-                          kidlbls = kidlbls,
+                          lblkids = lblkids,
                           cfmt = cfmt)
         lyt[[ind]] = tmp
     }
@@ -770,22 +770,22 @@ setMethod("add_summary", "PreDataRowLayout",
 })
 
 setMethod("add_summary", "SplitVector",
-          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
+          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = add_summary(spl, lbl, cfun, kidlbls = kidlbls, cfmt = cfmt)
+    tmp = add_summary(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
     lyt[[ind]] = tmp
     lyt
 })
 
 setMethod("add_summary", "Split",
-          function(lyt, lbl, cfun, kidlbls = NA, cfmt = NULL) {
+          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     content_fun(lyt) = cfun
     obj_fmt(lyt) = cfmt
-    if(!identical(kidlbls, label_kids(lyt)))
-        label_kids(lyt) = kidlbls
+    if(!identical(lblkids, label_kids(lyt)))
+        label_kids(lyt) = lblkids
     lyt
 })
 
@@ -1023,7 +1023,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 ## Manual column construction in a simple (seeming
 ## to the user) way.
 #' Manual column declaration
-#' @param dots One or more vectors of levels to appear
+#' @param \dots One or more vectors of levels to appear
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
 #' @param .list A list of sets of levels, by default populated via \code{list(...)}.
 #' @examples

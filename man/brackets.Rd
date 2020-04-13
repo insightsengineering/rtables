@@ -37,6 +37,8 @@
 \item{...}{ignored}
 
 \item{value}{Replacement value (list, TableRow, or TableTree)}
+
+\item{drop}{logical. Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}}
 }
 \description{
 retrieve and assign elements of a TableTree

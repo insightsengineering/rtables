@@ -4,7 +4,7 @@
 \alias{row.names.rheader}
 \title{Row names of an \code{\link{rheader}} object}
 \usage{
-row.names.rheader(x)
+\method{row.names}{rheader}(x)
 }
 \arguments{
 \item{x}{an \code{\link{rtable}} object}

@@ -8,7 +8,8 @@
 #' @param gap number of empty rows to add between tables
 #'   
 #' @return an \code{\link{rtable}} object
-#' 
+#'
+#' @method rbind rtable
 #' @export
 #' 
 #' @examples 

@@ -12,6 +12,8 @@ insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 \item{rrow}{rrow to append to rtable}
 
 \item{at}{position into which to put the rrow, defaults to beginning (ie 1)}
+
+\item{ascontent}{logical. Currently ignored.}
 }
 \value{
 A TableTree of the same specific class as \code{tbl}

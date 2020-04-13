@@ -4,7 +4,7 @@
 \alias{toString.empty_rtable}
 \title{convert an empty old_rtable to a string}
 \usage{
-toString.empty_rtable(x, ...)
+\method{toString}{empty_rtable}(x, ...)
 }
 \arguments{
 \item{x}{and \code{empty_old_rtable} object}

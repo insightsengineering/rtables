@@ -7,7 +7,7 @@
 #' @return vector of length two with number of rows and number of columns.
 #' 
 #' @export
-#' 
+#' @method dim rtable
 dim.rtable <- function(x) {
   c(attr(x, "nrow"), attr(x, "ncol"))
 }
@@ -21,7 +21,7 @@ dim.rtable <- function(x) {
 #' @return vector of length two with number of rows and number of columns.
 #' 
 #' @export
-#' 
+#' @method dim rheader
 dim.rheader <- function(x) {
   c(attr(x, "nrow"), attr(x, "ncol"))
 }
@@ -35,6 +35,7 @@ dim.rheader <- function(x) {
 #' @return a vector with the row names
 #' 
 #' @export
+#' @method  row.names rtable
 row.names.rtable <- function(x) {
   vapply(x, function(row) {
     rn <- attr(row, "row.name")
@@ -72,7 +73,7 @@ indented_row.names <- function(x, spaces = 2) {
 #' @export
 #' @rdname deprecated
 header_indent <- function(x) {
-    .Deprecation("The concept of the table header being made up of rows is no longer supported.")
+    .Deprecated("The concept of the table header being made up of rows is no longer supported.")
     stopifnot(is(x, "VTableTree"))
     hdr = .tbl_header_mat(x)
     rep(0, nrow(hdr$body))
@@ -137,7 +138,8 @@ header_indent_old <- function(x) {
 #' @inheritParams row.names.rtable
 #' 
 #' @return a vector with the row names
-#' 
+#'
+#' @method row.names rheader
 #' @export
 row.names.rheader <- function(x) {
   row.names.rtable(x)
@@ -152,7 +154,8 @@ row.names.rheader <- function(x) {
 #' @inheritParams dim.rtable
 #' 
 #' @return a vector with the column names 
-#' 
+#'
+#' @method names rtable
 #' @export
 names.rtable <- function(x) {
   row_i <- attr(x, "header")[[1]]
@@ -266,6 +269,7 @@ header_row.names <- function(x) {
 #'   j+1]}, \code{x[i, j+2]}, \code{x[i, j+3]} return the same
 #'   \code{\link{rcell}} object.
 #'
+#' @method [ rtable
 #' @export
 `[.rtable` <- function(x, i, j, ...) {
   
@@ -305,7 +309,7 @@ header_row.names <- function(x) {
 #' @param i row index
 #' @param j col index
 #' @param ... arguments passed forward to \code{\link{[.rtable}}
-#' 
+#' @method [ rheader
 #' @export
 `[.rheader` <- function(x, i, j, ...) {
   `[.rtable`(x, i, j, ...)

@@ -12,7 +12,7 @@ add_rowby_varlevels(
   splfun = NULL,
   fmt = NULL,
   newtoplev = FALSE,
-  kidlbls = NA
+  lblkids = NA
 )
 }
 \arguments{
@@ -22,11 +22,15 @@ add_rowby_varlevels(
 
 \item{lbl}{string, label, often variable label}
 
+\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+
 \item{splfun}{function/NULL. custom splitting function}
 
 \item{fmt}{format string for cells}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 }
 \description{
 Add Rows according to levels of a variable

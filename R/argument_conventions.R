@@ -16,7 +16,7 @@ NULL
 #' @param vars character vector. Multiple variable names.
 #' @param lbl string, label, often variable label
 #' @param df dataset
-#' @param valuelblvar string, name of variable containing split value display lables
+#' @param vlblvar string, name of variable containing labels to be displayed for the values of \code{var}
 #' @param varlbls character vector. Labels for \code{vars}
 #' @param splfmt format spec. Format associated with this split.
 #' @param newtoplev boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
@@ -47,6 +47,14 @@ NULL
 #' @param \dots Passed on to metthods or tabulation functions.
 #' @param value The new value
 #' @param object The object to modify in-place
+#' @param lblkids logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.
+#' @param extrargs list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.
+#' @param kids list. List of direct children.
+#' @param cont ElementaryTable. Content table.
+#' @param lev integer. Nesting level (roughly, indentation level in practical terms).
+#' @param iscontent logical. Is the TableTree/ElementaryTable being constructed the content table for another TableTree.
+#' @param cinfo InstantiatedColumnInfo (or NULL). Column structure for the object being created.
+#' @param name character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.
 #' @rdname argument_conventions
 NULL
 

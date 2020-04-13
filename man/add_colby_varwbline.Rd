@@ -10,7 +10,7 @@ add_colby_varwbline(
   baseline,
   incl_all = FALSE,
   lbl,
-  valuelblvar,
+  vlblvar = var,
   splfmt = NULL,
   newtoplev = FALSE
 )
@@ -24,7 +24,7 @@ add_colby_varwbline(
 
 \item{lbl}{string, label, often variable label}
 
-\item{valuelblvar}{string, name of variable containing split value display lables}
+\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{splfmt}{format spec. Format associated with this split.}
 

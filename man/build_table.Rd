@@ -4,17 +4,25 @@
 \alias{build_table}
 \title{Create a table from a layout and data}
 \usage{
-build_table(lyt, df, col_args = NULL, col_counts = NULL, ...)
+build_table(lyt, df, col_counts = NULL, ...)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{df}{dataset}
 
+\item{col_counts}{numeric (or NULL). If non-null, column counts which override those calculated automatically during tabulation.}
+
 \item{...}{Passed on to metthods or tabulation functions.}
 }
 \description{
 Layouts are used to describe a table pre-data. `build_rable` is used to create a table using a layout and a dataset.
+}
+\note{
+When overriding the collumn counts care must be taken that, e.g., length() or nrow() are not called within
+tabulation functions, because those will NOT give the overridden counts. Writing/using tabulation functions
+which accept \code{.N_col} and \code{.N_total} or do not rely on column counts at all (even implicitly) is
+the only way to ensure overriden counts are fully respected.
 }
 \examples{
 

@@ -378,6 +378,12 @@ recursive_applysplit = function( df,
 #' Layouts are used to describe a table pre-data. `build_rable` is used to create a table using a layout and a dataset.
 #' 
 #' @inheritParams argument_conventions
+#' @param col_counts numeric (or NULL). If non-null, column counts which override those calculated automatically during tabulation. 
+#'
+#' @note When overriding the collumn counts care must be taken that, e.g., length() or nrow() are not called within
+#' tabulation functions, because those will NOT give the overridden counts. Writing/using tabulation functions
+#' which accept \code{.N_col} and \code{.N_total} or do not rely on column counts at all (even implicitly) is
+#' the only way to ensure overriden counts are fully respected.
 #' 
 #' @examples
 #' 
@@ -393,7 +399,6 @@ recursive_applysplit = function( df,
 #' build_table(l, DM) 
 #' @export
 build_table = function(lyt, df,
-                       col_args = NULL,
                        col_counts = NULL,
                        ...) {
     lyt = fix_dyncuts(lyt, df)

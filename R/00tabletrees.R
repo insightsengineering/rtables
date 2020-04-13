@@ -100,27 +100,27 @@ setClass("VarLevelSplit", contains = "CustomizableSplit",
 #' @export
 VarLevelSplit = function(var,
                          splbl,
-                         valuelblvar = NULL,
+                         vlblvar = NULL,
                          cfun = NULL,
                          cfmt = NULL,
                          splfun = NULL,
                          splfmt = NULL,
                          valorder = NULL,
                          splname = var,
-                         kid_labs = NA,
+                         lblkids = NA,
                          extrargs = list()) {
-    if(is.null(valuelblvar))
-        valuelblvar = var
+    if(is.null(vlblvar))
+        vlblvar = var
     new("VarLevelSplit", payload = var,
         split_label = splbl,
         name = splname,
-        value_lbl_var = valuelblvar,
+        value_lbl_var = vlblvar,
         content_fun = cfun,
         content_format = cfmt,
         split_fun = splfun,
         split_format = splfmt,
         value_order = NULL,
-        label_children = kid_labs,
+        label_children = lblkids,
         extra_args = extrargs
         )
 }
@@ -164,6 +164,7 @@ setClass("ManualSplit", contains = "AllSplit",
 #' Manually defined split
 #'
 #' @inheritParams argument_conventions
+#' @param levs character. Levels of the split (ie the children of the manual split)
 #' @export
 ManualSplit = function(levs, lbl, name = "manual",
                        extrargs = list()) {
@@ -197,7 +198,7 @@ MultiVarSplit = function(vars,
                          cfmt = NULL,
                          splfmt = NULL,
                          splname = paste(vars, collapse = ":"),
-                         kid_labs = NA,
+                         lblkids = NA,
                          extrargs = list()) {
 
     if(length(vars) == 1 && grepl(":", vars))
@@ -210,7 +211,7 @@ MultiVarSplit = function(vars,
         content_fun = cfun,
         content_format = cfmt,
         split_format = splfmt,
-        label_children = kid_labs,
+        label_children = lblkids,
         extra_args = extrargs)
 }
 
@@ -228,7 +229,7 @@ VarStaticCutSplit = function(var,
                              cfmt = NULL,
                              splfmt = NULL,
                              splname = var,
-                             kid_labs = NA,
+                             lblkids = NA,
                              extrargs = list()) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
@@ -249,7 +250,7 @@ VarStaticCutSplit = function(var,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = kid_labs,
+        label_children = lblkids,
         extra_args = extrargs)
 }
 
@@ -267,7 +268,7 @@ CumulativeCutSplit = function(var,
                              cfmt = NULL,
                              splfmt = NULL,
                              splname = var,
-                             kid_labs = NA,
+                             lblkids = NA,
                              extrargs = list()) {
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
@@ -288,7 +289,7 @@ CumulativeCutSplit = function(var,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = kid_labs,
+        label_children = lblkids,
         extra_args = extrargs)
 }
 
@@ -312,7 +313,7 @@ VarDynCutSplit = function(var,
                           cfmt = NULL,
                           splfmt = NULL,
                           splname = var,
-                          kid_labs = NA,
+                          lblkids = NA,
                           extrargs = list(),
                           cumulative = FALSE) {
     new("VarDynCutSplit", payload = var,
@@ -324,7 +325,7 @@ VarDynCutSplit = function(var,
         content_format = cfmt,
         split_format = splfmt,
         name = splname,
-        label_children = kid_labs,
+        label_children = lblkids,
         extra_args = extrargs)
 }
 
@@ -379,6 +380,7 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 }
 
 #' @rdname avarspl
+#' @param .payload Used internally, not intended to be set by end users.
 #' @export
 AnalyzeMultiVars = function(var, splbl ="", afun, defrowlab = "", cfun = NULL, cfmt = NULL, splfmt = NULL, inclNAs = FALSE,
                             .payload = NULL,
@@ -445,7 +447,7 @@ AVarBaselineComp = function(var,
                             splbl,
                             afun,
                             compfun = `-`,
-                            valuelblvar = NULL,
+                            vlblvar = NULL,
                             cfun = NULL,
                             cfmt = NULL,
                             splfun = NULL,
@@ -454,10 +456,10 @@ AVarBaselineComp = function(var,
                             splname = var,
                             extrargs = list()
                             ) {
-    if(is.null(valuelblvar))
-        valuelblvar = var
+    if(is.null(vlblvar))
+        vlblvar = var
     new("AVarBaselineComp", payload = var, split_label = splbl,
-        value_lbl_var = valuelblvar,
+        value_lbl_var = vlblvar,
         content_fun = cfun,
         content_format = cfmt,
         split_fun = splfun,
@@ -565,7 +567,7 @@ setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
                         incl_allcategory = "logical"))
 #' @rdname VarLevelSplit
 #' @export
-VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALSE,
+VarLevWBaselineSplit = function(var, baseline, vlblvar= var, incl_all = FALSE,
                                 splbl,
 #                             comparison = `-`,
                              lbl_fmt = "%s - %s",
@@ -581,7 +583,8 @@ VarLevWBaselineSplit = function(var, baseline, valuelblvar= var, incl_all = FALS
         ## This will occur ata theee row level not on the column split, for now
         ## TODO revisit this to confirm its right
         ##        comparison_func = comparison,
-  #      label_format = lbl_fmt,
+                                        #      label_format = lbl_fmt,
+        value_lbl_var = vlblvar,
         split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
@@ -894,6 +897,26 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 
 
 ### TableTree Core non-virtual Classes
+#' Row classes and constructors
+#' @rdname rowclasses
+#' @inheritParams argument_conventions
+#' @param vis logical. Should the row be visible (\code{LabelRow} only).
+#' @export
+LabelRow = function(lev = 1L,
+                    lab = "",
+                    name = lab,
+                    vis = !is.na(lab) && nzchar(lab),
+                    cinfo = InstantiatedColumnInfo()) {
+    new("LabelRow",
+        leaf_value = list(),
+        level = lev,
+        label = lab,
+        ## XXX this means that a label row and its talbe can have the same name....that is bad but how bad remains to be seen
+        ## XXX
+        name = .chkname(name),
+        col_info = cinfo,
+        visible = vis)
+}
 
 #' Row constructors and Classes
 #' @rdname rowclasses
@@ -925,23 +948,7 @@ setClass("LabelRow", contains = "TableRow",
         (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
 })
 
-#' @rdname rowclasses
-#' @export
-LabelRow = function(lev = 1L,
-                    lab = "",
-                    name = lab,
-                      vis = !is.na(lab) && nzchar(lab),
-                      cinfo = InstantiatedColumnInfo()) {
-    new("LabelRow",
-        leaf_value = list(),
-        level = lev,
-        label = lab,
-        ## XXX this means that a label row and its talbe can have the same name....that is bad but how bad remains to be seen
-        ## XXX
-        name = .chkname(name),
-        col_info = cinfo,
-        visible = vis)
-}
+
                       
 
 .tablerow = function(val = list(),
@@ -984,10 +991,9 @@ ContentRow = function(...) .tablerow(..., klass = "ContentRow")
 
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
-#' Table Constructors and Classes
-#' @inheritParams argument_conventions
-#' @rdname tabclasses
+#' TableTree classes
 #' @exportClass ElementaryTable
+#' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character",
                         labelrow = "LabelRow"),
@@ -1037,7 +1043,9 @@ setClass("ElementaryTable", contains = "VTableTree",
 
 }
 
-#' @rdname tabclasses
+#' Table Constructors and Classes
+#' @inheritParams argument_conventions
+#' @rdname tabconstr
 #' @export
 ElementaryTable = function(kids = list(),
                            name = "",
@@ -1090,7 +1098,7 @@ setClass("TableTree", contains = c("VTableTree"),
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
 })
 
-#' @rdname tabclasses
+#' @rdname tabconstr
 #' @export
 TableTree = function(kids = list(),
                      name = if(!is.na(var)) var else "",

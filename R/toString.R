@@ -5,7 +5,7 @@
 #' @param indent.unit number of spaces used for indentation of row.names
 #' @param ... currently not used
 #' 
-#' 
+#' @method toString rtable
 #' @export
 #' 
 toString.rtable <- function(x, gap = 8, indent.unit = 2, ...) {
@@ -76,6 +76,7 @@ max_nchar_rownames <- function(rows, indent.unit) {
 }
 
 
+#' @method print rtable
 #' @export
 print.rtable <- function(x, ...) {
   str <- toString(x, ...)
@@ -83,12 +84,14 @@ print.rtable <- function(x, ...) {
   cat("\n")
 }
 
+#' @method print rcell
 #' @export
 print.rcell <- function(x, output = "ascii", ...) {
   cat(format_rcell(x, output = output))
   cat("\n")
 }
 
+#' @method print rrow
 #' @export
 print.rrow <- function(x, gap = 8, indent.unit = 2, ...) {
   txt <- row_to_str(x, max_nchar_rownames(x, indent.unit = indent.unit), max_nchar_cols(x), gap = gap, indent.unit = indent.unit)
