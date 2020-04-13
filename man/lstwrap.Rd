@@ -24,7 +24,6 @@ We provide both because when using the functions as tabulation functions via \co
 
 summary(iris$Sepal.Length)
 
-library(magrittr)
 f <- lstwrapx(summary)
 f(iris$Sepal.Length)
 }

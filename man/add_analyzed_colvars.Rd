@@ -23,9 +23,6 @@ level of nesting in the column structure, rather than at the row level.
 }
 \examples{
 
-library(magrittr)
-library(dplyr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   add_rowby_varlevels("RACE", "ethnicity") \%>\%

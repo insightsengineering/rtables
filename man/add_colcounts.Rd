@@ -15,9 +15,6 @@ add_colcounts(lyt, fmt = "(N=xx)")
 Add the column population counts to the header
 }
 \examples{
-
-library(magrittr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
     add_colcounts() \%>\% 
     add_rowby_varlevels("RACE") \%>\% 

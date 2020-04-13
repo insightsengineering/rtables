@@ -36,9 +36,6 @@ add_rowby_varlevels(
 Add Rows according to levels of a variable
 }
 \examples{
-
-library(magrittr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_colby_varlevels("SEX", "Gender") \%>\%
   add_summary_count(rowlblf = "Overall (N)") \%>\%

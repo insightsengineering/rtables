@@ -23,10 +23,6 @@ need columns to reflect different variables entirely, rather than different leve
 \code{add_colby_multivar}
 }
 \examples{
-
-library(magrittr)
-library(dplyr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   add_rowby_varlevels("RACE", "ethnicity") \%>\%

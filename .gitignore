@@ -6,4 +6,4 @@
 .httr-oauth
 *~
 *.sas.txt
-^docs/
+docs/*

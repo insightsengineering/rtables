@@ -36,8 +36,6 @@ Instead of doing \code{\link{add_colby_varlevels}} we simply do add_colby_varwbl
 baseline")
 }
 \examples{
-library(magrittr)
-
 l <- NULL \%>\%
   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") \%>\%
   add_rowby_varlevels("RACE", "ethnicity") \%>\% 

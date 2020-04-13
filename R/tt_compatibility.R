@@ -460,7 +460,6 @@ header_add_N = function(x, N) {
     x
 }
 
-
 #' @export
 #' @rdname compatability
 header <- function(x) col_info(obj = x)

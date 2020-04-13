@@ -33,9 +33,6 @@ add_colby_varlevels(
 Will generate children for each subset of a categorical variable
 }
 \examples{
-
-library(magrittr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM") 
 l
 

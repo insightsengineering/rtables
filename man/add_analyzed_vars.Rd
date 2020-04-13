@@ -39,9 +39,6 @@ calls to \code{add_analyzed_vars} and/or \code{\link{add_analyzed_colvars}} into
 adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 }
 \examples{
-
-library(magrittr)
-
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l

@@ -26,7 +26,6 @@ by_add_total(mat, label = "tot")
 by_add_total(x, label = "tot")
 
 if (requireNamespace("testthat", quietly = TRUE)) {
-  library(dplyr)
   mat \%>\% by_add_total(label = "tot")
 }
 

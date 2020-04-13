@@ -1,6 +1,11 @@
+
 home:
   strip_header: true
 
+template:
+  params:
+    bootswatch: cerulean
+    
 navbar:
   type: default
   right:
@@ -13,36 +18,19 @@ reference:
     desc: Table Trees
     contents:
     - argument_conventions
-
-  - title: Layouts Simple Tabulation
+    
+  - title: Layouts and Tabulation
     desc: Functions for declaring layout and tabulatioin
     contents:
     - starts_with("add_")
     - build_table
     - manual_cols
-    # - add_colby_varlevels
-    # - add_colcounts
-    # - add_analyzed_vars
-    # - add_rowby_varlevels
-    # - add_summary_count
-    # - add_colby_multivar
-    # - add_analyzed_colvars
     
-
   - title: Table Tree Untility Functions
     desc: Utility functions
     contents:
-    - lstwrap
-
-  # - title: Compatibility Layer
-  #   desc: Compatibility layer.
-  #   contents:
-  #   - tt_rtable
-  #   - tt_rrow
-  #   - tt_rowl
-  #   - tt_rcell
-    
-
+    - lstwrapx
+    - lstwrapdf
 
   - title: Manual Table Creation Functions
     desc:  These are the main functions needed to build an rtable.
@@ -101,6 +89,7 @@ reference:
     desc: rtabulate is a framework to derive rtables
     contents:
     - starts_with("rtabulate")
+    - rtab_inner
     - col_by_to_matrix
     - col_by_to_factor
     - by_add_total
@@ -111,6 +100,7 @@ reference:
     - by_compare_subset
     - by_drop_empty_cols
     - by_factor_to_matrix
+    - by_all_old
 
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
@@ -126,8 +116,6 @@ reference:
     - toString.rtable
     - toString.empty_rtable
     - as_html
-    - as_html.default
-    - as_html.rtable
 
   - title: Coercion Functions
     desc: coercion functions
@@ -140,7 +128,7 @@ reference:
     contents:
     - Viewer
     - compare_rtables
-    - label
+    - label$$
     - var_labels<-
     - var_labels
     - var_labels_remove
@@ -172,8 +160,18 @@ reference:
     - pag_tt_indices
     - make_pagdf
     - get_formatted_rows
+    
+  - title: To Sort
+    desc: These functions need to be moved to another section
+    contents:
+    - "as.vector,TableRow-method"
+    - clayout
+    - collect_leaves
+    - no_colinfo
+    - obj_avar
 
   - title: Included Data
     desc: Included datasets
     contents:
-    - DM
+    - DM    
+
