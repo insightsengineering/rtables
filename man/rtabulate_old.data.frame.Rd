@@ -46,63 +46,65 @@ an \code{\link{rtable}} object
 Split data.frame and apply functions
 }
 \examples{
-df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
-df <- rbind(df, df)
-df$val <- 1:nrow(df)
 
-rtabulate_old(
-  x = df,
-  row_by = df$aaa,
-  col_by = df$bbb,
-  FUN = function(x) {  
-     sum(x$val)
-  }
-)
-
-rtabulate_old(
-  x = iris,
-  row_by = by_all("sum"),
-  col_by = iris$Species, 
-  FUN = function(x) sum(x$Sepal.Length)
-)
-
-rtabulate_old(
-  x = iris,
-  row_by = iris$Species,
-  col_by = by_all("sum"), 
-  FUN = function(x) sum(x$Sepal.Length)
-)
-
-fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-    labels = c("S.L > 5", "S.L <= 5"))
-
-tbl <- rtabulate_old(
-  x = iris,
-  row_by = fsl5,
-  col_by = iris$Species, 
-  FUN = function(x_cell) {
-    if (nrow(x_cell) < 10) {
-      rcell("-")
-    } else {
-      fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
-           
-      rcell(list(fit), format = function(x, output) {
-        paste("df:", x[[1]]$df.residual)
-      })
-    }
-  }
-)
-tbl
-
-rtabulate_old(
-  x = iris,
-  row_by = fsl5,
-  col_by = iris$Species, 
-  FUN = function(x_cell, N) {
-     N
-  },
-  col_wise_args = list(N = c(10, 100, 200))
-)
+# TODO: remove rtabulate_old
+# df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
+# df <- rbind(df, df)
+# df$val <- 1:nrow(df)
+# 
+# rtabulate_old(
+#   x = df,
+#   row_by = df$aaa,
+#   col_by = df$bbb,
+#   FUN = function(x) {  
+#      sum(x$val)
+#   }
+# )
+# 
+# rtabulate_old(
+#   x = iris,
+#   row_by = by_all("sum"),
+#   col_by = iris$Species, 
+#   FUN = function(x) sum(x$Sepal.Length)
+# )
+# 
+# rtabulate_old(
+#   x = iris,
+#   row_by = iris$Species,
+#   col_by = by_all("sum"), 
+#   FUN = function(x) sum(x$Sepal.Length)
+# )
+# 
+# fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#     labels = c("S.L > 5", "S.L <= 5"))
+# 
+# tbl <- rtabulate_old(
+#   x = iris,
+#   row_by = fsl5,
+#   col_by = iris$Species, 
+#   FUN = function(x_cell) {
+#     if (nrow(x_cell) < 10) {
+#       rcell("-")
+#     } else {
+#       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
+#            
+#       rcell(list(fit), format = function(x, output) {
+#         paste("df:", x[[1]]$df.residual)
+#       })
+#     }
+#   }
+# )
+# tbl
+# 
+# rtabulate_old(
+#   x = iris,
+#   row_by = fsl5,
+#   col_by = iris$Species, 
+#   FUN = function(x_cell, N) {
+#      N
+#   },
+#   col_wise_args = list(N = c(10, 100, 200))
+# )
 
  
 

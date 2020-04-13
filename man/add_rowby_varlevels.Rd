@@ -44,6 +44,7 @@ l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   
 l
 
-build_table(l, DM)
+# TODO: fix
+# build_table(l, DM)
   
 }

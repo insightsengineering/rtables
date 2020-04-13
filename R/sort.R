@@ -28,11 +28,12 @@
 #'   rrow("r3", c(1,3), c(3,2,22))
 #' ) 
 #' 
-#' order_rrows(tbl, c(1,1))
-#' order_rrows(tbl, c(2, 3), decreasing = TRUE)
-#' order_rrows(tbl, c(0,2))
-#' 
-#' order_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
+#' # TODO: refactor
+#' # order_rrows(tbl, c(1,1))
+#' # order_rrows(tbl, c(2, 3), decreasing = TRUE)
+#' # order_rrows(tbl, c(0,2))
+#' # 
+#' # order_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
 
 order_rrows <- function(x, indices = c(1, 1), ...) {
   
@@ -81,14 +82,15 @@ order_rrows <- function(x, indices = c(1, 1), ...) {
 #'   rrow("r2", c(4,-1), c(8,9,21)),
 #'   rrow("r3", c(1,3), c(3,2,22))
 #' )
-#'
-#' sort_rrows(tbl, c(1, 1))
-#' sort_rrows(tbl, c(0, 1))
-#'
-#' sort_rrows(tbl, c(2, 3), decreasing = FALSE)
-#' sort_rrows(tbl, c(2, 3), decreasing = TRUE)
-#'
-#' sort_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
+#' 
+#' # TODO: refactor
+#' # sort_rrows(tbl, c(1, 1))
+#' # sort_rrows(tbl, c(0, 1))
+#' # 
+#' # sort_rrows(tbl, c(2, 3), decreasing = FALSE)
+#' # sort_rrows(tbl, c(2, 3), decreasing = TRUE)
+#' # 
+#' # sort_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
 #' 
 sort_rrows <- function(x, indices = c(1, 1), ...) {
   x[order_rrows(x, indices , ...), ]
@@ -136,13 +138,14 @@ sort_rrows <- function(x, indices = c(1, 1), ...) {
 #'      rrow("r3", c(1,3), c(3,1,22))
 #'    )
 #' )
-#'
-#' order_rtables(tbls, c(1,1,1))
-#' order_rtables(tbls, c(1,1,1), decreasing = TRUE)
 #' 
-#' order_rtables(tbls, c(1,0,1))
-#' 
-#' order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
+#' # TODO: refactor
+#' # order_rtables(tbls, c(1,1,1))
+#' # order_rtables(tbls, c(1,1,1), decreasing = TRUE)
+#' # 
+#' # order_rtables(tbls, c(1,0,1))
+#' # 
+#' # order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
 
 order_rtables <- function(x, indices = c(1,0,1), ...) {
   
@@ -203,12 +206,13 @@ order_rtables <- function(x, indices = c(1,0,1), ...) {
 #'    )
 #' )
 #'
-#' sort_rtables(tbls, c(1,1,1))
-#' sort_rtables(tbls, c(1,1,1), decreasing = TRUE)
-#' 
-#' sort_rtables(tbls, c(1,0,1))
-#' 
-#' sort_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
+#' # TODO: refactor
+#' # sort_rtables(tbls, c(1,1,1))
+#' # sort_rtables(tbls, c(1,1,1), decreasing = TRUE)
+#' # 
+#' # sort_rtables(tbls, c(1,0,1))
+#' # 
+#' # sort_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
 #' 
 sort_rtables <- function(x, indices = c(1,0,1), ...) {
   x[order_rtables(x, indices , ...)]

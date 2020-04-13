@@ -32,11 +32,12 @@ tbl <- rtable(
   rrow("r3", c(1,3), c(3,2,22))
 ) 
 
-order_rrows(tbl, c(1,1))
-order_rrows(tbl, c(2, 3), decreasing = TRUE)
-order_rrows(tbl, c(0,2))
-
-order_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
+# TODO: refactor
+# order_rrows(tbl, c(1,1))
+# order_rrows(tbl, c(2, 3), decreasing = TRUE)
+# order_rrows(tbl, c(0,2))
+# 
+# order_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
 }
 \seealso{
 \code{\link{sort_rrows}}, \code{\link{order_rtables}},

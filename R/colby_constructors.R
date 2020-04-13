@@ -270,7 +270,8 @@ add_new_coltree = function(lyt, spl) {
 #'   add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 #' l3
 #' 
-#' build_table(l3, DM)
+#' # TODO: fix
+#' # build_table(l3, DM)
 #' 
 add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = NULL, newtoplev = FALSE,
                                extrargs = list()) {
@@ -336,7 +337,8 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #'   
 #' l
 #' 
-#' build_table(l, DM)
+#' # TODO: fix
+#' # build_table(l, DM)
 #'   
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, kidlbls = NA) {
     spl = VarLevelSplit(var = var,
@@ -377,7 +379,8 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' 
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
-#' build_table(l, ANL)
+#' # TODO: fix
+#' # build_table(l, ANL)
 #'   
 #'   
 add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
@@ -636,7 +639,8 @@ add_analyzed_vars = function(lyt,
 #' 
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
-#' build_table(l, ANL)
+#' # TODO: fix
+#' # build_table(l, ANL)
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {

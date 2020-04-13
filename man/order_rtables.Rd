@@ -46,12 +46,13 @@ tbls <- list(
    )
 )
 
-order_rtables(tbls, c(1,1,1))
-order_rtables(tbls, c(1,1,1), decreasing = TRUE)
-
-order_rtables(tbls, c(1,0,1))
-
-order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
+# TODO: refactor
+# order_rtables(tbls, c(1,1,1))
+# order_rtables(tbls, c(1,1,1), decreasing = TRUE)
+# 
+# order_rtables(tbls, c(1,0,1))
+# 
+# order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
 }
 \seealso{
 \code{\link{sort_rtables}}, \code{\link{sort_rrows}}, 

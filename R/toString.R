@@ -50,7 +50,7 @@ max_nchar_cols <- function(rows) {
     lapply(row, function(cell) { 
       nc <- nchar(unlist(strsplit(format_rcell(cell, output = "ascii"), "\n", fixed = TRUE)))
       nc[is.na(nc)] <- 0
-      nc / attr(cell, "colspan")
+      nc / get_colspan(cell)
     })
   }))))
 }
@@ -123,7 +123,7 @@ row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
       }
     })
     
-    colspans <- vapply(row, function(cell) attr(cell, "colspan"), numeric(1))
+    colspans <- vapply(row, get_colspan, numeric(1))
     lines <- as.matrix(Reduce(cbind, cells_same_length))
     
     row_char <- paste0(

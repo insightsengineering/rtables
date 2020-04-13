@@ -88,30 +88,30 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #' @export
 #'
 #' @examples
-#'
-#' rtabulate_old(iris$Sepal.Length)
-#'
-#' rtabulate_old(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
-#'
-#' with(iris,  rtabulate_old(x = Sepal.Length, col_by = Species, row.name = "mean"))
-#'
-#' SL <- iris$Sepal.Length
-#' Sp <- iris$Species
-#' rbind(
-#'   rtabulate_old(SL, Sp, length, row.name = "n"),
-#'   rtabulate_old(SL, Sp, function(x)c(mean(x), sd(x)), format = "xx.xx (xx.xx)", row.name = "Mean (SD)"),
-#'   rtabulate_old(SL, Sp, median, row.name = "Median"),
-#'   rtabulate_old(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
-#' )
-#' 
-#' x <- 1:100
-#' cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
-#' 
-#' rtabulate_old(
-#'   x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
-#'   format = sprintf_format("%.2f (%.2f) and %i"), row.name = "Mean (SD) and N",
-#'   col_wise_args = list(N = table(cb))
-#' )
+#' # TODO: reomve rtabulate_old
+#' # rtabulate_old(iris$Sepal.Length)
+#' #
+#' # rtabulate_old(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
+#' #
+#' # with(iris,  rtabulate_old(x = Sepal.Length, col_by = Species, row.name = "mean"))
+#' #
+#' # SL <- iris$Sepal.Length
+#' # Sp <- iris$Species
+#' # rbind(
+#' #   rtabulate_old(SL, Sp, length, row.name = "n"),
+#' #   rtabulate_old(SL, Sp, function(x)c(mean(x), sd(x)), format = "xx.xx (xx.xx)", row.name = "Mean (SD)"),
+#' #   rtabulate_old(SL, Sp, median, row.name = "Median"),
+#' #   rtabulate_old(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
+#' # )
+#' # 
+#' # x <- 1:100
+#' # cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
+#' # 
+#' # rtabulate_old(
+#' #   x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
+#' #   format = sprintf_format("%.2f (%.2f) and %i"), row.name = "Mean (SD) and N",
+#' #   col_wise_args = list(N = table(cb))
+#' # )
 #' 
 rtabulate_old.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
                               format = NULL, row.name = NULL,
@@ -137,25 +137,27 @@ rtabulate_old.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
 #' @export
 #' 
 #' @examples 
-#' rtabulate_old(iris$Species == "setosa")
 #' 
-#' rtabulate_old(iris$Species == "setosa", by_all("Species"),
-#'    FUN = function(x, N) list(sum(x), sum(x)/N),
-#'    row.name = "n (n/N)",
-#'    col_wise_args = list(N = 150)
-#' )
-#' 
-#' # default FUN is number of observations equal to TRUE
-#' with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
-#'  
-#' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
-#' # in each column
-#' with(iris, rtabulate_old(Sepal.Length < 5, Species,
-#'   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
-#'   format = "xx.xx (xx.xx%)",
-#'   row.name = "Sepal.Length < 5",
-#'   col_wise_args = list(N = table(Species))
-#' ))
+#' # TODO: remove rtabulate_old
+#' # rtabulate_old(iris$Species == "setosa")
+#' # 
+#' # rtabulate_old(iris$Species == "setosa", by_all("Species"),
+#' #    FUN = function(x, N) list(sum(x), sum(x)/N),
+#' #    row.name = "n (n/N)",
+#' #    col_wise_args = list(N = 150)
+#' # )
+#' # 
+#' # # default FUN is number of observations equal to TRUE
+#' # with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
+#' #  
+#' # # Custom FUN: number of TRUE records in a cell and precentages based on number of records
+#' # # in each column
+#' # with(iris, rtabulate_old(Sepal.Length < 5, Species,
+#' #   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+#' #   format = "xx.xx (xx.xx%)",
+#' #   row.name = "Sepal.Length < 5",
+#' #   col_wise_args = list(N = table(Species))
+#' # ))
 #' 
 rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
                               FUN = sum,
@@ -192,42 +194,43 @@ rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
 #' 
 #' @examples 
 #' 
-#' rtabulate_old(x = iris$Species)
-#' rtabulate_old(x = iris$Species, useNA = "always")
-#' rtabulate_old(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
-#' 
-#' rtabulate_old(x = iris$Species, by_all("sum"))
-#' 
-#' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-#'    labels = c("S.L > 5", "S.L <= 5"))
-#' 
-#' rtabulate_old(iris$Species, col_by = sl5)
-#' rtabulate_old(sl5, iris$Species)
-#' 
-#' rtabulate_old(iris$Species, col_by = sl5,
-#'    FUN = function(cell_data, N) {
-#'      if (length(cell_data) > 10) {
-#'         length(cell_data) * c(1, 1/N)
-#'      } else {
-#'         rcell("-", format = "xx")
-#'      }
-#'    },
-#'    format = "xx (xx.xx%)",
-#'    col_wise_args = list(N = table(sl5))
-#' )
-#' 
-#' rtabulate_old(x = factor(c("X", "Y"), c("X", "Y")),
-#'           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
-#' 
-#' rtabulate_old(factor(c("Y", "Y"), c("X", "Y")),
-#'           factor(c("b", "b"), c("a", "b")), length)
-#' 
-#' rtabulate_old(
-#'   x = factor(c("Y", "Y"), c("X", "Y")),
-#'   col_by = factor(c("b", "b"), c("a", "b")),
-#'   FUN = function(x, N) list(length(x), N),
-#'   col_wise_args = list(N = c(1,2))
-#' )
+#' # TODO: remove rtabulate_old
+#' # rtabulate_old(x = iris$Species)
+#' # rtabulate_old(x = iris$Species, useNA = "always")
+#' # rtabulate_old(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+#' # 
+#' # rtabulate_old(x = iris$Species, by_all("sum"))
+#' # 
+#' # sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#' #    labels = c("S.L > 5", "S.L <= 5"))
+#' # 
+#' # rtabulate_old(iris$Species, col_by = sl5)
+#' # rtabulate_old(sl5, iris$Species)
+#' # 
+#' # rtabulate_old(iris$Species, col_by = sl5,
+#' #    FUN = function(cell_data, N) {
+#' #      if (length(cell_data) > 10) {
+#' #         length(cell_data) * c(1, 1/N)
+#' #      } else {
+#' #         rcell("-", format = "xx")
+#' #      }
+#' #    },
+#' #    format = "xx (xx.xx%)",
+#' #    col_wise_args = list(N = table(sl5))
+#' # )
+#' # 
+#' # rtabulate_old(x = factor(c("X", "Y"), c("X", "Y")),
+#' #           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+#' # 
+#' # rtabulate_old(factor(c("Y", "Y"), c("X", "Y")),
+#' #           factor(c("b", "b"), c("a", "b")), length)
+#' # 
+#' # rtabulate_old(
+#' #   x = factor(c("Y", "Y"), c("X", "Y")),
+#' #   col_by = factor(c("b", "b"), c("a", "b")),
+#' #   FUN = function(x, N) list(length(x), N),
+#' #   col_wise_args = list(N = c(1,2))
+#' # )
 #'
 #'  
 rtabulate_old.factor <- function(x,
@@ -292,63 +295,65 @@ rtabulate_old.factor <- function(x,
 #' 
 #' 
 #' @examples 
-#' df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
-#' df <- rbind(df, df)
-#' df$val <- 1:nrow(df)
 #' 
-#' rtabulate_old(
-#'   x = df,
-#'   row_by = df$aaa,
-#'   col_by = df$bbb,
-#'   FUN = function(x) {  
-#'      sum(x$val)
-#'   }
-#' )
-#' 
-#' rtabulate_old(
-#'   x = iris,
-#'   row_by = by_all("sum"),
-#'   col_by = iris$Species, 
-#'   FUN = function(x) sum(x$Sepal.Length)
-#' )
-#' 
-#' rtabulate_old(
-#'   x = iris,
-#'   row_by = iris$Species,
-#'   col_by = by_all("sum"), 
-#'   FUN = function(x) sum(x$Sepal.Length)
-#' )
-#' 
-#' fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-#'     labels = c("S.L > 5", "S.L <= 5"))
-#' 
-#' tbl <- rtabulate_old(
-#'   x = iris,
-#'   row_by = fsl5,
-#'   col_by = iris$Species, 
-#'   FUN = function(x_cell) {
-#'     if (nrow(x_cell) < 10) {
-#'       rcell("-")
-#'     } else {
-#'       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
-#'            
-#'       rcell(list(fit), format = function(x, output) {
-#'         paste("df:", x[[1]]$df.residual)
-#'       })
-#'     }
-#'   }
-#' )
-#' tbl
-#' 
-#' rtabulate_old(
-#'   x = iris,
-#'   row_by = fsl5,
-#'   col_by = iris$Species, 
-#'   FUN = function(x_cell, N) {
-#'      N
-#'   },
-#'   col_wise_args = list(N = c(10, 100, 200))
-#' )
+#' # TODO: remove rtabulate_old
+#' # df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
+#' # df <- rbind(df, df)
+#' # df$val <- 1:nrow(df)
+#' # 
+#' # rtabulate_old(
+#' #   x = df,
+#' #   row_by = df$aaa,
+#' #   col_by = df$bbb,
+#' #   FUN = function(x) {  
+#' #      sum(x$val)
+#' #   }
+#' # )
+#' # 
+#' # rtabulate_old(
+#' #   x = iris,
+#' #   row_by = by_all("sum"),
+#' #   col_by = iris$Species, 
+#' #   FUN = function(x) sum(x$Sepal.Length)
+#' # )
+#' # 
+#' # rtabulate_old(
+#' #   x = iris,
+#' #   row_by = iris$Species,
+#' #   col_by = by_all("sum"), 
+#' #   FUN = function(x) sum(x$Sepal.Length)
+#' # )
+#' # 
+#' # fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#' #     labels = c("S.L > 5", "S.L <= 5"))
+#' # 
+#' # tbl <- rtabulate_old(
+#' #   x = iris,
+#' #   row_by = fsl5,
+#' #   col_by = iris$Species, 
+#' #   FUN = function(x_cell) {
+#' #     if (nrow(x_cell) < 10) {
+#' #       rcell("-")
+#' #     } else {
+#' #       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
+#' #            
+#' #       rcell(list(fit), format = function(x, output) {
+#' #         paste("df:", x[[1]]$df.residual)
+#' #       })
+#' #     }
+#' #   }
+#' # )
+#' # tbl
+#' # 
+#' # rtabulate_old(
+#' #   x = iris,
+#' #   row_by = fsl5,
+#' #   col_by = iris$Species, 
+#' #   FUN = function(x_cell, N) {
+#' #      N
+#' #   },
+#' #   col_wise_args = list(N = c(10, 100, 200))
+#' # )
 #' 
 #'  
 #' 

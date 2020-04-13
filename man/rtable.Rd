@@ -50,8 +50,6 @@ mtbl <- rtable(
   )
 )
 
-# TODO Warning message:
-
 mtbl
 
 names(mtbl) # always first row of header
@@ -70,7 +68,7 @@ names(mtbl) # always first row of header
 # )
 # TODO: fix
 # TODO: coerce c(...) to rheader
-tbl
+# tbl
 
 # row.names(tbl) # TODO # row.lables
 # names(tbl)

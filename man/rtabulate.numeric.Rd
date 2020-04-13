@@ -65,13 +65,12 @@ rbind(
   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 )
 
-x <- 1:100
-cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
-
-rtabulate(
-  x = x, col_by = cb, FUN = function(x, N) list(mean(x), sd(x), N),
-  format = sprintf_format("\%.2f (\%.2f) and \%i"), row.name = "Mean (SD) and N",
-  col_wise_args = list(N = table(cb))
-)
+# TODO: enable sprintf_format in rtabulate
+# rtabulate(
+#   x = 1:100, col_by = factor(rep(LETTERS[1:3], c(20, 30, 50))), 
+#   FUN = function(x, N) list(mean(x), sd(x), N),
+#   format = sprintf_format("\%.2f (\%.2f) and \%i"), row.name = "Mean (SD) and N",
+#   col_wise_args = list(N = table(cb))
+# )
 
 }

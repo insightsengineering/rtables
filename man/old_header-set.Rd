@@ -15,7 +15,9 @@ old_header(x) <- value
 Change Header of Rtable
 }
 \examples{
-x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
-header(x) <- rheader(rrow("a", "a", "b", "d"))
-x
+
+# TODO: fix
+# x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
+# header(x) <- rheader(rrow("a", "a", "b", "d"))
+# x
 }
