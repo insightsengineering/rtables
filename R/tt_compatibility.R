@@ -444,9 +444,10 @@ header_add_N = function(x, N) {
     x
 }
 
+# NOTE: header <- col_info breaks pkgdown::build_reference_index
 #' export
 #' @rdname compatability
-header = col_info
+header <- function(...) col_info(...)
 
 
 #' Add column representing all rows
