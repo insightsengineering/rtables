@@ -2,9 +2,15 @@
 % Please edit documentation in R/tree_accessors.R
 \name{no_colinfo}
 \alias{no_colinfo}
+\alias{no_colinfo,VTableNodeInfo-method}
+\alias{no_colinfo,InstantiatedColumnInfo-method}
 \title{Exported for use in tern}
 \usage{
 no_colinfo(obj)
+
+\S4method{no_colinfo}{VTableNodeInfo}(obj)
+
+\S4method{no_colinfo}{InstantiatedColumnInfo}(obj)
 }
 \arguments{
 \item{obj}{the object.}

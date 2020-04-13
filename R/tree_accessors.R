@@ -1204,12 +1204,17 @@ setMethod("colcount_fmt<-", "PreDataTableLayouts",
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
 #' @inheritParams argument_conventions
-#' @rdname fortern
+#' @rdname no_info
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
+
+#' @exportMethod no_colinfo
+#' @rdname no_info
 setMethod("no_colinfo", "VTableNodeInfo",
           function(obj) no_colinfo(col_info(obj)))
 
+#' @exportMethod no_colinfo
+#' @rdname no_info
 setMethod("no_colinfo", "InstantiatedColumnInfo",
            function(obj) identical(obj, InstantiatedColumnInfo()))
 
@@ -1255,7 +1260,7 @@ setMethod("row.names", "VTableTree",
 #' convert to a vector
 #'@rdname asvec
 #' @param x ANY. The object to be converted to a vector
-#' @param mode character(1). Passed on to \code{\link{base::as.vector}}
+#' @param mode character(1). Passed on to \code{\link[base]{as.vector}}
 #' @exportMethod as.vector
 setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
 #'@rdname asvec

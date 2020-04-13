@@ -472,28 +472,29 @@ header <- function(x) col_info(obj = x)
 #' @rdname compatability
 
 by_all <- function(name) {
-    NULL %>% rtables:::add_col_total(lbl = name)
+    add_col_total(NULL, lbl = name)
 }
 
 ## XXX this is named this only for testing
 ## replace with better name once all ttestts are passing
 
-setGeneric("col_by_to_matrix", function(col_by, x = NULL)
-    standardGeneric("col_by_to_matrix"))
+## setGeneric("col_by_to_matrix", def = col_by_to_matrix)
 
-setMethod("col_by_to_matrix", "PreDataTableLayouts",
-          function(col_by, x = NULL) col_by)
+## #' @exportMethod col_by_to_matrix
+## setMethod("col_by_to_matrix", "PreDataTableLayouts",
+##           function(col_by, x = NULL) col_by)
 
-setMethod("col_by_to_matrix",
-          "character",
-          function(col_by, x = NULL) {
+## #' @exportMethod col_by_to_matrix
+## setMethod("col_by_to_matrix",
+##           "character",
+##           function(col_by, x = NULL) {
 
-    ret = NULL
-    for(col in col_by) {
-        ret <- ret %>% add_colby_varlevels(col)
-    }
-    ret
-})
+##     ret = NULL
+##     for(col in col_by) {
+##         ret <- ret %>% add_colby_varlevels(col)
+##     }
+##     ret
+## })
 
 
 
@@ -878,4 +879,19 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 
 
 
+}
+
+#' @param col_by An existing laayout (or NULL)
+#' @param label Label.
+#' @param n If non-null, the count to use for the tottal of the new column.
+#' @rdname compatability
+#' @export
+by_add_total <- function(col_by, label = "total", n = NULL) {
+    ret = add_col_total(col_by, lbl = label)
+    if(!is.null(ret)) {
+        cc = col_counts(ret)
+        cc[length(cc)] <- n
+        col_counts(ret) <- cc
+    }
+    ret
 }

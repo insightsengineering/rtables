@@ -15,8 +15,3 @@ matrix with dropped columns
 \description{
 Drop empty columns from matrix-version of by
 }
-\examples{
-by <- factor(c("a", "b"), levels = c("a", "b", "c"))
-col_by_to_matrix(by)
-by_drop_empty_cols(by)
-}

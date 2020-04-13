@@ -7,15 +7,8 @@
 by_combine(col_by, ...)
 }
 \arguments{
-\item{col_by}{factor or matrix to add column to, e.g. output of \code{\link{col_by_to_matrix}}}
-
 \item{...}{a series of named character vectors}
 }
 \description{
 Combine levels
-}
-\examples{
-# note partial arument matching, in this case col_by has to be written
-head(by_combine(col_by = iris$Species, a = c("setosa", "versicolor"),
-           b =  c("setosa", "virginica"), c = "setosa"))
 }

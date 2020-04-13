@@ -10,7 +10,7 @@ Authors@R: c(
 Description: Reporting tables are useful to create formated tables with cells that
   display multiple values. An rtable object will provide access to all the raw data
   that make up the table.
-Depends: methods, magrittr
+Depends: methods, magrittr, R (>= 2.10)
 Imports:
   stats,
   htmltools,

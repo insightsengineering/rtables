@@ -15,7 +15,3 @@ col_by matrix
 \description{
 This is the analog to \code{\link{by_add_total}} to start a dplyr pipeline.
 }
-\examples{
-by_all("total")
-col_by_to_matrix(by_all("total"), x = 1:3)
-}

@@ -2,7 +2,7 @@
 #' Convert an \code{\link{rtable}} object to an \code{shiny.tag} html
 #' representation of the \code{\link{rtable}}
 #' 
-#' The returned html object can be immediately used in shiny and rmarkdown
+#' The returned html object can be immediately used in shiny and rmarkdown.
 #' 
 #' @param x object
 #' @param ... additional arguments currently not used
@@ -25,6 +25,7 @@
 #' @export
 setGeneric("as_html", function(x, ...) standardGeneric("as_html"))
 
+setOldClass("rtable")
 ## #' Convert an rtable object to html
 ## #' 
 ## #' @inheritParams as_html
@@ -32,8 +33,12 @@ setGeneric("as_html", function(x, ...) standardGeneric("as_html"))
 ## #' 
 ## #' @return an object of class \code{shinyTag}
 ## #' 
-#' @exportMethod as_html
-setMethod("as_html", "rtable",
+#' @export
+#' @method as_html rtable
+#' @rdname as_html
+
+## setMethod("as_html", "rtable",
+
 
 as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
                            ...) {
@@ -49,10 +54,13 @@ as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
              lapply(body, as_html, ncol = ncol, is_header = FALSE, ...)
          )
     
-})
+} #)
 
-#' @exportMethod as_html
-setMethod("as_html", "rrow", 
+setOldClass("rrow")
+#' @method as_html rrow
+#' @export
+#' @rdname as_html
+##setMethod("as_html", "rrow",
 as_html.rrow <- function(x, ncol, is_header, 
                          class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
   
@@ -97,7 +105,7 @@ as_html.rrow <- function(x, ncol, is_header,
   }
   
   tags$tr(cells, class = class.tr)
-})
+} #)
 
 extract_rowobj = function(tt) {
     stopifnot(nrow(tt) == 1)

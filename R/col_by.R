@@ -8,10 +8,7 @@ NULL
 #' @param x factor to convert to matrix_by
 #' 
 #' @return matrix of size length(x) times nlevels(x)
-#' 
-#' @examples 
-#' x <- factor(c("a", "b", "a", "a", "b"))
-#' rtables:::by_factor_to_matrix(x)
+#' @rdname deprecated
 by_factor_to_matrix <- function(x) {
   stopifnot(is.factor(x))
   stopifnot(!any(is.na(x)))
@@ -36,13 +33,7 @@ by_factor_to_matrix <- function(x) {
 #' @return factor
 #' 
 #' @export
-#' 
-#' @examples 
-#' col_by_to_factor(data.frame(
-#' x1 = c(TRUE, TRUE, FALSE, FALSE),
-#' x2 = c(FALSE, FALSE, TRUE, FALSE),
-#' x3 = c(FALSE, FALSE, FALSE, TRUE)
-#' ))
+#' @rdname deprecated
 col_by_to_factor <- function(x) {
   if (is.factor(x)) {
     return(x)
@@ -68,36 +59,26 @@ col_by_to_factor <- function(x) {
 #' 
 #' @return matrix with dropped columns
 #' 
-#' @export
-#' 
-#' @examples 
-#' by <- factor(c("a", "b"), levels = c("a", "b", "c"))
-#' col_by_to_matrix(by)
-#' by_drop_empty_cols(by)
+## ' @examples 
+## ' by <- factor(c("a", "b"), levels = c("a", "b", "c"))
+## ' col_by_to_matrix(by)
+## ' by_drop_empty_cols(by)
 by_drop_empty_cols <- function(by) {
   by <- col_by_to_matrix(by)
   with_label(by[, vapply(by, any, logical(1)), drop = FALSE], label(by))
 }
 
-#' Converts col_by to matrix if needed (if it is a factor)
+#' DEPRECATED Converts col_by to matrix if needed (if it is a factor)
 #' Also handles case when it is of class by_all
 #' x can be NULL if col_by is not of class by_all
 #' returns transformed col_by as a matrix
 #' 
-#' @param col_by factor or data.frame to convert
-#' @param x object that col_by is applied to, must be non-NULL if col_by is of class by_all 
-#'   to select all elements from x
-#' 
-#' @return matrix col_by
-#' 
+#' @param col_by deprecated.
+#' @rdname deprecated
 #' @export
 #' 
-#' @examples 
-#' col_by <- factor(c("a", "b", "a", "a", "b"))
-#' col_by
-#' col_by_to_matrix(col_by)
-#' col_by_to_matrix(by_all("tot"), 1:5)
 col_by_to_matrix <- function(col_by, x = NULL) {
+    .Deprecated("This function is deprecated and should never be called directly by user code. The concept of representing column splitting via a matrix is no longer supported.")
   #todo: rename col_by_to_matrix to by_to_matrix, similarly for col_by_to_factor
   new_col_by <- if (is.factor(col_by)) {
     by_factor_to_matrix(col_by)
@@ -131,20 +112,10 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 #' 
 #' @return new matrix with one column added
 #' 
-#' @export
-#' 
-#' @examples 
-#' x <- factor(c("a", "b", "a", "a", "b"))
-#' mat <- col_by_to_matrix(x)
-#' by_add_total(mat, label = "tot")
-#' by_add_total(x, label = "tot")
-#' 
-#' if (requireNamespace("testthat", quietly = TRUE)) {
-#'   mat %>% by_add_total(label = "tot")
-#' }
-#' 
-#' by_add_total(NULL, "total", n = 3)
-by_add_total <- function(col_by, label = "total", n = NULL) {
+
+
+
+by_add_total_old <- function(col_by, label = "total", n = NULL) {
   # todo: maybe remove n, but this does not give enough flexibility because col_by may be NULL
   if (is.null(col_by)) {
     mat <- data.frame(rep(TRUE, n))
@@ -170,11 +141,6 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
 #' 
 #' @return col_by matrix
 #' 
-#' @export
-#' 
-#' @examples 
-#' by_all("total")
-#' col_by_to_matrix(by_all("total"), x = 1:3)
 by_all_old <- function(name) {
   structure(name, class = "by_all")
 }
@@ -182,16 +148,15 @@ by_all_old <- function(name) {
 
 #' Combine levels
 #' 
-#' @inheritParams by_add_total
 #' @param ... a series of named character vectors
 #' 
 #' @export
-#' 
-#' @examples 
-#' # note partial arument matching, in this case col_by has to be written
-#' head(by_combine(col_by = iris$Species, a = c("setosa", "versicolor"),
-#'            b =  c("setosa", "virginica"), c = "setosa"))
-by_combine <- function(col_by, ...) {
+## TODO
+## #' @examples 
+## #' # note partial arument matching, in this case col_by has to be written
+## #' head(by_combine(col_by = iris$Species, a = c("setosa", "versicolor"),
+## #'            b =  c("setosa", "virginica"), c = "setosa"))
+ by_combine <- function(col_by, ...) {
   lst <- list(...)
   if (is.null(names(lst)) || any(names(lst) == "")) {
     stop("named character vectors are required")
@@ -264,7 +229,6 @@ by_quartile <- function(x, cumulative = FALSE) {
 
 #' Compare Subset to Current col_by Levels
 #' 
-#' @inheritParams by_combine
 #' @param subset logical
 #' @param label_all character, label appended to level of \code{col_by}
 #' @param label_subset character, label appended to the subset of the corresponding level of \code{col_by}
@@ -274,12 +238,13 @@ by_quartile <- function(x, cumulative = FALSE) {
 #' TODO: make hierarchical headers
 #' 
 #' @export
-#' 
-#' @examples 
-#' 
-#' by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
-#'                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
-#' 
+#' @rdname deprecated
+## TODO
+## ' @examples 
+## ' 
+## ' by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
+## '                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+## ' 
 by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = "subset", sep = " - ") {
   
   mat <- col_by_to_matrix(col_by)

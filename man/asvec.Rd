@@ -15,7 +15,7 @@
 \arguments{
 \item{x}{ANY. The object to be converted to a vector}
 
-\item{mode}{character(1). Passed on to \code{\link{base::as.vector}}}
+\item{mode}{character(1). Passed on to \code{\link[base]{as.vector}}}
 }
 \description{
 convert to a vector

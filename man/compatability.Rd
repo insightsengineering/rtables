@@ -4,6 +4,7 @@
 \alias{header<-}
 \alias{header}
 \alias{by_all}
+\alias{by_add_total}
 \title{Miscellaneous Compatability methods for the old API}
 \usage{
 header(x) <- value
@@ -11,6 +12,8 @@ header(x) <- value
 header(x)
 
 by_all(name)
+
+by_add_total(col_by, label = "total", n = NULL)
 }
 \arguments{
 \item{x}{An object}
@@ -18,6 +21,12 @@ by_all(name)
 \item{value}{The new value}
 
 \item{name}{character(1). Label for the added all/total column}
+
+\item{col_by}{An existing laayout (or NULL)}
+
+\item{label}{Label.}
+
+\item{n}{If non-null, the count to use for the tottal of the new column.}
 }
 \description{
 Miscellaneous Compatability methods for the old API
