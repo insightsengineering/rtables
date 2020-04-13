@@ -1,0 +1,63 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: rocker/tidyverse:3.6.2
+    steps:
+      - checkout:
+          path: rtables
+      - run:
+          name: "build package"
+          command: R CMD build rtables
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "*.tar.gz"
+
+  check:
+    docker:
+      - image: rocker/tidyverse:3.6.2
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "get package build name"
+          command: echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
+      - run:
+          name: "check package"
+          command: R CMD check --no-manual --no-build-vignettes ${PKG}
+      - run:
+          name: "install package"
+          command: R CMD INSTALL ${PKG}
+#      - store_artifacts:
+#          path: rtables.Rcheck
+#          destination: rtables.Rcheck
+      - store_test_results:
+          path: rtables.Rcheck/tests
+
+  pkgdown:
+    docker:
+      - image: rocker/tidyverse:3.6.2
+    steps:
+      - checkout:
+          path: rtables
+      - run:
+          name: "create pkgdown website"
+          command: R -e 'pkgdown::build_site("rtables", devel = FALSE)'
+      - store_artifacts:
+          path: rtables/docs
+          destination: pkgdown
+
+workflows:
+  version: 2
+  Rworkflow:
+    jobs:
+      - build
+      - check:
+          requires:
+            - build
+      - pkgdown:
+          requires:
+            - build
+
