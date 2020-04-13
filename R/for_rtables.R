@@ -115,7 +115,7 @@ unlist_rtables <- function(x) {
 #' 
 #' # TODO: fix
 #' # insert_rrow(tbl, rrow("Hello World"))
-insert_rrow <- function(tbl, rrow, at = 1) {
+insert_rrow_old <- function(tbl, rrow, at = 1) {
   stopifnot(
     is_rtable(tbl),
     is(rrow, "rrow")

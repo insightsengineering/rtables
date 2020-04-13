@@ -37,33 +37,32 @@ Note that the formats propagate to the \code{\link{old_rrow}} and
 \examples{
 
 # Table with multirow header
+mtbl <- old_rtable(
+  header = old_rheader(
+    old_rrow(row.name = NULL, old_rcell("Sepal.Length", colspan = 2), old_rcell("Petal.Length", colspan=2)),
+    old_rrow(NULL, "mean", "median", "mean", "median")
+  ),
+  old_rrow(
+    row.name = "All Species",
+    mean(iris$Sepal.Length), median(iris$Sepal.Length),
+    mean(iris$Petal.Length), median(iris$Petal.Length),
+    format = "xx.xx"
+  )
+)
 
-# TODO: fix
-# mtbl <- rtable(
-#   header = old_rheader(
-#     old_rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
-#     old_rrow(NULL, "mean", "median", "mean", "median")
-#   ),
-#   old_rrow(
-#     row.name = "All Species",
-#     mean(iris$Sepal.Length), median(iris$Sepal.Length),
-#     mean(iris$Petal.Length), median(iris$Petal.Length),
-#     format = "xx.xx"
-#   )
-# )
-# 
-# mtbl
-# 
-# names(mtbl) # always first row of header
+mtbl
 
 # Single row header
 
 tbl <- old_rtable(
-  header =  c("Treatement\nN=100", "Comparison\nN=300"),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx\%)",
   old_rrow("A", c(104, .2), c(100, .4)),
   old_rrow("B", c(23, .4), c(43, .5)),
-  old_rrow()
+  old_rrow(),
+  old_rrow("This is a really long header row"),
+  old_rrow("spanning", old_rcell(2, format = "xx" , colspan = 2))
+
 )
 
 tbl

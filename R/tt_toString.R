@@ -159,7 +159,7 @@ setGeneric("get_formatted_rows", function(obj, depth = 0, indent = 0) standardGe
 setMethod("get_formatted_rows", "TableTree",
           function(obj, depth = 0, indent = 0) {
             
-            lr <- get_formatted_rows(obj@labelrow, depth, indent)
+            lr <- get_formatted_rows(tt_labelrow(obj), depth, indent)
             
             indent <- indent + !is.null(lr)
             

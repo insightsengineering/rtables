@@ -173,12 +173,10 @@ names.rtable <- function(x) {
 #' @return an \code{\link{rheader}} object
 #' 
 #' @export
-#' 
-#' @examples 
-#' x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3)) 
-#'
-#' # TODO:fix
-#' # header(x)
+#' @rdname  deprecated
+## ' @examples 
+## ' x <- old_rtable(header = letters[1:3], old_rrow("row 1", 1,2,3)) 
+## ' old_header(x)
 old_header <- function(x) {
   
   if (!is(x, "rtable")) stop("x is required to be an object of class rtable")
@@ -190,15 +188,9 @@ old_header <- function(x) {
 #' 
 #' @param x object representing the table header.
 #' @param value an \code{\link{rheader}} object
-#' 
+#' @rdname deprecated
 #' @export
 #' 
-#' @examples 
-#' 
-#' # TODO: fix
-#' # x <- rtable(header = letters[1:3], rrow("row 1", 1,2,3))
-#' # header(x) <- rheader(rrow("a", "a", "b", "d"))
-#' # x
 `old_header<-` <- function(x, value) {
   if (!is(x, "rtable")) stop("x is not an rtable")
   
@@ -282,7 +274,7 @@ header_row.names <- function(x) {
   } else if (missing(j) && !missing(i)) {  
     # subset the table (rows)
     
-    rtablel(header = attr(x, "header"), unclass(x)[i])
+    old_rtablel(header = attr(x, "header"), unclass(x)[i])
     
   } else if (!missing(i) && !missing(j) && is.numeric(i) && is.numeric(j) && length(i) == 1 && length(j) == 1) {
     # access a single rcell

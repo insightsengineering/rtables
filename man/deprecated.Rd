@@ -3,6 +3,8 @@
 \name{header_indent}
 \alias{header_indent}
 \alias{header_indent<-}
+\alias{old_header}
+\alias{old_header<-}
 \alias{header_row.names}
 \alias{header_row.names<-}
 \title{Return Indentation of Header Rows}
@@ -10,6 +12,10 @@
 header_indent(x)
 
 header_indent(x) <- value
+
+old_header(x)
+
+old_header(x) <- value
 
 header_row.names(x)
 
@@ -20,10 +26,17 @@ header_row.names(x) <- value
 
 \item{value}{vector with new row names}
 }
+\value{
+an \code{\link{rheader}} object
+}
 \description{
 Return Indentation of Header Rows
 
 Return Indentation of Header Rows
+
+Get Header ot Rtable
+
+Change Header of Rtable
 
 Access Header Row Names
 

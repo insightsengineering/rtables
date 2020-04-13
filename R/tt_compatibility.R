@@ -390,15 +390,29 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
         warning("check_headers = FALSE is no longer supported, ignoring.")
 
     firstcols = col_info(x[[1]])
-    if(!all(sapply(x, function(xi) identical(col_info(xi), firstcols))))
-        stop("column structure didn't match in rbindl_rtables call. This is no longer supported")
+    i = 1
+    while(no_colinfo(firstcols) &&
+          i < length(x))
+        firstcols <- col_info(x[[i]])
+    
+    lapply(x, function(xi) chk_compat_cinfos(firstcols, col_info(xi)))
 
-    if(are(x, "ElementaryTable") &&
-       all(sapply(x, function(tb) {
-           nrow(tb) == 1 && obj_name(tb) == ""
-       }))) {
-        body = lapply(x, function(tb) tree_children(tb)[[1]])
+
+    ## if we got only ElementaryTable and
+    ## TableRow objects, construct a new
+    ## elementary table with all the rows
+    ## instead of adding nesting.
+    if(all(sapply(x, function(xi) {
+        (is(xi, "ElementaryTable") && !labrow_visible(xi) ) ||
+            is(xi, "TableRow") && !is(xi, "LabelRow")}))) {
+        x <- unlist(lapply(x, function(xi) {
+            if(is(xi, "TableRow"))
+                xi
+            else
+                tree_children(xi)
+        }))
     }
+
 
     
     
@@ -406,14 +420,14 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     
 }
 
-setMethod("rbind", "VTableTree",
+setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
-    rbindl_rtables(list(...))
+    rbindl_rtables(list(...), check_headers = TRUE)
 })
 
-setMethod("rbind2", "VTableTree",
+setMethod("rbind2", "VTableNodeInfo",
           function(x, y) {
-    rbindl_rtables(list(x, y))
+    rbindl_rtables(list(x, y), check_headers = TRUE)
 })
 
 
@@ -644,3 +658,220 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
 setMethod("recurse_cbind", c("LabelRow", "LabelRow",
                              "InstantiatedColumnInfo"),
           function(x,y, cinfo = NULL) x)
+
+## we don't care about the following discrepencies:
+## - ci2  having NA counts when ci1 doesn't
+## - mismatching display_ccounts values
+## - mismatching colcount formats
+## 
+
+chk_compat_cinfos <- function(ci1, ci2) {
+
+    if(no_colinfo(ci2))
+        return(TRUE)
+    ## this will enforce same length and
+    ## same names, in addition to same
+    ## expressions so we dont need
+    ## to check those separateley
+    if(!identical(col_exprs(ci1), col_exprs(ci2))) {
+        stop("Column structures not compatible: subset expression lists not identical")
+    }
+    
+    if (any(!is.na(col_counts(ci2))) &&
+        !identical(col_counts(ci1),
+                   col_counts(ci2))) {
+        stop("Column structures not compatible: 2nd column structure has non-matching, non-null column counts")
+    }
+    
+    if (any(sapply(cextra_args(ci2),
+                   function(x) length(x)>0)) &&
+        !identical(cextra_args(ci1),
+                   cextra_args(ci2))) {
+        stop("Column structures not compatible: 2nd column structure has non-matching, non-null extra args")
+          
+    }
+    TRUE
+}
+
+
+#' insert rrows at (before) a specific location
+#'
+#' @param tbl rtable
+#' @param rrow rrow to append to rtable
+#' @param at position into which to put the rrow, defaults to beginning (ie 1)
+#' 
+#' @return A TableTree of the same specific class as \code{tbl}
+#' 
+#' @export
+#'
+#' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
+#' @examples
+#' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
+#'
+#' insert_rrow(tbl, rrow("Hello World"))
+#' insert_rrow(tbl, rrow("Hello World"), at = 2)
+#' tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
+#' insert_rrow(tbl2, rrow("Hello World"))
+#' insert_rrow(tbl2, rrow("Hello World"), at = 2)
+#' insert_rrow(tbl2, rrow("Hello World"), at = 4)
+#' insert_rrow(tbl2, rrow("Hello World"), at = 6)
+#' insert_rrow(tbl2, rrow("Hello World"), at = 7)
+#' ##errors b/c label rows
+#' try(insert_rrow(tbl2, rrow("Hello World"), at = 3))
+#' try(insert_rrow(tbl2, rrow("Hello World"), at = 5))
+#'
+#' insert_rrow(tbl2, rrow("new row", 5, 6, 7))
+#'
+#' insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
+#' 
+#' 
+insert_rrow <- function(tbl, rrow, at = 1,
+                        ascontent = FALSE) {
+    stopifnot(is(tbl, "VTableTree"),
+              is(rrow, "TableRow"),
+              at >= 1 && at <= nrow(tbl) + 1)
+    chk_compat_cinfos(col_info(tbl),
+                      col_info(rrow))
+    if(no_colinfo(rrow))
+        col_info(rrow) <- col_info(tbl)
+    
+    if (at == 1) {
+        return(rbindl_rtables(list(rrow, tbl),
+                              check_headers = TRUE))
+    } else if (at == nrow(tbl) + 1) {
+        return(rbind2(tbl, rrow))
+    }
+
+    ret <- recurse_insert(tbl, rrow, at = at,
+                          pos = 0,
+                          ascontent = ascontent)
+    ret
+}
+
+
+.insert_helper = function(tt, row, at, pos,
+                          ascontent = FALSE) {
+    islab <- is(row, "LabelRow")
+    kids <- tree_children(tt)
+    numkids <- length(kids)
+    kidnrs <- sapply(kids, nrow)
+    cumpos <- pos + cumsum(kidnrs)
+    contnr = if(is(tt, "TableTree"))
+                 nrow(content_table(tt))
+             else
+                 0
+    contnr <- contnr + as.numeric(labrow_visible(tt))
+    
+  
+    totnr = nrow(tt)
+    endpos = pos + totnr
+    atend = !islab && endpos == at - 1
+    if(at == pos + 1
+       && islab) {
+        if(labrow_visible(tt_labelrow(tt)))
+            stop("Inserting a label row at a position that already has a label row is not currently supported")
+        tt_labelrow(tt) <- row
+        return(tt)
+    }
+    
+    if(numkids == 0) {
+        kids = list(row)
+    } else if (atend) {
+        if(are(kids, "TableRow")) {
+            kids = c(kids, list(row))
+        } else {
+            kids[[numkids]] = recurse_insert(kids[[numkids]], row =  row, at = at, pos = pos + contnr + sum(kidnrs[-numkids]), ascontent =  ascontent)
+        }
+    } else { #have >0 kids
+        kidnrs <- sapply(kids, nrow)
+        cumpos <- pos + cumsum(kidnrs)
+        ## if (atend) {
+        ##     if(are(kids, "TableRow")) {
+        ##         kids = c(kids, list(row))
+        ##     } else { #not all table rows
+        ##         kids[[numkids]] <- recurse_insert(kids[[numkids]], row = row, pos = at - 1,  at = at, ascontent = ascontent)
+        ##     } # end are(kids, "TableRow")
+        ## } else { # not at end
+            
+            
+            ## data rows go in the end of the
+            ## preceding subtable (if applicable)
+            ## label rows go in the beginning of
+            ##  one at at
+            ind <- min(which((cumpos + !islab) >= at),
+                       numkids )
+            thekid  = kids[[ind]]
+            
+            if(is(thekid, "TableRow")) {
+                tt_level(row) = tt_level(thekid)
+                if(ind == 1) {
+                    bef = integer()
+                    aft = 1:numkids
+                    ## } else if(atend ) {
+                    ##     bef = 1:numkids
+                    ##     aft = integer()
+                } else if(ind == numkids) {
+                    bef = 1:(ind -1)
+                    aft = ind
+                } else {
+                    bef = 1:ind
+                    aft = (ind + 1):numkids
+                }
+                kids <- c(kids[bef], list(row),
+                          kids[aft])
+            } else { # kid is not a table row
+                newpos <- if(ind==1)
+                              pos + contnr
+                          else 
+                              cumpos[ind - 1]
+                
+                kids[[ind]] <- recurse_insert(thekid,
+                                              row,
+                                              at,
+                                              pos = newpos,
+                                              ascontent = ascontent)
+            } # end kid is not table row
+  ##      } # end not at the end
+    }
+    tree_children(tt) <- kids
+    tt
+}
+
+    
+setGeneric("recurse_insert", function(tt, row, at, pos, ascontent = FALSE) standardGeneric("recurse_insert"))
+setMethod("recurse_insert", "TableTree",
+          function(tt, row, at, pos, ascontent = FALSE) {
+    ctab = content_table(tt)
+    contnr = nrow(ctab)
+    contpos = pos + contnr
+    islab = is(row, "LabelRow")
+    ## this will NOT insert it as 
+    if((contnr > 0 || islab) &&
+       contpos > at) {
+        content_table(tt) <- recurse_insert(ctab, row, at, pos, TRUE)
+        return(tt)
+    }
+
+    .insert_helper(tt, row, at = at, pos= pos + contnr,
+                   ascontent = ascontent)
+})
+
+setMethod("recurse_insert", "ElementaryTable",
+          function(tt, row, at, pos, ascontent = FALSE) {
+    .insert_helper(tt, row, at = at, pos = pos,
+                   ascontent = FALSE)
+})
+
+
+
+
+
+
+
+
+order_rrows = function(x, indices = c(1, 1), ...) {
+
+
+
+
+}

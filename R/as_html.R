@@ -32,72 +32,72 @@ setGeneric("as_html", function(x, ...) standardGeneric("as_html"))
 ## #' 
 ## #' @return an object of class \code{shinyTag}
 ## #' 
-## #' @exportMethod as_html
-## setMethod("as_html", "rtable",
-          
-## ###as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
-##           function(x, class.table = "table table-condensed table-hover",
-##                    ...) {
-  
-##     ncol <- ncol(x)
-    
-##     header <- attr(x, "header")
-##     body <- x
-    
-##     tags$table(
-##              class = class.table,
-##              lapply(header, as_html, ncol = ncol, is_header = TRUE, ...),
-##              lapply(body, as_html, ncol = ncol, is_header = FALSE, ...)
-##          )
-    
-## })
+#' @exportMethod as_html
+setMethod("as_html", "rtable",
 
-## #' @export
-## as_html.rrow <- function(x, ncol, is_header, 
-##                          class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
+as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
+                           ...) {
   
-##   (is.logical(is_header) && length(is_header) == 1) || stop("is_header is supposed to be a boolean")
+    ncol <- ncol(x)
+    
+    header <- attr(x, "header")
+    body <- x
+    
+    tags$table(
+             class = class.table,
+             lapply(header, as_html, ncol = ncol, is_header = TRUE, ...),
+             lapply(body, as_html, ncol = ncol, is_header = FALSE, ...)
+         )
+    
+})
+
+#' @exportMethod as_html
+setMethod("as_html", "rrow", 
+as_html.rrow <- function(x, ncol, is_header, 
+                         class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
   
-##   cell_tag <- if (is_header) {
-##     function(...) tags$th(class = class.th, ...)
-##   } else {
-##     function(...) tags$td(class = class.td, ...)
-##   }
+  (is.logical(is_header) && length(is_header) == 1) || stop("is_header is supposed to be a boolean")
   
-##   indent <- attr(x, "indent")
-##   row.name <- attr(x, "row.name")
+  cell_tag <- if (is_header) {
+    function(...) tags$th(class = class.th, ...)
+  } else {
+    function(...) tags$td(class = class.td, ...)
+  }
   
-##   cells <- if (length(x) == 0) {
-##     cell_tag(row.name, class=paste("rowname", "text-left"), colspan = as.character(ncol+1))
-##   } else {
-##     tagList(
-##       cell_tag(row.name, class=paste("rowname", "text-left")),
-##       lapply(x, function(xi) {
+  indent <- attr(x, "indent")
+  row.name <- attr(x, "row.name")
+  
+  cells <- if (length(x) == 0) {
+    cell_tag(row.name, class=paste("rowname", "text-left"), colspan = as.character(ncol+1))
+  } else {
+    tagList(
+      cell_tag(row.name, class=paste("rowname", "text-left")),
+      lapply(x, function(xi) {
         
-##         colspan <- attr(xi, "colspan")
-##         if (is.null(colspan)) stop("colspan for rcell is NULL")
+        colspan <- attr(xi, "colspan")
+        if (is.null(colspan)) stop("colspan for rcell is NULL")
         
-##         cell_content <- format_rcell(xi, output="html")
-##         if (colspan == 1) {
-##           cell_tag(cell_content, class = "text-center")
-##         } else {
-##           cell_tag(cell_content, colspan = as.character(colspan), class = "text-center")
-##         }
-##       }),
-##       replicate(ncol - ncell(x), cell_tag(), simplify = FALSE)
-##     )
-##   }
+        cell_content <- format_rcell(xi, output="html")
+        if (colspan == 1) {
+          cell_tag(cell_content, class = "text-center")
+        } else {
+          cell_tag(cell_content, colspan = as.character(colspan), class = "text-center")
+        }
+      }),
+      replicate(ncol - ncell(x), cell_tag(), simplify = FALSE)
+    )
+  }
   
-##   if (indent>0) {
-##     if (length(x) == 0) {
-##       cells$attribs <- c(cells$attribs, list(style=paste0("padding-left: ", indent*3, "ch")))
-##     } else {
-##       cells[[1]]$attribs <- c(cells[[1]]$attribs, list(style=paste0("padding-left: ", indent*3, "ch")))
-##     }
-##   }
+  if (indent>0) {
+    if (length(x) == 0) {
+      cells$attribs <- c(cells$attribs, list(style=paste0("padding-left: ", indent*3, "ch")))
+    } else {
+      cells[[1]]$attribs <- c(cells[[1]]$attribs, list(style=paste0("padding-left: ", indent*3, "ch")))
+    }
+  }
   
-##   tags$tr(cells, class = class.tr)
-## }
+  tags$tr(cells, class = class.tr)
+})
 
 extract_rowobj = function(tt) {
     stopifnot(nrow(tt) == 1)

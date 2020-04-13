@@ -18,7 +18,7 @@ Create a old_rheader object
 h1 <- old_rheader(c("A", "B", "C"))
 
 h2 <- old_rheader(
-  old_rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
+  old_rrow(NULL, old_rcell("group 1", colspan = 2), old_rcell("group 2", colspan = 2)),
   old_rrow(NULL, "A", "B", "A", "B")
 )
 }
