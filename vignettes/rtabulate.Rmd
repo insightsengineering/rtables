@@ -5,8 +5,10 @@ date: "3/21/2018"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{rtabulate}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -27,21 +29,20 @@ interested in the average `Sepal.Length` for each `Species` which can be
 answered with `tapply` as follows:
 
 ```{r}
-attach(iris)
-tapply(X = Sepal.Length, INDEX = Species, FUN = mean)
+with(iris, tapply(X = Sepal.Length, INDEX = Species, FUN = mean))
 ```
 
 and to get the same numbers with `rtabulate` we can run
 
 ```{r}
-rtabulate(x = Sepal.Length, col_by = Species, FUN = mean)
+with(iris, rtabulate(x = Sepal.Length, col_by = Species, FUN = mean))
 ```
 
 Because rtables also provide formatting options we can pass that info to
 `rtabulate`
 
 ```{r}
-rtabulate(x = Sepal.Length, col_by = Species, FUN = mean, format = "xx.xx")
+with(iris, rtabulate(x = Sepal.Length, col_by = Species, FUN = mean, format = "xx.xx"))
 ```
 
 This vignette will provide an overview of `rtabulate` and show how different
@@ -70,7 +71,7 @@ If `x` should not be split, i.e. all should be taken, then the `by_all` function
 column name (as the returned object is still an rtable with one column):
 
 ```{r}
-rtabulate(Sepal.Length, by_all("All Data"), sum)
+with(iris, rtabulate(Sepal.Length, by_all("All Data"), sum))
 ```
 
 
@@ -82,7 +83,7 @@ rtabulate(Sepal.Length, by_all("All Data"), sum)
 the levels of `col_by`.
 
 ```{r}
-rtabulate(x = Sepal.Length, col_by = Species, FUN = median)
+with(iris, rtabulate(x = Sepal.Length, col_by = Species, FUN = median))
 ```
 
 #### Tabulating Boolean Data
@@ -92,9 +93,9 @@ columns according to the levels of `col_by`.
 
 
 ```{r}
-is_SL_below_avg <- Sepal.Length < mean(Sepal.Length)
+is_SL_below_avg <- iris$Sepal.Length < mean(iris$Sepal.Length)
 
-rtabulate(x = is_SL_below_avg, col_by = Species, row.name = "count (percentage)")
+rtabulate(x = is_SL_below_avg, col_by = iris$Species, row.name = "count (percentage)")
 ```
 
 By default `FUN=function(x) sum(x) * c(1, 1/length(x))`.

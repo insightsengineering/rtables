@@ -140,7 +140,6 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 #' by_add_total(x, label = "tot")
 #' 
 #' if (requireNamespace("testthat", quietly = TRUE)) {
-#'   library(dplyr)
 #'   mat %>% by_add_total(label = "tot")
 #' }
 #' 

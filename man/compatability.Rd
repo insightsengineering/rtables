@@ -2,14 +2,13 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{header<-}
 \alias{header<-}
-\alias{col_info}
 \alias{header}
 \alias{by_all}
 \title{export}
 \usage{
 header(x) <- value
 
-col_info(obj)
+header(...)
 
 by_all(name)
 }

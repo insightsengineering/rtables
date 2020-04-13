@@ -251,9 +251,6 @@ add_new_coltree = function(lyt, spl) {
 #' @export
 #'
 #' @examples 
-#' 
-#' library(magrittr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM") 
 #' l
 #' 
@@ -295,8 +292,6 @@ add_colby_varlevels = function(lyt, var, lbl = var, valuelblvar = var, splfmt = 
 #' @export
 #' 
 #' @examples 
-#' library(magrittr)
-#' 
 #' l <- NULL %>%
 #'   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") %>%
 #'   add_rowby_varlevels("RACE", "ethnicity") %>% 
@@ -325,9 +320,6 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, valuel
 #' @export
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_varlevels("SEX", "Gender") %>%
 #'   add_summary_count(rowlblf = "Overall (N)") %>%
@@ -366,10 +358,6 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' @seealso \code{\link{add_analyzed_colvars}}
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' library(dplyr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   add_rowby_varlevels("RACE", "ethnicity") %>%
@@ -560,9 +548,6 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 #' @export
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
@@ -626,9 +611,6 @@ add_analyzed_vars = function(lyt,
 #' 
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' library(dplyr)
 #' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
@@ -832,9 +814,6 @@ setMethod("add_summary", "Split",
 #' @export
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
 #'     add_summary_count(rowlblf = "%s (n)") %>% 
@@ -862,9 +841,6 @@ add_summary_count = function(lyt, var = NULL, rowlblf = "%s", fmt = "xx (xx.x%)"
 #' @export
 #' 
 #' @examples 
-#' 
-#' library(magrittr)
-#' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_colcounts() %>% 
 #'     add_rowby_varlevels("RACE") %>% 
@@ -1061,7 +1037,6 @@ manual_cols = function(..., .lst = list(...)) {
 #' 
 #' summary(iris$Sepal.Length)
 #' 
-#' library(magrittr)
 #' f <- lstwrapx(summary)
 #' f(iris$Sepal.Length)
 #' @rdname lstwrap
