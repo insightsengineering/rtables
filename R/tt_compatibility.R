@@ -7,7 +7,7 @@
 #' 
 #' @examples 
 #' 
-#' tt_rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
+#' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' rrow("")
 #' 
 rrow = function(row.name = "", ..., format = NULL, indent = 0) {
@@ -272,8 +272,6 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #'   )
 #' )
 #' 
-#' # TODO Warning message:
-#' 
 #' mtbl
 #' 
 #' names(mtbl) # always first row of header
@@ -292,7 +290,7 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #'# )
 #' # TODO: fix
 #' # TODO: coerce c(...) to rheader
-#' tbl
+#' # tbl
 #' 
 #'# row.names(tbl) # TODO # row.lables
 #'# names(tbl)

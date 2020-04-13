@@ -50,6 +50,7 @@ l3 <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
   add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 l3
 
-build_table(l3, DM)
+# TODO: fix
+# build_table(l3, DM)
 
 }

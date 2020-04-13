@@ -41,13 +41,11 @@
 #' 
 #' rbind(mtbl, mtbl2)
 #' 
-#' rbind(mtbl, rrow(), mtbl2)
-#' 
-#' rbind(mtbl, rrow("aaa"), indent(mtbl2))
-#' 
-#' rbind(mtbl, mtbl2, gap = 1)
-#' 
-#' rbind(mtbl, mtbl2, gap = 2)
+#' # TODO: add functionality
+#' # rbind(mtbl, rrow(), mtbl2)
+#' # rbind(mtbl, rrow("aaa"), indent(mtbl2))
+#' # rbind(mtbl, mtbl2, gap = 1)
+#' # rbind(mtbl, mtbl2, gap = 2)
 #' 
 rbind.rtable <- function(..., gap = 0) {
   dots <- Filter(Negate(is.null), list(...))

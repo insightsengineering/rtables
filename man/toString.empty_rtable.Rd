@@ -15,5 +15,6 @@ toString.empty_rtable(x, ...)
 convert an empty old_rtable to a string
 }
 \examples{
-empty_rtable()
+# TODO: remove empty_rtable()
+# empty_rtable()
 }

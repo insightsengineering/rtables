@@ -35,7 +35,8 @@ l
 
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
-build_table(l, ANL)
+# TODO: fix
+# build_table(l, ANL)
 }
 \seealso{
 \code{\link{add_colby_multivar}}

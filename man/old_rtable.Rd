@@ -37,27 +37,29 @@ Note that the formats propagate to the \code{\link{old_rrow}} and
 \examples{
 
 # Table with multirow header
-mtbl <- rtable(
-  header = old_rheader(
-    old_rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
-    old_rrow(NULL, "mean", "median", "mean", "median")
-  ),
-  old_rrow(
-    row.name = "All Species",
-    mean(iris$Sepal.Length), median(iris$Sepal.Length),
-    mean(iris$Petal.Length), median(iris$Petal.Length),
-    format = "xx.xx"
-  )
-)
 
-mtbl
-
-names(mtbl) # always first row of header
+# TODO: fix
+# mtbl <- rtable(
+#   header = old_rheader(
+#     old_rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#     old_rrow(NULL, "mean", "median", "mean", "median")
+#   ),
+#   old_rrow(
+#     row.name = "All Species",
+#     mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#     mean(iris$Petal.Length), median(iris$Petal.Length),
+#     format = "xx.xx"
+#   )
+# )
+# 
+# mtbl
+# 
+# names(mtbl) # always first row of header
 
 # Single row header
 
-tbl <- rtable(
-  header = c("Treatement\nN=100", "Comparison\nN=300"),
+tbl <- old_rtable(
+  header =  c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx\%)",
   old_rrow("A", c(104, .2), c(100, .4)),
   old_rrow("B", c(23, .4), c(43, .5)),
@@ -67,26 +69,25 @@ tbl <- rtable(
 tbl
 
 row.names(tbl)
-names(tbl)
 
-
-# Subsetting
-tbl[1,2]
-tbl[3,2]
-tbl[5,1]
-tbl[5,2]
-tbl[1:3]
-
-
-# Data Structure methods
-dim(tbl)
-nrow(tbl)
-ncol(tbl)
-names(tbl)
-
-
-# Output: html
-as_html(tbl)
+# TODO: fix
+# # Subsetting
+# tbl[1,2]
+# tbl[3,2]
+# tbl[5,1]
+# tbl[5,2]
+# tbl[1:3]
+# 
+# 
+# # Data Structure methods
+# dim(tbl)
+# nrow(tbl)
+# ncol(tbl)
+# names(tbl)
+# 
+# 
+# # Output: html
+# as_html(tbl)
 
 \dontrun{
 Viewer(tbl)

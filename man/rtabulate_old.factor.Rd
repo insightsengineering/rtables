@@ -53,42 +53,43 @@ each level of \code{x}.
 }
 \examples{
 
-rtabulate_old(x = iris$Species)
-rtabulate_old(x = iris$Species, useNA = "always")
-rtabulate_old(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
-
-rtabulate_old(x = iris$Species, by_all("sum"))
-
-sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-   labels = c("S.L > 5", "S.L <= 5"))
-
-rtabulate_old(iris$Species, col_by = sl5)
-rtabulate_old(sl5, iris$Species)
-
-rtabulate_old(iris$Species, col_by = sl5,
-   FUN = function(cell_data, N) {
-     if (length(cell_data) > 10) {
-        length(cell_data) * c(1, 1/N)
-     } else {
-        rcell("-", format = "xx")
-     }
-   },
-   format = "xx (xx.xx\%)",
-   col_wise_args = list(N = table(sl5))
-)
-
-rtabulate_old(x = factor(c("X", "Y"), c("X", "Y")),
-          col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
-
-rtabulate_old(factor(c("Y", "Y"), c("X", "Y")),
-          factor(c("b", "b"), c("a", "b")), length)
-
-rtabulate_old(
-  x = factor(c("Y", "Y"), c("X", "Y")),
-  col_by = factor(c("b", "b"), c("a", "b")),
-  FUN = function(x, N) list(length(x), N),
-  col_wise_args = list(N = c(1,2))
-)
+# TODO: remove rtabulate_old
+# rtabulate_old(x = iris$Species)
+# rtabulate_old(x = iris$Species, useNA = "always")
+# rtabulate_old(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+# 
+# rtabulate_old(x = iris$Species, by_all("sum"))
+# 
+# sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#    labels = c("S.L > 5", "S.L <= 5"))
+# 
+# rtabulate_old(iris$Species, col_by = sl5)
+# rtabulate_old(sl5, iris$Species)
+# 
+# rtabulate_old(iris$Species, col_by = sl5,
+#    FUN = function(cell_data, N) {
+#      if (length(cell_data) > 10) {
+#         length(cell_data) * c(1, 1/N)
+#      } else {
+#         rcell("-", format = "xx")
+#      }
+#    },
+#    format = "xx (xx.xx\%)",
+#    col_wise_args = list(N = table(sl5))
+# )
+# 
+# rtabulate_old(x = factor(c("X", "Y"), c("X", "Y")),
+#           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+# 
+# rtabulate_old(factor(c("Y", "Y"), c("X", "Y")),
+#           factor(c("b", "b"), c("a", "b")), length)
+# 
+# rtabulate_old(
+#   x = factor(c("Y", "Y"), c("X", "Y")),
+#   col_by = factor(c("b", "b"), c("a", "b")),
+#   FUN = function(x, N) list(length(x), N),
+#   col_wise_args = list(N = c(1,2))
+# )
 
  
 }

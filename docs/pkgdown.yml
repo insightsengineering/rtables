@@ -1,9 +1,0 @@
-pandoc: '2.5'
-pkgdown: 1.4.1
-pkgdown_sha: ~
-articles:
-  devguide: devguide.html
-  rtables: rtables.html
-  rtabulate: rtabulate.html
-  tabletree_design: tabletree_design.html
-

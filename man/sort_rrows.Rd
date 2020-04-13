@@ -32,13 +32,14 @@ tbl <- rtable(
   rrow("r3", c(1,3), c(3,2,22))
 )
 
-sort_rrows(tbl, c(1, 1))
-sort_rrows(tbl, c(0, 1))
-
-sort_rrows(tbl, c(2, 3), decreasing = FALSE)
-sort_rrows(tbl, c(2, 3), decreasing = TRUE)
-
-sort_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
+# TODO: refactor
+# sort_rrows(tbl, c(1, 1))
+# sort_rrows(tbl, c(0, 1))
+# 
+# sort_rrows(tbl, c(2, 3), decreasing = FALSE)
+# sort_rrows(tbl, c(2, 3), decreasing = TRUE)
+# 
+# sort_rrows(tbl, function(row) row[[2]][3] - row[[1]][1])
 
 }
 \seealso{

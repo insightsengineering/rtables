@@ -4,7 +4,7 @@ author: "Gabriel Becker"
 date: "November 2019"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rtabulate}
+  %\VignetteIndexEntry{TableTree Design}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
