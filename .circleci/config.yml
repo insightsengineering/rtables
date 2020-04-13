@@ -49,17 +49,17 @@ jobs:
           path: rtables/docs
           destination: pkgdown
 
-  TODOS:
+  TODOs:
     docker:
       - image: cimg/base:2020.01
     steps:
       - checkout:
           path: rtables
       - run:
-          command: grep -R -A 2 "TODO" rtables/R > TODOS.txt
+          command: grep -R -A 2 "TODO" rtables/R > TODOs.txt
       - store_artifacts:
-          path: TODOS.txt
-          destination: aaa_TODOS.txt
+          path: TODOs.txt
+          destination: TODOs.txt
 
 workflows:
   version: 2
@@ -70,4 +70,4 @@ workflows:
       - check:
           requires:
             - build
-      - TODOS
+      - TODOs
