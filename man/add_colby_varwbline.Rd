@@ -22,6 +22,8 @@ add_colby_varwbline(
 
 \item{baseline}{character. Value of \code{var} to be taken as the baseline/control to be compared against.}
 
+\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
+
 \item{lbl}{string, label, often variable label}
 
 \item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}

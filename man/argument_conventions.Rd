@@ -50,11 +50,9 @@
 
 \item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
 
-\item{rowlblf}{string. An sprintf style format string containing up to one \code{"\%s"} which takes the current split value and generates the row label for the summary.}
+\item{lbl_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
-
-\item{verbose}{logical. Should additional information be displayed to the user. Defaults to FALSE.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 
@@ -89,6 +87,20 @@
 \item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
 
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
+
+\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
+
+\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
+
+\item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
+
+\item{lblrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{lbl} by default if not specified.}
+
+\item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
+if a \code{\link{factor}} of length \code{nrow(x)} that defines
+which levels in \code{col_by} define a column.
+can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
+can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}})}
 }
 \description{
 Dummy Function with aruments that are used throughout the framework

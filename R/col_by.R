@@ -147,7 +147,8 @@ by_all_old <- function(name) {
 
 
 #' Combine levels
-#' 
+#'
+#' @inheritParams argument_conventions
 #' @param ... a series of named character vectors
 #' 
 #' @export

@@ -58,6 +58,8 @@ as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
 
 setOldClass("rrow")
 #' @method as_html rrow
+#' @param ncol Number of columns
+#' @param is_header boolean. Deprecated
 #' @export
 #' @rdname as_html
 ##setMethod("as_html", "rrow",
@@ -112,9 +114,10 @@ extract_rowobj = function(tt) {
     
 }
 
+#' @param class.table class for table tag
 #' @param class.tr class for tr tag
-#' @param class.tr class for td tag
-#' @param class.tr class for th tag
+#' @param class.td class for td tag
+#' @param class.th class for th tag
 #' @exportMethod as_html
 #' @rdname as_html
 setMethod("as_html", "VTableTree",

@@ -4,14 +4,14 @@
 \alias{add_summary_count}
 \title{Add a content row of summary counts}
 \usage{
-add_summary_count(lyt, var = NULL, rowlblf = "\%s", fmt = "xx (xx.x\%)")
+add_summary_count(lyt, var = NULL, lbl_fstr = "\%s", fmt = "xx (xx.x\%)")
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{var}{string, variable name}
 
-\item{rowlblf}{string. An sprintf style format string containing up to one \code{"\%s"} which takes the current split value and generates the row label for the summary.}
+\item{lbl_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 
 \item{fmt}{format string for cells}
 }
@@ -24,7 +24,7 @@ if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string,
 \examples{
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
     add_rowby_varlevels("RACE") \%>\% 
-    add_summary_count(rowlblf = "\%s (n)") \%>\% 
+    add_summary_count(lbl_fstr = "\%s (n)") \%>\% 
     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 

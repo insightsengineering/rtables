@@ -18,11 +18,13 @@ pag_tt_indices(
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
+\item{min_siblings}{numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.}
+
+\item{nosplitin}{character. List of names of sub-tables where page-breaks are not allowed, regardless of other considerations. Defaults to none.}
+
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 
-\item{verbose}{logical. Should additional information be displayed to the user. Defaults to FALSE.}
-
-\item{min_siblings.}{numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.}
+\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 }
 \description{
 Determine pagination of a TableTree

@@ -322,9 +322,9 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblva
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_varlevels("SEX", "Gender") %>%
-#'   add_summary_count(rowlblf = "Overall (N)") %>%
+#'   add_summary_count(lbl_fstr = "Overall (N)") %>%
 #'   add_rowby_varlevels("RACE", "Ethnicity") %>%
-#'   add_summary_count("RACE", rowlblf = "%s (n)") %>%
+#'   add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
 #'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
 #'   
 #' l
@@ -560,14 +560,14 @@ add_analyzed_vars = function(lyt,
                              lbl = var,
                              afun,
                              fmt = NULL,
-                             rowlabs = "",
+                             defrowlab = "",
                              newtoplev = FALSE,
                              inclNAs = FALSE,
                              extrargs = list()) {
 
     subafun = substitute(afun)
     if(is.name(subafun) &&
-       missing(rowlabs) &&
+       missing(defrowlab) &&
        is.function(afun) &&
        ## this is gross. basically testing
        ## if the symbol we have corresponds
@@ -578,12 +578,12 @@ add_analyzed_vars = function(lyt,
                       ifnotfound = list(NULL),
                       inherits = TRUE
                       )[[1]], afun)) {
-        rowlabs = as.character(subafun)
+        defrowlab = as.character(subafun)
     }
     spl = AnalyzeMultiVars(var, lbl,
                           afun = afun,
                           splfmt = fmt,
-                          defrowlab = rowlabs,
+                          defrowlab = defrowlab,
                           inclNAs = inclNAs,
                           extrargs = extrargs)
  
@@ -773,9 +773,9 @@ setMethod("add_summary", "Split",
     lyt
 })
 
-.count_raw_constr = function(var, fmt, rowlblf) {
+.count_raw_constr = function(var, fmt, lbl_fstr) {
     function(df, lblstr = "") {
-        lbl = sprintf(rowlblf, lblstr)
+        lbl = sprintf(lbl_fstr, lblstr)
         if(!is.null(var))
             cnt = sum(!is.na(df[[var]]))
         else
@@ -789,9 +789,9 @@ setMethod("add_summary", "Split",
     }
 }
 
-.count_wpcts_constr = function(var, fmt, rowlblf) {
+.count_wpcts_constr = function(var, fmt, lbl_fstr) {
     function(df, lblstr = "", .N_col) {
-        lbl = sprintf(rowlblf, lblstr)
+        lbl = sprintf(lbl_fstr, lblstr)
         if(!is.null(var))
             cnt = sum(!is.na(df[[var]]))
         else
@@ -818,18 +818,18 @@ setMethod("add_summary", "Split",
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
-#'     add_summary_count(rowlblf = "%s (n)") %>% 
+#'     add_summary_count(lbl_fstr = "%s (n)") %>% 
 #'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
 #' 
-add_summary_count = function(lyt, var = NULL, rowlblf = "%s", fmt = "xx (xx.x%)" ){
+add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)" ){
 
     if(length(gregexpr("xx", fmt)[[1]]) == 2)
-        fun = .count_wpcts_constr(var, fmt, rowlblf)
+        fun = .count_wpcts_constr(var, fmt, lbl_fstr)
     else
-        fun = .count_raw_constr(var,fmt, rowlblf)
+        fun = .count_raw_constr(var,fmt, lbl_fstr)
     add_summary(lyt,# lbl = lbl,
                 cfun = fun, cfmt = fmt)
 }
@@ -1003,7 +1003,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #' Manual column declaration
 #' @param \dots One or more vectors of levels to appear
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
-#' @param .list A list of sets of levels, by default populated via \code{list(...)}.
+#' @param .lst A list of sets of levels, by default populated via \code{list(...)}.
 #' @examples
 #' # simple one level column space
 #' rows = lapply(1:5, function(i) {

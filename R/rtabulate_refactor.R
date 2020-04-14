@@ -69,7 +69,26 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 #' arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{rtab_inner}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
 #'   
 #' @param x either a vector or \code{data.frame}
-#' @param ... arguments passed to methods
+#' @param ... arguments passed to the tabulation function
+#' @inheritParams argument_conventions
+#' @param FUN a function that processes the cell data
+#' @param ... arguments passed to \code{FUN}
+#' @param total string of column name of an added total column using \code{\link[rtables]{by_add_total}} to
+#'   \code{col_by} and \code{\link[tern]{col_N_add_total}} to \code{col_N}. If \code{NULL} no total column is added.
+#' @param col_N numeric. If non-NULL, counts to override total column counts.
+#' @param row_by rows in \code{x} to take per row in the resulting table
+#' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
+#'   then the \code{format} is applied
+#' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
+#'   used as \code{row.name} of the \code{\link{rrow}}
+#' @param indent The indent level (deprecated in refactor)
+#' @param col_wise_args a named list containing collections (e.g. vectors or
+#'   lists) with data elements for each column of the resulting table. The data
+#'   elements are then passed to the named argument \code{FUN} corresponding to
+#'   the element name of the outer list. Hence, the length and order of each
+#'   collection must match the levels in \code{col_by}. See examples.
+#'
+
 #' 
 #' @return an \code{\link{rtable}} object
 #' @note For backwards compatibility, all paramters other than \code{x}, \code{col_by} and \code{FUN} appear after \dots so must be specified by full argument name.
@@ -186,7 +205,7 @@ rtabulate <- function(x,
     lyt <- add_analyzed_vars(lyt,
                              var = xcols,
                              lbl = lbls,
-                             rowlabs = row.name,
+                             defrowlab = row.name,
                              afun = FUN,
                              fmt = format,
                              extrargs = list(...))

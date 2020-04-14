@@ -10,6 +10,8 @@ rcell(x, format = NULL, colspan = NULL)
 \item{x}{An object}
 
 \item{format}{format string for cells.}
+
+\item{colspan}{Columnspan value. NOTE currently column spanning is only supported for defining header structure.}
 }
 \description{
 Rcell

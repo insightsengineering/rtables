@@ -12,9 +12,9 @@
 \usage{
 LabelRow(
   lev = 1L,
-  lab = "",
-  name = lab,
-  vis = !is.na(lab) && nzchar(lab),
+  lbl = "",
+  name = lbl,
+  vis = !is.na(lbl) && nzchar(lbl),
   cinfo = InstantiatedColumnInfo()
 )
 
@@ -24,6 +24,8 @@ ContentRow(...)
 }
 \arguments{
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+
+\item{lbl}{string, label, often variable label}
 
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 

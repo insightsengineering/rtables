@@ -10,7 +10,7 @@ add_analyzed_vars(
   lbl = var,
   afun,
   fmt = NULL,
-  rowlabs = "",
+  defrowlab = "",
   newtoplev = FALSE,
   inclNAs = FALSE,
   extrargs = list()
@@ -26,6 +26,8 @@ add_analyzed_vars(
 \item{afun}{function. Analysis function.}
 
 \item{fmt}{format string for cells}
+
+\item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 

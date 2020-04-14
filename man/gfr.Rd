@@ -21,6 +21,8 @@ get_formatted_rows(obj, depth = 0, indent = 0)
 \arguments{
 \item{obj}{the object.}
 
+\item{depth}{Depth we are currently at. Not intended to  be set by end users.}
+
 \item{indent}{deprecated.}
 }
 \description{

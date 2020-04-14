@@ -4,12 +4,14 @@
 \alias{rheader}
 \title{Create a header}
 \usage{
-rheader(..., format = "xx", .rowlist = NULL)
+rheader(..., format = "xx", .lst = NULL)
 }
 \arguments{
 \item{...}{Passed on to metthods or tabulation functions.}
 
 \item{format}{format string for cells.}
+
+\item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
 }
 \description{
 Create a header

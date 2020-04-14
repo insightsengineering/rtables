@@ -39,7 +39,17 @@ as_html(x, ...)
 
 \item{...}{additional arguments currently not used}
 
-\item{class.tr}{class for th tag}
+\item{class.table}{class for table tag}
+
+\item{ncol}{Number of columns}
+
+\item{is_header}{boolean. Deprecated}
+
+\item{class.tr}{class for tr tag}
+
+\item{class.td}{class for td tag}
+
+\item{class.th}{class for th tag}
 
 \item{indent}{amount it should be indented}
 }

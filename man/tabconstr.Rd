@@ -9,9 +9,9 @@ ElementaryTable(
   kids = list(),
   name = "",
   lev = 1L,
-  lab = "",
-  labrow = LabelRow(lev = lev, lab = lab, vis = !isTRUE(iscontent) && !is.na(lab) &&
-    nzchar(lab)),
+  lbl = "",
+  lblrow = LabelRow(lev = lev, lbl = lbl, vis = !isTRUE(iscontent) && !is.na(lbl) &&
+    nzchar(lbl)),
   rspans = data.frame(),
   cinfo = NULL,
   iscontent = NA,
@@ -24,9 +24,9 @@ TableTree(
   name = if (!is.na(var)) var else "",
   cont = ElementaryTable(),
   lev = 1L,
-  lab = name,
-  labrow = LabelRow(lev = lev, lab = lab, vis = nrow(cont) == 0 && !is.na(lab) &&
-    nzchar(lab)),
+  lbl = name,
+  lblrow = LabelRow(lev = lev, lbl = lbl, vis = nrow(cont) == 0 && !is.na(lbl) &&
+    nzchar(lbl)),
   rspans = data.frame(),
   iscontent = NA,
   var = NA_character_,
@@ -40,6 +40,12 @@ TableTree(
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+
+\item{lbl}{string, label, often variable label}
+
+\item{lblrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{lbl} by default if not specified.}
+
+\item{rspans}{data.frame. Currently stored but otherwise ignored.}
 
 \item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
 

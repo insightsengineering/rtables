@@ -18,7 +18,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         stop() #row.name = as.character(row.name)
     if(length(vals) == 0L) {
         LabelRow(lev = as.integer(indent),
-                 lab = row.name,
+                 lbl = row.name,
                  name = row.name)
     } else {
         csps = as.integer(sapply(vals, function(x) {
@@ -34,7 +34,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         fmts = sapply(vals, obj_fmt)
         if(is.character(fmts) && length(unique(fmts)) == 1L && is.null(format))
             format = unique(fmts)
-        DataRow(val = vals, lev = as.integer(indent), lab = row.name,
+        DataRow(val = vals, lev = as.integer(indent), lbl = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
                 fmt = format)
@@ -74,7 +74,7 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' Rcell
 #' 
 #' @inheritParams argument_conventions
-#' 
+#' @param colspan Columnspan value. NOTE currently column spanning is only supported for defining header structure.
 #' @export
 #' 
 rcell = function(x, format = NULL, colspan = NULL) {
@@ -200,9 +200,9 @@ hrows_to_colinfo = function(rows) {
 #' 
 #' h2
 #' 
-rheader = function(..., format = "xx", .rowlist = NULL) {
-    if(!is.null(.rowlist))
-        args = .rowlist
+rheader = function(..., format = "xx", .lst = NULL) {
+    if(!is.null(.lst))
+        args = .lst
     else 
         args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
@@ -234,6 +234,7 @@ rheader = function(..., format = "xx", .rowlist = NULL) {
 #' Create a Table
 #' 
 #' @inheritParams argument_conventions
+#' @param header Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.
 #' 
 #' 
 #' @export
@@ -372,7 +373,7 @@ rtable = function(header, ..., format = NULL) {
             stop("colspans in TableTree bodies are currently not supported.")
         )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
-              labrow = LabelRow(lev = 0L, lab = "", vis = FALSE))
+              lblrow = LabelRow(lev = 0L, lbl = "", vis = FALSE))
 }
 
 #' @rdname rtable
@@ -403,7 +404,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     ## elementary table with all the rows
     ## instead of adding nesting.
     if(all(sapply(x, function(xi) {
-        (is(xi, "ElementaryTable") && !labrow_visible(xi) ) ||
+        (is(xi, "ElementaryTable") && !lblrow_visible(xi) ) ||
             is(xi, "TableRow") && !is(xi, "LabelRow")}))) {
         x <- unlist(lapply(x, function(xi) {
             if(is(xi, "TableRow"))
@@ -416,7 +417,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 
     
     
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", lab = "")
+    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", lbl = "")
     
 }
 
@@ -444,7 +445,7 @@ header_add_N = function(x, N) {
 #' @rdname compatability
 `header<-` = function(x, value) {
     if(is(value, "list")) {
-        value = rheader(.rowlist = value)
+        value = rheader(.lst = value)
     } else if(!is(value, "InstantiatedColumnInfo")) {
         ## XXX we could be more defensive here, some
         ## bad invalid values could get through.
@@ -591,7 +592,7 @@ setMethod("recurse_cbind", c("TableTree",
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    TableTree(kids = kids, labrow = tt_labelrow(x),
+    TableTree(kids = kids, lblrow = tt_labelrow(x),
               cont = cont,
               name = obj_name(x),
               lev = tt_level(x),
@@ -614,7 +615,7 @@ setMethod("recurse_cbind", c("ElementaryTable",
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    ElementaryTable(kids = kids, labrow = tt_labelrow(x),
+    ElementaryTable(kids = kids, lblrow = tt_labelrow(x),
                   name = obj_name(x),
                   lev = tt_level(x),
                   cinfo = cinfo,
@@ -656,7 +657,7 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
                var = obj_avar(x),
                fmt = obj_fmt(x),
                name = obj_name(x),
-               lab = obj_label(x))
+               lbl = obj_label(x))
 })
 
 setMethod("recurse_cbind", c("LabelRow", "LabelRow",
@@ -765,7 +766,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
                  nrow(content_table(tt))
              else
                  0
-    contnr <- contnr + as.numeric(labrow_visible(tt))
+    contnr <- contnr + as.numeric(lblrow_visible(tt))
     
   
     totnr = nrow(tt)
@@ -773,7 +774,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
     atend = !islab && endpos == at - 1
     if(at == pos + 1
        && islab) {
-        if(labrow_visible(tt_labelrow(tt)))
+        if(lblrow_visible(tt))
             stop("Inserting a label row at a position that already has a label row is not currently supported")
         tt_labelrow(tt) <- row
         return(tt)

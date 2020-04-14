@@ -63,7 +63,7 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #' By default each cell reports the mean based on the associated vector. 
 #'
 #'
-# ' @inheritParams argument_conventions
+#' @inheritParams argument_conventions
 #' @param x a vector
 #' @param col_by (\code{\link{factor}} or \code{\link{data.frame}}
 #'   if a \code{\link{factor}} of length \code{nrow(x)} that defines

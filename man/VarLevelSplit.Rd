@@ -27,7 +27,7 @@ VarLevWBaselineSplit(
   vlblvar = var,
   incl_all = FALSE,
   splbl,
-  lbl_fmt = "\%s - \%s",
+  lbl_fstr = "\%s - \%s",
   cfun = NULL,
   cfmt = NULL,
   splfmt = NULL,
@@ -60,6 +60,10 @@ VarLevWBaselineSplit(
 \item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{baseline}{character. Value of \code{var} to be taken as the baseline/control to be compared against.}
+
+\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
+
+\item{lbl_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 }
 \description{
 Split on levels within a variable

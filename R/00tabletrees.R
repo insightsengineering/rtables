@@ -514,7 +514,7 @@ setClass("MultiSubsetCompSplit", contains = "VCompSplit",
          representation(subset1_gen = "VarOrFactory",
                         subset2_gen = "VarOrFactory"))
 
-MultiSubsetCompSplit = function(factory1, factory2, lbl_fmt = "%s - %s",
+MultiSubsetCompSplit = function(factory1, factory2, lbl_fstr = "%s - %s",
                            splbl = "",
                            comparison = `-`,
                            ## not needed i think...
@@ -522,7 +522,7 @@ MultiSubsetCompSplit = function(factory1, factory2, lbl_fmt = "%s - %s",
     new("MultiSubsetCompSplit",
         subset1_gen = factory1,
         subset2_gen = factory2,
-        label_format = lbl_fmt,
+        label_format = lbl_fstr,
         split_label = splbl,
         content_fun = cfun,
         content_format = cfmt,
@@ -570,7 +570,7 @@ setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
 VarLevWBaselineSplit = function(var, baseline, vlblvar= var, incl_all = FALSE,
                                 splbl,
 #                             comparison = `-`,
-                             lbl_fmt = "%s - %s",
+                             lbl_fstr = "%s - %s",
                              ## not needed I Think...
                              cfun =  NULL, cfmt = NULL, splfmt = NULL,
                              valorder = NULL,
@@ -583,7 +583,7 @@ VarLevWBaselineSplit = function(var, baseline, vlblvar= var, incl_all = FALSE,
         ## This will occur ata theee row level not on the column split, for now
         ## TODO revisit this to confirm its right
         ##        comparison_func = comparison,
-                                        #      label_format = lbl_fmt,
+                                        #      label_format = lbl_fstr,
         value_lbl_var = vlblvar,
         split_label = splbl,
         content_fun = cfun,
@@ -769,8 +769,8 @@ setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
 setClass("LayoutRowTree", contains = "LayoutAxisTree")
 setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree = function(lev = 0L,
-                         name = lab,
-                         lab = "",
+                         name = lbl,
+                         lbl = "",
                          kids = list(),
                          ##spl = if(length(kids) == 0) NULL else AllSplit(),
                          spl = AllSplit(), 
@@ -789,21 +789,21 @@ LayoutColTree = function(lev = 0L,
             split = spl,
             ## subset = sub,
             ## splitvar = svar,
-            label = lab,
+            label = lbl,
             display_columncounts = disp_colcounts,
             columncount_format = colcount_fmt)
     } else {
         stop("problema my manitar")
-        LayoutColLeaf(lev = lev, lab = lab, tpos = tpos,
+        LayoutColLeaf(lev = lev, lbl = lbl, tpos = tpos,
                       name = .chkname(name))
     }        
 }
 
-LayoutColLeaf = function(lev = 0L, name = lab, lab = "", tpos = TreePos()#,
+LayoutColLeaf = function(lev = 0L, name = lbl, lbl = "", tpos = TreePos()#,
                         ## n = NA_integer_,
                          #svar = NA_character_
                          ) {
-    new("LayoutColLeaf", level = lev, name = .chkname(name), label = lab,
+    new("LayoutColLeaf", level = lev, name = .chkname(name), label = lbl,
         pos_in_tree = tpos##, 
         ##subset = sub#,
         ##N_count = n,
@@ -815,9 +815,9 @@ LayoutRowTree = function(lev = 0L, kids = list()) {
     new("LayoutRowTree", level = lev, children = kids)
 }
 
-LayoutRowLeaf = function(lev = 0L, lab = "",
+LayoutRowLeaf = function(lev = 0L, lbl = "",
                        pos){##, sub, n) {
-    new("LayoutRowLeaf", level = lev, label = lab,
+    new("LayoutRowLeaf", level = lev, label = lbl,
         pos_in_tree = pos)##subset = sub, N_count = n)
 }
 
@@ -903,14 +903,14 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 #' @param vis logical. Should the row be visible (\code{LabelRow} only).
 #' @export
 LabelRow = function(lev = 1L,
-                    lab = "",
-                    name = lab,
-                    vis = !is.na(lab) && nzchar(lab),
+                    lbl = "",
+                    name = lbl,
+                    vis = !is.na(lbl) && nzchar(lbl),
                     cinfo = InstantiatedColumnInfo()) {
     new("LabelRow",
         leaf_value = list(),
         level = lev,
-        label = lab,
+        label = lbl,
         ## XXX this means that a label row and its talbe can have the same name....that is bad but how bad remains to be seen
         ## XXX
         name = .chkname(name),
@@ -954,7 +954,7 @@ setClass("LabelRow", contains = "TableRow",
 .tablerow = function(val = list(),
                     name = "",
                     lev = 1L,
-                    lab = name,
+                    lbl = name,
                     cspan = rep(1L, length(val)),
                     ##clayout = LayoutColTree(),
                     cinfo = InstantiatedColumnInfo(),
@@ -965,11 +965,11 @@ setClass("LabelRow", contains = "TableRow",
                     fmt = NULL,
                     klass) {
     if((missing(name) || is.null(name) || nchar(name) == 0) &&
-       !missing(lab))
-        name = lab
+       !missing(lbl))
+        name = lbl
     rw = new(klass, leaf_value = val,
              name = .chkname(name),        level = lev,
-        label = .chkname(lab),
+        label = .chkname(lbl),
         colspans = cspan,
         col_info = cinfo,
         ##  col_layout = clayout,
@@ -1045,15 +1045,16 @@ setClass("ElementaryTable", contains = "VTableTree",
 
 #' Table Constructors and Classes
 #' @inheritParams argument_conventions
+#' @param rspans data.frame. Currently stored but otherwise ignored.
 #' @rdname tabconstr
 #' @export
 ElementaryTable = function(kids = list(),
                            name = "",
                            lev = 1L,
-                           lab = "",
-                           labrow = LabelRow(lev = lev,
-                                             lab = lab,
-                                             vis = !isTRUE(iscontent) && !is.na(lab) && nzchar(lab)),
+                           lbl = "",
+                           lblrow = LabelRow(lev = lev,
+                                             lbl = lbl,
+                                             vis = !isTRUE(iscontent) && !is.na(lbl) && nzchar(lbl)),
                            rspans = data.frame(),
                            cinfo = NULL,
                            #tpos = TableTreePos(),
@@ -1068,14 +1069,14 @@ ElementaryTable = function(kids = list(),
             cinfo = InstantiatedColumnInfo()
     }
 
-    if(no_colinfo(labrow))
-        col_info(labrow) = cinfo
+    if(no_colinfo(lblrow))
+        col_info(lblrow) = cinfo
     kids = .enforce_valid_kids(kids, cinfo)
     tab = new("ElementaryTable",
               children = kids,
               name = .chkname(name),
               level = lev,
-              labelrow = labrow,
+              labelrow = lblrow,
               rowspans = rspans,
               col_info = cinfo,
               var_analyzed = var,
@@ -1104,10 +1105,10 @@ TableTree = function(kids = list(),
                      name = if(!is.na(var)) var else "",
                      cont = ElementaryTable(),
                      lev = 1L,
-                     lab = name,
-                     labrow = LabelRow(lev = lev,
-                                       lab = lab,
-                                       vis = nrow(cont)== 0 && !is.na(lab) && nzchar(lab)),
+                     lbl= name,
+                     lblrow = LabelRow(lev = lev,
+                                       lbl = lbl,
+                                       vis = nrow(cont)== 0 && !is.na(lbl) && nzchar(lbl)),
                      rspans = data.frame(),
                      iscontent = NA,
                      var = NA_character_,
@@ -1126,14 +1127,14 @@ TableTree = function(kids = list(),
     kids = .enforce_valid_kids(kids, cinfo)
     if(isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0)
         stop("Got table tree with content table and content position")
-    if(no_colinfo(labrow))
-        col_info(labrow) = cinfo
+    if(no_colinfo(lblrow))
+        col_info(lblrow) = cinfo
     if((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids,
                         name = .chkname(name),
                         lev = lev,
-                        labrow = labrow,
+                        lblrow = lblrow,
                         rspans = rspans,
                         cinfo = cinfo,
                         var = var,
@@ -1143,7 +1144,7 @@ TableTree = function(kids = list(),
                   children = kids,
                   name = .chkname(name),
                   level = lev,
-                  labelrow = labrow,
+                  labelrow = lblrow,
                   rowspans = rspans,
                   col_info = cinfo,
                   format = NULL)## ,

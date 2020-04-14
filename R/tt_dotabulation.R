@@ -134,7 +134,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         rowconstr(val = rowvals,
                   cinfo = cinfo,
                   lev = lev,
-                  lab = lbls[i],
+                  lbl = lbls[i],
                   name = lbls[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
                   fmt = fmtvec[i]
@@ -214,7 +214,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ctab = ElementaryTable(kids = contkids,
                            name = paste0(name, "@content"),
                            lev = lvl,
-                           labrow = LabelRow(),
+                           lblrow = LabelRow(),
                            cinfo = cinfo,
                            iscontent = TRUE,
                            fmt = format)
@@ -239,7 +239,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         lab = ""
     TableTree(kids = kids,
               name = spl_payload(spl),
-              lab = lab,
+              lbl = lab,
               lev = lvl,
               cinfo = cinfo,
               fmt = obj_fmt(spl))
@@ -343,7 +343,7 @@ recursive_applysplit = function( df,
             if(nonroot) {
                 kids = list(TableTree(kids = inner,
                                       name = obj_name(spl),
-                                      lab = obj_label(spl),
+                                      lbl = obj_label(spl),
                                       lev = innerlev - 1L,
                                       cinfo = cinfo,
                                       fmt = obj_fmt(spl)))
@@ -361,8 +361,8 @@ recursive_applysplit = function( df,
                         name = name,
                         lev = lvl,
                     iscontent = FALSE, 
-                    labrow = LabelRow(lev = lvl,
-                                      lab = label,
+                    lblrow = LabelRow(lev = lvl,
+                                      lbl = label,
                                       cinfo = cinfo),
                     cinfo = cinfo)
     } else {
@@ -434,7 +434,7 @@ build_table = function(lyt, df,
                     kids = kids,
                     lev = 0L,
                     name = "root",
-                    lab="",
+                    lbl="",
                     iscontent = FALSE,
                     cinfo = cinfo,
                     fmt = obj_fmt(rtspl))
@@ -514,7 +514,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,
-                      lab = lbl,
+                      lbl = lbl,
                       tpos = pos,
                       name = nm
                       )
@@ -530,7 +530,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
             splitvec_to_coltree(dfpart, splvec, newpos,
                                 lvl + 1L, partlab)
         }, dfpart = datparts, value = vals, SIMPLIFY=FALSE)
-        LayoutColTree(lev = lvl, lab = lbl,
+        LayoutColTree(lev = lvl, lbl = lbl,
                       spl = spl,
                       kids = kids, tpos = pos,
                       name = nm, 

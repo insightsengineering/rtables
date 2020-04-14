@@ -154,7 +154,7 @@ setMethod("nlines", "TableRow",
 
 setMethod("nlines", "LabelRow",
           function(x, colwidths) {
-    if(labrow_visible(x))
+    if(lblrow_visible(x))
         1L
     else
         0L
@@ -215,7 +215,7 @@ make_pagdf = function(tt, colwidths = NULL) {
                       repr_inds = integer(),
                       indent = 0L) {
         ret = list()
-        if(labrow_visible(tree)) {
+        if(lblrow_visible(tree)) {
             lr = tt_labelrow(tree)
             rownum <<- rownum + 1L
             ret  =  c(ret,
@@ -354,7 +354,9 @@ find_pag = function(pagdf,
 #' Determine pagination of a TableTree
 #' @inheritParams argument_conventions
 #' @param lpp numeric. Maximum lines per page including (re)printed header and context rows
-#' @param min_siblings. numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.
+#' @param min_siblings  numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.
+#' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other considerations. Defaults to none.
+#' 
 #' @export
 pag_tt_indices = function(tt, lpp = 15,
                            min_siblings = 2,

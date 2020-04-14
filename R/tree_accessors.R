@@ -340,7 +340,7 @@ setMethod("obj_label<-", "VTableTree",
     lr = tt_labelrow(obj)
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
-        labrow_visible(lr) = TRUE
+        lblrow_visible(lr) = TRUE
  
     tt_labelrow(obj) = lr
     obj
@@ -358,23 +358,23 @@ setMethod("tt_labelrow<-", "VTableTree",
     obj
 })
 
-setGeneric("labrow_visible", function(obj) standardGeneric("labrow_visible"))
-setMethod("labrow_visible", "VTableTree",
+setGeneric("lblrow_visible", function(obj) standardGeneric("lblrow_visible"))
+setMethod("lblrow_visible", "VTableTree",
           function(obj) {
-    labrow_visible(tt_labelrow(obj))
+    lblrow_visible(tt_labelrow(obj))
 })
-setMethod("labrow_visible", "LabelRow",
+setMethod("lblrow_visible", "LabelRow",
           function(obj) obj@visible)
 
-setGeneric("labrow_visible<-", function(obj, value) standardGeneric("labrow_visible<-"))
-setMethod("labrow_visible<-", "VTableTree",
+setGeneric("lblrow_visible<-", function(obj, value) standardGeneric("lblrow_visible<-"))
+setMethod("lblrow_visible<-", "VTableTree",
           function(obj, value) {
     lr = tt_labelrow(obj)
-    labrow_visible(lr) = value
+    lblrow_visible(lr) = value
     tt_labelrow(obj) = lr
     obj
 })
-setMethod("labrow_visible<-", "LabelRow",
+setMethod("lblrow_visible<-", "LabelRow",
           function(obj, value) {
     obj@visible = value
     obj
@@ -695,7 +695,7 @@ setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
         if(incl.cont) {tree_children(content_table(tt))},
-        if(add.labrows && labrow_visible(tt)) {
+        if(add.labrows && lblrow_visible(tt)) {
             tt_labelrow(tt)
         },
         lapply(tree_children(tt),
@@ -709,7 +709,7 @@ setMethod("collect_leaves", "TableTree",
 setMethod("collect_leaves", "ElementaryTable",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = tree_children(tt)
-    if(add.labrows && labrow_visible(tt)) {
+    if(add.labrows && lblrow_visible(tt)) {
         ret = c(tt_labelrow(tt), ret)
     }
     ret

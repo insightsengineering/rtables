@@ -10,6 +10,8 @@ rtable(header, ..., format = NULL)
 rtablel(header, ..., format = NULL)
 }
 \arguments{
+\item{header}{Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.}
+
 \item{...}{Passed on to metthods or tabulation functions.}
 
 \item{format}{format string for cells.}
