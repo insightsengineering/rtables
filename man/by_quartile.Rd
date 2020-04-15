@@ -15,8 +15,6 @@ by_quartile(x, cumulative = FALSE)
 Cut by quartiles
 }
 \examples{
-head(by_quartile(iris$Sepal.Length))
-head(by_quartile(iris$Sepal.Length, TRUE))
 
 rtabulate(x = iris$Sepal.Length, col_by = by_quartile(iris$Sepal.Width), 
           FUN = mean, format = "xx.xx")

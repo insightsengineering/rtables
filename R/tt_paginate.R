@@ -204,7 +204,7 @@ pagdfrow = function(row,
 }
 
 #' Make layout summary  data.frame for use during pagination
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @export
 make_pagdf = function(tt, colwidths = NULL) {
     rownum = 0
@@ -352,7 +352,7 @@ find_pag = function(pagdf,
 }
 
 #' Determine pagination of a TableTree
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @param lpp numeric. Maximum lines per page including (re)printed header and context rows
 #' @param min_siblings  numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.
 #' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other considerations. Defaults to none.

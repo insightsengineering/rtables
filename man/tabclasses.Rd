@@ -3,8 +3,70 @@
 \docType{class}
 \name{ElementaryTable-class}
 \alias{ElementaryTable-class}
+\alias{ElementaryTable}
 \alias{TableTree-class}
+\alias{TableTree}
 \title{TableTree classes}
+\usage{
+ElementaryTable(
+  kids = list(),
+  name = "",
+  lev = 1L,
+  lbl = "",
+  lblrow = LabelRow(lev = lev, lbl = lbl, vis = !isTRUE(iscontent) && !is.na(lbl) &&
+    nzchar(lbl)),
+  rspans = data.frame(),
+  cinfo = NULL,
+  iscontent = NA,
+  var = NA_character_,
+  fmt = NULL
+)
+
+TableTree(
+  kids = list(),
+  name = if (!is.na(var)) var else "",
+  cont = ElementaryTable(),
+  lev = 1L,
+  lbl = name,
+  lblrow = LabelRow(lev = lev, lbl = lbl, vis = nrow(cont) == 0 && !is.na(lbl) &&
+    nzchar(lbl)),
+  rspans = data.frame(),
+  iscontent = NA,
+  var = NA_character_,
+  cinfo = NULL,
+  fmt = NULL
+)
+}
+\arguments{
+\item{kids}{list. List of direct children.}
+
+\item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
+
+\item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+
+\item{lbl}{string, label, often variable label}
+
+\item{lblrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{lbl} by default if not specified.}
+
+\item{rspans}{data.frame. Currently stored but otherwise ignored.}
+
+\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
+
+\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed the content table for another TableTree.}
+
+\item{var}{string, variable name}
+
+\item{fmt}{format string for cells}
+
+\item{cont}{ElementaryTable. Content table.}
+}
 \description{
 TableTree classes
+
+Table Constructors and Classes
+}
+\author{
+Gabriel Becker
+
+Gabriel Becker
 }

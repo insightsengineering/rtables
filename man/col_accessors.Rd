@@ -70,7 +70,7 @@ col_exprs(obj, df = NULL)
 \S4method{col_exprs}{InstantiatedColumnInfo}(obj, df = NULL)
 }
 \arguments{
-\item{obj}{the object.}
+\item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{object}{The object to modify in-place}
 

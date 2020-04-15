@@ -13,7 +13,7 @@ no_colinfo(obj)
 \S4method{no_colinfo}{InstantiatedColumnInfo}(obj)
 }
 \arguments{
-\item{obj}{the object.}
+\item{obj}{ANY. The object for the accessor to access or modify}
 }
 \description{
 Does the table/row/InstantiatedColumnInfo object contain no column structure information?

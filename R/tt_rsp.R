@@ -37,7 +37,8 @@ TF_counter = function(nms = NULL) {
     tab = table(catvec, c(bldat, coldat))
     tab
 }
-    
+
+## TODO: remove internal package-code use of %>% (maybe?)
 
 tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
     NULL %>% iter_colby(cbys = col_by, baselines = baselines) %>%

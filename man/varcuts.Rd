@@ -36,6 +36,7 @@ add_colby_dyncut(
   var,
   lbl = var,
   cutfun = qtile_cuts,
+  cutlblfun = function(x) NULL,
   splfmt = NULL,
   newtoplev = FALSE,
   extrargs = list(),
@@ -92,6 +93,8 @@ add_rowby_dyncut(
 
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 
+\item{cutlblfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
+
 \item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
@@ -100,4 +103,7 @@ Create columns (or row splits) based on values (such as quartiles) of \code{var}
 \details{
 For dynamic cuts, the cut is transformed into a static cut by
 \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+}
+\author{
+Gabriel Becker
 }

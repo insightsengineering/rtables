@@ -246,10 +246,11 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' Will generate children for each subset of a categorical variable
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
 #'
+#' @author Gabriel Becker
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") 
 #' l
@@ -269,7 +270,7 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' # TODO: fix
 #' # build_table(l3, DM)
-#' 
+
 add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE,
                                extrargs = list()) {
     spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = FALSE,
@@ -287,10 +288,10 @@ add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL
 #' baseline")
 #' 
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
-#' 
+#' @author Gabriel Becker
 #' @examples 
 #' l <- NULL %>%
 #'   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") %>%
@@ -299,6 +300,7 @@ add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL
 #' 
 #' build_table(l, DM)
 #' 
+
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
@@ -315,10 +317,10 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblva
 #' Add Rows according to levels of a variable
 #' 
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
-#' 
+#' @author Gabriel Becker 
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_varlevels("SEX", "Gender") %>%
@@ -331,7 +333,7 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblva
 #' 
 #' # TODO: fix
 #' # build_table(l, DM)
-#'   
+#' 
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
@@ -351,12 +353,12 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
 #' \code{add_colby_multivar}
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
 #' 
 #' @seealso \code{\link{add_analyzed_colvars}}
-#' 
+#' @author Gabriel Becker 
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
@@ -371,7 +373,7 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' # TODO: fix
 #'  build_table(l, ANL)
 #'   
-#'   
+#'  
 add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
                               newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
@@ -395,7 +397,7 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
 #'
 #' Create columns (or row splits) based on values (such as quartiles) of \code{var}.
 #'
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' @param cuts numeric. Cuts to use
 #' @param cutlbls character (or NULL). Labels for the cutst
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}
@@ -407,6 +409,7 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
 #' \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
 #' @export
 #' @rdname varcuts
+#' @author Gabriel Becker
 add_colby_staticcut = function(lyt, var, lbl, cuts,
                             cutlbls = NULL,
                             newtoplev = FALSE,
@@ -440,11 +443,14 @@ add_rowby_staticcut = function(lyt, var, lbl, cuts,
 #' @rdname varcuts
 add_colby_dyncut = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
+                            cutlblfun = function(x) NULL,
                             splfmt = NULL,
                             newtoplev = FALSE,
                             extrargs = list(),
                             cumulative = FALSE) {
-    spl = VarDynCutSplit(var, lbl, cutfun,
+    spl = VarDynCutSplit(var, lbl,
+                         cutfun = cutfun,
+                         cutlblfun = cutlblfun,
                          splfmt = splfmt,
                          extrargs = extrargs,
                          cumulative = cumulative)
@@ -544,10 +550,10 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 #' calls to \code{add_analyzed_vars} and/or \code{\link{add_analyzed_colvars}} into our layout pipeline. As with
 #' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
-#' 
+#' @author Gabriel Becker
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
@@ -604,13 +610,13 @@ add_analyzed_vars = function(lyt,
 #' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
 #' level of nesting in the column structure, rather than at the row level.
 #' 
-#' @inheritParams  argument_conventions
+#' @inheritParams  lyt_args
 #' 
 #' @export
 #' 
 #' @seealso \code{\link{add_colby_multivar}}
 #' 
-#' 
+#' @author Gabriel Becker
 #' @examples 
 #' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
@@ -625,6 +631,7 @@ add_analyzed_vars = function(lyt,
 #' 
 #' # TODO: fix
 #' build_table(l, ANL)
+#' 
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {
@@ -809,12 +816,12 @@ setMethod("add_summary", "Split",
 
 #' Add a content row of summary counts
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @details if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
 #' 
 #' @export
-#' 
+#' @author Gabriel Becker
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
@@ -838,10 +845,10 @@ add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)
 #' Add the column population counts to the header
 #' 
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
 #' 
 #' @export
-#' 
+#' @author Gabriel Becker
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_colcounts() %>% 
@@ -1004,6 +1011,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #' @param \dots One or more vectors of levels to appear
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via \code{list(...)}.
+#' @author Gabriel Becker
 #' @examples
 #' # simple one level column space
 #' rows = lapply(1:5, function(i) {
@@ -1015,12 +1023,13 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #'                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
 #'                                      Gender = c("M", "F")))
 #' @export
+#' 
 
 manual_cols = function(..., .lst = list(...)) {
     if(is.null(names(.lst)))
         names(.lst) = paste("colsplit", seq_along(.lst))
     
-    splvec = SplitVector(lst = mapply(ManualSplit, levs = .lst, lbl = names(.lst)))
+    splvec = SplitVector(lst = mapply(ManualSplit, levels = .lst, lbl = names(.lst)))
     ctree = splitvec_to_coltree(data.frame(), splvec=splvec, pos = TreePos())
     InstantiatedColumnInfo(treelyt = ctree)
 }
@@ -1035,13 +1044,14 @@ manual_cols = function(..., .lst = list(...)) {
 #'
 #' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{add_analyzed_vars}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
 #' 
+#' @rdname lstwrap
+#' @author Gabriel Becker
 #' @examples 
 #' 
 #' summary(iris$Sepal.Length)
 #' 
 #' f <- lstwrapx(summary)
 #' f(iris$Sepal.Length)
-#' @rdname lstwrap
 lstwrapx = function(f) {
     function(x,...) as.list(f(x,...))
 }

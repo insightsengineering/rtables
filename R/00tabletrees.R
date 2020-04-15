@@ -91,12 +91,14 @@ setClass("CustomizableSplit", contains = "Split",
 
 #' @exportClass VarLevelSplit
 #' @rdname VarLevelSplit
+#' @author Gabriel Becker
 setClass("VarLevelSplit", contains = "CustomizableSplit",
          representation(value_lbl_var = "character",
                         value_order = "ANY"))
 #' Split on levels within a variable
 #'
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
 #' @export
 VarLevelSplit = function(var,
                          splbl,
@@ -163,14 +165,16 @@ setClass("ManualSplit", contains = "AllSplit",
 
 #' Manually defined split
 #'
-#' @inheritParams argument_conventions
-#' @param levs character. Levels of the split (ie the children of the manual split)
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
+#' @param levels character. Levels of the split (ie the children of the manual split)
+#' @author Gabriel Becker
 #' @export
-ManualSplit = function(levs, lbl, name = "manual",
+ManualSplit = function(levels, lbl, name = "manual",
                        extrargs = list()) {
     new("ManualSplit",
         split_label = lbl,
-        levels = levs,
+        levels = levels,
         name = name,
         label_children = FALSE,
         extra_args = extrargs)
@@ -189,7 +193,9 @@ setClass("MultiVarSplit", contains = "Split",
 
 #' Split between two or more different variables
 #'
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
+#' @author Gabriel Becker
 #' @export
 MultiVarSplit = function(vars,
                          splbl,
@@ -216,11 +222,16 @@ MultiVarSplit = function(vars,
 }
 
 
-
+#' Splits for cutting by values of a numeric variable
+#' @rdname cutsplits
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
+#' @exportClass VarStaticCutSplit
 setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
-
+#' @rdname cutsplits
+#' @export
 VarStaticCutSplit = function(var,
                              splbl,
                              cuts,
@@ -256,10 +267,13 @@ VarStaticCutSplit = function(var,
 
 
 
-
+#' @rdname cutsplits
+#' @exportClass CumulativeCutSplit
 
 setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
 
+#' @rdname cutsplits
+#' @export
 CumulativeCutSplit = function(var,
                              splbl,
                              cuts,
@@ -300,11 +314,14 @@ CumulativeCutSplit = function(var,
 ## taking cut_fun?
 ## cut_funct must take avector and no other arguments
 ## and return a named vector of cut points
+#' @rdname cutsplits
+#' @exportClass VarDynCutSplit
 setClass("VarDynCutSplit", contains = "Split",
          representation(cut_fun = "function",
                         cut_label_fun = "function",
                         cumulative_cuts = "logical"))
-                        
+#' @rdname cutsplits
+#' @export                  
 VarDynCutSplit = function(var,
                           splbl,
                           cutfun,
@@ -337,8 +354,10 @@ setClass("AnalyzeVarSplit", contains = "Split",
 
 #' Define a subset tabulation/analysis
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
 #' @rdname avarspl
+#' @author Gabriel Becker
 #' @export
 AnalyzeVarSplit = function(var,
                            splbl,
@@ -829,6 +848,9 @@ LayoutRowLeaf = function(lev = 0L, lbl = "",
 ## various aspects of the column layout
 ## once its applied to the data.
 
+#' InstantiatedColumnInfo
+#' @exportClass InstantiatedColumnInfo
+#' @rdname cinfo
 setClass("InstantiatedColumnInfo",
          representation(tree_layout = "VLayoutNode", ##LayoutColTree",
                         subset_exprs = "list",
@@ -845,6 +867,14 @@ setClass("InstantiatedColumnInfo",
         (all(is.na(counts)) || all(!is.na(counts)))
 })
 
+#' @rdname cinfo
+#' @export
+#' @param treelyt LayoutColTree.
+#' @param csubs list. List of subsetting expressions
+#' @param extras list. Extra arguments associated with the columns
+#' @param cnts integer. Counts.
+#' @param dispcounts logical. Should the counts be displayed as header info when the associated table is printed.
+#' @param countfmt string. Format for the counts if thtey are displayed
 InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
                                   csubs = list(expression(TRUE)),
                                   extras = list(list()),
@@ -899,8 +929,10 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 ### TableTree Core non-virtual Classes
 #' Row classes and constructors
 #' @rdname rowclasses
-#' @inheritParams argument_conventions
+#' @inheritParams constr_args
+#' @inheritParams lyt_args
 #' @param vis logical. Should the row be visible (\code{LabelRow} only).
+#' @author Gabriel Becker
 #' @export
 LabelRow = function(lev = 1L,
                     lbl = "",
@@ -950,24 +982,25 @@ setClass("LabelRow", contains = "TableRow",
 
 
                       
-
-.tablerow = function(val = list(),
+#' @rdname rowclasses
+#' @param klass Internal detail.
+#' 
+#' @export
+.tablerow = function(vals = list(),
                     name = "",
                     lev = 1L,
                     lbl = name,
-                    cspan = rep(1L, length(val)),
+                    cspan = rep(1L, length(vals)),
                     ##clayout = LayoutColTree(),
                     cinfo = InstantiatedColumnInfo(),
                     #tpos = TableRowPos(),
                     var = NA_character_,
- ##                   var_lbl = NA_character_,
- ##                   v_type = NA_character_,
                     fmt = NULL,
                     klass) {
     if((missing(name) || is.null(name) || nchar(name) == 0) &&
        !missing(lbl))
         name = lbl
-    rw = new(klass, leaf_value = val,
+    rw = new(klass, leaf_value = vals,
              name = .chkname(name),        level = lev,
         label = .chkname(lbl),
         colspans = cspan,
@@ -983,6 +1016,7 @@ setClass("LabelRow", contains = "TableRow",
 }
 
 #' @rdname rowclasses
+#' @param \dots passed to shared constructor (\code{.tablerow}).
 #' @export
 DataRow = function(...) .tablerow(..., klass = "DataRow")
 #' @rdname rowclasses
@@ -993,6 +1027,7 @@ ContentRow = function(...) .tablerow(..., klass = "ContentRow")
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
 #' TableTree classes
 #' @exportClass ElementaryTable
+#' @author Gabriel Becker
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character",
@@ -1044,9 +1079,11 @@ setClass("ElementaryTable", contains = "VTableTree",
 }
 
 #' Table Constructors and Classes
-#' @inheritParams argument_conventions
+#' @inheritParams constr_args
+#' @inheritParams lyt_args
 #' @param rspans data.frame. Currently stored but otherwise ignored.
-#' @rdname tabconstr
+#' @rdname tabclasses
+#' @author Gabriel Becker
 #' @export
 ElementaryTable = function(kids = list(),
                            name = "",
@@ -1099,7 +1136,7 @@ setClass("TableTree", contains = c("VTableTree"),
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
 })
 
-#' @rdname tabconstr
+#' @rdname tabclasses
 #' @export
 TableTree = function(kids = list(),
                      name = if(!is.na(var)) var else "",

@@ -24,3 +24,6 @@ l
 build_table(l, DM)
 
 }
+\author{
+Gabriel Becker
+}

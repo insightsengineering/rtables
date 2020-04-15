@@ -82,3 +82,6 @@ AVarBaselineComp(
 \description{
 Define a subset tabulation/analysis
 }
+\author{
+Gabriel Becker
+}

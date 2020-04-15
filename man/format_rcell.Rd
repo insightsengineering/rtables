@@ -10,7 +10,8 @@ format_rcell(x, format, output = c("ascii", "html"))
 \arguments{
 \item{x}{an object of class \code{\link{rcell}}}
 
-\item{format}{format string for cells.}
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
 
 \item{output}{output type}
 }

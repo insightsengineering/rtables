@@ -7,9 +7,10 @@
 rheader(..., format = "xx", .lst = NULL)
 }
 \arguments{
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{\dots}{row specifications (either as character vectors or the output from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}}, etc.}
 
-\item{format}{format string for cells.}
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
 
 \item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
 }

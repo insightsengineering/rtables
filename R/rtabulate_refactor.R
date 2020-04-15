@@ -70,23 +70,11 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 #'   
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to the tabulation function
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
 #' @param FUN a function that processes the cell data
-#' @param ... arguments passed to \code{FUN}
 #' @param total string of column name of an added total column using \code{\link[rtables]{by_add_total}} to
 #'   \code{col_by} and \code{\link[tern]{col_N_add_total}} to \code{col_N}. If \code{NULL} no total column is added.
 #' @param col_N numeric. If non-NULL, counts to override total column counts.
-#' @param row_by rows in \code{x} to take per row in the resulting table
-#' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
-#'   then the \code{format} is applied
-#' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
-#'   used as \code{row.name} of the \code{\link{rrow}}
-#' @param indent The indent level (deprecated in refactor)
-#' @param col_wise_args a named list containing collections (e.g. vectors or
-#'   lists) with data elements for each column of the resulting table. The data
-#'   elements are then passed to the named argument \code{FUN} corresponding to
-#'   the element name of the outer list. Hence, the length and order of each
-#'   collection must match the levels in \code{col_by}. See examples.
 #'
 
 #' 

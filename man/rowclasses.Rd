@@ -6,6 +6,7 @@
 \alias{DataRow-class}
 \alias{ContentRow-class}
 \alias{LabelRow-class}
+\alias{.tablerow}
 \alias{DataRow}
 \alias{ContentRow}
 \title{Row classes and constructors}
@@ -16,6 +17,18 @@ LabelRow(
   name = lbl,
   vis = !is.na(lbl) && nzchar(lbl),
   cinfo = InstantiatedColumnInfo()
+)
+
+.tablerow(
+  vals = list(),
+  name = "",
+  lev = 1L,
+  lbl = name,
+  cspan = rep(1L, length(vals)),
+  cinfo = InstantiatedColumnInfo(),
+  var = NA_character_,
+  fmt = NULL,
+  klass
 )
 
 DataRow(...)
@@ -33,10 +46,23 @@ ContentRow(...)
 
 \item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
 
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{vals}{list. cell values for the row}
+
+\item{cspan}{integer. Currently not internally supported. Effectively ignored.}
+
+\item{var}{string, variable name}
+
+\item{fmt}{format string for cells}
+
+\item{klass}{Internal detail.}
+
+\item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }
 \description{
 Row classes and constructors
 
 Row constructors and Classes
+}
+\author{
+Gabriel Becker
 }

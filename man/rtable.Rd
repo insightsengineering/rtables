@@ -12,9 +12,10 @@ rtablel(header, ..., format = NULL)
 \arguments{
 \item{header}{Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.}
 
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{\dots}{Rows to place in the table.}
 
-\item{format}{format string for cells.}
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
 }
 \description{
 Create a Table
@@ -119,3 +120,10 @@ names(mtbl) # always first row of header
 # )
 # tbl3
 }
+\seealso{
+Other compatability: 
+\code{\link{by_all}()},
+\code{\link{header<-}()},
+\code{\link{insert_rrow}()}
+}
+\concept{compatability}

@@ -38,3 +38,6 @@ MultiVarSplit(
 \description{
 Split between two or more different variables
 }
+\author{
+Gabriel Becker
+}

@@ -25,11 +25,11 @@ rtabulate(
 if a \code{\link{factor}} of length \code{nrow(x)} that defines
 which levels in \code{col_by} define a column.
 can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}})}
+can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
 
 \item{FUN}{a function that processes the cell data}
 
-\item{...}{arguments passed to \code{FUN}}
+\item{...}{arguments passed to the tabulation function}
 
 \item{row_by}{rows in \code{x} to take per row in the resulting table}
 
@@ -39,7 +39,7 @@ then the \code{format} is applied}
 \item{row.name}{if \code{NULL} then the \code{FUN} argument is deparsed and
 used as \code{row.name} of the \code{\link{rrow}}}
 
-\item{indent}{The indent level (deprecated in refactor)}
+\item{indent}{deprecated.}
 
 \item{col_wise_args}{a named list containing collections (e.g. vectors or
 lists) with data elements for each column of the resulting table. The data

@@ -1,7 +1,8 @@
 
 #' row
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
+#' @param \dots cell values
 #' 
 #' @export
 #' 
@@ -44,7 +45,8 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
 
 #' rrowl
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
+#' @param \dots values in vector/list form
 #' 
 #' @export
 #' 
@@ -73,7 +75,8 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 
 #' Rcell
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
+#' @param x ANY. Cell value
 #' @param colspan Columnspan value. NOTE currently column spanning is only supported for defining header structure.
 #' @export
 #' 
@@ -182,7 +185,8 @@ hrows_to_colinfo = function(rows) {
 
 #' Create a header
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
+#' @param \dots row specifications (either as character vectors or the output from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}}, etc.
 #' 
 #' @export
 #'
@@ -233,13 +237,14 @@ rheader = function(..., format = "xx", .lst = NULL) {
 
 #' Create a Table
 #' 
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
 #' @param header Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.
+#' @param \dots Rows to place in the table.
 #' 
 #' 
 #' @export
 #' 
-#' 
+#' @family compatability
 #' @examples 
 #' 
 #' mtbl <- rtable(
@@ -440,9 +445,10 @@ header_add_N = function(x, N) {
 }
 
 #' Miscellaneous Compatability methods for the old API
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @export
-#' @rdname compatability
+#' @rdname header_compat
+#' @family compatability
 `header<-` = function(x, value) {
     if(is(value, "list")) {
         value = rheader(.lst = value)
@@ -461,20 +467,13 @@ header_add_N = function(x, N) {
     x
 }
 
+#' Header info
 #' @export
-#' @rdname compatability
+#' @family compatability
+#' @rdname header_compat
 header <- function(x) col_info(obj = x)
 
 
-#' Add column representing all rows
-#' @param name character(1). Label for the added all/total column
-#' 
-#' @export
-#' @rdname compatability
-
-by_all <- function(name) {
-    add_col_total(NULL, lbl = name)
-}
 
 ## XXX this is named this only for testing
 ## replace with better name once all ttestts are passing
@@ -711,6 +710,7 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' @export
 #'
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
+#' @family compatability
 #' @examples
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 #'
@@ -882,10 +882,24 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 
 }
 
-#' @param col_by An existing laayout (or NULL)
-#' @param label Label.
+#' Compatability Layer for Legacy "by_*" functions
+#'
+#' Functions from the  previous API starting  with \code{by_} not listed here may not currently be supported.
+#' 
+#' @param name character(1). Label for the added all/total column
+#' @rdname bycompats
+#' @inheritParams lyt_args
+#' @export
+#' @family compatability
+
+by_all <- function(name) {
+    add_col_total(NULL, lbl = name)
+}
+
+#' @inheritParams compat_args
 #' @param n If non-null, the count to use for the tottal of the new column.
-#' @rdname compatability
+#' @family compatability
+#' @rdname bycompats
 #' @export
 by_add_total <- function(col_by, label = "total", n = NULL) {
     ret = add_col_total(col_by, lbl = label)

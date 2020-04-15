@@ -7,9 +7,10 @@
 rcell(x, format = NULL, colspan = NULL)
 }
 \arguments{
-\item{x}{An object}
+\item{x}{ANY. Cell value}
 
-\item{format}{format string for cells.}
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
 
 \item{colspan}{Columnspan value. NOTE currently column spanning is only supported for defining header structure.}
 }

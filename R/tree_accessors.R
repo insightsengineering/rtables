@@ -483,7 +483,7 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 })
 
 #' Row attribute accessors
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @rdname row_accessors
 #' @export
 #'
@@ -678,7 +678,7 @@ setMethod("value_fmts", "VTableTree",
 ### framework.
 
 #' Collect leaves of a table tree
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @param incl.cont logical. Include rows from content tables within the tree. Defaults to \code{TRUE}
 #' @param add.labrows logical. Include label rows. Defaults to \code{FALSE}
 #' @return A list of \code{TableRow} objects for all rows in the table
@@ -855,7 +855,7 @@ setMethod("clayout_splits", "VTableNodeInfo",
 ## FIXME
 
 #' Column information/structure accessors
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @param df data.frame/NULL. Data to use if the column information is being generated from a  Pre-Data layout object
 #' @param rtpos TreePos. Root position.
 #' @return A \code{LayoutColTree} object.
@@ -1203,7 +1203,7 @@ setMethod("colcount_fmt<-", "PreDataTableLayouts",
 #' Exported for use in tern
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
 #' @rdname no_info
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))

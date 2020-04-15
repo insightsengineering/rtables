@@ -27,3 +27,6 @@ summary(iris$Sepal.Length)
 f <- lstwrapx(summary)
 f(iris$Sepal.Length)
 }
+\author{
+Gabriel Becker
+}

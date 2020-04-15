@@ -7,11 +7,13 @@
 rrowl(row.name, ..., format = NULL, indent = 0)
 }
 \arguments{
-\item{row.name}{The default row name to use}
+\item{row.name}{if \code{NULL} then the \code{FUN} argument is deparsed and
+used as \code{row.name} of the \code{\link{rrow}}}
 
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{\dots}{values in vector/list form}
 
-\item{format}{format string for cells.}
+\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
+then the \code{format} is applied}
 
 \item{indent}{deprecated.}
 }

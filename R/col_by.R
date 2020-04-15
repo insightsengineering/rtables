@@ -148,7 +148,7 @@ by_all_old <- function(name) {
 
 #' Combine levels
 #'
-#' @inheritParams argument_conventions
+#' @inheritParams compat_args
 #' @param ... a series of named character vectors
 #' 
 #' @export
@@ -184,8 +184,6 @@ by_all_old <- function(name) {
 #' @export
 #' 
 #' @examples 
-#' head(by_quartile(iris$Sepal.Length))
-#' head(by_quartile(iris$Sepal.Length, TRUE))
 #' 
 #' rtabulate(x = iris$Sepal.Length, col_by = by_quartile(iris$Sepal.Width), 
 #'           FUN = mean, format = "xx.xx")

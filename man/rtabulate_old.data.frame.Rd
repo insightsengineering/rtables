@@ -24,14 +24,14 @@
 
 For cell in (row, column), it takes the intersection of the corresponding row_by & col_by}
 
-\item{FUN}{a function that processes the cell data}
+\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
 
 \item{...}{arguments passed to \code{FUN}}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
-\item{indent}{The indent level (deprecated in refactor)}
+\item{indent}{deprecated.}
 
 \item{col_wise_args}{a named list containing collections (e.g. vectors or
 lists) with data elements for each column of the resulting table. The data

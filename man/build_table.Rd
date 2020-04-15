@@ -9,7 +9,7 @@ build_table(lyt, df, col_counts = NULL, ...)
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{df}{dataset}
+\item{df}{dataset (data.frame or tibble)}
 
 \item{col_counts}{numeric (or NULL). If non-null, column counts which override those calculated automatically during tabulation.}
 
@@ -32,5 +32,8 @@ l <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
 
 l
 
-build_table(l, DM) 
+build_table(l, DM)
+}
+\author{
+Gabriel Becker
 }

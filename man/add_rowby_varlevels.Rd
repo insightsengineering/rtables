@@ -47,5 +47,8 @@ l
 
 # TODO: fix
 # build_table(l, DM)
-  
+
+}
+\author{
+Gabriel Becker
 }

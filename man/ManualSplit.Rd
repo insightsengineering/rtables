@@ -4,10 +4,10 @@
 \alias{ManualSplit}
 \title{Manually defined split}
 \usage{
-ManualSplit(levs, lbl, name = "manual", extrargs = list())
+ManualSplit(levels, lbl, name = "manual", extrargs = list())
 }
 \arguments{
-\item{levs}{character. Levels of the split (ie the children of the manual split)}
+\item{levels}{character. Levels of the split (ie the children of the manual split)}
 
 \item{lbl}{string, label, often variable label}
 
@@ -17,4 +17,7 @@ ManualSplit(levs, lbl, name = "manual", extrargs = list())
 }
 \description{
 Manually defined split
+}
+\author{
+Gabriel Becker
 }

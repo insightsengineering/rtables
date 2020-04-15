@@ -19,7 +19,7 @@ get_formatted_rows(obj, depth = 0, indent = 0)
 \S4method{get_formatted_rows}{LabelRow}(obj, depth = 0, indent = 0)
 }
 \arguments{
-\item{obj}{the object.}
+\item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{depth}{Depth we are currently at. Not intended to  be set by end users.}
 

@@ -147,7 +147,8 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
 
 
 #' Get formatted rows
-#' @inheritParams argument_conventions
+#' @inheritParams gen_args
+#' @inheritParams compat_args
 #' @param depth Depth we are currently at. Not intended to  be set by end users.
 #' @rdname gfr
 #' @export

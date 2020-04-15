@@ -36,8 +36,11 @@ ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 # TODO: fix
  build_table(l, ANL)
   
-  
+ 
 }
 \seealso{
 \code{\link{add_analyzed_colvars}}
+}
+\author{
+Gabriel Becker
 }
