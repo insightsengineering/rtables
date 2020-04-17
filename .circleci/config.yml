@@ -36,6 +36,24 @@ jobs:
       - store_test_results:
           path: rtables.Rcheck/tests
 
+  roxygen:
+    docker:
+      - image: rocker/tidyverse:3.6.2
+    steps:
+      - checkout
+      - run:
+          name: "check if manuals are upto date with roxygen comments"
+          command: |
+            R -e "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+            if [[ -z $(git status -s) ]]
+            then
+              echo "manuals are not upto date with roxygen comments"
+              echo "please rerun roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+              set -o errexit
+            else
+              echo "manuals are upto date with roxygen comments"
+            fi
+
   pkgdown:
     docker:
       - image: rocker/tidyverse:3.6.2
@@ -66,6 +84,7 @@ workflows:
   Rworkflow:
     jobs:
       - build
+      - roxygen
       - pkgdown
       - check:
           requires:
