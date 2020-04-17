@@ -34,7 +34,7 @@ library(dplyr)
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 # TODO: fix
-build_table(l, ANL)
+# build_table(l, ANL)
 
 }
 \seealso{

@@ -26,13 +26,17 @@ jobs:
           command: echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
       - run:
           name: "check package"
-          command: R CMD check --no-manual --no-build-vignettes ${PKG}
+          command: |
+            R CMD check ${PKG}
+            result=$(tail -1 rtables.Rcheck/00check.log)
+            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
+            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
       - run:
           name: "install package"
           command: R CMD INSTALL ${PKG}
-#      - store_artifacts:
-#          path: rtables.Rcheck
-#          destination: rtables.Rcheck
+      - store_artifacts:
+          path: rtables.Rcheck
+          destination: rtables.Rcheck
       - store_test_results:
           path: rtables.Rcheck/tests
 

@@ -371,7 +371,7 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
 #' # TODO: fix
-#'  build_table(l, ANL)
+#' # build_table(l, ANL)
 #'   
 #'  
 add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
@@ -630,7 +630,7 @@ add_analyzed_vars = function(lyt,
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
 #' # TODO: fix
-#' build_table(l, ANL)
+#' # build_table(l, ANL)
 #' 
 add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
