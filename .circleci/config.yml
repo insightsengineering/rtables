@@ -35,8 +35,8 @@ jobs:
           name: "install package"
           command: R CMD INSTALL ${PKG}
       - store_artifacts:
-          path: rtables.Rcheck
-          destination: rtables.Rcheck
+          path: rtables.Rcheck/00check.log
+          destination: 00check.log
       - store_test_results:
           path: rtables.Rcheck/tests
 
