@@ -27,7 +27,7 @@ jobs:
       - run:
           name: "check package"
           command: |
-            R CMD check ${PKG}
+            R CMD check --no-manual ${PKG}
             result=$(tail -1 rtables.Rcheck/00check.log)
             [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
             [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
