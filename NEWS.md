@@ -1,4 +1,8 @@
-## rtables 0.1.4.9000
+## rtables 0.1.5.9000
+
+## rtables 0.1.5
+
+* Changed testing approach to fit internal pipelines
 
 ## rtables 0.1.4
 
