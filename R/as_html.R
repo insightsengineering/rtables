@@ -33,14 +33,12 @@ setOldClass("rtable")
 ## #' 
 ## #' @return an object of class \code{shinyTag}
 ## #' 
-#' @export
-#' @method as_html rtable
+
+#' @exportMethod as_html
 #' @rdname as_html
-
-## setMethod("as_html", "rtable",
-
-
-as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
+##as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
+setMethod("as_html", "rtable",
+          function(x, class.table = "table table-condensed table-hover",
                            ...) {
   
     ncol <- ncol(x)
@@ -54,18 +52,18 @@ as_html.rtable <- function(x, class.table = "table table-condensed table-hover",
              lapply(body, as_html, ncol = ncol, is_header = FALSE, ...)
          )
     
-} #)
+})
 
 setOldClass("rrow")
-#' @method as_html rrow
 #' @param ncol Number of columns
 #' @param is_header boolean. Deprecated
-#' @export
+#' @exportMethod as_html
 #' @rdname as_html
-##setMethod("as_html", "rrow",
-as_html.rrow <- function(x, ncol, is_header, 
-                         class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
-  
+setMethod("as_html", "rrow",
+##          as_html.rrow <- function(x, ncol, is_header,
+          function(x, ncol, is_header, 
+                   class.tr = NULL, class.td = NULL, class.th = NULL, ...) {
+    
   (is.logical(is_header) && length(is_header) == 1) || stop("is_header is supposed to be a boolean")
   
   cell_tag <- if (is_header) {
@@ -107,7 +105,7 @@ as_html.rrow <- function(x, ncol, is_header,
   }
   
   tags$tr(cells, class = class.tr)
-} #)
+} )
 
 extract_rowobj = function(tt) {
     stopifnot(nrow(tt) == 1)

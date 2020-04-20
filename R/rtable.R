@@ -75,17 +75,17 @@
 #' tbl[5,1]
 #' tbl[5,2]
 #' tbl[1:3]
-#' # 
-#' # 
-#' # # Data Structure methods
-#' # dim(tbl)
-#' # nrow(tbl)
-#' # ncol(tbl)
-#' # names(tbl)
-#' # 
-#' # 
-#' # # Output: html
-#' # as_html(tbl)
+#'  
+#'  
+#'  # Data Structure methods
+#'  dim(tbl)
+#'  nrow(tbl)
+#'  ncol(tbl)
+#'  names(tbl)
+#'  
+#'  
+#'  # Output: html
+#'  as_html(tbl)
 #' 
 #' \dontrun{
 #' Viewer(tbl)

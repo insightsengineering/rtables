@@ -120,30 +120,28 @@ rtabulate_old.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
 #' @inherit rtabulate_old return
 #' 
 #' @export
-#' 
-#' @examples 
-#' 
-#' # TODO: remove rtabulate_old
-#' # rtabulate_old(iris$Species == "setosa")
-#' # 
-#' # rtabulate_old(iris$Species == "setosa", by_all("Species"),
-#' #    FUN = function(x, N) list(sum(x), sum(x)/N),
-#' #    row.name = "n (n/N)",
-#' #    col_wise_args = list(N = 150)
-#' # )
-#' # 
-#' # # default FUN is number of observations equal to TRUE
-#' # with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
-#' #  
-#' # # Custom FUN: number of TRUE records in a cell and precentages based on number of records
-#' # # in each column
-#' # with(iris, rtabulate_old(Sepal.Length < 5, Species,
-#' #   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
-#' #   format = "xx.xx (xx.xx%)",
-#' #   row.name = "Sepal.Length < 5",
-#' #   col_wise_args = list(N = table(Species))
-#' # ))
-#' 
+## ' @examples 
+## ' 
+## ' # TODO: remove rtabulate_old
+## ' rtabulate_old(iris$Species == "setosa")
+## ' 
+## ' rtabulate_old(iris$Species == "setosa", by_all("Species"),
+## '    FUN = function(x, N) list(sum(x), sum(x)/N),
+## '    row.name = "n (n/N)",
+## '    col_wise_args = list(N = 150))
+## ' 
+## ' # default FUN is number of observations equal to TRUE
+## ' with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
+## '  
+## ' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
+## ' # in each column
+## ' with(iris, rtabulate_old(Sepal.Length < 5, Species,
+## '   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+## '   format = "xx.xx (xx.xx%)",
+## '   row.name = "Sepal.Length < 5",
+## '   col_wise_args = list(N = table(Species))
+## ' ))
+## ' 
 rtabulate_old.logical <- function(x, col_by = by_all("col_1"),
                               FUN = sum,
                               ...,

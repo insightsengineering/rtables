@@ -813,6 +813,13 @@ setGeneric("split_exargs", function(obj) standardGeneric("split_exargs"))
 setMethod("split_exargs", "Split",
           function(obj) obj@extra_args)
 
+setGeneric("split_exargs<-", function(obj, value) standardGeneric("split_exargs<-"))
+setMethod("split_exargs<-", "Split",
+          function(obj, value ) {
+    obj@extra_args <- value
+    obj
+})
+
 
 
 

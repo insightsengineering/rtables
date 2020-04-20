@@ -331,7 +331,6 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblva
 #'   
 #' l
 #' 
-#' # TODO: fix
 #'  build_table(l, DM)
 #' 
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
