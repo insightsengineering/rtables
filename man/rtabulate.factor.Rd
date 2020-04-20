@@ -56,8 +56,8 @@ each level of \code{x}.
 rtabulate(x = iris$Species)
 
 # TODO: fix
-# rtabulate(x = iris$Species, useNA = "always")
-# rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+ rtabulate(x = iris$Species, useNA = "always")
+ rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
 
 rtabulate(x = iris$Species, by_all("sum"))
 

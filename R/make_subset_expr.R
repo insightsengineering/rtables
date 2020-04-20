@@ -3,7 +3,7 @@ setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_e
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
     v = splv_rawvalues(val)
-    as.expression(bquote(which(.(a) == .(b)), list(a = as.name(spl_payload(spl)),
+    as.expression(bquote((!is.na(.(a)) & .(a) == .(b)), list(a = as.name(spl_payload(spl)),
                               b = v)))
 
 

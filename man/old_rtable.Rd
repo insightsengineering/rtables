@@ -70,12 +70,12 @@ tbl
 row.names(tbl)
 
 # TODO: fix
-# # Subsetting
-# tbl[1,2]
-# tbl[3,2]
-# tbl[5,1]
-# tbl[5,2]
-# tbl[1:3]
+# Subsetting
+tbl[1,2]
+tbl[3,2]
+tbl[5,1]
+tbl[5,2]
+tbl[1:3]
 # 
 # 
 # # Data Structure methods

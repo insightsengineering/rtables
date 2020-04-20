@@ -52,11 +52,7 @@ By default each cell reports the number of \code{TRUE} observations from the ass
 rtabulate(iris$Species == "setosa")
 
 # TODO: fix
-# rtabulate(iris$Species == "setosa", by_all("Species"),
-#    FUN = function(x, N) list(sum(x), sum(x)/N),
-#    row.name = "n (n/N)",
-#    col_wise_args = list(N = 150)
-# )
+
 
 # default FUN is number of observations equal to TRUE
 with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))

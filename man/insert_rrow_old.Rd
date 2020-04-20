@@ -23,5 +23,5 @@ insert rrows at a specific location
 tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 
 # TODO: fix
-# insert_rrow(tbl, rrow("Hello World"))
+insert_rrow(tbl, rrow("Hello World"))
 }

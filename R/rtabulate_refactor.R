@@ -337,11 +337,11 @@ rtabulate.numeric <- function(x, col_by = by_all("col_1"), FUN = mean, ...,
 #' rtabulate(iris$Species == "setosa")
 #' 
 #' # TODO: fix
-#' # rtabulate(iris$Species == "setosa", by_all("Species"),
-#' #    FUN = function(x, N) list(sum(x), sum(x)/N),
-#' #    row.name = "n (n/N)",
-#' #    col_wise_args = list(N = 150)
-#' # )
+# rtabulate(iris$Species == "setosa", by_all("Species"),
+#   FUN = function(x, N) list(sum(x), sum(x)/N),
+#   row.name = "n (n/N)",
+#   col_wise_args = list(N = 150)
+#' 
 #' 
 #' # default FUN is number of observations equal to TRUE
 #' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
@@ -393,8 +393,8 @@ rtabulate.logical <- function(x, col_by = by_all("col_1"),
 #' rtabulate(x = iris$Species)
 #' 
 #' # TODO: fix
-#' # rtabulate(x = iris$Species, useNA = "always")
-#' # rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+#'  rtabulate(x = iris$Species, useNA = "always")
+#'  rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
 #' 
 #' rtabulate(x = iris$Species, by_all("sum"))
 #' 

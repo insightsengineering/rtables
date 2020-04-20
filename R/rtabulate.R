@@ -65,6 +65,7 @@ rtabulate_old_default <- function(x, col_by = by_all("col_1"), FUN, ...,
 #'
 #' @inheritParams compat_args
 #' @param x a vector
+#' @param FUN a function that processes the cell data
 #' @param ... arguments passed to \code{FUN}
 #'
 #' @inherit rtabulate_old return
