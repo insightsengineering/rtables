@@ -75,15 +75,22 @@ set_format <- function(x, value) {
 #' 
 #' @examples 
 #' 
-#' rcell(100, format = sprintf_format("(N=%i)"))
-#' 
-#' rcell(c(4,9999999999), format = sprintf_format("(%.2f, >999.9)"))
+## ' rcell(100, format = sprintf_format("(N=%i)"))
+## ' 
+## ' rcell(c(4,9999999999), format = sprintf_format("(%.2f, >999.9)"))
 #' 
 #' rtable(LETTERS[1:2], rrow("", 1 ,2), format = sprintf_format("%.2f"))
 #' 
 sprintf_format <- function(fmt) {
+    function(x,...) {
+        do.call(sprintf, c(list(fmt = fmt), x))
+    }
+}
+
+sprintf_format_old <- function(fmt) {
   structure(fmt, "format_type" = "sprintf")
 }
+
 
 
 # # @export
