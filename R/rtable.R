@@ -69,23 +69,23 @@
 #' row.names(tbl)
 #' 
 #' # TODO: fix
-#' # # Subsetting
-#' # tbl[1,2]
-#' # tbl[3,2]
-#' # tbl[5,1]
-#' # tbl[5,2]
-#' # tbl[1:3]
-#' # 
-#' # 
-#' # # Data Structure methods
-#' # dim(tbl)
-#' # nrow(tbl)
-#' # ncol(tbl)
-#' # names(tbl)
-#' # 
-#' # 
-#' # # Output: html
-#' # as_html(tbl)
+#' # Subsetting
+#' tbl[1,2]
+#' tbl[3,2]
+#' tbl[5,1]
+#' tbl[5,2]
+#' tbl[1:3]
+#'  
+#'  
+#'  # Data Structure methods
+#'  dim(tbl)
+#'  nrow(tbl)
+#'  ncol(tbl)
+#'  names(tbl)
+#'  
+#'  
+#'  # Output: html
+#'  as_html(tbl)
 #' 
 #' \dontrun{
 #' Viewer(tbl)

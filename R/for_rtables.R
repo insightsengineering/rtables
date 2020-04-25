@@ -113,8 +113,7 @@ unlist_rtables <- function(x) {
 #' @examples
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 #' 
-#' # TODO: fix
-#' # insert_rrow(tbl, rrow("Hello World"))
+#' insert_rrow(tbl, rrow("Hello World"))
 insert_rrow_old <- function(tbl, rrow, at = 1) {
   stopifnot(
     is_rtable(tbl),

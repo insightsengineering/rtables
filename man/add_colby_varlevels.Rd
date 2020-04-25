@@ -49,8 +49,7 @@ l3 <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
   add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 l3
 
-# TODO: fix
-# build_table(l3, DM)
+ build_table(l3, DM)
 }
 \author{
 Gabriel Becker

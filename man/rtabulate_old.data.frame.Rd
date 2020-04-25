@@ -24,7 +24,7 @@
 
 For cell in (row, column), it takes the intersection of the corresponding row_by & col_by}
 
-\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
 

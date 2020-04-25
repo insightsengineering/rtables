@@ -24,7 +24,7 @@ which levels in \code{col_by} define a column.
 can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
 can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
 
-\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
+\item{FUN}{a function that processes the cell data}
 
 \item{...}{arguments passed to \code{FUN}}
 
@@ -47,28 +47,4 @@ an \code{\link{rtable}} object
 }
 \description{
 By default each cell reports the number of \code{TRUE} observations from the associated vector.
-}
-\examples{
-
-# TODO: remove rtabulate_old
-# rtabulate_old(iris$Species == "setosa")
-# 
-# rtabulate_old(iris$Species == "setosa", by_all("Species"),
-#    FUN = function(x, N) list(sum(x), sum(x)/N),
-#    row.name = "n (n/N)",
-#    col_wise_args = list(N = 150)
-# )
-# 
-# # default FUN is number of observations equal to TRUE
-# with(iris, rtabulate_old(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
-#  
-# # Custom FUN: number of TRUE records in a cell and precentages based on number of records
-# # in each column
-# with(iris, rtabulate_old(Sepal.Length < 5, Species,
-#   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
-#   format = "xx.xx (xx.xx\%)",
-#   row.name = "Sepal.Length < 5",
-#   col_wise_args = list(N = table(Species))
-# ))
-
 }

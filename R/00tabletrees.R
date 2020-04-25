@@ -997,7 +997,7 @@ setClass("LabelRow", contains = "TableRow",
                     var = NA_character_,
                     fmt = NULL,
                     klass) {
-    if((missing(name) || is.null(name) || nchar(name) == 0) &&
+    if((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
        !missing(lbl))
         name = lbl
     rw = new(klass, leaf_value = vals,

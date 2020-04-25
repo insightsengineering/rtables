@@ -125,9 +125,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
     ##recycle formats
-    if(!is.null(format))
+    if(!is.null(format)) {
+        if(is.function(format))
+            format = list(format)
+        
         fmtvec = rep(format, length.out = ncrows)
-    else
+    } else
         fmtvec = NULL
     trows = lapply(1:ncrows, function(i) {
         rowvals = lapply(rawvals, function(colvals) colvals[[i]])
@@ -137,7 +140,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                   lbl = lbls[i],
                   name = lbls[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
-                  fmt = fmtvec[i]
+                  fmt = fmtvec[[i]]
                   )
         
     })

@@ -65,6 +65,161 @@ arguments using hierarchical splitting for rows and columns as necessary, then a
 \note{
 For backwards compatibility, all paramters other than \code{x}, \code{col_by} and \code{FUN} appear after \dots so must be specified by full argument name.
 }
+\examples{
+## logical
+rtabulate(iris$Species == "setosa", by_all("Species"),
+  FUN = function(x, N) c(sum(x), sum(x)/N),
+  row.name = "n (n/N)",
+  col_wise_args = list(N = 150),
+  format = "xx (xx.xx\%)")
+
+
+# default FUN is number of observations equal to TRUE
+with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
+ 
+# Custom FUN: number of TRUE records in a cell and precentages based on number of records
+# in each column
+with(iris, rtabulate(Sepal.Length < 5, Species,
+  FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+  format = "xx.xx (xx.xx\%)",
+  row.name = "Sepal.Length < 5",
+  col_wise_args = list(N = table(Species))
+))
+
+
+## numerics
+rtabulate(iris$Sepal.Length)
+
+rtabulate(iris$Sepal.Length, col_by = by_all("Sepal.Length"))
+
+with(iris,  rtabulate(x = Sepal.Length, col_by = Species, row.name = "mean"))
+
+SL <- iris$Sepal.Length
+Sp <- iris$Species
+rbind(
+  rtabulate(SL, Sp, length, row.name = "n"),
+  rtabulate(SL, Sp, function(x)c(mean(x), sd(x)), format = "xx.xx (xx.xx)", row.name = "Mean (SD)"),
+  rtabulate(SL, Sp, median, row.name = "Median"),
+  rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
+)
+
+# TODO: enable sprintf_format in rtabulate
+ x <- 1:100
+ cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
+
+ rtabulate(
+   x = x, col_by = cb, 
+   FUN = function(x, N) c(mean(x), sd(x), N),
+   format = sprintf_format("\%.2f (\%.2f) and \%i"),
+   row.name = "Mean (SD) and N",
+   col_wise_args = list(N = table(cb))
+ )
+
+
+
+## factors
+rtabulate(x = iris$Species)
+
+ rtabulate(x = iris$Species, useNA = "always")
+ rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
+
+rtabulate(x = iris$Species, by_all("sum"))
+
+sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+   labels = c("S.L > 5", "S.L <= 5"))
+
+rtabulate(iris$Species, col_by = sl5)
+rtabulate(sl5, iris$Species)
+
+rtabulate(iris$Species, col_by = sl5,
+          FUN = function(dat, .N_total) {
+    tb <- table(dat)
+    lapply(tb, function(cell_count) {
+     if (cell_count > 10) {
+        cell_count * c(1, 1/.N_total)
+     } else {
+        rcell("-", format = "xx")
+     }
+     })
+   },
+   format = "xx (xx.xx\%)")
+
+rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
+          col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
+
+rtabulate(factor(c("Y", "Y"), c("X", "Y")),
+          factor(c("b", "b"), c("a", "b")), length)
+
+rtabulate(
+  x = factor(c("Y", "Y"), c("X", "Y")),
+  col_by = factor(c("b", "b"), c("a", "b")),
+  FUN = function(x, N) lapply(table(x), function(tbi) c(tbi, N)),
+  col_wise_args = list(N = c(1,2))
+)
+
+## data.frames
+df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
+df <- rbind(df, df)
+df$val <- 1:nrow(df)
+
+# TODO: fix
+# rtabulate(
+#   x = df,
+#   row_by = df$aaa,
+#   col_by = df$bbb,
+#   FUN = function(x) {  
+#      sum(x$val)
+#   }
+# )
+# 
+# rtabulate(
+#   x = iris,
+#   row_by = by_all("sum"),
+#   col_by = iris$Species, 
+#   FUN = function(x) sum(x$Sepal.Length)
+# )
+# 
+# rtabulate(
+#   x = iris,
+#   row_by = iris$Species,
+#   col_by = by_all("sum"), 
+#   FUN = function(x) sum(x$Sepal.Length)
+# )
+# 
+# fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#     labels = c("S.L > 5", "S.L <= 5"))
+# 
+# tbl <- rtabulate(
+#   x = iris,
+#   row_by = fsl5,
+#   col_by = iris$Species, 
+#   FUN = function(x_cell) {
+#     if (nrow(x_cell) < 10) {
+#       rcell("-")
+#     } else {
+#       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
+#            
+#       rcell(list(fit), format = function(x, output) {
+#         paste("df:", x[[1]]$df.residual)
+#       })
+#     }
+#   }
+# )
+# tbl
+# 
+# rtabulate(
+#   x = iris,
+#   row_by = fsl5,
+#   col_by = iris$Species, 
+#   FUN = function(x_cell, N) {
+#      N
+#   },
+#   col_wise_args = list(N = c(10, 100, 200))
+# )
+# 
+#  
+# 
+}
 \author{
 Gabriel Becker and Adrian Waddell
 }
