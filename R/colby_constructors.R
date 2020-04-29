@@ -271,9 +271,9 @@ add_new_coltree = function(lyt, spl) {
 #'  build_table(l3, DM)
 
 
-add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE,
+add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE, lblkids = FALSE,
                                extrargs = list()) {
-    spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = FALSE,
+    spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = lblkids,
                         extrargs = extrargs)
     pos = next_cpos(lyt, newtoplev)
     add_col_split(lyt, spl, pos)
@@ -328,7 +328,6 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblva
 #'   add_rowby_varlevels("RACE", "Ethnicity") %>%
 #'   add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
 #'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
-#'   
 #' l
 #' 
 #'  build_table(l, DM)
@@ -567,7 +566,8 @@ add_analyzed_vars = function(lyt,
                              defrowlab = "",
                              newtoplev = FALSE,
                              inclNAs = FALSE,
-                             extrargs = list()) {
+                             extrargs = list(),
+                             lblkids = TRUE) {
 
     subafun = substitute(afun)
     if(is.name(subafun) &&
@@ -785,10 +785,11 @@ setMethod("add_summary", "Split",
         else
             cnt = nrow(df)
 
-        ret = cnt
+        ret = rcell(cnt, format = fmt,
+                    lbl = lbl)
         
-        attr(ret, "format") = fmt
-        names(ret) = lbl
+        ## attr(ret, "format") = fmt
+        ## names(ret) = lbl
         ret
     }
 }
@@ -802,10 +803,12 @@ setMethod("add_summary", "Split",
             cnt = nrow(df)
 
         ## the formatter does the *100 so we don't here.
-        ret = list(c(cnt, cnt/.N_col))
+        ret = rcell(c(cnt, cnt/.N_col),
+                    format = fmt,
+                    lbl = lbl)
         
-        attr(ret, "format") = fmt
-        names(ret) = lbl
+        ## attr(ret, "format") = fmt
+        ## names(ret) = lbl
         ret
     }
 }
@@ -873,49 +876,6 @@ add_existing_table = function(lyt, tab) {
 }
 
 
-## playground, once done modify rtabulate_default etc
-
-## rtabulate_layout <- function(x, layout, FUN, ...,
-##                               format = NULL, row.name = "", indent  = 0,
-##                               col_wise_args = NULL) {
-  
-##   force(FUN)
-##  # check_stop_col_by(col_by, col_wise_args)
-  
-##   column_data <- if (n_leaves(col_tree(layout)) == 0L) {
-##     setNames(list(x), "noname(for now FIXME)")
-##   } else {
-##       ## if (length(x) != length(col_by)) stop("dimension missmatch x and col_by")
-
-##       ## not handling nesting right now at all
-##       leaves = layout_children(col_tree(layout))
-##       setNames(lapply(leaves,
-##                       function(leaf) x[leaf@subset]),
-##                sapply(leaves,
-##                       function(leaf) leaf@label)
-##                )
-##   }
-    
-##   cells <- if (is.null(col_wise_args)) {
-    
-##     lapply(column_data, FUN, ...)
-    
-##   } else {
-    
-##     dots <- list(...)
-##     args <- lapply(seq_len(nlevels(col_by)), function(i) c(dots, lapply(col_wise_args, `[[`, i)))
-    
-##     Map(function(xi, argsi) {
-##       do.call(FUN, c(list(xi), argsi))
-##     }, column_data, args)
-##   }
-  
-##   rr <- rrowl(row.name = row.name, cells, format = format, indent = indent)
-  
-##   rtable(header = sapply(layout_children(coltree(layout)), function(leaf) leaf@label), rr)
-## }
-
-
 takes_coln = function(f) {
     stopifnot(is(f, "function"))
     forms = names(formals(f))
@@ -930,10 +890,6 @@ takes_totn = function(f) {
     res
 }
 
-
-tmpfun = function(lyt, df) {
-
-}
 
 ## use data to transform dynamic cuts to static cuts
 setGeneric("fix_dyncuts", function(spl, df) standardGeneric("fix_dyncuts"))
@@ -1050,13 +1006,26 @@ manual_cols = function(..., .lst = list(...)) {
 #' f <- lstwrapx(summary)
 #' f(iris$Sepal.Length)
 lstwrapx = function(f) {
-    function(x,...) as.list(f(x,...))
+    function(x,...) {
+        vs = as.list(f(x,...))
+        ret = mapply(function(v, nm) {
+            rcell(v, lbl = nm)
+        },
+        v = vs,
+        nm = names(vs))
+    }
 }
 
 #' @rdname lstwrap
 #' @export
 lstwrapdf = function(f) {
-    function(df,...) as.list(f(df,...))
+    function(df,...) {
+        vs = as.list(f(df,...))
+        ret = mapply(function(v, nm) {
+            rcell(v, lbl = nm)
+        },
+        v = vs,
+        nm = names(vs))
+    }
 }
-
 

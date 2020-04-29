@@ -77,17 +77,22 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' 
 #' @inheritParams compat_args
 #' @param x ANY. Cell value
+#' @param lbl character(1). Label or Null. If non-null, it will be looked at when determining row labels.
 #' @param colspan Columnspan value. NOTE currently column spanning is only supported for defining header structure.
 #' @export
 #' 
-rcell = function(x, format = NULL, colspan = NULL) {
-    ## if(length(x) != 1)
-    ##     x = list(x)
-    if(!is.null(format))
-        attr(x, "format") = format
-    if(!is.null(colspan))
-        attr(x, "colspan") = colspan
-    x
+rcell = function(x, format = NULL, colspan = NULL, lbl = NULL) {
+    ## ## if(!is.atomic(x) && length(x) > 1)
+    ## ##      x = list(x)
+    ## if(!is.null(format))
+    ##     attr(x, "format") = format
+    ## if(!is.null(colspan))
+    ##     attr(x, "colspan") = colspan
+    ## x
+    if(is(x, "CellValue"))
+        x
+    else
+        CellValue(val = x, fmt = format, colspan = colspan, lbl = lbl)
 }
 
 
@@ -715,16 +720,11 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 #'
 #' insert_rrow(tbl, rrow("Hello World"))
-#' insert_rrow(tbl, rrow("Hello World"), at = 2)
+#' insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
 #' tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
 #' insert_rrow(tbl2, rrow("Hello World"))
 #' insert_rrow(tbl2, rrow("Hello World"), at = 2)
 #' insert_rrow(tbl2, rrow("Hello World"), at = 4)
-#' insert_rrow(tbl2, rrow("Hello World"), at = 6)
-#' insert_rrow(tbl2, rrow("Hello World"), at = 7)
-#' ##errors b/c label rows
-#' try(insert_rrow(tbl2, rrow("Hello World"), at = 3))
-#' try(insert_rrow(tbl2, rrow("Hello World"), at = 5))
 #'
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 #'
@@ -891,9 +891,8 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 #' @inheritParams lyt_args
 #' @export
 #' @family compatability
-
 by_all <- function(name) {
-    add_col_total(NULL, lbl = name)
+    AllSplit(splbl = name)
 }
 
 #' @inheritParams compat_args

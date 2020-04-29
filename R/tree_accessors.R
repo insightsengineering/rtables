@@ -321,7 +321,7 @@ setMethod("obj_label", "TableRow", function(obj) obj@label)
 setMethod("obj_label", "VTableTree",
           function(obj) obj_label(tt_labelrow(obj)))
 
-
+setMethod("obj_label", "CellValue", function(obj) obj@label)
 
 setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
 setMethod("obj_label<-", "Split",
@@ -498,10 +498,18 @@ setMethod("obj_avar", "ElementaryTable", function(obj) obj@var_analyzed)
 
 #' @export
 #' @rdname row_accessors
+setGeneric("row_cells", function(obj) standardGeneric("row_cells"))
+#' @rdname row_accessors
+#' @exportMethod row_cells
+setMethod("row_cells", "TableRow", function(obj) obj@leaf_value)
+
+#' @export
+#' @rdname row_accessors
 setGeneric("row_values", function(obj) standardGeneric("row_values"))
 #' @rdname row_accessors
 #' @exportMethod row_values
-setMethod("row_values", "TableRow", function(obj) obj@leaf_value)
+setMethod("row_values", "TableRow", function(obj) rawvalues(obj@leaf_value))
+
 #' @rdname row_accessors
 #' @exportMethod row_values<-
 setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
@@ -509,7 +517,7 @@ setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
 #' @exportMethod row_values<-
 setMethod("row_values<-", "TableRow",
           function(obj, value) {
-    obj@leaf_value = value
+    obj@leaf_value = lapply(value, rcell)
     obj
 })
 #' @rdname row_accessors
@@ -566,6 +574,7 @@ setGeneric("obj_fmt", function(obj) standardGeneric("obj_fmt"))
 ## this covers rcell, etc
 setMethod("obj_fmt", "ANY", function(obj) attr(obj, "format"))
 setMethod("obj_fmt", "VTableNodeInfo", function(obj) obj@format)
+setMethod("obj_fmt", "CellValue", function(obj) obj@format)
 setMethod("obj_fmt", "Split", function(obj) obj@split_format)
 
 setGeneric("obj_fmt<-", function(obj, value) standardGeneric("obj_fmt<-"))
@@ -584,6 +593,12 @@ setMethod("obj_fmt<-", "Split", function(obj, value) {
     obj
 })
 
+setMethod("obj_fmt<-", "CellValue", function(obj, value) {
+    obj@format = value
+    obj
+})
+
+
 setGeneric("set_fmt_recursive", function(obj, fmt, override = FALSE) standardGeneric("set_fmt_recursive"))
 setMethod("set_fmt_recursive", "TableRow",
           function(obj, fmt, override = FALSE) {
@@ -591,10 +606,10 @@ setMethod("set_fmt_recursive", "TableRow",
         return(obj)
     if(is.null(obj_fmt(obj)) || override)
         obj_fmt(obj) = fmt
-    lvals = row_values(obj)
-    lvals = lapply(lvals, function(x) {
-        if(!is.null(x) && is.null(attr(x, "format")))
-            attr(x, "format") = obj_fmt(obj)
+    lcells = row_cells(obj)
+    lvals = lapply(lcells, function(x) {
+        if(!is.null(x) && is.null(obj_fmt(x)))
+            obj_fmt(x) = obj_fmt(obj)
         x
     })
     row_values(obj) = lvals
@@ -788,15 +803,23 @@ setMethod("tt_level<-", "VTableTree",
 })
           
           
+setGeneric("rawvalues", function(obj) standardGeneric("rawvalues"))
+setMethod("rawvalues", "ValueWrapper",  function(obj) obj@value)
+setMethod("rawvalues", "list", function(obj) lapply(obj, rawvalues))
+setMethod("rawvalues", "ANY", function(obj) obj)
+setMethod("rawvalues", "TreePos",
+          function(obj) rawvalues(pos_splvals(obj)))
 
 
-setGeneric("splv_rawvalues", function(obj) standardGeneric("splv_rawvalues"))
-setMethod("splv_rawvalues", "SplitValue",
-          function(obj) obj@value)
-setMethod("splv_rawvalues", "list",
-          function(obj) lapply(obj, splv_rawvalues))
-setMethod("splv_rawvalues", "TreePos",
-          function(obj) splv_rawvalues(pos_splvals(obj)))
+
+
+## setGeneric("splv_rawvalues", function(obj) standardGeneric("splv_rawvalues"))
+## setMethod("splv_rawvalues", "SplitValue",
+##           function(obj) rawvalue(obj))
+## setMethod("splv_rawvalues", "list",
+##           function(obj) lapply(obj, splv_rawvalues))
+## setMethod("rawvalues", "TreePos",
+##           function(obj) rawvalues(pos_splvals(obj)))
           
 
 ## These two are similar enough we could probably combine

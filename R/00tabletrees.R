@@ -13,7 +13,10 @@
 setOldClass("expression")
 setClassUnion("SubsetDef", c("expression", "logical", "integer", "numeric"))
 
-setClassUnion("functionOrNULL", c("NULL", "function"))
+
+
+setClassUnion("integerOrNULL", c("NULL", "integer"))
+setClassUnion("characterOrNULL", c("NULL", "character"))
 
 
 
@@ -38,18 +41,19 @@ setClass("TreePos", representation(splits = "list",
 ##                         is_content = "logical",
 ##                         local_rownum = "numeric"))
 
-## these default to NULL even though NULL does not appear first
-setClassUnion("functionOrNULL", c("function", "NULL"))
+
+setClassUnion("functionOrNULL", c("NULL", "function"))
 setClassUnion("FormatSpec",c("NULL", "character", "function"))
 
+setClass("ValueWrapper", representation(value = "ANY"),
+         contains = "VIRTUAL")
 ## heavier-weight than I'd like but I think we need
 ## this to carry around thee subsets for
 ## comparison-based splits
 
 setClass("SplitValue",
-         representation(
-             value = "ANY",
-             extra = "list"))
+         contains = "ValueWrapper",
+         representation(extra = "list"))
 
 SplitValue = function(val, extr =list()) {
     if(is(val, "SplitValue"))
@@ -369,8 +373,11 @@ AnalyzeVarSplit = function(var,
                            inclNAs = FALSE,
                            splname = var,
                            extrargs = list()) {
-    if(!any(nzchar(defrowlab)))
+    if(!any(nzchar(defrowlab))) {
         defrowlab = as.character(substitute(afun))
+        if(length(defrowlab) > 1 || startsWith(defrowlab, "function("))
+            defrowlab = ""
+    }
     new("AnalyzeVarSplit",
         payload = var,
         split_label = splbl,
@@ -676,29 +683,6 @@ TreePos = function(spls = list(), svals = list(), svlbls =  character(), sub = N
         subset = sub)
 }
 
-
-## setClass("TableTreePos", contains = "TreePos",
-##          representation(is_content="logical"),
-##          prototype = list(is_content = FALSE))
-
-## TableTreePos = function(iscontent = FALSE, ...) {
-##     tp = TreePos(...)
-##     new("TableTreePos", tp, is_content = iscontent)
-## }
-
-## setClass("TableRowPos", contains = "TableTreePos",
-##          representation(local_rownum = "numeric",
-##                         is_label_row = "logical"),
-##          prototype = list(is_content = FALSE,
-##                           is_label_row = FALSE))
-
-
-## TableRowPos = function(localrow = NA_real_, iscontent = FALSE, islabel = FALSE,...) {
-##     ttpos = TableTreePos(iscontent, ...)
-##     new("TableRowPos", ttpos, local_rownum = localrow, is_label_row = islabel)
-## }
-
-
 ##
 ## Tree position convenience functions
 ##
@@ -716,20 +700,6 @@ make_child_pos = function(parpos, newspl, newval, newlab = newval, newextra = li
         sub = .combine_subset_exprs(pos_subset(parpos),
                                     make_subset_expr(newspl, nsplitval)))
 }
-
-## make_tablepos= function(treepos, iscontent) {
-##     ttpos = new("TableTreePos", treepos,
-##                 is_content = iscontent)
-## }
-
-
-## make_rowpos = function(tp, rownum) {
-##     new("TableRowPos", tp,
-##         local_rownum = rownum)
-## }
-
-
-
 
 
 ### 
@@ -1000,6 +970,12 @@ setClass("LabelRow", contains = "TableRow",
     if((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
        !missing(lbl))
         name = lbl
+    vals = lapply(vals, rcell)
+    rlbls = unique(unlist(lapply(vals, obj_label)))
+    if((missing(lbl) || is.null(lbl) || identical(lbl, "")) &&
+       sum(nzchar(rlbls)) == 1)
+        lbl = rlbls[nzchar(rlbls)]
+    
     rw = new(klass, leaf_value = vals,
              name = .chkname(name),        level = lev,
         label = .chkname(lbl),
@@ -1284,3 +1260,27 @@ PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
         col_layout = clayout)
 }
         
+
+
+setClass("CellValue", contains = "ValueWrapper",
+         representation(format = "FormatSpec",
+                        colspan = "integerOrNULL",
+                        label = "characterOrNULL"),
+         prototype = list(label ="", colspan = NULL,
+                          format = NULL))
+#' Length of a Cell value
+#'
+#' @exportMethod length
+#' @param x x.
+setMethod("length", "CellValue",
+          function(x) 1L)
+#' Cell Value constructor
+#' @inheritParams lyt_args
+#' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
+#' @param colspan integer. Generally ignored currently.
+#' @export
+CellValue = function(val, fmt = NULL, colspan =NULL, lbl = NULL)  {
+    if(!is.null(colspan) && !is(colspan, "integer"))
+        colspan = as.integer(colspan)
+    new("CellValue", value =val, format  =  fmt, colspan = colspan, label = lbl)
+}

@@ -199,8 +199,8 @@ setMethod("get_formatted_rows", "TableRow",
             
             default_format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
             
-            format <- lapply(row_values(obj), function(x) {
-              fmt <- attr(x, "format")
+            format <- lapply(row_cells(obj), function(x) {
+              fmt <- obj_fmt(x)
               if (is.null(fmt))
                 default_format
               else
