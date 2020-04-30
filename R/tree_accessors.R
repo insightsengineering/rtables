@@ -510,6 +510,7 @@ setGeneric("row_values", function(obj) standardGeneric("row_values"))
 #' @exportMethod row_values
 setMethod("row_values", "TableRow", function(obj) rawvalues(obj@leaf_value))
 
+
 #' @rdname row_accessors
 #' @exportMethod row_values<-
 setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
@@ -532,11 +533,27 @@ setMethod("spanned_values", "TableRow",
           function(obj) {
     sp = row_cspans(obj)
     rvals = row_values(obj)
-    unlist(mapply(function(v, s) rep(list(v), times = s)),
+    unlist(mapply(function(v, s) rep(list(v), times = s),
+                  v = rvals, s = sp),
            recursive = FALSE)
 })
 
 setMethod("spanned_values", "LabelRow",
+          function(obj) {
+    rep(list(NULL), ncol(obj))
+})
+
+
+setGeneric("spanned_cells", function(obj) standardGeneric("spanned_cells"))
+setMethod("spanned_cells", "TableRow",
+          function(obj) {
+    sp = row_cspans(obj)
+    rvals = row_cells(obj)
+    unlist(mapply(function(v, s) rep(list(v), times = s)),
+           recursive = FALSE)
+})
+
+setMethod("spanned_cells", "LabelRow",
           function(obj) {
     rep(list(NULL), ncol(obj))
 })
@@ -551,8 +568,10 @@ setMethod("spanned_values<-", "TableRow",
     
     rvals = lapply(split(value, splvec),
                    function(v) {
+        if(length(v) == 1)
+            return(v)
         stopifnot(length(unique(v)) == 1L)
-        unique(v)
+        rcell(unique(v), colspan= length(v))
     })
     row_values(obj) = rvals
     obj
@@ -597,6 +616,8 @@ setMethod("obj_fmt<-", "CellValue", function(obj, value) {
     obj@format = value
     obj
 })
+
+
 
 
 setGeneric("set_fmt_recursive", function(obj, fmt, override = FALSE) standardGeneric("set_fmt_recursive"))
@@ -780,6 +801,20 @@ setMethod("row_cspans<-", "TableRow", function(obj, value) {
 setMethod("row_cspans<-", "LabelRow", function(obj, value) {
     stop("attempted to set colspans for LabelRow")
 })
+
+
+## XXX TODO colapse with above?
+
+setGeneric("cell_cspan", function(obj) standardGeneric("cell_cspan"))
+setMethod("cell_cspan", "CellValue", function(obj) obj@colspan)
+
+setGeneric("cell_cspan<-", function(obj, value) standardGeneric("cell_cspan<-"))
+setMethod("cell_cspan<-", "CellValue", function(obj, value) {
+    obj@colspan = value
+    obj
+})
+
+
 
 ### Level (indent) in tree structure
 setGeneric("tt_level", function(obj) standardGeneric("tt_level"))

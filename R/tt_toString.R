@@ -25,28 +25,32 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
     matdata <- unname(unlist(get_formatted_rows(x)))
     if(is.null(matdata))
         matdata <- ""
-  tbody <- matrix(matdata, ncol = ncol(x) + 1, byrow = TRUE)
-  tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
+    tbody <- matrix(matdata, ncol = ncol(x) + 1, byrow = TRUE)
+    ## tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
+    tsptmp = lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
+        sp = row_cspans(rr)
+        rep(sp, times = sp)
+    })
+    ## the 1 is for row labels
+    tspans <- cbind(1L, do.call(rbind, tsptmp))
+    
+    
+    body <- rbind(hbody, tbody)
+    spans <- rbind(hspans, tspans)
+    
+    space <- matrix(rep(0, length(body)), nrow = nrow(body))
+    aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
+    aligns[, 1] <- "left" # row names
   
-  body <- rbind(hbody, tbody)
-  spans <- rbind(hspans, tspans)
+    if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
+        stop("no \\n allowed at the moment")
+    
+    space <- nchar(body)/spans
+    col_widths <- ceiling(apply(space, 2, max))
   
-  space <- matrix(rep(0, length(body)), nrow = nrow(body))
-  aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
-  aligns[, 1] <- "left" # row names
+    col_widths_mat <- matrix(rep(col_widths, nrow(body)), ncol = ncol(body), byrow = TRUE)
   
-  if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-    stop("no \\n allowed at the moment")
-  
-  space <- matrix(mapply(body, spans, FUN = function(txt, span) {
-    max(vapply(txt, nchar, numeric(1))) / span
-  }), ncol = ncol(body))
-  
-  col_widths <- ceiling(apply(space, 2, max))
-  
-  col_widths_mat <- matrix(rep(col_widths, nrow(body)), ncol = ncol(body), byrow = TRUE)
-  
-  nc <- ncol(col_widths_mat)
+    nc <- ncol(col_widths_mat)
   cell_widths_mat <- col_widths_mat
   keep_mat <- matrix(rep(TRUE, length(cell_widths_mat)), ncol = nc)
   
@@ -194,8 +198,8 @@ setMethod("get_formatted_rows", "ElementaryTable",
 setMethod("get_formatted_rows", "TableRow",
           function(obj, depth = 0, indent = 0) {
             
-            stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
-            stopifnot(length(row_values(obj)) == ncol(obj))
+            ## stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
+            ## stopifnot(length(row_values(obj)) == ncol(obj))
             
             default_format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
             
@@ -207,17 +211,22 @@ setMethod("get_formatted_rows", "TableRow",
                 fmt
             })
 
-            c(indent_string(obj_label(obj), indent), unlist(Map(function(val, fmt)
-              paste(format_rcell(val, fmt), collapse = ", "), row_values(obj), format)))
-            
-          })
+    c(indent_string(obj_label(obj), indent),
+      unlist(Map(function(val, fmt, spn) {
+          stopifnot(is(spn, "integer"))
+          rep(paste(format_rcell(val, fmt), collapse = ", "),
+              spn)
+      }, row_values(obj), format, row_cspans(obj)),
+      recursive = FALSE))
+    
+})
 #' @rdname gfr
 #' @exportMethod get_formatted_rows
 
 setMethod("get_formatted_rows", "LabelRow",
           function(obj, depth = 0, indent = 0) {
             
-            if (obj@visible) 
+            if (lblrow_visible(obj))
               c(indent_string(obj_label(obj), indent), rep("", ncol(obj)))
             else
               NULL 

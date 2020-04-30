@@ -4,7 +4,7 @@
 \alias{CellValue}
 \title{Cell Value constructor}
 \usage{
-CellValue(val, fmt = NULL, colspan = NULL, lbl = NULL)
+CellValue(val, fmt = NULL, colspan = 1L, lbl = NULL)
 }
 \arguments{
 \item{val}{ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted}

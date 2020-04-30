@@ -4,7 +4,7 @@
 \alias{rcell}
 \title{Rcell}
 \usage{
-rcell(x, format = NULL, colspan = NULL, lbl = NULL)
+rcell(x, format = NULL, colspan = 1L, lbl = NULL)
 }
 \arguments{
 \item{x}{ANY. Cell value}

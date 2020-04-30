@@ -1279,7 +1279,9 @@ setMethod("length", "CellValue",
 #' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
 #' @param colspan integer. Generally ignored currently.
 #' @export
-CellValue = function(val, fmt = NULL, colspan =NULL, lbl = NULL)  {
+CellValue = function(val, fmt = NULL, colspan =1L, lbl = NULL)  {
+    if(is.null(colspan))
+        colspan = 1L
     if(!is.null(colspan) && !is(colspan, "integer"))
         colspan = as.integer(colspan)
     new("CellValue", value =val, format  =  fmt, colspan = colspan, label = lbl)

@@ -420,6 +420,25 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     res
     
 }
+
+select_cells_j = function(cells, j) {
+    if(length(j) != length(unique(j)))
+        stop("duplicate column selections is not currently supported")
+    spans = vapply(cells, function(x) x@colspan, ## XXX
+                   integer(1))
+    inds = rep(seq_along(cells), times = spans)
+    selinds = inds[j]
+    retcells = cells[selinds[!duplicated(selinds)]]
+    newspans = vapply(split(selinds, selinds),
+                      length,
+                      integer(1))
+
+    mapply(function(cl, sp) {
+        cell_cspan(cl) = sp
+        cl
+    }, cl = retcells, sp = newspans)
+}
+
 setMethod("subset_cols", c("TableRow", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
     j = .j_to_posj(j, ncol(tt))
@@ -428,8 +447,9 @@ setMethod("subset_cols", c("TableRow", "numeric"),
         newcinfo = subset_cols(cinfo, j, ...)
     }
     tt2 = tt
-    row_values(tt2) = row_values(tt2)[j]
-    if(length(row_cspans(tt2)) > 0) 
+    row_values(tt2) =  select_cells_j(row_cells(tt2), j)
+    
+    if(length(row_cspans(tt2)) > 0)  
         row_cspans(tt2) = .fix_rowcspans(tt2, j)
     col_info(tt2) = newcinfo
     tt2
@@ -437,6 +457,12 @@ setMethod("subset_cols", c("TableRow", "numeric"),
 
 setMethod("subset_cols", c("LabelRow", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
+    if(is.null(newcinfo)) {
+        cinfo = col_info(tt)
+        newcinfo = subset_cols(cinfo, j, ...)
+    }
+
+    col_info(tt) = newcinfo
     tt
 })
 
