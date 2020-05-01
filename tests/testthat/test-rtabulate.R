@@ -81,7 +81,7 @@ test_that("rtabulate: col_wise_args argument", {
     }
   
   tbl1 <- rtabulate(1:3, factor(letters[1:3]), function(xi, a, b) {
-    list(list(xi, a, b))
+    rcell(list(xi, a, b))
   }, col_wise_args = list(a = c(3, 2, 1), b = LETTERS[1:3]), row.name = "-")
   
 
@@ -89,7 +89,7 @@ test_that("rtabulate: col_wise_args argument", {
 
   
   tbl2 <- rtabulate((1:3)>2, factor(letters[1:3]), function(xi, a, b) {
-    list(list(xi, a, b))
+    rcell(list(xi, a, b))
   }, col_wise_args = list(a = c(3, 2, 1), b = LETTERS[1:3]), row.name = "-")
   
   check_row1(tbl2)
@@ -112,7 +112,7 @@ test_that("rtabulate: col_wise_args argument", {
     v1 = 1:3, v2 = 3:5
   )
   tbl4 <- rtabulate(df, factor(letters[1:3]), row_by = factor(letters[1:3]),  function(df, a, b) {
-    list(list(nrow(df), a, b))
+    rcell(list(nrow(df), a, b))
   }, col_wise_args = list(a = c(3, 2, 1), b = LETTERS[1:3]), row.name = "-")
   
   check_all_rows(tbl4)

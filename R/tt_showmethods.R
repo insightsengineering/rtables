@@ -1,3 +1,29 @@
+treestruct <- function(obj, ind = 0L) {
+    nc = ncol(obj)
+    cat(rep(" ", times = ind),
+        sprintf("[%s] %s", class(obj), obj_name(obj)),
+        sep = "")
+    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
+        crows = nrow(content_table(obj))
+        ccols = if(crows == 0) 0 else nc
+        cat(sprintf(" [cont: %d x %d]",
+                      crows, ccols))        
+    }
+    if(is(obj, "VTableTree") && length(tree_children(obj))) {
+        kids = tree_children(obj)
+        if(are(kids, "TableRow")) {
+            cat(sprintf( " (%d x %d)\n",
+                        length(kids), nc))
+        } else {
+            cat("\n")
+            lapply(kids, treestruct, ind = ind+1)
+        }
+    }
+    invisible(NULL)
+}
+
+    
+
 
 docat = function(obj) {
     if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
@@ -87,8 +113,7 @@ setMethod("payloadmsg", "ANY",
 })
 
 spldesc = function(spl, value = "") {
-    if(is(value, "SplitValue"))
-        value = splv_rawvalues(value)
+    value = rawvalues(value)
     payloadmsg = payloadmsg(spl)
     fmt = "%s (%s)"
     sprintf(fmt,

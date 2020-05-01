@@ -113,8 +113,8 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
   if (length(x) == 0) return("")
   
   output <- match.arg(output)
-  
-  format <- if (!missing(format)) format else attr(x, "format")
+    format <- if (!missing(format)) format else obj_fmt(x)
+    x <- rawvalues(x)
   
   txt <- if (is.null(format)) {
     toString(x)
