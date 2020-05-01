@@ -82,7 +82,10 @@ workflows:
   version: 2
   Rworkflow:
     jobs:
-      - build_check_install
+      - build_check_install:
+          package: rtables
+
+
  #     - roxygen
  #     - pkgdown:
  #         requires:
