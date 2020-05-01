@@ -35,6 +35,7 @@ jobs:
            cp ${PKGBUILD} artifacts/
       - store_artifacts:
           path: "artifacts"
+          destination: /
       - store_test_results:
           path: << parameters.package >>.Rcheck/tests
 
