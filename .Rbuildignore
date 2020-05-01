@@ -12,3 +12,4 @@
 ^redesign$
 ^man-roxygen$
 ^\..*$
+^temp$
