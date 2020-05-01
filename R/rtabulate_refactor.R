@@ -182,60 +182,69 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
 #' 
-#' # TODO: fix
-#' # rtabulate(
-#' #   x = df,
-#' #   row_by = df$aaa,
-#' #   col_by = df$bbb,
-#' #   FUN = function(x) {  
-#' #      sum(x$val)
-#' #   }
-#' # )
-#' # 
-#' # rtabulate(
-#' #   x = iris,
-#' #   row_by = by_all("sum"),
-#' #   col_by = iris$Species, 
-#' #   FUN = function(x) sum(x$Sepal.Length)
-#' # )
-#' # 
-#' # rtabulate(
-#' #   x = iris,
-#' #   row_by = iris$Species,
-#' #   col_by = by_all("sum"), 
-#' #   FUN = function(x) sum(x$Sepal.Length)
-#' # )
-#' # 
-#' # fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-#' #     labels = c("S.L > 5", "S.L <= 5"))
-#' # 
-#' # tbl <- rtabulate(
-#' #   x = iris,
-#' #   row_by = fsl5,
-#' #   col_by = iris$Species, 
-#' #   FUN = function(x_cell) {
-#' #     if (nrow(x_cell) < 10) {
-#' #       rcell("-")
-#' #     } else {
-#' #       fit <- lm(Sepal.Length ~ Petal.Width, data = x_cell)
-#' #            
-#' #       rcell(list(fit), format = function(x, output) {
-#' #         paste("df:", x[[1]]$df.residual)
-#' #       })
-#' #     }
-#' #   }
-#' # )
-#' # tbl
-#' # 
-#' # rtabulate(
-#' #   x = iris,
-#' #   row_by = fsl5,
-#' #   col_by = iris$Species, 
-#' #   FUN = function(x_cell, N) {
-#' #      N
-#' #   },
-#' #   col_wise_args = list(N = c(10, 100, 200))
-#' # )
+#'  rtabulate(
+#'    x = df,
+#'    row_by = df$aaa,
+#'    col_by = df$bbb,
+#'    FUN = function(df) {  
+#'       sum(df$val)
+#'    }
+#'  )
+#'
+#'  ## this is largely nonsensical, all is not really a "row by" here
+#'  ## that's why we get the label row and data row
+#'  rtabulate(
+#'    x = iris,
+#'    row_by = by_all("sum"),
+#'    col_by = iris$Species, 
+#'    FUN = function(df) sum(df$Sepal.Length)
+#'  )
+#' 
+#' ## standard way would be this
+#' rtabulate(
+#'     x = iris,
+#'     col_by = iris$Species,
+#'     FUN = function(df) sum(df$Sepal.Length),
+#'     row.name =  "sum")
+#' 
+#'  
+#'  rtabulate(
+#'    x = iris,
+#'    row_by = iris$Species,
+#'    col_by = by_all("sum"), 
+#'    FUN = function(df) sum(df$Sepal.Length)
+#'  )
+#'  
+#'  fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
+#'      labels = c("S.L > 5", "S.L <= 5"))
+#'  
+#'  tbl <- rtabulate(
+#'    x = iris,
+#'    row_by = fsl5,
+#'    col_by = iris$Species, 
+#'    FUN = function(df) {
+#'      if (nrow(df) < 10) {
+#'        rcell("-")
+#'      } else {
+#'        fit <- lm(Sepal.Length ~ Petal.Width, data = df)
+#'             
+#'        rcell(list(fit), format = function(x, output) {
+#'            paste("df:", x[[1]]$df.residual)
+#'        })
+#'      }
+#'    }
+#'  )
+#'  tbl
+#'  
+#'  rtabulate(
+#'    x = iris,
+#'    row_by = fsl5,
+#'    col_by = iris$Species, 
+#'    FUN = function(df, N) {
+#'       N
+#'    },
+#'    col_wise_args = list(N = c(10, 100, 200))
+#'  )
 #' # 
 #' #  
 #' # 
@@ -296,9 +305,9 @@ rtabulate <- function(x,
     
     fulld = xdf
 
-    if(is(col_by, "PreDataTableLayouts")) {
+    if(is(col_by, "Split")) {
         ## we're done already
-        lyt <- col_by
+        lyt <- add_col_split(lyt, col_by, next_cpos(lyt, FALSE))
         if(length(col_wise_args) > 0) {
             ##awww, darn :-/
             clyt <- clayout(lyt)
@@ -342,7 +351,9 @@ rtabulate <- function(x,
         
     } 
     
-    if(!is.null(row_by)) {
+    if(is(row_by, "Split")) {
+        lyt <- add_row_split(lyt, row_by, next_rpos(lyt, FALSE))
+    } else if(!is.null(row_by)) {
         rdf <- as.data.frame(row_by,
                              stringsAsFactors = FALSE)
         fulld <- cbind(fulld,
@@ -351,18 +362,24 @@ rtabulate <- function(x,
         for(rspl in names(rdf)) {
             lyt <- add_rowby_varlevels(lyt,
                                        rspl,
-                                       lbl ="")
+                                       lbl ="",
+                                       lblkids = FALSE)
         }
     }
     ## rows
-    lbls = if(usexnms) xcols else ""
+    lbls = row.name
+    if(nchar(lbls) == 0 && usexnms)
+       lbls = xcols
+       
     lyt <- add_analyzed_vars(lyt,
                              var = xcols,
-                             lbl = lbls,
-                             defrowlab = row.name,
+                             lbl = "",#lbls,
+                             defrowlab = row.name, #lbls,# row.name,
                              afun = FUN,
                              fmt = format,
-                             extrargs = list(...))
+                             extrargs = list(...),
+                             lblkids = FALSE
+                             )
     ## XXX a way to just return the layout?
     ## but x needs to be padded with the relevant
     ## columns so not sure...

@@ -11,6 +11,7 @@ add_colby_varlevels(
   vlblvar = var,
   splfmt = NULL,
   newtoplev = FALSE,
+  lblkids = FALSE,
   extrargs = list()
 )
 }
@@ -26,6 +27,8 @@ add_colby_varlevels(
 \item{splfmt}{format spec. Format associated with this split.}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
 \item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }

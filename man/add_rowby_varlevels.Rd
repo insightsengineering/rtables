@@ -42,7 +42,6 @@ l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_rowby_varlevels("RACE", "Ethnicity") \%>\%
   add_summary_count("RACE", lbl_fstr = "\%s (n)") \%>\%
   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
-  
 l
 
  build_table(l, DM)

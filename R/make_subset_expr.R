@@ -2,7 +2,7 @@
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
-    v = splv_rawvalues(val)
+    v = rawvalues(val)
     as.expression(bquote((!is.na(.(a)) & .(a) == .(b)), list(a = as.name(spl_payload(spl)),
                               b = v)))
 
@@ -11,7 +11,7 @@ setMethod("make_subset_expr", "VarLevelSplit",
 
 setMethod("make_subset_expr", "MultiVarSplit",
           function(spl, val) {
-    v = splv_rawvalues(val)
+    v = rawvalues(val)
     as.expression(bquote(!is.na(.(a)), list(a = v)))
 })
 
@@ -26,7 +26,7 @@ setMethod("make_subset_expr", "AnalyzeVarSplit",
 
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
-    v = splv_rawvalues(val)
+    v = rawvalues(val)
     as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(lbls),
                                    include.lowest = TRUE) == .(b)),
                   list(a = as.name(spl_payload(spl)),
@@ -38,7 +38,7 @@ setMethod("make_subset_expr", "VarStaticCutSplit",
 ## NB this assumes spl_cutlbls(spl) is in order!!!!!!
 setMethod("make_subset_expr", "CumulativeCutSplit",
           function(spl, val) {
-    v = splv_rawvalues(val)
+    v = rawvalues(val)
     as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
                                               labels = .(lbls),
                                               include.lowest = TRUE)) <=
@@ -53,7 +53,7 @@ setMethod("make_subset_expr", "CumulativeCutSplit",
 
 setMethod("make_subset_expr", "VarDynCutSplit",
           function(spl, val) {
-    v = splv_rawvalues(val)
+    v = rawvalues(val)
     as.expression(bquote(which(.(fun)(.(a)) == .(b)),
                   list(a = as.name(spl_payload(spl)),
                        b = v,

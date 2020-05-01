@@ -154,7 +154,7 @@ x <- c(1, 2, 3, NA, 3, 2)
 cb <- factor(c("A", "A", "A", "B", "B", "A"), levels = c("A", "B"))
 
 tbl <- rtabulate(x, cb, FUN = function(xi, na.rm, N) {
-  list(mean(xi, na.rm=na.rm), N)
+  c(mean(xi, na.rm=na.rm), N)
 }, na.rm = TRUE, col_wise_args = list(N = table(cb)), row.name = "mean, N")
 
 tbl

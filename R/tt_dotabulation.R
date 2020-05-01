@@ -31,11 +31,16 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) 
         args = c(args,
                  match_extrargs(func, count, totcount, extras = c(cextr, splextra)))
         
-        ret = do.call(func, args)
-        if(!is.list(ret) && length(ret) > 1)
-            ret = list(ret)
+        val = do.call(func, args)
+        if(is.list(val))
+            ret = lapply(val, rcell)
+        else
+            ret = rcell(val)
         ret
-    }
+}
+
+
+
 gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
@@ -50,7 +55,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                         function(x) {
             pos = tree_pos(x)
             spls = pos_splits(pos)
-            splvals = splv_rawvalues(pos_splvals(pos))
+            splvals = rawvalues(pos)
             n = length(spls)
             if(is(spls[[n]], "MultiVarSplit"))
                 splvals[n]
@@ -81,6 +86,14 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     rawvals
 }
 
+
+
+.strip_lst_rvals <- function(lst) {
+    lapply(lst, rawvalues)
+}
+
+#' @noRd    
+#' @return a list of table rows, even when only one is generated
 .make_tablerows = function(dfpart,
                            func,
                            cinfo,
@@ -115,7 +128,16 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 
     ## look if we got labels, if not apply the
     ## default row labels
-    lbls = names(rawvals[[maxind]])
+    rv1col = rawvals[[maxind]]
+    if(is(rv1col, "CellValue"))
+        lbls = obj_label(rv1col)
+    else if (!is.null(names(rv1col)))
+        lbls = names(rv1col)
+    else if(are(rv1col, "CellValue"))
+        lbls = sapply(rv1col, obj_label)
+    else
+        lbls = NULL
+    
     if(is.null(lbls)) {
         if(length(rawvals[[maxind]]) == length(defrowlabs))
             lbls = defrowlabs
@@ -125,15 +147,27 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
     ##recycle formats
+    if(ncrows ==  1)  {
+        return(list(rowconstr(val = rawvals,
+                         cinfo = cinfo,
+                         lev = lev,
+                         lbl = lbls,
+                         name = lbls,
+                         var = rowvar,
+                         fmt = format)))
+    }
+    fmtvec = NULL
     if(!is.null(format)) {
-        if(is.function(format))
+        if(is.function(format) )
             format = list(format)
-        
         fmtvec = rep(format, length.out = ncrows)
-    } else
-        fmtvec = NULL
+    }
+    
     trows = lapply(1:ncrows, function(i) {
-        rowvals = lapply(rawvals, function(colvals) colvals[[i]])
+        rowvals = lapply(rawvals, function(colvals)
+            {
+                colvals[[i]]
+            })
         rowconstr(val = rowvals,
                   cinfo = cinfo,
                   lev = lev,
@@ -225,35 +259,50 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 }
 
 
-.make_analyzed_tab = function(df, spl, cinfo, name, dolab = TRUE, ctab, lvl) {
+.make_analyzed_tab = function(df,
+                              spl,
+                              cinfo,
+                              partlbl = "",
+                              dolab = TRUE,
+                              lvl) {
     stopifnot(is(spl, "AnalyzeVarSplit"))
     check_validsplit(spl, df)
+    defrlbl = spl@default_rowlabel
+    nolab  = FALSE
+    if(nchar(defrlbl) == 0 && !missing(partlbl) && nchar(partlbl) > 0) {
+        defrlbl = partlbl
+        dolab = FALSE
+    }
     kids = .make_tablerows(df,
                            func = analysis_fun(spl),
-                           defrowlabs = spl@default_rowlabel, ##XXX XXX
+                           defrowlabs = defrlbl, # XXX
                            cinfo = cinfo,
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
                            format = obj_fmt(spl),
                            splextra = split_exargs(spl))
+    vis = TRUE
+
     if(dolab)
         lab = obj_label(spl)
     else
         lab = ""
-    TableTree(kids = kids,
+    ret = TableTree(kids = kids,
               name = spl_payload(spl),
               lbl = lab,
               lev = lvl,
               cinfo = cinfo,
               fmt = obj_fmt(spl))
+    ret
 }
 
 recursive_applysplit = function( df,
                                 lvl = 0L,
                                 splvec,
                                 name,
-                                label,
-                                make_lrow,
+                       #         label,
+                                make_lrow = NA,
+                                partlbl = "",
                                 ##colexprs, coltree,
                                 cinfo,
                                 parent_cfun = NULL,
@@ -262,7 +311,7 @@ recursive_applysplit = function( df,
 
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
-        return(spl)
+        return(splvec[[1]])
         
     ## the content function is the one from the PREVIOUS
     ## split, ie the one whose children we are now constructing
@@ -277,13 +326,8 @@ recursive_applysplit = function( df,
     if((is.na(make_lrow) && nrow(ctab) > 0) ||
        identical(make_lrow, FALSE))
         label = ""
-    ##    if(length(splvec) > 0) { ## there's more depth, recurse
-        ## lvl is level of indentation, which starts at 0
-    ## pos, is position in the splvec, which starts at 1
-    ## because R is 1-indexed, so pos = lvl + 1L
-    ## pos = lvl + 1L;
-    ## stopifnot(pos <= length(splvec),
-    ##           is(splvec, "SplitVector"))
+
+    
     if(length(splvec) == 0L) {
         kids = list()
     } else {
@@ -294,12 +338,18 @@ recursive_applysplit = function( df,
         lab = obj_label(spl)
 
         if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
-            kids = list(.make_analyzed_tab(df = df,
-                                           spl = spl,
-                                           cinfo = cinfo,
-                                           lvl = lvl + 1L,
-                                           dolab = nonroot))
-            names(kids) = sapply(kids, obj_name)
+            ret = .make_analyzed_tab(df = df,
+                                     spl = spl,
+                                     cinfo = cinfo,
+                                     lvl = lvl + 1L,
+                                     dolab = nonroot && label_kids(spl),
+                                     partlbl = partlbl)
+            if(nrow(ctab) == 0 && isTRUE(make_lrow))
+                return(ret)
+            else {
+                kids = list(ret)
+                names(kids) = obj_name(ret)
+            }
         } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
             ##     lab = ""
             kids = lapply(spl_payload(spl),
@@ -307,22 +357,32 @@ recursive_applysplit = function( df,
                 .make_analyzed_tab(df = df,
                                    spl = sp,
                                    cinfo = cinfo,
-                                   lvl = lvl + 1L
+                                   lvl = lvl + 1L,
+                                   partlbl = obj_label(sp),
+                                   dolab = label_kids(sp)
                                )}
                 )
+            if(isTRUE(make_lrow) || (length(kids) == 1 && nrow(ctab) == 0)) {
+                ## we only analyzed one var so
+                ## we don't need an extra wrapper table
+                ## in the structure
+                stopifnot(identical(obj_name(kids[[1]]),
+                                    spl_payload(spl)))
+                return(kids[[1]])
+            }
             ## this will be the variables
             nms = sapply(spl_payload(spl), spl_payload)
             nms[is.na(nms)] = ""
             names(kids) = nms
         } else { #not Analyze(Multi)Var(s)
-            rawpart = do_split(spl, df) ##apply_split(spl, df)
+            rawpart = do_split(spl, df)
             dataspl = rawpart[["datasplit"]]
             ## these are SplitValue objects
             splvals = rawpart[["values"]]
             partlbls = rawpart[["labels"]]
             if(is.factor(partlbls))
                 partlbls = as.character(partlbls)
-            nms = unlist(splv_rawvalues(splvals))
+            nms = unlist(rawvalues(splvals))
             if(is.factor(nms))
                 nms = as.character(nms)
             
@@ -332,41 +392,40 @@ recursive_applysplit = function( df,
             inner = unlist(mapply(function(dfpart,  nm, lbl) {
                 recursive_applysplit(dfpart,
                                      name = nm, 
-                                     label = lbl,
+                     #                label = lbl,
                                      lvl = innerlev,
                                      splvec = splvec,
                                      cinfo = cinfo,
                                      make_lrow = label_kids(spl),
                                      parent_cfun = content_fun(spl),
-                                     cformat = obj_fmt(spl))
+                                     cformat = obj_fmt(spl),
+                                     partlbl = lbl)
             }, dfpart = dataspl,
             lbl = partlbls,
             nm = nms,
             SIMPLIFY=FALSE))
-            if(nonroot) {
-                kids = list(TableTree(kids = inner,
-                                      name = obj_name(spl),
-                                      lbl = obj_label(spl),
-                                      lev = innerlev - 1L,
-                                      cinfo = cinfo,
-                                      fmt = obj_fmt(spl)))
-                ## I'm enforcing this in the TableTree
-                ## constructor now
-                ##names(kids) = obj_name(spl)
-            } else { ## is root
                 kids = inner
-            } ## end nonroot
         } ## end split type
     } ## end length(splvec)
 
     if(nrow(ctab) > 0L || length(kids) > 0L) {
+        ## avoid visible label rows when the row.names
+        ## directly repeat the info.
+        if((is.na(make_lrow) && nrow(ctab) > 0) || (
+            length(kids) == 1L  &&
+            identical(partlbl, row.names(kids[[1]]))))
+            tlbl = ""
+        else
+            tlbl = partlbl
+        
         ret = TableTree(cont = ctab, kids = kids,
                         name = name,
+                        lbl = tlbl, #partlbl,
                         lev = lvl,
                     iscontent = FALSE, 
                     lblrow = LabelRow(lev = lvl,
-                                      lbl = label,
-                                      cinfo = cinfo),
+                                      lbl = tlbl,
+                                      cinfo = cinfo),#                                      vis = !identical(partlbl, names(kids))),
                     cinfo = cinfo)
     } else {
         ret = NULL
@@ -426,7 +485,7 @@ build_table = function(lyt, df,
         lab = obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,
-                             label = lab,
+  #                           label = lab,
                              splvec = splvec,
                              cinfo = cinfo,
                              ## XXX are these ALWAYS right?
@@ -435,15 +494,20 @@ build_table = function(lyt, df,
                              cformat = obj_fmt(firstspl))
     })
     names(kids) = sapply(kids, obj_name)
-                             
-    tab = TableTree(cont = ctab,
-                    kids = kids,
-                    lev = 0L,
-                    name = "root",
-                    lbl="",
-                    iscontent = FALSE,
-                    cinfo = cinfo,
-                    fmt = obj_fmt(rtspl))
+    if(nrow(ctab) == 0L &&
+       length(kids) == 1L &&
+       is(kids[[1]], "VTableTree")) {
+        tab = kids[[1]]
+    } else {
+        tab = TableTree(cont = ctab,
+                        kids = kids,
+                        lev = 0L,
+                        name = "root",
+                        lbl="",
+                        iscontent = FALSE,
+                        cinfo = cinfo,
+                        fmt = obj_fmt(rtspl))
+    }
     tab
 }
 
@@ -516,7 +580,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
 
-    nm = unlist(tail(splv_rawvalues(pos), 1)) %||% ""
+    nm = unlist(tail(rawvalues(pos), 1)) %||% ""
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,

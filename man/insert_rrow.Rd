@@ -28,16 +28,11 @@ Label rows (ie a row with no data values, only a row.name) can only be inserted 
 tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 
 insert_rrow(tbl, rrow("Hello World"))
-insert_rrow(tbl, rrow("Hello World"), at = 2)
+insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
 tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
 insert_rrow(tbl2, rrow("Hello World"))
 insert_rrow(tbl2, rrow("Hello World"), at = 2)
 insert_rrow(tbl2, rrow("Hello World"), at = 4)
-insert_rrow(tbl2, rrow("Hello World"), at = 6)
-insert_rrow(tbl2, rrow("Hello World"), at = 7)
-##errors b/c label rows
-try(insert_rrow(tbl2, rrow("Hello World"), at = 3))
-try(insert_rrow(tbl2, rrow("Hello World"), at = 5))
 
 insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 

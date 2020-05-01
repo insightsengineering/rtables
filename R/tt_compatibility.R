@@ -20,7 +20,8 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
     if(length(vals) == 0L) {
         LabelRow(lev = as.integer(indent),
                  lbl = row.name,
-                 name = row.name)
+                 name = row.name,
+                 vis = TRUE)
     } else {
         csps = as.integer(sapply(vals, function(x) {
             attr(x, "colspan") %||% 1L
@@ -77,17 +78,22 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' 
 #' @inheritParams compat_args
 #' @param x ANY. Cell value
+#' @param lbl character(1). Label or Null. If non-null, it will be looked at when determining row labels.
 #' @param colspan Columnspan value. NOTE currently column spanning is only supported for defining header structure.
 #' @export
 #' 
-rcell = function(x, format = NULL, colspan = NULL) {
-    ## if(length(x) != 1)
-    ##     x = list(x)
-    if(!is.null(format))
-        attr(x, "format") = format
-    if(!is.null(colspan))
-        attr(x, "colspan") = colspan
-    x
+rcell = function(x, format = NULL, colspan = 1L, lbl = NULL) {
+    ## ## if(!is.atomic(x) && length(x) > 1)
+    ## ##      x = list(x)
+    ## if(!is.null(format))
+    ##     attr(x, "format") = format
+    ## if(!is.null(colspan))
+    ##     attr(x, "colspan") = colspan
+    ## x
+    if(is(x, "CellValue"))
+        x
+    else
+        CellValue(val = x, fmt = format, colspan = colspan, lbl = lbl)
 }
 
 
@@ -284,66 +290,66 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' 
 #' # Single row header
 #' 
-#'# tbl <- rtable(
-#'#   header = rheader(rrow(NULL, rcell("Treatement N=100"), rcell("Comparison N=300"))),
-#'#   format = "xx (xx.xx%)",
-#'#   rrow("A", c(104, .2), c(100, .4)),
-#'#   rrow("B", c(23, .4), c(43, .5)),
-#'#   rrow(""),
-#'#   rrow("this is a very long section header"),
-#'#   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-#'#   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
-#'# )
+#' tbl <- rtable(
+#'   header = c("Treatement\nN=100", "Comparison\nN=300"),
+#'   format = "xx (xx.xx%)",
+#'   rrow("A", c(104, .2), c(100, .4)),
+#'   rrow("B", c(23, .4), c(43, .5)),
+#'   rrow(""),
+#'   rrow("this is a very long section header"),
+#'   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+#'   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+#' )
 #' # TODO: fix
 #' # TODO: coerce c(...) to rheader
-#' # tbl
+#' tbl
 #' 
-#'# row.names(tbl) # TODO # row.lables
-#'# names(tbl)
+#' row.names(tbl) # TODO # row.lables
+#' names(tbl)
 #'# 
 #'# 
 #'# # Subsetting
-#'# tbl[1,2]
-#'# tbl[2, 1]
+#' tbl[1,2]
+#' tbl[2, 1]
 #'# # TODO access to the cell
 #'# tbl[[2, 1]] # cell ?
 #'# tbl[[c("All Species"), 1]]
-#'# tbl[3,2]
-#'# tbl[5,1]
-#'# tbl[5,2]
-#'# tbl[1:3]
+#' tbl[3,2]
+#' tbl[5,1]
+#' tbl[5,2]
+#' tbl[1:3] ##XXX TODO not sure this should work...
 #'# 
 #'# 
 #'# # Data Structure methods
-#'# dim(tbl) # TODO
-#'# nrow(tbl)
-#'# ncol(tbl)
-#'# names(tbl)
+#' dim(tbl) 
+#' nrow(tbl)
+#' ncol(tbl)
+#' names(tbl)
 #'# 
 #'# 
 #'# # Colspans
 #'# 
-#'# tbl2 <- rtable(
-#'#   c("A", "B", "C", "D", "E"),
-#'#   format = "xx",
-#'#   rrow("r1", 1, 2, 3, 4, 5),
+#' tbl2 <- rtable(
+#'   c("A", "B", "C", "D", "E"),
+#'   format = "xx",
+#'   rrow("r1", 1, 2, 3, 4, 5),
+#'
+#'   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
+#' )
 #' 
-#'#   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
-#'# )
-#'# 
-#'# tbl2
+#' tbl2
 #'# 
 #'# 
 #'# # Custom format with functions (might be deprecated soon)
-#'# my_format <- function(x, output) {
-#'#    paste(x, collapse = "/")
-#'# }
-#'# tbl3 <- rtable(
-#'#   c("A", "B"),
-#'#   format = my_format,
-#'#   rrow("row1", c(1,2,3,4), letters[1:10])
-#'# )
-#'# tbl3
+#' my_format <- function(x, output) {
+#'    paste(x, collapse = "/")
+#' }
+#' tbl3 <- rtable(
+#'   c("A", "B"),
+#'   format = my_format,
+#'   rrow("row1", c(1,2,3,4), letters[1:10])
+#' )
+#' tbl3
 #' @rdname rtable
 rtable = function(header, ..., format = NULL) {
     if(is.character(header))
@@ -373,10 +379,10 @@ rtable = function(header, ..., format = NULL) {
         body = lapply(body, function(tb) tree_children(tb)[[1]])
     }
         
-    lapply(body, function(x)
-        if(any(row_cspans(x) > 1))
-            stop("colspans in TableTree bodies are currently not supported.")
-        )
+    ## lapply(body, function(x)
+    ##     if(any(row_cspans(x) > 1))
+    ##         stop("colspans in TableTree bodies are currently not supported.")
+    ##     )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
               lblrow = LabelRow(lev = 0L, lbl = "", vis = FALSE))
 }
@@ -715,16 +721,11 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
 #'
 #' insert_rrow(tbl, rrow("Hello World"))
-#' insert_rrow(tbl, rrow("Hello World"), at = 2)
+#' insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
 #' tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
 #' insert_rrow(tbl2, rrow("Hello World"))
 #' insert_rrow(tbl2, rrow("Hello World"), at = 2)
 #' insert_rrow(tbl2, rrow("Hello World"), at = 4)
-#' insert_rrow(tbl2, rrow("Hello World"), at = 6)
-#' insert_rrow(tbl2, rrow("Hello World"), at = 7)
-#' ##errors b/c label rows
-#' try(insert_rrow(tbl2, rrow("Hello World"), at = 3))
-#' try(insert_rrow(tbl2, rrow("Hello World"), at = 5))
 #'
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 #'
@@ -891,9 +892,8 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 #' @inheritParams lyt_args
 #' @export
 #' @family compatability
-
 by_all <- function(name) {
-    add_col_total(NULL, lbl = name)
+    AllSplit(splbl = name)
 }
 
 #' @inheritParams compat_args

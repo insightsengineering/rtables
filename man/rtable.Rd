@@ -59,66 +59,66 @@ names(mtbl) # always first row of header
 
 # Single row header
 
-# tbl <- rtable(
-#   header = rheader(rrow(NULL, rcell("Treatement N=100"), rcell("Comparison N=300"))),
-#   format = "xx (xx.xx\%)",
-#   rrow("A", c(104, .2), c(100, .4)),
-#   rrow("B", c(23, .4), c(43, .5)),
-#   rrow(""),
-#   rrow("this is a very long section header"),
-#   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-#   rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
-# )
+tbl <- rtable(
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
+  format = "xx (xx.xx\%)",
+  rrow("A", c(104, .2), c(100, .4)),
+  rrow("B", c(23, .4), c(43, .5)),
+  rrow(""),
+  rrow("this is a very long section header"),
+  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+  rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+)
 # TODO: fix
 # TODO: coerce c(...) to rheader
-# tbl
+tbl
 
-# row.names(tbl) # TODO # row.lables
-# names(tbl)
+row.names(tbl) # TODO # row.lables
+names(tbl)
 # 
 # 
 # # Subsetting
-# tbl[1,2]
-# tbl[2, 1]
+tbl[1,2]
+tbl[2, 1]
 # # TODO access to the cell
 # tbl[[2, 1]] # cell ?
 # tbl[[c("All Species"), 1]]
-# tbl[3,2]
-# tbl[5,1]
-# tbl[5,2]
-# tbl[1:3]
+tbl[3,2]
+tbl[5,1]
+tbl[5,2]
+tbl[1:3] ##XXX TODO not sure this should work...
 # 
 # 
 # # Data Structure methods
-# dim(tbl) # TODO
-# nrow(tbl)
-# ncol(tbl)
-# names(tbl)
+dim(tbl) 
+nrow(tbl)
+ncol(tbl)
+names(tbl)
 # 
 # 
 # # Colspans
 # 
-# tbl2 <- rtable(
-#   c("A", "B", "C", "D", "E"),
-#   format = "xx",
-#   rrow("r1", 1, 2, 3, 4, 5),
+tbl2 <- rtable(
+  c("A", "B", "C", "D", "E"),
+  format = "xx",
+  rrow("r1", 1, 2, 3, 4, 5),
 
-#   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
-# )
-# 
-# tbl2
+  rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
+)
+
+tbl2
 # 
 # 
 # # Custom format with functions (might be deprecated soon)
-# my_format <- function(x, output) {
-#    paste(x, collapse = "/")
-# }
-# tbl3 <- rtable(
-#   c("A", "B"),
-#   format = my_format,
-#   rrow("row1", c(1,2,3,4), letters[1:10])
-# )
-# tbl3
+my_format <- function(x, output) {
+   paste(x, collapse = "/")
+}
+tbl3 <- rtable(
+  c("A", "B"),
+  format = my_format,
+  rrow("row1", c(1,2,3,4), letters[1:10])
+)
+tbl3
 }
 \seealso{
 Other compatability: 
