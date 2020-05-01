@@ -91,7 +91,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 .strip_lst_rvals <- function(lst) {
     lapply(lst, rawvalues)
 }
-    
+
+#' @noRd    
 #' @return a list of table rows, even when only one is generated
 .make_tablerows = function(dfpart,
                            func,

@@ -18,19 +18,24 @@ jobs:
           command: |
             R CMD build pkgsource
             echo "export PKGBUILD=$(echo *.tar.gz)" >> $BASH_ENV
+#      - run:
+#          name: "Install R package"
+#          command: R CMD INSTALL ${PKGBUILD}    
+#      - run:
+#          name: "Check R package"
+#          command: |
+#            R CMD check --no-manual ${PKGBUILD}
+#            result=$(tail -1 << parameters.package >>.Rcheck/00check.log)
+#            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
+#            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
       - run:
-          name: "Check R package"
-          command: |
-            R CMD check --no-manual ${PKGBUILD}
-            result=$(tail -1 << parameters.package >>.Rcheck/00check.log)
-            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
-            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
-      - run:
-          name: "Install R package"
-          command: R CMD INSTALL ${PKGBUILD}            
+         name: "Prepare Artifacts"
+         command: |
+           mkdir artifacts
+           cp ${PKGBUILD} artifacts/
       - store_artifacts:
-          path: << parameters.package >>.Rcheck/00check.log
-          destination: 00check.log
+          path: "artifacts"
+          destination: /
       - store_test_results:
           path: << parameters.package >>.Rcheck/tests
 
@@ -83,12 +88,16 @@ workflows:
   version: 2
   Rworkflow:
     jobs:
-      - roxygen
-      - pkgdown:
-          requires:
-            - roxygen
       - build_check_install:
           package: rtables
-          requires:
-            - roxygen
-      - TODOs
+
+
+ #     - roxygen
+ #     - pkgdown:
+ #         requires:
+ #           - roxygen
+ #     - build_check_install:
+ #         package: rtables
+ #         requires:
+ #           - roxygen
+ #     - TODOs

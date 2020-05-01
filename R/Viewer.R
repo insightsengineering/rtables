@@ -39,7 +39,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
       NULL
     } else if (is(x, "shiny.tag")) {
       x
-    } else if (is(x, "rtable")) {
+    } else if (is(x, "TableTree")) {
       as_html(x, ...)
     } else {
       stop("object of class rtable or shiny tag excepted for ", name)
