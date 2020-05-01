@@ -38,7 +38,7 @@ setMethod("show", "VTableTree", function(object) {
 #' toString(tbl, gap = 3)
 #' 
 setMethod("toString", "VTableTree", function(x, gap = 3) {
-  
+
   tmp <- .tbl_header_mat(x)
   
   hbody <- tmp$body
