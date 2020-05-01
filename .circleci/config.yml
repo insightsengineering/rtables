@@ -29,7 +29,7 @@ jobs:
             [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
             [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
       - store_artifacts:
-          path: "*.tar.gz"
+          path: "${PKGBUILD}"
       - store_test_results:
           path: << parameters.package >>.Rcheck/tests
 
@@ -82,12 +82,13 @@ workflows:
   version: 2
   Rworkflow:
     jobs:
-      - roxygen
-      - pkgdown:
-          requires:
-            - roxygen
-      - build_check_install:
-          package: rtables
-          requires:
-            - roxygen
-      - TODOs
+      - build_check_install
+ #     - roxygen
+ #     - pkgdown:
+ #         requires:
+ #           - roxygen
+ #     - build_check_install:
+ #         package: rtables
+ #         requires:
+ #           - roxygen
+ #     - TODOs
