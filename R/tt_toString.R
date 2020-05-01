@@ -14,17 +14,41 @@ setMethod("show", "VTableTree", function(object) {
   cat(toString(object))
 })
 
+
+#' Convert an rtable object to a string
+#' @noRd
+#' 
+#' @examples 
+#' library(dplyr)
+#' 
+#' iris2 <- iris %>%
+#'   group_by(Species) %>%
+#'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+#'   ungroup()
+#' 
+#' l <- NULL %>% 
+#'   add_colby_varlevels("Species") %>%
+#'   add_colby_varlevels("group") %>%
+#'   add_analyzed_vars(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
+#' 
+#' l
+#' 
+#' tbl <- build_table(l, iris2)
+#' 
+#' toString(tbl, gap = 3)
+#' 
 setMethod("toString", "VTableTree", function(x, gap = 3) {
   
   tmp <- .tbl_header_mat(x)
   
   hbody <- tmp$body
   hspans <- tmp$span
-    
-    ## table body
-    matdata <- unname(unlist(get_formatted_rows(x)))
-    if(is.null(matdata))
-        matdata <- ""
+  
+  ## table body
+  matdata <- unname(unlist(get_formatted_rows(x)))
+  if(is.null(matdata))
+    matdata <- ""
+  
   tbody <- matrix(matdata, ncol = ncol(x) + 1, byrow = TRUE)
   tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
   
@@ -76,8 +100,7 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   txt_head <- apply(head(content, nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
   
-  paste0(paste(c(txt_head, div, txt_body), collapse = "\n"),
-           "\n")
+  paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
   
 })
 
