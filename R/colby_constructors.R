@@ -627,6 +627,7 @@ add_analyzed_vars = function(lyt,
 #' library(dplyr)
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
+#' # TODO: fix
 #' build_table(l, ANL)
 #' 
 add_analyzed_colvars = function(lyt, lbl, afun,

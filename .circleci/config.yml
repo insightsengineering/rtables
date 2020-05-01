@@ -1,52 +1,72 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+
 jobs:
-  build:
+  build_check_install:
+    parameters:
+      package:
+        type: string
     docker:
       - image: rocker/tidyverse:3.6.2
     steps:
       - checkout:
-          path: rtables
+          path: pkgsource
       - run:
-          name: "build package"
-          command: R CMD build rtables
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - "*.tar.gz"
+          name: "Build R package"
+          command: |
+            R CMD build pkgsource
+            echo "export PKGBUILD=$(echo *.tar.gz)" >> $BASH_ENV
+      - run:
+          name: "Install R package"
+          command: R CMD INSTALL ${PKGBUILD}    
+      - run:
+          name: "Check R package"
+          command: |
+            R CMD check --no-manual ${PKGBUILD}
+            result=$(tail -1 << parameters.package >>.Rcheck/00check.log)
+            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
+            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
+      - run:
+         name: "Prepare Artifacts"
+         command: |
+           mkdir artifacts
+           cp ${PKGBUILD} artifacts/
+      - store_artifacts:
+          path: "artifacts"
+          destination: /
+      - store_test_results:
+          path: << parameters.package >>.Rcheck/tests
 
-  check:
+
+  roxygen:
     docker:
       - image: rocker/tidyverse:3.6.2
     steps:
-      - attach_workspace:
-          at: ./
+      - checkout
       - run:
-          name: "get package build name"
-          command: echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
-      - run:
-          name: "check package"
-          command: R CMD check --no-manual --no-build-vignettes ${PKG}
-      - run:
-          name: "install package"
-          command: R CMD INSTALL ${PKG}
-#      - store_artifacts:
-#          path: rtables.Rcheck
-#          destination: rtables.Rcheck
-      - store_test_results:
-          path: rtables.Rcheck/tests
+          name: "check if manuals are upto date with roxygen comments"
+          command: |
+            R -e "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+            if [[ -z $(git status -s) ]]
+            then
+              echo "manuals are not upto date with roxygen comments"
+              echo "please rerun roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+              set -o errexit
+            else
+              echo "manuals are upto date with roxygen comments"
+            fi
+
 
   pkgdown:
     docker:
       - image: rocker/tidyverse:3.6.2
     steps:
-      - checkout:
-          path: rtables
+      - checkout
       - run:
           name: "create pkgdown website"
-          command: R -e 'pkgdown::build_site("rtables", devel = FALSE)'
+          command: R -e 'pkgdown::build_site(".", devel = FALSE)'
       - store_artifacts:
-          path: rtables/docs
+          path: docs
           destination: pkgdown
 
   TODOs:
@@ -54,20 +74,24 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - checkout:
-          path: rtables
+          path: pkgsource
       - run:
-          command: grep -R -A 2 "TODO" rtables/R > TODOs.txt
+          command: grep -R -A 2 "TODO" pkgsource/R > TODOs.txt
       - store_artifacts:
           path: TODOs.txt
           destination: TODOs.txt
+
 
 workflows:
   version: 2
   Rworkflow:
     jobs:
-      - build
-      - pkgdown
-      - check:
+      - roxygen
+      - pkgdown:
           requires:
-            - build
+            - roxygen
+      - build_check_install:
+          package: rtables
+          requires:
+            - roxygen
       - TODOs
