@@ -66,7 +66,7 @@ rawdat = makefakedat()
 ## add top level column split on ARM
 lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
+    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
     ## add_colby_total(lbl = "All") %>%
@@ -74,7 +74,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colcounts() %>%
     ## add a new subtable that splits on RACE, value labels from ethn_lbl
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", rowlblf = "%s (n)") %>%
+    add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
     ##
     ## Add nested row split within Race categories for FACTOR2
     ## using a split function that excludes level C
@@ -99,7 +99,7 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
     ## levels of VAR3, in this case 2.
-    add_analyzed_vars("VAR3", "Var3 Counts", afun = lstwrap(table), newtoplev = TRUE)
+    add_analyzed_vars("VAR3", "Var3 Counts", afun = lstwrapx(table), newtoplev = TRUE)
 
 
 
@@ -111,7 +111,7 @@ tab = build_table(lyt, rawdat)
 ## that we're going to build
 thing2 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
+    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
     add_analyzed_vars(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"), afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
@@ -120,9 +120,9 @@ tab2 = build_table(thing2, rawdat)
 
 thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", valuelblvar = "gend_lbl") %>%
+    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", rowlblf = "%s (n)") %>%
+    add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
     add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx") %>%
 
@@ -137,12 +137,11 @@ tab3 = build_table(thing3, rawdat)
 
 ### baseline stuff?????
 
-blthing = NULL %>% add_colby_varwbline("ARM", "ARM1", lbl = "Arm") %>%
-    add_analyzed_blinecomp(var = "AGE", lbl = "Age",
-                           afun = mean) %>%
-    add_analyzed_vars("AGE", lbl = "Age v2",
-                     afun = mean,
-                     newtoplev = TRUE)
+blthing = NULL %>% add_colby_varwbline("ARM", "ARM1") %>%
+    add_analyzed_vars("AGE", lbl = "",## lbl = "Age v2",
+                     afun = mean) %>%
+    add_analyzed_blinecomp(var = "AGE",
+                           afun = mean)
 ## function(x) list(mean = mean(x)))
 
 
@@ -161,7 +160,7 @@ simplecomp = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_summary_count("RACE", "%s (n)") %>%
     add_rowby_varlevels("SEX", "Gender", vlblvar="gend_lbl") %>%
     add_summary_count("SEX", "%s (n)") %>%
-    add_analyzed_colvars("Mean", afun = function(x) list(mean = mean(x, na.rm = TRUE)), fmt= "xx.xx")
+    add_analyzed_colvars("Mean", afun = function(x) if(all(is.na(x))) rcell(NULL) else rcell(mean(x, na.rm = TRUE), lbl="mean"), fmt= "xx.xx")
 
 tab3 = build_table(simplecomp, longdat)
 
@@ -204,7 +203,7 @@ complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
     add_colby_varwbline(var = "visit",lbl = "Visit", baseline = "baseline",
                         incl_all = TRUE) %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-    add_summary_count("RACE", rowlblf = "%s (n)") %>%
+    add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
     add_analyzed_blinecomp("weight", lbl = "weight", afun = mean, fmt = "xx.xx")
     
 

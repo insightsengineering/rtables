@@ -9,7 +9,7 @@ add_colby_varwbline(
   var,
   baseline,
   incl_all = FALSE,
-  lbl,
+  lbl = var,
   vlblvar = var,
   splfmt = NULL,
   newtoplev = FALSE

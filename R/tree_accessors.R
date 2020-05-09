@@ -730,10 +730,11 @@ setGeneric("collect_leaves",
 setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
-        if(incl.cont) {tree_children(content_table(tt))},
         if(add.labrows && lblrow_visible(tt)) {
             tt_labelrow(tt)
         },
+        if(incl.cont) {tree_children(content_table(tt))},
+ 
         lapply(tree_children(tt),
                collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)

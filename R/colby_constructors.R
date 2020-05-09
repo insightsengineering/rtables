@@ -59,27 +59,35 @@ setMethod("c", "SplitVector", function(x, ...) {
 
 ## The cascading (by class) in this case is as follows for the row case:
 ## PreDataTableLayouts -> PreDataRowLayout -> SplitVector
-setGeneric("add_row_split", function(lyt = NULL, spl, pos) standardGeneric("add_row_split"))
+setGeneric("add_row_split", function(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars) standardGeneric("add_row_split"))
 
-setMethod("add_row_split", "NULL", function(lyt, spl, pos) {
+setMethod("add_row_split", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     rl = PreDataRowLayout(SplitVector(spl))
     cl = PreDataColLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
 
 setMethod("add_row_split", "PreDataRowLayout",
-          function(lyt, spl, pos) {
+          function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     stopifnot(pos >0 && pos <= length(lyt) + 1)
     tmp  = if (pos <= length(lyt)) {
-               add_row_split(lyt[[pos]], spl, pos)
+               add_row_split(lyt[[pos]], spl, pos, cmpnd_fun)
            } else {
                SplitVector(spl)
            }
     lyt[[pos]] = tmp
     lyt
 })
+is_analysis_spl = function(spl) is(spl, "AnalyzeVarSplit") || is(spl, "AnalyzeMultiVars")
+## note "pos" is ignored here because it is for which nest-chain
+## spl should be placed in, NOIT for where in that chain it should go
 setMethod("add_row_split", "SplitVector",
-          function(lyt, spl, pos) {
+          function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
+    ## if(is_analysis_spl(spl) &&
+    ##    is_analysis_spl(last_rowsplit(lyt))) {
+    ##     return(cmpnd_last_rowsplit(lyt, spl, cmpnd_fun))
+    ## }
+    
     tmp = c(unclass(lyt), spl)
     SplitVector(lst = tmp)
 })
@@ -301,7 +309,7 @@ add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL
 #' build_table(l, DM)
 #' 
 
-add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
+add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
                                baseline = baseline,
@@ -596,12 +604,22 @@ add_analyzed_vars = function(lyt,
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
+    ## analysis compounding now done in add_row_split
         pos = next_rpos(lyt, newtoplev)
         add_row_split(lyt, spl, pos)
     }
 }
 
 
+
+get_acolvar_name  <- function(lyt) {
+    clyt <- clayout(lyt)
+    stopifnot(length(clyt) == 1L)
+    vec = clyt[[1]]
+    vcls = vapply(vec, class, "")
+    pos = max(which(vcls ==  "MultiVarSplit"))
+    paste(c("ac", spl_payload(vec[[pos]])), collapse = "_")
+}
 
 #' Generate Rows Analyzing Different Variables Across Columns
 #' 
@@ -634,16 +652,25 @@ add_analyzed_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {
     spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
-                          splfmt = fmt)
+                          defrowlab = lbl,
+                          splfmt = fmt,
+                          splname = get_acolvar_name(lyt))
     pos = next_rpos(lyt, newtoplev)
     add_row_split(lyt, spl, pos)
 
 
 }
 
-add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl, afun,
+#' Add baseline comparison analysis recipe
+#'
+#' @inheritParams lyt_args
+#' @author Gabriel Becker
+#' @export
+#' @rdname bline_analyses
+add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl = "", afun,
                                    compfun = `-`,
-                                   fmt = NULL,
+                                  fmt = NULL,
+                                  defrowlab = "Diff from Baseline",
                                   newtoplev = FALSE) {
     if(is.character(afun)) {
         afnm = afun
@@ -681,11 +708,20 @@ add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl, afun,
     }
 
     spl = AnalyzeVarSplit(var, lbl, afun = afun2,
-                          splfmt = fmt)
-    pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+                          splfmt = fmt, defrowlab = defrowlab)
+    if(!newtoplev &&
+       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
+    } else {
+        
+        pos = next_rpos(lyt, newtoplev)
+        add_row_split(lyt, spl, pos)
+    }
 }
 
+#' @export
+#' @rdname bline_analyses
 add_2dtable_blinecomp = function(lyt,
                                  var = NA_character_,
                                  lbl = var,
@@ -773,7 +809,7 @@ setMethod("add_summary", "Split",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     content_fun(lyt) = cfun
     obj_fmt(lyt) = cfmt
-    if(!identical(lblkids, label_kids(lyt)))
+    if(!is.na(lblkids) && !identical(lblkids, label_kids(lyt)))
         label_kids(lyt) = lblkids
     lyt
 })
@@ -868,10 +904,15 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 ## Currently existing tables can ONLY be added 
 ## as new entries at the top level, never at any
 ## level of nesting.
-add_existing_table = function(lyt, tab) {
+#' Add an already calculated table to the layout
+#' @inheritParams lyt_args
+#' @inheritParams gen_args
+#' @export
+#' @author Gabriel Becker
+add_existing_table = function(lyt, tt) {
 
     lyt = add_row_split(lyt,
-                        tab,
+                        tt,
                         next_rpos(lyt, TRUE))
     lyt
 }
@@ -919,6 +960,9 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
         ret = as(ret, "CumulativeCutSplit")
     ret
 })
+
+setMethod("fix_dyncuts", "VTableTree",
+          function(spl, df) spl)
 
 
 .fd_helper = function(spl, df) {

@@ -33,19 +33,19 @@ test_that("rtable design decisions", {
     rrow("A", c(104, .2), c(100, .4)),
     rrow("B", c(23, .4), c(43, .5)),
     rrow(),
-    rrow("this is a very long section header") #,
-#    rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-#    rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
-  )
+    rrow("this is a very long section header"),
+    rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+    rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
   
+  tbl
     ## see redesign/breaking_changes.md
     ## expect_identical(names(tbl), c("Treatement\nN=100", "Comparison\nN=300"))
     expect_identical(names(tbl), c("Treatement", "Comparison"))
     
     ## replace once the colspan rows are uncommented
-    ##expect_equal(dim(tbl) , c(6, 2))
-    expect_equal(dim(tbl) , c(4, 2))
-  expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header"))#, "estimate", "95% CI"))
+    expect_equal(dim(tbl) , c(6, 2))
+    ##expect_equal(dim(tbl) , c(4, 2))
+  expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header", "estimate", "95% CI"))
   
   expect_identical(as.vector(tbl[1,1]), c(104, .2))
   expect_identical(as.vector(tbl[1,2]), c(100, .4))
@@ -96,7 +96,8 @@ test_that("multi-header tables work", {
     rrowl(row.name = "row 1", 1:4),
     rrowl(row.name = "row 2", 4:1)
   )
-  
+    ## printing it works
+    t1
   expect_equal(nrow(t1), 2)
   expect_equal(ncol(t1), 4)
   expect_equal(names(t1), c("A", "A", "B", "B"))
@@ -122,4 +123,4 @@ test_that("unlisting rtables has no effect on them", {
 
 
 test_that("manually created label l rows are always visible",
-          expect_true(lblrow_visible(rrow(""))))
+          expect_true(rtables:::lblrow_visible(rrow(""))))

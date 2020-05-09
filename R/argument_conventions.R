@@ -81,7 +81,7 @@ lyt_args <- function( lyt, var, vars, lbl, vlblvar, varlbls, splfmt,
 #' @param cinfo InstantiatedColumnInfo (or NULL). Column structure for the object being created.
 #' @param lblrow LabelRow. The LabelRow object to assign to this Table. Consructed from \code{lbl} by default if not specified.
 #' @param vals list. cell values for the row
-#' @param cspan integer. Currently not internally supported. Effectively ignored.
+#' @param cspan integer. Column span. \code{1} indicates no spanning.
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, lblrow, vals, cspan) NULL
 

@@ -48,7 +48,7 @@ ContentRow(...)
 
 \item{vals}{list. cell values for the row}
 
-\item{cspan}{integer. Currently not internally supported. Effectively ignored.}
+\item{cspan}{integer. Column span. \code{1} indicates no spanning.}
 
 \item{var}{string, variable name}
 

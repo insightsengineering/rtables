@@ -882,11 +882,6 @@ setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
              col_info = "InstantiatedColumnInfo",
              format = "FormatSpec"))
 
-setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
-         representation(children = "list",
-                        rowspans = "data.frame"#,
-                        ##labelrow = "LabelRow"
-                        ))
 setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"), 
          representation(leaf_value = "ANY",
                         var_analyzed = "character",
@@ -999,6 +994,11 @@ DataRow = function(...) .tablerow(..., klass = "DataRow")
 #' @export
 ContentRow = function(...) .tablerow(..., klass = "ContentRow")
 
+setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
+         representation(children = "list",
+                        rowspans = "data.frame",
+                        labelrow = "LabelRow"
+                        ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
 #' TableTree classes
@@ -1006,10 +1006,7 @@ setClassUnion("IntegerOrNull", c("integer", "NULL"))
 #' @author Gabriel Becker
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
-         representation(var_analyzed = "character",
-                        labelrow = "LabelRow"),
-         
-                        ##var_label = "character"),
+         representation(var_analyzed = "character"),
          validity = function(object) {
     kids = tree_children(object)
     all(sapply(kids,
@@ -1104,9 +1101,7 @@ ElementaryTable = function(kids = list(),
 #' @rdname tabclasses
 #' @exportClass TableTree
 setClass("TableTree", contains = c("VTableTree"),
-         representation(content = "ElementaryTable",
-                       labelrow = "LabelRow"##,
-                     ##   split = "Split"
+         representation(content = "ElementaryTable"
                         ),
          validity = function(object) {
     all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
