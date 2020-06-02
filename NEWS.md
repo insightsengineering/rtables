@@ -1,4 +1,6 @@
-## rtables 0.1.5.9000
+## rtables 0.1.6
+
+* miinor changes
 
 ## rtables 0.1.5
 
