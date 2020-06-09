@@ -525,30 +525,6 @@ add_rowby_dyncut = function(lyt, var, lbl = var,
 }
 
 
-
-add_analyzed_var = function(lyt, var, lbl = var, afun,
-                            fmt = NULL,
-                            rowlabs = "",
-                            newtoplev = FALSE,
-                            inclNAs = FALSE) {
-    spl = AnalyzeVarSplit(var, lbl,
-                          afun = afun,
-                          splfmt = fmt,
-                          defrowlab = rowlabs,
-                          inclNAs = inclNAs)
-    .Deprecated("add_analyzed_vars")
-    
-    if(!newtoplev &&
-       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
-        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
-        cmpnd_last_rowsplit(lyt, spl)
-    } else {
-        pos = next_rpos(lyt, newtoplev)
-        add_row_split(lyt, spl, pos)
-    }
-}
-
-
 #' Generate Rows Analyzing Variables Across Columns
 #' 
 #' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
@@ -560,11 +536,23 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
 #' @export
 #' @author Gabriel Becker
 #' @examples 
+#' 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
+#' 
+#' 
+#' l <- NULL %>% add_colby_varlevels("Species") %>%
+#'     add_analyzed_vars(head(names(iris), -1), afun = function(x) {
+#'        list(
+#'            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'            "range" = rcell(diff(range(x)), format = "xx.xx")
+#'        )
+#'     })
+#' l
+#' build_table(l, iris)
 #' 
 add_analyzed_vars = function(lyt,
                              var,

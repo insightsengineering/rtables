@@ -12,10 +12,23 @@ navbar:
   - icon: fa-github fa-lg
     href: https://github.com/roche/rtables
 
+
+articles:
+  - title: For Users
+    desc: Vignettes aimed at package users
+    contents:
+    - rtables
+    - tabletree_design
+    - rtabulate
+  - title: Developer
+    desc: Vignettes aimed at package developers
+    contents:
+    - devguide
+
 reference:
 
-  - title: Table Trees
-    desc: Table Trees
+  - title: Argument Conventions
+    desc: The following functions are unexported dummy functions that document argument conventions in the framework.
     contents:
     - lyt_args
     - constr_args
@@ -25,6 +38,7 @@ reference:
   - title: Layouts and Tabulation
     desc: Functions for declaring layout and tabulatioin
     contents:
+    - add_analyzed_vars
     - starts_with("add_")
     - build_table
     - manual_cols
@@ -88,6 +102,8 @@ reference:
     - tree_children
     - starts_with("dim")
     - "c,SplitVector-method"
+    - CellValue
+    - "length,CellValue-method"
 
   - title: Tabulation functions
     desc: rtabulate is a framework to derive rtables
@@ -141,7 +157,7 @@ reference:
     contents:
     - Viewer
     - compare_rtables
-    - label$$
+    - label
     - var_labels<-
     - var_labels
     - var_labels_remove

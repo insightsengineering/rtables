@@ -10,6 +10,7 @@ library(rtables)
 # - rtable.R?
 # - other files that are not needed anyomer
 
+# what dows tt_* stand for, e.g. tt_labelrow
 
 # Where are variable Names ----
 tbl <- NULL %>% 
@@ -54,6 +55,7 @@ NULL %>%
 #  All           5.84              3.76
 
 # vs.
+all arguments are used in examples.
 
 #                 Sepal.Length       Petal.Length
 #  versicolor
@@ -80,6 +82,27 @@ x <- rcell(lm(1~1))
 
 class(x)
 
+
+## rcell
+##  - show method
+##  - what is the label slot?
+rcell(5, format = "xx.xx")
+
+## strip rcells
+obj <- s_coxph(Surv(tte, resp) ~ ARM, data = ADTE_F)
+
+list(
+  a = list(
+    mod1 = rcell(...),
+    mod
+  )
+)
+
+# nested list of rcells?
+x <- lstwrapdf(table)(iris$Species) # is invisible
+
+
+x
 
 ###
 #

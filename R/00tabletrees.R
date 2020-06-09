@@ -1,6 +1,7 @@
 
 
-##Split types
+## Split types
+## -----------
 ## variable: split on distinct values of a variable
 ## all: include all observations (root 'split')
 ## rawcut: cut on static values of a variable
