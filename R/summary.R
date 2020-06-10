@@ -115,10 +115,9 @@ cat_row <- function(indent, name, label, visible, content) {
 }
 
 
-
-
-
-
+# rtables:::treestruct(tbl)
+# rtables:::make_pagdf(tbl)
+# cell_value(tbl, c("B", "Sepal.Length", "Median"), "setosa") # names, not labels
 
 # Column Structure:
 # name                label              col_count
@@ -144,3 +143,10 @@ cat_row <- function(indent, name, label, visible, content) {
 #   - 3rd. Qu.     ...             TRUE
 #   - Max.         ...             TRUE
 # 
+
+
+# SOC
+#  TERM           ARM A           ARM B
+# -------------------------------------
+# 
+
