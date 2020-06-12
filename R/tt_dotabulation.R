@@ -440,30 +440,73 @@ recursive_applysplit = function( df,
 
 
 #' Create a table from a layout and data
+#'
+#' Layouts are used to describe a table pre-data. `build_rable` is used to
+#' create a table using a layout and a dataset.
 #' 
-#' Layouts are used to describe a table pre-data. `build_rable` is used to create a table using a layout and a dataset.
 #' 
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param col_counts numeric (or NULL). If non-null, column counts which override those calculated automatically during tabulation. 
+#' @param col_counts numeric (or `NULL`). If non-null, column counts which
+#'   override those calculated automatically during tabulation.
 #'
-#' @note When overriding the collumn counts care must be taken that, e.g., length() or nrow() are not called within
-#' tabulation functions, because those will NOT give the overridden counts. Writing/using tabulation functions
-#' which accept \code{.N_col} and \code{.N_total} or do not rely on column counts at all (even implicitly) is
-#' the only way to ensure overriden counts are fully respected.
+#' @note When overriding the column counts care must be taken that, e.g.,
+#'   `length()` or `nrow()` are not called within tabulation functions, because
+#'   those will NOT give the overridden counts. Writing/using tabulation
+#'   functions which accept \code{.N_col} and \code{.N_total} or do not rely on
+#'   column counts at all (even implicitly) is the only way to ensure overriden
+#'   counts are fully respected.
+#'   
+#' @export
 #' 
 #' @author Gabriel Becker
+#' 
 #' @examples
-#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
+#' 
+#' l <- NULL %>%
+#'   add_colby_varlevels("Species") %>%
+#'   add_analyzed_vars("Sepal.Length", afun = function(x) {
+#'   list(
+#'     "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'     "range" = diff(range(x))
+#'   )
+#' })
+#' 
+#' l
+#' 
+#' build_table(l, iris)
+#' 
+#' # analyze multiple variables
+#' l <- NULL %>%
+#'   add_colby_varlevels("Species") %>%
+#'   add_analyzed_vars(c("Sepal.Length", "Petal.Width"), afun = function(x) {
+#'   list(
+#'     "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'     "range" = diff(range(x))
+#'   )
+#' })
+#' 
+#' build_table(l, iris)
+#' 
+#' # an example more relevant for clinical trials
+#' l <- NULL %>%
+#'     add_colby_varlevels("ARM") %>% 
 #'     add_analyzed_vars("AGE", afun = function(x) {
 #'       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median", "upper-hinge", "maximum"))
 #'     })
 #' 
-#' l
-#' 
 #' build_table(l, DM)
-
-#' @export
+#' 
+#' build_table(l, subset(DM, AGE > 40))
+#' 
+#' # with column counts
+#' l2 <- l %>%
+#'   add_colcounts()
+#' build_table(l2, DM)
+#' 
+#' # with manual column counts
+#' build_table(l, DM, col_counts = 1:3)
+#' 
 build_table = function(lyt, df,
                        col_counts = NULL,
                        ...) {

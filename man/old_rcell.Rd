@@ -8,7 +8,7 @@ old_rcell(x, format = NULL, colspan = 1)
 }
 \arguments{
 \item{x}{data object for the \code{rcell} object. Note that if the data
-object has attributes then it needs to be encasultated in a list as 
+object has attributes then it needs to be encasultated in a list as
 \code{rcell} adds/modifies the attributes.}
 
 \item{format}{a valid format string or a format function for

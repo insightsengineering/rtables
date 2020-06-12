@@ -107,6 +107,14 @@ sprintf_format_old <- function(fmt) {
 #' 
 #' 
 #' @export
+#' 
+#' @examples 
+#' 
+#' x <- rcell(pi, format = "xx.xx")
+#' x
+#' 
+#' format_rcell(x, output = "ascii")
+#' 
 format_rcell <- function(x, format, output = c("ascii", "html")) {
   
   

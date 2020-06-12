@@ -291,24 +291,29 @@ add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL
 
 #' Declaring a column-split with a Baseline level
 #' 
-#' Which value should be considered the baseline when performing automatic comparisons is done in the column split.
-#' Instead of doing \code{\link{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
-#' baseline")
+#' Which value should be considered the baseline when performing automatic
+#' comparisons is done in the column split. Instead of doing
+#' `add_colby_varlevels` we simply do `add_colby_varwbline`` (the last portion
+#' means "variable with baseline")
 #' 
 #' 
 #' @inheritParams lyt_args
 #' 
 #' @export
 #' @author Gabriel Becker
+#' 
 #' @examples 
 #' l <- NULL %>%
 #'   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") %>%
 #'   add_rowby_varlevels("RACE", "ethnicity") %>% 
-#'   add_analyzed_vars("AGE", afun = mean)
+#'   add_analyzed_vars("AGE", afun = function(df, .baseline_data) {
+#'      rcell(c(nrow(df), nrow(.baseline_data)), format = "xx / xx")
+#'   })
 #' 
 #' build_table(l, DM)
 #' 
-
+#' 
+#' 
 add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
 
     spl = VarLevWBaselineSplit(var = var,
@@ -330,6 +335,17 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, 
 #' @export
 #' @author Gabriel Becker 
 #' @examples 
+#' 
+#' # TODO: this needs to give a compressed output, the mean information would 
+#' #       either go into the table header or table title
+#' l <- NULL %>%
+#'   add_colby_varlevels("ARM") %>%
+#'   add_rowby_varlevels("RACE") %>%
+#'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+#'  
+#' build_table(l, DM)
+#' 
+#' 
 #' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 #'   add_colby_varlevels("SEX", "Gender") %>%
 #'   add_summary_count(lbl_fstr = "Overall (N)") %>%
@@ -338,7 +354,7 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, 
 #'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
 #' l
 #' 
-#'  build_table(l, DM)
+#' build_table(l, DM)
 #' 
 add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
     spl = VarLevelSplit(var = var,
@@ -847,6 +863,7 @@ setMethod("add_summary", "Split",
 #' 
 #' @export
 #' @author Gabriel Becker
+#' 
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_rowby_varlevels("RACE") %>% 
@@ -854,7 +871,11 @@ setMethod("add_summary", "Split",
 #'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
-#' build_table(l, DM)
+#' tbl <- build_table(l, DM)
+#' 
+#' tbl
+#' 
+#' summary(tbl) # summary count is a content table
 #' 
 add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)" ){
 
@@ -869,11 +890,21 @@ add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)
 
 #' Add the column population counts to the header
 #' 
+#' Add the data derived column counts.
+#' 
+#' @details It is often the case that the the column counts derived from the
+#'   input data to `build_table` is not representative of the population counts.
+#'   For example, if events are counted in the table and the header should
+#'   display the number of subjects and not the total number of events. In that
+#'   case use the `col_count` argument in `build_table` to control the counts
+#'   displayed in the table header.
 #' 
 #' @inheritParams lyt_args
 #' 
 #' @export
+#' 
 #' @author Gabriel Becker
+#' 
 #' @examples 
 #' l <- NULL %>% add_colby_varlevels("ARM") %>% 
 #'     add_colcounts() %>% 
@@ -897,6 +928,22 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 #' @inheritParams gen_args
 #' @export
 #' @author Gabriel Becker
+#' 
+#' @examples 
+#' tbl1 <- NULL %>%
+#'    add_colby_varlevels("ARM") %>%
+#'    add_analyzed_vars("AGE", afun = mean, fmt = "xx.xx") %>%
+#'    build_table(DM)
+#' 
+#' tbl1
+#' 
+#' tbl2 <- NULL %>% add_colby_varlevels("ARM") %>%
+#'    add_analyzed_vars("AGE", afun = sd, fmt = "xx.xx") %>%
+#'    add_existing_table(tbl1) %>%
+#'    build_table(DM)
+#' 
+#' summary(tbl2)
+#' 
 add_existing_table = function(lyt, tt) {
 
     lyt = add_row_split(lyt,
@@ -998,19 +1045,23 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #' in the column splace. If more than one set of levels is given, the values of the second are nested within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via \code{list(...)}.
 #' @author Gabriel Becker
+#' 
+#' @export
+#' 
 #' @examples
 #' # simple one level column space
 #' rows = lapply(1:5, function(i) {
 #'    DataRow(rep(i, times  = 3))})
 #' tab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
-#'
+#' tab
+#' 
 #' # manually declared nesting
 #' tab2 = TableTree(kids = list(DataRow(as.list(1:4))),
 #'                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
 #'                                      Gender = c("M", "F")))
-#' @export
+#'                                      
+#' tab2
 #' 
-
 manual_cols = function(..., .lst = list(...)) {
     if(is.null(names(.lst)))
         names(.lst) = paste("colsplit", seq_along(.lst))

@@ -29,8 +29,8 @@ can use \code{\link{by_all}} to have a column with all rows, alternatively look 
 \item{...}{arguments passed to \code{FUN}}
 
 \item{useNA}{either one of ("no", "ifany", "always"). If \code{"no"} then \code{NA} values
-in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is 
-included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"} 
+in \code{x} get dropped. When \code{"ifany"} is used a row for \code{NA} values is
+included in the summary if any \code{NA}s exist in \code{x}. For option \code{"always"}
 \code{NA} values are always included in the summary even if none exist in \code{x}.}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}

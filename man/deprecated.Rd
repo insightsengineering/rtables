@@ -54,7 +54,6 @@ by_compare_subset(
 
 \item{sep}{separator of new labels
 
-
 TODO: make hierarchical headers}
 }
 \value{
@@ -65,9 +64,9 @@ matrix of size length(x) times nlevels(x)
 factor
 }
 \description{
-Each column corresponds to a factor level and each row is TRUE for all indexes 
+Each column corresponds to a factor level and each row is TRUE for all indexes
 where factor equals this factor level
 
-This is the opposite of the function \code{\link{col_by_to_matrix}}. 
+This is the opposite of the function \code{\link{col_by_to_matrix}}.
 Only works when columns of matrix are disjoint.
 }

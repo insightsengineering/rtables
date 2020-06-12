@@ -31,7 +31,7 @@ Rtable objects can be currently exported to text with
 future we would plan to add the \code{as_latex} and \code{as_gridGrob}
 outputting function.
 
-Note that the formats propagate to the \code{\link{old_rrow}} and 
+Note that the formats propagate to the \code{\link{old_rrow}} and
 \code{\link{rcell}} if these do not specify their own format.
 }
 \examples{

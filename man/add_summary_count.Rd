@@ -28,7 +28,11 @@ l <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 
-build_table(l, DM)
+tbl <- build_table(l, DM)
+
+tbl
+
+summary(tbl) # summary count is a content table
 
 }
 \author{

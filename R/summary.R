@@ -2,6 +2,7 @@
 
 setGeneric("summary", function(object,...) standardGeneric("summary"))
 ## preserve S3 behavior
+#' @export
 setMethod("summary", "ANY", base:::summary)
 
 

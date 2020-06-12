@@ -4,7 +4,7 @@
 \alias{summary,TableTree-method}
 \title{Show Row and Column summary of a TableTree}
 \usage{
-\S4method{summary}{TableTree}(object, indent = 0, ...)
+\S4method{summary}{TableTree}(object, depth = 0, indent = 0, row_type = "", ...)
 }
 \arguments{
 \item{object}{an object of class \code{TableTree} which is usually created with \code{\url{build_table}}}
@@ -13,12 +13,17 @@
 Show Row and Column summary of a TableTree
 }
 \examples{
+library(dplyr)
 
-l <- NULL \%>\% add_colby_varlevels("Species") \%>\% 
+l <- NULL \%>\% 
+    add_colby_varlevels("Species") \%>\%
+    add_rowby_varlevels("RND") \%>\%
     add_analyzed_vars(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 
-tbl <- build_table(l, iris)
+iris2 <- iris \%>\% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))
+
+tbl <- build_table(l, iris2)
 tbl
 
 summary(tbl)

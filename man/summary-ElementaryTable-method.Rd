@@ -4,7 +4,7 @@
 \alias{summary,ElementaryTable-method}
 \title{Summary method for elementary table}
 \usage{
-\S4method{summary}{ElementaryTable}(object, indent = 0, ...)
+\S4method{summary}{ElementaryTable}(object, depth = 0, indent = 0, row_type)
 }
 \description{
 Summary method for elementary table

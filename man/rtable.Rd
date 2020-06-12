@@ -22,27 +22,19 @@ Create a Table
 }
 \examples{
 
-mtbl <- rtable(
-    header = rheader(
-        rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
-                rcell("Petal.Length", colspan=2)),
-        rrow(NULL, "mean", "median", "mean", "median")
-    ),
-    rrow(
-        row.name = "All Species",
-        mean(iris$Sepal.Length), median(iris$Sepal.Length),
-        mean(iris$Petal.Length), median(iris$Petal.Length),
-        format = "xx.xx"
-    )
+rtable(
+  header = LETTERS[1:3],
+  rrow("one to three", 1, 2, 3),
+  rrow("more stuff", rcell(pi, format = "xx.xx"), "test", "and more")
 )
-
-mtbl
 
 
 # Table with multirow header
+sel <- iris$Species == "setosa"
 mtbl <- rtable(
   header = rheader(
-    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
+         rcell("Petal.Length", colspan=2)),
     rrow(NULL, "mean", "median", "mean", "median")
   ),
   rrow(
@@ -50,6 +42,11 @@ mtbl <- rtable(
     mean(iris$Sepal.Length), median(iris$Sepal.Length),
     mean(iris$Petal.Length), median(iris$Petal.Length),
     format = "xx.xx"
+  ),
+  rrow(
+    row.name = "Setosa",
+    mean(iris$Sepal.Length[sel]), median(iris$Sepal.Length[sel]),
+    mean(iris$Petal.Length[sel]), median(iris$Petal.Length[sel])
   )
 )
 
@@ -69,17 +66,20 @@ tbl <- rtable(
   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
   rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
-# TODO: fix
 # TODO: coerce c(...) to rheader
 tbl
 
 row.names(tbl) # TODO # row.lables
 names(tbl)
-# 
-# 
-# # Subsetting
+
+
+# Subsetting
+tbl[1, ]
+tbl[, 1] # TODO: this seems wrong
+
 tbl[1,2]
 tbl[2, 1]
+
 # # TODO access to the cell
 # tbl[[2, 1]] # cell ?
 # tbl[[c("All Species"), 1]]

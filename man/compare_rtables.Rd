@@ -16,7 +16,7 @@ compare_rtables(object, expected, tol = 0.1, comp.attr = TRUE)
 \item{comp.attr}{boolean compare attributes}
 }
 \description{
-Prints a matrix where \code{.} means cell matches, \code{X} means cell does 
+Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 should not be there.
 }
