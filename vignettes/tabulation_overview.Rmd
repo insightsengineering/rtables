@@ -1,0 +1,66 @@
+---
+title: "Tabulation Overview"
+author: "Adrian Waddell"
+date: "6/12/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{TableTree Design}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+There are a number of ways tabulating data
+
+* layout based tabulation as defined in `rtables`
+* use the `rtabulate` framework
+* use use other means like `dplyr` to derive the numbers for a table
+
+```{r}
+D <- data.frame(
+  x = rnorm(100),
+  cb = factor(sample(c("A", "B", "C"), 100, replace = TRUE), levels = c("A", "B", "C"))
+) 
+```
+
+## Layout Based Tabulation
+
+```
+             A         B         C
+--------------------------------------
+r1        foo(x1A)  foo(x1B)  foo(x1C)
+r2        foo(x2A)  foo(x2B)  foo(x2C)
+r3        foo(x3A)  foo(x3B)  foo(32C)
+```
+
+
+```{r}
+foo <- function(x) {mean(x, na.rm = TRUE)}
+
+# NULL %>%
+#   add_
+
+```
+             A         B         C
+--------------------------------------
+r1        foo(x1A)  foo(x1B)  foo(x1C)
+r2        bar(x2A)  bar(x2B)  bar(x2C)
+r3        zoo(x3A)  zpo(x3B)  zoo(32C)
+```
+
+```
+             A         B         C
+--------------------------------------
+r1        foo(x1A)  bar(x1B)  bar(x1C)
+r2        foo(x2A)  bar(x2B)  bar(x2C)
+r3        foo(x3A)  bar(x3B)  bar(32C)
+```
+
+
+
+

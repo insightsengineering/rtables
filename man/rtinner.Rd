@@ -36,6 +36,11 @@ This function has the following behavior given particular types of inputs:
 
 All other classes of input currently lead to an error.
 }
+\examples{
+rtab_inner(1:3)
+rtab_inner(iris$Species)
+rtab_inner(iris$Species == "setosa")
+}
 \author{
 Gabriel Becker and Adrian Waddell
 }

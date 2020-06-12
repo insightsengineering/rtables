@@ -41,6 +41,7 @@ reference:
     - build_table
     - add_analyzed_vars
     - add_colby_varlevels
+    - add_col_total
     - add_colcounts
     - add_summary_count
     - add_rowby_varlevels

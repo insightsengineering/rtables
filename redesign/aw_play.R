@@ -2,13 +2,6 @@
 library(dplyr)
 library(rtables)
 
-# Automation ----
-# let's go over comments
-
-# prune files ----
-# - delete rtabulate.R?
-# - rtable.R?
-# - other files that are not needed anyomer
 
 # what dows tt_* stand for, e.g. tt_labelrow
 
@@ -19,6 +12,8 @@ tbl <- NULL %>%
   build_table(iris)
 
 tbl  
+
+summary(tbl) # why is row_type missing
 
 iris2 <- iris %>%
   group_by(Species) %>%

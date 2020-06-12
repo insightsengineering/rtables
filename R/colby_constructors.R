@@ -761,8 +761,12 @@ add_2dtable_blinecomp = function(lyt,
 }
 
 
-## Add a total column at the next **top level** spot in
-## the column layout. 
+#' Add a total column at the next **top level** spot in
+#' the column layout. 
+#' 
+#' @export
+#' 
+#' 
 add_col_total = function(lyt, lbl) {
     spl = AllSplit(lbl)
     add_col_split(lyt,
