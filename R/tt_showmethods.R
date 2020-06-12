@@ -70,19 +70,6 @@ ploads_to_str = function(x, collapse = ":") {
     }
 }
     
-## setMethod("show", "TableTree",
-##           function(object) {
-##     cat("\nA TableTree object\n")
-##     docat(object)
-    
-## })
-
-## setMethod("show", "ElementaryTable",
-##           function(object) {
-##     cat("\nAn ElementaryTableTree object\n")
-##     docat(object)
-    
-## })
 
 setMethod("show", "VTableTree",
           function(object) print(to_s3compat(object)))
@@ -269,15 +256,5 @@ setMethod("show", "InstantiatedColumnInfo",
         "",
         sep = "\n")
     
-    ## tmpdf = data.frame(col_layout = layoutmsg,
-    ##            count = col_counts(object),
-    ##            expr = vapply(col_exprs(object),
-    ##                          as.character,
-    ##                          ""),
-               
-    ##            col_args = I(cextra_args(object)),
-    ##            stringsAsFactors = FALSE)
-    ## row.names(tmpdf) = NULL
-    ## print(tmpdf)
     invisible(object)
 })

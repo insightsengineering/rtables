@@ -379,12 +379,6 @@ subsets_from_factory = function(df, fact) {
 }
 
 
-## make_blinecomp_extargs = function(spl, df) {
-##     incall = blsplit_incall(spl)
-##     var = blsplit_var(spl)
-##     blvalue = blsplit_baseline(spl)
-## }
-
 make_splvalue_vec = function(vals, extrs = list(list())) {
     if(is(extrs, "AsIs"))
         extrs = unclass(extrs)
@@ -459,21 +453,6 @@ reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
         .apply_split_inner(spl, df2, vals = neworder, lbls = newlbls)
     }
 }
-
-## not called from anywhere???
-## .raw_to_splvals = function(partinfo, extrs) {
-##     if(are(partinfo$rawvalues, "SplitValue")) {
-##         if(any(sapply(extrs, length) > 0))
-##             warning(" values are already SplitValues but extrs contained non-empty arguments. please contact the maintainer")
-##         partinfo$values = partinfo$rawvalues
-        
-##         return(partinfo)
-##     }
-##     partinfo$values = make_splvalue_vec(partinfo$rawvalues,
-##                                         extrs)
-##     partinfo
-
-## }
 
 droplevsinner = function(innervar) {
   myfun = function(df, spl, vals = NULL, lbls = NULL) {

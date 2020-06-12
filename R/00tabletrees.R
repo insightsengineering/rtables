@@ -28,18 +28,10 @@ setClass("TreePos", representation(splits = "list",
                                    sval_labels = "character",
                                    subset = "SubsetDef"),
          validity = function(object) {
-    length(unique(length(object@splits),
-                  length(object@s_values),
-                  length(object@sval_labels))) == 1L
+    nspl = length(object@splits)
+    length(object@s_values) == nspl && length(object@sval_labels) == nspl
 })
 
-
-## we may come back to needing this but I don't think we do right now.
-
-## setClass("TableRowPos",
-##          representation(parent_pos = "TableTreePos",
-##                         is_content = "logical",
-##                         local_rownum = "numeric"))
 
 
 setClassUnion("functionOrNULL", c("NULL", "function"))
@@ -58,14 +50,6 @@ setClass("SplitValue",
 SplitValue = function(val, extr =list()) {
     if(is(val, "SplitValue"))
         stop("SplitValue  object passed to SplitValue constructor")
-    ## data.frame roundtrip has been abandoned
-    ## ## this might happen if its coming out of the
-    ## ## data.frame form.
-    ## if(is(extr, "AsIs"))
-    ##     extr = unclass(extr)
-    ## if(is(val, "AsIs"))
-    ##     val = unclass(val)
-
     if(!is(extr, "list"))
         extr <- list(extr)
         
@@ -130,18 +114,17 @@ VarLevelSplit = function(var,
         extra_args = extrargs
         )
 }
-setClass("NULLSplit", contains = "Split",
-         validity = function(object) {
-length(object@payload) == 0 && length(object@split_label) == 0})
- 
+setClass("NULLSplit", contains = "Split")
+
 NULLSplit = function(...) {
     ## only(!!) valid instantiation of NULLSplit class
     new("NULLSplit", payload = character(), split_label = character(), content_fun = NULL, content_format= NULL, split_format = NULL, name  = "")
 }
 
-setClass("AllSplit", contains = "Split",
-         validity = function(object) length(object@payload) == 0
-         )
+setClass("AllSplit", contains = "Split")
+## ,
+##          validity = function(object) length(object@payload) == 0
+##          )
 
 AllSplit = function(splbl = "", cfun = NULL, cfmt = NULL, splfmt = NULL, splname = if(!missing(splbl) && nzchar(splbl)) splbl else "all obs", extrargs = list(), ...) {
     new("AllSplit", split_label = splbl,
@@ -643,22 +626,6 @@ setClass("CompSubsetVectors",
 }
 
 
-
-### XXX I think this was out of datte and wrong so
-### I commented it out
-        
-## Split = function(var, type, lbl, cfun = NULL,  cfmt = NULL, splfmt = NULL, extra = NULL) {
-##     switch(type,
-##            varlevels = VarLevelSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            multivar = MultiVarSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            null = NULLSplit(),
-##            all = AllSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            staticcut = VarStaticCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            dyncut = VarDynCutSplit(var, lbl, extra, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            root = RootSplit(splbl = lbl, cfun = cfun, cfmt = cfmt, splfmt = splfmt),
-##            stop("Don't know how to make a split of type ", type)
-##            )
-## }
 
 
 ###
