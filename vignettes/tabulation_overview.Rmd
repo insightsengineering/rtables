@@ -5,8 +5,10 @@ date: "6/12/2020"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{TableTree Design}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -22,9 +24,11 @@ There are a number of ways tabulating data
 * use use other means like `dplyr` to derive the numbers for a table
 
 ```{r}
+library(dplyr)
 D <- data.frame(
   x = rnorm(100),
-  cb = factor(sample(c("A", "B", "C"), 100, replace = TRUE), levels = c("A", "B", "C"))
+  cb = factor(sample(c("A", "B", "C"), 100, replace = TRUE), levels = c("A", "B", "C")),
+  rb = factor(sample(c("r1", "r2", "r3"), 100, replace = TRUE), levels = c("r1", "r2", "r3"))
 ) 
 ```
 
@@ -38,12 +42,15 @@ r2        foo(x2A)  foo(x2B)  foo(x2C)
 r3        foo(x3A)  foo(x3B)  foo(32C)
 ```
 
-
 ```{r}
 foo <- function(x) {mean(x, na.rm = TRUE)}
+bar <- function(x) sd(x)
+zoo <- function(x) diff(range(x))
 
-# NULL %>%
-#   add_
+#NULL %>%
+#  add_colby_varlevels("cb") %>%
+#  add_analyzed_vars("x", afun = foo) %>%
+#  build_table(D)
 
 ```
              A         B         C
@@ -53,12 +60,17 @@ r2        bar(x2A)  bar(x2B)  bar(x2C)
 r3        zoo(x3A)  zpo(x3B)  zoo(32C)
 ```
 
+
+```r
+
+```
+
 ```
              A         B         C
 --------------------------------------
-r1        foo(x1A)  bar(x1B)  bar(x1C)
-r2        foo(x2A)  bar(x2B)  bar(x2C)
-r3        foo(x3A)  bar(x3B)  bar(32C)
+r1        foo(x1A)  bar(x1B)  zoo(x1C)
+r2        foo(x2A)  bar(x2B)  zoo(x2C)
+r3        foo(x3A)  bar(x3B)  zoo(32C)
 ```
 
 
