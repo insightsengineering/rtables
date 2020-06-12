@@ -61,46 +61,6 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 
 
 
-## not worth the S4 dispatch to do it "right"... probably
-## n_leaves = function(tree) {
-##     kids = layout_children(tree)
-##     length(unlist(lapply(kids, function(x) if(is(x, "VLeaf")) TRUE else n_leaves(x))))
-## }
-
-
-## setGeneric("pos_payloads", function(obj) standardGeneric("pos_payloads"))
-## setMethod("pos_payloads", "TreePos",
-##           function(obj) {
-##     spls = pos_splits(obj)
-##     lapply(spls, function(x) x@payload)
-## })
-
-## setMethod("pos_payloads", "VNodeInfo",
-##           function(obj) pos_payloads(tree_pos(obj)))
-
-## setMethod("pos_payloads", "VLayoutNode",
-##           function(obj) pos_payloads(tree_pos(obj)))
-
-
-
-
-## setGeneric("rs_values", function(obj) standardGeneric("rs_values"))
-
-## setMethod("rs_values", "VTableNodeInfo",
-##           function(obj) tree_pos(obj)@s_values)
-
-## setGeneric("rs_var_lbls", function(obj) standardGeneric("rs_var_lbls"))
- 
-## setMethod("rs_var_lbls", "VTableNodeInfo",
-##           function(obj) {
-##     spls = pos_splits(obj)
-## })
-## setGeneric("rs_value_lbls", function(obj) standardGeneric("rs_value_lbls"))
-
-## setMethod("rs_value_lbls", "VTableNodeInfo",
-##           function(obj) tree_pos(obj)@sval_labels)
-
-
 setGeneric("content_table", function(obj) standardGeneric("content_table"))
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
@@ -127,7 +87,6 @@ setMethod("next_rpos", "PreDataRowLayout",
     l
 })
 
-## setMethod("next_rpos", "PreDataColLayout", function(obj, newtree) stop("can't get next row position from a column layout object"))
 
 setMethod("next_rpos", "ANY", function(obj, newtree) 1L)
 
@@ -168,10 +127,6 @@ setMethod("last_rowsplit", "PreDataRowLayout",
 
 setMethod("last_rowsplit", "PreDataTableLayouts",
           function(obj) last_rowsplit(rlayout(obj)))
-
-
-## setMethod("next_cpos", "PreDataRowLayout", function(obj, newtree) stop("can't get next column position from a row layout object"))
-
 
 
 
@@ -696,15 +651,6 @@ setMethod("value_fmts", "VTableTree",
     mat
 })
 
-## setGeneric("current_spl", function(obj) standardGeneric("current_spl"))
-## setMethod("current_spl", "VTableTree", function(obj) obj@split)
-
-
-## setGeneric("current_spl<-", function(obj, value) standardGeneric("current_spl<-"))
-## setMethod("current_spl<-", "VTableTree", function(obj, value)  {
-##     obj@split = value
-##     obj
-## })
 
 ### Collect all leaves of a current tree
 ### This is a workhorse function in various
@@ -847,16 +793,6 @@ setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
 
 
-
-
-## setGeneric("splv_rawvalues", function(obj) standardGeneric("splv_rawvalues"))
-## setMethod("splv_rawvalues", "SplitValue",
-##           function(obj) rawvalue(obj))
-## setMethod("splv_rawvalues", "list",
-##           function(obj) lapply(obj, splv_rawvalues))
-## setMethod("rawvalues", "TreePos",
-##           function(obj) rawvalues(pos_splvals(obj)))
-          
 
 ## These two are similar enough we could probably combine
 ## them but conceptually they are pretty different

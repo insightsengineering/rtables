@@ -1,21 +1,4 @@
 
-
-
-## pos_from_values = function(vals, tab) {
-##     splvec = list()
-##     curtree = tab
-##     for(v in vals) {
-##         if(is.factor(v)) v = levels(v)[v]
-##         kids = tree_children(curtree)
-##         stopifnot(v %in% names(kids))
-##         splvec = c(splvec, list(current_spl(curtree)))
-##         curtree = kids[[v]]
-##     }
-    
-
-
-## }
-
 do_recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL,
                                 cols = NULL, value) {
     ## don't want this in the recursive function
@@ -67,7 +50,13 @@ recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols 
         ## expression
         ## for now only the last step supports selecting
         ## multiple kids
-        stopifnot(length(kidel) == 1)
+        stopifnot(length(kidel) == 1,
+                  is.character(kidel) || is.factor(kidel))
+        knms = names(tree_children(tab))
+        if(!(kidel %in% knms))
+            stop(sprintf("position element %s not in names of next level children", kidel))
+        else if (sum(kidel == knms) > 1)
+            stop(sprintf("position element %s appears more than once, not currently supported", kidel))
         if(is.factor(kidel)) kidel = levels(kidel)[kidel]
         newkid = recursive_replace(
             tree_children(tab)[[kidel]],
@@ -96,7 +85,7 @@ setMethod("replace_rows", c(value = "list"),
         i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
     }
 
-    if(lblrow_visible(x) && 1 %in% i && !are(value, "TableRow"))
+    if(lblrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
         stop("attempted to assign values into a LabelRow")
     
     if(length(value) != length(i))
@@ -130,120 +119,6 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 
 
 
-
-
-
-## This is currently NOT the fully general method for TableTree objects
-## it will not handle tree structure and ignores content rows entirely!!!
-##
-## But it works for ElementaryTables and TableTrees which have a content (to
-## be ignored) and only TableRows as children.
-## setMethod("[<-", "VTableTree",
-##           function(x, i, j, ...,  value) {
-##     stopifnot(are(tree_children(x), "TableRow"))
-##     if(is.null(j)) {
-##         replace_rows(x, i, value)
-    
-##     } else { ## replacing only elements within certain rows
-##         if(is.null(i)) ## all of them
-##             i = seq_along(tree_children(x))
-
-##         if(is.null(dim(value)))
-##             value = matrix(value, nrow = length(i), ncol = length(j))
-        
-##         rws = tree_children(x)
-##         modrws = lapply(seq_along(i),
-##                      function(pos) {
-##             r = rws[[ i[pos] ]]
-##             rvals = row_values(r)
-##             rvals[j] =  value[pos,] #whole row of value matrix
-##             row_values(r) = rvals
-##             r
-##         })
-##         rws[i] = modrws
-##         tree_children(x) = rws
-##     }
-##     x
-## })
-
-
-    
-    
-
-## setMethod("[<-", c("VTableTree", j = "missing", value = "list"),
-##           function(x, i, j, ...,  value) {
-
-
-##     nr = nrow(x)
-##     i = .j_to_posj(i, nr)
-##     nc = ncol(x)
-##     if(are(value, "TableRow"))
-##         value = rep(value, length.out = length(i))
-##     else
-        
-##     counter = 0
-##     vrow = 1
-
-##     ## this has access to value, i, and j by scoping
-##     replace_rowsbynum = function(x) {
-##         maxi = max(i)
-##         if(counter >= maxi)
-##             return(valifnone)
-        
-##         if(lblrow_visible(x)) {
-##             counter <<- counter + 1
-##             if(counter %in% i) {
-##                 nxtval = value[[1]]
-##                 if(is(nxtval, "character") &&
-##                    length(nxtval) == 1L) {
-##                     obj_label(x) = nxtval
-##                 } else if(is(nxtrow, "LabelRow")) {
-##                     tt_labelrow(x) = nxtval
-##                 } else {
-##                     stop("can't replace label with value of class", class(nxtval))
-##                 }
-##                 ## we're done with this one move to
-##                 ## the next
-##                 value <<- value[-1]
-##             }
-##         }
-##         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
-##             ctab = content_table(x)
-            
-##             content_table(x) = replace_rowsbynum(ctab, i)
-##         }
-##         if(counter >= maxi) { #already done
-##             return(x)
-##         }
-##         kids = tree_children(x)
-        
-##         if(length(kids) > 0) {
-##             for(pos in seq_along(kids)) {
-##                 curkid = kids[[pos]]
-##                 if(is(curkid, "TableRow")) {
-##                     counter <<- counter + 1
-##                     if(!(counter %in% i)) {
-##                         nxtval = value[[1]]
-##                         if(is(nxtval, class(curkid))) {
-##                             curkid = nxtval
-##                         } else {
-##                             row_values(curkid) = rep(value[[vrow]], length.out = ncol(x))
-##                         }
-##                         vrow <<- vrow + 1
-##                         kids[[pos]] = curkid
-##                     }
-##                 } else {
-##                     kids[[pos]] = replace_rowsbynum(curkid)
-##                 }
-##                 if(counter >= maxi)
-##                     break
-##             }
-##         }
-##         tree_children(x) = kids
-##         x
-##     }
-##     replace_rowsbynum(tt, i)
-## })
 
 
 

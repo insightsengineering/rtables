@@ -4,24 +4,24 @@ library(tern)
 options(error=recover)
 
 
-
+races = c("Caucasian" = "WHITE", "African American" = "BLACK", "Latino" = "LATINO", "Eastern Asian" = "EASTASIAN", "Southern Asian" = "SOUTHASIAN", "Indian" = "INDIAN")
 makefakedat = function(n  = 1000) {
     datadf = data.frame(stringsAsFactors = FALSE,
                         ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),
-                        SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
+                        SEX = c("M", sample(c("M", "F", "U"), n - 1, replace = TRUE, prob = c(.495, .495, .01))),
                         FACTOR2 = c("A", sample(c("A", "B", "C"), n - 1, replace = TRUE)),
-                        RACE = c("WHITE", sample(c("WHITE", "BLACK"), n - 1, replace = TRUE)),
+                        RACE = c("WHITE", sample(races, n - 1, replace = TRUE)),
                         AGE = runif(n, 40, 70),
                         VAR3 = c("level1", sample(c("level1", "level2"), n -1,
                                                   replace = TRUE)))
                         
-    datadf$ethn_lbl = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
+    datadf$ethn_lbl = names(races)[match(datadf$RACE, races)]
     datadf$fac2_lbl = paste("Level", datadf$FACTOR2)
-    datadf$gend_lbl = c(M="Male", F="Female")[datadf$SEX]
+    datadf$gend_lbl = c(M="Male", F="Female", U="Undetermined")[datadf$SEX]
     datadf
 }
 
-
+bigdat = makefakedat(10000)
 
 makefakedat2 =  function(n  = 1000) {
     if(n%%4 != 0) {
@@ -105,8 +105,13 @@ lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
 
 tab = build_table(lyt, rawdat)
 
+bigtab = build_table(lyt, bigdat)
+bigae
 
+library(random.cdisc.data)
 
+bigadsl = radsl(N=5000, study_duration = 4)
+bigadae = radae(bigadsl,lookup = aelookup, max_n_aes=  20L)
 ## generate a little table that we want to add onto another table
 ## that we're going to build
 thing2 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%

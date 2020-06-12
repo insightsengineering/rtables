@@ -83,13 +83,6 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 #' @export
 #' 
 rcell = function(x, format = NULL, colspan = 1L, lbl = NULL) {
-    ## ## if(!is.atomic(x) && length(x) > 1)
-    ## ##      x = list(x)
-    ## if(!is.null(format))
-    ##     attr(x, "format") = format
-    ## if(!is.null(colspan))
-    ##     attr(x, "colspan") = colspan
-    ## x
     if(is(x, "CellValue"))
         x
     else
@@ -171,13 +164,6 @@ hrows_to_colinfo = function(rows) {
     ## based on the columns we actually want.
 
  
-    ## fullbusiness = unqvals[[1]]
-    ## for(i in 2:nr) {
-    ##     nvi = length(unqvals[[i]])
-    ##     nfb = length(fullbusiness)
-    ##     fullbusiness = paste(rep(fullbusiness, length.out = nvi*nfb),
-    ##                          rep(unqvals[[i]], times = rep(nfb, nvi)))
-    ## }
     fullcolinfo = manual_cols(.lst = unqvals)
     fullbusiness = names(collect_leaves(coltree(fullcolinfo)))
     wanted = paste_em_n(repvals, nr)
@@ -380,10 +366,6 @@ rtable = function(header, ..., format = NULL) {
         body = lapply(body, function(tb) tree_children(tb)[[1]])
     }
         
-    ## lapply(body, function(x)
-    ##     if(any(row_cspans(x) > 1))
-    ##         stop("colspans in TableTree bodies are currently not supported.")
-    ##     )
     TableTree(kids = body, fmt = format, cinfo = colinfo,
               lblrow = LabelRow(lev = 0L, lbl = "", vis = FALSE))
 }
@@ -478,28 +460,6 @@ header_add_N = function(x, N) {
 #' @rdname header_compat
 header <- function(x) col_info(obj = x)
 
-
-
-## XXX this is named this only for testing
-## replace with better name once all ttestts are passing
-
-## setGeneric("col_by_to_matrix", def = col_by_to_matrix)
-
-## #' @exportMethod col_by_to_matrix
-## setMethod("col_by_to_matrix", "PreDataTableLayouts",
-##           function(col_by, x = NULL) col_by)
-
-## #' @exportMethod col_by_to_matrix
-## setMethod("col_by_to_matrix",
-##           "character",
-##           function(col_by, x = NULL) {
-
-##     ret = NULL
-##     for(col in col_by) {
-##         ret <- ret %>% add_colby_varlevels(col)
-##     }
-##     ret
-## })
 
 
 
@@ -791,53 +751,42 @@ insert_rrow <- function(tbl, rrow, at = 1,
     } else { #have >0 kids
         kidnrs <- sapply(kids, nrow)
         cumpos <- pos + cumsum(kidnrs)
-        ## if (atend) {
-        ##     if(are(kids, "TableRow")) {
-        ##         kids = c(kids, list(row))
-        ##     } else { #not all table rows
-        ##         kids[[numkids]] <- recurse_insert(kids[[numkids]], row = row, pos = at - 1,  at = at, ascontent = ascontent)
-        ##     } # end are(kids, "TableRow")
-        ## } else { # not at end
             
             
-            ## data rows go in the end of the
-            ## preceding subtable (if applicable)
-            ## label rows go in the beginning of
-            ##  one at at
-            ind <- min(which((cumpos + !islab) >= at),
-                       numkids )
-            thekid  = kids[[ind]]
+        ## data rows go in the end of the
+        ## preceding subtable (if applicable)
+        ## label rows go in the beginning of
+        ##  one at at
+        ind <- min(which((cumpos + !islab) >= at),
+                   numkids )
+        thekid  = kids[[ind]]
+        
+        if(is(thekid, "TableRow")) {
+            tt_level(row) = tt_level(thekid)
+            if(ind == 1) {
+                bef = integer()
+                aft = 1:numkids
+            } else if(ind == numkids) {
+                bef = 1:(ind -1)
+                aft = ind
+            } else {
+                bef = 1:ind
+                aft = (ind + 1):numkids
+            }
+            kids <- c(kids[bef], list(row),
+                      kids[aft])
+        } else { # kid is not a table row
+            newpos <- if(ind==1)
+                          pos + contnr
+                      else 
+                          cumpos[ind - 1]
             
-            if(is(thekid, "TableRow")) {
-                tt_level(row) = tt_level(thekid)
-                if(ind == 1) {
-                    bef = integer()
-                    aft = 1:numkids
-                    ## } else if(atend ) {
-                    ##     bef = 1:numkids
-                    ##     aft = integer()
-                } else if(ind == numkids) {
-                    bef = 1:(ind -1)
-                    aft = ind
-                } else {
-                    bef = 1:ind
-                    aft = (ind + 1):numkids
-                }
-                kids <- c(kids[bef], list(row),
-                          kids[aft])
-            } else { # kid is not a table row
-                newpos <- if(ind==1)
-                              pos + contnr
-                          else 
-                              cumpos[ind - 1]
-                
-                kids[[ind]] <- recurse_insert(thekid,
-                                              row,
-                                              at,
-                                              pos = newpos,
-                                              ascontent = ascontent)
-            } # end kid is not table row
-  ##      } # end not at the end
+            kids[[ind]] <- recurse_insert(thekid,
+                                          row,
+                                          at,
+                                          pos = newpos,
+                                          ascontent = ascontent)
+        } # end kid is not table row
     }
     tree_children(tt) <- kids
     tt

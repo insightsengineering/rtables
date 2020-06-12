@@ -3,7 +3,7 @@
 
 ## e.g.
 ##
-## add_colby_total() %>%>
+## add_colby_tota() %>%>
 ##   add_colby("colname") %>%
 ##   add_colby_cumulcuts("colname", cuts) %>%
 ##   add_colby_collapse_levs("colname",
@@ -774,6 +774,8 @@ add_col_total = function(lyt, lbl) {
                   next_cpos(lyt, TRUE))
 }
 
+#' @rdname add_summary
+#' @export
 setGeneric("add_summary",
            function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric("add_summary"))
 setMethod("add_summary", "PreDataTableLayouts",
@@ -949,7 +951,6 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 #' summary(tbl2)
 #' 
 add_existing_table = function(lyt, tt) {
-
     lyt = add_row_split(lyt,
                         tt,
                         next_rpos(lyt, TRUE))
