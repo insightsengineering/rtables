@@ -422,6 +422,8 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
          labels = lbls)
 }
 
+#' @rdname split_funcs
+#' @export
 excl_levs_sfun = function(excl) {
     function(df, spl, vals = NULL, lbls = NULL) {
         var = spl_payload(spl)
@@ -431,7 +433,8 @@ excl_levs_sfun = function(excl) {
     }
 }
 
-
+#' @rdname split_funcs
+#' @export
 only_levs_sfun = function(only) {
     function(df, spl, vals = NULL, lbls = NULL) {
         var = spl_payload(spl)
@@ -441,6 +444,8 @@ only_levs_sfun = function(only) {
     }
 }
 
+#' @rdname split_funcs
+#' @export
 reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     function(df, spl,  ...) {
         df2 = df
@@ -454,6 +459,8 @@ reord_levs_sfun = function(neworder, newlbls = neworder, drlevels = TRUE) {
     }
 }
 
+#' @rdname split_funcs
+#' @export 
 droplevsinner = function(innervar) {
   myfun = function(df, spl, vals = NULL, lbls = NULL) {
     ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls)
