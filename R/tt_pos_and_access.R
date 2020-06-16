@@ -564,7 +564,6 @@ setMethod("[[", c("VTableTree", "list", "ANY"),
         subtree = subset_cols(subtree, j)
     if(is(subtree, "TableRow"))
         subtree = TableTree(list(subtree), cinfo = col_info(subtree))
-    browser()
     subtree
     
 
