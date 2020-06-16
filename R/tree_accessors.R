@@ -667,7 +667,7 @@ setMethod("value_fmts", "VTableTree",
 #' @rdname collect_leaves
 #' @export
 setGeneric("collect_leaves",
-           function(tt, incl.cont = TRUE, add.labrows = FALSE)
+           function(tt, incl.cont = TRUE, add.labrows = FALSE, incl.invis = FALSE)
     standardGeneric("collect_leaves"), signature = "tt")
 
 #' @rdname collect_leaves
@@ -676,7 +676,7 @@ setGeneric("collect_leaves",
 setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
-        if(add.labrows && lblrow_visible(tt)) {
+        if(add.labrows &&(incl.invis|| lblrow_visible(tt))) {
             tt_labelrow(tt)
         },
         if(incl.cont) {tree_children(content_table(tt))},
