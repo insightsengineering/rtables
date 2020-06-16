@@ -1059,6 +1059,8 @@ lstwrapx = function(f) {
         },
         v = vs,
         nm = names(vs))
+        ret
+        
     }
 }
 
@@ -1072,6 +1074,7 @@ lstwrapdf = function(f) {
         },
         v = vs,
         nm = names(vs))
+        ret
     }
 }
 
