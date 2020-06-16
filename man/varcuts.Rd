@@ -104,6 +104,13 @@ Create columns (or row splits) based on values (such as quartiles) of \code{var}
 For dynamic cuts, the cut is transformed into a static cut by
 \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
 }
+\examples{
+l <- NULL \%>\%
+add_colby_staticcut("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) \%>\%
+add_analyzed_vars("RACE", lbl ="", defrowlab="count", afun = length)
+
+build_table(l, DM)
+}
 \author{
 Gabriel Becker
 }
