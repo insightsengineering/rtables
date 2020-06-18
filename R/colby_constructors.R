@@ -48,7 +48,7 @@ setMethod("c", "SplitVector", function(x, ...) {
     SplitVector(lst = tmp)
 })
 
-## add_row_split and add_col_split are "recursive method stacks" which follow
+## split_rows and split_cols are "recursive method stacks" which follow
 ## the general pattern of accept object -> call add_*_split on slot of object ->
 ## update object with value returned from slot method, return object.
 ##
@@ -59,19 +59,19 @@ setMethod("c", "SplitVector", function(x, ...) {
 
 ## The cascading (by class) in this case is as follows for the row case:
 ## PreDataTableLayouts -> PreDataRowLayout -> SplitVector
-setGeneric("add_row_split", function(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars) standardGeneric("add_row_split"))
+setGeneric("split_rows", function(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
 
-setMethod("add_row_split", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
+setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     rl = PreDataRowLayout(SplitVector(spl))
     cl = PreDataColLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
 
-setMethod("add_row_split", "PreDataRowLayout",
+setMethod("split_rows", "PreDataRowLayout",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     stopifnot(pos >0 && pos <= length(lyt) + 1)
     tmp  = if (pos <= length(lyt)) {
-               add_row_split(lyt[[pos]], spl, pos, cmpnd_fun)
+               split_rows(lyt[[pos]], spl, pos, cmpnd_fun)
            } else {
                SplitVector(spl)
            }
@@ -81,7 +81,7 @@ setMethod("add_row_split", "PreDataRowLayout",
 is_analysis_spl = function(spl) is(spl, "AnalyzeVarSplit") || is(spl, "AnalyzeMultiVars")
 ## note "pos" is ignored here because it is for which nest-chain
 ## spl should be placed in, NOIT for where in that chain it should go
-setMethod("add_row_split", "SplitVector",
+setMethod("split_rows", "SplitVector",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     ## if(is_analysis_spl(spl) &&
     ##    is_analysis_spl(last_rowsplit(lyt))) {
@@ -93,15 +93,15 @@ setMethod("add_row_split", "SplitVector",
 })
     
 
-setMethod("add_row_split", "PreDataTableLayouts",
+setMethod("split_rows", "PreDataTableLayouts",
           function(lyt, spl, pos){
     rlyt = lyt@row_layout
-    rlyt = add_row_split(rlyt, spl, pos)
+    rlyt = split_rows(rlyt, spl, pos)
     lyt@row_layout = rlyt
     lyt
 })
 
-setMethod("add_row_split", "ANY",
+setMethod("split_rows", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a row split to that (", class(lyt), "). contact the maintaner.")
           )
 
@@ -148,19 +148,19 @@ setMethod("cmpnd_last_rowsplit", "ANY",
 
 
 
-setGeneric("add_col_split", function(lyt = NULL, spl, pos) standardGeneric("add_col_split"))
+setGeneric("split_cols", function(lyt = NULL, spl, pos) standardGeneric("split_cols"))
 
-setMethod("add_col_split", "NULL", function(lyt, spl, pos) {
+setMethod("split_cols", "NULL", function(lyt, spl, pos) {
     cl = PreDataColLayout(SplitVector(spl))
     rl = PreDataRowLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
 
-setMethod("add_col_split", "PreDataColLayout",
+setMethod("split_cols", "PreDataColLayout",
           function(lyt, spl, pos) {
     stopifnot(pos > 0 && pos <= length(lyt) + 1)
     tmp  = if (pos <= length(lyt)) {
-               add_col_split(lyt[[pos]], spl, pos)
+               split_cols(lyt[[pos]], spl, pos)
            } else {
                SplitVector(spl)
            }
@@ -169,21 +169,21 @@ setMethod("add_col_split", "PreDataColLayout",
     lyt
 })
 
-setMethod("add_col_split", "SplitVector",
+setMethod("split_cols", "SplitVector",
           function(lyt, spl, pos) {
     tmp = c(lyt, spl)
     SplitVector(lst = tmp)
 })
 
-setMethod("add_col_split", "PreDataTableLayouts",
+setMethod("split_cols", "PreDataTableLayouts",
           function(lyt, spl, pos){
     rlyt = lyt@col_layout
-    rlyt = add_col_split(rlyt, spl, pos)
+    rlyt = split_cols(rlyt, spl, pos)
     lyt@col_layout = rlyt
     lyt
 })
 
-setMethod("add_col_split", "ANY",
+setMethod("split_cols", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a col split to that (", class(lyt), "). contact the maintaner.")
           )
 
@@ -236,17 +236,17 @@ setMethod("cmpnd_last_colsplit", "ANY",
 
 # TODO: consider to remove
 add_new_rowtree = function(lyt, spl) {
-    add_row_split(lyt, spl, next_rpos(lyt, TRUE))
+    split_rows(lyt, spl, next_rpos(lyt, TRUE))
 }
 
 # TODO: consider to remove
 add_new_coltree = function(lyt, spl) {
-    add_col_split(lyt, spl, next_cpos(lyt, TRUE))
+    split_cols(lyt, spl, next_cpos(lyt, TRUE))
 }
 
 
 ## Pipe-able functions to add the various types of splits to the current layout for both
-## row and column.  These all act as wrappers to the add_col_split and add_row_split
+## row and column.  These all act as wrappers to the split_cols and split_rows
 ## method stacks.
 
 
@@ -255,75 +255,49 @@ add_new_coltree = function(lyt, spl) {
 #' Will generate children for each subset of a categorical variable
 #' 
 #' @inheritParams lyt_args
+#'
+#' @param baseline character(1) or NULL. Level of \code{var} which should be considered baseline/reference
+#' @param incl_all logical(1). Should a column representing all observations at this level of nesting be added. defaults to \code{FALSE}
 #' 
 #' @export
 #'
 #' @author Gabriel Becker
 #' @examples 
-#' l <- NULL %>% add_colby_varlevels("ARM") 
+#' l <- NULL %>% split_cols_by("ARM") 
 #' l
 #' 
 #' # add an analysis (summary)
 #' l2 <- l %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+#'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l2
 #' 
 #' build_table(l2, DM)
 #' 
 #' # By default sequentially adding layouts results in nesting
-#' l3 <- NULL %>% add_colby_varlevels("ARM") %>%
-#'   add_colby_varlevels("SEX") %>%
-#'   add_analyzed_vars("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
+#' l3 <- NULL %>% split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   analyze("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 #' l3
 #' 
 #'  build_table(l3, DM)
 
 
-add_colby_varlevels = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE, lblkids = FALSE,
-                               extrargs = list()) {
-    spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = lblkids,
-                        extrargs = extrargs)
+split_cols_by = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE, lblkids = FALSE,
+                         extrargs = list(), baseline = NULL, incl_all = FALSE) {
+    if(is.null(baseline)) {
+        spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = lblkids,
+                            extrargs = extrargs)
+    } else {
+        spl = VarLevWBaselineSplit(var = var,
+                                   baseline = baseline,
+                                   incl_all = incl_all,
+                                   splbl = lbl,
+                                   vlblvar = vlblvar,
+                                   splfmt = splfmt)
+        
+    }
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
-}
-
-
-
-#' Declaring a column-split with a Baseline level
-#' 
-#' Which value should be considered the baseline when performing automatic
-#' comparisons is done in the column split. Instead of doing
-#' `add_colby_varlevels` we simply do `add_colby_varwbline`` (the last portion
-#' means "variable with baseline")
-#' 
-#' 
-#' @inheritParams lyt_args
-#' 
-#' @export
-#' @author Gabriel Becker
-#' 
-#' @examples 
-#' l <- NULL %>%
-#'   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") %>%
-#'   add_rowby_varlevels("RACE", "ethnicity") %>% 
-#'   add_analyzed_vars("AGE", afun = function(df, .baseline_data) {
-#'      rcell(c(nrow(df), nrow(.baseline_data)), format = "xx / xx")
-#'   })
-#' 
-#' build_table(l, DM)
-#' 
-#' 
-#' 
-add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE) {
-
-    spl = VarLevWBaselineSplit(var = var,
-                               baseline = baseline,
-                               incl_all = incl_all,
-                               splbl = lbl,
-                               vlblvar = vlblvar,
-                               splfmt = splfmt)
-    pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
 
@@ -339,24 +313,24 @@ add_colby_varwbline = function(lyt, var, baseline, incl_all = FALSE, lbl = var, 
 #' # TODO: this needs to give a compressed output, the mean information would 
 #' #       either go into the table header or table title
 #' l <- NULL %>%
-#'   add_colby_varlevels("ARM") %>%
-#'   add_rowby_varlevels("RACE") %>%
-#'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("RACE") %>%
+#'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 #'  
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-#'   add_colby_varlevels("SEX", "Gender") %>%
-#'   add_summary_count(lbl_fstr = "Overall (N)") %>%
-#'   add_rowby_varlevels("RACE", "Ethnicity") %>%
-#'   add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
-#'   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#'   split_cols_by("SEX", "Gender") %>%
+#'   summarise_row_groups_count(lbl_fstr = "Overall (N)") %>%
+#'   split_rows_by("RACE", "Ethnicity") %>%
+#'   summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+#'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
 #' 
-add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
+split_rows_by = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
                         vlblvar = vlblvar,
@@ -364,7 +338,7 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
                         splfmt = fmt,
                         lblkids = lblkids)
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
 }
 
 
@@ -373,19 +347,19 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #' 
 #' In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
 #' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
-#' \code{add_colby_multivar}
+#' \code{split_cols_by_multivar}
 #' 
 #' @inheritParams lyt_args
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{add_analyzed_colvars}}
+#' @seealso \code{\link{analyze_colvars}}
 #' @author Gabriel Becker 
 #' @examples 
-#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   add_rowby_varlevels("RACE", "ethnicity") %>%
-#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   split_rows_by("RACE", "ethnicity") %>%
+#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
@@ -395,11 +369,11 @@ add_rowby_varlevels = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NU
 #'  build_table(l, ANL)
 #'   
 #'  
-add_colby_multivar = function(lyt, vars, lbl, varlbls = vars,
+split_cols_by_multivar = function(lyt, vars, lbl, varlbls = vars,
                               newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
 
@@ -411,7 +385,7 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
                         splfmt = splfmt,
                         lblkids = lblkids)
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
 }
 
 #' Split on static or dynamic cuts of the data
@@ -433,12 +407,12 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
 #' @author Gabriel Becker
 #' @examples
 #' l <- NULL %>%
-#' add_colby_staticcut("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) %>%
-#' add_analyzed_vars("RACE", lbl ="", defrowlab="count", afun = length)
+#' split_cols_by_cuts("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) %>%
+#' analyze("RACE", lbl ="", defrowlab="count", afun = length)
 #'
 #' build_table(l, DM)
 
-add_colby_staticcut = function(lyt, var, lbl, cuts,
+split_cols_by_cuts = function(lyt, var, lbl, cuts,
                             cutlbls = NULL,
                             newtoplev = FALSE,
                             cumulative = FALSE) {
@@ -446,12 +420,12 @@ add_colby_staticcut = function(lyt, var, lbl, cuts,
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
 #' @export
 #' @rdname varcuts
-add_rowby_staticcut = function(lyt, var, lbl, cuts,
+split_rows_by_dyncut = function(lyt, var, lbl, cuts,
                                cutlbls = NULL,
                                splfmt = NULL,
                                newtoplev = FALSE,
@@ -464,12 +438,12 @@ add_rowby_staticcut = function(lyt, var, lbl, cuts,
         spl = as(spl, "CumulativeCutSplit")
 
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
 }
 
 #' @export
 #' @rdname varcuts
-add_colby_dyncut = function(lyt, var, lbl = var,
+split_cols_by_cutfun = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
                             cutlblfun = function(x) NULL,
                             splfmt = NULL,
@@ -483,12 +457,12 @@ add_colby_dyncut = function(lyt, var, lbl = var,
                          extrargs = extrargs,
                          cumulative = cumulative)
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
 #' @export
 #' @rdname varcuts
-add_colby_qrtiles = function(lyt, var, lbl = var,
+split_cols_by_quartiles = function(lyt, var, lbl = var,
                              splfmt = NULL,
                              newtoplev = FALSE,
                              extrargs = list()) {
@@ -500,7 +474,7 @@ add_colby_qrtiles = function(lyt, var, lbl = var,
                          splfmt = splfmt,
                          extrargs = extrargs)
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
 #' @export
@@ -518,7 +492,7 @@ add_colby_cmlqrtiles = function(lyt, var, lbl = var,
                          cumulative = TRUE,
                          extrargs = extrargs)
     pos = next_cpos(lyt, newtoplev)
-    add_col_split(lyt, spl, pos)
+    split_cols(lyt, spl, pos)
 }
 
     
@@ -544,14 +518,14 @@ add_rowby_dyncut = function(lyt, var, lbl = var,
                          lblkids = lblkids,
                          cumulative = cumulative)
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
 }
 
 
 #' Generate Rows Analyzing Variables Across Columns
 #' 
 #' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
-#' calls to \code{add_analyzed_vars} and/or \code{\link{add_analyzed_colvars}} into our layout pipeline. As with
+#' calls to \code{analyze} and/or \code{\link{analyze_colvars}} into our layout pipeline. As with
 #' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
 #' @inheritParams lyt_args
@@ -560,15 +534,15 @@ add_rowby_dyncut = function(lyt, var, lbl = var,
 #' @author Gabriel Becker
 #' @examples 
 #' 
-#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+#' l <- NULL %>% split_cols_by("ARM") %>% 
+#'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- NULL %>% add_colby_varlevels("Species") %>%
-#'     add_analyzed_vars(head(names(iris), -1), afun = function(x) {
+#' l <- NULL %>% split_cols_by("Species") %>%
+#'     analyze(head(names(iris), -1), afun = function(x) {
 #'        list(
 #'            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
 #'            "range" = rcell(diff(range(x)), format = "xx.xx")
@@ -577,7 +551,7 @@ add_rowby_dyncut = function(lyt, var, lbl = var,
 #' l
 #' build_table(l, iris)
 #' 
-add_analyzed_vars = function(lyt,
+analyze = function(lyt,
                              var,
                              lbl = var,
                              afun,
@@ -615,9 +589,9 @@ add_analyzed_vars = function(lyt,
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
-    ## analysis compounding now done in add_row_split
+    ## analysis compounding now done in split_rows
         pos = next_rpos(lyt, newtoplev)
-        add_row_split(lyt, spl, pos)
+        split_rows(lyt, spl, pos)
     }
 }
 
@@ -641,15 +615,15 @@ get_acolvar_name  <- function(lyt) {
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{add_colby_multivar}}
+#' @seealso \code{\link{split_cols_by_multivar}}
 #' 
 #' @author Gabriel Becker
 #' @examples 
 #' 
-#' l <- NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-#'   add_colby_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   add_rowby_varlevels("RACE", "ethnicity") %>%
-#'   add_analyzed_colvars("", afun = mean, fmt = "xx.xx")
+#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#'   split_rows_by("RACE", "ethnicity") %>%
+#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
@@ -659,7 +633,7 @@ get_acolvar_name  <- function(lyt) {
 #' # TODO: fix
 #' build_table(l, ANL)
 #' 
-add_analyzed_colvars = function(lyt, lbl, afun,
+analyze_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                                 newtoplev = FALSE) {
     spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
@@ -667,7 +641,7 @@ add_analyzed_colvars = function(lyt, lbl, afun,
                           splfmt = fmt,
                           splname = get_acolvar_name(lyt))
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
 
 
 }
@@ -727,7 +701,7 @@ add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl = "", afun,
     } else {
         
         pos = next_rpos(lyt, newtoplev)
-        add_row_split(lyt, spl, pos)
+        split_rows(lyt, spl, pos)
     }
 }
 
@@ -768,42 +742,39 @@ add_2dtable_blinecomp = function(lyt,
 }
 
 
-#' Add a total column at the next **top level** spot in
-#' the column layout. 
-#' 
+## Add a total column at the next **top level** spot in
+## the column layout.
 #' @export
-#' 
-#' 
-add_col_total = function(lyt, lbl) {
+add_overall_col = function(lyt, lbl) {
     spl = AllSplit(lbl)
-    add_col_split(lyt,
+    split_cols(lyt,
                   spl,
                   next_cpos(lyt, TRUE))
 }
 
-#' @rdname add_summary
+#' @rdname summarise_row_groups
 #' @export
-setGeneric("add_summary",
-           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric("add_summary"))
-setMethod("add_summary", "PreDataTableLayouts",
+setGeneric("summarise_row_groups",
+           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric("summarise_row_groups"))
+setMethod("summarise_row_groups", "PreDataTableLayouts",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
-    tmp = add_summary(rlayout(lyt), lbl, cfun,
+    tmp = summarise_row_groups(rlayout(lyt), lbl, cfun,
                       lblkids = lblkids,
                       cfmt = cfmt)
     rlayout(lyt) = tmp
     lyt
 })
 
-setMethod("add_summary", "PreDataRowLayout",
+setMethod("summarise_row_groups", "PreDataRowLayout",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         rt = root_spl(lyt)
-        rt = add_summary(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
+        rt = summarise_row_groups(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
-        tmp = add_summary(lyt[[ind]], lbl, cfun,
+        tmp = summarise_row_groups(lyt[[ind]], lbl, cfun,
                           lblkids = lblkids,
                           cfmt = cfmt)
         lyt[[ind]] = tmp
@@ -811,18 +782,18 @@ setMethod("add_summary", "PreDataRowLayout",
     lyt
 })
 
-setMethod("add_summary", "SplitVector",
+setMethod("summarise_row_groups", "SplitVector",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = add_summary(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
+    tmp = summarise_row_groups(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
     lyt[[ind]] = tmp
     lyt
 })
 
-setMethod("add_summary", "Split",
+setMethod("summarise_row_groups", "Split",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     content_fun(lyt) = cfun
     obj_fmt(lyt) = cfmt
@@ -878,10 +849,10 @@ setMethod("add_summary", "Split",
 #' @author Gabriel Becker
 #' 
 #' @examples 
-#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
-#'     add_rowby_varlevels("RACE") %>% 
-#'     add_summary_count(lbl_fstr = "%s (n)") %>% 
-#'     add_analyzed_vars("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+#' l <- NULL %>% split_cols_by("ARM") %>% 
+#'     split_rows_by("RACE") %>% 
+#'     summarise_row_groups_count(lbl_fstr = "%s (n)") %>% 
+#'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' tbl <- build_table(l, DM)
@@ -890,13 +861,13 @@ setMethod("add_summary", "Split",
 #' 
 #' summary(tbl) # summary count is a content table
 #' 
-add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)" ){
+summarise_row_groups_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)" ){
 
     if(length(gregexpr("xx", fmt)[[1]]) == 2)
         fun = .count_wpcts_constr(var, fmt, lbl_fstr)
     else
         fun = .count_raw_constr(var,fmt, lbl_fstr)
-    add_summary(lyt,# lbl = lbl,
+    summarise_row_groups(lyt,# lbl = lbl,
                 cfun = fun, cfmt = fmt)
 }
 
@@ -919,10 +890,10 @@ add_summary_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)
 #' @author Gabriel Becker
 #' 
 #' @examples 
-#' l <- NULL %>% add_colby_varlevels("ARM") %>% 
+#' l <- NULL %>% split_cols_by("ARM") %>% 
 #'     add_colcounts() %>% 
-#'     add_rowby_varlevels("RACE") %>% 
-#'     add_analyzed_vars("AGE", afun = function(x) list(min = min(x), max = max(x)))
+#'     split_rows_by("RACE") %>% 
+#'     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
 #' l
 #' 
 #' build_table(l, DM)
@@ -944,21 +915,21 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 #' 
 #' @examples 
 #' tbl1 <- NULL %>%
-#'    add_colby_varlevels("ARM") %>%
-#'    add_analyzed_vars("AGE", afun = mean, fmt = "xx.xx") %>%
+#'    split_cols_by("ARM") %>%
+#'    analyze("AGE", afun = mean, fmt = "xx.xx") %>%
 #'    build_table(DM)
 #' 
 #' tbl1
 #' 
-#' tbl2 <- NULL %>% add_colby_varlevels("ARM") %>%
-#'    add_analyzed_vars("AGE", afun = sd, fmt = "xx.xx") %>%
+#' tbl2 <- NULL %>% split_cols_by("ARM") %>%
+#'    analyze("AGE", afun = sd, fmt = "xx.xx") %>%
 #'    add_existing_table(tbl1) %>%
 #'    build_table(DM)
 #' 
 #' summary(tbl2)
 #' 
 add_existing_table = function(lyt, tt) {
-    lyt = add_row_split(lyt,
+    lyt = split_rows(lyt,
                         tt,
                         next_rpos(lyt, TRUE))
     lyt
@@ -1091,7 +1062,7 @@ manual_cols = function(..., .lst = list(...)) {
 #'
 #' @details \code{lstwrapx} generates a wrapper which takes \code{x} as its first argument, while \code{lstwrapdf} generates an otherwise identical wrapper function whose first argument is named \code{df}.
 #'
-#' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{add_analyzed_vars}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
+#' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
 #' 
 #' @rdname lstwrap
 #' @author Gabriel Becker

@@ -89,8 +89,8 @@ All examples will use the following column structure layout unless specified oth
 ```
 ## we can re-use this over and over to
 ## generate a bunch of layouts. Pretty nice right?
-collyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-       add_colby_varlevels("SEX", "Gender")
+collyt = NULL %>% split_cols_by("ARM", "Arm") %>%
+       split_cols_by("SEX", "Gender")
 ```
 
 ## Standard Tabulation
@@ -109,7 +109,7 @@ One single valued row (mean)
 
 ```
 layout = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx")
 ```
 
@@ -118,7 +118,7 @@ One multi-valued row (mean and sd)
 
 ```
 layout2 = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = function(x) c(mean = mean(x), sd = sd(x)), fmt = "xx.xx (xx.xx)")
 ```
 
@@ -126,7 +126,7 @@ Two rows (mean and median)
 
 ```
 layout2 = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = function(x) list(mean = mean(x), median = median(x)), fmt = "xx.xx")
 
 ```
@@ -139,7 +139,7 @@ Example (this is VERY silly since the mean will be NA if any NA are in the data)
 
 ```
 layout = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx", inclNAs = TRUE)
 ```
 
@@ -154,7 +154,7 @@ by the current row. (silly but illustrates using `.N_col`)
 
 ```
 layout2 = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = function(x, .N_col) list(prop = length(x) / .N_col), fmt = "xx.xx")
 ```
 
@@ -163,17 +163,17 @@ Columnwise proportion of total dataset (even sillier since we are ignoring the d
 
 ```
 layout2 = collyt %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
        add_analyzed_var("AGE", "Age", afun = function(x, .N_col, .N_total) list("column prop" = .N_col/.N_total), fmt = "xx.xx")
 ```
 
 ## Comparisons against "control" or "baseline" group (column)
 
-We can declare one of the columns in our table layout the "baseline" or "control" column, by using `add_colby_varwbline()` instead of `add_colby_varlevels()`. Once this is done, we can declare comparisons against that group as part of the layout.
+We can declare one of the columns in our table layout the "baseline" or "control" column, by using `split_cols_by()` instead of `split_cols_by()`. Once this is done, we can declare comparisons against that group as part of the layout.
 
 Setup
 ```
-collyt2 = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
+collyt2 = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
 
 ```
 
@@ -242,21 +242,21 @@ NB: This could occur when doing pairwise tests in certain data, though care woul
 
 ## Content Row tabulation
 
-Content rows are generally declared analogously to non-comparison data rows, except that `add_summary` or, often, the helper `add_summary_count()` instead of e.g., `add_analyzed_var()`.
+Content rows are generally declared analogously to non-comparison data rows, except that `summarise_row_groups` or, often, the helper `summarise_row_groups_count()` instead of e.g., `add_analyzed_var()`.
 
 The label is specified slightly differently: as a sprintf style format, where the single `%s` will be replaced with the current level at that split.
 
-`add_summary_counts` adds observation counts and percent of column count in the form  `"xx (xx%)"`.
+`summarise_row_groups` adds observation counts and percent of column count in the form  `"xx (xx%)"`.
 
 ```
 layout = collyt2 %>%
-       add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-       add_summary_count("RACE", lblfmt = "%s (n)")
+       split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
+       summarise_row_groups_count("RACE", lblfmt = "%s (n)")
 ```
 
-The more general `add_summary()` allows us to specify a custom content function (the `cfun` argument) which can generate any desired content row(s) in the same way a tabulation function would generate data rows.
+The more general `summarise_row_groups()` allows us to specify a custom content function (the `cfun` argument) which can generate any desired content row(s) in the same way a tabulation function would generate data rows.
 
-NOTE: `add_summary_counts()` is implemented as a custom content function passed to `add_summary()`.
+NOTE: `summarise_row_groups()` is implemented as a custom content function passed to `summarise_row_groups()`.
 
 ## Column Counts
 

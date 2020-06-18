@@ -49,12 +49,12 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
     ## sadly takes different argument signature...
     ## TODO fix this?
     if(identical(cbyclass, "total"))
-       return(add_col_total(lyt, lbl = var))
+       return(add_overall_col(lyt, lbl = var))
 
     addfun = switch(cbyclass,
-                    quartcut_df = add_colby_qrtiles,
+                    quartcut_df = split_cols_by_quartiles,
                     cmlquartcut_df = add_colby_cmlqrtiles,
-                    add_colby_varlevels)
+                    split_cols_by)
     lyt <- addfun(lyt, var = var,
                   newtoplev = newtoplev,
                   extrargs = extrargs)
@@ -313,7 +313,7 @@ rtabulate <- function(x,
 
     if(is(col_by, "Split")) {
         ## we're done already
-        lyt <- add_col_split(lyt, col_by, next_cpos(lyt, FALSE))
+        lyt <- split_cols(lyt, col_by, next_cpos(lyt, FALSE))
         if(length(col_wise_args) > 0) {
             ##awww, darn :-/
             clyt <- clayout(lyt)
@@ -358,7 +358,7 @@ rtabulate <- function(x,
     } 
     
     if(is(row_by, "Split")) {
-        lyt <- add_row_split(lyt, row_by, next_rpos(lyt, FALSE))
+        lyt <- split_rows(lyt, row_by, next_rpos(lyt, FALSE))
     } else if(!is.null(row_by)) {
         rdf <- as.data.frame(row_by,
                              stringsAsFactors = FALSE)
@@ -366,7 +366,7 @@ rtabulate <- function(x,
                        rdf)
 
         for(rspl in names(rdf)) {
-            lyt <- add_rowby_varlevels(lyt,
+            lyt <- split_rows_by(lyt,
                                        rspl,
                                        lbl ="",
                                        lblkids = FALSE)
@@ -377,7 +377,7 @@ rtabulate <- function(x,
     if(nchar(lbls) == 0 && usexnms)
        lbls = xcols
        
-    lyt <- add_analyzed_vars(lyt,
+    lyt <- analyze(lyt,
                              var = xcols,
                              lbl = "",#lbls,
                              defrowlab = row.name, #lbls,# row.name,

@@ -464,8 +464,8 @@ recursive_applysplit = function( df,
 #' @examples
 #' 
 #' l <- NULL %>%
-#'   add_colby_varlevels("Species") %>%
-#'   add_analyzed_vars("Sepal.Length", afun = function(x) {
+#'   split_cols_by("Species") %>%
+#'   analyze("Sepal.Length", afun = function(x) {
 #'   list(
 #'     "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
 #'     "range" = diff(range(x))
@@ -478,8 +478,8 @@ recursive_applysplit = function( df,
 #' 
 #' # analyze multiple variables
 #' l <- NULL %>%
-#'   add_colby_varlevels("Species") %>%
-#'   add_analyzed_vars(c("Sepal.Length", "Petal.Width"), afun = function(x) {
+#'   split_cols_by("Species") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
 #'   list(
 #'     "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
 #'     "range" = diff(range(x))
@@ -490,8 +490,8 @@ recursive_applysplit = function( df,
 #' 
 #' # an example more relevant for clinical trials
 #' l <- NULL %>%
-#'     add_colby_varlevels("ARM") %>% 
-#'     add_analyzed_vars("AGE", afun = function(x) {
+#'     split_cols_by("ARM") %>% 
+#'     analyze("AGE", afun = function(x) {
 #'       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median", "upper-hinge", "maximum"))
 #'     })
 #' 

@@ -27,9 +27,9 @@ setMethod("show", "VTableTree", function(object) {
 #'   ungroup()
 #' 
 #' l <- NULL %>% 
-#'   add_colby_varlevels("Species") %>%
-#'   add_colby_varlevels("group") %>%
-#'   add_analyzed_vars(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
+#'   split_cols_by("Species") %>%
+#'   split_cols_by("group") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
 #' 
 #' l
 #' 

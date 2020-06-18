@@ -16,9 +16,9 @@ Show Row and Column summary of a TableTree
 library(dplyr)
 
 l <- NULL \%>\% 
-    add_colby_varlevels("Species") \%>\%
-    add_rowby_varlevels("RND") \%>\%
-    add_analyzed_vars(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , fmt = "xx.xx")
+    split_cols_by("Species") \%>\%
+    split_rows_by("RND") \%>\%
+    analyze(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , fmt = "xx.xx")
 l
 
 iris2 <- iris \%>\% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))

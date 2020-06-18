@@ -5,9 +5,9 @@ iter_colby = function(lyt, cbys, baselines = vector("list", length(cbys))) {
     for(i in seq_along(cbys)) {
         cb = cbys[[i]]
         if(!is.null(baselines[[i]]))
-            lyt = add_colby_varwbline(lyt, cb, lbl = cb, baseline = baselines[[i]])
+            lyt = split_cols_by(lyt, cb, lbl = cb, baseline = baselines[[i]])
         else
-            lyt = add_colby_varlevels(lyt, cb, lbl = cb)
+            lyt = split_cols_by(lyt, cb, lbl = cb)
     }
     lyt
 }
@@ -76,10 +76,10 @@ tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
                  "95% CI" = fit$conf.int)
             }, fmt = c("xx.xx", "(xx.xx, xx.xx)"), newtoplev = TRUE) %>%
         ## Response rates by type of response
-        add_rowby_varlevels("AVALC", " ",
+        split_rows_by("AVALC", " ",
                             splfun = reord_levs_sfun(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), newtoplev = TRUE) %>%
         ## counts are a summary content row
-        add_summary_count("AVALC", "%s") %>%
+        summarise_row_groups_count("AVALC", "%s") %>%
         ## CIs are an analysis row
         add_analyzed_var("AVALC", lbl = " ", afun = function(x, .N_col) {
             list("95% CI" = binom.test(length(x), .N_col)$conf.int * 100)

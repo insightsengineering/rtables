@@ -23,10 +23,10 @@ case use the \code{col_count} argument in \code{build_table} to control the coun
 displayed in the table header.
 }
 \examples{
-l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 
+l <- NULL \%>\% split_cols_by("ARM") \%>\% 
     add_colcounts() \%>\% 
-    add_rowby_varlevels("RACE") \%>\% 
-    add_analyzed_vars("AGE", afun = function(x) list(min = min(x), max = max(x)))
+    split_rows_by("RACE") \%>\% 
+    analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
 l
 
 build_table(l, DM)

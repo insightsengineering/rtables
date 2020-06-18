@@ -16,14 +16,14 @@ Add an already calculated table to the layout
 }
 \examples{
 tbl1 <- NULL \%>\%
-   add_colby_varlevels("ARM") \%>\%
-   add_analyzed_vars("AGE", afun = mean, fmt = "xx.xx") \%>\%
+   split_cols_by("ARM") \%>\%
+   analyze("AGE", afun = mean, fmt = "xx.xx") \%>\%
    build_table(DM)
 
 tbl1
 
-tbl2 <- NULL \%>\% add_colby_varlevels("ARM") \%>\%
-   add_analyzed_vars("AGE", afun = sd, fmt = "xx.xx") \%>\%
+tbl2 <- NULL \%>\% split_cols_by("ARM") \%>\%
+   analyze("AGE", afun = sd, fmt = "xx.xx") \%>\%
    add_existing_table(tbl1) \%>\%
    build_table(DM)
 

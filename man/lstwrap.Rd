@@ -18,7 +18,7 @@ Returns a function that coerces the return values of f to a list
 \details{
 \code{lstwrapx} generates a wrapper which takes \code{x} as its first argument, while \code{lstwrapdf} generates an otherwise identical wrapper function whose first argument is named \code{df}.
 
-We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{add_analyzed_vars}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
+We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
 }
 \examples{
 

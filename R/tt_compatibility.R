@@ -850,7 +850,7 @@ by_all <- function(name) {
 #' @rdname bycompats
 #' @export
 by_add_total <- function(col_by, label = "total", n = NULL) {
-    ret = add_col_total(col_by, lbl = label)
+    ret = add_overall_col(col_by, lbl = label)
     if(!is.null(ret)) {
         cc = col_counts(ret)
         cc[length(cc)] <- n

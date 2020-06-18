@@ -77,7 +77,7 @@ default, unless adding structure where nesting does not make sense
 
 So if
 
-`NULL %>% add_colby_varlevels("ARM")`
+`NULL %>% split_cols_by("ARM")`
 
 results in a table like 
 
@@ -88,7 +88,7 @@ Value  5    8
 
 Then
 
-`NULL %>% add_colby_varlevels("ARM") %>% add_colby_varlevels("SEX")`
+`NULL %>% split_cols_by("ARM") %>% split_cols_by("SEX")`
 
 would give us something like
 
@@ -104,7 +104,7 @@ syntax for building up complex table structures using basic components.
 We can always bypass the default if nesting is not what is desired, for
 example
 
-`NULL %>% add_colby_varlevels("ARM") %>% add_colby_varlevels("SEX", newtoplev = TRUE)`
+`NULL %>% split_cols_by("ARM") %>% split_cols_by("SEX", newtoplev = TRUE)`
 
 Would give us a column structure like
 
@@ -170,7 +170,7 @@ NULL %>% add_colby_blinecomp(var = "visit",
      	 	             baseline = "BASE",
 			     comparison = '-',
 			     rawvalcol = TRUE) %>%
-      add_analyzed_vars("BP", "Blood pressure)
+      analyze("BP", "Blood pressure)
 `
 
 Would give us something like
@@ -260,7 +260,7 @@ not likely to affect anything in most cases.
 # Declaring layout
 
 Table structure is declared (pre-data) via a set of sequential
-`add_colby_*`, `add_rowby_*`, `add_analyzed_var` and `add_summary_*`
+`add_colby_*`, `add_rowby_*`, `add_analyzed_var` and `summarise_row_groups_*`
 calls within a layout pipeline (which currently starts with NULL as an
 artifact).
 
@@ -271,12 +271,12 @@ definitionally.
 For example
 
 ```
-layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-       add_colby_varlevels("SEX", "Gender") %>%
-       add_summary_count(lbl = "Overall (N)") %>%
-       add_rowby_varlevels("RACE", "Ethnicity") %>%
-       add_summary_count("RACE", lblfmt = "%s (n)") %>%
-       add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+layout = NULL %>% split_cols_by("ARM", "Arm") %>%
+       split_cols_by("SEX", "Gender") %>%
+       summarise_row_groups_count(lbl = "Overall (N)") %>%
+       split_rows_by("RACE", "Ethnicity") %>%
+       summarise_row_groups_count("RACE", lblfmt = "%s (n)") %>%
+       analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 ```
 
 Will generate a layout where each arm of the trial has a column for
@@ -309,9 +309,9 @@ pipeline. As with adding further splitting, the tabulation will occur
 at the current/next level of nesting by default, so
 
 ```
-layout <- NULL %>% add_colby_varlevels("ARM", "arm") %>%
-     add_colby_varlevels("SEX", "gender") %>%
-     add_analyzed_vars("AGE", summary)
+layout <- NULL %>% split_cols_by("ARM", "arm") %>%
+     split_cols_by("SEX", "gender") %>%
+     analyze("AGE", summary)
 ``` 
 
 Will tabulate values of `AGE` after grouping/splitting by `ARM` and
@@ -370,24 +370,24 @@ naturally defined on a column, not a row basis.
 
 When we need columns to reflect _different variables entirely_, rather
 than different levels of a single variable, we use
-`add_colby_multivar`, which places a `MultiVarSplit` within the column
+`split_cols_by_multivar`, which places a `MultiVarSplit` within the column
 structure.
 
 By default, this simply makes the subset associated with each column
 the set of observations which are non-NA for that column's
 variable. In order to maake the cell contents within the column
 reflect tabulation/analysis of those variables, we need to use
-`add_analyzed_colvars` instead of `add_analyzed_var` when specifying
+`analyze_colvars` instead of `add_analyzed_var` when specifying
 the tabulation, like so.
 
 ```
-layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-       add_colby_multivar(c("value", "pctdiff")) %>%
-       add_rowby_varlevels("RACE", "ethnicity") %>%
-       add_analyzed_colvars(afun = mean)
+layout = NULL %>% split_cols_by("ARM", "Arm") %>%
+       split_cols_by_multivar(c("value", "pctdiff")) %>%
+       split_rows_by("RACE", "ethnicity") %>%
+       analyze_colvars(afun = mean)
 ```
 
-The `add_analyzed_colvars` here indicates that the variables whose data
+The `analyze_colvars` here indicates that the variables whose data
 are ultimately processed by `afun` are specified at the highest-depth
 level of nesting in the column structure, rather than at the row
 level.
@@ -422,11 +422,11 @@ the`add_colcounts()` function. The default format is `"(N=xx)"` so
 generally an empty call within the pipe workflow is sufficient.
 
 ```
-layout = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-       add_colby_multivar(c("value", "pctdiff")) %>%
+layout = NULL %>% split_cols_by("ARM", "Arm") %>%
+       split_cols_by_multivar(c("value", "pctdiff")) %>%
        add_colcounts() %>%
-       add_rowby_varlevels("RACE", "ethnicity") %>%
-       add_analyzed_colvars(afun = mean)
+       split_rows_by("RACE", "ethnicity") %>%
+       analyze_colvars(afun = mean)
 ```
 
 The call can appear anywhere in the pipeline, but is perhaps easiest
@@ -465,10 +465,10 @@ One question is how to declare/add compound splits
 ### Option 1
 
 ```
-NULL %>% add_colby_varlevels("ARM", "arm") %>%
+NULL %>% split_cols_by("ARM", "arm") %>%
      add_colby_compound(NULL %>% add_colby_all() %>%
-     add_colby_varlevels("SEX", "sex")) %>%
-     add_analyzed_vars("AGE", summary)
+     split_cols_by("SEX", "sex")) %>%
+     analyze("AGE", summary)
 ```
 
 Pros: no new syntax or grammar elements
@@ -481,9 +481,9 @@ Cons: I really hate the whole nesting pipes thing.
 ### Option 2
 
 ```
-NULL %>% add_colby_varlevels("ARM", "arm") %>%
+NULL %>% split_cols_by("ARM", "arm") %>%
      add_colby_compound(AllSplit(), VarLevelSplit("SEX", "gender")) %>%
-     add_analyzed_vars("AGE", summary)
+     analyze("AGE", summary)
 ```
 
 Pros: no nested pipes. 
@@ -504,10 +504,10 @@ replace `newtoplevel` argument with `nestlevel` which can take:
 
 
 ```
-NULL %>% add_colby_varlevels("ARM", "arm") %>%
+NULL %>% split_cols_by("ARM", "arm") %>%
      add_colby_all() %>% 
-     add_colby_varlevels("SEX", "gender", nestlevel = "current") %>%
-     add_analyzed_vars("AGE", summary)
+     split_cols_by("SEX", "gender", nestlevel = "current") %>%
+     analyze("AGE", summary)
 ```
 
 Pros: same ux/"formfeel" as the before
@@ -524,7 +524,7 @@ at the row level: each data row represents a (partial) tabulation of
 single variable within the context of the different
 columns. Sometimes, however, we want different columns to display
 values/summaries of _different variables_. We do this by declaring the
-columns via `add_colby_multivar` and then adding tabulation via
+columns via `split_cols_by_multivar` and then adding tabulation via
 `add_analyzed_colvar`.
 
 `add_analyzed_colvar` declares that a data cell's value is a
@@ -533,7 +533,7 @@ grouped according to the row and column splitting, rather than
 associating a variable with the row. Note that unlike
 `add_analyzed_var` we do not specify a variable to be analyzed here,
 only a tabulation function, as the column variable will have already
-been declared via a call to `add_colby_multivar`. tabulation should be
+been declared via a call to `split_cols_by_multivar`. tabulation should be
 done with respect to the variable/subset associated with the column,
 rather than
 
@@ -555,21 +555,21 @@ special case of non-comparison tabulation.
 
 Which value should be considered the baseline when performing
 automatic comparisons is done in the column split. Instead of doing
-`add_colby_varlevels` we simply do `add_colby_varwbline` (the last
+`split_cols_by` we simply do `split_cols_by` (the last
 portion means "variable with baseline"), like so
 
 ```
-layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
-       add_rowby_varlevels("RACE", "ethnicity") %>%
-       add_analyzed_vars("AGE", afun = mean)
+layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+       split_rows_by("RACE", "ethnicity") %>%
+       analyze("AGE", afun = mean)
 ```
 
 Note that the above layout does not actually perform any comparisons,
 because `add_analyzed_var` declares non-comparing tabulation.
 
-For non-comparing tabulations `add_colby_varwbline` and the
+For non-comparing tabulations `split_cols_by` and the
 corresponding `VarLevWBaselineSplit` split object which is added to
-the layout, behave identically to `add_colby_varlevels` and its
+the layout, behave identically to `split_cols_by` and its
 corresponding `VarLevelSplit`.
 
 NOTE: In light of the above, we can probably just always have the
@@ -590,8 +590,8 @@ We declare direct comparisons with `add_analyzed_blcomp`, which take
 to declare we want differences in means in our table we would do
 
 ```
-layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
-       add_rowby_varlevels("RACE", "ethnicity") %>%
+layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+       split_rows_by("RACE", "ethnicity") %>%
        add_analyzed_blinecomp("AGE", afun = mean)
 ```
 
@@ -607,7 +607,7 @@ done automatically and only the comparison function is specified by
 the user, like so
 
 ```
-layout = NULL %>% add_colby_varwbline("ARM", "Arm A", lbl = "Arm") %>%
+layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
        add_analyzed_blinecomp("rsp", 
        		compfun = function(tab) list("CI" = prop.test(tab)$conf.int*100))
 ```

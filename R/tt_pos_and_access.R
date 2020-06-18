@@ -334,7 +334,6 @@ setMethod("subset_cols", c("TableRow", "numeric"),
 
 setMethod("subset_cols", c("LabelRow", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
-    browser()
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)

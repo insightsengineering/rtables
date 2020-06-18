@@ -9,7 +9,7 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
                         splfmt = fmt,
                         defrowlab = rowlabs,
                         inclNAs = inclNAs)
-  .Deprecated("add_analyzed_vars")
+  .Deprecated("analyze")
   
   if(!newtoplev &&
      (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
@@ -17,7 +17,7 @@ add_analyzed_var = function(lyt, var, lbl = var, afun,
     cmpnd_last_rowsplit(lyt, spl)
   } else {
     pos = next_rpos(lyt, newtoplev)
-    add_row_split(lyt, spl, pos)
+    split_rows(lyt, spl, pos)
   }
 }
 

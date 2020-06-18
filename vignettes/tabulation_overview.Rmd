@@ -48,8 +48,8 @@ bar <- function(x) sd(x)
 zoo <- function(x) diff(range(x))
 
 #NULL %>%
-#  add_colby_varlevels("cb") %>%
-#  add_analyzed_vars("x", afun = foo) %>%
+#  split_cols_by("cb") %>%
+#  analyze("x", afun = foo) %>%
 #  build_table(D)
 
 ```
