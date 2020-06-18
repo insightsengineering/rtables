@@ -12,7 +12,15 @@ add_colcounts(lyt, fmt = "(N=xx)")
 \item{fmt}{format string for cells}
 }
 \description{
-Add the column population counts to the header
+Add the data derived column counts.
+}
+\details{
+It is often the case that the the column counts derived from the
+input data to \code{build_table} is not representative of the population counts.
+For example, if events are counted in the table and the header should
+display the number of subjects and not the total number of events. In that
+case use the \code{col_count} argument in \code{build_table} to control the counts
+displayed in the table header.
 }
 \examples{
 l <- NULL \%>\% add_colby_varlevels("ARM") \%>\% 

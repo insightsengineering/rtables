@@ -20,11 +20,15 @@ Manual column declaration
 rows = lapply(1:5, function(i) {
    DataRow(rep(i, times  = 3))})
 tab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
+tab
 
 # manually declared nesting
 tab2 = TableTree(kids = list(DataRow(as.list(1:4))),
                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
                                      Gender = c("M", "F")))
+                                     
+tab2
+
 }
 \author{
 Gabriel Becker

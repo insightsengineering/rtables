@@ -12,10 +12,23 @@ navbar:
   - icon: fa-github fa-lg
     href: https://github.com/roche/rtables
 
+
+articles:
+  - title: For Users
+    desc: Vignettes aimed at package users
+    contents:
+    - rtables
+    - tabletree_design
+    - rtabulate
+  - title: Developer
+    desc: Vignettes aimed at package developers
+    contents:
+    - devguide
+
 reference:
 
-  - title: Table Trees
-    desc: Table Trees
+  - title: Argument Conventions
+    desc: The following functions are unexported dummy functions that document argument conventions in the framework.
     contents:
     - lyt_args
     - constr_args
@@ -23,10 +36,21 @@ reference:
     - gen_args
     
   - title: Layouts and Tabulation
-    desc: Functions for declaring layout and tabulatioin
+    desc: Functions for declaring layout and tabulation
     contents:
-    - starts_with("add_")
     - build_table
+    - add_analyzed_vars
+    - add_colby_varlevels
+    - add_col_total
+    - add_colcounts
+    - add_summary_count
+    - add_rowby_varlevels
+    - add_analyzed_colvars
+    - add_colby_multivar
+    - add_colby_varwbline
+    - add_analyzed_blinecomp
+    - add_colby_staticcut 
+    - add_existing_table
     - manual_cols
     
   - title: Table Tree Untility Functions
@@ -54,6 +78,41 @@ reference:
     - format_rcell
     - list_rcell_format_labels
 
+  - title: Tabulation functions
+    desc: rtabulate is another framework to tabulate rtables
+    contents:
+    - rtabulate
+    - rtab_inner
+    - by_all
+    - by_add_total
+    - by_quartile
+
+  - title: Output Functions
+    desc: These functions create ascii or html representations of the table
+    contents:
+    - toString.rtable
+    - toString.empty_rtable
+    - as_html
+
+  - title: Utility Functions
+    desc: utility functions
+    contents:
+    - Viewer
+    - compare_rtables
+    - label
+    - var_labels<-
+    - var_labels
+    - var_labels_remove
+    - var_relabel
+    - with_label
+
+  - title: Pagination
+    desc: Pagination related functionality
+    contents:
+    - pag_tt_indices
+    - make_pagdf
+    - get_formatted_rows    
+    
   - title: Accessor and Modification Functions
     desc: Access and Modify Functions
     contents:
@@ -88,15 +147,10 @@ reference:
     - tree_children
     - starts_with("dim")
     - "c,SplitVector-method"
+    - CellValue
+    - "length,CellValue-method"
 
-  - title: Tabulation functions
-    desc: rtabulate is a framework to derive rtables
-    contents:
-    - rtabulate
-    - rtab_inner
-    - by_all
-    - by_add_total
-    - by_quartile
+
     
   - title: Legacy Tabulation Functions
     desc: legacy functions not yet compatible 
@@ -115,8 +169,6 @@ reference:
     - col_by_to_matrix
     - col_by_to_factor
 
-
-
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
     contents:
@@ -125,28 +177,9 @@ reference:
     - order_rtables
     - sort_rtables
 
-  - title: Output Functions
-    desc: These functions create ascii or html representations of the table
-    contents:
-    - toString.rtable
-    - toString.empty_rtable
-    - as_html
-
   - title: Coercion Functions
     desc: coercion functions
     contents:
-    
-  - title: Utility Functions
-    desc: utility functions
-    contents:
-    - Viewer
-    - compare_rtables
-    - label$$
-    - var_labels<-
-    - var_labels
-    - var_labels_remove
-    - var_relabel
-    - with_label
 
   - title: Unexported Functions used by Developers
     desc: internal functions
@@ -172,12 +205,6 @@ reference:
     - ends_with("Row")
     - contains("Table")
 
-  - title: Pagination
-    desc: Pagination related functionality
-    contents:
-    - pag_tt_indices
-    - make_pagdf
-    - get_formatted_rows
     
   - title: To Sort
     desc: These functions need to be moved to another section

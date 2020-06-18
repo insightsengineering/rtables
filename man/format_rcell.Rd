@@ -19,3 +19,11 @@ then the \code{format} is applied}
 Convert the contets of an \code{\link{rcell}} to a string using the
 \code{format} information
 }
+\examples{
+
+x <- rcell(pi, format = "xx.xx")
+x
+
+format_rcell(x, output = "ascii")
+
+}

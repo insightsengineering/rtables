@@ -36,6 +36,17 @@ add_rowby_varlevels(
 Add Rows according to levels of a variable
 }
 \examples{
+
+# TODO: this needs to give a compressed output, the mean information would 
+#       either go into the table header or table title
+l <- NULL \%>\%
+  add_colby_varlevels("ARM") \%>\%
+  add_rowby_varlevels("RACE") \%>\%
+  add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
+ 
+build_table(l, DM)
+
+
 l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_colby_varlevels("SEX", "Gender") \%>\%
   add_summary_count(lbl_fstr = "Overall (N)") \%>\%
@@ -44,7 +55,7 @@ l <- NULL \%>\% add_colby_varlevels("ARM", "Arm") \%>\%
   add_analyzed_vars("AGE", "Age", afun = mean, fmt = "xx.xx")
 l
 
- build_table(l, DM)
+build_table(l, DM)
 
 }
 \author{

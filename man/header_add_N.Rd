@@ -13,7 +13,7 @@ header_add_N(x, N)
 length must match the number of columns in \code{x}}
 }
 \description{
-Helper function used to add the population total (N) in the 
+Helper function used to add the population total (N) in the
 column header of \code{\link{rtable}} object.
 }
 \examples{

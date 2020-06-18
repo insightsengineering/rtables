@@ -17,7 +17,13 @@
 #' @export
 #' @rdname rtinner
 #' @author Gabriel Becker and Adrian Waddell
+#' 
+#' @examples 
+#' rtab_inner(1:3)
+#' rtab_inner(iris$Species)
+#' rtab_inner(iris$Species == "setosa")
 setGeneric("rtab_inner", function(x, ...) standardGeneric("rtab_inner"))
+
 #' @rdname rtinner
 #' @exportMethod rtab_inner
 setMethod("rtab_inner", "numeric", function(x, ...) mean(x,...))

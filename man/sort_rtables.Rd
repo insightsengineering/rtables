@@ -56,6 +56,6 @@ tbls <- list(
 
 }
 \seealso{
-\code{\link{order_rtables}}, \code{\link{sort_rrows}}, 
-  \code{\link{order_rrows}}
+\code{\link{order_rtables}}, \code{\link{sort_rrows}},
+\code{\link{order_rrows}}
 }

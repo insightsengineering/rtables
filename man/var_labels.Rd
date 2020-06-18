@@ -14,7 +14,7 @@ var_labels(x, fill = FALSE)
 }
 \value{
 a named character vector with the variable labels, the names
-  correspond to the variable names
+correspond to the variable names
 }
 \description{
 Variable labels can be stored as a \code{label} attribute for each variable.

@@ -33,17 +33,22 @@ add_colby_varwbline(
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 }
 \description{
-Which value should be considered the baseline when performing automatic comparisons is done in the column split.
-Instead of doing \code{\link{add_colby_varlevels}} we simply do add_colby_varwbline (the last portion means "variable with
-baseline")
+Which value should be considered the baseline when performing automatic
+comparisons is done in the column split. Instead of doing
+\code{add_colby_varlevels} we simply do `add_colby_varwbline`` (the last portion
+means "variable with baseline")
 }
 \examples{
 l <- NULL \%>\%
   add_colby_varwbline("ARM", "A: Drug X", lbl = "Arm") \%>\%
   add_rowby_varlevels("RACE", "ethnicity") \%>\% 
-  add_analyzed_vars("AGE", afun = mean)
+  add_analyzed_vars("AGE", afun = function(df, .baseline_data) {
+     rcell(c(nrow(df), nrow(.baseline_data)), format = "xx / xx")
+  })
 
 build_table(l, DM)
+
+
 
 }
 \author{

@@ -9,11 +9,11 @@ order_rrows(x, indices = c(1, 1), ...)
 \arguments{
 \item{x}{rtable object}
 
-\item{indices}{of column and cell within a row to access value 
+\item{indices}{of column and cell within a row to access value
 used for sorting. If the column index is 0 then the sum of the cell
-values across all columns is derived and used for sorting. 
-If \code{indices} is a function then the function argument is 
-rrow object and the user must specify how to extract the information 
+values across all columns is derived and used for sorting.
+If \code{indices} is a function then the function argument is
+rrow object and the user must specify how to extract the information
 required to sort the rows. See examples.}
 
 \item{...}{arguments passed on to \code{\link{order}}}
@@ -41,5 +41,5 @@ tbl <- rtable(
 }
 \seealso{
 \code{\link{sort_rrows}}, \code{\link{order_rtables}},
-  \code{\link{sort_rtables}}
+\code{\link{sort_rtables}}
 }

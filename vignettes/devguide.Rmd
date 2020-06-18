@@ -270,7 +270,7 @@ collyt3  = collyt2 %>% add_colcounts()
 
 # Recursively Traversing, Subsetting and Modifying Trees
 
-Walking trees trees, either to find or modify data or aspects of the tree, is typically a recursive operation.
+Walking trees, either to find or modify data or aspects of the tree, is typically a recursive operation.
 
 Always do depth-first traversal when walking or modifying a tree (typically via recursion).  This translates to 3 rules:
 
@@ -290,44 +290,46 @@ The `TableTree` and `ElementaryTable` methods simply call `square2nd` again on a
 
 ```
 setGeneric("square2nd", function(obj) standardGeneric("square2nd"))
+
 ## TableTree objects (can) have content Rows
 ## process the content, then the children by recursive call
 setMethod("square2nd", "TableTree",
-	function(obj) {
-    ct = content_table(obj)
-    if(nrow(ct))
-        content_table(obj) = square2nd(ct)
-    kids = tree_children(obj)
-    if(length(kids)) { 
-    	newkids = lapply(kids, square2nd)
-        names(newkids) = names(kids)
-        tree_children(obj) = newkids
+  function(obj) {
+    ct <- content_table(obj)
+    if (nrow(ct))
+        content_table(obj) <- square2nd(ct)
+    kids <- tree_children(obj)
+    if (length(kids)) { 
+    	newkids <- lapply(kids, square2nd)
+        names(newkids) <- names(kids)
+        tree_children(obj) <- newkids
     }
     obj
 })
+
 ## this will hit all Content tables as well
 ## as any subtrees that happen to be
 ## Elementary
 setMethod("square2nd", "ElementaryTable",
-	function(obj) {
-    kids = tree_children(obj)
-    if(length(kids)) {
-        newkids = lapply(kids, square2nd)
-        names(newkids) = names(kids)
-        tree_children(obj) = newkids
+  function(obj) {
+    kids <- tree_children(obj)
+    if (length(kids)) {
+        newkids <- lapply(kids, square2nd)
+        names(newkids) <- names(kids)
+        tree_children(obj) <- newkids
     }
     obj
 })
 ```
 
-All of the actuaal value modification occurs in the `TableRow` method, which simply replaces the 2nd elemenent of the values list with its square and returns the modified `TableRow`
+All of the actual value modification occurs in the `TableRow` method, which simply replaces the 2nd elemenent of the values list with its square and returns the modified `TableRow`
 
 ```
 setMethod("square2nd", "TableRow",
-	function(obj) {
-    vals = row_values(obj)
-    vals[[2]] = vals[[2]]^2
-    row_values(obj) = vals
+  function(obj) {
+    vals <- row_values(obj)
+    vals[[2]] <- vals[[2]]^2
+    row_values(obj) <- vals
     obj
 })
 ```
@@ -336,7 +338,6 @@ This "cascading methods" approach to recursion allows us to consolodate the actu
 The same pattern, with some additional logic, is how formats can be recursively on any node in a tree, how rows can be selected and modified more generally, and how column structure can be set or modified on an existing tree.
 
 See, e.g., the code of `subset_cols()` and `subset_by_rownum()` for this pattern being implemented in practice.
-
 
 
 # Getting the Rendering You Want

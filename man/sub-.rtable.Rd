@@ -20,7 +20,7 @@ Accessor function
 }
 \details{
 Note that if a cell spans multiple columns, e.g. the 3 columns
-  \code{j} to \code{j + 3} then the accessing then \code{x[i, j]}, \code{x[i,
+\code{j} to \code{j + 3} then the accessing then \code{x[i, j]}, \code{x[i,
   j+1]}, \code{x[i, j+2]}, \code{x[i, j+3]} return the same
-  \code{\link{rcell}} object.
+\code{\link{rcell}} object.
 }

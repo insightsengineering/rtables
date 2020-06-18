@@ -55,6 +55,6 @@ tbls <- list(
 # order_rtables(tbls, function(tbl) tbl[[1]][[2]][3] - tbl[[1]][[1]][1]  )
 }
 \seealso{
-\code{\link{sort_rtables}}, \code{\link{sort_rrows}}, 
-  \code{\link{order_rrows}}
+\code{\link{sort_rtables}}, \code{\link{sort_rrows}},
+\code{\link{order_rrows}}
 }

@@ -17,11 +17,13 @@ Imports:
   purrr
 Suggests:
   dplyr,
+  tidyr,
   testthat,
   knitr
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
@@ -37,6 +39,7 @@ Collate:
     'col_by.R'
     'colby_constructors.R'
     'compare_rtables.R'
+    'deprecated.R'
     'for_rtables.R'
     'format_rcell.R'
     'header_add_N.R'
@@ -49,6 +52,7 @@ Collate:
     'rtabulate_refactor.R'
     'sort.R'
     'split_funs.R'
+    'summary.R'
     'toString.R'
     'tree_accessors.R'
     'tt_compatibility.R'

@@ -229,6 +229,8 @@ rheader = function(..., format = "xx", .lst = NULL) {
 
 #' Create a Table
 #' 
+#' @rdname rtable
+#' 
 #' @inheritParams compat_args
 #' @param header Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.
 #' @param \dots Rows to place in the table.
@@ -239,27 +241,19 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' @family compatability
 #' @examples 
 #' 
-#' mtbl <- rtable(
-#'     header = rheader(
-#'         rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
-#'                 rcell("Petal.Length", colspan=2)),
-#'         rrow(NULL, "mean", "median", "mean", "median")
-#'     ),
-#'     rrow(
-#'         row.name = "All Species",
-#'         mean(iris$Sepal.Length), median(iris$Sepal.Length),
-#'         mean(iris$Petal.Length), median(iris$Petal.Length),
-#'         format = "xx.xx"
-#'     )
+#' rtable(
+#'   header = LETTERS[1:3],
+#'   rrow("one to three", 1, 2, 3),
+#'   rrow("more stuff", rcell(pi, format = "xx.xx"), "test", "and more")
 #' )
-#' 
-#' mtbl
 #' 
 #' 
 #' # Table with multirow header
+#' sel <- iris$Species == "setosa"
 #' mtbl <- rtable(
 #'   header = rheader(
-#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
+#'          rcell("Petal.Length", colspan=2)),
 #'     rrow(NULL, "mean", "median", "mean", "median")
 #'   ),
 #'   rrow(
@@ -267,6 +261,11 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'     mean(iris$Sepal.Length), median(iris$Sepal.Length),
 #'     mean(iris$Petal.Length), median(iris$Petal.Length),
 #'     format = "xx.xx"
+#'   ),
+#'   rrow(
+#'     row.name = "Setosa",
+#'     mean(iris$Sepal.Length[sel]), median(iris$Sepal.Length[sel]),
+#'     mean(iris$Petal.Length[sel]), median(iris$Petal.Length[sel])
 #'   )
 #' )
 #' 
@@ -286,17 +285,20 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
 #'   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 #' )
-#' # TODO: fix
 #' # TODO: coerce c(...) to rheader
 #' tbl
 #' 
 #' row.names(tbl) # TODO # row.lables
 #' names(tbl)
-#'# 
-#'# 
-#'# # Subsetting
+#'
+#'
+#' # Subsetting
+#' tbl[1, ]
+#' tbl[, 1] # TODO: this seems wrong
+#' 
 #' tbl[1,2]
 #' tbl[2, 1]
+#' 
 #'# # TODO access to the cell
 #'# tbl[[2, 1]] # cell ?
 #'# tbl[[c("All Species"), 1]]
@@ -336,7 +338,6 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'   rrow("row1", c(1,2,3,4), letters[1:10])
 #' )
 #' tbl3
-#' @rdname rtable
 rtable = function(header, ..., format = NULL) {
     if(is.character(header))
         header = .char_to_hrows(header) #list(rrowl(NULL, header))
@@ -408,8 +409,6 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     }
 
 
-    
-    
     TableTree(kids = x, cinfo = firstcols, name = "rbind_root", lbl = "")
     
 }
