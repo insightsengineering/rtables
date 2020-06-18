@@ -431,6 +431,13 @@ add_rowby_multivar = function(lyt, vars, lbl, varlbls,
 #' @export
 #' @rdname varcuts
 #' @author Gabriel Becker
+#' @examples
+#' l <- NULL %>%
+#' add_colby_staticcut("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) %>%
+#' add_analyzed_vars("RACE", lbl ="", defrowlab="count", afun = length)
+#'
+#' build_table(l, DM)
+
 add_colby_staticcut = function(lyt, var, lbl, cuts,
                             cutlbls = NULL,
                             newtoplev = FALSE,
@@ -1102,6 +1109,8 @@ lstwrapx = function(f) {
         },
         v = vs,
         nm = names(vs))
+        ret
+        
     }
 }
 
@@ -1115,6 +1124,7 @@ lstwrapdf = function(f) {
         },
         v = vs,
         nm = names(vs))
+        ret
     }
 }
 

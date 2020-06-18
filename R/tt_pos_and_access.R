@@ -247,6 +247,7 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     col_info(tt2) <- newcinfo
     content_table(tt2) <- newcont
     tree_children(tt2) <- newkids
+    tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
     tt2
 })
 
@@ -262,6 +263,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     tt2 = tt
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
+    tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
     tt2
 })
 
@@ -332,11 +334,12 @@ setMethod("subset_cols", c("TableRow", "numeric"),
 
 setMethod("subset_cols", c("LabelRow", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
+    browser()
+    j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
         newcinfo = subset_cols(cinfo, j, ...)
     }
-
     col_info(tt) = newcinfo
     tt
 })
@@ -533,6 +536,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
 
 setMethod("[[", c("VTableTree", "list", "ANY"),
           function(x, i, j, ...) {
+
     subtree = x
     nms = i
     while(length(nms) > 0 && is(subtree, "VTableTree")) {
@@ -558,6 +562,8 @@ setMethod("[[", c("VTableTree", "list", "ANY"),
     }
     if(!missing(j))
         subtree = subset_cols(subtree, j)
+    if(is(subtree, "TableRow"))
+        subtree = TableTree(list(subtree), cinfo = col_info(subtree))
     subtree
     
 
