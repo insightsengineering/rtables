@@ -539,23 +539,25 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' @author Gabriel Becker
 #' @examples 
 #' 
-#' l <- NULL %>% split_cols_by("ARM") %>% 
+#' l <- NULL %>%
+#'     split_cols_by("ARM") %>% 
 #'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- NULL %>% split_cols_by("Species") %>%
+#' l <- NULL %>% 
+#'     split_cols_by("Species") %>%
 #'     analyze(head(names(iris), -1), afun = function(x) {
-#'        list(
-#'            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-#'            "range" = rcell(diff(range(x)), format = "xx.xx")
-#'        )
+#'         list(
+#'             "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'             "range" = rcell(diff(range(x)), format = "xx.xx")
+#'         )
 #'     })
 #' l
 #' build_table(l, iris)
-#' 
+#'  
 analyze = function(lyt,
                              var,
                              lbl = var,
