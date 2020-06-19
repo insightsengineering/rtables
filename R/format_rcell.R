@@ -1,7 +1,8 @@
 
 formats_1d <- c(
   "xx", "xx.", "xx.x", "xx.xx", "xx.xxx", "xx.xxxx",
-  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9"
+  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9",
+  "x.xxxx | (<0.0001)"
 )
 
 formats_2d <- c(
@@ -138,6 +139,7 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       "xx.xxx%" = paste0(round(x * 100, 3), "%"),
       "(N=xx)" = paste0("(N=", x, ")"),
       ">999.9" = ">999.9",
+      "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
       "xx / xx" = paste(x, collapse = " / "),
       "xx. / xx." = paste(lapply(x, round, 0)),
       "xx.x / xx.x" = paste(lapply(x, round, 1)),
