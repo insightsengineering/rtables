@@ -146,7 +146,7 @@ test_that("baseline comparisons work", {
     blthing = NULL %>% split_cols_by("ARM", baseline = "ARM1") %>%
         analyze("AGE", lbl = "",## lbl = "Age v2",
                           afun = mean) %>%
-        add_analyzed_blinecomp(var = "AGE",
+        analyze_against_baseline(var = "AGE",
                                afun = mean)
     ## function(x) list(mean = mean(x)))
     

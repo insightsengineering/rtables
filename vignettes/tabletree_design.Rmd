@@ -592,7 +592,7 @@ to declare we want differences in means in our table we would do
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
        split_rows_by("RACE", "ethnicity") %>%
-       add_analyzed_blinecomp("AGE", afun = mean)
+       analyze_against_baseline("AGE", afun = mean)
 ```
 
 Everything is then done by the rtables machinery internally and we get
@@ -608,7 +608,7 @@ the user, like so
 
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
-       add_analyzed_blinecomp("rsp", 
+       analyze_against_baseline("rsp", 
        		compfun = function(tab) list("CI" = prop.test(tab)$conf.int*100))
 ```
 

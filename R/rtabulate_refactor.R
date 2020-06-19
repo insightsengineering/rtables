@@ -53,7 +53,7 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 
     addfun = switch(cbyclass,
                     quartcut_df = split_cols_by_quartiles,
-                    cmlquartcut_df = add_colby_cmlqrtiles,
+                    cmlquartcut_df = function(...) split_cols_by_quartiles(..., cumulative = TRUE), 
                     split_cols_by)
     lyt <- addfun(lyt, var = var,
                   newtoplev = newtoplev,

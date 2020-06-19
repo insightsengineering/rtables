@@ -55,11 +55,11 @@ tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
         
         ## Difference in Response Rates section
         ## I think this one should acttually e a content row?
-        add_analyzed_blinecomp(var = "rsp", lbl =" ",
+        analyze_against_baseline(var = "rsp", lbl =" ",
                                afun = function(x) c("Difference in Response Rates (%)" =  mean(x)*100), fmt = "xx.xx", newtoplev = TRUE) %>%
         
         ## (both) CIs for diff in response rates
-        add_2dtable_blinecomp(var = "rsp", lbl = " ",
+        analyze_against_baseline_2dtable(var = "rsp", lbl = " ",
                               compfun = function(tab) {
             list("95% CI for difference (Wald without continuity correction)"=
                      prop.test(tab, correct = FALSE)$conf.int*100,
@@ -68,7 +68,7 @@ tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
         }, fmt = "(xx.xx, xx.xx)", newtoplev = TRUE) %>%
         
         ## Odds ratio
-        add_2dtable_blinecomp(var = "rsp",
+        analyze_against_baseline_2dtable(var = "rsp",
                               lbl = " ",
                               compfun = function(tab) {
             fit = tern:::odds_ratio(tab)
@@ -79,7 +79,7 @@ tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
         split_rows_by("AVALC", " ",
                             splfun = reord_levs_sfun(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), newtoplev = TRUE) %>%
         ## counts are a summary content row
-        summarise_row_groups_count("AVALC", "%s") %>%
+        summarize_row_groups("AVALC", "%s") %>%
         ## CIs are an analysis row
         add_analyzed_var("AVALC", lbl = " ", afun = function(x, .N_col) {
             list("95% CI" = binom.test(length(x), .N_col)$conf.int * 100)

@@ -181,21 +181,21 @@ collyt2 = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
 
 The standard way comparison cell values are generated is by performing a tabulation for both columns, and then passing them to the comparison function (defaults to `-` for simple differencing).
 
-We do this by calling `add_analyzed_blinecomp`
+We do this by calling `analyze_against_baseline`
 
 Examples:
 
 Differences in mean from 'baseline' column
 ```
 layout = collyt2 %>%
-       add_analyzed_blinecomp("AGE", afun = mean)
+       analyze_against_baseline("AGE", afun = mean)
 ```
 
 Ratio of means to baseline mean (note I am not saying this is a sane thing to do statistically)
 
 ```
 layout = collyt2 %>%
-       add_analyzed_blinecomp("AGE", afun = mean,
+       analyze_against_baseline("AGE", afun = mean,
        compfun = function(a, b) list("ratio of means" = a/b))
 
 ```
@@ -204,7 +204,7 @@ layout = collyt2 %>%
 
 ### Comparisons based on contingency tables
 
-For convenience we provide a helper function for comparisons which based on the 2xk table of (baseline vs column) against (levels of the variable): `add_2dtable_blinecomp()`.
+For convenience we provide a helper function for comparisons which based on the 2xk table of (baseline vs column) against (levels of the variable): `analyze_against_baseline_2dtable()`.
 
 When using this, we simply pass a comparsion function which accepts the table and returns what we want.
 
@@ -212,7 +212,7 @@ NB: We do NOT specify an analysis function here, as our comparison function does
 
 ```
 layout = collyt2 %>%
-       add_2dtable_blinecomp(var = "AGE",
+       analyze_against_baseline_2dtable(var = "AGE",
        compfun = function(tab) list("1,1 value" = tab[1,1]))
 ```
 
@@ -231,7 +231,7 @@ Example (average ratio of the two vectors. Note unless this is pairwise data in 
 
 ```
 layout = collyt2 %>%
-       add_analyzed_blinecomp("AGE", afun = identity,
+       analyze_against_baseline("AGE", afun = identity,
        compfun = function(a, b) list("mean of ratios" = mean(a/b)))
 
 

@@ -377,7 +377,7 @@ split_cols_by_multivar = function(lyt, vars, lbl, varlbls = vars,
 }
 
 
-add_rowby_multivar = function(lyt, vars, lbl, varlbls,
+split_rows_by_multivar = function(lyt, vars, lbl, varlbls,
                               splfmt = NULL,
                               newtoplev = FALSE,
                               lblkids = NA) {
@@ -466,7 +466,7 @@ split_cols_by_quartiles = function(lyt, var, lbl = var,
                              splfmt = NULL,
                              newtoplev = FALSE,
                              extrargs = list(),
-                             cumulative) {
+                             cumulative = FALSE) {
     spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
                          cutlblfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
@@ -477,6 +477,26 @@ split_cols_by_quartiles = function(lyt, var, lbl = var,
                          cumulative = cumulative)
     pos = next_cpos(lyt, newtoplev)
     split_cols(lyt, spl, pos)
+}
+
+
+#' @export
+#' @rdname varcuts
+split_rows_by_quartiles = function(lyt, var, lbl = var,
+                             splfmt = NULL,
+                             newtoplev = FALSE,
+                             extrargs = list(),
+                             cumulative= FALSE) {
+    spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
+                         cutlblfun = function(x) c("[min, Q1]",
+                                                   "(Q1, Q2]",
+                                                   "(Q2, Q3]",
+                                                   "(Q3, max]"),
+                         splfmt = splfmt,
+                         extrargs = extrargs,
+                         cumulative = cumulative)
+    pos = next_rpos(lyt, newtoplev)
+    split_rows(lyt, spl, pos)
 }
 
 
@@ -637,7 +657,7 @@ analyze_colvars = function(lyt, lbl, afun,
 #' @author Gabriel Becker
 #' @export
 #' @rdname bline_analyses
-add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl = "", afun,
+analyze_against_baseline = function(lyt, var = NA_character_, lbl = "", afun,
                                    compfun = `-`,
                                   fmt = NULL,
                                   defrowlab = "Diff from Baseline",
@@ -692,7 +712,7 @@ add_analyzed_blinecomp = function(lyt, var = NA_character_, lbl = "", afun,
 
 #' @export
 #' @rdname bline_analyses
-add_2dtable_blinecomp = function(lyt,
+analyze_against_baseline_2dtable = function(lyt,
                                  var = NA_character_,
                                  lbl = var,
                                  compfun,
@@ -719,7 +739,7 @@ add_2dtable_blinecomp = function(lyt,
             names(ret) = cfnm
         ret
     }
-    add_analyzed_blinecomp(lyt = lyt, var = var, lbl = lbl,
+    analyze_against_baseline(lyt = lyt, var = var, lbl = lbl,
                            afun = function(x) x,
                            compfun = compfun2,
                            fmt = fmt,

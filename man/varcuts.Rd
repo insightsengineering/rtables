@@ -5,7 +5,7 @@
 \alias{split_rows_by_dyncut}
 \alias{split_cols_by_cutfun}
 \alias{split_cols_by_quartiles}
-\alias{add_colby_cmlqrtiles}
+\alias{split_rows_by_quartiles}
 \alias{split_rows_by_cutfun}
 \title{Split on static or dynamic cuts of the data}
 \usage{
@@ -49,16 +49,18 @@ split_cols_by_quartiles(
   lbl = var,
   splfmt = NULL,
   newtoplev = FALSE,
-  extrargs = list()
+  extrargs = list(),
+  cumulative = FALSE
 )
 
-add_colby_cmlqrtiles(
+split_rows_by_quartiles(
   lyt,
   var,
   lbl = var,
   splfmt = NULL,
   newtoplev = FALSE,
-  extrargs = list()
+  extrargs = list(),
+  cumulative = FALSE
 )
 
 split_rows_by_cutfun(
