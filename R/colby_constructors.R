@@ -465,35 +465,20 @@ split_cols_by_cutfun = function(lyt, var, lbl = var,
 split_cols_by_quartiles = function(lyt, var, lbl = var,
                              splfmt = NULL,
                              newtoplev = FALSE,
-                             extrargs = list()) {
+                             extrargs = list(),
+                             cumulative) {
     spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
                          cutlblfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
                                                    "(Q2, Q3]",
                                                    "(Q3, max]"),
                          splfmt = splfmt,
-                         extrargs = extrargs)
+                         extrargs = extrargs,
+                         cumulative = cumulative)
     pos = next_cpos(lyt, newtoplev)
     split_cols(lyt, spl, pos)
 }
 
-#' @export
-#' @rdname varcuts
-add_colby_cmlqrtiles = function(lyt, var, lbl = var,
-                               splfmt = NULL,
-                               newtoplev = FALSE,
-                               extrargs = list()) {
-    spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
-                         splfmt = splfmt,
-                         cutlblfun = function(x) c("[min, Q1]",
-                                                   "[min, Q2]",
-                                                   "[min, Q3]",
-                                                   "[min, max]"),
-                         cumulative = TRUE,
-                         extrargs = extrargs)
-    pos = next_cpos(lyt, newtoplev)
-    split_cols(lyt, spl, pos)
-}
 
     
 qtile_cuts = function(x) {
@@ -507,7 +492,7 @@ qtile_cuts = function(x) {
 
 #' @export
 #' @rdname varcuts
-add_rowby_dyncut = function(lyt, var, lbl = var,
+split_rows_by_cutfun = function(lyt, var, lbl = var,
                             cutfun = qtile_cuts,
                             splfmt = NULL,
                             newtoplev = FALSE,
