@@ -322,9 +322,9 @@ split_cols_by = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newt
 #' 
 #' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by("SEX", "Gender") %>%
-#'   summarise_row_groups_count(lbl_fstr = "Overall (N)") %>%
+#'   summarize_row_groups(lbl_fstr = "Overall (N)") %>%
 #'   split_rows_by("RACE", "Ethnicity") %>%
-#'   summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+#'   summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
 #'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 #' l
 #' 
@@ -752,29 +752,29 @@ add_overall_col = function(lyt, lbl) {
                   next_cpos(lyt, TRUE))
 }
 
-#' @rdname summarise_row_groups
+#' @rdname .add_row_summary
 #' @export
-setGeneric("summarise_row_groups",
-           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric("summarise_row_groups"))
-setMethod("summarise_row_groups", "PreDataTableLayouts",
+setGeneric(".add_row_summary",
+           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric(".add_row_summary"))
+setMethod(".add_row_summary", "PreDataTableLayouts",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
-    tmp = summarise_row_groups(rlayout(lyt), lbl, cfun,
+    tmp = .add_row_summary(rlayout(lyt), lbl, cfun,
                       lblkids = lblkids,
                       cfmt = cfmt)
     rlayout(lyt) = tmp
     lyt
 })
 
-setMethod("summarise_row_groups", "PreDataRowLayout",
+setMethod(".add_row_summary", "PreDataRowLayout",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         rt = root_spl(lyt)
-        rt = summarise_row_groups(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
+        rt = .add_row_summary(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
-        tmp = summarise_row_groups(lyt[[ind]], lbl, cfun,
+        tmp = .add_row_summary(lyt[[ind]], lbl, cfun,
                           lblkids = lblkids,
                           cfmt = cfmt)
         lyt[[ind]] = tmp
@@ -782,18 +782,18 @@ setMethod("summarise_row_groups", "PreDataRowLayout",
     lyt
 })
 
-setMethod("summarise_row_groups", "SplitVector",
+setMethod(".add_row_summary", "SplitVector",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = summarise_row_groups(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
+    tmp = .add_row_summary(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
     lyt[[ind]] = tmp
     lyt
 })
 
-setMethod("summarise_row_groups", "Split",
+setMethod(".add_row_summary", "Split",
           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
     content_fun(lyt) = cfun
     obj_fmt(lyt) = cfmt
@@ -839,6 +839,8 @@ setMethod("summarise_row_groups", "Split",
 }
 
 
+
+
 #' Add a content row of summary counts
 #' 
 #' @inheritParams lyt_args
@@ -851,7 +853,7 @@ setMethod("summarise_row_groups", "Split",
 #' @examples 
 #' l <- NULL %>% split_cols_by("ARM") %>% 
 #'     split_rows_by("RACE") %>% 
-#'     summarise_row_groups_count(lbl_fstr = "%s (n)") %>% 
+#'     summarize_row_groups(lbl_fstr = "%s (n)") %>% 
 #'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
 #' 
@@ -861,14 +863,16 @@ setMethod("summarise_row_groups", "Split",
 #' 
 #' summary(tbl) # summary count is a content table
 #' 
-summarise_row_groups_count = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)" ){
+summarize_row_groups = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)", cfun = NULL ){
 
-    if(length(gregexpr("xx", fmt)[[1]]) == 2)
-        fun = .count_wpcts_constr(var, fmt, lbl_fstr)
-    else
-        fun = .count_raw_constr(var,fmt, lbl_fstr)
-    summarise_row_groups(lyt,# lbl = lbl,
-                cfun = fun, cfmt = fmt)
+    if(is.null(cfun)) {
+        if(length(gregexpr("xx", fmt)[[1]]) == 2)
+            cfun = .count_wpcts_constr(var, fmt, lbl_fstr)
+        else
+            cfun = .count_raw_constr(var,fmt, lbl_fstr)
+    }
+    .add_row_summary(lyt,# lbl = lbl,
+                cfun = cfun, cfmt = fmt)
 }
 
 

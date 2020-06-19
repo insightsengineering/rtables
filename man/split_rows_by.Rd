@@ -49,9 +49,9 @@ build_table(l, DM)
 
 l <- NULL \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by("SEX", "Gender") \%>\%
-  summarise_row_groups_count(lbl_fstr = "Overall (N)") \%>\%
+  summarize_row_groups(lbl_fstr = "Overall (N)") \%>\%
   split_rows_by("RACE", "Ethnicity") \%>\%
-  summarise_row_groups_count("RACE", lbl_fstr = "\%s (n)") \%>\%
+  summarize_row_groups("RACE", lbl_fstr = "\%s (n)") \%>\%
   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 l
 

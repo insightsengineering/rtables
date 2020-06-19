@@ -11,11 +11,11 @@ test_that("complex layout works", {
         ## No row splits have been introduced, so this adds
         ## a root split and puts summary content on it labelled Overall (N)
         ## add_colby_total(lbl = "All") %>%
-        ##    summarise_row_groups_count(lbl = "Overall (N)", fmt = "(N=xx)") %>%
+        ##    summarize_row_groups(lbl = "Overall (N)", fmt = "(N=xx)") %>%
         add_colcounts() %>%
         ## add a new subtable that splits on RACE, value labels from ethn_lbl
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-        summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+        summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         ##
         ## Add nested row split within Race categories for FACTOR2
         ## using a split function that excludes level C
@@ -24,7 +24,7 @@ test_that("complex layout works", {
                             splfun = rtables:::excl_levs_sfun("C"),
                             vlblvar = "fac2_lbl") %>%
         ## Add count summary within FACTOR2 categories
-        summarise_row_groups_count("FACTOR2") %>%
+        summarize_row_groups("FACTOR2") %>%
         ## Add analysis/data rows by analyzing AGE variable
         ## Note afun is a function that returns 2 values in a named list
         ## this will create 2 data rows
@@ -75,7 +75,7 @@ tab2 = build_table(thing2, rawdat)
         ## add nested column split on SEX with value lables from gend_lbl
         split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-        summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+        summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         analyze("AGE", "Age Analysis",
                           afun = function(x) list(mean = mean(x), median = median(x)),
                           fmt = "xx.xx") %>%
@@ -91,7 +91,7 @@ test_that("lblkids parameter works", {
     yeslbllyt <- NULL %>% split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = TRUE) %>%
-        summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+        summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
                             splfun = rtables:::excl_levs_sfun("C"),
                             vlblvar = "fac2_lbl", lblkids = TRUE) %>%
@@ -109,7 +109,7 @@ test_that("lblkids parameter works", {
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = NA) %>%
-        summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+        summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
                             splfun = rtables:::excl_levs_sfun("C"),
                             vlblvar = "fac2_lbl", lblkids = NA) %>%
@@ -124,7 +124,7 @@ test_that("lblkids parameter works", {
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = FALSE) %>%
-        summarise_row_groups_count("RACE", lbl_fstr = "%s (n)") %>%
+        summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
                             splfun = rtables:::excl_levs_sfun("C"),
                             vlblvar = "fac2_lbl", lblkids = FALSE) %>%
