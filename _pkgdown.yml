@@ -18,6 +18,7 @@ articles:
     desc: Vignettes aimed at package users
     contents:
     - rtables
+    - tabulation_overview
     - tabletree_design
     - rtabulate
   - title: Developer
@@ -39,17 +40,15 @@ reference:
     desc: Functions for declaring layout and tabulation
     contents:
     - build_table
-    - add_analyzed_vars
-    - add_colby_varlevels
-    - add_col_total
+    - analyze
+    - split_cols_by
     - add_colcounts
-    - add_summary_count
-    - add_rowby_varlevels
-    - add_analyzed_colvars
-    - add_colby_multivar
-    - add_colby_varwbline
-    - add_analyzed_blinecomp
-    - add_colby_staticcut 
+    - split_rows_by
+    - summarize_row_groups
+    - split_cols_by_multivar
+    - analyze_colvars
+    - analyze_against_baseline
+    - split_cols_by_cuts 
     - add_existing_table
     - manual_cols
     
