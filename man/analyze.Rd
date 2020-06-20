@@ -8,7 +8,7 @@ analyze(
   lyt,
   var,
   lbl = var,
-  afun,
+  afun = rtab_inner,
   fmt = NULL,
   defrowlab = "",
   newtoplev = FALSE,

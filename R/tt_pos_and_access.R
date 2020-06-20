@@ -478,6 +478,16 @@ setMethod("[", c("VTableTree", "logical", "ANY"),
 #' @exportMethod [
 #' @rdname brackets
 
+setMethod("[", c("VTableTree", "logical", "missing"),
+          function(x, i, j, ..., drop = FALSE) {
+    j = seq_len(ncol(x))
+    i = .j_to_posj(i, nrow(x))
+    x[i,j, ..., drop = drop]
+})
+
+#' @exportMethod [
+#' @rdname brackets
+
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j = .j_to_posj(j, ncol(x))

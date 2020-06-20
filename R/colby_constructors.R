@@ -559,7 +559,7 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 analyze = function(lyt,
                              var,
                              lbl = var,
-                             afun,
+                             afun = rtab_inner,
                              fmt = NULL,
                              defrowlab = "",
                              newtoplev = FALSE,
@@ -1108,3 +1108,21 @@ lstwrapdf = function(f) {
     }
 }
 
+
+#' Basic starting table layout with 1 column and zero rows
+#' @note this is represented by \code(NULL) currently
+#' @export
+basic_table <- function() NULL
+
+#' Create multiple rows in analysis or summary functions
+#' @param ... single row defining expressions
+#' @param .lst list of rrows
+#' @export
+in_rows <- function(..., .lst) {
+  l <- list(...)
+  if (missing(.lst)) {
+    l
+  } else {
+    c(l, .lst)
+  }
+} 

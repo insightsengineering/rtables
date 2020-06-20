@@ -439,6 +439,7 @@ recursive_applysplit = function( df,
 }
 
 
+
 #' Create a table from a layout and data
 #'
 #' Layouts are used to describe a table pre-data. `build_rable` is used to
@@ -510,6 +511,15 @@ recursive_applysplit = function( df,
 build_table = function(lyt, df,
                        col_counts = NULL,
                        ...) {
+
+    ##demo hax
+
+    clyt = clayout(lyt)
+    if(length(clyt) ==1 && length(clyt[[1]]) == 0) {
+        clyt[[1]] = add_overall_col(clyt[[1]], "")
+        clayout(lyt) = clyt
+    }
+    
     lyt = fix_dyncuts(lyt, df)
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
