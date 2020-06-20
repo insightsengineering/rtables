@@ -1112,8 +1112,12 @@ lstwrapdf = function(f) {
 
 
 #' Basic starting table layout with 1 column and zero rows
-#' @note this is represented by \code(NULL) currently
+#'
+#' 
+#' @note this is represented by \code{NULL} currently
+#'
 #' @export
+#' 
 basic_table <- function() NULL
 
 #' Create multiple rows in analysis or summary functions

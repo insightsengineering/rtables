@@ -21,7 +21,7 @@ test_that("complex layout works", {
         ## using a split function that excludes level C
         ## value labels from fac2_lbl
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = rtables:::excl_levs_sfun("C"),
+                            splfun = remove_split_levels("C"),
                             vlblvar = "fac2_lbl") %>%
         ## Add count summary within FACTOR2 categories
         summarize_row_groups("FACTOR2") %>%
@@ -93,7 +93,7 @@ test_that("lblkids parameter works", {
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = TRUE) %>%
         summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = rtables:::excl_levs_sfun("C"),
+                            splfun = remove_split_levels("C"),
                             vlblvar = "fac2_lbl", lblkids = TRUE) %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
@@ -111,7 +111,7 @@ test_that("lblkids parameter works", {
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = NA) %>%
         summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = rtables:::excl_levs_sfun("C"),
+                            splfun = remove_split_levels("C"),
                             vlblvar = "fac2_lbl", lblkids = NA) %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
@@ -126,7 +126,7 @@ test_that("lblkids parameter works", {
         split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl",lblkids = FALSE) %>%
         summarize_row_groups("RACE", lbl_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = rtables:::excl_levs_sfun("C"),
+                            splfun = remove_split_levels("C"),
                             vlblvar = "fac2_lbl", lblkids = FALSE) %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),

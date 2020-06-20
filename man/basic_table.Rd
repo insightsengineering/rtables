@@ -10,5 +10,5 @@ basic_table()
 Basic starting table layout with 1 column and zero rows
 }
 \note{
-this is represented by \code(NULL) currently
+this is represented by \code{NULL} currently
 }
