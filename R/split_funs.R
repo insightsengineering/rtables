@@ -422,6 +422,8 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
          labels = lbls)
 }
 
+#' Split functions
+#'@param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless of presence in the data).
 #' @rdname split_funcs
 #' @export
 remove_split_levels = function(excl) {
@@ -434,6 +436,7 @@ remove_split_levels = function(excl) {
 }
 
 #' @rdname split_funcs
+#' @param only character. Levels to retain (all others will be dropped).
 #' @export
 keep_split_levels = function(only) {
     function(df, spl, vals = NULL, lbls = NULL) {
@@ -445,6 +448,9 @@ keep_split_levels = function(only) {
 }
 
 #' @rdname split_funcs
+#' @param neworder character. New order or factor levels.
+#' @param newlbls character. Labels for (new order of) factor levels
+#' @param drlevels logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}
 #' @export
 reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
     function(df, spl,  ...) {
@@ -460,6 +466,7 @@ reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
 }
 
 #' @rdname split_funcs
+#' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
 #' @export 
 trim_levels_in_group = function(innervar) {
   myfun = function(df, spl, vals = NULL, lbls = NULL) {
