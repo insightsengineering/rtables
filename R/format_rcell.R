@@ -39,6 +39,14 @@ list_rcell_format_labels <- function() {
   )
 }
 
+#' Check if a format is a valid rcell format
+#'
+#' @param x either format string or an object returned by \code{sprintf_format}
+#' @param stop_otherwise logical, if \code{x} is not a format should an error be
+#'   thrown
+#' 
+#' @export
+#'   
 is_rcell_format <- function(x, stop_otherwise=FALSE) {
   is_valid <- is.null(x) ||
     (length(x) == 1 && 
@@ -52,6 +60,14 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
   is_valid
 }
 
+#' Get format attribute of an rcell
+#' 
+#' @param x rcell object
+#' @export
+#' 
+#' @examples
+#' get_format(rcell(c(2, 0.34), format = "xx.xx (xx.xx%)"))
+#' 
 get_format <- function(x) {
   if (!is(x, "rcell")) stop("rcell object required")
   attr(x, "format")
