@@ -857,11 +857,16 @@ setMethod("clayout_splits", "VTableNodeInfo",
 ## FIXME
 
 #' Column information/structure accessors
+#' 
 #' @inheritParams gen_args
-#' @param df data.frame/NULL. Data to use if the column information is being generated from a  Pre-Data layout object
+#' @param df data.frame/NULL. Data to use if the column information is being
+#'   generated from a  Pre-Data layout object
 #' @param rtpos TreePos. Root position.
+#'   
 #' @return A \code{LayoutColTree} object.
+#' 
 #' @rdname col_accessors
+#' 
 #' @export 
 setGeneric("clayout", function(obj) standardGeneric("clayout"))
 #'@rdname col_accessors
@@ -1205,8 +1210,10 @@ setMethod("colcount_fmt<-", "PreDataTableLayouts",
 #' Exported for use in tern
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
+#' 
 #' @inheritParams gen_args
 #' @rdname no_info
+#' 
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
 
@@ -1224,7 +1231,8 @@ setMethod("no_colinfo", "InstantiatedColumnInfo",
 #' Names of a TableTree
 #'
 #' @param x the object.
-#' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level split values repped out across the columns that they span.
+#' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
+#'   split values repped out across the columns that they span.
 #' @rdname names
 #' @exportMethod names
 setMethod("names", "VTableNodeInfo",
@@ -1260,7 +1268,7 @@ setMethod("row.names", "VTableTree",
 
 
 #' convert to a vector
-#'@rdname asvec
+#' @rdname asvec
 #' @param x ANY. The object to be converted to a vector
 #' @param mode character(1). Passed on to \code{\link[base]{as.vector}}
 #' @exportMethod as.vector
