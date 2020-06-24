@@ -45,7 +45,7 @@ adding further splitting, the tabulation will occur at the current/next level of
 }
 \examples{
 
-l <- NULL \%>\%
+l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\% 
     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 l
@@ -53,7 +53,7 @@ l
 build_table(l, DM)
 
 
-l <- NULL \%>\% 
+l <- basic_table() \%>\% 
     split_cols_by("Species") \%>\%
     analyze(head(names(iris), -1), afun = function(x) {
         list(

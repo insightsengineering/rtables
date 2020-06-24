@@ -76,7 +76,8 @@ col_exprs(obj, df = NULL)
 
 \item{value}{The new value}
 
-\item{df}{data.frame/NULL. Data to use if the column information is being generated from a  Pre-Data layout object}
+\item{df}{data.frame/NULL. Data to use if the column information is being
+generated from a  Pre-Data layout object}
 
 \item{rtpos}{TreePos. Root position.}
 }

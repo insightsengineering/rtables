@@ -15,14 +15,14 @@ add_existing_table(lyt, tt)
 Add an already calculated table to the layout
 }
 \examples{
-tbl1 <- NULL \%>\%
+tbl1 <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    analyze("AGE", afun = mean, fmt = "xx.xx") \%>\%
    build_table(DM)
 
 tbl1
 
-tbl2 <- NULL \%>\% split_cols_by("ARM") \%>\%
+tbl2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
    analyze("AGE", afun = sd, fmt = "xx.xx") \%>\%
    add_existing_table(tbl1) \%>\%
    build_table(DM)

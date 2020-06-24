@@ -22,5 +22,6 @@
 Names of a TableTree
 }
 \details{
-For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level split values repped out across the columns that they span.
+For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
+split values repped out across the columns that they span.
 }

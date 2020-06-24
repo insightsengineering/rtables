@@ -16,7 +16,8 @@ reorder_split_levels(neworder, newlbls = neworder, drlevels = TRUE)
 trim_levels_in_group(innervar)
 }
 \arguments{
-\item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless of presence in the data).}
+\item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
+of presence in the data).}
 
 \item{only}{character. Levels to retain (all others will be dropped).}
 

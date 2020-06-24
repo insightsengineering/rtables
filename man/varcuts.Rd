@@ -107,7 +107,7 @@ For dynamic cuts, the cut is transformed into a static cut by
 \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
 }
 \examples{
-l <- NULL \%>\%
+l <- basic_table() \%>\%
 split_cols_by_cuts("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) \%>\%
 analyze("RACE", lbl ="", defrowlab="count", afun = length)
 
