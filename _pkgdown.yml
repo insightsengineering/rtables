@@ -40,6 +40,7 @@ reference:
     desc: Functions for declaring layout and tabulation
     contents:
     - build_table
+    - basic_table
     - analyze
     - split_cols_by
     - add_colcounts
@@ -85,6 +86,15 @@ reference:
     - by_all
     - by_add_total
     - by_quartile
+
+  - title: Splitting Helper Functions
+    desc: Functions to help getting the desired splits
+    contents:
+    - remove_split_levels
+    - keep_split_levels
+    - reorder_split_levels
+    - trim_levels_in_group
+ 
 
   - title: Output Functions
     desc: These functions create ascii or html representations of the table

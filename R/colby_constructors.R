@@ -759,7 +759,9 @@ add_overall_col = function(lyt, lbl) {
                   next_cpos(lyt, TRUE))
 }
 
-#' @rdname .add_row_summary
+#' Add Row Summary
+#' 
+#' @rdname dot_add_row_summary
 #' @export
 setGeneric(".add_row_summary",
            function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric(".add_row_summary"))
@@ -1117,6 +1119,12 @@ lstwrapdf = function(f) {
 #' @note this is represented by \code{NULL} currently
 #'
 #' @export
+#' 
+#' @examples 
+#' 
+#' basic_table() %>%
+#'   analyze("AGE", afun = mean) %>%
+#'   build_table(DM)
 #' 
 basic_table <- function() NULL
 

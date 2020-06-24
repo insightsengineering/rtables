@@ -423,7 +423,10 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
 }
 
 #' Split functions
-#'@param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless of presence in the data).
+#' 
+#' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
+#'   of presence in the data).
+#'
 #' @rdname split_funcs
 #' @export
 remove_split_levels = function(excl) {
