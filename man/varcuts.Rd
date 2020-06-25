@@ -28,7 +28,8 @@ split_rows_by_dyncut(
   splfmt = NULL,
   newtoplev = FALSE,
   lblkids = NA,
-  cumulative = FALSE
+  cumulative = FALSE,
+  indent_mod = 0L
 )
 
 split_cols_by_cutfun(
@@ -40,7 +41,8 @@ split_cols_by_cutfun(
   splfmt = NULL,
   newtoplev = FALSE,
   extrargs = list(),
-  cumulative = FALSE
+  cumulative = FALSE,
+  indent_mod = 0L
 )
 
 split_cols_by_quartiles(
@@ -60,7 +62,8 @@ split_rows_by_quartiles(
   splfmt = NULL,
   newtoplev = FALSE,
   extrargs = list(),
-  cumulative = FALSE
+  cumulative = FALSE,
+  indent_mod = 0L
 )
 
 split_rows_by_cutfun(
@@ -71,7 +74,8 @@ split_rows_by_cutfun(
   splfmt = NULL,
   newtoplev = FALSE,
   lblkids = NA,
-  cumulative = FALSE
+  cumulative = FALSE,
+  indent_mod = 0L
 )
 }
 \arguments{

@@ -18,7 +18,9 @@ VarLevelSplit(
   valorder = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L,
+  cindent_mod = 0L
 )
 
 VarLevWBaselineSplit(

@@ -783,8 +783,48 @@ setMethod("tt_level<-", "VTableTree",
                                 `tt_level<-`, value = as.integer(value) + 1L)
     obj
 })
-          
-          
+
+setGeneric("indent_mod", function(obj) standardGeneric("indent_mod"))
+setMethod("indent_mod", "Split",
+          function(obj) obj@indent_modifier)
+
+setMethod("indent_mod", "VTableNodeInfo",
+          function(obj) obj@indent_modifier)
+
+setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
+setMethod("indent_mod<-", "Split",
+          function(obj, value) {
+    obj@indent_modifier = as.integer(value)
+    obj
+})
+setMethod("indent_mod<-", "VTableNodeInfo",
+          function(obj, value) {
+    obj@indent_modifier = as.integer(value)
+    obj
+})
+
+
+
+setGeneric("content_indent_mod", function(obj) standardGeneric("content_indent_mod"))
+setMethod("content_indent_mod", "Split",
+          function(obj) obj@content_indent_modifier)
+
+setMethod("content_indent_mod", "VTableNodeInfo",
+          function(obj) obj@content_indent_modifier)
+
+setGeneric("content_indent_mod<-", function(obj, value) standardGeneric("content_indent_mod<-"))
+setMethod("content_indent_mod<-", "Split",
+          function(obj, value) {
+    obj@content_indent_modifier = as.integer(value)
+    obj
+})
+setMethod("content_indent_mod<-", "VTableNodeInfo",
+          function(obj, value) {
+    obj@content_indent_modifier = as.integer(value)
+    obj
+})
+
+
 setGeneric("rawvalues", function(obj) standardGeneric("rawvalues"))
 setMethod("rawvalues", "ValueWrapper",  function(obj) obj@value)
 setMethod("rawvalues", "list", function(obj) lapply(obj, rawvalues))

@@ -4,7 +4,7 @@
 \alias{add_existing_table}
 \title{Add an already calculated table to the layout}
 \usage{
-add_existing_table(lyt, tt)
+add_existing_table(lyt, tt, indent_mod = 0)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}

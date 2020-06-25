@@ -14,7 +14,8 @@ analyze(
   newtoplev = FALSE,
   inclNAs = FALSE,
   extrargs = list(),
-  lblkids = TRUE
+  lblkids = TRUE,
+  indent_mod = 0L
 )
 }
 \arguments{

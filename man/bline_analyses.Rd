@@ -13,7 +13,8 @@ analyze_against_baseline(
   compfun = `-`,
   fmt = NULL,
   defrowlab = "Diff from Baseline",
-  newtoplev = FALSE
+  newtoplev = FALSE,
+  indent_mod = 0L
 )
 
 analyze_against_baseline_2dtable(
@@ -22,7 +23,8 @@ analyze_against_baseline_2dtable(
   lbl = var,
   compfun,
   fmt = NULL,
-  newtoplev = FALSE
+  newtoplev = FALSE,
+  indent_mod = 0L
 )
 }
 \arguments{

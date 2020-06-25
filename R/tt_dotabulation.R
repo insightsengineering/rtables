@@ -100,7 +100,6 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                            datcol = NULL,
                            lev = 1L,
                            rvlab = NA_character_,
-##                           rvtypes = NULL,
                            format = NULL,
                            defrowlabs = NULL,
                            rowconstr = DataRow,
@@ -233,7 +232,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                       name,
                       ##colexprs, coltree,
                       cinfo,
-                      parent_cfun = NULL, format = NULL) {
+                      parent_cfun = NULL,
+                      format = NULL,
+                      indent_mod = 0L) {
 
  
     if(!is.null(parent_cfun)) {
@@ -247,14 +248,14 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     } else {
         contkids = list()
     }
-    
     ctab = ElementaryTable(kids = contkids,
                            name = paste0(name, "@content"),
                            lev = lvl,
                            lblrow = LabelRow(),
                            cinfo = cinfo,
                            iscontent = TRUE,
-                           fmt = format)
+                           fmt = format,
+                           indent_mod = indent_mod)
     ctab
 }
 
@@ -291,7 +292,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
               lbl = lab,
               lev = lvl,
               cinfo = cinfo,
-              fmt = obj_fmt(spl))
+              fmt = obj_fmt(spl),
+              indent_mod = indent_mod(spl))
     ret
 }
 
@@ -304,7 +306,8 @@ recursive_applysplit = function( df,
                                 partlbl = "",
                                 cinfo,
                                 parent_cfun = NULL,
-                                cformat = NULL) {
+                                cformat = NULL,
+                                cindent_mod = 0L) {
     
 
     ## pre-existing table was added to the layout
@@ -319,7 +322,9 @@ recursive_applysplit = function( df,
                       lvl = lvl,
                       name = name, 
                       cinfo = cinfo,
-                      parent_cfun = parent_cfun, format = cformat)
+                      parent_cfun = parent_cfun,
+                      format = cformat,
+                      indent_mod = cindent_mod)
     
     
     if(length(splvec) == 0L) {
@@ -330,6 +335,7 @@ recursive_applysplit = function( df,
         splvec = splvec[-1]
         nonroot = lvl != 0L
         lab = obj_label(spl)
+        indentmod = 0L ## changed if necessary in else block
 
         if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
             ret = .make_analyzed_tab(df = df,
@@ -394,12 +400,14 @@ recursive_applysplit = function( df,
                                      make_lrow = label_kids(spl),
                                      parent_cfun = content_fun(spl),
                                      cformat = obj_fmt(spl),
-                                     partlbl = lbl)
+                                     partlbl = lbl,
+                                     cindent_mod = content_indent_mod(spl))
             }, dfpart = dataspl,
             lbl = partlbls,
             nm = nms,
             SIMPLIFY=FALSE))
-                kids = inner
+            kids = inner
+            indentmod = indent_mod(spl)
         } ## end split type
     } ## end length(splvec)
 
@@ -411,6 +419,7 @@ recursive_applysplit = function( df,
 
     if(nrow(ctab) == 0L && length(kids) == 1L && !make_lrow) {
         ret = kids[[1]]
+        indent_mod(ret) = indent_mod(spl)
      } else if(nrow(ctab) > 0L || length(kids) > 0L) {
         ## avoid visible label rows when the row.names
         ## directly repeat the info.
@@ -419,7 +428,10 @@ recursive_applysplit = function( df,
              tlbl = ""
          else
              tlbl = partlbl
-         
+         kids = lapply(kids, function(x) {
+             indent_mod(x) = indent_mod(spl)
+             x
+         })
          ret = TableTree(cont = ctab,
                          kids = kids,
                         name = name,
@@ -434,6 +446,9 @@ recursive_applysplit = function( df,
     } else {
         ret = NULL
     }
+    ## message(sprintf("indent modifier: %d", indentmod))
+    ## if(!is.null(ret))
+    ##     indent_mod(ret) = indentmod
     ret
     
 }
@@ -512,8 +527,9 @@ build_table = function(lyt, df,
                        col_counts = NULL,
                        ...) {
 
-    ##demo hax
-
+    ## if no columns are defined (e.g. because lyt is NULL)
+    ## add a single overall column as the "most basic"
+    ## table column structure that makes sense
     clyt = clayout(lyt)
     if(length(clyt) ==1 && length(clyt[[1]]) == 0) {
         clyt[[1]] = add_overall_col(clyt[[1]], "")
@@ -533,7 +549,8 @@ build_table = function(lyt, df,
                       name = "root",
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
-                      format = content_fmt(rtspl))
+                      format = content_fmt(rtspl),
+                      indent_mod = 0L)
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
         firstspl = splvec[[1]]

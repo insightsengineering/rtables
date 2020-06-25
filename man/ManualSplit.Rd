@@ -4,7 +4,14 @@
 \alias{ManualSplit}
 \title{Manually defined split}
 \usage{
-ManualSplit(levels, lbl, name = "manual", extrargs = list())
+ManualSplit(
+  levels,
+  lbl,
+  name = "manual",
+  extrargs = list(),
+  indent_mod = 0L,
+  cindent_mod = 0L
+)
 }
 \arguments{
 \item{levels}{character. Levels of the split (ie the children of the manual split)}
