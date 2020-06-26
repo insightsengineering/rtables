@@ -37,17 +37,17 @@ setMethod("show", "VTableTree", function(object) {
 #' 
 setMethod("toString", "VTableTree", function(x, gap = 3) {
   
-  browser()
+ # browser()
   
   ## we create a matrix with the formatted cell contents
   
-  header_data <- .tbl_header_mat(x) # first col are for row.names
+  header_content <- .tbl_header_mat(x) # first col are for row.names
   
   ## table body
-  body_data <- unname(unlist(get_formatted_rows(x)))
-  if(is.null(body_data))
-    body_data <- ""
-  body_body <- matrix(body_data, ncol = ncol(x) + 1, byrow = TRUE)
+  body_content <- unname(unlist(get_formatted_rows(x)))
+  if(is.null(body_content))
+    body_content <- ""
+  body_content_strings <- matrix(body_content, ncol = ncol(x) + 1, byrow = TRUE)
   
   tsptmp <- lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
     sp <- row_cspans(rr)
@@ -56,8 +56,8 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   ## the 1 is for row labels
   body_spans <- cbind(1L, do.call(rbind, tsptmp))
   
-  body <- rbind(header_data$body, body_body)
-  spans <- rbind(header_data$spans, body_spans)
+  body <- rbind(header_content$body, body_content_strings)
+  spans <- rbind(header_content$span, body_spans)
   
   space <- matrix(rep(0, length(body)), nrow = nrow(body))
   aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
@@ -98,8 +98,8 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   
   div <- strrep("-", sum(col_widths) + (length(col_widths) - 1) * gap)
   
-  txt_head <- apply(head(content, nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
-  txt_body <- apply(tail(content, -nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
+  txt_head <- apply(head(content, nrow(header_content$body)), 1, .paste_no_na, collapse = gap_str)
+  txt_body <- apply(tail(content, -nrow(header_content$body)), 1, .paste_no_na, collapse = gap_str)
   
   paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
   
@@ -261,5 +261,53 @@ indent_string <- function(x, indent = 0, incr = 2) {
 
 .paste_no_na <- function(x, ...) {
   paste(na.omit(x), ...)
+}
+
+
+#' Pad a string and align within string
+#' 
+#' @param x string
+#' @param n number of character of the output string, if `n < nchar(x)` an error is thrown
+#' 
+#' @noRd
+#' 
+#' @examples 
+#' 
+#' padstr("abc", 3)
+#' padstr("abc", 4)
+#' padstr("abc", 5)
+#' padstr("abc", 5, "left")
+#' padstr("abc", 5, "right")
+#' 
+#' \dontrun{
+#' padstr("abc", 1)
+#' }
+#' 
+padstr <- function(x, n, just = c("center", "left", "right")) {
+  
+  just <- match.arg(just)
+  
+  if (length(x) != 1) stop("length of x needs to be 1 and not", length(x))
+  if (is.na(n) || !is.numeric(n) || n < 0) stop("n needs to be numeric and > 0")
+  
+  if (is.na(x)) x <- ""
+  
+  nc <- nchar(x)
+  
+  if (n < nc) stop("\"", x, "\" has more than ", n, " characters")
+  
+  switch(
+    just,
+    center = {
+      pad <- (n-nc)/2  
+      paste0(spaces(floor(pad)), x, spaces(ceiling(pad)))
+    },
+    left = paste0(x, spaces(n-nc)),
+    right = paste0(spaces(n-nc), x)
+  )
+}
+
+spaces <- function(n) {
+  paste(rep(" ", n), collapse = "")
 }
 

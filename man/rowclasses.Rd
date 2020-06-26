@@ -16,7 +16,8 @@ LabelRow(
   lbl = "",
   name = lbl,
   vis = !is.na(lbl) && nzchar(lbl),
-  cinfo = InstantiatedColumnInfo()
+  cinfo = InstantiatedColumnInfo(),
+  indent_mod = 0L
 )
 
 .tablerow(

@@ -45,6 +45,7 @@ reference:
     - in_rows
     - split_cols_by
     - add_colcounts
+    - add_overall_level
     - split_rows_by
     - summarize_row_groups
     - split_cols_by_multivar
@@ -96,7 +97,11 @@ reference:
     - reorder_split_levels
     - trim_levels_in_group
  
-
+  - title: Table Modification Functions
+    desc: Functions to post process tables
+    contents:
+    - trim_rows
+    
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
