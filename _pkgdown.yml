@@ -42,6 +42,7 @@ reference:
     - build_table
     - basic_table
     - analyze
+    - in_rows
     - split_cols_by
     - add_colcounts
     - split_rows_by
