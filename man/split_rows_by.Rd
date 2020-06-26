@@ -12,7 +12,8 @@ split_rows_by(
   splfun = NULL,
   fmt = NULL,
   newtoplev = FALSE,
-  lblkids = NA
+  lblkids = NA,
+  indent_mod = 0L
 )
 }
 \arguments{

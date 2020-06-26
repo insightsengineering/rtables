@@ -9,7 +9,8 @@ summarize_row_groups(
   var = NULL,
   lbl_fstr = "\%s",
   fmt = "xx (xx.x\%)",
-  cfun = NULL
+  cfun = NULL,
+  indent_mod = 0L
 )
 }
 \arguments{

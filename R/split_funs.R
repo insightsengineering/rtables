@@ -100,58 +100,9 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
         ## Currently the contract is that split_functions take df, vals, lbls and
         ## return list(values=., datasplit=., labels = .), optionally with
         ## an additional extras element
-        ret = splfun(df, spl, vals, lbls)
+        ret = splfun(df, spl, vals, lbls, trim = trim)
     } else {
-        ## try to calculate values first. Most of the time we can
-        if(is.null(vals)) 
-            vals = .applysplit_rawvals(spl, df)
-        extr = .applysplit_extras(spl, df, vals)
-
-        ## in some cases, currently ComparisonSplit, we don't know the
-        ## values until after we know the extra args, since the values
-        ## themselves are meaningless. If this is the case, fix them
-        ## before generating the data partition
-        if(is.null(vals) && length(extr) > 0) {
-            vals = seq_along(extr)
-            names(vals) = names(extr)
-        }
-        
-        dpart = .applysplit_datapart(spl, df, vals)
-
-        if(is.null(lbls))
-            lbls = .applysplit_partlbls(spl, df, vals, lbls)
-        else
-            stopifnot(names(lbls)== names(vals))
-
-        ## get rid of columns that would not have any
-        ## observations.
-        ##
-        ## But only if there were any rows to start with
-        ## if not we're in a manually constructed table
-        ## column tree
-        if(trim) {
-            hasdata = sapply(dpart, function(x) nrow(x) >0)
-            if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
-                dpart = dpart[hasdata]
-                vals = vals[hasdata]
-                extr = extr[hasdata]
-                lbls = lbls[hasdata]
-            }
-        }
-
-        if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
-            vord = seq_along(vals)
-        } else {
-            vord = match(spl_child_order(spl),
-                         vals)
-            vord = vord[!is.na(vord)]
-        } 
-                
-        ## FIXME: should be an S4 object, not a list
-        ret = list(values = vals[vord],
-                   datasplit = dpart[vord],
-                   labels = lbls[vord],
-                   extras = extr[vord])
+        ret = .apply_split_inner(df = df, spl = spl, vals = vals, lbls = lbls, trim = trim)
     }
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
@@ -162,6 +113,91 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     ret
 }
 
+
+.apply_split_inner = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
+
+    ## try to calculate values first. Most of the time we can
+    if(is.null(vals)) 
+        vals = .applysplit_rawvals(spl, df)
+    extr = .applysplit_extras(spl, df, vals)
+    
+    ## in some cases, currently ComparisonSplit, we don't know the
+    ## values until after we know the extra args, since the values
+    ## themselves are meaningless. If this is the case, fix them
+    ## before generating the data partition
+    if(is.null(vals) && length(extr) > 0) {
+        vals = seq_along(extr)
+        names(vals) = names(extr)
+    }
+    
+    dpart = .applysplit_datapart(spl, df, vals)
+    
+    if(is.null(lbls))
+        lbls = .applysplit_partlbls(spl, df, vals, lbls)
+    else
+        stopifnot(names(lbls)== names(vals))
+    
+    ## get rid of columns that would not have any
+    ## observations.
+    ##
+    ## But only if there were any rows to start with
+    ## if not we're in a manually constructed table
+    ## column tree
+    if(trim) {
+        hasdata = sapply(dpart, function(x) nrow(x) >0)
+        if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
+            dpart = dpart[hasdata]
+            vals = vals[hasdata]
+            extr = extr[hasdata]
+            lbls = lbls[hasdata]
+        }
+    }
+    
+    if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
+        vord = seq_along(vals)
+    } else {
+        vord = match(spl_child_order(spl),
+                     vals)
+        vord = vord[!is.na(vord)]
+    } 
+    
+    ## FIXME: should be an S4 object, not a list
+    ret = list(values = vals[vord],
+               datasplit = dpart[vord],
+               labels = lbls[vord],
+               extras = extr[vord])
+    ret
+    ## varvec = df[[spl_payload(spl)]]
+    ## lblvec = df[[spl_lblvar(spl)]]
+    ## if(is.null(vals)) {
+    ##     vals = if(is.factor(varvec))
+    ##                levels(varvec)
+    ##            else
+    ##                unique(varvec)
+    ## }
+ 
+    ## if(is.null(lbls)) {
+    ##     ##XXX dangerous
+    ##     if(is.factor(varvec))
+    ##         lbls = vals
+    ##     else
+    ##         lbls = sapply(vals, function(v) {
+    ##             vlbl = unique(df[df[[spl_payload(spl)]] == v,
+    ##                              spl_lblvar(spl), drop = TRUE])
+    ##             if(length(vlbl) == 0)
+    ##                 vlbl = ""
+    ##             vlbl
+    ##         })
+    ## }
+    ## fct = factor(varvec, levels = vals)
+    ## spl = split(df, fct)
+    ## ## should always be true or the above would have broken
+    ## if(!are(vals, "SplitValue"))
+    ##     vals = make_splvalue_vec(vals)
+    
+    ## list(values = vals, datasplit = spl,
+    ##      labels = lbls)
+}
 
 
 .checkvarsok = function(spl, df) {
@@ -389,38 +425,6 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
            SIMPLIFY=FALSE)
 }
 
-.apply_split_inner = function(spl, df, vals = NULL, lbls = NULL) {
-    varvec = df[[spl_payload(spl)]]
-    lblvec = df[[spl_lblvar(spl)]]
-    if(is.null(vals)) {
-        vals = if(is.factor(varvec))
-                   levels(varvec)
-               else
-                   unique(varvec)
-    }
- 
-    if(is.null(lbls)) {
-        ##XXX dangerous
-        if(is.factor(varvec))
-            lbls = vals
-        else
-            lbls = sapply(vals, function(v) {
-                vlbl = unique(df[df[[spl_payload(spl)]] == v,
-                                 spl_lblvar(spl), drop = TRUE])
-                if(length(vlbl) == 0)
-                    vlbl = ""
-                vlbl
-            })
-    }
-    fct = factor(varvec, levels = vals)
-    spl = split(df, fct)
-    ## should always be true or the above would have broken
-    if(!are(vals, "SplitValue"))
-        vals = make_splvalue_vec(vals)
-    
-    list(values = vals, datasplit = spl,
-         labels = lbls)
-}
 
 #' Split functions
 #' 
@@ -430,11 +434,12 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
 #' @rdname split_funcs
 #' @export
 remove_split_levels = function(excl) {
-    function(df, spl, vals = NULL, lbls = NULL) {
+    function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df[!(df[[var]] %in% excl),]
         .apply_split_inner(spl, df2, vals = vals,
-                           lbls = lbls)
+                           lbls = lbls,
+                           trim = trim)
     }
 }
 
@@ -442,11 +447,12 @@ remove_split_levels = function(excl) {
 #' @param only character. Levels to retain (all others will be dropped).
 #' @export
 keep_split_levels = function(only) {
-    function(df, spl, vals = NULL, lbls = NULL) {
+    function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df[df[[var]] %in% only,]
         .apply_split_inner(spl, df2, vals = vals,
-                           lbls = lbls)
+                           lbls = lbls,
+                           trim = trim)
     }
 }
 
@@ -456,7 +462,7 @@ keep_split_levels = function(only) {
 #' @param drlevels logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}
 #' @export
 reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
-    function(df, spl,  ...) {
+    function(df, spl,  trim, ...) {
         df2 = df
         df2[[spl_payload(spl)]] = factor(df[[spl_payload(spl)]], levels = neworder)
         if(drlevels) {
@@ -464,7 +470,7 @@ reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
             neworder = levels(df2[[spl_payload(spl)]])
             newlbls = newlbls[newlbls %in% neworder]
         }
-        .apply_split_inner(spl, df2, vals = neworder, lbls = newlbls)
+        .apply_split_inner(spl, df2, vals = neworder, lbls = newlbls, trim = trim)
     }
 }
 
@@ -472,8 +478,8 @@ reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
 #' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
 #' @export 
 trim_levels_in_group = function(innervar) {
-  myfun = function(df, spl, vals = NULL, lbls = NULL) {
-    ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls)
+  myfun = function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
+    ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
     
     ret$datasplit = lapply(ret$datasplit, function(x) {
         coldat = x[[innervar]]
@@ -498,3 +504,49 @@ trim_levels_in_group = function(innervar) {
   
 }
 
+.add_part_info = function(part, df, valuename, lbl, extras, first = TRUE) {
+
+    newdat = setNames(list(df), lbl)
+    newval = setNames(list(valuename), lbl)
+    newextra = setNames(list(extras), lbl)
+    if(first) {
+        part$datasplit = c(newdat, part$datasplit)
+        part$values = c(newval, part$values)
+        part$labels = c(lbl, part$labels)
+        part$extras = c(newextra, part$extras)
+    } else {
+        part$datasplit = c(part$datasplit, newdat)
+        part$values = c(part$values, newval)
+        part$labels = c(part$labels, lbl)
+        part$extras = c(part$extras, newextra)
+    }
+    ## just in case. this is overkill. Revisit if is too costly
+    part = .fixupvals(part)
+    part
+}
+
+#' Add an implicit 'overall' level to split
+#' @inheritParams lyt_args
+#' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
+#' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
+#' @return a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+#' @examples
+#'l <- NULL %>%
+#'    split_cols_by("ARM") %>% 
+#'    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) %>% 
+#'    summarize_row_groups(lbl_fstr = "%s (n)") %>% 
+#'    analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+#' l
+#' 
+#' tbl <- build_table(l, DM)
+ 
+#' tbl
+#' @export
+add_overall_level = function(valname = "Overall", lbl = valname, extrargs = list(), first = TRUE, trim = FALSE) {
+    myfun = function(df, spl, vals = NULL, lbls = NULL, ...) {
+        ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
+        .add_part_info(ret, df, valname, lbl, extrargs, first)
+    }
+  myfun
+  
+}

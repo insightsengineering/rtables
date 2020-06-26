@@ -177,16 +177,16 @@ setGeneric("get_formatted_rows", function(obj, depth = 0, indent = 0) standardGe
 #' @exportMethod get_formatted_rows
 setMethod("get_formatted_rows", "TableTree",
           function(obj, depth = 0, indent = 0) {
-            
-            lr <- get_formatted_rows(tt_labelrow(obj), depth, indent)
-            
-            indent <- indent + !is.null(lr)
-            
-            ct <- unlist(get_formatted_rows(content_table(obj), depth = depth, indent = indent))
-            els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + (length(ct) > 0))
-            
-            list(lr, ct, els)
-          })
+
+    indent <- indent + indent_mod(obj)
+    lr <- get_formatted_rows(tt_labelrow(obj), depth, indent)
+                             
+    indent <- indent + !is.null(lr)
+    ctab <- content_table(obj)
+    ct <- unlist(get_formatted_rows(ctab, depth = depth, indent = indent))
+    els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + (length(ct) > 0) * indent_mod(ctab))
+    list(lr, ct, els)
+})
 
 
 ## this will hit all Content tables as well
@@ -196,34 +196,31 @@ setMethod("get_formatted_rows", "TableTree",
 #' @exportMethod get_formatted_rows
 setMethod("get_formatted_rows", "ElementaryTable",
           function(obj, depth = 0, indent = 0) {
-            
-            lr <- get_formatted_rows(obj@labelrow, depth, indent)
-            
-            els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + !is.null(lr))
-            
-            list(lr, els)
-            
-          })
+    indent <- indent + indent_mod(obj)
 
+    lr <- get_formatted_rows(obj@labelrow, depth, indent)
+    els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + !is.null(lr))
+
+    list(lr, els)
+})
 
 #' @rdname gfr
 #' @exportMethod get_formatted_rows
 setMethod("get_formatted_rows", "TableRow",
           function(obj, depth = 0, indent = 0) {
-            
-            ## stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
-            ## stopifnot(length(row_values(obj)) == ncol(obj))
-            
-            default_format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
-            
-            format <- lapply(row_cells(obj), function(x) {
-              fmt <- obj_fmt(x)
-              if (is.null(fmt))
-                default_format
-              else
-                fmt
-            })
-
+    indent <- indent + indent_mod(obj)
+    ## stopifnot(all(row_cspans(obj) == 1)) # Second assertion depends on first
+    ## stopifnot(length(row_values(obj)) == ncol(obj))
+    
+    default_format <- if (is.null(obj_fmt(obj))) "xx" else obj_fmt(obj)
+    
+    format <- lapply(row_cells(obj), function(x) {
+        fmt <- obj_fmt(x)
+        if (is.null(fmt))
+            default_format
+        else
+            fmt
+    })
     c(indent_string(obj_label(obj), indent),
       unlist(Map(function(val, fmt, spn) {
           stopifnot(is(spn, "integer"))
@@ -231,20 +228,18 @@ setMethod("get_formatted_rows", "TableRow",
               spn)
       }, row_values(obj), format, row_cspans(obj)),
       recursive = FALSE))
-    
 })
-
 
 #' @rdname gfr
 #' @exportMethod get_formatted_rows
 setMethod("get_formatted_rows", "LabelRow",
           function(obj, depth = 0, indent = 0) {
-            
-            if (lblrow_visible(obj))
-              c(indent_string(obj_label(obj), indent), rep("", ncol(obj)))
-            else
-              NULL 
-          })
+    indent <- indent + indent_mod(obj)
+    if (lblrow_visible(obj))
+        c(indent_string(obj_label(obj), indent), rep("", ncol(obj)))
+    else
+        NULL 
+})
 
 
 #' Calculate the Column Widths of an `rtable`

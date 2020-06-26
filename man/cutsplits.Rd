@@ -20,7 +20,9 @@ VarStaticCutSplit(
   splfmt = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L,
+  cindent_mod = 0L
 )
 
 CumulativeCutSplit(
@@ -33,7 +35,9 @@ CumulativeCutSplit(
   splfmt = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L,
+  cindent_mod = 0L
 )
 
 VarDynCutSplit(
@@ -47,7 +51,9 @@ VarDynCutSplit(
   splname = var,
   lblkids = NA,
   extrargs = list(),
-  cumulative = FALSE
+  cumulative = FALSE,
+  indent_mod = 0L,
+  cindent_mod = 0L
 )
 }
 \arguments{

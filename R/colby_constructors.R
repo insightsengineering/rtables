@@ -282,10 +282,22 @@ add_new_coltree = function(lyt, spl) {
 #'  build_table(l3, DM)
 
 
-split_cols_by = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newtoplev = FALSE, lblkids = FALSE,
-                         extrargs = list(), baseline = NULL, incl_all = FALSE) {
+split_cols_by = function(lyt,
+                         var,
+                         lbl = var,
+                         vlblvar = var,
+                         splfmt = NULL,
+                         newtoplev = FALSE,
+                         lblkids = FALSE,
+                         extrargs = list(),
+                         baseline = NULL,
+                         incl_all = FALSE) {
     if(is.null(baseline)) {
-        spl = VarLevelSplit(var = var, splbl = lbl, vlblvar = vlblvar, splfmt = splfmt, lblkids = lblkids,
+        spl = VarLevelSplit(var = var,
+                            splbl = lbl,
+                            vlblvar = vlblvar,
+                            splfmt = splfmt,
+                            lblkids = lblkids,
                             extrargs = extrargs)
     } else {
         spl = VarLevWBaselineSplit(var = var,
@@ -330,13 +342,22 @@ split_cols_by = function(lyt, var, lbl = var, vlblvar = var, splfmt = NULL, newt
 #' 
 #' build_table(l, DM)
 #' 
-split_rows_by = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fmt = NULL, newtoplev = FALSE, lblkids = NA) {
+split_rows_by = function(lyt,
+                         var,
+                         lbl = var,
+                         vlblvar = var,
+                         splfun = NULL,
+                         fmt = NULL,
+                         newtoplev = FALSE,
+                         lblkids = NA,
+                         indent_mod = 0L) {
     spl = VarLevelSplit(var = var,
                         splbl = lbl,
                         vlblvar = vlblvar,
                         splfun = splfun,
                         splfmt = fmt,
-                        lblkids = lblkids)
+                        lblkids = lblkids,
+                        indent_mod = indent_mod)
     pos = next_rpos(lyt, newtoplev)
     split_rows(lyt, spl, pos)
 }
@@ -369,8 +390,11 @@ split_rows_by = function(lyt,  var, lbl = var,  vlblvar = var, splfun = NULL, fm
 #'  build_table(l, ANL)
 #'   
 #'  
-split_cols_by_multivar = function(lyt, vars, lbl, varlbls = vars,
-                              newtoplev = FALSE) {
+split_cols_by_multivar = function(lyt,
+                                  vars,
+                                  lbl,
+                                  varlbls = vars,
+                                  newtoplev = FALSE) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls)
     pos = next_cpos(lyt, newtoplev)
     split_cols(lyt, spl, pos)
@@ -380,10 +404,12 @@ split_cols_by_multivar = function(lyt, vars, lbl, varlbls = vars,
 split_rows_by_multivar = function(lyt, vars, lbl, varlbls,
                               splfmt = NULL,
                               newtoplev = FALSE,
-                              lblkids = NA) {
+                              lblkids = NA,
+                              indent_mod = 0L) {
     spl = MultiVarSplit(vars = vars, splbl = lbl, varlbls,
                         splfmt = splfmt,
-                        lblkids = lblkids)
+                        lblkids = lblkids,
+                        indent_mod = indent_mod)
     pos = next_rpos(lyt, newtoplev)
     split_rows(lyt, spl, pos)
 }
@@ -430,10 +456,12 @@ split_rows_by_dyncut = function(lyt, var, lbl, cuts,
                                splfmt = NULL,
                                newtoplev = FALSE,
                                lblkids = NA,
-                               cumulative = FALSE) {
+                               cumulative = FALSE,
+                               indent_mod = 0L) {
     spl = VarStaticCutSplit(var, lbl, cuts, cutlbls,
                             splfmt = splfmt,
-                            lblkids = lblkids)
+                            lblkids = lblkids,
+                            indent_mod = indent_mod)
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
 
@@ -449,13 +477,15 @@ split_cols_by_cutfun = function(lyt, var, lbl = var,
                             splfmt = NULL,
                             newtoplev = FALSE,
                             extrargs = list(),
-                            cumulative = FALSE) {
+                            cumulative = FALSE,
+                            indent_mod = 0L) {
     spl = VarDynCutSplit(var, lbl,
                          cutfun = cutfun,
                          cutlblfun = cutlblfun,
                          splfmt = splfmt,
                          extrargs = extrargs,
-                         cumulative = cumulative)
+                         cumulative = cumulative,
+                         indent_mod = indent_mod)
     pos = next_cpos(lyt, newtoplev)
     split_cols(lyt, spl, pos)
 }
@@ -486,7 +516,8 @@ split_rows_by_quartiles = function(lyt, var, lbl = var,
                              splfmt = NULL,
                              newtoplev = FALSE,
                              extrargs = list(),
-                             cumulative= FALSE) {
+                             cumulative= FALSE,
+                             indent_mod = 0L) {
     spl = VarDynCutSplit(var, lbl, cutfun = qtile_cuts,
                          cutlblfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
@@ -494,7 +525,8 @@ split_rows_by_quartiles = function(lyt, var, lbl = var,
                                                    "(Q3, max]"),
                          splfmt = splfmt,
                          extrargs = extrargs,
-                         cumulative = cumulative)
+                         cumulative = cumulative,
+                         indent_mod = indent_mod)
     pos = next_rpos(lyt, newtoplev)
     split_rows(lyt, spl, pos)
 }
@@ -517,11 +549,13 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
                             splfmt = NULL,
                             newtoplev = FALSE,
                             lblkids = NA,
-                            cumulative = FALSE) {
+                            cumulative = FALSE,
+                            indent_mod = 0L) {
     spl = VarDynCutSplit(var, lbl, cutfun = cutfun,
                          splfmt = splfmt,
                          lblkids = lblkids,
-                         cumulative = cumulative)
+                         cumulative = cumulative,
+                         indent_mod = indent_mod)
     pos = next_rpos(lyt, newtoplev)
     split_rows(lyt, spl, pos)
 }
@@ -559,15 +593,16 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' build_table(l, iris)
 #'  
 analyze = function(lyt,
-                             var,
-                             lbl = var,
-                             afun = rtab_inner,
-                             fmt = NULL,
-                             defrowlab = "",
-                             newtoplev = FALSE,
-                             inclNAs = FALSE,
-                             extrargs = list(),
-                             lblkids = TRUE) {
+                   var,
+                   lbl = var,
+                   afun = rtab_inner,
+                   fmt = NULL,
+                   defrowlab = "",
+                   newtoplev = FALSE,
+                   inclNAs = FALSE,
+                   extrargs = list(),
+                   lblkids = TRUE,
+                   indent_mod = 0L) {
 
     subafun = substitute(afun)
     if(is.name(subafun) &&
@@ -589,7 +624,8 @@ analyze = function(lyt,
                           splfmt = fmt,
                           defrowlab = defrowlab,
                           inclNAs = inclNAs,
-                          extrargs = extrargs)
+                          extrargs = extrargs,
+                          indent_mod = indent_mod)
  
     if(!newtoplev &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
@@ -642,11 +678,13 @@ get_acolvar_name  <- function(lyt) {
 #' 
 analyze_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
-                                newtoplev = FALSE) {
+                           newtoplev = FALSE,
+                           indent_mod = 0L) {
     spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
                           defrowlab = lbl,
                           splfmt = fmt,
-                          splname = get_acolvar_name(lyt))
+                          splname = get_acolvar_name(lyt),
+                          indent_mod = indent_mod)
     pos = next_rpos(lyt, newtoplev)
     split_rows(lyt, spl, pos)
 
@@ -663,7 +701,8 @@ analyze_against_baseline = function(lyt, var = NA_character_, lbl = "", afun,
                                    compfun = `-`,
                                   fmt = NULL,
                                   defrowlab = "Diff from Baseline",
-                                  newtoplev = FALSE) {
+                                  newtoplev = FALSE,
+                                  indent_mod = 0L) {
     if(is.character(afun)) {
         afnm = afun
         afun = get(afun, mode = "function")
@@ -699,8 +738,12 @@ analyze_against_baseline = function(lyt, var = NA_character_, lbl = "", afun,
         ret
     }
 
-    spl = AnalyzeVarSplit(var, lbl, afun = afun2,
-                          splfmt = fmt, defrowlab = defrowlab)
+    spl = AnalyzeVarSplit(var,
+                          lbl,
+                          afun = afun2,
+                          splfmt = fmt,
+                          defrowlab = defrowlab,
+                          indent_mod = indent_mod)
     if(!newtoplev &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
@@ -719,7 +762,8 @@ analyze_against_baseline_2dtable = function(lyt,
                                  lbl = var,
                                  compfun,
                                  fmt = NULL,
-                                 newtoplev = FALSE) {
+                                 newtoplev = FALSE,
+                                 indent_mod = 0L) {
 
     if(is.character(compfun)) {
         cfnm = compfun
@@ -741,11 +785,12 @@ analyze_against_baseline_2dtable = function(lyt,
             names(ret) = cfnm
         ret
     }
-    analyze_against_baseline(lyt = lyt, var = var, lbl = lbl,
+    analyze_against_baseline(lyt = lyt, var = vtar, lbl = lbl,
                            afun = function(x) x,
                            compfun = compfun2,
                            fmt = fmt,
-                           newtoplev = newtoplev)
+                           newtoplev = newtoplev,
+                           indent_mod = indent_mod)
 }
 
 
@@ -764,20 +809,32 @@ add_overall_col = function(lyt, lbl) {
 #' @rdname dot_add_row_summary
 #' @export
 setGeneric(".add_row_summary",
-           function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) standardGeneric(".add_row_summary"))
+           function(lyt,
+                    lbl,
+                    cfun,
+                    lblkids = NA,
+                    cfmt = NULL,
+                    indent_mod = 0L) standardGeneric(".add_row_summary"))
 setMethod(".add_row_summary", "PreDataTableLayouts",
-          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
+          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL, indent_mod = 0L) {
     tmp = .add_row_summary(rlayout(lyt), lbl, cfun,
                       lblkids = lblkids,
-                      cfmt = cfmt)
+                      cfmt = cfmt,
+                      indent_mod = indent_mod)
     rlayout(lyt) = tmp
     lyt
 })
 
 setMethod(".add_row_summary", "PreDataRowLayout",
-          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
+          function(lyt,
+                   lbl,
+                   cfun,
+                   lblkids = NA,
+                   cfmt = NULL,
+                   indent_mod = 0L) {
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
+        ## XXX ignoring indent mod here
         rt = root_spl(lyt)
         rt = .add_row_summary(rt, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
         root_spl(lyt) = rt
@@ -785,26 +842,43 @@ setMethod(".add_row_summary", "PreDataRowLayout",
         ind = length(lyt)
         tmp = .add_row_summary(lyt[[ind]], lbl, cfun,
                           lblkids = lblkids,
-                          cfmt = cfmt)
+                          cfmt = cfmt,
+                          indent_mod = indent_mod)
         lyt[[ind]] = tmp
     }
     lyt
 })
 
 setMethod(".add_row_summary", "SplitVector",
-          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
+          function(lyt,
+                   lbl,
+                   cfun,
+                   lblkids = NA,
+                   cfmt = NULL,
+                   indent_mod = 0L) {
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
     spl = lyt[[ind]]
     ## if(is(spl, "AnalyzeVarSplit")) stop("can't add content rows to analyze variable split")
-    tmp = .add_row_summary(spl, lbl, cfun, lblkids = lblkids, cfmt = cfmt)
+    tmp = .add_row_summary(spl,
+                           lbl,
+                           cfun,
+                           lblkids = lblkids,
+                           cfmt = cfmt,
+                           indent_mod = indent_mod)
     lyt[[ind]] = tmp
     lyt
 })
 
 setMethod(".add_row_summary", "Split",
-          function(lyt, lbl, cfun, lblkids = NA, cfmt = NULL) {
+          function(lyt,
+                   lbl,
+                   cfun,
+                   lblkids = NA,
+                   cfmt = NULL,
+                   indent_mod = 0L) {
     content_fun(lyt) = cfun
+    content_indent_mod(lyt) = indent_mod
     obj_fmt(lyt) = cfmt
     if(!is.na(lblkids) && !identical(lblkids, label_kids(lyt)))
         label_kids(lyt) = lblkids
@@ -872,7 +946,12 @@ setMethod(".add_row_summary", "Split",
 #' 
 #' summary(tbl) # summary count is a content table
 #' 
-summarize_row_groups = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.x%)", cfun = NULL ){
+summarize_row_groups = function(lyt,
+                                var = NULL,
+                                lbl_fstr = "%s",
+                                fmt = "xx (xx.x%)",
+                                cfun = NULL,
+                                indent_mod = 0L){
 
     if(is.null(cfun)) {
         if(length(gregexpr("xx", fmt)[[1]]) == 2)
@@ -880,8 +959,10 @@ summarize_row_groups = function(lyt, var = NULL, lbl_fstr = "%s", fmt = "xx (xx.
         else
             cfun = .count_raw_constr(var,fmt, lbl_fstr)
     }
-    .add_row_summary(lyt,# lbl = lbl,
-                cfun = cfun, cfmt = fmt)
+    .add_row_summary(lyt,
+                     cfun = cfun,
+                     cfmt = fmt,
+                     indent_mod = indent_mod)
 }
 
 
@@ -941,7 +1022,8 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 #' 
 #' summary(tbl2)
 #' 
-add_existing_table = function(lyt, tt) {
+add_existing_table = function(lyt, tt, indent_mod = 0) {
+    indent_mod(tt) = indent_mod
     lyt = split_rows(lyt,
                         tt,
                         next_rpos(lyt, TRUE))

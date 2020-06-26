@@ -19,7 +19,8 @@ ElementaryTable(
   cinfo = NULL,
   iscontent = NA,
   var = NA_character_,
-  fmt = NULL
+  fmt = NULL,
+  indent_mod = 0L
 )
 
 TableTree(
@@ -34,7 +35,8 @@ TableTree(
   iscontent = NA,
   var = NA_character_,
   cinfo = NULL,
-  fmt = NULL
+  fmt = NULL,
+  indent_mod = 0L
 )
 }
 \arguments{

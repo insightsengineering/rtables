@@ -55,6 +55,7 @@ Collate:
     'summary.R'
     'toString.R'
     'tree_accessors.R'
+    'tt_compare_tables.R'
     'tt_compatibility.R'
     'tt_dotabulation.R'
     'tt_paginate.R'

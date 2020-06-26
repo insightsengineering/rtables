@@ -16,7 +16,8 @@ AnalyzeVarSplit(
   splfmt = NULL,
   inclNAs = FALSE,
   splname = var,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L
 )
 
 AnalyzeMultiVars(
@@ -30,7 +31,8 @@ AnalyzeMultiVars(
   inclNAs = FALSE,
   .payload = NULL,
   splname = NULL,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L
 )
 
 AVarBaselineComp(
@@ -45,7 +47,8 @@ AVarBaselineComp(
   splfmt = NULL,
   valorder = NULL,
   splname = var,
-  extrargs = list()
+  extrargs = list(),
+  indent_mod = 0L
 )
 }
 \arguments{
