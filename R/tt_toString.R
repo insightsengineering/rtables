@@ -1,12 +1,9 @@
-## temporary compatability layer to leverage existing
-## ascii-rendering functionality
-##
-## We will want to replace this is if the S4 approach is
-## adopted fully
 
+# toString ----
 
-
+#' @export
 setGeneric("toString", function(x,...) standardGeneric("toString"))
+
 ## preserve S3 behavior
 setMethod("toString", "ANY", base:::toString)
 
@@ -15,7 +12,8 @@ setMethod("show", "VTableTree", function(object) {
 })
 
 
-#' Convert an rtable object to a string
+#' Convert an `rtable` object to a string
+#' 
 #' @noRd
 #' 
 #' @examples 
@@ -26,7 +24,7 @@ setMethod("show", "VTableTree", function(object) {
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #' 
-#' l <- NULL %>% 
+#' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
@@ -38,42 +36,42 @@ setMethod("show", "VTableTree", function(object) {
 #' toString(tbl, gap = 3)
 #' 
 setMethod("toString", "VTableTree", function(x, gap = 3) {
-
-  tmp <- .tbl_header_mat(x)
   
-  hbody <- tmp$body
-  hspans <- tmp$span
-    
-    ## table body
-    matdata <- unname(unlist(get_formatted_rows(x)))
-    if(is.null(matdata))
-        matdata <- ""
-    tbody <- matrix(matdata, ncol = ncol(x) + 1, byrow = TRUE)
-    ## tspans <- matrix(rep(1, length(tbody)), nrow = nrow(tbody))
-    tsptmp = lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
-        sp = row_cspans(rr)
-        rep(sp, times = sp)
-    })
-    ## the 1 is for row labels
-    tspans <- cbind(1L, do.call(rbind, tsptmp))
-    
-    
-    body <- rbind(hbody, tbody)
-    spans <- rbind(hspans, tspans)
-    
-    space <- matrix(rep(0, length(body)), nrow = nrow(body))
-    aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
-    aligns[, 1] <- "left" # row names
+ # browser()
   
-    if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-        stop("no \\n allowed at the moment")
-    
-    space <- nchar(body)/spans
-    col_widths <- ceiling(apply(space, 2, max))
+  ## we create a matrix with the formatted cell contents
   
-    col_widths_mat <- matrix(rep(col_widths, nrow(body)), ncol = ncol(body), byrow = TRUE)
+  header_content <- .tbl_header_mat(x) # first col are for row.names
   
-    nc <- ncol(col_widths_mat)
+  ## table body
+  body_content <- unname(unlist(get_formatted_rows(x)))
+  if(is.null(body_content))
+    body_content <- ""
+  body_content_strings <- matrix(body_content, ncol = ncol(x) + 1, byrow = TRUE)
+  
+  tsptmp <- lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
+    sp <- row_cspans(rr)
+    rep(sp, times = sp)
+  })
+  ## the 1 is for row labels
+  body_spans <- cbind(1L, do.call(rbind, tsptmp))
+  
+  body <- rbind(header_content$body, body_content_strings)
+  spans <- rbind(header_content$span, body_spans)
+  
+  space <- matrix(rep(0, length(body)), nrow = nrow(body))
+  aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
+  aligns[, 1] <- "left" # row names
+  
+  if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
+    stop("no \\n allowed at the moment")
+  
+  space <- nchar(body)/spans
+  col_widths <- ceiling(apply(space, 2, max))
+  
+  col_widths_mat <- matrix(rep(col_widths, nrow(body)), ncol = ncol(body), byrow = TRUE)
+  
+  nc <- ncol(col_widths_mat)
   cell_widths_mat <- col_widths_mat
   keep_mat <- matrix(rep(TRUE, length(cell_widths_mat)), ncol = nc)
   
@@ -100,39 +98,35 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   
   div <- strrep("-", sum(col_widths) + (length(col_widths) - 1) * gap)
   
-  txt_head <- apply(head(content, nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
-  txt_body <- apply(tail(content, -nrow(hbody)), 1, .paste_no_na, collapse = gap_str)
+  txt_head <- apply(head(content, nrow(header_content$body)), 1, .paste_no_na, collapse = gap_str)
+  txt_body <- apply(tail(content, -nrow(header_content$body)), 1, .paste_no_na, collapse = gap_str)
   
   paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
   
 })
 
-.paste_no_na <- function(x, ...) {
-  paste(na.omit(x), ...)
-}
 
-
-.tbl_header_mat = function(tt) {
+.tbl_header_mat <- function(tt) {
   
-  clyt = coltree(tt)
+  clyt <- coltree(tt)
   
-  atrow = 1
-  rows = list()
-  kids = tree_children(clyt)
-  dispcounts = disp_ccounts(tt)
+  atrow <- 1
+  rows <- list()
+  kids <- tree_children(clyt)
+  dispcounts <- disp_ccounts(tt)
   while(length(kids) > 0 && atrow < 1000) { #we will break from this
     
-    labs = names(kids)
-    cells = lapply(names(kids), function(x) {
+    labs <- names(kids)
+    cells <- lapply(names(kids), function(x) {
       old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
     })
-    rows[[atrow]] = old_rrowl(row.name = "",
+    rows[[atrow]] <- old_rrowl(row.name = "",
                               cells)
-    atrow = atrow + 1
+    atrow <- atrow + 1
     ## otherwise its pasted with the next level...
     ## XXX todo figure out a better way to do this
-    names(kids) = NULL
-    kids = unlist(lapply(kids,
+    names(kids) <- NULL
+    kids <- unlist(lapply(kids,
                          function(k) {
                            if(is(k, "LayoutColLeaf"))
                              NULL
@@ -141,10 +135,6 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
                          }),
                   recursive = FALSE)
   }
-  
-  
-  
-  
   
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
@@ -171,6 +161,7 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
 }
 
 
+# get_formatted_rows ----
 
 #' Get formatted rows
 #' @inheritParams gen_args
@@ -178,6 +169,7 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
 #' @param depth Depth we are currently at. Not intended to  be set by end users.
 #' @rdname gfr
 setGeneric("get_formatted_rows", function(obj, depth = 0, indent = 0) standardGeneric("get_formatted_rows"))
+
 
 ## TableTree objects (can) have content Rows
 ## process the content, then the children by recursive call
@@ -250,7 +242,72 @@ setMethod("get_formatted_rows", "LabelRow",
 })
 
 
+#' Calculate the Column Widths of an `rtable`
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+column_widhts <- function(x, column_gap = 3) {
+  stopifnot(is(x, "rtable"))
+  
+}
+
+# utility functions ----
+
 indent_string <- function(x, indent = 0, incr = 2) {
   paste0(strrep(" ", (indent > 0) * indent * incr), x)
+}
+
+.paste_no_na <- function(x, ...) {
+  paste(na.omit(x), ...)
+}
+
+
+#' Pad a string and align within string
+#' 
+#' @param x string
+#' @param n number of character of the output string, if `n < nchar(x)` an error is thrown
+#' 
+#' @noRd
+#' 
+#' @examples 
+#' 
+#' padstr("abc", 3)
+#' padstr("abc", 4)
+#' padstr("abc", 5)
+#' padstr("abc", 5, "left")
+#' padstr("abc", 5, "right")
+#' 
+#' \dontrun{
+#' padstr("abc", 1)
+#' }
+#' 
+padstr <- function(x, n, just = c("center", "left", "right")) {
+  
+  just <- match.arg(just)
+  
+  if (length(x) != 1) stop("length of x needs to be 1 and not", length(x))
+  if (is.na(n) || !is.numeric(n) || n < 0) stop("n needs to be numeric and > 0")
+  
+  if (is.na(x)) x <- ""
+  
+  nc <- nchar(x)
+  
+  if (n < nc) stop("\"", x, "\" has more than ", n, " characters")
+  
+  switch(
+    just,
+    center = {
+      pad <- (n-nc)/2  
+      paste0(spaces(floor(pad)), x, spaces(ceiling(pad)))
+    },
+    left = paste0(x, spaces(n-nc)),
+    right = paste0(spaces(n-nc), x)
+  )
+}
+
+spaces <- function(n) {
+  paste(rep(" ", n), collapse = "")
 }
 

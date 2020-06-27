@@ -263,7 +263,7 @@ add_new_coltree = function(lyt, spl) {
 #'
 #' @author Gabriel Becker
 #' @examples 
-#' l <- NULL %>% split_cols_by("ARM") 
+#' l <- basic_table() %>% split_cols_by("ARM") 
 #' l
 #' 
 #' # add an analysis (summary)
@@ -274,7 +274,7 @@ add_new_coltree = function(lyt, spl) {
 #' build_table(l2, DM)
 #' 
 #' # By default sequentially adding layouts results in nesting
-#' l3 <- NULL %>% split_cols_by("ARM") %>%
+#' l3 <- basic_table() %>% split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
 #'   analyze("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 #' l3
@@ -324,7 +324,7 @@ split_cols_by = function(lyt,
 #' 
 #' # TODO: this needs to give a compressed output, the mean information would 
 #' #       either go into the table header or table title
-#' l <- NULL %>%
+#' l <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("RACE") %>%
 #'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
@@ -332,7 +332,7 @@ split_cols_by = function(lyt,
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by("SEX", "Gender") %>%
 #'   summarize_row_groups(lbl_fstr = "Overall (N)") %>%
 #'   split_rows_by("RACE", "Ethnicity") %>%
@@ -377,7 +377,7 @@ split_rows_by = function(lyt,
 #' @seealso \code{\link{analyze_colvars}}
 #' @author Gabriel Becker 
 #' @examples 
-#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity") %>%
 #'   analyze_colvars("", afun = mean, fmt = "xx.xx")
@@ -432,7 +432,7 @@ split_rows_by_multivar = function(lyt, vars, lbl, varlbls,
 #' @rdname varcuts
 #' @author Gabriel Becker
 #' @examples
-#' l <- NULL %>%
+#' l <- basic_table() %>%
 #' split_cols_by_cuts("AGE", lbl = "Age", cuts = c(0,25, 35, 1000), cutlbls = c("young", "medium", "old")) %>%
 #' analyze("RACE", lbl ="", defrowlab="count", afun = length)
 #'
@@ -573,7 +573,7 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' @author Gabriel Becker
 #' @examples 
 #' 
-#' l <- NULL %>%
+#' l <- basic_table() %>%
 #'     split_cols_by("ARM") %>% 
 #'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
 #' l
@@ -581,7 +581,7 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- NULL %>% 
+#' l <- basic_table() %>% 
 #'     split_cols_by("Species") %>%
 #'     analyze(head(names(iris), -1), afun = function(x) {
 #'         list(
@@ -663,7 +663,7 @@ get_acolvar_name  <- function(lyt) {
 #' @author Gabriel Becker
 #' @examples 
 #' 
-#' l <- NULL %>% split_cols_by("ARM", "Arm") %>%
+#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity") %>%
 #'   analyze_colvars("", afun = mean, fmt = "xx.xx")
@@ -804,7 +804,9 @@ add_overall_col = function(lyt, lbl) {
                   next_cpos(lyt, TRUE))
 }
 
-#' @rdname .add_row_summary
+#' Add Row Summary
+#' 
+#' @rdname dot_add_row_summary
 #' @export
 setGeneric(".add_row_summary",
            function(lyt,
@@ -932,7 +934,7 @@ setMethod(".add_row_summary", "Split",
 #' @author Gabriel Becker
 #' 
 #' @examples 
-#' l <- NULL %>% split_cols_by("ARM") %>% 
+#' l <- basic_table() %>% split_cols_by("ARM") %>% 
 #'     split_rows_by("RACE") %>% 
 #'     summarize_row_groups(lbl_fstr = "%s (n)") %>% 
 #'     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
@@ -982,7 +984,7 @@ summarize_row_groups = function(lyt,
 #' @author Gabriel Becker
 #' 
 #' @examples 
-#' l <- NULL %>% split_cols_by("ARM") %>% 
+#' l <- basic_table() %>% split_cols_by("ARM") %>% 
 #'     add_colcounts() %>% 
 #'     split_rows_by("RACE") %>% 
 #'     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
@@ -1006,14 +1008,14 @@ add_colcounts = function(lyt, fmt = "(N=xx)") {
 #' @author Gabriel Becker
 #' 
 #' @examples 
-#' tbl1 <- NULL %>%
+#' tbl1 <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    analyze("AGE", afun = mean, fmt = "xx.xx") %>%
 #'    build_table(DM)
 #' 
 #' tbl1
 #' 
-#' tbl2 <- NULL %>% split_cols_by("ARM") %>%
+#' tbl2 <- basic_table() %>% split_cols_by("ARM") %>%
 #'    analyze("AGE", afun = sd, fmt = "xx.xx") %>%
 #'    add_existing_table(tbl1) %>%
 #'    build_table(DM)
@@ -1199,6 +1201,12 @@ lstwrapdf = function(f) {
 #' @note this is represented by \code{NULL} currently
 #'
 #' @export
+#' 
+#' @examples 
+#' 
+#' basic_table() %>%
+#'   analyze("AGE", afun = mean) %>%
+#'   build_table(DM)
 #' 
 basic_table <- function() NULL
 

@@ -13,7 +13,7 @@ setMethod("summary", "ANY", base:::summary)
 #' @examples 
 #' library(dplyr)
 #' 
-#' l <- NULL %>% 
+#' l <- basic_table() %>% 
 #'     split_cols_by("Species") %>%
 #'     split_rows_by("RND") %>%
 #'     analyze(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , fmt = "xx.xx")

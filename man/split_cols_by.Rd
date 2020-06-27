@@ -42,7 +42,7 @@ split_cols_by(
 Will generate children for each subset of a categorical variable
 }
 \examples{
-l <- NULL \%>\% split_cols_by("ARM") 
+l <- basic_table() \%>\% split_cols_by("ARM") 
 l
 
 # add an analysis (summary)
@@ -53,7 +53,7 @@ l2
 build_table(l2, DM)
 
 # By default sequentially adding layouts results in nesting
-l3 <- NULL \%>\% split_cols_by("ARM") \%>\%
+l3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
   analyze("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
 l3

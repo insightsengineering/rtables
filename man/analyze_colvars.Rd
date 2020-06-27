@@ -25,7 +25,7 @@ level of nesting in the column structure, rather than at the row level.
 }
 \examples{
 
-l <- NULL \%>\% split_cols_by("ARM", "Arm") \%>\%
+l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   split_rows_by("RACE", "ethnicity") \%>\%
   analyze_colvars("", afun = mean, fmt = "xx.xx")
