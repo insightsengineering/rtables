@@ -97,6 +97,8 @@ split_rows_by_cutfun(
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 
 \item{cutlblfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}

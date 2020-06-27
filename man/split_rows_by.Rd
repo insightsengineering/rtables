@@ -32,6 +32,8 @@ split_rows_by(
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Add Rows according to levels of a variable

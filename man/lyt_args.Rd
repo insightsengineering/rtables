@@ -34,7 +34,8 @@ lyt_args(
   cutfun,
   cutlblfun,
   cumulative,
-  incl_all
+  incl_all,
+  indent_mod
 )
 }
 \arguments{
@@ -97,6 +98,8 @@ lyt_args(
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
 \item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Layouting Function Arg Conventions

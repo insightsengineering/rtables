@@ -60,6 +60,8 @@ TableTree(
 
 \item{fmt}{format string for cells}
 
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
 \item{cont}{ElementaryTable. Content table.}
 }
 \description{

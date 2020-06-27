@@ -191,8 +191,8 @@ setMethod("get_formatted_rows", "TableTree",
                              
     indent <- indent + !is.null(lr)
     ctab <- content_table(obj)
-    ct <- unlist(get_formatted_rows(ctab, depth = depth, indent = indent))
-    els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + (length(ct) > 0) * indent_mod(ctab))
+    ct <- unlist(get_formatted_rows(ctab, depth = depth, indent = indent + indent_mod(ctab)))
+    els <- lapply(tree_children(obj), get_formatted_rows, depth = depth + 1, indent = indent + (length(ct) > 0) *(1 + indent_mod(ctab)))
     list(lr, ct, els)
 })
 

@@ -136,7 +136,6 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
         lbls = .applysplit_partlbls(spl, df, vals, lbls)
     else
         stopifnot(names(lbls)== names(vals))
-    
     ## get rid of columns that would not have any
     ## observations.
     ##
@@ -160,6 +159,7 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
                      vals)
         vord = vord[!is.na(vord)]
     } 
+
     
     ## FIXME: should be an S4 object, not a list
     ret = list(values = vals[vord],
@@ -257,7 +257,7 @@ setMethod("check_validsplit", "CompoundSplit",
 ## default does nothing, add methods as they become
 ## required
 setMethod("check_validsplit", "Split",
-          function(spl, df)
+          function(spl, df) 
     invisible(NULL))
 
 
@@ -397,6 +397,35 @@ setMethod(".applysplit_extras", "VarLevWBaselineSplit",
 ## XXX TODO FIXME
 setMethod(".applysplit_partlbls", "Split",
           function(spl, df, vals, lbls) as.character(vals))
+
+setMethod(".applysplit_partlbls", "VarLevelSplit",
+          function(spl, df, vals, lbls) {
+    
+    
+    varvec = df[[spl_payload(spl)]]
+    lblvec = df[[spl_lblvar(spl)]]
+    if(is.null(vals)) {
+        vals = if(is.factor(varvec))
+                   levels(varvec)
+               else
+                   unique(varvec)
+    }
+    if(is.null(lbls)) {
+        ##XXX dangerous
+        if(is.factor(varvec))
+            lbls = vals
+        else
+            lbls = sapply(vals, function(v) {
+                vlbl = unique(df[df[[spl_payload(spl)]] == v,
+                                 spl_lblvar(spl), drop = TRUE])
+                if(length(vlbl) == 0)
+                    vlbl = ""
+                vlbl
+            })
+    }
+    names(lbls) = as.character(vals)
+    lbls
+})
 
 
 

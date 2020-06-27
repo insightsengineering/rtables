@@ -62,13 +62,15 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}
 #' @param cutfun function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation
 #' @param incl_all logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.
+#' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior. 
 #' @family conventions
 lyt_args <- function( lyt, var, vars, lbl, vlblvar, varlbls, splfmt,
                      newtoplev, fmt, cfun, cfmt, splfun, splname,
                      splbl, afun, defrowlab, inclNAs, valorder,
                      baseline, compfun, lbl_fstr, lblkids, extrargs, name,
                      cuts, cutlbls, cutfun, cutlblfun, cumulative,
-                     incl_all ) NULL
+                     incl_all,
+                     indent_mod) NULL
 
 
 #' Constructor Arg Conventions

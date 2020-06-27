@@ -16,6 +16,8 @@ analyze_colvars(lyt, lbl, afun, fmt = NULL, newtoplev = FALSE, indent_mod = 0L)
 \item{fmt}{format string for cells}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth

@@ -43,11 +43,11 @@ test_that("complex layout works", {
         analyze("VAR3", "Var3 Counts", afun = lstwrapx(table), newtoplev = TRUE)
     
     
-    expnames = c("WHITE (n)", "A", "Age Analysis", "mean", "median",
-                 "Age Analysis redux", "range", "B", "Age Analysis",
+    expnames = c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
+                 "Age Analysis redux", "range", "Level B", "Age Analysis",
                  "mean", "median", "Age Analysis redux", "range",
-                 "BLACK (n)", "A", "Age Analysis", "mean", "median",
-                 "Age Analysis redux", "range", "B", "Age Analysis",
+                 "African American (n)", "Level A", "Age Analysis", "mean", "median",
+                 "Age Analysis redux", "range", "Level B", "Age Analysis",
                  "mean", "median", "Age Analysis redux", "range",
                  "level1", "level2")
     tab = build_table(lyt, rawdat)
@@ -102,7 +102,7 @@ test_that("lblkids parameter works", {
     tabyes <- build_table(yeslbllyt, rawdat)
 
     expect_identical(row.names(tabyes)[1:4],
-                     c("WHITE", "WHITE (n)", "Level A", "Age Analysis"))
+                     c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis"))
 
     
     misslbllyt <- NULL %>%

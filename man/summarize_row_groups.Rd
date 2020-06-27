@@ -23,6 +23,8 @@ summarize_row_groups(
 \item{fmt}{format string for cells}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Add a content row of summary counts

@@ -230,7 +230,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 
 .make_ctab = function(df, lvl, ##treepos,
                       name,
-                      ##colexprs, coltree,
+                      lbl,
                       cinfo,
                       parent_cfun = NULL,
                       format = NULL,
@@ -238,11 +238,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 
  
     if(!is.null(parent_cfun)) {
-         
-            
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   func = .make_caller(parent_cfun, name), 
+                                   func = .make_caller(parent_cfun, lbl), 
                                    cinfo = cinfo,
                                    rowconstr = ContentRow)
     } else {
@@ -320,7 +318,8 @@ recursive_applysplit = function( df,
     ## declaring layouts much more sane.
     ctab = .make_ctab(df,
                       lvl = lvl,
-                      name = name, 
+                      name = name,
+                      lbl = partlbl,
                       cinfo = cinfo,
                       parent_cfun = parent_cfun,
                       format = cformat,
@@ -547,6 +546,7 @@ build_table = function(lyt, df,
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L,
                       name = "root",
+                      lbl = "",
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
                       format = content_fmt(rtspl),

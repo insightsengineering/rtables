@@ -43,6 +43,8 @@ analyze_against_baseline_2dtable(
 \item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 
 \item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Add baseline comparison analysis recipe

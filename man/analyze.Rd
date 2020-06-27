@@ -38,6 +38,8 @@ analyze(
 \item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding

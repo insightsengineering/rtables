@@ -16,7 +16,8 @@ LabelRow(
   lbl = "",
   name = lbl,
   vis = !is.na(lbl) && nzchar(lbl),
-  cinfo = InstantiatedColumnInfo()
+  cinfo = InstantiatedColumnInfo(),
+  indent_mod = 0L
 )
 
 .tablerow(
@@ -45,6 +46,8 @@ ContentRow(...)
 \item{vis}{logical. Should the row be visible (\code{LabelRow} only).}
 
 \item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
 \item{vals}{list. cell values for the row}
 

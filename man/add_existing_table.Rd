@@ -10,6 +10,8 @@ add_existing_table(lyt, tt, indent_mod = 0)
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Add an already calculated table to the layout
