@@ -17,8 +17,11 @@ formats_2d <- c(
   "xx.x to xx.x"
 )
 
+formats_3d <- c(
+  "xx.xx (xx.xx - xx.xx)"
+)
 
-#' List with valid \code{\link{rcell}} formats labels grouped by 1d and 2d
+#' List with valid \code{\link{rcell}} formats labels grouped by 1d, 2d and 3d
 #' 
 #' Currently valid format lables can not be added dynamically. Format functions
 #' must be used for special cases
@@ -33,7 +36,8 @@ list_rcell_format_labels <- function() {
   structure(  
     list(
       "1d" = formats_1d,
-      "2d" = formats_2d
+      "2d" = formats_2d,
+      "3d" = formats_3d
     ),
     info = "xx does not modify the element, and xx. rounds a number to 0 digits"
   )
@@ -135,6 +139,8 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       1
     } else if (format %in% formats_2d) {
       2
+    } else if (format %in% formats_3d) {
+      3
     } else {
       stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
     }
@@ -181,6 +187,7 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
       "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
       "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to "),
+      "xx.xx (xx.xx - xx.xx)" = paste0(round(x[1], 2), " (", paste(round(x[2:3], 2), collapse = " - "), ")"),
       paste("format string", format, "not found")
     )
   } else if (is.function(format)) {

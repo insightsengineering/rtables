@@ -2,7 +2,7 @@
 % Please edit documentation in R/format_rcell.R
 \name{list_rcell_format_labels}
 \alias{list_rcell_format_labels}
-\title{List with valid \code{\link{rcell}} formats labels grouped by 1d and 2d}
+\title{List with valid \code{\link{rcell}} formats labels grouped by 1d, 2d and 3d}
 \usage{
 list_rcell_format_labels()
 }
