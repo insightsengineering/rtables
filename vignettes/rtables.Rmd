@@ -31,16 +31,14 @@ library(rtables)
 ```
 ```{r}
 tbl <- rtable(
- # header = c("Treatement\nN=100", "Comparison\nN=300"),
-  header = list(rrow(NULL, c("Treatment", "Comparison")),
-  	        rrow(NULL, c("N=100",     "N=300"))),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
   rrow(),
-  rrow("this is a very long section header")#,
-#  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2))#,
- # rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+  rrow("this is a very long section header"),
+  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+  rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
 
 tbl  
@@ -132,16 +130,3 @@ t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
 
 
-# Converting table objects
-
-You can also convert table objects to rtables:
-
-```{r}
-as.rtable(table(iris$Species))
-```
-
-or 
-
-```{r}
-print(as.rtable(with(mtcars, table(cyl, hp))), gap = 1)
-```

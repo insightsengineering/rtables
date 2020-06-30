@@ -380,6 +380,11 @@ rtablel = function (header, ..., format = NULL)
     do.call(rtable, args_list)
 }
 
+
+#' @rdname rbind
+#' @export
+#' @param gap deprecated. Ignored.
+#' @param check_headers deprecated. Ignored.
 rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     if(!check_headers)
         warning("check_headers = FALSE is no longer supported, ignoring.")
@@ -387,8 +392,10 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     firstcols = col_info(x[[1]])
     i = 1
     while(no_colinfo(firstcols) &&
-          i < length(x))
-        firstcols <- col_info(x[[i]])
+          i <= length(x)) {
+              firstcols <- col_info(x[[i]])
+              i <- i+ 1
+          }
     
     lapply(x, function(xi) chk_compat_cinfos(firstcols, col_info(xi)))
 
@@ -397,14 +404,19 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     ## TableRow objects, construct a new
     ## elementary table with all the rows
     ## instead of adding nesting.
+
+    ## we used to check for xi not being a lable row, why?? XXX
     if(all(sapply(x, function(xi) {
-        (is(xi, "ElementaryTable") && !lblrow_visible(xi) ) ||
-            is(xi, "TableRow") && !is(xi, "LabelRow")}))) {
+        (is(xi, "ElementaryTable") && !lblrow_visible(xi) )||
+            is(xi, "TableRow")}))) { ## && !is(xi, "LabelRow")}))) {
         x <- unlist(lapply(x, function(xi) {
             if(is(xi, "TableRow"))
                 xi
-            else
-                tree_children(xi)
+            else {
+                lst <- tree_children(xi)
+                lapply(lst, indent,
+                       by = indent_mod(xi))
+            }
         }))
     }
 
@@ -413,14 +425,55 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     
 }
 
+#' rbind TableTree and related objects
+#' @rdname rbind
+#' @exportMethod rbind
+#' @examples
+#' mtbl <- rtable(
+#'    header = rheader(
+#'      rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'      rrow(NULL, "mean", "median", "mean", "median")
+#'    ),
+#'    rrow(
+#'      row.name = "All Species",
+#'      mean(iris$Sepal.Length), median(iris$Sepal.Length),
+#'      mean(iris$Petal.Length), median(iris$Petal.Length),
+#'      format = "xx.xx"
+#'    )
+#'  )
+#'  
+#'  mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
+#'    header = rheader(
+#'      rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+#'      rrow(NULL, "mean", "median", "mean", "median")
+#'    ),
+#'    rrow(
+#'      row.name = "Setosa",
+#'      mean(Sepal.Length), median(Sepal.Length),
+#'      mean(Petal.Length), median(Petal.Length),
+#'      format = "xx.xx"
+#'    )
+#'  ))
+#'  
+#'  rbind(mtbl, mtbl2)
+#' rbind(mtbl, rrow(), mtbl2)
+#' rbind(mtbl, rrow("aaa"), indent(mtbl2))
+#'  # TODO: add functionality
+#'  # 
+#'  # rbind(mtbl, mtbl2, gap = 1)
+#'  # rbind(mtbl, mtbl2, gap = 2)
 setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
     rbindl_rtables(list(...), check_headers = TRUE)
 })
 
+#' @exportMethod rbind2
+#' @param x VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
+#' @param y VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
+#' @rdname rbind
 setMethod("rbind2", "VTableNodeInfo",
           function(x, y) {
-    rbindl_rtables(list(x, y), check_headers = TRUE)
+     rbindl_rtables(list(x, y), check_headers = TRUE)
 })
 
 
@@ -870,4 +923,42 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
         col_counts(ret) <- cc
     }
     ret
+}
+
+
+#' Add N=xx to header
+#' 
+#' Helper function used to add the population total (N) in the 
+#' column header of \code{\link{rtable}} object.
+#' 
+#' @param x \code{rtable}
+#' @param N vector with counts to be displayed in the header. The
+#'   length must match the number of columns in \code{x}
+#'   
+#' @export
+#' 
+#' @examples 
+#' 
+#' tbl <- rtable(
+#'  header = letters[1:3],
+#'  rrow("X", 1, 2, 3),
+#'  rrow("Y", 4, 5, 6)
+#' )
+#' tbl
+#' header_add_N(tbl, 1:3)
+#' 
+#' # multiline header
+#' tbl <- rtable(
+#'   header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),
+#'   rrow("X", 1, 2, 3),
+#'   rrow("Y", 4, 5, 6)
+#' )
+#' tbl
+#' header_add_N(tbl, 1:3)
+header_add_N <- function(x, N = NULL) {
+    stopifnot(is.null(N) || length(N) == ncol(x))
+    disp_ccounts(x) <- TRUE
+    if(is.null(N))
+        col_counts(x) <- N
+    x
 }

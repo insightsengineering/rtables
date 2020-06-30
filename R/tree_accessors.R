@@ -621,7 +621,10 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
     obj
 })
 
-`%||%` = function(L, R) if(is.null(L)) R else L
+## credit: rlang, Henry and Wickham.
+## this one tiny utility function is NOT worth a dependency.
+## modified it so any length 0 x grabs y
+`%||%` = function(L, R) if(length(L) == 0) R else L
 setGeneric("value_fmts", function(obj, default = obj_fmt(obj)) standardGeneric("value_fmts"))
 setMethod("value_fmts", "ANY",
           function(obj, default) {
