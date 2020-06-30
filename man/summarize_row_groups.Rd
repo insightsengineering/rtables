@@ -33,7 +33,7 @@ Add a content row of summary counts
 if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
 }
 \examples{
-l <- NULL \%>\% split_cols_by("ARM") \%>\% 
+l <- basic_table() \%>\% split_cols_by("ARM") \%>\% 
     split_rows_by("RACE") \%>\% 
     summarize_row_groups(lbl_fstr = "\%s (n)") \%>\% 
     analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")

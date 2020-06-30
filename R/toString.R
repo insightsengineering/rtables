@@ -152,30 +152,3 @@ row_to_str <- function(row, nchar_rownames, nchar_col, gap, indent.unit) {
 }
 
 
-padstr <- function(x, n, just = c("center", "left", "right")) {
-  
-  just <- match.arg(just)
-  
-  if (length(x) != 1) stop("length of x needs to be 1 and not", length(x))
-  if (is.na(n) || !is.numeric(n) || n < 0) stop("n needs to be numeric and > 0")
-  
-  if (is.na(x)) x <- ""
-  
-  nc <- nchar(x)
-  
-  if (n < nc) stop(x, " has more than ", n, " characters")
-  
-  switch(
-    just,
-    center = {
-      pad <- (n-nc)/2  
-      paste0(spaces(floor(pad)), x, spaces(ceiling(pad)))
-    },
-    left = paste0(x, spaces(n-nc)),
-    right = paste0(spaces(n-nc), x)
-  )
-}
-
-spaces <- function(n) {
-  paste(rep(" ", n), collapse = "")
-}

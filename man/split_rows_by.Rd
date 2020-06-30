@@ -42,7 +42,7 @@ Add Rows according to levels of a variable
 
 # TODO: this needs to give a compressed output, the mean information would 
 #       either go into the table header or table title
-l <- NULL \%>\%
+l <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE") \%>\%
   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
@@ -50,7 +50,7 @@ l <- NULL \%>\%
 build_table(l, DM)
 
 
-l <- NULL \%>\% split_cols_by("ARM", "Arm") \%>\%
+l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by("SEX", "Gender") \%>\%
   summarize_row_groups(lbl_fstr = "Overall (N)") \%>\%
   split_rows_by("RACE", "Ethnicity") \%>\%

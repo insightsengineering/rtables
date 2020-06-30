@@ -30,7 +30,7 @@ counts are fully respected.
 }
 \examples{
 
-l <- NULL \%>\%
+l <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze("Sepal.Length", afun = function(x) {
   list(
@@ -44,7 +44,7 @@ l
 build_table(l, iris)
 
 # analyze multiple variables
-l <- NULL \%>\%
+l <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
   list(
@@ -56,7 +56,7 @@ l <- NULL \%>\%
 build_table(l, iris)
 
 # an example more relevant for clinical trials
-l <- NULL \%>\%
+l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\% 
     analyze("AGE", afun = function(x) {
       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median", "upper-hinge", "maximum"))
