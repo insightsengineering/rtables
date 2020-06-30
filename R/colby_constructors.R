@@ -322,17 +322,23 @@ split_cols_by = function(lyt,
 #' @author Gabriel Becker 
 #' @examples 
 #' 
-#' # TODO: this needs to give a compressed output, the mean information would 
-#' #       either go into the table header or table title
 #' l <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   split_rows_by("RACE") %>%
+#'   split_rows_by("RACE", splfun = drop_split_levels) %>%
 #'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
 #'  
 #' build_table(l, DM)
 #' 
 #' 
-#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
+#' basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("RACE") %>%
+#'   analyze("AGE", "Age", afun = mean, fmt = "xx.xx") %>%
+#'   build_table(DM)
+#'  
+#' 
+#' l <- basic_table() %>%
+#'   split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by("SEX", "Gender") %>%
 #'   summarize_row_groups(lbl_fstr = "Overall (N)") %>%
 #'   split_rows_by("RACE", "Ethnicity") %>%
@@ -341,6 +347,7 @@ split_cols_by = function(lyt,
 #' l
 #' 
 #' build_table(l, DM)
+#' 
 #' 
 split_rows_by = function(lyt,
                          var,

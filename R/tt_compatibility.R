@@ -520,12 +520,25 @@ chk_cbindable <- function(x,y) {
     TRUE
 }
 
-# cbind_rtables <-  function(x,y) {
-#     
-#     recurse_cbind(x, y, NULL)
-# 
-# 
-# }
+
+#' cbind two rtables
+#' 
+#' @param x table 1
+#' @param y table 2
+#' 
+#' @export
+#'
+#' @examples
+#' x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
+#'
+#' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
+#' 
+#' cbind_rtables(x, y)
+#' 
+cbind_rtables <-  function(x,y) {
+    recurse_cbind(x, y, NULL)
+}
+
 setGeneric("recurse_cbind", function(x,y, cinfo = NULL) standardGeneric("recurse_cbind"))
 
 setMethod("recurse_cbind", c("VTableNodeInfo",

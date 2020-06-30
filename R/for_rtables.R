@@ -144,42 +144,6 @@ insert_rrow_old <- function(tbl, rrow, at = 1) {
   
 }
 
-#' cbind two rtables
-#' 
-#' @param x table 1
-#' @param y table 2
-#' 
-#' @export
-#'
-#' @examples
-#' x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
-#'
-#' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
-#' 
-#' # TODO: does not run on R 4.0.1 in R CMD check
-#' \dontrun{
-#' cbind_rtables(x, y)
-#' }
-#' 
-cbind_rtables <- function(x, y) {
-  stopifnot(
-    is_rtable(x) && is_rtable(y),
-    nrow(x) == nrow(y)
-  )
-  if (is_empty_rtable(x)) {
-    return(y)
-  }
-  if (is_empty_rtable(y)) {
-    return(x)
-  }
-  header_x <- header(x)
-  header_y <- header(y)
-  stopifnot(nrow(header_x) == nrow(header_y))
-  
-  header <- do.call(rheader, combine_rrows(header_x, header_y))
-  body <- combine_rrows(unclass(x), unclass(y))
-  rtablel(header, body)
-}
 
 #' Combines two lists of rrows to a list of rrows
 #' 
