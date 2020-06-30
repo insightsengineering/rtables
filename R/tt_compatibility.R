@@ -520,12 +520,12 @@ chk_cbindable <- function(x,y) {
     TRUE
 }
 
-cbind_rtables <-  function(x,y) {
-    
-    recurse_cbind(x, y, NULL)
-
-
-}
+# cbind_rtables <-  function(x,y) {
+#     
+#     recurse_cbind(x, y, NULL)
+# 
+# 
+# }
 setGeneric("recurse_cbind", function(x,y, cinfo = NULL) standardGeneric("recurse_cbind"))
 
 setMethod("recurse_cbind", c("VTableNodeInfo",
