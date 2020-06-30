@@ -189,7 +189,7 @@ by_all_old <- function(name) {
 #'           FUN = mean, format = "xx.xx")
 #' 
 by_quartile <- function(x, cumulative = FALSE) {
-  stopifnot(is.numeric(x), is.logical.single(cumulative), !any(is.na(x)))
+  stopifnot(is.numeric(x), is_logical_single(cumulative), !any(is.na(x)))
 
 
   ret <- data.frame(x)
