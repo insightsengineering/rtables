@@ -25,7 +25,7 @@ displayed in the table header.
 \examples{
 l <- NULL \%>\% split_cols_by("ARM") \%>\% 
     add_colcounts() \%>\% 
-    split_rows_by("RACE") \%>\% 
+    split_rows_by("RACE", splfun = drop_split_levels) \%>\% 
     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
 l
 
