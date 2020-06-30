@@ -486,6 +486,17 @@ keep_split_levels = function(only) {
 }
 
 #' @rdname split_funcs
+#' @export
+drop_split_levels <- function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
+        var = spl_payload(spl)
+        df2 = df
+        df2[[var]] = factor(df[[var]])
+        .apply_split_inner(spl, df2, vals = vals,
+                           lbls = lbls,
+                           trim = trim)
+}
+
+#' @rdname split_funcs
 #' @param neworder character. New order or factor levels.
 #' @param newlbls character. Labels for (new order of) factor levels
 #' @param drlevels logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}

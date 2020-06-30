@@ -665,7 +665,7 @@ get_acolvar_name  <- function(lyt) {
 #' 
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   split_rows_by("RACE", "ethnicity") %>%
+#'   split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) %>%
 #'   analyze_colvars("", afun = mean, fmt = "xx.xx")
 #' 
 #' l
@@ -673,15 +673,30 @@ get_acolvar_name  <- function(lyt) {
 #' library(dplyr)
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
-#' # TODO: fix
 #' build_table(l, ANL)
 #' 
 analyze_colvars = function(lyt, lbl, afun,
                                 fmt = NULL,
                            newtoplev = FALSE,
+                           defrowlab,
                            indent_mod = 0L) {
+    subafun = substitute(afun)
+    if(is.name(subafun) &&
+       missing(defrowlab) &&
+       is.function(afun) &&
+       ## this is gross. basically testing
+       ## if the symbol we have corresponds
+       ## in some meaningful way to the function
+       ## we will be calling.
+       identical(mget(as.character(subafun),
+                      mode = "function",
+                      ifnotfound = list(NULL),
+                      inherits = TRUE
+                      )[[1]], afun)) {
+        defrowlab = as.character(subafun)
+    }
     spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
-                          defrowlab = lbl,
+                          defrowlab = defrowlab,
                           splfmt = fmt,
                           splname = get_acolvar_name(lyt),
                           indent_mod = indent_mod)
@@ -986,7 +1001,7 @@ summarize_row_groups = function(lyt,
 #' @examples 
 #' l <- basic_table() %>% split_cols_by("ARM") %>% 
 #'     add_colcounts() %>% 
-#'     split_rows_by("RACE") %>% 
+#'     split_rows_by("RACE", splfun = drop_split_levels) %>% 
 #'     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
 #' l
 #' 
