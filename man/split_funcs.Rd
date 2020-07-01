@@ -10,7 +10,7 @@
 \usage{
 remove_split_levels(excl)
 
-keep_split_levels(only)
+keep_split_levels(only, reorder = TRUE)
 
 drop_split_levels(df, spl, vals = NULL, lbls = NULL, trim = FALSE)
 
@@ -23,6 +23,8 @@ trim_levels_in_group(innervar)
 of presence in the data).}
 
 \item{only}{character. Levels to retain (all others will be dropped).}
+
+\item{reorder}{logical(1). Should the order of \code{only} be used as the order of the children of the split. defaults to \code{TRUE}}
 
 \item{neworder}{character. New order or factor levels.}
 

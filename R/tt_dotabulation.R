@@ -464,6 +464,7 @@ recursive_applysplit = function( df,
 #' @inheritParams lyt_args
 #' @param col_counts numeric (or `NULL`). If non-null, column counts which
 #'   override those calculated automatically during tabulation.
+#' @param \dots currently ignored.
 #'
 #' @note When overriding the column counts care must be taken that, e.g.,
 #'   `length()` or `nrow()` are not called within tabulation functions, because
