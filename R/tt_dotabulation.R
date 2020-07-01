@@ -525,7 +525,6 @@ recursive_applysplit = function( df,
 build_table = function(lyt, df,
                        col_counts = NULL,
                        ...) {
-
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
     ## table column structure that makes sense
@@ -534,13 +533,13 @@ build_table = function(lyt, df,
         clyt[[1]] = add_overall_col(clyt[[1]], "")
         clayout(lyt) = clyt
     }
-    
     lyt = fix_dyncuts(lyt, df)
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
-
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts)
+    if(!is.null(col_counts))
+        disp_ccounts(cinfo) = TRUE
     
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
@@ -603,7 +602,7 @@ setMethod("set_def_child_ord", "PreDataTableLayouts",
 
 setMethod("set_def_child_ord", "PreDataAxisLayout",
           function(lyt, df) {
-    lyt[] = lapply(lyt, set_def_child_ord, df = df)
+    lyt@.Data = lapply(lyt, set_def_child_ord, df = df)
     lyt
 })
 

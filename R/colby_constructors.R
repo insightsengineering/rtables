@@ -1102,23 +1102,26 @@ setMethod("fix_dyncuts", "VTableTree",
 
 .fd_helper = function(spl, df) {
     lst = lapply(spl, fix_dyncuts, df = df)
-    as(lst, class(spl))
+    spl@.Data = lst
+    spl
+    
 }
        
 setMethod("fix_dyncuts", "PreDataRowLayout",
           function(spl, df) {
-    rt = root_spl(spl)
+ #   rt = root_spl(spl)
     ret = .fd_helper(spl, df)
-    root_spl(ret) = rt
+#    root_spl(ret) = rt
     ret
 })
 
 setMethod("fix_dyncuts", "PreDataColLayout",
           function(spl, df) {
-    rt = root_spl(spl)
+ #   rt = root_spl(spl)
     ret = .fd_helper(spl, df)
-    root_spl(ret) = rt
-    disp_ccounts(ret) = disp_ccounts(spl)
+ #   root_spl(ret) = rt
+ #   disp_ccounts(ret) = disp_ccounts(spl)
+ #   colcount_fmt(ret) = colcount_fmt(spl)
     ret
 })
 
