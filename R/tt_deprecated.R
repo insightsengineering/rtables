@@ -425,6 +425,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
     apply(mat[, levels, drop = FALSE], 1, any)
   }), names(lst)))
   
-}
+ }
+
 
 

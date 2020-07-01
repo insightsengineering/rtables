@@ -553,6 +553,8 @@ build_table = function(lyt, df,
                       indent_mod = 0L)
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
+        if(length(splvec) == 0)
+            return(NULL)
         firstspl = splvec[[1]]
         nm = obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
@@ -566,7 +568,10 @@ build_table = function(lyt, df,
                              parent_cfun = NULL,
                              cformat = obj_fmt(firstspl))
     })
-    names(kids) = sapply(kids, obj_name)
+    kids = kids[!sapply(kids, is.null)]
+    if(length(kids) > 0)
+        names(kids) = sapply(kids, obj_name)
+
     if(nrow(ctab) == 0L &&
        length(kids) == 1L &&
        is(kids[[1]], "VTableTree")) {
