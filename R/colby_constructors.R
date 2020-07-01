@@ -673,7 +673,7 @@ get_acolvar_name  <- function(lyt) {
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) %>%
-#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
+#'   analyze_colvars( afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
@@ -681,8 +681,8 @@ get_acolvar_name  <- function(lyt) {
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
 #' build_table(l, ANL)
-#' 
-analyze_colvars = function(lyt, lbl, afun,
+ 
+analyze_colvars = function(lyt, afun,
                                 fmt = NULL,
                            newtoplev = FALSE,
                            defrowlab,
@@ -702,7 +702,7 @@ analyze_colvars = function(lyt, lbl, afun,
                       )[[1]], afun)) {
         defrowlab = as.character(subafun)
     }
-    spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
+    spl = AnalyzeVarSplit(NA_character_, "", afun = afun,
                           defrowlab = defrowlab,
                           splfmt = fmt,
                           splname = get_acolvar_name(lyt),
