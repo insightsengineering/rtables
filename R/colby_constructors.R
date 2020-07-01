@@ -387,7 +387,7 @@ split_rows_by = function(lyt,
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity") %>%
-#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
+#'   analyze_colvars( afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
