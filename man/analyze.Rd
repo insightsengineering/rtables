@@ -25,7 +25,7 @@ analyze(
 
 \item{lbl}{string, label, often variable label}
 
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{fmt}{format string for cells}
 
@@ -45,6 +45,20 @@ analyze(
 Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
 calls to \code{analyze} and/or \code{\link{analyze_colvars}} into our layout pipeline. As with
 adding further splitting, the tabulation will occur at the current/next level of nesting by default.
+}
+\details{
+the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the function accepts changes the behavior when tabulation is performed.
+\itemize{
+\item{If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the relevant column (from \code{var} here) of the raw data being used to build the table.}
+\item{If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (ie all columns) of the raw data being tabulated}
+}
+
+In addition to differentation on the first argument, the analysis function can optionally accept a number of other parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation machinery. These are as follows:
+\describe{
+\item{.N_col}{column-wise N (column count) for the full column being tabulated within}
+\item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
+\item{.baseline_data}{data.frame subset corresponding to the baseline column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a baseline column has been defined}
+}
 }
 \examples{
 

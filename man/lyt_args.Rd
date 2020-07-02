@@ -67,7 +67,7 @@ lyt_args(
 
 \item{splbl}{string. Labe associated with this split}
 
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 

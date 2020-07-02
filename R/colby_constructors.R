@@ -595,7 +595,19 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
 #' @inheritParams lyt_args
-#' 
+#'
+#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the function accepts changes the behavior when tabulation is performed.
+#' \itemize{
+#' \item{If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the relevant column (from \code{var} here) of the raw data being used to build the table.}
+#' \item{If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (ie all columns) of the raw data being tabulated}
+#' }
+#'
+#' In addition to differentation on the first argument, the analysis function can optionally accept a number of other parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation machinery. These are as follows:
+#' \describe{
+#' \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
+#' \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
+#' \item{.baseline_data}{data.frame subset corresponding to the baseline column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a baseline column has been defined}
+#' }
 #' @export
 #' @author Gabriel Becker
 #' @examples 
@@ -971,6 +983,8 @@ setMethod(".add_row_summary", "Split",
 #' @inheritParams lyt_args
 #' 
 #' @details if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
+#'
+#' \code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{lblstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 #' 
 #' @export
 #' @author Gabriel Becker

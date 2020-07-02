@@ -41,12 +41,12 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param splfmt format spec. Format associated with this split.
 #' @param newtoplev boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
 #' @param fmt format string for cells
-#' @param cfun function/NULL. tabulation function for creating content rows
+#' @param cfun function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts
 #' @param cfmt format spec. Format for content rows
 #' @param splfun function/NULL. custom splitting function
 #' @param splname string. Name associiated with this split (for pathing, etc)
 #' @param splbl string. Labe associated with this split
-#' @param afun function. Analysis function.
+#' @param afun function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.
 #' @param defrowlab character vector. Default row labels for resulting analysis rows.
 #' @param inclNAs boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}
 #' @param valorder character vector. Order that the split children should appear in resulting table.

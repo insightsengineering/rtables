@@ -16,7 +16,7 @@ analyze_colvars(
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{fmt}{format string for cells}
 
