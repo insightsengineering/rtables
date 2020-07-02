@@ -1,10 +1,10 @@
 ---
-title: "Tabulation Overview"
+title: "Tabulation Concepts"
 author: "Adrian Waddell"
 date: "6/12/2020"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tabulation Overview}
+  %\VignetteIndexEntry{Tabulation Concepts}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

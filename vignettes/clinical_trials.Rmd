@@ -1,0 +1,18 @@
+---
+title: "Tables in Clinical Trials"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tables in Clinical Trials}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+## Introduction
+
+## Demographic Table
+
+## Adverse Events
+
+## Response Table

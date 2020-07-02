@@ -1,0 +1,217 @@
+---
+title: "Introduction to rtables"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to rtables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+## Introduction
+
+The `rtables` R package provides a framework to create, tabulate and output tables in `R`. Most of the requirements in the design phase of `rtables` were taken from tables that are commonly used to report analyses from clinical trials, however, we were careful to keep `rtables` a general purpose toolkit. 
+
+There are a number of other table frameworks available in `R` such as [gt](https://gt.rstudio.com/) from RStudio, [xtable](https://cran.r-project.org/web/packages/xtable/index.html), [tableone](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html) and [tables](https://cran.r-project.org/web/packages/tables/index.html) to name a few. One reason to implement `rtables` was that to report clinical trials data the tables are often outputted in ASCII and paginated, a functionality not found in the packages just mentioned. `rtables` has a strong focus on tabulation and organizing and accessing information where other packages such as `gt` provide more functionality to markup and output tables (in html and markdown). We are currently not planning to extend the `rtables` features to add those type of functionality, instead it is on our roadmap to provide coercion functions from `rtable` to `gt`.
+
+In the remainder of this vignette we give a short introduction into `rtables` and tabulating a table. The content is based on the useR 2020 presentation from Gabriel Becker.
+
+The packages used for this vignettes ar `rtables` and `dplyr`:
+
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+```
+
+## Data 
+
+The data used in this vignette is a made up using random number generators. The data content is relatively simple: one row per represents one observation of an imaginary person where we measure a study arm, the country of origin, gender, handedness, age, and weight:
+
+```{r data}
+n <- 400
+
+set.seed(1)
+
+data <- tibble(
+  arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
+  country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
+  gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
+  handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
+  age = rchisq(n, 30) + 10
+) %>% mutate(
+  weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
+) 
+
+head(data)
+```
+
+Note that we use factors so that the level order is represented in the row or column order in the tabulation that will follow.
+
+
+## Building an Table
+
+We will build the following table:
+
+```{r, echo=FALSE}
+basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  add_colcounts() %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  split_rows_by("handed") %>%
+  summarize_row_groups() %>%
+  analyze("age", afun = mean, defrowlab = "Mean Age", fmt = "xx.x") %>%
+  build_table(data)
+```
+
+Please take a moment and think about the information packed in this table:
+
+* is the layout intuitive
+* what data has been used in which cell
+* which summary functions have been used?
+
+## Layout Instructions
+
+* Nested splitting
+  - in row space (`split_rows_by`, `split_rows_by_*`)
+  - in column space (`split_cols_by`, `split_cols_by_*`)
+* Summarizing Groups (`summarize_row_groups`)
+* Analyzing Variables (`analyze`, `analyze_against_baseline`)
+
+
+## Starting Simple
+
+```{r}
+l <- basic_table() %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+and 
+
+```{r}
+l
+```
+
+
+Next, splitting column space by arm:
+
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+Splitting Each Column By Gender
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+Splitting rows by country
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+### Summarizing Each Country
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+Splitting Each Country By Handedness
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  split_rows_by("handed") %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+Summarizing Handedness Within Each Country
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  split_rows_by("handed") %>%
+  summarize_row_groups() %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+build_table(l, data)
+```
+
+
+
+Add Column Observation Counts
+
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  split_rows_by("handed") %>%
+  summarize_row_groups() %>%
+  add_colcounts() %>%
+  analyze("age", afun = mean, fmt = "xx.x")
+
+tbl <- build_table(l, data)
+tbl
+```
+
+
+```{r}
+rtables:::treestruct(tbl)
+```
+
+
+## Subsetting
+
+with `[` and `[[` and `cell_value`
+
+
+## Deriving the information with dplyr only
+
+
+

@@ -1,15 +1,15 @@
 ---
-title: "Introduction to rtables"
+title: "Constructing rtables Manually"
 author: "Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to rtables}
+  %\VignetteIndexEntry{Constructing rtables Manually}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-# Overview
+## Overview
 
 `rtable` is useful to create tables where multiple values are stored in a cell 
 with a particular format. An `rtable` object has access to the individual raw 
@@ -23,7 +23,7 @@ The main functions currently associated with `rtable`s are
 * `rcell`: collection of data objects and cell format
 * `as_html` and `toString`: output an `rtable` as ascii or html
 
-# Simple Example
+## Simple Example
 
 
 ```{r, message=FALSE}
@@ -64,7 +64,7 @@ and to format that cell run `format_rcell(tbl[1,1])`=`r #format_rcell(tbl[1,1])`
 Note that `tbl[6, 1]` and `tbl[6, 2]` display both the same `rcell` because of
 the colspan.
 
-# Viewer
+## Viewer
 
 The `Viewer` functions takes an `rtable` object and displays it with
 [bootstrap](https://getbootstrap.com/) styling in RStudio's Viewer pane.
@@ -80,7 +80,7 @@ Viewer(tbl, tbl)
 ```
 
 
-# Formats
+## Formats
 
 Cell formats are inherited from `rtable` to `rrow` to `rcell` if there is not a
 more specific format argument (i.e. format arguments of `rcell` are more
@@ -115,9 +115,8 @@ tbl3
 
 
 
-# Comparing two rtables
+## Comparing two rtables
 
-XXX 
 Because we have the original data for each cell accessible for the `rtable` data
 structure it is possible to programmatically compare two tables:
 
