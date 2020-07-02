@@ -59,6 +59,26 @@ l3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
 l3
 
  build_table(l3, DM)
+
+# newtoplev=TRUE vs not
+l4 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+ split_rows_by("SEX", splfun = drop_split_levels) \%>\%
+ split_rows_by("RACE", splfun = drop_split_levels) \%>\%
+ analyze("AGE")
+
+l4
+build_table(l4, DM)
+
+l5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+ split_rows_by("SEX", splfun= drop_split_levels) \%>\%
+ analyze("AGE") \%>\%
+ split_rows_by("RACE", newtoplev=TRUE, splfun = drop_split_levels) \%>\%
+ analyze("AGE")
+
+l5
+build_table(l5, DM)
+
+
 }
 \author{
 Gabriel Becker
