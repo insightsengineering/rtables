@@ -1,0 +1,16 @@
+---
+title: "Comparing Against Baselines or Control"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparing Against Baselines or Control}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+## Introduction
+
+explain how `add_colby_multivar` and `add_analyzed_colvars` relate
+
+* documentation is not clear, what are the arguments to `afun`, i.e. `.baseline_data` seems to be added

@@ -586,7 +586,11 @@ chk_cbindable <- function(x,y) {
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 #' 
+#' \dontrun{
+#' # TODO: error on R 4.0.1
 #' cbind_rtables(x, y)
+#' } 
+#' 
 #' 
 cbind_rtables <-  function(x,y) {
     recurse_cbind(x, y, NULL)

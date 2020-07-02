@@ -17,13 +17,20 @@ articles:
   - title: For Users
     desc: Vignettes aimed at package users
     contents:
-    - rtables
-    - tabulation_overview
-    - tabletree_design
+    - introduction
+    - clinical_trials
+    - tabulation_concepts
     - rtabulate
+    - manual_table_construction
+    - formatting_tables
+    - pagination
+    - baseline
+    - known_issues
+
   - title: Developer
     desc: Vignettes aimed at package developers
     contents:
+    - tabletree_design
     - devguide
 
 reference:
@@ -55,11 +62,12 @@ reference:
     - add_existing_table
     - manual_cols
     
-  - title: Table Tree Untility Functions
+  - title: Table Tree Utility Functions
     desc: Utility functions
     contents:
     - lstwrapx
     - lstwrapdf
+    - remove_split_levels # split_funcs
 
   - title: Manual Table Creation Functions
     desc:  These are the main functions needed to build an rtable.
@@ -68,10 +76,8 @@ reference:
     - rrow
     - rcell
     - rheader
-#    - rheaderl
     - rtablel
     - rrowl
-#    - empty_rtable
 
   - title: Cell Formatting related Functions
     desc: cell formatting.
@@ -80,7 +86,7 @@ reference:
     - format_rcell
     - list_rcell_format_labels
 
-  - title: Tabulation functions
+  - title: tapply-like tabulation functions
     desc: rtabulate is another framework to tabulate rtables
     contents:
     - rtabulate
@@ -89,25 +95,12 @@ reference:
     - by_add_total
     - by_quartile
 
-  - title: Splitting Helper Functions
-    desc: Functions to help getting the desired splits
-    contents:
-    - remove_split_levels
-    - keep_split_levels
-    - reorder_split_levels
-    - trim_levels_in_group
- 
-  - title: Table Modification Functions
-    desc: Functions to post process tables
-    contents:
-    - trim_rows
     
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
-    - toString.rtable
-    - toString.empty_rtable
     - as_html
+    # - toString
 
   - title: Utility Functions
     desc: utility functions
@@ -133,56 +126,21 @@ reference:
     contents:
     - starts_with("nam")
     - starts_with("row.name")
+    - trim_rows
     - ends_with("<-")
-    - "[.rtable"
-    - "[.rheader"
-    - dim.rtable
-    - rbind.rtable
     - rbindl_rtables
-    - combine_rrows
     - cbind_rtables
     - header
-#    - header<-
-    - dim.rheader
     - header_add_N
-    - indented_row.names
     - indent
-    - unlist.rtable
-    - unlist.rcell
-    - unlist.rrow
     - insert_rrow
-    - is_empty_rtable
-    - is_non_empty_rtable
-    - is_rtable
-    - header_indent
-#    - header_indent<-
-    - header_row.names
-#    - header_row.names<-
     - "[<-,VTableTree,ANY,ANY,list-method"
     - tree_children
     - starts_with("dim")
     - "c,SplitVector-method"
     - CellValue
     - "length,CellValue-method"
-
-
     
-  - title: Legacy Tabulation Functions
-    desc: legacy functions not yet compatible 
-    contents:
-    - starts_with("rtabulate.")
-    - by_combine
-    - by_hierarchical
-    - by_compare_subset
-    - by_drop_empty_cols
-
-  - title: Deprecated and Defunct
-    desc: Functions which are not needed/supported in the new API
-    contents:
-    - by_factor_to_matrix
-    - ends_with("_old")
-    - col_by_to_matrix
-    - col_by_to_factor
 
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
@@ -192,25 +150,6 @@ reference:
     - order_rtables
     - sort_rtables
 
-  - title: Coercion Functions
-    desc: coercion functions
-    contents:
-
-  - title: Unexported Functions used by Developers
-    desc: internal functions
-    contents:
-    - by_header
-    - by_header_to_string
-#    - with_by_header
-
-  - title: old legacy S3 classes
-    desc: Legacy s3 constructors and manipulation
-    contents:
-    - empty_old_rtable
-    - starts_with("old_")
-    - as.rtable
-    - as.rtable.table
-
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors
@@ -218,7 +157,8 @@ reference:
     - ends_with("Split")
     - ends_with("class")
     - ends_with("Row")
-    - contains("Table")
+
+
 
     
   - title: To Sort
@@ -229,9 +169,18 @@ reference:
     - collect_leaves
     - no_colinfo
     - obj_avar
+    - summary,ElementaryTable-method
+    - summary,TableTree-method 
+    - column_widhts
+    - .add_row_summary
 
   - title: Included Data
     desc: Included datasets
     contents:
-    - DM    
+    - DM
+    - ex_adsl 
 
+  - title: Deprecated and Defunct
+    desc: Functions which are not needed/supported in the new API
+    contents:
+    - by_compare_subset # with rdname deprecated
