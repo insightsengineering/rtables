@@ -17,13 +17,18 @@ articles:
   - title: For Users
     desc: Vignettes aimed at package users
     contents:
-    - rtables
-    - tabulation_overview
-    - tabletree_design
+    - introduction
+    - clinical_trials
+    - tabulation_concepts
     - rtabulate
+    - manual_table_construction
+    - formatting_tables
+    - pagination
+
   - title: Developer
     desc: Vignettes aimed at package developers
     contents:
+    - tabletree_design
     - devguide
 
 reference:

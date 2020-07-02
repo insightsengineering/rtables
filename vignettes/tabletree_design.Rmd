@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(rtables)
 ```
 
-# General Definitions
+## General Definitions
 
 These definitions will be used throughout this document. Other
 sections may contain further definitions specific to their topic
@@ -57,7 +57,7 @@ sections may contain further definitions specific to their topic
     analyzed.
 
 
-# Layouts
+## Layouts
 
 Layouts are declared *pre-data* as the structure the table and
 associated aggregation will have once it is applied to data.
@@ -65,7 +65,7 @@ associated aggregation will have once it is applied to data.
 This allows us to re-use layouts for different datasets (that have
 the same relevant structure) and is a core design choice.
 
-## Building up Layouts
+### Building up Layouts
 
 Layouts define both the column- and row-based nesting structure and
 are built up by piping together a declarative "grammar of table
@@ -118,8 +118,9 @@ sub-roots structure will be much more common in row space than column
 space by my estimation).
 
 
-# The Object Model
-## Core Pieces - Splits
+## The Object Model
+
+### Core Pieces - Splits
 
 Table structure is modeled via declaring "splits", formally
 modeled by the `Split` S4 virtual class and its non-virtual
@@ -137,7 +138,7 @@ for a table structure, rather than a structure themselves.
 `SplitVector` objects (just a list of `Split`s which define
 a nested (sub) structure in row or column space.
 
-### Non-comparison Split Types
+#### Non-comparison Split Types
 - `VarLevelSplit` - Will generate children for each subset of a
   categorical variable
 - `AllSplit` - Will generate one child containing the full set of data
@@ -157,7 +158,7 @@ a nested (sub) structure in row or column space.
   child/children will be added for at least one of: Non-inclusion, all
   observations.
 
-### Comparison Splits
+#### Comparison Splits
 
 Comparison splits declare that two intermediate aggregation values
 should be generated and then computed on together to generate the
@@ -196,7 +197,7 @@ XXX I have an email in to Adrian about whether this is even something
        but test based comparisons are not.
        
 
-## Populated Table Structure
+### Populated Table Structure
 
 A table tree is a nested structure of `TableTree` objects, each of
 which has a `content` `ElementaryTable` and a set of children (which
@@ -210,7 +211,7 @@ list of `SplitValue` objects which define the child "selected" at each
 split to get to the current position. Each subtree and row within the
 full tree is aware of its position (in row space).
 
-### InstantiatedColumnInfo
+#### InstantiatedColumnInfo
 
 A populated table (and all of its subtables) carry around an
 `InstantiatedColumnInfo` object, which contains all of the various
@@ -239,7 +240,7 @@ for once a table has been created from layout + data.
 
 
 
-## Pre-Data
+### Pre-Data
 
 
 The table structure is declared prior to data being present (and thus
@@ -248,7 +249,7 @@ can be re-used).
 This means that in the pre-data stage we cannot actually build the
 nesting and children yet.
 
-### Pre-data Layouts
+#### Pre-data Layouts
 
 A `PreDataTableLayouts` object is built by a layout pipe chain
 (discussed below) and contains a `PreDataColLayout` and a
@@ -257,7 +258,7 @@ are both lists of one or more `SplitVector` objects declaring nesting
 substructures. Each also contains a `RootSplit` object though that is
 not likely to affect anything in most cases.
 
-# Declaring layout
+## Declaring layout
 
 Table structure is declared (pre-data) via a set of sequential
 `add_colby_*`, `add_rowby_*`, `add_analyzed_var` and `summarise_row_groups_*`
@@ -299,7 +300,7 @@ Note this layout is then usable with any dataset that has the `ARM`,
 `SEX`, `RACE`, and `AGE` variables present.
 
 
-## Analyzed Variables
+### Analyzed Variables
 
 
 Adding /analyzed variables/ to our table layout defines the primary
@@ -317,7 +318,7 @@ layout <- NULL %>% split_cols_by("ARM", "arm") %>%
 Will tabulate values of `AGE` after grouping/splitting by `ARM` and
 then `SEX` by calling `summary()`.
 
-## Tabulation functions
+### Tabulation functions
 
 Tabulation functions should return a list or vector with one element
 per row to be created. Row labels are taken from the names of the
@@ -344,7 +345,7 @@ onerow = function(x, ...) {
 }
 ```
 
-### Tabulation Function Signatures
+#### Tabulation Function Signatures
 
 Tabulation functions, both analysis and summary, must take the data
 to be analyzed as their first argument. This will either be a subset
@@ -363,7 +364,7 @@ There is also currently support for tabulation functions being passed
 column-specific `extra` arguments, which I will document here once it
 is more concrete and actually used in the test script.
 
-## Variable columns
+### Variable columns
 
 In some cases, the variable to be ultimately analyzed is most
 naturally defined on a column, not a row basis.
@@ -413,7 +414,7 @@ these would always be in conflict but need to think a bit harder
 first.
 
 
-## Column Counts
+### Column Counts
 
 Column counts can be displayed a couple of ways, one is as a content
 summary row on the root split, but the more common one is as part of
@@ -445,7 +446,7 @@ disp_ccounts(tab) = TRUE
 
 
 
-## Compound splits
+### Compound splits
 
 The current design calls for layouts (in both the row and column
 direction) to be lists of split vectors. Max brought up the
@@ -462,7 +463,7 @@ NOTE: some possible issues with labeling in display.
 
 One question is how to declare/add compound splits
 
-### Option 1
+#### Option 1
 
 ```
 NULL %>% split_cols_by("ARM", "arm") %>%
@@ -478,7 +479,7 @@ Cons: I really hate the whole nesting pipes thing.
       inner pipe would build up a PreDataLayouts object only to
       extract the split vector and ignore the rest.
 
-### Option 2
+#### Option 2
 
 ```
 NULL %>% split_cols_by("ARM", "arm") %>%
@@ -494,7 +495,7 @@ Not using the same declarative style grammer as everything
 else. 'Manual' construction of individual split objects via
 constructors
 
-### Option 3
+#### Option 3
 
 replace `newtoplevel` argument with `nestlevel` which can take:
 
@@ -517,7 +518,7 @@ Cons: adds complexity to parameter space
       non-logical argument
 
 
-### Different variables summarized per column
+#### Different variables summarized per column
 
 The above `add_analyzed_var` method for declaring tabulation does so
 at the row level: each data row represents a (partial) tabulation of
@@ -539,7 +540,7 @@ rather than
 
 
 
-# Comparison-based tabulation
+## Comparison-based tabulation
 
 Comparison-based values are where the tabulated value of a cell
 depends on data from two (or more?) columns. For example, the
@@ -551,7 +552,7 @@ declared without our layout and then performed automatically by the
 tabulation machinery. In fact, currently they are implemented as a
 special case of non-comparison tabulation.
 
-## Declaring a column-split with a Baseline level
+### Declaring a column-split with a Baseline level
 
 Which value should be considered the baseline when performing
 automatic comparisons is done in the column split. Instead of doing
@@ -578,12 +579,12 @@ even need to declare it. This is NOT what happens now, though, and
 some care is needed because we only want comparisons at the deepest
 level of nesting, I think. TODO(?)
 
-## Declaring comparison-based tabulation
+### Declaring comparison-based tabulation
 
 With a baseline value defined on our column split we can declare
 comparison tabulations with our layout.
 
-### Declaring direct comparisons
+#### Declaring direct comparisons
 
 We declare direct comparisons with `add_analyzed_blcomp`, which take
 `compfun` (defaulting to simple subtraction) in addition to `afun` so
@@ -599,7 +600,7 @@ Everything is then done by the rtables machinery internally and we get
 a row with no value for Arm A, and the differences in mean between
 Arm A and each of Arms B and C.
 
-### Declaring Table-based comparisons
+#### Declaring Table-based comparisons
 
 We provide a convenience function which declares that the comparisons
 are table-based. In this case, calculating the contingency table is
@@ -616,7 +617,7 @@ See `tt_rsp` in `R/tt_rsp.R` for an example of table-based comparison
 used in practice.
 
 		     
-# Manual Table Construction and manipulation
+## Manual Table Construction and manipulation
 
 The primary aim of the class hierarchy laid out above is to declare,
 and then automate the execution of, tabulations of raw data.
@@ -626,9 +627,9 @@ to be modified manually by results, or when a table must be
 constructed manually without the use of a layout and the tabulation
 machinery.
 
-## Manual Construction
+### Manual Construction
 
-### Definitions
+#### Definitions
 
 - Manual Split - a 'split' which defines the names of its children
   directly, and which does not meaningfully reflect a set of subsets
@@ -636,7 +637,7 @@ machinery.
   are, each child represents the entire subset of the data that
   "flowed into" the split.
 
-### Column information/structure
+#### Column information/structure
 
 `TableTree` objects, even manually constructed ones, have a formalized
 column structure, distinct from the approach taken by the S3 `rtable`
@@ -662,7 +663,7 @@ This constructs a full `InstantiatedColumnInfo` object suitable for
 passing to the `TableTree` constructor.
 
 
-### Constructing Elementary Tables
+#### Constructing Elementary Tables
 
 Constructing ElementaryTable objects manually is done like so
 
@@ -673,7 +674,7 @@ ElementaryTable(kids = list(TableRow(list(1, 2, 3, 4), lab = "Row 1"),
 	        cinfo = manual_cols(ARM = c("ARM 1", "ARM 2"), SEX= c("M", "F")))
 ```
 
-### Constructing Non-Elementary Tables
+#### Constructing Non-Elementary Tables
 
 In general Tables in `rtables` are not Elementary, rather they are
 `TableTree` objects. This means that there can be a nested row
@@ -706,10 +707,10 @@ Typically we do not set column info when constructing a `TableRow`
 because when added to a table without it, the rows inherit the table's
 column structure.
 
-### Constructing ElementaryTables
+#### Constructing ElementaryTables
 
 
-# Pagination
+## Pagination
 
 A first pass of the pagination algorithm is working and can be seen in
 `tt_paginate.R`
@@ -724,7 +725,7 @@ we want the TableTree objects themselves to know about pagination
 because other output backends (e.g., html) will either not have
 pagination at all or will handle it very differently.
 
-## Definitions
+### Definitions
 
 - Header lines - The multi-row definition of the column layout and the
   dividing "row" displayed between the the columns and the table rows
@@ -854,7 +855,7 @@ Var3 Counts
 
 ```
 
-## Pagination Rules
+### Pagination Rules
 
 Pagination is defined to happen at (after) a row if that row will be
 the _last_ row on a page, with a page break directly after it (or
@@ -878,7 +879,7 @@ OR pos does not point to the first Data Row data that position in the
 tree structure
 
 
-### The Algorithm.
+#### The Algorithm.
 
 The algorithm in pseudo code
 
