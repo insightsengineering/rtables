@@ -196,8 +196,19 @@ l <- basic_table() %>%
   add_colcounts() %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+tbl <- build_table(l, data)
+tbl
 ```
+
+
+```{r}
+rtables:::treestruct(tbl)
+```
+
+
+## Subsetting
+
+with `[` and `[[` and `cell_value`
 
 
 ## Deriving the information with dplyr only

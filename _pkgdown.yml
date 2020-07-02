@@ -24,6 +24,8 @@ articles:
     - manual_table_construction
     - formatting_tables
     - pagination
+    - baseline
+    - known_issues
 
   - title: Developer
     desc: Vignettes aimed at package developers
@@ -60,7 +62,7 @@ reference:
     - add_existing_table
     - manual_cols
     
-  - title: Table Tree Untility Functions
+  - title: Table Tree Utility Functions
     desc: Utility functions
     contents:
     - lstwrapx
@@ -140,11 +142,6 @@ reference:
     - "length,CellValue-method"
     
 
-  - title: Deprecated and Defunct
-    desc: Functions which are not needed/supported in the new API
-    contents:
-    - by_compare_subset # with rdname deprecated
-
   - title: Table sorting functions
     desc: funtions to sort rows within tables and list of tables
     contents:
@@ -183,3 +180,7 @@ reference:
     - DM
     - ex_adsl 
 
+  - title: Deprecated and Defunct
+    desc: Functions which are not needed/supported in the new API
+    contents:
+    - by_compare_subset # with rdname deprecated
