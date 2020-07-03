@@ -85,7 +85,9 @@ reference:
     - sprintf_format
     - format_rcell
     - list_rcell_format_labels
-
+    - get_format
+    - is_rcell_format
+    
   - title: tapply-like tabulation functions
     desc: rtabulate is another framework to tabulate rtables
     contents:

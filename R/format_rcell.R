@@ -1,7 +1,7 @@
 
 formats_1d <- c(
   "xx", "xx.", "xx.x", "xx.xx", "xx.xxx", "xx.xxxx",
-  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9",
+  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9", ">999.99",
   "x.xxxx | (<0.0001)"
 )
 
@@ -17,10 +17,13 @@ formats_2d <- c(
   "xx.x to xx.x"
 )
 
+formats_3d <- c(
+  "xx.xx (xx.xx - xx.xx)"
+)
 
-#' List with valid \code{\link{rcell}} formats labels grouped by 1d and 2d
+#' List with valid \code{\link{rcell}} formats labels grouped by 1d, 2d and 3d
 #' 
-#' Currently valid format lables can not be added dynamically. Format functions
+#' Currently valid format labels can not be added dynamically. Format functions
 #' must be used for special cases
 #' 
 #' @export
@@ -33,12 +36,21 @@ list_rcell_format_labels <- function() {
   structure(  
     list(
       "1d" = formats_1d,
-      "2d" = formats_2d
+      "2d" = formats_2d,
+      "3d" = formats_3d
     ),
     info = "xx does not modify the element, and xx. rounds a number to 0 digits"
   )
 }
 
+#' Check if a format is a valid rcell format
+#'
+#' @param x either format string or an object returned by \code{sprintf_format}
+#' @param stop_otherwise logical, if \code{x} is not a format should an error be
+#'   thrown
+#' 
+#' @export
+#'   
 is_rcell_format <- function(x, stop_otherwise=FALSE) {
   is_valid <- is.null(x) ||
     (length(x) == 1 && 
@@ -52,6 +64,14 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
   is_valid
 }
 
+#' Get format attribute of an rcell
+#' 
+#' @param x rcell object
+#' @export
+#' 
+#' @examples
+#' get_format(rcell(c(2, 0.34), format = "xx.xx (xx.xx%)"))
+#' 
 get_format <- function(x) {
   if (!is(x, "rcell")) stop("rcell object required")
   attr(x, "format")
@@ -134,6 +154,8 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       1
     } else if (format %in% formats_2d) {
       2
+    } else if (format %in% formats_3d) {
+      3
     } else {
       stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
     }
@@ -153,7 +175,8 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       "xx.xx%" = paste0(round(x * 100, 2), "%"),
       "xx.xxx%" = paste0(round(x * 100, 3), "%"),
       "(N=xx)" = paste0("(N=", x, ")"),
-      ">999.9" = ">999.9",
+      ">999.9" = ifelse(x > 999.9, ">999.9", as.character(round(x, 1))), 
+      ">999.99" = ifelse(x > 999.99, ">999.99", as.character(round(x, 2))), 
       "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
       "xx / xx" = paste(x, collapse = " / "),
       "xx. / xx." = paste(lapply(x, round, 0)),
@@ -180,6 +203,7 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
       "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
       "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to "),
+      "xx.xx (xx.xx - xx.xx)" = paste0(round(x[1], 2), " (", paste(round(x[2:3], 2), collapse = " - "), ")"),
       paste("format string", format, "not found")
     )
   } else if (is.function(format)) {

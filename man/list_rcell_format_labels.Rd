@@ -2,12 +2,12 @@
 % Please edit documentation in R/format_rcell.R
 \name{list_rcell_format_labels}
 \alias{list_rcell_format_labels}
-\title{List with valid \code{\link{rcell}} formats labels grouped by 1d and 2d}
+\title{List with valid \code{\link{rcell}} formats labels grouped by 1d, 2d and 3d}
 \usage{
 list_rcell_format_labels()
 }
 \description{
-Currently valid format lables can not be added dynamically. Format functions
+Currently valid format labels can not be added dynamically. Format functions
 must be used for special cases
 }
 \examples{
