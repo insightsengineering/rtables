@@ -474,11 +474,14 @@ remove_split_levels = function(excl) {
 
 #' @rdname split_funcs
 #' @param only character. Levels to retain (all others will be dropped).
+#' @param reorder logical(1). Should the order of \code{only} be used as the order of the children of the split. defaults to \code{TRUE}
 #' @export
-keep_split_levels = function(only) {
+keep_split_levels = function(only, reorder = TRUE) {
     function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df[df[[var]] %in% only,]
+        if(reorder)
+            df2[[var]] = factor(df2[[var]], levels = only)
         .apply_split_inner(spl, df2, vals = vals,
                            lbls = lbls,
                            trim = trim)

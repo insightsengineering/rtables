@@ -25,7 +25,7 @@ MultiVarSplit(
 
 \item{varlbls}{character vector. Labels for \code{vars}}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows}
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
 \item{cfmt}{format spec. Format for content rows}
 

@@ -22,7 +22,7 @@ summarize_row_groups(
 
 \item{fmt}{format string for cells}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows}
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
@@ -31,6 +31,8 @@ Add a content row of summary counts
 }
 \details{
 if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
+
+\code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{lblstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 }
 \examples{
 l <- basic_table() \%>\% split_cols_by("ARM") \%>\% 

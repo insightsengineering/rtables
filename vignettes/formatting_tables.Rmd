@@ -1,0 +1,28 @@
+---
+title: "Formatting Tables"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formatting Tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+## Introduction
+
+
+## Cell Formats
+
+## Output Types
+
+### ASCII
+
+#### Column Width / Row Heights
+
+### HTML
+
+### LaTeX
+
+### RTF
+

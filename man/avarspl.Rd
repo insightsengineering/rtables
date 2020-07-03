@@ -56,11 +56,11 @@ AVarBaselineComp(
 
 \item{splbl}{string. Labe associated with this split}
 
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows}
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
 \item{cfmt}{format spec. Format for content rows}
 

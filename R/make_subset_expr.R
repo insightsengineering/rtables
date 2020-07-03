@@ -174,13 +174,7 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
             }
         })
     }
-    ## this is a monkeypatch, shouldn't be happening
-    ## in the first place :(
-    fmt =  if(length(colcount_fmt(lyt))  == 1L)
-               colcount_fmt(lyt)
-           else
-               "xx"
-    
+    fmt =  colcount_fmt(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = cextras,

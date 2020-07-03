@@ -14,7 +14,7 @@ build_table(lyt, df, col_counts = NULL, ...)
 \item{col_counts}{numeric (or \code{NULL}). If non-null, column counts which
 override those calculated automatically during tabulation.}
 
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{\dots}{currently ignored.}
 }
 \description{
 Layouts are used to describe a table pre-data. \code{build_rable} is used to

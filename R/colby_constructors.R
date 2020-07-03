@@ -280,6 +280,26 @@ add_new_coltree = function(lyt, spl) {
 #' l3
 #' 
 #'  build_table(l3, DM)
+#'
+#' # newtoplev=TRUE vs not
+#' l4 <- basic_table() %>% split_cols_by("ARM") %>%
+#'  split_rows_by("SEX", splfun = drop_split_levels) %>%
+#'  split_rows_by("RACE", splfun = drop_split_levels) %>%
+#'  analyze("AGE")
+#'
+#' l4
+#' build_table(l4, DM)
+#'
+#' l5 <- basic_table() %>% split_cols_by("ARM") %>%
+#'  split_rows_by("SEX", splfun= drop_split_levels) %>%
+#'  analyze("AGE") %>%
+#'  split_rows_by("RACE", newtoplev=TRUE, splfun = drop_split_levels) %>%
+#'  analyze("AGE")
+#'
+#' l5
+#' build_table(l5, DM)
+#'
+#' 
 
 
 split_cols_by = function(lyt,
@@ -387,7 +407,7 @@ split_rows_by = function(lyt,
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity") %>%
-#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
+#'   analyze_colvars( afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
@@ -575,7 +595,19 @@ split_rows_by_cutfun = function(lyt, var, lbl = var,
 #' adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 #' 
 #' @inheritParams lyt_args
-#' 
+#'
+#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the function accepts changes the behavior when tabulation is performed.
+#' \itemize{
+#' \item{If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the relevant column (from \code{var} here) of the raw data being used to build the table.}
+#' \item{If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (ie all columns) of the raw data being tabulated}
+#' }
+#'
+#' In addition to differentation on the first argument, the analysis function can optionally accept a number of other parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation machinery. These are as follows:
+#' \describe{
+#' \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
+#' \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
+#' \item{.baseline_data}{data.frame subset corresponding to the baseline column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a baseline column has been defined}
+#' }
 #' @export
 #' @author Gabriel Becker
 #' @examples 
@@ -673,7 +705,7 @@ get_acolvar_name  <- function(lyt) {
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
 #'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
 #'   split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) %>%
-#'   analyze_colvars("", afun = mean, fmt = "xx.xx")
+#'   analyze_colvars( afun = mean, fmt = "xx.xx")
 #' 
 #' l
 #'
@@ -681,8 +713,8 @@ get_acolvar_name  <- function(lyt) {
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
 #' build_table(l, ANL)
-#' 
-analyze_colvars = function(lyt, lbl, afun,
+ 
+analyze_colvars = function(lyt, afun,
                                 fmt = NULL,
                            newtoplev = FALSE,
                            defrowlab,
@@ -702,7 +734,7 @@ analyze_colvars = function(lyt, lbl, afun,
                       )[[1]], afun)) {
         defrowlab = as.character(subafun)
     }
-    spl = AnalyzeVarSplit(NA_character_, lbl, afun = afun,
+    spl = AnalyzeVarSplit(NA_character_, "", afun = afun,
                           defrowlab = defrowlab,
                           splfmt = fmt,
                           splname = get_acolvar_name(lyt),
@@ -951,6 +983,8 @@ setMethod(".add_row_summary", "Split",
 #' @inheritParams lyt_args
 #' 
 #' @details if \code{fmt} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
+#'
+#' \code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{lblstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 #' 
 #' @export
 #' @author Gabriel Becker
@@ -1102,23 +1136,26 @@ setMethod("fix_dyncuts", "VTableTree",
 
 .fd_helper = function(spl, df) {
     lst = lapply(spl, fix_dyncuts, df = df)
-    as(lst, class(spl))
+    spl@.Data = lst
+    spl
+    
 }
        
 setMethod("fix_dyncuts", "PreDataRowLayout",
           function(spl, df) {
-    rt = root_spl(spl)
+ #   rt = root_spl(spl)
     ret = .fd_helper(spl, df)
-    root_spl(ret) = rt
+#    root_spl(ret) = rt
     ret
 })
 
 setMethod("fix_dyncuts", "PreDataColLayout",
           function(spl, df) {
-    rt = root_spl(spl)
+ #   rt = root_spl(spl)
     ret = .fd_helper(spl, df)
-    root_spl(ret) = rt
-    disp_ccounts(ret) = disp_ccounts(spl)
+ #   root_spl(ret) = rt
+ #   disp_ccounts(ret) = disp_ccounts(spl)
+ #   colcount_fmt(ret) = colcount_fmt(spl)
     ret
 })
 

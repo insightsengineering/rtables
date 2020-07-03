@@ -1,0 +1,19 @@
+---
+title: "Known Issues"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Known Issues}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+## Introduction
+
+Also see [issues](https://github.com/Roche/rtables/issues).
+
+* order, sort
+* structure based pruning
+* Baseline comparison only works if there is no row splitting
+

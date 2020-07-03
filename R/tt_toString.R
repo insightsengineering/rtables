@@ -116,7 +116,8 @@ setMethod("toString", "VTableTree", function(x, gap = 3) {
   dispcounts <- disp_ccounts(tt)
   while(length(kids) > 0 && atrow < 1000) { #we will break from this
     
-    labs <- names(kids)
+      labs <- names(kids)
+      #TODO: XXX remove reliance on old_cell and old_rrowl!!!
     cells <- lapply(names(kids), function(x) {
       old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
     })

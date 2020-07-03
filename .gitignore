@@ -8,3 +8,17 @@
 *.sas.txt
 docs/*
 temp
+
+*.rprof
+
+tmp.R
+
+tmp.txt
+
+*.html
+
+checklog.txt
+
+currentwork.R
+
+tablefunexample.R

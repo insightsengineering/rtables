@@ -34,7 +34,7 @@ analyze_against_baseline_2dtable(
 
 \item{lbl}{string, label, often variable label}
 
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
 

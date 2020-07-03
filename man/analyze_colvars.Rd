@@ -6,7 +6,6 @@
 \usage{
 analyze_colvars(
   lyt,
-  lbl,
   afun,
   fmt = NULL,
   newtoplev = FALSE,
@@ -17,9 +16,7 @@ analyze_colvars(
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{lbl}{string, label, often variable label}
-
-\item{afun}{function. Analysis function.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{fmt}{format string for cells}
 
@@ -38,7 +35,7 @@ level of nesting in the column structure, rather than at the row level.
 l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) \%>\%
-  analyze_colvars("", afun = mean, fmt = "xx.xx")
+  analyze_colvars( afun = mean, fmt = "xx.xx")
 
 l
 
@@ -46,7 +43,6 @@ library(dplyr)
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 build_table(l, ANL)
-
 }
 \seealso{
 \code{\link{split_cols_by_multivar}}

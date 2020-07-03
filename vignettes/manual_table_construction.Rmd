@@ -1,15 +1,15 @@
 ---
-title: "Introduction to rtables"
+title: "Constructing rtables Manually"
 author: "Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to rtables}
+  %\VignetteIndexEntry{Constructing rtables Manually}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-# Overview
+## Overview
 
 `rtable` is useful to create tables where multiple values are stored in a cell 
 with a particular format. An `rtable` object has access to the individual raw 
@@ -23,7 +23,7 @@ The main functions currently associated with `rtable`s are
 * `rcell`: collection of data objects and cell format
 * `as_html` and `toString`: output an `rtable` as ascii or html
 
-# Simple Example
+## Simple Example
 
 
 ```{r, message=FALSE}
@@ -31,16 +31,14 @@ library(rtables)
 ```
 ```{r}
 tbl <- rtable(
- # header = c("Treatement\nN=100", "Comparison\nN=300"),
-  header = list(rrow(NULL, c("Treatment", "Comparison")),
-  	        rrow(NULL, c("N=100",     "N=300"))),
+  header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
   rrow("A", c(104, .2), c(100, .4)),
   rrow("B", c(23, .4), c(43, .5)),
   rrow(),
-  rrow("this is a very long section header")#,
-#  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2))#,
- # rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+  rrow("this is a very long section header"),
+  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+  rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
 
 tbl  
@@ -66,7 +64,7 @@ and to format that cell run `format_rcell(tbl[1,1])`=`r #format_rcell(tbl[1,1])`
 Note that `tbl[6, 1]` and `tbl[6, 2]` display both the same `rcell` because of
 the colspan.
 
-# Viewer
+## Viewer
 
 The `Viewer` functions takes an `rtable` object and displays it with
 [bootstrap](https://getbootstrap.com/) styling in RStudio's Viewer pane.
@@ -82,7 +80,7 @@ Viewer(tbl, tbl)
 ```
 
 
-# Formats
+## Formats
 
 Cell formats are inherited from `rtable` to `rrow` to `rcell` if there is not a
 more specific format argument (i.e. format arguments of `rcell` are more
@@ -117,9 +115,8 @@ tbl3
 
 
 
-# Comparing two rtables
+## Comparing two rtables
 
-XXX 
 Because we have the original data for each cell accessible for the `rtable` data
 structure it is possible to programmatically compare two tables:
 
@@ -132,16 +129,3 @@ t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
 
 
-# Converting table objects
-
-You can also convert table objects to rtables:
-
-```{r}
-as.rtable(table(iris$Species))
-```
-
-or 
-
-```{r}
-print(as.rtable(with(mtcars, table(cyl, hp))), gap = 1)
-```

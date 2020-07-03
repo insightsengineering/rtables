@@ -464,6 +464,7 @@ recursive_applysplit = function( df,
 #' @inheritParams lyt_args
 #' @param col_counts numeric (or `NULL`). If non-null, column counts which
 #'   override those calculated automatically during tabulation.
+#' @param \dots currently ignored.
 #'
 #' @note When overriding the column counts care must be taken that, e.g.,
 #'   `length()` or `nrow()` are not called within tabulation functions, because
@@ -525,7 +526,6 @@ recursive_applysplit = function( df,
 build_table = function(lyt, df,
                        col_counts = NULL,
                        ...) {
-
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
     ## table column structure that makes sense
@@ -534,13 +534,13 @@ build_table = function(lyt, df,
         clyt[[1]] = add_overall_col(clyt[[1]], "")
         clayout(lyt) = clyt
     }
-    
     lyt = fix_dyncuts(lyt, df)
     rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
-
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts)
+    if(!is.null(col_counts))
+        disp_ccounts(cinfo) = TRUE
     
     rlyt = rlayout(lyt)
     rtspl = root_spl(rlyt)
@@ -553,6 +553,8 @@ build_table = function(lyt, df,
                       indent_mod = 0L)
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
+        if(length(splvec) == 0)
+            return(NULL)
         firstspl = splvec[[1]]
         nm = obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
@@ -566,7 +568,10 @@ build_table = function(lyt, df,
                              parent_cfun = NULL,
                              cformat = obj_fmt(firstspl))
     })
-    names(kids) = sapply(kids, obj_name)
+    kids = kids[!sapply(kids, is.null)]
+    if(length(kids) > 0)
+        names(kids) = sapply(kids, obj_name)
+
     if(nrow(ctab) == 0L &&
        length(kids) == 1L &&
        is(kids[[1]], "VTableTree")) {
@@ -598,7 +603,7 @@ setMethod("set_def_child_ord", "PreDataTableLayouts",
 
 setMethod("set_def_child_ord", "PreDataAxisLayout",
           function(lyt, df) {
-    lyt[] = lapply(lyt, set_def_child_ord, df = df)
+    lyt@.Data = lapply(lyt, set_def_child_ord, df = df)
     lyt
 })
 

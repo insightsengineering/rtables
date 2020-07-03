@@ -65,7 +65,7 @@ VarDynCutSplit(
 
 \item{cutlbls}{character (or NULL). Labels for the cuts}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows}
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
 \item{cfmt}{format spec. Format for content rows}
 

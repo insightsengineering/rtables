@@ -4,7 +4,7 @@
 \alias{indent}
 \title{Change indentation of all rrows in an rtable}
 \usage{
-indent(x, by = 1, truncate_at_zero = FALSE)
+indent(x, by = 1)
 }
 \arguments{
 \item{x}{\code{\link{rtable}} object}
@@ -39,6 +39,5 @@ mtbl <- rtable(
 )
 indent(mtbl)
 indent(mtbl, 2)
-indent(mtbl, -3, truncate_at_zero = TRUE)
 
 }

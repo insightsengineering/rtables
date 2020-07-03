@@ -45,7 +45,7 @@ VarLevWBaselineSplit(
 
 \item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows}
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
 \item{cfmt}{format spec. Format for content rows}
 
