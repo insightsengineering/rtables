@@ -7,7 +7,7 @@
 list_rcell_format_labels()
 }
 \description{
-Currently valid format lables can not be added dynamically. Format functions
+Currently valid format labels can not be added dynamically. Format functions
 must be used for special cases
 }
 \examples{

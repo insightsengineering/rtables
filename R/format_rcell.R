@@ -1,7 +1,7 @@
 
 formats_1d <- c(
   "xx", "xx.", "xx.x", "xx.xx", "xx.xxx", "xx.xxxx",
-  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9",
+  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9", ">999.99",
   "x.xxxx | (<0.0001)"
 )
 
@@ -23,7 +23,7 @@ formats_3d <- c(
 
 #' List with valid \code{\link{rcell}} formats labels grouped by 1d, 2d and 3d
 #' 
-#' Currently valid format lables can not be added dynamically. Format functions
+#' Currently valid format labels can not be added dynamically. Format functions
 #' must be used for special cases
 #' 
 #' @export
@@ -160,7 +160,8 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       "xx.xx%" = paste0(round(x * 100, 2), "%"),
       "xx.xxx%" = paste0(round(x * 100, 3), "%"),
       "(N=xx)" = paste0("(N=", x, ")"),
-      ">999.9" = ">999.9",
+      ">999.9" = ifelse(x > 999.9, ">999.9", as.character(round(x, 1))), 
+      ">999.99" = ifelse(x > 999.99, ">999.99", as.character(round(x, 2))), 
       "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
       "xx / xx" = paste(x, collapse = " / "),
       "xx. / xx." = paste(lapply(x, round, 0)),
