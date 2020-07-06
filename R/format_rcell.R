@@ -64,25 +64,6 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
   is_valid
 }
 
-#' Get format attribute of an rcell
-#' 
-#' @param x rcell object
-#' @export
-#' 
-#' @examples
-#' get_format(rcell(c(2, 0.34), format = "xx.xx (xx.xx%)"))
-#' 
-get_format <- function(x) {
-  if (!is(x, "rcell")) stop("rcell object required")
-  attr(x, "format")
-}
-
-set_format <- function(x, value) {
-  if (!is(x, "rcell")) stop("rcell object required")
-  is_rcell_format(format, stop_otherwise = TRUE)
-  attr(x, "format") <- value
-  x
-}
 
 #' Specify a rcell format based on sprintf formattig rules
 #'
