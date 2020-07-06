@@ -285,23 +285,7 @@ unlist_rtables <- function(x) {
 
 
 #' Compare Subset to Current col_by Levels
-#' 
-#' @param subset logical
-#' @param label_all character, label appended to level of \code{col_by}
-#' @param label_subset character, label appended to the subset of the corresponding level of \code{col_by}
-#' @param sep separator of new labels
-#' 
-#' 
-#' TODO: make hierarchical headers
-#' 
-#' @noRd
 #' @rdname deprecated
-## TODO
-## ' @examples 
-## ' 
-## ' by_compare_subset(col_by = factor(c("A", "A", "A", "B", "B")),
-## '                   subset = c(TRUE, FALSE, TRUE, FALSE, TRUE))
-## ' 
 by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = "subset", sep = " - ") {
   
   mat <- col_by_to_matrix(col_by)
@@ -325,13 +309,6 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 
 
 
-#' Convert a factor to a matrix by, each column corresponding to a factor level
-#' 
-#' Each column corresponds to a factor level and each row is TRUE for all indexes 
-#' where factor equals this factor level
-#' @param x factor to convert to matrix_by
-#' 
-#' @return matrix of size length(x) times nlevels(x)
 #' @rdname deprecated
 by_factor_to_matrix <- function(x) {
   stopifnot(is.factor(x))
@@ -346,29 +323,15 @@ by_factor_to_matrix <- function(x) {
   with_label(res, label(x))
 }
 
-#' Drop empty columns from matrix-version of by
-#' 
-#' @param by factor or matrix
-#' 
-#' @return matrix with dropped columns
+
 #' @rdname deprecated
-## ' @examples 
-## ' by <- factor(c("a", "b"), levels = c("a", "b", "c"))
-## ' col_by_to_matrix(by)
-## ' by_drop_empty_cols(by)
 by_drop_empty_cols <- function(by) {
   by <- col_by_to_matrix(by)
   with_label(by[, vapply(by, any, logical(1)), drop = FALSE], label(by))
 }
 
-#' DEPRECATED Converts col_by to matrix if needed (if it is a factor)
-#' Also handles case when it is of class by_all
-#' x can be NULL if col_by is not of class by_all
-#' returns transformed col_by as a matrix
-#' 
-#' @param col_by deprecated.
+
 #' @rdname deprecated
-#' 
 col_by_to_matrix <- function(col_by, x = NULL) {
     .Deprecated("This function is deprecated and should never be called directly by user code. The concept of representing column splitting via a matrix is no longer supported.")
   #todo: rename col_by_to_matrix to by_to_matrix, similarly for col_by_to_factor
@@ -399,18 +362,9 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 
 
 
-#' Combine levels
-#'
-#' @inheritParams compat_args
-#' @param ... a series of named character vectors
-#' 
+
 #' @rdname deprecated
-## TODO
-## #' @examples 
-## #' # note partial arument matching, in this case col_by has to be written
-## #' head(by_combine(col_by = iris$Species, a = c("setosa", "versicolor"),
-## #'            b =  c("setosa", "virginica"), c = "setosa"))
- by_combine <- function(col_by, ...) {
+by_combine <- function(col_by, ...) {
   lst <- list(...)
   if (is.null(names(lst)) || any(names(lst) == "")) {
     stop("named character vectors are required")
@@ -420,12 +374,12 @@ col_by_to_matrix <- function(col_by, x = NULL) {
   if (!all(unlist(lst) %in% names(mat))) {
     stop("not all levels exist in col_by")
   }
-   
+  
   as.data.frame(setNames(lapply(lst, function(levels) {
     apply(mat[, levels, drop = FALSE], 1, any)
   }), names(lst)))
   
- }
+}
 
 
 

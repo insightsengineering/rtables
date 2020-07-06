@@ -16,6 +16,14 @@ by_compare_subset(
   sep = " - "
 )
 
+by_compare_subset(
+  col_by,
+  subset,
+  label_all = "all",
+  label_subset = "subset",
+  sep = " - "
+)
+
 by_factor_to_matrix(x)
 
 by_drop_empty_cols(by)
@@ -25,8 +33,6 @@ col_by_to_matrix(col_by, x = NULL)
 by_combine(col_by, ...)
 }
 \arguments{
-\item{col_by}{deprecated.}
-
 \item{subset}{logical}
 
 \item{label_all}{character, label appended to level of \code{col_by}}
@@ -36,19 +42,9 @@ by_combine(col_by, ...)
 \item{sep}{separator of new labels
 
 TODO: make hierarchical headers}
-
-\item{x}{factor to convert to matrix_by}
-
-\item{by}{factor or matrix}
-
-\item{...}{a series of named character vectors}
-}
-\value{
-matrix of size length(x) times nlevels(x)
-
-matrix with dropped columns
 }
 \description{
-Each column corresponds to a factor level and each row is TRUE for all indexes
-where factor equals this factor level
+Compare Subset to Current col_by Levels
+
+Compare Subset to Current col_by Levels
 }
