@@ -23,11 +23,11 @@ Header info
 Other compatability: 
 \code{\link{by_all}()},
 \code{\link{insert_rrow}()},
-\code{\link{rtable}}
+\code{\link{rtable}()}
 
 Other compatability: 
 \code{\link{by_all}()},
 \code{\link{insert_rrow}()},
-\code{\link{rtable}}
+\code{\link{rtable}()}
 }
 \concept{compatability}

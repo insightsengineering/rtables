@@ -29,11 +29,11 @@ Functions from the  previous API starting  with \code{by_} not listed here may n
 Other compatability: 
 \code{\link{header<-}()},
 \code{\link{insert_rrow}()},
-\code{\link{rtable}}
+\code{\link{rtable}()}
 
 Other compatability: 
 \code{\link{header<-}()},
 \code{\link{insert_rrow}()},
-\code{\link{rtable}}
+\code{\link{rtable}()}
 }
 \concept{compatability}

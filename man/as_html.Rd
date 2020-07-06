@@ -2,59 +2,30 @@
 % Please edit documentation in R/as_html.R
 \name{as_html}
 \alias{as_html}
-\alias{as_html,rtable-method}
-\alias{as_html,rrow-method}
-\alias{as_html,VTableTree-method}
-\alias{as_html,TableRow-method}
-\title{Convert an \code{\link{rtable}} object to an \code{shiny.tag} html
-representation of the \code{\link{rtable}}}
+\title{Convert an \code{rtable} object to a \code{shiny.tag} html object}
 \usage{
-as_html(x, ...)
-
-\S4method{as_html}{rtable}(x, class.table = "table table-condensed table-hover", ...)
-
-\S4method{as_html}{rrow}(
+as_html(
   x,
-  ncol,
-  is_header,
-  class.tr = NULL,
-  class.td = NULL,
-  class.th = NULL,
-  ...
+  width = NULL,
+  class_table = "table table-condensed table-hover",
+  class_tr = "",
+  class_td = "",
+  class_th = ""
 )
-
-\S4method{as_html}{VTableTree}(
-  x,
-  class.table = "table table-condensed table-hover",
-  class.tr = NULL,
-  class.td = NULL,
-  class.th = NULL,
-  ...
-)
-
-\S4method{as_html}{TableRow}(x, class.tr = NULL, class.td = NULL, class.th = NULL, indent, ...)
 }
 \arguments{
-\item{x}{object}
-
-\item{...}{additional arguments currently not used}
+\item{x}{\code{rtable} object}
 
 \item{class.table}{class for table tag}
-
-\item{ncol}{Number of columns}
-
-\item{is_header}{boolean. Deprecated}
 
 \item{class.tr}{class for tr tag}
 
 \item{class.td}{class for td tag}
 
 \item{class.th}{class for th tag}
-
-\item{indent}{amount it should be indented}
 }
 \description{
-The returned html object can be immediately used in shiny and rmarkdown.
+The returned \code{html} object can be immediately used in shiny and rmarkdown.
 }
 \examples{
 
@@ -68,7 +39,9 @@ tbl <- rtable(
 
 as_html(tbl)
 
-as_html(tbl, class.table = "table", class.tr = "row")
+as_html(tbl, class_table = "table", class_tr = "row")
 
-as_html(tbl, class.td = "aaa")
+as_html(tbl, class_td = "aaa")
+
+Viewer(tbl)
 }

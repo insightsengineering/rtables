@@ -85,10 +85,9 @@ reference:
     - sprintf_format
     - format_rcell
     - list_rcell_format_labels
-    - get_format
     - is_rcell_format
     
-  - title: tapply-like tabulation functions
+  - title: rtabulate Framework
     desc: rtabulate is another framework to tabulate rtables
     contents:
     - rtabulate
@@ -101,8 +100,11 @@ reference:
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
+    - toString,VTableTree-method 
+    - propose_column_widhts
     - as_html
-    # - toString
+    - matrix_form
+    - get_formatted_rows    
 
   - title: Utility Functions
     desc: utility functions
@@ -121,7 +123,6 @@ reference:
     contents:
     - pag_tt_indices
     - make_pagdf
-    - get_formatted_rows    
     
   - title: Accessor and Modification Functions
     desc: Access and Modify Functions
@@ -173,7 +174,6 @@ reference:
     - obj_avar
     - summary,ElementaryTable-method
     - summary,TableTree-method 
-    - column_widhts
     - .add_row_summary
 
   - title: Included Data

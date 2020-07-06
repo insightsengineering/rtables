@@ -33,7 +33,7 @@ Viewer(tbl, tbl)
 
 tbl2 <-htmltools::tags$div(
   class = "table-responsive",
-  as_html(tbl, class.table = "table")
+  as_html(tbl, class_table = "table")
 )
 
 Viewer(tbl, tbl2)

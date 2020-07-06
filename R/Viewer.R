@@ -26,7 +26,7 @@
 #' 
 #' tbl2 <-htmltools::tags$div(
 #'   class = "table-responsive",
-#'   as_html(tbl, class.table = "table")
+#'   as_html(tbl, class_table = "table")
 #' )
 #' 
 #' Viewer(tbl, tbl2)
@@ -39,7 +39,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
       NULL
     } else if (is(x, "shiny.tag")) {
       x
-    } else if (is(x, "TableTree")) {
+    } else if (is(x, "VTableTree")) {
       as_html(x, ...)
     } else {
       stop("object of class rtable or shiny tag excepted for ", name)

@@ -151,3 +151,115 @@ cat_row <- function(indent, name, label, visible, content) {
 # -------------------------------------
 # 
 
+
+
+
+
+summarize_row_df <- function(name, label, indent, depth, rowtype) {
+  data.frame(name = name, label = label, indent = indent, depth = depth, rowtype = rowtype, 
+             stringsAsFactors = FALSE)
+}
+
+summarize_row_df_empty <- function(...) {
+  data.frame(name = character(0), label = character(0), indent = integer(0), depth = integer(0), rowtype = character(0))
+}
+
+#' Summarize Rows
+#' 
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(dplyr)
+#' 
+#' iris2 <- iris %>%
+#'   group_by(Species) %>%
+#'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+#'   ungroup()
+#' 
+#' l <- basic_table() %>% 
+#'   split_cols_by("Species") %>%
+#'   split_cols_by("group") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
+#' 
+#' tbl <- build_table(l, iris2)
+#' 
+#' y <- summarize_rows(tbl)
+#' 
+setGeneric("summarize_rows", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows"))
+
+setMethod("summarize_rows", "TableTree",
+          function(obj, depth = 0, indent = 0) {
+            
+            indent <- indent + indent_mod(obj)
+            
+            lr <- summarize_rows(tt_labelrow(obj), depth, indent)
+            
+            indent <- indent + (nrow(lr) > 0)
+            
+            ctab <- content_table(obj)
+            ct <- summarize_rows(ctab, depth = depth, indent = indent + indent_mod(ctab))
+            
+            els <- lapply(tree_children(obj), summarize_rows, 
+                          depth = depth + 1, indent = indent + (nrow(ct) > 0) * (1 + indent_mod(ctab)))
+            
+            df <- do.call(rbind, c(list(lr), list(ct), els))
+            
+            row.names(df) <- NULL
+            df
+            
+          })
+
+setMethod("summarize_rows", "ElementaryTable",
+          function(obj, depth = 0, indent = 0) {
+            
+            indent <- indent + indent_mod(obj)
+            
+            lr <- summarize_rows(tt_labelrow(obj), depth, indent)
+            
+            els <- lapply(tree_children(obj), summarize_rows, depth = depth + 1, indent = indent + (nrow(lr) > 0))
+            
+            df <- do.call(rbind, c(list(lr), els))
+            row.names(df) <- NULL
+            df
+            
+          })
+
+
+setMethod("summarize_rows", "TableRow",
+          function(obj, depth = 0, indent = 0) {
+            
+            indent <- indent + indent_mod(obj)
+            
+            summarize_row_df(
+              name = obj_name(obj),
+              label = obj_label(obj),
+              indent = indent,
+              depth = depth,
+              rowtype = "TableRow"
+            ) 
+            
+          })
+
+setMethod("summarize_rows", "LabelRow",
+          function(obj, depth = 0, indent = 0) {
+            
+            indent <- indent + indent_mod(obj)
+            
+            if (lblrow_visible(obj)) {
+              summarize_row_df(
+                name = obj_name(obj),
+                label = obj_label(obj),
+                indent = indent,
+                depth = depth,
+                rowtype = "LabelRow"
+              ) 
+            } else {
+              summarize_row_df_empty()         
+            } 
+          })
+
+
+
+
