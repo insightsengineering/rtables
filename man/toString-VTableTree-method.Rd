@@ -4,14 +4,17 @@
 \alias{toString,VTableTree-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
-\S4method{toString}{VTableTree}(x, column_widths = NULL, gap = 3)
+\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3, label_gap_at_depth = 1)
 }
 \arguments{
 \item{x}{table object}
 
-\item{column_widths}{width of columns (row name also counts as a column here)}
+\item{widths}{widths of row.name and columns columns}
 
-\item{gap}{gap between columns}
+\item{col_gap}{gap between columns}
+
+\item{label_gap_at_depth}{add an empty row before labels at tree depth. Note 1 and consecutive numbers will be
+removed.}
 }
 \description{
 Convert an \code{rtable} object to a string
@@ -31,6 +34,5 @@ l <- basic_table() \%>\%
 
 tbl <- build_table(l, iris2)
 
-toString(tbl, gap = 3)
-
+cat(toString(tbl, col_gap = 3))
 }

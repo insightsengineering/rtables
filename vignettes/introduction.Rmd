@@ -41,7 +41,7 @@ n <- 400
 
 set.seed(1)
 
-data <- tibble(
+df <- tibble(
   arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
   country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
   gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
@@ -51,7 +51,7 @@ data <- tibble(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
 ) 
 
-head(data)
+head(df)
 ```
 
 Note that we use factors so that the level order is represented in the row or column order in the tabulation that will follow.
@@ -71,7 +71,7 @@ basic_table() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, defrowlab = "Mean Age", fmt = "xx.x") %>%
-  build_table(data)
+  build_table(df)
 ```
 
 Please take a moment and think about the information packed in this table:
@@ -95,7 +95,7 @@ Please take a moment and think about the information packed in this table:
 l <- basic_table() %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 and 
@@ -113,7 +113,7 @@ l <- basic_table() %>%
   split_cols_by("arm") %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 Splitting Each Column By Gender
@@ -124,7 +124,7 @@ l <- basic_table() %>%
   split_cols_by("gender") %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 Splitting rows by country
@@ -136,7 +136,7 @@ l <- basic_table() %>%
   split_rows_by("country") %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 ### Summarizing Each Country
@@ -149,7 +149,7 @@ l <- basic_table() %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 Splitting Each Country By Handedness
@@ -163,7 +163,7 @@ l <- basic_table() %>%
   split_rows_by("handed") %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 Summarizing Handedness Within Each Country
@@ -178,7 +178,7 @@ l <- basic_table() %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-build_table(l, data)
+build_table(l, df)
 ```
 
 
@@ -196,7 +196,7 @@ l <- basic_table() %>%
   add_colcounts() %>%
   analyze("age", afun = mean, fmt = "xx.x")
 
-tbl <- build_table(l, data)
+tbl <- build_table(l, df)
 tbl
 ```
 

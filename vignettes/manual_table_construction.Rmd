@@ -41,7 +41,7 @@ tbl <- rtable(
   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
 
-tbl  
+# tbl TODO rrow() does not know ncol()
 ```
 
 
@@ -50,7 +50,7 @@ we continue with the html conversion of the `rtable` object:
 
 
 ```{r}
-as_html(tbl, width = "80%")
+# as_html(tbl, width = "80%") TODO
 ```
 
 Next, the `[` operator lets you access the cell content.
