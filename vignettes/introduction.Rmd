@@ -83,13 +83,15 @@ Please take a moment and think about the information packed in this table:
 ## Layout Instructions
 
 * Nested splitting
-  - in row space (`split_rows_by`, `split_rows_by_*`)
-  - in column space (`split_cols_by`, `split_cols_by_*`)
-* Summarizing Groups (`summarize_row_groups`)
-* Analyzing Variables (`analyze`, `analyze_against_baseline`)
+  - in row space: `split_rows_by`, `split_rows_by_*`
+  - in column space: `split_cols_by`, `split_cols_by_*`
+* Summarizing Groups: `summarize_row_groups`
+* Analyzing Variables: `analyze`, `analyze_against_baseline`
 
 
 ## Starting Simple
+
+A basic table has one column representing all data and 0 rows. Analyzing a variable is one way of adding a row:
 
 ```{r}
 l <- basic_table() %>%
@@ -98,14 +100,16 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-and 
+Note, a number of things happen in the code above. We first define a layout and save it to the variable `l`. The layout here contains the information that we have one column for all the data and that the `age` variable should be analyzed with the `mean` analysis function and the result should be rounded to `1` precision. And then the layout is used to build a table using the actual data `df`. Hence, the layout is pre-data, that is, we do not need any data to say how to build a table. We can look at the layout isolated:
 
 ```{r}
 l
 ```
 
 
-Next, splitting column space by arm:
+### Adding Column Structure
+
+Next, we will add more structure to the columns by splitting column space by the levels in the factor defined by the `arm` variable:
 
 
 ```{r}
@@ -116,7 +120,7 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-Splitting Each Column By Gender
+We can continue the column space splitting by adding another `split_cols_by` instruction. By default this will add nested splitting. Here we splitting each arm further by the gender:
 
 ```{r}
 l <- basic_table() %>%
@@ -127,7 +131,11 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-Splitting rows by country
+So the first column represents the data in `df` where `df$arm == "A" & df$gender == "Female"` and the second column the data in `df` where `df$arm == "A" & df$gender == "Male"` and so on.
+
+### Adding Row Structure
+
+So far we have added analysis information and column structure. This resulted in multiple columns and one analysis or data row. We now continue to add column structure defined by the data using row splits by country:
 
 ```{r}
 l <- basic_table() %>%
@@ -139,7 +147,51 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-### Summarizing Each Country
+In this table the data used to derive the first cell (average of age of female canadians in arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`, hence the cell value can also be calculated manually:
+
+```{r}
+mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
+```
+
+or in `dplyr` syntax:
+
+```{r}
+df %>%
+  filter(country == "CAN", arm == "Arm A", gender == "Female") %>%
+  summarise(mean_age = mean(age))
+```
+
+On a side note, we can actually easily get the first row with `dplyr`:
+
+```{r}
+df %>%
+  group_by(arm, gender) %>%
+  filter(country == "CAN") %>%
+  summarise(mean_age = mean(age))
+```
+
+or all the data in the table above:
+
+```{r}
+df %>%
+  group_by(arm, gender, country) %>%
+  summarise(mean_age = mean(age))
+```
+
+and it also possible to reshape the data to look similar as displayed in the table above:
+
+```{r, message=FALSE}
+library(tidyr)
+
+df %>%
+  group_by(arm, gender, country) %>%
+  summarise(mean_age = mean(age)) %>%
+  pivot_wider(names_from = c(arm, gender), values_from = mean_age)
+```
+
+### Adding Group Information
+
+Often a group of dat
 
 ```{r}
 l <- basic_table() %>%

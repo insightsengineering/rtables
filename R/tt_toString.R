@@ -24,9 +24,6 @@ setMethod("print", "VTableTree", function(x, ...) {
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
-#' @param label_gap_at_depth add an empty row before labels at tree depth. Note 1 and consecutive numbers will be
-#'   removed.
-#' 
 #' 
 #' @exportMethod toString
 #' 
@@ -46,7 +43,7 @@ setMethod("print", "VTableTree", function(x, ...) {
 #' tbl <- build_table(l, iris2)
 #' 
 #' cat(toString(tbl, col_gap = 3))
-setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, label_gap_at_depth = 1) {
+setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   
   ## we create a matrix with the formatted cell contents
   mat <- matrix_form(x)
@@ -67,11 +64,12 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, labe
   ri <- mat$row_info
   
 
-  
-  # get rowgap position
-  insert_gap_before <- which(ri$rowtype == "LabelRow" & ri$depth %in% label_gap_at_depth)
-  insert_gap_before <- remove_consecutive_numbers(insert_gap_before[insert_gap_before != 1])
-  
+  # xxxx <- 1
+  # # get rowgap position
+  # insert_gap_before <- which(ri$depth == sort(ri$depth)[seq_len(xxxx)])
+  # # which(ri$rowtype == "LabelRow" & ri$depth == min(ri$depth))
+  # insert_gap_before <- remove_consecutive_numbers(insert_gap_before)
+  # insert_gap_before <- insert_gap_before[insert_gap_before != 1]
   
   nr <- nrow(body)
   nr_header <- attr(mat, "nrow_header")
@@ -109,7 +107,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, labe
   div <- strrep("-", sum(widths) + (length(widths) - 1) * col_gap)
   
   txt_head <- apply(head(content, nr_header), 1, .paste_no_na, collapse = gap_str)
-  txt_body <- empty_string_after(apply(tail(content, -nr_header), 1, .paste_no_na, collapse = gap_str), insert_gap_before - 1)
+  txt_body <- apply(tail(content, -nr_header), 1, .paste_no_na, collapse = gap_str)
   
   paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
   

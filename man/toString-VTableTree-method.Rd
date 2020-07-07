@@ -4,7 +4,7 @@
 \alias{toString,VTableTree-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
-\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3, label_gap_at_depth = 1)
+\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3)
 }
 \arguments{
 \item{x}{table object}
@@ -12,9 +12,6 @@
 \item{widths}{widths of row.name and columns columns}
 
 \item{col_gap}{gap between columns}
-
-\item{label_gap_at_depth}{add an empty row before labels at tree depth. Note 1 and consecutive numbers will be
-removed.}
 }
 \description{
 Convert an \code{rtable} object to a string

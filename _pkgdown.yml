@@ -52,13 +52,13 @@ reference:
     - in_rows
     - split_cols_by
     - add_colcounts
-    - add_overall_level
     - split_rows_by
     - summarize_row_groups
     - split_cols_by_multivar
     - analyze_colvars
     - analyze_against_baseline
     - split_cols_by_cuts 
+    - add_overall_level
     - add_existing_table
     - manual_cols
     
