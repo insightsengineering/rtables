@@ -10,32 +10,32 @@
 VarLevelSplit(
   var,
   splbl,
-  vlblvar = NULL,
+  labels_var = NULL,
   cfun = NULL,
-  cfmt = NULL,
+  cformat = NULL,
   splfun = NULL,
-  splfmt = NULL,
+  split_format = NULL,
   valorder = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L
 )
 
 VarLevWBaselineSplit(
   var,
-  baseline,
-  vlblvar = var,
+  ref_group,
+  labels_var = var,
   incl_all = FALSE,
   splbl,
   lbl_fstr = "\%s - \%s",
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   valorder = NULL,
   splname = var,
-  extrargs = list()
+  extra_args = list()
 )
 }
 \arguments{
@@ -43,15 +43,15 @@ VarLevWBaselineSplit(
 
 \item{splbl}{string. Labe associated with this split}
 
-\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
-\item{cfmt}{format spec. Format for content rows}
+\item{cformat}{format spec. Format for content rows}
 
 \item{splfun}{function/NULL. custom splitting function}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{split_format}{format spec. Format associated with this split.}
 
 \item{valorder}{character vector. Order that the split children should appear in resulting table.}
 
@@ -59,11 +59,11 @@ VarLevWBaselineSplit(
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
-\item{baseline}{character. Value of \code{var} to be taken as the baseline/control to be compared against.}
+\item{ref_group}{character. Value of \code{var} to be taken as the ref_group/control to be compared against.}
 
 \item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
 

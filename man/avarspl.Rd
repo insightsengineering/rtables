@@ -12,11 +12,11 @@ AnalyzeVarSplit(
   afun,
   defrowlab = "",
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   inclNAs = FALSE,
   splname = var,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L
 )
 
@@ -26,12 +26,12 @@ AnalyzeMultiVars(
   afun,
   defrowlab = "",
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   inclNAs = FALSE,
   .payload = NULL,
   splname = NULL,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L
 )
 
@@ -40,14 +40,14 @@ AVarBaselineComp(
   splbl,
   afun,
   compfun = `-`,
-  vlblvar = NULL,
+  labels_var = NULL,
   cfun = NULL,
-  cfmt = NULL,
+  cformat = NULL,
   splfun = NULL,
-  splfmt = NULL,
+  split_format = NULL,
   valorder = NULL,
   splname = var,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L
 )
 }
@@ -62,15 +62,15 @@ AVarBaselineComp(
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
-\item{cfmt}{format spec. Format for content rows}
+\item{cformat}{format spec. Format for content rows}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{split_format}{format spec. Format associated with this split.}
 
 \item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 
 \item{splname}{string. Name associiated with this split (for pathing, etc)}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
@@ -78,7 +78,7 @@ AVarBaselineComp(
 
 \item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
 
-\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{splfun}{function/NULL. custom splitting function}
 

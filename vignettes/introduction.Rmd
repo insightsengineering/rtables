@@ -70,7 +70,7 @@ basic_table() %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, defrowlab = "Mean Age", fmt = "xx.x") %>%
+  analyze("age", afun = mean, defrowlab = "Mean Age", format = "xx.x") %>%
   build_table(df)
 ```
 
@@ -86,7 +86,7 @@ Please take a moment and think about the information packed in this table:
   - in row space: `split_rows_by`, `split_rows_by_*`
   - in column space: `split_cols_by`, `split_cols_by_*`
 * Summarizing Groups: `summarize_row_groups`
-* Analyzing Variables: `analyze`, `analyze_against_baseline`
+* Analyzing Variables: `analyze`, `analyze_against_ref_group`
 
 
 ## Starting Simple
@@ -95,7 +95,7 @@ A basic table has one column representing all data and 0 rows. Analyzing a varia
 
 ```{r}
 l <- basic_table() %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -115,7 +115,7 @@ Next, we will add more structure to the columns by splitting column space by the
 ```{r}
 l <- basic_table() %>%
   split_cols_by("arm") %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -126,7 +126,7 @@ We can continue the column space splitting by adding another `split_cols_by` ins
 l <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -142,7 +142,7 @@ l <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -199,7 +199,7 @@ l <- basic_table() %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -213,7 +213,7 @@ l <- basic_table() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -228,7 +228,7 @@ l <- basic_table() %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 build_table(l, df)
 ```
@@ -246,7 +246,7 @@ l <- basic_table() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
   add_colcounts() %>%
-  analyze("age", afun = mean, fmt = "xx.x")
+  analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(l, df)
 tbl

@@ -15,7 +15,7 @@ split_cols_by_cuts(
   lbl,
   cuts,
   cutlbls = NULL,
-  newtoplev = FALSE,
+  nested = FALSE,
   cumulative = FALSE
 )
 
@@ -25,8 +25,8 @@ split_rows_by_dyncut(
   lbl,
   cuts,
   cutlbls = NULL,
-  splfmt = NULL,
-  newtoplev = FALSE,
+  format = NULL,
+  nested = FALSE,
   lblkids = NA,
   cumulative = FALSE,
   indent_mod = 0L
@@ -38,9 +38,9 @@ split_cols_by_cutfun(
   lbl = var,
   cutfun = qtile_cuts,
   cutlblfun = function(x) NULL,
-  splfmt = NULL,
-  newtoplev = FALSE,
-  extrargs = list(),
+  format = NULL,
+  nested = FALSE,
+  extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L
 )
@@ -49,9 +49,9 @@ split_cols_by_quartiles(
   lyt,
   var,
   lbl = var,
-  splfmt = NULL,
-  newtoplev = FALSE,
-  extrargs = list(),
+  format = NULL,
+  nested = FALSE,
+  extra_args = list(),
   cumulative = FALSE
 )
 
@@ -59,9 +59,9 @@ split_rows_by_quartiles(
   lyt,
   var,
   lbl = var,
-  splfmt = NULL,
-  newtoplev = FALSE,
-  extrargs = list(),
+  format = NULL,
+  nested = FALSE,
+  extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L
 )
@@ -71,8 +71,8 @@ split_rows_by_cutfun(
   var,
   lbl = var,
   cutfun = qtile_cuts,
-  splfmt = NULL,
-  newtoplev = FALSE,
+  format = NULL,
+  nested = FALSE,
   lblkids = NA,
   cumulative = FALSE,
   indent_mod = 0L
@@ -89,11 +89,11 @@ split_rows_by_cutfun(
 
 \item{cutlbls}{character (or NULL). Labels for the cutst}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{format}{format string for cells}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
@@ -103,7 +103,7 @@ split_rows_by_cutfun(
 
 \item{cutlblfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Create columns (or row splits) based on values (such as quartiles) of \code{var}.

@@ -544,30 +544,30 @@ setMethod("spanned_values<-", "LabelRow",
 ### Format manipulation
 ### obj_format<- is not recursive
 
-setGeneric("obj_fmt", function(obj) standardGeneric("obj_fmt"))
+setGeneric("obj_format", function(obj) standardGeneric("obj_format"))
 ## this covers rcell, etc
-setMethod("obj_fmt", "ANY", function(obj) attr(obj, "format"))
-setMethod("obj_fmt", "VTableNodeInfo", function(obj) obj@format)
-setMethod("obj_fmt", "CellValue", function(obj) obj@format)
-setMethod("obj_fmt", "Split", function(obj) obj@split_format)
+setMethod("obj_format", "ANY", function(obj) attr(obj, "format"))
+setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
+setMethod("obj_format", "CellValue", function(obj) obj@format)
+setMethod("obj_format", "Split", function(obj) obj@split_format)
 
-setGeneric("obj_fmt<-", function(obj, value) standardGeneric("obj_fmt<-"))
+setGeneric("obj_format<-", function(obj, value) standardGeneric("obj_format<-"))
 ## this covers rcell, etc
-setMethod("obj_fmt<-", "ANY", function(obj, value) {
+setMethod("obj_format<-", "ANY", function(obj, value) {
     attr(obj, "format") = value
     obj
 })
-setMethod("obj_fmt<-", "VTableNodeInfo", function(obj, value) {
+setMethod("obj_format<-", "VTableNodeInfo", function(obj, value) {
     obj@format = value
     obj
 })
 
-setMethod("obj_fmt<-", "Split", function(obj, value) {
+setMethod("obj_format<-", "Split", function(obj, value) {
     obj@split_format = value
     obj
 })
 
-setMethod("obj_fmt<-", "CellValue", function(obj, value) {
+setMethod("obj_format<-", "CellValue", function(obj, value) {
     obj@format = value
     obj
 })
@@ -575,48 +575,48 @@ setMethod("obj_fmt<-", "CellValue", function(obj, value) {
 
 
 
-setGeneric("set_fmt_recursive", function(obj, fmt, override = FALSE) standardGeneric("set_fmt_recursive"))
-setMethod("set_fmt_recursive", "TableRow",
-          function(obj, fmt, override = FALSE) {
-    if(is.null(fmt))
+setGeneric("set_format_recursive", function(obj, format, override = FALSE) standardGeneric("set_format_recursive"))
+setMethod("set_format_recursive", "TableRow",
+          function(obj, format, override = FALSE) {
+    if(is.null(format))
         return(obj)
-    if(is.null(obj_fmt(obj)) || override)
-        obj_fmt(obj) = fmt
+    if(is.null(obj_format(obj)) || override)
+        obj_format(obj) = format
     lcells = row_cells(obj)
     lvals = lapply(lcells, function(x) {
-        if(!is.null(x) && is.null(obj_fmt(x)))
-            obj_fmt(x) = obj_fmt(obj)
+        if(!is.null(x) && is.null(obj_format(x)))
+            obj_format(x) = obj_format(obj)
         x
     })
     row_values(obj) = lvals
     obj
 })
 
-setMethod("set_fmt_recursive", "LabelRow",
-          function(obj, fmt, override = FALSE) obj)
-setMethod("set_fmt_recursive", "VTableTree",
-          function(obj, fmt, override = FALSE) {
-    force(fmt)
-    if(is.null(fmt))
+setMethod("set_format_recursive", "LabelRow",
+          function(obj, format, override = FALSE) obj)
+setMethod("set_format_recursive", "VTableTree",
+          function(obj, format, override = FALSE) {
+    force(format)
+    if(is.null(format))
         return(obj)
     
-    if(is.null(obj_fmt(obj)) || override)
-        obj_fmt(obj) = fmt
+    if(is.null(obj_format(obj)) || override)
+        obj_format(obj) = format
     
     kids = tree_children(obj)
-    kids = lapply(kids, function(x, fmt2, oride) set_fmt_recursive(x,
-                                                                      fmt = fmt2, override = oride),
-                  fmt2 = obj_fmt(obj), oride = override)
+    kids = lapply(kids, function(x, format2, oride) set_format_recursive(x,
+                                                                      format = format2, override = oride),
+                  format2 = obj_format(obj), oride = override)
     tree_children(obj) = kids
     obj
 })
 
-setGeneric("content_fmt", function(obj) standardGeneric("content_fmt"))
-setMethod("content_fmt", "Split", function(obj) obj@content_format)
+setGeneric("content_format", function(obj) standardGeneric("content_format"))
+setMethod("content_format", "Split", function(obj) obj@content_format)
 
-setGeneric("content_fmt<-", function(obj, value) standardGeneric("content_fmt<-"))
+setGeneric("content_format<-", function(obj, value) standardGeneric("content_format<-"))
 
-setMethod("content_fmt<-", "Split", function(obj, value) {
+setMethod("content_format<-", "Split", function(obj, value) {
     obj@content_format = value
     obj
 })
@@ -625,31 +625,31 @@ setMethod("content_fmt<-", "Split", function(obj, value) {
 ## this one tiny utility function is NOT worth a dependency.
 ## modified it so any length 0 x grabs y
 `%||%` = function(L, R) if(length(L) == 0) R else L
-setGeneric("value_fmts", function(obj, default = obj_fmt(obj)) standardGeneric("value_fmts"))
-setMethod("value_fmts", "ANY",
+setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGeneric("value_formats"))
+setMethod("value_formats", "ANY",
           function(obj, default) {
     attr(obj, "format") %||% default
 })
 
-setMethod("value_fmts", "TableRow",
+setMethod("value_formats", "TableRow",
           function(obj, default) {
-    fmts = lapply(row_values(obj), function(x)
-        value_fmts(x) %||% default)
-    fmts
+    formats = lapply(row_values(obj), function(x)
+        value_formats(x) %||% default)
+    formats
 })
 
-setMethod("value_fmts", "LabelRow",
+setMethod("value_formats", "LabelRow",
           function(obj, default) {
     rep(list(NULL), ncol(obj))
 })
 
 
 
-setMethod("value_fmts", "VTableTree",
+setMethod("value_formats", "VTableTree",
           function(obj, default) {
     rws = collect_leaves(obj, TRUE, TRUE)
-    fmtrws = lapply(rws, value_fmts)
-    mat = do.call(rbind, fmtrws)
+    formatrws = lapply(rws, value_formats)
+    mat = do.call(rbind, formatrws)
     row.names(mat) = NULL
     mat
 })
@@ -864,9 +864,9 @@ setMethod("split_exargs<-", "Split",
 is_labrow = function(obj) is(obj, "LabelRow")
 
 
-spl_baseline = function(obj) {
+spl_ref_group = function(obj) {
     stopifnot(is(obj, "VarLevWBaselineSplit"))
-    obj@baseline_value
+    obj@ref_group_value
 }
 
 
@@ -1202,50 +1202,50 @@ setMethod("disp_ccounts<-", "PreDataTableLayouts",
 })
 
 
-setGeneric("colcount_fmt", function(obj) standardGeneric("colcount_fmt"))
+setGeneric("colcount_format", function(obj) standardGeneric("colcount_format"))
 
-setMethod("colcount_fmt", "InstantiatedColumnInfo",
+setMethod("colcount_format", "InstantiatedColumnInfo",
           function(obj) obj@columncount_format)
 
-setMethod("colcount_fmt", "VTableNodeInfo",
-          function(obj) colcount_fmt(col_info(obj)))
+setMethod("colcount_format", "VTableNodeInfo",
+          function(obj) colcount_format(col_info(obj)))
 
 
-setMethod("colcount_fmt", "PreDataColLayout",
+setMethod("colcount_format", "PreDataColLayout",
           function(obj) obj@columncount_format)
 
-setMethod("colcount_fmt", "PreDataTableLayouts",
-          function(obj) colcount_fmt(clayout(obj)))
+setMethod("colcount_format", "PreDataTableLayouts",
+          function(obj) colcount_format(clayout(obj)))
 
 
 
-setGeneric("colcount_fmt<-", function(obj,value) standardGeneric("colcount_fmt<-"))
+setGeneric("colcount_format<-", function(obj,value) standardGeneric("colcount_format<-"))
 
-setMethod("colcount_fmt<-", "InstantiatedColumnInfo",
+setMethod("colcount_format<-", "InstantiatedColumnInfo",
           function(obj, value) {
     obj@columncount_format = value
     obj
 })
 
-setMethod("colcount_fmt<-", "VTableNodeInfo",
+setMethod("colcount_format<-", "VTableNodeInfo",
           function(obj, value) {
     cinfo = col_info(obj)
-    colcount_fmt(cinfo) = value
+    colcount_format(cinfo) = value
     col_info(obj) = cinfo
     obj
 })
 
 
-setMethod("colcount_fmt<-", "PreDataColLayout",
+setMethod("colcount_format<-", "PreDataColLayout",
           function(obj, value) {
     obj@columncount_format = value
     obj
 })
 
-setMethod("colcount_fmt<-", "PreDataTableLayouts",
+setMethod("colcount_format<-", "PreDataTableLayouts",
           function(obj, value) {
     clyt = clayout(obj)
-    colcount_fmt(clyt) = value
+    colcount_format(clyt) = value
     clayout(obj) = clyt
     obj
 })

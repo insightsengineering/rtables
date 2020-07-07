@@ -4,12 +4,12 @@
 \alias{add_colcounts}
 \title{Add the column population counts to the header}
 \usage{
-add_colcounts(lyt, fmt = "(N=xx)")
+add_colcounts(lyt, format = "(N=xx)")
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 }
 \description{
 Add the data derived column counts.

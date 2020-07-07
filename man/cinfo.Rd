@@ -12,7 +12,7 @@ InstantiatedColumnInfo(
   extras = list(list()),
   cnts = NA_integer_,
   dispcounts = FALSE,
-  countfmt = "(N=xx)"
+  countformat = "(N=xx)"
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ InstantiatedColumnInfo(
 
 \item{dispcounts}{logical. Should the counts be displayed as header info when the associated table is printed.}
 
-\item{countfmt}{string. Format for the counts if thtey are displayed}
+\item{countformat}{string. Format for the counts if thtey are displayed}
 }
 \description{
 InstantiatedColumnInfo

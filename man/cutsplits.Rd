@@ -16,11 +16,11 @@ VarStaticCutSplit(
   cuts,
   cutlbls = NULL,
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L
 )
@@ -31,11 +31,11 @@ CumulativeCutSplit(
   cuts,
   cutlbls = NULL,
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list(),
+  extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L
 )
@@ -46,11 +46,11 @@ VarDynCutSplit(
   cutfun,
   cutlblfun = function(x) NULL,
   cfun = NULL,
-  cfmt = NULL,
-  splfmt = NULL,
+  cformat = NULL,
+  split_format = NULL,
   splname = var,
   lblkids = NA,
-  extrargs = list(),
+  extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
   cindent_mod = 0L
@@ -67,15 +67,15 @@ VarDynCutSplit(
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
-\item{cfmt}{format spec. Format for content rows}
+\item{cformat}{format spec. Format for content rows}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{split_format}{format spec. Format associated with this split.}
 
 \item{splname}{string. Name associiated with this split (for pathing, etc)}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 

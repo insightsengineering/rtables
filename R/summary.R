@@ -16,7 +16,7 @@ setMethod("summary", "ANY", base:::summary)
 #' l <- basic_table() %>% 
 #'     split_cols_by("Species") %>%
 #'     split_rows_by("RND") %>%
-#'     analyze(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , fmt = "xx.xx")
+#'     analyze(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , format = "xx.xx")
 #' l
 #' 
 #' iris2 <- iris %>% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))
@@ -181,7 +181,7 @@ summarize_row_df_empty <- function(...) {
 #' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , fmt = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx")
 #' 
 #' tbl <- build_table(l, iris2)
 #' 

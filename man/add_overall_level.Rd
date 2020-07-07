@@ -7,7 +7,7 @@
 add_overall_level(
   valname = "Overall",
   lbl = valname,
-  extrargs = list(),
+  extra_args = list(),
   first = TRUE,
   trim = FALSE
 )
@@ -17,7 +17,7 @@ add_overall_level(
 
 \item{lbl}{string, label, often variable label}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.}
 }
@@ -32,7 +32,7 @@ l <- NULL \%>\%
    split_cols_by("ARM") \%>\% 
    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) \%>\% 
    summarize_row_groups(lbl_fstr = "\%s (n)") \%>\% 
-   analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+   analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 l
 
 tbl <- build_table(l, DM)

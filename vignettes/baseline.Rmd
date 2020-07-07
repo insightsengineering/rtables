@@ -13,4 +13,4 @@ vignette: >
 
 explain how `add_colby_multivar` and `add_analyzed_colvars` relate
 
-* documentation is not clear, what are the arguments to `afun`, i.e. `.baseline_data` seems to be added
+* documentation is not clear, what are the arguments to `afun`, i.e. `.ref_group_data` seems to be added

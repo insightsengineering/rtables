@@ -62,7 +62,7 @@ Most getters have setters with the corresponding `<-`ed version of their name. T
 
 `row_values` - retrieve the values from a `TableRow` object (as a list).
 
-`obj_fmt` - a general accessor which retrieves the format associated with any supported object
+`obj_format` - a general accessor which retrieves the format associated with any supported object
 
 `obj_label` - a general accessor which retrieves the label associated with any supported object. NOTE - some care is needed here there are currently too many concepts of label in some cases.
 
@@ -74,9 +74,9 @@ Most getters have setters with the corresponding `<-`ed version of their name. T
 
 Formats are specified by character values or functions in a way that is backwards compatible. For currently supported string formats call `list_rcell_format_labels()`. Formats are modelled in the S4 framework with the `FormatSpec` class union, which can take `NULL`, character values, or functions.
 
-- `obj_fmt` - get (/set) the format of associated with an individual object
+- `obj_format` - get (/set) the format of associated with an individual object
 
-- `set_fmt_recursive` - recursively set the format of an object and any content/children  of the object that. By default, only children/content with no format (ie `NULL` receive the format, `override=TRUE` causes existing formats to be overridden as well.
+- `set_format_recursive` - recursively set the format of an object and any content/children  of the object that. By default, only children/content with no format (ie `NULL` receive the format, `override=TRUE` causes existing formats to be overridden as well.
 
 # Getting the Tabulation You Want
 
@@ -101,7 +101,7 @@ If the list is named, the names are used as the row labels. if not, default row 
 
 The variable specified is automatically selected from the subset of the data.frame corresponding to the row/column combination and passed to the tabulation function.
 
-`fmt` takes a vector and is recycled as needed if a tabulation function generates multiple rows.
+`format` takes a vector and is recycled as needed if a tabulation function generates multiple rows.
 
 Examples:
 
@@ -110,7 +110,7 @@ One single valued row (mean)
 ```
 layout = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx")
+       add_analyzed_var("AGE", "Age", afun = mean, format = "xx.xx")
 ```
 
 
@@ -119,7 +119,7 @@ One multi-valued row (mean and sd)
 ```
 layout2 = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = function(x) c(mean = mean(x), sd = sd(x)), fmt = "xx.xx (xx.xx)")
+       add_analyzed_var("AGE", "Age", afun = function(x) c(mean = mean(x), sd = sd(x)), format = "xx.xx (xx.xx)")
 ```
 
 Two rows (mean and median)
@@ -127,7 +127,7 @@ Two rows (mean and median)
 ```
 layout2 = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = function(x) list(mean = mean(x), median = median(x)), fmt = "xx.xx")
+       add_analyzed_var("AGE", "Age", afun = function(x) list(mean = mean(x), median = median(x)), format = "xx.xx")
 
 ```
 
@@ -140,7 +140,7 @@ Example (this is VERY silly since the mean will be NA if any NA are in the data)
 ```
 layout = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = mean, fmt = "xx.xx", inclNAs = TRUE)
+       add_analyzed_var("AGE", "Age", afun = mean, format = "xx.xx", inclNAs = TRUE)
 ```
 
 ## Incorporating column or dataset totals
@@ -155,7 +155,7 @@ by the current row. (silly but illustrates using `.N_col`)
 ```
 layout2 = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = function(x, .N_col) list(prop = length(x) / .N_col), fmt = "xx.xx")
+       add_analyzed_var("AGE", "Age", afun = function(x, .N_col) list(prop = length(x) / .N_col), format = "xx.xx")
 ```
 
 
@@ -164,12 +164,12 @@ Columnwise proportion of total dataset (even sillier since we are ignoring the d
 ```
 layout2 = collyt %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       add_analyzed_var("AGE", "Age", afun = function(x, .N_col, .N_total) list("column prop" = .N_col/.N_total), fmt = "xx.xx")
+       add_analyzed_var("AGE", "Age", afun = function(x, .N_col, .N_total) list("column prop" = .N_col/.N_total), format = "xx.xx")
 ```
 
-## Comparisons against "control" or "baseline" group (column)
+## Comparisons against "control" or "ref_group" group (column)
 
-We can declare one of the columns in our table layout the "baseline" or "control" column, by using `split_cols_by()` instead of `split_cols_by()`. Once this is done, we can declare comparisons against that group as part of the layout.
+We can declare one of the columns in our table layout the "ref_group" or "control" column, by using `split_cols_by()` instead of `split_cols_by()`. Once this is done, we can declare comparisons against that group as part of the layout.
 
 Setup
 ```
@@ -181,21 +181,21 @@ collyt2 = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
 
 The standard way comparison cell values are generated is by performing a tabulation for both columns, and then passing them to the comparison function (defaults to `-` for simple differencing).
 
-We do this by calling `analyze_against_baseline`
+We do this by calling `analyze_against_ref_group`
 
 Examples:
 
-Differences in mean from 'baseline' column
+Differences in mean from 'ref_group' column
 ```
 layout = collyt2 %>%
-       analyze_against_baseline("AGE", afun = mean)
+       analyze_against_ref_group("AGE", afun = mean)
 ```
 
-Ratio of means to baseline mean (note I am not saying this is a sane thing to do statistically)
+Ratio of means to ref_group mean (note I am not saying this is a sane thing to do statistically)
 
 ```
 layout = collyt2 %>%
-       analyze_against_baseline("AGE", afun = mean,
+       analyze_against_ref_group("AGE", afun = mean,
        compfun = function(a, b) list("ratio of means" = a/b))
 
 ```
@@ -204,7 +204,7 @@ layout = collyt2 %>%
 
 ### Comparisons based on contingency tables
 
-For convenience we provide a helper function for comparisons which based on the 2xk table of (baseline vs column) against (levels of the variable): `analyze_against_baseline_2dtable()`.
+For convenience we provide a helper function for comparisons which based on the 2xk table of (ref_group vs column) against (levels of the variable): `analyze_against_ref_group_2dtable()`.
 
 When using this, we simply pass a comparsion function which accepts the table and returns what we want.
 
@@ -212,7 +212,7 @@ NB: We do NOT specify an analysis function here, as our comparison function does
 
 ```
 layout = collyt2 %>%
-       analyze_against_baseline_2dtable(var = "AGE",
+       analyze_against_ref_group_2dtable(var = "AGE",
        compfun = function(tab) list("1,1 value" = tab[1,1]))
 ```
 
@@ -221,7 +221,7 @@ See `tt_rsp()` in `R/tt_rsp.R` (specifically the generation of confidence interv
 
 ### Comparisons based on full data vectors
 
-Sometimes we may want to perform a comparison that is some complex function of both full data vectors (baseline and column).
+Sometimes we may want to perform a comparison that is some complex function of both full data vectors (ref_group and column).
 
 To do this we simply use `identity` (or `function(x) x`) as our analysis function. In this case, both untabulated vectors will be passed directly to the comparison function.
 
@@ -231,7 +231,7 @@ Example (average ratio of the two vectors. Note unless this is pairwise data in 
 
 ```
 layout = collyt2 %>%
-       analyze_against_baseline("AGE", afun = identity,
+       analyze_against_ref_group("AGE", afun = identity,
        compfun = function(a, b) list("mean of ratios" = mean(a/b)))
 
 
@@ -250,8 +250,8 @@ The label is specified slightly differently: as a sprintf style format, where th
 
 ```
 layout = collyt2 %>%
-       split_rows_by("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
-       summarise_row_groups_count("RACE", lblfmt = "%s (n)")
+       split_rows_by("RACE", "Ethnicity", labels_var = "ethn_lbl") %>%
+       summarise_row_groups_count("RACE", lblformat = "%s (n)")
 ```
 
 The more general `summarise_row_groups()` allows us to specify a custom content function (the `cfun` argument) which can generate any desired content row(s) in the same way a tabulation function would generate data rows.

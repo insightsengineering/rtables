@@ -4,7 +4,7 @@
 \alias{split_cols_by_multivar}
 \title{Associate Multiple Variables with Columns}
 \usage{
-split_cols_by_multivar(lyt, vars, lbl, varlbls = vars, newtoplev = FALSE)
+split_cols_by_multivar(lyt, vars, lbl, varlbls = vars, nested = FALSE)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -15,7 +15,7 @@ split_cols_by_multivar(lyt, vars, lbl, varlbls = vars, newtoplev = FALSE)
 
 \item{varlbls}{character vector. Labels for \code{vars}}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 }
 \description{
 In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
@@ -26,7 +26,7 @@ need columns to reflect different variables entirely, rather than different leve
 l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   split_rows_by("RACE", "ethnicity") \%>\%
-  analyze_colvars( afun = mean, fmt = "xx.xx")
+  analyze_colvars( afun = mean, format = "xx.xx")
 
 l
 

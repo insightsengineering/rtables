@@ -219,7 +219,7 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
 ### to the ***current subset*** of the df.
 ###
 ### This is called at each level of recursive splitting so
-### do NOT make it check, e.g., if the baseline level of
+### do NOT make it check, e.g., if the ref_group level of
 ### a factor is present in the data, because it may not be.
 
                                         
@@ -389,9 +389,9 @@ setMethod(".applysplit_extras", "Split",
 setMethod(".applysplit_extras", "VarLevWBaselineSplit",
           function(spl, df, vals) {
     var = spl_payload(spl)
-    bl_level = spl@baseline_value #XXX XXX
+    bl_level = spl@ref_group_value #XXX XXX
     bldata = df[df[[var]] == bl_level,]
-    replicate(c(list(.baseline_data = bldata), split_exargs(spl)), n = length(vals), simplify = FALSE)
+    replicate(c(list(.ref_group_data = bldata), split_exargs(spl)), n = length(vals), simplify = FALSE)
 })
 
 ## XXX TODO FIXME
@@ -578,18 +578,62 @@ trim_levels_in_group = function(innervar) {
 #'    split_cols_by("ARM") %>% 
 #'    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) %>% 
 #'    summarize_row_groups(lbl_fstr = "%s (n)") %>% 
-#'    analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+#'    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 #' l
 #' 
 #' tbl <- build_table(l, DM)
  
 #' tbl
 #' @export
-add_overall_level = function(valname = "Overall", lbl = valname, extrargs = list(), first = TRUE, trim = FALSE) {
+add_overall_level = function(valname = "Overall", lbl = valname, extra_args = list(), first = TRUE, trim = FALSE) {
+  ##   myfun = function(df, spl, vals = NULL, lbls = NULL, ...) {
+  ##       ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
+  ##       .add_part_info(ret, df, valname, lbl, extra_args, first)
+  ##   }
+  ## myfun
+    add_combo_levels(data.frame(valname = valname, lbl = lbl, levelcombo = I(list(select_all_levels)), exargs = I(list(list()))), trim = trim, first = first)
+    }
+
+setClass("AllLevelsSentinel", contains = "character")
+#' @export
+select_all_levels = new("AllLevelsSentinel")
+
+#' Add Combination Levels to split
+#' @param combosdf data.frame/tbl_df. Columns valname, lbl, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.
+#' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
+#' @export
+#' @examples
+#' library(tibble)
+#' combodf <- tribble(
+#'     ~valname, ~lbl, ~levelcombo, ~exargs,
+#'     "A+B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
+#'     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
+#' 
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM", splfun = add_combo_levels(combodf)) %>%
+#'     analyze("AGE")
+#' build_table(l, DM)
+add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
     myfun = function(df, spl, vals = NULL, lbls = NULL, ...) {
         ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
-        .add_part_info(ret, df, valname, lbl, extrargs, first)
+        for(i in 1:nrow(combosdf)) {
+            lcombo = combosdf[i, "levelcombo"][[1]]
+            spld = spl_payload(spl)
+            if(is(lcombo, "AllLevelsSentinel"))
+                subdf = df
+            else if (is(spl, "VarLevelSplit")) {
+                 subdf = df[df[[spld]] %in% lcombo,]
+            } else {
+                stopifnot(all(lcombo %in% c(ret$lbls, ret$vals)))
+                subdf = do.call(rbind, ret$datasplit[names(ret$datasplit) %in% lcombo |
+                                                     ret$vals %in% lcombo])
+            }
+            ret = .add_part_info(ret, subdf, combosdf[i,"valname"],
+                                 combosdf[i,"lbl"],
+                                 combosdf[i, "exargs"][[1]],
+                                 first)
+        }
+        ret
     }
   myfun
-  
 }

@@ -83,14 +83,14 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 #' 
 #' rtable(LETTERS[1:2], rrow("", 1 ,2), format = sprintf_format("%.2f"))
 #' 
-sprintf_format <- function(fmt) {
+sprintf_format <- function(format) {
     function(x,...) {
-        do.call(sprintf, c(list(fmt = fmt), x))
+        do.call(sprintf, c(list(format = format), x))
     }
 }
 
-sprintf_format_old <- function(fmt) {
-  structure(fmt, "format_type" = "sprintf")
+sprintf_format_old <- function(format) {
+  structure(format, "format_type" = "sprintf")
 }
 
 
@@ -123,7 +123,7 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
   if (length(x) == 0) return("")
   
   output <- match.arg(output)
-    format <- if (!missing(format)) format else obj_fmt(x)
+    format <- if (!missing(format)) format else obj_format(x)
     x <- rawvalues(x)
   
   txt <- if (is.null(format)) {

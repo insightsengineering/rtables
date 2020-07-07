@@ -4,10 +4,7 @@
 \alias{sprintf_format}
 \title{Specify a rcell format based on sprintf formattig rules}
 \usage{
-sprintf_format(fmt)
-}
-\arguments{
-\item{fmt}{a character vector of format strings, each of up to 8192 bytes.}
+sprintf_format(format)
 }
 \description{
 Format the rcell data with \code{\link[base]{sprintf}} formatting strings

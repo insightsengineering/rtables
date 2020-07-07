@@ -36,13 +36,13 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param var string, variable name
 #' @param vars character vector. Multiple variable names.
 #' @param lbl string, label, often variable label
-#' @param vlblvar string, name of variable containing labels to be displayed for the values of \code{var}
+#' @param labels_var string, name of variable containing labels to be displayed for the values of \code{var}
 #' @param varlbls character vector. Labels for \code{vars}
-#' @param splfmt format spec. Format associated with this split.
-#' @param newtoplev boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
-#' @param fmt format string for cells
+#' @param split_format format spec. Format associated with this split.
+#' @param nested boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
+#' @param format format string for cells
 #' @param cfun function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts
-#' @param cfmt format spec. Format for content rows
+#' @param cformat format spec. Format for content rows
 #' @param splfun function/NULL. custom splitting function
 #' @param splname string. Name associiated with this split (for pathing, etc)
 #' @param splbl string. Labe associated with this split
@@ -50,11 +50,11 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param defrowlab character vector. Default row labels for resulting analysis rows.
 #' @param inclNAs boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}
 #' @param valorder character vector. Order that the split children should appear in resulting table.
-#' @param baseline character. Value of \code{var} to be taken as the baseline/control to be compared against.
+#' @param ref_group character. Value of \code{var} to be taken as the ref_group/control to be compared against.
 #' @param compfun function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.
 #' @param lbl_fstr string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.
 #' @param lblkids logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.
-#' @param extrargs list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.
+#' @param extra_args list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.
 #' @param name character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.
 #' @param cuts numeric. Cuts to use
 #' @param cutlbls character (or NULL). Labels for the cuts
@@ -64,10 +64,10 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param incl_all logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.
 #' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior. 
 #' @family conventions
-lyt_args <- function( lyt, var, vars, lbl, vlblvar, varlbls, splfmt,
-                     newtoplev, fmt, cfun, cfmt, splfun, splname,
+lyt_args <- function( lyt, var, vars, lbl, labels_var, varlbls, split_format,
+                     nested, format, cfun, cformat, splfun, splname,
                      splbl, afun, defrowlab, inclNAs, valorder,
-                     baseline, compfun, lbl_fstr, lblkids, extrargs, name,
+                     ref_group, compfun, lbl_fstr, lblkids, extra_args, name,
                      cuts, cutlbls, cutfun, cutlblfun, cumulative,
                      incl_all,
                      indent_mod) NULL

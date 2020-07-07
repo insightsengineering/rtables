@@ -174,13 +174,13 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
             }
         })
     }
-    fmt =  colcount_fmt(lyt)
+    format =  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = cextras,
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
-                           countfmt = fmt)
+                           countformat = format)
     
 }
 

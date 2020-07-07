@@ -19,13 +19,13 @@ Add an already calculated table to the layout
 \examples{
 tbl1 <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
-   analyze("AGE", afun = mean, fmt = "xx.xx") \%>\%
+   analyze("AGE", afun = mean, format = "xx.xx") \%>\%
    build_table(DM)
 
 tbl1
 
 tbl2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-   analyze("AGE", afun = sd, fmt = "xx.xx") \%>\%
+   analyze("AGE", afun = sd, format = "xx.xx") \%>\%
    add_existing_table(tbl1) \%>\%
    build_table(DM)
 

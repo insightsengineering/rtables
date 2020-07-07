@@ -53,7 +53,7 @@ sections may contain further definitions specific to their topic
     returns values which should populate the data cell
   - Table-based Comparison Function - a comparison function which
     accepts a 2d (2xk) contingency table representing the subset
-    (baseline vs comparison column) by the value of the variable being
+    (ref_group vs comparison column) by the value of the variable being
     analyzed.
 
 
@@ -104,7 +104,7 @@ syntax for building up complex table structures using basic components.
 We can always bypass the default if nesting is not what is desired, for
 example
 
-`NULL %>% split_cols_by("ARM") %>% split_cols_by("SEX", newtoplev = TRUE)`
+`NULL %>% split_cols_by("ARM") %>% split_cols_by("SEX", nested = TRUE)`
 
 Would give us a column structure like
 
@@ -168,7 +168,7 @@ E.g,
 
 `
 NULL %>% add_colby_blinecomp(var = "visit",
-     	 	             baseline = "BASE",
+     	 	             ref_group = "BASE",
 			     comparison = '-',
 			     rawvalcol = TRUE) %>%
       analyze("BP", "Blood pressure)
@@ -193,7 +193,7 @@ XXX I have an email in to Adrian about whether this is even something
       AW: why don't you just ask for a function with two arguments
        `xb`, `xc` so that it is left to the user to define what to 
        calculate?
-       The baseline changes are usually calculated before tabulations\
+       The ref_group changes are usually calculated before tabulations\
        but test based comparisons are not.
        
 
@@ -276,8 +276,8 @@ layout = NULL %>% split_cols_by("ARM", "Arm") %>%
        split_cols_by("SEX", "Gender") %>%
        summarise_row_groups_count(lbl = "Overall (N)") %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       summarise_row_groups_count("RACE", lblfmt = "%s (n)") %>%
-       analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
+       summarise_row_groups_count("RACE", lblformat = "%s (n)") %>%
+       analyze("AGE", "Age", afun = mean, format = "xx.xx")
 ```
 
 Will generate a layout where each arm of the trial has a column for
@@ -497,7 +497,7 @@ constructors
 
 #### Option 3
 
-replace `newtoplevel` argument with `nestlevel` which can take:
+replace `nestedel` argument with `nestlevel` which can take:
 
 - `"next"` (the default), 
 - `"current"` (create or add to compound split at current nesting level), or
@@ -545,7 +545,7 @@ rather than
 Comparison-based values are where the tabulated value of a cell
 depends on data from two (or more?) columns. For example, the
 difference in mean measurements between the current column and a
-declared baseline column.
+declared ref_group column.
 
 Like single column tabulations, these comparison calculations are
 declared without our layout and then performed automatically by the
@@ -554,10 +554,10 @@ special case of non-comparison tabulation.
 
 ### Declaring a column-split with a Baseline level
 
-Which value should be considered the baseline when performing
+Which value should be considered the ref_group when performing
 automatic comparisons is done in the column split. Instead of doing
 `split_cols_by` we simply do `split_cols_by` (the last
-portion means "variable with baseline"), like so
+portion means "variable with ref_group"), like so
 
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
@@ -574,14 +574,14 @@ the layout, behave identically to `split_cols_by` and its
 corresponding `VarLevelSplit`.
 
 NOTE: In light of the above, we can probably just always have the
-deepest column-split have a baseline of the first level so people don't
+deepest column-split have a ref_group of the first level so people don't
 even need to declare it. This is NOT what happens now, though, and
 some care is needed because we only want comparisons at the deepest
 level of nesting, I think. TODO(?)
 
 ### Declaring comparison-based tabulation
 
-With a baseline value defined on our column split we can declare
+With a ref_group value defined on our column split we can declare
 comparison tabulations with our layout.
 
 #### Declaring direct comparisons
@@ -593,7 +593,7 @@ to declare we want differences in means in our table we would do
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
        split_rows_by("RACE", "ethnicity") %>%
-       analyze_against_baseline("AGE", afun = mean)
+       analyze_against_ref_group("AGE", afun = mean)
 ```
 
 Everything is then done by the rtables machinery internally and we get
@@ -609,7 +609,7 @@ the user, like so
 
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
-       analyze_against_baseline("rsp", 
+       analyze_against_ref_group("rsp", 
        		compfun = function(tab) list("CI" = prop.test(tab)$conf.int*100))
 ```
 

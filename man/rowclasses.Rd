@@ -28,7 +28,7 @@ LabelRow(
   cspan = rep(1L, length(vals)),
   cinfo = InstantiatedColumnInfo(),
   var = NA_character_,
-  fmt = NULL,
+  format = NULL,
   klass
 )
 
@@ -55,7 +55,7 @@ ContentRow(...)
 
 \item{var}{string, variable name}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 
 \item{klass}{Internal detail.}
 

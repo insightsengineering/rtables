@@ -8,10 +8,10 @@ split_rows_by(
   lyt,
   var,
   lbl = var,
-  vlblvar = var,
+  labels_var = var,
   splfun = NULL,
-  fmt = NULL,
-  newtoplev = FALSE,
+  format = NULL,
+  nested = FALSE,
   lblkids = NA,
   indent_mod = 0L
 )
@@ -23,13 +23,13 @@ split_rows_by(
 
 \item{lbl}{string, label, often variable label}
 
-\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{splfun}{function/NULL. custom splitting function}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
@@ -43,7 +43,7 @@ Add Rows according to levels of a variable
 l <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE", splfun = drop_split_levels) \%>\%
-  analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
+  analyze("AGE", "Age", afun = mean, format = "xx.xx")
  
 build_table(l, DM)
 
@@ -51,7 +51,7 @@ build_table(l, DM)
 basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE") \%>\%
-  analyze("AGE", "Age", afun = mean, fmt = "xx.xx") \%>\%
+  analyze("AGE", "Age", afun = mean, format = "xx.xx") \%>\%
   build_table(DM)
  
 
@@ -61,7 +61,7 @@ l <- basic_table() \%>\%
   summarize_row_groups(lbl_fstr = "Overall (N)") \%>\%
   split_rows_by("RACE", "Ethnicity") \%>\%
   summarize_row_groups("RACE", lbl_fstr = "\%s (n)") \%>\%
-  analyze("AGE", "Age", afun = mean, fmt = "xx.xx")
+  analyze("AGE", "Age", afun = mean, format = "xx.xx")
 l
 
 build_table(l, DM)

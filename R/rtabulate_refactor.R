@@ -44,8 +44,8 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
 .rtab_colby_helper <- function(lyt,
                                cbyclass,
                                var = NA_character_,
-                               newtoplev = FALSE,
-                               extrargs = list()) {
+                               nested = FALSE,
+                               extra_args = list()) {
     ## sadly takes different argument signature...
     ## TODO fix this?
     if(identical(cbyclass, "total"))
@@ -56,8 +56,8 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
                     cmlquartcut_df = function(...) split_cols_by_quartiles(..., cumulative = TRUE), 
                     split_cols_by)
     lyt <- addfun(lyt, var = var,
-                  newtoplev = newtoplev,
-                  extrargs = extrargs)
+                  nested = nested,
+                  extra_args = extra_args)
     lyt
 }
                                
@@ -350,8 +350,8 @@ rtabulate <- function(x,
             
             lyt <- .rtab_colby_helper(lyt, cby_class,
                                       var = cby_nms[i],
-                                      newtoplev = newtop,
-                                      extrargs = ex)
+                                      nested = newtop,
+                                      extra_args = ex)
             newtop = FALSE
         }
         
@@ -382,8 +382,8 @@ rtabulate <- function(x,
                              lbl = "",#lbls,
                              defrowlab = row.name, #lbls,# row.name,
                              afun = FUN,
-                             fmt = format,
-                             extrargs = list(...),
+                             format = format,
+                             extra_args = list(...),
                              lblkids = FALSE
                              )
     ## XXX a way to just return the layout?

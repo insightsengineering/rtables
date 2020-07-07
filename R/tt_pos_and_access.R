@@ -358,7 +358,7 @@ setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
                            extras = newcextra,
                            cnts = newcounts,
                            dispcounts = disp_ccounts(tt),
-                           countfmt = colcount_fmt(tt))
+                           countformat = colcount_format(tt))
 })
 
 setMethod("subset_cols", c("LayoutColTree", "numeric"),

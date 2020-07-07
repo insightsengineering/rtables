@@ -9,13 +9,13 @@ lyt_args(
   var,
   vars,
   lbl,
-  vlblvar,
+  labels_var,
   varlbls,
-  splfmt,
-  newtoplev,
-  fmt,
+  split_format,
+  nested,
+  format,
   cfun,
-  cfmt,
+  cformat,
   splfun,
   splname,
   splbl,
@@ -23,11 +23,11 @@ lyt_args(
   defrowlab,
   inclNAs,
   valorder,
-  baseline,
+  ref_group,
   compfun,
   lbl_fstr,
   lblkids,
-  extrargs,
+  extra_args,
   name,
   cuts,
   cutlbls,
@@ -47,19 +47,19 @@ lyt_args(
 
 \item{lbl}{string, label, often variable label}
 
-\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{varlbls}{character vector. Labels for \code{vars}}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{split_format}{format spec. Format associated with this split.}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
-\item{cfmt}{format spec. Format for content rows}
+\item{cformat}{format spec. Format for content rows}
 
 \item{splfun}{function/NULL. custom splitting function}
 
@@ -75,7 +75,7 @@ lyt_args(
 
 \item{valorder}{character vector. Order that the split children should appear in resulting table.}
 
-\item{baseline}{character. Value of \code{var} to be taken as the baseline/control to be compared against.}
+\item{ref_group}{character. Value of \code{var} to be taken as the ref_group/control to be compared against.}
 
 \item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
 
@@ -83,7 +83,7 @@ lyt_args(
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 

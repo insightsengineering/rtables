@@ -4,7 +4,7 @@
 \alias{.add_row_summary}
 \title{Add Row Summary}
 \usage{
-.add_row_summary(lyt, lbl, cfun, lblkids = NA, cfmt = NULL, indent_mod = 0L)
+.add_row_summary(lyt, lbl, cfun, lblkids = NA, cformat = NULL, indent_mod = 0L)
 }
 \description{
 Add Row Summary

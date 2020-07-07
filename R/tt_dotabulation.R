@@ -1,5 +1,5 @@
 
-match_extrargs = function(f, .N_col, .N_total, extras) {
+match_extra_args = function(f, .N_col, .N_total, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
     formargs = formals(f)
@@ -29,7 +29,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) 
         args = list(dat)
 
         args = c(args,
-                 match_extrargs(func, count, totcount, extras = c(cextr, splextra)))
+                 match_extra_args(func, count, totcount, extras = c(cextr, splextra)))
         
         val = do.call(func, args)
         if(is.list(val))
@@ -153,13 +153,13 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                          lbl = lbls,
                          name = lbls,
                          var = rowvar,
-                         fmt = format)))
+                         format = format)))
     }
-    fmtvec = NULL
+    formatvec = NULL
     if(!is.null(format)) {
         if(is.function(format) )
             format = list(format)
-        fmtvec = rep(format, length.out = ncrows)
+        formatvec = rep(format, length.out = ncrows)
     }
     
     trows = lapply(1:ncrows, function(i) {
@@ -173,7 +173,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                   lbl = lbls[i],
                   name = lbls[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
-                  fmt = fmtvec[[i]]
+                  format = formatvec[[i]]
                   )
         
     })
@@ -252,7 +252,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                            lblrow = LabelRow(),
                            cinfo = cinfo,
                            iscontent = TRUE,
-                           fmt = format,
+                           format = format,
                            indent_mod = indent_mod)
     ctab
 }
@@ -278,7 +278,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                            cinfo = cinfo,
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
-                           format = obj_fmt(spl),
+                           format = obj_format(spl),
                            splextra = split_exargs(spl))
     vis = TRUE
     if(dolab && (!didlab || !identical(obj_label(spl), sapply(kids, obj_name))))
@@ -290,7 +290,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
               lbl = lab,
               lev = lvl,
               cinfo = cinfo,
-              fmt = obj_fmt(spl),
+              format = obj_format(spl),
               indent_mod = indent_mod(spl))
     ret
 }
@@ -398,7 +398,7 @@ recursive_applysplit = function( df,
                                      cinfo = cinfo,
                                      make_lrow = label_kids(spl),
                                      parent_cfun = content_fun(spl),
-                                     cformat = obj_fmt(spl),
+                                     cformat = obj_format(spl),
                                      partlbl = lbl,
                                      cindent_mod = content_indent_mod(spl))
             }, dfpart = dataspl,
@@ -549,7 +549,7 @@ build_table = function(lyt, df,
                       lbl = "",
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
-                      format = content_fmt(rtspl),
+                      format = content_format(rtspl),
                       indent_mod = 0L)
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
@@ -566,7 +566,7 @@ build_table = function(lyt, df,
                              ## XXX are these ALWAYS right?
                              make_lrow = label_kids(firstspl),
                              parent_cfun = NULL,
-                             cformat = obj_fmt(firstspl))
+                             cformat = obj_format(firstspl))
     })
     kids = kids[!sapply(kids, is.null)]
     if(length(kids) > 0)
@@ -584,7 +584,7 @@ build_table = function(lyt, df,
                         lbl="",
                         iscontent = FALSE,
                         cinfo = cinfo,
-                        fmt = obj_fmt(rtspl))
+                        format = obj_format(rtspl))
     }
     tab
 }
@@ -634,7 +634,7 @@ setMethod("set_def_child_ord", "VarLevelSplit",
 
 setMethod("set_def_child_ord", "VarLevWBaselineSplit",
           function(lyt, df) {
-    bline = spl_baseline(lyt)
+    bline = spl_ref_group(lyt)
     if(!is.null(spl_child_order(lyt)) &&
        match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
         return(lyt)
@@ -646,7 +646,7 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
   
     stopifnot(bline %in% vals)
     pos = match(bline, vals)
-    ## same order except baseline always first
+    ## same order except ref_group always first
     vals = c(bline, vals[-pos])
     spl_child_order(lyt) = vals
     lyt

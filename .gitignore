@@ -22,3 +22,5 @@ checklog.txt
 currentwork.R
 
 tablefunexample.R
+
+*.R#

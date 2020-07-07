@@ -8,12 +8,12 @@ split_cols_by(
   lyt,
   var,
   lbl = var,
-  vlblvar = var,
-  splfmt = NULL,
-  newtoplev = FALSE,
+  labels_var = var,
+  format = NULL,
+  nested = FALSE,
   lblkids = FALSE,
-  extrargs = list(),
-  baseline = NULL,
+  extra_args = list(),
+  ref_group = NULL,
   incl_all = FALSE
 )
 }
@@ -24,17 +24,17 @@ split_cols_by(
 
 \item{lbl}{string, label, often variable label}
 
-\item{vlblvar}{string, name of variable containing labels to be displayed for the values of \code{var}}
+\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
-\item{splfmt}{format spec. Format associated with this split.}
+\item{format}{format string for cells}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{lblkids}{logical. Should the children of this split have label rows. Defaults to \code{NA} which creates a label row only if the child has 0 content rows.}
 
-\item{extrargs}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
-\item{baseline}{character(1) or NULL. Level of \code{var} which should be considered baseline/reference}
+\item{ref_group}{character(1) or NULL. Level of \code{var} which should be considered ref_group/reference}
 
 \item{incl_all}{logical(1). Should a column representing all observations at this level of nesting be added. defaults to \code{FALSE}}
 }
@@ -47,7 +47,7 @@ l
 
 # add an analysis (summary)
 l2 <- l \%>\% 
-    analyze("AGE", afun = lstwrapx(summary) , fmt = "xx.xx")
+    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 l2
 
 build_table(l2, DM)
@@ -55,12 +55,12 @@ build_table(l2, DM)
 # By default sequentially adding layouts results in nesting
 l3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
-  analyze("AGE", afun = lstwrapx(summary), fmt = "xx.xx")
+  analyze("AGE", afun = lstwrapx(summary), format = "xx.xx")
 l3
 
  build_table(l3, DM)
 
-# newtoplev=TRUE vs not
+# nested=TRUE vs not
 l4 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", splfun = drop_split_levels) \%>\%
  split_rows_by("RACE", splfun = drop_split_levels) \%>\%
@@ -72,7 +72,7 @@ build_table(l4, DM)
 l5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", splfun= drop_split_levels) \%>\%
  analyze("AGE") \%>\%
- split_rows_by("RACE", newtoplev=TRUE, splfun = drop_split_levels) \%>\%
+ split_rows_by("RACE", nested=TRUE, splfun = drop_split_levels) \%>\%
  analyze("AGE")
 
 l5

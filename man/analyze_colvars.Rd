@@ -7,8 +7,8 @@
 analyze_colvars(
   lyt,
   afun,
-  fmt = NULL,
-  newtoplev = FALSE,
+  format = NULL,
+  nested = FALSE,
   defrowlab,
   indent_mod = 0L
 )
@@ -18,9 +18,9 @@ analyze_colvars(
 
 \item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 
-\item{newtoplev}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
 \item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 
@@ -35,7 +35,7 @@ level of nesting in the column structure, rather than at the row level.
 l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
   split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) \%>\%
-  analyze_colvars( afun = mean, fmt = "xx.xx")
+  analyze_colvars( afun = mean, format = "xx.xx")
 
 l
 

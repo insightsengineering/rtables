@@ -19,7 +19,7 @@ ElementaryTable(
   cinfo = NULL,
   iscontent = NA,
   var = NA_character_,
-  fmt = NULL,
+  format = NULL,
   indent_mod = 0L
 )
 
@@ -35,7 +35,7 @@ TableTree(
   iscontent = NA,
   var = NA_character_,
   cinfo = NULL,
-  fmt = NULL,
+  format = NULL,
   indent_mod = 0L
 )
 }
@@ -58,7 +58,7 @@ TableTree(
 
 \item{var}{string, variable name}
 
-\item{fmt}{format string for cells}
+\item{format}{format string for cells}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 

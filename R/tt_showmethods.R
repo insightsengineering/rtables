@@ -86,7 +86,7 @@ setMethod("payloadmsg", "MultiVarSplit",
 
 setMethod("payloadmsg", "VarLevWBaselineSplit",
           function(spl) paste0(spl_payload(spl), "[bsl ",
-                               spl@baseline_value, # XXX XXX
+                               spl@ref_group_value, # XXX XXX
                                "]"))
 
 setMethod("payloadmsg", "ManualSplit",
@@ -102,8 +102,8 @@ setMethod("payloadmsg", "ANY",
 spldesc = function(spl, value = "") {
     value = rawvalues(value)
     payloadmsg = payloadmsg(spl)
-    fmt = "%s (%s)"
-    sprintf(fmt,
+    format = "%s (%s)"
+    sprintf(format,
             value,
             payloadmsg)
             
@@ -145,7 +145,7 @@ setMethod("spltype_abbrev", "VarLevelSplit",
           function(obj) "lvls")
 
 setMethod("spltype_abbrev", "VarLevWBaselineSplit", 
-          function(obj) paste("baseline", obj@baseline_value))
+          function(obj) paste("ref_group", obj@ref_group_value))
 
 
 setMethod("spltype_abbrev", "MultiVarSplit",

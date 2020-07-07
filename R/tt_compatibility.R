@@ -33,13 +33,13 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         ## SIMPLIFY=FALSE)
         ## vals = unlist(vals,
         ##               recursive = FALSE)
-        fmts = sapply(vals, obj_fmt)
-        if(is.character(fmts) && length(unique(fmts)) == 1L && is.null(format))
-            format = unique(fmts)
+        formats = sapply(vals, obj_format)
+        if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
+            format = unique(formats)
         DataRow(val = vals, lev = as.integer(indent), lbl = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
-                fmt = format)
+                format = format)
     }
 }
 
@@ -86,7 +86,7 @@ rcell = function(x, format = NULL, colspan = 1L, lbl = NULL) {
     if(is(x, "CellValue"))
         x
     else
-        CellValue(val = x, fmt = format, colspan = colspan, lbl = lbl)
+        CellValue(val = x, format = format, colspan = colspan, lbl = lbl)
 }
 
 
@@ -109,9 +109,9 @@ hrows_to_colinfo = function(rows) {
     cspans = lapply(rows, row_cspans)
     vals = lapply(rows, function(x) unlist(row_values(x)))
     unqvals = lapply(vals, unique)
-    fmts = lapply(rows, obj_fmt)
+    formats = lapply(rows, obj_format)
     counts = NULL
-    if( fmts[ nr ] == "(N=xx)" ) { ## count row
+    if( formats[ nr ] == "(N=xx)" ) { ## count row
         counts = vals[[ nr ]]
         vals = vals[ -nr ]
         cspans = cspans[ -nr ]
@@ -366,7 +366,7 @@ rtable = function(header, ..., format = NULL) {
         body = lapply(body, function(tb) tree_children(tb)[[1]])
     }
         
-    TableTree(kids = body, fmt = format, cinfo = colinfo,
+    TableTree(kids = body, format = format, cinfo = colinfo,
               lblrow = LabelRow(lev = 0L, lbl = "", vis = FALSE))
 }
 
@@ -479,7 +479,7 @@ setMethod("rbind2", "VTableNodeInfo",
 
 header_add_N = function(x, N) {
     col_counts(x) = as.integer(N)
-    colcount_fmt(x) = "(N=xx)"
+    colcount_format(x) = "(N=xx)"
     disp_ccounts(x) = TRUE
     x
 }
@@ -535,7 +535,7 @@ combine_cinfo = function(ci1, ci2) {
                            extras = newexargs,
                            cnts = newcounts,
                            dispcounts = newdisp,
-                           countfmt = colcount_fmt(ci1))
+                           countformat = colcount_format(ci1))
 }
 
 
@@ -631,7 +631,7 @@ setMethod("recurse_cbind", c("TableTree",
               name = obj_name(x),
               lev = tt_level(x),
               cinfo = cinfo,
-              fmt = obj_fmt(x))
+              format = obj_format(x))
 })
 
 setMethod("recurse_cbind", c("ElementaryTable",
@@ -653,7 +653,7 @@ setMethod("recurse_cbind", c("ElementaryTable",
                   name = obj_name(x),
                   lev = tt_level(x),
                   cinfo = cinfo,
-                  fmt = obj_fmt(x),
+                  format = obj_format(x),
                   var = obj_avar(x))
 })
 
@@ -689,7 +689,7 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
                cspan = retcsp,
                cinfo = cinfo,
                var = obj_avar(x),
-               fmt = obj_fmt(x),
+               format = obj_format(x),
                name = obj_name(x),
                lbl = obj_label(x))
 })
