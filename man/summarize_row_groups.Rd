@@ -7,7 +7,7 @@
 summarize_row_groups(
   lyt,
   var = NULL,
-  lbl_fstr = "\%s",
+  label_fstr = "\%s",
   format = "xx (xx.x\%)",
   cfun = NULL,
   indent_mod = 0L
@@ -18,7 +18,7 @@ summarize_row_groups(
 
 \item{var}{string, variable name}
 
-\item{lbl_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
+\item{label_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 
 \item{format}{format string for cells}
 
@@ -32,12 +32,12 @@ Add a content row of summary counts
 \details{
 if \code{format} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
 
-\code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{lblstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
+\code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 }
 \examples{
 l <- basic_table() \%>\% split_cols_by("ARM") \%>\% 
     split_rows_by("RACE") \%>\% 
-    summarize_row_groups(lbl_fstr = "\%s (n)") \%>\% 
+    summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 l
 

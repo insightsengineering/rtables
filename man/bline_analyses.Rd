@@ -9,21 +9,21 @@ analyze_against_ref_group(
   lyt,
   var = NA_character_,
   afun,
-  lbl = "",
+  label = "",
   compfun = `-`,
   format = NULL,
   defrowlab = "Diff from Baseline",
-  nested = FALSE,
+  nested = TRUE,
   indent_mod = 0L
 )
 
 analyze_against_ref_group_2dtable(
   lyt,
   var = NA_character_,
-  lbl = var,
+  label = var,
   compfun,
   format = NULL,
-  nested = FALSE,
+  nested = TRUE,
   indent_mod = 0L
 )
 }
@@ -34,13 +34,9 @@ analyze_against_ref_group_2dtable(
 
 \item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
-\item{lbl}{string, label, often variable label}
-
 \item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
 
 \item{format}{format string for cells}
-
-\item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 

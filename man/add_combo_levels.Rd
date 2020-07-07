@@ -7,7 +7,7 @@
 add_combo_levels(combosdf, trim = FALSE, first = FALSE)
 }
 \arguments{
-\item{combosdf}{data.frame/tbl_df. Columns valname, lbl, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.}
+\item{combosdf}{data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.}
 }
 \description{
 Add Combination Levels to split
@@ -18,7 +18,7 @@ Analysis or summary functions for which the order matters should never be used w
 \examples{
 library(tibble)
 combodf <- tribble(
-    ~valname, ~lbl, ~levelcombo, ~exargs,
+    ~valname, ~label, ~levelcombo, ~exargs,
     "A+B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 

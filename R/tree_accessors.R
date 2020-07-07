@@ -186,17 +186,17 @@ setMethod("pos_splvals", "VLayoutNode",
 
          
 
-setGeneric("pos_split_lbls", function(obj) standardGeneric("pos_split_lbls"))
-setMethod("pos_split_lbls", "TreePos",
+setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
+setMethod("pos_split_labels", "TreePos",
           function(obj) {
     spls = pos_splits(obj)
     sapply(spls, function(x) x@split_label)
 })
 
-## setMethod("pos_split_lbls", "VNodeInfo",
-##            function(obj) pos_split_lbls(tree_pos(obj)))
-setMethod("pos_split_lbls", "VLayoutNode",
-           function(obj) pos_split_lbls(tree_pos(obj)))
+## setMethod("pos_split_labels", "VNodeInfo",
+##            function(obj) pos_split_labels(tree_pos(obj)))
+setMethod("pos_split_labels", "VLayoutNode",
+           function(obj) pos_split_labels(tree_pos(obj)))
 
 
 setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
@@ -223,13 +223,13 @@ setMethod("pos_spltypes", "TreePos",
 setMethod("pos_spltypes", "VLayoutNode",
           function(obj) pos_spltypes(tree_pos(obj)))
 
-setGeneric("pos_splval_lbls", function(obj) standardGeneric("pos_splval_lbls"))
-setMethod("pos_splval_lbls", "TreePos",
+setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels"))
+setMethod("pos_splval_labels", "TreePos",
           function(obj) obj@sval_labels)
-## setMethod("pos_splval_lbls", "VNodeInfo",
-##            function(obj) pos_splval_lbls(tree_pos(obj)))
-setMethod("pos_splval_lbls", "VLayoutNode",
-           function(obj) pos_splval_lbls(tree_pos(obj)))
+## setMethod("pos_splval_labels", "VNodeInfo",
+##            function(obj) pos_splval_labels(tree_pos(obj)))
+setMethod("pos_splval_labels", "VLayoutNode",
+           function(obj) pos_splval_labels(tree_pos(obj)))
 
 
 
@@ -295,7 +295,7 @@ setMethod("obj_label<-", "VTableTree",
     lr = tt_labelrow(obj)
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
-        lblrow_visible(lr) = TRUE
+        labelrow_visible(lr) = TRUE
  
     tt_labelrow(obj) = lr
     obj
@@ -313,23 +313,23 @@ setMethod("tt_labelrow<-", "VTableTree",
     obj
 })
 
-setGeneric("lblrow_visible", function(obj) standardGeneric("lblrow_visible"))
-setMethod("lblrow_visible", "VTableTree",
+setGeneric("labelrow_visible", function(obj) standardGeneric("labelrow_visible"))
+setMethod("labelrow_visible", "VTableTree",
           function(obj) {
-    lblrow_visible(tt_labelrow(obj))
+    labelrow_visible(tt_labelrow(obj))
 })
-setMethod("lblrow_visible", "LabelRow",
+setMethod("labelrow_visible", "LabelRow",
           function(obj) obj@visible)
 
-setGeneric("lblrow_visible<-", function(obj, value) standardGeneric("lblrow_visible<-"))
-setMethod("lblrow_visible<-", "VTableTree",
+setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_visible<-"))
+setMethod("labelrow_visible<-", "VTableTree",
           function(obj, value) {
     lr = tt_labelrow(obj)
-    lblrow_visible(lr) = value
+    labelrow_visible(lr) = value
     tt_labelrow(obj) = lr
     obj
 })
-setMethod("lblrow_visible<-", "LabelRow",
+setMethod("labelrow_visible<-", "LabelRow",
           function(obj, value) {
     obj@visible = value
     obj
@@ -342,8 +342,13 @@ setGeneric("label_kids", function(spl) standardGeneric("label_kids"))
 setMethod("label_kids", "Split", function(spl) spl@label_children)
 
 setGeneric("label_kids<-", function(spl, value) standardGeneric("label_kids<-"))
-setMethod("label_kids<-", "Split", function(spl, value) {
-    spl@label_children = value
+setMethod("label_kids<-", c("Split", "character"), function(spl, value) {
+    label_kids(spl) <- .labelkids_helper(value)
+    spl
+})
+
+setMethod("label_kids<-", c("Split", "logical"), function(spl, value) {
+    spl@label_children <- value
     spl
 })
 
@@ -391,8 +396,8 @@ setMethod("avar_inclNAs<-", "AnalyzeVarSplit",
 })
 
 
-setGeneric("spl_lblvar", function(obj) standardGeneric("spl_lblvar"))
-setMethod("spl_lblvar", "VarLevelSplit", function(obj) obj@value_lbl_var)
+setGeneric("spl_labelvar", function(obj) standardGeneric("spl_labelvar"))
+setMethod("spl_labelvar", "VarLevelSplit", function(obj) obj@value_label_var)
 
 setGeneric("spl_child_order", function(obj) standardGeneric("spl_child_order"))
 setMethod("spl_child_order", "VarLevelSplit", function(obj) obj@value_order)
@@ -419,7 +424,7 @@ setMethod("spl_child_order",
 
 setMethod("spl_child_order",
           "VarStaticCutSplit",
-          function(obj) spl_cutlbls(obj))
+          function(obj) spl_cutlabels(obj))
 
 
 
@@ -679,7 +684,7 @@ setGeneric("collect_leaves",
 setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = c(
-        if(add.labrows && lblrow_visible(tt)) {
+        if(add.labrows && labelrow_visible(tt)) {
             tt_labelrow(tt)
         },
         if(incl.cont) {tree_children(content_table(tt))},
@@ -695,7 +700,7 @@ setMethod("collect_leaves", "TableTree",
 setMethod("collect_leaves", "ElementaryTable",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     ret = tree_children(tt)
-    if(add.labrows && lblrow_visible(tt)) {
+    if(add.labrows && labelrow_visible(tt)) {
         ret = c(tt_labelrow(tt), ret)
     }
     ret
@@ -1341,8 +1346,8 @@ setGeneric("spl_cuts", function(obj) standardGeneric("spl_cuts"))
 setMethod("spl_cuts", "VarStaticCutSplit",
           function(obj) obj@cuts)
 
-setGeneric("spl_cutlbls", function(obj) standardGeneric("spl_cutlbls"))
-setMethod("spl_cutlbls", "VarStaticCutSplit",
+setGeneric("spl_cutlabels", function(obj) standardGeneric("spl_cutlabels"))
+setMethod("spl_cutlabels", "VarStaticCutSplit",
           function(obj) obj@cut_labels)
 
 
@@ -1350,8 +1355,8 @@ setGeneric("spl_cutfun", function(obj) standardGeneric("spl_cutfun"))
 setMethod("spl_cutfun", "VarDynCutSplit",
           function(obj) obj@cut_fun)
 
-setGeneric("spl_cutlblfun", function(obj) standardGeneric("spl_cutlblfun"))
-setMethod("spl_cutlblfun", "VarDynCutSplit",
+setGeneric("spl_cutlabelfun", function(obj) standardGeneric("spl_cutlabelfun"))
+setMethod("spl_cutlabelfun", "VarDynCutSplit",
           function(obj) obj@cut_label_fun)
 
 

@@ -173,7 +173,7 @@ We can declare one of the columns in our table layout the "ref_group" or "contro
 
 Setup
 ```
-collyt2 = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+collyt2 = NULL %>% split_cols_by("ARM", "Arm A", label = "Arm") %>%
 
 ```
 
@@ -250,8 +250,8 @@ The label is specified slightly differently: as a sprintf style format, where th
 
 ```
 layout = collyt2 %>%
-       split_rows_by("RACE", "Ethnicity", labels_var = "ethn_lbl") %>%
-       summarise_row_groups_count("RACE", lblformat = "%s (n)")
+       split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
+       summarise_row_groups_count("RACE", labelformat = "%s (n)")
 ```
 
 The more general `summarise_row_groups()` allows us to specify a custom content function (the `cfun` argument) which can generate any desired content row(s) in the same way a tabulation function would generate data rows.

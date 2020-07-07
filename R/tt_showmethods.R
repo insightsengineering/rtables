@@ -232,11 +232,11 @@ setMethod("show", "PreDataTableLayouts",
 
 setMethod("show", "TreePos",
           function(object) {
-    chars = mapply(function(lbl, val)
+    chars = mapply(function(label, val)
         {
-            paste0(lbl, " [", val, "]")
-        }, lbl = pos_split_lbls(object),
-        val = pos_splval_lbls(object))
+            paste0(label, " [", val, "]")
+        }, label = pos_split_labels(object),
+        val = pos_splval_labels(object))
         
     msg = paste(chars, collapse = " -> ")
     cat("An object of class ", class(object), "\n\n", msg)

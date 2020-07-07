@@ -12,9 +12,9 @@ remove_split_levels(excl)
 
 keep_split_levels(only, reorder = TRUE)
 
-drop_split_levels(df, spl, vals = NULL, lbls = NULL, trim = FALSE)
+drop_split_levels(df, spl, vals = NULL, labels = NULL, trim = FALSE)
 
-reorder_split_levels(neworder, newlbls = neworder, drlevels = TRUE)
+reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 
 trim_levels_in_group(innervar)
 }
@@ -28,7 +28,7 @@ of presence in the data).}
 
 \item{neworder}{character. New order or factor levels.}
 
-\item{newlbls}{character. Labels for (new order of) factor levels}
+\item{newlabels}{character. Labels for (new order of) factor levels}
 
 \item{drlevels}{logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}}
 

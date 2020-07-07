@@ -71,7 +71,7 @@ setMethod("summary", "TableRow", function(object, depth = 0, indent = 0, row_typ
 
 setMethod("summary", "LabelRow", function(object, depth = 0, indent = 0, ...) {
 
-  if (lblrow_visible(object)) {
+  if (labelrow_visible(object)) {
     cat_row(indent, obj_name(object), obj_label(object), object@visible, "label |")
     TRUE
   } else {
@@ -248,7 +248,7 @@ setMethod("summarize_rows", "LabelRow",
             
             indent <- indent + indent_mod(obj)
             
-            if (lblrow_visible(obj)) {
+            if (labelrow_visible(obj)) {
               summarize_row_df(
                 name = obj_name(obj),
                 label = obj_label(obj),

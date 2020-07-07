@@ -4,7 +4,7 @@
 \alias{rcell}
 \title{Rcell}
 \usage{
-rcell(x, format = NULL, colspan = 1L, lbl = NULL)
+rcell(x, format = NULL, colspan = 1L, label = NULL)
 }
 \arguments{
 \item{x}{ANY. Cell value}
@@ -14,7 +14,7 @@ then the \code{format} is applied}
 
 \item{colspan}{Columnspan value. NOTE currently column spanning is only supported for defining header structure.}
 
-\item{lbl}{character(1). Label or Null. If non-null, it will be looked at when determining row labels.}
+\item{label}{character(1). Label or Null. If non-null, it will be looked at when determining row labels.}
 }
 \description{
 Rcell

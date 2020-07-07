@@ -174,7 +174,7 @@ by_hierarchical <- function(...) {
     })
     lyt = NULL
     for(stuff in by_lst)
-        lyt <- split_cols(lyt, ManualSplit(stuff, lbl = ""), pos = next_cpos(lyt))
+        lyt <- split_cols(lyt, ManualSplit(stuff, label = ""), pos = next_cpos(lyt))
     return(lyt)
 }
 

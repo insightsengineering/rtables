@@ -70,7 +70,7 @@ basic_table() %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, defrowlab = "Mean Age", format = "xx.x") %>%
+  analyze("age", afun = mean, format = "xx.x") %>%
   build_table(df)
 ```
 

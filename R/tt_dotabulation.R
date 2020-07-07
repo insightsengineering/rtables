@@ -129,19 +129,19 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ## default row labels
     rv1col = rawvals[[maxind]]
     if(is(rv1col, "CellValue"))
-        lbls = obj_label(rv1col)
+        labels = obj_label(rv1col)
     else if (!is.null(names(rv1col)))
-        lbls = names(rv1col)
+        labels = names(rv1col)
     else if(are(rv1col, "CellValue"))
-        lbls = sapply(rv1col, obj_label)
+        labels = sapply(rv1col, obj_label)
     else
-        lbls = NULL
+        labels = NULL
     
-    if(is.null(lbls)) {
+    if(is.null(labels)) {
         if(length(rawvals[[maxind]]) == length(defrowlabs))
-            lbls = defrowlabs
+            labels = defrowlabs
         else
-            lbls = rep("", length(rawvals[[maxind]]))
+            labels = rep("", length(rawvals[[maxind]]))
     }
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
@@ -150,8 +150,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         return(list(rowconstr(val = rawvals,
                          cinfo = cinfo,
                          lev = lev,
-                         lbl = lbls,
-                         name = lbls,
+                         label = labels,
+                         name = labels,
                          var = rowvar,
                          format = format)))
     }
@@ -170,8 +170,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         rowconstr(val = rowvals,
                   cinfo = cinfo,
                   lev = lev,
-                  lbl = lbls[i],
-                  name = lbls[i], ## XXX this is probably the wrong thing!
+                  label = labels[i],
+                  name = labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
                   format = formatvec[[i]]
                   )
@@ -180,32 +180,32 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     trows
 }
 
-.both_caller = function(pcfun, lblstr) {
+.both_caller = function(pcfun, labelstr) {
     function(df2, .N_col, .N_total, ...) {
-        pcfun(df2, lblstr, .N_col = .N_col, .N_total = .N_total, ...)
+        pcfun(df2, labelstr, .N_col = .N_col, .N_total = .N_total, ...)
     }
 }
 
-.ncol_caller = function(pcfun, lblstr) {
+.ncol_caller = function(pcfun, labelstr) {
     function(df2, .N_col, ...) {
-        pcfun(df2, lblstr, .N_col = .N_col, ...)
+        pcfun(df2, labelstr, .N_col = .N_col, ...)
     }
 }
 
-.ntot_caller  = function(pcfun, lblstr) {
+.ntot_caller  = function(pcfun, labelstr) {
     function(df2, .N_total, ...) {
-        pcfun(df2, lblstr, .N_total = .N_total, ...)
+        pcfun(df2, labelstr, .N_total = .N_total, ...)
     }
 }
 
-.neither_caller = .ntot_caller  = function(pcfun, lblstr) {
+.neither_caller = .ntot_caller  = function(pcfun, labelstr) {
     function(df2,  ...) {
-        pcfun(df2, lblstr, ...)
+        pcfun(df2, labelstr, ...)
     }
 }
 
 
-.make_caller = function(parent_cfun, clblstr) {
+.make_caller = function(parent_cfun, clabelstr) {
     ## XXX Ugh. Combinatorial explosion X.X
     ## This is what I get for abusing scope to do
     ## the content label thing. Bad design.
@@ -215,22 +215,22 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ## by. Yet mr
     if(takes_coln(parent_cfun)) {
         if(takes_totn(parent_cfun)) {
-            .both_caller(parent_cfun, clblstr)
+            .both_caller(parent_cfun, clabelstr)
         } else {
-            .ncol_caller(parent_cfun, clblstr)
+            .ncol_caller(parent_cfun, clabelstr)
         }
     } else {
         if(takes_totn(parent_cfun)) {
-            .ntot_caller(parent_cfun, clblstr)
+            .ntot_caller(parent_cfun, clabelstr)
         } else {
-            .neither_caller(parent_cfun, clblstr)
+            .neither_caller(parent_cfun, clabelstr)
         }
     }
 }
 
 .make_ctab = function(df, lvl, ##treepos,
                       name,
-                      lbl,
+                      label,
                       cinfo,
                       parent_cfun = NULL,
                       format = NULL,
@@ -240,7 +240,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     if(!is.null(parent_cfun)) {
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   func = .make_caller(parent_cfun, lbl), 
+                                   func = .make_caller(parent_cfun, label), 
                                    cinfo = cinfo,
                                    rowconstr = ContentRow)
     } else {
@@ -249,7 +249,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     ctab = ElementaryTable(kids = contkids,
                            name = paste0(name, "@content"),
                            lev = lvl,
-                           lblrow = LabelRow(),
+                           labelrow = LabelRow(),
                            cinfo = cinfo,
                            iscontent = TRUE,
                            format = format,
@@ -261,20 +261,20 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
 .make_analyzed_tab = function(df,
                               spl,
                               cinfo,
-                              partlbl = "",
+                              partlabel = "",
                               dolab = TRUE,
                               lvl) {
     stopifnot(is(spl, "AnalyzeVarSplit"))
     check_validsplit(spl, df)
-    defrlbl = spl@default_rowlabel
+    defrlabel = spl@default_rowlabel
     didlab  = FALSE
-    if(nchar(defrlbl) == 0 && !missing(partlbl) && nchar(partlbl) > 0) {
-        defrlbl = partlbl
+    if(nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
+        defrlabel = partlabel
         didlab = TRUE
     }
     kids = .make_tablerows(df,
                            func = analysis_fun(spl),
-                           defrowlabs = defrlbl, # XXX
+                           defrowlabs = defrlabel, # XXX
                            cinfo = cinfo,
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
@@ -287,7 +287,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         lab = ""
     ret = TableTree(kids = kids,
               name = obj_name(spl),
-              lbl = lab,
+              label = lab,
               lev = lvl,
               cinfo = cinfo,
               format = obj_format(spl),
@@ -301,7 +301,7 @@ recursive_applysplit = function( df,
                                 name,
                        #         label,
                                 make_lrow = NA,
-                                partlbl = "",
+                                partlabel = "",
                                 cinfo,
                                 parent_cfun = NULL,
                                 cformat = NULL,
@@ -319,7 +319,7 @@ recursive_applysplit = function( df,
     ctab = .make_ctab(df,
                       lvl = lvl,
                       name = name,
-                      lbl = partlbl,
+                      label = partlabel,
                       cinfo = cinfo,
                       parent_cfun = parent_cfun,
                       format = cformat,
@@ -342,7 +342,7 @@ recursive_applysplit = function( df,
                                      cinfo = cinfo,
                                      lvl = lvl + 1L,
                                      dolab = isTRUE(make_lrow),
-                                     partlbl = obj_label(spl))##partlbl)
+                                     partlabel = obj_label(spl))##partlabel)
   
             kids = list(ret)
             names(kids) = obj_name(ret)
@@ -357,7 +357,7 @@ recursive_applysplit = function( df,
                                    spl = sp,
                                    cinfo = cinfo,
                                    lvl = lvl + 1L,
-                                   partlbl = obj_label(sp),
+                                   partlabel = obj_label(sp),
                                    dolab = isTRUE(label_kids(spl)) || length(avspls) > 1)}
                 )
             if(!identical(make_lrow, FALSE) &&
@@ -379,9 +379,9 @@ recursive_applysplit = function( df,
             dataspl = rawpart[["datasplit"]]
             ## these are SplitValue objects
             splvals = rawpart[["values"]]
-            partlbls = rawpart[["labels"]]
-            if(is.factor(partlbls))
-                partlbls = as.character(partlbls)
+            partlabels = rawpart[["labels"]]
+            if(is.factor(partlabels))
+                partlabels = as.character(partlabels)
             nms = unlist(rawvalues(splvals))
             if(is.factor(nms))
                 nms = as.character(nms)
@@ -389,20 +389,20 @@ recursive_applysplit = function( df,
             innerlev = lvl + (nrow(ctab) > 0 || is.na(make_lrow) || make_lrow)
             ## if(nonroot)
             ##     innerlev = innerlev + 1L
-            inner = unlist(mapply(function(dfpart,  nm, lbl) {
+            inner = unlist(mapply(function(dfpart,  nm, label) {
                 recursive_applysplit(dfpart,
                                      name = nm, 
-                     #                label = lbl,
+                     #                label = label,
                                      lvl = innerlev,
                                      splvec = splvec,
                                      cinfo = cinfo,
                                      make_lrow = label_kids(spl),
                                      parent_cfun = content_fun(spl),
                                      cformat = obj_format(spl),
-                                     partlbl = lbl,
+                                     partlabel = label,
                                      cindent_mod = content_indent_mod(spl))
             }, dfpart = dataspl,
-            lbl = partlbls,
+            label = partlabels,
             nm = nms,
             SIMPLIFY=FALSE))
             kids = inner
@@ -411,9 +411,9 @@ recursive_applysplit = function( df,
     } ## end length(splvec)
 
     if(is.na(make_lrow))
-        make_lrow = if(nrow(ctab) > 0 || !nzchar(partlbl)) FALSE else TRUE
+        make_lrow = if(nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
     ## never print an empty row label for root. 
-    if(make_lrow && partlbl == "" && !nonroot)
+    if(make_lrow && partlabel == "" && !nonroot)
         make_lrow = FALSE
 
     if(nrow(ctab) == 0L && length(kids) == 1L && !make_lrow) {
@@ -423,10 +423,10 @@ recursive_applysplit = function( df,
         ## avoid visible label rows when the row.names
         ## directly repeat the info.
          if(length(kids) == 1L &&
-            identical(partlbl, row.names(kids[[1]])))
-             tlbl = ""
+            identical(partlabel, row.names(kids[[1]])))
+             tlabel = ""
          else
-             tlbl = partlbl
+             tlabel = partlabel
          kids = lapply(kids, function(x) {
              indent_mod(x) = indent_mod(spl)
              x
@@ -434,11 +434,11 @@ recursive_applysplit = function( df,
          ret = TableTree(cont = ctab,
                          kids = kids,
                         name = name,
-                        lbl = tlbl, #partlbl,
+                        label = tlabel, #partlabel,
                         lev = lvl,
                     iscontent = FALSE, 
-                    lblrow = LabelRow(lev = lvl,
-                                      lbl = tlbl,
+                    labelrow = LabelRow(lev = lvl,
+                                      label = tlabel,
                                       cinfo = cinfo,
                                       vis = make_lrow),
                     cinfo = cinfo)
@@ -546,7 +546,7 @@ build_table = function(lyt, df,
     rtspl = root_spl(rlyt)
     ctab = .make_ctab(df, 0L,
                       name = "root",
-                      lbl = "",
+                      label = "",
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
                       format = content_format(rtspl),
@@ -581,7 +581,7 @@ build_table = function(lyt, df,
                         kids = kids,
                         lev = 0L,
                         name = "root",
-                        lbl="",
+                        label="",
                         iscontent = FALSE,
                         cinfo = cinfo,
                         format = obj_format(rtspl))
@@ -654,7 +654,7 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
 
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
-                               lvl = 1L, lbl = "") {
+                               lvl = 1L, label = "") {
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
 
@@ -662,7 +662,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,
-                      lbl = lbl,
+                      label = label,
                       tpos = pos,
                       name = nm
                       )
@@ -678,7 +678,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
             splitvec_to_coltree(dfpart, splvec, newpos,
                                 lvl + 1L, partlab)
         }, dfpart = datparts, value = vals, SIMPLIFY=FALSE)
-        LayoutColTree(lev = lvl, lbl = lbl,
+        LayoutColTree(lev = lvl, label = label,
                       spl = spl,
                       kids = kids, tpos = pos,
                       name = nm, 

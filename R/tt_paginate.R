@@ -35,7 +35,7 @@ setMethod("nlines", "TableRow",
 
 setMethod("nlines", "LabelRow",
           function(x, colwidths) {
-    if(lblrow_visible(x))
+    if(labelrow_visible(x))
         1L
     else
         0L
@@ -96,7 +96,7 @@ make_pagdf = function(tt, colwidths = NULL) {
                       repr_inds = integer(),
                       indent = 0L) {
         ret = list()
-        if(lblrow_visible(tree)) {
+        if(labelrow_visible(tree)) {
             lr = tt_labelrow(tree)
             rownum <<- rownum + 1L
             ret  =  c(ret,

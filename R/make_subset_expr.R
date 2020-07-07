@@ -27,26 +27,26 @@ setMethod("make_subset_expr", "AnalyzeVarSplit",
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
     v = rawvalues(val)
-    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(lbls),
+    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(labels),
                                    include.lowest = TRUE) == .(b)),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
                        brk = spl_cuts(spl),
-                       lbls = spl_cutlbls(spl))))
+                       labels = spl_cutlabels(spl))))
 })
 
-## NB this assumes spl_cutlbls(spl) is in order!!!!!!
+## NB this assumes spl_cutlabels(spl) is in order!!!!!!
 setMethod("make_subset_expr", "CumulativeCutSplit",
           function(spl, val) {
     v = rawvalues(val)
     as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
-                                              labels = .(lbls),
+                                              labels = .(labels),
                                               include.lowest = TRUE)) <=
-                               as.integer(factor(.(b), levels = .(lbls)))),
+                               as.integer(factor(.(b), levels = .(labels)))),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
                        brk = spl_cuts(spl),
-                       lbls = spl_cutlbls(spl))))
+                       labels = spl_cutlabels(spl))))
 })
 
 

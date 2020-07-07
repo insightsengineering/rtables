@@ -1,10 +1,10 @@
 
-add_analyzed_var = function(lyt, var, lbl = var, afun,
+add_analyzed_var = function(lyt, var, label = var, afun,
                             format = NULL,
                             rowlabs = "",
                             nested = FALSE,
                             inclNAs = FALSE) {
-  spl = AnalyzeVarSplit(var, lbl,
+  spl = AnalyzeVarSplit(var, label,
                         afun = afun,
                         split_format = format,
                         defrowlab = rowlabs,

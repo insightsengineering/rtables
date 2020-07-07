@@ -6,7 +6,7 @@
 \usage{
 ManualSplit(
   levels,
-  lbl,
+  label,
   name = "manual",
   extra_args = list(),
   indent_mod = 0L,
@@ -15,8 +15,6 @@ ManualSplit(
 }
 \arguments{
 \item{levels}{character. Levels of the split (ie the children of the manual split)}
-
-\item{lbl}{string, label, often variable label}
 
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 

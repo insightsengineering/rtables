@@ -8,7 +8,7 @@ analyze_colvars(
   lyt,
   afun,
   format = NULL,
-  nested = FALSE,
+  nested = TRUE,
   defrowlab,
   indent_mod = 0L
 )
@@ -22,8 +22,6 @@ analyze_colvars(
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
-\item{defrowlab}{character vector. Default row labels for resulting analysis rows.}
-
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
@@ -34,7 +32,7 @@ level of nesting in the column structure, rather than at the row level.
 
 l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
-  split_rows_by("RACE", "ethnicity", splfun = drop_split_levels) \%>\%
+  split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
   analyze_colvars( afun = mean, format = "xx.xx")
 
 l

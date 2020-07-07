@@ -6,7 +6,7 @@
 \usage{
 add_overall_level(
   valname = "Overall",
-  lbl = valname,
+  label = valname,
   extra_args = list(),
   first = TRUE,
   trim = FALSE
@@ -14,8 +14,6 @@ add_overall_level(
 }
 \arguments{
 \item{valname}{character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}}
-
-\item{lbl}{string, label, often variable label}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
@@ -31,7 +29,7 @@ Add an implicit 'overall' level to split
 l <- NULL \%>\%
    split_cols_by("ARM") \%>\% 
    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) \%>\% 
-   summarize_row_groups(lbl_fstr = "\%s (n)") \%>\% 
+   summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 l
 

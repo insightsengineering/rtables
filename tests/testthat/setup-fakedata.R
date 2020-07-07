@@ -9,9 +9,9 @@ makefakedat = function(n  = 1000) {
                         VAR3 = c("level1", sample(c("level1", "level2"), n -1,
                                                   replace = TRUE)))
                         
-    datadf$ethn_lbl = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
-    datadf$fac2_lbl = paste("Level", datadf$FACTOR2)
-    datadf$gend_lbl = c(M="Male", F="Female")[datadf$SEX]
+    datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
+    datadf$fac2_label = paste("Level", datadf$FACTOR2)
+    datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
     datadf
 }
 
@@ -32,8 +32,8 @@ makefakedat2 =  function(n  = 1000) {
                         PATID = rep(seq(1, n/2), many2s),
                         VISIT = rep(c("BASELINE", "FOLLOWUP"))
                         )                        
-    datadf$ethn_lbl = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
-    datadf$gend_lbl = c(M="Male", F="Female")[datadf$SEX]
+    datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
+    datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
     mu = 5 + (as.integer(factor(datadf$RACE)) + as.integer(factor(datadf$ARM)) + as.integer(factor(datadf$SEX)))/2
     datadf$VALUE =  ifelse(datadf$VISIT == "BASELINE",
                            5,

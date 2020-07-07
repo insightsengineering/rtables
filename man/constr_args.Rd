@@ -4,7 +4,7 @@
 \alias{constr_args}
 \title{Constructor Arg Conventions}
 \usage{
-constr_args(kids, cont, lev, iscontent, cinfo, lblrow, vals, cspan)
+constr_args(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan)
 }
 \arguments{
 \item{kids}{list. List of direct children.}
@@ -17,7 +17,7 @@ constr_args(kids, cont, lev, iscontent, cinfo, lblrow, vals, cspan)
 
 \item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
 
-\item{lblrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{lbl} by default if not specified.}
+\item{labelrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{label} by default if not specified.}
 
 \item{vals}{list. cell values for the row}
 

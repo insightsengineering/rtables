@@ -138,4 +138,4 @@ test_that("unlisting rtables has no effect on them", {
 
 
 test_that("manually created label l rows are always visible",
-          expect_true(rtables:::lblrow_visible(rrow(""))))
+          expect_true(rtables:::labelrow_visible(rrow(""))))

@@ -274,9 +274,9 @@ For example
 ```
 layout = NULL %>% split_cols_by("ARM", "Arm") %>%
        split_cols_by("SEX", "Gender") %>%
-       summarise_row_groups_count(lbl = "Overall (N)") %>%
+       summarise_row_groups_count(label = "Overall (N)") %>%
        split_rows_by("RACE", "Ethnicity") %>%
-       summarise_row_groups_count("RACE", lblformat = "%s (n)") %>%
+       summarise_row_groups_count("RACE", labelformat = "%s (n)") %>%
        analyze("AGE", "Age", afun = mean, format = "xx.xx")
 ```
 
@@ -560,7 +560,7 @@ automatic comparisons is done in the column split. Instead of doing
 portion means "variable with ref_group"), like so
 
 ```
-layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+layout = NULL %>% split_cols_by("ARM", "Arm A", label = "Arm") %>%
        split_rows_by("RACE", "ethnicity") %>%
        analyze("AGE", afun = mean)
 ```
@@ -591,7 +591,7 @@ We declare direct comparisons with `add_analyzed_blcomp`, which take
 to declare we want differences in means in our table we would do
 
 ```
-layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+layout = NULL %>% split_cols_by("ARM", "Arm A", label = "Arm") %>%
        split_rows_by("RACE", "ethnicity") %>%
        analyze_against_ref_group("AGE", afun = mean)
 ```
@@ -608,7 +608,7 @@ done automatically and only the comparison function is specified by
 the user, like so
 
 ```
-layout = NULL %>% split_cols_by("ARM", "Arm A", lbl = "Arm") %>%
+layout = NULL %>% split_cols_by("ARM", "Arm A", label = "Arm") %>%
        analyze_against_ref_group("rsp", 
        		compfun = function(tab) list("CI" = prop.test(tab)$conf.int*100))
 ```

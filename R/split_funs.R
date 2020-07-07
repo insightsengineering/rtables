@@ -19,8 +19,8 @@ setGeneric(".applysplit_datapart",
 setGeneric(".applysplit_extras",
            function(spl, df, vals) standardGeneric(".applysplit_extras"))
 
-setGeneric(".applysplit_partlbls",
-           function(spl, df, vals, lbls) standardGeneric(".applysplit_partlbls"))
+setGeneric(".applysplit_partlabels",
+           function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels"))
 
 setGeneric("check_validsplit",
            function(spl, df) standardGeneric("check_validsplit"))
@@ -32,22 +32,22 @@ setGeneric("check_validsplit",
 ## do various cleaning, and naming, plus
 ## ensure partinfo$values contains SplitValue objects only
 .fixupvals = function(partinfo) {
-    if(is.factor(partinfo$lbls))
-        partinfo$lbls = as.character(partinfo$lbls)
+    if(is.factor(partinfo$labels))
+        partinfo$labels = as.character(partinfo$labels)
 
     vals = partinfo$values
     if(is.factor(vals))
         vals = levels(vals)[vals]
     extr = partinfo$extras
     dpart = partinfo$datasplit
-    lbls = partinfo$labels
-    if(is.null(lbls)) {
+    labels = partinfo$labels
+    if(is.null(labels)) {
         if(!is.null(names(vals)))
-            lbls = names(vals)
+            labels = names(vals)
         else if(!is.null(names(dpart)))
-            lbls = names(dpart)
+            labels = names(dpart)
         else if (!is.null(names(extr)))
-            lbls = names(extr)
+            labels = names(extr)
     }
         
     if(is.null(vals) && !is.null(extr))
@@ -73,15 +73,15 @@ setGeneric("check_validsplit",
     if(is.null(extr))
         extr = rep(list(list()), length(vals))
     vals = make_splvalue_vec(vals, extr)
-    names(vals) = lbls
+    names(vals) = labels
     partinfo$values = vals
     
-    if(!identical(names(dpart), lbls)) {
-        names(dpart) = lbls
+    if(!identical(names(dpart), labels)) {
+        names(dpart) = labels
         partinfo$datasplit = dpart
     }
 
-    partinfo$labels = lbls
+    partinfo$labels = labels
     
     ## we're done with this so take it off
     partinfo$extras = NULL
@@ -90,31 +90,31 @@ setGeneric("check_validsplit",
 
 
 ### NB This is called at EACH level of recursive splitting 
-do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
+do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
     ## can't be applied to df
     check_validsplit(spl, df)
     ## note the <- here!!!
     if(!is.null(splfun<-split_fun(spl))) {
-        ## Currently the contract is that split_functions take df, vals, lbls and
+        ## Currently the contract is that split_functions take df, vals, labels and
         ## return list(values=., datasplit=., labels = .), optionally with
         ## an additional extras element
-        ret = splfun(df, spl, vals, lbls, trim = trim)
+        ret = splfun(df, spl, vals, labels, trim = trim)
     } else {
-        ret = .apply_split_inner(df = df, spl = spl, vals = vals, lbls = lbls, trim = trim)
+        ret = .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
     }
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
     ## - removes the extras element since its redundant after the above
     ## - Ensures datasplit and values lists are named according to labels
-    ## - ensures lbls are character not factor
+    ## - ensures labels are character not factor
     ret = .fixupvals(ret)
     ret
 }
 
 
-.apply_split_inner = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
+.apply_split_inner = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
     ## try to calculate values first. Most of the time we can
     if(is.null(vals)) 
@@ -132,10 +132,10 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     
     dpart = .applysplit_datapart(spl, df, vals)
     
-    if(is.null(lbls))
-        lbls = .applysplit_partlbls(spl, df, vals, lbls)
+    if(is.null(labels))
+        labels = .applysplit_partlabels(spl, df, vals, labels)
     else
-        stopifnot(names(lbls)== names(vals))
+        stopifnot(names(labels)== names(vals))
     ## get rid of columns that would not have any
     ## observations.
     ##
@@ -148,7 +148,7 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
             dpart = dpart[hasdata]
             vals = vals[hasdata]
             extr = extr[hasdata]
-            lbls = lbls[hasdata]
+            labels = labels[hasdata]
         }
     }
     
@@ -164,11 +164,11 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     ## FIXME: should be an S4 object, not a list
     ret = list(values = vals[vord],
                datasplit = dpart[vord],
-               labels = lbls[vord],
+               labels = labels[vord],
                extras = extr[vord])
     ret
     ## varvec = df[[spl_payload(spl)]]
-    ## lblvec = df[[spl_lblvar(spl)]]
+    ## labelvec = df[[spl_labelvar(spl)]]
     ## if(is.null(vals)) {
     ##     vals = if(is.factor(varvec))
     ##                levels(varvec)
@@ -176,17 +176,17 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     ##                unique(varvec)
     ## }
  
-    ## if(is.null(lbls)) {
+    ## if(is.null(labels)) {
     ##     ##XXX dangerous
     ##     if(is.factor(varvec))
-    ##         lbls = vals
+    ##         labels = vals
     ##     else
-    ##         lbls = sapply(vals, function(v) {
-    ##             vlbl = unique(df[df[[spl_payload(spl)]] == v,
-    ##                              spl_lblvar(spl), drop = TRUE])
-    ##             if(length(vlbl) == 0)
-    ##                 vlbl = ""
-    ##             vlbl
+    ##         labels = sapply(vals, function(v) {
+    ##             vlabel = unique(df[df[[spl_payload(spl)]] == v,
+    ##                              spl_labelvar(spl), drop = TRUE])
+    ##             if(length(vlabel) == 0)
+    ##                 vlabel = ""
+    ##             vlabel
     ##         })
     ## }
     ## fct = factor(varvec, levels = vals)
@@ -196,7 +196,7 @@ do_split = function(spl, df, vals = NULL, lbls = NULL, trim = FALSE) {
     ##     vals = make_splvalue_vec(vals)
     
     ## list(values = vals, datasplit = spl,
-    ##      labels = lbls)
+    ##      labels = labels)
 }
 
 
@@ -294,7 +294,7 @@ setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
 ## all again in tthe data split part :-/
 setMethod(".applysplit_rawvals", "VarStaticCutSplit",
           function(spl, df) {
-    spl_cutlbls(spl)
+    spl_cutlabels(spl)
 })
 
 
@@ -349,7 +349,7 @@ setMethod(".applysplit_datapart", "AnalyzeVarSplit",
 
 setMethod(".applysplit_datapart", "VarStaticCutSplit",
           function(spl, df, vals) {
-  #  lbs = spl_cutlbls(spl)
+  #  lbs = spl_cutlabels(spl)
     var = spl_payload(spl)
     varvec = df[[var]]
     cts = spl_cuts(spl)
@@ -395,36 +395,36 @@ setMethod(".applysplit_extras", "VarLevWBaselineSplit",
 })
 
 ## XXX TODO FIXME
-setMethod(".applysplit_partlbls", "Split",
-          function(spl, df, vals, lbls) as.character(vals))
+setMethod(".applysplit_partlabels", "Split",
+          function(spl, df, vals, labels) as.character(vals))
 
-setMethod(".applysplit_partlbls", "VarLevelSplit",
-          function(spl, df, vals, lbls) {
+setMethod(".applysplit_partlabels", "VarLevelSplit",
+          function(spl, df, vals, labels) {
     
     
     varvec = df[[spl_payload(spl)]]
-    lblvec = df[[spl_lblvar(spl)]]
+    labelvec = df[[spl_labelvar(spl)]]
     if(is.null(vals)) {
         vals = if(is.factor(varvec))
                    levels(varvec)
                else
                    unique(varvec)
     }
-    if(is.null(lbls)) {
+    if(is.null(labels)) {
         ##XXX dangerous
         if(is.factor(varvec))
-            lbls = vals
+            labels = vals
         else
-            lbls = sapply(vals, function(v) {
-                vlbl = unique(df[df[[spl_payload(spl)]] == v,
-                                 spl_lblvar(spl), drop = TRUE])
-                if(length(vlbl) == 0)
-                    vlbl = ""
-                vlbl
+            labels = sapply(vals, function(v) {
+                vlabel = unique(df[df[[spl_payload(spl)]] == v,
+                                 spl_labelvar(spl), drop = TRUE])
+                if(length(vlabel) == 0)
+                    vlabel = ""
+                vlabel
             })
     }
-    names(lbls) = as.character(vals)
-    lbls
+    names(labels) = as.character(vals)
+    labels
 })
 
 
@@ -463,11 +463,11 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
 #' @rdname split_funcs
 #' @export
 remove_split_levels = function(excl) {
-    function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
+    function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df[!(df[[var]] %in% excl),]
         .apply_split_inner(spl, df2, vals = vals,
-                           lbls = lbls,
+                           labels = labels,
                            trim = trim)
     }
 }
@@ -477,43 +477,43 @@ remove_split_levels = function(excl) {
 #' @param reorder logical(1). Should the order of \code{only} be used as the order of the children of the split. defaults to \code{TRUE}
 #' @export
 keep_split_levels = function(only, reorder = TRUE) {
-    function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
+    function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df[df[[var]] %in% only,]
         if(reorder)
             df2[[var]] = factor(df2[[var]], levels = only)
         .apply_split_inner(spl, df2, vals = vals,
-                           lbls = lbls,
+                           labels = labels,
                            trim = trim)
     }
 }
 
 #' @rdname split_funcs
 #' @export
-drop_split_levels <- function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
+drop_split_levels <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df
         df2[[var]] = factor(df[[var]])
         .apply_split_inner(spl, df2, vals = vals,
-                           lbls = lbls,
+                           labels = labels,
                            trim = trim)
 }
 
 #' @rdname split_funcs
 #' @param neworder character. New order or factor levels.
-#' @param newlbls character. Labels for (new order of) factor levels
+#' @param newlabels character. Labels for (new order of) factor levels
 #' @param drlevels logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}
 #' @export
-reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
+reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE) {
     function(df, spl,  trim, ...) {
         df2 = df
         df2[[spl_payload(spl)]] = factor(df[[spl_payload(spl)]], levels = neworder)
         if(drlevels) {
             df2[[spl_payload(spl)]] = droplevels(df2[[spl_payload(spl)]] )
             neworder = levels(df2[[spl_payload(spl)]])
-            newlbls = newlbls[newlbls %in% neworder]
+            newlabels = newlabels[newlabels %in% neworder]
         }
-        .apply_split_inner(spl, df2, vals = neworder, lbls = newlbls, trim = trim)
+        .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)
     }
 }
 
@@ -521,8 +521,8 @@ reorder_split_levels = function(neworder, newlbls = neworder, drlevels = TRUE) {
 #' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
 #' @export 
 trim_levels_in_group = function(innervar) {
-  myfun = function(df, spl, vals = NULL, lbls = NULL, trim = FALSE) {
-    ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
+  myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
     
     ret$datasplit = lapply(ret$datasplit, function(x) {
         coldat = x[[innervar]]
@@ -547,20 +547,20 @@ trim_levels_in_group = function(innervar) {
   
 }
 
-.add_part_info = function(part, df, valuename, lbl, extras, first = TRUE) {
+.add_part_info = function(part, df, valuename, label, extras, first = TRUE) {
 
-    newdat = setNames(list(df), lbl)
-    newval = setNames(list(valuename), lbl)
-    newextra = setNames(list(extras), lbl)
+    newdat = setNames(list(df), label)
+    newval = setNames(list(valuename), label)
+    newextra = setNames(list(extras), label)
     if(first) {
         part$datasplit = c(newdat, part$datasplit)
         part$values = c(newval, part$values)
-        part$labels = c(lbl, part$labels)
+        part$labels = c(label, part$labels)
         part$extras = c(newextra, part$extras)
     } else {
         part$datasplit = c(part$datasplit, newdat)
         part$values = c(part$values, newval)
-        part$labels = c(part$labels, lbl)
+        part$labels = c(part$labels, label)
         part$extras = c(part$extras, newextra)
     }
     ## just in case. this is overkill. Revisit if is too costly
@@ -577,7 +577,7 @@ trim_levels_in_group = function(innervar) {
 #'l <- NULL %>%
 #'    split_cols_by("ARM") %>% 
 #'    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) %>% 
-#'    summarize_row_groups(lbl_fstr = "%s (n)") %>% 
+#'    summarize_row_groups(label_fstr = "%s (n)") %>% 
 #'    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 #' l
 #' 
@@ -585,13 +585,13 @@ trim_levels_in_group = function(innervar) {
  
 #' tbl
 #' @export
-add_overall_level = function(valname = "Overall", lbl = valname, extra_args = list(), first = TRUE, trim = FALSE) {
-  ##   myfun = function(df, spl, vals = NULL, lbls = NULL, ...) {
-  ##       ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
-  ##       .add_part_info(ret, df, valname, lbl, extra_args, first)
+add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
+  ##   myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
+  ##       ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
+  ##       .add_part_info(ret, df, valname, label, extra_args, first)
   ##   }
   ## myfun
-    add_combo_levels(data.frame(valname = valname, lbl = lbl, levelcombo = I(list(select_all_levels)), exargs = I(list(list()))), trim = trim, first = first)
+    add_combo_levels(data.frame(valname = valname, label = label, levelcombo = I(list(select_all_levels)), exargs = I(list(list()))), trim = trim, first = first)
     }
 
 setClass("AllLevelsSentinel", contains = "character")
@@ -599,13 +599,13 @@ setClass("AllLevelsSentinel", contains = "character")
 select_all_levels = new("AllLevelsSentinel")
 
 #' Add Combination Levels to split
-#' @param combosdf data.frame/tbl_df. Columns valname, lbl, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.
+#' @param combosdf data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.
 #' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #' @export
 #' @examples
 #' library(tibble)
 #' combodf <- tribble(
-#'     ~valname, ~lbl, ~levelcombo, ~exargs,
+#'     ~valname, ~label, ~levelcombo, ~exargs,
 #'     "A+B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
 #'     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 #' 
@@ -614,8 +614,8 @@ select_all_levels = new("AllLevelsSentinel")
 #'     analyze("AGE")
 #' build_table(l, DM)
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
-    myfun = function(df, spl, vals = NULL, lbls = NULL, ...) {
-        ret = .apply_split_inner(spl, df, vals = vals, lbls = lbls, trim = trim)
+    myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
+        ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
         for(i in 1:nrow(combosdf)) {
             lcombo = combosdf[i, "levelcombo"][[1]]
             spld = spl_payload(spl)
@@ -624,12 +624,12 @@ add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
             else if (is(spl, "VarLevelSplit")) {
                  subdf = df[df[[spld]] %in% lcombo,]
             } else {
-                stopifnot(all(lcombo %in% c(ret$lbls, ret$vals)))
+                stopifnot(all(lcombo %in% c(ret$labels, ret$vals)))
                 subdf = do.call(rbind, ret$datasplit[names(ret$datasplit) %in% lcombo |
                                                      ret$vals %in% lcombo])
             }
             ret = .add_part_info(ret, subdf, combosdf[i,"valname"],
-                                 combosdf[i,"lbl"],
+                                 combosdf[i,"label"],
                                  combosdf[i, "exargs"][[1]],
                                  first)
         }

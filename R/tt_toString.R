@@ -345,7 +345,7 @@ setMethod("get_formatted_cells", "TableRow",
 setMethod("get_formatted_cells", "LabelRow",
           function(obj) {
             nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
-            if (lblrow_visible(obj)) {
+            if (labelrow_visible(obj)) {
               matrix(rep("", nc), ncol = nc)
             } else {
               matrix(character(0), ncol = nc)

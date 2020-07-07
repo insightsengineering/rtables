@@ -49,7 +49,7 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
     ## sadly takes different argument signature...
     ## TODO fix this?
     if(identical(cbyclass, "total"))
-       return(add_overall_col(lyt, lbl = var))
+       return(add_overall_col(lyt, label = var))
 
     addfun = switch(cbyclass,
                     quartcut_df = split_cols_by_quartiles,
@@ -367,25 +367,23 @@ rtabulate <- function(x,
 
         for(rspl in names(rdf)) {
             lyt <- split_rows_by(lyt,
-                                       rspl,
-                                       lbl ="",
-                                       lblkids = FALSE)
+                                 rspl,
+                                 split_label ="",
+                                 child_labels = "hidden")
         }
     }
     ## rows
-    lbls = row.name
-    if(nchar(lbls) == 0 && usexnms)
-       lbls = xcols
+    labels = row.name
+    if(nchar(labels) == 0 && usexnms)
+       labels = xcols
        
     lyt <- analyze(lyt,
-                             var = xcols,
-                             lbl = "",#lbls,
-                             defrowlab = row.name, #lbls,# row.name,
-                             afun = FUN,
-                             format = format,
-                             extra_args = list(...),
-                             lblkids = FALSE
-                             )
+                   vars = xcols,
+                   afun = FUN,
+                   var_labels = "",
+                   format = format,
+                   extra_args = list(...),
+                   show_labels = "hidden")
     ## XXX a way to just return the layout?
     ## but x needs to be padded with the relevant
     ## columns so not sure...
