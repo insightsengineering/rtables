@@ -18,6 +18,7 @@ articles:
     desc: Vignettes aimed at package users
     contents:
     - introduction
+    - tabulation_dplyr
     - clinical_trials
     - tabulation_concepts
     - rtabulate

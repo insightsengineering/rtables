@@ -1308,6 +1308,8 @@ setClass("CellValue", contains = "ValueWrapper",
 #' @param x x.
 setMethod("length", "CellValue",
           function(x) 1L)
+
+
 #' Cell Value constructor
 #' @inheritParams lyt_args
 #' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
@@ -1320,3 +1322,9 @@ CellValue = function(val, fmt = NULL, colspan =1L, lbl = NULL)  {
         colspan = as.integer(colspan)
     new("CellValue", value =val, format  =  fmt, colspan = colspan, label = lbl)
 }
+
+#' @export
+setMethod("show", "CellValue",
+          function(object) {
+              cat(paste("rcell:", format_rcell(object), "\n"))
+          })
