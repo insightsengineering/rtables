@@ -306,12 +306,12 @@ recursive_applysplit = function( df,
                                 parent_cfun = NULL,
                                 cformat = NULL,
                                 cindent_mod = 0L) {
-    
+   
 
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(splvec[[1]])
-        
+    
     ## the content function is the one from the PREVIOUS
     ## split, ie the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
@@ -329,7 +329,6 @@ recursive_applysplit = function( df,
     if(length(splvec) == 0L) {
         kids = list()
     } else {
-        
         spl = splvec[[1]]
         splvec = splvec[-1]
         nonroot = lvl != 0L

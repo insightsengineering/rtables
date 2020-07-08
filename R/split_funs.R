@@ -572,11 +572,11 @@ trim_levels_in_group = function(innervar) {
 #' @inheritParams lyt_args
 #' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
 #' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
-#' @return a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+#' @return a closure suitable for use as a splitting function (\code{split_fun}) when creating a table layout
 #' @examples
 #'l <- NULL %>%
 #'    split_cols_by("ARM") %>% 
-#'    split_rows_by("RACE", splfun = add_overall_level("All Ethnicities")) %>% 
+#'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>% 
 #'    summarize_row_groups(label_fstr = "%s (n)") %>% 
 #'    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
 #' l
@@ -610,7 +610,7 @@ select_all_levels = new("AllLevelsSentinel")
 #'     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 #' 
 #' l <- basic_table() %>%
-#'     split_cols_by("ARM", splfun = add_combo_levels(combodf)) %>%
+#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
 #'     analyze("AGE")
 #' build_table(l, DM)
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {

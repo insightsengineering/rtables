@@ -306,6 +306,7 @@ split_cols_by = function(lyt,
                          var,
                          labels_var = var,
                          split_label = var,
+                         split_fun = NULL,
                          format = NULL,
                          nested = TRUE,
                          child_labels = c("default", "visible", "hidden"),
@@ -318,12 +319,14 @@ split_cols_by = function(lyt,
                             labels_var = labels_var,
                             split_format = format,
                             child_labels = child_labels,
+                            split_fun = split_fun,
                             extra_args = extra_args)
     } else {
         spl = VarLevWBaselineSplit(var = var,
                                    ref_group = ref_group,
                                    incl_all = incl_all,
                                    split_label = split_label,
+                                   split_fun = split_fun,
                                    labels_var = labels_var,
                                    split_format = format)
         
@@ -363,7 +366,7 @@ split_cols_by = function(lyt,
 #'   summarize_row_groups(label_fstr = "Overall (N)") %>%
 #'   split_rows_by("RACE", "Ethnicity") %>%
 #'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-#'   analyze("AGE", "Age", afun = mean, format = "xx.xx") %>
+#'   analyze("AGE", "Age", afun = mean, format = "xx.xx") %>%
 #' l
 #' 
 #' build_table(l, DM)
@@ -527,7 +530,7 @@ split_cols_by_quartiles = function(lyt, var, split_label = var,
                              nested = TRUE,
                              extra_args = list(),
                              cumulative = FALSE) {
-    spl = VarDynCutSplit(var, label, cutfun = qtile_cuts,
+    spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
                          cutlabelfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
                                                    "(Q2, Q3]",
@@ -548,7 +551,7 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                              extra_args = list(),
                              cumulative= FALSE,
                              indent_mod = 0L) {
-    spl = VarDynCutSplit(var, label, cutfun = qtile_cuts,
+    spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
                          cutlabelfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
                                                    "(Q2, Q3]",
@@ -671,7 +674,7 @@ analyze = function(lyt,
                           extra_args = extra_args,
                           indent_mod = indent_mod)
  
-    if(!nested &&
+    if(nested &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
@@ -722,7 +725,6 @@ get_acolvar_name  <- function(lyt) {
 analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
-                           defrowlab,
                            indent_mod = 0L) {
     subafun = substitute(afun)
     if(is.name(subafun) &&
@@ -738,11 +740,13 @@ analyze_colvars = function(lyt, afun,
                       inherits = TRUE
                       )[[1]], afun)) {
         defrowlab = as.character(subafun)
+    } else {
+        defrowlab = ""
     }
     spl = AnalyzeVarSplit(NA_character_, "", afun = afun,
                           defrowlab = defrowlab,
                           split_format = format,
-                          splname = get_acolvar_name(lyt),
+                          split_name = get_acolvar_name(lyt),
                           indent_mod = indent_mod)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
@@ -761,7 +765,6 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                                     label = "",
                                    compfun = `-`,
                                   format = NULL,
-                                  defrowlab = "Diff from Baseline",
                                   nested = TRUE,
                                   indent_mod = 0L) {
     if(is.character(afun)) {
@@ -770,7 +773,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
     } else {
         afnm = as.character(substitute(afun))
     }
-    
+    defrowlab = "Diff from Baseline"
     if(is.character(compfun))
         compfun = get(compfun, mode = "function")
     afun2 = function(x, .ref_group_data = NULL, .N_col, .N_total, ...) {
@@ -805,7 +808,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                           split_format = format,
                           defrowlab = defrowlab,
                           indent_mod = indent_mod)
-    if(!nested &&
+    if(nested &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
@@ -858,8 +861,8 @@ analyze_against_ref_group_2dtable = function(lyt,
 ## Add a total column at the next **top level** spot in
 ## the column layout.
 #' @export
-add_overall_col = function(lyt, split_label) {
-    spl = AllSplit(split_label)
+add_overall_col = function(lyt, label) {
+    spl = AllSplit(label)
     split_cols(lyt,
                   spl,
                   next_cpos(lyt, TRUE))
@@ -942,11 +945,12 @@ setMethod(".add_row_summary", "Split",
                    cformat = NULL,
                    indent_mod = 0L) {
     child_labels = match.arg(child_labels)
+    lbl_kids = .labelkids_helper(child_labels)
     content_fun(lyt) = cfun
     content_indent_mod(lyt) = indent_mod
     obj_format(lyt) = cformat
-    if(!is.na(child_labels) && !identical(child_labels, label_kids(lyt)))
-        label_kids(lyt) = child_labels
+    if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
+        label_kids(lyt) = lbl_kids
     lyt
 })
 
@@ -1093,7 +1097,7 @@ add_existing_table = function(lyt, tt, indent_mod = 0) {
     indent_mod(tt) = indent_mod
     lyt = split_rows(lyt,
                         tt,
-                        next_rpos(lyt, TRUE))
+                        next_rpos(lyt, nested = FALSE))
     lyt
 }
 

@@ -50,7 +50,7 @@ setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behav
     ## TODO fix this?
     if(identical(cbyclass, "total"))
        return(add_overall_col(lyt, label = var))
-
+    stopifnot(length(cbyclass) == 1)
     addfun = switch(cbyclass,
                     quartcut_df = split_cols_by_quartiles,
                     cmlquartcut_df = function(...) split_cols_by_quartiles(..., cumulative = TRUE), 
@@ -350,7 +350,7 @@ rtabulate <- function(x,
             
             lyt <- .rtab_colby_helper(lyt, cby_class,
                                       var = cby_nms[i],
-                                      nested = newtop,
+                                      nested = !newtop,
                                       extra_args = ex)
             newtop = FALSE
         }

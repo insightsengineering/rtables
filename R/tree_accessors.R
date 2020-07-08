@@ -73,37 +73,37 @@ setMethod("content_table<-", c("TableTree", "ElementaryTable"),
 })
 
 
-setGeneric("next_rpos", function(obj, newtree = FALSE) standardGeneric("next_rpos"))
+setGeneric("next_rpos", function(obj, nested = TRUE) standardGeneric("next_rpos"))
 
 setMethod("next_rpos", "PreDataTableLayouts",
-          function(obj, newtree) next_rpos(rlayout(obj), newtree))
+          function(obj, nested) next_rpos(rlayout(obj), nested))
 
 setMethod("next_rpos", "PreDataRowLayout",
-          function(obj, newtree) {
+          function(obj, nested) {
     l = length(obj)
-    if(newtree && length(obj[[l]]) > 0L)
+    if(!nested && length(obj[[l]]) > 0L)
         l = l + 1L
 
     l
 })
 
 
-setMethod("next_rpos", "ANY", function(obj, newtree) 1L)
+setMethod("next_rpos", "ANY", function(obj, nested) 1L)
 
-setGeneric("next_cpos", function(obj, newtree = FALSE) standardGeneric("next_cpos"))
+setGeneric("next_cpos", function(obj, nested = TRUE) standardGeneric("next_cpos"))
 
 setMethod("next_cpos", "PreDataTableLayouts",
-          function(obj, newtree) next_cpos(clayout(obj), newtree))
+          function(obj, nested) next_cpos(clayout(obj), nested))
 
 setMethod("next_cpos", "PreDataColLayout",
-          function(obj, newtree) {
-    if(newtree)
+          function(obj, nested) {
+    if(!nested)
         length(obj) + 1L
     else
         length(obj)
 })
 
-setMethod("next_cpos", "ANY", function(obj, newtree) 1L)
+setMethod("next_cpos", "ANY", function(obj, nested) 1L)
 
 
 setGeneric("last_rowsplit", function(obj) standardGeneric("last_rowsplit"))

@@ -11,10 +11,11 @@
 ## arbitrary: children are not related to eachother in any systematic fashion.
 
 .labelkids_helper = function(charval) {
-    switch(charval,
-           "default" = NA,
-           "visible" = TRUE,
-           "hidden" = FALSE)
+    ret = switch(charval,
+                 "default" = NA,
+                 "visible" = TRUE,
+                 "hidden" = FALSE,
+                 stop("unrecognized charval in .labelkids_helper. this shouldn't ever happen"))
 }
 
 setOldClass("expression")
@@ -653,6 +654,7 @@ setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
 #' @export
 VarLevWBaselineSplit = function(var, ref_group, labels_var= var, incl_all = FALSE,
                                 split_label,
+                                split_fun = NULL,
 #                             comparison = `-`,
                              label_fstr = "%s - %s",
                              ## not needed I Think...
@@ -673,6 +675,7 @@ VarLevWBaselineSplit = function(var, ref_group, labels_var= var, incl_all = FALS
         content_fun = cfun,
         content_format = cformat,
         split_format = split_format,
+        split_fun = split_fun,
         name = split_name,
         label_children = FALSE,
         extra_args = extra_args,

@@ -85,7 +85,7 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 #' 
 sprintf_format <- function(format) {
     function(x,...) {
-        do.call(sprintf, c(list(format = format), x))
+        do.call(sprintf, c(list(fmt = format), x))
     }
 }
 

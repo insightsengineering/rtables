@@ -29,6 +29,7 @@ VarLevWBaselineSplit(
   labels_var = var,
   incl_all = FALSE,
   split_label,
+  split_fun = NULL,
   label_fstr = "\%s - \%s",
   cfun = NULL,
   cformat = NULL,

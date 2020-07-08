@@ -21,7 +21,7 @@ test_that("complex layout works", {
         ## using a split function that excludes level C
         ## value labels from fac2_label
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = remove_split_levels("C"),
+                            split_fun = remove_split_levels("C"),
                             labels_var = "fac2_label") %>%
         ## Add count summary within FACTOR2 categories
         summarize_row_groups("FACTOR2") %>%
@@ -40,7 +40,7 @@ test_that("complex layout works", {
         ## root split
         ## afun of table() gives us k count rows, where k is the number of
         ## levels of VAR3, in this case 2.
-        analyze("VAR3", "Var3 Counts", afun = lstwrapx(table), nested = TRUE)
+        analyze("VAR3", "Var3 Counts", afun = lstwrapx(table), nested = FALSE)
     
     
     expnames = c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
@@ -63,7 +63,7 @@ test_that("complex layout works", {
 
 test_that("existing table in layout works", {
     thing2 = NULL %>% split_cols_by("ARM", "Arm") %>%
-    ## add nested column split on SEX with value lables from gend_label
+    ## add nested column split on SEX with value labels from gend_label
     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
     analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"), afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), format = "xx.xx")
@@ -72,7 +72,7 @@ tab2 = build_table(thing2, rawdat)
 
 
     thing3 = NULL %>% split_cols_by("ARM", "Arm") %>%
-        ## add nested column split on SEX with value lables from gend_label
+        ## add nested column split on SEX with value labels from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -83,6 +83,7 @@ tab2 = build_table(thing2, rawdat)
         add_existing_table(tab2)
 
     tab3 = build_table(thing3, rawdat)
+    expect_equal(nrow(tab3), 12)
     tab3
 })
 
@@ -90,11 +91,11 @@ tab2 = build_table(thing2, rawdat)
 test_that("labelkids parameter works", {
     yeslabellyt <- NULL %>% split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label",labelkids = TRUE) %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = remove_split_levels("C"),
-                            labels_var = "fac2_label", labelkids = TRUE) %>%
+                            split_fun = remove_split_levels("C"),
+                            labels_var = "fac2_label", child_labels = "visible") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
                           format = "xx.xx")
@@ -108,11 +109,11 @@ test_that("labelkids parameter works", {
     misslabellyt <- NULL %>%
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label",labelkids = NA) %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "default") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = remove_split_levels("C"),
-                            labels_var = "fac2_label", labelkids = NA) %>%
+                            split_fun = remove_split_levels("C"),
+                            labels_var = "fac2_label", child_labels = "default") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
                       format = "xx.xx") 
@@ -123,11 +124,11 @@ test_that("labelkids parameter works", {
     nolabellyt <- NULL %>%
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label",labelkids = FALSE) %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
-                            splfun = remove_split_levels("C"),
-                            labels_var = "fac2_label", labelkids = FALSE) %>%
+                            split_fun = remove_split_levels("C"),
+                            labels_var = "fac2_label", child_labels = "hidden") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
                           format = "xx.xx")
@@ -144,10 +145,9 @@ test_that("labelkids parameter works", {
 test_that("ref_group comparisons work", {
     
     blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
-        analyze("AGE", label = "",## label = "Age v2",
-                          afun = mean) %>%
+        analyze("AGE", mean, var_labels = "") %>%
         analyze_against_ref_group(var = "AGE",
-                               afun = mean)
+                                  mean)
     ## function(x) list(mean = mean(x)))
     
     

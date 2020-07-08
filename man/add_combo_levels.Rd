@@ -23,7 +23,7 @@ combodf <- tribble(
     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 
 l <- basic_table() \%>\%
-    split_cols_by("ARM", splfun = add_combo_levels(combodf)) \%>\%
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
     analyze("AGE")
 build_table(l, DM)
 }
