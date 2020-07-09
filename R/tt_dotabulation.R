@@ -381,7 +381,7 @@ recursive_applysplit = function( df,
             partlabels = rawpart[["labels"]]
             if(is.factor(partlabels))
                 partlabels = as.character(partlabels)
-            nms = unlist(rawvalues(splvals))
+            nms = unlist(value_names(splvals))
             if(is.factor(nms))
                 nms = as.character(nms)
             
@@ -652,12 +652,15 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
 })
 
 
+
 splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, label = "") {
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
 
-    nm = unlist(tail(rawvalues(pos), 1)) %||% ""
+    ## nm = unlist(tail(rawvalues(pos), 1)) %||% ""
+    nm = unlist(tail(value_names(pos), 1)) %||% ""
+
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
         LayoutColLeaf(lev = lvl - 1L,

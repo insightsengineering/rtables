@@ -12,7 +12,6 @@ analyze_against_ref_group(
   label = "",
   compfun = `-`,
   format = NULL,
-  defrowlab = "Diff from Baseline",
   nested = TRUE,
   indent_mod = 0L
 )

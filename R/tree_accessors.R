@@ -840,6 +840,12 @@ setMethod("rawvalues", "ANY", function(obj) obj)
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
 
+setGeneric("value_names", function(obj) standardGeneric("value_names"))
+setMethod("value_names", "ANY", function(obj) as.character(rawvalues(obj)))
+setMethod("value_names", "list", function(obj) lapply(obj, value_names))
+setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
+setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@comboname)
+
 
 
 ## These two are similar enough we could probably combine

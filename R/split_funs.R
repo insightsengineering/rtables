@@ -64,15 +64,16 @@ setGeneric("check_validsplit",
             warning("Got a partinfo list with values that are ",
                     "already SplitValue objects and non-null extras ",
                     "element. This shouldn't happen")
-            partinfo$extras = NULL
         }
-        return(partinfo)
+    } else {
+        if(is.null(extr))
+            extr = rep(list(list()), length(vals))
+        ## strict is FALSE here cause fixupvals might be called repeatedly
+        vals = make_splvalue_vec(vals, extr)
     }
+    ## we're done with this so take it off
+    partinfo$extras = NULL
 
-    ## vals elements are not  SplitValue objects from here down
-    if(is.null(extr))
-        extr = rep(list(list()), length(vals))
-    vals = make_splvalue_vec(vals, extr)
     names(vals) = labels
     partinfo$values = vals
     
@@ -82,9 +83,8 @@ setGeneric("check_validsplit",
     }
 
     partinfo$labels = labels
-    
-    ## we're done with this so take it off
-    partinfo$extras = NULL
+
+    stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
     partinfo
 }
 
@@ -450,6 +450,7 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
     if(are(vals, "SplitValue")) {
         return(vals)
     }
+    
     mapply(SplitValue, val = vals, extr = extrs,
            SIMPLIFY=FALSE)
 }
@@ -547,10 +548,11 @@ trim_levels_in_group = function(innervar) {
   
 }
 
-.add_part_info = function(part, df, valuename, label, extras, first = TRUE) {
+.add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {
 
+    value = LevelComboSplitValue(levels, extras, comboname = valuename)
     newdat = setNames(list(df), label)
-    newval = setNames(list(valuename), label)
+    newval = setNames(list(value), label)
     newextra = setNames(list(extras), label)
     if(first) {
         part$datasplit = c(newdat, part$datasplit)
@@ -563,8 +565,8 @@ trim_levels_in_group = function(innervar) {
         part$labels = c(part$labels, label)
         part$extras = c(part$extras, newextra)
     }
-    ## just in case. this is overkill. Revisit if is too costly
-    part = .fixupvals(part)
+    ## not needed even in custom split function case.
+    ##   part = .fixupvals(part)
     part
 }
 
@@ -586,12 +588,13 @@ trim_levels_in_group = function(innervar) {
 #' tbl
 #' @export
 add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
-  ##   myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
-  ##       ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
-  ##       .add_part_info(ret, df, valname, label, extra_args, first)
-  ##   }
-  ## myfun
-    add_combo_levels(data.frame(valname = valname, label = label, levelcombo = I(list(select_all_levels)), exargs = I(list(list()))), trim = trim, first = first)
+    combodf <- data.frame(valname = valname,
+                          label = label,
+                          levelcombo = I(list(select_all_levels)),
+                          exargs = I(list(extra_args)),
+                          stringsAsFactors = FALSE)
+    add_combo_levels(combodf,
+                     trim = trim, first = first)
     }
 
 setClass("AllLevelsSentinel", contains = "character")
@@ -603,16 +606,35 @@ select_all_levels = new("AllLevelsSentinel")
 #' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #' @export
 #' @examples
-#' library(tibble)
+#'library(tibble)
 #' combodf <- tribble(
 #'     ~valname, ~label, ~levelcombo, ~exargs,
-#'     "A+B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
-#'     "A+C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
-#' 
-#' l <- basic_table() %>%
+#'     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
+#'     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
+#'
+#'l <- basic_table() %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'     analyze("AGE")
-#' build_table(l, DM)
+#'    add_colcounts() %>%
+#'    analyze("AGE")
+#'
+#'build_table(l, DM)
+#'
+#'l2 <- basic_table() %>%
+#'    split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) %>%
+#'    split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
+#'    add_colcounts() %>%
+#'    analyze("AGE")
+#' 
+#'l3 <-  basic_table() %>%
+#'    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#'    add_colcounts() %>%
+#'    split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
+#'    summarize_row_groups() %>%
+#'    analyze("AGE")
+#'
+#'
+#'build_table(l3, smallerDM)
+
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
     myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
         ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
@@ -628,10 +650,12 @@ add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
                 subdf = do.call(rbind, ret$datasplit[names(ret$datasplit) %in% lcombo |
                                                      ret$vals %in% lcombo])
             }
-            ret = .add_part_info(ret, subdf, combosdf[i,"valname"],
-                                 combosdf[i,"label"],
-                                 combosdf[i, "exargs"][[1]],
-                                 first)
+            ret = .add_combo_part_info(ret, subdf,
+                                       combosdf[i, "valname", drop=TRUE],
+                                       lcombo,
+                                       combosdf[i,"label"],
+                                       combosdf[i, "exargs"][[1]],
+                                       first)
         }
         ret
     }

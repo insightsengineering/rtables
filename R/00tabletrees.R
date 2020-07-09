@@ -56,14 +56,27 @@ setClass("SplitValue",
          representation(extra = "list"))
 
 SplitValue = function(val, extr =list()) {
-    if(is(val, "SplitValue"))
-        stop("SplitValue  object passed to SplitValue constructor")
+    if(is(val, "SplitValue")) {
+        if(length(extr) >0 && !identical(extr, splv_extra(val)))
+            stop("SplitValue  object passed to SplitValue constructor along with non-identical extra")
+        return(val)
+    }
     if(!is(extr, "list"))
         extr <- list(extr)
-        
-    
+
     new("SplitValue", value = val,
         extra = extr)
+}
+
+setClass("LevelComboSplitValue",
+         contains = "SplitValue",
+         representation(comboname = "character"))
+
+LevelComboSplitValue = function(val, extr, comboname) {
+    new("LevelComboSplitValue",
+        value = val,
+        extra = extr,
+        comboname = comboname)
 }
 
 

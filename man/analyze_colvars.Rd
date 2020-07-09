@@ -4,14 +4,7 @@
 \alias{analyze_colvars}
 \title{Generate Rows Analyzing Different Variables Across Columns}
 \usage{
-analyze_colvars(
-  lyt,
-  afun,
-  format = NULL,
-  nested = TRUE,
-  defrowlab,
-  indent_mod = 0L
-)
+analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}

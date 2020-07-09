@@ -2,11 +2,13 @@
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
-    v = rawvalues(val)
-    as.expression(bquote((!is.na(.(a)) & .(a) == .(b)), list(a = as.name(spl_payload(spl)),
-                              b = v)))
-
-
+    v = unlist(rawvalues(val))
+    ## XXX if we're including all levels should even missing be included?
+    if(is(v, "AllLevelsSentinel"))
+        as.expression(bquote((!is.na(.(a))), list(a = as.name(spl_payload(spl)))))
+    else
+        as.expression(bquote((!is.na(.(a)) & .(a) %in% .(b)), list(a = as.name(spl_payload(spl)),
+                                                                   b = v)))
 })
 
 setMethod("make_subset_expr", "MultiVarSplit",
