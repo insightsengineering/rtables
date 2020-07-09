@@ -24,24 +24,24 @@ combodf <- tribble(
 
 l <- basic_table() \%>\%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-   add_colcounts() \%>\%
-   analyze("AGE")
+    add_colcounts() \%>\%
+    analyze("AGE")
 
 build_table(l, DM)
-
+smallerDM <- droplevels(subset(DM, SEX \%in\% c("M", "F") &
+                        grepl("^(A|B)", ARM)))
 l2 <- basic_table() \%>\%
-   split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) \%>\%
-   split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
-   add_colcounts() \%>\%
-   analyze("AGE")
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) \%>\%
+    split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
+    add_colcounts() \%>\%
+    analyze("AGE")
 
 l3 <-  basic_table() \%>\%
-   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-   add_colcounts() \%>\%
-   split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
-   summarize_row_groups() \%>\%
-   analyze("AGE")
-
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
+    add_colcounts() \%>\%
+    split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
+    summarize_row_groups() \%>\%
+    analyze("AGE")
 
 build_table(l3, smallerDM)
 }

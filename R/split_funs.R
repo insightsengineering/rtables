@@ -606,34 +606,34 @@ select_all_levels = new("AllLevelsSentinel")
 #' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #' @export
 #' @examples
-#'library(tibble)
+#' library(tibble)
 #' combodf <- tribble(
 #'     ~valname, ~label, ~levelcombo, ~exargs,
 #'     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
 #'     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 #'
-#'l <- basic_table() %>%
+#' l <- basic_table() %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'    add_colcounts() %>%
-#'    analyze("AGE")
+#'     add_colcounts() %>%
+#'     analyze("AGE")
 #'
-#'build_table(l, DM)
-#'
-#'l2 <- basic_table() %>%
-#'    split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) %>%
-#'    split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
-#'    add_colcounts() %>%
-#'    analyze("AGE")
+#' build_table(l, DM)
+#' smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
+#'                         grepl("^(A|B)", ARM)))
+#' l2 <- basic_table() %>%
+#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) %>%
+#'     split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
+#'     add_colcounts() %>%
+#'     analyze("AGE")
 #' 
-#'l3 <-  basic_table() %>%
-#'    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'    add_colcounts() %>%
-#'    split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
-#'    summarize_row_groups() %>%
-#'    analyze("AGE")
-#'
-#'
-#'build_table(l3, smallerDM)
+#' l3 <-  basic_table() %>%
+#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#'     add_colcounts() %>%
+#'     split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
+#'     summarize_row_groups() %>%
+#'     analyze("AGE")
+#' 
+#' build_table(l3, smallerDM)
 
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
     myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
