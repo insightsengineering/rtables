@@ -22,18 +22,18 @@ TODO here indicates that the variables whose data are ultimately processed by af
 level of nesting in the column structure, rather than at the row level.
 }
 \examples{
-
-l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
-  split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
-  split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
-  analyze_colvars( afun = mean, format = "xx.xx")
-
-l
-
-library(dplyr)
-ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
-
-build_table(l, ANL)
+# TODO
+# l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
+#   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
+#   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
+#   analyze_colvars(afun = mean, format = "xx.xx")
+# 
+# l
+#
+# library(dplyr)
+# ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
+# 
+# build_table(l, ANL)
 }
 \seealso{
 \code{\link{split_cols_by_multivar}}

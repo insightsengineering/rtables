@@ -13,7 +13,8 @@ split_rows_by(
   format = NULL,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
-  indent_mod = 0L
+  indent_mod = 0L,
+  splfun
 )
 }
 \arguments{
@@ -62,6 +63,7 @@ l <- basic_table() \%>\%
   split_rows_by("RACE", "Ethnicity") \%>\%
   summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
   analyze("AGE", "Age", afun = mean, format = "xx.xx")
+  
 l
 
 build_table(l, DM)

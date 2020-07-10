@@ -312,7 +312,8 @@ split_cols_by = function(lyt,
                          child_labels = c("default", "visible", "hidden"),
                          extra_args = list(),
                          ref_group = NULL,
-                         incl_all = FALSE) {
+                         incl_all = FALSE, 
+                         splfun) { # TODO: remove
     if(is.null(ref_group)) {
         spl = VarLevelSplit(var = var,
                             split_label = split_label,
@@ -367,6 +368,7 @@ split_cols_by = function(lyt,
 #'   split_rows_by("RACE", "Ethnicity") %>%
 #'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
 #'   analyze("AGE", "Age", afun = mean, format = "xx.xx")
+#'   
 #' l
 #' 
 #' build_table(l, DM)
@@ -380,7 +382,8 @@ split_rows_by = function(lyt,
                          format = NULL,
                          nested = TRUE,
                          child_labels = c("default", "visible", "hidden"),
-                         indent_mod = 0L) {
+                         indent_mod = 0L,
+                         splfun) { # TODO: remove
     child_labels = match.arg(child_labels)
     spl = VarLevelSplit(var = var,
                         split_label = split_label,
@@ -458,18 +461,25 @@ split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
 #' 
 #'
 #' @details
-#' For dynamic cuts, the cut is transformed into a static cut by
-#' \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+#' For dynamic cuts, the cut is transformed into a static cut by \code{\link{build_table}} \emph{based on the full
+#' dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will
+#' reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+#' 
 #' @export
+#' 
 #' @rdname varcuts
+#' 
 #' @author Gabriel Becker
+#' 
 #' @examples
 #' l <- basic_table() %>%
-#' split_cols_by_cuts("AGE", split_label = "Age,, cuts = c(0,25, 35, 1000), cutlabels = c("young", "medium", "old")) %>%
-#' analyze("RACE", label ="", defrowlab="count", afun = length)
-#'
+#'     split_cols_by_cuts("AGE", split_label = "Age",
+#'                        cuts = c(0, 25, 35, 1000), 
+#'                        cutlabels = c("young", "medium", "old")) %>%
+#'     analyze("RACE", afun = length)
+#' 
 #' build_table(l, DM)
-
+#' 
 split_cols_by_cuts = function(lyt, var, split_label, cuts,
                             cutlabels = NULL,
                             nested = TRUE,
@@ -708,19 +718,20 @@ get_acolvar_name  <- function(lyt) {
 #' @seealso \code{\link{split_cols_by_multivar}}
 #' 
 #' @author Gabriel Becker
+#' 
 #' @examples 
-#' 
-#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
-#'   analyze_colvars( afun = mean, format = "xx.xx")
-#' 
-#' l
-#'
-#' library(dplyr)
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
-#' 
-#' build_table(l, ANL)
+#' # TODO
+#' # l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
+#' #   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
+#' #   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#' #   analyze_colvars(afun = mean, format = "xx.xx")
+#' # 
+#' # l
+#' #
+#' # library(dplyr)
+#' # ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' # 
+#' # build_table(l, ANL)
  
 analyze_colvars = function(lyt, afun,
                            format = NULL,

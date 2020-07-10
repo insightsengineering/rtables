@@ -571,22 +571,28 @@ trim_levels_in_group = function(innervar) {
 }
 
 #' Add an implicit 'overall' level to split
+#' 
 #' @inheritParams lyt_args
 #' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
 #' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
-#' @return a closure suitable for use as a splitting function (\code{split_fun}) when creating a table layout
+#' 
+#' @return a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+#' 
+#' @export
+#' 
 #' @examples
-#'l <- NULL %>%
+#' l <- NULL %>%
 #'    split_cols_by("ARM") %>% 
 #'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>% 
 #'    summarize_row_groups(label_fstr = "%s (n)") %>% 
 #'    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'    
 #' l
 #' 
 #' tbl <- build_table(l, DM)
- 
+#' 
 #' tbl
-#' @export
+#' 
 add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
     combodf <- data.frame(valname = valname,
                           label = label,
