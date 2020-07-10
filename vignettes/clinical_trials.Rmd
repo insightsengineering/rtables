@@ -7,12 +7,365 @@ vignette: >
   %\VignetteIndexEntry{Tables in Clinical Trials}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
 
 ## Introduction
 
+In this vignette we show how `rtables` can be used to create common tables used to analyze clinical trials data. That is, we will create a demographic table, adverse event table and a response table. We don't aim to create fully specified tables that can be used for all the standard analyses, we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly used to analyze clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
+
+Note that all the data used here is created using random number generators with another internal R package called `random.cdisc.data`. We have attached some data to this package but we do intend to release `random.cdisc.data` as open source soon.
+
+
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+```
+
 ## Demographic Table
+
+Demographic tables are used to summarize variables and compare their values between columns. We will now create a simple demographic table. 
+
+One feature of `analyze` that we have not introduced yet is that the analysis function `afun` can specify multiple rows:
+
+
+```{r}
+ADSL <- ex_adsl
+
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+    )
+  }) %>%
+  build_table(ADSL)
+```
+
+and further multiple variables can be analyzed in one `analyze` call
+
+```{r}
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = c("AGE", "BMRKR1"), afun = function(x) {
+    in_rows(
+      "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+    )
+  }) %>%
+  build_table(ADSL)
+```
+
+Hence if our function passed to the `afun` argument can process different argument types then we are fairly close to a standard demographic table. Here is a function that creates count table for factors and some summary calculation for numerical variables:
+
+
+```{r}
+s_summary <- function(x, lblstr, ...) {
+  if (is.numeric(x)) {
+    in_rows(
+      "n" = rcell(sum(!is.na(x)), format = "xx"),
+      "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)), format = "xx.xx (xx.xx)"),
+      "IQR" = rcell(IQR(x, na.rm = TRUE), format = "xx.xx"),
+      "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
+    )
+  } else if (is.factor(x)) {
+    
+    vs <- as.list(table(x))
+    do.call(in_rows, lapply(vs, rcell, format = "xx"))
+    
+  } else (
+    stop("type not supported")
+  )
+}
+```
+
+
+Note we use `rcell`s to wrap the results. We can use `s_summary` outside the context of tabulation:
+
+```{r}
+s_summary(ADSL$AGE)
+```
+
+and 
+
+```{r}
+s_summary(ADSL$SEX)
+```
+
+Hence, now we can now create a demographic table:
+
+```{r}
+lyt <- basic_table() %>% 
+  split_cols_by(var = "ARM",  split_label = "Study Arm") %>%
+  analyze(c("AGE", "SEX"), afun = s_summary) 
+
+tbl <- build_table(lyt, ADSL)
+tbl
+```
+
+The `split_label` argument usually set to the variable label. The `split` in the argument name refers to the fact that in the tabulation the `ARM` variable was used for splitting.
+
+Note that `analyze` can also be called multiple times in sequence:
+
+```{r}
+tbl2 <- basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  analyze("AGE", s_summary) %>%
+  analyze("SEX", s_summary) %>%
+  build_table(ADSL) 
+
+tbl2
+```
+
+which leads to the identical table as `tbl1`:
+
+```{r}
+identical(tbl, tbl2)
+```
+
+Column `N`s (population size represented by column) are added using the `add_colcounts` function:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARMCD") %>%
+  add_colcounts() %>%
+  analyze(c("AGE", "SEX"), s_summary) %>%
+  build_table(ADSL) 
+```
+
+### Variations on the demographic table
+
+We will now show a couple of variations of the demographic table. Note that these variations are in structure and not in analysis, hence they don't require a modification to the `s_summary` function.
+
+
+We will start with a standard table analyzing the variables `AGE` and `BMRKR2` variables:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  analyze(c("AGE", "BMRKR2"), s_summary) %>%
+  build_table(ADSL) 
+```
+
+let's assume we would like to have this analysis carried out per gender:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX") %>%
+  analyze(c("AGE", "BMRKR2"), s_summary) %>%
+  build_table(ADSL) 
+```
+
+Let's say we only need to analyze by `SEX` for `AGE` but not for `BMRKR2`. Further we will subset `ADSL` to include males and females in the analysis, this way we can demonstrate the `drop_split_levels` function that can be passed to `split_rows_by` via the `split_fun` arguments. Splitting is a bigger topic and we will address this in another vignette in more details. 
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
+  analyze("AGE", s_summary) %>%
+  analyze("BMRKR2", s_summary, nested = FALSE) %>%
+  build_table(filter(ADSL, SEX %in% c("M", "F"))) 
+```
+
+**TODO: We need to show the label for `SEX` and `BMRKR2`**
+
+Once we split the rows into groups (`M` and `F` here) one might want to summarize groups usually with showing count and column percentages. This is especially important if we have missing data. For example for:
+
+```{r}
+insert_NAs <- function(x) {
+  x[sample(c(TRUE, FALSE), length(x), TRUE, prob = c(0.2, 0.8))] <- NA
+  x
+}
+
+set.seed(1)
+ADSL_NA <- ADSL %>% 
+  mutate(AGE = insert_NAs(AGE))
+
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
+  analyze("AGE", s_summary) %>%
+  analyze("BMRKR2", s_summary, nested = FALSE) %>%
+  build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
+```
+
+it is not easy to see how many females and males there are in each arm as `n` removes `NA` in the count. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups`, for example
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+  summarize_row_groups()  %>% 
+  analyze("AGE", s_summary) %>%
+  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
+```
+
+There are a couple of things to note here. We have changed `child_labels` to `"hidden"` (**TODO: not so sure why**). Next, group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows but they are an important design decision for `rtables` as when we paginate tables the content rows are by default repeated if a group gets divided via pagination. Conceptually the content rows summarize the patient population that is analyzed and often displays count percentages (default behavior of `summarize_row_groups`). We can recreate this default behavior  by defining a `cfun` for illustrative purposes here as it results in the same table as above:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+  summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
+    rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)", label = labelstr)
+  })  %>% 
+  analyze("AGE", s_summary) %>%
+  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
+```
+
+Note that `cfun` differs from `afun` (which is used in `analyze`)  in that `cfun` does not operate on variables and hence the subset of the data set is passed via the `df` argument (`afun` can optionally request `df` too). Further `cfun` gives the default group label (factor level from splitting) as an argument and hence it could be modified:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+  summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
+    rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)", label = paste(labelstr, " count (perc.)"))
+  })  %>% 
+  analyze("AGE", s_summary) %>%
+  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
+```
+
+**TODO: remove the `label` argument from `rcell` and specify the content row label with another mechanism**.  
+
+
+### Using Layouts
+
+We have created quite a few tabulation layouts here. Although we have already discussed some of the advantages using pre-data specification of tables in the `introduction` vignette, we would like to repeat here again that layouts can be reused using different datasets, especially different subsets of the data. Lets define a simple demographic table layout:
+
+```{r}
+lyt <- NULL %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  analyze(c("AGE", "SEX"), afun = s_summary)
+
+lyt
+```
+
+We can now build a table for `ADSL`
+
+```{r}
+build_table(lyt, ADSL)
+```
+
+or for all patients that are older than 18:
+
+```{r}
+build_table(lyt, ADSL %>% filter(AGE > 18))
+```
+
 
 ## Adverse Events
 
+There are a number of different adverse event tables. We will now present one that shows the 
+
 ## Response Table
+
+
+```{r, eval=FALSE}
+iter_colby = function(lyt, cbys, baselines = vector("list", length(cbys))) {
+
+    ##unpiped version
+    for(i in seq_along(cbys)) {
+        cb = cbys[[i]]
+        if(!is.null(baselines[[i]]))
+            lyt = split_cols_by(lyt, cb, lbl = cb, baseline = baselines[[i]])
+        else
+            lyt = split_cols_by(lyt, cb, lbl = cb)
+    }
+    lyt
+}
+
+TF_counter = function(nms = NULL) {
+    function(x, .N_col) {
+    tcnt = sum(x)
+    fcnt = .N_col - tcnt
+    ret = list(c(tcnt, tcnt/.N_col),
+               c(fcnt, fcnt/.N_col))
+    if(!is.null(nms))
+        names(ret) = nms
+    ret
+
+    }
+}
+
+
+.make_2xk_tab = function(coldat, bldat) {
+    if(is.list(coldat) && length(coldat) == 1)
+        coldat = coldat[[1]]
+    if(is.list(bldat) && length(bldat) == 1)
+        bldat = bldat[[1]]
+    
+    catvec = c(rep("baseline", times = length(bldat)),
+               rep("coldata", times = length(coldat)))
+    tab = table(catvec, c(bldat, coldat))
+    tab
+}
+
+## TODO: remove internal package-code use of %>% (maybe?)
+
+tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
+    NULL %>% iter_colby(cbys = col_by, baselines = baselines) %>%
+        ## respodner and nonresponder counts
+        add_analyzed_var("rsp", lbl = " ",
+                         afun = TF_counter( nms = c("Responders", "Non-Responders")),
+                         fmt = "xx (xx.%)") %>%
+        
+        ## response rate CI
+        add_analyzed_var("rsp", lbl = " ",
+                         afun = function(x) {
+            list("95% CI for Response Rates (Clopper-Pearson)" = binom.test(sum(x), length(x))$conf.int * 100)
+        }, fmt = "(xx.xx, xx.xx)", newtoplev = TRUE) %>%
+        
+        ## Difference in Response Rates section
+        ## I think this one should acttually e a content row?
+        analyze_against_baseline(var = "rsp", lbl =" ",
+                               afun = function(x) c("Difference in Response Rates (%)" =  mean(x)*100), fmt = "xx.xx", newtoplev = TRUE) %>%
+        
+        ## (both) CIs for diff in response rates
+        analyze_against_baseline_2dtable(var = "rsp", lbl = " ",
+                              compfun = function(tab) {
+            list("95% CI for difference (Wald without continuity correction)"=
+                     prop.test(tab, correct = FALSE)$conf.int*100,
+                 "95% CI for difference (Wald with continuity correction)" =
+                     prop.test(tab, correct = TRUE)$conf.int*100)
+        }, fmt = "(xx.xx, xx.xx)", newtoplev = TRUE) %>%
+        
+        ## Odds ratio
+        analyze_against_baseline_2dtable(var = "rsp",
+                              lbl = " ",
+                              compfun = function(tab) {
+            fit = tern:::odds_ratio(tab)
+            list("Odds Ratio" = fit$estimator,
+                 "95% CI" = fit$conf.int)
+            }, fmt = c("xx.xx", "(xx.xx, xx.xx)"), newtoplev = TRUE) %>%
+        ## Response rates by type of response
+        split_rows_by("AVALC", " ",
+                            splfun = reord_levs_sfun(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), newtoplev = TRUE) %>%
+        ## counts are a summary content row
+        summarize_row_groups("AVALC", "%s") %>%
+        ## CIs are an analysis row
+        add_analyzed_var("AVALC", lbl = " ", afun = function(x, .N_col) {
+            list("95% CI" = binom.test(length(x), .N_col)$conf.int * 100)
+        }, fmt = "(xx.xx, xx.xx)")
+
+}
+
+```
+
+
+## Variable and Value Labels

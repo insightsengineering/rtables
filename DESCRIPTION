@@ -55,6 +55,5 @@ Collate:
     'tt_dotabulation.R'
     'tt_paginate.R'
     'tt_pos_and_access.R'
-    'tt_rsp.R'
     'tt_showmethods.R'
     'tt_toString.R'

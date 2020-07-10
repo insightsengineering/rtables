@@ -1,0 +1,180 @@
+---
+title: "Tabulation using dplyr"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tabulation using dplyr}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+
+
+## Introduction
+
+Much of the `rtables` framework focuses on tabulation/summarizing of data. There are many other ways to tabulate/summarize data and probably the most popular way is using the `dplyr` package and `data.frame` or `tibble` objects. Using `dplyr` to summarize data and `gt` to visualize the table is a good way if the tabulation is of a certain nature or complexity. However, there are tables that would take some effort to create with `dplyr` and then also to store in `data.frame`s. One such table is the table we have created in the `introduction` vignette.
+
+In this vignette we would like to discuss the similarities and differences between `dplyr` and `rtable`. If you know a more elegant way of deriving the table content with `dplyr` please let us know and we will update the vignette.
+
+
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+library(tidyr)
+```
+
+Here is table and data used in the `introduction` vignette:
+
+```{r}
+n <- 400
+
+set.seed(1)
+
+df <- tibble(
+  arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
+  country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
+  gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
+  handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
+  age = rchisq(n, 30) + 10
+) %>% mutate(
+  weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
+) 
+
+basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  add_colcounts() %>%
+  split_rows_by("country") %>%
+  summarize_row_groups() %>%
+  split_rows_by("handed") %>%
+  summarize_row_groups() %>%
+  analyze("age", afun = mean, defrowlab = "Mean Age", fmt = "xx.x") %>%
+  build_table(df)
+```
+
+
+
+## Getting Started
+
+We will start by deriving the first analysis cell: the mean age for left handed & female canadians in "Arm A":
+
+
+```{r}
+mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female" & df$handed == "Left"])
+```
+
+or with `dplyr`:
+
+```{r}
+df %>%
+  filter(country == "CAN", arm == "Arm A", gender == "Female", handed == "Left") %>%
+  summarise(mean_age = mean(age))
+```
+
+Further, `dplyr` gives us other verbs to easily get the average age of left handed canadians for each group defined by the 4 columns:
+
+```{r}
+df %>%
+  group_by(arm, gender) %>%
+  filter(country == "CAN", handed == "Left") %>%
+  summarise(mean_age = mean(age))
+```
+
+We can further get to all the average age cell values with:
+
+```{r}
+average_age <- df %>%
+  group_by(arm, gender, country, handed) %>%
+  summarise(mean_age = mean(age))
+
+average_age
+```
+
+Although this data frame has all analysis content (mean age) it is not shaped in the table way we had above. This is, however, not too much of a task using `tidyr`:
+
+```{r}
+df %>%
+  group_by(arm, gender, country, handed) %>%
+  summarise(mean_age = mean(age)) %>%
+  pivot_wider(names_from = c(arm, gender), values_from = mean_age)
+```
+
+In `rtable` syntax we need the follwoing code to get to the same content:
+
+```{r}
+basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country") %>%
+  split_rows_by("handed") %>%
+  analyze("age", afun = mean, fmt = "xx.x") %>%
+  build_table(df)
+```
+
+Please disregard the actual presentation of the table, it's possible to condense the `rtable` more and it is possible to make the tibble look more like a table using the `gt` R package. We would like to make another point in this vignette that has to do with deriving the cell values.
+
+In terms of tabulation for this example there arguably not much added by `rtables` over `dplyr` and `tidyr`.
+
+## Content Information
+
+We will now focus on the count percentage information for handedness for each country:
+
+
+```{r}
+colN <- df %>%
+  group_by(arm, gender, country) %>%
+  summarize(N = n())
+
+group_summary_handedness <- df %>% 
+  left_join(colN) %>%
+  group_by(arm, gender, country, handed) %>%
+  summarize(c_h_count = n(), c_h_percent = n()/N[1])
+  
+group_summary_handedness
+```
+
+which has 16 rows (cells) like the `average_age` data frame defined above. There was a `colN` step necessary to determine the column associated population size. `N` is then added as repeated information to the data via `left_join` to derive the count and percentage and extracted using `N[1]`.
+
+Next, we will derive the group information for coutnries:
+
+```{r}
+colN <- df %>% 
+  group_by(arm, gender) %>%
+  summarize(N = n())
+  
+group_summary_country <- df %>% 
+  left_join(colN) %>%
+  group_by(arm, gender, country) %>%
+  summarize(c_count = n(), c_percent = c_count/N[1]) 
+
+group_summary_country
+```
+
+
+Now we have 8 rows (cells) for the country content rows. Similar as with `colN` in order to combine all the cell information we need to repeat some information (`group_summary_country` here):
+
+```{r}
+average_age %>%
+  left_join(group_summary_handedness) %>%
+  left_join(group_summary_country)
+```
+
+Although all the information from the final table is available in this data table it will need some skillful reshaping and it contains repeated information in `c_count` and `c_h_percentage`. Further, by now the `rtable` syntax has hopefully become more straightforward to derive this particular table.
+
+
+## Summary
+
+In this vignette learned that:
+
+* many tables are quite easily created with `dplyr` and `tidyr` and `data.frame` or `tibble` as data structure
+* if tables have group summaries then repeating of information is required if `data.frame` or `tibble`s are used
+* often tabulation does not need a specialized framework such as provided by `rtables` but also `rtables` keeps simple summaries simple
