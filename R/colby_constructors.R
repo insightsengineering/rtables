@@ -356,7 +356,7 @@ split_cols_by = function(lyt,
 #' basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("RACE") %>%
-#'   analyze("AGE", mean, var_label = "Age", format = "xx.xx")
+#'   analyze("AGE", mean, var_label = "Age", format = "xx.xx") %>%
 #'   build_table(DM)
 #'  
 #' 
@@ -366,7 +366,7 @@ split_cols_by = function(lyt,
 #'   summarize_row_groups(label_fstr = "Overall (N)") %>%
 #'   split_rows_by("RACE", "Ethnicity") %>%
 #'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-#'   analyze("AGE", "Age", afun = mean, format = "xx.xx") %>%
+#'   analyze("AGE", "Age", afun = mean, format = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
@@ -465,7 +465,7 @@ split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
 #' @author Gabriel Becker
 #' @examples
 #' l <- basic_table() %>%
-#' split_cols_by_cuts("AGE", label = "Age", cuts = c(0,25, 35, 1000), cutlabels = c("young", "medium", "old")) %>%
+#' split_cols_by_cuts("AGE", split_label = "Age,, cuts = c(0,25, 35, 1000), cutlabels = c("young", "medium", "old")) %>%
 #' analyze("RACE", label ="", defrowlab="count", afun = length)
 #'
 #' build_table(l, DM)
@@ -728,7 +728,6 @@ analyze_colvars = function(lyt, afun,
                            indent_mod = 0L) {
     subafun = substitute(afun)
     if(is.name(subafun) &&
-       missing(defrowlab) &&
        is.function(afun) &&
        ## this is gross. basically testing
        ## if the symbol we have corresponds
