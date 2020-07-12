@@ -1,0 +1,105 @@
+---
+title: "Subsetting Tables"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Subsetting Tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+## Introduction
+
+`rtable` objects are based on a tree data structure. However, the package is written such that the user does not need to walk trees and it is rarely required to understand the actual tree structure. In this vignette we show some methods to subset tables and to extract cell values.
+
+We will use the following table for illustrative purposes:
+
+```{r}
+library(rtables)
+library(dplyr)
+
+tbl <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("SEX") %>%
+  analyze(c("AGE", "STRATA1", "STRATA2", "BMRKR1", "BMRKR2"), rtab_inner) %>%
+  build_table(ex_adsl)
+```
+
+**TODO: fix formatting**.
+
+The `[` ancestor function always returns an rtable object. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
+
+```{r}
+tbl[1, 1]
+```
+
+because the first row is a label row. We need to access a cell with actual content:
+
+```{r}
+tbl[2, 1]
+```
+
+
+which is another rtable and not an `rcell`. If we wanted the `rcell` we need to use the `drop` argument:
+
+```{r}
+tbl[2, 1, drop = TRUE]
+```
+
+**TODO: though now we have also dropped the format**. 
+
+One can access multiple rows and columns:
+
+```{r}
+tbl[1:3, 1:2]
+```
+
+**TODO: we have lost the label row**. Note that we do not repeat label rows for descending children, e.g.
+
+```{r}
+tbl[2:4, ]
+```
+
+does not show that the first row is derived from `AGE`. In order to repeat content/label infromation one can use
+
+```{r, eval=FALSE}
+tbl[2:4, in_context = TRUE]
+```
+
+**TODO: (Adrian and Gabe to discuss)**.
+
+
+## Path Based Cell Value Accessing:
+
+**This is not final**
+
+We can get an idea about the tree structure of the table using the `make_pagedf` function.
+
+```{r}
+make_pagdf(tbl) %>%
+  select(label, name, abs_rownumber, path, row_class)
+#summary(tbl)
+```
+
+So in order to get the age value for column "Arm A" we would have to run
+
+```{r, eval = FALSE}
+cell_value(tbl, c("root", "AGE"), "ARM A")
+```
+
+
+
+## Comparing two rtables
+
+Because we have the original data for each cell accessible for the `rtable` data
+structure it is possible to programmatically compare two tables:
+
+```{r}
+t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
+t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
+
+##compare_rtables(object = t1, expected = t2) 
+```

@@ -12,7 +12,44 @@ vignette: >
 ## Introduction
 
 
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+```
+
 ## Cell Formats
+
+
+Cell formats are inherited from `rtable` to `rrow` to `rcell` if there is not a
+more specific format argument (i.e. format arguments of `rcell` are more
+specific than those of `rrow` which are more specific than those of `rtable`.
+
+Two types of formats are supported:
+
+* format label, e.g. `xx.xx (xx.xx%)`
+
+* functions that take the element and output type as an argument and return a 
+formatted string or html object **note, we will eventually deprecate this**
+
+Formats labels are currently limited to the following predefined set:
+
+```{r}
+list_rcell_format_labels()
+```
+
+Here is an example of using functions for formatting cells:
+
+```{r}
+my_format <- function(x, output) {
+   paste(x, collapse = "/")
+}
+tbl3 <- rtable(
+  c("A", "B"),
+  format = my_format,
+  rrow("row1", c(1,2,3,4), letters[1:10])
+)
+tbl3
+```
 
 ## Output Types
 
@@ -24,9 +61,43 @@ vignette: >
 
 ### HTML
 
+#### Viewer
+
+The `Viewer` functions takes an `rtable` object and displays it with
+[bootstrap](https://getbootstrap.com/) styling in RStudio's Viewer pane.
+
+```{r, eval = FALSE}
+tbl <- basic_table() %>%
+  split_cols_by("Species") %>%
+  analyze("Sepal.Length", mean) %>%
+  build_table(iris)
+
+Viewer(tbl)
+```
+
+It is also possible to show two tables side by side
+
+```{r, eval = FALSE}
+tbl2 <- basic_table() %>%
+  split_cols_by("Species") %>%
+  analyze("Sepal.Width", mean) %>%
+  build_table(iris)
+
+Viewer(tbl, tbl2)
+```
+
 ### LaTeX
 
 ### RTF
 
 ### Power Point
+
+
+
+
+
+
+
+
+
 

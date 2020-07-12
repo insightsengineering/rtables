@@ -53,7 +53,98 @@ df <- tibble(
 df
 ```
 
-## Tabulation Patterns I
+
+## Building A Table Row By Row
+
+Let's look at another pattern:
+
+```
+                     A         B         C
+------------------------------------------------
+foo_label        foo(df_A)  foo(df_B)  foo(df_C)
+bar_label        bar(df_A)  bar(df_B)  bar(df_C)
+zoo_label        zoo(df_A)  zoo(df_B)  zoo(df_C)
+```
+
+note that now the rows represent different analyses for the subset defined by the respective column and:
+
+```{r}
+df_A <- df %>% filter(c1 == "A")
+df_B <- df %>% filter(c1 == "B")
+df_C <- df %>% filter(c1 == "C")
+```
+
+
+Let's do this first with `analyze`:
+
+```{r}
+foo <- prod
+bar <- sum
+zoo <- mean
+
+basic_table() %>%
+  split_cols_by("c1") %>%
+  analyze("x", function(df) foo(df$x), var_labels = "foo label", format = "xx.xx") %>%
+  analyze("x", function(df) bar(df$x), var_labels = "bar label", format = "xx.xx") %>%
+  analyze("x", function(df) zoo(df$x), var_labels = "zoo label", format = "xx.xx") %>%
+  build_table(df)
+```
+
+**TODO: why are the labels showing up twice?**
+
+of if we wanted
+
+```
+                     A         B         C
+------------------------------------------------
+foo_label        foo(x_A)  foo(x_B)  foo(x_C)
+bar_label        bar(x_A)  bar(x_B)  bar(x_C)
+zoo_label        zoo(x_A)  zoo(x_B)  zoo(x_C)
+```
+
+where
+
+```{r}
+x_A <- df$x[df$c1 == "A"]
+x_B <- df$x[df$c1 == "B"]
+x_C <- df$x[df$c1 == "C"]
+```
+
+we can do this less verbose as the `afun` gets the subset of the specified variable if `afun` has an argument `x`:
+
+```{r}
+basic_table() %>%
+  split_cols_by("c1") %>%
+  analyze("x", foo, var_labels = "foo label", format = "xx.xx") %>%
+  analyze("x", bar, var_labels = "bar label", format = "xx.xx") %>%
+  analyze("x", zoo, var_labels = "zoo label", format = "xx.xx") %>%
+  build_table(df)
+```
+
+
+Note that it is also possible that a function returns multiple rows with `in_rows`
+
+```{r}
+basic_table() %>%
+  split_cols_by("c1") %>%
+  analyze("x", function(x) {
+    in_rows(
+      "row 1" = rcell(mean(x), format = "xx.xx"),
+      "row 2" = rcell(sd(x), format = "xx.xxx")
+    )
+  }, var_labels = "foo label") %>%
+  analyze("x", function(x) {
+    in_rows(
+      "more rows 1" =  rcell(median(x), format = "xx.x"),
+      "even more rows 1" = rcell(IQR(x), format = "xx.xx")
+    )
+  }, var_labels = "bar label", format = "xx.xx") %>%
+  build_table(df)
+```
+
+which sheds some light from where the row names come from.
+
+## Tabulation With Row Structure
 
 Let's say we would like to create the following table:
 
@@ -274,8 +365,8 @@ basic_table() %>%
 Which has the following structure:
 
 ```
-                          A         B         C
---------------------------------------
+                   A              B              C
+---------------------------------------------------------
 U        
   u1
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
@@ -308,71 +399,126 @@ W
      range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
-## Pattern II
 
-Let's look at another pattern:
+The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows and the other rows (with `mean_sd` and `range` are data rows). Currently we do not have content rows in the table. Content rows summarize the data defined by their splitting (i.e. `V > v1, B`). So if we wanted to add content row at the `r2` split level then we would get:
+
+
 
 ```
-                     A         B         C
-------------------------------------------------
-foo_label        foo(df_A)  foo(df_B)  foo(df_C)
-bar_label        bar(df_A)  bar(df_B)  bar(df_C)
-zoo_label        zoo(df_A)  zoo(df_B)  zoo(df_C)
+                   A              B              C
+---------------------------------------------------------
+U        
+  u1          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  u2          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  u3          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+V 
+  v1          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  v2          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  v3          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+W
+  w1          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  w2          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  w3          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
-note that now the rows represent different analyses for the subset defined by the respective column and:
+where `s_cfun_2` is the content function and either returns one row via `rcell` or multiple rows via `in_rows`. The data represented by `<>` for the content rows is same data as for it's descendant, i.e. for the `U > u1, A` content row cell it is `df %>% filter(r1 == "U", r2 == "u1", c1 == "A")`. Note that content functions `cfun` operate only on data frames and not on vectors/variables so they must take the `df` argument. Further, a `cfun` must also have the `labelstr` argument which is the split level. This way, the `cfun` can define its own row name. In order to get the table above we can use the layout framework as follows:
 
 ```{r}
-df_A <- df %>% filter(c1 == "A")
-df_B <- df %>% filter(c1 == "B")
-df_C <- df %>% filter(c1 == "C")
-```
+s_mean_sd <- function(x) {
+  in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"))
+}
 
+s_range <- function(x) {
+  in_rows("range" = rcell(range(x), format = "xx.xx - xx.xx"))
+}
 
-Let's do this first with `analyze`:
+s_cfun_2 <- function(df, labelstr) {
+  rcell(nrow(df), format = "xx", label = paste(labelstr, "(n)"))
+}
 
-```{r}
-foo <- prod
-bar <- sum
-zoo <- mean
 
 basic_table() %>%
   split_cols_by("c1") %>%
-  analyze("x", function(df) foo(df$x), var_labels = "foo label", format = "xx.xx") %>%
-  analyze("x", function(df) bar(df$x), var_labels = "bar label", format = "xx.xx") %>%
-  analyze("x", function(df) zoo(df$x), var_labels = "zoo label", format = "xx.xx") %>%
+  split_rows_by("r1") %>%
+  split_rows_by("r2") %>%
+  summarize_row_groups(cfun = s_cfun_2) %>%
+  analyze("x", s_mean_sd, show_labels = "FALSE") %>%
+  analyze("x", s_range, show_labels = "FALSE") %>%
   build_table(df)
 ```
 
-**TODO: why are the labels showing up twice?**
-
-of if we wanted
-
-```
-                     A         B         C
-------------------------------------------------
-foo_label        foo(x_A)  foo(x_B)  foo(x_C)
-bar_label        bar(x_A)  bar(x_B)  bar(x_C)
-zoo_label        zoo(x_A)  zoo(x_B)  zoo(x_C)
-```
-
-where
-
-```{r}
-x_A <- df$x[df$c1 == "A"]
-x_B <- df$x[df$c1 == "B"]
-x_C <- df$x[df$c1 == "C"]
-```
-
-we can do this less verbose as the `afun` gets the subset of the specified variable if `afun` has an argument `x`:
+In the same manner, if we wanted content rows for `r1` split we can do it at as follows:
 
 ```{r}
 basic_table() %>%
   split_cols_by("c1") %>%
-  analyze("x", foo, var_labels = "foo label", format = "xx.xx") %>%
-  analyze("x", bar, var_labels = "bar label", format = "xx.xx") %>%
-  analyze("x", zoo, var_labels = "zoo label", format = "xx.xx") %>%
+  split_rows_by("r1") %>%
+  summarize_row_groups(cfun = s_cfun_2) %>%
+  split_rows_by("r2") %>%
+  summarize_row_groups(cfun = s_cfun_2) %>%
+  analyze("x", s_mean_sd, show_labels = "FALSE") %>%
+  analyze("x", s_range, show_labels = "FALSE") %>%
   build_table(df)
+```
+
+In pagination content rows and label rows get repeated if a page is split in a descendant of a content row. So for example, if we were to split the following table at `***` then :
+
+
+```
+                   A              B              C
+---------------------------------------------------------
+U        
+  u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+***
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  u2 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+```
+
+we would get the following two tables:
+
+
+
+```
+                   A              B              C
+---------------------------------------------------------
+U        
+  u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+```
+
+and 
+
+
+```
+                   A              B              C
+---------------------------------------------------------
+U        
+  u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
+  u2 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
+     mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
+     range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
 

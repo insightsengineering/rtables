@@ -24,6 +24,7 @@ articles:
     - rtabulate
     - manual_table_construction
     - formatting_tables
+    - subsetting_tables
     - pagination
     - baseline
     - known_issues
