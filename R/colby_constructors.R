@@ -268,7 +268,7 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' # add an analysis (summary)
 #' l2 <- l %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l2
 #' 
 #' build_table(l2, DM)
@@ -276,7 +276,7 @@ add_new_coltree = function(lyt, spl) {
 #' # By default sequentially adding layouts results in nesting
 #' l3 <- basic_table() %>% split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
-#'   analyze("AGE", afun = lstwrapx(summary), format = "xx.xx")
+#'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 #' l3
 #' 
 #'  build_table(l3, DM)
@@ -631,7 +631,7 @@ split_rows_by_cutfun = function(lyt, var, split_label = var,
 #' 
 #' l <- basic_table() %>%
 #'     split_cols_by("ARM") %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
@@ -676,6 +676,7 @@ analyze = function(lyt,
     } else {
         defrowlab = var_labels
     }
+    
     spl = AnalyzeMultiVars(vars, var_labels,
                           afun = afun,
                           split_format = format,
@@ -1018,7 +1019,7 @@ setMethod(".add_row_summary", "Split",
 #' l <- basic_table() %>% split_cols_by("ARM") %>% 
 #'     split_rows_by("RACE") %>% 
 #'     summarize_row_groups(label_fstr = "%s (n)") %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #' 
 #' tbl <- build_table(l, DM)
@@ -1239,21 +1240,29 @@ manual_cols = function(..., .lst = list(...)) {
 #' @param f The function to wrap.
 #' @export
 #'
-#' @details \code{lstwrapx} generates a wrapper which takes \code{x} as its first argument, while \code{lstwrapdf} generates an otherwise identical wrapper function whose first argument is named \code{df}.
+#' @details \code{list_wrap_x} generates a wrapper which takes \code{x} as its first argument, while \code{list_wrap_df}
+#'   generates an otherwise identical wrapper function whose first argument is named \code{df}.
 #'
-#' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
+#'   We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or
+#'   \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe,
+#'   while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the
+#'   variable being analyzed.
 #' 
-#' @rdname lstwrap
+#' @rdname list_wrap
 #' @author Gabriel Becker
 #' @examples 
 #' 
 #' summary(iris$Sepal.Length)
 #' 
-#' f <- lstwrapx(summary)
-#' f(iris$Sepal.Length)
-lstwrapx = function(f) {
+#' f <- list_wrap_x(summary)
+#' f(x = iris$Sepal.Length)
+#' 
+#' f2 <- list_wrap_df(summary)
+#' f2(df = iris$Sepal.Length)
+#' 
+list_wrap_x = function(f) {
     function(x,...) {
-        vs = as.list(f(x,...))
+        vs = as.list(f(x, ...))
         ret = mapply(function(v, nm) {
             rcell(v, label = nm)
         },
@@ -1264,9 +1273,9 @@ lstwrapx = function(f) {
     }
 }
 
-#' @rdname lstwrap
+#' @rdname list_wrap
 #' @export
-lstwrapdf = function(f) {
+list_wrap_df = function(f) {
     function(df,...) {
         vs = as.list(f(df,...))
         ret = mapply(function(v, nm) {
@@ -1295,14 +1304,55 @@ lstwrapdf = function(f) {
 basic_table <- function() NULL
 
 #' Create multiple rows in analysis or summary functions
+#' 
+#' define the cells that get placed into multiple rows in `afun`
+#' 
+#' @note currently the `.name` argument is not used
+#' 
 #' @param ... single row defining expressions
-#' @param .lst list of rrows
+#' @param .list list cell content, usually `rcells`, the `.list` is concatenated to `...`
+#' @param .names names rows
+#' @param .labels labels of rows
+#' 
 #' @export
-in_rows <- function(..., .lst) {
-  l <- list(...)
-  if (missing(.lst)) {
-    l
-  } else {
-    c(l, .lst)
-  }
+#' 
+#' @seealso `analyze`
+#' 
+#' @examples 
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+#' 
+#' in_rows(.list = list(a = 1, b = 2, c = 3))
+#' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
+#' 
+#' basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze("AGE", afun = function(x) {
+#'     in_rows(
+#'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+#'     )
+#'   }) %>%
+#'   build_table(ex_adsl)
+#' 
+in_rows <- function(..., .list, .names, .labels) {
+    if (missing(.list)) .list <- NULL
+    
+    l <- c(list(...), .list)
+    
+    if (missing(.names) && missing(.labels)) {
+        if (length(l) > 0 && is.null(names(l))) 
+            stop("need a named list")
+    } else {
+        # currently .names is not supported
+        if (missing(.labels)) .labels <- .names
+        
+        if (length(.labels) != length(l)) 
+            stop("dimension missmatch for cells and row names")
+        
+        names(l) <- .labels
+    }
+    
+    if (length(l) == 0) NULL else l
 } 

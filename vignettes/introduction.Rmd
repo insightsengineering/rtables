@@ -94,7 +94,7 @@ A basic table has one column representing all data and 0 rows. Analyzing a varia
 
 ```{r}
 l <- basic_table() %>%
-  analyze("age", afun = mean, format = "xx.x")
+  analyze("age", mean, format = "xx.x")
 
 build_table(l, df)
 ```

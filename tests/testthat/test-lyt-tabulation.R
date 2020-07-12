@@ -40,7 +40,7 @@ test_that("complex layout works", {
         ## root split
         ## afun of table() gives us k count rows, where k is the number of
         ## levels of VAR3, in this case 2.
-        analyze("VAR3", "Var3 Counts", afun = lstwrapx(table), nested = FALSE)
+        analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
     
     
     expnames = c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
@@ -56,7 +56,7 @@ test_that("complex layout works", {
     expect_identical(dim(tab), c(28L, 4L))
     expect_identical(row.names(tab), expnames)
 })
-
+F
 
 
 

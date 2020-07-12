@@ -18,6 +18,8 @@ vignette: >
 
 ### ASCII
 
+#### PDF
+
 #### Column Width / Row Heights
 
 ### HTML
@@ -25,4 +27,6 @@ vignette: >
 ### LaTeX
 
 ### RTF
+
+### Power Point
 

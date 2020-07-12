@@ -10,6 +10,6 @@
 Summary method for elementary table
 }
 \examples{
-tbl <- rtabulate(iris$Sepal.Length, iris$Species, lstwrapx(summary))
+tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
 
 }

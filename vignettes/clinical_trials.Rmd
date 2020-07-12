@@ -17,13 +17,14 @@ knitr::opts_chunk$set(comment = "")
 
 ## Introduction
 
-In this vignette we show how `rtables` can be used to create common tables used to analyze clinical trials data. That is, we will create a demographic table, adverse event table and a response table. We don't aim to create fully specified tables that can be used for all the standard analyses, we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly used to analyze clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
+In this vignette we show how `rtables` can be used to create common tables used to analyze clinical trials data. That is, we will create a demographic table, adverse event table, disposition table and a response table. We don't aim to create fully specified tables that can be used for all the standard analyses, we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly used to analyze clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
 
 Note that all the data used here is created using random number generators with another internal R package called `random.cdisc.data`. We have attached some data to this package but we do intend to release `random.cdisc.data` as open source soon.
 
 
 ```{r, message=FALSE}
 library(rtables)
+library(tibble)
 library(dplyr)
 ```
 
@@ -99,7 +100,7 @@ s_summary(ADSL$SEX)
 ```
 
 Hence, now we can now create a demographic table:
-
+ 
 ```{r}
 lyt <- basic_table() %>% 
   split_cols_by(var = "ARM",  split_label = "Study Arm") %>%
@@ -200,23 +201,25 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
-it is not easy to see how many females and males there are in each arm as `n` removes `NA` in the count. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups`, for example
+it is not easy to see how many females and males there are in each arm as `n` removes `NA` in the count. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups`, for example:
 
 ```{r}
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
   summarize_row_groups()  %>% 
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  analyze("BMRKR2", afun = s_summary, nested = FALSE) %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
-There are a couple of things to note here. We have changed `child_labels` to `"hidden"` (**TODO: not so sure why**). Next, group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows but they are an important design decision for `rtables` as when we paginate tables the content rows are by default repeated if a group gets divided via pagination. Conceptually the content rows summarize the patient population that is analyzed and often displays count percentages (default behavior of `summarize_row_groups`). We can recreate this default behavior  by defining a `cfun` for illustrative purposes here as it results in the same table as above:
+There are a couple of things to note here. We have changed `child_labels` to `"hidden"` (**TODO: not so sure why**). Next, group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination. Conceptually the content rows summarize the patient population that is analyzed and often displays count percentages (default behavior of `summarize_row_groups`). We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
 
 ```{r}
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
     rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)", label = labelstr)
@@ -271,50 +274,328 @@ build_table(lyt, ADSL %>% filter(AGE > 18))
 
 ## Adverse Events
 
-There are a number of different adverse event tables. We will now present one that shows the 
+There are a number of different adverse event tables. We will now present two tables that show adverse events by id and then by grade and by id. 
+
+This time we won't use the `ADAE` dataset from `random.cdisc.data` but rather generate on on the fly (see [Adrian's 2016 Phuse paper](https://github.com/waddella/phuse2016_adverse_events)):
+
+```{r}
+set.seed(1)
+
+lookup <- tribble(
+  ~AEDECOD,                          ~AEBODSYS,                                         ~AETOXGR,
+  'HEADACHE',                        "NERVOUS SYSTEM DISORDERS",                        "5",
+  'BACK PAIN',                       "MUSCULOSKELETAL AND CONNECTIVE TISSUE DISORDERS", "2",
+  'GINGIVAL BLEEDING',               "GASTROINTESTINAL DISORDERS",                      "1",
+  'HYPOTENSION',                     "VASCULAR DISORDERS",                              "3",
+  'FAECES SOFT',                     "GASTROINTESTINAL DISORDERS",                      "2",
+  'ABDOMINAL DISCOMFORT',            "GASTROINTESTINAL DISORDERS",                      "1",
+  'DIARRHEA',                        "GASTROINTESTINAL DISORDERS",                      "1",
+  'ABDOMINAL FULLNESS DUE TO GAS',   "GASTROINTESTINAL DISORDERS",                      "1",
+  'NAUSEA (INTERMITTENT)',           "GASTROINTESTINAL DISORDERS",                      "2",
+  'WEAKNESS',                        "MUSCULOSKELETAL AND CONNECTIVE TISSUE DISORDERS", "3",
+  'ORTHOSTATIC HYPOTENSION',         "VASCULAR DISORDERS",                              "4"
+)
+
+normalize <- function(x) x/sum(x)
+weightsA <- normalize(c(0.1, dlnorm(seq(0, 5, length.out = 25), meanlog = 3)))
+weightsB <- normalize(c(0.2, dlnorm(seq(0, 5, length.out = 25))))
+
+N_pop <- 300
+ADSL2 <- data.frame(
+  USUBJID = seq(1, N_pop, by = 1),
+  ARM = sample(c('ARM A', 'ARM B'), N_pop, TRUE),
+  SEX = sample(c('F', 'M'), N_pop, TRUE),
+  AGE = 20 + rbinom(N_pop, size=40, prob=0.7)
+)
+ 
+                                      
+l.adae <- mapply(ADSL2$USUBJID, ADSL2$ARM, ADSL2$SEX, ADSL2$AGE, FUN = function(id, arm, sex, age) {
+  
+  n_ae <- sample(0:25, 1, prob = if (arm == "ARM A") weightsA else weightsB)
+  i <- sample(1:nrow(lookup), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10))/16)
+  
+  aes <- lookup[i, ] %>% mutate(AESEQ = seq_len(n()))
+ 
+  aes %>%
+    mutate(USUBJID = id, ARM = arm, SEX = sex, AGE = age)
+}, SIMPLIFY = FALSE)
+
+ADAE2 <- do.call(rbind, l.adae)
+ADAE2 <- ADAE2 %>% 
+  mutate(
+    ARM = factor(ARM, levels = c("ARM A", "ARM B")),
+    AEDECOD = as.factor(AEDECOD),
+    AEBODSYS = as.factor(AEBODSYS), 
+    AETOXGR = factor(AETOXGR, levels = as.character(1:5))
+  ) %>% 
+  select(USUBJID, ARM, AGE, SEX, AESEQ, AEDECOD, AEBODSYS, AETOXGR)
+  
+
+ADAE2
+```
+
+
+
+### Adverse Events By ID
+
+We start by defining an events summary function:
+
+```{r}
+s_events_patients <- function(x, .N_col, lblstr = NULL) {
+  in_rows(
+    "Total number of patients with at least one event" = 
+      rcell(length(unique(x)) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
+    
+    "Total number of events" = rcell(length(x), format = "xx")
+  )
+}
+```
+
+So, for a population size of `5` where one patient has 2 AEs and one patient has 1 AE and 3 patients have no AEs we would get the following summary:
+
+```{r}
+s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
+```
+
+Let's use this summary function in a table:
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  add_colcounts() %>%
+  analyze("USUBJID", s_events_patients) %>%
+  build_table(ADAE2)
+```
+
+Note that the column `N`'s are wrong as by default they are set to the number of rows per group (i.e. number of AEs per arm here). This also affects the percentages. For this table we are interested by the number of patients per column/arm which is usually taken from `ADSL`:
+
+```{r}
+N_per_arm <- table(ADSL2$ARM)
+N_per_arm
+```
+
+and this information can then be passed to `build_table`:
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  analyze("USUBJID", s_events_patients) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+```
+
+We next calculate this information per system organ class:
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("AEBODSYS", child_labels = "visible")  %>%
+  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+```
+
+**TODO: `show_labels` does not work**. The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation.
+
+We have now the add a count table of `AEDECOD` for each `AEBODSYS`. For example, 
+
+```{r}
+table(ADAE2$AEDECOD)
+```
+
+gets us already fairly close. Unfortunately we cannot use `analyze("USUBJID", afun = table)` as we expect multiple rows defined by `in_rows` and `table` returns a table. `rtables` provides the `list_wrap_x` function with takes a function `f` and an argument and then coerces the return value of `f` to a list:
+
+```{r}
+lwtable <- list_wrap_x(table)
+lwtable(x = ADAE2$AEDECOD)
+```
+
+Note that the `_x` in the `list_wrap` function names translates to the argument name of the wrapped function.  `analyze` processes a list `l` with `do.call(in_rows, l)`, hence every named list element is turned into a row. **TODO: this needs to be discussed further**. A complete adverse events table is the defined as follows:
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("AEBODSYS", child_labels = "visible")  %>%
+  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = FALSE,) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+```
+
+Note that we are missing the overall summary. This can be added with another `analyze` call and then setting `nested = FALSE` in the subsequent `summarize_row_groups` call (**TODO: though that is not intuitive**):
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  analyze("USUBJID", afun = s_events_patients) %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
+  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = FALSE,) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+```
+
+**TODO: here `cfun` takes a function with only `x` as an argument, so `cfun` allows `x` and `df` as an argument.**
+
+### Adverse Events By ID and By Grade
+
+For this table we do not show the zero count grades. Note that we add overall groups with a custom split function. 
+
+```{r}
+basic_table() %>% 
+    split_cols_by("ARM") %>%
+    add_colcounts() %>%
+    split_rows_by("AEBODSYS", 
+                  split_fun = add_overall_level("- All AEBODSYS -"), 
+                  child_labels = "visible") %>%
+    split_rows_by("AEDECOD", split_fun = add_overall_level("- All AEDECOD -", trim = TRUE),
+                  child_labels = "visible")  %>%
+    summarize_row_groups(label_fstr = "- Any Grade -") %>%
+    analyze("AETOXGR", afun = function(x, ...) {
+        tbl <- table(x)
+        tbl <- tbl[tbl != 0]
+        in_rows(.list = as.list(tbl))
+    }, indent_mod = -1, show_labels = FALSE) %>%
+  build_table(ADAE2)
+```
+
+**TODO: labels are wrong**
+
+## Disposition Table
+
+Let's start with creating a suitable `ADSL` (currently not part of `random.cdisc.data`):
+
+```{r}
+set.seed(1)
+ADSL0 <- ex_adsl %>%
+  mutate(
+    COMPSTUD = sample(c('Y','N'), size=nrow(ex_adsl), replace = TRUE) %>% as.factor,
+    STUDONS = sample(c('Alive: On Treatment', 'Alive: In Follow-up', NA), size = nrow(ex_adsl), replace = TRUE) %>% as.factor,
+    STDDRS = sample(c('Death', 'Lost To Follow-Up',
+                      'Protocol Violation', 'Withdrawal By Subject',
+                      'Other'),
+                    size=nrow(ex_adsl),
+                    replace = TRUE) %>% as.factor,
+    GOTTRT = ifelse(!is.na(ACTARMCD), 'Y', 'N') %>% as.factor,
+    DISTRTFL = sample(c('Y','N'),
+                      size=nrow(ex_adsl),
+                      replace = TRUE) %>% as.factor,
+    TRTDRS = sample(c('ADVERSE EVENT', 'PROGRESSIVE DISEASE',
+                      'PHYSICIAN DECISION', 'LACK OF EFFICACY',
+                      'OTHER'),
+                    size=nrow(ex_adsl),
+                    replace = TRUE) %>% as.factor,
+    STUDONS = case_when(COMPSTUD == 'N' ~ STUDONS),
+    STDDRS = case_when(COMPSTUD == 'N' & is.na(STUDONS) ~ STDDRS),
+    DISSTDFL = case_when(!is.na(STDDRS) ~ "Y"),
+    DISTRTFL = case_when(GOTTRT == 'Y' ~ DISTRTFL),
+    TRTDRS = case_when(DISTRTFL == 'Y' ~ TRTDRS),
+    DRSCAT = case_when(
+      TRTDRS %in% c('ADVERSE EVENT', 'PHYSICIAN DECISION') ~ "Safety",
+      !is.na(TRTDRS) ~ "Other"
+    )
+  ) %>% var_relabel(COMPSTUD = "Complete Study",
+                    STUDONS = "On-study Status",
+                    DISSTDFL = "Discontinued Study",
+                    STDDRS = "Reason for Study \r\nDiscontinuation",
+                    GOTTRT = "Received Treatment",
+                    DISTRTFL = "Discontinued Treatment",
+                    TRTDRS = "Reason for Treatment \r\nDiscontinuation",
+                    DRSCAT = "Subcategory for Treatment Discontinuation"
+  )
+
+ADSL0
+```
+
+We also need a couple of utility functions to deal with the particular format:
+
+```{r}
+yn_as_bool <- function(f) {
+  function(x, .N_col) {
+    f(x == "Y", .N_col)
+  }
+}
+
+s_count_perc <- function(x, .N_col) {
+  rcell(sum(!is.na(x)) * c(1, 1/.N_col), format = "xx (xx.xx%)")
+}
+```
+
+A dispositon table is then created as follows:
+
+```{r disposition_table}
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze("COMPSTUD", yn_as_bool(s_count_perc), var_labels = "Completed Study") %>%
+  split_rows_by("DISSTDFL", nested = FALSE, split_fun = keep_split_levels("Y")) %>%
+  summarize_row_groups(label_fstr = "Discontinued Study") %>%
+  split_rows_by("DRSCAT", split_fun = reorder_split_levels(c("Safety", "Other"))) %>%
+  summarize_row_groups() %>%
+  analyze("TRTDRS", var_labels = "Discontinued Study") %>% 
+  build_table(ADSL0) %>%
+  trim_zero_rows()
+```
 
 ## Response Table
 
+Let's start with the first part of a response table which is fairly simple to derive:
 
-```{r, eval=FALSE}
-iter_colby = function(lyt, cbys, baselines = vector("list", length(cbys))) {
+```{r}
+ADRS_BESRSPI <- ex_adrs %>%
+  filter(PARAMCD == "BESRSPI") %>%
+  mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
+         is_rsp = rsp == "Responders")
 
-    ##unpiped version
-    for(i in seq_along(cbys)) {
-        cb = cbys[[i]]
-        if(!is.null(baselines[[i]]))
-            lyt = split_cols_by(lyt, cb, lbl = cb, baseline = baselines[[i]])
-        else
-            lyt = split_cols_by(lyt, cb, lbl = cb)
-    }
-    lyt
-}
-
-TF_counter = function(nms = NULL) {
-    function(x, .N_col) {
-    tcnt = sum(x)
-    fcnt = .N_col - tcnt
-    ret = list(c(tcnt, tcnt/.N_col),
-               c(fcnt, fcnt/.N_col))
-    if(!is.null(nms))
-        names(ret) = nms
-    ret
-
-    }
-}
+basic_table() %>%
+  split_cols_by("ARMCD") %>%
+  analyze("rsp", list_wrap_x(table), show_labels = FALSE) %>%
+  analyze("is_rsp", function(x) {
+    in_rows(
+      rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
+      .labels = "95% CI for Response Rates (Clopper-Pearson)"
+    )
+  }, show_labels = FALSE) %>%
+  build_table(ADRS_BESRSPI)
+```
 
 
-.make_2xk_tab = function(coldat, bldat) {
-    if(is.list(coldat) && length(coldat) == 1)
-        coldat = coldat[[1]]
-    if(is.list(bldat) && length(bldat) == 1)
-        bldat = bldat[[1]]
-    
-    catvec = c(rep("baseline", times = length(bldat)),
-               rep("coldata", times = length(coldat)))
-    tab = table(catvec, c(bldat, coldat))
-    tab
-}
+**TODO: where did the `format` go?**
+
+This did not require any new knowledge. The next addition requires the specification of reference column (arm). 
+
+
+```{r, eval = FALSE}
+ADRS_BESRSPI <- ex_adrs %>%
+  filter(PARAMCD == "BESRSPI") %>%
+  mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
+         is_rsp = rsp == "Responders")
+
+basic_table() %>%
+  split_cols_by("ARMCD") %>%
+  analyze("rsp", list_wrap_x(table), show_labels = FALSE) %>%
+  analyze("is_rsp", function(x) {
+    in_rows(
+      rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
+      .labels = "95% CI for Response Rates (Clopper-Pearson)"
+    )
+  }, show_labels = FALSE) 
+
+
+basic_table() %>%
+  split_cols_by("ARMCD", ref_group = "ARM A", nested = FALSE) %>%
+  analyze_against_ref_group("is_rsp", function(x, ...) {
+    in_rows(a = 1, b = 2)
+  }) %>%
+  build_table(ADRS_BESRSPI)
+```
+
+**TODO: somewhing does not work**.
+
+```{r, eval = FALSE}
 
 ## TODO: remove internal package-code use of %>% (maybe?)
 
@@ -365,6 +646,44 @@ tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
 
 }
 
+iter_colby = function(lyt, cbys, baselines = vector("list", length(cbys))) {
+
+    ##unpiped version
+    for(i in seq_along(cbys)) {
+        cb = cbys[[i]]
+        if(!is.null(baselines[[i]]))
+            lyt = split_cols_by(lyt, cb, lbl = cb, baseline = baselines[[i]])
+        else
+            lyt = split_cols_by(lyt, cb, lbl = cb)
+    }
+    lyt
+}
+
+TF_counter = function(nms = NULL) {
+    function(x, .N_col) {
+    tcnt = sum(x)
+    fcnt = .N_col - tcnt
+    ret = list(c(tcnt, tcnt/.N_col),
+               c(fcnt, fcnt/.N_col))
+    if(!is.null(nms))
+        names(ret) = nms
+    ret
+
+    }
+}
+
+
+.make_2xk_tab = function(coldat, bldat) {
+    if(is.list(coldat) && length(coldat) == 1)
+        coldat = coldat[[1]]
+    if(is.list(bldat) && length(bldat) == 1)
+        bldat = bldat[[1]]
+    
+    catvec = c(rep("baseline", times = length(bldat)),
+               rep("coldata", times = length(coldat)))
+    tab = table(catvec, c(bldat, coldat))
+    tab
+}
 ```
 
 

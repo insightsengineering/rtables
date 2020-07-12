@@ -17,6 +17,7 @@ Imports:
   purrr
 Suggests:
   dplyr,
+  tibble,
   tidyr,
   testthat,
   xml2,
@@ -43,6 +44,7 @@ Collate:
     'indent.R'
     'labels.R'
     'make_subset_expr.R'
+    'prune.R'
     'rtable.R'
     'rtabulate_refactor.R'
     'sort.R'

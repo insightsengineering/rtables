@@ -16,7 +16,7 @@ setMethod("summary", "ANY", base:::summary)
 #' l <- basic_table() %>% 
 #'     split_cols_by("Species") %>%
 #'     split_rows_by("RND") %>%
-#'     analyze(c("Sepal.Length", "Petal.Length"), afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze(c("Sepal.Length", "Petal.Length"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #' 
 #' iris2 <- iris %>% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))
@@ -53,7 +53,7 @@ setMethod("summary", "TableTree", function(object, depth = 0, indent = 0, row_ty
 #' Summary method for elementary table
 #' 
 #' @examples 
-#' tbl <- rtabulate(iris$Sepal.Length, iris$Species, lstwrapx(summary))
+#' tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
 #' 
 setMethod("summary", "ElementaryTable", function(object, depth = 0, indent = 0, row_type) {
 
@@ -181,7 +181,7 @@ summarize_row_df_empty <- function(...) {
 #' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' 
 #' tbl <- build_table(l, iris2)
 #' 

@@ -4,13 +4,42 @@
 \alias{in_rows}
 \title{Create multiple rows in analysis or summary functions}
 \usage{
-in_rows(..., .lst)
+in_rows(..., .list, .names, .labels)
 }
 \arguments{
 \item{...}{single row defining expressions}
 
-\item{.lst}{list of rrows}
+\item{.list}{list cell content, usually \code{rcells}, the \code{.list} is concatenated to \code{...}}
+
+\item{.names}{names rows}
+
+\item{.labels}{labels of rows}
 }
 \description{
-Create multiple rows in analysis or summary functions
+define the cells that get placed into multiple rows in \code{afun}
+}
+\note{
+currently the \code{.name} argument is not used
+}
+\examples{
+in_rows(1, 2, 3, .names = c("a", "b", "c"))
+in_rows(1, 2, 3, .labels = c("a", "b", "c"))
+in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+
+in_rows(.list = list(a = 1, b = 2, c = 3))
+in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
+
+basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = function(x) {
+    in_rows(
+       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+       "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+    )
+  }) \%>\%
+  build_table(ex_adsl)
+
+}
+\seealso{
+\code{analyze}
 }

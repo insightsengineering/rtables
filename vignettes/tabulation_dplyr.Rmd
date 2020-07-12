@@ -57,7 +57,7 @@ basic_table() %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, defrowlab = "Mean Age", fmt = "xx.x") %>%
+  analyze("age", afun = mean, show_labels = "Mean Age", format = "xx.x") %>%
   build_table(df)
 ```
 
@@ -116,7 +116,7 @@ basic_table() %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
   split_rows_by("handed") %>%
-  analyze("age", afun = mean, fmt = "xx.x") %>%
+  analyze("age", afun = mean, format = "xx.x") %>%
   build_table(df)
 ```
 

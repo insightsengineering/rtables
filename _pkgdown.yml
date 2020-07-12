@@ -66,8 +66,8 @@ reference:
   - title: Table Tree Utility Functions
     desc: Utility functions
     contents:
-    - lstwrapx
-    - lstwrapdf
+    - list_wrap_x
+    - list_wrap_df
     - remove_split_levels # split_funcs
     - add_combo_levels
 
@@ -146,13 +146,14 @@ reference:
     - "length,CellValue-method"
     
 
-  - title: Table sorting functions
+  - title: Table sorting and pruning functions
     desc: funtions to sort rows within tables and list of tables
     contents:
     - order_rrows
     - sort_rrows
     - order_rtables
     - sort_rtables
+    - trim_zero_rows
 
 
   - title: TableTree Framework Constructors and S4 Classes

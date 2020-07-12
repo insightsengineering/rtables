@@ -59,7 +59,7 @@ In addition to differentation on the first argument, the analysis function can o
 
 l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\% 
-    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
 
 build_table(l, DM)

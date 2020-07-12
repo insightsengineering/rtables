@@ -27,17 +27,21 @@ setGeneric("rtab_inner", function(x, ...) standardGeneric("rtab_inner"))
 #' @rdname rtinner
 #' @exportMethod rtab_inner
 setMethod("rtab_inner", "numeric", function(x, ...) mean(x,...))
+
 #' @rdname rtinner
 #' @exportMethod rtab_inner
 setMethod("rtab_inner", "logical", function(x, ...) sum(x,...))
 
+#' @rdname rtinner
+#' @exportMethod rtab_inner
+setMethod("rtab_inner", "factor", list_wrap_x(table))
 
 #' @rdname rtinner
 #' @exportMethod rtab_inner
-setMethod("rtab_inner", "factor", lstwrapx(table))#function(x, ...) as.list(table(x, ...)))
-#' @rdname rtinner
-#' @exportMethod rtab_inner
-setMethod("rtab_inner", "ANY", function(x, ...) stop("No default rtabulate behavior for class ", class(x), " please specify FUN  explicitly."))
+setMethod("rtab_inner", "ANY",
+          function(x, ...) {
+              stop("No default rtabulate behavior for class ", class(x), " please specify FUN  explicitly.")
+          })
 
 
 

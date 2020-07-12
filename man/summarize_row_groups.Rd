@@ -38,7 +38,7 @@ if \code{format} expects 2 values (ie \code{xx} appears twice in the format stri
 l <- basic_table() \%>\% split_cols_by("ARM") \%>\% 
     split_rows_by("RACE") \%>\% 
     summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
-    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
 
 tbl <- build_table(l, DM)

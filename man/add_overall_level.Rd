@@ -30,7 +30,7 @@ l <- NULL \%>\%
    split_cols_by("ARM") \%>\% 
    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) \%>\% 
    summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
-   analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+   analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
    
 l
 
