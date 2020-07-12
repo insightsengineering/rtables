@@ -244,7 +244,7 @@ basic_table() %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = function(df, labelstr) {
-    rcell(foo(df$x), format = "xx.xx", label = labelstr)
+    rcell(mean(df$x), format = "xx.xx", label = paste("mean x for", labelstr))
   }) %>% 
   build_table(df)
 ```
