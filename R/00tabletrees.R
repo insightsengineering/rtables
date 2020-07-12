@@ -1286,6 +1286,7 @@ setClass("PreDataAxisLayout", contains = "list",
 setClass("PreDataColLayout", contains = "PreDataAxisLayout",
          representation(display_columncounts = "logical",
                         columncount_format = "character"))
+
 setClass("PreDataRowLayout", contains = "PreDataAxisLayout")
 
 PreDataColLayout = function(x = SplitVector(),
@@ -1326,8 +1327,8 @@ setClass("CellValue", contains = "ValueWrapper",
          representation(format = "FormatSpec",
                         colspan = "integerOrNULL",
                         label = "characterOrNULL"),
-         prototype = list(label ="", colspan = NULL,
-                          format = NULL))
+         prototype = list(label ="", colspan = NULL, format = NULL))
+
 #' Length of a Cell value
 #'
 #' @exportMethod length
@@ -1337,16 +1338,20 @@ setMethod("length", "CellValue",
 
 
 #' Cell Value constructor
+#' 
 #' @inheritParams lyt_args
 #' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
 #' @param colspan integer. Generally ignored currently.
+#' @param label used as row name if the row name is not specified by `in_rows`
+#' 
 #' @export
-CellValue = function(val, format = NULL, colspan =1L, label = NULL)  {
+#' 
+CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
     if(is.null(colspan))
-        colspan = 1L
+        colspan <- 1L
     if(!is.null(colspan) && !is(colspan, "integer"))
-        colspan = as.integer(colspan)
-    new("CellValue", value =val, format  =  format, colspan = colspan, label = label)
+        colspan <- as.integer(colspan)
+    new("CellValue", value = val, format = format, colspan = colspan, label = label)
 }
 
 #' @export

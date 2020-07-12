@@ -21,6 +21,7 @@ Suggests:
   tidyr,
   testthat,
   xml2,
+  crayon,
   knitr
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
