@@ -102,14 +102,12 @@ We can now create a commonly used demographic table:
  
 ```{r}
 lyt <- basic_table() %>% 
-  split_cols_by(var = "ARM",  split_label = "Study Arm") %>%
+  split_cols_by(var = "ARM") %>%
   analyze(c("AGE", "SEX"), afun = s_summary) 
 
 tbl <- build_table(lyt, ADSL)
 tbl
 ```
-
-The `split_label` argument is usually set to the variable label. The `split` in the argument name refers to the fact that in the tabulation the `ARM` variable was used for splitting.
 
 Note that `analyze` can also be called multiple times in sequence:
 
@@ -129,7 +127,9 @@ which leads to the identical table as `tbl1`:
 identical(tbl, tbl2)
 ```
 
-Column `N`s (population size represented by column) are added using the `add_colcounts` function:
+**TODO: why is it not identical?**
+
+In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). Column `N`s are added using the `add_colcounts` function:
 
 ```{r}
 basic_table() %>% 

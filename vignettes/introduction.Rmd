@@ -28,6 +28,7 @@ There are a number of other table frameworks available in `R` such as [gt](https
 * table view (ASCII, HTML, etc.) is separate from the data model. Hence, one always has access to the non-rounded/non-formatted numbers.
 * pagination to meet the health authority submission requirements
 * cell, row, column, table reference system (**TODO: is currently missing**)
+  * title footnotes
 * path based access to cell content which will be useful for automated content generation **TODO: work in progress**
 
 In the remainder of this vignette we give a short introduction into `rtables` and tabulating a table. The content is based on the [useR 2020 presentation from Gabriel Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA).
@@ -227,7 +228,7 @@ build_table(l, df)
 
 ## Adding Column Information
 
-In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). In `rtables` the column counts can be added using the `add_colcounts` instruction:
+In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). In `rtables` the column counts can be added using the `add_colcounts` function:
 
 ```{r}
 l <- basic_table() %>%

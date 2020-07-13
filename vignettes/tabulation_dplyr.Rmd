@@ -168,7 +168,8 @@ Although all the information from the final table is available in this data tabl
 In this vignette learned that:
 
 * many tables are quite easily created with `dplyr` and `data.frame` or `tibble` as data structure
+  * `dplyr` keeps simple things simple
 * if tables have group summaries then repeating of information is required
-* often tabulation does not need a specialized framework such as provided by `rtables` but also that `rtables` "keeps simple things simple"
+* `rtables` streamlines the construction of complex tables
 
 We recommend that you continue reading the `clinical_trials` vignette where we create a number of more advanced tables using layouts.
