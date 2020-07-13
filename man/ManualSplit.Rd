@@ -10,7 +10,8 @@ ManualSplit(
   name = "manual",
   extra_args = list(),
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 }
 \arguments{

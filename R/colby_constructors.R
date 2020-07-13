@@ -657,9 +657,10 @@ analyze = function(lyt,
                    ##can we name this na_rm? symbol conflict with possible afuns!!!
                    inclNAs = FALSE, 
                    extra_args = list(),
-                   show_labels = TRUE,
+                   show_labels = c("default", "visible", "hidden"),
                    indent_mod = 0L) {
 
+    show_labels = match.arg(show_labels)
     subafun = substitute(afun)
     if(is.name(subafun) &&
        is.function(afun) &&
@@ -683,7 +684,8 @@ analyze = function(lyt,
                           defrowlab = defrowlab,
                           inclNAs = inclNAs,
                           extra_args = extra_args,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          child_labels = show_labels)
  
     if(nested &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
@@ -758,7 +760,8 @@ analyze_colvars = function(lyt, afun,
                           defrowlab = defrowlab,
                           split_format = format,
                           split_name = get_acolvar_name(lyt),
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          show_varlabel = FALSE)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 
@@ -889,14 +892,16 @@ setGeneric(".add_row_summary",
                     cfun,
                     child_labels = c("default", "visible", "hidden"),
                     cformat = NULL,
-                    indent_mod = 0L) standardGeneric(".add_row_summary"))
+                    indent_mod = 0L,
+                    cvar = "") standardGeneric(".add_row_summary"))
 setMethod(".add_row_summary", "PreDataTableLayouts",
-          function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L) {
+          function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L, cvar = "") {
     child_labels = match.arg(child_labels)
     tmp = .add_row_summary(rlayout(lyt), label, cfun,
                       child_labels = child_labels,
                       cformat = cformat,
-                      indent_mod = indent_mod)
+                      indent_mod = indent_mod,
+                      cvar = cvar)
     rlayout(lyt) = tmp
     lyt
 })
@@ -907,20 +912,23 @@ setMethod(".add_row_summary", "PreDataRowLayout",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         ## XXX ignoring indent mod here
         rt = root_spl(lyt)
-        rt = .add_row_summary(rt, label, cfun, child_labels = child_labels, cformat = cformat)
+        rt = .add_row_summary(rt, label, cfun, child_labels = child_labels, cformat = cformat,
+                              cvar = cvar)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
         tmp = .add_row_summary(lyt[[ind]], label, cfun,
                           child_labels = child_labels,
                           cformat = cformat,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          cvar = cvar)
         lyt[[ind]] = tmp
     }
     lyt
@@ -932,7 +940,8 @@ setMethod(".add_row_summary", "SplitVector",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
@@ -943,7 +952,8 @@ setMethod(".add_row_summary", "SplitVector",
                            cfun,
                            child_labels = child_labels,
                            cformat = cformat,
-                           indent_mod = indent_mod)
+                           indent_mod = indent_mod,
+                           cvar = cvar)
     lyt[[ind]] = tmp
     lyt
 })
@@ -954,11 +964,13 @@ setMethod(".add_row_summary", "Split",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     lbl_kids = .labelkids_helper(child_labels)
     content_fun(lyt) = cfun
     content_indent_mod(lyt) = indent_mod
+    content_var(lyt) = cvar
     obj_format(lyt) = cformat
     if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
         label_kids(lyt) = lbl_kids
@@ -968,11 +980,14 @@ setMethod(".add_row_summary", "Split",
 .count_raw_constr = function(var, format, label_fstr) {
     function(df, labelstr = "") {
         label = sprintf(label_fstr, labelstr)
-        if(!is.null(var))
-            cnt = sum(!is.na(df[[var]]))
-        else
-            cnt = nrow(df)
-
+        if(is(df, "data.frame")) {
+            if(!is.null(var))
+                cnt = sum(!is.na(df[[var]]))
+            else
+                cnt = nrow(df)
+        } else { # df is the data column vector
+            cnt = sum(!is.na(df))
+        }
         ret = rcell(cnt, format = format,
                     label = label)
         
@@ -985,11 +1000,14 @@ setMethod(".add_row_summary", "Split",
 .count_wpcts_constr = function(var, format, label_fstr) {
     function(df, labelstr = "", .N_col) {
         label = sprintf(label_fstr, labelstr)
-        if(!is.null(var))
-            cnt = sum(!is.na(df[[var]]))
-        else
-            cnt = nrow(df)
-
+        if(is(df, "data.frame")) {
+            if(!is.null(var))
+                cnt = sum(!is.na(df[[var]]))
+            else
+                cnt = nrow(df)
+        } else { # df is the data column vector
+            cnt = sum(!is.na(df))
+        }
         ## the formatter does the *100 so we don't here.
         ret = rcell(c(cnt, cnt/.N_col),
                     format = format,
@@ -1029,7 +1047,7 @@ setMethod(".add_row_summary", "Split",
 #' summary(tbl) # summary count is a content table
 #' 
 summarize_row_groups = function(lyt,
-                                var = NULL,
+                                var = "",
                                 label_fstr = "%s",
                                 format = "xx (xx.x%)",
                                 cfun = NULL,
@@ -1044,7 +1062,8 @@ summarize_row_groups = function(lyt,
     .add_row_summary(lyt,
                      cfun = cfun,
                      cformat = format,
-                     indent_mod = indent_mod)
+                     indent_mod = indent_mod,
+                     cvar = var)
 }
 
 

@@ -321,6 +321,11 @@ setMethod("labelrow_visible", "VTableTree",
 setMethod("labelrow_visible", "LabelRow",
           function(obj) obj@visible)
 
+setMethod("labelrow_visible", "AnalyzeVarSplit",
+          function(obj) obj@var_label_visible)
+
+
+
 setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_visible<-"))
 setMethod("labelrow_visible<-", "VTableTree",
           function(obj, value) {
@@ -335,9 +340,15 @@ setMethod("labelrow_visible<-", "LabelRow",
     obj
 })
 
+setMethod("labelrow_visible<-", "AnalyzeVarSplit",
+          function(obj, value) {
+    obj@var_label_visible = value
+    obj
+})
+
 
 ## TRUE is always, FALSE is never, NA is only when no
-## content function is present
+## content function (or rows in an instantiated table) is present
 setGeneric("label_kids", function(spl) standardGeneric("label_kids"))
 setMethod("label_kids", "Split", function(spl) spl@label_children)
 
@@ -366,6 +377,16 @@ setMethod("content_fun<-", "Split", function(object, value) {
     object
 })
 
+
+setGeneric("content_var", function(obj) standardGeneric("content_var"))
+setMethod("content_var", "Split", function(obj) obj@content_var)
+
+
+setGeneric("content_var<-", function(object, value) standardGeneric("content_var<-"))
+setMethod("content_var<-", "Split", function(object, value) {
+    object@content_var = value
+    object
+})
 
 setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
 setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)

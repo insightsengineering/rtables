@@ -10,7 +10,8 @@
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
-  indent_mod = 0L
+  indent_mod = 0L,
+  cvar = ""
 )
 }
 \description{

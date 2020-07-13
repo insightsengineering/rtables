@@ -20,7 +20,8 @@ VarLevelSplit(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 
 VarLevWBaselineSplit(
@@ -33,6 +34,7 @@ VarLevWBaselineSplit(
   label_fstr = "\%s - \%s",
   cfun = NULL,
   cformat = NULL,
+  cvar = "",
   split_format = NULL,
   valorder = NULL,
   split_name = var,

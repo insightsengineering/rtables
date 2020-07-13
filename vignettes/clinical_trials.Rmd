@@ -388,13 +388,14 @@ basic_table() %>%
 We next calculate this information per system organ class:
 
 ```{r}
-basic_table() %>% 
+l <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  split_rows_by("AEBODSYS", child_labels = "visible")  %>%
-  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
-  build_table(ADAE2, col_counts = N_per_arm)
+  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
+#  summarize_row_groups("USUBJID", cfun = s_events_patients)
+  analyze("USUBJID", s_events_patients, show_labels = "hidden")
+  build_table(l, ADAE2, col_counts = N_per_arm)
 ```
 
 **TODO: `show_labels` does not work**. The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation.
@@ -420,8 +421,8 @@ basic_table() %>%
   add_colcounts() %>%
   split_rows_by("AEBODSYS", child_labels = "visible")  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
-  analyze("AEDECOD", list_wrap_x(table), show_labels = FALSE,) %>%
+  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden",) %>%
   build_table(ADAE2, col_counts = N_per_arm)
 ```
 
@@ -434,8 +435,8 @@ basic_table() %>%
   analyze("USUBJID", afun = s_events_patients) %>%
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("USUBJID", s_events_patients, show_labels = FALSE, indent_mod = -1) %>%
-  analyze("AEDECOD", list_wrap_x(table), show_labels = FALSE,) %>%
+  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden",) %>%
   build_table(ADAE2, col_counts = N_per_arm)
 ```
 
@@ -459,7 +460,7 @@ basic_table() %>%
         tbl <- table(x)
         tbl <- tbl[tbl != 0]
         in_rows(.list = as.list(tbl))
-    }, indent_mod = -1, show_labels = FALSE) %>%
+    }, indent_mod = -1, show_labels = "hidden") %>%
   build_table(ADAE2)
 ```
 
@@ -552,13 +553,13 @@ ADRS_BESRSPI <- ex_adrs %>%
 
 basic_table() %>%
   split_cols_by("ARMCD") %>%
-  analyze("rsp", list_wrap_x(table), show_labels = FALSE) %>%
+  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
   analyze("is_rsp", function(x) {
     in_rows(
       rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
       .labels = "95% CI for Response Rates (Clopper-Pearson)"
     )
-  }, show_labels = FALSE) %>%
+  }, show_labels = "hidden") %>%
   build_table(ADRS_BESRSPI)
 ```
 
@@ -576,13 +577,13 @@ ADRS_BESRSPI <- ex_adrs %>%
 
 basic_table() %>%
   split_cols_by("ARMCD") %>%
-  analyze("rsp", list_wrap_x(table), show_labels = FALSE) %>%
+  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
   analyze("is_rsp", function(x) {
     in_rows(
       rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
       .labels = "95% CI for Response Rates (Clopper-Pearson)"
     )
-  }, show_labels = FALSE) 
+  }, show_labels = "hidden") 
 
 
 basic_table() %>%

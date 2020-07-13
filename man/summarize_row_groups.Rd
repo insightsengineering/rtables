@@ -6,7 +6,7 @@
 \usage{
 summarize_row_groups(
   lyt,
-  var = NULL,
+  var = "",
   label_fstr = "\%s",
   format = "xx (xx.x\%)",
   cfun = NULL,

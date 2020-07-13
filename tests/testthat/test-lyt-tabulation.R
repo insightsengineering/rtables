@@ -56,7 +56,7 @@ test_that("complex layout works", {
     expect_identical(dim(tab), c(28L, 4L))
     expect_identical(row.names(tab), expnames)
 })
-F
+
 
 
 
@@ -87,7 +87,7 @@ tab2 = build_table(thing2, rawdat)
     tab3
 })
 
-## It currently sometimes
+
 test_that("labelkids parameter works", {
     yeslabellyt <- NULL %>% split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
@@ -98,7 +98,8 @@ test_that("labelkids parameter works", {
                             labels_var = "fac2_label", child_labels = "visible") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
-                          format = "xx.xx")
+                format = "xx.xx",
+                show_labels = "visible")
 
     tabyes <- build_table(yeslabellyt, rawdat)
 
@@ -119,6 +120,8 @@ test_that("labelkids parameter works", {
                       format = "xx.xx") 
 
     tabmiss <- build_table(misslabellyt, rawdat)
+    expect_identical(row.names(tabmiss)[1:4],
+                     c("Caucasian (n)", "Level A", "mean", "median"))
     
 
     nolabellyt <- NULL %>%
@@ -131,11 +134,48 @@ test_that("labelkids parameter works", {
                             labels_var = "fac2_label", child_labels = "hidden") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
-                          format = "xx.xx")
+                format = "xx.xx",
+                show_labels = "hidden")
 
 
     tabno <- build_table(nolabellyt, rawdat)
+    expect_identical(row.names(tabno)[1:4],
+                     c("Caucasian (n)", "mean", "median", "mean"))
+
+    mixedlyt2 <- NULL %>%
+        split_cols_by("ARM", "Arm") %>%
+        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
+        summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+        split_rows_by("FACTOR2", "Factor2",
+                      split_fun = remove_split_levels("C"),
+                      labels_var = "fac2_label", child_labels = "hidden") %>%
+        analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                               median = median(x)),
+                format = "xx.xx",
+                show_labels = "visible")
     
+    tabmixed2 <- build_table(mixedlyt2, rawdat)
+    expect_identical(row.names(tabmixed2)[1:4],
+                     c("Caucasian (n)", "Age Analysis", "mean", "median"))
+
+    
+    mixedlyt <- NULL %>%
+        split_cols_by("ARM", "Arm") %>%
+        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
+        summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+        split_rows_by("FACTOR2", "Factor2",
+                      split_fun = remove_split_levels("C"),
+                      labels_var = "fac2_label", child_labels = "visible") %>%
+        analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                               median = median(x)),
+                format = "xx.xx",
+                show_labels = "hidden")
+    
+    tabmixed <- build_table(mixedlyt, rawdat)
+    expect_identical(row.names(tabmixed)[1:4],
+                     c("Caucasian", "Caucasian (n)", "Level A", "mean"))
 
 
 })

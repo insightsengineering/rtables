@@ -355,8 +355,8 @@ basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
-  analyze("x", s_mean_sd, show_labels = "FALSE") %>%
-  analyze("x", s_range, show_labels = "FALSE") %>%
+  analyze("x", s_mean_sd, show_labels = "hidden") %>%
+  analyze("x", s_range, show_labels = "hidden") %>%
   build_table(df)
 ```
 
@@ -460,8 +460,8 @@ basic_table() %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
-  analyze("x", s_mean_sd, show_labels = "FALSE") %>%
-  analyze("x", s_range, show_labels = "FALSE") %>%
+  analyze("x", s_mean_sd, show_labels = "hidden") %>%
+  analyze("x", s_range, show_labels = "hidden") %>%
   build_table(df)
 ```
 
@@ -474,8 +474,8 @@ basic_table() %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
-  analyze("x", s_mean_sd, show_labels = "FALSE") %>%
-  analyze("x", s_range, show_labels = "FALSE") %>%
+  analyze("x", s_mean_sd, show_labels = "hidden") %>%
+  analyze("x", s_range, show_labels = "hidden") %>%
   build_table(df)
 ```
 

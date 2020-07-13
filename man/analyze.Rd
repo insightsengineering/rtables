@@ -13,7 +13,7 @@ analyze(
   nested = TRUE,
   inclNAs = FALSE,
   extra_args = list(),
-  show_labels = TRUE,
+  show_labels = c("default", "visible", "hidden"),
   indent_mod = 0L
 )
 }

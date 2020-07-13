@@ -16,7 +16,8 @@ match_extra_args = function(f, .N_col, .N_total, extras) {
 .takes_df = function(f) !is.null(formals(f)) && names(formals(f))[1] == "df"
 
 
-gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) {
+gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
+                     takesdf = .takes_df(func)) {
         inds = eval(csub, envir = dfpart)
 
         dat = dfpart[inds,,drop = FALSE]
@@ -24,7 +25,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) 
         ## if(nrow(dat) == 0L)
         ##     return(list(NULL))
         
-        if(!is.null(col) && !.takes_df(func))
+        if(!is.null(col) && !takesdf)
             dat = dat[[col]]
         args = list(dat)
 
@@ -41,7 +42,8 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra) 
 
 
 
-gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
+gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
+                         takesdf = .takes_df(func)) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
     colextras = cextra_args(cinfo, NULL)
@@ -78,7 +80,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                      MoreArgs = list(dfpart = dfpart,
                                      func = func,
                                      totcount = totcount,
-                                     splextra= splextra),
+                                     splextra= splextra,
+                                     takesdf = takesdf),
     SIMPLIFY= FALSE)
 
     
@@ -103,7 +106,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                            format = NULL,
                            defrowlabs = NULL,
                            rowconstr = DataRow,
-                           splextra = list()) {
+                           splextra = list(),
+                           takesdf = .takes_df(func)) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -115,7 +119,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
         rowvar  = NA_character_
     }
     
-    rawvals = gen_rowvalues(dfpart, datcol, cinfo, func,splextra =  splextra)
+    rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
@@ -180,6 +184,16 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
     trows
 }
 
+## ## THIS IS HORRIBLE!!!!!!!!!!!!
+## ## I don't think I've ever written hackier code in my entire life
+## rename_caller_arg <- function(fun, oldname, newname) {
+##     forms = formals(fun)
+##     formpos = match(names(forms), oldname)
+##     if(is.na(formpos))
+##         stop("the hacky argument renamer for ")
+##     names(forms)[formpos] = newname
+## }
+
 .both_caller = function(pcfun, labelstr) {
     function(df2, .N_col, .N_total, ...) {
         pcfun(df2, labelstr, .N_col = .N_col, .N_total = .N_total, ...)
@@ -234,15 +248,19 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra) {
                       cinfo,
                       parent_cfun = NULL,
                       format = NULL,
-                      indent_mod = 0L) {
+                      indent_mod = 0L,
+                      cvar = NULL) {
 
- 
+    if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
+        cvar = NULL
     if(!is.null(parent_cfun)) {
         contkids = .make_tablerows(df,
                                    lev = lvl,
                                    func = .make_caller(parent_cfun, label), 
                                    cinfo = cinfo,
-                                   rowconstr = ContentRow)
+                                   rowconstr = ContentRow,
+                                   datcol = cvar,
+                                   takesdf = is.null(cvar))
     } else {
         contkids = list()
     }
@@ -305,7 +323,8 @@ recursive_applysplit = function( df,
                                 cinfo,
                                 parent_cfun = NULL,
                                 cformat = NULL,
-                                cindent_mod = 0L) {
+                                cindent_mod = 0L,
+                                cvar = NULL) {
    
 
     ## pre-existing table was added to the layout
@@ -323,7 +342,8 @@ recursive_applysplit = function( df,
                       cinfo = cinfo,
                       parent_cfun = parent_cfun,
                       format = cformat,
-                      indent_mod = cindent_mod)
+                      indent_mod = cindent_mod,
+                      cvar = cvar)
     
     
     if(length(splvec) == 0L) {
@@ -340,7 +360,8 @@ recursive_applysplit = function( df,
                                      spl = spl,
                                      cinfo = cinfo,
                                      lvl = lvl + 1L,
-                                     dolab = isTRUE(make_lrow),
+                                     ##dolab = isTRUE(make_lrow),
+                                     dolab = labelrow_visible(spl),
                                      partlabel = obj_label(spl))##partlabel)
   
             kids = list(ret)
@@ -349,6 +370,8 @@ recursive_applysplit = function( df,
             ##     lab = ""
 
             avspls = spl_payload(spl)
+
+            labkids = label_kids(spl)
             
             kids = lapply(avspls,
                           function(sp) {
@@ -357,8 +380,10 @@ recursive_applysplit = function( df,
                                    cinfo = cinfo,
                                    lvl = lvl + 1L,
                                    partlabel = obj_label(sp),
-                                   dolab = isTRUE(label_kids(spl)) || length(avspls) > 1)}
-                )
+                                   dolab = labelrow_visible(sp)) #isTRUE(labkids ) || (is.na(labkids) && length(avspls) > 1))
+            })
+            ## XXX this seems like it should be identical not !identical
+            ## TODO FIXME
             if(!identical(make_lrow, FALSE) &&
                nrow(ctab) == 0 &&
                length(kids) == 1) {
@@ -399,7 +424,8 @@ recursive_applysplit = function( df,
                                      parent_cfun = content_fun(spl),
                                      cformat = obj_format(spl),
                                      partlabel = label,
-                                     cindent_mod = content_indent_mod(spl))
+                                     cindent_mod = content_indent_mod(spl),
+                                     cvar = content_var(spl))
             }, dfpart = dataspl,
             label = partlabels,
             nm = nms,
@@ -549,7 +575,8 @@ build_table = function(lyt, df,
                       cinfo = cinfo, ##cexprs, ctree,
                       parent_cfun = content_fun(rtspl),
                       format = content_format(rtspl),
-                      indent_mod = 0L)
+                      indent_mod = 0L,
+                      cvar = content_var(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
         if(length(splvec) == 0)
@@ -565,7 +592,8 @@ build_table = function(lyt, df,
                              ## XXX are these ALWAYS right?
                              make_lrow = label_kids(firstspl),
                              parent_cfun = NULL,
-                             cformat = obj_format(firstspl))
+                             cformat = obj_format(firstspl),
+                             cvar = content_var(firstspl))
     })
     kids = kids[!sapply(kids, is.null)]
     if(length(kids) > 0)
