@@ -19,9 +19,16 @@ knitr::opts_chunk$set(comment = "")
 
 ## Introduction
 
-The `rtables` R package provides a framework to create, tabulate and output tables in `R`. Most of the requirements for the design of `rtables` were taken from tables that are commonly used to report analyses from clinical trials, however, we were careful to keep `rtables` a general purpose toolkit. 
+The `rtables` R package provides a framework to create, tabulate and output tables in `R`. Most of the design requirements for `rtables` have their origin in studying tables that are commonly used to report analyses from clinical trials, however, we were careful to keep `rtables` a general purpose toolkit. 
 
-There are a number of other table frameworks available in `R` such as [gt](https://gt.rstudio.com/) from RStudio, [xtable](https://cran.r-project.org/web/packages/xtable/index.html), [tableone](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html) and [tables](https://cran.r-project.org/web/packages/tables/index.html) to name a few. One reason to implement `rtables` was that in order to report clinical trials data the tables are often outputted in ASCII and paginated. `rtables` has further a strong focus on tabulation and organizing and accessing information.
+There are a number of other table frameworks available in `R` such as [gt](https://gt.rstudio.com/) from RStudio, [xtable](https://cran.r-project.org/web/packages/xtable/index.html), [tableone](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html), and [tables](https://cran.r-project.org/web/packages/tables/index.html) to name a few. There are a number of reasons to implement `rtables` (yet another tables R package):
+
+* output tables in ASCII to text files
+* `rtables` has two powerful tabulation frameworks
+* table view (ASCII, HTML, etc.) is separate from the data model. Hence, one always has access to the non-rounded/non-formatted numbers.
+* pagination to meet the health authority submission requirements
+* cell, row, column, table reference system (**TODO: is currently missing**)
+* path based access to cell content which will be useful for automated content generation **TODO: work in progress**
 
 In the remainder of this vignette we give a short introduction into `rtables` and tabulating a table. The content is based on the [useR 2020 presentation from Gabriel Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA).
 
@@ -54,7 +61,7 @@ df <- tibble(
 head(df)
 ```
 
-Note that we use factors so that the level order is represented in the row or column order in the tabulation that will follow.
+Note that we use factors so that the level order is represented in the row or column order in the tabulations that will follow.
 
 
 ## Building an Table
@@ -74,23 +81,16 @@ basic_table() %>%
   build_table(df)
 ```
 
-Please take a moment and think about the information packed in this table:
+Please take a moment and think about the information contained in this table:
 
 * is the layout intuitive
 * what data has been used in which cell
 * which summary functions have been used?
 
 
-* Nested splitting
-  - in row space: `split_rows_by`, `split_rows_by_*`
-  - in column space: `split_cols_by`, `split_cols_by_*`
-* Summarizing Groups: `summarize_row_groups`
-* Analyzing Variables: `analyze`, `analyze_against_ref_group`
-
-
 ## Starting Simple
 
-A basic table has one column representing all data and 0 rows. Analyzing a variable is one way of adding a row:
+In `rtables`basic table is defined to have one column representing all data and 0 rows. Analyzing a variable is one way of adding a row:
 
 ```{r}
 l <- basic_table() %>%
@@ -102,9 +102,9 @@ build_table(l, df)
 
 ### Layout Instructions
 
-Note that in the code above we first describe the table and save that description to a variable `l` and then build the table using actual data with `build_data`. The description of a table is called a table layout. `basic_table` is the start of every table layout and contains the information that we have one column representing all data. The `analyze` instructions add to the layout that the `age` variable should be analyzed with the `mean` analysis function and the result should be rounded to `1` precision.
+In the code above we first described the table and assigned that description to a variable `l`. We then built the table using actual data with `build_table`. The description of a table is called a table layout. `basic_table` is the start of every table layout and contains the information that we have one column representing all data. The `analyze` instruction adds to the layout that the `age` variable should be analyzed with the `mean` analysis function and the result should be rounded to `1` decimal place.
 
-Hence, the layout is "pre-data", that is, we do not need any data to say how to build a table. We can look at the layout isolated: 
+Hence, a layout is "pre-data", that is, we do not need any data to describe how to build a table. Data is only needed when the actual table is constructed with `build_table`. We can look at the layout isolated: 
 
 ```{r}
 l
@@ -112,19 +112,19 @@ l
 
 The general layouting instructions are summarized below:
 
-* `basic_table` for a table with zero rows and one column
+* `basic_table` is a layout representing a table with zero rows and one column
 * Nested splitting
   - in row space: `split_rows_by`, `split_rows_by_*`
   - in column space: `split_cols_by`, `split_cols_by_*`
 * Summarizing Groups: `summarize_row_groups`
 * Analyzing Variables: `analyze`, `analyze_against_baseline`
 
-using those functions it is possible to create a wide variety of tables.
+using those functions it is possible to create a wide variety of tables as we will show in this and the other vignettes in this package.
 
 
 ### Adding Column Structure
 
-We will now continue our table example from above by adding more structure to the columns by splitting column space by the levels in the factor defined by the `arm` variable:
+We will now add more structure to the columns by adding a column split based on the factor variable `arm`:
 
 
 ```{r}
@@ -135,7 +135,9 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-We can continue the column space splitting by adding another `split_cols_by` instruction. By default this will add nested splitting. Here we splitting each arm further by the gender:
+The resulting table has one column per factor level of `arm`. So the data represented by the first column is `df[df$arm == "ARM A", ]`. Hence, the columns partition the data which is also described in the `split_cols_by` layout function. 
+
+Column splitting can be done in a recursive/nested manner by adding sequential `split_cols_by` layout instruction. It's also possible to add a non-nested split. Here we splitting each arm further by the gender:
 
 ```{r}
 l <- basic_table() %>%
@@ -146,11 +148,11 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-So the first column represents the data in `df` where `df$arm == "A" & df$gender == "Female"` and the second column the data in `df` where `df$arm == "A" & df$gender == "Male"` and so on.
+The first column represents the data in `df` where `df$arm == "A" & df$gender == "Female"` and the second column the data in `df` where `df$arm == "A" & df$gender == "Male"` and so on.
 
 ### Adding Row Structure
 
-So far we have added analysis information and column structure to the layout. This resulted with a table that has multiple columns and one analysis / data row. We will now continue to add more row structure by further stratifying the mean analysis by country:
+So far, we have created layouts with analysis instructions (`analyze`) and column splitting (`split_cols_by`). This resulted with a table that has multiple columns and one data row. We will add more row structure by stratifying the mean analysis by country (i.e. adding a split in the row space):
 
 ```{r}
 l <- basic_table() %>%
@@ -162,17 +164,15 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-In this table the data used to derive the first cell (average of age of female canadians in arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`, hence the cell value can also be calculated manually:
+In this table the data used to derive the first data cell (average of age of female canadians in Arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`. This cell value can also be calculated manually:
 
 ```{r}
 mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
 ```
 
-
 ### Adding Group Information
 
-Often the analysis carried out (mean here) is put into context by summarizing the group information such as by adding the number of observations and percentage of the column data is used in the analyis cells. In `rtables` such group summaries are called content information. In the following table we add the count percentage information for each mean analysis. 
-Often a group of dat
+When adding row splits we get by default label rows for each split level, for example `CAN` and `USA` in the table above. That is besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful to add the information the number or observations/data row go into a particular cell/analysis. In `rtables` this is referred to as content information, i.e. `mean` on row 2 is a descendant of `CAN` (visible via the indenting, though the table has an underlaying tree structure that is not of importance for this vignette). In order to add content information and turn the `CAN` label row into a content row the `summarize_row_groups` function is required. By default, the count (`nrows`) and percentage of data relative to the column associated data is calculated:
 
 ```{r}
 l <- basic_table() %>%
@@ -185,7 +185,7 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-Note that group information for average age of female canadians is calculated as follows:
+The relative percentage for average age of female Canadians is calculated as follows:
 
 ```{r}
 df_cell <- subset(df, df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female")
@@ -194,9 +194,9 @@ df_col_1 <- subset(df, df$arm == "Arm A" & df$gender == "Female")
 c(count = nrow(df_cell), percentage = nrow(df_cell)/nrow(df_col_1))
 ```
 
-so the group percentages sum up to 1 for each column. 
+so the group percentages per row split sum up to 1 for each column. 
 
-We can further split the column space by dividing each country by handedness:
+We can further split the row space by dividing each country by handedness:
 
 ```{r}
 l <- basic_table() %>%
@@ -227,7 +227,7 @@ build_table(l, df)
 
 ## Adding Column Information
 
-In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is often referred to as `N`). In `rtables` it is simple to add this information using the `add_colcounts`:
+In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). In `rtables` the column counts can be added using the `add_colcounts` instruction:
 
 ```{r}
 l <- basic_table() %>%
@@ -246,9 +246,9 @@ build_table(l, df)
 
 ## Summary
 
-In this vignette you have learned a number of things:
+In this vignette you have learned:
 
-* cells represent an analysis or summary on a subset of the overall data
+* every cell has an associated subset of data
    * this means that much of tabulation has to do with splitting/subsetting data
 * tables can be described pre-data using layouts
 * tables are a form of visualization of data
