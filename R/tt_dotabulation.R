@@ -33,10 +33,13 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                  match_extra_args(func, count, totcount, extras = c(cextr, splextra)))
         
         val = do.call(func, args)
-        if(is.list(val))
+        if(is.list(val)) {
             ret = lapply(val, rcell)
-        else
+            if(length(ret) == 1)
+                ret = ret[[1]]
+        } else {
             ret = rcell(val)
+        }
         ret
 }
 

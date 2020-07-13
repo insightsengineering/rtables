@@ -1355,8 +1355,7 @@ basic_table <- function() NULL
 #'   }) %>%
 #'   build_table(ex_adsl)
 #' 
-in_rows <- function(..., .list, .names, .labels) {
-    if (missing(.list)) .list <- NULL
+in_rows <- function(..., .list = NULL, .names, .labels) {
     
     l <- c(list(...), .list)
     
