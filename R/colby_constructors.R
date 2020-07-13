@@ -981,7 +981,7 @@ setMethod(".add_row_summary", "Split",
     function(df, labelstr = "") {
         label = sprintf(label_fstr, labelstr)
         if(is(df, "data.frame")) {
-            if(!is.null(var))
+            if(!is.null(var) && nzchar(var))
                 cnt = sum(!is.na(df[[var]]))
             else
                 cnt = nrow(df)
@@ -1001,7 +1001,7 @@ setMethod(".add_row_summary", "Split",
     function(df, labelstr = "", .N_col) {
         label = sprintf(label_fstr, labelstr)
         if(is(df, "data.frame")) {
-            if(!is.null(var))
+            if(!is.null(var) && nzchar(var))
                 cnt = sum(!is.na(df[[var]]))
             else
                 cnt = nrow(df)
