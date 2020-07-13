@@ -13,7 +13,9 @@ editor_options:
 
 ## Introduction
 
-`rtable` objects are based on a tree data structure. However, the package is written such that the user does not need to walk trees and it is rarely required to understand the actual tree structure. In this vignette we show some methods to subset tables and to extract cell values.
+`rtable` objects are based on a tree data structure. However, the package is written such that the user does not need to walk trees for many basic table manipulations. Walking trees will still be necessary for certain manipulation and will be the subject of a different vignette.
+
+In this vignette we show some methods to subset tables and to extract cell values.
 
 We will use the following table for illustrative purposes:
 
@@ -23,33 +25,43 @@ library(dplyr)
 
 tbl <- basic_table() %>%
   split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  analyze(c("AGE", "STRATA1", "STRATA2", "BMRKR1", "BMRKR2"), rtab_inner) %>%
-  build_table(ex_adsl)
+  split_rows_by("SEX", split_fun = drop_split_levels) %>%
+  analyze(c("AGE", "STRATA1")) %>%
+  build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
+
+tbl
 ```
 
-**TODO: fix formatting**.
+and another table
 
-The `[` ancestor function always returns an rtable object. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
+```{r}
+tbl2 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("SEX", split_fun = drop_split_levels) %>%
+  analyze(c("AGE", "STRATA1")) %>%
+  build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
+
+tbl2
+```
+
+The `[` accessor function always returns an rtable object if not stated otherwise using `drop=TRUE`. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
 
 ```{r}
 tbl[1, 1]
 ```
 
-because the first row is a label row. We need to access a cell with actual content:
+is empty  because the first row is a label row. We need to access a cell with actual cell data:
 
 ```{r}
-tbl[2, 1]
+tbl[3, 1]
 ```
-
 
 which is another rtable and not an `rcell`. If we wanted the `rcell` we need to use the `drop` argument:
 
 ```{r}
-tbl[2, 1, drop = TRUE]
+tbl[3, 1, drop = TRUE]
 ```
 
-**TODO: though now we have also dropped the format**. 
 
 One can access multiple rows and columns:
 
@@ -57,7 +69,8 @@ One can access multiple rows and columns:
 tbl[1:3, 1:2]
 ```
 
-**TODO: we have lost the label row**. Note that we do not repeat label rows for descending children, e.g.
+
+Note that we do not repeat label rows for descending children, e.g.
 
 ```{r}
 tbl[2:4, ]

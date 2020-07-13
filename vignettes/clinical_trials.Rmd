@@ -67,7 +67,7 @@ Hence, if `afun` can process different data vector types (i.e. variables selecte
 
 
 ```{r}
-s_summary <- function(x, lblstr, ...) {
+s_summary <- function(x) {
   if (is.numeric(x)) {
     in_rows(
       "n" = rcell(sum(!is.na(x)), format = "xx"),
@@ -127,7 +127,9 @@ which leads to the identical table as `tbl1`:
 identical(tbl, tbl2)
 ```
 
-**TODO: why is it not identical?**
+```{r, echo=FALSE}
+stopifnot(identical(tbl, tbl2))
+```
 
 In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). Column `N`s are added using the `add_colcounts` function:
 
@@ -181,17 +183,49 @@ basic_table() %>%
 
 Note that the `UNDIFFERENTIATED` and `U` level still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function. If empty levels should be dropped then the `split_*` function needs to know that via the  `split_fun` argument which excepts a splitting function, i.e. `drop_split_levels` here. Splitting is a bigger topic and we will address this in another vignette in more details. 
  
+ 
 ```{r}
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
   add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
-  analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", s_summary, nested = FALSE) %>%
+  analyze(c("AGE", "BMRKR2"), s_summary) %>%
   build_table(ADSL_M_F) 
 ```
 
-**TODO: We need to show the label for `SEX` and `BMRKR2`**
+
+Also, `M` and `F` are not very descriptive, you can add the full label with:
+
+```{r}
+ADSL_M_F_l <- ADSL_M_F %>% 
+  mutate(lbl_sex = case_when(
+    SEX == "M" ~ "Male",
+    SEX == "F" ~ "Female",
+    SEX == "U" ~ "Unknown",
+    SEX == "UNDIFFERENTIATED" ~ "Undifferentiated"
+  ))
+
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
+  analyze(c("AGE", "BMRKR2"), s_summary) %>%
+  build_table(ADSL_M_F_l)
+```
+
+**TODO: `labels_var` is not working**.
+
+If we only want to stratify by gender for the `AGE` analyis one can do this using the `nested` argument:
+
+```{r}
+basic_table() %>% 
+  split_cols_by(var = "ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
+  analyze("AGE", s_summary, show_labels = "visible") %>%
+  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible") %>%
+  build_table(ADSL_M_F) 
+```
 
 Once we split the rows into groups (`M` and `F` here) one might want to summarize groups usually by showing count and column percentages. This is especially important if we have missing data. For example for:
 
@@ -210,7 +244,7 @@ basic_table() %>%
   add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", s_summary, nested = FALSE) %>%
+  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible") %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
@@ -220,25 +254,25 @@ Here it is not easy to see how many females and males there are in each arm as `
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
   add_colcounts() %>%
-  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+  split_rows_by("SEX", split_fun = drop_split_levels) %>%
   summarize_row_groups()  %>% 
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", afun = s_summary, nested = FALSE) %>%
+  analyze("BMRKR2", afun = s_summary, nested = FALSE,  show_labels = "visible") %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
-There are a couple of things to note here. We have changed `child_labels` to `"hidden"` (**TODO: not so sure why**). Next, group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination. Conceptually the content rows summarize the patient population which is analyzed and hence is often the count & group percentages (default behavior of `summarize_row_groups`). We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
+There are a couple of things to note here. Group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination. Conceptually the content rows summarize the patient population which is analyzed and hence is often the count & group percentages (default behavior of `summarize_row_groups`). We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
 
 ```{r}
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
   add_colcounts() %>%
-  split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+  split_rows_by("SEX", split_fun = drop_split_levels) %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
     rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)", label = labelstr)
   })  %>% 
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  analyze("BEP01FL", afun = s_summary, nested = FALSE,  show_labels = "visible") %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
@@ -380,7 +414,6 @@ Let's use this summary function in a table:
 basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  add_colcounts() %>%
   analyze("USUBJID", s_events_patients) %>%
   build_table(ADAE2)
 ```
@@ -408,56 +441,86 @@ We next calculate this information per system organ class:
 l <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
+  analyze("USUBJID", s_events_patients) %>%
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
-#  summarize_row_groups("USUBJID", cfun = s_events_patients)
-  analyze("USUBJID", s_events_patients, show_labels = "hidden")
+  summarize_row_groups("USUBJID", cfun = s_events_patients)
   build_table(l, ADAE2, col_counts = N_per_arm)
 ```
 
-**TODO: `show_labels` does not work**. The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation.
 
-We have now the add a count table of `AEDECOD` for each `AEBODSYS`. For example, 
+
+We now have to the add a count table of `AEDECOD` for each `AEBODSYS`. The defaulty `analyze` behaviour for a factor is to create the count table per level (using `rtab_inner`):
+
+```{r}
+tbl1 <- basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("AEBODSYS", child_labels = "visible")  %>%
+  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+  analyze("AEDECOD", show_labels = "hidden", indent_mod = -1) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+
+tbl1
+```
+
+The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation.
+
+To illustrate custom analyses function we will now rectreate this behavior.
+
+The `table` function gets us already fairly close to the counts needed in the AE table:
 
 ```{r}
 table(ADAE2$AEDECOD)
 ```
 
-gets us already fairly close. Unfortunately we cannot use `analyze("USUBJID", afun = table)` as we expect multiple rows defined by `in_rows` and `table` returns a table. `rtables` provides the `list_wrap_x` function with takes a function `f` and an argument and then coerces the return value of `f` to a list:
+Unfortunately we cannot use `analyze("USUBJID", afun = table)` as we expect multiple rows defined by `in_rows` and `table` returns a table. Currently if your `afun` or `cfun` returns a list (test with `is.list`) then each list element is wrapped into an `rcell` and defines a row and thus placed on a seperate row. All other return types of `afun`/`cfun` are taken as defining a single row (and also wrapped in an `rcell`) regardless of their length. This is an implementation detail that is subject to change. It is safest to use `in_rows` whenever an analysis or content function needs to generate muliple rows. **TODO: rename `list_warp` to `muli_row_wrap` or something similar**.
+
+`rtables` provides the `list_wrap_x` function with takes a function `f` and an argument and then coerces the return value of `f` to a list:
 
 ```{r}
 lwtable <- list_wrap_x(table)
 lwtable(x = ADAE2$AEDECOD)
 ```
 
-Note that the `_x` in the `list_wrap` function names translates to the argument name of the wrapped function.  `analyze` processes a list `l` with `do.call(in_rows, l)`, hence every named list element is turned into a row. **TODO: this needs to be discussed further**. A complete adverse events table is the defined as follows:
+Note that the `_x` in the `list_wrap` function name translates to the argument name of the wrapped function. 
+
+Thus we have re-created the AE table from above with our custom count function is:
 
 ```{r}
-basic_table() %>% 
+tbl2 <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
   split_rows_by("AEBODSYS", child_labels = "visible")  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
-  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden") %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden", indent_mod = -1) %>%
   build_table(ADAE2, col_counts = N_per_arm)
+
+tbl2
 ```
 
-Note that we are missing the overall summary. This can be added with another `analyze` call and then setting `nested = FALSE` in the subsequent `summarize_row_groups` call (**TODO: though that is not intuitive**):
+where
+
+```{r}
+identical(tbl1, tbl2)
+```
+
+```{r, echo=FALSE}
+stopifnot(identical(tbl1, tbl2))
+```
+
+Note that we are missing the overall summary. This can be added with another `analyze` call and then setting `nested = FALSE` in the subsequent `summarize_row_groups` call (**TODO: though that is not intuitive we will likely change that** as it does not make sense in the layout framwork to nest a split in an analyisis and currently the `nested` argument needs to be explicit):
 
 ```{r}
 basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  analyze("USUBJID", afun = s_events_patients) %>%
+  analyze("USUBJID", afun = s_events_patients) %>% 
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("USUBJID", s_events_patients, show_labels = "hidden", indent_mod = -1) %>%
-  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden",) %>%
+  analyze("AEDECOD", show_labels = "hidden", indent_mod = -1) %>%
   build_table(ADAE2, col_counts = N_per_arm)
 ```
 
-**TODO: here `cfun` takes a function with only `x` as an argument, so `cfun` allows `x` and `df` as an argument.**
 
 ### Adverse Events By ID and By Grade
 
@@ -465,23 +528,20 @@ For this table we do not show the zero count grades. Note that we add overall gr
 
 ```{r}
 basic_table() %>% 
-    split_cols_by("ARM") %>%
-    add_colcounts() %>%
-    split_rows_by("AEBODSYS", 
-                  split_fun = add_overall_level("- All AEBODSYS -"), 
-                  child_labels = "visible") %>%
-    split_rows_by("AEDECOD", split_fun = add_overall_level("- All AEDECOD -", trim = TRUE),
-                  child_labels = "visible")  %>%
-    summarize_row_groups(label_fstr = "- Any Grade -") %>%
-    analyze("AETOXGR", afun = function(x, ...) {
-        tbl <- table(x)
-        tbl <- tbl[tbl != 0]
-        in_rows(.list = as.list(tbl))
-    }, indent_mod = -1, show_labels = "hidden") %>%
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  analyze("AETOXGR", afun = function(x) {
+    in_rows(
+      "--Any Grade--" = sum(!is.na(x)),
+      .list = as.list(table(x))
+    )
+  }, var_labels = "--All AEBODSYS--", show_labels = "visible") %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE) %>%
+  split_rows_by("AEDECOD", split_fun = add_overall_level("--All AEDECOD--", trim = TRUE), child_labels = "visible")  %>%
+  summarize_row_groups(label_fstr = "--Any Grade--") %>%
+  analyze("AETOXGR", indent_mod = -1, show_labels = "hidden") %>%
   build_table(ADAE2)
 ```
-
-**TODO: labels are wrong**
 
 ## Disposition Table
 
@@ -580,13 +640,11 @@ basic_table() %>%
   build_table(ADRS_BESRSPI)
 ```
 
-
-**TODO: where did the `format` go?**
-
-This did not require any new knowledge. The next addition requires the specification of reference column (arm). 
+**TODO: I will finish this example this week**
 
 
-```{r, eval = FALSE}
+
+```{r, eval = FALSE, echo=FALSE}
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
   mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
