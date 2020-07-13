@@ -35,8 +35,12 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
         val = do.call(func, args)
         if(is.list(val)) {
             ret = lapply(val, rcell)
-            if(length(ret) == 1)
+            if(length(ret) == 1) {
+                nm = names(ret)
                 ret = ret[[1]]
+                if(is.null(obj_label(ret)))
+                    obj_label(ret) = nm
+            }
         } else {
             ret = rcell(val)
         }

@@ -289,6 +289,11 @@ setMethod("obj_label<-", "TableRow",
     obj@label = value
     obj
 })
+setMethod("obj_label<-", "CellValue",
+          function(obj, value){
+    obj@label = value
+    obj
+})
 
 setMethod("obj_label<-", "VTableTree",
           function(obj, value) {

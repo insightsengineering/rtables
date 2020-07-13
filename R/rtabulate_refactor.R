@@ -26,11 +26,11 @@ setGeneric("rtab_inner", function(x, ...) standardGeneric("rtab_inner"))
 
 #' @rdname rtinner
 #' @exportMethod rtab_inner
-setMethod("rtab_inner", "numeric", function(x, ...) mean(x,...))
+setMethod("rtab_inner", "numeric", function(x, ...) in_rows("Mean" = rcell(mean(x,...), format = "xx.xx")))
 
 #' @rdname rtinner
 #' @exportMethod rtab_inner
-setMethod("rtab_inner", "logical", function(x, ...) sum(x,...))
+setMethod("rtab_inner", "logical", function(x, ...) in_rows("Count" = rcell(sum(x,...), format = "xx")))
 
 #' @rdname rtinner
 #' @exportMethod rtab_inner
