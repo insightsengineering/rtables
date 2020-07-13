@@ -17,12 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-There are a number of ways tabulating data
-
-* layout based tabulation as defined in `rtables`
-* use the `rtabulate` framework
-* use use other means like `dplyr` to derive the numbers for a table (see the `tabulation_dplyr` vignette)
-
+In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using 
 
 For this vignette we will use the following packages:
 
@@ -32,13 +27,13 @@ library(tibble)
 library(rtables)
 ```
 
-... and following data:
+The data we use is the following one created with random number generators:
 
 ```{r}
-add_subgroup <- function(x) {
-  paste0(tolower(x), sample(1:3, length(x), TRUE))
-}
+add_subgroup <- function(x) paste0(tolower(x), sample(1:3, length(x), TRUE))
+
 set.seed(1)
+
 df <- tibble(
   x = rnorm(100),
   c1 = factor(sample(c("A", "B", "C"), 100, replace = TRUE), levels = c("A", "B", "C")),
@@ -56,7 +51,7 @@ df
 
 ## Building A Table Row By Row
 
-Let's look at another pattern:
+Let's look at a table that has 3 columns and 3 rows. Each row represents a different analysis (functions `foo`, `bar`, `zoo` that return an `rcell` object):
 
 ```
                      A         B         C
@@ -66,7 +61,7 @@ bar_label        bar(df_A)  bar(df_B)  bar(df_C)
 zoo_label        zoo(df_A)  zoo(df_B)  zoo(df_C)
 ```
 
-note that now the rows represent different analyses for the subset defined by the respective column and:
+The data passed to the analysis functions are a subset defined by the respective column and:
 
 ```{r}
 df_A <- df %>% filter(c1 == "A")
@@ -74,8 +69,7 @@ df_B <- df %>% filter(c1 == "B")
 df_C <- df %>% filter(c1 == "C")
 ```
 
-
-Let's do this first with `analyze`:
+Let's do this on the concrete data with `analyze`:
 
 ```{r}
 foo <- prod
@@ -92,7 +86,7 @@ basic_table() %>%
 
 **TODO: why are the labels showing up twice?**
 
-of if we wanted
+of if we wanted the `x` variable instead of the data frame:
 
 ```
                      A         B         C
@@ -105,12 +99,12 @@ zoo_label        zoo(x_A)  zoo(x_B)  zoo(x_C)
 where
 
 ```{r}
-x_A <- df$x[df$c1 == "A"]
-x_B <- df$x[df$c1 == "B"]
-x_C <- df$x[df$c1 == "C"]
+x_A <- df_A$x
+x_B <- df_B$x
+x_C <- df_C$x
 ```
 
-we can do this less verbose as the `afun` gets the subset of the specified variable if `afun` has an argument `x`:
+The function passed to `afun` is evaluated using argument matching, if `afun` has an argument `x` the analysis variable specified in `vars` in `analyze` is passed to the function and if `afun` has an argument `df` then set subset of the dataset is passed to `afun`. So,
 
 ```{r}
 basic_table() %>%
@@ -120,7 +114,6 @@ basic_table() %>%
   analyze("x", zoo, var_labels = "zoo label", format = "xx.xx") %>%
   build_table(df)
 ```
-
 
 Note that it is also possible that a function returns multiple rows with `in_rows`
 
@@ -142,7 +135,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-which sheds some light from where the row names come from.
+which is how we recommend to specify the row names explicitly.
 
 ## Tabulation With Row Structure
 
