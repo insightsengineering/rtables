@@ -1,7 +1,3 @@
-
-
-setMethod("nrow", "ElementaryTable",
-          function(x) length(tree_children(x)))
 ## XXX Do we want add.labrows here or no?
 ## we have to choose one and stick to it.
 setMethod("nrow", "VTableTree",

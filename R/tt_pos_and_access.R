@@ -405,7 +405,7 @@ subset_by_rownum = function(tt, i, ... ) {
     
     prune_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)
-        if(counter >= maxi)
+        if(counter > maxi)
             return(valifnone)
         
         if(labelrow_visible(x)) {
@@ -426,7 +426,7 @@ subset_by_rownum = function(tt, i, ... ) {
                                                valifnone = ElementaryTable(cinfo = col_info(ctab), iscontent = TRUE))
         }
         kids = tree_children(x)
-        if(counter >= maxi) { #already done
+        if(counter > maxi) { #already done
             kids = list()
         } else if(length(kids) > 0) {
             for(pos in seq_along(kids)) {
@@ -439,13 +439,13 @@ subset_by_rownum = function(tt, i, ... ) {
                     kids[[pos]] = prune_rowsbynum(kids[[pos]], i, list())
                 }
             }
-            kids = kids[sapply(kids, function(x) length(x) > 0)]
+            kids = kids[sapply(kids, function(x) NROW(x) > 0)]
         }
         tree_children(x) = kids
-        if(length(kids) == 0) {
-            if(!is(x, "TableTree"))
-                return(valifnone)
-        }
+        ## if(length(kids) == 0) {
+        ##     if(!is(x, "TableTree"))
+        ##         return(valifnone)
+        ## }
         if(is(x, "VTableTree") && nrow(x) > 0) {
             x
         } else {
