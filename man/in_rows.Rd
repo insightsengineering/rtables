@@ -4,7 +4,7 @@
 \alias{in_rows}
 \title{Create multiple rows in analysis or summary functions}
 \usage{
-in_rows(..., .list, .names, .labels)
+in_rows(..., .list = NULL, .names, .labels)
 }
 \arguments{
 \item{...}{single row defining expressions}

@@ -15,6 +15,11 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
 ## Introduction
 
 In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using 
@@ -352,8 +357,6 @@ basic_table() %>%
   analyze("x", s_range, show_labels = "hidden") %>%
   build_table(df)
 ```
-
-**TODO: remove x label, what happened to the formats?**.
 
 Which has the following structure:
 

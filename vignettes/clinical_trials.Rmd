@@ -286,7 +286,7 @@ basic_table() %>%
     rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)", label = paste(labelstr, " count (perc.)"))
   })  %>% 
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", afun = s_summary, nested = FALSE) %>%
+  analyze("BEP01FL", s_summary, nested = FALSE, show_labels = "visible") %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F"))) 
 ```
 
