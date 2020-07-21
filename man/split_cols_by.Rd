@@ -76,7 +76,7 @@ build_table(l4, DM)
 l5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", split_fun= drop_split_levels) \%>\%
  analyze("AGE") \%>\%
- split_rows_by("RACE", nested=TRUE, split_fun = drop_split_levels) \%>\%
+ split_rows_by("RACE", nested=FALSE, split_fun = drop_split_levels) \%>\%
  analyze("AGE")
 
 l5

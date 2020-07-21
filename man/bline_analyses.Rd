@@ -9,11 +9,12 @@ analyze_against_ref_group(
   lyt,
   var = NA_character_,
   afun,
-  label = "",
+  label = if (is.na(var)) "" else var,
   compfun = `-`,
   format = NULL,
   nested = TRUE,
-  indent_mod = 0L
+  indent_mod = 0L,
+  show_labels = c("default", "hidden", "visible")
 )
 
 analyze_against_ref_group_2dtable(

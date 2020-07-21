@@ -307,11 +307,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            lev = lvl + 1L,
                            format = obj_format(spl),
                            splextra = split_exargs(spl))
-    vis = TRUE
-    if(dolab && (!didlab || !identical(obj_label(spl), sapply(kids, obj_name))))
-        lab = obj_label(spl)
-    else
-        lab = ""
+    lab = obj_label(spl)
     ret = TableTree(kids = kids,
               name = obj_name(spl),
               label = lab,
@@ -319,6 +315,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
               cinfo = cinfo,
               format = obj_format(spl),
               indent_mod = indent_mod(spl))
+    labelrow_visible(ret) = dolab
     ret
 }
 
@@ -377,19 +374,23 @@ recursive_applysplit = function( df,
             names(kids) = obj_name(ret)
         } else if(is(spl, "AnalyzeMultiVars")) { ## full depth multiple analyze vars
             ##     lab = ""
-
+            
             avspls = spl_payload(spl)
 
             labkids = label_kids(spl)
+            nspl = length(avspls)
             
             kids = lapply(avspls,
                           function(sp) {
+                spvis = labelrow_visible(sp)
+                if(is.na(spvis))
+                    spvis = nspl > 1
                 .make_analyzed_tab(df = df,
                                    spl = sp,
                                    cinfo = cinfo,
                                    lvl = lvl + 1L,
                                    partlabel = obj_label(sp),
-                                   dolab = labelrow_visible(sp)) #isTRUE(labkids ) || (is.na(labkids) && length(avspls) > 1))
+                                   dolab = spvis ) ##labelrow_visible(sp)) #isTRUE(labkids ) || (is.na(labkids) && length(avspls) > 1))
             })
             ## XXX this seems like it should be identical not !identical
             ## TODO FIXME
@@ -569,8 +570,9 @@ build_table = function(lyt, df,
         clayout(lyt) = clyt
     }
     lyt = fix_dyncuts(lyt, df)
-    rtpos = TreePos()
     lyt = set_def_child_ord(lyt, df)
+    lyt = fix_analyze_vis(lyt)
+    rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts)
     if(!is.null(col_counts))
@@ -725,13 +727,49 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     }
 }
 
+## now that we know for sure the number of siblings
+## collaplse NAs to TRUE/FALSE for whether
+## labelrows should be visible for ElementaryTables
+## generatead from analyzing a single variable
+setGeneric("fix_analyze_vis", function(lyt) standardGeneric("fix_analyze_vis"))
+setMethod("fix_analyze_vis", "PreDataTableLayouts",
+          function(lyt) {
+    rlayout(lyt) = fix_analyze_vis(rlayout(lyt))
+    lyt
+})
+setMethod("fix_analyze_vis", "PreDataRowLayout",
+          function(lyt) {
+    splvecs = lapply(lyt, fix_analyze_vis)
+    PreDataRowLayout(root = root_spl(lyt),
+                     lst = splvecs)
+})
 
-
+setMethod("fix_analyze_vis", "SplitVector",
+          function(lyt) {
+    len = length(lyt)
+    lastspl = lyt[[len]]
+    if(len == 0 || ! (is(lastspl, "AnalyzeVarSplit") ||
+                      is(lastspl, "AnalyzeMultivar")))
+        return(lyt)
+    if(is(lastspl, "AnalyzeVarSplit") && is.na(labelrow_visible(lastspl)))
+        labelrow_visible(lastspl) = FALSE
+    else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
+        pld = spl_payload(lastspl)
+        newpld = lapply(pld, function(sp, havesibs) {
+            if(is.na(labelrow_visible(sp)))
+                labelrow_visible(sp) = havesibs
+        }, havesibs = len > 1)
+        spl_payload(lastspl) = newpld
+        ## pretty sure this isn't needed...
+        if(is.na(label_kids(lastspl)))
+            label_kids(lastspl) = len > 1
+    }
+    lyt[[len]] = lastspl
+    lyt
+})
 
 
 setGeneric("build_splits_expr", function(lyt, df, curexpr) standardGeneric("build_splits_expr"))
-
-
 
 
 setGeneric("expr_stubs", function(spl, df) standardGeneric("expr_stubs"))

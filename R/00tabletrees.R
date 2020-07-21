@@ -502,6 +502,10 @@ AnalyzeMultiVars = function(var,
                             child_labels = c("default", "visible", "hidden"),
                             cvar = ""
                             ) {
+    ## NB we used to resolve to strict TRUE/FALSE for label visibillity
+    ## in this function but that was too greedy for repeated
+    ## analyze calls, so that now occurs in the tabulation machinery
+    ## when the table is actually being built.
     show_kidlabs = .labelkids_helper(match.arg(child_labels))
     if(is.null(.payload)) {
         nv = length(var)
@@ -522,10 +526,12 @@ AnalyzeMultiVars = function(var,
                      split_format = split_format,
                      inclNAs = inclNAs,
                      MoreArgs = list(extra_args = extra_args,
-                                     indent_mod = indent_mod),
+                                     indent_mod = indent_mod,
+                                     show_varlabel = show_kidlabs),##rvis),
                      SIMPLIFY = FALSE)
     } else {
-        .payload = unlist(lapply(.payload,
+        ## we're combining existing splits here
+        pld = unlist(lapply(.payload,
                                  function(x) {
             if(is(x, "CompoundSplit")) {
                 spl_payload(x)
@@ -533,19 +539,30 @@ AnalyzeMultiVars = function(var,
                 x
             }
         }))
-        pld = .payload
+        ## only override the childen being combined if the constructor
+        ## was passed a non-default value for child_labels
+        ## and the child was at NA before
+        pld = lapply(pld,
+                     function(x) {
+            rvis = labelrow_visible(x)
+            if(!is.na(show_kidlabs)) {
+                if(is.na(rvis))
+                    rvis = show_labkids
+            }
+            labelrow_visible(x) = rvis
+            x
+        })
     }
     if(length(pld) == 1) {
         ret = pld[[1]]
-        labelrow_visible(ret) <- isTRUE(show_kidlabs)
      } else {
          if(is.null(split_name))
              split_name = paste(.payload, collapse = ":")
-         pld = lapply(pld,
-                      function(pldspl) {
-             labelrow_visible(pldspl) <- !identical(show_kidlabs, FALSE)
-             pldspl
-         })
+         ## pld = lapply(pld,
+         ##              function(pldspl) {
+         ##     labelrow_visible(pldspl) <- !identical(show_kidlabs, FALSE)
+         ##     pldspl
+         ## })
          
          ret = new("AnalyzeMultiVars",
                    payload = pld,
@@ -1305,6 +1322,8 @@ SplitVector = function(x = NULL,
 }
 
 avar_noneorlast = function(vec) {
+    if(!is(vec, "SplitVector"))
+        return(FALSE)
     if(length(vec) == 0)
         return(TRUE)
     isavar = which(sapply(vec, is, "AnalyzeVarSplit"))
@@ -1316,8 +1335,12 @@ avar_noneorlast = function(vec) {
 setClass("PreDataAxisLayout", contains = "list",
          representation(root_split = "ANY"),
          validity = function(object) {
-     allleafs = unlist(object, recursive = TRUE)
-     all(sapply(object, is, "SplitVector")) && all(sapply(allleafs, is, "Split")) && all(sapply(object, avar_noneorlast))
+    allleafs = unlist(object, recursive = TRUE)
+    all(sapply(object, avar_noneorlast)) &&
+        all(sapply(allleafs,
+                   ## remember existing table trees can be added to layouts
+                   ## for now...
+                   function(x) is(x, "Split") || is(x, "VTableTree")))
 })
 
 
