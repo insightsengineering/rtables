@@ -441,16 +441,21 @@ subset_by_rownum = function(tt, i, ... ) {
             }
             kids = kids[sapply(kids, function(x) NROW(x) > 0)]
         }
-        tree_children(x) = kids
-        ## if(length(kids) == 0) {
-        ##     if(!is(x, "TableTree"))
-        ##         return(valifnone)
-        ## }
-        if(is(x, "VTableTree") && nrow(x) > 0) {
+        if(length(kids) == 0 && !labelrow_visible(x))
+            return(valifnone)
+        else {
+            tree_children(x) = kids
             x
-        } else {
-            valifnone
         }
+        ## ## if(length(kids) == 0) {
+        ## ##     if(!is(x, "TableTree"))
+        ## ##         return(valifnone)
+        ## ## }
+        ## if(is(x, "VTableTree") && nrow(x) > 0) {
+        ##     x
+        ## } else {
+        ##     valifnone
+        ## }
     }
     prune_rowsbynum(tt, i)
 }
