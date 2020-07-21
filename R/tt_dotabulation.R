@@ -1,7 +1,9 @@
 
-match_extra_args = function(f, .N_col, .N_total, extras) {
+match_extra_args = function(f, .N_col, .N_total, var, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
+    if(!is.null(var))
+        possargs = c(possargs, list(var = var))
     formargs = formals(f)
     formnms = names(formargs)
     if(is.null(formargs))
@@ -30,7 +32,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
         args = list(dat)
 
         args = c(args,
-                 match_extra_args(func, count, totcount, extras = c(cextr, splextra)))
+                 match_extra_args(func, count, totcount, var = col,  extras = c(cextr, splextra)))
         
         val = do.call(func, args)
         if(is.list(val)) {
