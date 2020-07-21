@@ -776,11 +776,13 @@ analyze_colvars = function(lyt, afun,
 #' @rdname bline_analyses
 analyze_against_ref_group = function(lyt, var = NA_character_,
                                     afun,
-                                    label = "",
+                                    label = if(is.na(var)) "" else var,
                                    compfun = `-`,
                                   format = NULL,
                                   nested = TRUE,
-                                  indent_mod = 0L) {
+                                  indent_mod = 0L,
+                                  show_labels = c("default", "hidden", "visible")) {
+    show_labels = match.arg(show_labels)
     if(is.character(afun)) {
         afnm = afun
         afun = get(afun, mode = "function")
@@ -821,7 +823,8 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                           afun = afun2,
                           split_format = format,
                           defrowlab = defrowlab,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          show_varlabel = .labelkids_helper(show_labels))
     if(nested &&
        (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {

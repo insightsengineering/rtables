@@ -185,9 +185,9 @@ test_that("labelkids parameter works", {
 test_that("ref_group comparisons work", {
     
     blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
-        analyze("AGE", mean, var_labels = "") %>%
+        analyze("AGE", mean, var_labels = "", show_labels = "hidden") %>%
         analyze_against_ref_group(var = "AGE",
-                                  mean)
+                                  mean, show_labels = "hidden")
     ## function(x) list(mean = mean(x)))
     
     
