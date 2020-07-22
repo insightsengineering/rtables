@@ -513,21 +513,49 @@ basic_table() %>%
 For this table we do not show the zero count grades. Note that we add overall groups with a custom split function. 
 
 ```{r}
+table_count_grade_once_per_id <- function(df, labelstr = "", gradevar = "AETOXGR", idvar = "USUBJID", grade_levels = NULL, na.rm = TRUE) {
+  
+  id <- df[[idvar]]
+  grade <- df[[gradevar]]
+  
+  if (!is.null(grade_levels)) {
+    stopifnot(all(grade %in% grade_levels))
+    grade <- factor(grade, levels = grade_levels)
+  }
+  
+  if (na.rm) grade <- na.omit(grade)
+  
+  id_sel <- !duplicated(id)
+  
+  in_rows(
+      "--Any Grade--" = sum(id_sel),
+      .list =  as.list(table(grade[id_sel]))
+    )
+}
+
+table_count_grade_once_per_id(ex_adae, grade_levels = 1:5)
+```
+
+
+```{r}
 basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  analyze("AETOXGR", afun = function(x) {
-    in_rows(
-      "--Any Grade--" = sum(!is.na(x)),
-      .list = as.list(table(x))
-    )
-  }, var_labels = "--All AEBODSYS--", show_labels = "visible") %>%
+  analyze("AETOXGR", 
+          afun = table_count_grade_once_per_id, 
+          extra_args = list(grade_levels = 1:5),
+          var_labels = "- Any adverse events -", show_labels = "visible") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE) %>%
-  split_rows_by("AEDECOD", split_fun = add_overall_level("--All AEDECOD--", trim = TRUE), child_labels = "visible")  %>%
-  summarize_row_groups(label_fstr = "--Any Grade--") %>%
-  analyze("AETOXGR", table_count_once_per_id, indent_mod = -1, show_labels = "hidden") %>%
+  summarize_row_groups(cfun = table_count_grade_once_per_id, format = "xx", indent_mod = 1) %>%
+  split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2)  %>%
+  analyze("AETOXGR", 
+          afun = table_count_grade_once_per_id, 
+          extra_args = list(grade_levels = 1:5), show_labels = "hidden") %>%
   build_table(ADAE2)
 ```
+
+** TODO: now the overall label is missing ***
+
 
 ## Disposition Table
 
