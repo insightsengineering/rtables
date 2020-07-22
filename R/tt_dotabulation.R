@@ -1,9 +1,15 @@
 
-match_extra_args = function(f, .N_col, .N_total, var, extras) {
+match_extra_args = function(f, .N_col, .N_total, var, .ref_group_data = NULL, .full_ref_col_data = NULL, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
+    ## specialized arguments that must be named in formals, cannot go anonymously into ...
     if(!is.null(var))
         possargs = c(possargs, list(var = var))
+    if(!is.null(.ref_group_data))
+        possargs = c(possargs, list(.ref_group_data = .ref_group_data))
+    if(!is.null(.full_ref_col_data))
+        possargs = c(possargs, list(.full_ref_col_data = .full_ref_col_data))
+    
     formargs = formals(f)
     formnms = names(formargs)
     if(is.null(formargs))
@@ -19,7 +25,8 @@ match_extra_args = function(f, .N_col, .N_total, var, extras) {
 
 
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
-                     takesdf = .takes_df(func)) {
+                     takesdf = .takes_df(func),
+                     baselinedf) {
         inds = eval(csub, envir = dfpart)
 
         dat = dfpart[inds,,drop = FALSE]
@@ -31,8 +38,18 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
             dat = dat[[col]]
         args = list(dat)
 
+        fullrefcoldat = cextr$.full_ref_col_data
+        if(!is.null(fullrefcoldat))
+            cextr$.full_ref_col_data = NULL
+        exargs = c(cextr, splextra)
+        
+
         args = c(args,
-                 match_extra_args(func, count, totcount, var = col,  extras = c(cextr, splextra)))
+                 match_extra_args(func, count, totcount, var = col,
+                                  .ref_group_data = baselinedf,
+                                  .full_ref_col_data = fullrefcoldat,
+                                  extras = c(cextr,
+                                             splextra)))
         
         val = do.call(func, args)
         if(is.list(val)) {
@@ -52,7 +69,8 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 
 gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
-                         takesdf = .takes_df(func)) {
+                         takesdf = .takes_df(func),
+                         baselines) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
     colextras = cextra_args(cinfo, NULL)
@@ -86,6 +104,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
                      count = colcounts,
                      cextr = colextras,
+                     baselinedf = baselines,
                      MoreArgs = list(dfpart = dfpart,
                                      func = func,
                                      totcount = totcount,
@@ -116,7 +135,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            defrowlabs = NULL,
                            rowconstr = DataRow,
                            splextra = list(),
-                           takesdf = .takes_df(func)) {
+                           takesdf = .takes_df(func),
+                           baselines = replicate( length(col_exprs(cinfo)),
+                                                 list(dfpart[0,]))) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -128,7 +149,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         rowvar  = NA_character_
     }
     
-    rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf)
+    rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf,
+                            baselines)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
@@ -290,7 +312,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                               cinfo,
                               partlabel = "",
                               dolab = TRUE,
-                              lvl) {
+                              lvl,
+                              baselines) {
     stopifnot(is(spl, "AnalyzeVarSplit"))
     check_validsplit(spl, df)
     defrlabel = spl@default_rowlabel
@@ -306,7 +329,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            datcol = spl_payload(spl),
                            lev = lvl + 1L,
                            format = obj_format(spl),
-                           splextra = split_exargs(spl))
+                           splextra = split_exargs(spl),
+                           baselines = baselines)
     lab = obj_label(spl)
     ret = TableTree(kids = kids,
               name = obj_name(spl),
@@ -330,9 +354,9 @@ recursive_applysplit = function( df,
                                 parent_cfun = NULL,
                                 cformat = NULL,
                                 cindent_mod = 0L,
-                                cvar = NULL) {
-   
-
+                                cvar = NULL,
+                                baselines = lapply(cextra_args(cinfo),
+                                                   function(x) x$.full_ref_col_data)) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(splvec[[1]])
@@ -368,7 +392,8 @@ recursive_applysplit = function( df,
                                      lvl = lvl + 1L,
                                      ##dolab = isTRUE(make_lrow),
                                      dolab = labelrow_visible(spl),
-                                     partlabel = obj_label(spl))##partlabel)
+                                     partlabel = obj_label(spl),
+                                     baselines = baselines)##partlabel)
   
             kids = list(ret)
             names(kids) = obj_name(ret)
@@ -390,7 +415,8 @@ recursive_applysplit = function( df,
                                    cinfo = cinfo,
                                    lvl = lvl + 1L,
                                    partlabel = obj_label(sp),
-                                   dolab = spvis ) ##labelrow_visible(sp)) #isTRUE(labkids ) || (is.na(labkids) && length(avspls) > 1))
+                                   dolab = spvis,
+                                   baselines = baselines) ##labelrow_visible(sp)) #isTRUE(labkids ) || (is.na(labkids) && length(avspls) > 1))
             })
             ## XXX this seems like it should be identical not !identical
             ## TODO FIXME
@@ -419,11 +445,51 @@ recursive_applysplit = function( df,
             nms = unlist(value_names(splvals))
             if(is.factor(nms))
                 nms = as.character(nms)
+            ## XXX this is a lot of data churn, if it proves too slow
+            ## we can
+            ## a) check if any of the analyses (ie the afuns) need the baseline in this splitvec
+            ##    and not do any of this if not, or
+            ## b) refactor row splitting to behave like column splitting
+            ##
+            ## (b) seems the better design but is a major reworking of the guts of how rtables tabulation works
+            ## (a) will only help if analyses that use baseline info are mixed with those who don't.
+            newbl_raw = lapply(baselines,
+                                  function(dat) {
+  
+                if(is.null(dat))
+                    return(NULL)
+                ## apply the same splitting on the 
+                bldataspl = do_split(spl, dat)[["datasplit"]]
+                ## we only keep the ones correspnoding with actual data splits
+                res =lapply(names(dataspl),
+                            function(nm) {
+                    if(nm %in% names(bldataspl))
+                        bldataspl[[nm]]
+                    else
+                        dataspl[[1]][0,]
+                })
+               
+                names(res) = names(dataspl)
+                res
+            })
+            newbaselines = lapply(names(dataspl),
+                                  function(nm) {
+                lapply(newbl_raw,
+                       function(rawdat) {
+                    if(nm %in% names(rawdat))
+                        rawdat[[nm]]
+                    else
+                        rawdat[[1]][0,]
+                })
+            })
             
+            
+            stopifnot(length(newbaselines) == length(dataspl),
+                      identical(unique(sapply(newbaselines, length)), length(col_exprs(cinfo))))
             innerlev = lvl + (nrow(ctab) > 0 || is.na(make_lrow) || make_lrow)
             ## if(nonroot)
             ##     innerlev = innerlev + 1L
-            inner = unlist(mapply(function(dfpart,  nm, label) {
+            inner = unlist(mapply(function(dfpart,  nm, label, baselines) {
                 recursive_applysplit(dfpart,
                                      name = nm, 
                      #                label = label,
@@ -435,10 +501,12 @@ recursive_applysplit = function( df,
                                      cformat = obj_format(spl),
                                      partlabel = label,
                                      cindent_mod = content_indent_mod(spl),
-                                     cvar = content_var(spl))
+                                     cvar = content_var(spl),
+                                     baselines = baselines)
             }, dfpart = dataspl,
             label = partlabels,
             nm = nms,
+            baselines = newbaselines,
             SIMPLIFY=FALSE))
             kids = inner
             indentmod = indent_mod(spl)

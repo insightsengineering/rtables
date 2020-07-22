@@ -199,6 +199,31 @@ test_that("ref_group comparisons work", {
     c2 = bltab[1,2, drop = TRUE]
     c3 = bltab[2,2, drop = TRUE]
     expect_equivalent(c2 - c1, c3)
+
+    lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("SEX", ref_group = "F") %>%
+    analyze("AGE", mean, show_labels = "hidden") %>%
+    analyze_against_ref_group("AGE", mean, show_labels="hidden") %>% 
+    split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
+    analyze("AGE", mean, show_labels = "hidden") %>%
+    analyze_against_ref_group("AGE", mean, show_labels = "hidden")
+
+    bltab2 = build_table(lyt, DM)
+    d1 = bltab2[4,1, drop = TRUE]
+    d2 = bltab2[4,2, drop = TRUE]
+    d3 = bltab2[5,2, drop = TRUE]
+
+    expect_equivalent(d2 - d1, d3)
+    d4 = bltab2[1,3, drop = TRUE]
+    d5 = bltab2[1,4, drop = TRUE]
+    d6 = bltab2[2,4, drop = TRUE]
+    expect_equivalent(d5 - d4, d6)
+
+    d7 = bltab2[4,3, drop = TRUE]
+    d8 = bltab2[4,4, drop = TRUE]
+    d9 = bltab2[5,4, drop = TRUE]
+    expect_equivalent(d8 - d7, d9)
 })
 
 test_that("missing vars caught", {
