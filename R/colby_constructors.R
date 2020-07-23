@@ -782,6 +782,8 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                                   nested = TRUE,
                                   indent_mod = 0L,
                                   show_labels = c("default", "hidden", "visible")) {
+    .Deprecated("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
+    
     show_labels = match.arg(show_labels)
     if(is.character(afun)) {
         afnm = afun

@@ -1,15 +1,17 @@
 
-match_extra_args = function(f, .N_col, .N_total, var, .ref_group_data = NULL, .full_ref_col_data = NULL, extras) {
+match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, extras) {
     possargs = c(list(.N_col = .N_col, .N_total = .N_total),
                  extras)
     ## specialized arguments that must be named in formals, cannot go anonymously into ...
-    if(!is.null(var))
-        possargs = c(possargs, list(var = var))
-    if(!is.null(.ref_group_data))
-        possargs = c(possargs, list(.ref_group_data = .ref_group_data))
-    if(!is.null(.full_ref_col_data))
-        possargs = c(possargs, list(.full_ref_col_data = .full_ref_col_data))
-    
+    if(!is.null(.var))
+        possargs = c(possargs, list(.var = .var))
+    if(!is.null(.ref_group))
+        possargs = c(possargs, list(.ref_group = .ref_group))
+    if(!is.null(.ref_full))
+        possargs = c(possargs, list(.ref_full = .ref_full))
+    if(!is.null(.in_ref_col))
+        possargs = c(possargs, list(.in_ref_col = .in_ref_col))
+
     formargs = formals(f)
     formnms = names(formargs)
     if(is.null(formargs))
@@ -31,23 +33,30 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
         dat = dfpart[inds,,drop = FALSE]
                 
-        ## if(nrow(dat) == 0L)
-        ##     return(list(NULL))
+        fullrefcoldat = cextr$.ref_full
+        if(!is.null(fullrefcoldat))
+            cextr$.ref_full = NULL
+        inrefcol = cextr$.in_ref_col
+        if(!is.null(fullrefcoldat))
+            cextr$.in_ref_col = NULL
         
-        if(!is.null(col) && !takesdf)
+        exargs = c(cextr, splextra)
+
+        ## behavior for x/df and ref-data (full and group)
+        ## match
+        if(!is.null(col) && !takesdf) {
             dat = dat[[col]]
+            fullrefcoldat = fullrefcoldat[[col]]
+            baselinedf = baselinedf[[col]]
+        }
         args = list(dat)
 
-        fullrefcoldat = cextr$.full_ref_col_data
-        if(!is.null(fullrefcoldat))
-            cextr$.full_ref_col_data = NULL
-        exargs = c(cextr, splextra)
-        
 
         args = c(args,
-                 match_extra_args(func, count, totcount, var = col,
-                                  .ref_group_data = baselinedf,
-                                  .full_ref_col_data = fullrefcoldat,
+                 match_extra_args(func, count, totcount, .var = col,
+                                  .ref_group = baselinedf,
+                                  .ref_full = fullrefcoldat,
+                                  .in_ref_col = inrefcol,
                                   extras = c(cextr,
                                              splextra)))
         
@@ -356,7 +365,7 @@ recursive_applysplit = function( df,
                                 cindent_mod = 0L,
                                 cvar = NULL,
                                 baselines = lapply(cextra_args(cinfo),
-                                                   function(x) x$.full_ref_col_data)) {
+                                                   function(x) x$.ref_full)) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(splvec[[1]])

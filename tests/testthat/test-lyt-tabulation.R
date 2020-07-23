@@ -182,17 +182,26 @@ test_that("labelkids parameter works", {
 
 
 
+refcompmean = function(x, .ref_group, .in_ref_col, ...) {
+    if(.in_ref_col)
+        val <- rcell(NULL)
+    else
+        val <- rcell(mean(x, ...) - mean(.ref_group,...), format = "xx.xx")
+    
+    in_rows(
+        "Diff from reference - mean" = val
+    )
+}
+
 test_that("ref_group comparisons work", {
     
     blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
-        analyze("AGE", mean, var_labels = "", show_labels = "hidden") %>%
-        analyze_against_ref_group(var = "AGE",
-                                  mean, show_labels = "hidden")
+        analyze("AGE", show_labels = "hidden") %>%
+        analyze("AGE", refcompmean, show_labels = "hidden")
     ## function(x) list(mean = mean(x)))
     
     
     bltab = build_table(blthing, rawdat)
-    print(bltab)
     expect_identical(dim(bltab), c(2L,2L))
     expect_null(bltab[2,1, drop = TRUE])
     c1 = bltab[1,1, drop = TRUE]
@@ -201,13 +210,13 @@ test_that("ref_group comparisons work", {
     expect_equivalent(c2 - c1, c3)
 
     lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", ref_group = "F") %>%
-    analyze("AGE", mean, show_labels = "hidden") %>%
-    analyze_against_ref_group("AGE", mean, show_labels="hidden") %>% 
-    split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
-    analyze("AGE", mean, show_labels = "hidden") %>%
-    analyze_against_ref_group("AGE", mean, show_labels = "hidden")
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", ref_group = "F") %>%
+        analyze("AGE", mean, show_labels = "hidden") %>%
+        analyze("AGE", refcompmean, show_labels="hidden") %>% 
+        split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
+        analyze("AGE", mean, show_labels = "hidden") %>%
+        analyze("AGE", refcompmean, show_labels = "hidden")
 
     bltab2 = build_table(lyt, DM)
     d1 = bltab2[4,1, drop = TRUE]

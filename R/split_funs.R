@@ -391,7 +391,9 @@ setMethod(".applysplit_extras", "VarLevWBaselineSplit",
     var = spl_payload(spl)
     bl_level = spl@ref_group_value #XXX XXX
     bldata = df[df[[var]] == bl_level,]
-    replicate(c(list(.full_ref_col_data = bldata), split_exargs(spl)), n = length(vals), simplify = FALSE)
+    lapply(vals, function(vl) {
+        list(.ref_full = bldata, .in_ref_col = vl == bl_level)
+    })
 })
 
 ## XXX TODO FIXME
