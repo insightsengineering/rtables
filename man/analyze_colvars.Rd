@@ -22,18 +22,31 @@ TODO here indicates that the variables whose data are ultimately processed by af
 level of nesting in the column structure, rather than at the row level.
 }
 \examples{
-# TODO
-# l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
-#   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") \%>\%
-#   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
-#   analyze_colvars(afun = mean, format = "xx.xx")
-# 
-# l
-#
-# library(dplyr)
-# ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
-# 
-# build_table(l, ANL)
+## toy example where we take the mean of the first variable and the
+## count of >.5 for the second.
+colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
+                function(x) rcell(sum(x > .5), format = "xx"))
+
+l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
+    split_cols_by_multivar(c("value", "pctdiff")) \%>\%
+    split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
+    summarize_row_groups() \%>\%
+    analyze_colvars(afun = colfuns)
+
+l
+
+library(dplyr)
+ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
+
+build_table(l, ANL)
+
+
+basic_table() \%>\% split_cols_by("ARM") \%>\%
+    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) \%>\%
+    split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
+    summarize_row_groups() \%>\%
+    analyze_colvars(afun = mean, format = "xx.xx") \%>\%
+    build_table(ANL)
 }
 \seealso{
 \code{\link{split_cols_by_multivar}}

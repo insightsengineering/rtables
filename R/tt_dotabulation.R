@@ -23,8 +23,11 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
 }
 
 
-.takes_df = function(f) !is.null(formals(f)) && names(formals(f))[1] == "df"
-
+.takes_df = function(f) {
+    if(is.list(f))
+        return(vapply(f, .takes_df, NA))
+    !is.null(formals(f)) && names(formals(f))[1] == "df"
+}
 
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                      takesdf = .takes_df(func),
@@ -78,7 +81,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 
 gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
-                         takesdf = .takes_df(func),
+                         takesdf = NULL,
                          baselines) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
@@ -110,16 +113,19 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         datcol = list(NULL)
     }
 
+    allfuncs = if(is.list(func)) func else lapply(colexprs, function(x) func)
+    if(is.null(takesdf))
+        takesdf = .takes_df(allfuncs)
     rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
                      count = colcounts,
                      cextr = colextras,
                      baselinedf = baselines,
+                     func = allfuncs,
+                     takesdf = takesdf,
                      MoreArgs = list(dfpart = dfpart,
-                                     func = func,
                                      totcount = totcount,
-                                     splextra= splextra,
-                                     takesdf = takesdf),
-    SIMPLIFY= FALSE)
+                                     splextra= splextra),
+                     SIMPLIFY= FALSE)
 
     
     names(rawvals) = names(colexprs)
@@ -144,7 +150,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            defrowlabs = NULL,
                            rowconstr = DataRow,
                            splextra = list(),
-                           takesdf = .takes_df(func),
+                           takesdf = NULL,
                            baselines = replicate( length(col_exprs(cinfo)),
                                                  list(dfpart[0,]))) {
     if(is.null(datcol) && !is.na(rvlab))
@@ -300,7 +306,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                                    cinfo = cinfo,
                                    rowconstr = ContentRow,
                                    datcol = cvar,
-                                   takesdf = is.null(cvar))
+                                   takesdf = rep(is.null(cvar),
+                                                 ncol(cinfo)))
     } else {
         contkids = list()
     }
@@ -323,7 +330,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                               dolab = TRUE,
                               lvl,
                               baselines) {
-    stopifnot(is(spl, "AnalyzeVarSplit"))
+    stopifnot(is(spl, "VAnalyzeSplit"))
     check_validsplit(spl, df)
     defrlabel = spl@default_rowlabel
     didlab  = FALSE
@@ -394,7 +401,7 @@ recursive_applysplit = function( df,
         lab = obj_label(spl)
         indentmod = 0L ## changed if necessary in else block
 
-        if(is(spl, "AnalyzeVarSplit")) { ## we're at full depth, single analyze var
+        if(is(spl, "VAnalyzeSplit")) { ## we're at full depth, single analyze var
             ret = .make_analyzed_tab(df = df,
                                      spl = spl,
                                      cinfo = cinfo,
@@ -825,10 +832,10 @@ setMethod("fix_analyze_vis", "SplitVector",
           function(lyt) {
     len = length(lyt)
     lastspl = lyt[[len]]
-    if(len == 0 || ! (is(lastspl, "AnalyzeVarSplit") ||
+    if(len == 0 || ! (is(lastspl, "VAnalyzeSplit") ||
                       is(lastspl, "AnalyzeMultivar")))
         return(lyt)
-    if(is(lastspl, "AnalyzeVarSplit") && is.na(labelrow_visible(lastspl)))
+    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl)))
         labelrow_visible(lastspl) = FALSE
     else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
         pld = spl_payload(lastspl)

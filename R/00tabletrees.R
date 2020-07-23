@@ -236,7 +236,7 @@ setClass("MultiVarSplit", contains = "Split",
          validity = function(object) {
     length(object@payload) > 1 &&
         all(!is.na(object@payload)) &&
-        length(object@payload) == length(object@var_labels)
+        (length(object@var_labels) == 0 || length(object@payload) == length(object@var_labels))
 })
 
 #' Split between two or more different variables
@@ -421,12 +421,17 @@ VarDynCutSplit = function(var,
         content_var = cvar)
 }
 
-setClass("AnalyzeVarSplit", contains = "Split",
-         representation(analysis_fun = "function",
-                        default_rowlabel = "character",
+
+setClass("VAnalyzeSplit", contains = "Split",
+         representation(default_rowlabel = "character",
                         include_NAs = "logical",
                         var_label_visible = "logical"))
 
+setClass("AnalyzeVarSplit", contains = "VAnalyzeSplit",
+         representation(analysis_fun = "function"))
+
+setClass("AnalyzeColVarSplit", contains = "VAnalyzeSplit",
+         representation(analysis_fun = "list"))
 
 #' Define a subset tabulation/analysis
 #' 
@@ -456,6 +461,51 @@ AnalyzeVarSplit = function(var,
     new("AnalyzeVarSplit",
         payload = var,
         split_label = split_label,
+        content_fun = cfun,
+        analysis_fun = afun,
+        content_format = cformat,
+        split_format = split_format,
+        default_rowlabel = defrowlab,
+        include_NAs = inclNAs,
+        name = split_name,
+        label_children = FALSE,
+        extra_args = extra_args,
+        indent_modifier = as.integer(indent_mod),
+        content_indent_modifier = 0L,
+        var_label_visible = show_varlabel,
+        content_var = cvar)
+}
+
+#' Define a subset tabulation/analysis
+#' 
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
+#' @rdname avarspl
+#' @author Gabriel Becker
+#' @export
+AnalyzeColVarSplit = function(afun,
+                              defrowlab = "",
+                              cfun = NULL,
+                              cformat = NULL,
+                              split_format = NULL,
+                              inclNAs = FALSE,
+                              split_name = var,
+                              extra_args = list(),
+                              indent_mod = 0L,
+                              show_varlabel = NA,
+                              cvar = "") {
+    if(is.function(afun)) {
+        if(!any(nzchar(defrowlab))) {
+            defrowlab = as.character(substitute(afun))
+            if(length(defrowlab) > 1 || startsWith(defrowlab, "function(") || startsWith(defrowlab, "list("))
+                defrowlab = ""
+        }
+        afun = lapply(var, function(x) afun)
+    }
+    
+    new("AnalyzeColVarSplit",
+        payload = NA_character_,
+        split_label = "",
         content_fun = cfun,
         analysis_fun = afun,
         content_format = cformat,
@@ -584,45 +634,45 @@ AnalyzeMultiVars = function(var,
     ret
 }
 
-setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
-         representation(comparison_fun = "function"))
+## setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
+##          representation(comparison_fun = "function"))
 
-## this is just a sentinel class so we hit different methods
-setClass("AVarBaselineComp", contains = "VAnalyzeVarComp")
+## ## this is just a sentinel class so we hit different methods
+## setClass("AVarBaselineComp", contains = "VAnalyzeVarComp")
 
-## do we want a separate rd for this?
-#' @rdname avarspl
-AVarBaselineComp = function(var,
-                            split_label,
-                            afun,
-                            compfun = `-`,
-                            labels_var = NULL,
-                            cfun = NULL,
-                            cformat = NULL,
-                            split_fun = NULL,
-                            split_format = NULL,
-                            valorder = NULL,
-                            split_name = var,
-                            extra_args = list(),
-                            indent_mod = 0L,
-                            cvar = ""
-                            ) {
-    if(is.null(labels_var))
-        labels_var = var
-    new("AVarBaselineComp", payload = var, split_label = split_label,
-        value_label_var = labels_var,
-        content_fun = cfun,
-        content_format = cformat,
-        split_fun = split_fun,
-        split_format = split_format,
-        value_order = valorder,
-        comparison_fun = compfun,
-        name = split_name,
-        extra_args = extra_args,
-        indent_modifier = as.integer(indent_mod),
-        content_indent_modifier = 0L,
-        content_var = cvar)
-}
+## ## do we want a separate rd for this?
+## #' @rdname avarspl
+## AVarBaselineComp = function(var,
+##                             split_label,
+##                             afun,
+##                             compfun = `-`,
+##                             labels_var = NULL,
+##                             cfun = NULL,
+##                             cformat = NULL,
+##                             split_fun = NULL,
+##                             split_format = NULL,
+##                             valorder = NULL,
+##                             split_name = var,
+##                             extra_args = list(),
+##                             indent_mod = 0L,
+##                             cvar = ""
+##                             ) {
+##     if(is.null(labels_var))
+##         labels_var = var
+##     new("AVarBaselineComp", payload = var, split_label = split_label,
+##         value_label_var = labels_var,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_fun = split_fun,
+##         split_format = split_format,
+##         value_order = valorder,
+##         comparison_fun = compfun,
+##         name = split_name,
+##         extra_args = extra_args,
+##         indent_modifier = as.integer(indent_mod),
+##         content_indent_modifier = 0L,
+##         content_var = cvar)
+## }
 
 
 

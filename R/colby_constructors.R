@@ -78,7 +78,7 @@ setMethod("split_rows", "PreDataRowLayout",
     lyt[[pos]] = tmp
     lyt
 })
-is_analysis_spl = function(spl) is(spl, "AnalyzeVarSplit") || is(spl, "AnalyzeMultiVars")
+is_analysis_spl = function(spl) is(spl, "VAnalyzeSplit") || is(spl, "AnalyzeMultiVars")
 ## note "pos" is ignored here because it is for which nest-chain
 ## spl should be placed in, NOIT for where in that chain it should go
 setMethod("split_rows", "SplitVector",
@@ -410,26 +410,14 @@ split_rows_by = function(lyt,
 #' 
 #' @seealso \code{\link{analyze_colvars}}
 #' @author Gabriel Becker 
-#' @examples 
-#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   split_rows_by("RACE", "ethnicity") %>%
-#'   analyze_colvars( afun = mean, format = "xx.xx")
-#' 
-#' l
-#'
-#' library(dplyr)
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
-#' 
-#'  build_table(l, ANL)
-#'   
-#'  
+
 split_cols_by_multivar = function(lyt,
                                   vars,
-                                  split_label,
+                                  ##split_label = "",
                                   varlabels = vars,
                                   nested = TRUE) {
-    spl = MultiVarSplit(vars = vars, split_label = split_label, varlabels)
+    spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
+                        varlabels)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -623,7 +611,7 @@ split_rows_by_cutfun = function(lyt, var, split_label = var,
 #' \describe{
 #' \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 #' \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
-#' \item{.ref_group_data}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
+#' \item{.ref_group}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
 #' }
 #' @export
 #' @author Gabriel Becker
@@ -688,7 +676,7 @@ analyze = function(lyt,
                           child_labels = show_labels)
  
     if(nested &&
-       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
@@ -706,13 +694,21 @@ get_acolvar_name  <- function(lyt) {
     vec = clyt[[1]]
     vcls = vapply(vec, class, "")
     pos = max(which(vcls ==  "MultiVarSplit"))
-    paste(c("ac", spl_payload(vec[[pos]])), collapse = "_")
+    paste(c("ac", get_acolvar_vars(lyt)), collapse = "_")
 }
 
+
+get_acolvar_vars <- function(lyt) {
+    clyt <- clayout(lyt)
+    stopifnot(length(clyt) == 1L)
+    vec = clyt[[1]]
+    vcls = vapply(vec, class, "")
+    pos = max(which(vcls ==  "MultiVarSplit"))
+    spl_payload(vec[[pos]])
+}
+
+
 #' Generate Rows Analyzing Different Variables Across Columns
-#' 
-#' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
-#' level of nesting in the column structure, rather than at the row level.
 #' 
 #' @inheritParams  lyt_args
 #' 
@@ -722,41 +718,60 @@ get_acolvar_name  <- function(lyt) {
 #' 
 #' @author Gabriel Becker
 #' 
-#' @examples 
-#' # TODO
-#' # l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
-#' #   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#' #   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
-#' #   analyze_colvars(afun = mean, format = "xx.xx")
-#' # 
-#' # l
-#' #
-#' # library(dplyr)
-#' # ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
-#' # 
-#' # build_table(l, ANL)
- 
+#' @examples
+#' ## toy example where we take the mean of the first variable and the
+#' ## count of >.5 for the second.
+#' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
+#'                 function(x) rcell(sum(x > .5), format = "xx"))
+#'
+#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
+#'     split_cols_by_multivar(c("value", "pctdiff")) %>%
+#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     summarize_row_groups() %>%
+#'     analyze_colvars(afun = colfuns)
+#'
+#' l
+#'
+#' library(dplyr)
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' build_table(l, ANL)
+#' 
+#' 
+#' basic_table() %>% split_cols_by("ARM") %>%
+#'     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) %>%
+#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     summarize_row_groups() %>%
+#'     analyze_colvars(afun = mean, format = "xx.xx") %>%
+#'     build_table(ANL)
+
 analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
                            indent_mod = 0L) {
-    subafun = substitute(afun)
-    if(is.name(subafun) &&
-       is.function(afun) &&
-       ## this is gross. basically testing
-       ## if the symbol we have corresponds
-       ## in some meaningful way to the function
-       ## we will be calling.
-       identical(mget(as.character(subafun),
-                      mode = "function",
-                      ifnotfound = list(NULL),
-                      inherits = TRUE
-                      )[[1]], afun)) {
-        defrowlab = as.character(subafun)
+    if(is.function(afun)) {
+        subafun = substitute(afun)
+        if(is.name(subafun) &&
+           is.function(afun) &&
+           ## this is gross. basically testing
+           ## if the symbol we have corresponds
+           ## in some meaningful way to the function
+           ## we will be calling.
+           identical(mget(as.character(subafun),
+                          mode = "function",
+                          ifnotfound = list(NULL),
+                          inherits = TRUE
+                          )[[1]], afun)) {
+            defrowlab = as.character(subafun)
+        } else {
+            defrowlab = ""
+        }
+        afun = lapply(get_acolvar_vars(lyt),
+                      function(x) afun)
     } else {
         defrowlab = ""
     }
-    spl = AnalyzeVarSplit(NA_character_, "", afun = afun,
+    spl = AnalyzeColVarSplit(afun = afun,
                           defrowlab = defrowlab,
                           split_format = format,
                           split_name = get_acolvar_name(lyt),
@@ -764,8 +779,6 @@ analyze_colvars = function(lyt, afun,
                           show_varlabel = FALSE)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
-
-
 }
 
 #' Add ref_group comparison analysis recipe
@@ -794,14 +807,14 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
     defrowlab = "Diff from Baseline"
     if(is.character(compfun))
         compfun = get(compfun, mode = "function")
-    afun2 = function(x, .ref_group_data = NULL, .N_col, .N_total, ...) {
-        if(is.null(.ref_group_data))
+    afun2 = function(x, .ref_group = NULL, .in_ref_col, .N_col, .N_total, ...) {
+        if(is.null(.ref_group))
             stop("did not receive ref_group aggregataion value required for comparison")
         if(!is.na(var) && !.takes_df(afun))
-            blinevardat = .ref_group_data[[var]]
+            blinevardat = .ref_group[[var]]
         else
-            blinevardat = .ref_group_data
-        if(identical(x, blinevardat))
+            blinevardat = .ref_group
+        if(.in_ref_col)
             return(NULL) ## we are in the ref_group
         
         args = list()
@@ -828,7 +841,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                           indent_mod = indent_mod,
                           show_varlabel = .labelkids_helper(show_labels))
     if(nested &&
-       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
@@ -840,152 +853,152 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
 
 
 
-#' Add ref_group comparison analysis recipe
-#'
-#' @inheritParams lyt_args
-#' 
-#' @export
-#' 
-#' @examples 
-#' 
-#' foo <- function(x, x_ref) {
-#'   if (is.null(x)) {
-#'     rcell("-")
-#'   } else {
-#'     rcell(mean(x) - mean(x_ref), format = "xx.xx")
-#'   }
-#' }
-#' 
-#' basic_table() %>%
-#'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-#'   analyze_against_ref_group2("AGE", foo) %>%
-#'   build_table(DM)
-#' 
-#' basic_table() %>%
-#'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-#'   analyze_against_ref_group2("AGE", function(df, df_ref, .N_col, .N_total) {
-#'     in_rows( dimensions = rcell(list(nrow(df), nrow(df_ref)), format = "xx / xx"))
-#'   }) %>%
-#'   build_table(DM)
-#'
-#'
-analyze_against_ref_group2 = function(lyt, 
-                                      var,
-                                      afun,
-                                      label = if(is.na(var)) "" else var,
-                                      format = NULL,
-                                      nested = TRUE,
-                                      extra_args = list(),
-                                      indent_mod = 0L,
-                                      show_labels = c("default", "hidden", "visible")) {
+## #' Add ref_group comparison analysis recipe
+## #'
+## #' @inheritParams lyt_args
+## #' 
+## #' @export
+## #' 
+## #' @examples 
+## #' 
+## #' foo <- function(x, x_ref) {
+## #'   if (is.null(x)) {
+## #'     rcell("-")
+## #'   } else {
+## #'     rcell(mean(x) - mean(x_ref), format = "xx.xx")
+## #'   }
+## #' }
+## #' 
+## #' basic_table() %>%
+## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+## #'   analyze_against_ref_group2("AGE", foo) %>%
+## #'   build_table(DM)
+## #' 
+## #' basic_table() %>%
+## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+## #'   analyze_against_ref_group2("AGE", function(df, df_ref, .N_col, .N_total) {
+## #'     in_rows( dimensions = rcell(list(nrow(df), nrow(df_ref)), format = "xx / xx"))
+## #'   }) %>%
+## #'   build_table(DM)
+## #'
+## #'
+## analyze_against_ref_group2 = function(lyt, 
+##                                       var,
+##                                       afun,
+##                                       label = if(is.na(var)) "" else var,
+##                                       format = NULL,
+##                                       nested = TRUE,
+##                                       extra_args = list(),
+##                                       indent_mod = 0L,
+##                                       show_labels = c("default", "hidden", "visible")) {
     
-    show_labels <- match.arg(show_labels)
+##     show_labels <- match.arg(show_labels)
     
-    if(is.character(afun)) {
-        afnm <- afun
-        afun <- get(afun, mode = "function")
-    } else {
-        afnm <- as.character(substitute(afun))
-    }
+##     if(is.character(afun)) {
+##         afnm <- afun
+##         afun <- get(afun, mode = "function")
+##     } else {
+##         afnm <- as.character(substitute(afun))
+##     }
     
-    stopifnot(!is.null(formals(afun)), !is.na(var))
+##     stopifnot(!is.null(formals(afun)), !is.na(var))
     
-    arg_nm <- names(formals(afun))[1:2]
+##     arg_nm <- names(formals(afun))[1:2]
     
-    afun_df <- if (identical(arg_nm, c("x", "x_ref"))) {
-        function(df, df_ref, ...) {
+##     afun_df <- if (identical(arg_nm, c("x", "x_ref"))) {
+##         function(df, df_ref, ...) {
             
-            x <- if (is.null(df)) 
-                NULL
-            else
-                df[[var]]
+##             x <- if (is.null(df)) 
+##                 NULL
+    ##         else
+    ##             df[[var]]
             
-            afun(x = x, x_ref = df_ref[[var]], ...)
-        }
-    } else if (identical(arg_nm, c("df", "df_ref"))) {
-        afun
-    } else {
-        stop("afun needs to either have the first two arguments x & x_ref or df & df_ref")
-    }
+    ##         afun(x = x, x_ref = df_ref[[var]], ...)
+    ##     }
+    ## } else if (identical(arg_nm, c("df", "df_ref"))) {
+    ##     afun
+    ## } else {
+    ##     stop("afun needs to either have the first two arguments x & x_ref or df & df_ref")
+    ## }
     
-    afun_tabulation <- function(df, .ref_group_data = NULL, .N_col, .N_total, ...) {
+    ## afun_tabulation <- function(df, .ref_group = NULL, .N_col, .N_total, ...) {
         
-        if(is.null(.ref_group_data))
-            stop("did not receive ref_group aggregataion value required for comparison")
+    ##     if(is.null(.ref_group))
+    ##         stop("did not receive ref_group aggregataion value required for comparison")
         
         
-        if (identical(df, .ref_group_data)) {
-            df <- NULL
-        } 
+    ##     if (identical(df, .ref_group)) {
+    ##         df <- NULL
+    ##     } 
         
-        args <- extra_args
-        if(takes_coln(afun))
-            args <- c(args, list(.N_col = .N_col))
+    ##     args <- extra_args
+    ##     if(takes_coln(afun))
+    ##         args <- c(args, list(.N_col = .N_col))
         
-        if(takes_totn(afun))
-            args = c(args, list(.N_total = .N_total))
+    ##     if(takes_totn(afun))
+    ##         args = c(args, list(.N_total = .N_total))
         
-        ret <- do.call(afun_df, c(list(df = df, df_ref = .ref_group_data), args))
+    ##     ret <- do.call(afun_df, c(list(df = df, df_ref = .ref_group), args))
         
-        ret
-    }
+    ##     ret
+    ## }
     
-    spl <- AnalyzeVarSplit(var,
-                           label,
-                           afun = afun_tabulation,
-                           split_format = format,
-                           defrowlab = afnm,
-                           indent_mod = indent_mod,
-                           show_varlabel = .labelkids_helper(show_labels))
+    ## spl <- AnalyzeVarSplit(var,
+    ##                        label,
+    ##                        afun = afun_tabulation,
+    ##                        split_format = format,
+    ##                        defrowlab = afnm,
+    ##                        indent_mod = indent_mod,
+    ##                        show_varlabel = .labelkids_helper(show_labels))
     
-    if (nested && (is(last_rowsplit(lyt), "AnalyzeVarSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
-        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
-    } else {
-        pos <- next_rpos(lyt, nested)
-        split_rows(lyt, spl, pos)
-    }
+    ## if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+    ##     cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
+    ## } else {
+    ##     pos <- next_rpos(lyt, nested)
+##         split_rows(lyt, spl, pos)
+##     }
     
-}
+## }
 
 
 
-#' @export
-#' @rdname bline_analyses
-analyze_against_ref_group_2dtable = function(lyt,
-                                 var = NA_character_,
-                                 label = var,
-                                 compfun,
-                                 format = NULL,
-                                 nested = TRUE,
-                                 indent_mod = 0L) {
+## #' @export
+## #' @rdname bline_analyses
+## analyze_against_ref_group_2dtable = function(lyt,
+##                                  var = NA_character_,
+##                                  label = var,
+##                                  compfun,
+##                                  format = NULL,
+##                                  nested = TRUE,
+##                                  indent_mod = 0L) {
 
-    if(is.character(compfun)) {
-        cfnm = compfun
-        compfun = get(compfun, mode = "function")
-    } else {
-        cfnm = as.character(substitute(compfun))
-    }
+##     if(is.character(compfun)) {
+##         cfnm = compfun
+##         compfun = get(compfun, mode = "function")
+##     } else {
+##         cfnm = as.character(substitute(compfun))
+##     }
     
 
     
-    compfun2 = function(colvardat, blinevardat) {
-        if(identical(colvardat, blinevardat))
-            return(NULL)
+##     compfun2 = function(colvardat, blinevardat) {
+##         if(identical(colvardat, blinevardat))
+##             return(NULL)
             
-        ## TODO(?) compfun cmight need .N_col or .N_total??
-        tab = .make_2xk_tab(colvardat, blinevardat)
-        ret = compfun(tab)
-        if(length(ret) == 1 && is.null(names(ret)))
-            names(ret) = cfnm
-        ret
-    }
-    analyze_against_ref_group(lyt = lyt, var = vtar, label = label,
-                           afun = function(x) x,
-                           compfun = compfun2,
-                           format = format,
-                           nested = nested,
-                           indent_mod = indent_mod)
-}
+##         ## TODO(?) compfun cmight need .N_col or .N_total??
+##         tab = .make_2xk_tab(colvardat, blinevardat)
+##         ret = compfun(tab)
+##         if(length(ret) == 1 && is.null(names(ret)))
+##             names(ret) = cfnm
+##         ret
+##     }
+##     analyze_against_ref_group(lyt = lyt, var = vtar, label = label,
+##                            afun = function(x) x,
+##                            compfun = compfun2,
+##                            format = format,
+##                            nested = nested,
+##                            indent_mod = indent_mod)
+## }
 
 
 ## Add a total column at the next **top level** spot in

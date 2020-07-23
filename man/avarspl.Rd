@@ -2,13 +2,27 @@
 % Please edit documentation in R/00tabletrees.R
 \name{AnalyzeVarSplit}
 \alias{AnalyzeVarSplit}
+\alias{AnalyzeColVarSplit}
 \alias{AnalyzeMultiVars}
-\alias{AVarBaselineComp}
 \title{Define a subset tabulation/analysis}
 \usage{
 AnalyzeVarSplit(
   var,
   split_label,
+  afun,
+  defrowlab = "",
+  cfun = NULL,
+  cformat = NULL,
+  split_format = NULL,
+  inclNAs = FALSE,
+  split_name = var,
+  extra_args = list(),
+  indent_mod = 0L,
+  show_varlabel = NA,
+  cvar = ""
+)
+
+AnalyzeColVarSplit(
   afun,
   defrowlab = "",
   cfun = NULL,
@@ -38,23 +52,6 @@ AnalyzeMultiVars(
   child_labels = c("default", "visible", "hidden"),
   cvar = ""
 )
-
-AVarBaselineComp(
-  var,
-  split_label,
-  afun,
-  compfun = `-`,
-  labels_var = NULL,
-  cfun = NULL,
-  cformat = NULL,
-  split_fun = NULL,
-  split_format = NULL,
-  valorder = NULL,
-  split_name = var,
-  extra_args = list(),
-  indent_mod = 0L,
-  cvar = ""
-)
 }
 \arguments{
 \item{var}{string, variable name}
@@ -80,18 +77,14 @@ AVarBaselineComp(
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
-
-\item{compfun}{function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.}
-
-\item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
-
-\item{split_fun}{function/NULL. custom splitting function}
-
-\item{valorder}{character vector. Order that the split children should appear in resulting table.}
 }
 \description{
 Define a subset tabulation/analysis
+
+Define a subset tabulation/analysis
 }
 \author{
+Gabriel Becker
+
 Gabriel Becker
 }

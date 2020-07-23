@@ -23,6 +23,12 @@ setMethod("make_subset_expr", "AnalyzeVarSplit",
                          list(a = as.name(spl_payload(spl)))))
 })
 
+setMethod("make_subset_expr", "AnalyzeColVarSplit",
+          function(spl, val) {
+    expression(TRUE)
+})
+
+
 ## XXX these are going to be ridiculously slow
 ## FIXME
 

@@ -236,7 +236,7 @@ setMethod("check_validsplit", "MultiVarSplit",
     .checkvarsok(spl, df)
 })
 
-setMethod("check_validsplit", "AnalyzeVarSplit",
+setMethod("check_validsplit", "VAnalyzeSplit",
           
           function(spl, df) {
     if(!is.na(spl_payload(spl))) {
@@ -286,7 +286,7 @@ setMethod(".applysplit_rawvals", "ManualSplit",
 setMethod(".applysplit_rawvals", "NULLSplit",
           function(spl, df) "")
 
-setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
+setMethod(".applysplit_rawvals", "VAnalyzeSplit",
           function(spl, df) spl_payload(spl))
 
 
@@ -333,7 +333,7 @@ setMethod(".applysplit_datapart", "NULLSplit",
           function(spl, df, vals) list(df[FALSE,]))
 
 ## XXX should this be mandatorily excluding NAs???
-setMethod(".applysplit_datapart", "AnalyzeVarSplit",
+setMethod(".applysplit_datapart", "VAnalyzeSplit",
           function(spl, df, vals) {
     ## for now, this will work later
     stopifnot(length(vals) == 1L)

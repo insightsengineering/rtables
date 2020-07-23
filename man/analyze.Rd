@@ -52,7 +52,7 @@ In addition to differentation on the first argument, the analysis function can o
 \describe{
 \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
-\item{.ref_group_data}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
+\item{.ref_group}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
 }
 }
 \examples{
