@@ -836,6 +836,117 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
     }
 }
 
+
+
+#' Add ref_group comparison analysis recipe
+#'
+#' @inheritParams lyt_args
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' foo <- function(x, x_ref) {
+#'   if (is.null(x)) {
+#'     rcell("-")
+#'   } else {
+#'     rcell(mean(x) - mean(x_ref), format = "xx.xx")
+#'   }
+#' }
+#' 
+#' basic_table() %>%
+#'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+#'   analyze_against_ref_group2("AGE", foo) %>%
+#'   build_table(DM)
+#' 
+#' basic_table() %>%
+#'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+#'   analyze_against_ref_group2("AGE", function(df, df_ref, .N_col, .N_total) {
+#'     in_rows( dimensions = rcell(list(nrow(df), nrow(df_ref)), format = "xx / xx"))
+#'   }) %>%
+#'   build_table(DM)
+#'
+#'
+analyze_against_ref_group2 = function(lyt, 
+                                      var,
+                                      afun,
+                                      label = if(is.na(var)) "" else var,
+                                      format = NULL,
+                                      nested = TRUE,
+                                      extra_args = list(),
+                                      indent_mod = 0L,
+                                      show_labels = c("default", "hidden", "visible")) {
+    
+    show_labels <- match.arg(show_labels)
+    
+    if(is.character(afun)) {
+        afnm <- afun
+        afun <- get(afun, mode = "function")
+    } else {
+        afnm <- as.character(substitute(afun))
+    }
+    
+    stopifnot(!is.null(formals(afun)), !is.na(var))
+    
+    arg_nm <- names(formals(afun))[1:2]
+    
+    afun_df <- if (identical(arg_nm, c("x", "x_ref"))) {
+        function(df, df_ref, ...) {
+            
+            x <- if (is.null(df)) 
+                NULL
+            else
+                df[[var]]
+            
+            afun(x = x, x_ref = df_ref[[var]], ...)
+        }
+    } else if (identical(arg_nm, c("df", "df_ref"))) {
+        afun
+    } else {
+        stop("afun needs to either have the first two arguments x & x_ref or df & df_ref")
+    }
+    
+    afun_tabulation <- function(df, .ref_group_data = NULL, .N_col, .N_total, ...) {
+        
+        if(is.null(.ref_group_data))
+            stop("did not receive ref_group aggregataion value required for comparison")
+        
+        
+        if (identical(df, .ref_group_data)) {
+            df <- NULL
+        } 
+        
+        args <- extra_args
+        if(takes_coln(afun))
+            args <- c(args, list(.N_col = .N_col))
+        
+        if(takes_totn(afun))
+            args = c(args, list(.N_total = .N_total))
+        
+        ret <- do.call(afun_df, c(list(df = df, df_ref = .ref_group_data), args))
+        
+        ret
+    }
+    
+    spl <- AnalyzeVarSplit(var,
+                           label,
+                           afun = afun_tabulation,
+                           split_format = format,
+                           defrowlab = afnm,
+                           indent_mod = indent_mod,
+                           show_varlabel = .labelkids_helper(show_labels))
+    
+    if (nested && (is(last_rowsplit(lyt), "AnalyzeVarSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
+    } else {
+        pos <- next_rpos(lyt, nested)
+        split_rows(lyt, spl, pos)
+    }
+    
+}
+
+
+
 #' @export
 #' @rdname bline_analyses
 analyze_against_ref_group_2dtable = function(lyt,
