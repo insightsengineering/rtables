@@ -653,7 +653,11 @@ s_clopper_perarson <- function(x) {
 
 ```
 
-```{r}
+
+
+This does not work at the moment
+
+```{r, eval = FALSE}
 basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
@@ -667,7 +671,7 @@ build_table(ADRS_BESRSPI)
 
 
 
-```{r, eval = FALSE, echo=FALSE}
+```{r, eval = FALSE, echo=FALSE, eval = FALSE}
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
   mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
