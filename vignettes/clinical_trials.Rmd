@@ -642,16 +642,25 @@ ADRS_BESRSPI <- ex_adrs %>%
   mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
          is_rsp = rsp == "Responders")
 
-basic_table() %>%
-  split_cols_by("ARMCD") %>%
-  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
-  analyze("is_rsp", function(x) {
-    in_rows(
+
+s_clopper_perarson <- function(x) {
+  in_rows(
+      rcell("aaa"),
       rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
-      .labels = "95% CI for Response Rates (Clopper-Pearson)"
+      .labels = c("estimate", "95% CI for Response Rates (Clopper-Pearson)")
     )
-  }, show_labels = "hidden") %>%
-  build_table(ADRS_BESRSPI)
+}
+
+```
+
+```{r}
+basic_table() %>%
+  split_cols_by("ARMCD", ref_group = "ARM A") %>%
+  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
+  analyze("is_rsp", function(x) s_clopper_perarson(x)[2], show_labels = "hidden") %>%
+  analyze_against_ref_group(var = "rsp",
+                           afun = function(x) c("Difference in Response Rates (%)" =  mean(x)*100), fmt = "xx.xx", newtoplev = TRUE) %>%
+build_table(ADRS_BESRSPI)
 ```
 
 **TODO: I will finish this example this week**

@@ -7,9 +7,81 @@ vignette: >
   %\VignetteIndexEntry{Comparing Against Baselines or Control}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Introduction
+
+
+Often the data from one column is considered the reference and is compared to the data from the other columns.
+
+For example, lets calculate the average age:
+
+```{r}
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze("AGE") %>%
+  build_table(DM)
+```
+
+and then the average difference between the arms to the placebo arm:
+
+```{r}
+out <- vector("list", 8)
+i <- 1
+
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  analyze("AGE", function(x, .ref_group_data) {
+    .GlobalEnv$out[[.GlobalEnv$i]] <- list(x = x, .ref_group_data = .ref_group_data)
+    .GlobalEnv$i <- .GlobalEnv$i + 1
+    in_rows(
+      a = 1,
+      b = 2
+    )
+  }) %>%
+  build_table(DM)
+
+out[[2]][[2]]
+```
+
+** TODO: why did it change the column ordering?**
+
+```{r}
+
+
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  analyze("AGE") %>%
+  analyze_against_ref_group("AGE", mean, ) %>%
+  build_table(DM)
+
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  analyze_against_ref_group("AGE", function(x, .ref_group_data) mean(x, ...)) %>%
+  build_table(DM)
+
+
+
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  analyze("AGE") %>%
+  analyze_against_ref_group("AGE", function(x, ref) mean(x) - mean(ref)) %>%
+  build_table(DM)
+
+
+analyze_against_ref_group_2dtable
+out
+
+aaa <- function(x, ...) {
+  print("-aaa")
+
+  1
+}
+
+```
+
 
 explain how `add_colby_multivar` and `add_analyzed_colvars` relate
 
