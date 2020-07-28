@@ -733,9 +733,7 @@ basic_table() %>%
 
 ** TODO: discuss indenting**
 
-And next we will add the Multinomial response table. We already 
-
-So basically we are doing a row-split by response level, and then doing the same thing as we did for the binary response table above. However, when we want to do row-split, that means we need to also take into account the `.N_col` as total and then reconstruct the full logical vector.
+And next we will add the Multinomial response table. We are doing a row-split by response level, and then doing the same thing as we did for the binary response table above. However, when we want to do row-split, that means we need to also take into account the `.N_col` as total and then reconstruct the full logical vector.
 
 ```{r}
 s_prop <- function(df, labelstr, .N_col) {
