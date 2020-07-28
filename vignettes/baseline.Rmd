@@ -11,14 +11,18 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+
 ## Introduction
 
 
-Often the data from one column is considered the reference and is compared to the data from the other columns.
+Often the data from one column is considered the reference/baseline/comparison group and is compared to the data from the other columns.
 
 For example, lets calculate the average age:
 
 ```{r}
+library(rtables)
+
 basic_table() %>%
   split_cols_by("ARM") %>%
   analyze("AGE") %>%
@@ -28,61 +32,54 @@ basic_table() %>%
 and then the average difference between the arms to the placebo arm:
 
 ```{r}
-out <- vector("list", 8)
-i <- 1
-
 basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  analyze("AGE", function(x, .ref_group_data) {
-    .GlobalEnv$out[[.GlobalEnv$i]] <- list(x = x, .ref_group_data = .ref_group_data)
-    .GlobalEnv$i <- .GlobalEnv$i + 1
+  analyze("AGE", afun = function(x, .ref_group) {
     in_rows(
-      a = 1,
-      b = 2
+      "Average Difference" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
     )
   }) %>%
   build_table(DM)
-
-out[[2]][[2]]
 ```
 
-** TODO: why did it change the column ordering?**
+Note that the column order has changed and the reference group is displayed in the first column.
+
+In case we want to display a blank cell for "B: Placebo" we can test if a calculation happens for a cell that is part of the reference column with the `.in_ref_col` argument in `afun`:
 
 ```{r}
-
-
 basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  analyze("AGE") %>%
-  analyze_against_ref_group("AGE", mean, ) %>%
+  analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
+    if (.in_ref_col) {
+      in_rows("Average Difference" = rcell(""))
+    } else {
+      in_rows("Average Difference" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"))
+    }
+  }) %>%
   build_table(DM)
-
-basic_table() %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  analyze_against_ref_group("AGE", function(x, .ref_group_data) mean(x, ...)) %>%
-  build_table(DM)
-
-
-
-basic_table() %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  analyze("AGE") %>%
-  analyze_against_ref_group("AGE", function(x, ref) mean(x) - mean(ref)) %>%
-  build_table(DM)
-
-
-analyze_against_ref_group_2dtable
-out
-
-aaa <- function(x, ...) {
-  print("-aaa")
-
-  1
-}
-
 ```
 
+You can see which arguments are available for `afun` in the manual fro `analyze`.
 
-explain how `add_colby_multivar` and `add_analyzed_colvars` relate
+## Row Splitting
 
-* documentation is not clear, what are the arguments to `afun`, i.e. `.ref_group_data` seems to be added
+When adding row-splitting the reference data might be one represented by the column with or without row splitting. For example:
+
+```{r}
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  add_colcounts() %>%
+  split_rows_by("SEX", split_fun = drop_split_levels) %>%
+  analyze("AGE", afun = function(x, .ref_group, .ref_full, .in_ref_col){
+    in_rows(
+      "is reference (.in_ref_col)" = rcell(.in_ref_col),
+      "ref cell N (.ref_group)" = rcell(length(.ref_group)),
+      "ref column N (.ref_full)" = rcell(length(.ref_full))
+    )
+  }) %>%
+  build_table(subset(DM, SEX %in% c("M", "F")))
+```
+
+so the data assigned to `.ref_full` is the full data of the reference column where the data assigned to `.ref_group` respects the subsetting defined by row-splitting and hence is from the same subset as the argument `x` or `df` to `afun`.
+
+
