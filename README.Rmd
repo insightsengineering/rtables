@@ -82,6 +82,13 @@ tbl <- rtable(
 tbl
 ```
 
+
+# Acknowledgements
+
+We would like to thank everyone who has made `rtables` a better project by providing feedback and improving examples & vignettes. The following list of contributors is alphabetical:
+
+Daniel Sabanes Bove, Francois Collins, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang.
+
 ## Presentations
 
 * [Presentation on v0.1.0 April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)

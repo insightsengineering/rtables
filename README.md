@@ -1,41 +1,53 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-rtables
-=======
 
+# rtables
 
-[![Build Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
+[![Build
+Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
 
-Reporting tables with R
------------------------
+## Reporting tables with R
 
-The `rtables` R package is a prototype to create and display complex tables with R. The cells in an `rtable` may contain any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently, `rtables` can be outputted in `ascii` and `html`.
+The `rtables` R package is a prototype to create and display complex
+tables with R. The cells in an `rtable` may contain any high-dimensional
+data structure which can then be displayed with cell-specific formatting
+instructions. Currently, `rtables` can be outputted in `ascii` and
+`html`.
 
-Some of our requirements and reasons to create this new table package are:
+Some of our requirements and reasons to create this new table package
+are:
 
--   multiple values displayed within a cell
--   values need to be programmatically accessible for cross-checking
--   flexible formatting (cell spans, rounding, alignment, etc.)
--   composition of an `rtable` object from other rtable objects
--   multiple output formats (html, ascii, latex, pdf)
--   flexible pagination
+  - multiple values displayed within a cell
+  - values need to be programmatically accessible for cross-checking
+  - flexible formatting (cell spans, rounding, alignment, etc.)
+  - composition of an `rtable` object from other rtable objects
+  - multiple output formats (html, ascii, latex, pdf)
+  - flexible pagination
 
-Note that the current state of `rtables` does not fulfill all of those requirements. We are looking for collaborators, see the next section.
+Note that the current state of `rtables` does not fulfill all of those
+requirements. We are looking for collaborators, see the next section.
 
-Collaboration and Planned API Changes
--------------------------------------
+## Collaboration and Planned API Changes
 
-The current state of the `rtables` functionality is a first rough prototype. We will be changing the API significantly in the coming months without maintaining backward compatibility. We will release the `rtable` package on [CRAN](https://cran.r-project.org/) once we have a stable version.
+The current state of the `rtables` functionality is a first rough
+prototype. We will be changing the API significantly in the coming
+months without maintaining backward compatibility. We will release the
+`rtable` package on [CRAN](https://cran.r-project.org/) once we have a
+stable version.
 
-We are looking for collaborators to help define and shape the `rtables` package. Please [contact me](mailto:adrian.waddell@roche.com) if you would like to align your contributions to the current development plans or feel free to fork the repository and to send us pull requests with the suggested improvements.
+We are looking for collaborators to help define and shape the `rtables`
+package. Please [contact me](mailto:adrian.waddell@roche.com) if you
+would like to align your contributions to the current development plans
+or feel free to fork the repository and to send us pull requests with
+the suggested improvements.
 
-Installation
-------------
+## Installation
 
-To install the stable release of `rtables` package run the following command in `R`:
+To install the stable release of `rtables` package run the following
+command in `R`:
 
 ``` r
-devtools::install_github("roche/rtables", ref="v0.1.0")
+devtools::install_github("roche/rtables", ref="v0.1.1")
 ```
 
 To install the test version of `rtables` run
@@ -44,11 +56,12 @@ To install the test version of `rtables` run
 devtools::install_github("roche/rtables")
 ```
 
-Usage
------
+## Usage
 
 ``` r
 library(rtables)
+#> Loading required package: magrittr
+
 tbl <- rtable(
   header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
@@ -60,20 +73,31 @@ tbl <- rtable(
   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
 tbl
-#>                                           Treatement        Comparison
-#>                                             N=100             N=300   
-#> ----------------------------------------------------------------------
-#> A                                         104 (20%)         100 (40%) 
-#> B                                          23 (40%)          43 (50%) 
-#> 
-#> this is a very long section header
-#> estimate                                             55.23            
-#>   95% CI                                          (44.8, 67.4)
+#>                                      Treatement   Comparison
+#>                                        N=100        N=300   
+#> ------------------------------------------------------------
+#> A                                    104 (20%)    100 (40%) 
+#> B                                     23 (40%)     43 (50%) 
+#>                                                             
+#> this is a very long section header                          
+#> estimate                                      55.23         
+#> 95% CI                                    (44.8, 67.4)
 ```
 
-Presentations
--------------
+# Acknowledgements
 
--   [Presentation on v0.1.0 April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
+We would like to thank everyone who has made `rtables` a better project
+by providing feedback and improving examples & vignettes. The following
+list of contributors is alphabetical:
 
--   [baselR November 2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing), this presentation was written for version `v0.0.1`
+Daniel Sabanes Bove, Francois Collins, Tadeusz Lewandowski, Nick Paszty,
+Nina Qi, Jana Stoilova, Heng Wang.
+
+## Presentations
+
+  - [Presentation on v0.1.0
+    April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
+
+  - [baselR November
+    2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing),
+    this presentation was written for version `v0.0.1`
