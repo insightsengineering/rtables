@@ -21,6 +21,7 @@ articles:
     - tabulation_dplyr
     - clinical_trials
     - tabulation_concepts
+    - varia
     - rtabulate
     - manual_table_construction
     - formatting_tables
@@ -28,6 +29,7 @@ articles:
     - pagination
     - baseline
     - known_issues
+    - varia
 
   - title: Developer
     desc: Vignettes aimed at package developers

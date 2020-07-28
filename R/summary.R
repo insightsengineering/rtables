@@ -25,7 +25,7 @@ setMethod("summary", "ANY", base:::summary)
 #' tbl
 #' 
 #' summary(tbl)
-setMethod("summary", "TableTree", function(object, depth = 0, indent = 0, row_type = "", ...) {
+setMethod("summary", "VTableTree", function(object, depth = 0, indent = 0, row_type = "", ...) {
   
   if (indent == 0) {
     cat_row(0, "name", "label", TRUE, "type  |")
@@ -152,9 +152,6 @@ cat_row <- function(indent, name, label, visible, content) {
 # 
 
 
-
-
-
 summarize_row_df <- function(name, label, indent, depth, rowtype, level) {
   data.frame(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, level = level,
              stringsAsFactors = FALSE)
@@ -185,7 +182,7 @@ summarize_row_df_empty <- function(...) {
 #' 
 #' tbl <- build_table(l, iris2)
 #' 
-#' y <- summarize_rows(tbl)
+#' summarize_rows(tbl)
 #' 
 setGeneric("summarize_rows", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows"))
 
@@ -264,4 +261,141 @@ setMethod("summarize_rows", "LabelRow",
 
 
 
+#' Summarize Table
+#' 
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(dplyr)
+#' 
+#' iris2 <- iris %>%
+#'   group_by(Species) %>%
+#'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+#'   ungroup()
+#' 
+#' l <- basic_table() %>% 
+#'   split_cols_by("Species") %>%
+#'   split_cols_by("group") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+#' 
+#' tbl <- build_table(l, iris2)
+#' 
+#' summarize_table(tbl)
+#' 
+setGeneric("summarize_table", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("summarize_table"))
 
+
+scat <- function(..., indent = 0, newline = TRUE) {
+  
+  txt <- paste(..., collapse = "", sep = "")
+  
+  cat(indent_string(txt, indent))
+  
+  if (newline) cat("\n")
+}
+
+obj_visible <- function(x) {
+  x@visible
+}
+
+is_empty_labelrow <- function(x) {
+  obj_label(x) == "" && !labelrow_visible(x)
+}
+
+is_empty_ElementaryTable <- function(x) {
+  length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
+}
+
+setMethod("summarize_table", "TableTree",
+          function(obj, depth = 0, indent = 0, print_indent = 0) {
+            
+            indent <- indent + indent_mod(obj)
+            
+            scat("TableTree: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
+            
+            visible <- if (is_empty_labelrow(tt_labelrow(obj))) {
+              scat("labelrow: -", indent = print_indent + 1)
+              FALSE
+            } else {
+              scat("labelrow:", indent = print_indent + 1)
+              summarize_table(tt_labelrow(obj), depth, indent, print_indent + 2)
+            }
+            
+            indent <- indent + visible
+            
+            ctab <- content_table(obj)
+            visible_content <- if (is_empty_ElementaryTable(ctab)) {
+              scat("content: -", indent = print_indent + 1)
+              FALSE
+            } else {
+              scat("content:", indent = print_indent + 1)
+              summarize_table(ctab, depth = depth,
+                              indent = indent + indent_mod(ctab),
+                              print_indent = print_indent + 2)
+            }
+            
+            if (length(tree_children(obj)) == 0) {
+              scat("children: - ", indent = print_indent + 1)
+            } else {
+              scat("children: ", indent = print_indent + 1)
+              lapply(tree_children(obj), summarize_table, 
+                     depth = depth + 1, 
+                     indent = indent + visible_content * (1 + indent_mod(ctab)),
+                     print_indent = print_indent + 2)
+            }
+          
+          invisible(NULL)
+            
+          })
+
+setMethod("summarize_table", "ElementaryTable",
+          function(obj, depth = 0, indent = 0, print_indent = 0) {
+            
+            scat("ElementaryTable: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
+            
+            
+            indent <- indent + indent_mod(obj)
+            
+            visible <- if (is_empty_labelrow(tt_labelrow(obj))) {
+              scat("labelrow: -", indent = print_indent + 1)
+              FALSE
+            } else {
+              scat("labelrow:", indent = print_indent + 1)
+              summarize_table(tt_labelrow(obj), depth, indent, print_indent + 2)
+            }
+            
+            
+            if (length(tree_children(obj)) == 0) {
+              scat("children: - ", indent = print_indent + 1)
+            } else {
+              scat("children: ", indent = print_indent + 1)
+              lapply(tree_children(obj), summarize_table, depth = depth + 1, indent = indent, print_indent = print_indent + 2)
+            }
+            
+            invisible(NULL)
+            
+          })
+
+
+setMethod("summarize_table", "TableRow",
+          function(obj, depth = 0, indent = 0, print_indent = 0) {
+            
+            scat(class(obj), ": ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
+            
+            indent <- indent + indent_mod(obj)
+            
+            invisible(NULL)
+          })
+
+setMethod("summarize_table", "LabelRow",
+          function(obj, depth = 0, indent = 0, print_indent = 0) {
+          
+            indent <- indent + indent_mod(obj)
+            
+            txtvis <- if (!obj_visible(obj)) "- <not visible>" else ""
+            scat("LabelRow: ", "[", obj_name(obj), "] (", obj_label(obj), ")", txtvis,  indent = print_indent)
+            
+            obj_visible(obj)
+          })
