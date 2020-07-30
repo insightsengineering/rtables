@@ -62,6 +62,7 @@ l <- basic_table() \%>\%
   split_rows_by("RACE", "Ethnicity") \%>\%
   summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
   analyze("AGE", "Age", afun = mean, format = "xx.xx")
+  
 l
 
 build_table(l, DM)

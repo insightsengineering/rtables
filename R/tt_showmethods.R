@@ -169,6 +169,8 @@ setMethod("spltype_abbrev", "CompoundSplit",
 
 setMethod("spltype_abbrev", "AnalyzeMultiVars",
           function(obj) "** multivar analysis **")
+setMethod("spltype_abbrev", "AnalyzeColVarSplit",
+          function(obj) "** col-var analysis **")
 
            
 

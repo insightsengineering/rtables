@@ -78,7 +78,7 @@ setMethod("split_rows", "PreDataRowLayout",
     lyt[[pos]] = tmp
     lyt
 })
-is_analysis_spl = function(spl) is(spl, "AnalyzeVarSplit") || is(spl, "AnalyzeMultiVars")
+is_analysis_spl = function(spl) is(spl, "VAnalyzeSplit") || is(spl, "AnalyzeMultiVars")
 ## note "pos" is ignored here because it is for which nest-chain
 ## spl should be placed in, NOIT for where in that chain it should go
 setMethod("split_rows", "SplitVector",
@@ -268,7 +268,7 @@ add_new_coltree = function(lyt, spl) {
 #' 
 #' # add an analysis (summary)
 #' l2 <- l %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l2
 #' 
 #' build_table(l2, DM)
@@ -276,7 +276,7 @@ add_new_coltree = function(lyt, spl) {
 #' # By default sequentially adding layouts results in nesting
 #' l3 <- basic_table() %>% split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
-#'   analyze("AGE", afun = lstwrapx(summary), format = "xx.xx")
+#'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 #' l3
 #' 
 #'  build_table(l3, DM)
@@ -293,7 +293,7 @@ add_new_coltree = function(lyt, spl) {
 #' l5 <- basic_table() %>% split_cols_by("ARM") %>%
 #'  split_rows_by("SEX", split_fun= drop_split_levels) %>%
 #'  analyze("AGE") %>%
-#'  split_rows_by("RACE", nested=TRUE, split_fun = drop_split_levels) %>%
+#'  split_rows_by("RACE", nested=FALSE, split_fun = drop_split_levels) %>%
 #'  analyze("AGE")
 #'
 #' l5
@@ -367,6 +367,7 @@ split_cols_by = function(lyt,
 #'   split_rows_by("RACE", "Ethnicity") %>%
 #'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
 #'   analyze("AGE", "Age", afun = mean, format = "xx.xx")
+#'   
 #' l
 #' 
 #' build_table(l, DM)
@@ -407,26 +408,14 @@ split_rows_by = function(lyt,
 #' 
 #' @seealso \code{\link{analyze_colvars}}
 #' @author Gabriel Becker 
-#' @examples 
-#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   split_rows_by("RACE", "ethnicity") %>%
-#'   analyze_colvars( afun = mean, format = "xx.xx")
-#' 
-#' l
-#'
-#' library(dplyr)
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
-#' 
-#'  build_table(l, ANL)
-#'   
-#'  
+
 split_cols_by_multivar = function(lyt,
                                   vars,
-                                  split_label,
+                                  ##split_label = "",
                                   varlabels = vars,
                                   nested = TRUE) {
-    spl = MultiVarSplit(vars = vars, split_label = split_label, varlabels)
+    spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
+                        varlabels)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -458,22 +447,30 @@ split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
 #' 
 #'
 #' @details
-#' For dynamic cuts, the cut is transformed into a static cut by
-#' \code{\link{build_table}} \emph{based on the full dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+#' For dynamic cuts, the cut is transformed into a static cut by \code{\link{build_table}} \emph{based on the full
+#' dataset}, before proceeding. Thus even when nested within another split in column/row space, the resulting split will
+#' reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
+#' 
 #' @export
+#' 
 #' @rdname varcuts
+#' 
 #' @author Gabriel Becker
+#' 
 #' @examples
 #' l <- basic_table() %>%
-#' split_cols_by_cuts("AGE", split_label = "Age,, cuts = c(0,25, 35, 1000), cutlabels = c("young", "medium", "old")) %>%
-#' analyze("RACE", label ="", defrowlab="count", afun = length)
-#'
+#'     split_cols_by_cuts("AGE", split_label = "Age",
+#'                        cuts = c(0, 25, 35, 1000), 
+#'                        cutlabels = c("young", "medium", "old")) %>%
+#'     analyze("RACE", afun = length)
+#' 
 #' build_table(l, DM)
-
-split_cols_by_cuts = function(lyt, var, split_label, cuts,
-                            cutlabels = NULL,
-                            nested = TRUE,
-                            cumulative = FALSE) {
+#' 
+split_cols_by_cuts = function(lyt, var, cuts, 
+                              cutlabels = NULL,
+                              split_label = var,
+                              nested = TRUE,
+                              cumulative = FALSE) {
     spl = VarStaticCutSplit(var, split_label, cuts, cutlabels)
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
@@ -483,13 +480,28 @@ split_cols_by_cuts = function(lyt, var, split_label, cuts,
 
 #' @export
 #' @rdname varcuts
-split_rows_by_dyncut = function(lyt, var, split_label, cuts,
-                               cutlabels = NULL,
-                               format = NULL,
-                               nested = TRUE,
-                               child_labels = c("default", "visible", "hidden"),
-                               cumulative = FALSE,
-                               indent_mod = 0L) {
+split_rows_by_cuts = function(lyt, var, cuts, 
+                              cutlabels = NULL,
+                              split_label = var,
+                              nested = TRUE,
+                              cumulative = FALSE) {
+    spl = VarStaticCutSplit(var, split_label, cuts, cutlabels)
+    if(cumulative)
+        spl = as(spl, "CumulativeCutSplit")
+    pos = next_rpos(lyt, nested)
+    split_rows(lyt, spl, pos)
+}
+
+#' @export
+#' @rdname varcuts
+split_rows_by_dyncut = function(lyt, var, cut,
+                                cutlabels = NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                child_labels = c("default", "visible", "hidden"),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     child_labels = match.arg(child_labels)
     spl = VarStaticCutSplit(var, split_label, cuts, cutlabels,
                             split_format = format,
@@ -504,14 +516,15 @@ split_rows_by_dyncut = function(lyt, var, split_label, cuts,
 
 #' @export
 #' @rdname varcuts
-split_cols_by_cutfun = function(lyt, var, split_label = var,
-                            cutfun = qtile_cuts,
-                            cutlabelfun = function(x) NULL,
-                            format = NULL,
-                            nested = TRUE,
-                            extra_args = list(),
-                            cumulative = FALSE,
-                            indent_mod = 0L) {
+split_cols_by_cutfun = function(lyt, var,
+                                cutfun = qtile_cuts,
+                                cutlabelfun = function(x) NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                extra_args = list(),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     spl = VarDynCutSplit(var, split_label,
                          cutfun = cutfun,
                          cutlabelfun = cutlabelfun,
@@ -548,6 +561,7 @@ split_cols_by_quartiles = function(lyt, var, split_label = var,
 split_rows_by_quartiles = function(lyt, var, split_label = var,
                              format = NULL,
                              nested = TRUE,
+                             child_labels = c("default", "visible", "hidden"),
                              extra_args = list(),
                              cumulative= FALSE,
                              indent_mod = 0L) {
@@ -557,6 +571,7 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                                                    "(Q2, Q3]",
                                                    "(Q3, max]"),
                          split_format = format,
+                         child_labels = child_labels,
                          extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod)
@@ -577,17 +592,22 @@ qtile_cuts = function(x) {
 
 #' @export
 #' @rdname varcuts
-split_rows_by_cutfun = function(lyt, var, split_label = var,
-                            cutfun = qtile_cuts,
-                            format = NULL,
-                            nested = TRUE,
-                            child_labels = c("default", "visible", "hidden"),
-                            cumulative = FALSE,
-                            indent_mod = 0L) {
+split_rows_by_cutfun = function(lyt, var,
+                                cutfun = qtile_cuts,
+                                cutlabelfun = function(x) NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                child_labels = c("default", "visible", "hidden"),
+                                extra_args = list(),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     child_labels = match.arg(child_labels)
     spl = VarDynCutSplit(var, split_label, cutfun = cutfun,
+                         cutlabelfun = cutlabelfun,
                          split_format = format,
                          child_labels = child_labels,
+                         extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod)
     pos = next_rpos(lyt, nested)
@@ -603,25 +623,46 @@ split_rows_by_cutfun = function(lyt, var, split_label = var,
 #' 
 #' @inheritParams lyt_args
 #'
-#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the function accepts changes the behavior when tabulation is performed.
+#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the
+#'   function accepts changes the behavior when tabulation is performed.
+#' 
 #' \itemize{
-#' \item{If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the relevant column (from \code{var} here) of the raw data being used to build the table.}
-#' \item{If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (ie all columns) of the raw data being tabulated}
+#'   \item{
+#'   If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the
+#'   relevant column (from \code{var} here) of the raw data being used to build the table.
+#'   }
+#'   
+#'   \item{
+#'   If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (i.e. all
+#'   columns) of the raw data being tabulated
+#'   }
 #' }
 #'
-#' In addition to differentation on the first argument, the analysis function can optionally accept a number of other parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation machinery. These are as follows:
+#' In addition to differentiation on the first argument, the analysis function can optionally accept a number of other
+#' parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation
+#' machinery. These are as follows:
+#' 
 #' \describe{
-#' \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
-#' \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
-#' \item{.ref_group_data}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
+#'   \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
+#'   \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
+#'   \item{.var}{variable that is analyzed}
+#'   \item{.ref_group}{data.frame or vector of subset corresponding to the `ref_group` column including subsetting
+#'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.ref_full}{data.frame or vector of subset corresponding to the `ref_group` column without subsetting
+#'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
 #' }
+#' 
 #' @export
+#' 
 #' @author Gabriel Becker
+#' 
+#' 
 #' @examples 
 #' 
 #' l <- basic_table() %>%
 #'     split_cols_by("ARM") %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #' 
 #' build_table(l, DM)
@@ -647,9 +688,10 @@ analyze = function(lyt,
                    ##can we name this na_rm? symbol conflict with possible afuns!!!
                    inclNAs = FALSE, 
                    extra_args = list(),
-                   show_labels = TRUE,
+                   show_labels = c("default", "visible", "hidden"),
                    indent_mod = 0L) {
 
+    show_labels = match.arg(show_labels)
     subafun = substitute(afun)
     if(is.name(subafun) &&
        is.function(afun) &&
@@ -666,16 +708,18 @@ analyze = function(lyt,
     } else {
         defrowlab = var_labels
     }
+    
     spl = AnalyzeMultiVars(vars, var_labels,
                           afun = afun,
                           split_format = format,
                           defrowlab = defrowlab,
                           inclNAs = inclNAs,
                           extra_args = extra_args,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          child_labels = show_labels)
  
     if(nested &&
-       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
@@ -693,13 +737,21 @@ get_acolvar_name  <- function(lyt) {
     vec = clyt[[1]]
     vcls = vapply(vec, class, "")
     pos = max(which(vcls ==  "MultiVarSplit"))
-    paste(c("ac", spl_payload(vec[[pos]])), collapse = "_")
+    paste(c("ac", get_acolvar_vars(lyt)), collapse = "_")
 }
 
+
+get_acolvar_vars <- function(lyt) {
+    clyt <- clayout(lyt)
+    stopifnot(length(clyt) == 1L)
+    vec = clyt[[1]]
+    vcls = vapply(vec, class, "")
+    pos = max(which(vcls ==  "MultiVarSplit"))
+    spl_payload(vec[[pos]])
+}
+
+
 #' Generate Rows Analyzing Different Variables Across Columns
-#' 
-#' TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
-#' level of nesting in the column structure, rather than at the row level.
 #' 
 #' @inheritParams  lyt_args
 #' 
@@ -708,49 +760,68 @@ get_acolvar_name  <- function(lyt) {
 #' @seealso \code{\link{split_cols_by_multivar}}
 #' 
 #' @author Gabriel Becker
-#' @examples 
 #' 
+#' @examples
+#' ## toy example where we take the mean of the first variable and the
+#' ## count of >.5 for the second.
+#' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
+#'                 function(x) rcell(sum(x > .5), format = "xx"))
+#'
 #' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff"), "TODO Multiple Variables") %>%
-#'   split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
-#'   analyze_colvars( afun = mean, format = "xx.xx")
-#' 
+#'     split_cols_by_multivar(c("value", "pctdiff")) %>%
+#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     summarize_row_groups() %>%
+#'     analyze_colvars(afun = colfuns)
+#'
 #' l
 #'
 #' library(dplyr)
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #' 
 #' build_table(l, ANL)
- 
+#' 
+#' 
+#' basic_table() %>% split_cols_by("ARM") %>%
+#'     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) %>%
+#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     summarize_row_groups() %>%
+#'     analyze_colvars(afun = mean, format = "xx.xx") %>%
+#'     build_table(ANL)
+
 analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
                            indent_mod = 0L) {
-    subafun = substitute(afun)
-    if(is.name(subafun) &&
-       is.function(afun) &&
-       ## this is gross. basically testing
-       ## if the symbol we have corresponds
-       ## in some meaningful way to the function
-       ## we will be calling.
-       identical(mget(as.character(subafun),
-                      mode = "function",
-                      ifnotfound = list(NULL),
-                      inherits = TRUE
-                      )[[1]], afun)) {
-        defrowlab = as.character(subafun)
+    if(is.function(afun)) {
+        subafun = substitute(afun)
+        if(is.name(subafun) &&
+           is.function(afun) &&
+           ## this is gross. basically testing
+           ## if the symbol we have corresponds
+           ## in some meaningful way to the function
+           ## we will be calling.
+           identical(mget(as.character(subafun),
+                          mode = "function",
+                          ifnotfound = list(NULL),
+                          inherits = TRUE
+                          )[[1]], afun)) {
+            defrowlab = as.character(subafun)
+        } else {
+            defrowlab = ""
+        }
+        afun = lapply(get_acolvar_vars(lyt),
+                      function(x) afun)
     } else {
         defrowlab = ""
     }
-    spl = AnalyzeVarSplit(NA_character_, "", afun = afun,
+    spl = AnalyzeColVarSplit(afun = afun,
                           defrowlab = defrowlab,
                           split_format = format,
                           split_name = get_acolvar_name(lyt),
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          show_varlabel = FALSE)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
-
-
 }
 
 #' Add ref_group comparison analysis recipe
@@ -760,12 +831,16 @@ analyze_colvars = function(lyt, afun,
 #' @export
 #' @rdname bline_analyses
 analyze_against_ref_group = function(lyt, var = NA_character_,
-                                    afun,
-                                    label = "",
-                                   compfun = `-`,
-                                  format = NULL,
-                                  nested = TRUE,
-                                  indent_mod = 0L) {
+                                     afun,
+                                     label = if(is.na(var)) "" else var,
+                                     compfun = `-`,
+                                     format = NULL,
+                                     nested = TRUE,
+                                     indent_mod = 0L,
+                                     show_labels = c("default", "hidden", "visible")) {
+    .Deprecated("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
+    
+    show_labels = match.arg(show_labels)
     if(is.character(afun)) {
         afnm = afun
         afun = get(afun, mode = "function")
@@ -775,14 +850,14 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
     defrowlab = "Diff from Baseline"
     if(is.character(compfun))
         compfun = get(compfun, mode = "function")
-    afun2 = function(x, .ref_group_data = NULL, .N_col, .N_total, ...) {
-        if(is.null(.ref_group_data))
+    afun2 = function(x, .ref_group = NULL, .in_ref_col, .N_col, .N_total, ...) {
+        if(is.null(.ref_group))
             stop("did not receive ref_group aggregataion value required for comparison")
         if(!is.na(var) && !.takes_df(afun))
-            blinevardat = .ref_group_data[[var]]
+            blinevardat = .ref_group[[var]]
         else
-            blinevardat = .ref_group_data
-        if(identical(x, blinevardat))
+            blinevardat = .ref_group
+        if(.in_ref_col)
             return(NULL) ## we are in the ref_group
         
         args = list()
@@ -806,9 +881,10 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                           afun = afun2,
                           split_format = format,
                           defrowlab = defrowlab,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          show_varlabel = .labelkids_helper(show_labels))
     if(nested &&
-       (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
+       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
@@ -818,43 +894,154 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
     }
 }
 
-#' @export
-#' @rdname bline_analyses
-analyze_against_ref_group_2dtable = function(lyt,
-                                 var = NA_character_,
-                                 label = var,
-                                 compfun,
-                                 format = NULL,
-                                 nested = TRUE,
-                                 indent_mod = 0L) {
 
-    if(is.character(compfun)) {
-        cfnm = compfun
-        compfun = get(compfun, mode = "function")
-    } else {
-        cfnm = as.character(substitute(compfun))
-    }
-    
 
+## #' Add ref_group comparison analysis recipe
+## #'
+## #' @inheritParams lyt_args
+## #' 
+## #' @export
+## #' 
+## #' @examples 
+## #' 
+## #' foo <- function(x, x_ref) {
+## #'   if (is.null(x)) {
+## #'     rcell("-")
+## #'   } else {
+## #'     rcell(mean(x) - mean(x_ref), format = "xx.xx")
+## #'   }
+## #' }
+## #' 
+## #' basic_table() %>%
+## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+## #'   analyze_against_ref_group2("AGE", foo) %>%
+## #'   build_table(DM)
+## #' 
+## #' basic_table() %>%
+## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
+## #'   analyze_against_ref_group2("AGE", function(df, df_ref, .N_col, .N_total) {
+## #'     in_rows( dimensions = rcell(list(nrow(df), nrow(df_ref)), format = "xx / xx"))
+## #'   }) %>%
+## #'   build_table(DM)
+## #'
+## #'
+## analyze_against_ref_group2 = function(lyt, 
+##                                       var,
+##                                       afun,
+##                                       label = if(is.na(var)) "" else var,
+##                                       format = NULL,
+##                                       nested = TRUE,
+##                                       extra_args = list(),
+##                                       indent_mod = 0L,
+##                                       show_labels = c("default", "hidden", "visible")) {
     
-    compfun2 = function(colvardat, blinevardat) {
-        if(identical(colvardat, blinevardat))
-            return(NULL)
+##     show_labels <- match.arg(show_labels)
+    
+##     if(is.character(afun)) {
+##         afnm <- afun
+##         afun <- get(afun, mode = "function")
+##     } else {
+##         afnm <- as.character(substitute(afun))
+##     }
+    
+##     stopifnot(!is.null(formals(afun)), !is.na(var))
+    
+##     arg_nm <- names(formals(afun))[1:2]
+    
+##     afun_df <- if (identical(arg_nm, c("x", "x_ref"))) {
+##         function(df, df_ref, ...) {
             
-        ## TODO(?) compfun cmight need .N_col or .N_total??
-        tab = .make_2xk_tab(colvardat, blinevardat)
-        ret = compfun(tab)
-        if(length(ret) == 1 && is.null(names(ret)))
-            names(ret) = cfnm
-        ret
-    }
-    analyze_against_ref_group(lyt = lyt, var = vtar, label = label,
-                           afun = function(x) x,
-                           compfun = compfun2,
-                           format = format,
-                           nested = nested,
-                           indent_mod = indent_mod)
-}
+##             x <- if (is.null(df)) 
+##                 NULL
+    ##         else
+    ##             df[[var]]
+            
+    ##         afun(x = x, x_ref = df_ref[[var]], ...)
+    ##     }
+    ## } else if (identical(arg_nm, c("df", "df_ref"))) {
+    ##     afun
+    ## } else {
+    ##     stop("afun needs to either have the first two arguments x & x_ref or df & df_ref")
+    ## }
+    
+    ## afun_tabulation <- function(df, .ref_group = NULL, .N_col, .N_total, ...) {
+        
+    ##     if(is.null(.ref_group))
+    ##         stop("did not receive ref_group aggregataion value required for comparison")
+        
+        
+    ##     if (identical(df, .ref_group)) {
+    ##         df <- NULL
+    ##     } 
+        
+    ##     args <- extra_args
+    ##     if(takes_coln(afun))
+    ##         args <- c(args, list(.N_col = .N_col))
+        
+    ##     if(takes_totn(afun))
+    ##         args = c(args, list(.N_total = .N_total))
+        
+    ##     ret <- do.call(afun_df, c(list(df = df, df_ref = .ref_group), args))
+        
+    ##     ret
+    ## }
+    
+    ## spl <- AnalyzeVarSplit(var,
+    ##                        label,
+    ##                        afun = afun_tabulation,
+    ##                        split_format = format,
+    ##                        defrowlab = afnm,
+    ##                        indent_mod = indent_mod,
+    ##                        show_varlabel = .labelkids_helper(show_labels))
+    
+    ## if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+    ##     cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
+    ## } else {
+    ##     pos <- next_rpos(lyt, nested)
+##         split_rows(lyt, spl, pos)
+##     }
+    
+## }
+
+
+
+## #' @export
+## #' @rdname bline_analyses
+## analyze_against_ref_group_2dtable = function(lyt,
+##                                  var = NA_character_,
+##                                  label = var,
+##                                  compfun,
+##                                  format = NULL,
+##                                  nested = TRUE,
+##                                  indent_mod = 0L) {
+
+##     if(is.character(compfun)) {
+##         cfnm = compfun
+##         compfun = get(compfun, mode = "function")
+##     } else {
+##         cfnm = as.character(substitute(compfun))
+##     }
+    
+
+    
+##     compfun2 = function(colvardat, blinevardat) {
+##         if(identical(colvardat, blinevardat))
+##             return(NULL)
+            
+##         ## TODO(?) compfun cmight need .N_col or .N_total??
+##         tab = .make_2xk_tab(colvardat, blinevardat)
+##         ret = compfun(tab)
+##         if(length(ret) == 1 && is.null(names(ret)))
+##             names(ret) = cfnm
+##         ret
+##     }
+##     analyze_against_ref_group(lyt = lyt, var = vtar, label = label,
+##                            afun = function(x) x,
+##                            compfun = compfun2,
+##                            format = format,
+##                            nested = nested,
+##                            indent_mod = indent_mod)
+## }
 
 
 ## Add a total column at the next **top level** spot in
@@ -864,7 +1051,7 @@ add_overall_col = function(lyt, label) {
     spl = AllSplit(label)
     split_cols(lyt,
                   spl,
-                  next_cpos(lyt, TRUE))
+                  next_cpos(lyt, FALSE))
 }
 
 #' Add Row Summary
@@ -877,14 +1064,16 @@ setGeneric(".add_row_summary",
                     cfun,
                     child_labels = c("default", "visible", "hidden"),
                     cformat = NULL,
-                    indent_mod = 0L) standardGeneric(".add_row_summary"))
+                    indent_mod = 0L,
+                    cvar = "") standardGeneric(".add_row_summary"))
 setMethod(".add_row_summary", "PreDataTableLayouts",
-          function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L) {
+          function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L, cvar = "") {
     child_labels = match.arg(child_labels)
     tmp = .add_row_summary(rlayout(lyt), label, cfun,
                       child_labels = child_labels,
                       cformat = cformat,
-                      indent_mod = indent_mod)
+                      indent_mod = indent_mod,
+                      cvar = cvar)
     rlayout(lyt) = tmp
     lyt
 })
@@ -895,20 +1084,23 @@ setMethod(".add_row_summary", "PreDataRowLayout",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         ## XXX ignoring indent mod here
         rt = root_spl(lyt)
-        rt = .add_row_summary(rt, label, cfun, child_labels = child_labels, cformat = cformat)
+        rt = .add_row_summary(rt, label, cfun, child_labels = child_labels, cformat = cformat,
+                              cvar = cvar)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
         tmp = .add_row_summary(lyt[[ind]], label, cfun,
                           child_labels = child_labels,
                           cformat = cformat,
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          cvar = cvar)
         lyt[[ind]] = tmp
     }
     lyt
@@ -920,7 +1112,8 @@ setMethod(".add_row_summary", "SplitVector",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
@@ -931,7 +1124,8 @@ setMethod(".add_row_summary", "SplitVector",
                            cfun,
                            child_labels = child_labels,
                            cformat = cformat,
-                           indent_mod = indent_mod)
+                           indent_mod = indent_mod,
+                           cvar = cvar)
     lyt[[ind]] = tmp
     lyt
 })
@@ -942,11 +1136,13 @@ setMethod(".add_row_summary", "Split",
                    cfun,
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
-                   indent_mod = 0L) {
+                   indent_mod = 0L,
+                   cvar = "") {
     child_labels = match.arg(child_labels)
     lbl_kids = .labelkids_helper(child_labels)
     content_fun(lyt) = cfun
     content_indent_mod(lyt) = indent_mod
+    content_var(lyt) = cvar
     obj_format(lyt) = cformat
     if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
         label_kids(lyt) = lbl_kids
@@ -956,11 +1152,14 @@ setMethod(".add_row_summary", "Split",
 .count_raw_constr = function(var, format, label_fstr) {
     function(df, labelstr = "") {
         label = sprintf(label_fstr, labelstr)
-        if(!is.null(var))
-            cnt = sum(!is.na(df[[var]]))
-        else
-            cnt = nrow(df)
-
+        if(is(df, "data.frame")) {
+            if(!is.null(var) && nzchar(var))
+                cnt = sum(!is.na(df[[var]]))
+            else
+                cnt = nrow(df)
+        } else { # df is the data column vector
+            cnt = sum(!is.na(df))
+        }
         ret = rcell(cnt, format = format,
                     label = label)
         
@@ -973,11 +1172,14 @@ setMethod(".add_row_summary", "Split",
 .count_wpcts_constr = function(var, format, label_fstr) {
     function(df, labelstr = "", .N_col) {
         label = sprintf(label_fstr, labelstr)
-        if(!is.null(var))
-            cnt = sum(!is.na(df[[var]]))
-        else
-            cnt = nrow(df)
-
+        if(is(df, "data.frame")) {
+            if(!is.null(var) && nzchar(var))
+                cnt = sum(!is.na(df[[var]]))
+            else
+                cnt = nrow(df)
+        } else { # df is the data column vector
+            cnt = sum(!is.na(df))
+        }
         ## the formatter does the *100 so we don't here.
         ret = rcell(c(cnt, cnt/.N_col),
                     format = format,
@@ -1007,7 +1209,7 @@ setMethod(".add_row_summary", "Split",
 #' l <- basic_table() %>% split_cols_by("ARM") %>% 
 #'     split_rows_by("RACE") %>% 
 #'     summarize_row_groups(label_fstr = "%s (n)") %>% 
-#'     analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #' 
 #' tbl <- build_table(l, DM)
@@ -1017,7 +1219,7 @@ setMethod(".add_row_summary", "Split",
 #' summary(tbl) # summary count is a content table
 #' 
 summarize_row_groups = function(lyt,
-                                var = NULL,
+                                var = "",
                                 label_fstr = "%s",
                                 format = "xx (xx.x%)",
                                 cfun = NULL,
@@ -1032,7 +1234,8 @@ summarize_row_groups = function(lyt,
     .add_row_summary(lyt,
                      cfun = cfun,
                      cformat = format,
-                     indent_mod = indent_mod)
+                     indent_mod = indent_mod,
+                     cvar = var)
 }
 
 
@@ -1228,21 +1431,29 @@ manual_cols = function(..., .lst = list(...)) {
 #' @param f The function to wrap.
 #' @export
 #'
-#' @details \code{lstwrapx} generates a wrapper which takes \code{x} as its first argument, while \code{lstwrapdf} generates an otherwise identical wrapper function whose first argument is named \code{df}.
+#' @details \code{list_wrap_x} generates a wrapper which takes \code{x} as its first argument, while \code{list_wrap_df}
+#'   generates an otherwise identical wrapper function whose first argument is named \code{df}.
 #'
-#' We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe, while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the variable being analyzed.
+#'   We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or
+#'   \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe,
+#'   while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the
+#'   variable being analyzed.
 #' 
-#' @rdname lstwrap
+#' @rdname list_wrap
 #' @author Gabriel Becker
 #' @examples 
 #' 
 #' summary(iris$Sepal.Length)
 #' 
-#' f <- lstwrapx(summary)
-#' f(iris$Sepal.Length)
-lstwrapx = function(f) {
+#' f <- list_wrap_x(summary)
+#' f(x = iris$Sepal.Length)
+#' 
+#' f2 <- list_wrap_df(summary)
+#' f2(df = iris$Sepal.Length)
+#' 
+list_wrap_x = function(f) {
     function(x,...) {
-        vs = as.list(f(x,...))
+        vs = as.list(f(x, ...))
         ret = mapply(function(v, nm) {
             rcell(v, label = nm)
         },
@@ -1253,9 +1464,9 @@ lstwrapx = function(f) {
     }
 }
 
-#' @rdname lstwrap
+#' @rdname list_wrap
 #' @export
-lstwrapdf = function(f) {
+list_wrap_df = function(f) {
     function(df,...) {
         vs = as.list(f(df,...))
         ret = mapply(function(v, nm) {
@@ -1284,14 +1495,54 @@ lstwrapdf = function(f) {
 basic_table <- function() NULL
 
 #' Create multiple rows in analysis or summary functions
+#' 
+#' define the cells that get placed into multiple rows in `afun`
+#' 
+#' @note currently the `.name` argument is not used
+#' 
 #' @param ... single row defining expressions
-#' @param .lst list of rrows
+#' @param .list list cell content, usually `rcells`, the `.list` is concatenated to `...`
+#' @param .names names rows
+#' @param .labels labels of rows
+#' 
 #' @export
-in_rows <- function(..., .lst) {
-  l <- list(...)
-  if (missing(.lst)) {
-    l
-  } else {
-    c(l, .lst)
-  }
+#' 
+#' @seealso `analyze`
+#' 
+#' @examples 
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+#' 
+#' in_rows(.list = list(a = 1, b = 2, c = 3))
+#' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
+#' 
+#' basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze("AGE", afun = function(x) {
+#'     in_rows(
+#'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+#'     )
+#'   }) %>%
+#'   build_table(ex_adsl)
+#' 
+in_rows <- function(..., .list = NULL, .names, .labels) {
+    
+    l <- c(list(...), .list)
+    
+    if (missing(.names) && missing(.labels)) {
+        if (length(l) > 0 && is.null(names(l))) 
+            stop("need a named list")
+    } else {
+        # currently .names is not supported
+        if (missing(.labels)) .labels <- .names
+        
+        if (length(.labels) != length(l)) 
+            stop("dimension missmatch for cells and row names")
+        
+        names(l) <- .labels
+    }
+    
+    if (length(l) == 0) NULL else l
 } 

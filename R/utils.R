@@ -18,12 +18,14 @@ num_all_equal <- function(x, tol = .Machine$double.eps ^ 0.5) {
 all_true <- function(lst, fcn, ...) {
   all(vapply(lst, fcn, logical(1), ...))
 }
+
 is_logical_single <- function(x) {
   !is.null(x) &&
     is.logical(x) &&
     length(x) == 1 &&
     !is.na(x)
 }
+
 is_logical_vector_modif <- function(x, min_length = 1) {
   !is.null(x) &&
     is.logical(x) &&

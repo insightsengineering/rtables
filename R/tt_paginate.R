@@ -239,6 +239,7 @@ find_pag = function(pagdf,
 #' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other considerations. Defaults to none.
 #' 
 #' @export
+#' @rdname paginate
 pag_tt_indices = function(tt, lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
@@ -269,4 +270,19 @@ pag_tt_indices = function(tt, lpp = 15,
         start = end + 1
     }
     ret
+}
+
+#' @export
+#' @rdname paginate
+paginate_table = function(tt, lpp = 15,
+                           min_siblings = 2,
+                           nosplitin = character(),
+                           colwidths = NULL,
+                           verbose = FALSE) {
+    inds = pag_tt_indices(tt, lpp = lpp,
+                          min_siblings = min_siblings,
+                          nosplitin = nosplitin,
+                          colwidths = colwidths,
+                          verbose = verbose)
+    lapply(inds, function(x) tt[x,])
 }

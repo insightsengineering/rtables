@@ -1,0 +1,62 @@
+---
+title: "Varia"
+author: "Adrian Waddell"
+date: "6/12/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Varia}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+## Introduction
+
+This vignette contains sections that were removed from other vignettes and are currently orphaned.
+
+
+## list_wrap functions
+
+To illustrate custom analyses function we will now recreate the `rtab_inner` functionality for factors.
+
+The `table` function gets us already fairly close to the counts needed in the AE table:
+
+```{r, eval = FALSE}
+table(ADAE2$AEDECOD)
+```
+
+Unfortunately we cannot use `analyze("USUBJID", afun = table)` as we expect multiple rows defined by `in_rows` and `table` returns a table. Currently if your `afun` or `cfun` returns a list (test with `is.list`) then each list element is wrapped into an `rcell` and defines a row and thus placed on a seperate row. All other return types of `afun`/`cfun` are taken as defining a single row (and also wrapped in an `rcell`) regardless of their length. This is an implementation detail that is subject to change. It is safest to use `in_rows` whenever an analysis or content function needs to generate muliple rows. **TODO: rename `list_warp` to `muli_row_wrap` or something similar**.
+
+`rtables` provides the `list_wrap_x` function with takes a function `f` and an argument and then coerces the return value of `f` to a list:
+
+```{r, eval = FALSE}
+lwtable <- list_wrap_x(table)
+lwtable(x = ADAE2$AEDECOD)
+```
+
+Note that the `_x` in the `list_wrap` function name translates to the argument name of the wrapped function. 
+
+Thus we have re-created the AE table from above with our custom count function is:
+
+```{r, eval = FALSE}
+tbl2 <- basic_table() %>% 
+  split_cols_by("ARM") %>%
+  add_colcounts() %>%
+  split_rows_by("AEBODSYS", child_labels = "visible")  %>%
+  summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+  analyze("AEDECOD", list_wrap_x(table), show_labels = "hidden", indent_mod = -1) %>%
+  build_table(ADAE2, col_counts = N_per_arm)
+
+tbl2
+```
+

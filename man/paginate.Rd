@@ -2,9 +2,19 @@
 % Please edit documentation in R/tt_paginate.R
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
+\alias{paginate_table}
 \title{Determine pagination of a TableTree}
 \usage{
 pag_tt_indices(
+  tt,
+  lpp = 15,
+  min_siblings = 2,
+  nosplitin = character(),
+  colwidths = NULL,
+  verbose = FALSE
+)
+
+paginate_table(
   tt,
   lpp = 15,
   min_siblings = 2,

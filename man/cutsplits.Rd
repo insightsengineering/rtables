@@ -22,7 +22,8 @@ VarStaticCutSplit(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 
 CumulativeCutSplit(
@@ -37,7 +38,8 @@ CumulativeCutSplit(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 
 VarDynCutSplit(
@@ -53,7 +55,8 @@ VarDynCutSplit(
   extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 }
 \arguments{

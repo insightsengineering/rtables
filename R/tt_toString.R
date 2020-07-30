@@ -38,7 +38,7 @@ setMethod("print", "VTableTree", function(x, ...) {
 #' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' 
 #' tbl <- build_table(l, iris2)
 #' 
@@ -139,7 +139,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' 
 #' l
 #' 
@@ -288,7 +288,7 @@ matrix_form <- function(x) {
 #' tbl <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx") %>%
 #'   build_table(iris2)
 #' 
 #' get_formatted_cells(tbl)
@@ -374,7 +374,7 @@ setMethod("get_formatted_cells", "LabelRow",
 #' l <- basic_table() %>% 
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = lstwrapx(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' 
 #' tbl <- build_table(l, iris2)
 #' 

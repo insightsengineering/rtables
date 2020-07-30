@@ -2,28 +2,18 @@
 % Please edit documentation in R/colby_constructors.R
 \name{analyze_against_ref_group}
 \alias{analyze_against_ref_group}
-\alias{analyze_against_ref_group_2dtable}
 \title{Add ref_group comparison analysis recipe}
 \usage{
 analyze_against_ref_group(
   lyt,
   var = NA_character_,
   afun,
-  label = "",
+  label = if (is.na(var)) "" else var,
   compfun = `-`,
   format = NULL,
   nested = TRUE,
-  indent_mod = 0L
-)
-
-analyze_against_ref_group_2dtable(
-  lyt,
-  var = NA_character_,
-  label = var,
-  compfun,
-  format = NULL,
-  nested = TRUE,
-  indent_mod = 0L
+  indent_mod = 0L,
+  show_labels = c("default", "hidden", "visible")
 )
 }
 \arguments{

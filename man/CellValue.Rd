@@ -12,6 +12,8 @@ CellValue(val, format = NULL, colspan = 1L, label = NULL)
 \item{format}{format string for cells}
 
 \item{colspan}{integer. Generally ignored currently.}
+
+\item{label}{used as row name if the row name is not specified by \code{in_rows}}
 }
 \description{
 Cell Value constructor

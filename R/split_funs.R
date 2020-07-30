@@ -167,36 +167,6 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
                labels = labels[vord],
                extras = extr[vord])
     ret
-    ## varvec = df[[spl_payload(spl)]]
-    ## labelvec = df[[spl_labelvar(spl)]]
-    ## if(is.null(vals)) {
-    ##     vals = if(is.factor(varvec))
-    ##                levels(varvec)
-    ##            else
-    ##                unique(varvec)
-    ## }
- 
-    ## if(is.null(labels)) {
-    ##     ##XXX dangerous
-    ##     if(is.factor(varvec))
-    ##         labels = vals
-    ##     else
-    ##         labels = sapply(vals, function(v) {
-    ##             vlabel = unique(df[df[[spl_payload(spl)]] == v,
-    ##                              spl_labelvar(spl), drop = TRUE])
-    ##             if(length(vlabel) == 0)
-    ##                 vlabel = ""
-    ##             vlabel
-    ##         })
-    ## }
-    ## fct = factor(varvec, levels = vals)
-    ## spl = split(df, fct)
-    ## ## should always be true or the above would have broken
-    ## if(!are(vals, "SplitValue"))
-    ##     vals = make_splvalue_vec(vals)
-    
-    ## list(values = vals, datasplit = spl,
-    ##      labels = labels)
 }
 
 
@@ -236,7 +206,7 @@ setMethod("check_validsplit", "MultiVarSplit",
     .checkvarsok(spl, df)
 })
 
-setMethod("check_validsplit", "AnalyzeVarSplit",
+setMethod("check_validsplit", "VAnalyzeSplit",
           
           function(spl, df) {
     if(!is.na(spl_payload(spl))) {
@@ -286,7 +256,7 @@ setMethod(".applysplit_rawvals", "ManualSplit",
 setMethod(".applysplit_rawvals", "NULLSplit",
           function(spl, df) "")
 
-setMethod(".applysplit_rawvals", "AnalyzeVarSplit",
+setMethod(".applysplit_rawvals", "VAnalyzeSplit",
           function(spl, df) spl_payload(spl))
 
 
@@ -333,7 +303,7 @@ setMethod(".applysplit_datapart", "NULLSplit",
           function(spl, df, vals) list(df[FALSE,]))
 
 ## XXX should this be mandatorily excluding NAs???
-setMethod(".applysplit_datapart", "AnalyzeVarSplit",
+setMethod(".applysplit_datapart", "VAnalyzeSplit",
           function(spl, df, vals) {
     ## for now, this will work later
     stopifnot(length(vals) == 1L)
@@ -391,7 +361,9 @@ setMethod(".applysplit_extras", "VarLevWBaselineSplit",
     var = spl_payload(spl)
     bl_level = spl@ref_group_value #XXX XXX
     bldata = df[df[[var]] == bl_level,]
-    replicate(c(list(.ref_group_data = bldata), split_exargs(spl)), n = length(vals), simplify = FALSE)
+    lapply(vals, function(vl) {
+        list(.ref_full = bldata, .in_ref_col = vl == bl_level)
+    })
 })
 
 ## XXX TODO FIXME
@@ -571,22 +543,28 @@ trim_levels_in_group = function(innervar) {
 }
 
 #' Add an implicit 'overall' level to split
+#' 
 #' @inheritParams lyt_args
 #' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
 #' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
-#' @return a closure suitable for use as a splitting function (\code{split_fun}) when creating a table layout
+#' 
+#' @return a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+#' 
+#' @export
+#' 
 #' @examples
-#'l <- NULL %>%
+#' l <- NULL %>%
 #'    split_cols_by("ARM") %>% 
 #'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>% 
 #'    summarize_row_groups(label_fstr = "%s (n)") %>% 
-#'    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+#'    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+#'    
 #' l
 #' 
 #' tbl <- build_table(l, DM)
- 
+#' 
 #' tbl
-#' @export
+#' 
 add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
     combodf <- data.frame(valname = valname,
                           label = label,

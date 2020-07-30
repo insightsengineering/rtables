@@ -20,7 +20,7 @@ add_overall_level(
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.}
 }
 \value{
-a closure suitable for use as a splitting function (\code{split_fun}) when creating a table layout
+a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
 }
 \description{
 Add an implicit 'overall' level to split
@@ -30,9 +30,12 @@ l <- NULL \%>\%
    split_cols_by("ARM") \%>\% 
    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) \%>\% 
    summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
-   analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+   analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+   
 l
 
 tbl <- build_table(l, DM)
+
 tbl
+
 }

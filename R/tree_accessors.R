@@ -1,7 +1,3 @@
-
-
-setMethod("nrow", "ElementaryTable",
-          function(x) length(tree_children(x)))
 ## XXX Do we want add.labrows here or no?
 ## we have to choose one and stick to it.
 setMethod("nrow", "VTableTree",
@@ -11,8 +7,12 @@ setMethod("nrow", "TableRow",
           function(x) 1L)
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
-    ci = col_info(x)
-    length(col_exprs(ci))
+    ncol(col_info(x))
+})
+
+setMethod("ncol", "InstantiatedColumnInfo",
+          function(x) {
+    length(col_exprs(x))
 })
 
 #' Dim of a TableTree-related Object
@@ -289,6 +289,11 @@ setMethod("obj_label<-", "TableRow",
     obj@label = value
     obj
 })
+setMethod("obj_label<-", "CellValue",
+          function(obj, value){
+    obj@label = value
+    obj
+})
 
 setMethod("obj_label<-", "VTableTree",
           function(obj, value) {
@@ -321,6 +326,11 @@ setMethod("labelrow_visible", "VTableTree",
 setMethod("labelrow_visible", "LabelRow",
           function(obj) obj@visible)
 
+setMethod("labelrow_visible", "VAnalyzeSplit",
+          function(obj) obj@var_label_visible)
+
+
+
 setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_visible<-"))
 setMethod("labelrow_visible<-", "VTableTree",
           function(obj, value) {
@@ -335,9 +345,15 @@ setMethod("labelrow_visible<-", "LabelRow",
     obj
 })
 
+setMethod("labelrow_visible<-", "VAnalyzeSplit",
+          function(obj, value) {
+    obj@var_label_visible = value
+    obj
+})
+
 
 ## TRUE is always, FALSE is never, NA is only when no
-## content function is present
+## content function (or rows in an instantiated table) is present
 setGeneric("label_kids", function(spl) standardGeneric("label_kids"))
 setMethod("label_kids", "Split", function(spl) spl@label_children)
 
@@ -367,8 +383,19 @@ setMethod("content_fun<-", "Split", function(object, value) {
 })
 
 
+setGeneric("content_var", function(obj) standardGeneric("content_var"))
+setMethod("content_var", "Split", function(obj) obj@content_var)
+
+
+setGeneric("content_var<-", function(object, value) standardGeneric("content_var<-"))
+setMethod("content_var<-", "Split", function(object, value) {
+    object@content_var = value
+    object
+})
+
 setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
 setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
+setMethod("analysis_fun", "AnalyzeColVarSplit", function(obj) obj@analysis_fun)
 
 
 
@@ -386,11 +413,11 @@ setMethod("split_fun", "Split", function(obj) NULL)
 ### Miscelaneous accessors
 
 setGeneric("avar_inclNAs", function(obj) standardGeneric("avar_inclNAs"))
-setMethod("avar_inclNAs", "AnalyzeVarSplit",
+setMethod("avar_inclNAs", "VAnalyzeSplit",
           function(obj) obj@include_NAs)
 
 setGeneric("avar_inclNAs<-", function(obj, value) standardGeneric("avar_inclNAs<-"))
-setMethod("avar_inclNAs<-", "AnalyzeVarSplit",
+setMethod("avar_inclNAs<-", "VAnalyzeSplit",
           function(obj, value) {
     obj@include_NAs = value
 })

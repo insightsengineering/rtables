@@ -15,7 +15,8 @@ MultiVarSplit(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   indent_mod = 0L,
-  cindent_mod = 0L
+  cindent_mod = 0L,
+  cvar = ""
 )
 }
 \arguments{

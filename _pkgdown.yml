@@ -18,14 +18,18 @@ articles:
     desc: Vignettes aimed at package users
     contents:
     - introduction
+    - tabulation_dplyr
     - clinical_trials
     - tabulation_concepts
+    - varia
     - rtabulate
     - manual_table_construction
     - formatting_tables
+    - subsetting_tables
     - pagination
     - baseline
     - known_issues
+    - varia
 
   - title: Developer
     desc: Vignettes aimed at package developers
@@ -56,18 +60,19 @@ reference:
     - summarize_row_groups
     - split_cols_by_multivar
     - analyze_colvars
-    - analyze_against_baseline
     - split_cols_by_cuts 
     - add_overall_level
+    - analyze_against_ref_group
     - add_existing_table
     - manual_cols
     
   - title: Table Tree Utility Functions
     desc: Utility functions
     contents:
-    - lstwrapx
-    - lstwrapdf
+    - list_wrap_x
+    - list_wrap_df
     - remove_split_levels # split_funcs
+    - add_combo_levels
 
   - title: Manual Table Creation Functions
     desc:  These are the main functions needed to build an rtable.
@@ -101,10 +106,9 @@ reference:
     desc: These functions create ascii or html representations of the table
     contents:
     - toString,VTableTree-method 
-    - propose_column_widhts
+    - propose_column_widths
     - as_html
     - matrix_form
-    - get_formatted_rows    
 
   - title: Utility Functions
     desc: utility functions
@@ -145,13 +149,14 @@ reference:
     - "length,CellValue-method"
     
 
-  - title: Table sorting functions
+  - title: Table sorting and pruning functions
     desc: funtions to sort rows within tables and list of tables
     contents:
     - order_rrows
     - sort_rrows
     - order_rtables
     - sort_rtables
+    - trim_zero_rows
 
 
   - title: TableTree Framework Constructors and S4 Classes

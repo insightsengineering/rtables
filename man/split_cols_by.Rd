@@ -50,7 +50,7 @@ l
 
 # add an analysis (summary)
 l2 <- l \%>\% 
-    analyze("AGE", afun = lstwrapx(summary) , format = "xx.xx")
+    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l2
 
 build_table(l2, DM)
@@ -58,7 +58,7 @@ build_table(l2, DM)
 # By default sequentially adding layouts results in nesting
 l3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
-  analyze("AGE", afun = lstwrapx(summary), format = "xx.xx")
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 l3
 
  build_table(l3, DM)
@@ -75,7 +75,7 @@ build_table(l4, DM)
 l5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", split_fun= drop_split_levels) \%>\%
  analyze("AGE") \%>\%
- split_rows_by("RACE", nested=TRUE, split_fun = drop_split_levels) \%>\%
+ split_rows_by("RACE", nested=FALSE, split_fun = drop_split_levels) \%>\%
  analyze("AGE")
 
 l5
