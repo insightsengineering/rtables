@@ -623,20 +623,41 @@ split_rows_by_cutfun = function(lyt, var,
 #' 
 #' @inheritParams lyt_args
 #'
-#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the function accepts changes the behavior when tabulation is performed.
+#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the
+#'   function accepts changes the behavior when tabulation is performed.
+#' 
 #' \itemize{
-#' \item{If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the relevant column (from \code{var} here) of the raw data being used to build the table.}
-#' \item{If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (ie all columns) of the raw data being tabulated}
+#'   \item{
+#'   If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the
+#'   relevant column (from \code{var} here) of the raw data being used to build the table.
+#'   }
+#'   
+#'   \item{
+#'   If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (i.e. all
+#'   columns) of the raw data being tabulated
+#'   }
 #' }
 #'
-#' In addition to differentation on the first argument, the analysis function can optionally accept a number of other parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation machinery. These are as follows:
+#' In addition to differentiation on the first argument, the analysis function can optionally accept a number of other
+#' parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation
+#' machinery. These are as follows:
+#' 
 #' \describe{
-#' \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
-#' \item{.N_total}{ overall N (all observation count, defined as sum of column counts) for the tabulation}
-#' \item{.ref_group}{data.frame subset corresponding to the ref_group column. Currently does not reflect row-splittin but this will change. Optional and only required/meaningful if a ref_group column has been defined}
+#'   \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
+#'   \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
+#'   \item{.var}{variable that is analyzed}
+#'   \item{.ref_group}{data.frame or vector of subset corresponding to the `ref_group` column including subsetting
+#'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.ref_full}{data.frame or vector of subset corresponding to the `ref_group` column without subsetting
+#'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
 #' }
+#' 
 #' @export
+#' 
 #' @author Gabriel Becker
+#' 
+#' 
 #' @examples 
 #' 
 #' l <- basic_table() %>%
@@ -810,13 +831,13 @@ analyze_colvars = function(lyt, afun,
 #' @export
 #' @rdname bline_analyses
 analyze_against_ref_group = function(lyt, var = NA_character_,
-                                    afun,
-                                    label = if(is.na(var)) "" else var,
-                                   compfun = `-`,
-                                  format = NULL,
-                                  nested = TRUE,
-                                  indent_mod = 0L,
-                                  show_labels = c("default", "hidden", "visible")) {
+                                     afun,
+                                     label = if(is.na(var)) "" else var,
+                                     compfun = `-`,
+                                     format = NULL,
+                                     nested = TRUE,
+                                     indent_mod = 0L,
+                                     show_labels = c("default", "hidden", "visible")) {
     .Deprecated("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
     
     show_labels = match.arg(show_labels)

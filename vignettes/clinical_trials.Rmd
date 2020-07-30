@@ -15,6 +15,14 @@ editor_options:
 knitr::opts_chunk$set(comment = "")
 ```
 
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+
 ## Introduction
 
 In this vignette we create a demographic table, adverse event table, disposition table, and a response table using layouts. We don't aim to create fully specified tables that meet the requirements of most standard analyses, instead we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
@@ -634,147 +642,169 @@ basic_table() %>%
 
 ## Response Table
 
-Let's start with the first part of a response table which is fairly simple to derive:
+The response table that we will create here is composed of 3 parts:
+
+1. Binary response table
+1. Unstratified analysis comparison vs. control group
+1. Multinomial response table
+
+
+Let's start with the first part which is fairly simple to derive:
 
 ```{r}
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
-  mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
-         is_rsp = rsp == "Responders")
+  mutate(
+    rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
+    is_rsp = (rsp == "Responders")
+  )
+
+s_proportion <- function(x, .N_col) {
+   in_rows(.list = lapply(as.list(table(x)), function(xi) rcell(xi * c(1, 1/.N_col), format = "xx.xx (xx.xx%)")))
+}
 
 basic_table() %>%
-  split_cols_by("ARMCD") %>%
-  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
-  analyze("is_rsp", function(x) {
-    in_rows(
-      rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
-      .labels = "95% CI for Response Rates (Clopper-Pearson)"
-    )
-  }, show_labels = "hidden") %>%
+  split_cols_by("ARMCD", ref_group = "ARM A") %>%
+  add_colcounts() %>%
+  analyze("rsp", s_proportion, show_labels = "hidden") %>%
   build_table(ADRS_BESRSPI)
 ```
 
-**TODO: I will finish this example this week**
 
+Note that we have set the `ref_group` argument in `split_cols_by` which for the current table has no effect as we only use the cell data for the responder and non-responder counting.
 
+We will now look at 2. Unstratified analysis comparison vs. control group. Let's start with the analysis function:
 
-```{r, eval = FALSE, echo=FALSE}
-ADRS_BESRSPI <- ex_adrs %>%
-  filter(PARAMCD == "BESRSPI") %>%
-  mutate(rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
-         is_rsp = rsp == "Responders")
+```{r}
+s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
+  
+  if (.in_ref_col) {
+    return(in_rows(
+        "Difference in Response Rates (%)" = rcell(numeric(0)),
+        "95% CI (Wald, with correction)" = rcell(numeric(0)),
+        "p-value (Chi-Squared Test)" = rcell(numeric(0)),
+        "Odds Ratio (95% CI)" = rcell(numeric(0))
+    ))
+  }
+  
+  fit <- stats::prop.test(
+    x = c(sum(x), sum(.ref_group)),
+    n = c(length(x), length(.ref_group)),
+    correct = FALSE
+  )
+  
+  fit_glm <- stats::glm(
+    formula = rsp ~ group,
+    data = data.frame(
+      rsp = c(.ref_group, x), 
+      group = factor(rep(c("ref", "x"), times = c(length(.ref_group), length(x))), levels = c("ref", "x"))
+    ),
+    family = binomial(link = "logit")
+  )
 
+  in_rows(
+    "Difference in Response Rates (%)" = rcell((mean(x) - mean(.ref_group)) * 100, format = "xx.xx") ,
+    "95% CI (Wald, with correction)" = rcell(fit$conf.int * 100, format = "(xx.xx, xx.xx)"),
+    "p-value (Chi-Squared Test)" = rcell(fit$p.value, format = "x.xxxx | (<0.0001)"),
+    "Odds Ratio (95% CI)" = rcell(c(
+      exp(stats::coef(fit_glm)[-1]),
+      exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
+    ), format = "xx.xx (xx.xx - xx.xx)")
+  )
+}
+
+s_unstratified_response_analysis(
+  x = ADRS_BESRSPI %>% filter(ARM == "A: Drug X") %>% pull(is_rsp), 
+  .ref_group = ADRS_BESRSPI %>% filter(ARM == "B: Placebo") %>% pull(is_rsp),
+  .in_ref_col = FALSE
+)
+```
+
+so hence we can now add the next section to the table:
+
+```{r}
 basic_table() %>%
-  split_cols_by("ARMCD") %>%
-  analyze("rsp", list_wrap_x(table), show_labels = "hidden") %>%
-  analyze("is_rsp", function(x) {
-    in_rows(
-      rcell(binom.test(sum(x), length(x))$conf.int * 100, format = "(xx.xx, xx.xx)"),
-      .labels = "95% CI for Response Rates (Clopper-Pearson)"
-    )
-  }, show_labels = "hidden") 
+  split_cols_by("ARMCD", ref_group = "ARM A") %>%
+  add_colcounts() %>%
+  analyze("rsp", s_proportion, show_labels = "hidden") %>%
+  analyze("is_rsp", s_unstratified_response_analysis) %>%
+  build_table(ADRS_BESRSPI)
+```
 
+** TODO: discuss indenting**
 
+And next we will add the Multinomial response table. We are doing a row-split by response level, and then doing the same thing as we did for the binary response table above. However, when we want to do row-split, that means we need to also take into account the `.N_col` as total and then reconstruct the full logical vector.
+
+```{r}
+s_prop <- function(df, .N_col) {
+  in_rows(
+    "95% CI (Wald, with correction)" = rcell(binom.test(nrow(df), .N_col)$conf.int * 100, format = "(xx.xx, xx.xx)")
+  )
+}
+
+s_prop(
+  df = ADRS_BESRSPI %>% filter(ARM == "A: Drug X", AVALC == "CR"), 
+  .N_col = sum(ADRS_BESRSPI$ARM == "A: Drug X")
+)
+```
+
+Note that we have added the `labelstr` argument **TODO: this is clunky**
+
+```{r}
 basic_table() %>%
-  split_cols_by("ARMCD", ref_group = "ARM A", nested = FALSE) %>%
-  analyze_against_ref_group("is_rsp", function(x, ...) {
-    in_rows(a = 1, b = 2)
+  split_cols_by("ARMCD", ref_group = "ARM A") %>%
+  add_colcounts() %>%
+  analyze("rsp", s_proportion, show_labels = "hidden") %>%
+  analyze("is_rsp", s_unstratified_response_analysis) %>%
+  split_rows_by(
+    var = "AVALC",
+    splfun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), 
+    nested = FALSE
+  ) %>%
+  summarize_row_groups() %>%
+  analyze("AVALC", afun = s_prop) %>%
+  build_table(ADRS_BESRSPI)
+```
+
+In case the we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
+
+
+```{r}
+rsp_label <- function(x) {
+  rsp_full_label <- c(
+    CR          = "Complete Response (CR)",
+    PR          = "Partial Response (PR)",
+    SD          = "Stable Disease (SD)",
+    `NON CR/PD` = "Non-CR or Non-PD (NON CR/PD)",
+    PD          = "Progressive Disease (PD)",
+    NE          = "Not Evaluable (NE)",
+    Missing     = "Missing",
+    `NE/Missing` = "Missing or unevaluable"
+  )
+  stopifnot(all(x %in% names(rsp_full_label)))
+  rsp_full_label[x]
+}
+
+
+tbl <- basic_table() %>%
+  split_cols_by("ARMCD", ref_group = "ARM A") %>%
+  add_colcounts() %>%
+  analyze("rsp", s_proportion, show_labels = "hidden") %>%
+  analyze("is_rsp", s_unstratified_response_analysis) %>%
+  split_rows_by(
+    var = "AVALC",
+    split_fun = keep_split_levels(c("CR", "PR", "SD", "NON CR/PD", "PD"), reorder = TRUE), 
+    nested = FALSE
+  ) %>%
+  summarize_row_groups(cfun = function(df, labelstr, .N_col) {
+    in_rows(nrow(df) * c(1, 1/.N_col), .labels = rsp_label(labelstr))
   }) %>%
+  analyze("AVALC", afun = s_prop) %>%
+  analyze("AVALC", afun = function(x, .N_col) {
+    in_rows(rcell(sum(x == "NE") * c(1, 1/.N_col), format = "xx.xx (xx.xx%)"), .labels = rsp_label("NE"))
+  }, nested = FALSE) %>%
   build_table(ADRS_BESRSPI)
+
+tbl
 ```
 
-**TODO: somewhing does not work**.
-
-```{r, eval = FALSE}
-
-## TODO: remove internal package-code use of %>% (maybe?)
-
-tt_rsp_lyt = function(col_by, baselines = vector("list", length(col_by))) {
-    NULL %>% iter_colby(cbys = col_by, baselines = baselines) %>%
-        ## respodner and nonresponder counts
-        add_analyzed_var("rsp", lbl = " ",
-                         afun = TF_counter( nms = c("Responders", "Non-Responders")),
-                         fmt = "xx (xx.%)") %>%
-        
-        ## response rate CI
-        add_analyzed_var("rsp", lbl = " ",
-                         afun = function(x) {
-            list("95% CI for Response Rates (Clopper-Pearson)" = binom.test(sum(x), length(x))$conf.int * 100)
-        }, fmt = "(xx.xx, xx.xx)", newtoplev = TRUE) %>%
-        
-        ## Difference in Response Rates section
-        ## I think this one should acttually e a content row?
-        analyze_against_baseline(var = "rsp", lbl =" ",
-                               afun = function(x) c("Difference in Response Rates (%)" =  mean(x)*100), fmt = "xx.xx", newtoplev = TRUE) %>%
-        
-        ## (both) CIs for diff in response rates
-        analyze_against_baseline_2dtable(var = "rsp", lbl = " ",
-                              compfun = function(tab) {
-            list("95% CI for difference (Wald without continuity correction)"=
-                     prop.test(tab, correct = FALSE)$conf.int*100,
-                 "95% CI for difference (Wald with continuity correction)" =
-                     prop.test(tab, correct = TRUE)$conf.int*100)
-        }, fmt = "(xx.xx, xx.xx)", newtoplev = TRUE) %>%
-        
-        ## Odds ratio
-        analyze_against_baseline_2dtable(var = "rsp",
-                              lbl = " ",
-                              compfun = function(tab) {
-            fit = tern:::odds_ratio(tab)
-            list("Odds Ratio" = fit$estimator,
-                 "95% CI" = fit$conf.int)
-            }, fmt = c("xx.xx", "(xx.xx, xx.xx)"), newtoplev = TRUE) %>%
-        ## Response rates by type of response
-        split_rows_by("AVALC", " ",
-                            splfun = reord_levs_sfun(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), newtoplev = TRUE) %>%
-        ## counts are a summary content row
-        summarize_row_groups("AVALC", "%s") %>%
-        ## CIs are an analysis row
-        add_analyzed_var("AVALC", lbl = " ", afun = function(x, .N_col) {
-            list("95% CI" = binom.test(length(x), .N_col)$conf.int * 100)
-        }, fmt = "(xx.xx, xx.xx)")
-
-}
-
-iter_colby = function(lyt, cbys, baselines = vector("list", length(cbys))) {
-
-    ##unpiped version
-    for(i in seq_along(cbys)) {
-        cb = cbys[[i]]
-        if(!is.null(baselines[[i]]))
-            lyt = split_cols_by(lyt, cb, lbl = cb, baseline = baselines[[i]])
-        else
-            lyt = split_cols_by(lyt, cb, lbl = cb)
-    }
-    lyt
-}
-
-TF_counter = function(nms = NULL) {
-    function(x, .N_col) {
-    tcnt = sum(x)
-    fcnt = .N_col - tcnt
-    ret = list(c(tcnt, tcnt/.N_col),
-               c(fcnt, fcnt/.N_col))
-    if(!is.null(nms))
-        names(ret) = nms
-    ret
-
-    }
-}
-
-
-.make_2xk_tab = function(coldat, bldat) {
-    if(is.list(coldat) && length(coldat) == 1)
-        coldat = coldat[[1]]
-    if(is.list(bldat) && length(bldat) == 1)
-        bldat = bldat[[1]]
-    
-    catvec = c(rep("baseline", times = length(bldat)),
-               rep("coldata", times = length(coldat)))
-    tab = table(catvec, c(bldat, coldat))
-    tab
-}
-```
-
-
-## Variable and Value Labels
