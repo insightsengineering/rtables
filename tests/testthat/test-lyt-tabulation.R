@@ -262,3 +262,23 @@ test_that("missing vars caught", {
 
 
     
+test_that("cfun args", {
+    cfun1 <- function(df, lbl_str, .N_col, .N_total) {
+        stopifnot(is(df, "data.frame"))
+        in_rows(
+            rcell(nrow(df) *c(1, 1/.N_col), format = "xx (xx.xx%)"),
+            .names = lbl_str)
+    }
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = cfun1)
+
+    tbl <- build_table(lyt, rawdat)
+
+
+
+
+
+
+})

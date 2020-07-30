@@ -35,8 +35,9 @@ setMethod("make_subset_expr", "AnalyzeColVarSplit",
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
     v = rawvalues(val)
-    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(labels),
-                                   include.lowest = TRUE) == .(b)),
+    ##    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(labels),
+    as.expression(bquote(cut(.(a), breaks=.(brk), labels = .(labels),
+                                   include.lowest = TRUE) == .(b),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
                        brk = spl_cuts(spl),
@@ -47,10 +48,11 @@ setMethod("make_subset_expr", "VarStaticCutSplit",
 setMethod("make_subset_expr", "CumulativeCutSplit",
           function(spl, val) {
     v = rawvalues(val)
-    as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
+    ## as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
+    as.expression(bquote(as.integer(cut(.(a), breaks=.(brk),
                                               labels = .(labels),
                                               include.lowest = TRUE)) <=
-                               as.integer(factor(.(b), levels = .(labels)))),
+                               as.integer(factor(.(b), levels = .(labels))),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
                        brk = spl_cuts(spl),
@@ -58,14 +60,19 @@ setMethod("make_subset_expr", "CumulativeCutSplit",
 })
 
 
-
+## I think this one is unnecessary,
+## build_table collapses DynCutSplits into
+## static ones.
+##
+## XXX TODO fixme
 setMethod("make_subset_expr", "VarDynCutSplit",
           function(spl, val) {
     v = rawvalues(val)
-    as.expression(bquote(which(.(fun)(.(a)) == .(b)),
+    ##   as.expression(bquote(which(.(fun)(.(a)) == .(b)),
+       as.expression(bquote(.(fun)(.(a)) == .(b)),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
-                       fun = spl@cut_fun)))
+                       fun = spl@cut_fun))
 })
 
 setMethod("make_subset_expr", "AllSplit",

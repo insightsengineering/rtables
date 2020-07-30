@@ -15,8 +15,7 @@ split_cols_by(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   ref_group = NULL,
-  incl_all = FALSE,
-  splfun
+  incl_all = FALSE
 )
 }
 \arguments{

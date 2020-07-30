@@ -167,36 +167,6 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
                labels = labels[vord],
                extras = extr[vord])
     ret
-    ## varvec = df[[spl_payload(spl)]]
-    ## labelvec = df[[spl_labelvar(spl)]]
-    ## if(is.null(vals)) {
-    ##     vals = if(is.factor(varvec))
-    ##                levels(varvec)
-    ##            else
-    ##                unique(varvec)
-    ## }
- 
-    ## if(is.null(labels)) {
-    ##     ##XXX dangerous
-    ##     if(is.factor(varvec))
-    ##         labels = vals
-    ##     else
-    ##         labels = sapply(vals, function(v) {
-    ##             vlabel = unique(df[df[[spl_payload(spl)]] == v,
-    ##                              spl_labelvar(spl), drop = TRUE])
-    ##             if(length(vlabel) == 0)
-    ##                 vlabel = ""
-    ##             vlabel
-    ##         })
-    ## }
-    ## fct = factor(varvec, levels = vals)
-    ## spl = split(df, fct)
-    ## ## should always be true or the above would have broken
-    ## if(!are(vals, "SplitValue"))
-    ##     vals = make_splvalue_vec(vals)
-    
-    ## list(values = vals, datasplit = spl,
-    ##      labels = labels)
 }
 
 

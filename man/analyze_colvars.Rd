@@ -18,8 +18,7 @@ analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
-TODO here indicates that the variables whose data are ultimately processed by afun are specified at the highest-depth
-level of nesting in the column structure, rather than at the row level.
+Generate Rows Analyzing Different Variables Across Columns
 }
 \examples{
 ## toy example where we take the mean of the first variable and the

@@ -312,8 +312,7 @@ split_cols_by = function(lyt,
                          child_labels = c("default", "visible", "hidden"),
                          extra_args = list(),
                          ref_group = NULL,
-                         incl_all = FALSE, 
-                         splfun) { # TODO: remove
+                         incl_all = FALSE) {
     if(is.null(ref_group)) {
         spl = VarLevelSplit(var = var,
                             split_label = split_label,
@@ -382,8 +381,7 @@ split_rows_by = function(lyt,
                          format = NULL,
                          nested = TRUE,
                          child_labels = c("default", "visible", "hidden"),
-                         indent_mod = 0L,
-                         splfun) { # TODO: remove
+                         indent_mod = 0L) {
     child_labels = match.arg(child_labels)
     spl = VarLevelSplit(var = var,
                         split_label = split_label,
@@ -468,10 +466,11 @@ split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
 #' 
 #' build_table(l, DM)
 #' 
-split_cols_by_cuts = function(lyt, var, split_label, cuts,
-                            cutlabels = NULL,
-                            nested = TRUE,
-                            cumulative = FALSE) {
+split_cols_by_cuts = function(lyt, var, cuts, 
+                              cutlabels = NULL,
+                              split_label = var,
+                              nested = TRUE,
+                              cumulative = FALSE) {
     spl = VarStaticCutSplit(var, split_label, cuts, cutlabels)
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
@@ -481,13 +480,28 @@ split_cols_by_cuts = function(lyt, var, split_label, cuts,
 
 #' @export
 #' @rdname varcuts
-split_rows_by_dyncut = function(lyt, var, split_label, cuts,
-                               cutlabels = NULL,
-                               format = NULL,
-                               nested = TRUE,
-                               child_labels = c("default", "visible", "hidden"),
-                               cumulative = FALSE,
-                               indent_mod = 0L) {
+split_rows_by_cuts = function(lyt, var, cuts, 
+                              cutlabels = NULL,
+                              split_label = var,
+                              nested = TRUE,
+                              cumulative = FALSE) {
+    spl = VarStaticCutSplit(var, split_label, cuts, cutlabels)
+    if(cumulative)
+        spl = as(spl, "CumulativeCutSplit")
+    pos = next_rpos(lyt, nested)
+    split_rows(lyt, spl, pos)
+}
+
+#' @export
+#' @rdname varcuts
+split_rows_by_dyncut = function(lyt, var, cut,
+                                cutlabels = NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                child_labels = c("default", "visible", "hidden"),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     child_labels = match.arg(child_labels)
     spl = VarStaticCutSplit(var, split_label, cuts, cutlabels,
                             split_format = format,
@@ -502,14 +516,15 @@ split_rows_by_dyncut = function(lyt, var, split_label, cuts,
 
 #' @export
 #' @rdname varcuts
-split_cols_by_cutfun = function(lyt, var, split_label = var,
-                            cutfun = qtile_cuts,
-                            cutlabelfun = function(x) NULL,
-                            format = NULL,
-                            nested = TRUE,
-                            extra_args = list(),
-                            cumulative = FALSE,
-                            indent_mod = 0L) {
+split_cols_by_cutfun = function(lyt, var,
+                                cutfun = qtile_cuts,
+                                cutlabelfun = function(x) NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                extra_args = list(),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     spl = VarDynCutSplit(var, split_label,
                          cutfun = cutfun,
                          cutlabelfun = cutlabelfun,
@@ -546,6 +561,7 @@ split_cols_by_quartiles = function(lyt, var, split_label = var,
 split_rows_by_quartiles = function(lyt, var, split_label = var,
                              format = NULL,
                              nested = TRUE,
+                             child_labels = c("default", "visible", "hidden"),
                              extra_args = list(),
                              cumulative= FALSE,
                              indent_mod = 0L) {
@@ -555,6 +571,7 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                                                    "(Q2, Q3]",
                                                    "(Q3, max]"),
                          split_format = format,
+                         child_labels = child_labels,
                          extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod)
@@ -575,17 +592,22 @@ qtile_cuts = function(x) {
 
 #' @export
 #' @rdname varcuts
-split_rows_by_cutfun = function(lyt, var, split_label = var,
-                            cutfun = qtile_cuts,
-                            format = NULL,
-                            nested = TRUE,
-                            child_labels = c("default", "visible", "hidden"),
-                            cumulative = FALSE,
-                            indent_mod = 0L) {
+split_rows_by_cutfun = function(lyt, var,
+                                cutfun = qtile_cuts,
+                                cutlabelfun = function(x) NULL,
+                                split_label = var,
+                                format = NULL,
+                                nested = TRUE,
+                                child_labels = c("default", "visible", "hidden"),
+                                extra_args = list(),
+                                cumulative = FALSE,
+                                indent_mod = 0L) {
     child_labels = match.arg(child_labels)
     spl = VarDynCutSplit(var, split_label, cutfun = cutfun,
+                         cutlabelfun = cutlabelfun,
                          split_format = format,
                          child_labels = child_labels,
+                         extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod)
     pos = next_rpos(lyt, nested)
@@ -1008,7 +1030,7 @@ add_overall_col = function(lyt, label) {
     spl = AllSplit(label)
     split_cols(lyt,
                   spl,
-                  next_cpos(lyt, TRUE))
+                  next_cpos(lyt, FALSE))
 }
 
 #' Add Row Summary

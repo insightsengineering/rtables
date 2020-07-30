@@ -13,8 +13,7 @@ split_rows_by(
   format = NULL,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
-  indent_mod = 0L,
-  splfun
+  indent_mod = 0L
 )
 }
 \arguments{

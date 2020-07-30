@@ -793,7 +793,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       )
     } else {
         spl = splvec[[lvl]]
-        rawpart = do_split(spl,df, trim = )
+        rawpart = do_split(spl,df, trim =FALSE )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         kids = mapply(function(dfpart, value) {
@@ -860,7 +860,7 @@ setGeneric("expr_stubs", function(spl, df) standardGeneric("expr_stubs"))
 
 setMethod("expr_stubs", "VarLevelSplit",
           function(spl, df) {
-    sdat = do_split(spl, df) ##apply_split(spl, df)
+    sdat = do_split(spl, df)
     values = sdat$values
     ## var = spl_payload(spl)
     ## values = unique(df[[var]])
