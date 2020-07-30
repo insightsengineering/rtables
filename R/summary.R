@@ -152,13 +152,13 @@ cat_row <- function(indent, name, label, visible, content) {
 # 
 
 
-summarize_row_df <- function(name, label, indent, depth, rowtype, level) {
-  data.frame(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, level = level,
+summarize_row_df <- function(name, label, indent, depth, rowtype, indent_mod, level) {
+  data.frame(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level,
              stringsAsFactors = FALSE)
 }
 
 summarize_row_df_empty <- function(...) {
-  data.frame(name = character(0), label = character(0), indent = integer(0), depth = integer(0), rowtype = character(0), level = integer(0))
+  data.frame(name = character(0), label = character(0), indent = integer(0), depth = integer(0), rowtype = character(0), indent_mod = integer(0), level = integer(0))
 }
 
 #' Summarize Rows
@@ -235,6 +235,7 @@ setMethod("summarize_rows", "TableRow",
               indent = indent,
               depth = depth,
               rowtype = "TableRow",
+              indent_mod = indent_mod(obj),
               level = tt_level(obj)
             ) 
             
@@ -252,6 +253,7 @@ setMethod("summarize_rows", "LabelRow",
                 indent = indent,
                 depth = depth,
                 rowtype = "LabelRow",
+                indent_mod = indent_mod(obj),
                 level = tt_level(obj)
               ) 
             } else {

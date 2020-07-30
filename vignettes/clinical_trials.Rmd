@@ -736,17 +736,14 @@ basic_table() %>%
 And next we will add the Multinomial response table. We are doing a row-split by response level, and then doing the same thing as we did for the binary response table above. However, when we want to do row-split, that means we need to also take into account the `.N_col` as total and then reconstruct the full logical vector.
 
 ```{r}
-s_prop <- function(df, labelstr, .N_col) {
+s_prop <- function(df, .N_col) {
   in_rows(
-    rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
-    rcell(binom.test(nrow(df), .N_col)$conf.int * 100, format = "(xx.xx, xx.xx)"),
-    .labels = c(labelstr, "95% CI (Wald, with correction)")
+    "95% CI (Wald, with correction)" = rcell(binom.test(nrow(df), .N_col)$conf.int * 100, format = "(xx.xx, xx.xx)")
   )
 }
 
 s_prop(
   df = ADRS_BESRSPI %>% filter(ARM == "A: Drug X", AVALC == "CR"), 
-  labelstr = "CR",
   .N_col = sum(ADRS_BESRSPI$ARM == "A: Drug X")
 )
 ```
@@ -764,7 +761,8 @@ basic_table() %>%
     splfun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), 
     nested = FALSE
   ) %>%
-  summarize_row_groups(cfun = s_prop) %>%
+  summarize_row_groups() %>%
+  analyze("AVALC", afun = s_prop) %>%
   build_table(ADRS_BESRSPI)
 ```
 
@@ -788,22 +786,25 @@ rsp_label <- function(x) {
 }
 
 
-basic_table() %>%
+tbl <- basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstratified_response_analysis) %>%
   split_rows_by(
     var = "AVALC",
-    splfun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), 
+    split_fun = keep_split_levels(c("CR", "PR", "SD", "NON CR/PD", "PD"), reorder = TRUE), 
     nested = FALSE
   ) %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col) {
-    res <- s_prop(df, rsp_label(labelstr), .N_col)
-    
-    if (labelstr == "NE") res[-2] else  res
-    
+    in_rows(nrow(df) * c(1, 1/.N_col), .labels = rsp_label(labelstr))
   }) %>%
+  analyze("AVALC", afun = s_prop) %>%
+  analyze("AVALC", afun = function(x, .N_col) {
+    in_rows(rcell(sum(x == "NE") * c(1, 1/.N_col), format = "xx.xx (xx.xx%)"), .labels = rsp_label("NE"))
+  }, nested = FALSE) %>%
   build_table(ADRS_BESRSPI)
+
+tbl
 ```
 

@@ -29,14 +29,14 @@ basic_table() %>%
   build_table(DM)
 ```
 
-and then the average difference between the arms to the placebo arm:
+and then the difference of the average `AGE` between the arms to the placebo arm:
 
 ```{r}
 basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group) {
     in_rows(
-      "Average Difference" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
+      "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
     )
   }) %>%
   build_table(DM)
@@ -51,12 +51,28 @@ basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
     if (.in_ref_col) {
-      in_rows("Average Difference" = rcell(""))
+      in_rows("Difference of Averages" = rcell(NULL))
     } else {
-      in_rows("Average Difference" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"))
+      in_rows("Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"))
     }
   }) %>%
   build_table(DM)
+
+
+basic_table() %>%
+  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+  analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
+    if (.in_ref_col) {
+      in_rows(tmp = NULL, tmp1 = NULL)
+    } else {
+      in_rows(
+        "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"),
+         "another row" = rcell("aaa")
+      )
+    }
+  }) %>%
+  build_table(DM)
+
 ```
 
 You can see which arguments are available for `afun` in the manual fro `analyze`.
