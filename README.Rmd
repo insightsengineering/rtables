@@ -91,6 +91,12 @@ Daniel Sabanes Bove, Francois Collins, Tadeusz Lewandowski, Nick Paszty, Nina Qi
 
 ## Presentations
 
+### New Layouting and Tabulation Framework (v.0.3+)
+
+* [Presentation on v0.3.1.1 July 2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+
+### v0.1.0 and previous
+
 * [Presentation on v0.1.0 April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
 
 * [baselR November
