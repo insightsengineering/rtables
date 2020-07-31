@@ -501,7 +501,7 @@ recursive_applysplit = function( df,
             
             
             stopifnot(length(newbaselines) == length(dataspl),
-                      identical(unique(sapply(newbaselines, length)), length(col_exprs(cinfo))))
+                      length(newbaselines) == 0 || identical(unique(sapply(newbaselines, length)), length(col_exprs(cinfo))))
             innerlev = lvl + (nrow(ctab) > 0 || is.na(make_lrow) || make_lrow)
             ## if(nonroot)
             ##     innerlev = innerlev + 1L

@@ -129,6 +129,13 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
         vals = seq_along(extr)
         names(vals) = names(extr)
     }
+
+    if(is.null(vals)) {
+        return(list(values = list(),
+                    datasplit = list(),
+                    labels = list(),
+                    extras = list()))
+    }
     
     dpart = .applysplit_datapart(spl, df, vals)
     
@@ -340,8 +347,8 @@ setMethod(".applysplit_extras", "Split",
     splex <- split_exargs(spl)
     nextr <- length(splex)
     nvals <- length(vals)
-    stopifnot(nvals > 0,
-              nextr <= nvals)
+    ## stopifnot(nvals > 0,
+    ##           nextr <= nvals)
     lapply(seq_len(nvals), function(vpos) {
         one_ex <- lapply(splex, function(arg) {
             if(length(arg) >= vpos)
@@ -494,30 +501,27 @@ reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE)
 #' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
 #' @export 
 trim_levels_in_group = function(innervar) {
-  myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-    ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
-    
-    ret$datasplit = lapply(ret$datasplit, function(x) {
-        coldat = x[[innervar]]
-        if(is(coldat, "character")) {
-            if(!is.null(vals))
-                lvs = vals
-            else
-                lvs = unique(coldat)
-            coldat = factor(coldat, levels = lvs) ## otherwise
-        } else {
-            coldat = droplevels(coldat)
-        }
-      x[[innervar]] = coldat
-      
-      x
-    })
-    
-    ret$labels <- as.character(ret$labels) # TODO
-    ret
-  }
-  myfun
-  
+    myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+        ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
+
+        ret$datasplit = lapply(ret$datasplit, function(x) {
+            coldat = x[[innervar]]
+            if(is(coldat, "character")) {
+                if(!is.null(vals))
+                    lvs = vals
+                else
+                    lvs = unique(coldat)
+                coldat = factor(coldat, levels = lvs) ## otherwise
+            } else {
+                coldat = droplevels(coldat)
+            }
+            x[[innervar]] = coldat
+            x
+        })
+        ret$labels <- as.character(ret$labels) # TODO
+        ret
+    }
+    myfun
 }
 
 .add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {

@@ -38,6 +38,8 @@ requirements. We are looking for collaborators, see the next section.
 
 ## Collaboration and Planned API Changes
 
+The `rtables` package is currently in the process of being reworked to address 
+
 The current state of the `rtables` functionality is a first rough prototype. We
 will be changing the API significantly in the coming months without maintaining
 backward compatibility. We will release the `rtable` package on
@@ -51,16 +53,16 @@ repository and to send us pull requests with the suggested improvements.
 
 ## Installation
 
-To install the stable release of `rtables` package run the following command in `R`:
+To install a frozen pre-release version of `rtables` based on the new Layouting and Tabulation API as presented at user!2020 and JSM2020 run the following command in `R`:
 
 ```{r, eval = FALSE}
-devtools::install_github("roche/rtables", ref="v0.1.1")
+devtools::install_github("roche/rtables", ref="v0.3.2.3")
 ```
 
-To install the test version of `rtables` run
+To install the latest development version of the new test version of `rtables` run
 
 ```{r, eval = FALSE}
-devtools::install_github("roche/rtables")
+devtools::install_github("roche/rtables", ref = "gabe_tabletree_work")
 ```
 
 
@@ -68,18 +70,26 @@ devtools::install_github("roche/rtables")
 
 ```{r}
 library(rtables)
+library(dplyr)
 
-tbl <- rtable(
-  header = c("Treatement\nN=100", "Comparison\nN=300"),
-  format = "xx (xx.xx%)",
-  rrow("A", c(104, .2), c(100, .4)),
-  rrow("B", c(23, .4), c(43, .5)),
-  rrow(),
-  rrow("this is a very long section header"),
-  rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-  rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
-)
-tbl
+## for simplicity grab non-sparse subset
+ADSL = ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
+biomarker_ave = function(x, ...) {
+     val = if(length(x) > 0) round(mean(x), 2) else "no data"
+     in_rows(
+        "Biomarker 1 (mean)" = rcell(val)
+     )
+}
+
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("BMRKR2") %>%
+  add_colcounts() %>%
+  split_rows_by("RACE", split_fun = trim_levels_in_group("SEX")) %>%
+  split_rows_by("SEX") %>%
+  summarize_row_groups() %>%
+  analyze("BMRKR1", biomarker_ave) %>%
+  build_table(ADSL)
 ```
 
 
@@ -91,9 +101,9 @@ Daniel Sabanes Bove, Francois Collins, Tadeusz Lewandowski, Nick Paszty, Nina Qi
 
 ## Presentations
 
-### New Layouting and Tabulation Framework (v.0.3+)
+### New (Current) Layouting and Tabulation Framework (v.0.3+)
 
-* [Presentation on v0.3.1.1 July 2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+* [useR!2020 Presentation (on v0.3.1.1) July 2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
 
 ### v0.1.0 and previous
 
