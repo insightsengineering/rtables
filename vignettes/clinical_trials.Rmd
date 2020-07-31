@@ -758,7 +758,7 @@ basic_table() %>%
   analyze("is_rsp", s_unstratified_response_analysis) %>%
   split_rows_by(
     var = "AVALC",
-    splfun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), 
+    split_fun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE), 
     nested = FALSE
   ) %>%
   summarize_row_groups() %>%
