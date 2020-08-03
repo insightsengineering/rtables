@@ -1,6 +1,6 @@
-## rtables 0.1.6.9000
+## rtables 0.1.7
 
-* issues with no comments: 
+* added format `xx.xx (xx.xx - xx.xx)` and `x.xxxx | (<0.0001)`
 
 ## rtables 0.1.6
 
