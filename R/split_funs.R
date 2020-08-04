@@ -380,23 +380,25 @@ setMethod(".applysplit_partlabels", "Split",
 setMethod(".applysplit_partlabels", "VarLevelSplit",
           function(spl, df, vals, labels) {
     
-    
-    varvec = df[[spl_payload(spl)]]
-    labelvec = df[[spl_labelvar(spl)]]
+    varname <- spl_payload(spl)
+    vlabelname <- spl_labelvar(spl)
+    varvec = df[[varname]]  
     if(is.null(vals)) {
+  
         vals = if(is.factor(varvec))
                    levels(varvec)
                else
                    unique(varvec)
     }
     if(is.null(labels)) {
-        ##XXX dangerous
-        if(is.factor(varvec))
+        if(varname == vlabelname)
             labels = vals
         else
             labels = sapply(vals, function(v) {
-                vlabel = unique(df[df[[spl_payload(spl)]] == v,
-                                 spl_labelvar(spl), drop = TRUE])
+                vlabel = unique(df[varvec == v,
+                                   vlabelname, drop = TRUE])
+                ## TODO remove this once 1-to-1 value-label map is enforced elsewhere.
+                stopifnot(length(vlabel) < 2) 
                 if(length(vlabel) == 0)
                     vlabel = ""
                 vlabel
