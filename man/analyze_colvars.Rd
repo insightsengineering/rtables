@@ -26,9 +26,9 @@ Generate Rows Analyzing Different Variables Across Columns
 colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
                 function(x) rcell(sum(x > .5), format = "xx"))
 
-l <- basic_table() \%>\% split_cols_by("ARM", "Arm") \%>\%
+l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff")) \%>\%
-    split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
+    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = colfuns)
 
@@ -42,7 +42,7 @@ build_table(l, ANL)
 
 basic_table() \%>\% split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) \%>\%
-    split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) \%>\%
+    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = mean, format = "xx.xx") \%>\%
     build_table(ANL)

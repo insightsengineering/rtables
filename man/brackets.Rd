@@ -2,31 +2,31 @@
 % Please edit documentation in R/tt_pos_and_access.R
 \name{[<-,VTableTree,ANY,ANY,list-method}
 \alias{[<-,VTableTree,ANY,ANY,list-method}
-\alias{[,VTableTree,logical,logical-method}
-\alias{[,VTableTree,logical,ANY-method}
-\alias{[,VTableTree,logical,missing-method}
-\alias{[,VTableTree,ANY,logical-method}
-\alias{[,VTableTree,ANY,missing-method}
-\alias{[,VTableTree,missing,numeric-method}
-\alias{[,VTableTree,numeric,numeric-method}
+\alias{[,VTableTree,logical,logical,ANY-method}
+\alias{[,VTableTree,logical,ANY,ANY-method}
+\alias{[,VTableTree,logical,missing,ANY-method}
+\alias{[,VTableTree,ANY,logical,ANY-method}
+\alias{[,VTableTree,ANY,missing,ANY-method}
+\alias{[,VTableTree,missing,numeric,ANY-method}
+\alias{[,VTableTree,numeric,numeric,ANY-method}
 \alias{[[,VTableTree,list-method}
 \title{retrieve and assign elements of a TableTree}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
 
-\S4method{[}{VTableTree,logical,logical}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,logical,logical,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,logical,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,logical,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,logical,missing}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,logical,missing,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,ANY,logical,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,missing,numeric,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,numeric,numeric,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[[}{VTableTree,list}(x, i, j, ...)
 }

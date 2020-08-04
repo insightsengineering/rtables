@@ -348,7 +348,7 @@ split_cols_by = function(lyt,
 #' l <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
-#'   analyze("AGE", mean, var_label = "Age", format = "xx.xx")
+#'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 #'  
 #' build_table(l, DM)
 #' 
@@ -356,17 +356,17 @@ split_cols_by = function(lyt,
 #' basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("RACE") %>%
-#'   analyze("AGE", mean, var_label = "Age", format = "xx.xx") %>%
+#'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
 #'   build_table(DM)
 #'  
 #' 
 #' l <- basic_table() %>%
-#'   split_cols_by("ARM", "Arm") %>%
-#'   split_cols_by("SEX", "Gender") %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
 #'   summarize_row_groups(label_fstr = "Overall (N)") %>%
-#'   split_rows_by("RACE", "Ethnicity") %>%
+#'   split_rows_by("RACE", split_label = "Ethnicity") %>%
 #'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-#'   analyze("AGE", "Age", afun = mean, format = "xx.xx")
+#'   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 #'   
 #' l
 #' 
@@ -767,9 +767,9 @@ get_acolvar_vars <- function(lyt) {
 #' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
 #'                 function(x) rcell(sum(x > .5), format = "xx"))
 #'
-#' l <- basic_table() %>% split_cols_by("ARM", "Arm") %>%
+#' l <- basic_table() %>% split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff")) %>%
-#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = colfuns)
 #'
@@ -783,7 +783,7 @@ get_acolvar_vars <- function(lyt) {
 #' 
 #' basic_table() %>% split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) %>%
-#'     split_rows_by("RACE", "ethnicity", split_fun = drop_split_levels) %>%
+#'     split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = mean, format = "xx.xx") %>%
 #'     build_table(ANL)

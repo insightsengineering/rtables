@@ -43,7 +43,7 @@ Add Rows according to levels of a variable
 l <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
-  analyze("AGE", mean, var_label = "Age", format = "xx.xx")
+  analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
  
 build_table(l, DM)
 
@@ -51,17 +51,17 @@ build_table(l, DM)
 basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE") \%>\%
-  analyze("AGE", mean, var_label = "Age", format = "xx.xx") \%>\%
+  analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
   build_table(DM)
  
 
 l <- basic_table() \%>\%
-  split_cols_by("ARM", "Arm") \%>\%
-  split_cols_by("SEX", "Gender") \%>\%
+  split_cols_by("ARM") \%>\%
+  split_cols_by("SEX") \%>\%
   summarize_row_groups(label_fstr = "Overall (N)") \%>\%
-  split_rows_by("RACE", "Ethnicity") \%>\%
+  split_rows_by("RACE", split_label = "Ethnicity") \%>\%
   summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
-  analyze("AGE", "Age", afun = mean, format = "xx.xx")
+  analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
   
 l
 
