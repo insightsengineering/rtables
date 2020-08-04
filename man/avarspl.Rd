@@ -29,7 +29,7 @@ AnalyzeColVarSplit(
   cformat = NULL,
   split_format = NULL,
   inclNAs = FALSE,
-  split_name = var,
+  split_name = "",
   extra_args = list(),
   indent_mod = 0L,
   show_varlabel = NA,

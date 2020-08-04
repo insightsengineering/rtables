@@ -73,19 +73,31 @@ setMethod("content_table<-", c("TableTree", "ElementaryTable"),
 })
 
 
-setGeneric("next_rpos", function(obj, nested = TRUE) standardGeneric("next_rpos"))
+setGeneric("next_rpos", function(obj, nested = TRUE, for_analyze = FALSE) standardGeneric("next_rpos"))
 
 setMethod("next_rpos", "PreDataTableLayouts",
-          function(obj, nested) next_rpos(rlayout(obj), nested))
+          function(obj, nested, for_analyze = FALSE) next_rpos(rlayout(obj), nested, for_analyze = for_analyze))
 
+.check_if_nest <- function(obj, nested, for_analyze) {
+    if(!nested)
+        FALSE
+    else
+        ## can always nest analyze splits (almost? what about colvars noncolvars mixing? prolly ok?)
+        for_analyze ||
+            ## If its not an analyze split it can't go under an analyze split
+            !is(last_rowsplit(obj), "VAnalyzeSplit")
+}
 setMethod("next_rpos", "PreDataRowLayout",
-          function(obj, nested) {
+          function(obj, nested, for_analyze) {
     l = length(obj)
-    if(!nested && length(obj[[l]]) > 0L)
+    if(length(obj[[l]]) > 0L &&
+       !.check_if_nest(obj, nested, for_analyze)) {
         l = l + 1L
-
+    }
     l
 })
+
+
 
 
 setMethod("next_rpos", "ANY", function(obj, nested) 1L)

@@ -42,7 +42,7 @@ as_html <- function(x,
   mat <- matrix_form(x)
   
   nrh <- attr(mat, "nrow_header")
-  nc <- ncol(tbl) + 1
+  nc <- ncol(x) + 1
   is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$row_info))), ncol = nc, byrow = TRUE)
     
   cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {

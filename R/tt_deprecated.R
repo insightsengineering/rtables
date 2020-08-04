@@ -246,38 +246,39 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
 #' rtables:::unlist_rtables(l_tbls)
 #'
 unlist_rtables <- function(x) {
+    stop("this needs to be added to the compatability layer if its used a lot")
+    
+  ## n <- 0
+  ## incr_n_if_rtable <- function(x) {
+  ##   if (is(x, "rtable")) {
+  ##     if (is_non_empty_rtable(x)) {
+  ##       n <<- n + 1
+  ##     }
+  ##   } else {
+  ##     lapply(x, incr_n_if_rtable)
+  ##   }
+  ## }
+  ## incr_n_if_rtable(x)
   
-  n <- 0
-  incr_n_if_rtable <- function(x) {
-    if (is(x, "rtable")) {
-      if (is_non_empty_rtable(x)) {
-        n <<- n + 1
-      }
-    } else {
-      lapply(x, incr_n_if_rtable)
-    }
-  }
-  incr_n_if_rtable(x)
+  ## i <- 1
+  ## tbls <- vector(mode = "list", length = n)
   
-  i <- 1
-  tbls <- vector(mode = "list", length = n)
+  ## add_tbls <- function(x) {
+  ##   if (is(x, "rtable")) {
+  ##     if (is_non_empty_rtable(x)) {
+  ##       tbls[[i]] <<- x
+  ##       i <<- i + 1
+  ##     }
+  ##   } else {
+  ##     lapply(x, add_tbls)
+  ##   }
+  ## }
   
-  add_tbls <- function(x) {
-    if (is(x, "rtable")) {
-      if (is_non_empty_rtable(x)) {
-        tbls[[i]] <<- x
-        i <<- i + 1
-      }
-    } else {
-      lapply(x, add_tbls)
-    }
-  }
+  ## if (n > 0) {
+  ##   add_tbls(x)
+  ## }
   
-  if (n > 0) {
-    add_tbls(x)
-  }
-  
-  tbls
+  ## tbls
   
 }
 
@@ -354,7 +355,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
     stopifnot(nrow(new_col_by) == nrow(x))
   }
   stopifnot(
-    all(vapply(new_col_by, function(col) is.logical.vector_modif(col, min_size = 0), logical(1)))
+    all(vapply(new_col_by, function(col) is_logical_vector_modif(col, min_length = 0), logical(1)))
   )
   new_col_by
 }

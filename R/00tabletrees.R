@@ -157,7 +157,7 @@ NULLSplit = function(...) {
         split_format = NULL,
         name  = "",
         indent_modifier = 0L,
-        content_indent_modifier = as.integer(cindent_mod),
+        content_indent_modifier = 0L,
         content_var = "")
 }
 
@@ -489,19 +489,19 @@ AnalyzeColVarSplit = function(afun,
                               cformat = NULL,
                               split_format = NULL,
                               inclNAs = FALSE,
-                              split_name = var,
+                              split_name = "",
                               extra_args = list(),
                               indent_mod = 0L,
                               show_varlabel = NA,
                               cvar = "") {
-    if(is.function(afun)) {
-        if(!any(nzchar(defrowlab))) {
-            defrowlab = as.character(substitute(afun))
-            if(length(defrowlab) > 1 || startsWith(defrowlab, "function(") || startsWith(defrowlab, "list("))
-                defrowlab = ""
-        }
-        afun = lapply(var, function(x) afun)
-    }
+    ## if(is.function(afun)) {
+    ##     if(!any(nzchar(defrowlab))) {
+    ##         defrowlab = as.character(substitute(afun))
+    ##         if(length(defrowlab) > 1 || startsWith(defrowlab, "function(") || startsWith(defrowlab, "list("))
+    ##             defrowlab = ""
+    ##     }
+    ##     afun = lapply(var, function(x) afun)
+    ## }
     
     new("AnalyzeColVarSplit",
         payload = NA_character_,
@@ -597,7 +597,7 @@ AnalyzeMultiVars = function(var,
             rvis = labelrow_visible(x)
             if(!is.na(show_kidlabs)) {
                 if(is.na(rvis))
-                    rvis = show_labkids
+                    rvis = show_kidlabs
             }
             labelrow_visible(x) = rvis
             x

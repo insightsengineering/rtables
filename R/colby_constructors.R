@@ -492,27 +492,27 @@ split_rows_by_cuts = function(lyt, var, cuts,
     split_rows(lyt, spl, pos)
 }
 
-#' @export
-#' @rdname varcuts
-split_rows_by_dyncut = function(lyt, var, cut,
-                                cutlabels = NULL,
-                                split_label = var,
-                                format = NULL,
-                                nested = TRUE,
-                                child_labels = c("default", "visible", "hidden"),
-                                cumulative = FALSE,
-                                indent_mod = 0L) {
-    child_labels = match.arg(child_labels)
-    spl = VarStaticCutSplit(var, split_label, cuts, cutlabels,
-                            split_format = format,
-                            child_labels = child_labels,
-                            indent_mod = indent_mod)
-    if(cumulative)
-        spl = as(spl, "CumulativeCutSplit")
+## #' @export
+## #' @rdname varcuts
+## split_rows_by_dyncut = function(lyt, var, cut,
+##                                 cutlabels = NULL,
+##                                 split_label = var,
+##                                 format = NULL,
+##                                 nested = TRUE,
+##                                 child_labels = c("default", "visible", "hidden"),
+##                                 cumulative = FALSE,
+##                                 indent_mod = 0L) {
+##     child_labels = match.arg(child_labels)
+##     spl = VarStaticCutSplit(var, split_label, cuts, cutlabels,
+##                             split_format = format,
+##                             child_labels = child_labels,
+##                             indent_mod = indent_mod)
+##     if(cumulative)
+##         spl = as(spl, "CumulativeCutSplit")
 
-    pos = next_rpos(lyt, nested)
-    split_rows(lyt, spl, pos)
-}
+##     pos = next_rpos(lyt, nested)
+##     split_rows(lyt, spl, pos)
+## }
 
 #' @export
 #' @rdname varcuts
@@ -820,7 +820,7 @@ analyze_colvars = function(lyt, afun,
                           split_name = get_acolvar_name(lyt),
                           indent_mod = indent_mod,
                           show_varlabel = FALSE)
-    pos = next_rpos(lyt, nested)
+    pos = next_rpos(lyt, nested, for_analyze = TRUE)
     split_rows(lyt, spl, pos)
 }
 
@@ -889,7 +889,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
         cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
     } else {
         
-        pos = next_rpos(lyt, nested)
+        pos = next_rpos(lyt, nested, for_analyze = TRUE)
         split_rows(lyt, spl, pos)
     }
 }

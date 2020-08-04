@@ -275,10 +275,38 @@ test_that("cfun args", {
         summarize_row_groups(cfun = cfun1)
 
     tbl <- build_table(lyt, rawdat)
-
-
-
-
-
-
 })
+
+## regression test for automatically not-nesting
+## when a non-analyze comes after an analyze
+test_that("split under analyze", {
+    dontnest <- basic_table() %>% 
+        split_cols_by(var = "ARM") %>%
+        add_colcounts() %>%
+        analyze("AGE") %>%
+        split_rows_by("VAR3") %>%
+        analyze("AGE") %>%
+        build_table(rawdat)
+    expect_equal(nrow(dontnest), 5)
+})
+
+
+test_that("label_var", {
+    yeslbls <- basic_table() %>% 
+        split_cols_by(var = "ARM") %>%
+        add_colcounts() %>%
+        split_rows_by("SEX", labels_var = "gend_label") %>%
+        analyze("AGE") %>%
+        build_table(rawdat)
+    expect_identical(row.names(yeslbls)[1], "Male")
+
+    nolbls <- basic_table() %>% 
+        split_cols_by(var = "ARM") %>%
+        add_colcounts() %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE") %>%
+        build_table(rawdat)
+    expect_identical(row.names(nolbls)[1], "M")
+})    
+
+

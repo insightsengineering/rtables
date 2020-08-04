@@ -3,7 +3,6 @@
 \name{split_cols_by_cuts}
 \alias{split_cols_by_cuts}
 \alias{split_rows_by_cuts}
-\alias{split_rows_by_dyncut}
 \alias{split_cols_by_cutfun}
 \alias{split_cols_by_quartiles}
 \alias{split_rows_by_quartiles}
@@ -28,19 +27,6 @@ split_rows_by_cuts(
   split_label = var,
   nested = TRUE,
   cumulative = FALSE
-)
-
-split_rows_by_dyncut(
-  lyt,
-  var,
-  cut,
-  cutlabels = NULL,
-  split_label = var,
-  format = NULL,
-  nested = TRUE,
-  child_labels = c("default", "visible", "hidden"),
-  cumulative = FALSE,
-  indent_mod = 0L
 )
 
 split_cols_by_cutfun(
@@ -107,17 +93,17 @@ split_rows_by_cutfun(
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
-\item{format}{format string for cells}
-
-\item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
-
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
-
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 
 \item{cutlabelfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
 
+\item{format}{format string for cells}
+
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
 }
 \description{
 Create columns (or row splits) based on values (such as quartiles) of \code{var}.

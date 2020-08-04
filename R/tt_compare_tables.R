@@ -46,7 +46,7 @@ recurse_prune_by_content = function(tt, criteria, stop_depth, depth) {
 
     keepkids = kids[!torm]
     if(depth < stop_depth && !are(keepkids, "TableRow"))
-        tree_children(tt) = lapply(keepkids, recurse_prune_content,
+        tree_children(tt) = lapply(keepkids, recurse_prune_by_content,
                                    criteria = criteria,
                                    stop_depth = stop_depth,
                                    depth = depth + 1)
