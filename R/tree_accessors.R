@@ -65,6 +65,10 @@ setGeneric("content_table", function(obj) standardGeneric("content_table"))
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
 
+setMethod("content_table", "ANY",
+          function(obj) NULL)
+
+
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
 setMethod("content_table<-", c("TableTree", "ElementaryTable"),
           function(obj, value) {
@@ -1300,6 +1304,7 @@ setMethod("colcount_format<-", "PreDataTableLayouts",
     obj
 })
 
+EmptyColInfo <- InstantiatedColumnInfo()
 #' Exported for use in tern
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
@@ -1318,7 +1323,7 @@ setMethod("no_colinfo", "VTableNodeInfo",
 #' @exportMethod no_colinfo
 #' @rdname no_info
 setMethod("no_colinfo", "InstantiatedColumnInfo",
-           function(obj) identical(obj, InstantiatedColumnInfo()))
+           function(obj) identical(obj, EmptyColInfo))
 
 
 #' Names of a TableTree

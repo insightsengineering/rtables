@@ -28,37 +28,72 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 
 ## }
 
-recurse_prune_by_content = function(tt, criteria, stop_depth, depth) {
-    if(is(tt, "TableRow") || (!is.na(stop_depth) && depth > stop_depth))
-        return(tt)
+content_all_zeros_nas = function(tt) {
+    ## this will be NULL if
+    ## tt is something that doesn't have a content table
+    ct <- content_table(tt)
+    ## NROW returns 0 for NULL.
+    if(NROW(ct) == 0 || nrow(ct) > 1)
+        return(FALSE)
 
+    cr <- tree_children(ct)
+    all_zero_or_na(cr)
+}
+
+
+
+prune_empty_level = function(tt) {
+    if(is(tt, "TableRow"))
+        return(all_zero_or_na(tt))
+    
+    if(content_all_zeros_nas(tt))
+        return(TRUE)
     kids = tree_children(tt)
-    ctabs = lapply(kids, function(kid) {
-        if(!is(kid, "TableTree"))
-            content_table(kid)
-        else
-            NULL
-    })
+    length(kids) == 0
+}
 
-    torm = vapply(ctabs, function(tb) {
-        !is.null(tb) && criteria(tb)
+recurse_prune = function(tt, prune_func = prune_empty_level, stop_depth = NA, depth = 0) {
+    if(!is.na(stop_depth) && depth > stop_depth)
+        return(tt)
+    if(is(tt, "TableRow")) {
+        if(prune_func(tt))
+            tt <- NULL
+        return(tt)
+    }
+    
+    kids = tree_children(tt)
+ 
+    torm = vapply(kids, function(tb) {
+        !is.null(tb) && prune_func(tb)
     }, NA)
 
     keepkids = kids[!torm]
-    if(depth < stop_depth && !are(keepkids, "TableRow"))
-        tree_children(tt) = lapply(keepkids, recurse_prune_by_content,
-                                   criteria = criteria,
-                                   stop_depth = stop_depth,
-                                   depth = depth + 1)
-    else
+    keepkids = lapply(keepkids, recurse_prune,
+                      prune_func = prune_func,
+                      stop_depth = stop_depth,
+                      depth = depth + 1)
+    
+    keepkids = keepkids[!vapply(keepkids, is.null, NA)]
+    if(length(keepkids) > 0)
         tree_children(tt) = keepkids
+    else
+        tt = NULL
     tt
 }
 
 ## }
 
-## recurse_trim_content = function(tt, path,  trim_fun, full_recursive = FALSE) {
-##     if(length(path) == 0) {
+
+## l <- basic_table() %>%
+##     split_cols_by("ARM") %>%
+##     split_rows_by("COUNTRY") %>%
+##     split_rows_by("RACE") %>%
+##     analyze("AGE", mean)
+
+## sptbl <- build_table(l, dm2)
+## ## recurse_trim_content = function(tt, path,  trim_fun, full_recursive = FALSE) {
+## ##
+
         
         
 
