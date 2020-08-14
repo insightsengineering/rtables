@@ -3,7 +3,7 @@ context("tabulation framework")
 
 
 
-## this 
+## this
 test_that("complex layout works", {
     lyt = NULL %>% split_cols_by("ARM", "Arm") %>%
         ## add nested column split on SEX with value lables from gend_label
@@ -35,14 +35,14 @@ test_that("complex layout works", {
         ## level of nesting as all previous analysis blocks, rather than
         ## attempting to further nest them
         analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x") %>%
-        
+
         ## Note nested=TRUE, this creates a NEW subtable directly under the
         ## root split
         ## afun of table() gives us k count rows, where k is the number of
         ## levels of VAR3, in this case 2.
         analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
-    
-    
+
+
     expnames = c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
                  "Age Analysis redux", "range", "Level B", "Age Analysis",
                  "mean", "median", "Age Analysis redux", "range",
@@ -106,7 +106,7 @@ test_that("labelkids parameter works", {
     expect_identical(row.names(tabyes)[1:4],
                      c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis"))
 
-    
+
     misslabellyt <- NULL %>%
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
@@ -117,12 +117,12 @@ test_that("labelkids parameter works", {
                             labels_var = "fac2_label", child_labels = "default") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                          median = median(x)),
-                      format = "xx.xx") 
+                      format = "xx.xx")
 
     tabmiss <- build_table(misslabellyt, rawdat)
     expect_identical(row.names(tabmiss)[1:4],
                      c("Caucasian (n)", "Level A", "mean", "median"))
-    
+
 
     nolabellyt <- NULL %>%
         split_cols_by("ARM", "Arm") %>%
@@ -154,12 +154,12 @@ test_that("labelkids parameter works", {
                                                                median = median(x)),
                 format = "xx.xx",
                 show_labels = "visible")
-    
+
     tabmixed2 <- build_table(mixedlyt2, rawdat)
     expect_identical(row.names(tabmixed2)[1:4],
                      c("Caucasian (n)", "Age Analysis", "mean", "median"))
 
-    
+
     mixedlyt <- NULL %>%
         split_cols_by("ARM", "Arm") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
@@ -172,12 +172,29 @@ test_that("labelkids parameter works", {
                                                                median = median(x)),
                 format = "xx.xx",
                 show_labels = "hidden")
-    
+
     tabmixed <- build_table(mixedlyt, rawdat)
     expect_identical(row.names(tabmixed)[1:4],
                      c("Caucasian", "Caucasian (n)", "Level A", "mean"))
 
 
+    varshowlyt <- NULL %>%
+        split_cols_by("ARM", "Arm") %>%
+        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
+        summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+        split_rows_by("FACTOR2", "Factor2",
+                      split_fun = remove_split_levels("C"),
+                      labels_var = "fac2_label",
+                      visible_label = TRUE) %>%
+        analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                               median = median(x)),
+                format = "xx.xx",
+                show_labels = "hidden")
+
+    varshowtab <- build_table(varshowlyt, rawdat)
+    expect_identical(row.names(varshowtab)[1:4],
+                     c("Caucasian (n)", "Factor2", "Level A", "mean"))
 })
 
 
@@ -187,20 +204,20 @@ refcompmean = function(x, .ref_group, .in_ref_col, ...) {
         val <- rcell(NULL)
     else
         val <- rcell(mean(x, ...) - mean(.ref_group,...), format = "xx.xx")
-    
+
     in_rows(
         "Diff from reference - mean" = val
     )
 }
 
 test_that("ref_group comparisons work", {
-    
+
     blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
         analyze("AGE", show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden")
     ## function(x) list(mean = mean(x)))
-    
-    
+
+
     bltab = build_table(blthing, rawdat)
     expect_identical(dim(bltab), c(2L,2L))
     expect_null(bltab[2,1, drop = TRUE])
@@ -213,7 +230,7 @@ test_that("ref_group comparisons work", {
         split_cols_by("ARM") %>%
         split_cols_by("SEX", ref_group = "F") %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels="hidden") %>% 
+        analyze("AGE", refcompmean, show_labels="hidden") %>%
         split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden")
@@ -261,7 +278,7 @@ test_that("missing vars caught", {
     })
 
 
-    
+
 test_that("cfun args", {
     cfun1 <- function(df, lbl_str, .N_col, .N_total) {
         stopifnot(is(df, "data.frame"))
@@ -280,7 +297,7 @@ test_that("cfun args", {
 ## regression test for automatically not-nesting
 ## when a non-analyze comes after an analyze
 test_that("split under analyze", {
-    dontnest <- basic_table() %>% 
+    dontnest <- basic_table() %>%
         split_cols_by(var = "ARM") %>%
         add_colcounts() %>%
         analyze("AGE") %>%
@@ -292,7 +309,7 @@ test_that("split under analyze", {
 
 
 test_that("label_var", {
-    yeslbls <- basic_table() %>% 
+    yeslbls <- basic_table() %>%
         split_cols_by(var = "ARM") %>%
         add_colcounts() %>%
         split_rows_by("SEX", labels_var = "gend_label") %>%
@@ -300,13 +317,13 @@ test_that("label_var", {
         build_table(rawdat)
     expect_identical(row.names(yeslbls)[1], "Male")
 
-    nolbls <- basic_table() %>% 
+    nolbls <- basic_table() %>%
         split_cols_by(var = "ARM") %>%
         add_colcounts() %>%
         split_rows_by("SEX") %>%
         analyze("AGE") %>%
         build_table(rawdat)
     expect_identical(row.names(nolbls)[1], "M")
-})    
+})
 
 

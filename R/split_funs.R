@@ -49,7 +49,7 @@ setGeneric("check_validsplit",
         else if (!is.null(names(extr)))
             labels = names(extr)
     }
-        
+
     if(is.null(vals) && !is.null(extr))
         vals = seq_along(extr)
 
@@ -58,7 +58,7 @@ setGeneric("check_validsplit",
         return(partinfo)
     }
     ## length(vals) > 0 from here down
-    
+
     if(are(vals, "SplitValue")) {
         if(!is.null(extr)) {
             warning("Got a partinfo list with values that are ",
@@ -76,7 +76,7 @@ setGeneric("check_validsplit",
 
     names(vals) = labels
     partinfo$values = vals
-    
+
     if(!identical(names(dpart), labels)) {
         names(dpart) = labels
         partinfo$datasplit = dpart
@@ -89,7 +89,7 @@ setGeneric("check_validsplit",
 }
 
 
-### NB This is called at EACH level of recursive splitting 
+### NB This is called at EACH level of recursive splitting
 do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
@@ -117,10 +117,10 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 .apply_split_inner = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
     ## try to calculate values first. Most of the time we can
-    if(is.null(vals)) 
+    if(is.null(vals))
         vals = .applysplit_rawvals(spl, df)
     extr = .applysplit_extras(spl, df, vals)
-    
+
     ## in some cases, currently ComparisonSplit, we don't know the
     ## values until after we know the extra args, since the values
     ## themselves are meaningless. If this is the case, fix them
@@ -136,9 +136,9 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
                     labels = list(),
                     extras = list()))
     }
-    
+
     dpart = .applysplit_datapart(spl, df, vals)
-    
+
     if(is.null(labels))
         labels = .applysplit_partlabels(spl, df, vals, labels)
     else
@@ -158,16 +158,16 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
             labels = labels[hasdata]
         }
     }
-    
+
     if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
         vord = seq_along(vals)
     } else {
         vord = match(spl_child_order(spl),
                      vals)
         vord = vord[!is.na(vord)]
-    } 
+    }
 
-    
+
     ## FIXME: should be an S4 object, not a list
     ret = list(values = vals[vord],
                datasplit = dpart[vord],
@@ -188,7 +188,7 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
                    collapse = ", "),
              "] not present in data. (",
              class(spl), ")")
-    invisible(NULL)   
+    invisible(NULL)
 
 }
 
@@ -199,7 +199,7 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 ### do NOT make it check, e.g., if the ref_group level of
 ### a factor is present in the data, because it may not be.
 
-                                        
+
 
 setMethod("check_validsplit", "VarLevelSplit",
           function(spl, df) {
@@ -208,13 +208,13 @@ setMethod("check_validsplit", "VarLevelSplit",
 
 
 setMethod("check_validsplit", "MultiVarSplit",
-          
+
           function(spl, df) {
     .checkvarsok(spl, df)
 })
 
 setMethod("check_validsplit", "VAnalyzeSplit",
-          
+
           function(spl, df) {
     if(!is.na(spl_payload(spl))) {
         .checkvarsok(spl, df)
@@ -234,7 +234,7 @@ setMethod("check_validsplit", "CompoundSplit",
 ## default does nothing, add methods as they become
 ## required
 setMethod("check_validsplit", "Split",
-          function(spl, df) 
+          function(spl, df)
     invisible(NULL))
 
 
@@ -320,7 +320,7 @@ setMethod(".applysplit_datapart", "VAnalyzeSplit",
     }
     ret = df
     if(!is.na(vals) && avar_inclNAs(spl))
-        ret = df[!is.na(df[[vals]]),] 
+        ret = df[!is.na(df[[vals]]),]
     list(ret)
 })
 
@@ -360,7 +360,7 @@ setMethod(".applysplit_extras", "Split",
         one_ex <- one_ex[!sapply(one_ex, is, "NullSentinel")]
         one_ex
     })
-                 
+
 })
 
 setMethod(".applysplit_extras", "VarLevWBaselineSplit",
@@ -379,12 +379,12 @@ setMethod(".applysplit_partlabels", "Split",
 
 setMethod(".applysplit_partlabels", "VarLevelSplit",
           function(spl, df, vals, labels) {
-    
+
     varname <- spl_payload(spl)
     vlabelname <- spl_labelvar(spl)
-    varvec = df[[varname]]  
+    varvec = df[[varname]]
     if(is.null(vals)) {
-  
+
         vals = if(is.factor(varvec))
                    levels(varvec)
                else
@@ -398,7 +398,7 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
                 vlabel = unique(df[varvec == v,
                                    vlabelname, drop = TRUE])
                 ## TODO remove this once 1-to-1 value-label map is enforced elsewhere.
-                stopifnot(length(vlabel) < 2) 
+                stopifnot(length(vlabel) < 2)
                 if(length(vlabel) == 0)
                     vlabel = ""
                 vlabel
@@ -431,14 +431,14 @@ make_splvalue_vec = function(vals, extrs = list(list())) {
     if(are(vals, "SplitValue")) {
         return(vals)
     }
-    
+
     mapply(SplitValue, val = vals, extr = extrs,
            SIMPLIFY=FALSE)
 }
 
 
 #' Split functions
-#' 
+#'
 #' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 #'   of presence in the data).
 #'
@@ -499,9 +499,10 @@ reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE)
     }
 }
 
+
 #' @rdname split_funcs
 #' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
-#' @export 
+#' @export
 trim_levels_in_group = function(innervar) {
     myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
@@ -549,28 +550,28 @@ trim_levels_in_group = function(innervar) {
 }
 
 #' Add an implicit 'overall' level to split
-#' 
+#'
 #' @inheritParams lyt_args
 #' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
 #' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
-#' 
+#'
 #' @return a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
-#' 
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' l <- NULL %>%
-#'    split_cols_by("ARM") %>% 
-#'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>% 
-#'    summarize_row_groups(label_fstr = "%s (n)") %>% 
+#'    split_cols_by("ARM") %>%
+#'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>%
+#'    summarize_row_groups(label_fstr = "%s (n)") %>%
 #'    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-#'    
+#'
 #' l
-#' 
+#'
 #' tbl <- build_table(l, DM)
-#' 
+#'
 #' tbl
-#' 
+#'
 add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
     combodf <- data.frame(valname = valname,
                           label = label,
@@ -609,14 +610,14 @@ select_all_levels = new("AllLevelsSentinel")
 #'     split_cols_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
 #'     add_colcounts() %>%
 #'     analyze("AGE")
-#' 
+#'
 #' l3 <-  basic_table() %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
 #'     add_colcounts() %>%
 #'     split_rows_by("SEX", split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
 #'     summarize_row_groups() %>%
 #'     analyze("AGE")
-#' 
+#'
 #' build_table(l3, smallerDM)
 
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {

@@ -64,9 +64,9 @@ rawdat = makefakedat()
 
 ## starting will NULL causes it to construct a PreDataLayouts object
 ## add top level column split on ARM
-lyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+lyt = NULL %>% split_cols_by("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
+    split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
     ## add_colby_total(lbl = "All") %>%
@@ -110,22 +110,121 @@ bigae
 
 library(random.cdisc.data)
 
-bigadsl = radsl(N=5000, study_duration = 4)
-bigadae = radae(bigadsl,lookup = aelookup, max_n_aes=  20L)
+bigaelookup <-  tribble(
+      ~AEBODSYS, ~AELLT,          ~AEDECOD,        ~AEHLT,        ~AEHLGT,      ~AETOXGR, ~AESOC, ~AESER, ~AREL,
+      "cl A.1",  "llt A.1.1.1.1", "dcd A.1.1.1.1", "hlt A.1.1.1", "hlgt A.1.1", "1",        "cl A", "N",    "N",
+      "cl A.1",  "llt A.1.1.1.2", "dcd A.1.1.1.2", "hlt A.1.1.1", "hlgt A.1.1", "2",        "cl A", "Y",    "N",
+      "cl A.1",  "llt A.1.1.1.1", "dcd A.1.1.1.1", "hlt A.1.1.1", "hlgt A.1.1", "5",        "cl B", "N",    "Y",
+      "cl A.2",  "llt A.2.1.2.1", "dcd A.2.1.2.1", "hlt A.2.1.2", "hlgt A.2.1", "3",        "cl B", "N",    "N",
+      "cl A.2",  "llt A.2.2.3.1", "dcd A.2.2.3.1", "hlt A.2.2.3", "hlgt A.2.2", "1",        "cl B", "Y",    "N",
+      "cl A.1",  "llt A.1.1.1.3", "dcd A.1.1.1.3", "hlt A.1.1.1", "hlgt A.1.1", "4",        "cl C", "N",    "Y",
+      "cl A.2",  "llt A.2.1.2.1", "dcd A.2.1.2.1", "hlt A.2.1.2", "hlgt A.2.1", "2",        "cl C", "N",    "Y",
+      "cl A.2",  "llt A.2.1.1.1", "dcd A.2.1.1.1", "hlt A.2.1.1", "hlgt A.2.1", "5",        "cl D", "Y",    "N",
+      "cl A.2",  "llt A.2.1.4.2", "dcd A.2.1.4.2", "hlt A.2.1.4", "hlgt A.2.1", "3",        "cl D", "N",    "N",
+      "cl A.2",  "llt A.2.1.5.3", "dcd A.2.1.5.3", "hlt A.2.1.5", "hlgt A.2.1", "1",        "cl D", "N",    "Y",
+
+          "cl B.1",  "llt B.1.1.1.1", "dcd B.1.1.1.1", "hlt B.1.1.1", "hlgt B.1.1", "1",        "cl A", "N",    "N",
+      "cl B.1",  "llt B.1.1.1.2", "dcd B.1.1.1.2", "hlt B.1.1.1", "hlgt B.1.1", "2",        "cl A", "Y",    "N",
+      "cl B.1",  "llt B.1.1.1.1", "dcd B.1.1.1.1", "hlt B.1.1.1", "hlgt B.1.1", "5",        "cl B", "N",    "Y",
+      "cl B.2",  "llt B.2.1.2.1", "dcd B.2.1.2.1", "hlt B.2.1.2", "hlgt B.2.1", "3",        "cl B", "N",    "N",
+      "cl B.2",  "llt B.2.2.3.1", "dcd B.2.2.3.1", "hlt B.2.2.3", "hlgt B.2.2", "1",        "cl B", "Y",    "N",
+      "cl B.1",  "llt B.1.1.1.3", "dcd B.1.1.1.3", "hlt B.1.1.1", "hlgt B.1.1", "4",        "cl C", "N",    "Y",
+      "cl B.2",  "llt B.2.1.2.1", "dcd B.2.1.2.1", "hlt B.2.1.2", "hlgt B.2.1", "2",        "cl C", "N",    "Y",
+      "cl B.2",  "llt B.2.1.1.1", "dcd B.2.1.1.1", "hlt B.2.1.1", "hlgt B.2.1", "5",        "cl D", "Y",    "N",
+      "cl B.2",  "llt B.2.1.4.2", "dcd B.2.1.4.2", "hlt B.2.1.4", "hlgt B.2.1", "3",        "cl D", "N",    "N",
+      "cl B.2",  "llt B.2.1.5.3", "dcd B.2.1.5.3", "hlt B.2.1.5", "hlgt B.2.1", "1",        "cl D", "N",    "Y",
+
+          "cl C.1",  "llt C.1.1.1.1", "dcd C.1.1.1.1", "hlt C.1.1.1", "hlgt C.1.1", "1",        "cl A", "N",    "N",
+      "cl C.1",  "llt C.1.1.1.2", "dcd C.1.1.1.2", "hlt C.1.1.1", "hlgt C.1.1", "2",        "cl A", "Y",    "N",
+      "cl C.1",  "llt C.1.1.1.1", "dcd C.1.1.1.1", "hlt C.1.1.1", "hlgt C.1.1", "5",        "cl B", "N",    "Y",
+      "cl C.2",  "llt C.2.1.2.1", "dcd C.2.1.2.1", "hlt C.2.1.2", "hlgt C.2.1", "3",        "cl B", "N",    "N",
+      "cl C.2",  "llt C.2.2.3.1", "dcd C.2.2.3.1", "hlt C.2.2.3", "hlgt C.2.2", "1",        "cl B", "Y",    "N",
+      "cl C.1",  "llt C.1.1.1.3", "dcd C.1.1.1.3", "hlt C.1.1.1", "hlgt C.1.1", "4",        "cl C", "N",    "Y",
+      "cl C.2",  "llt C.2.1.2.1", "dcd C.2.1.2.1", "hlt C.2.1.2", "hlgt C.2.1", "2",        "cl C", "N",    "Y",
+      "cl C.2",  "llt C.2.1.1.1", "dcd C.2.1.1.1", "hlt C.2.1.1", "hlgt C.2.1", "5",        "cl D", "Y",    "N",
+      "cl C.2",  "llt C.2.1.4.2", "dcd C.2.1.4.2", "hlt C.2.1.4", "hlgt C.2.1", "3",        "cl D", "N",    "N",
+      "cl C.2",  "llt C.2.1.5.3", "dcd C.2.1.5.3", "hlt C.2.1.5", "hlgt C.2.1", "1",        "cl D", "N",    "Y",
+
+          "cl D.1",  "llt D.1.1.1.1", "dcd D.1.1.1.1", "hlt D.1.1.1", "hlgt D.1.1", "1",        "cl A", "N",    "N",
+      "cl D.1",  "llt D.1.1.1.2", "dcd D.1.1.1.2", "hlt D.1.1.1", "hlgt D.1.1", "2",        "cl A", "Y",    "N",
+      "cl D.1",  "llt D.1.1.1.1", "dcd D.1.1.1.1", "hlt D.1.1.1", "hlgt D.1.1", "5",        "cl B", "N",    "Y",
+      "cl D.2",  "llt D.2.1.2.1", "dcd D.2.1.2.1", "hlt D.2.1.2", "hlgt D.2.1", "3",        "cl B", "N",    "N",
+      "cl D.2",  "llt D.2.2.3.1", "dcd D.2.2.3.1", "hlt D.2.2.3", "hlgt D.2.2", "1",        "cl B", "Y",    "N",
+      "cl D.1",  "llt D.1.1.1.3", "dcd D.1.1.1.3", "hlt D.1.1.1", "hlgt D.1.1", "4",        "cl C", "N",    "Y",
+      "cl D.2",  "llt D.2.1.2.1", "dcd D.2.1.2.1", "hlt D.2.1.2", "hlgt D.2.1", "2",        "cl C", "N",    "Y",
+      "cl D.2",  "llt D.2.1.1.1", "dcd D.2.1.1.1", "hlt D.2.1.1", "hlgt D.2.1", "5",        "cl D", "Y",    "N",
+      "cl D.2",  "llt D.2.1.4.2", "dcd D.2.1.4.2", "hlt D.2.1.4", "hlgt D.2.1", "3",        "cl D", "N",    "N",
+      "cl D.2",  "llt D.2.1.5.3", "dcd D.2.1.5.3", "hlt D.2.1.5", "hlgt D.2.1", "1",        "cl D", "N",    "Y",
+)
+
+bigadsl = radsl(N=20000, study_duration = 4, narms = 10)
+bigadae = radae(bigadsl,lookup = bigaelookup, max_n_aes=  20L)
+
+
+
+
+s_events_patients <- function(x, .N_col, lblstr = NULL) {
+  in_rows(
+    "Total number of patients with at least one event" = 
+      rcell(length(unique(x)) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
+    
+    "Total number of events" = rcell(length(x), format = "xx")
+  )
+}
+
+table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID", na.rm = TRUE) {
+
+  x <- df[[termvar]]
+  id <- df[[idvar]]
+  
+  if (na.rm) x <- na.omit(x)
+ 
+  as.list(table(x[!duplicated(id)]))
+}
+
+
+N_per_arm <- table(bigadsl$ARM)
+
+biglyt <- basic_table() %>% 
+    split_cols_by("ARM") %>%
+  add_colcounts() %>%
+    analyze("USUBJID", afun = s_events_patients) %>% 
+  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
+    summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
+    analyze("AEDECOD", table_count_once_per_id, show_labels = "hidden", indent_mod = -1)
+
+
+Rprof("~/bigtable.Rprof")
+bigtbl <- build_table(biglyt, bigadae, col_counts = N_per_arm)
+Rprof(NULL)
+
+
+
+
+
+
+
+
+
+
+
 ## generate a little table that we want to add onto another table
 ## that we're going to build
-thing2 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+thing2 = NULL %>% split_cols_by("ARM", split_label = "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
-    add_analyzed_vars(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"), afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), fmt = "xx.xx")
+    split_cols_by("SEX", "Gender", labels_var = "gend_lbl") %>%
+    analyze(c("AGE", "AGE"), var_labels = c("Age Analysis", "Age Analysis Redux"),
+            afun = function(x) {
+        in_rows(mean = rcell(mean(x), format = "xx.xx"),
+                median = rcell(median(x), format = "xx.xx"))
+        })
 
 tab2 = build_table(thing2, rawdat)
 
 
-thing3 = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+thing3 = NULL %>% split_cols_by("ARM", "Arm") %>%
     ## add nested column split on SEX with value lables from gend_lbl
-    add_colby_varlevels("SEX", "Gender", vlblvar = "gend_lbl") %>%
+    split_cols_by("SEX", "Gender", vlblvar = "gend_lbl") %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", lbl_fstr = "%s (n)") %>%
     add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
@@ -158,8 +257,8 @@ bltab = build_table(blthing, rawdat)
 
 longdat = makefakedat2()
 ## 'comparison' where different variables are displayed sidebyside
-simplecomp = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-    add_colby_varlevels("VISIT", "Visit") %>%
+simplecomp = NULL %>% split_cols_by("ARM", "Arm") %>%
+    split_cols_by("VISIT", "Visit") %>%
     add_colby_multivar(c("VALUE", "PCTDIFF"), "dummylab", varlbls = c("Raw", "Pct Diff")) %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
     add_summary_count("RACE", "%s (n)") %>%
@@ -175,24 +274,24 @@ tab3 = build_table(simplecomp, longdat)
 
 ### reasonable errors
 
-misscol = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-    add_colby_varlevels("SX", "Gender") %>%
+misscol = NULL %>% split_cols_by("ARM", "Arm") %>%
+    split_cols_by("SX", "Gender") %>%
     add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 build_table(misscol, rawdat)
 
 
-missrsplit =  NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-    add_colby_varlevels("SEX", "Gender") %>%
+missrsplit =  NULL %>% split_cols_by("ARM", "Arm") %>%
+    split_cols_by("SEX", "Gender") %>%
     add_rowby_varlevels("RACER", "ethn") %>%
     add_analyzed_vars("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
 
 build_table(missrsplit, rawdat)
 
-missavar =  NULL %>% add_colby_varlevels("ARM", "Arm") %>%
-    add_colby_varlevels("SEX", "Gender") %>%
+missavar =  NULL %>% split_cols_by("ARM", "Arm") %>%
+    split_cols_by("SEX", "Gender") %>%
     add_rowby_varlevels("RACE", "ethn") %>%
     add_analyzed_vars("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), fmt = "xx.xx")
@@ -204,7 +303,7 @@ build_table(missavar, rawdat)
 
 
 
-complyt = NULL %>% add_colby_varlevels("ARM", "Arm") %>%
+complyt = NULL %>% split_cols_by("ARM", "Arm") %>%
     add_colby_varwbline(var = "visit",lbl = "Visit", baseline = "baseline",
                         incl_all = TRUE) %>%
     add_rowby_varlevels("RACE", "Ethnicity", vlblvar = "ethn_lbl") %>%
@@ -306,7 +405,7 @@ mtbl <- tt_rtable(
 
 
 
-l <- NULL %>% add_colby_varlevels("ARM") %>%
+l <- NULL %>% split_cols_by("ARM") %>%
     add_colcounts() %>%
     add_rowby_varlevels("RACE", "Ethnicity") %>%
     add_analyzed_vars("AGE", afun = range , fmt = "xx.xx - xx.xx")

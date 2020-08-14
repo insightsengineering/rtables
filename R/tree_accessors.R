@@ -138,7 +138,7 @@ setMethod("last_rowsplit", "PreDataRowLayout",
     if(length(obj) == 0)
         NULL
     else
-        last_rowsplit(obj[[ length( obj ) ]]) 
+        last_rowsplit(obj[[ length( obj ) ]])
 })
 
 setMethod("last_rowsplit", "PreDataTableLayouts",
@@ -200,7 +200,7 @@ setMethod("pos_splvals", "VLayoutNode",
           function(obj) pos_splvals(tree_pos(obj)))
 
 
-         
+
 
 setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
 setMethod("pos_split_labels", "TreePos",
@@ -317,7 +317,7 @@ setMethod("obj_label<-", "VTableTree",
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
         labelrow_visible(lr) = TRUE
- 
+
     tt_labelrow(obj) = lr
     obj
 })
@@ -384,6 +384,17 @@ setMethod("label_kids<-", c("Split", "logical"), function(spl, value) {
     spl
 })
 
+
+setGeneric("vis_label", function(spl) standardGeneric("vis_label"))
+setMethod("vis_label", "Split", function(spl) spl@split_label_visible)
+
+setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
+setMethod("vis_label<-", "Split", function(spl, value) {
+    if(is.na(value))
+        stop("split label visibility must be TRUE or FALSE, got NA")
+    spl@split_label_visible <- value
+    spl
+})
 
 
 ### Function acessors (summary, tabulation and split)
@@ -568,7 +579,7 @@ setMethod("spanned_values<-", "TableRow",
     sp = row_cspans(obj)
     ## this is 3 times too clever!!!
     splvec = cumsum(unlist(lapply(sp, function(x) c(1, rep(0, x - 1)))))
-    
+
     rvals = lapply(split(value, splvec),
                    function(v) {
         if(length(v) == 1)
@@ -647,10 +658,10 @@ setMethod("set_format_recursive", "VTableTree",
     force(format)
     if(is.null(format))
         return(obj)
-    
+
     if(is.null(obj_format(obj)) || override)
         obj_format(obj) = format
-    
+
     kids = tree_children(obj)
     kids = lapply(kids, function(x, format2, oride) set_format_recursive(x,
                                                                       format = format2, override = oride),
@@ -731,7 +742,7 @@ setMethod("collect_leaves", "TableTree",
             tt_labelrow(tt)
         },
         if(incl.cont) {tree_children(content_table(tt))},
- 
+
         lapply(tree_children(tt),
                collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)
@@ -924,7 +935,7 @@ spl_ref_group = function(obj) {
 }
 
 
-           
+
 
 
 
@@ -954,17 +965,17 @@ setMethod("clayout_splits", "VTableNodeInfo",
 ## FIXME
 
 #' Column information/structure accessors
-#' 
+#'
 #' @inheritParams gen_args
 #' @param df data.frame/NULL. Data to use if the column information is being
 #'   generated from a  Pre-Data layout object
 #' @param rtpos TreePos. Root position.
-#'   
+#'
 #' @return A \code{LayoutColTree} object.
-#' 
+#'
 #' @rdname col_accessors
-#' 
-#' @export 
+#'
+#' @export
 setGeneric("clayout", function(obj) standardGeneric("clayout"))
 #'@rdname col_accessors
 #' @exportMethod clayout
@@ -1037,7 +1048,7 @@ setMethod("col_info<-", "ElementaryTable",
           function(obj, value) {
     obj@col_info = value
     .set_cinfo_kids(obj)
-    
+
 })
 
 #'@rdname col_accessors
@@ -1197,7 +1208,7 @@ setMethod("col_counts<-", "VTableNodeInfo",
     col_counts(cinfo) = value
     col_info(obj) = cinfo
     obj
-    
+
 })
 
 
@@ -1308,10 +1319,10 @@ EmptyColInfo <- InstantiatedColumnInfo()
 #' Exported for use in tern
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
-#' 
+#'
 #' @inheritParams gen_args
 #' @rdname no_info
-#' 
+#'
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
 
