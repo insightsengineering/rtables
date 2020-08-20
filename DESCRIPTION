@@ -23,7 +23,7 @@ Suggests:
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
 BugReports: https://github.com/roche/rtables/issues

@@ -140,7 +140,7 @@ var_labels <- function(x, fill = FALSE) {
 #' @examples
 #' x <- var_relabel(iris, Sepal.Length = "Sepal Length of iris flower")
 #' var_labels(x)
-#' var_relabel(iris)
+#' 
 var_relabel <- function(x, ...) {
   # todo: make this function more readable / code easier
   stopifnot(is.data.frame(x))
