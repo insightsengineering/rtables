@@ -53,9 +53,10 @@ setClass("ValueWrapper", representation(value = "ANY"),
 
 setClass("SplitValue",
          contains = "ValueWrapper",
-         representation(extra = "list"))
+         representation(extra = "list",
+                        label = "character"))
 
-SplitValue = function(val, extr =list()) {
+SplitValue = function(val, label = val, extr =list()) {
     if(is(val, "SplitValue")) {
         if(length(extr) >0 && !identical(extr, splv_extra(val)))
             stop("SplitValue  object passed to SplitValue constructor along with non-identical extra")
@@ -65,7 +66,7 @@ SplitValue = function(val, extr =list()) {
         extr <- list(extr)
 
     new("SplitValue", value = val,
-        extra = extr)
+        extra = extr, label = label)
 }
 
 setClass("LevelComboSplitValue",

@@ -13,7 +13,7 @@ NULL
 #' @family conventions
 #' @param df dataset (data.frame or tibble)
 #' @param spl A Split object defining a partitioning or analysis/tabulation of the data.
-#' @param pos numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current 
+#' @param pos numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current
 #' @param tt TableTree (or related class). A TableTree object representing a populated table.
 #' @param verbose logical. Should additional information be displayed to the user. Defaults to FALSE.
 #' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
@@ -23,9 +23,10 @@ NULL
 #' @param value The new value
 #' @param object The object to modify in-place
 #' @param verbose logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.
+#' @param path character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.
 #' @rdname gen_args
 gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
-                     value, object, ...) NULL
+                     value, object, path, ...) NULL
 
 
 
@@ -63,7 +64,7 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}
 #' @param cutfun function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation
 #' @param incl_all logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.
-#' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior. 
+#' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.
 #' @family conventions
 lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, split_format,
                      nested, format, cfun, cformat, split_fun, split_name,

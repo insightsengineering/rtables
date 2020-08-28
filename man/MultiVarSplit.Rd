@@ -6,7 +6,7 @@
 \usage{
 MultiVarSplit(
   vars,
-  split_label,
+  split_label = "",
   varlabels = NULL,
   cfun = NULL,
   cformat = NULL,
@@ -16,7 +16,8 @@ MultiVarSplit(
   extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  visible_label = FALSE
 )
 }
 \arguments{

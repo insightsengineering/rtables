@@ -23,7 +23,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 ##     kids = tree_children)
 ##     if(.depth >= max(start_depth, 1))
 ##         ctab = content_table(tt)
-    
+
 
 
 ## }
@@ -45,14 +45,21 @@ content_all_zeros_nas = function(tt) {
 prune_empty_level = function(tt) {
     if(is(tt, "TableRow"))
         return(all_zero_or_na(tt))
-    
+
     if(content_all_zeros_nas(tt))
         return(TRUE)
     kids = tree_children(tt)
     length(kids) == 0
 }
 
-recurse_prune = function(tt, prune_func = prune_empty_level, stop_depth = NA, depth = 0) {
+#' Recursively prune a TableTree
+#' @inheritParams gen_args
+#' @param prune_func function. A Function to be called on each subtree which returns TRUE if the entire subtree should be removed.
+#' @param stop_depth numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA} which indicates pruning should happen at all levels
+#' @param depth numeric(1). Used internally, not intended to be set by the end user.
+#' @return A TableTree pruned via recursive application of \code{prune_func}.
+#' @export
+prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_, depth = 0) {
     if(!is.na(stop_depth) && depth > stop_depth)
         return(tt)
     if(is(tt, "TableRow")) {
@@ -60,9 +67,9 @@ recurse_prune = function(tt, prune_func = prune_empty_level, stop_depth = NA, de
             tt <- NULL
         return(tt)
     }
-    
+
     kids = tree_children(tt)
- 
+
     torm = vapply(kids, function(tb) {
         !is.null(tb) && prune_func(tb)
     }, NA)
@@ -72,7 +79,7 @@ recurse_prune = function(tt, prune_func = prune_empty_level, stop_depth = NA, de
                       prune_func = prune_func,
                       stop_depth = stop_depth,
                       depth = depth + 1)
-    
+
     keepkids = keepkids[!vapply(keepkids, is.null, NA)]
     if(length(keepkids) > 0)
         tree_children(tt) = keepkids
@@ -94,8 +101,8 @@ recurse_prune = function(tt, prune_func = prune_empty_level, stop_depth = NA, de
 ## ## recurse_trim_content = function(tt, path,  trim_fun, full_recursive = FALSE) {
 ## ##
 
-        
-        
+
+
 
 ## }
 

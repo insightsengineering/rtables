@@ -57,7 +57,7 @@ build_table(l, iris)
 
 # an example more relevant for clinical trials
 l <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\% 
+    split_cols_by("ARM") \%>\%
     analyze("AGE", afun = function(x) {
       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median", "upper-hinge", "maximum"))
     })

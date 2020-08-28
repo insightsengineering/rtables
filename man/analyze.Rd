@@ -75,14 +75,14 @@ defined by row-splitting. Optional and only required/meaningful if a \code{ref_g
 \examples{
 
 l <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\% 
+    split_cols_by("ARM") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
 
 build_table(l, DM)
 
 
-l <- basic_table() \%>\% 
+l <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     analyze(head(names(iris), -1), afun = function(x) {
         list(
@@ -92,7 +92,7 @@ l <- basic_table() \%>\%
     })
 l
 build_table(l, iris)
- 
+
 }
 \author{
 Gabriel Becker

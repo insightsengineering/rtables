@@ -94,11 +94,11 @@ setMethod("make_subset_expr", "character",
 .combine_subset_exprs = function(ex1, ex2) {
     if(is.null(ex1) && is.expression(ex2))
         return(ex2)
-    
+
     stopifnot(is.expression(ex1), is.expression(ex2))
     as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
- 
+
 
 make_pos_subset = function(spls = pos_splits(pos),
                            svals = pos_splvals(pos),
@@ -143,7 +143,7 @@ setMethod("make_col_subsets", "PreDataColLayout",
 setMethod("make_col_subsets", "SplitVector",
           function(lyt, df) {
     build_splits_expr(lyt, df)
-    
+
 })
 
 setMethod("make_col_subsets", "LayoutColTree",
@@ -164,10 +164,14 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
     ## this will work whether clayout is pre or post
     ## data
     clayout = clayout(lyt)
-    
+
     ctree = coltree(clayout, df = df, rtpos = rtpos)
 
     cexprs = make_col_subsets(ctree, df)
+    ## XXX experimental!!!!
+    ## env = as.environment(df)
+    ## parent.env(env) = .GlobalEnv
+    ## cexprs = lapply(cexprs, function(e) compiler::compile(e[[1]], env = env))
     cextras = cextra_args(ctree)
 
     ## calculate the counts based on the df
@@ -196,6 +200,6 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
                            countformat = format)
-    
+
 }
 

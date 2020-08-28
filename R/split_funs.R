@@ -69,7 +69,7 @@ setGeneric("check_validsplit",
         if(is.null(extr))
             extr = rep(list(list()), length(vals))
         ## strict is FALSE here cause fixupvals might be called repeatedly
-        vals = make_splvalue_vec(vals, extr)
+        vals = make_splvalue_vec(vals, extr, labels = labels)
     }
     ## we're done with this so take it off
     partinfo$extras = NULL
@@ -393,7 +393,9 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     if(is.null(labels)) {
         if(varname == vlabelname)
             labels = vals
-        else
+        else if (is.factor(df[[vlabelname]]))
+            labels = levels(df[varvec %in% vals, ][[vlabelname]])
+        else {
             labels = sapply(vals, function(v) {
                 vlabel = unique(df[varvec == v,
                                    vlabelname, drop = TRUE])
@@ -403,6 +405,7 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
                     vlabel = ""
                 vlabel
             })
+        }
     }
     names(labels) = as.character(vals)
     labels
@@ -425,7 +428,7 @@ subsets_from_factory = function(df, fact) {
 }
 
 
-make_splvalue_vec = function(vals, extrs = list(list())) {
+make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
     if(is(extrs, "AsIs"))
         extrs = unclass(extrs)
     if(are(vals, "SplitValue")) {

@@ -45,11 +45,11 @@ split_cols_by(
 Will generate children for each subset of a categorical variable
 }
 \examples{
-l <- basic_table() \%>\% split_cols_by("ARM") 
+l <- basic_table() \%>\% split_cols_by("ARM")
 l
 
 # add an analysis (summary)
-l2 <- l \%>\% 
+l2 <- l \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l2
 

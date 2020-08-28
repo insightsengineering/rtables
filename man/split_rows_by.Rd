@@ -13,6 +13,7 @@ split_rows_by(
   format = NULL,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
+  visible_label = FALSE,
   indent_mod = 0L
 )
 }
@@ -38,13 +39,20 @@ split_rows_by(
 \description{
 Add Rows according to levels of a variable
 }
+\note{
+If \code{var} is a factor with empty unobserved levels and
+\code{labels_var} is specified, it must also be a factor
+with the same number of levels as \code{var}. Currently the
+error that occurs when this is not hte case is not very informative,
+but that will change in the future.
+}
 \examples{
 
 l <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
- 
+
 build_table(l, DM)
 
 
@@ -53,19 +61,27 @@ basic_table() \%>\%
   split_rows_by("RACE") \%>\%
   analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
   build_table(DM)
- 
 
-l <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_cols_by("SEX") \%>\%
-  summarize_row_groups(label_fstr = "Overall (N)") \%>\%
-  split_rows_by("RACE", split_label = "Ethnicity") \%>\%
-  summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
-  analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
-  
-l
 
-build_table(l, DM)
+ l <- basic_table() \%>\%
+   split_cols_by("ARM") \%>\%
+   split_cols_by("SEX") \%>\%
+   summarize_row_groups(label_fstr = "Overall (N)") \%>\%
+     split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
+                   split_fun = drop_split_levels) \%>\%
+   summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
+   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+
+ l
+
+ DM2 <- DM
+ DM2$gender_lab <- DM2$SEX
+levels(DM2$gender_lab) <- c("Female", "Male", "Unknown", "Undifferentiated")
+DM2$ethn_lab <- c("Asian", "African American", "Caucasian", "Am Indian or Alaska Native",
+                  "Multiple", "Pacific Islander", "Other", "Unknown")[DM2$RACE]
+
+build_table(l, DM2)
+
 
 
 }

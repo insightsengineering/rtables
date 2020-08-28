@@ -4,7 +4,20 @@
 \alias{gen_args}
 \title{General Argument Conventions}
 \usage{
-gen_args(df, spl, pos, tt, verbose, colwidths, obj, x, value, object, ...)
+gen_args(
+  df,
+  spl,
+  pos,
+  tt,
+  verbose,
+  colwidths,
+  obj,
+  x,
+  value,
+  object,
+  path,
+  ...
+)
 }
 \arguments{
 \item{df}{dataset (data.frame or tibble)}
@@ -26,6 +39,8 @@ gen_args(df, spl, pos, tt, verbose, colwidths, obj, x, value, object, ...)
 \item{value}{The new value}
 
 \item{object}{The object to modify in-place}
+
+\item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
 
 \item{\dots}{Passed on to metthods or tabulation functions.}
 }

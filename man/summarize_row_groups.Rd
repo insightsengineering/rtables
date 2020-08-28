@@ -35,9 +35,9 @@ if \code{format} expects 2 values (ie \code{xx} appears twice in the format stri
 \code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 }
 \examples{
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\% 
-    split_rows_by("RACE") \%>\% 
-    summarize_row_groups(label_fstr = "\%s (n)") \%>\% 
+l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+    split_rows_by("RACE") \%>\%
+    summarize_row_groups(label_fstr = "\%s (n)") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
 

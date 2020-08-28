@@ -12,7 +12,7 @@
 \usage{
 VarStaticCutSplit(
   var,
-  split_label,
+  split_label = var,
   cuts,
   cutlabels = NULL,
   cfun = NULL,
@@ -23,7 +23,8 @@ VarStaticCutSplit(
   extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  visible_label = FALSE
 )
 
 CumulativeCutSplit(
@@ -39,7 +40,8 @@ CumulativeCutSplit(
   extra_args = list(),
   indent_mod = 0L,
   cindent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  visible_label = FALSE
 )
 
 VarDynCutSplit(
@@ -56,7 +58,8 @@ VarDynCutSplit(
   cumulative = FALSE,
   indent_mod = 0L,
   cindent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  visible_label = FALSE
 )
 }
 \arguments{

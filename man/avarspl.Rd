@@ -8,7 +8,7 @@
 \usage{
 AnalyzeVarSplit(
   var,
-  split_label,
+  split_label = var,
   afun,
   defrowlab = "",
   cfun = NULL,
@@ -18,7 +18,7 @@ AnalyzeVarSplit(
   split_name = var,
   extra_args = list(),
   indent_mod = 0L,
-  show_varlabel = NA,
+  visible_label = NA,
   cvar = ""
 )
 
@@ -32,7 +32,7 @@ AnalyzeColVarSplit(
   split_name = "",
   extra_args = list(),
   indent_mod = 0L,
-  show_varlabel = NA,
+  visible_varlabel = NA,
   cvar = ""
 )
 

@@ -900,6 +900,14 @@ setMethod("value_names", "list", function(obj) lapply(obj, value_names))
 setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
 setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@comboname)
 
+## not sure if I need these anywhere
+## XXX
+setGeneric("value_labels", function(obj) standardGeneric("value_labels"))
+setMethod("value_labels", "ANY", function(obj) as.character(obj_label(obj)))
+setMethod("value_labels", "list", function(obj) lapply(obj, value_labels))
+setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
+setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj@comboname)
+
 
 
 ## These two are similar enough we could probably combine

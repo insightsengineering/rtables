@@ -1,11 +1,11 @@
 
-do_recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL,
+do_recursive_replace = function(tab, path, incontent = FALSE, rows = NULL,
                                 cols = NULL, value) {
     ## don't want this in the recursive function
     ## so thats why we have the do_ variant
-    if(is.character(posvals) && length(posvals) > 1)
-        posvals = as.list(posvals)
-   recursive_replace(tab, posvals, incontent, rows, cols,value)
+    if(is.character(path) && length(path) > 1)
+        path = as.list(path)
+   recursive_replace(tab, path, incontent, rows, cols,value)
 }
 
 
@@ -18,8 +18,8 @@ do_recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL,
 ## 5. replace data cell values for specific row/col positions within the content table at a particular position within the tree
 
 ## XXX This is wrong, what happens if a split (or more accurately, value)  happens more than once in the overall tree???
-recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols = NULL, value) {
-    if(length(posvals) == 0) { ## done recursing
+recursive_replace = function(tab, path, incontent = FALSE, rows = NULL, cols = NULL, value) {
+    if(length(path) == 0) { ## done recursing
         if(is.null(rows) && is.null(cols)) { ## replacing whole subtree a this position
             if(incontent) {
                 newkid = tab
@@ -35,7 +35,7 @@ recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols 
                 ctab[rows, cols] = value
                 content_table(tab) = ctab
                 newkid = tab
-                
+
             } else {
                 allkids = tree_children(tab)
                 stopifnot(are(allkids, "TableRow"))
@@ -44,8 +44,8 @@ recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols 
             }
         }
         return(newkid)
-    } else { ## length(posvals) > 1, more recursing to do
-        kidel = posvals[[1]]
+    } else { ## length(path) > 1, more recursing to do
+        kidel = path[[1]]
         ## broken up for debugabiliity, could be a single complex
         ## expression
         ## for now only the last step supports selecting
@@ -60,7 +60,7 @@ recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols 
         if(is.factor(kidel)) kidel = levels(kidel)[kidel]
         newkid = recursive_replace(
             tree_children(tab)[[kidel]],
-            posvals[-1],
+            path[-1],
             incontent = incontent,
             rows = rows,
             cols = cols,
@@ -68,15 +68,41 @@ recursive_replace = function(tab, posvals, incontent = FALSE, rows = NULL, cols 
         tree_children(tab)[[kidel]] = newkid
         tab
     }
- 
-    
+
+
 }
+
+setGeneric("tt_at_path", function(tt, path, ...) standardGeneric("tt_at_path"))
+setMethod("tt_at_path", "VTableTree",
+           function(tt, path, ...) {
+    stopifnot(is(path, "character"),
+              length(path) > 0,
+              !anyNA(path))
+    cur <- tt
+    curpath <- path
+    while(length(curpath > 0)) {
+        kids <- tree_children(cur)
+        curname <- curpath[1]
+        if(!(curname %in% names(kids)))
+            stop("Path appears invalidfor this tree at step ", curname)
+        cur <- kids[[curname]]
+        curpath <- curpath[-1]
+    }
+    cur
+})
+
+setGeneric("tt_at_path<-", function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
+setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
+          function(tt, path, ..., value) {
+    recursive_replace(tt, path = path, value = value)
+
+})
 
 setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows"))
 setMethod("replace_rows", c(value = "list"),
           function(x, i, value) {
 
-    
+
     if(is.null(i)) {
         i = seq_along(tree_children(x))
         if(labelrow_visible(x))
@@ -87,10 +113,10 @@ setMethod("replace_rows", c(value = "list"),
 
     if(labelrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
         stop("attempted to assign values into a LabelRow")
-    
+
     if(length(value) != length(i))
         value = rep(value, length.out = length(i))
-    
+
     if(are(value, "TableRow")) {
         newrows =value
     } else {
@@ -102,7 +128,7 @@ setMethod("replace_rows", c(value = "list"),
                      )
         })
     }
-    
+
     kids = tree_children(x)
     kids[i] = newrows
     tree_children(x) = kids
@@ -147,18 +173,18 @@ setMethod("[<-", c("VTableTree", value = "list"),
         stop("cannot modify multiple rows in not all columns.")
 
     if(are(value, "TableRow"))
-        
+
         value = rep(value, length.out = length(i))
     else
         value = rep(value, length.out = length(i) * length(j))
-    
+
     counter = 0
     ## this has access to value, i, and j by scoping
     replace_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)
         if(counter >= maxi)
             return(valifnone)
-        
+
         if(labelrow_visible(x)) {
             counter <<- counter + 1
             if(counter %in% i) {
@@ -175,14 +201,14 @@ setMethod("[<-", c("VTableTree", value = "list"),
         }
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
             ctab = content_table(x)
-            
+
             content_table(x) = replace_rowsbynum(ctab, i)
         }
         if(counter >= maxi) { #already done
             return(x)
         }
         kids = tree_children(x)
-        
+
         if(length(kids) > 0) {
             for(pos in seq_along(kids)) {
                 curkid = kids[[pos]]
@@ -222,13 +248,13 @@ setMethod("[<-", c("VTableTree", value = "list"),
 
 
 
-        
+
 ## this is going to be hard :( :( :(
 
 ### selecting/removing columns
 
 ## we have two options here: path like we do with rows and positional
-## in leaf space. 
+## in leaf space.
 
 setGeneric("subset_cols", function(tt, j, newcinfo = NULL, ...) standardGeneric("subset_cols"))
 
@@ -271,10 +297,36 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
 ## small utility to transform any negative
 ## indices into positive ones, given j
 ## and total length
+
 .j_to_posj = function(j, n) {
     ## This will work for logicals, numerics, integers
     j = seq_len(n)[j]
     j
+}
+
+#' @param spanfunc is the thing that gets the counts after subsetting
+## should be n_leaves for a column tree structure and NROW for
+## a table tree
+.path_to_pos <- function(path, fullidx, ctree, spanfunc) {
+    retidx = fullidx
+    while(length(cj) > 0) {
+        colcounts = sapply(tree_children(ctree), spanfunc)
+        cnms <- names(tree_children(ctree))
+        curcj <- cj[1]
+        cj <- cj[-1]
+        ## this will ONLY find the first match in the case of duplciated names!!!!
+        fidx <- match(cj, cnms)
+        if(anyNA(fidx))
+            stop("Path element ", cj, "did not match any remaining names [", paste(cnms, collapse = ", "), "]")
+        if(fidx == 1L) {
+            retidx <- retidx[1:colcounts[1]]
+        } else {
+            strtpos <- sum(colcounts[1:fidx]) + 1
+            retidx <- retidx[strtpos:(strtpos + colcounts[fidx])]
+        }
+        ctree <- ctree[[fidx]]
+    }
+    retidx
 }
 
 ## fix column spans that would be invalid
@@ -295,7 +347,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     res = res[res>0]
     stopifnot(sum(res) == length(j))
     res
-    
+
 }
 
 select_cells_j = function(cells, j) {
@@ -316,6 +368,12 @@ select_cells_j = function(cells, j) {
     }, cl = retcells, sp = newspans)
 }
 
+setMethod("subset_cols", c("ANY", "character"),
+          function(tt, j, newcinfo = NULL, ...) {
+    j <- .path_to_pos(j, seq_len(ncol(tt)), coltree(tt), n_leaves)
+    subset_cols(tt, j, newcinfo = newcinfo, ...)
+})
+
 setMethod("subset_cols", c("TableRow", "numeric"),
           function(tt, j, newcinfo = NULL,  ...) {
     j = .j_to_posj(j, ncol(tt))
@@ -325,8 +383,8 @@ setMethod("subset_cols", c("TableRow", "numeric"),
     }
     tt2 = tt
     row_values(tt2) =  select_cells_j(row_cells(tt2), j)
-    
-    if(length(row_cspans(tt2)) > 0)  
+
+    if(length(row_cspans(tt2)) > 0)
         row_cspans(tt2) = .fix_rowcspans(tt2, j)
     col_info(tt2) = newcinfo
     tt2
@@ -365,7 +423,7 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
           function(tt, j, newcinfo = NULL, ...) {
     lst = collect_leaves(tt)
     j = .j_to_posj(j, length(lst))
-    
+
     ## j has only non-negative values from
     ## this point on
     counter = 0
@@ -402,12 +460,12 @@ subset_by_rownum = function(tt, i, ... ) {
     counter = 0
     nr = nrow(tt)
     i = .j_to_posj(i, nr)
-    
+
     prune_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)
         if(counter > maxi)
             return(valifnone)
-        
+
         if(labelrow_visible(x)) {
             counter <<- counter + 1
             if(!(counter %in% i)) {
@@ -421,7 +479,7 @@ subset_by_rownum = function(tt, i, ... ) {
         }
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
             ctab = content_table(x)
-            
+
             content_table(x) = prune_rowsbynum(ctab, i,
                                                valifnone = ElementaryTable(cinfo = col_info(ctab), iscontent = TRUE))
         }
@@ -508,6 +566,36 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
     x[i = i,j = j, ..., drop = drop]
 })
 
+
+
+#' @exportMethod [
+#' @rdname brackets
+
+setMethod("[", c("VTableTree", "ANY", "character"),
+          function(x, i, j, ..., drop = FALSE) {
+    j <- .path_to_pos(j, seq_len(ncol(x)),  coltree(x), n_leaves)
+    x[i = i,j = j, ..., drop = drop]
+})
+
+#' @exportMethod [
+#' @rdname brackets
+setMethod("[", c("VTableTree", "character", "ANY"),
+          function(x, i, j, ..., drop = FALSE) {
+    i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
+    x[i = i,j = j, ..., drop = drop]
+})
+
+## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
+#' @exportMethod [
+#' @rdname brackets
+setMethod("[", c("VTableTree", "character", "character"),
+          function(x, i, j, ..., drop = FALSE) {
+    i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
+    j <- .path_to_pos(j, seq_len(ncol(x)),  coltree(x), n_leaves)
+    x[i = i,j = j, ..., drop = drop]
+})
+
+
 #' @exportMethod [
 #' @rdname brackets
 
@@ -528,7 +616,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     nc = ncol(x)
     i = .j_to_posj(i, nr)
     j = .j_to_posj(j, nc)
-    
+
     if(!missing(j) && length(j) < nc)
         x = subset_cols(x, j)
     if(!missing(i) && length(i) < nr)
@@ -579,12 +667,12 @@ setMethod("[[", c("VTableTree", "list", "ANY"),
     if(is(subtree, "TableRow"))
         subtree = TableTree(list(subtree), cinfo = col_info(subtree))
     subtree
-    
+
 
 })
 
 extract_colvals = function(tt, j) {
-    
+
 
 
 }

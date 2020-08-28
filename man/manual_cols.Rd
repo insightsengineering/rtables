@@ -26,7 +26,7 @@ tab
 tab2 = TableTree(kids = list(DataRow(as.list(1:4))),
                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
                                      Gender = c("M", "F")))
-                                     
+
 tab2
 
 }

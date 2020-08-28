@@ -20,6 +20,7 @@ VarLevelSplit(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   indent_mod = 0L,
+  visible_label = FALSE,
   cindent_mod = 0L,
   cvar = ""
 )

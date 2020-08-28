@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2019-10-11
-Version: 0.3.2.6
+Version: 0.3.2.7
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = "aut"),
@@ -27,7 +27,7 @@ License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/roche/rtables, https://roche.github.io/rtables/
 BugReports: https://github.com/roche/rtables/issues
@@ -59,4 +59,5 @@ Collate:
     'tt_paginate.R'
     'tt_pos_and_access.R'
     'tt_showmethods.R'
+    'tt_sort.R'
     'tt_toString.R'

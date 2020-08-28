@@ -545,11 +545,10 @@ recursive_applysplit = function( df,
     if(make_lrow && partlabel == "" && !nonroot)
         make_lrow = FALSE
 
-    ## if(nrow(ctab) == 0L && length(kids) == 1L && !make_lrow) {
-    ##     ret = kids[[1]]
-    ##     indent_mod(ret) = indent_mod(spl)
-    ##  } else
-    if(nrow(ctab) > 0L || length(kids) > 0L) {
+    if(nrow(ctab) == 0L && length(kids) == 1L && !make_lrow) {
+        ret = kids[[1]]
+        indent_mod(ret) = indent_mod(spl)
+     } else if(nrow(ctab) > 0L || length(kids) > 0L) {
         ## avoid visible label rows when the row.names
         ## directly repeat the info.
          if(length(kids) == 1L &&
@@ -794,6 +793,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
 
     ## nm = unlist(tail(rawvalues(pos), 1)) %||% ""
     nm = unlist(tail(value_names(pos), 1)) %||% ""
+    lab = unlist(tail(value_labels(pos), 1)) %||% ""
 
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.

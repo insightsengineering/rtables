@@ -26,7 +26,8 @@ split_rows_by_cuts(
   cutlabels = NULL,
   split_label = var,
   nested = TRUE,
-  cumulative = FALSE
+  cumulative = FALSE,
+  visible_label = FALSE
 )
 
 split_cols_by_cutfun(
@@ -61,7 +62,8 @@ split_rows_by_quartiles(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   cumulative = FALSE,
-  indent_mod = 0L
+  indent_mod = 0L,
+  visible_label = FALSE
 )
 
 split_rows_by_cutfun(
@@ -75,7 +77,8 @@ split_rows_by_cutfun(
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
   cumulative = FALSE,
-  indent_mod = 0L
+  indent_mod = 0L,
+  visible_label = FALSE
 )
 }
 \arguments{
@@ -116,7 +119,7 @@ reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for
 \examples{
 l <- basic_table() \%>\%
     split_cols_by_cuts("AGE", split_label = "Age",
-                       cuts = c(0, 25, 35, 1000), 
+                       cuts = c(0, 25, 35, 1000),
                        cutlabels = c("young", "medium", "old")) \%>\%
     analyze("RACE", afun = length)
 
