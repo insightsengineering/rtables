@@ -45,7 +45,8 @@ setClass("TreePos", representation(splits = "list",
 setClassUnion("functionOrNULL", c("NULL", "function"))
 setClassUnion("FormatSpec",c("NULL", "character", "function"))
 
-setClass("ValueWrapper", representation(value = "ANY"),
+setClass("ValueWrapper", representation(value = "ANY",
+                                        label = "characterOrNULL"),
          contains = "VIRTUAL")
 ## heavier-weight than I'd like but I think we need
 ## this to carry around thee subsets for
@@ -53,10 +54,9 @@ setClass("ValueWrapper", representation(value = "ANY"),
 
 setClass("SplitValue",
          contains = "ValueWrapper",
-         representation(extra = "list",
-                        label = "character"))
+         representation(extra = "list"))
 
-SplitValue = function(val, label = val, extr =list()) {
+SplitValue = function(val, extr =list(), label = val) {
     if(is(val, "SplitValue")) {
         if(length(extr) >0 && !identical(extr, splv_extra(val)))
             stop("SplitValue  object passed to SplitValue constructor along with non-identical extra")

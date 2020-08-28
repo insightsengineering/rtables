@@ -292,7 +292,7 @@ setMethod("obj_label", "TableRow", function(obj) obj@label)
 setMethod("obj_label", "VTableTree",
           function(obj) obj_label(tt_labelrow(obj)))
 
-setMethod("obj_label", "CellValue", function(obj) obj@label)
+setMethod("obj_label", "ValueWrapper", function(obj) obj@label)
 
 setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
 setMethod("obj_label<-", "Split",
@@ -305,7 +305,7 @@ setMethod("obj_label<-", "TableRow",
     obj@label = value
     obj
 })
-setMethod("obj_label<-", "CellValue",
+setMethod("obj_label<-", "ValueWrapper",
           function(obj, value){
     obj@label = value
     obj
@@ -904,6 +904,7 @@ setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@comboname)
 ## XXX
 setGeneric("value_labels", function(obj) standardGeneric("value_labels"))
 setMethod("value_labels", "ANY", function(obj) as.character(obj_label(obj)))
+setMethod("value_labels", "TreePos", function(obj) sapply(pos_splvals(obj), obj_label))
 setMethod("value_labels", "list", function(obj) lapply(obj, value_labels))
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj@comboname)
