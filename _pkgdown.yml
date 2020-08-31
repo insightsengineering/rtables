@@ -26,6 +26,7 @@ articles:
     - manual_table_construction
     - formatting_tables
     - subsetting_tables
+    - sorting_pruning
     - pagination
     - baseline
     - known_issues
