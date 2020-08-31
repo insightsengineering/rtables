@@ -7,6 +7,17 @@ cont_n_allcols <- function(tt) {
                function(cv) cv[1]))
 }
 
+#' @rdname score_funs
+#' @export
+cont_n_onecol <- function(j) {
+    function(tt) {
+        ctab <- content_table(tt)
+        if(NROW(ctab) == 0)
+            return(NA)
+        row_values(tree_children(ctab)[[1]])[[j]][1]
+    }
+}
+
 #' Sort substructure of a TableTree at a particular Path in the Tree.
 #' @inheritParams gen_args
 #' @param scorefun function. Scoring function, should accept the type of children directly under the position at \code{path} (either VTableTree, VTableRow, or VTableNodeInfo, which covers both) and return a numeric value to be sorted.
@@ -16,9 +27,13 @@ cont_n_allcols <- function(tt) {
 #' @details
 #' The \code{path} here can include \code{"*"} as a step, which means taht each child at that step will be \emph{separately} sorted based on \code{scorefun} and the remaining \code{path} entries. This can occur multiple times in a path.
 #'
-#' 
+#'
 #' @export
-sort_at_path <- function(tt, path, scorefun, decreasing = FALSE, na.pos = c("omit", "last", "first")) {
+sort_at_path <- function(tt, path, scorefun, decreasing = TRUE, na.pos = c("omit", "last", "first")) {
+
+    ## XXX hacky fix this!!!
+    if(identical(obj_name(tt), path[1]))
+        path <- path[-1]
 
     curpath <- path
     subtree <- tt

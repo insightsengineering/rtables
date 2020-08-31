@@ -1,0 +1,140 @@
+---
+title: "Pruning and Sorting Tables"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pruning and Sorting Tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+## Introduction
+
+Often we want to filter or reorder subsections of a table in ways that take into account the table structure. For example
+
+- sorting subtables corresponding to factor levels so that most commonly observed levels occur first in the table
+- Removing subtables which represent 0 observations or which after other filtering contain 0 rows
+
+```{r, messages=FALSE}
+library(rtables)
+library(dplyr)
+```
+
+
+## A Table In Need of Attention
+
+
+```{r}
+rawtable <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("SEX") %>%
+    split_rows_by("RACE") %>%
+    summarize_row_groups() %>%
+    split_rows_by("STRATA1") %>%
+    summarize_row_groups() %>%
+    analyze("AGE") %>%
+    build_table(DM)
+rawtable
+```
+
+## Trimming
+
+### Rows
+
+Trimming represents a convenience wrapper around simple, direct subsetting of the rows of a `TableTree`.
+
+We use the `trim_rows()` function and pass it our table and a critera function. All rows where the criteria function returns `TRUE` will be removed, all others will be retained. 
+
+**NOTE**: each row is kept or removed completely independently, with no awareness of the surrounding structure. This means, for example, that a subtree could have all its analysis rows removed and not be removed itself. For structure-aware filtering of a table, we will use *pruning* described in the next section.
+
+A *trimming function* accepts a `TableRow` object and returns `TRUE` if the row should be removed.
+
+The default trimming function removes rows that have no values in them that have all `NA` values or all `0` values (but not if there is a mix)
+```{r}
+trim_rows(rawtable)
+```
+
+### Trimming Columns
+
+There are currently no special utilities for trimming columns but we can remove the empty columns with fairly straightforward column subsetting:
+
+```{r}
+coltrimmed <- rawtable[,col_counts(rawtable) > 0]
+head(coltrimmed)
+```
+
+
+## Pruning
+
+Pruning is similar in outcome to trimming, but more powerful and more complex, as it takes structure into account. 
+
+Pruning is applied recursively, in that at each structural unit (subtable, row) it both applies the pruning function at that level and to all it's children (up to a user-specifiable maximum depth).
+
+The default pruning funciton, for example, determines if a subtree is empty by
+
+a. Removing all children which contain a single content row which contains all zeros or all `NA`s
+b. Removing rows which contain either all zeros or all `NA`s
+c. Removing the full subtree if no unpruned children remain
+
+```{r}
+pruned <- prune_table(coltrimmed)
+pruned
+```
+
+We can also use the `low_obs_pruner` pruning function constructor to create a pruning function which removes subtrees with content summaries whose first entries for each column sum or average to below a specified number. (In the default summaries the first entry per column is the count).
+
+```{r}
+pruned2 <- prune_table(coltrimmed, low_obs_pruner(10, "mean"))
+pruned2
+```
+
+Note that because the pruning is being applied recursively, only the `ASIAN` subtree remains because even though the full `BLACK OR AFRICAN AMERICAN` subtree encompassed enough observations, the strata within it did not. We can take care of this by setting the `stop_depth` for pruning to `1`.
+
+
+```{r}
+pruned3 <- prune_table(coltrimmed, low_obs_pruner(10, "sum"), stop_depth = 1)
+pruned3
+```
+
+We can also see that pruning to a lower number of observations, say, to a total of `16`, with no `stop_depth` removes some but not all of the strata from our third race (`WHITE`)
+
+```{r}
+pruned4 <- prune_table(coltrimmed, low_obs_pruner(16, "sum"))
+pruned4
+```
+
+
+
+## Sorting
+
+Sorting an rtable is done **at a path** and recursively, meaning a sort opreation will occur at a particular location within the table, and the subtables( children) will both be reordered themselves and potentially have their own children reordered as well.
+
+This is done by giving a *score function* which accepts a subtree or TableRow and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function.
+
+Another difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within branch of the path.
+
+Sort the strata by observation counts within just the `ASIAN` subtable:
+```{r}
+sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols)
+```
+
+
+Sort the ethnicities by observations, increasing
+
+```{r}
+sort_at_path(pruned, path = c("RACE"), scorefun = cont_n_allcols, decreasing = FALSE)
+```
+
+Within each ethnicity separately, sort the strata by number of females in arm c (ie column position `5`)
+
+```{r}
+sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
+
+```

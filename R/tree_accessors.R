@@ -60,16 +60,28 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 })
 
 
-
+#' Retrieve or set Content Table from a TableTree
+#'
+#' Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise
+#'
+#' @param obj TableTree. The TableTree
+#' @export
+#' @rdname content_table
 setGeneric("content_table", function(obj) standardGeneric("content_table"))
+#' @exportMethod content_table
+#' @rdname content_table
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
-
+#' @exportMethod content_table
+#' @rdname content_table
 setMethod("content_table", "ANY",
           function(obj) NULL)
 
-
+#' @export
+#' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
+#' @exportMethod "content_table<-"
+#' @rdname content_table
 setMethod("content_table<-", c("TableTree", "ElementaryTable"),
           function(obj, value) {
     obj@content = value
@@ -1194,23 +1206,34 @@ setMethod("cextra_args", "LayoutColLeaf",
 
 
 
-
+#' @export
+#' @rdname col_accessors
 setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
 
+#' @export
+#' @rdname col_accessors
 setMethod("col_counts",  "InstantiatedColumnInfo",
           function(obj) obj@counts)
 
+#' @export
+#' @rdname col_accessors
 setMethod("col_counts", "VTableNodeInfo",
           function(obj) col_counts(col_info(obj)))
 
+#' @export
+#' @rdname col_accessors
 setGeneric("col_counts<-", function(obj, value) standardGeneric("col_counts<-"))
 
+#' @export
+#' @rdname col_accessors
 setMethod("col_counts<-",  "InstantiatedColumnInfo",
           function(obj, value) {
     obj@counts = value
     obj
 })
 
+#' @export
+#' @rdname col_accessors
 setMethod("col_counts<-", "VTableNodeInfo",
           function(obj, value) {
     cinfo = col_info(obj)

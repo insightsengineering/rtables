@@ -7,6 +7,7 @@
 \alias{[,VTableTree,logical,missing-method}
 \alias{[,VTableTree,ANY,logical-method}
 \alias{[,VTableTree,ANY,missing-method}
+\alias{[,VTableTree,missing,ANY-method}
 \alias{[,VTableTree,ANY,character-method}
 \alias{[,VTableTree,character,ANY-method}
 \alias{[,VTableTree,character,character-method}
@@ -26,6 +27,8 @@
 \S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
 

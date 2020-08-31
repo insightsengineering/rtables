@@ -566,6 +566,15 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
     x[i = i,j = j, ..., drop = drop]
 })
 
+#' @exportMethod [
+#' @rdname brackets
+
+setMethod("[", c("VTableTree", "missing", "ANY"),
+          function(x, i, j, ..., drop = FALSE) {
+    i = seq_len(nrow(x))
+    x[i = i,j = j, ..., drop = drop]
+})
+
 
 
 #' @exportMethod [

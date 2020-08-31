@@ -8,7 +8,7 @@ sort_at_path(
   tt,
   path,
   scorefun,
-  decreasing = FALSE,
+  decreasing = TRUE,
   na.pos = c("omit", "last", "first")
 )
 }

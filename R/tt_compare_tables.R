@@ -36,12 +36,15 @@ content_all_zeros_nas = function(tt) {
     if(NROW(ct) == 0 || nrow(ct) > 1)
         return(FALSE)
 
-    cr <- tree_children(ct)
+    cr <- tree_children(ct)[[1]]
     all_zero_or_na(cr)
 }
 
 
-
+#' Pruning Functions
+#' @inheritParams gen_args
+#' @export
+#' @rdname pruning_funs
 prune_empty_level = function(tt) {
     if(is(tt, "TableRow"))
         return(all_zero_or_na(tt))
@@ -50,6 +53,25 @@ prune_empty_level = function(tt) {
         return(TRUE)
     kids = tree_children(tt)
     length(kids) == 0
+}
+
+
+#' @rdname pruning_funs
+#' @export
+low_obs_pruner <- function(min, type = c("sum", "mean")) {
+    type <- match.arg(type)
+    function(tt) {
+        if(is(tt, "TableRow") ||
+           ## note the <- in there!!!
+           NROW(ctab <- content_table(tt)) != 1)
+            return(FALSE) ## only trimming on count content rows
+        ctr <- tree_children(ctab)[[1]]
+        vals <- sapply(row_values(ctr), function(v) v[[1]])
+        sumvals <- sum(vals)
+        if(type == "mean")
+            sumvals <- sumvals/length(vals)
+        sumvals < min
+    }
 }
 
 #' Recursively prune a TableTree
@@ -75,7 +97,7 @@ prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_
     }, NA)
 
     keepkids = kids[!torm]
-    keepkids = lapply(keepkids, recurse_prune,
+    keepkids = lapply(keepkids, prune_table,
                       prune_func = prune_func,
                       stop_depth = stop_depth,
                       depth = depth + 1)

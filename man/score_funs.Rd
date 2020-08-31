@@ -2,9 +2,12 @@
 % Please edit documentation in R/tt_sort.R
 \name{cont_n_allcols}
 \alias{cont_n_allcols}
+\alias{cont_n_onecol}
 \title{Score functions for sorting TableTrees}
 \usage{
 cont_n_allcols(tt)
+
+cont_n_onecol(j)
 }
 \description{
 Score functions for sorting TableTrees
