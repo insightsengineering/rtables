@@ -649,7 +649,11 @@ split_rows_by_cutfun = function(lyt, var,
 #'
 #' @inheritParams lyt_args
 #'
-#' @details the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the
+#' @details
+#'
+#' When non-NULL \code{format} is used to specify formats for all generated rows, and can be a character vector, a function, or a list of functions. It will be repped out to the number of rows once this is known during the tabulation process, but will be overridden by formats specified within \code{rcell} calls in \code{afun}.
+#'
+#' The analysis function (\code{afun}) should take as its first parameter either \code{x} or \code{df}. Which of these the
 #'   function accepts changes the behavior when tabulation is performed.
 #'
 #' \itemize{

@@ -43,7 +43,8 @@ setClass("TreePos", representation(splits = "list",
 
 
 setClassUnion("functionOrNULL", c("NULL", "function"))
-setClassUnion("FormatSpec",c("NULL", "character", "function"))
+## TODO (?) make "list" more specific, e.g FormatList, or FunctionList?
+setClassUnion("FormatSpec",c("NULL", "character", "function", "list"))
 
 setClass("ValueWrapper", representation(value = "ANY",
                                         label = "characterOrNULL"),
@@ -582,7 +583,7 @@ AnalyzeMultiVars = function(var,
         split_label = .repoutlst(split_label, nv)
         cfun = .repoutlst(cfun, nv)
         cformat = .repoutlst(cformat, nv)
-        split_format = .repoutlst(split_format, nv)
+##        split_format = .repoutlst(split_format, nv)
         inclNAs = .repoutlst(inclNAs, nv)
         pld = mapply(AnalyzeVarSplit,
                      var = var,
@@ -591,11 +592,13 @@ AnalyzeMultiVars = function(var,
                      defrowlab = defrowlab,
                      cfun = cfun,
                      cformat = cformat,
-                     split_format = split_format,
+##                     split_format = split_format,
                      inclNAs = inclNAs,
                      MoreArgs = list(extra_args = extra_args,
                                      indent_mod = indent_mod,
-                                     visible_label = show_kidlabs),##rvis),
+                                     visible_label = show_kidlabs,
+                                     split_format = split_format
+                                     ),##rvis),
                      SIMPLIFY = FALSE)
     } else {
         ## we're combining existing splits here

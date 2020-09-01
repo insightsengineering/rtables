@@ -52,7 +52,7 @@ lyt_args(
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
-\item{format}{format string for cells}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 

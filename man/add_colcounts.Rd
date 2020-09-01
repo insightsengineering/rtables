@@ -9,7 +9,7 @@ add_colcounts(lyt, format = "(N=xx)")
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{format}{format string for cells}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 }
 \description{
 Add the data derived column counts.

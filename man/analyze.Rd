@@ -26,7 +26,7 @@ analyze(
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
-\item{format}{format string for cells}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
@@ -42,7 +42,9 @@ calls to \code{analyze} and/or \code{\link{analyze_colvars}} into our layout pip
 adding further splitting, the tabulation will occur at the current/next level of nesting by default.
 }
 \details{
-the analysis function should take as its first parameter either \code{x} or \code{df}. Which of these the
+When non-NULL \code{format} is used to specify formats for all generated rows, and can be a character vector, a function, or a list of functions. It will be repped out to the number of rows once this is known during the tabulation process, but will be overridden by formats specified within \code{rcell} calls in \code{afun}.
+
+The analysis function (\code{afun}) should take as its first parameter either \code{x} or \code{df}. Which of these the
 function accepts changes the behavior when tabulation is performed.
 
 \itemize{
