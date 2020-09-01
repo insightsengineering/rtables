@@ -11,7 +11,7 @@ analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
 
 \item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 

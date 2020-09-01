@@ -9,7 +9,7 @@ CellValue(val, format = NULL, colspan = 1L, label = NULL)
 \arguments{
 \item{val}{ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{colspan}{integer. Generally ignored currently.}
 

@@ -100,7 +100,7 @@ split_rows_by_cutfun(
 
 \item{cutlabelfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 

@@ -26,7 +26,7 @@ analyze(
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code("xx.x")) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
