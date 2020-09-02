@@ -9,7 +9,7 @@ analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
+\item{afun}{function or list. Function(s) to be used to calculate the values in each column.  the list will be repped out as needed and matched by position with the columns during tabulation.}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 

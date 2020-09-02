@@ -492,12 +492,19 @@ drop_split_levels <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE)
 reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE) {
     function(df, spl,  trim, ...) {
         df2 = df
-        df2[[spl_payload(spl)]] = factor(df[[spl_payload(spl)]], levels = neworder)
+        valvec <- df2[[spl_payload(spl)]]
+        vals = if(is.factor(valvec)) levels(valvec) else unique(valvec)
+        stopifnot(all(neworder %in% vals))
+
+        if(!drlevels)
+            neworder <- c(neworder, setdiff(vals, neworder))
+        df2[[spl_payload(spl)]] = factor(valvec, levels = neworder)
         if(drlevels) {
             df2[[spl_payload(spl)]] = droplevels(df2[[spl_payload(spl)]] )
             neworder = levels(df2[[spl_payload(spl)]])
             newlabels = newlabels[newlabels %in% neworder]
         }
+        spl_child_order(spl) <- neworder
         .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)
     }
 }

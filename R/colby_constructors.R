@@ -785,6 +785,8 @@ get_acolvar_vars <- function(lyt) {
 #'
 #' @inheritParams  lyt_args
 #'
+#' @param afun function or list. Function(s) to be used to calculate the values in each column.  the list will be repped out as needed and matched by position with the columns during tabulation.
+#'
 #' @export
 #'
 #' @seealso \code{\link{split_cols_by_multivar}}
