@@ -494,8 +494,6 @@ reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE)
         df2 = df
         valvec <- df2[[spl_payload(spl)]]
         vals = if(is.factor(valvec)) levels(valvec) else unique(valvec)
-        stopifnot(all(neworder %in% vals))
-
         if(!drlevels)
             neworder <- c(neworder, setdiff(vals, neworder))
         df2[[spl_payload(spl)]] = factor(valvec, levels = neworder)
