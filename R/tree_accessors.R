@@ -272,21 +272,33 @@ setMethod("spl_payload<-", "Split", function(obj, value) {
 
 
 ### name related things
-
+#' Label and Name accessors
+#' @param obj ANY. The object.
+#' @rdname lab_name
+#' @export
 setGeneric("obj_name", function(obj) standardGeneric("obj_name"))
+#' @rdname lab_name
+#' @exportMethod obj_name
 setMethod("obj_name", "VNodeInfo",
           function(obj) obj@name)
 
+#' @rdname lab_name
+#' @exportMethod obj_name
 setMethod("obj_name", "Split",
           function(obj) obj@name)
-
+#' @rdname lab_name
+#' @param value character(1). The new value
+#' @export
 setGeneric("obj_name<-", function(obj, value) standardGeneric("obj_name<-"))
+#' @rdname lab_name
+#' @exportMethod obj_name<-
 setMethod("obj_name<-", "VNodeInfo",
           function(obj, value) {
     obj@name = value
     obj
 })
-
+#' @rdname lab_name
+#' @exportMethod obj_name<-
 setMethod("obj_name<-", "Split",
           function(obj, value) {
     obj@name = value
@@ -295,34 +307,56 @@ setMethod("obj_name<-", "Split",
 
 
 ### Label related things
+#' @rdname lab_name
+#' @export
 setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
+#' @rdname lab_name
+#' @exportMethod obj_label
 setMethod("obj_label", "Split", function(obj) obj@split_label)
+#' @rdname lab_name
+#' @exportMethod obj_label
 setMethod("obj_label", "TableRow", function(obj) obj@label)
 ## XXX Do we want a convenience for VTableTree that
 ## grabs the label from the LabelRow or will
 ## that just muddy the waters?
+#' @rdname lab_name
+#' @exportMethod obj_label
 setMethod("obj_label", "VTableTree",
           function(obj) obj_label(tt_labelrow(obj)))
 
+#' @rdname lab_name
+#' @exportMethod obj_label
 setMethod("obj_label", "ValueWrapper", function(obj) obj@label)
 
+#' @rdname lab_name
+#' @export
 setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
+#' @rdname lab_name
+#' @exportMethod obj_label<-
 setMethod("obj_label<-", "Split",
           function(obj, value) {
     obj@split_label <- value
     obj
 })
+
+#' @rdname lab_name
+#' @exportMethod obj_label<-
 setMethod("obj_label<-", "TableRow",
           function(obj, value){
     obj@label = value
     obj
 })
+
+#' @rdname lab_name
+#' @exportMethod obj_label<-
 setMethod("obj_label<-", "ValueWrapper",
           function(obj, value){
     obj@label = value
     obj
 })
 
+#' @rdname lab_name
+#' @exportMethod obj_label<-
 setMethod("obj_label<-", "VTableTree",
           function(obj, value) {
     lr = tt_labelrow(obj)
