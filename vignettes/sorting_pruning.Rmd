@@ -140,6 +140,33 @@ sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
 
 ```
 
+### Sorting Within an Analysis Subtable
+
+When sorting within an analysis subtable (e.g., the subtable generated when your analysis function generates more than one row per group of data), the name of that subtable (generally the name of the variable being analyzed) must appear in the path, _**even if the variable label is not displayed when the table is printed**_
+
+
+```{r}
+silly_afun = function(x) {
+    in_rows(a = rcell(2),
+            b = rcell(3),
+            c = rcell(1))
+}
+
+
+
+sillytbl <- basic_table() %>% split_rows_by("cyl") %>%
+    analyze("mpg", silly_afun) %>%
+    build_table(mtcars)
+sillytbl
+```
+
+
+The path required to sort the rows inside our "analysis" of `mpg`, then is `c("cyl", "*", "mpg")`:
+
+```{r}
+scorefun <- function(tt) { mean(unlist(row_values(tt)))}
+sort_at_path(sillytbl, c("cyl", "*", "mpg"), scorefun)
+```
 
 # Writing Custom Pruning Criteria and Scoring Functions
 

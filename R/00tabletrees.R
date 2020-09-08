@@ -65,6 +65,8 @@ SplitValue = function(val, extr =list(), label = val) {
     }
     if(!is(extr, "list"))
         extr <- list(extr)
+    if(!is(label, "character"))
+        label = as.character(label)
 
     new("SplitValue", value = val,
         extra = extr, label = label)

@@ -271,6 +271,9 @@ setMethod("spl_payload<-", "Split", function(obj, value) {
 })
 
 
+setGeneric("spl_label_var", function(obj) standardGeneric("spl_label_var"))
+setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
+
 ### name related things
 #' Label and Name accessors
 #' @param obj ANY. The object.

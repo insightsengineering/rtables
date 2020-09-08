@@ -663,9 +663,14 @@ build_table = function(lyt, df,
         clyt[[1]] = add_overall_col(clyt[[1]], "")
         clayout(lyt) = clyt
     }
+
+    ## do checks and defensive programming now that we have the data
     lyt = fix_dyncuts(lyt, df)
     lyt = set_def_child_ord(lyt, df)
     lyt = fix_analyze_vis(lyt)
+    df <- fix_split_vars(lyt, df)
+
+
     rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts)
@@ -721,6 +726,59 @@ build_table = function(lyt, df,
     tab
 }
 
+fix_one_split_var <- function(spl, df) {
+    var <- spl_payload(spl)
+    varvec <- df[[var]]
+    if(!is(varvec, "character") && !is.factor(varvec)) {
+        message(sprintf("Split var [%s] was not character or factor. Converting to factor",
+                        var))
+        varvec <- factor(varvec)
+        df[[var]] <- varvec
+    }
+
+    ## handle label var
+    lblvar <- spl_label_var(spl)
+    have_lblvar <- !identical(var, lblvar)
+    if(have_lblvar) {
+        lblvec <- df[[lblvar]]
+        tab <- table(varvec, lblvec)
+
+        if(any(rowSums(tab > 0) > 1) ||
+           any(colSums(tab > 0) > 1))
+            stop(sprintf("There does not appear to be a 1-1 correspondence between values in split var [%s] and label var [%s]",
+                         var, lblvar))
+
+        if(!is(varvec, "character") && !is.factor(varvec)) {
+            message(sprintf("Split label var [%s] was not character or factor. Converting to factor",
+                            var))
+            lblvec <- factor(lblvec)
+            df[[lblvar]] <- lblvec
+        }
+    }
+
+    ## maybe. not sure.
+    ## if(is.factor(varvec) && is.factor(lblvec) &&
+    ##    length(levels(varvec)) != length(levels(lblvec)))
+    ##     stop("Split var [%s] and label var [%s] are both factors but have different numbers of levels")
+
+
+    df
+}
+
+fix_split_vars <- function(lyt, df) {
+    clyt <- clayout(lyt)
+    rlyt <- rlayout(lyt)
+
+    allspls <- unlist(list(clyt, rlyt))
+    ## VarLevelSplit includes sublclass VarLevWBaselineSplit
+    varspls <- allspls[sapply(allspls, is, "VarLevelSplit")]
+    unqvarinds <- !duplicated(sapply(varspls, spl_payload))
+    unqvarspls <- varspls[unqvarinds]
+    for(spl in unqvarspls)
+        df <- fix_one_split_var(spl, df)
+
+    df
+}
 
 ## the table is built by recursively splitting the data
 ## and doing things to each piece. The order (or even values) of unique(df[[col]]) is not guaranteed to be the same in all the different partitions. This addresses that.
