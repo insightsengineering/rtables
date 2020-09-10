@@ -26,3 +26,6 @@ A TableTree pruned via recursive application of \code{prune_func}.
 \description{
 Recursively prune a TableTree
 }
+\seealso{
+\code{\link[=prune_empty_level]{prune_empty_level()}}
+}

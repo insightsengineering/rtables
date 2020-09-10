@@ -128,14 +128,3 @@ test_that("test 3d format (estimate and CI)", {
   expect_equal(format_rcell(rcell(c(12.34590, 3.2359, 324.2492), "xx.xx (xx.xx - xx.xx)")), "12.35 (3.24 - 324.25)")
 
 })
-
-test_that("unlisting rtables has no effect on them", {
-  
-  t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
-  
-  expect_identical(t1, unlist(t1))
-})
-
-
-test_that("manually created label l rows are always visible",
-          expect_true(rtables:::labelrow_visible(rrow(""))))

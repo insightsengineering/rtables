@@ -1,6 +1,22 @@
+
+#' Trimming and Pruning Criteria
+#'
+#' Criteria functions (and constructors thereof) for trimming and pruning tables.
+#'
+#' @inheritParams gen_args
+#'
+#' @details
+#'
+#' \code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning)
+#' for any \emph{non-LabelRow} \code{TableRow} which contain only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and \code{-Inf} values.
+#' @rdname trim_prune_funs
+#' @seealso [prune_table()], [trim_rows()]
+#' @export
 all_zero_or_na = function(tr) {
+    if(!is(tr, "TableRow") || is(tr, "LabelRow"))
+        return(FALSE)
     rvs = unlist(unname(row_values(tr)))
-    all(is.na(rvs)) || isTRUE(all.equal(unique(rvs), 0))
+    all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
 }
 
 
@@ -8,9 +24,11 @@ all_zero_or_na = function(tr) {
 
 #' Trim rows from a populated table without regard for table structure
 #' @inheritParams gen_args
-#' @param criteria function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to removing rows with all zeros or all NAs
-#' @return The table with rows that have only cell values removed
+#' @param criteria function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \link{\code{all_zero_or_na}}
+#' @return The table with rows that have only NA or 0 cell values removed
+#' @note Visible \code{LabelRow}s are including in this trimming, which can lead to either all label rows being trimmed or label rows remaining when all data rows have been trimmed, depending on what \code{criteria} returns when called on a \code{LabelRow} object. To avoid this, use the structurally-aware \code{\link{prune_table}} machinery instead.
 #' @export
+#' @seealso [prune_table()]
 trim_rows <- function(tt, criteria = all_zero_or_na) {
     rows = collect_leaves(tt, TRUE, TRUE)
     torm = vapply(rows, criteria,
@@ -18,16 +36,16 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
     tt[!torm,]
 }
 
-
-## prune_by_group_summary = function(tt, criteria = all_zero_or_na, start_depth = 0, stop_depth= NA_real_, .depth = 0) {
-##     kids = tree_children)
-##     if(.depth >= max(start_depth, 1))
-##         ctab = content_table(tt)
-
-
-
-## }
-
+#' @rdname trim_prune_funs
+#' @details
+#'
+#' \code{content_all_zeros_nas} Prunes a subtable if a) it has a content table with exactly one row in it, and
+#' b) \code{all_zero_or_na} returns \code{TRUE} for that single content row. In practice, when the default
+#' summary/content function was used, this represents pruning any subtable which corresponds to an empty set of
+#' the input data (e.g., because a factor variable was used in \code{\link{split_rows_by}} but not all levels
+#' were present in the data).
+#'
+#' @export
 content_all_zeros_nas = function(tt) {
     ## this will be NULL if
     ## tt is something that doesn't have a content table
@@ -41,10 +59,14 @@ content_all_zeros_nas = function(tt) {
 }
 
 
-#' Pruning Functions
-#' @inheritParams gen_args
+#' @details
+#'
+#' \code{prune_empty_level} combines \code{all_zero_or_na} behavior for \code{TableRow} objects,
+#' \code{content_all_zeros_nas} on \code{content_table(tt)} for \code{TableTree} objects, and an addition check
+#' that returns \code{TRUE} if the \code{tt} has no children.
+#'
 #' @export
-#' @rdname pruning_funs
+#' @rdname trim_prune_funs
 prune_empty_level = function(tt) {
     if(is(tt, "TableRow"))
         return(all_zero_or_na(tt))
@@ -56,7 +78,18 @@ prune_empty_level = function(tt) {
 }
 
 
-#' @rdname pruning_funs
+#' @param min numeric(1). (lob_obs_pruner only). Miminum aggregate count value. Subtables whose combined/average
+#' count are below this threshhold will be pruned
+#' @param type character(1). How count values should be aggregated. Must be \code{"sum"} (the default) or
+#' \code{"mean"}
+#'
+#' @details
+#' \code{lob_obs_pruner} is a \emph{constructor function} which, when called, returns a pruning criteria function
+#' which will prune on content rows by comparing sum or mean (dictated by \code{type})of the count count portions
+#' of the cell values (defined as the first value per cell regardless of how many values per cell there are)
+#' against \code{min}.
+#'
+#' @rdname trim_prune_funs
 #' @export
 low_obs_pruner <- function(min, type = c("sum", "mean")) {
     type <- match.arg(type)
@@ -80,6 +113,7 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' @param stop_depth numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA} which indicates pruning should happen at all levels
 #' @param depth numeric(1). Used internally, not intended to be set by the end user.
 #' @return A TableTree pruned via recursive application of \code{prune_func}.
+#' @seealso [prune_empty_level()]
 #' @export
 prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_, depth = 0) {
     if(!is.na(stop_depth) && depth > stop_depth)
@@ -109,23 +143,4 @@ prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_
         tt = NULL
     tt
 }
-
-## }
-
-
-## l <- basic_table() %>%
-##     split_cols_by("ARM") %>%
-##     split_rows_by("COUNTRY") %>%
-##     split_rows_by("RACE") %>%
-##     analyze("AGE", mean)
-
-## sptbl <- build_table(l, dm2)
-## ## recurse_trim_content = function(tt, path,  trim_fun, full_recursive = FALSE) {
-## ##
-
-
-
-
-## }
-
 

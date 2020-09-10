@@ -308,7 +308,7 @@ test_that("split under analyze", {
 })
 
 
-test_that("label_var", {
+test_that("label_var works as expected", {
     yeslblslyt <- basic_table() %>%
         split_cols_by(var = "ARM") %>%
         add_colcounts() %>%
@@ -329,7 +329,26 @@ test_that("label_var", {
     rawdat2 <- rawdat
     rawdat2$gend_label[5] <- "XXXXX"
 
+    ## test check for label-value concordance.
     expect_error(build_table(yeslblslyt, rawdat2), "There does not appear to be a 1-1 correspondence between values in split var \\[SEX\\] and label var \\[gend_label\\]")
 })
 
 
+test_that("factors with unobserved levels work as expected", {
+
+    ## default behavior is that empty levels are NOT dropped
+    ## rows
+    lyt <- basic_table() %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE")
+    tab <- build_table(lyt, DM)
+
+    expect_identical(dim(tab), c(8L, 1L))
+
+    ## cols
+    lyt2 <- basic_table() %>%
+        split_cols_by("SEX") %>%
+        analyze("AGE")
+    tab2 <- build_table(lyt2, DM)
+    expect_identical(dim(tab2), c(1L, 4L))
+})

@@ -3,6 +3,9 @@
 #' @export
 cont_n_allcols <- function(tt) {
     ctab <- content_table(tt)
+    if(NROW(ctab) == 0)
+        return(NA)
+
     sum(sapply(row_values(tree_children(ctab)[[1]]),
                function(cv) cv[1]))
 }
