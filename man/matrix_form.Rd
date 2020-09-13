@@ -21,7 +21,7 @@ iris2 <- iris \%>\%
   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) \%>\%
   ungroup()
 
-l <- basic_table() \%>\% 
+l <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
