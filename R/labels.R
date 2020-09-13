@@ -140,18 +140,21 @@ var_labels <- function(x, fill = FALSE) {
 #' @examples
 #' x <- var_relabel(iris, Sepal.Length = "Sepal Length of iris flower")
 #' var_labels(x)
+#' 
 var_relabel <- function(x, ...) {
   # todo: make this function more readable / code easier
   stopifnot(is.data.frame(x))
-  
+  if (missing(...)) {return(x)}
   dots <- list(...)
   varnames <- names(dots)
   stopifnot(!is.null(varnames))
   
   map_varnames <- match(varnames, colnames(x))
+  
   if (any(is.na(map_varnames))) {
     stop("variables: ", paste(varnames[is.na(map_varnames)], collapse = ", "), " not found")
   }
+  
   if (any(vapply(dots, Negate(is.character), logical(1)))) {
     stop("all variable labels must be of type character")
   }
