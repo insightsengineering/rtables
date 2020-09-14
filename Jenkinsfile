@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
 
-@Library('nestautomation@load_all_before_build') _
+@Library('nestautomation') _
 
 rpackagePipeline()
