@@ -1,4 +1,4 @@
-## rtables 0.1.7.9000
+## rtables 0.3.2.17.9000
 
 * issues with no news: 
 
