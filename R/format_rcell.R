@@ -118,8 +118,8 @@ sprintf_format_old <- function(format) {
 #' format_rcell(x, output = "ascii")
 #'
 format_rcell <- function(x, format, output = c("ascii", "html")) {
-    if(is(x, "CellValue"))
-        x = x[[1]]
+    ## if(is(x, "CellValue"))
+    ##     x = x[[1]]
 
   if (length(x) == 0) return("")
 

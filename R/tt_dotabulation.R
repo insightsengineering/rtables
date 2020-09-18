@@ -64,7 +64,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                                              splextra)))
 
         val = do.call(func, args)
-        if(is.list(val)) {
+        if(!is(val, "CellValue") && is.list(val)) {
             ret = lapply(val, rcell)
             if(length(ret) == 1) {
                 nm = names(ret)

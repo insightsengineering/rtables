@@ -953,6 +953,7 @@ setGeneric("rawvalues", function(obj) standardGeneric("rawvalues"))
 setMethod("rawvalues", "ValueWrapper",  function(obj) obj@value)
 setMethod("rawvalues", "list", function(obj) lapply(obj, rawvalues))
 setMethod("rawvalues", "ANY", function(obj) obj)
+setMethod("rawvalues", "CellValue", function(obj) obj[[1]])
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
 

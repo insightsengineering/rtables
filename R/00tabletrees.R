@@ -657,49 +657,6 @@ AnalyzeMultiVars = function(var,
     ret
 }
 
-## setClass("VAnalyzeVarComp", contains = c("VIRTUAL", "AnalyzeVarSplit"),
-##          representation(comparison_fun = "function"))
-
-## ## this is just a sentinel class so we hit different methods
-## setClass("AVarBaselineComp", contains = "VAnalyzeVarComp")
-
-## ## do we want a separate rd for this?
-## #' @rdname avarspl
-## AVarBaselineComp = function(var,
-##                             split_label,
-##                             afun,
-##                             compfun = `-`,
-##                             labels_var = NULL,
-##                             cfun = NULL,
-##                             cformat = NULL,
-##                             split_fun = NULL,
-##                             split_format = NULL,
-##                             valorder = NULL,
-##                             split_name = var,
-##                             extra_args = list(),
-##                             indent_mod = 0L,
-##                             cvar = ""
-##                             ) {
-##     if(is.null(labels_var))
-##         labels_var = var
-##     new("AVarBaselineComp", payload = var, split_label = split_label,
-##         value_label_var = labels_var,
-##         content_fun = cfun,
-##         content_format = cformat,
-##         split_fun = split_fun,
-##         split_format = split_format,
-##         value_order = valorder,
-##         comparison_fun = compfun,
-##         name = split_name,
-##         extra_args = extra_args,
-##         indent_modifier = as.integer(indent_mod),
-##         content_indent_modifier = 0L,
-##         content_var = cvar)
-## }
-
-
-
-
 ## A comparison split is one where the analysis value (e.g., mean)
 ## will neeed to be calculated on two different subsets and further
 ## computed on (by calling comparison_func on them, default is just
@@ -1052,9 +1009,9 @@ InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
     nleaves = length(leaves)
     snas = sum(is.na(cnts))
     if(length(csubs) != nleaves ||
-        length(extras) != nleaves ||
-        length(cnts) != nleaves ||
-        (snas != 0  && snas != nleaves))
+       length(extras) != nleaves ||
+       length(cnts) != nleaves ||
+       (snas != 0  && snas != nleaves))
         stop("attempted to create invalid InstatiedColumnInfo object. Please contact the maintainer(s).")
 
     new("InstantiatedColumnInfo",
@@ -1500,6 +1457,10 @@ setMethod("length", "CellValue",
 ## }
 
 CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
+    if(is.null(colspan))
+        colspan <- 1L
+    if(!is.null(colspan) && !is(colspan, "integer"))
+        colspan <- as.integer(colspan)
     structure(list(val), format = format, colspan = colspan, label = label, class = "CellValue")
 }
 
@@ -1510,8 +1471,8 @@ setMethod("show", "CellValue",
           })
 
 
-## Empty default objects to avoid repeated calls
-EmptyColInfo <- InstantiatedColumnInfo()
-EmptyElTable <- ElementaryTable()
-EmptyRootSplit <- RootSplit()
-EmptyAllSplit <- AllSplit()
+## ## Empty default objects to avoid repeated calls
+## EmptyColInfo <- InstantiatedColumnInfo()
+## EmptyElTable <- ElementaryTable()
+## EmptyRootSplit <- RootSplit()
+## EmptyAllSplit <- AllSplit()

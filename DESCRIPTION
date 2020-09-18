@@ -62,3 +62,4 @@ Collate:
     'tt_showmethods.R'
     'tt_sort.R'
     'tt_toString.R'
+    'zzz_constants.R'

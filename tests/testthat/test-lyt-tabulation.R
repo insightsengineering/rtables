@@ -292,6 +292,7 @@ test_that("cfun args", {
         summarize_row_groups(cfun = cfun1)
 
     tbl <- build_table(lyt, rawdat)
+    expect_null(print(tbl))
 })
 
 ## regression test for automatically not-nesting

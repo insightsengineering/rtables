@@ -353,7 +353,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
 select_cells_j = function(cells, j) {
     if(length(j) != length(unique(j)))
         stop("duplicate column selections is not currently supported")
-    spans = vapply(cells, function(x) x@colspan, ## XXX
+    spans = vapply(cells, function(x) cell_cspan(x),
                    integer(1))
     inds = rep(seq_along(cells), times = spans)
     selinds = inds[j]
