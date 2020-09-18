@@ -164,12 +164,14 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         rowvar  = NA_character_
     }
 
+
+
     rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf,
                             baselines)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
-    lens = sapply(rawvals, length)
+    lens = vapply(rawvals, length, NA_integer_)
     unqlens = unique(lens)
     stopifnot(length(unqlens) == 1 ||
               (0 %in% unqlens && length(unqlens) == 2))
@@ -183,7 +185,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     else if (!is.null(names(rv1col)))
         labels = names(rv1col)
     else if(are(rv1col, "CellValue"))
-        labels = sapply(rv1col, obj_label)
+        labels = vapply(rv1col, obj_label, "")
     else
         labels = NULL
 

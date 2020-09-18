@@ -318,6 +318,10 @@ setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
 setMethod("obj_label", "Split", function(obj) obj@split_label)
 #' @rdname lab_name
 #' @exportMethod obj_label
+setMethod("obj_label", "ANY", function(obj) attr(obj, "label"))
+
+#' @rdname lab_name
+#' @exportMethod obj_label
 setMethod("obj_label", "TableRow", function(obj) obj@label)
 ## XXX Do we want a convenience for VTableTree that
 ## grabs the label from the LabelRow or will
@@ -355,6 +359,14 @@ setMethod("obj_label<-", "TableRow",
 setMethod("obj_label<-", "ValueWrapper",
           function(obj, value){
     obj@label = value
+    obj
+})
+
+#' @rdname lab_name
+#' @exportMethod obj_label<-
+setMethod("obj_label<-", "ANY",
+          function(obj, value){
+    attr(obj, "label") = value
     obj
 })
 
@@ -656,7 +668,7 @@ setGeneric("obj_format", function(obj) standardGeneric("obj_format"))
 ## this covers rcell, etc
 setMethod("obj_format", "ANY", function(obj) attr(obj, "format"))
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
-setMethod("obj_format", "CellValue", function(obj) obj@format)
+##setMethod("obj_format", "CellValue", function(obj) obj@format)
 setMethod("obj_format", "Split", function(obj) obj@split_format)
 
 setGeneric("obj_format<-", function(obj, value) standardGeneric("obj_format<-"))
@@ -675,10 +687,10 @@ setMethod("obj_format<-", "Split", function(obj, value) {
     obj
 })
 
-setMethod("obj_format<-", "CellValue", function(obj, value) {
-    obj@format = value
-    obj
-})
+## setMethod("obj_format<-", "CellValue", function(obj, value) {
+##     obj@format = value
+##     obj
+## })
 
 
 
@@ -864,11 +876,12 @@ setMethod("row_cspans<-", "LabelRow", function(obj, value) {
 ## XXX TODO colapse with above?
 
 setGeneric("cell_cspan", function(obj) standardGeneric("cell_cspan"))
-setMethod("cell_cspan", "CellValue", function(obj) obj@colspan)
+setMethod("cell_cspan", "CellValue", function(obj) attr(obj, "colspan")) ##obj@colspan)
 
 setGeneric("cell_cspan<-", function(obj, value) standardGeneric("cell_cspan<-"))
 setMethod("cell_cspan<-", "CellValue", function(obj, value) {
-    obj@colspan = value
+    ##  obj@colspan = value
+    attr(obj, "colspan") <- value
     obj
 })
 
@@ -1384,7 +1397,7 @@ setMethod("colcount_format<-", "PreDataTableLayouts",
     obj
 })
 
-EmptyColInfo <- InstantiatedColumnInfo()
+
 #' Exported for use in tern
 #'
 #' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
@@ -1403,7 +1416,7 @@ setMethod("no_colinfo", "VTableNodeInfo",
 #' @exportMethod no_colinfo
 #' @rdname no_info
 setMethod("no_colinfo", "InstantiatedColumnInfo",
-           function(obj) identical(obj, EmptyColInfo))
+           function(obj) length(obj@subset_exprs) == 0) ##identical(obj, EmptyColInfo))
 
 
 #' Names of a TableTree

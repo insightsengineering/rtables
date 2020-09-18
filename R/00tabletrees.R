@@ -951,8 +951,7 @@ LayoutColTree = function(lev = 0L,
                          name = label,
                          label = "",
                          kids = list(),
-                         ##spl = if(length(kids) == 0) NULL else AllSplit(),
-                         spl = AllSplit(),
+                         spl = EmptyAllSplit,
                          tpos = TreePos(),
                          summary_function = NULL,
                          disp_colcounts = FALSE,
@@ -1105,7 +1104,7 @@ LabelRow = function(lev = 1L,
                     label = "",
                     name = label,
                     vis = !is.na(label) && nzchar(label),
-                    cinfo = InstantiatedColumnInfo(),
+                    cinfo = EmptyColInfo,
                     indent_mod = 0L) {
     new("LabelRow",
         leaf_value = list(),
@@ -1160,9 +1159,7 @@ setClass("LabelRow", contains = "TableRow",
                     lev = 1L,
                     label = name,
                     cspan = rep(1L, length(vals)),
-                    ##clayout = LayoutColTree(),
-                    cinfo = InstantiatedColumnInfo(),
-                    #tpos = TableRowPos(),
+                    cinfo = EmptyColInfo,
                     var = NA_character_,
                     format = NULL,
                     klass) {
@@ -1279,7 +1276,7 @@ ElementaryTable = function(kids = list(),
         if(length(kids) > 0)
             cinfo = col_info(kids[[1]])
         else
-            cinfo = InstantiatedColumnInfo()
+            cinfo = EmptyColInfo
     }
 
     if(no_colinfo(labelrow))
@@ -1314,7 +1311,7 @@ setClass("TableTree", contains = c("VTableTree"),
 #' @export
 TableTree = function(kids = list(),
                      name = if(!is.na(var)) var else "",
-                     cont = ElementaryTable(),
+                     cont = EmptyElTable,
                      lev = 1L,
                      label= name,
                      labelrow = LabelRow(lev = lev,
@@ -1332,7 +1329,7 @@ TableTree = function(kids = list(),
         } else if(length(kids) > 0) {
             cinfo = col_info(kids[[1]])
         } else {
-            cinfo = InstantiatedColumnInfo()
+            cinfo = EmptyColInfo
         }
     }
 
@@ -1469,11 +1466,13 @@ PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
 
 
 
-setClass("CellValue", contains = "ValueWrapper",
-         representation(format = "FormatSpec",
-                        colspan = "integerOrNULL",
-                        label = "characterOrNULL"),
-         prototype = list(label ="", colspan = NULL, format = NULL))
+## setClass("CellValue", contains = "ValueWrapper",
+##          representation(format = "FormatSpec",
+##                         colspan = "integerOrNULL",
+##                         label = "characterOrNULL"),
+##          prototype = list(label ="", colspan = NULL, format = NULL))
+
+setOldClass("CellValue")
 
 #' Length of a Cell value
 #'
@@ -1492,12 +1491,16 @@ setMethod("length", "CellValue",
 #'
 #' @export
 #'
+## CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
+##     if(is.null(colspan))
+##         colspan <- 1L
+##     if(!is.null(colspan) && !is(colspan, "integer"))
+##         colspan <- as.integer(colspan)
+##     new("CellValue", value = val, format = format, colspan = colspan, label = label)
+## }
+
 CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
-    if(is.null(colspan))
-        colspan <- 1L
-    if(!is.null(colspan) && !is(colspan, "integer"))
-        colspan <- as.integer(colspan)
-    new("CellValue", value = val, format = format, colspan = colspan, label = label)
+    structure(list(val), format = format, colspan = colspan, label = label, class = "CellValue")
 }
 
 #' @export
@@ -1505,3 +1508,10 @@ setMethod("show", "CellValue",
           function(object) {
               cat(paste("rcell:", format_rcell(object), "\n"))
           })
+
+
+## Empty default objects to avoid repeated calls
+EmptyColInfo <- InstantiatedColumnInfo()
+EmptyElTable <- ElementaryTable()
+EmptyRootSplit <- RootSplit()
+EmptyAllSplit <- AllSplit()
