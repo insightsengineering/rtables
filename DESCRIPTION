@@ -52,6 +52,7 @@ Collate:
     'split_funs.R'
     'summary.R'
     'tree_accessors.R'
+    'tt_afun_utils.R'
     'tt_compare_tables.R'
     'tt_compatibility.R'
     'tt_deprecated.R'
