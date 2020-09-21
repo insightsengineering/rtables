@@ -66,6 +66,7 @@ machinery. These are as follows:
 \describe{
 \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
+\item{.N_row}{row-wise N (row group count) for the group of observations being analyzed (ie with no column-based subsetting)}
 \item{.var}{variable that is analyzed}
 \item{.ref_group}{data.frame or vector of subset corresponding to the \code{ref_group} column including subsetting
 defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}

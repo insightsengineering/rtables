@@ -353,3 +353,18 @@ test_that("factors with unobserved levels work as expected", {
     tab2 <- build_table(lyt2, DM)
     expect_identical(dim(tab2), c(1L, 4L))
 })
+
+
+test_that(".N_row argument in afun works correctly", {
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", afun = function(x, .N_row) .N_row)
+    tab <- build_table(lyt, rawdat)
+    rows <- collect_leaves(tab)
+    names(rows) <- substr(names(rows), 1, 1)
+    ans <- tapply(rawdat$AGE, rawdat$SEX, function(x) rep(length(x), 2))
+    res = vapply(names(rows), function(nm) isTRUE(all.equal(unname(unlist(row_values(rows[[nm]]))), ans[[nm]])), NA)
+    expect_true(all(res))
+})

@@ -1,6 +1,6 @@
 
-match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, extras) {
-    possargs = c(list(.N_col = .N_col, .N_total = .N_total),
+match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, .N_row, extras) {
+    possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row),
                  extras)
     ## specialized arguments that must be named in formals, cannot go anonymously into ...
     if(!is.null(.var))
@@ -64,6 +64,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                                   .ref_group = baselinedf,
                                   .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
+                                  .N_row = NROW(dfpart),
                                   extras = c(cextr,
                                              splextra)))
 
