@@ -10,6 +10,7 @@
 #' @seealso [analyze()]
 #' @export
 
+
 make_afun <- function(fun, .stats, .formats = NULL, .labels = NULL, ...) {
     ## too clever by three-quarters (because half wasn't enough)
     ## gross scope hackery
@@ -20,7 +21,7 @@ make_afun <- function(fun, .stats, .formats = NULL, .labels = NULL, ...) {
     .N_total = NULL
     .ref_group = NULL
     .in_ref_col = NULL
-    ret <- function() {
+    ret <- function(x) { ## remember formals get clobbered here
         custargs <- fun_args
 
         exargs <- list(...)

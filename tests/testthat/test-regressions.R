@@ -38,3 +38,21 @@ test_that("MultiVarSplit varlabels work correctly", {
                      expnms)
 })
 
+
+test_that("inclNAs argument works as expected", {
+
+    tinydat <- data.frame(RSP = c(TRUE, FALSE, NA, TRUE),
+                                    ARM = factor(c("A", "A", "B", "B")))
+    tbl1 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(vars = "RSP", inclNAs = FALSE) %>%
+        build_table(df = tinydat)
+
+    expect_equal(tbl1[1,2, drop=TRUE], 1)
+    tbl2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(vars = "RSP", inclNAs = TRUE) %>%
+        build_table(df = tinydat)
+
+    expect_true(is.na(tbl2[1,2,drop = TRUE]))
+})

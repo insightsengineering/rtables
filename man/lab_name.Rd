@@ -9,14 +9,15 @@
 \alias{obj_name<-,Split-method}
 \alias{obj_label}
 \alias{obj_label,Split-method}
+\alias{obj_label,ANY-method}
 \alias{obj_label,TableRow-method}
 \alias{obj_label,VTableTree-method}
 \alias{obj_label,ValueWrapper-method}
-\alias{obj_label,ANY-method}
 \alias{obj_label<-}
 \alias{obj_label<-,Split-method}
 \alias{obj_label<-,TableRow-method}
 \alias{obj_label<-,ValueWrapper-method}
+\alias{obj_label<-,ANY-method}
 \alias{obj_label<-,VTableTree-method}
 \title{Label and Name accessors}
 \usage{
@@ -36,13 +37,13 @@ obj_label(obj)
 
 \S4method{obj_label}{Split}(obj)
 
+\S4method{obj_label}{ANY}(obj)
+
 \S4method{obj_label}{TableRow}(obj)
 
 \S4method{obj_label}{VTableTree}(obj)
 
 \S4method{obj_label}{ValueWrapper}(obj)
-
-\S4method{obj_label}{ANY}(obj)
 
 obj_label(obj) <- value
 
@@ -51,6 +52,8 @@ obj_label(obj) <- value
 \S4method{obj_label}{TableRow}(obj) <- value
 
 \S4method{obj_label}{ValueWrapper}(obj) <- value
+
+\S4method{obj_label}{ANY}(obj) <- value
 
 \S4method{obj_label}{VTableTree}(obj) <- value
 }

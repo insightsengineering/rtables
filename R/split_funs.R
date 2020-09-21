@@ -309,20 +309,21 @@ setMethod(".applysplit_datapart", "ManualSplit",
 setMethod(".applysplit_datapart", "NULLSplit",
           function(spl, df, vals) list(df[FALSE,]))
 
-## XXX should this be mandatorily excluding NAs???
-setMethod(".applysplit_datapart", "VAnalyzeSplit",
-          function(spl, df, vals) {
-    ## for now, this will work later
-    stopifnot(length(vals) == 1L)
-    if(!is.na(vals) && !all(vals %in% names(df))) {
-        badcols = setdiff(vals, names(df))
-        stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
-    }
-    ret = df
-    if(!is.na(vals) && avar_inclNAs(spl))
-        ret = df[!is.na(df[[vals]]),]
-    list(ret)
-})
+
+## This happens in the tabulation machinery now
+## setMethod(".applysplit_datapart", "VAnalyzeSplit",
+##           function(spl, df, vals) {
+##     ## for now, this will work later
+##     stopifnot(length(vals) == 1L)
+##     if(!is.na(vals) && !all(vals %in% names(df))) {
+##         badcols = setdiff(vals, names(df))
+##         stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
+##     }
+##     ret = df
+##     if(!is.na(vals) && !avar_inclNAs(spl))
+##         ret = df[!is.na(df[[vals]]),]
+##     list(ret)
+## })
 
 setMethod(".applysplit_datapart", "VarStaticCutSplit",
           function(spl, df, vals) {

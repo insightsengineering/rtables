@@ -19,8 +19,11 @@ setMethod("make_subset_expr", "MultiVarSplit",
 
 setMethod("make_subset_expr", "AnalyzeVarSplit",
           function(spl, val) {
-    as.expression(bquote(!is.na(.(a)),
-                         list(a = as.name(spl_payload(spl)))))
+    if(avar_inclNAs(spl))
+        expression(TRUE)
+    else
+        as.expression(bquote(!is.na(.(a)),
+                             list(a = as.name(spl_payload(spl)))))
 })
 
 setMethod("make_subset_expr", "AnalyzeColVarSplit",

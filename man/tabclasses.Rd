@@ -26,7 +26,7 @@ ElementaryTable(
 TableTree(
   kids = list(),
   name = if (!is.na(var)) var else "",
-  cont = ElementaryTable(),
+  cont = EmptyElTable,
   lev = 1L,
   label = name,
   labelrow = LabelRow(lev = lev, label = label, vis = nrow(cont) == 0 && !is.na(label)

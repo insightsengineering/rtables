@@ -16,7 +16,7 @@ LabelRow(
   label = "",
   name = label,
   vis = !is.na(label) && nzchar(label),
-  cinfo = InstantiatedColumnInfo(),
+  cinfo = EmptyColInfo,
   indent_mod = 0L
 )
 
@@ -26,7 +26,7 @@ LabelRow(
   lev = 1L,
   label = name,
   cspan = rep(1L, length(vals)),
-  cinfo = InstantiatedColumnInfo(),
+  cinfo = EmptyColInfo,
   var = NA_character_,
   format = NULL,
   klass

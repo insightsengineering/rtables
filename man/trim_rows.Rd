@@ -9,7 +9,7 @@ trim_rows(tt, criteria = all_zero_or_na)
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
-\item{criteria}{function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \link{\code{all_zero_or_na}}}
+\item{criteria}{function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \code{\link{all_zero_or_na}}}
 }
 \value{
 The table with rows that have only NA or 0 cell values removed

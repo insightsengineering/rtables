@@ -31,10 +31,14 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
 
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                      takesdf = .takes_df(func),
-                     baselinedf) {
+                     baselinedf,
+                     inclNAs) {
         inds = eval(csub, envir = dfpart)
 
         dat = dfpart[inds,,drop = FALSE]
+
+        if(!is.null(col) && !inclNAs)
+            dat <- dat[!is.na(dat[[col]]),,drop = FALSE]
 
         fullrefcoldat = cextr$.ref_full
         if(!is.null(fullrefcoldat))
@@ -82,7 +86,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          takesdf = NULL,
-                         baselines) {
+                         baselines, inclNAs) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
     colextras = cextra_args(cinfo, NULL)
@@ -124,7 +128,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                      takesdf = takesdf,
                      MoreArgs = list(dfpart = dfpart,
                                      totcount = totcount,
-                                     splextra= splextra),
+                                     splextra= splextra,
+                                     inclNAs = inclNAs),
                      SIMPLIFY= FALSE)
 
 
@@ -152,7 +157,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            splextra = list(),
                            takesdf = NULL,
                            baselines = replicate( length(col_exprs(cinfo)),
-                                                 list(dfpart[0,]))) {
+                                                 list(dfpart[0,])),
+                           inclNAs) {
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -164,10 +170,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         rowvar  = NA_character_
     }
 
-
-
     rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf,
-                            baselines)
+                            baselines, inclNAs = inclNAs)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
@@ -297,7 +301,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                       parent_cfun = NULL,
                       format = NULL,
                       indent_mod = 0L,
-                      cvar = NULL) {
+                      cvar = NULL,
+                      inclNAs) {
 
     if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
         cvar = NULL
@@ -309,7 +314,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                                    rowconstr = ContentRow,
                                    datcol = cvar,
                                    takesdf = rep(is.null(cvar),
-                                                 ncol(cinfo)))
+                                                 ncol(cinfo)),
+                                   inclNAs = FALSE)
     } else {
         contkids = list()
     }
@@ -348,7 +354,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                            lev = lvl + 1L,
                            format = obj_format(spl),
                            splextra = split_exargs(spl),
-                           baselines = baselines)
+                           baselines = baselines,
+                           inclNAs = avar_inclNAs(spl))
     lab = obj_label(spl)
     ret = TableTree(kids = kids,
               name = obj_name(spl),
