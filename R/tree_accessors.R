@@ -971,6 +971,7 @@ setMethod("value_labels", "TreePos", function(obj) sapply(pos_splvals(obj), obj_
 setMethod("value_labels", "list", function(obj) lapply(obj, value_labels))
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj@comboname)
+setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
 
 

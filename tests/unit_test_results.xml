@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="test-col_by" timestamp="2020-09-18T20:41:19Z" hostname="Gabriels-MacBook-Pro.local" tests="0" skipped="0" failures="0" errors="0" time="0"/>
+  <testsuite name="tabulation framework" timestamp="2020-09-18T20:41:19Z" hostname="Gabriels-MacBook-Pro.local" tests="25" skipped="1" failures="0" errors="0" time="1.037">
+    <testcase time="0.150000000000091" classname="tabulation_framework" name="complex_layout_works"/>
+    <testcase time="0.000999999999976353" classname="tabulation_framework" name="complex_layout_works"/>
+    <testcase time="0.0760000000000218" classname="tabulation_framework" name="existing_table_in_layout_works"/>
+    <testcase time="0.0660000000000309" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0619999999998981" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0610000000001492" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0619999999998981" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0679999999999836" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0730000000000928" classname="tabulation_framework" name="labelkids_parameter_works"/>
+    <testcase time="0.0229999999999109" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.00299999999992906" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.00600000000008549" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.117999999999938" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.0309999999999491" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.02800000000002" classname="tabulation_framework" name="ref_group_comparisons_work"/>
+    <testcase time="0.0170000000000528" classname="tabulation_framework" name="missing_vars_caught"/>
+    <testcase time="0.0150000000001" classname="tabulation_framework" name="missing_vars_caught"/>
+    <testcase time="0.0139999999998963" classname="tabulation_framework" name="missing_vars_caught"/>
+    <testcase time="0.0230000000001382" classname="tabulation_framework" name="cfun_args">
+      <skipped/>
+    </testcase>
+    <testcase time="0.0279999999997926" classname="tabulation_framework" name="split_under_analyze"/>
+    <testcase time="0.02800000000002" classname="tabulation_framework" name="label_var_works_as_expected"/>
+    <testcase time="0.0230000000001382" classname="tabulation_framework" name="label_var_works_as_expected"/>
+    <testcase time="0.0080000000000382" classname="tabulation_framework" name="label_var_works_as_expected"/>
+    <testcase time="0.0349999999998545" classname="tabulation_framework" name="factors_with_unobserved_levels_work_as_expected"/>
+    <testcase time="0.0180000000000291" classname="tabulation_framework" name="factors_with_unobserved_levels_work_as_expected"/>
+  </testsuite>
+  <testsuite name="regression tests" timestamp="2020-09-18T20:41:20Z" hostname="Gabriels-MacBook-Pro.local" tests="3" skipped="1" failures="0" errors="0" time="0.028">
+    <testcase time="0.0170000000000528" classname="regression_tests" name="unlisting_rtables_has_no_effect_on_them"/>
+    <testcase time="0.00199999999995271" classname="regression_tests" name="manually_created_label_l_rows_are_always_visible"/>
+    <testcase time="0.00900000000001455" classname="regression_tests" name="printing_table_with_0_rows_works">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="rtables" timestamp="2020-09-18T20:41:20Z" hostname="Gabriels-MacBook-Pro.local" tests="27" skipped="0" failures="8" errors="0" time="0.105">
+    <testcase time="0.0190000000000055" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00199999999995271" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00200000000018008" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.015999999999849" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00300000000015643" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00599999999985812" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00300000000015643" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00299999999992906" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00400000000013279" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00299999999992906" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00299999999992906" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.00400000000013279" classname="rtables" name="rtable_design_decisions"/>
+    <testcase time="0.0179999999998017" classname="rtables" name="multi_header_tables_work"/>
+    <testcase time="0.00100000000020373" classname="rtables" name="multi_header_tables_work"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="multi_header_tables_work"/>
+    <testcase time="0.000999999999976353" classname="rtables" name="test_sprintf_based_format">
+      <failure type="failure" message="format_rcell(rcell(12.213743534, sprintf_format(&quot;%.3f&quot;))) not equal to &quot;12.214&quot;. (@test-rtables.R#110)">format_rcell(rcell(12.213743534, sprintf_format("%.3f"))) not equal to "12.214".
+1/1 mismatches
+x[1]: "12.213743534"
+y[1]: "12.214"</failure>
+    </testcase>
+    <testcase time="0.00199999999995271" classname="rtables" name="test_sprintf_based_format">
+      <failure type="failure" message="format_rcell(rcell(12.2134543534, sprintf_format(&quot;%.3f&quot;))) not equal to &quot;12.213&quot;. (@test-rtables.R#111)">format_rcell(rcell(12.2134543534, sprintf_format("%.3f"))) not equal to "12.213".
+1/1 mismatches
+x[1]: "12.2134543534"
+y[1]: "12.213"</failure>
+    </testcase>
+    <testcase time="0.000999999999976353" classname="rtables" name="test_sprintf_based_format">
+      <failure type="failure" message="format_rcell(rcell(c(12.21, 7.321), sprintf_format(&quot;%.1f and %.2f&quot;))) not equal to &quot;12.2 and 7.32&quot;. (@test-rtables.R#113)">format_rcell(rcell(c(12.21, 7.321), sprintf_format("%.1f and %.2f"))) not equal to "12.2 and 7.32".
+1/1 mismatches
+x[1]: "12.21, 7.321"
+y[1]: "12.2 and 7.32"</failure>
+    </testcase>
+    <testcase time="0.00199999999995271" classname="rtables" name="test_p_value_format">
+      <failure type="failure" message="format_rcell(rcell(0.02, &quot;x.xxxx | (&lt;0.0001)&quot;)) not equal to &quot;0.0200&quot;. (@test-rtables.R#119)">format_rcell(rcell(0.02, "x.xxxx | (&lt;0.0001)")) not equal to "0.0200".
+1/1 mismatches
+x[1]: "0.02"
+y[1]: "0.0200"</failure>
+    </testcase>
+    <testcase time="0.00200000000018008" classname="rtables" name="test_p_value_format">
+      <failure type="failure" message="format_rcell(rcell(0.0234934, &quot;x.xxxx | (&lt;0.0001)&quot;)) not equal to &quot;0.0235&quot;. (@test-rtables.R#120)">format_rcell(rcell(0.0234934, "x.xxxx | (&lt;0.0001)")) not equal to "0.0235".
+1/1 mismatches
+x[1]: "0.0234934"
+y[1]: "0.0235"</failure>
+    </testcase>
+    <testcase time="0.000999999999976353" classname="rtables" name="test_p_value_format">
+      <failure type="failure" message="format_rcell(rcell(1e-08, &quot;x.xxxx | (&lt;0.0001)&quot;)) not equal to &quot;&lt;0.0001&quot;. (@test-rtables.R#121)">format_rcell(rcell(1e-08, "x.xxxx | (&lt;0.0001)")) not equal to "&lt;0.0001".
+1/1 mismatches
+x[1]: "1e-08"
+y[1]: "&lt;0.0001"</failure>
+    </testcase>
+    <testcase time="0.00199999999995271" classname="rtables" name="test_3d_format_estimate_and_CI_">
+      <failure type="failure" message="format_rcell(rcell(c(0.02, -0.05, 0.0434235), &quot;xx.xx (xx.xx - xx.xx)&quot;)) not equal to &quot;0.02 (-0.05 - 0.04)&quot;. (@test-rtables.R#127)">format_rcell(rcell(c(0.02, -0.05, 0.0434235), "xx.xx (xx.xx - xx.xx)")) not equal to "0.02 (-0.05 - 0.04)".
+1/1 mismatches
+x[1]: "0.02, -0.05, 0.0434235"
+y[1]: "0.02 (-0.05 - 0.04)"</failure>
+    </testcase>
+    <testcase time="0.00199999999995271" classname="rtables" name="test_3d_format_estimate_and_CI_">
+      <failure type="failure" message="format_rcell(rcell(c(12.3459, 3.2359, 324.2492), &quot;xx.xx (xx.xx - xx.xx)&quot;)) not equal to &quot;12.35 (3.24 - 324.25)&quot;. (@test-rtables.R#128)">format_rcell(rcell(c(12.3459, 3.2359, 324.2492), "xx.xx (xx.xx - xx.xx)")) not equal to "12.35 (3.24 - 324.25)".
+1/1 mismatches
+x[1]: "12.3459, 3.2359, 324.2492"
+y[1]: "12.35 (3.24 - 324.25)"</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="rtabulate" timestamp="2020-09-18T20:41:20Z" hostname="Gabriels-MacBook-Pro.local" tests="29" skipped="0" failures="0" errors="0" time="0.312">
+    <testcase time="0.0209999999999582" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0140000000001237" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.01299999999992" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0170000000000528" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0149999999998727" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0130000000001473" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0139999999998963" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0180000000000291" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0150000000001" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0139999999998963" classname="rtabulate" name="rtabulate_length_tests"/>
+    <testcase time="0.0180000000000291" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.0160000000000764" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.0170000000000528" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.0309999999999491" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.00200000000018008" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.00199999999995271" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.000999999999976353" classname="rtabulate" name="rtabulate_col_wise_args_argument"/>
+    <testcase time="0.0190000000000055" classname="rtabulate" name="rtabulate_by_quartile_works"/>
+    <testcase time="0.0260000000000673" classname="rtabulate" name="rtabulate_by_quartile_works"/>
+    <testcase time="0.0169999999998254" classname="rtabulate" name="rtabulate_..._passed_on_correctly"/>
+  </testsuite>
+  <testsuite name="sorting and pruning" timestamp="2020-09-18T20:41:20Z" hostname="Gabriels-MacBook-Pro.local" tests="7" skipped="0" failures="0" errors="0" time="0.531">
+    <testcase time="0.447000000000116" classname="sorting_and_pruning" name="provided_pruning_functions_work"/>
+    <testcase time="0.000999999999976353" classname="sorting_and_pruning" name="provided_pruning_functions_work"/>
+    <testcase time="0.00199999999995271" classname="sorting_and_pruning" name="provided_pruning_functions_work"/>
+    <testcase time="0.0350000000000819" classname="sorting_and_pruning" name="pruning_and_trimming_work"/>
+    <testcase time="0.00299999999992906" classname="sorting_and_pruning" name="pruning_and_trimming_work"/>
+    <testcase time="0.0410000000001673" classname="sorting_and_pruning" name="provided_score_functions_work"/>
+    <testcase time="0.00199999999995271" classname="sorting_and_pruning" name="provided_score_functions_work"/>
+  </testsuite>
+</testsuites>

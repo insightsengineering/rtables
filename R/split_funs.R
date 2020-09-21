@@ -411,6 +411,9 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     labels
 })
 
+setMethod(".applysplit_partlabels", "MultiVarSplit",
+          function(spl, df, vals, labels) value_labels(spl))
+
 
 
 subsets_from_factory = function(df, fact) {

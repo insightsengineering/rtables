@@ -394,7 +394,7 @@ split_cols_by_multivar = function(lyt,
                                   varlabels = vars,
                                   nested = TRUE) {
     spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
-                        varlabels)
+                        varlabels =varlabels)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }

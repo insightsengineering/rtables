@@ -8,7 +8,7 @@ makefakedat = function(n  = 1000) {
                         AGE = runif(n, 40, 70),
                         VAR3 = c("level1", sample(c("level1", "level2"), n -1,
                                                   replace = TRUE)))
-                        
+
     datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
     datadf$fac2_label = paste("Level", datadf$FACTOR2)
     datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
@@ -31,7 +31,7 @@ makefakedat2 =  function(n  = 1000) {
                                    times = many2s),
                         PATID = rep(seq(1, n/2), many2s),
                         VISIT = rep(c("BASELINE", "FOLLOWUP"))
-                        )                        
+                        )
     datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
     datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
     mu = 5 + (as.integer(factor(datadf$RACE)) + as.integer(factor(datadf$ARM)) + as.integer(factor(datadf$SEX)))/2
@@ -41,10 +41,10 @@ makefakedat2 =  function(n  = 1000) {
     datadf$PCTDIFF = NA_real_
     seconds = seq(2, n, by =2)
     datadf$PCTDIFF[seq(2, n, by=2)] = 100*(datadf$VALUE[seconds] - datadf$VALUE[seconds-1]) / datadf$VALUE[seconds - 1]
-    
+
     datadf
 }
 set.seed(0)
-rawdat = makefakedat()
-
+rawdat <- makefakedat()
+rawdat2 <- makefakedat2() 
 
