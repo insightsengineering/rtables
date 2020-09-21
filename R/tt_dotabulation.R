@@ -272,27 +272,52 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 }
 
 
-.make_caller = function(parent_cfun, clabelstr) {
-    ## XXX Ugh. Combinatorial explosion X.X
-    ## This is what I get for abusing scope to do
-    ## the content label thing. Bad design.
+## .make_caller = function(parent_cfun, clabelstr) {
+##     ## XXX Ugh. Combinatorial explosion X.X
+##     ## This is what I get for abusing scope to do
+##     ## the content label thing. Bad design.
 
-    ## Ugh number 2. If we assign each of htese to the same name
-    ## R CMD check complains so we return them as anon funcs to sneak
-    ## by. Yet mr
-    if(takes_coln(parent_cfun)) {
-        if(takes_totn(parent_cfun)) {
-            .both_caller(parent_cfun, clabelstr)
-        } else {
-            .ncol_caller(parent_cfun, clabelstr)
-        }
+##     ## Ugh number 2. If we assign each of htese to the same name
+##     ## R CMD check complains so we return them as anon funcs to sneak
+##     ## by. Yet mr
+##     if(takes_coln(parent_cfun)) {
+##         if(takes_totn(parent_cfun)) {
+##             .both_caller(parent_cfun, clabelstr)
+##         } else {
+##             .ncol_caller(parent_cfun, clabelstr)
+##         }
+##     } else {
+##         if(takes_totn(parent_cfun)) {
+##             .ntot_caller(parent_cfun, clabelstr)
+##         } else {
+##             .neither_caller(parent_cfun, clabelstr)
+##         }
+##     }
+## }
+
+.make_caller <- function(parent_cfun, clabelstr="") {
+
+    formalnms <- names(formals(parent_cfun))
+    ## note the <- here
+    if(!is.na(dotspos <- match("...", formalnms))) {
+        hasdots <- TRUE
+        toremove <- dotspos
     } else {
-        if(takes_totn(parent_cfun)) {
-            .ntot_caller(parent_cfun, clabelstr)
-        } else {
-            .neither_caller(parent_cfun, clabelstr)
-        }
+        hasdots <- FALSE
+        toremove <- NULL
     }
+
+    labelstrpos <- match("labelstr", names(formals(parent_cfun)))
+    if(is.na(labelstrpos)) stop("problem with .make_caller, contact maintainer")
+    toremove <- c(toremove, labelstrpos)
+    formalnms <- formalnms[-1*toremove]
+
+    caller <- eval(parse(text = paste("function() { parent_cfun(",
+                                      paste(formalnms, "=", formalnms, collapse = ", "),
+                                      ", labelstr = clabelstr, ...)}")))
+    formals(caller) <- c(formals(parent_cfun)[-labelstrpos], alist("..."=))
+    caller
+
 }
 
 .make_ctab = function(df, lvl, ##treepos,

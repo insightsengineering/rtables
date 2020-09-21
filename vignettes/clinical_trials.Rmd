@@ -400,7 +400,7 @@ ADAE2
 We start by defining an events summary function:
 
 ```{r}
-s_events_patients <- function(x, .N_col, lblstr = NULL) {
+s_events_patients <- function(x, labelstr, .N_col) {
   in_rows(
     "Total number of patients with at least one event" = 
       rcell(length(unique(x)) * c(1, 1/.N_col), format = "xx (xx.xx%)"),

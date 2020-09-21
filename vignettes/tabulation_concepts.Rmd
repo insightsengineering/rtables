@@ -173,7 +173,7 @@ further note that `df_*` are of the same class as `df`, i.e. `tibble`s. Hence `f
 Given a function `foo` (ignore the `...` for now):
 
 ```{r}
-foo <- function(df, ...) {
+foo <- function(df, labelstr = "", ...) {
   paste(dim(df), collapse = " x ")
 }
 ```
@@ -231,7 +231,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-but now the row labels diapered. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
+but now the row labels disapered. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
 
 
 ```{r}

@@ -280,11 +280,11 @@ test_that("missing vars caught", {
 
 
 test_that("cfun args", {
-    cfun1 <- function(df, lbl_str, .N_col, .N_total) {
+    cfun1 <- function(df, labelstr, .N_col, .N_total) {
         stopifnot(is(df, "data.frame"))
         in_rows(
             rcell(nrow(df) *c(1, 1/.N_col), format = "xx (xx.xx%)"),
-            .names = lbl_str)
+            .names = labelstr)
     }
     lyt <- basic_table() %>%
         split_cols_by("ARM") %>%
