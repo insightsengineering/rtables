@@ -3,7 +3,7 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
     possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row),
                  extras)
     ## specialized arguments that must be named in formals, cannot go anonymously into ...
-    if(!is.null(.var))
+    if(!is.null(.var) && nzchar(.var))
         possargs = c(possargs, list(.var = .var))
     if(!is.null(.ref_group))
         possargs = c(possargs, list(.ref_group = .ref_group))
@@ -333,13 +333,14 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
         cvar = NULL
     if(!is.null(parent_cfun)) {
+        cfunc <- .make_caller(parent_cfun, label)
         contkids = .make_tablerows(df,
                                    lev = lvl,
-                                   func = .make_caller(parent_cfun, label),
+                                   func = cfunc,
                                    cinfo = cinfo,
                                    rowconstr = ContentRow,
                                    datcol = cvar,
-                                   takesdf = rep(is.null(cvar),
+                                   takesdf = rep(.takes_df(cfunc),
                                                  ncol(cinfo)),
                                    inclNAs = FALSE)
     } else {
