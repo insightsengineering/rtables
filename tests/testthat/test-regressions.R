@@ -56,3 +56,25 @@ test_that("inclNAs argument works as expected", {
 
     expect_true(is.na(tbl2[1,2,drop = TRUE]))
 })
+
+test_that("head/tail work", {
+    tbl = rtable(c("hi", "lo"),
+                 rrow("rn", 5, 5))
+    expect_false(is.null(head(tbl)))
+    expect_false(is.null(tail(tbl)))
+})
+
+test_that("sort does not clobber top-level siblings", {
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze("AGE") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", function(x) in_rows(mean = mean(x), "mean+5" = mean(x) +5))
+
+    tbl <- build_table(lyt, rawdat)
+
+    stbl <- sort_at_path(tbl, c("SEX", "*", "AGE"), function(tt) sum(unlist(row_values((tt)))), decreasing = TRUE)
+
+    expnms = c("Mean", "M", "mean+5", "mean", "F", "mean+5", "mean")
+    expect_identical(row.names(stbl), expnms)
+})

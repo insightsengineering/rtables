@@ -62,8 +62,8 @@ sort_at_path <- function(tt, path, scorefun, decreasing = NA, na.pos = c("omit",
             return(ret)
         }
         subtree <- tree_children(subtree)[[curname]]
+        backpath <- c(backpath, curpath[1])
         curpath <- curpath[-1]
-
     }
 
     na.pos <- match.arg(na.pos)

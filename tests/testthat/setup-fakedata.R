@@ -46,5 +46,5 @@ makefakedat2 =  function(n  = 1000) {
 }
 set.seed(0)
 rawdat <- makefakedat()
-rawdat2 <- makefakedat2() 
+rawdat2 <- makefakedat2()
 
