@@ -1464,11 +1464,11 @@ CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
     structure(list(val), format = format, colspan = colspan, label = label, class = "CellValue")
 }
 
-#' @export
-setMethod("show", "CellValue",
-          function(object) {
-              cat(paste("rcell:", format_rcell(object), "\n"))
-          })
+
+#' @export print.CellValue
+print.CellValue <- function(x, ...) {
+    cat(paste("rcell:", format_rcell(x), "\n"))
+}
 
 
 ## ## Empty default objects to avoid repeated calls

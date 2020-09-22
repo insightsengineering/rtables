@@ -4,27 +4,73 @@
 \alias{make_afun}
 \title{Create custom analysis function wrapping existing function}
 \usage{
-make_afun(fun, .stats, .formats = NULL, .labels = NULL, ...)
+make_afun(fun, ..., .stats = NULL, .formats = NULL, .labels = NULL)
 }
 \arguments{
 \item{fun}{function. The function to be wrapped in a new customized analysis fun. Should return named list.}
+
+\item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
+overriden by extra args within a split.}
 
 \item{.stats}{character. Names of elements to keep from \code{fun}'s full output.}
 
 \item{.formats}{ANY. vector/list of formats to override any defaults applied by \code{fun}.}
 
 \item{.labels}{character. Vector of labels to override defaults returned by \code{fun}}
-
-\item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be overriden by extra args within a split.}
 }
 \value{
-A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling performed automatically.
+A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
+performed automatically.
 }
 \description{
 Create custom analysis function wrapping existing function
 }
 \examples{
 
+s_summary <- function(x) {
+  stopifnot(is.numeric(x))
+  
+  list(
+    n = sum(!is.na(x)),
+    mean_sd = c(mean = mean(x), sd = sd(x)),
+    min_max = range(x)
+  )
+}
+
+s_summary(iris$Sepal.Length)
+
+a_summary <- make_afun(
+  fun = s_summary,
+  .formats = c(n = "xx", mean_sd = "xx.xx (xx.xx)", min_max = "xx.xx - xx.xx"),
+  .labels = c(n = "n", mean_sd = "Mean (sd)", min_max = "min - max")
+)
+
+a_summary(x = iris$Sepal.Length)
+a_summary(x = iris$Sepal.Length, .labels = c(min_max = "Range"))
+
+a_summary(x = iris$Sepal.Length, .stats = c("n", "mean_sd"))
+
+a_summary(x = iris$Sepal.Length, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
+
+
+s_foo <- function(df, .N_col, a = 1, b = 2) {
+   list(
+      nrow_df = nrow(df),
+      .N_col = .N_col,
+      a = a,
+      b = b
+   ) 
+}
+
+s_foo(iris, 40)
+
+a_foo <- make_afun(s_foo, b = 4,
+ .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
+ .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
+)
+
+a_foo(iris, .N_col = 40)
+a_foo(iris, .N_col = 40, .labels = c(nrow_df = "Number of rows"))
 
 }
 \seealso{
