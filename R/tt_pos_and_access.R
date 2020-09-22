@@ -685,3 +685,16 @@ extract_colvals = function(tt, j) {
 
 
 }
+
+setGeneric("tail", tail)
+setMethod("tail", "VTableTree",
+          function(x, n = 6L, ...) {
+    tail.matrix(x, n, addrownums = FALSE)
+})
+
+setGeneric("head", head)
+setMethod("head", "VTableTree",
+          function(x, n= 6L, ...) {
+    head.matrix(x, n)
+}
+)
