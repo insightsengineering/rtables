@@ -1,5 +1,5 @@
 ## package imports
-#' @importFrom utils head tail
+#' @importFrom utils head head.matrix tail tail.matrix
 #' @importFrom stats setNames na.omit prop.test binom.test relevel
 #' @importFrom purrr transpose
 #' @importFrom htmltools tags tagList
