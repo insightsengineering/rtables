@@ -23,6 +23,10 @@ A function suitable for use in \code{\link{analyze}} with element selection, ref
 \description{
 Create custom analysis function wrapping existing function
 }
+\examples{
+
+
+}
 \seealso{
 \code{\link[=analyze]{analyze()}}
 }

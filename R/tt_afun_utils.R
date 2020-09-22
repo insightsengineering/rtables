@@ -1,20 +1,48 @@
 
 
 #' Create custom analysis function wrapping existing function
+#'
 #' @param fun function. The function to be wrapped in a new customized analysis fun. Should return named list.
 #' @param .stats character. Names of elements to keep from \code{fun}'s full output.
 #' @param .formats ANY. vector/list of formats to override any defaults applied by \code{fun}.
 #' @param .labels character. Vector of labels to override defaults returned by \code{fun}
-#' @param ... dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be overriden by extra args within a split.
-#' @return A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling performed automatically.
+#' @param ... dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
+#'   overriden by extra args within a split.
+#'   
+#' @return A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
+#'   performed automatically.
+#'   
 #' @seealso [analyze()]
+#' 
 #' @export
-
-
+#' 
+#' @examples 
+#' 
+#' s_summary <- function(x, .Ncol) {
+#'   stopifnot(is.numeric(x))
+#'   
+#'   list(
+#'     n = sum(!is.na(x)),
+#'     mean_sd = c(mean = mean(x), sd = sd(x)),
+#'     min_max = range(x)
+#'   )
+#' }
+#' 
+#' s_summary(iris$Sepal.Length)
+#' 
+#' a_summary <- make_afun(
+#'   fun = s_summary,
+#'   .formats = c(n = "xx", mean_sd = "xx.xx (xx.xxl)", min_max = "xx.xx - xx.xx"),
+#'   .labels = c(n = "n", mean_sd = "Mean (sd)", min_max = "min - max")
+#' )
+#' 
+#' a_summary(x = iris$Sepal.Length, .Ncol = 1)
+#' 
 make_afun <- function(fun, .stats, .formats = NULL, .labels = NULL, ...) {
     ## too clever by three-quarters (because half wasn't enough)
     ## gross scope hackery
     fun_args = list(...)
+    
     ## so these are guaranteed to be defined for the list construction below
     ## hacky but everything else I thought of was worse.
     .N_col = NULL
@@ -35,6 +63,9 @@ make_afun <- function(fun, .stats, .formats = NULL, .labels = NULL, ...) {
 
         rawvals <- do.call(fun, c(sfunargs, custargs))
 
+        if (!is.list(rawvals))
+            stop("make_afun expects a function fun that always returns a list")
+        
         ## note single brackets here so its a list
         ## no matter what. thats important!
         final_vals <- rawvals[.stats]
