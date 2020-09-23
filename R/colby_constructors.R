@@ -86,7 +86,7 @@ setMethod("cmpnd_last_rowsplit", "SplitVector",
     pos = length(lyt)
     lst = lyt[[pos]]
     tmp = if(is(lst, "CompoundSplit")) {
-              spl_payload(lst) = c(spl_payload(lst), spl)
+              spl_payload(lst) = c(.uncompound(spl_payload(lst)), .uncompound(spl))
               lst
           } else {
               constructor(.payload = list(lst, spl))

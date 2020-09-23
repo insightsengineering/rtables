@@ -78,3 +78,20 @@ test_that("sort does not clobber top-level siblings", {
     expnms = c("Mean", "M", "mean+5", "mean", "F", "mean+5", "mean")
     expect_identical(row.names(stbl), expnms)
 })
+
+
+test_that("repeated multi-var analyzes work as expected", {
+    works <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(c("SEX", "RACE", "STRATA1"), afun = list_wrap_x(table)) %>%
+        analyze("COUNTRY", afun = list_wrap_x(table)) %>%
+        build_table(DM)
+
+    fails <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(c("SEX", "RACE"), afun = list_wrap_x(table)) %>%
+        analyze(c("STRATA1", "COUNTRY"), afun = list_wrap_x(table)) %>%
+        build_table(DM)
+
+    expect_identical(works, fails)
+})

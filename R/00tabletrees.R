@@ -555,6 +555,23 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
     rep(x, length.out = nv)
 }
 
+
+.uncompound <- function(csplit) {
+    if(is(csplit, "list"))
+        return(unlist(lapply(csplit, .uncompound)))
+
+    if(!is(csplit, "CompoundSplit"))
+        return(csplit)
+
+    pld = spl_payload(csplit)
+    done = all(!vapply(pld, is, TRUE, class2 = "CompoundSplit"))
+    if(done)
+        pld
+    else
+        unlist(lapply(pld, .uncompound))
+}
+
+
 #' @rdname avarspl
 #' @param .payload Used internally, not intended to be set by end users.
 #' @export
@@ -604,14 +621,8 @@ AnalyzeMultiVars = function(var,
                      SIMPLIFY = FALSE)
     } else {
         ## we're combining existing splits here
-        pld = unlist(lapply(.payload,
-                                 function(x) {
-            if(is(x, "CompoundSplit")) {
-                spl_payload(x)
-            } else {
-                x
-            }
-        }))
+        pld = unlist(lapply(.payload, .uncompound))
+
         ## only override the childen being combined if the constructor
         ## was passed a non-default value for child_labels
         ## and the child was at NA before
