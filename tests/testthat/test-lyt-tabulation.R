@@ -368,3 +368,33 @@ test_that(".N_row argument in afun works correctly", {
     res = vapply(names(rows), function(nm) isTRUE(all.equal(unname(unlist(row_values(rows[[nm]]))), ans[[nm]])), NA)
     expect_true(all(res))
 })
+
+
+test_that("extra args works for analyze_colvars", {
+    colfuns <- list(function(x, add = 0) rcell(mean(x)+ add, format = "xx.x"),
+                    function(x, cutoff = .5) rcell(sum(x > cutoff), format = "xx"))
+
+    l <-  basic_table() %>% split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
+        analyze_colvars(afun = colfuns)
+
+    l
+
+    tbl_noex <- build_table(l, rawdat2)
+
+    l2 <-  basic_table() %>% split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
+        analyze_colvars(afun = colfuns, extra_args = list(list(add = 5), list(cutoff = 100)))
+
+
+    tbl_ex <- build_table(l2, rawdat2)
+
+    vals_noex <- row_values(tree_children(tbl_noex)[[1]])
+    vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
+
+    expect_identical(unlist(vals_noex[c(1,3)]) + 5,
+                     unlist(vals_ex[c(1,3)]))
+    truevals <- tapply(rawdat2$PCTDIFF, rawdat2$ARM, function(x) sum(x>100, na.rm= TRUE), simplify = FALSE)
+    expect_equal(unname(unlist(truevals)),
+                 unname(unlist(vals_ex[c(2,4)])))
+})

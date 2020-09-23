@@ -95,28 +95,39 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     ## wrong in certain really weird corner cases?
     totcount = sum(colcounts)
 
+    colleaves =  collect_leaves(cinfo@tree_layout)
+
     if(!is.null(datcol) && is.na(datcol)) {
-        colleaves =  collect_leaves(cinfo@tree_layout)
-        datcol = sapply(colleaves,
-                        function(x) {
+        datcol <- character(length(colleaves))
+        exargs <- vector("list", length(colleaves))
+        for(i in 1:length(colleaves)) {
+            x  = colleaves[[i]]
+
+        ## datcol = sapply(colleaves,
+        ##                 function(x) {
             pos = tree_pos(x)
             spls = pos_splits(pos)
             splvals = rawvalues(pos)
             n = length(spls)
-            if(is(spls[[n]], "MultiVarSplit"))
-                splvals[n]
-            else
-                NA_character_
-        })
+            datcol[i] <- if(is(spls[[n]], "MultiVarSplit"))
+                             splvals[n]
+                         else
+                             NA_character_
+            argpos <- match(datcol[i], spl_payload(spls[[n]]))
+            exargs[[i]] <- if(argpos <= length(splextra)) splextra[[argpos]] else NULL
+        }
+        ## })
         if(all(is.na(datcol)))
             datcol = list(NULL)
         else if(any(is.na(datcol)))
             stop("mix of var and non-var columns with NA analysis rowvara")
     } else if(!is.null(datcol)) {
         datcol = rep(datcol, length(colexprs))
+        exargs = rep(splextra, length(colexprs))
     } else {
         datcol = list(NULL)
     }
+
 
     allfuncs = if(is.list(func)) func else lapply(colexprs, function(x) func)
     if(is.null(takesdf))
@@ -127,9 +138,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                      baselinedf = baselines,
                      func = allfuncs,
                      takesdf = takesdf,
+                     splextra = exargs,
                      MoreArgs = list(dfpart = dfpart,
                                      totcount = totcount,
-                                     splextra= splextra,
+#                                     splextra= splextra,
                                      inclNAs = inclNAs),
                      SIMPLIFY= FALSE)
 

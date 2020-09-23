@@ -390,7 +390,6 @@ split_rows_by = function(lyt,
 
 split_cols_by_multivar = function(lyt,
                                   vars,
-                                  ##split_label = "",
                                   varlabels = vars,
                                   nested = TRUE) {
     spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
@@ -786,6 +785,7 @@ get_acolvar_vars <- function(lyt) {
 analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
+                           extra_args = list(),
                            indent_mod = 0L) {
     if(is.function(afun)) {
         subafun = substitute(afun)
@@ -813,7 +813,8 @@ analyze_colvars = function(lyt, afun,
                           defrowlab = defrowlab,
                           split_format = format,
                           split_name = get_acolvar_name(lyt),
-                          indent_mod = indent_mod)
+                          indent_mod = indent_mod,
+                          extra_args = extra_args)
     pos = next_rpos(lyt, nested, for_analyze = TRUE)
     split_rows(lyt, spl, pos)
 }
