@@ -1186,7 +1186,21 @@ setMethod(".add_row_summary", "Split",
     }
 }
 
+.validate_cfuns <- function(fun) {
+    if(is.list(fun))
+        return(lapply(fun, .check_cfuns))
 
+    frmls <- formals(fun)
+    ls_pos <- match("labelstr", names(frmls))
+    if(is.na(ls_pos)) {
+        ls_pos <- grep("lbl_{0,1}str", names(frmls))
+        if(length(ls_pos) == 0)
+            stop("Invalid content function - does not accept the required labelstr argument")
+        .Deprecated(old = "Use of content functions which do not accept a named 'labelstr' argument", new = "content functions which explicitly accept 'labelstr'")
+        names(formals(fun))[ls_pos] <- "labelstr"
+    }
+    fun
+}
 
 
 #' Add a content row of summary counts
@@ -1226,6 +1240,7 @@ summarize_row_groups = function(lyt,
         else
             cfun = .count_raw_constr(var,format, label_fstr)
     }
+    cfun <- .validate_cfuns(cfun)
     .add_row_summary(lyt,
                      cfun = cfun,
                      cformat = format,

@@ -128,6 +128,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         datcol = list(NULL)
     }
 
+    if(length(exargs) != length(colexprs))
+        length(exargs) <- length(colexprs)
 
     allfuncs = if(is.list(func)) func else lapply(colexprs, function(x) func)
     if(is.null(takesdf))
@@ -320,7 +322,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     }
 
     labelstrpos <- match("labelstr", names(formals(parent_cfun)))
-    if(is.na(labelstrpos)) stop("problem with .make_caller, contact maintainer")
+    if(is.na(labelstrpos)) {
+             stop("content function does not appear to accept the labelstr arguent")
+    }
     toremove <- c(toremove, labelstrpos)
     formalnms <- formalnms[-1*toremove]
 
