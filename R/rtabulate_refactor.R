@@ -17,8 +17,8 @@
 #' @export
 #' @rdname rtinner
 #' @author Gabriel Becker and Adrian Waddell
-#' 
-#' @examples 
+#'
+#' @examples
 #' rtab_inner(1:3)
 #' rtab_inner(iris$Species)
 #' rtab_inner(iris$Species == "setosa")
@@ -57,27 +57,27 @@ setMethod("rtab_inner", "ANY",
     stopifnot(length(cbyclass) == 1)
     addfun = switch(cbyclass,
                     quartcut_df = split_cols_by_quartiles,
-                    cmlquartcut_df = function(...) split_cols_by_quartiles(..., cumulative = TRUE), 
+                    cmlquartcut_df = function(...) split_cols_by_quartiles(..., cumulative = TRUE),
                     split_cols_by)
     lyt <- addfun(lyt, var = var,
                   nested = nested,
                   extra_args = extra_args)
     lyt
 }
-                               
-                               
-                               
-                               
-                               
-                               
+
+
+
+
+
+
 
 #' Direct Tabulation
 #'
 #' \code{rtablulate} provides a direct tabulation API conceptually derived from \code{\link{tapply}}.
-#' 
+#'
 #' In practice, a Pre-data layout is built up based on the
 #' arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{rtab_inner}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
-#'   
+#'
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to the tabulation function
 #' @inheritParams compat_args
@@ -87,14 +87,14 @@ setMethod("rtab_inner", "ANY",
 #' @param col_N numeric. If non-NULL, counts to override total column counts.
 #'
 
-#' 
+#'
 #' @return an \code{\link{rtable}} object
 #' @note For backwards compatibility, all paramters other than \code{x}, \code{col_by} and \code{FUN} appear after \dots so must be specified by full argument name.
-#' 
+#'
 #' @author Gabriel Becker and Adrian Waddell
-#'       
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' ## logical
 #' rtabulate(iris$Species == "setosa", by_all("Species"),
@@ -102,15 +102,15 @@ setMethod("rtab_inner", "ANY",
 #'   row.name = "n (n/N)",
 #'   col_wise_args = list(N = 150),
 #'   format = "xx (xx.xx%)")
-#' 
-#' 
+#'
+#'
 #' # default FUN is number of observations equal to TRUE
 #' with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
-#'  
+#'
 #' # Custom FUN: number of TRUE records in a cell and precentages based on number of records
 #' # in each column
 #' with(iris, rtabulate(Sepal.Length < 5, Species,
-#'   FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+#'   FUN = function(xi, N) sum(xi) * c(1, 1/N),
 #'   format = "xx.xx (xx.xx%)",
 #'   row.name = "Sepal.Length < 5",
 #'   col_wise_args = list(N = table(Species))
@@ -132,13 +132,13 @@ setMethod("rtab_inner", "ANY",
 #'   rtabulate(SL, Sp, median, row.name = "Median"),
 #'   rtabulate(SL, Sp, range, format = "xx.xx - xx.xx", row.name = "Min - Max")
 #' )
-#' 
+#'
 #' # TODO: enable sprintf_format in rtabulate
 #'  x <- 1:100
 #'  cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
 #'
 #'  rtabulate(
-#'    x = x, col_by = cb, 
+#'    x = x, col_by = cb,
 #'    FUN = function(x, N) c(mean(x), sd(x), N),
 #'    format = sprintf_format("%.2f (%.2f) and %i"),
 #'    row.name = "Mean (SD) and N",
@@ -149,18 +149,18 @@ setMethod("rtab_inner", "ANY",
 #'
 #' ## factors
 #' rtabulate(x = iris$Species)
-#' 
+#'
 #'  rtabulate(x = iris$Species, useNA = "always")
 #'  rtabulate(x = factor(c("a", "a", NA, "b")), useNA = "ifany")
-#' 
+#'
 #' rtabulate(x = iris$Species, by_all("sum"))
-#' 
+#'
 #' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'    labels = c("S.L > 5", "S.L <= 5"))
-#' 
+#'
 #' rtabulate(iris$Species, col_by = sl5)
 #' rtabulate(sl5, iris$Species)
-#' 
+#'
 #' rtabulate(iris$Species, col_by = sl5,
 #'           FUN = function(dat, .N_total) {
 #'     tb <- table(dat)
@@ -173,13 +173,13 @@ setMethod("rtab_inner", "ANY",
 #'      })
 #'    },
 #'    format = "xx (xx.xx%)")
-#' 
+#'
 #' rtabulate(x = factor(c("X", "Y"), c("X", "Y")),
 #'           col_by = factor(c("a", "a"), c("a", "b")), FUN = length)
-#' 
+#'
 #' rtabulate(factor(c("Y", "Y"), c("X", "Y")),
 #'           factor(c("b", "b"), c("a", "b")), length)
-#' 
+#'
 #' rtabulate(
 #'   x = factor(c("Y", "Y"), c("X", "Y")),
 #'   col_by = factor(c("b", "b"), c("a", "b")),
@@ -191,12 +191,12 @@ setMethod("rtab_inner", "ANY",
 #' df <- expand.grid(aaa = factor(c("A", "B")), bbb = factor(c("X", "Y", "Z")))
 #' df <- rbind(df, df)
 #' df$val <- 1:nrow(df)
-#' 
+#'
 #'  rtabulate(
 #'    x = df,
 #'    row_by = df$aaa,
 #'    col_by = df$bbb,
-#'    FUN = function(df) {  
+#'    FUN = function(df) {
 #'       sum(df$val)
 #'    }
 #'  )
@@ -206,38 +206,38 @@ setMethod("rtab_inner", "ANY",
 #'  rtabulate(
 #'    x = iris,
 #'    row_by = by_all("sum"),
-#'    col_by = iris$Species, 
+#'    col_by = iris$Species,
 #'    FUN = function(df) sum(df$Sepal.Length)
 #'  )
-#' 
+#'
 #' ## standard way would be this
 #' rtabulate(
 #'     x = iris,
 #'     col_by = iris$Species,
 #'     FUN = function(df) sum(df$Sepal.Length),
 #'     row.name =  "sum")
-#' 
-#'  
+#'
+#'
 #'  rtabulate(
 #'    x = iris,
 #'    row_by = iris$Species,
-#'    col_by = by_all("sum"), 
+#'    col_by = by_all("sum"),
 #'    FUN = function(df) sum(df$Sepal.Length)
 #'  )
-#'  
+#'
 #'  fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'      labels = c("S.L > 5", "S.L <= 5"))
-#'  
+#'
 #'  tbl <- rtabulate(
 #'    x = iris,
 #'    row_by = fsl5,
-#'    col_by = iris$Species, 
+#'    col_by = iris$Species,
 #'    FUN = function(df) {
 #'      if (nrow(df) < 10) {
 #'        rcell("-")
 #'      } else {
 #'        fit <- lm(Sepal.Length ~ Petal.Width, data = df)
-#'             
+#'
 #'        rcell(list(fit), format = function(x, output) {
 #'            paste("df:", x[[1]]$df.residual)
 #'        })
@@ -245,19 +245,19 @@ setMethod("rtab_inner", "ANY",
 #'    }
 #'  )
 #'  tbl
-#'  
+#'
 #'  rtabulate(
 #'    x = iris,
 #'    row_by = fsl5,
-#'    col_by = iris$Species, 
+#'    col_by = iris$Species,
 #'    FUN = function(df, N) {
 #'       N
 #'    },
 #'    col_wise_args = list(N = c(10, 100, 200))
 #'  )
-#' # 
-#' #  
-#' # 
+#' #
+#' #
+#' #
 rtabulate <- function(x,
                      col_by = by_all("col_1"),
                      FUN = rtab_inner,
@@ -287,13 +287,13 @@ rtabulate <- function(x,
     }
     usexnms = FALSE
     lyt = NULL
-    
-    
+
+
     if(!inherits(x, "data.frame")) {
         if(is(x, "list")) {
             ## gotta guess whether this is many things to summarize or one...
             ## XXX this is a fast first pass, revisit this
-            
+
             if(length(unique(sapply(x, length))) != 1)
                 xdf = data.frame(.xvar = I(x))
             else {
@@ -312,7 +312,7 @@ rtabulate <- function(x,
         xcols = ".xx_xproxy_xx."
     }
     lyt = NULL
-    
+
     fulld = xdf
 
     if(is(col_by, "Split")) {
@@ -341,7 +341,7 @@ rtabulate <- function(x,
             lyt <- .rtab_colby_helper(lyt, "total", total)
             newtop = TRUE
         }
-        
+
         ## wrap it if there's only one to preserve old behavior
         if(length(cby_nms) == 1 && length(col_wise_args) > 0)
             col_wise_args <- list(col_wise_args)
@@ -351,16 +351,16 @@ rtabulate <- function(x,
             ex = if(length(col_wise_args) >= i)
                      col_wise_args[[i]]
                  else list()
-            
+
             lyt <- .rtab_colby_helper(lyt, cby_class,
                                       var = cby_nms[i],
                                       nested = !newtop,
                                       extra_args = ex)
             newtop = FALSE
         }
-        
-    } 
-    
+
+    }
+
     if(is(row_by, "Split")) {
         lyt <- split_rows(lyt, row_by, next_rpos(lyt, FALSE))
     } else if(!is.null(row_by)) {
@@ -380,16 +380,16 @@ rtabulate <- function(x,
     labels = row.name
     if(nchar(labels) == 0 && usexnms)
        labels = xcols
-       
+
     lyt <- analyze(lyt,
                    vars = xcols,
                    afun = FUN,
                    var_labels = "",
                    format = format,
-                   extra_args = list(...),
+                   extra_args = list(list(...)),
                    show_labels = "hidden")
     ## XXX a way to just return the layout?
     ## but x needs to be padded with the relevant
     ## columns so not sure...
-    build_table(lyt, fulld)    
+    build_table(lyt, fulld)
 }

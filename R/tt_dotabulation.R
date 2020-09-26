@@ -85,6 +85,8 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 
 
+## Generate all values (one for each column) for one or more rows
+## by calling func once per column (as defined by cinfo)
 gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          takesdf = NULL,
                          baselines, inclNAs) {
@@ -97,14 +99,23 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 
     colleaves =  collect_leaves(cinfo@tree_layout)
 
+
+    gotflist <- is.list(func)
+    if(!gotflist)
+        func <- list(func)
+
+    if(length(func) == 1 && length(splextra) > 1)
+        splextra = list(splextra)
+
+    ## we are in analyze_colvars, so we have to match
+    ## the exargs value by position for each column repeatedly
+    ## across the higher level col splits.
     if(!is.null(datcol) && is.na(datcol)) {
         datcol <- character(length(colleaves))
         exargs <- vector("list", length(colleaves))
         for(i in 1:length(colleaves)) {
             x  = colleaves[[i]]
 
-        ## datcol = sapply(colleaves,
-        ##                 function(x) {
             pos = tree_pos(x)
             spls = pos_splits(pos)
             splvals = rawvalues(pos)
@@ -121,17 +132,31 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
             datcol = list(NULL)
         else if(any(is.na(datcol)))
             stop("mix of var and non-var columns with NA analysis rowvara")
-    } else if(!is.null(datcol)) {
-        datcol = rep(datcol, length(colexprs))
-        exargs = rep(splextra, length(colexprs))
     } else {
-        datcol = list(NULL)
+        exargs <- splextra
+        if(is.null(datcol))
+            datcol = list(NULL)
+        datcol = rep(datcol, length(colexprs))
+        if(gotflist)
+            length(exargs) <- length(func) ## func is a list
+        exargs <- rep(exargs, length.out = length(colexprs))
+
     }
 
-    if(length(exargs) != length(colexprs))
-        length(exargs) <- length(colexprs)
 
-    allfuncs = if(is.list(func)) func else lapply(colexprs, function(x) func)
+ #       exargs = rep## else if(!is.null(datcol)) { ## datcol is NA, we're in analyze_colvars
+    ##     datcol = rep(datcol, length(colexprs))
+    ##     exargs = rep(splextra, length(colexprs))
+    ## } else { ## datcol is NULL, I think this means we're in
+    ##     datcol = list(NULL)
+    ##     exargs = rep(splextra, length(colexprs))
+
+    ## length(exargs) <- length(func)
+    ## exargs <- rep(exargs, length.out = length(colexprs))
+    allfuncs <- rep(func, length.out = length(colexprs))
+
+
+
     if(is.null(takesdf))
         takesdf = .takes_df(allfuncs)
     rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
