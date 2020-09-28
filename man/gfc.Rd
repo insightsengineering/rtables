@@ -2,9 +2,21 @@
 % Please edit documentation in R/tt_toString.R
 \name{get_formatted_cells}
 \alias{get_formatted_cells}
+\alias{get_formatted_cells,TableTree-method}
+\alias{get_formatted_cells,ElementaryTable-method}
+\alias{get_formatted_cells,TableRow-method}
+\alias{get_formatted_cells,LabelRow-method}
 \title{get formatted cells}
 \usage{
 get_formatted_cells(obj)
+
+\S4method{get_formatted_cells}{TableTree}(obj)
+
+\S4method{get_formatted_cells}{ElementaryTable}(obj)
+
+\S4method{get_formatted_cells}{TableRow}(obj)
+
+\S4method{get_formatted_cells}{LabelRow}(obj)
 }
 \description{
 get formatted cells
@@ -25,5 +37,4 @@ tbl <- basic_table() \%>\%
   build_table(iris2)
 
 get_formatted_cells(tbl)
-
 }

@@ -2,15 +2,26 @@
 % Please edit documentation in R/summary.R
 \name{summary,VTableTree-method}
 \alias{summary,VTableTree-method}
+\alias{summary,ElementaryTable-method}
+\alias{summary,TableRow-method}
+\alias{summary,LabelRow-method}
 \title{Show Row and Column summary of a TableTree}
 \usage{
 \S4method{summary}{VTableTree}(object, depth = 0, indent = 0, row_type = "", ...)
+
+\S4method{summary}{ElementaryTable}(object, depth = 0, indent = 0, row_type)
+
+\S4method{summary}{TableRow}(object, depth = 0, indent = 0, row_type)
+
+\S4method{summary}{LabelRow}(object, depth = 0, indent = 0, ...)
 }
 \arguments{
-\item{object}{an object of class \code{TableTree} which is usually created with \code{\url{build_table}}}
+\item{object}{an object of class \code{TableTree} which is usually created with \code{\link{build_table}}}
 }
 \description{
 Show Row and Column summary of a TableTree
+
+Summary method for elementary table
 }
 \examples{
 library(dplyr)
@@ -27,4 +38,6 @@ tbl <- build_table(l, iris2)
 tbl
 
 summary(tbl)
+tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
+
 }

@@ -18,8 +18,6 @@ which levels in \code{col_by} define a column.
 can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
 can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
 
-\item{label}{string. Label for the resulting column (or potentially row)}
-
 \item{n}{If non-null, the count to use for the tottal of the new column.}
 }
 \description{

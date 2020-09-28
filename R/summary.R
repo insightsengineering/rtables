@@ -8,7 +8,7 @@ setMethod("summary", "ANY", base:::summary)
 
 #' Show Row and Column summary of a TableTree
 #' 
-#' @param object an object of class \code{TableTree} which is usually created with \code{\url{build_table}}
+#' @param object an object of class \code{TableTree} which is usually created with \code{\link{build_table}}
 #' 
 #' @examples 
 #' library(dplyr)
@@ -25,6 +25,7 @@ setMethod("summary", "ANY", base:::summary)
 #' tbl
 #' 
 #' summary(tbl)
+#' @rdname summarymeths
 setMethod("summary", "VTableTree", function(object, depth = 0, indent = 0, row_type = "", ...) {
   
   if (indent == 0) {
@@ -54,7 +55,8 @@ setMethod("summary", "VTableTree", function(object, depth = 0, indent = 0, row_t
 #' 
 #' @examples 
 #' tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
-#' 
+#'
+#' @rdname summarymeths
 setMethod("summary", "ElementaryTable", function(object, depth = 0, indent = 0, row_type) {
 
   lr <- summary(tt_labelrow(object), depth, indent)
@@ -64,11 +66,11 @@ setMethod("summary", "ElementaryTable", function(object, depth = 0, indent = 0, 
   invisible(NULL)
 })
 
-
+#' @rdname summarymeths
 setMethod("summary", "TableRow", function(object, depth = 0, indent = 0, row_type) {
   cat_row(indent, obj_name(object), obj_label(object), TRUE, row_type)
 })
-
+#' @rdname summarymeths
 setMethod("summary", "LabelRow", function(object, depth = 0, indent = 0, ...) {
 
   if (labelrow_visible(object)) {
@@ -185,7 +187,7 @@ summarize_row_df_empty <- function(...) {
 #' summarize_rows(tbl)
 #' 
 setGeneric("summarize_rows", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows"))
-
+#' @rdname int_methods
 setMethod("summarize_rows", "TableTree",
           function(obj, depth = 0, indent = 0) {
             
@@ -207,7 +209,7 @@ setMethod("summarize_rows", "TableTree",
             df
             
           })
-
+#' @rdname int_methods
 setMethod("summarize_rows", "ElementaryTable",
           function(obj, depth = 0, indent = 0) {
             
@@ -223,7 +225,7 @@ setMethod("summarize_rows", "ElementaryTable",
             
           })
 
-
+#' @rdname int_methods
 setMethod("summarize_rows", "TableRow",
           function(obj, depth = 0, indent = 0) {
             
@@ -240,7 +242,7 @@ setMethod("summarize_rows", "TableRow",
             ) 
             
           })
-
+#' @rdname int_methods
 setMethod("summarize_rows", "LabelRow",
           function(obj, depth = 0, indent = 0) {
             
@@ -309,7 +311,7 @@ is_empty_labelrow <- function(x) {
 is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
-
+#' @rdname int_methods
 setMethod("summarize_table", "TableTree",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
             
@@ -351,7 +353,7 @@ setMethod("summarize_table", "TableTree",
           invisible(NULL)
             
           })
-
+#' @rdname int_methods
 setMethod("summarize_table", "ElementaryTable",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
             
@@ -380,7 +382,7 @@ setMethod("summarize_table", "ElementaryTable",
             
           })
 
-
+#' @rdname int_methods
 setMethod("summarize_table", "TableRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
             
@@ -390,7 +392,7 @@ setMethod("summarize_table", "TableRow",
             
             invisible(NULL)
           })
-
+#' @rdname int_methods
 setMethod("summarize_table", "LabelRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
           

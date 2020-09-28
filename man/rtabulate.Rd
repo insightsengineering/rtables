@@ -76,11 +76,11 @@ rtabulate(iris$Species == "setosa", by_all("Species"),
 
 # default FUN is number of observations equal to TRUE
 with(iris, rtabulate(Sepal.Length < 5, Species, row.name = "Sepal.Length < 5"))
- 
+
 # Custom FUN: number of TRUE records in a cell and precentages based on number of records
 # in each column
 with(iris, rtabulate(Sepal.Length < 5, Species,
-  FUN = function(xi, N) sum(xi) * c(1, 1/N), 
+  FUN = function(xi, N) sum(xi) * c(1, 1/N),
   format = "xx.xx (xx.xx\%)",
   row.name = "Sepal.Length < 5",
   col_wise_args = list(N = table(Species))
@@ -108,7 +108,7 @@ rbind(
  cb <- factor(rep(LETTERS[1:3], c(20, 30, 50)))
 
  rtabulate(
-   x = x, col_by = cb, 
+   x = x, col_by = cb,
    FUN = function(x, N) c(mean(x), sd(x), N),
    format = sprintf_format("\%.2f (\%.2f) and \%i"),
    row.name = "Mean (SD) and N",
@@ -166,7 +166,7 @@ df$val <- 1:nrow(df)
    x = df,
    row_by = df$aaa,
    col_by = df$bbb,
-   FUN = function(df) {  
+   FUN = function(df) {
       sum(df$val)
    }
  )
@@ -176,7 +176,7 @@ df$val <- 1:nrow(df)
  rtabulate(
    x = iris,
    row_by = by_all("sum"),
-   col_by = iris$Species, 
+   col_by = iris$Species,
    FUN = function(df) sum(df$Sepal.Length)
  )
 
@@ -187,27 +187,27 @@ rtabulate(
     FUN = function(df) sum(df$Sepal.Length),
     row.name =  "sum")
 
- 
+
  rtabulate(
    x = iris,
    row_by = iris$Species,
-   col_by = by_all("sum"), 
+   col_by = by_all("sum"),
    FUN = function(df) sum(df$Sepal.Length)
  )
- 
+
  fsl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
      labels = c("S.L > 5", "S.L <= 5"))
- 
+
  tbl <- rtabulate(
    x = iris,
    row_by = fsl5,
-   col_by = iris$Species, 
+   col_by = iris$Species,
    FUN = function(df) {
      if (nrow(df) < 10) {
        rcell("-")
      } else {
        fit <- lm(Sepal.Length ~ Petal.Width, data = df)
-            
+
        rcell(list(fit), format = function(x, output) {
            paste("df:", x[[1]]$df.residual)
        })
@@ -215,19 +215,19 @@ rtabulate(
    }
  )
  tbl
- 
+
  rtabulate(
    x = iris,
    row_by = fsl5,
-   col_by = iris$Species, 
+   col_by = iris$Species,
    FUN = function(df, N) {
       N
    },
    col_wise_args = list(N = c(10, 100, 200))
  )
-# 
-#  
-# 
+#
+#
+#
 }
 \author{
 Gabriel Becker and Adrian Waddell

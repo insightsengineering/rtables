@@ -13,6 +13,7 @@ setMethod("show", "VTableTree", function(object) {
 
 #' @export
 setMethod("print", "ANY", base::print)
+#' @rdname int_methods
 setMethod("print", "VTableTree", function(x, ...) {
   cat(toString(x, ...))
 })
@@ -294,9 +295,9 @@ matrix_form <- function(x) {
 #'   build_table(iris2)
 #'
 #' get_formatted_cells(tbl)
-#'
+#' @rdname gfc
 setGeneric("get_formatted_cells", function(obj) standardGeneric("get_formatted_cells"))
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "TableTree",
           function(obj) {
 
@@ -313,7 +314,7 @@ setMethod("get_formatted_cells", "TableTree",
 
             do.call(rbind, c(list(lr), list(ct),  els))
           })
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "ElementaryTable",
           function(obj) {
 
@@ -324,7 +325,7 @@ setMethod("get_formatted_cells", "ElementaryTable",
             do.call(rbind, c(list(lr), els))
           })
 
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj) {
             default_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
@@ -343,7 +344,7 @@ setMethod("get_formatted_cells", "TableRow",
             }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
 
           })
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "LabelRow",
           function(obj) {
             nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol

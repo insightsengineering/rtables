@@ -2,9 +2,53 @@
 % Please edit documentation in R/colby_constructors.R
 \name{.add_row_summary}
 \alias{.add_row_summary}
+\alias{.add_row_summary,PreDataRowLayout-method}
+\alias{.add_row_summary,SplitVector-method}
+\alias{.add_row_summary,Split-method}
+\alias{.add_row_summary,NULL-method}
 \title{Add Row Summary}
 \usage{
 .add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = ""
+)
+
+\S4method{.add_row_summary}{PreDataRowLayout}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = ""
+)
+
+\S4method{.add_row_summary}{SplitVector}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = ""
+)
+
+\S4method{.add_row_summary}{Split}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = ""
+)
+
+\S4method{.add_row_summary}{`NULL`}(
   lyt,
   label,
   cfun,

@@ -596,6 +596,7 @@ add_overall_level = function(valname = "Overall", label = valname, extra_args = 
 
 setClass("AllLevelsSentinel", contains = "character")
 #' @export
+#' @rdname add_combo_levels
 select_all_levels = new("AllLevelsSentinel")
 
 #' Add Combination Levels to split
@@ -631,7 +632,6 @@ select_all_levels = new("AllLevelsSentinel")
 #'     analyze("AGE")
 #'
 #' build_table(l3, smallerDM)
-
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
     myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
         ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)

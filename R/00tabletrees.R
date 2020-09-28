@@ -1476,7 +1476,7 @@ CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
 }
 
 
-#' @export print.CellValue
+#' @method print CellValue
 print.CellValue <- function(x, ...) {
     cat(paste("rcell:", format_rcell(x), "\n"))
 }

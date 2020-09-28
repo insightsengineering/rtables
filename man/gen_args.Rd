@@ -16,6 +16,7 @@ gen_args(
   value,
   object,
   path,
+  label,
   ...
 )
 }
@@ -41,6 +42,8 @@ gen_args(
 \item{object}{The object to modify in-place}
 
 \item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
+
+\item{label}{character(1). The label for the object being created.}
 
 \item{\dots}{Passed on to metthods or tabulation functions.}
 }

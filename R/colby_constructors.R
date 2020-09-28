@@ -21,14 +21,15 @@ setMethod("c", "SplitVector", function(x, ...) {
 
 ## The cascading (by class) in this case is as follows for the row case:
 ## PreDataTableLayouts -> PreDataRowLayout -> SplitVector
+#' @rdname int_methods
 setGeneric("split_rows", function(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
-
+#' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     rl = PreDataRowLayout(SplitVector(spl))
     cl = PreDataColLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
-
+#' @rdname int_methods
 setMethod("split_rows", "PreDataRowLayout",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     stopifnot(pos >0 && pos <= length(lyt) + 1)
@@ -43,6 +44,7 @@ setMethod("split_rows", "PreDataRowLayout",
 is_analysis_spl = function(spl) is(spl, "VAnalyzeSplit") || is(spl, "AnalyzeMultiVars")
 ## note "pos" is ignored here because it is for which nest-chain
 ## spl should be placed in, NOIT for where in that chain it should go
+#' @rdname int_methods
 setMethod("split_rows", "SplitVector",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     ## if(is_analysis_spl(spl) &&
@@ -54,7 +56,7 @@ setMethod("split_rows", "SplitVector",
     SplitVector(lst = tmp)
 })
 
-
+#' @rdname int_methods
 setMethod("split_rows", "PreDataTableLayouts",
           function(lyt, spl, pos){
     rlyt = lyt@row_layout
@@ -62,18 +64,18 @@ setMethod("split_rows", "PreDataTableLayouts",
     lyt@row_layout = rlyt
     lyt
 })
-
+#' @rdname int_methods
 setMethod("split_rows", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a row split to that (", class(lyt), "). contact the maintaner.")
           )
 
-
+#' @rdname int_methods
 setGeneric("cmpnd_last_rowsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_rowsplit"))
-
+#' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "NULL", function(lyt, spl, constructor) {
     stop("no existing splits to compound with. contact the maintainer")
 })
-
+#' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "PreDataRowLayout",
           function(lyt, spl, constructor) {
     pos = length(lyt)
@@ -81,6 +83,7 @@ setMethod("cmpnd_last_rowsplit", "PreDataRowLayout",
     lyt[[pos]] = tmp
     lyt
 })
+#' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "SplitVector",
           function(lyt, spl, constructor) {
     pos = length(lyt)
@@ -95,7 +98,7 @@ setMethod("cmpnd_last_rowsplit", "SplitVector",
     lyt
 })
 
-
+#' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "PreDataTableLayouts",
           function(lyt, spl, constructor){
     rlyt = rlayout(lyt)
@@ -103,21 +106,21 @@ setMethod("cmpnd_last_rowsplit", "PreDataTableLayouts",
     rlayout(lyt)= rlyt
     lyt
 })
-
+#' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "ANY",
           function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_rowsplit to that (", class(lyt), "). contact the maintaner.")
           )
 
 
-
+#' @rdname int_methods
 setGeneric("split_cols", function(lyt = NULL, spl, pos) standardGeneric("split_cols"))
-
+#' @rdname int_methods
 setMethod("split_cols", "NULL", function(lyt, spl, pos) {
     cl = PreDataColLayout(SplitVector(spl))
     rl = PreDataRowLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
-
+#' @rdname int_methods
 setMethod("split_cols", "PreDataColLayout",
           function(lyt, spl, pos) {
     stopifnot(pos > 0 && pos <= length(lyt) + 1)
@@ -130,13 +133,13 @@ setMethod("split_cols", "PreDataColLayout",
     lyt[[pos]] = tmp
     lyt
 })
-
+#' @rdname int_methods
 setMethod("split_cols", "SplitVector",
           function(lyt, spl, pos) {
     tmp = c(lyt, spl)
     SplitVector(lst = tmp)
 })
-
+#' @rdname int_methods
 setMethod("split_cols", "PreDataTableLayouts",
           function(lyt, spl, pos){
     rlyt = lyt@col_layout
@@ -144,19 +147,18 @@ setMethod("split_cols", "PreDataTableLayouts",
     lyt@col_layout = rlyt
     lyt
 })
-
+#' @rdname int_methods
 setMethod("split_cols", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a col split to that (", class(lyt), "). contact the maintaner.")
           )
 
-
-
+#' @rdname int_methods
 setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
-
+#' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "NULL", function(lyt, spl, constructor) {
     stop("no existing splits to compound with. contact the maintainer")
 })
-
+#' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "PreDataColLayout",
           function(lyt, spl, constructor) {
     pos = length(lyt)
@@ -164,6 +166,7 @@ setMethod("cmpnd_last_colsplit", "PreDataColLayout",
     lyt[[pos]] = tmp
     lyt
 })
+#' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "SplitVector",
           function(lyt, spl, constructor) {
     pos = length(lyt)
@@ -178,7 +181,7 @@ setMethod("cmpnd_last_colsplit", "SplitVector",
     lyt
 })
 
-
+#' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "PreDataTableLayouts",
           function(lyt, spl, constructor){
     clyt = clayout(lyt)
@@ -186,7 +189,7 @@ setMethod("cmpnd_last_colsplit", "PreDataTableLayouts",
     clayout(lyt)= clyt
     lyt
 })
-
+#' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "ANY",
           function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_colsplit to that (", class(lyt), "). contact the maintaner.")
           )
@@ -262,8 +265,6 @@ add_new_coltree = function(lyt, spl) {
 #' build_table(l5, DM)
 #'
 #'
-
-
 split_cols_by = function(lyt,
                          var,
                          labels_var = var,
@@ -890,157 +891,16 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
 }
 
 
-
-## #' Add ref_group comparison analysis recipe
-## #'
-## #' @inheritParams lyt_args
-## #'
-## #' @export
-## #'
-## #' @examples
-## #'
-## #' foo <- function(x, x_ref) {
-## #'   if (is.null(x)) {
-## #'     rcell("-")
-## #'   } else {
-## #'     rcell(mean(x) - mean(x_ref), format = "xx.xx")
-## #'   }
-## #' }
-## #'
-## #' basic_table() %>%
-## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-## #'   analyze_against_ref_group2("AGE", foo) %>%
-## #'   build_table(DM)
-## #'
-## #' basic_table() %>%
-## #'   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-## #'   analyze_against_ref_group2("AGE", function(df, df_ref, .N_col, .N_total) {
-## #'     in_rows( dimensions = rcell(list(nrow(df), nrow(df_ref)), format = "xx / xx"))
-## #'   }) %>%
-## #'   build_table(DM)
-## #'
-## #'
-## analyze_against_ref_group2 = function(lyt,
-##                                       var,
-##                                       afun,
-##                                       label = if(is.na(var)) "" else var,
-##                                       format = NULL,
-##                                       nested = TRUE,
-##                                       extra_args = list(),
-##                                       indent_mod = 0L,
-##                                       show_labels = c("default", "hidden", "visible")) {
-
-##     show_labels <- match.arg(show_labels)
-
-##     if(is.character(afun)) {
-##         afnm <- afun
-##         afun <- get(afun, mode = "function")
-##     } else {
-##         afnm <- as.character(substitute(afun))
-##     }
-
-##     stopifnot(!is.null(formals(afun)), !is.na(var))
-
-##     arg_nm <- names(formals(afun))[1:2]
-
-##     afun_df <- if (identical(arg_nm, c("x", "x_ref"))) {
-##         function(df, df_ref, ...) {
-
-##             x <- if (is.null(df))
-##                 NULL
-    ##         else
-    ##             df[[var]]
-
-    ##         afun(x = x, x_ref = df_ref[[var]], ...)
-    ##     }
-    ## } else if (identical(arg_nm, c("df", "df_ref"))) {
-    ##     afun
-    ## } else {
-    ##     stop("afun needs to either have the first two arguments x & x_ref or df & df_ref")
-    ## }
-
-    ## afun_tabulation <- function(df, .ref_group = NULL, .N_col, .N_total, ...) {
-
-    ##     if(is.null(.ref_group))
-    ##         stop("did not receive ref_group aggregataion value required for comparison")
-
-
-    ##     if (identical(df, .ref_group)) {
-    ##         df <- NULL
-    ##     }
-
-    ##     args <- extra_args
-    ##     if(takes_coln(afun))
-    ##         args <- c(args, list(.N_col = .N_col))
-
-    ##     if(takes_totn(afun))
-    ##         args = c(args, list(.N_total = .N_total))
-
-    ##     ret <- do.call(afun_df, c(list(df = df, df_ref = .ref_group), args))
-
-    ##     ret
-    ## }
-
-    ## spl <- AnalyzeVarSplit(var,
-    ##                        label,
-    ##                        afun = afun_tabulation,
-    ##                        split_format = format,
-    ##                        defrowlab = afnm,
-    ##                        indent_mod = indent_mod,
-    ##                        visible_label = .labelkids_helper(show_labels))
-
-    ## if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
-    ##     cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
-    ## } else {
-    ##     pos <- next_rpos(lyt, nested)
-##         split_rows(lyt, spl, pos)
-##     }
-
-## }
-
-
-
-## #' @export
-## #' @rdname bline_analyses
-## analyze_against_ref_group_2dtable = function(lyt,
-##                                  var = NA_character_,
-##                                  label = var,
-##                                  compfun,
-##                                  format = NULL,
-##                                  nested = TRUE,
-##                                  indent_mod = 0L) {
-
-##     if(is.character(compfun)) {
-##         cfnm = compfun
-##         compfun = get(compfun, mode = "function")
-##     } else {
-##         cfnm = as.character(substitute(compfun))
-##     }
-
-
-
-##     compfun2 = function(colvardat, blinevardat) {
-##         if(identical(colvardat, blinevardat))
-##             return(NULL)
-
-##         ## TODO(?) compfun cmight need .N_col or .N_total??
-##         tab = .make_2xk_tab(colvardat, blinevardat)
-##         ret = compfun(tab)
-##         if(length(ret) == 1 && is.null(names(ret)))
-##             names(ret) = cfnm
-##         ret
-##     }
-##     analyze_against_ref_group(lyt = lyt, var = vtar, label = label,
-##                            afun = function(x) x,
-##                            compfun = compfun2,
-##                            format = format,
-##                            nested = nested,
-##                            indent_mod = indent_mod)
-## }
-
-
 ## Add a total column at the next **top level** spot in
 ## the column layout.
+## TODO remove this???
+#' Add Overall Column (deprecated?)
+#' @description This function will \emph{only} add an overall
+#' column at the \emph{top} level of splitting, NOT within
+#' existing column splits.
+#' See \code{\link{add_overall_level}} for the recommended
+#' way to add overall columns more generally within existing splits.
+#' @inheritParams lyt_args
 #' @export
 add_overall_col = function(lyt, label) {
     spl = AllSplit(label)
@@ -1061,6 +921,7 @@ setGeneric(".add_row_summary",
                     cformat = NULL,
                     indent_mod = 0L,
                     cvar = "") standardGeneric(".add_row_summary"))
+#' @rdname int_methods
 setMethod(".add_row_summary", "PreDataTableLayouts",
           function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L, cvar = "") {
     child_labels = match.arg(child_labels)
@@ -1072,7 +933,7 @@ setMethod(".add_row_summary", "PreDataTableLayouts",
     rlayout(lyt) = tmp
     lyt
 })
-
+#' @rdname dot_add_row_summary
 setMethod(".add_row_summary", "PreDataRowLayout",
           function(lyt,
                    label,
@@ -1100,7 +961,7 @@ setMethod(".add_row_summary", "PreDataRowLayout",
     }
     lyt
 })
-
+#' @rdname dot_add_row_summary
 setMethod(".add_row_summary", "SplitVector",
           function(lyt,
                    label,
@@ -1124,7 +985,7 @@ setMethod(".add_row_summary", "SplitVector",
     lyt[[ind]] = tmp
     lyt
 })
-
+#' @rdname dot_add_row_summary
 setMethod(".add_row_summary", "Split",
           function(lyt,
                    label,
@@ -1142,6 +1003,29 @@ setMethod(".add_row_summary", "Split",
     if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
         label_kids(lyt) = lbl_kids
     lyt
+})
+#' @rdname dot_add_row_summary
+setMethod(".add_row_summary", "NULL",
+          function(lyt,
+                   label,
+                   cfun,
+                   child_labels = c("default", "visible", "hidden"),
+                   cformat = NULL,
+                   indent_mod = 0L,
+                   cvar = "") {
+
+    rlyt <- PreDataRowLayout()
+    rtspl <- root_spl(rlyt)
+
+    rtspl <- .add_row_summary(lyt = rtspl,
+                     label = label,
+                     cfun = cfun,
+                     child_labels = child_labels,
+                     cformat = cformat,
+                     indent_mod = indent_mod,
+                     cvar = cvar)
+    root_spl(rlyt) <- rtspl
+    PreDataTableLayouts(rlayout = rlyt)
 })
 
 .count_raw_constr = function(var, format, label_fstr) {
@@ -1188,7 +1072,7 @@ setMethod(".add_row_summary", "Split",
 
 .validate_cfuns <- function(fun) {
     if(is.list(fun))
-        return(lapply(fun, .check_cfuns))
+        return(lapply(fun, .validate_cfuns))
 
     frmls <- formals(fun)
     ls_pos <- match("labelstr", names(frmls))
@@ -1330,9 +1214,11 @@ takes_totn = function(f) {
 
 
 ## use data to transform dynamic cuts to static cuts
+#' @rdname int_methods
 setGeneric("fix_dyncuts", function(spl, df) standardGeneric("fix_dyncuts"))
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "Split", function(spl, df) spl)
+#' @rdname int_methods
 setMethod("fix_dyncuts", "VarDynCutSplit",
           function(spl, df) {
 
@@ -1356,7 +1242,7 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
         ret = as(ret, "CumulativeCutSplit")
     ret
 })
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "VTableTree",
           function(spl, df) spl)
 
@@ -1367,7 +1253,7 @@ setMethod("fix_dyncuts", "VTableTree",
     spl
 
 }
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "PreDataRowLayout",
           function(spl, df) {
  #   rt = root_spl(spl)
@@ -1375,7 +1261,7 @@ setMethod("fix_dyncuts", "PreDataRowLayout",
 #    root_spl(ret) = rt
     ret
 })
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "PreDataColLayout",
           function(spl, df) {
  #   rt = root_spl(spl)
@@ -1385,13 +1271,12 @@ setMethod("fix_dyncuts", "PreDataColLayout",
  #   colcount_format(ret) = colcount_format(spl)
     ret
 })
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "SplitVector",
           function(spl, df) {
     .fd_helper(spl, df)
 })
-
-
+#' @rdname int_methods
 setMethod("fix_dyncuts", "PreDataTableLayouts",
           function(spl, df) {
     rlayout(spl) = fix_dyncuts(rlayout(spl), df)

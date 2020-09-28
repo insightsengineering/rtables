@@ -148,7 +148,7 @@ compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
   X
 }
 
-#' @export
-print.rtable_diff <- function(x, ...) {
-  print.default(unclass(x), quote = FALSE, ...)
-}
+## #' @export
+## print.rtable_diff <- function(x, ...) {
+##   print.default(unclass(x), quote = FALSE, ...)
+## }
