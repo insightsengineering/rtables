@@ -977,10 +977,13 @@ setMethod("fix_analyze_vis", "PreDataRowLayout",
 setMethod("fix_analyze_vis", "SplitVector",
           function(lyt) {
     len = length(lyt)
-    lastspl = lyt[[len]]
-    if(len == 0 || ! (is(lastspl, "VAnalyzeSplit") ||
-                      is(lastspl, "AnalyzeMultivar")))
+    if(len == 0)
         return(lyt)
+    lastspl = lyt[[len]]
+    if(!(is(lastspl, "VAnalyzeSplit") ||
+         is(lastspl, "AnalyzeMultivar")))
+        return(lyt)
+
     if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl)))
         labelrow_visible(lastspl) = FALSE
     else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above

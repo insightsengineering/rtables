@@ -114,3 +114,13 @@ test_that("summarize_row_groups after analyze call(s) work", {
     tbl2 <- build_table(lyt2, DM)
     expect_equal(dim(tbl2), c(29, 1))
 })
+
+
+test_that("summarize_row_groups at top level works", {
+    lyt <- basic_table() %>%
+        summarize_row_groups("SEX")
+
+    tbl <- build_table(lyt, DM)
+    expect_equal(length(tree_children(tbl)), 0)
+    expect_equal(dim(tbl), c(1,1))
+})
