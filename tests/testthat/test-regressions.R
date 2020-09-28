@@ -95,3 +95,22 @@ test_that("repeated multi-var analyzes work as expected", {
 
     expect_identical(works, fails)
 })
+
+
+test_that("summarize_row_groups after analyze call(s) work", {
+    lyt1 <- basic_table() %>%
+        analyze("SEX") %>%
+        split_rows_by("SEX") %>%
+        analyze("SEX")
+    tbl1 <- build_table(lyt1, DM)
+    expect_equal(dim(tbl1), c(24, 1))
+
+    ## further regression when we have multiple analyze calls
+    lyt2 <- basic_table() %>%
+        analyze("SEX") %>%
+        analyze("STRATA1") %>%
+        split_rows_by("SEX") %>%
+        analyze("SEX")
+    tbl2 <- build_table(lyt2, DM)
+    expect_equal(dim(tbl2), c(29, 1))
+})

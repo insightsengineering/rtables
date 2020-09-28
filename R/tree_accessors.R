@@ -101,7 +101,8 @@ setMethod("next_rpos", "PreDataTableLayouts",
         ## can always nest analyze splits (almost? what about colvars noncolvars mixing? prolly ok?)
         for_analyze ||
             ## If its not an analyze split it can't go under an analyze split
-            !is(last_rowsplit(obj), "VAnalyzeSplit")
+            !(is(last_rowsplit(obj), "VAnalyzeSplit") ||
+              is(last_rowsplit(obj), "AnalyzeMultiVars")) ## should this be CompoundSplit?
 }
 setMethod("next_rpos", "PreDataRowLayout",
           function(obj, nested, for_analyze) {
