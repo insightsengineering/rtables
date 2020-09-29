@@ -39,6 +39,8 @@ ContentRow(...)
 \arguments{
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
 
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 
 \item{vis}{logical. Should the row be visible (\code{LabelRow} only).}

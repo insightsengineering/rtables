@@ -97,6 +97,7 @@ setMethod("content_table", "ANY",
           function(obj) NULL)
 
 #' @export
+#' @param value ElementaryTable. The new content table for \code{obj}.
 #' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
 #' @exportMethod "content_table<-"
@@ -108,6 +109,7 @@ setMethod("content_table<-", c("TableTree", "ElementaryTable"),
 })
 
 #' @rdname int_methods
+#' @param for_analyze logical(1).
 setGeneric("next_rpos", function(obj, nested = TRUE, for_analyze = FALSE) standardGeneric("next_rpos"))
 
 #' @rdname int_methods
@@ -793,6 +795,7 @@ setMethod("obj_format<-", "Split", function(obj, value) {
 #' @rdname int_methods
 setGeneric("set_format_recursive", function(obj, format, override = FALSE) standardGeneric("set_format_recursive"))
 #' @rdname int_methods
+#' @param override logical(1).
 setMethod("set_format_recursive", "TableRow",
           function(obj, format, override = FALSE) {
     if(is.null(format))
@@ -846,6 +849,7 @@ setMethod("content_format<-", "Split", function(obj, value) {
 ## modified it so any length 0 x grabs y
 `%||%` = function(L, R) if(length(L) == 0) R else L
 #' @rdname int_methods
+#' @param default FormatSpec.
 setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGeneric("value_formats"))
 #' @rdname int_methods
 setMethod("value_formats", "ANY",

@@ -4,7 +4,10 @@
 \alias{matrix_form}
 \title{Transform rtable to a list of matrices which can be used for outputting}
 \usage{
-matrix_form(x)
+matrix_form(tt)
+}
+\arguments{
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 }
 \description{
 Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to

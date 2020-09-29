@@ -1,5 +1,6 @@
 #' Score functions for sorting TableTrees
 #' @rdname score_funs
+#' @inheritParams gen_args
 #' @export
 cont_n_allcols <- function(tt) {
     ctab <- content_table(tt)
@@ -11,6 +12,7 @@ cont_n_allcols <- function(tt) {
 }
 
 #' @rdname score_funs
+#' @param j numeric(1). Number of column to be scored
 #' @export
 cont_n_onecol <- function(j) {
     function(tt) {

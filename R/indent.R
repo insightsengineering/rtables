@@ -6,7 +6,6 @@
 #' @param x \code{\link{rtable}} object
 #' @param by integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
 #'   indentation is set to 0.
-#' @param truncate_at_zero whether to truncate indent at zero or raise an error
 #' 
 #' @export
 #' 

@@ -15,6 +15,10 @@ add_combo_levels(combosdf, trim = FALSE, first = FALSE)
 }
 \arguments{
 \item{combosdf}{data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.}
+
+\item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
+
+\item{first}{logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
 }
 \description{
 Add Combination Levels to split

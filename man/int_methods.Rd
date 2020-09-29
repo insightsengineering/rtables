@@ -838,11 +838,15 @@ spl_is_cmlcuts(obj)
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
+\item{spl}{Split. The split.}
 
-\item{pos}{numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current}
+\item{pos}{numeric(1). Intended for internal use.}
 
-\item{label}{character(1). The label for the object being created.}
+\item{cmpnd_fun}{function. Intended for internal use.}
+
+\item{constructor}{function.}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
 \item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
 
@@ -858,15 +862,27 @@ spl_is_cmlcuts(obj)
 
 \item{obj}{The object.}
 
+\item{depth}{numeric(1).}
+
+\item{indent}{numeric(1).}
+
+\item{print_indent}{numeric(1).}
+
 \item{x}{The object.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+
+\item{for_analyze}{logical(1).}
 
 \item{object}{The object to modify in-place}
 
 \item{value}{The new value}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{override}{logical(1).}
+
+\item{default}{FormatSpec.}
 
 \item{...}{Passed on to metthods or tabulation functions.}
 }

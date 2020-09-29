@@ -19,6 +19,10 @@ rbindl_rtables(x, gap = 0, check_headers = FALSE)
 
 \item{check_headers}{deprecated. Ignored.}
 
+\item{\dots}{ANY. Elements to be stacked.}
+
+\item{deparse.level}{numeric(1). Currently Ignored.}
+
 \item{y}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
 }
 \description{

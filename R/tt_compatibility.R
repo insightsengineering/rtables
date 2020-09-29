@@ -428,6 +428,9 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #' rbind TableTree and related objects
 #' @rdname rbind
 #' @exportMethod rbind
+#' @param deparse.level numeric(1). Currently Ignored.
+#' @param \dots ANY. Elements to be stacked.
+#' 
 #' @examples
 #' mtbl <- rtable(
 #'    header = rheader(
@@ -462,6 +465,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #'  # 
 #'  # rbind(mtbl, mtbl2, gap = 1)
 #'  # rbind(mtbl, mtbl2, gap = 2)
+
 setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
     rbindl_rtables(list(...), check_headers = TRUE)

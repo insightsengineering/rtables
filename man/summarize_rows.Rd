@@ -6,6 +6,13 @@
 \usage{
 summarize_rows(obj, depth = 0, indent = 0)
 }
+\arguments{
+\item{obj}{ANY. The object for the accessor to access or modify}
+
+\item{depth}{numeric(1). Depth.}
+
+\item{indent}{numeric(1). Indent.}
+}
 \description{
 Summarize Rows
 }

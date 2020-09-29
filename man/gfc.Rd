@@ -18,6 +18,9 @@ get_formatted_cells(obj)
 
 \S4method{get_formatted_cells}{LabelRow}(obj)
 }
+\arguments{
+\item{obj}{ANY. The object for the accessor to access or modify}
+}
 \description{
 get formatted cells
 }

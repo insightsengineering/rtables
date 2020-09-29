@@ -219,6 +219,7 @@ setClass("ManualSplit", contains = "AllSplit",
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
+#' @inheritParams gen_args
 #' @param levels character. Levels of the split (ie the children of the manual split)
 #' @author Gabriel Becker
 #' @export
@@ -457,6 +458,7 @@ setClass("AnalyzeColVarSplit", contains = "VAnalyzeSplit",
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
+#' @param defrowlab character. Default row labels if they are not specified by the return value of \code{afun}
 #' @rdname avarspl
 #' @author Gabriel Becker
 #' @export
@@ -513,7 +515,7 @@ AnalyzeColVarSplit = function(afun,
                               split_name = "",
                               extra_args = list(),
                               indent_mod = 0L,
-                              visible_varlabel = NA,
+                              visible_label = NA,
                               cvar = "") {
     ## if(is.function(afun)) {
     ##     if(!any(nzchar(defrowlab))) {
@@ -538,7 +540,7 @@ AnalyzeColVarSplit = function(afun,
         extra_args = extra_args,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
-        var_label_visible = visible_varlabel,
+        var_label_visible = visible_label,
         content_var = cvar)
 }
 

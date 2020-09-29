@@ -5,11 +5,11 @@
 #' 
 #' Retrieve the row names of an \code{\link{rtable}} object
 #'   
-#' @inheritParams dim.rtable
 #' @param spaces numeric number of spaces per indent level
+#' @param x deprecated.
 #' 
 #' @return a vector with the row names
-#' @noRd
+#' @rdname deprecated
 #' 
 indented_row.names <- function(x, spaces = 2) {
   
@@ -83,7 +83,6 @@ header_indent_old <- function(x) {
 #' 
 #' Retrieve the content of the first header row of an \code{\link{rtable}} object
 #' 
-#' @inheritParams dim.rtable
 #' 
 #' @return a vector with the column names 
 #' @noRd
@@ -102,7 +101,6 @@ names.rtable <- function(x) {
 #' 
 #' Convert a table object to an \code{\link{rtable}}
 #' 
-#' @inheritParams as.rtable
 #' 
 #' 
 #' @noRd
@@ -180,8 +178,9 @@ by_hierarchical <- function(...) {
 
 
 
-#' Compare Subset to Current col_by Levels
-#' 
+#' Compare Subset to Current col_by Levels (deprecated).
+#'
+#' @param col_by factor
 #' @param subset logical
 #' @param label_all character, label appended to level of \code{col_by}
 #' @param label_subset character, label appended to the subset of the corresponding level of \code{col_by}
@@ -217,73 +216,6 @@ by_compare_subset <- function(col_by, subset, label_all = "all", label_subset = 
   
   df
 }
-
-
-
-#' Unlist a Nested Lists with rtables as leafes
-#'
-#' Often it is useful to flatten a nested lists with rtables as leafes to a list
-#' of rtables. The algorithm used is a depth first tree traversal.
-#'
-#' @param x a nested list of with rtables as leaf object
-#'
-#' @return a list of rtables
-#'
-#' @noRd
-#'
-#' @examples
-#'
-#' l_tbls <- list(
-#'   list(
-#'     rtabulate(iris$Sepal.Length, iris$Species, mean),
-#'     rtabulate(iris$Sepal.Length, iris$Species, sd)
-#'   ),
-#'   list(
-#'     rtabulate(iris$Sepal.Width, iris$Species, mean)
-#'   )
-#' )
-#'
-#' rtables:::unlist_rtables(l_tbls)
-#'
-unlist_rtables <- function(x) {
-    stop("this needs to be added to the compatability layer if its used a lot")
-    
-  ## n <- 0
-  ## incr_n_if_rtable <- function(x) {
-  ##   if (is(x, "rtable")) {
-  ##     if (is_non_empty_rtable(x)) {
-  ##       n <<- n + 1
-  ##     }
-  ##   } else {
-  ##     lapply(x, incr_n_if_rtable)
-  ##   }
-  ## }
-  ## incr_n_if_rtable(x)
-  
-  ## i <- 1
-  ## tbls <- vector(mode = "list", length = n)
-  
-  ## add_tbls <- function(x) {
-  ##   if (is(x, "rtable")) {
-  ##     if (is_non_empty_rtable(x)) {
-  ##       tbls[[i]] <<- x
-  ##       i <<- i + 1
-  ##     }
-  ##   } else {
-  ##     lapply(x, add_tbls)
-  ##   }
-  ## }
-  
-  ## if (n > 0) {
-  ##   add_tbls(x)
-  ## }
-  
-  ## tbls
-  
-}
-
-
-
 
 #' Compare Subset to Current col_by Levels
 #' @rdname deprecated
@@ -326,6 +258,7 @@ by_factor_to_matrix <- function(x) {
 
 
 #' @rdname deprecated
+#' @param by deprecated.
 by_drop_empty_cols <- function(by) {
   by <- col_by_to_matrix(by)
   with_label(by[, vapply(by, any, logical(1)), drop = FALSE], label(by))
@@ -365,6 +298,7 @@ col_by_to_matrix <- function(col_by, x = NULL) {
 
 
 #' @rdname deprecated
+#' @param \dots deprecated
 by_combine <- function(col_by, ...) {
   lst <- list(...)
   if (is.null(names(lst)) || any(names(lst) == "")) {

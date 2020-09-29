@@ -17,6 +17,14 @@
 }
 \arguments{
 \item{object}{an object of class \code{TableTree} which is usually created with \code{\link{build_table}}}
+
+\item{depth}{numeric(1). Depth.}
+
+\item{indent}{numeric(1). Indent.}
+
+\item{row_type}{character(1).}
+
+\item{\dots}{\dots.}
 }
 \description{
 Show Row and Column summary of a TableTree

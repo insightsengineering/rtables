@@ -70,6 +70,7 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 #' Format the rcell data with \code{\link[base]{sprintf}} formatting strings
 #'
 #' @inheritParams  base::sprintf
+#' @param format character(1). A format string passed to sprintf.
 #'
 #' @export
 #'

@@ -42,6 +42,8 @@ lists) with data elements for each column of the resulting table. The data
 elements are then passed to the named argument \code{FUN} corresponding to
 the element name of the outer list. Hence, the length and order of each
 collection must match the levels in \code{col_by}. See examples.}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 }
 \description{
 Compatability Arg Conventions

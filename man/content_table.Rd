@@ -20,6 +20,8 @@ content_table(obj) <- value
 }
 \arguments{
 \item{obj}{TableTree. The TableTree}
+
+\item{value}{ElementaryTable. The new content table for \code{obj}.}
 }
 \description{
 Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise

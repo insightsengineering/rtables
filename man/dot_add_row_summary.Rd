@@ -58,6 +58,21 @@
   cvar = ""
 )
 }
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
+\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+
+\item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+
+\item{cformat}{format spec. Format for content rows}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+}
 \description{
 Add Row Summary
 }

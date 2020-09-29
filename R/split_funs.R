@@ -445,7 +445,10 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 
 
 #' Split functions
-#'
+#' @inheritParams sf_args
+#' @inheritParams gen_args
+#' @param vals ANY. For internal use only.
+#' @param labels character. Labels to use for the remaining levels instead of the existing ones.
 #' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 #'   of presence in the data).
 #'
@@ -564,6 +567,7 @@ trim_levels_in_group = function(innervar) {
 #' Add an implicit 'overall' level to split
 #'
 #' @inheritParams lyt_args
+#' @inheritParams sf_args
 #' @param valname character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}
 #' @param first logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.
 #'
@@ -600,6 +604,7 @@ setClass("AllLevelsSentinel", contains = "character")
 select_all_levels = new("AllLevelsSentinel")
 
 #' Add Combination Levels to split
+#' @inheritParams sf_args
 #' @param combosdf data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.
 #' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #' @export

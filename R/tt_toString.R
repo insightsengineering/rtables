@@ -123,7 +123,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
 #' map the rtable to an in between state with the formatted cells in a matrix form.
 #'
-#'
+#' @inheritParams gen_args
 #' @note
 #' TODO: Look into `gt` representation
 #'
@@ -147,29 +147,29 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' tbl <- build_table(l, iris2)
 #'
 #' matrix_form(tbl)
-matrix_form <- function(x) {
+matrix_form <- function(tt) {
 
-  stopifnot(is(x, "VTableTree"))
+  stopifnot(is(tt, "VTableTree"))
 
-  header_content <- .tbl_header_mat(x) # first col are for row.names
+  header_content <- .tbl_header_mat(tt) # first col are for row.names
 
-  sr <- summarize_rows(x)
+  sr <- summarize_rows(tt)
 
   body_content_strings <- if (nrow(sr) == 0) {
     ""
   } else {
-    cbind(sr$label, get_formatted_cells(x))
+    cbind(sr$label, get_formatted_cells(tt))
   }
 
-  tsptmp <- lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
+  tsptmp <- lapply(collect_leaves(tt, TRUE, TRUE), function(rr) {
     sp <- row_cspans(rr)
     rep(sp, times = sp)
   })
     ## the 1 is for row labels
-    if(nrow(x) > 0)
+    if(nrow(tt) > 0)
         body_spans <- cbind(1L, do.call(rbind, tsptmp))
     else
-        body_spans <- matrix(1, nrow = 1, ncol = ncol(x) + 1)
+        body_spans <- matrix(1, nrow = 1, ncol = ncol(tt) + 1)
   body <- rbind(header_content$body, body_content_strings)
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
@@ -278,7 +278,7 @@ matrix_form <- function(x) {
 #' get formatted cells
 #'
 #' @export
-#'
+#' @inheritParams gen_args
 #' @examples
 #'
 #' library(dplyr)
@@ -362,7 +362,7 @@ setMethod("get_formatted_cells", "LabelRow",
 #' The row names are also considered a column for the output
 #'
 #' @param x `rtable` object
-#' @param matrix_form object as created with `matrix_form`
+#' @param mat_form object as created with `matrix_form`
 #'
 #' @export
 #'

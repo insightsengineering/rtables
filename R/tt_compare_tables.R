@@ -4,7 +4,7 @@
 #' Criteria functions (and constructors thereof) for trimming and pruning tables.
 #'
 #' @inheritParams gen_args
-#'
+#' 
 #' @details
 #'
 #' \code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning)

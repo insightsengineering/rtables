@@ -8,6 +8,8 @@ add_overall_col(lyt, label)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 }
 \description{
 This function will \emph{only} add an overall

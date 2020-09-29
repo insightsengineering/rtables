@@ -21,8 +21,12 @@ setMethod("c", "SplitVector", function(x, ...) {
 
 ## The cascading (by class) in this case is as follows for the row case:
 ## PreDataTableLayouts -> PreDataRowLayout -> SplitVector
+#' @param cmpnd_fun function. Intended for internal use.
+#' @param pos numeric(1). Intended for internal use.
+#' @param spl Split. The split.
 #' @rdname int_methods
-setGeneric("split_rows", function(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
+setGeneric("split_rows", function(lyt = NULL, spl, pos,
+                                  cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
 #' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
     rl = PreDataRowLayout(SplitVector(spl))
@@ -70,6 +74,7 @@ setMethod("split_rows", "ANY",
           )
 
 #' @rdname int_methods
+#' @param constructor function.
 setGeneric("cmpnd_last_rowsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_rowsplit"))
 #' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "NULL", function(lyt, spl, constructor) {
@@ -911,6 +916,7 @@ add_overall_col = function(lyt, label) {
 
 #' Add Row Summary
 #'
+#' @inheritParams lyt_args
 #' @rdname dot_add_row_summary
 #' @export
 setGeneric(".add_row_summary",

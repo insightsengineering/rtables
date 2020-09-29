@@ -9,7 +9,10 @@ setMethod("summary", "ANY", base:::summary)
 #' Show Row and Column summary of a TableTree
 #' 
 #' @param object an object of class \code{TableTree} which is usually created with \code{\link{build_table}}
-#' 
+#' @param row_type character(1).
+#' @param \dots \dots.
+#' @param depth numeric(1). Depth.
+#' @param indent numeric(1). Indent.
 #' @examples 
 #' library(dplyr)
 #' 
@@ -165,7 +168,9 @@ summarize_row_df_empty <- function(...) {
 
 #' Summarize Rows
 #' 
-#' 
+#' @inheritParams gen_args
+#' @param depth numeric(1). Depth.
+#' @param indent numeric(1). Indent.
 #' @export
 #' 
 #' @examples 
@@ -269,7 +274,11 @@ setMethod("summarize_rows", "LabelRow",
 #' 
 #' 
 #' @export
-#' 
+#' @inheritParams gen_args
+#' @param depth numeric(1).
+#' @param indent numeric(1).
+#' @param print_indent numeric(1).
+
 #' @examples 
 #' 
 #' library(dplyr)
@@ -312,6 +321,7 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 #' @rdname int_methods
+#' @inheritParams summarize_table
 setMethod("summarize_table", "TableTree",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
             
