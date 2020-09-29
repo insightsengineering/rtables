@@ -104,8 +104,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     if(!gotflist)
         func <- list(func)
 
-    if(length(func) == 1 && length(splextra) > 1)
+    if(!is.null(names(splextra)))
         splextra = list(splextra)
+    ## if(length(func)) == 1 && names(spl)
+    ##     splextra = list(splextra)
 
     ## we are in analyze_colvars, so we have to match
     ## the exargs value by position for each column repeatedly

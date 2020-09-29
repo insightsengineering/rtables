@@ -370,7 +370,7 @@ test_that(".N_row argument in afun works correctly", {
 })
 
 
-test_that("extra args works for analyze_colvars", {
+test_that("extra args works", {
     colfuns <- list(function(x, add = 0) rcell(mean(x)+ add, format = "xx.x"),
                     function(x, cutoff = .5) rcell(sum(x > cutoff), format = "xx"))
 
@@ -397,4 +397,14 @@ test_that("extra args works for analyze_colvars", {
     truevals <- tapply(rawdat2$PCTDIFF, rawdat2$ARM, function(x) sum(x>100, na.rm= TRUE), simplify = FALSE)
     expect_equal(unname(unlist(truevals)),
                  unname(unlist(vals_ex[c(2,4)])))
+
+    lyt <- basic_table() %>%
+      analyze("Sepal.Length", afun = function(x, a) {
+          in_rows(mean_a = rcell(mean(x) + a , format = "xx"))
+
+      }, extra_args = list( a = 1))
+
+
+    tbl <- build_table(lyt, iris)
+    expect_equal(tbl[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1)
 })
