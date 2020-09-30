@@ -101,11 +101,17 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 
 
     gotflist <- is.list(func)
-    if(!gotflist)
-        func <- list(func)
 
     if(!is.null(names(splextra)))
         splextra = list(splextra)
+
+
+    if(!gotflist) {
+        func <- list(func)
+    } else {
+        splextra  = rep(splextra, length.out = length(func))
+    }
+
     ## if(length(func)) == 1 && names(spl)
     ##     splextra = list(splextra)
 

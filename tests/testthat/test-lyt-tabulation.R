@@ -371,8 +371,10 @@ test_that(".N_row argument in afun works correctly", {
 
 
 test_that("extra args works", {
-    colfuns <- list(function(x, add = 0) rcell(mean(x)+ add, format = "xx.x"),
-                    function(x, cutoff = .5) rcell(sum(x > cutoff), format = "xx"))
+    oldop = options(warn=2)
+    on.exit(options(oldop))
+    colfuns <- list(function(x, add = 0, na.rm = TRUE) rcell(mean(c(NA,x), na.rm = na.rm)+ add, format = "xx.x"),
+                    function(x, cutoff = .5, na.rm = TRUE) rcell(sum(c(NA, x > cutoff), na.rm = na.rm), format = "xx"))
 
     l <-  basic_table() %>% split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
@@ -382,6 +384,7 @@ test_that("extra args works", {
 
     tbl_noex <- build_table(l, rawdat2)
 
+    ## one for each different function in colfuns, assigned correctly
     l2 <-  basic_table() %>% split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
         analyze_colvars(afun = colfuns, extra_args = list(list(add = 5), list(cutoff = 100)))
@@ -398,6 +401,26 @@ test_that("extra args works", {
     expect_equal(unname(unlist(truevals)),
                  unname(unlist(vals_ex[c(2,4)])))
 
+    vals_noex <- row_values(tree_children(tbl_noex)[[1]])
+    vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
+
+    expect_identical(unlist(vals_noex[c(1,3)]) + 5,
+                     unlist(vals_ex[c(1,3)]))
+    truevals <- tapply(rawdat2$PCTDIFF, rawdat2$ARM, function(x) sum(x>100, na.rm= TRUE), simplify = FALSE)
+    expect_equal(unname(unlist(truevals)),
+                 unname(unlist(vals_ex[c(2,4)])))
+
+    ## single argument passed to all functions
+    l2b <-  basic_table() %>% split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
+        analyze_colvars(afun = colfuns, extra_args = list(na.rm = FALSE))
+
+    tbl_ex2 <- build_table(l2b, rawdat2)
+
+    expect_true(all(is.na(unlist(rtables:::row_values(tree_children(tbl_ex2)[[1]])))))
+
+    ## one argument for a single function.
+
     lyt <- basic_table() %>%
       analyze("Sepal.Length", afun = function(x, a) {
           in_rows(mean_a = rcell(mean(x) + a , format = "xx"))
@@ -407,4 +430,15 @@ test_that("extra args works", {
 
     tbl <- build_table(lyt, iris)
     expect_equal(tbl[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1)
+
+    ## two arguments for a single function
+    lyt2 <- basic_table() %>%
+        analyze("Sepal.Length", afun = function(x, a, b) {
+          in_rows(mean_a = rcell(mean(x) + a + b , format = "xx"))
+
+      }, extra_args = list( a = 1, b = 3))
+
+
+    tbl2 <- build_table(lyt2, iris)
+    expect_equal(tbl2[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1 + 3)
 })
