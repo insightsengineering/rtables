@@ -1105,7 +1105,14 @@ setMethod("value_labels", "ANY", function(obj) as.character(obj_label(obj)))
 #' @rdname int_methods
 setMethod("value_labels", "TreePos", function(obj) sapply(pos_splvals(obj), obj_label))
 #' @rdname int_methods
-setMethod("value_labels", "list", function(obj) lapply(obj, value_labels))
+setMethod("value_labels", "list", function(obj) {
+    ret <- lapply(obj, obj_label)
+    if(!is.null(names(obj))) {
+        inds <- vapply(ret, function(x) length(x) == 0, NA)
+        ret[inds] = names(obj)[inds]
+    }
+    ret
+})
 #' @rdname int_methods
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 #' @rdname int_methods

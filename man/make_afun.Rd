@@ -4,19 +4,28 @@
 \alias{make_afun}
 \title{Create custom analysis function wrapping existing function}
 \usage{
-make_afun(fun, ..., .stats = NULL, .formats = NULL, .labels = NULL)
+make_afun(
+  fun,
+  .stats = NULL,
+  .formats = NULL,
+  .labels = NULL,
+  .ungroup_stats = NULL,
+  ...
+)
 }
 \arguments{
 \item{fun}{function. The function to be wrapped in a new customized analysis fun. Should return named list.}
-
-\item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
-overriden by extra args within a split.}
 
 \item{.stats}{character. Names of elements to keep from \code{fun}'s full output.}
 
 \item{.formats}{ANY. vector/list of formats to override any defaults applied by \code{fun}.}
 
 \item{.labels}{character. Vector of labels to override defaults returned by \code{fun}}
+
+\item{.ungroup_stats}{character. Vector of names, which must match elements of \code{.stats}}
+
+\item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
+overriden by extra args within a split.}
 }
 \value{
 A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
@@ -25,11 +34,18 @@ performed automatically.
 \description{
 Create custom analysis function wrapping existing function
 }
+\note{
+setting \code{.ungroup_stats} to non-null changes the \emph{structure} of the  value(s) returned by
+\code{fun}, rather than just labeling (\code{.labels}), formatting (\code{.formats}), and selecting amongst
+(\code{.stats}) them. This means that subsequent \code{make_afun} calls to customize the output further
+both can and must operate on the new structure, \emph{NOT} the original structure returned by \code{fun}.
+See the final pair of examples below.
+}
 \examples{
 
 s_summary <- function(x) {
   stopifnot(is.numeric(x))
-  
+
   list(
     n = sum(!is.na(x)),
     mean_sd = c(mean = mean(x), sd = sd(x)),
@@ -46,11 +62,13 @@ a_summary <- make_afun(
 )
 
 a_summary(x = iris$Sepal.Length)
-a_summary(x = iris$Sepal.Length, .labels = c(min_max = "Range"))
 
-a_summary(x = iris$Sepal.Length, .stats = c("n", "mean_sd"))
+a_summary2 <- make_afun(a_summary, .stats = c("n", "mean_sd"))
 
-a_summary(x = iris$Sepal.Length, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
+a_summary2(x = iris$Sepal.Length)
+
+a_summary3 <- make_afun(a_summary, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
+
 
 
 s_foo <- function(df, .N_col, a = 1, b = 2) {
@@ -59,7 +77,7 @@ s_foo <- function(df, .N_col, a = 1, b = 2) {
       .N_col = .N_col,
       a = a,
       b = b
-   ) 
+   )
 }
 
 s_foo(iris, 40)
@@ -70,8 +88,23 @@ a_foo <- make_afun(s_foo, b = 4,
 )
 
 a_foo(iris, .N_col = 40)
-a_foo(iris, .N_col = 40, .labels = c(nrow_df = "Number of rows"))
+a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
+a_foo(iris, .N_col = 40)
 
+#grouping and further customization
+s_grp <- function(df, .N_col, a = 1, b = 2) {
+   list(
+      nrow_df = nrow(df),
+      .N_col = .N_col,
+      letters = list(a = a,
+                     b = b)
+   )
+}
+a_grp <- make_afun(s_grp, b = 3, .labels = c(nrow_df = "row count", .N_col = "count in column"),
+                   .formats = c(nrow_df = "xx.", .N_col = "xx."), .ungroup_stats ="letters")
+a_grp(iris, 40)
+a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"), .formats = c(b = "xx."))
+a_aftergrp(iris, 40)
 }
 \seealso{
 \code{\link[=analyze]{analyze()}}

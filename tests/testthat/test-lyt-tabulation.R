@@ -264,7 +264,7 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACER", "ethn") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), format = "xx.xx")
+                                                           median = median(x)), format = "xx.xx")
 
     expect_error(build_table(missrsplit, rawdat))
 
@@ -441,4 +441,126 @@ test_that("extra args works", {
 
     tbl2 <- build_table(lyt2, iris)
     expect_equal(tbl2[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1 + 3)
+})
+
+
+test_that("make_afun unit tests", {
+    value_labels <- rtables:::value_labels
+    obj_format <- rtables:::obj_format
+    ## use existing funcs to ensure coverage numbers are correct
+    res_tafun1 <- test_afun(1:10, 5)
+    expect_identical(value_labels(res_tafun1),
+                     list("Min." = "Minimum", "1st Qu." = "1st Quartile",
+                          Median = "Median",
+                          Mean = "Mean",
+                          "3rd Qu." = "Third Quartile",
+                          "Max." = "Maximum",
+                          grp = "grp"))
+
+    res_tafun2 <- test_afun_grp(1:10, 5)
+    expect_identical(lapply(res_tafun2, obj_format),
+                     list("Min." = "xx.x", "1st Qu." = "xx.xx", Median = NULL, Mean = NULL,
+                          "3rd Qu." = "xx.xx", "Max." = "xx.x",
+                          range = "xx - xx", n_unique = "xx - xx"))
+
+ s_summary <- function(x) {
+   stopifnot(is.numeric(x))
+
+   list(
+     n = sum(!is.na(x)),
+     mean_sd = c(mean = mean(x), sd = sd(x)),
+     min_max = range(x)
+   )
+ }
+
+ a_summary <- make_afun(
+   fun = s_summary,
+   .formats = c(n = "xx", mean_sd = "xx.xx (xx.xx)", min_max = "xx.xx - xx.xx"),
+   .labels = c(n = "n", mean_sd = "Mean (sd)", min_max = "min - max")
+ )
+    expect_identical(formals(a_summary),
+                     formals(s_summary))
+
+    asres1 <- a_summary(x = iris$Sepal.Length)
+    expect_identical(list(n = "n", mean_sd = "Mean (sd)", min_max = "min - max"),
+                     rtables:::value_labels(asres1))
+
+ a_summary2 <- make_afun(a_summary, .stats = c("n", "mean_sd"))
+    expect_identical(formals(a_summary2),
+                     formals(s_summary))
+    asres1 <- a_summary2(x = iris$Sepal.Length)
+    expect_identical(names(asres1), c("n", "mean_sd"))
+
+ a_summary3 <- make_afun(a_summary, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
+
+    asres3 <- a_summary3(iris$Sepal.Length)
+    expect_equal(lapply(asres3, rtables:::obj_format),
+                 list(n = "xx", mean_sd = "(xx.xxx, xx.xxx)", min_max= "xx.xx - xx.xx"))
+
+ s_foo <- function(df, .N_col, a = 1, b = 2) {
+    list(
+       nrow_df = nrow(df),
+       .N_col = .N_col,
+       a = a,
+       b = b
+    )
+ }
+
+  a_foo <- make_afun(s_foo, b = 4,
+  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
+  .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
+ )
+
+ expect_identical(formals(a_foo),
+                  formals(s_foo))
+    ares1 <- a_foo(iris, .N_col = 40)
+    expect_identical(unlist(unname(rtables:::value_labels(ares1))),
+                     c("Nrow df", "n in cols", "a value", "b value"))
+
+    expect_equal(unlist(ares1$b), 4)
+    expect_equal(unlist(ares1$a), 1)
+
+    ares1b <- a_foo(iris, .N_col = 40, b = 8)
+    expect_identical(unlist(unname(rtables:::value_labels(ares1))),
+                     c("Nrow df", "n in cols", "a value", "b value"))
+
+    expect_equal(unlist(ares1b$b), 8)
+
+ a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
+    ares2 <- a_foo2(iris, .N_col = 40, b = 6)
+    expect(unlist(ares2$b), 6)
+    expect_identical(unlist(unname(rtables:::value_labels(ares2))),
+                     c("Number of Rows", "n in cols", "a value", "b value"))
+
+ ## with dots
+
+ sfun3 <- function(x, .ref_group = NULL, ...) "hi"
+ afun3 <- make_afun(sfun3)
+ expect_identical(formals(sfun3),
+                  formals(afun3))
+## ungrouping
+    sfun4 <- function(x) {
+        list(single1 = 5,
+             single2 = 10,
+             grouped1 = list(g1 = 11, g2 = 15, g3 = with_label(17, "sneaky label")),
+             grouped2 = list(g4 = c(2,3), g5 = c(6, 10)))
+    }
+    afun4 <- make_afun(sfun4,
+                       .labels = c(single1 = "first single val",
+                                   single2 = "second single val"),
+                       .formats = c(grouped2 = "xx - xx"),
+                       .ungroup_stats = c("grouped1", "grouped2"))
+    expect_identical(formals(sfun4), formals(afun4))
+    ares4 <- afun4(5)
+    expect_identical(names(ares4),
+                     c("single1", "single2", "g1", "g2", "g3", "g4", "g5"))
+    expect_identical(value_labels(ares4),
+                     list(single1 ="first single val",
+                          single2 = "second single val",
+                          g1 = "g1",
+                          g2 = "g2",
+                          g3 = "sneaky label",
+                          g4 = "g4",
+                          g5 = "g5"))
+
 })
