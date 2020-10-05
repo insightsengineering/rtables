@@ -235,7 +235,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     if(is(rv1col, "CellValue"))
         labels = obj_label(rv1col)
     else if(are(rv1col, "CellValue"))
-        labels = vapply(rv1col, obj_label, "")
+        labels = unlist(value_labels(rv1col))
     else if (!is.null(names(rv1col)))
         labels = names(rv1col)
     else

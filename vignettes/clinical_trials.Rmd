@@ -703,13 +703,17 @@ s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
   )
 
   in_rows(
-    "Difference in Response Rates (%)" = rcell((mean(x) - mean(.ref_group)) * 100, format = "xx.xx") ,
-    "95% CI (Wald, with correction)" = rcell(fit$conf.int * 100, format = "(xx.xx, xx.xx)"),
-    "p-value (Chi-Squared Test)" = rcell(fit$p.value, format = "x.xxxx | (<0.0001)"),
-    "Odds Ratio (95% CI)" = rcell(c(
-      exp(stats::coef(fit_glm)[-1]),
-      exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
-    ), format = "xx.xx (xx.xx - xx.xx)")
+      "Difference in Response Rates (%)" = non_ref_rcell((mean(x) - mean(.ref_group)) * 100,
+                                                         .in_ref_col, format = "xx.xx") ,
+      "95% CI (Wald, with correction)" = non_ref_rcell(fit$conf.int * 100,
+                                                       .in_ref_col, format = "(xx.xx, xx.xx)"),
+      "p-value (Chi-Squared Test)" = non_ref_rcell(fit$p.value,
+                                                   .in_ref_col, format = "x.xxxx | (<0.0001)"),
+      "Odds Ratio (95% CI)" = non_ref_rcell(c(
+          exp(stats::coef(fit_glm)[-1]),
+          exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
+      ),
+      .in_ref_col, format = "xx.xx (xx.xx - xx.xx)")
   )
 }
 

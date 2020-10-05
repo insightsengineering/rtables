@@ -44,32 +44,28 @@ basic_table() %>%
 
 Note that the column order has changed and the reference group is displayed in the first column.
 
-In case we want to display a blank cell for "B: Placebo" we can test if a calculation happens for a cell that is part of the reference column with the `.in_ref_col` argument in `afun`:
+In cases where we want cells to be blank in the reference column, (e.g., "B: Placebo") we use `non_ref_rcell` instead
+of `rcell`, and pass `.in_ref_col` as the second argument:
 
 ```{r}
 basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
-    if (.in_ref_col) {
-      in_rows("Difference of Averages" = rcell(NULL))
-    } else {
-      in_rows("Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"))
-    }
+      in_rows("Difference of Averages" = non_ref_rcell(mean(x) - mean(.ref_group),
+                                                       isref = .in_ref_col,
+                                                       format = "xx.xx"))
   }) %>%
   build_table(DM)
-
 
 basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
-    if (.in_ref_col) {
-      in_rows(tmp = NULL, tmp1 = NULL)
-    } else {
       in_rows(
-        "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx"),
-         "another row" = rcell("aaa")
+          "Difference of Averages" = non_ref_rcell(mean(x) - mean(.ref_group),
+                                                   isref = .in_ref_col,
+                                                   format = "xx.xx"),
+         "another row" = non_ref_rcell("aaa", .in_ref_col)
       )
-    }
   }) %>%
   build_table(DM)
 

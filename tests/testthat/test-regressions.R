@@ -133,3 +133,15 @@ test_that("add_colcounts works as first call", {
     expect_equal(tbl[1,1, drop = TRUE], mean(DM$AGE))
 })
 
+test_that("CellValue on something with object labels", {
+    expect_identical(obj_label(CellValue(with_label(5, "hi"))),
+                     "hi")
+
+    expect_identical(obj_label(CellValue(with_label(5, "hi"),
+                                         label = "")),
+                     "")
+
+    expect_identical(obj_label(CellValue(with_label(5, "hi"),
+                                         label = NULL)),
+                     "hi")
+})

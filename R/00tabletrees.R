@@ -1469,7 +1469,15 @@ setMethod("length", "CellValue",
 ##     new("CellValue", value = val, format = format, colspan = colspan, label = label)
 ## }
 
-CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
+
+## Class definition
+## [[1]] list: cell value
+## format : format for cell
+## colspan: column span info for cell
+## label: row label to be used for parent row
+## indent_mod: indent modifier to be used for parent row
+CellValue = function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)  {
+
     if(is.null(colspan))
         colspan <- 1L
     if(!is.null(colspan) && !is(colspan, "integer"))
@@ -1480,8 +1488,9 @@ CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
     ## so we can't have "" mean "not given a label" here
     if((is.null(label) || is.na(label)) &&
        !is.null(obj_label(val)))
-        label <- object_label(val)
-    structure(list(val), format = format, colspan = colspan, label = label, class = "CellValue")
+        label <- obj_label(val)
+    ret = structure(list(val), format = format, colspan = colspan, label = label,
+              indent_mod = indent_mod, class = "CellValue")
 }
 
 

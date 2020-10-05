@@ -1,3 +1,112 @@
+#' @title Cell value constructors
+#'
+#' @description Construct a cell value and associate formatting, labeling,
+#' indenting, and column spanning information with it.
+#'
+#' @inheritParams compat_args
+#' @inheritParams lyt_args
+#' @param x ANY. Cell value
+#' @param label character(1). Label or Null. If non-null, it will be looked at when determining row labels.
+#' @param colspan integer(1). Columnspan value.
+#' @note currently column spanning is only supported for defining header structure.
+#' @rdname rcell
+#' @export
+rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
+    if(is(x, "CellValue"))
+        x
+    else
+        CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
+}
+
+#' @details \code{non_ref_rcell} provides the common \emph{blank for cells in the reference
+#' column, this value otherwise}, and should be passed the value of \code{.in_ref_col}
+#' when it is used.
+#'
+#' @param  isref logical(1).  Are  we  in  the reference  column  (ie
+#'     .in_ref_col shoul be passed to this argument)
+#' @param refval ANY. Value to use when in the reference column. Defaults
+#' to \code{NULL}
+#' @rdname rcell
+#' @export
+non_ref_rcell = function(x, isref, format = NULL, colspan = 1L,
+                         label = NULL, indent_mod = NULL,
+                         refval = NULL) {
+    val <- if(isref) refval else x
+    rcell(val, format = format, colspan = colspan, label = label,
+          indent_mod = indent_mod)
+}
+
+
+#' Create multiple rows in analysis or summary functions
+#'
+#' define the cells that get placed into multiple rows in `afun`
+#'
+#' @note currently the `.name` argument is not used
+#'
+#' @param ... single row defining expressions
+#' @param .list list. list cell content, usually `rcells`, the `.list` is concatenated to `...`
+#' @param .names character or NULL. Names of the returned list/structure.
+#' @param .labels character or NULL. labels for the defined rows
+#' @param .formats character or NULL. Formats for the values
+#' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
+#'
+#' @export
+#'
+#' @seealso `analyze`
+#'
+#' @examples
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
+#' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+#'
+#' in_rows(.list = list(a = 1, b = 2, c = 3))
+#' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
+#'
+#' basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze("AGE", afun = function(x) {
+#'     in_rows(
+#'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+#'     )
+#'   }) %>%
+#'   build_table(ex_adsl)
+#'
+in_rows <- function(..., .list = NULL, .names = NULL,
+                    .labels = NULL,
+                    .formats = NULL,
+                    .indent_mods = NULL) {
+
+    l <- c(list(...), .list)
+
+    if (missing(.names) && missing(.labels)) {
+        if (length(l) > 0 && is.null(names(l)))
+            stop("need a named list")
+    } ## else {
+    ##     ## # currently .names is not supported
+    ##     ## if (missing(.labels)) .labels <- .names
+
+    ##     if (length(.labels) != length(l))
+    ##         stop("dimension missmatch for cells and row names")
+
+    ##     names(l) <- .labels
+    ## }
+
+
+    l2 <- mapply(rcell, x = l, label = .labels %||% list(NULL),
+                 format = .formats %||% list(NULL),
+                 indent_mod = .indent_mods %||% list(NULL),
+                 SIMPLIFY = FALSE)
+    if(!is.null(.names))
+        names(l2) <- .names
+    else
+        names(l2) <- names(l)
+    if(length(l2) == 0) NULL else l2
+
+
+ ##   if (length(l) == 0) NULL else l
+}
+
 
 
 #' Create custom analysis function wrapping existing function
