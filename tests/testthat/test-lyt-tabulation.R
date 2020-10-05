@@ -448,7 +448,7 @@ test_that("make_afun unit tests", {
     value_labels <- rtables:::value_labels
     obj_format <- rtables:::obj_format
     ## use existing funcs to ensure coverage numbers are correct
-    res_tafun1 <- test_afun(1:10, 5)
+    res_tafun1 <- rtables:::test_afun(1:10, 5)
     expect_identical(value_labels(res_tafun1),
                      list("Min." = "Minimum", "1st Qu." = "1st Quartile",
                           Median = "Median",
@@ -457,7 +457,7 @@ test_that("make_afun unit tests", {
                           "Max." = "Maximum",
                           grp = "grp"))
 
-    res_tafun2 <- test_afun_grp(1:10, 5)
+    res_tafun2 <- rtables:::test_afun_grp(1:10, 5)
     expect_identical(lapply(res_tafun2, obj_format),
                      list("Min." = "xx.x", "1st Qu." = "xx.xx", Median = NULL, Mean = NULL,
                           "3rd Qu." = "xx.xx", "Max." = "xx.x",
@@ -577,8 +577,121 @@ test_that("make_afun unit tests", {
                           .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
                           )
     a_nodflt(iris, 5)[["b"]]
+})
 
+test_that("make_afun+build_table integration tests", {
 
+    ## summary function that uses with_label
+    s_summary <- function(x) {
+   stopifnot(is.numeric(x))
+
+   list(
+     n = with_label(sum(!is.na(x)), "N subjects"),
+     mean_sd = with_label(c(mean = mean(x), sd = sd(x)), "My mean and SD"),
+     min_max = with_label(range(x), "Range")
+   )
+ }
+ a_summary <- make_afun(
+   s_summary,
+   .labels = c(n = "n subjects"),  # only overwrite the label of the `n` statistics here.
+   .formats = c(n = "xx", mean_sd = "xx.xx (xx.xx)", min_max = "xx.xx - xx.xx")
+ )
+ tbl <- basic_table() %>%
+   analyze(
+     "Sepal.Length",
+     afun = a_summary
+   ) %>%
+     build_table(iris)
+
+    expect_identical(row.names(tbl),
+                     c("n subjects",
+                       "My mean and SD",
+                       "Range"))
+
+    tbl2 <-  basic_table() %>%
+        split_cols_by("Species") %>%
+   analyze(
+     "Sepal.Length",
+     afun = a_summary
+   ) %>%
+     build_table(iris)
+
+    expect_identical(row.names(tbl2),
+                     c("n subjects",
+                       "My mean and SD",
+                       "Range"))
+
+    ## summary function that does not use with_label
+    s_summary2 <- function(x) {
+        stopifnot(is.numeric(x))
+
+        list(
+            n = sum(!is.na(x)),
+            mean_sd = c(mean = mean(x), sd = sd(x)),
+            min_max = range(x)
+        )
+    }
+
+    a_summary2 <- make_afun(
+        fun = s_summary2,
+        .formats = c(n = "xx", mean_sd = "xx.xx (xx.xx)", min_max = "xx.xx - xx.xx"),
+        .labels = c(n = "n subjects", mean_sd = "My mean and SD", min_max = "Range")
+    )
+     tbl3 <- basic_table() %>%
+   analyze(
+     "Sepal.Length",
+     afun = a_summary2
+   ) %>%
+     build_table(iris)
+
+    expect_identical(row.names(tbl3),
+                     c("n subjects",
+                       "My mean and SD",
+                       "Range"))
+
+    tbl4 <-  basic_table() %>%
+        split_cols_by("Species") %>%
+   analyze(
+     "Sepal.Length",
+     afun = a_summary2
+   ) %>%
+     build_table(iris)
+
+    expect_identical(row.names(tbl4),
+                     c("n subjects",
+                       "My mean and SD",
+                       "Range"))
+
+    ## recursive make_afun applications
+    ## with with_label
+
+    a_function3 <- make_afun(
+        a_summary,
+        .labels = c(min_max = "New Range"))
+    tbl5 <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze("Sepal.Length",
+                afun = a_function3) %>%
+        build_table(iris)
+
+    expect_identical(row.names(tbl5),
+                     c("n subjects",
+                     "My mean and SD",
+                     "New Range"))
+
+    a_function4 <- make_afun(
+        a_summary2,
+        .labels = c(min_max = "New Range"))
+    tbl5 <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze("Sepal.Length",
+                afun = a_function4) %>%
+        build_table(iris)
+
+    expect_identical(row.names(tbl5),
+                     c("n subjects",
+                     "My mean and SD",
+                     "New Range"))
 })
 
 test_that("Colcounts work correctly", {

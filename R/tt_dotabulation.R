@@ -234,10 +234,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     rv1col = rawvals[[maxind]]
     if(is(rv1col, "CellValue"))
         labels = obj_label(rv1col)
-    else if (!is.null(names(rv1col)))
-        labels = names(rv1col)
     else if(are(rv1col, "CellValue"))
         labels = vapply(rv1col, obj_label, "")
+    else if (!is.null(names(rv1col)))
+        labels = names(rv1col)
     else
         labels = NULL
 
@@ -677,7 +677,9 @@ recursive_applysplit = function( df,
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param col_counts numeric (or `NULL`). If non-null, column counts which
-#'   override those calculated automatically during tabulation.
+#'   override those calculated automatically during tabulation. Must specify
+#' "counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
+#' will be replaced with the automatically calculated counts.
 #' @param \dots currently ignored.
 #'
 #' @note When overriding the column counts care must be taken that, e.g.,

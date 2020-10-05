@@ -1474,6 +1474,13 @@ CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {
         colspan <- 1L
     if(!is.null(colspan) && !is(colspan, "integer"))
         colspan <- as.integer(colspan)
+    ## if we're not given a label but the value has one associated with
+    ## it we use that.
+    ## NB: we need to be able to override a non-empty label with an empty one
+    ## so we can't have "" mean "not given a label" here
+    if((is.null(label) || is.na(label)) &&
+       !is.null(obj_label(val)))
+        label <- object_label(val)
     structure(list(val), format = format, colspan = colspan, label = label, class = "CellValue")
 }
 
