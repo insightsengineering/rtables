@@ -124,3 +124,12 @@ test_that("summarize_row_groups at top level works", {
     expect_equal(length(tree_children(tbl)), 0)
     expect_equal(dim(tbl), c(1,1))
 })
+
+
+test_that("add_colcounts works as first call", {
+    tbl <- basic_table() %>% add_colcounts() %>%
+        analyze("AGE") %>% build_table(DM)
+
+    expect_equal(tbl[1,1, drop = TRUE], mean(DM$AGE))
+})
+

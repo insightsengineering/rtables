@@ -563,4 +563,20 @@ test_that("make_afun unit tests", {
                           g4 = "g4",
                           g5 = "g5"))
 
+    s_nodflt <- function(df, .N_col, a = 1, b) {
+        list(
+            nrow_df = nrow(df),
+       .N_col = .N_col,
+       a = a,
+       b = b
+       )
+    }
+
+    a_nodflt <- make_afun(s_nodflt, b = 4,
+                          .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
+                          .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
+                          )
+    a_nodflt(iris, 5)[["b"]]
+
+
 })

@@ -1166,8 +1166,10 @@ summarize_row_groups = function(lyt,
 #' build_table(l, DM)
 #'
 add_colcounts = function(lyt, format = "(N=xx)") {
-    disp_ccounts(lyt) = TRUE
-    colcount_format(lyt) = format
+    if(is.null(lyt))
+        lyt <- PreDataTableLayouts()
+    disp_ccounts(lyt) <- TRUE
+    colcount_format(lyt) <- format
     lyt
 }
 
