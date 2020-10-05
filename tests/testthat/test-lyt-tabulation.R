@@ -580,3 +580,24 @@ test_that("make_afun unit tests", {
 
 
 })
+
+test_that("Colcounts work correctly", {
+    lyt1 <- basic_table() %>% add_colcounts() %>%
+        analyze("AGE")
+    tbl1 <- build_table(lyt1, DM)
+
+    expect_identical(col_counts(tbl1), nrow(DM))
+
+    lyt2 <- lyt1 %>% split_cols_by("ARM")
+    tbl2 <- build_table(lyt2, DM)
+
+    expect_identical(col_counts(tbl2),
+                     as.integer(table(DM$ARM)))
+
+
+    tbl3 <- build_table(lyt2, DM, col_counts = c(500L, NA, NA))
+    expect_identical(col_counts(tbl3),
+                     c(500L, as.integer(table(DM$ARM))[2:3]))
+
+    expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
+})

@@ -182,7 +182,18 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
     ## NOT after any splitting has occured. Otherwise
     ## the counts will obviously be wrong.
     if(is.null(counts)) {
-        counts = sapply(cexprs, function(ex) {
+        counts <- rep(NA_integer_, length(cexprs))
+    } else {
+        if(length(counts) != length(cexprs))
+            stop("Length of overriding counts must equal number of columns. Got ",
+                 length(counts), " values for ", length(cexprs), " columns. ",
+                 "Use NAs to specify that the default counting machinery should be ",
+                 "used for that position.")
+        counts <- as.integer(counts)
+    }
+    calcpos <- is.na(counts)
+
+    calccounts = sapply(cexprs, function(ex) {
             if(identical(ex, expression(TRUE)))
                 nrow(df)
             else if (identical(ex, expression(FALSE)))
@@ -194,8 +205,8 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                 else if(is(vec, "logical"))
                     sum(vec, na.rm= TRUE)
             }
-        })
-    }
+    })
+    counts[calcpos] <- calccounts[calcpos]
     format =  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
