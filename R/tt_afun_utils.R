@@ -109,15 +109,32 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
 
 
+.validate_nms <- function(vals, .stats, arg) {
+    if (!is.null(arg)) {
+        if (is.null(names(arg))) {
+            stopifnot(length(arg) == length(.stats))
+            names(arg) <- names(vals)
+        } else {
+            lblpos <- match(names(arg), names(vals))
+            stopifnot(!anyNA(lblpos))
+        }
+    }
+    arg
+}
+
+
 #' Create custom analysis function wrapping existing function
 #'
 #' @param fun function. The function to be wrapped in a new customized analysis fun. Should return named list.
 #' @param .stats character. Names of elements to keep from \code{fun}'s full output.
 #' @param .formats ANY. vector/list of formats to override any defaults applied by \code{fun}.
 #' @param .labels character. Vector of labels to override defaults returned by \code{fun}
+#' @param .indent_mods integer. Named vector of indent modifiers for the generated rows.
 #' @param .ungroup_stats character. Vector of names, which must match elements of \code{.stats}
 #' @param ... dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
 #'   overriden by extra args within a split.
+#' @param .null_ref_cells logical(1). Should cells for the reference column be NULL-ed
+#' by the returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this argument occurs after \code{...} so it must be \emph{fully} specified  by name when set.
 #'
 #' @return A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
 #'   performed automatically.
@@ -175,7 +192,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'
 #' a_foo <- make_afun(s_foo, b = 4,
 #'  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
-#'  .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
+#'  .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value"),
+#'  .indent_mods = c(nrow_df = 2L, a = 1L)
 #' )
 #'
 #' a_foo(iris, .N_col = 40)
@@ -192,11 +210,31 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'    )
 #' }
 #' a_grp <- make_afun(s_grp, b = 3, .labels = c(nrow_df = "row count", .N_col = "count in column"),
-#'                    .formats = c(nrow_df = "xx.", .N_col = "xx."), .ungroup_stats ="letters")
+#'                    .formats = c(nrow_df = "xx.", .N_col = "xx."),
+#'                    .indent_mod = c(letters = 1L),
+#'                    .ungroup_stats ="letters")
 #' a_grp(iris, 40)
 #' a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"), .formats = c(b = "xx."))
 #' a_aftergrp(iris, 40)
-make_afun <- function(fun, .stats = NULL, .formats = NULL, .labels = NULL, .ungroup_stats = NULL, ...) {
+#'
+#' s_ref <- function(x, .in_ref_col, .ref_group) {
+#'    list(
+#'          mean_diff = mean(x) - mean(.ref_group)
+#'        )
+#' }
+#'
+#' a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
+#' a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
+#' a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
+
+make_afun <- function(fun,
+                      .stats = NULL,
+                      .formats = NULL,
+                      .labels = NULL,
+                      .indent_mods = NULL,
+                      .ungroup_stats = NULL,
+                      ...,
+                      .null_ref_cells = ".in_ref_col" %in% names(formals(fun))) {
 
     ## there is a LOT more computing-on-the-language hackery in here that I would
     ## prefer, but currently this is the way I see to do everything we want to do.
@@ -256,25 +294,9 @@ make_afun <- function(fun, .stats = NULL, .formats = NULL, .labels = NULL, .ungr
                  setdiff(.ungroup_stats, .stats))
         }
 
-        if (!is.null(.labels)) {
-            if (is.null(names(.labels))) {
-                stopifnot(length(.labels) == length(.stats))
-                names(.labels) <- names(final_vals)
-            } else {
-                lblpos <- match(names(.labels), names(final_vals))
-                stopifnot(!anyNA(lblpos))
-            }
-        }
-
-        if(!is.null(.formats)) {
-            if(is.null(names(.formats))) {
-                stopifnot(length(.formats) == length(.stats))
-                names(.formats) <- names(final_vals)
-            } else {
-                fmtpos <- match(names(.formats), names(final_vals))
-                stopifnot(!anyNA(fmtpos))
-            }
-        }
+        .labels <- .validate_nms(final_vals, .stats, .labels)
+        .formats <- .validate_nms(final_vals, .stats, .formats)
+        .indent_mods <- .validate_nms(final_vals, .stats, .indent_mods)
 
         final_labels <- value_labels(final_vals)
         final_labels[names(.labels)] <- .labels
@@ -282,6 +304,8 @@ make_afun <- function(fun, .stats = NULL, .formats = NULL, .labels = NULL, .ungr
         final_formats <- lapply(final_vals, obj_format)
         final_formats[names(.formats)] = .formats
 
+        final_imods <- vapply(final_vals, indent_mod, 1L)
+        final_imods[names(.indent_mods)] <- .indent_mods
 
         if(!is.null(.ungroup_stats)) {
             for(nm in .ungroup_stats) {
@@ -291,24 +315,41 @@ make_afun <- function(fun, .stats = NULL, .formats = NULL, .labels = NULL, .ungr
                 final_vals <- insert_replace(final_vals, nm, tmp)
                 stopifnot(all(nzchar(names(final_vals))))
 
-                final_labels <- insert_replace(final_labels, nm, setNames(value_labels(tmp),
-                                                                          names(tmp)))
-                final_formats <- insert_replace(final_formats, nm, setNames(rep(final_formats[nm], length.out = length(tmp)),
-                                                                            names(tmp)))
+                final_labels <- insert_replace(final_labels,
+                                               nm,
+                                               setNames(value_labels(tmp),
+                                                        names(tmp))
+                                               )
+                final_formats <- insert_replace(final_formats,
+                                                nm,
+                                                setNames(rep(final_formats[nm],
+                                                             length.out = length(tmp)),
+                                                         names(tmp))
+                                                )
+                final_imods <- insert_replace(final_imods,
+                                              nm,
+                                              setNames(rep(final_imods[nm],
+                                                           length.out = length(tmp)),
+                                                       names(tmp))
+                                              )
             }
         }
 
-        rcells <- mapply(function(x, f, l) {
+        rcells <- mapply(function(x, f, l, im) {
             if(is(x, "CellValue")) {
                 obj_label(x) <- l
                 obj_format(x) <- f
+                indent_mod(x) <- im
                 x
-            }else {
-                rcell(x, format =f, label = l)
+            } else if(.null_ref_cells) {
+                non_ref_rcell(x, .in_ref_col, format =f, label = l, indent_mod = im)
+            } else {
+                rcell(x, .in_ref_col, format =f, label = l, indent_mod = im)
             }
         }, f = final_formats, x = final_vals,
-                         l = final_labels,
-                         SIMPLIFY = FALSE)
+        l = final_labels,
+        im = final_imods,
+        SIMPLIFY = FALSE)
         in_rows(.list = rcells) ##, .labels = .labels)
     }
     formals(ret) <- formals(fun)

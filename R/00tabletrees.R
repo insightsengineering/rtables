@@ -1132,7 +1132,8 @@ setClass("LabelRow", contains = "TableRow",
                     cinfo = EmptyColInfo,
                     var = NA_character_,
                     format = NULL,
-                    klass) {
+                    klass,
+                    indent_mod = 0L) {
     if((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
        !missing(label))
         name = label
@@ -1151,7 +1152,7 @@ setClass("LabelRow", contains = "TableRow",
              col_info = cinfo,
              var_analyzed = var,
              format = NULL,
-             indent_modifier = 0L ## XXX confirm this is right
+             indent_modifier = indent_mod
              )
     rw = set_format_recursive(rw, format, FALSE)
     rw

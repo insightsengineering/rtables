@@ -9,8 +9,10 @@ make_afun(
   .stats = NULL,
   .formats = NULL,
   .labels = NULL,
+  .indent_mods = NULL,
   .ungroup_stats = NULL,
-  ...
+  ...,
+  .null_ref_cells = ".in_ref_col" \%in\% names(formals(fun))
 )
 }
 \arguments{
@@ -22,10 +24,15 @@ make_afun(
 
 \item{.labels}{character. Vector of labels to override defaults returned by \code{fun}}
 
+\item{.indent_mods}{integer. Named vector of indent modifiers for the generated rows.}
+
 \item{.ungroup_stats}{character. Vector of names, which must match elements of \code{.stats}}
 
 \item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
 overriden by extra args within a split.}
+
+\item{.null_ref_cells}{logical(1). Should cells for the reference column be NULL-ed
+by the returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this argument occurs after \code{...} so it must be \emph{fully} specified  by name when set.}
 }
 \value{
 A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
@@ -84,7 +91,8 @@ s_foo(iris, 40)
 
 a_foo <- make_afun(s_foo, b = 4,
  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
- .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value")
+ .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value"),
+ .indent_mods = c(nrow_df = 2L, a = 1L)
 )
 
 a_foo(iris, .N_col = 40)
@@ -101,10 +109,22 @@ s_grp <- function(df, .N_col, a = 1, b = 2) {
    )
 }
 a_grp <- make_afun(s_grp, b = 3, .labels = c(nrow_df = "row count", .N_col = "count in column"),
-                   .formats = c(nrow_df = "xx.", .N_col = "xx."), .ungroup_stats ="letters")
+                   .formats = c(nrow_df = "xx.", .N_col = "xx."),
+                   .indent_mod = c(letters = 1L),
+                   .ungroup_stats ="letters")
 a_grp(iris, 40)
 a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"), .formats = c(b = "xx."))
 a_aftergrp(iris, 40)
+
+s_ref <- function(x, .in_ref_col, .ref_group) {
+   list(
+         mean_diff = mean(x) - mean(.ref_group)
+       )
+}
+
+a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
+a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
+a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
 }
 \seealso{
 \code{\link[=analyze]{analyze()}}

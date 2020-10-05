@@ -1030,6 +1030,8 @@ setMethod("indent_mod", "Split",
 #' @rdname int_methods
 setMethod("indent_mod", "VTableNodeInfo",
           function(obj) obj@indent_modifier)
+setMethod("indent_mod", "ANY",
+          function(obj) attr(obj, "indent_mod") %||% 0L)
 
 #' @rdname int_methods
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
@@ -1045,6 +1047,14 @@ setMethod("indent_mod<-", "VTableNodeInfo",
     obj@indent_modifier = as.integer(value)
     obj
 })
+
+setMethod("indent_mod<-", "CellValue",
+          function(obj, value) {
+    attr(obj, "indent_mod") <- as.integer(value)
+    obj
+})
+
+
 
 #' @rdname int_methods
 setGeneric("content_indent_mod", function(obj) standardGeneric("content_indent_mod"))

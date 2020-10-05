@@ -247,8 +247,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         else
             labels = rep("", length(rawvals[[maxind]]))
     }
+
+
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
+
+
     ##recycle formats
     if(ncrows ==  1)  {
         return(list(rowconstr(val = rawvals,
@@ -257,7 +261,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          label = labels,
                          name = labels,
                          var = rowvar,
-                         format = format)))
+                         format = format,
+                         indent_mod = indent_mod(rawvals[[1]]))))
     }
     formatvec = NULL
     if(!is.null(format)) {
@@ -271,13 +276,17 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
             {
                 colvals[[i]]
             })
+        imod = unique(vapply(rowvals, indent_mod, 0L))
+        if(length(imod) != 1)
+            stop("Different cells in the same row appear to have been given different indent_mod values")
         rowconstr(val = rowvals,
                   cinfo = cinfo,
                   lev = lev,
                   label = labels[i],
                   name = labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
-                  format = formatvec[[i]]
+                  format = formatvec[[i]],
+                  indent_mod = imod
                   )
 
     })
