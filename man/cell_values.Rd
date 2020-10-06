@@ -24,15 +24,29 @@ row, otherwise a list of such lists, one for each row captured underneath \code{
 Retrieve cell values by row and column path
 }
 \examples{
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-  split_cols_by("SEX") \%>\%
-  split_rows_by("RACE") \%>\%
-  summarize_row_groups() \%>\%
-  split_rows_by("STRATA1") \%>\%
-  analyze("AGE")
+ l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+   split_cols_by("SEX") \%>\%
+   split_rows_by("RACE") \%>\%
+   summarize_row_groups() \%>\%
+   split_rows_by("STRATA1") \%>\%
+   analyze("AGE")
 
+library(dplyr) ## for mutate
 tbl <- build_table(l, DM \%>\% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 
+cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 
+cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
+
+cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
+
+## any arm, male columns from the ASIAN content (ie summary) row
+cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
+
+## all columns
+cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
+
+## all columns for the Combination arm
+cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
 
 }

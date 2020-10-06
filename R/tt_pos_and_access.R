@@ -767,6 +767,7 @@ setMethod("head", "VTableTree",
 #'    split_rows_by("STRATA1") %>%
 #'    analyze("AGE")
 #'
+#' library(dplyr) ## for mutate
 #' tbl <- build_table(l, DM %>% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 #'
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
