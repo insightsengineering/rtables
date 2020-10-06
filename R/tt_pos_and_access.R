@@ -78,14 +78,21 @@ setMethod("tt_at_path", "VTableTree",
     stopifnot(is(path, "character"),
               length(path) > 0,
               !anyNA(path))
+    ## handle pathing that hits the root split by name
+    if(obj_name(tt) == path[1])
+        path = path[-1]
     cur <- tt
     curpath <- path
     while(length(curpath > 0)) {
         kids <- tree_children(cur)
         curname <- curpath[1]
-        if(!(curname %in% names(kids)))
-            stop("Path appears invalidfor this tree at step ", curname)
-        cur <- kids[[curname]]
+        if(curname == "@content")
+            cur <- content_table(cur)
+        else if(curname %in% names(kids)) {
+            cur <- kids[[curname]]
+        } else {
+            stop("Path appears invalid for this tree at step ", curname)
+        }
         curpath <- curpath[-1]
     }
     cur
@@ -307,13 +314,53 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
 #' @param spanfunc is the thing that gets the counts after subsetting
 ## should be n_leaves for a column tree structure and NROW for
 ## a table tree
+.colpath_to_j <- function(path, ctree, offset = 0) {
+     if(length(path) == 0) {
+        if(is(ctree, "VLeaf"))
+            ret = offset + 1
+        else
+            ret = offset + 1:n_leaves(ctree)
+        return(ret)
+    }
+    ## the columntree is collapsed so we go to the kids and look
+    ## at their position information which has both split and
+    ## split value information
+    kids = tree_children(ctree)
+    splname = obj_name(tail(pos_splits(kids[[1]]), 1)[[1]])
+    if(splname != path[1]) {
+        stop("Path in column space appears to be invalid at step ", path[1])
+    }
+    if(length(path) == 1) {
+        ret = offset + 1:n_leaves(ctree)
+    } else {
+        cj <- path[2]
+
+        nkids = sapply(kids, n_leaves)
+        kidoffsets = cumsum(nkids) - nkids[1]
+        if(cj == "*") {
+            ret = sort(unlist(mapply(.colpath_to_j,
+                                     MoreArgs = list(path = tail(path, -2)),
+                                     ctree = kids,
+                                     offset = offset + kidoffsets,
+                                     SIMPLIFY=FALSE)))
+        } else if (cj %in% names(kids)) {
+            ret = .colpath_to_j(tail(path, -2), ctree = kids[[cj]],
+                               offset = offset + kidoffsets[which(cj == names(kids))])
+        } else {
+            stop("Path in column space appears to be invalid at step ", cj)
+        }
+    }
+    sort(unlist(ret))
+}
+
 .path_to_pos <- function(path, fullidx, ctree, spanfunc) {
     retidx = fullidx
-    while(length(cj) > 0) {
+    stopifnot(length(path) > 0)
+    cj = path[-1]
+    curcj = path[1]
+    while(length(cj) >= 0) {
         colcounts = sapply(tree_children(ctree), spanfunc)
         cnms <- names(tree_children(ctree))
-        curcj <- cj[1]
-        cj <- cj[-1]
         ## this will ONLY find the first match in the case of duplciated names!!!!
         fidx <- match(cj, cnms)
         if(anyNA(fidx))
@@ -324,7 +371,9 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
             strtpos <- sum(colcounts[1:fidx]) + 1
             retidx <- retidx[strtpos:(strtpos + colcounts[fidx])]
         }
-        ctree <- ctree[[fidx]]
+        ctree <- tree_children(ctree)[[fidx]]
+        curcj <- cj[1]
+        cj <- cj[-1]
     }
     retidx
 }
@@ -370,7 +419,7 @@ select_cells_j = function(cells, j) {
 
 setMethod("subset_cols", c("ANY", "character"),
           function(tt, j, newcinfo = NULL, ...) {
-    j <- .path_to_pos(j, seq_len(ncol(tt)), coltree(tt), n_leaves)
+    j <- .colpath_to_j(j, coltree(tt))
     subset_cols(tt, j, newcinfo = newcinfo, ...)
 })
 
@@ -582,7 +631,7 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
-    j <- .path_to_pos(j, seq_len(ncol(x)),  coltree(x), n_leaves)
+    j <- .colpath_to_j(j, coltree(x))
     x[i = i,j = j, ..., drop = drop]
 })
 
@@ -600,7 +649,7 @@ setMethod("[", c("VTableTree", "character", "ANY"),
 setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
-    j <- .path_to_pos(j, seq_len(ncol(x)),  coltree(x), n_leaves)
+    j <- .colpath_to_j(j, coltree(x))
     x[i = i,j = j, ..., drop = drop]
 })
 
@@ -698,3 +747,57 @@ setMethod("head", "VTableTree",
     head.matrix(x, n)
 }
 )
+
+#' Retrieve cell values by row and column path
+#' @inheritParams gen_args
+#' @param rowpath character. Path in row-split space to the desired row(s). Can include \code{"@content"}.
+#' @param colpath character. Path in column-split space to the desired column(s). Can include \code{"*"}.
+#' @param omit_labrows logical(1). Should label rows underneath \code{rowpath} be omitted
+#' (\code{TRUE}, the default), or return empty lists of cell "values" (\code{FALSE}).
+#'
+#' @return a \emph{list} (regardless of the type of value the cells hold). if \code{rowpath} defines a path to a single row, \code{cell_values} returns the list of cell values for that
+#' row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
+#'
+#' @export
+#' @examples
+#'  l <- basic_table() %>% split_cols_by("ARM") %>%
+#'    split_cols_by("SEX") %>%
+#'    split_rows_by("RACE") %>%
+#'    summarize_row_groups() %>%
+#'    split_rows_by("STRATA1") %>%
+#'    analyze("AGE")
+#'
+#' tbl <- build_table(l, DM %>% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
+#'
+#' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
+#'
+#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
+#'
+#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
+#'
+#' ## any arm, male columns from the ASIAN content (ie summary) row
+#' cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
+#'
+#' ## all columns
+#' cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
+#'
+#' ## all columns for the Combination arm
+#' cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
+#'
+setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+    standardGeneric("cell_values"))
+setMethod("cell_values", "VTableTree",
+          function(tt, rowpath, colpath = NULL, omit_labrows = TRUE){
+    if(is.null(rowpath))
+        subtree <- tt
+    else
+        subtree <- tt_at_path(tt, rowpath)
+    if(!is.null(colpath))
+        subtree <- subset_cols(subtree, colpath)
+
+    rows <- collect_leaves(subtree, TRUE, !omit_labrows)
+    if(length(rows)== 1)
+        row_values(rows[[1]])
+    else
+        lapply(rows, row_values)
+})
