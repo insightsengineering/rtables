@@ -633,6 +633,7 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 #'   \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
 #'   \item{.N_row}{row-wise N (row group count) for the group of observations being analyzed (ie with no column-based subsetting)}
+#'   \item{.df_row}{ data.frame for observations in the row group being analyzed (ie with no column-based subsetting)}
 #'   \item{.var}{variable that is analyzed}
 #'   \item{.ref_group}{data.frame or vector of subset corresponding to the `ref_group` column including subsetting
 #'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
@@ -641,6 +642,14 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
 #' }
 #'
+#' @note None of the arguments described in the Details section
+#' can be overridden via extra_args or when calling
+#' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
+#' be overridden via the \code{col_counts} argument to
+#' \code{\link{build_table}}. Alternative values for the others
+#' must be calculated within \code{afun} based on a combination
+#' of extra arguments and the unmodified values provided by the
+#' tabulation framework.
 #' @export
 #'
 #' @author Gabriel Becker

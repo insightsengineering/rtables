@@ -526,3 +526,27 @@ test_that("content extra args for summarize_row_groups works", {
                       list(ARM1 = c(9, 6),
                           ARM2 = c(9, 6)))
 })
+
+test_that(".df_row analysis function argument works", {
+    afun = function(x, labelstr = "", .N_col, .df_row)  {
+        rcell(c(nrow(.df_row), .N_col), format = "(xx.x, xx.x)")
+    }
+
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", afun)
+
+    tbl <- build_table(l, rawdat)
+    rws = collect_leaves(tbl, add.labrows = FALSE)
+    nmale = sum(rawdat$SEX == "M")
+    nfemale = sum(rawdat$SEX == "F")
+    narm1 = sum(rawdat$ARM == "ARM1")
+    narm2 = sum(rawdat$ARM == "ARM2")
+
+    expect_identical(unname(lapply(rws, row_values)),
+                     list(list(ARM1 = c(nmale, narm1),
+                               ARM2 = c(nmale, narm2)),
+                          list(ARM1 = c(nfemale, narm1),
+                               ARM2 = c(nfemale, narm2))))
+})
