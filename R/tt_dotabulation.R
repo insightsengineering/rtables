@@ -92,7 +92,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          baselines, inclNAs) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
-    colextras = cextra_args(cinfo, NULL)
+    colextras = col_extra_args(cinfo, NULL)
     ## XXX this is an assumption that could???? be
     ## wrong in certain really weird corner cases?
     totcount = sum(colcounts)
@@ -102,13 +102,16 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 
     gotflist <- is.list(func)
 
+    ## one set of named args to be applied to all columns
     if(!is.null(names(splextra)))
         splextra = list(splextra)
+    else
+        length(splextra) = ncol(cinfo)
 
 
     if(!gotflist) {
         func <- list(func)
-    } else {
+    } else  if(length(splextra) != length(func)) {
         splextra  = rep(splextra, length.out = length(func))
     }
 
@@ -386,7 +389,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                       format = NULL,
                       indent_mod = 0L,
                       cvar = NULL,
-                      inclNAs) {
+                      inclNAs,
+                      extra_args) {
 
     if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
         cvar = NULL
@@ -400,7 +404,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                                    datcol = cvar,
                                    takesdf = rep(.takes_df(cfunc),
                                                  ncol(cinfo)),
-                                   inclNAs = FALSE)
+                                   inclNAs = FALSE,
+                                   splextra = extra_args)
     } else {
         contkids = list()
     }
@@ -464,8 +469,9 @@ recursive_applysplit = function( df,
                                 parent_cfun = NULL,
                                 cformat = NULL,
                                 cindent_mod = 0L,
+                                cextra_args = list(),
                                 cvar = NULL,
-                                baselines = lapply(cextra_args(cinfo),
+                                baselines = lapply(col_extra_args(cinfo),
                                                    function(x) x$.ref_full)) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
@@ -483,7 +489,8 @@ recursive_applysplit = function( df,
                       parent_cfun = parent_cfun,
                       format = cformat,
                       indent_mod = cindent_mod,
-                      cvar = cvar)
+                      cvar = cvar,
+                      extra_args = cextra_args)
 
 
     if(length(splvec) == 0L) {
@@ -612,7 +619,8 @@ recursive_applysplit = function( df,
                                      partlabel = label,
                                      cindent_mod = content_indent_mod(spl),
                                      cvar = content_var(spl),
-                                     baselines = baselines)
+                                     baselines = baselines,
+                                     cextra_args = content_extra_args(spl))
             }, dfpart = dataspl,
             label = partlabels,
             nm = nms,
@@ -782,7 +790,8 @@ build_table = function(lyt, df,
                       parent_cfun = content_fun(rtspl),
                       format = content_format(rtspl),
                       indent_mod = 0L,
-                      cvar = content_var(rtspl))
+                      cvar = content_var(rtspl),
+                      extra_args = content_extra_args(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
         if(length(splvec) == 0)
@@ -799,7 +808,8 @@ build_table = function(lyt, df,
                              make_lrow = label_kids(firstspl),
                              parent_cfun = NULL,
                              cformat = obj_format(firstspl),
-                             cvar = content_var(firstspl))
+                             cvar = content_var(firstspl),
+                             cextra_args = content_extra_args(firstspl))
     })
     kids = kids[!sapply(kids, is.null)]
     if(length(kids) > 0)

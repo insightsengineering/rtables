@@ -464,3 +464,65 @@ test_that("Colcounts work correctly", {
 
     expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
 })
+
+first_cont_rowvals = function(tt)
+    row_values(
+        tree_children(
+            content_table(
+                tree_children(tt)[[1]]
+            )
+        )[[1]])
+
+test_that("content extra args for summarize_row_groups works", {
+    sfun <- function(x, labelstr, .N_col, a = 5, b = 6, c = 7) {
+        in_rows(
+            c(a, b),
+            .formats = "xx - xx",
+            .labels = labelstr)
+    }
+    ## specify single set of args for all columns
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(a = 9))
+    tbl1 <- build_table(l, rawdat)
+    expect_identical(first_cont_rowvals(tbl1),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(9, 6)))
+
+    ## specify different arg for each column
+    l2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(list(a = 9),
+                                               list(b = 3)))
+    tbl2 <- build_table(l2, rawdat)
+    expect_identical(first_cont_rowvals(tbl2),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(5, 3)))
+
+
+    ## specify arg for only one col
+    l3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(list(a = 9)))
+    tbl3 <- build_table(l3, rawdat)
+    expect_identical(first_cont_rowvals(tbl3),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(5, 6)))
+
+    ##works on root split
+
+    l4 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(a = 9))
+    tbl4 <- build_table(l4, rawdat)
+    expect_identical(row_values(tree_children(content_table(tbl4))[[1]]),
+                      list(ARM1 = c(9, 6),
+                          ARM2 = c(9, 6)))
+})

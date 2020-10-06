@@ -519,7 +519,7 @@ combine_cinfo = function(ci1, ci2) {
 
     newcounts = c(col_counts(ci1), col_counts(ci2))
     newexprs = c(col_exprs(ci1), col_exprs(ci2))
-    newexargs = c(cextra_args(ci1),cextra_args(ci2))
+    newexargs = c(col_extra_args(ci1), col_extra_args(ci2))
     newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
@@ -713,10 +713,10 @@ chk_compat_cinfos <- function(ci1, ci2) {
         stop("Column structures not compatible: 2nd column structure has non-matching, non-null column counts")
     }
 
-    if (any(sapply(cextra_args(ci2),
+    if (any(sapply(col_extra_args(ci2),
                    function(x) length(x)>0)) &&
-        !identical(cextra_args(ci1),
-                   cextra_args(ci2))) {
+        !identical(col_extra_args(ci1),
+                   col_extra_args(ci2))) {
         stop("Column structures not compatible: 2nd column structure has non-matching, non-null extra args")
 
     }

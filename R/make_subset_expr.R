@@ -175,7 +175,7 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
     ## env = as.environment(df)
     ## parent.env(env) = .GlobalEnv
     ## cexprs = lapply(cexprs, function(e) compiler::compile(e[[1]], env = env))
-    cextras = cextra_args(ctree)
+    colextras = col_extra_args(ctree)
 
     ## calculate the counts based on the df
     ## This presumes that it is called on the WHOLE dataset,
@@ -210,7 +210,7 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
     format =  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
-                           extras = cextras,
+                           extras = colextras,
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
                            countformat = format)

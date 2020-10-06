@@ -100,7 +100,8 @@ setClass("Split", contains = "VIRTUAL",
              label_children = "logical",
              extra_args = "list",
              indent_modifier = "integer",
-             content_indent_modifier = "integer"))
+             content_indent_modifier = "integer",
+             content_extra_args = "list"))
 
 
 setClass("CustomizableSplit", contains = "Split",
@@ -131,7 +132,8 @@ VarLevelSplit = function(var,
                          indent_mod = 0L,
                          visible_label = FALSE,
                          cindent_mod = 0L,
-                         cvar = ""
+                         cvar = "",
+                         cextra_args = list()
                          ) {
     child_labels = match.arg(child_labels)
     if(is.null(labels_var))
@@ -150,7 +152,8 @@ VarLevelSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label
+        split_label_visible = visible_label,
+        content_extra_args = cextra_args
         )
 }
 setClass("NULLSplit", contains = "Split")
@@ -183,6 +186,7 @@ AllSplit = function(split_label = "",
                     indent_mod = 0L,
                     cindent_mod = 0L,
                     cvar = "",
+                    cextra_args = list(),
                     ...) {
     new("AllSplit", split_label = split_label,
         content_fun = cfun,
@@ -194,12 +198,13 @@ AllSplit = function(split_label = "",
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = FALSE)
+        split_label_visible = FALSE,
+        content_extra_args = cextra_args)
 }
 
 setClass("RootSplit", contains = "AllSplit")
 
-RootSplit = function(split_label = "", cfun = NULL, cformat = NULL, cvar = "", split_format= NULL, ...) {
+RootSplit = function(split_label = "", cfun = NULL, cformat = NULL, cvar = "", split_format= NULL, cextra_args = list(), ...) {
     new("RootSplit", split_label = split_label,
         content_fun = cfun,
         content_format = cformat,
@@ -209,7 +214,8 @@ RootSplit = function(split_label = "", cfun = NULL, cformat = NULL, cvar = "", s
         indent_modifier = 0L,
         content_indent_modifier = 0L,
         content_var = cvar,
-        split_label_visible = FALSE)
+        split_label_visible = FALSE,
+        content_extra_args = cextra_args)
 }
 
 setClass("ManualSplit", contains = "AllSplit",
@@ -228,6 +234,7 @@ ManualSplit = function(levels, label, name = "manual",
                        indent_mod = 0L,
                        cindent_mod = 0L,
                        cvar = "",
+                       cextra_args = list(),
                        visible_label = FALSE) {
     new("ManualSplit",
         split_label = label,
@@ -270,6 +277,7 @@ MultiVarSplit = function(vars,
                          indent_mod = 0L,
                          cindent_mod = 0L,
                          cvar = "",
+                         cextra_args = list(),
                          visible_label = FALSE) {
     child_labels = match.arg(child_labels)
     if(length(vars) == 1 && grepl(":", vars))
@@ -287,7 +295,8 @@ MultiVarSplit = function(vars,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label)
+        split_label_visible = visible_label,
+        content_extra_args = cextra_args)
 }
 
 
@@ -314,6 +323,7 @@ VarStaticCutSplit = function(var,
                              indent_mod = 0L,
                              cindent_mod = 0L,
                              cvar = "",
+                             cextra_args = list(),
                              visible_label = FALSE) {
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
@@ -340,7 +350,8 @@ VarStaticCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label)
+        split_label_visible = visible_label,
+        content_extra_args = cextra_args)
 }
 
 
@@ -365,6 +376,7 @@ CumulativeCutSplit = function(var,
                              indent_mod = 0L,
                              cindent_mod = 0L,
                              cvar = "",
+                             cextra_args = list(),
                              visible_label = FALSE) {
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
@@ -391,7 +403,8 @@ CumulativeCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label)
+        split_label_visible = visible_label,
+        content_extra_args = cextra_args)
 }
 
 
@@ -423,6 +436,7 @@ VarDynCutSplit = function(var,
                           indent_mod = 0L,
                           cindent_mod = 0L,
                           cvar = "",
+                          cextra_args = list(),
                           visible_label = FALSE) {
     child_labels = match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
@@ -439,10 +453,13 @@ VarDynCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label)
+        split_label_visible = visible_label,
+        content_extra_args = cextra_args)
 }
 
 
+
+## NB analyze splits can't have content-related things
 setClass("VAnalyzeSplit", contains = "Split",
          representation(default_rowlabel = "character",
                         include_NAs = "logical",
@@ -496,7 +513,7 @@ AnalyzeVarSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_visible = visible_label,
-        content_var = cvar)
+        content_var = cvar) ## no content_extra_args
 }
 
 #' Define a subset tabulation/analysis
@@ -517,15 +534,6 @@ AnalyzeColVarSplit = function(afun,
                               indent_mod = 0L,
                               visible_label = NA,
                               cvar = "") {
-    ## if(is.function(afun)) {
-    ##     if(!any(nzchar(defrowlab))) {
-    ##         defrowlab = as.character(substitute(afun))
-    ##         if(length(defrowlab) > 1 || startsWith(defrowlab, "function(") || startsWith(defrowlab, "list("))
-    ##             defrowlab = ""
-    ##     }
-    ##     afun = lapply(var, function(x) afun)
-    ## }
-
     new("AnalyzeColVarSplit",
         payload = NA_character_,
         split_label = "",
@@ -541,7 +549,7 @@ AnalyzeColVarSplit = function(afun,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_visible = visible_label,
-        content_var = cvar)
+        content_var = cvar) ## no content_extra_args
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -644,11 +652,6 @@ AnalyzeMultiVars = function(var,
      } else {
          if(is.null(split_name))
              split_name = paste(.payload, collapse = ":")
-         ## pld = lapply(pld,
-         ##              function(pldspl) {
-         ##     labelrow_visible(pldspl) <- !identical(show_kidlabs, FALSE)
-         ##     pldspl
-         ## })
 
          ret = new("AnalyzeMultiVars",
                    payload = pld,
@@ -661,8 +664,7 @@ AnalyzeMultiVars = function(var,
                    ## XXX
                    label_children = show_kidlabs,
                    extra_args = extra_args,
-                   ## XXX is this right? modifier applied ton
-                   ## splits in payload
+                   ## modifier applied on splits in payload
                    indent_modifier = 0L,
                    content_indent_modifier = 0L,
                    content_var = cvar)
@@ -763,13 +765,19 @@ setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
                         incl_allcategory = "logical"))
 #' @rdname VarLevelSplit
 #' @export
-VarLevWBaselineSplit = function(var, ref_group, labels_var= var, incl_all = FALSE,
+VarLevWBaselineSplit = function(var,
+                                ref_group,
+                                labels_var = var,
+                                incl_all = FALSE,
                                 split_label,
                                 split_fun = NULL,
 #                             comparison = `-`,
                              label_fstr = "%s - %s",
                              ## not needed I Think...
-                             cfun =  NULL, cformat = NULL, cvar = "", split_format = NULL,
+                             cfun =  NULL,
+                             cformat = NULL,
+                             cvar = "",
+                             split_format = NULL,
                              valorder = NULL,
                              split_name = var,
                              extra_args = list()) {
@@ -986,16 +994,8 @@ setClass("InstantiatedColumnInfo",
                         cextra_args = "list",
                         counts = "integer",
                         display_columncounts = "logical",
-                        columncount_format = "FormatSpec")##,
-    ##      validity = function(object) {
-    ## nleaves = length(collect_leaves(object@tree_layout))
-    ## counts = object@counts
-    ## length(object@subset_exprs) == nleaves &&
-    ##     length(object@cextra_args) == nleaves &&
-    ##     length(counts) == nleaves &&
-    ##     (all(is.na(counts)) || all(!is.na(counts)))
-    ## }
-)
+                        columncount_format = "FormatSpec")
+         )
 
 #' @rdname cinfo
 #' @export

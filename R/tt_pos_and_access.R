@@ -408,7 +408,7 @@ setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
         return(newcinfo)
     j = .j_to_posj(j, length(col_exprs(tt)))
     newctree = subset_cols(coltree(tt), j, NULL)
-    newcextra = cextra_args(tt)[j]
+    newcextra = col_extra_args(tt)[j]
     newcsubs = col_exprs(tt)[j]
     newcounts = col_counts(tt)[j]
     InstantiatedColumnInfo(treelyt = newctree,

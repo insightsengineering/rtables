@@ -16,7 +16,8 @@ constr_args(
   visible_label,
   cindent_mod,
   cvar,
-  label
+  label,
+  cextra_args
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ constr_args(
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
+\item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 }
 \description{
 Constructor Arg Conventions
