@@ -784,9 +784,11 @@ setMethod("head", "VTableTree",
 #'
 #' ## all columns for the Combination arm
 #' cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
-#'
+#'@rdname cell_values
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
     standardGeneric("cell_values"))
+#'@rdname cell_values
+#' @exportMethod cell_values
 setMethod("cell_values", "VTableTree",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE){
     if(is.null(rowpath))

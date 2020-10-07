@@ -2,9 +2,12 @@
 % Please edit documentation in R/tt_pos_and_access.R
 \name{cell_values}
 \alias{cell_values}
+\alias{cell_values,VTableTree-method}
 \title{Retrieve cell values by row and column path}
 \usage{
 cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -48,5 +51,4 @@ cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
 
 ## all columns for the Combination arm
 cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
-
 }

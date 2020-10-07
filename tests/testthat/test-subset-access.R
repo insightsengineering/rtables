@@ -8,8 +8,10 @@ test_that("cell_values function works as desired", {
     split_rows_by("STRATA1") %>%
     analyze("AGE", afun = function(x, .N_col, .N_row) rcell(c(.N_row, .N_col), format = "(xx.x, xx.x)"))
 
-  ourdat <- DM %>% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE))
- tbl <- build_table(l, ourdat)
+  ourdat <- DM
+  ourdat$SEX <- droplevels(ourdat$SEX)
+  ourdat$RACE <- droplevels(ourdat$RACE)
+  tbl <- build_table(l, ourdat)
 
   armsextab <- table(ourdat$SEX, ourdat$ARM)
 
