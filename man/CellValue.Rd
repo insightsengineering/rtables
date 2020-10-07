@@ -4,7 +4,7 @@
 \alias{CellValue}
 \title{Cell Value constructor}
 \usage{
-CellValue(val, format = NULL, colspan = 1L, label = NULL)
+CellValue(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)
 }
 \arguments{
 \item{val}{ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted}
@@ -14,6 +14,8 @@ CellValue(val, format = NULL, colspan = 1L, label = NULL)
 \item{colspan}{integer. Generally ignored currently.}
 
 \item{label}{used as row name if the row name is not specified by \code{in_rows}}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Cell Value constructor

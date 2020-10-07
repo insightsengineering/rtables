@@ -1,8 +1,4 @@
-## rtables 0.3.2.17.9015
-
-* issues with no news: 
-
-## rtables 0.3.2.17.9000
+## rtables 0.3.2.17.9025
 
 * issues with no news: 
 

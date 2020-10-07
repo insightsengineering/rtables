@@ -270,7 +270,6 @@ rtabulate <- function(x,
                      total = NULL,
                      col_N = NULL
                      )  {
-
     if(missing(FUN) && missing(row.name)) {
         if(inherits(x, "numeric"))
             row.name = "mean"
@@ -342,7 +341,7 @@ rtabulate <- function(x,
             newtop = TRUE
         }
 
-        ## wrap it if there's only one to preserve old behavior
+        ## ## wrap it if there's only one to preserve old behavior
         if(length(cby_nms) == 1 && length(col_wise_args) > 0)
             col_wise_args <- list(col_wise_args)
 
@@ -386,10 +385,28 @@ rtabulate <- function(x,
                    afun = FUN,
                    var_labels = "",
                    format = format,
-                   extra_args = list(list(...)),
+                   extra_args = list(...),
                    show_labels = "hidden")
     ## XXX a way to just return the layout?
     ## but x needs to be padded with the relevant
     ## columns so not sure...
-    build_table(lyt, fulld)
+    ret = build_table(lyt, fulld)
+    if(all(nzchar(row.name))) {
+        ret <- recursive_rename(ret, row.name)
+    }
+    ret
+}
+
+recursive_rename <- function(tt,  nms) {
+    kids <- tree_children(tt)
+    if(are(kids, "TableRow")) {
+        tree_children(tt) <- mapply(`obj_label<-`,
+                                    obj = kids,
+                                    value = nms)
+        return(tt)
+    }
+    tree_children(tt) <- lapply(tree_children(tt),
+                                recursive_rename,
+                                nms = nms)
+    tt
 }

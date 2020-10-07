@@ -12,7 +12,9 @@ build_table(lyt, df, col_counts = NULL, ...)
 \item{df}{dataset (data.frame or tibble)}
 
 \item{col_counts}{numeric (or \code{NULL}). If non-null, column counts which
-override those calculated automatically during tabulation.}
+override those calculated automatically during tabulation. Must specify
+"counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
+will be replaced with the automatically calculated counts.}
 
 \item{\dots}{currently ignored.}
 }

@@ -15,7 +15,8 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 
 \S4method{.add_row_summary}{PreDataRowLayout}(
@@ -25,7 +26,8 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 
 \S4method{.add_row_summary}{SplitVector}(
@@ -35,7 +37,8 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 
 \S4method{.add_row_summary}{Split}(
@@ -45,7 +48,8 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 
 \S4method{.add_row_summary}{`NULL`}(
@@ -55,7 +59,8 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 }
 \arguments{
@@ -72,6 +77,8 @@
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Add Row Summary

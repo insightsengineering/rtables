@@ -204,16 +204,6 @@ setMethod("cmpnd_last_colsplit", "ANY",
 # constructors ----
 
 
-# TODO: consider to remove
-add_new_rowtree = function(lyt, spl) {
-    split_rows(lyt, spl, next_rpos(lyt, TRUE))
-}
-
-# TODO: consider to remove
-add_new_coltree = function(lyt, spl) {
-    split_cols(lyt, spl, next_cpos(lyt, TRUE))
-}
-
 
 ## Pipe-able functions to add the various types of splits to the current layout for both
 ## row and column.  These all act as wrappers to the split_cols and split_rows
@@ -643,6 +633,7 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 #'   \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
 #'   \item{.N_row}{row-wise N (row group count) for the group of observations being analyzed (ie with no column-based subsetting)}
+#'   \item{.df_row}{ data.frame for observations in the row group being analyzed (ie with no column-based subsetting)}
 #'   \item{.var}{variable that is analyzed}
 #'   \item{.ref_group}{data.frame or vector of subset corresponding to the `ref_group` column including subsetting
 #'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
@@ -651,6 +642,14 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
 #' }
 #'
+#' @note None of the arguments described in the Details section
+#' can be overridden via extra_args or when calling
+#' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
+#' be overridden via the \code{col_counts} argument to
+#' \code{\link{build_table}}. Alternative values for the others
+#' must be calculated within \code{afun} based on a combination
+#' of extra arguments and the unmodified values provided by the
+#' tabulation framework.
 #' @export
 #'
 #' @author Gabriel Becker
@@ -926,16 +925,25 @@ setGeneric(".add_row_summary",
                     child_labels = c("default", "visible", "hidden"),
                     cformat = NULL,
                     indent_mod = 0L,
-                    cvar = "") standardGeneric(".add_row_summary"))
+                    cvar = "",
+                    extra_args = list()) standardGeneric(".add_row_summary"))
 #' @rdname int_methods
 setMethod(".add_row_summary", "PreDataTableLayouts",
-          function(lyt, label, cfun, child_labels = c("default", "visible", "hidden"), cformat = NULL, indent_mod = 0L, cvar = "") {
+          function(lyt,
+                   label,
+                   cfun,
+                   child_labels = c("default", "visible", "hidden"),
+                   cformat = NULL,
+                   indent_mod = 0L,
+                   cvar = "",
+                   extra_args = list()) {
     child_labels = match.arg(child_labels)
     tmp = .add_row_summary(rlayout(lyt), label, cfun,
                       child_labels = child_labels,
                       cformat = cformat,
                       indent_mod = indent_mod,
-                      cvar = cvar)
+                      cvar = cvar,
+                      extra_args = extra_args)
     rlayout(lyt) = tmp
     lyt
 })
@@ -947,14 +955,20 @@ setMethod(".add_row_summary", "PreDataRowLayout",
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
                    indent_mod = 0L,
-                   cvar = "") {
+                   cvar = "",
+                   extra_args = list()) {
     child_labels = match.arg(child_labels)
     if(length(lyt) == 0 ||
        (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
         ## XXX ignoring indent mod here
         rt = root_spl(lyt)
-        rt = .add_row_summary(rt, label, cfun, child_labels = child_labels, cformat = cformat,
-                              cvar = cvar)
+        rt = .add_row_summary(rt,
+                              label,
+                              cfun,
+                              child_labels = child_labels,
+                              cformat = cformat,
+                              cvar = cvar,
+                              extra_args = extra_args)
         root_spl(lyt) = rt
     } else {
         ind = length(lyt)
@@ -962,7 +976,8 @@ setMethod(".add_row_summary", "PreDataRowLayout",
                           child_labels = child_labels,
                           cformat = cformat,
                           indent_mod = indent_mod,
-                          cvar = cvar)
+                          cvar = cvar,
+                          extra_args = extra_args)
         lyt[[ind]] = tmp
     }
     lyt
@@ -975,7 +990,8 @@ setMethod(".add_row_summary", "SplitVector",
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
                    indent_mod = 0L,
-                   cvar = "") {
+                   cvar = "",
+                   extra_args = list()) {
     child_labels = match.arg(child_labels)
     ind = length(lyt)
     if(ind == 0) stop("no split to add content rows at")
@@ -987,7 +1003,8 @@ setMethod(".add_row_summary", "SplitVector",
                            child_labels = child_labels,
                            cformat = cformat,
                            indent_mod = indent_mod,
-                           cvar = cvar)
+                           cvar = cvar,
+                           extra_args = extra_args)
     lyt[[ind]] = tmp
     lyt
 })
@@ -999,7 +1016,8 @@ setMethod(".add_row_summary", "Split",
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
                    indent_mod = 0L,
-                   cvar = "") {
+                   cvar = "",
+                   extra_args = list()) {
     child_labels = match.arg(child_labels)
     lbl_kids = .labelkids_helper(child_labels)
     content_fun(lyt) = cfun
@@ -1008,6 +1026,7 @@ setMethod(".add_row_summary", "Split",
     obj_format(lyt) = cformat
     if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
         label_kids(lyt) = lbl_kids
+    content_extra_args(lyt) = extra_args
     lyt
 })
 #' @rdname dot_add_row_summary
@@ -1018,7 +1037,8 @@ setMethod(".add_row_summary", "NULL",
                    child_labels = c("default", "visible", "hidden"),
                    cformat = NULL,
                    indent_mod = 0L,
-                   cvar = "") {
+                   cvar = "",
+                   extra_args = list()) {
 
     rlyt <- PreDataRowLayout()
     rtspl <- root_spl(rlyt)
@@ -1029,7 +1049,8 @@ setMethod(".add_row_summary", "NULL",
                      child_labels = child_labels,
                      cformat = cformat,
                      indent_mod = indent_mod,
-                     cvar = cvar)
+                     cvar = cvar,
+                     extra_args = extra_args)
     root_spl(rlyt) <- rtspl
     PreDataTableLayouts(rlayout = rlyt)
 })
@@ -1117,12 +1138,32 @@ setMethod(".add_row_summary", "NULL",
 #'
 #' summary(tbl) # summary count is a content table
 #'
+#'
+#' ## use a cfun and extra_args to customize summarization
+#' ## behavior
+#' sfun <- function(x, labelstr, trim) {
+#'     in_rows(
+#'         c(mean(x, trim = trim), trim),
+#'         .formats = "xx (xx.x%)",
+#'         .labels = sprintf("%s (Trimmed mean and trim %%)",
+#'                               labelstr)
+#'     )
+#' }
+#' l2 <- basic_table() %>% split_cols_by("ARM") %>%
+#'     split_rows_by("RACE") %>%
+#'     summarize_row_groups("AGE", cfun = sfun,
+#'                          extra_args = list(trim = .2)) %>%
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+#' tbl2 <- build_table(l2, DM)
+#' tbl2
+#'
 summarize_row_groups = function(lyt,
                                 var = "",
                                 label_fstr = "%s",
                                 format = "xx (xx.x%)",
                                 cfun = NULL,
-                                indent_mod = 0L){
+                                indent_mod = 0L,
+                                extra_args = list()){
 
     if(is.null(cfun)) {
         if(length(gregexpr("xx", format)[[1]]) == 2)
@@ -1135,7 +1176,8 @@ summarize_row_groups = function(lyt,
                      cfun = cfun,
                      cformat = format,
                      indent_mod = indent_mod,
-                     cvar = var)
+                     cvar = var,
+                     extra_args = extra_args)
 }
 
 
@@ -1166,8 +1208,10 @@ summarize_row_groups = function(lyt,
 #' build_table(l, DM)
 #'
 add_colcounts = function(lyt, format = "(N=xx)") {
-    disp_ccounts(lyt) = TRUE
-    colcount_format(lyt) = format
+    if(is.null(lyt))
+        lyt <- PreDataTableLayouts()
+    disp_ccounts(lyt) <- TRUE
+    colcount_format(lyt) <- format
     lyt
 }
 
@@ -1394,56 +1438,3 @@ list_wrap_df = function(f) {
 #'   build_table(DM)
 #'
 basic_table <- function() NULL
-
-#' Create multiple rows in analysis or summary functions
-#'
-#' define the cells that get placed into multiple rows in `afun`
-#'
-#' @note currently the `.name` argument is not used
-#'
-#' @param ... single row defining expressions
-#' @param .list list cell content, usually `rcells`, the `.list` is concatenated to `...`
-#' @param .names names rows
-#' @param .labels labels of rows
-#'
-#' @export
-#'
-#' @seealso `analyze`
-#'
-#' @examples
-#' in_rows(1, 2, 3, .names = c("a", "b", "c"))
-#' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
-#' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
-#'
-#' in_rows(.list = list(a = 1, b = 2, c = 3))
-#' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
-#'
-#' basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   analyze("AGE", afun = function(x) {
-#'     in_rows(
-#'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-#'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
-#'     )
-#'   }) %>%
-#'   build_table(ex_adsl)
-#'
-in_rows <- function(..., .list = NULL, .names, .labels) {
-
-    l <- c(list(...), .list)
-
-    if (missing(.names) && missing(.labels)) {
-        if (length(l) > 0 && is.null(names(l)))
-            stop("need a named list")
-    } else {
-        # currently .names is not supported
-        if (missing(.labels)) .labels <- .names
-
-        if (length(.labels) != length(l))
-            stop("dimension missmatch for cells and row names")
-
-        names(l) <- .labels
-    }
-
-    if (length(l) == 0) NULL else l
-}

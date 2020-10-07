@@ -264,7 +264,7 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACER", "ethn") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), format = "xx.xx")
+                                                           median = median(x)), format = "xx.xx")
 
     expect_error(build_table(missrsplit, rawdat))
 
@@ -441,4 +441,112 @@ test_that("extra args works", {
 
     tbl2 <- build_table(lyt2, iris)
     expect_equal(tbl2[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1 + 3)
+})
+
+
+test_that("Colcounts work correctly", {
+    lyt1 <- basic_table() %>% add_colcounts() %>%
+        analyze("AGE")
+    tbl1 <- build_table(lyt1, DM)
+
+    expect_identical(col_counts(tbl1), nrow(DM))
+
+    lyt2 <- lyt1 %>% split_cols_by("ARM")
+    tbl2 <- build_table(lyt2, DM)
+
+    expect_identical(col_counts(tbl2),
+                     as.integer(table(DM$ARM)))
+
+
+    tbl3 <- build_table(lyt2, DM, col_counts = c(500L, NA, NA))
+    expect_identical(col_counts(tbl3),
+                     c(500L, as.integer(table(DM$ARM))[2:3]))
+
+    expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
+})
+
+first_cont_rowvals = function(tt)
+    row_values(
+        tree_children(
+            content_table(
+                tree_children(tt)[[1]]
+            )
+        )[[1]])
+
+test_that("content extra args for summarize_row_groups works", {
+    sfun <- function(x, labelstr, .N_col, a = 5, b = 6, c = 7) {
+        in_rows(
+            c(a, b),
+            .formats = "xx - xx",
+            .labels = labelstr)
+    }
+    ## specify single set of args for all columns
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(a = 9))
+    tbl1 <- build_table(l, rawdat)
+    expect_identical(first_cont_rowvals(tbl1),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(9, 6)))
+
+    ## specify different arg for each column
+    l2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(list(a = 9),
+                                               list(b = 3)))
+    tbl2 <- build_table(l2, rawdat)
+    expect_identical(first_cont_rowvals(tbl2),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(5, 3)))
+
+
+    ## specify arg for only one col
+    l3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(list(a = 9)))
+    tbl3 <- build_table(l3, rawdat)
+    expect_identical(first_cont_rowvals(tbl3),
+                     list(ARM1 = c(9, 6),
+                          ARM2 = c(5, 6)))
+
+    ##works on root split
+
+    l4 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        summarize_row_groups(cfun = sfun,
+                             extra_args = list(a = 9))
+    tbl4 <- build_table(l4, rawdat)
+    expect_identical(row_values(tree_children(content_table(tbl4))[[1]]),
+                      list(ARM1 = c(9, 6),
+                          ARM2 = c(9, 6)))
+})
+
+test_that(".df_row analysis function argument works", {
+    afun = function(x, labelstr = "", .N_col, .df_row)  {
+        rcell(c(nrow(.df_row), .N_col), format = "(xx.x, xx.x)")
+    }
+
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", afun)
+
+    tbl <- build_table(l, rawdat)
+    rws = collect_leaves(tbl, add.labrows = FALSE)
+    nmale = sum(rawdat$SEX == "M")
+    nfemale = sum(rawdat$SEX == "F")
+    narm1 = sum(rawdat$ARM == "ARM1")
+    narm2 = sum(rawdat$ARM == "ARM2")
+
+    expect_identical(unname(lapply(rws, row_values)),
+                     list(list(ARM1 = c(nmale, narm1),
+                               ARM2 = c(nmale, narm2)),
+                          list(ARM1 = c(nfemale, narm1),
+                               ARM2 = c(nfemale, narm2))))
 })

@@ -127,16 +127,20 @@
 \alias{content_fun,Split-method}
 \alias{content_fun<-}
 \alias{content_fun<-,Split-method}
-\alias{content_var}
-\alias{content_var,Split-method}
-\alias{content_var<-}
-\alias{content_var<-,Split-method}
 \alias{analysis_fun}
 \alias{analysis_fun,AnalyzeVarSplit-method}
 \alias{analysis_fun,AnalyzeColVarSplit-method}
 \alias{split_fun}
 \alias{split_fun,CustomizableSplit-method}
 \alias{split_fun,Split-method}
+\alias{content_extra_args}
+\alias{content_extra_args,Split-method}
+\alias{content_extra_args<-}
+\alias{content_extra_args<-,Split-method}
+\alias{content_var}
+\alias{content_var,Split-method}
+\alias{content_var<-}
+\alias{content_var<-,Split-method}
 \alias{avar_inclNAs}
 \alias{avar_inclNAs,VAnalyzeSplit-method}
 \alias{avar_inclNAs<-}
@@ -239,12 +243,12 @@
 \alias{clayout_splits,LayoutColTree-method}
 \alias{clayout_splits,LayoutColLeaf-method}
 \alias{clayout_splits,VTableNodeInfo-method}
-\alias{cextra_args}
-\alias{cextra_args,InstantiatedColumnInfo-method}
-\alias{cextra_args,PreDataTableLayouts-method}
-\alias{cextra_args,PreDataColLayout-method}
-\alias{cextra_args,LayoutColTree-method}
-\alias{cextra_args,LayoutColLeaf-method}
+\alias{col_extra_args}
+\alias{col_extra_args,InstantiatedColumnInfo-method}
+\alias{col_extra_args,PreDataTableLayouts-method}
+\alias{col_extra_args,PreDataColLayout-method}
+\alias{col_extra_args,LayoutColTree-method}
+\alias{col_extra_args,LayoutColLeaf-method}
 \alias{disp_ccounts}
 \alias{disp_ccounts,VTableTree-method}
 \alias{disp_ccounts,InstantiatedColumnInfo-method}
@@ -334,7 +338,8 @@ cmpnd_last_colsplit(lyt, spl, constructor)
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
 
 fix_dyncuts(spl, df)
@@ -535,14 +540,6 @@ content_fun(object) <- value
 
 \S4method{content_fun}{Split}(object) <- value
 
-content_var(obj)
-
-\S4method{content_var}{Split}(obj)
-
-content_var(object) <- value
-
-\S4method{content_var}{Split}(object) <- value
-
 analysis_fun(obj)
 
 \S4method{analysis_fun}{AnalyzeVarSplit}(obj)
@@ -554,6 +551,22 @@ split_fun(obj)
 \S4method{split_fun}{CustomizableSplit}(obj)
 
 \S4method{split_fun}{Split}(obj)
+
+content_extra_args(obj)
+
+\S4method{content_extra_args}{Split}(obj)
+
+content_extra_args(object) <- value
+
+\S4method{content_extra_args}{Split}(object) <- value
+
+content_var(obj)
+
+\S4method{content_var}{Split}(obj)
+
+content_var(object) <- value
+
+\S4method{content_var}{Split}(object) <- value
 
 avar_inclNAs(obj)
 
@@ -759,17 +772,17 @@ clayout_splits(obj)
 
 \S4method{clayout_splits}{VTableNodeInfo}(obj)
 
-cextra_args(obj, df = NULL)
+col_extra_args(obj, df = NULL)
 
-\S4method{cextra_args}{InstantiatedColumnInfo}(obj, df = NULL)
+\S4method{col_extra_args}{InstantiatedColumnInfo}(obj, df = NULL)
 
-\S4method{cextra_args}{PreDataTableLayouts}(obj, df = NULL)
+\S4method{col_extra_args}{PreDataTableLayouts}(obj, df = NULL)
 
-\S4method{cextra_args}{PreDataColLayout}(obj, df = NULL)
+\S4method{col_extra_args}{PreDataColLayout}(obj, df = NULL)
 
-\S4method{cextra_args}{LayoutColTree}(obj, df = NULL)
+\S4method{col_extra_args}{LayoutColTree}(obj, df = NULL)
 
-\S4method{cextra_args}{LayoutColLeaf}(obj, df = NULL)
+\S4method{col_extra_args}{LayoutColLeaf}(obj, df = NULL)
 
 disp_ccounts(obj)
 
@@ -857,6 +870,8 @@ spl_is_cmlcuts(obj)
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{df}{dataset (data.frame or tibble)}
 

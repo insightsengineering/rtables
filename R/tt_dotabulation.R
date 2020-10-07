@@ -1,6 +1,6 @@
 
-match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, .N_row, extras) {
-    possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row),
+match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, .N_row, .df_row, extras) {
+    possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row, .df_row = .df_row),
                  extras)
     ## specialized arguments that must be named in formals, cannot go anonymously into ...
     if(!is.null(.var) && nzchar(.var))
@@ -65,6 +65,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                                   .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
                                   .N_row = NROW(dfpart),
+                                  .df_row = dfpart,
                                   extras = c(cextr,
                                              splextra)))
 
@@ -92,7 +93,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          baselines, inclNAs) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
-    colextras = cextra_args(cinfo, NULL)
+    colextras = col_extra_args(cinfo, NULL)
     ## XXX this is an assumption that could???? be
     ## wrong in certain really weird corner cases?
     totcount = sum(colcounts)
@@ -102,13 +103,16 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 
     gotflist <- is.list(func)
 
+    ## one set of named args to be applied to all columns
     if(!is.null(names(splextra)))
         splextra = list(splextra)
+    else
+        length(splextra) = ncol(cinfo)
 
 
     if(!gotflist) {
         func <- list(func)
-    } else {
+    } else  if(length(splextra) != length(func)) {
         splextra  = rep(splextra, length.out = length(func))
     }
 
@@ -234,10 +238,10 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     rv1col = rawvals[[maxind]]
     if(is(rv1col, "CellValue"))
         labels = obj_label(rv1col)
+    else if(are(rv1col, "CellValue"))
+        labels = unlist(value_labels(rv1col))
     else if (!is.null(names(rv1col)))
         labels = names(rv1col)
-    else if(are(rv1col, "CellValue"))
-        labels = vapply(rv1col, obj_label, "")
     else
         labels = NULL
 
@@ -247,8 +251,12 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         else
             labels = rep("", length(rawvals[[maxind]]))
     }
+
+
     ncrows = max(unqlens)
     stopifnot(ncrows > 0)
+
+
     ##recycle formats
     if(ncrows ==  1)  {
         return(list(rowconstr(val = rawvals,
@@ -257,7 +265,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                          label = labels,
                          name = labels,
                          var = rowvar,
-                         format = format)))
+                         format = format,
+                         indent_mod = indent_mod(rawvals[[1]]))))
     }
     formatvec = NULL
     if(!is.null(format)) {
@@ -271,13 +280,17 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
             {
                 colvals[[i]]
             })
+        imod = unique(vapply(rowvals, indent_mod, 0L))
+        if(length(imod) != 1)
+            stop("Different cells in the same row appear to have been given different indent_mod values")
         rowconstr(val = rowvals,
                   cinfo = cinfo,
                   lev = lev,
                   label = labels[i],
                   name = labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
-                  format = formatvec[[i]]
+                  format = formatvec[[i]],
+                  indent_mod = imod
                   )
 
     })
@@ -377,7 +390,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                       format = NULL,
                       indent_mod = 0L,
                       cvar = NULL,
-                      inclNAs) {
+                      inclNAs,
+                      extra_args) {
 
     if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
         cvar = NULL
@@ -391,7 +405,8 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
                                    datcol = cvar,
                                    takesdf = rep(.takes_df(cfunc),
                                                  ncol(cinfo)),
-                                   inclNAs = FALSE)
+                                   inclNAs = FALSE,
+                                   splextra = extra_args)
     } else {
         contkids = list()
     }
@@ -455,8 +470,9 @@ recursive_applysplit = function( df,
                                 parent_cfun = NULL,
                                 cformat = NULL,
                                 cindent_mod = 0L,
+                                cextra_args = list(),
                                 cvar = NULL,
-                                baselines = lapply(cextra_args(cinfo),
+                                baselines = lapply(col_extra_args(cinfo),
                                                    function(x) x$.ref_full)) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
@@ -474,7 +490,8 @@ recursive_applysplit = function( df,
                       parent_cfun = parent_cfun,
                       format = cformat,
                       indent_mod = cindent_mod,
-                      cvar = cvar)
+                      cvar = cvar,
+                      extra_args = cextra_args)
 
 
     if(length(splvec) == 0L) {
@@ -603,7 +620,8 @@ recursive_applysplit = function( df,
                                      partlabel = label,
                                      cindent_mod = content_indent_mod(spl),
                                      cvar = content_var(spl),
-                                     baselines = baselines)
+                                     baselines = baselines,
+                                     cextra_args = content_extra_args(spl))
             }, dfpart = dataspl,
             label = partlabels,
             nm = nms,
@@ -677,7 +695,9 @@ recursive_applysplit = function( df,
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param col_counts numeric (or `NULL`). If non-null, column counts which
-#'   override those calculated automatically during tabulation.
+#'   override those calculated automatically during tabulation. Must specify
+#' "counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
+#' will be replaced with the automatically calculated counts.
 #' @param \dots currently ignored.
 #'
 #' @note When overriding the column counts care must be taken that, e.g.,
@@ -771,7 +791,8 @@ build_table = function(lyt, df,
                       parent_cfun = content_fun(rtspl),
                       format = content_format(rtspl),
                       indent_mod = 0L,
-                      cvar = content_var(rtspl))
+                      cvar = content_var(rtspl),
+                      extra_args = content_extra_args(rtspl))
     kids = lapply(seq_along(rlyt), function(i) {
         splvec = rlyt[[i]]
         if(length(splvec) == 0)
@@ -788,7 +809,8 @@ build_table = function(lyt, df,
                              make_lrow = label_kids(firstspl),
                              parent_cfun = NULL,
                              cformat = obj_format(firstspl),
-                             cvar = content_var(firstspl))
+                             cvar = content_var(firstspl),
+                             cextra_args = content_extra_args(firstspl))
     })
     kids = kids[!sapply(kids, is.null)]
     if(length(kids) > 0)

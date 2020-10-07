@@ -544,19 +544,6 @@ setMethod("content_fun<-", "Split", function(object, value) {
 })
 
 #' @rdname int_methods
-setGeneric("content_var", function(obj) standardGeneric("content_var"))
-#' @rdname int_methods
-setMethod("content_var", "Split", function(obj) obj@content_var)
-
-#' @rdname int_methods
-setGeneric("content_var<-", function(object, value) standardGeneric("content_var<-"))
-#' @rdname int_methods
-setMethod("content_var<-", "Split", function(object, value) {
-    object@content_var = value
-    object
-})
-
-#' @rdname int_methods
 setGeneric("analysis_fun", function(obj) standardGeneric("analysis_fun"))
 #' @rdname int_methods
 setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
@@ -573,6 +560,37 @@ setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
 ## an accessor that just returns NULL
 #' @rdname int_methods
 setMethod("split_fun", "Split", function(obj) NULL)
+
+
+## Content specification related accessors
+#' @rdname int_methods
+setGeneric("content_extra_args", function(obj) standardGeneric("content_extra_args"))
+#' @rdname int_methods
+setMethod("content_extra_args", "Split", function(obj) obj@content_extra_args)
+
+#' @rdname int_methods
+setGeneric("content_extra_args<-", function(object, value) standardGeneric("content_extra_args<-"))
+#' @rdname int_methods
+setMethod("content_extra_args<-", "Split", function(object, value) {
+    object@content_extra_args = value
+    object
+})
+
+
+#' @rdname int_methods
+setGeneric("content_var", function(obj) standardGeneric("content_var"))
+#' @rdname int_methods
+setMethod("content_var", "Split", function(obj) obj@content_var)
+
+#' @rdname int_methods
+setGeneric("content_var<-", function(object, value) standardGeneric("content_var<-"))
+#' @rdname int_methods
+setMethod("content_var<-", "Split", function(object, value) {
+    object@content_var = value
+    object
+})
+
+
 
 
 
@@ -1030,6 +1048,8 @@ setMethod("indent_mod", "Split",
 #' @rdname int_methods
 setMethod("indent_mod", "VTableNodeInfo",
           function(obj) obj@indent_modifier)
+setMethod("indent_mod", "ANY",
+          function(obj) attr(obj, "indent_mod") %||% 0L)
 
 #' @rdname int_methods
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
@@ -1045,6 +1065,14 @@ setMethod("indent_mod<-", "VTableNodeInfo",
     obj@indent_modifier = as.integer(value)
     obj
 })
+
+setMethod("indent_mod<-", "CellValue",
+          function(obj, value) {
+    attr(obj, "indent_mod") <- as.integer(value)
+    obj
+})
+
+
 
 #' @rdname int_methods
 setGeneric("content_indent_mod", function(obj) standardGeneric("content_indent_mod"))
@@ -1105,7 +1133,14 @@ setMethod("value_labels", "ANY", function(obj) as.character(obj_label(obj)))
 #' @rdname int_methods
 setMethod("value_labels", "TreePos", function(obj) sapply(pos_splvals(obj), obj_label))
 #' @rdname int_methods
-setMethod("value_labels", "list", function(obj) lapply(obj, value_labels))
+setMethod("value_labels", "list", function(obj) {
+    ret <- lapply(obj, obj_label)
+    if(!is.null(names(obj))) {
+        inds <- vapply(ret, function(x) length(x) == 0, NA)
+        ret[inds] = names(obj)[inds]
+    }
+    ret
+})
 #' @rdname int_methods
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 #' @rdname int_methods
@@ -1360,31 +1395,31 @@ setMethod("col_exprs", "InstantiatedColumnInfo",
 })
 
 #' @rdname int_methods
-setGeneric("cextra_args", function(obj, df = NULL) standardGeneric("cextra_args"))
+setGeneric("col_extra_args", function(obj, df = NULL) standardGeneric("col_extra_args"))
 #' @rdname int_methods
-setMethod("cextra_args", "InstantiatedColumnInfo",
+setMethod("col_extra_args", "InstantiatedColumnInfo",
           function(obj, df) {
     if(!is.null(df))
         warning("Ignorning df when retrieving already-computed column extra arguments.")
     obj@cextra_args
 })
 #' @rdname int_methods
-setMethod("cextra_args", "PreDataTableLayouts",
-          function(obj, df) cextra_args(clayout(obj), df))
+setMethod("col_extra_args", "PreDataTableLayouts",
+          function(obj, df) col_extra_args(clayout(obj), df))
 #' @rdname int_methods
-setMethod("cextra_args", "PreDataColLayout",
+setMethod("col_extra_args", "PreDataColLayout",
           function(obj, df) {
-    cextra_args(coltree(obj, df), NULL)
+    col_extra_args(coltree(obj, df), NULL)
 })
 #' @rdname int_methods
-setMethod("cextra_args", "LayoutColTree",
+setMethod("col_extra_args", "LayoutColTree",
           function(obj, df) {
     if(!is.null(df))
         warning("Ignoring df argument and returning already calculated extra arguments")
     get_col_extras(obj)
 })
 #' @rdname int_methods
-setMethod("cextra_args", "LayoutColLeaf",
+setMethod("col_extra_args", "LayoutColLeaf",
           function(obj, df) {
     if(!is.null(df))
         warning("Ignoring df argument and returning already calculated extra arguments")

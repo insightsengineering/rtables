@@ -29,7 +29,8 @@ LabelRow(
   cinfo = EmptyColInfo,
   var = NA_character_,
   format = NULL,
-  klass
+  klass,
+  indent_mod = 0L
 )
 
 DataRow(...)

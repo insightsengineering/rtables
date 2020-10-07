@@ -41,7 +41,7 @@ mtbl <- rtable(
      format = "xx.xx"
    )
  )
- 
+
  mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
    header = rheader(
      rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
@@ -54,12 +54,12 @@ mtbl <- rtable(
      format = "xx.xx"
    )
  ))
- 
+
  rbind(mtbl, mtbl2)
 rbind(mtbl, rrow(), mtbl2)
 rbind(mtbl, rrow("aaa"), indent(mtbl2))
  # TODO: add functionality
- # 
+ #
  # rbind(mtbl, mtbl2, gap = 1)
  # rbind(mtbl, mtbl2, gap = 2)
 }
