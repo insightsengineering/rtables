@@ -12,10 +12,19 @@
 #' @rdname rcell
 #' @export
 rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
-    if(is(x, "CellValue"))
+    if(is(x, "CellValue")) {
+        if(!is.null(label))
+            obj_label(x) <- label
+        if(colspan != 1L)
+            cell_cspan(x) <- colspan
+        if(!is.null(indent_mod))
+            indent_mod(x) <- indent_mod
+        if(!is.null(format))
+            obj_format(x) <- format
         x
-    else
+    } else {
         CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
+    }
 }
 
 #' @details \code{non_ref_rcell} provides the common \emph{blank for cells in the reference

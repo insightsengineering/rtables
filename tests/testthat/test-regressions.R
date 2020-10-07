@@ -145,3 +145,16 @@ test_that("CellValue on something with object labels", {
                                          label = NULL)),
                      "hi")
 })
+
+
+test_that("rcell on CellValue overrides attrs as necessary", {
+    val <- CellValue(c(100, .5), format = "xx (xx.x%)", label = "oldlabel",
+                     colspan = 2L,
+                     indent_mod = 2L)
+    val2 <-  CellValue(c(100, .5), format = "xx (xx.xx%)", label = "new label",
+                     colspan = 3L,
+                     indent_mod = 3L)
+    expect_identical(rcell(val, format = "xx (xx.xx%)", label = "new label",
+                           colspan = 3L, indent_mod = 3L),
+                     val2)
+})
