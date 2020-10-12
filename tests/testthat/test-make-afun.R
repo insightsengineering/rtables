@@ -326,3 +326,25 @@ test_that("make_afun+build_table integration tests", {
     ## .indent_mod appears in .indent_mod unit test section
     ## currently
 })
+
+## regression for bug #102
+
+test_that("call-time ... passed down correctly by funs constructed by make_afun", {
+
+    f <- function(x, a, ...) {
+        list(a = a, ...)
+    }
+
+    af <- make_afun(f, .stats = "b")
+    res1 <- af(5, a = 6, b= 7)
+    expect_identical(list(b=7), rtables:::rawvalues(res1))
+
+
+    f2 <- function(df, a, ...) {
+        list(a = a, ...)
+    }
+
+    af2 <- make_afun(f2, .stats = "b")
+    res2 <- af2(iris, a = 5, b = 7)
+    expect_identical(list(b=7), rtables:::rawvalues(res2))
+})
