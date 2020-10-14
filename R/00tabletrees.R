@@ -76,11 +76,12 @@ setClass("LevelComboSplitValue",
          contains = "SplitValue",
          representation(comboname = "character"))
 
-LevelComboSplitValue = function(val, extr, comboname) {
+LevelComboSplitValue = function(val, extr, comboname, label = comboname) {
     new("LevelComboSplitValue",
         value = val,
         extra = extr,
-        comboname = comboname)
+        comboname = comboname,
+        label = label)
 }
 
 

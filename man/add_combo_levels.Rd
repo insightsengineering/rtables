@@ -11,7 +11,7 @@ An object of class \code{AllLevelsSentinel} of length 0.
 \usage{
 select_all_levels
 
-add_combo_levels(combosdf, trim = FALSE, first = FALSE)
+add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 }
 \arguments{
 \item{combosdf}{data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.}
@@ -19,6 +19,8 @@ add_combo_levels(combosdf, trim = FALSE, first = FALSE)
 \item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
 
 \item{first}{logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
+
+\item{keep_levels}{character or NULL. If non-NULL, the levels to retain across both combination and individual levels.}
 }
 \description{
 Add Combination Levels to split
@@ -39,6 +41,14 @@ l <- basic_table() \%>\%
     analyze("AGE")
 
 build_table(l, DM)
+
+la <- basic_table() \%>\%
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf, keep_levels = c("A_B", "A_C"))) \%>\%
+    add_colcounts() \%>\%
+    analyze("AGE")
+
+build_table(la, DM)
+
 smallerDM <- droplevels(subset(DM, SEX \%in\% c("M", "F") &
                         grepl("^(A|B)", ARM)))
 l2 <- basic_table() \%>\%
