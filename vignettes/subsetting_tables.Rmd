@@ -93,7 +93,7 @@ We can get an idea about the tree structure of the table using the `make_pagedf`
 
 ```{r}
 make_pagdf(tbl) %>%
-  select(label, name, abs_rownumber, path, row_class)
+  select(label, name, abs_rownumber, path, node_class)
 #summary(tbl)
 ```
 
