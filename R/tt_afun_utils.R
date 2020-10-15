@@ -12,10 +12,19 @@
 #' @rdname rcell
 #' @export
 rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
-    if(is(x, "CellValue"))
+    if(is(x, "CellValue")) {
+        if(!is.null(label))
+            obj_label(x) <- label
+        if(colspan != 1L)
+            cell_cspan(x) <- colspan
+        if(!is.null(indent_mod))
+            indent_mod(x) <- indent_mod
+        if(!is.null(format))
+            obj_format(x) <- format
         x
-    else
+    } else {
         CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
+    }
 }
 
 #' @details \code{non_ref_rcell} provides the common \emph{blank for cells in the reference
@@ -82,16 +91,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if (missing(.names) && missing(.labels)) {
         if (length(l) > 0 && is.null(names(l)))
             stop("need a named list")
-    } ## else {
-    ##     ## # currently .names is not supported
-    ##     ## if (missing(.labels)) .labels <- .names
-
-    ##     if (length(.labels) != length(l))
-    ##         stop("dimension missmatch for cells and row names")
-
-    ##     names(l) <- .labels
-    ## }
-
+    }
 
     l2 <- mapply(rcell, x = l, label = .labels %||% list(NULL),
                  format = .formats %||% list(NULL),
@@ -242,33 +242,54 @@ make_afun <- function(fun,
     ## too clever by three-quarters (because half wasn't enough)
     ## gross scope hackery
     fun_args = force(list(...))
+    fun_fnames <- names(formals(fun))
+    takes_inrefcol <- ".in_ref_col" %in% fun_fnames
 
-    ## so these are guaranteed to be defined for the list construction below
-    ## hacky but everything else I thought of was worse.
-    .N_col = NULL
-    .N_total = NULL
-    .ref_group = NULL
-    .in_ref_col = NULL
-    df = NULL
-    ret <- function(x) { ## remember formals get clobbered here
+    ret <- function(x, ...) { ## remember formals get clobbered here
+
+        ## this helper will grab the value and wrap it in a named list if
+        ## we need the variable and return list() otherwise.
+        ## We define it in here so that the scoping hackery works correctly
+        .if_in_formals <- function(nm, ifnot = list(), named_lwrap = TRUE) {
+            val <- if(nm %in% fun_fnames) get(nm) else ifnot
+            if(named_lwrap && length(val) > 0)
+                setNames(list(val), nm)
+            else
+                val
+        }
+
         custargs <- fun_args
 
+        ## special handling cause I need it at the bottom as well
+        in_rc_argl <- .if_in_formals(".in_ref_col")
+        .in_ref_col <- if(length(in_rc_argl) > 0) in_rc_argl[[1]] else FALSE
+
+        sfunargs <- c(
+            ## these are either named lists containing the arg, or list()
+            ## depending on whether fun accept the argument or not
+            .if_in_formals("x"),
+            .if_in_formals("df"),
+            .if_in_formals(".N_col"),
+            .if_in_formals(".N_total"),
+            .if_in_formals(".N_row"),
+            .if_in_formals(".ref_group"),
+            in_rc_argl,
+            .if_in_formals(".df_row"),
+            .if_in_formals(".var"),
+            .if_in_formals(".ref_full"))
+
+        allvars <- setdiff(fun_fnames, c("...", names(sfunargs)))
         ## values int he actual call to this function override customization
         ## done by the constructor. evalparse is to avoid a "... in wrong context" NOTE
-        if("..." %in% names(formals())) {
+        if("..." %in% fun_fnames) {
             exargs <- eval(parse(text = "list(...)"))
             custargs[names(exargs)] <- exargs
+            allvars <- unique(c(allvars, names(custargs)))
         }
-        sfunargs <- c(if("x" %in% names(formals(fun))) list(x = x) else list(df = df),
-                      list(
-                         .N_col = .N_col,
-                         .N_total = .N_total,
-                         .ref_group = .ref_group,
-                         .in_ref_col = .in_ref_col))
-        sfunargs <- sfunargs[names(sfunargs) %in% names(formals(fun))]
-        for(var in setdiff(names(formals(fun)), c("...", names(sfunargs)))) {
+
+        for(var in allvars) {
             ## not missing, ie specified in the direct call, takes precedence
-            if(eval(parse(text = paste0("!missing(", var, ")"))))
+            if(var %in% fun_fnames && eval(parse(text = paste0("!missing(", var, ")"))))
                 sfunargs[[var]] <- get(var)
             ## not specified in the call, but specified in the constructor
             else if(var %in% names(custargs))
@@ -334,7 +355,6 @@ make_afun <- function(fun,
                                               )
             }
         }
-
         rcells <- mapply(function(x, f, l, im) {
             if(is(x, "CellValue")) {
                 obj_label(x) <- l
@@ -342,9 +362,10 @@ make_afun <- function(fun,
                 indent_mod(x) <- im
                 x
             } else if(.null_ref_cells) {
-                non_ref_rcell(x, .in_ref_col, format =f, label = l, indent_mod = im)
+                non_ref_rcell(x, isref = .in_ref_col,
+                              format =f, label = l, indent_mod = im)
             } else {
-                rcell(x, .in_ref_col, format =f, label = l, indent_mod = im)
+                rcell(x, format =f, label = l, indent_mod = im)
             }
         }, f = final_formats, x = final_vals,
         l = final_labels,

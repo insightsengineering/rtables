@@ -59,7 +59,7 @@ setGeneric("check_validsplit",
     }
     ## length(vals) > 0 from here down
 
-    if(are(vals, "SplitValue")) {
+    if(are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
         if(!is.null(extr)) {
             warning("Got a partinfo list with values that are ",
                     "already SplitValue objects and non-null extras ",
@@ -544,19 +544,19 @@ trim_levels_in_group = function(innervar) {
 
 .add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {
 
-    value = LevelComboSplitValue(levels, extras, comboname = valuename)
+    value = LevelComboSplitValue(levels, extras, comboname = valuename, label = label)
     newdat = setNames(list(df), label)
     newval = setNames(list(value), label)
     newextra = setNames(list(extras), label)
     if(first) {
         part$datasplit = c(newdat, part$datasplit)
         part$values = c(newval, part$values)
-        part$labels = c(label, part$labels)
+        part$labels = c(setNames(label, label), part$labels)
         part$extras = c(newextra, part$extras)
     } else {
         part$datasplit = c(part$datasplit, newdat)
         part$values = c(part$values, newval)
-        part$labels = c(part$labels, label)
+        part$labels = c(part$labels, setNames(label, label))
         part$extras = c(part$extras, newextra)
     }
     ## not needed even in custom split function case.
@@ -606,6 +606,7 @@ select_all_levels = new("AllLevelsSentinel")
 #' Add Combination Levels to split
 #' @inheritParams sf_args
 #' @param combosdf data.frame/tbl_df. Columns valname, label, levelcombo, exargs. Of which levelcombo and exargs are list columns. Passing the \code{select_all_levels} object as a value in the \code{comblevels} column indicates that an overall/all-observations level should be created.
+#' @param keep_levels character or NULL. If non-NULL, the levels to retain across both combination and individual levels.
 #' @note Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #' @export
 #' @examples
@@ -621,6 +622,14 @@ select_all_levels = new("AllLevelsSentinel")
 #'     analyze("AGE")
 #'
 #' build_table(l, DM)
+#'
+#' la <- basic_table() %>%
+#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf, keep_levels = c("A_B", "A_C"))) %>%
+#'     add_colcounts() %>%
+#'     analyze("AGE")
+#'
+#' build_table(la, DM)
+#'
 #' smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
 #'                         grepl("^(A|B)", ARM)))
 #' l2 <- basic_table() %>%
@@ -637,11 +646,11 @@ select_all_levels = new("AllLevelsSentinel")
 #'     analyze("AGE")
 #'
 #' build_table(l3, smallerDM)
-add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
+add_combo_levels = function(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL) {
     myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
         ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
         for(i in 1:nrow(combosdf)) {
-            lcombo = combosdf[i, "levelcombo"][[1]]
+            lcombo = combosdf[i, "levelcombo", drop = TRUE][[1]]
             spld = spl_payload(spl)
             if(is(lcombo, "AllLevelsSentinel"))
                 subdf = df
@@ -655,10 +664,15 @@ add_combo_levels = function(combosdf, trim = FALSE, first = FALSE) {
             ret = .add_combo_part_info(ret, subdf,
                                        combosdf[i, "valname", drop=TRUE],
                                        lcombo,
-                                       combosdf[i,"label"],
-                                       combosdf[i, "exargs"][[1]],
+                                       combosdf[i,"label", drop = TRUE],
+                                       combosdf[i, "exargs", drop = TRUE][[1]],
                                        first)
         }
+        if(!is.null(keep_levels)) {
+            keep_inds <- value_names(ret$values) %in% keep_levels
+            ret <- lapply(ret, function(x) x[keep_inds])
+        }
+
         ret
     }
   myfun
