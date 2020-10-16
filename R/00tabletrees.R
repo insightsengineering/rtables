@@ -994,6 +994,7 @@ setClass("InstantiatedColumnInfo",
                         subset_exprs = "list",
                         cextra_args = "list",
                         counts = "integer",
+                        total_count = "integer",
                         display_columncounts = "logical",
                         columncount_format = "FormatSpec")
          )
@@ -1004,12 +1005,14 @@ setClass("InstantiatedColumnInfo",
 #' @param csubs list. List of subsetting expressions
 #' @param extras list. Extra arguments associated with the columns
 #' @param cnts integer. Counts.
+#' @param total_cnt integer(1). Total observations represented across all columns.
 #' @param dispcounts logical. Should the counts be displayed as header info when the associated table is printed.
 #' @param countformat string. Format for the counts if thtey are displayed
 InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
                                   csubs = list(expression(TRUE)),
                                   extras = list(list()),
                                   cnts = NA_integer_,
+                                  total_cnt = NA_integer_,
                                   dispcounts = FALSE,
                                   countformat = "(N=xx)") {
     leaves = collect_leaves(treelyt)
@@ -1033,6 +1036,7 @@ InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
         subset_exprs = csubs,
         cextra_args = extras,
         counts = cnts,
+        total_count = total_cnt,
         display_columncounts = dispcounts,
         columncount_format = countformat)
 }

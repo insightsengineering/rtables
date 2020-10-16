@@ -163,7 +163,8 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 
 create_colinfo = function(lyt, df, rtpos = TreePos(),
-                          counts = NULL) {
+                          counts = NULL,
+                          total = NULL) {
     ## this will work whether clayout is pre or post
     ## data
     clayout = clayout(lyt)
@@ -207,13 +208,16 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
             }
     })
     counts[calcpos] <- calccounts[calcpos]
+    if(is.null(total))
+        total <- sum(counts)
     format =  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = colextras,
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
-                           countformat = format)
+                           countformat = format,
+                           total_cnt = total)
 
 }
 

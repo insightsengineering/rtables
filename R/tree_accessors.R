@@ -1470,6 +1470,49 @@ setMethod("col_counts<-", "VTableNodeInfo",
 })
 
 
+
+#' @export
+#' @rdname col_accessors
+setGeneric("col_total", function(obj) standardGeneric("col_total"))
+
+#' @export
+#' @rdname col_accessors
+setMethod("col_total",  "InstantiatedColumnInfo",
+          function(obj) obj@total_count)
+
+#' @export
+#' @rdname col_accessors
+setMethod("col_total", "VTableNodeInfo",
+          function(obj) col_total(col_info(obj)))
+
+#' @export
+#' @rdname col_accessors
+setGeneric("col_total<-", function(obj, value) standardGeneric("col_total<-"))
+
+#' @export
+#' @rdname col_accessors
+setMethod("col_total<-",  "InstantiatedColumnInfo",
+          function(obj, value) {
+    obj@total_count = value
+    obj
+})
+
+#' @export
+#' @rdname col_accessors
+setMethod("col_total<-", "VTableNodeInfo",
+          function(obj, value) {
+    cinfo = col_info(obj)
+    col_total(cinfo) = value
+    col_info(obj) = cinfo
+    obj
+
+})
+
+
+
+
+
+
 #' @rdname int_methods
 setGeneric("disp_ccounts", function(obj) standardGeneric("disp_ccounts"))
 #' @rdname int_methods

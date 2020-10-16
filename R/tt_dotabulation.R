@@ -65,7 +65,10 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 
         args = c(args,
-                 match_extra_args(func, count, totcount, .var = col,
+                 match_extra_args(func,
+                                  .N_col = count,
+                                  .N_total = totcount,
+                                  .var = col,
                                   .ref_group = baselinedf,
                                   .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
@@ -94,7 +97,11 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
-gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
+gen_rowvalues = function(dfpart,
+                         datcol,
+                         cinfo,
+                         func,
+                         splextra,
                          takesdf = NULL,
                          baselines, inclNAs,
                          last_splval = last_splval) {
@@ -104,7 +111,7 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
     splextra = c(splextra, list(last_splval))
     ## XXX this is an assumption that could???? be
     ## wrong in certain really weird corner cases?
-    totcount = sum(colcounts)
+    totcount = col_total(cinfo) ##sum(colcounts)
 
     colleaves =  collect_leaves(cinfo@tree_layout)
 
@@ -179,7 +186,9 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
 
     if(is.null(takesdf))
         takesdf = .takes_df(allfuncs)
-    rawvals = mapply(gen_onerv, csub = colexprs, col = datcol,
+    rawvals = mapply(gen_onerv,
+                     csub = colexprs,
+                     col = datcol,
                      count = colcounts,
                      cextr = colextras,
                      baselinedf = baselines,
@@ -232,8 +241,15 @@ gen_rowvalues = function(dfpart, datcol, cinfo, func, splextra,
         rowvar  = NA_character_
     }
 
-    rawvals = gen_rowvalues(dfpart, datcol = datcol, cinfo, func,splextra =  splextra, takesdf = takesdf,
-                            baselines, inclNAs = inclNAs, last_splval = last_splval)
+    rawvals = gen_rowvalues(dfpart,
+                            datcol = datcol,
+                            cinfo = cinfo,
+                            func = func,
+                            splextra =  splextra,
+                            takesdf = takesdf,
+                            baselines = baselines,
+                            inclNAs = inclNAs,
+                            last_splval = last_splval)
 
     ## if(is.null(rvtypes))
     ##     rvtypes = rep(NA_character_, length(rawvals))
@@ -776,9 +792,10 @@ recursive_applysplit = function( df,
 #'   override those calculated automatically during tabulation. Must specify
 #' "counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
 #' will be replaced with the automatically calculated counts.
+#' @param col_total integer(1). The total observations across all columns. Defaults to \code{nrow(df)}.
 #' @param \dots currently ignored.
 #'
-#' @note When overriding the column counts care must be taken that, e.g.,
+#' @note When overriding the column counts or totals care must be taken that, e.g.,
 #'   `length()` or `nrow()` are not called within tabulation functions, because
 #'   those will NOT give the overridden counts. Writing/using tabulation
 #'   functions which accept \code{.N_col} and \code{.N_total} or do not rely on
@@ -837,6 +854,7 @@ recursive_applysplit = function( df,
 #'
 build_table = function(lyt, df,
                        col_counts = NULL,
+                       col_total = nrow(df),
                        ...) {
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
@@ -856,7 +874,8 @@ build_table = function(lyt, df,
 
     rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
-                           counts = col_counts)
+                           counts = col_counts,
+                           total = col_total)
     if(!is.null(col_counts))
         disp_ccounts(cinfo) = TRUE
 

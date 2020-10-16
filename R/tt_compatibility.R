@@ -507,7 +507,7 @@ header <- function(x) col_info(obj = x)
 
 
 
-combine_cinfo = function(ci1, ci2) {
+combine_cinfo = function(ci1, ci2, new_total = col_total(ci1) + col_total(ci2)) {
     stopifnot(is(ci1, "InstantiatedColumnInfo"),
               is(ci2, "InstantiatedColumnInfo"))
 
@@ -526,7 +526,8 @@ combine_cinfo = function(ci1, ci2) {
                            extras = newexargs,
                            cnts = newcounts,
                            dispcounts = newdisp,
-                           countformat = colcount_format(ci1))
+                           countformat = colcount_format(ci1),
+                           total_cnt = new_total)
 }
 
 
@@ -577,10 +578,7 @@ chk_cbindable <- function(x,y) {
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 #'
-#' \dontrun{
-#' # TODO: error on R 4.0.1
 #' cbind_rtables(x, y)
-#' }
 #'
 #'
 cbind_rtables <-  function(x,y) {
@@ -617,7 +615,9 @@ setMethod("recurse_cbind", c("TableTree",
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    TableTree(kids = kids, labelrow = tt_labelrow(x),
+    TableTree(kids = kids, labelrow = recurse_cbind(tt_labelrow(x),
+                                                    tt_labelrow(y),
+                                                    cinfo),
               cont = cont,
               name = obj_name(x),
               lev = tt_level(x),
@@ -640,7 +640,9 @@ setMethod("recurse_cbind", c("ElementaryTable",
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    ElementaryTable(kids = kids, labelrow = tt_labelrow(x),
+    ElementaryTable(kids = kids, labelrow = recurse_cbind(tt_labelrow(x),
+                                                          tt_labelrow(y),
+                                                          cinfo),
                   name = obj_name(x),
                   lev = tt_level(x),
                   cinfo = cinfo,
@@ -687,7 +689,10 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
 
 setMethod("recurse_cbind", c("LabelRow", "LabelRow",
                              "InstantiatedColumnInfo"),
-          function(x,y, cinfo = NULL) x)
+          function(x,y, cinfo = NULL) {
+    col_info(x) <- cinfo
+    x
+})
 
 ## we don't care about the following discrepencies:
 ## - ci2  having NA counts when ci1 doesn't

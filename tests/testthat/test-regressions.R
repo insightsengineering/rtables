@@ -158,3 +158,16 @@ test_that("rcell on CellValue overrides attrs as necessary", {
                            colspan = 3L, indent_mod = 3L),
                      val2)
 })
+
+
+test_that("cbind_rtables works", {
+
+    x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
+
+    y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
+
+    tab <- cbind_rtables(x, y)
+    expect_equal(ncol(tab), 3)
+    expect_equal(ncol(rtables:::tt_labelrow(tab)), 3)
+    expect_equal(nrow(tab), 2)
+})
