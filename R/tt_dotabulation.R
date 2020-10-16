@@ -152,7 +152,8 @@ gen_rowvalues = function(dfpart,
                          else
                              NA_character_
             argpos <- match(datcol[i], spl_payload(spls[[n]]))
-            exargs[[i]] <- if(argpos <= length(splextra)) splextra[[argpos]]  else NULL
+            ## single bracket here because assigning NULL into a list removes the position entirely
+            exargs[i] <- if(argpos <= length(splextra)) splextra[argpos]  else list(NULL)
         }
         ## })
         if(all(is.na(datcol)))

@@ -580,3 +580,22 @@ test_that("analyze_colvars inclNAs works", {
     res2 <- cell_values(tab2)
     expect_equal(ans2, res2)
 })
+
+
+test_that("analyze_colvars works generally", {
+    test <- data.frame(
+        a = 1,
+        b = 2,
+        c = 3,
+        d = 4,
+        e = 5
+    )
+
+    l1 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+        analyze_colvars(afun = identity)
+    tab1 <- build_table(l1, test)
+    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d", "e")) %>%
+        analyze_colvars(afun = identity)
+    tab2 <- build_table(l2, test)
+
+})

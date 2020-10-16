@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9029
+
+* Fix issue underlying spurious length-missmatch warning in some cases when using `analyze_colvars`
+
 ## rtables 0.3.2.17.9028
 
 * `analyze_colvars` now takes and adheres to `inclNAs` argument
