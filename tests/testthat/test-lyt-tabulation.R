@@ -550,3 +550,33 @@ test_that(".df_row analysis function argument works", {
                           list(ARM1 = c(nfemale, narm1),
                                ARM2 = c(nfemale, narm2))))
 })
+
+test_that("analyze_colvars inclNAs works", {
+
+    ## inclNAs
+    test <- data.frame(
+        a = c(1, 2),
+        b = c(1, NA)
+    )
+
+    l <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+        analyze_colvars(afun = length, inclNAs = TRUE)
+
+                                        # We expect:
+    ans <- lapply(test, length)
+                                        # a b
+                                        # 2 2
+
+                                        # But we get:
+    tab <-build_table(l, test)
+    res1 <- cell_values(tab)
+    expect_equal(ans, res1)
+
+    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+        analyze_colvars(afun = length, inclNAs = FALSE)
+
+    ans2 <- lapply(test, function(x) sum(!is.na(x)))
+    tab2 <- build_table(l2, test)
+    res2 <- cell_values(tab2)
+    expect_equal(ans2, res2)
+})

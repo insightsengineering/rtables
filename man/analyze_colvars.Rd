@@ -10,7 +10,8 @@ analyze_colvars(
   format = NULL,
   nested = TRUE,
   extra_args = list(),
-  indent_mod = 0L
+  indent_mod = 0L,
+  inclNAs = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ analyze_colvars(
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 }
 \description{
 Generate Rows Analyzing Different Variables Across Columns

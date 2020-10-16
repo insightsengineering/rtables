@@ -791,7 +791,8 @@ analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
                            extra_args = list(),
-                           indent_mod = 0L) {
+                           indent_mod = 0L,
+                           inclNAs = FALSE) {
     if(is.function(afun)) {
         subafun = substitute(afun)
         if(is.name(subafun) &&
@@ -819,7 +820,8 @@ analyze_colvars = function(lyt, afun,
                           split_format = format,
                           split_name = get_acolvar_name(lyt),
                           indent_mod = indent_mod,
-                          extra_args = extra_args)
+                          extra_args = extra_args,
+                          inclNAs = inclNAs)
     pos = next_rpos(lyt, nested, for_analyze = TRUE)
     split_rows(lyt, spl, pos)
 }
