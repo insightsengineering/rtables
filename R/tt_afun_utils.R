@@ -12,6 +12,7 @@
 #' @rdname rcell
 #' @export
 rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
+
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -21,26 +22,33 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
             indent_mod(x) <- indent_mod
         if(!is.null(format))
             obj_format(x) <- format
-        x
+        ret <- x
     } else {
-        CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
+        if(is.null(label))
+            label <- obj_label(x)
+        if(is.null(format))
+            format <- obj_format(x)
+        if(is.null(indent_mod))
+            indent_mod <- indent_mod(x)
+        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
     }
+    ret
 }
 
 #' @details \code{non_ref_rcell} provides the common \emph{blank for cells in the reference
 #' column, this value otherwise}, and should be passed the value of \code{.in_ref_col}
 #' when it is used.
 #'
-#' @param  isref logical(1).  Are  we  in  the reference  column  (ie
+#' @param  is_ref logical(1).  Are  we  in  the reference  column  (ie
 #'     .in_ref_col shoul be passed to this argument)
 #' @param refval ANY. Value to use when in the reference column. Defaults
 #' to \code{NULL}
 #' @rdname rcell
 #' @export
-non_ref_rcell = function(x, isref, format = NULL, colspan = 1L,
+non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
                          label = NULL, indent_mod = NULL,
                          refval = NULL) {
-    val <- if(isref) refval else x
+    val <- if(is_ref) refval else x
     rcell(val, format = format, colspan = colspan, label = label,
           indent_mod = indent_mod)
 }
@@ -93,15 +101,28 @@ in_rows <- function(..., .list = NULL, .names = NULL,
             stop("need a named list")
     }
 
-    l2 <- mapply(rcell, x = l, label = .labels %||% list(NULL),
-                 format = .formats %||% list(NULL),
-                 indent_mod = .indent_mods %||% list(NULL),
-                 SIMPLIFY = FALSE)
-    if(!is.null(.names))
-        names(l2) <- .names
-    else
-        names(l2) <- names(l)
-    if(length(l2) == 0) NULL else l2
+
+    l2 <- lapply(l, rcell)## rcell,
+    if(is.null(.labels)) {
+        objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
+        if(any(nzchar(objlabs)))
+            .labels <- objlabs
+                 ## x = l,
+                 ## #label = .labels %||% list(NULL),
+                 ## #indent_mod = .indent_mods %||% list(NULL),
+        ## SIMPLIFY = FALSE)
+    }
+    if(is.null(.names) && !is.null(names(l)))
+        .names <- names(l)
+    ret <- RowsVerticalSection(l2, names = .names,
+                               labels = .labels,
+                               indent_mods = .indent_mods,
+                               formats = .formats)
+    ## if(!is.null(.names))
+    ##     names(l2) <- .names
+    ## else
+    ##     names(l2) <- names(l)
+    if(length(ret) == 0) NULL else ret
 
 
  ##   if (length(l) == 0) NULL else l
@@ -325,7 +346,10 @@ make_afun <- function(fun,
         final_formats <- lapply(final_vals, obj_format)
         final_formats[names(.formats)] = .formats
 
-        final_imods <- vapply(final_vals, indent_mod, 1L)
+        if(is(final_vals, "RowsVerticalSection"))
+            final_imods <- indent_mod(final_vals)
+        else
+            final_imods <- vapply(final_vals, indent_mod, 1L)
         final_imods[names(.indent_mods)] <- .indent_mods
 
         if(!is.null(.ungroup_stats)) {
@@ -359,19 +383,19 @@ make_afun <- function(fun,
             if(is(x, "CellValue")) {
                 obj_label(x) <- l
                 obj_format(x) <- f
-                indent_mod(x) <- im
+#                indent_mod(x) <- im
                 x
             } else if(.null_ref_cells) {
-                non_ref_rcell(x, isref = .in_ref_col,
-                              format =f, label = l, indent_mod = im)
+                non_ref_rcell(x, is_ref = .in_ref_col,
+                              format =f, label = l)#, indent_mod = im)
             } else {
-                rcell(x, format =f, label = l, indent_mod = im)
+                rcell(x, format =f, label = l)#, indent_mod = im)
             }
         }, f = final_formats, x = final_vals,
         l = final_labels,
-        im = final_imods,
+#        im = final_imods,
         SIMPLIFY = FALSE)
-        in_rows(.list = rcells) ##, .labels = .labels)
+        in_rows(.list = rcells, .indent_mods = final_imods) ##, .labels = .labels)
     }
     formals(ret) <- formals(fun)
     ret

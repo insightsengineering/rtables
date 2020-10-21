@@ -9,7 +9,7 @@ rcell(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)
 
 non_ref_rcell(
   x,
-  isref,
+  is_ref,
   format = NULL,
   colspan = 1L,
   label = NULL,
@@ -29,7 +29,7 @@ then the \code{format} is applied}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
-\item{isref}{logical(1).  Are  we  in  the reference  column  (ie
+\item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
 .in_ref_col shoul be passed to this argument)}
 
 \item{refval}{ANY. Value to use when in the reference column. Defaults

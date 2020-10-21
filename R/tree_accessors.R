@@ -1048,8 +1048,12 @@ setMethod("indent_mod", "Split",
 #' @rdname int_methods
 setMethod("indent_mod", "VTableNodeInfo",
           function(obj) obj@indent_modifier)
+#' @rdname int_methods
 setMethod("indent_mod", "ANY",
           function(obj) attr(obj, "indent_mod") %||% 0L)
+#' @rdname int_methods
+setMethod("indent_mod", "RowsVerticalSection",
+          function(obj) setNames(obj@indent_mods,names(obj)))
 
 #' @rdname int_methods
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
@@ -1069,6 +1073,14 @@ setMethod("indent_mod<-", "VTableNodeInfo",
 setMethod("indent_mod<-", "CellValue",
           function(obj, value) {
     attr(obj, "indent_mod") <- as.integer(value)
+    obj
+})
+
+setMethod("indent_mod<-", "RowsVerticalSection",
+          function(obj, value) {
+    if(length(value) != 1 && length(value) != length(obj))
+        stop("When setting indent mods on a RowsVerticalSection the value must have length 1 or the number of rows")
+    obj@indent_mods <- value
     obj
 })
 
@@ -1123,6 +1135,8 @@ setMethod("value_names", "list", function(obj) lapply(obj, value_names))
 setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
 #' @rdname int_methods
 setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@comboname)
+#' @rdname int_methods
+setMethod("value_names", "RowsVerticalSection",  function(obj) obj@row_names)
 
 ## not sure if I need these anywhere
 ## XXX
@@ -1141,12 +1155,21 @@ setMethod("value_labels", "list", function(obj) {
     }
     ret
 })
+
+#' @rdname int_methods
+setMethod("value_labels", "RowsVerticalSection", function(obj) setNames(obj@row_labels, value_names(obj)))
+
+
 #' @rdname int_methods
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 #' @rdname int_methods
 setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj@comboname)
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
+
+
+
+
 
 
 

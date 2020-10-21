@@ -1,6 +1,19 @@
 context("tabulation framework")
 
 
+test_that("summarize_row_groups works with provided funcs", {
+    l1 <- basic_table() %>% split_cols_by("ARM") %>%
+        split_rows_by("RACE") %>%
+        summarize_row_groups() %>%
+        analyze("AGE", mean)
+
+    tb1 <- build_table(l1, DM)
+    print(tb1)
+    expect(TRUE, "succeeded")
+
+
+})
+
 
 
 ## this
@@ -583,6 +596,8 @@ test_that("analyze_colvars inclNAs works", {
 
 
 test_that("analyze_colvars works generally", {
+    op <- options(warn = 2)
+    on.exit(options(op))
     test <- data.frame(
         a = 1,
         b = 2,
@@ -590,12 +605,12 @@ test_that("analyze_colvars works generally", {
         d = 4,
         e = 5
     )
-
     l1 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
         analyze_colvars(afun = identity)
     tab1 <- build_table(l1, test)
     l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d", "e")) %>%
         analyze_colvars(afun = identity)
     tab2 <- build_table(l2, test)
+    expect(TRUE, "succeeded")
 
 })

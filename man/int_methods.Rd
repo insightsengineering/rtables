@@ -206,6 +206,8 @@
 \alias{indent_mod}
 \alias{indent_mod,Split-method}
 \alias{indent_mod,VTableNodeInfo-method}
+\alias{indent_mod,ANY-method}
+\alias{indent_mod,RowsVerticalSection-method}
 \alias{indent_mod<-}
 \alias{indent_mod<-,Split-method}
 \alias{indent_mod<-,VTableNodeInfo-method}
@@ -226,10 +228,12 @@
 \alias{value_names,list-method}
 \alias{value_names,ValueWrapper-method}
 \alias{value_names,LevelComboSplitValue-method}
+\alias{value_names,RowsVerticalSection-method}
 \alias{value_labels}
 \alias{value_labels,ANY-method}
 \alias{value_labels,TreePos-method}
 \alias{value_labels,list-method}
+\alias{value_labels,RowsVerticalSection-method}
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
@@ -698,6 +702,10 @@ indent_mod(obj)
 
 \S4method{indent_mod}{VTableNodeInfo}(obj)
 
+\S4method{indent_mod}{ANY}(obj)
+
+\S4method{indent_mod}{RowsVerticalSection}(obj)
+
 indent_mod(obj) <- value
 
 \S4method{indent_mod}{Split}(obj) <- value
@@ -738,6 +746,8 @@ value_names(obj)
 
 \S4method{value_names}{LevelComboSplitValue}(obj)
 
+\S4method{value_names}{RowsVerticalSection}(obj)
+
 value_labels(obj)
 
 \S4method{value_labels}{ANY}(obj)
@@ -745,6 +755,8 @@ value_labels(obj)
 \S4method{value_labels}{TreePos}(obj)
 
 \S4method{value_labels}{list}(obj)
+
+\S4method{value_labels}{RowsVerticalSection}(obj)
 
 \S4method{value_labels}{ValueWrapper}(obj)
 

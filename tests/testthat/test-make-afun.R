@@ -10,7 +10,7 @@ test_that("afun internals coverage", {
     ## use existing funcs to ensure coverage numbers are correct
     res_tafun1 <- rtables:::test_afun(1:10, 5)
     expect_identical(value_labels(res_tafun1),
-                     list("Min." = "Minimum",
+                     c("Min." = "Minimum",
                           "1st Qu." = "1st Quartile",
                           Median = "Median",
                           Mean = "Mean",
@@ -51,7 +51,7 @@ test_that("make_afun works for x arg", {
                      formals(s_summary))
 
     asres1 <- a_summary(x = iris$Sepal.Length)
-    expect_identical(list(n = "n", mean_sd = "Mean (sd)", min_max = "min - max"),
+    expect_identical(c(n = "n", mean_sd = "Mean (sd)", min_max = "min - max"),
                      rtables:::value_labels(asres1))
 
  a_summary2 <- make_afun(a_summary, .stats = c("n", "mean_sd"))
@@ -139,7 +139,7 @@ test_that("ungrouping .ungroup_stats works", {
     expect_identical(names(ares4),
                      c("single1", "single2", "g1", "g2", "g3", "g4", "g5"))
     expect_identical(value_labels(ares4),
-                     list(single1 ="first single val",
+                     c(single1 ="first single val",
                           single2 = "second single val",
                           g1 = "g1",
                           g2 = "g2",
@@ -148,7 +148,9 @@ test_that("ungrouping .ungroup_stats works", {
                           g5 = "g5"))
 })
 
-
+get_imods <- function(obj) {
+    setNames(rtables:::indent_mod(obj), names(obj))
+}
 
 test_that("make_afun .indent_mods argument works", {
 
@@ -157,13 +159,13 @@ test_that("make_afun .indent_mods argument works", {
                                                 a = 1L,
                                                 b = 2L))
     imodres1 <- a_imod(iris, 5)
-    expect_identical(vapply(imodres1, rtables:::indent_mod, 1L),
+    expect_identical(get_imods(imodres1),
                      c(nrow_df = -1L, .N_col = 0L, a = 1L, b = 2L))
 
     a_imod2 <- make_afun(a_imod, .indent_mods = c(nrow_df = 2L,
                                                   .N_col = 1L))
     imodres2 <- a_imod2(iris, 5)
-    expect_identical(vapply(imodres2, rtables:::indent_mod, 1L),
+    expect_identical(get_imods(imodres2), #vapply(imodres2, rtables:::indent_mod, 1L),
                      c(nrow_df = 2L, .N_col = 1L, a = 1L, b = 2L))
 
     tbl <- basic_table() %>% analyze("Sepal.Length", a_imod) %>%

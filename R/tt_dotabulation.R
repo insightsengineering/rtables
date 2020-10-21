@@ -79,17 +79,25 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                                              splextra)))
 
         val = do.call(func, args)
-        if(!is(val, "CellValue") && is.list(val)) {
-            ret = lapply(val, rcell)
-            if(length(ret) == 1) {
-                nm = names(ret)
-                ret = ret[[1]]
-                if(is.null(obj_label(ret)))
-                    obj_label(ret) = nm
-            }
+        if(!is(val, "RowsVerticalSection")) {
+            if(!is(val, "list"))
+                val <- list(val)
+            ret <- in_rows(.list = val, .labels = unlist(value_labels(val)), .names = names(val))
+
         } else {
-            ret = rcell(val)
+            ret <- val
         }
+        ## if(!is(val, "CellValue") && is.list(val)) {
+        ##     ret = lapply(val, rcell)
+        ##     if(length(ret) == 1) {
+        ##         nm = names(ret)
+        ##         ret = ret[[1]]
+        ##         if(is.null(obj_label(ret)))
+        ##             obj_label(ret) = nm
+        ##     }
+        ## } else {
+        ##     ret = rcell(val)
+        ## }
         ret
 }
 
@@ -263,7 +271,9 @@ gen_rowvalues = function(dfpart,
     ## look if we got labels, if not apply the
     ## default row labels
     rv1col = rawvals[[maxind]]
-    if(is(rv1col, "CellValue"))
+    if(is(rv1col, "RowsVerticalSection")) {
+        labels <- value_labels(rv1col)
+    } else if(is(rv1col, "CellValue"))
         labels = obj_label(rv1col)
     else if(are(rv1col, "CellValue"))
         labels = unlist(value_labels(rv1col))
@@ -271,6 +281,7 @@ gen_rowvalues = function(dfpart,
         labels = names(rv1col)
     else
         labels = NULL
+
 
 
     ncrows = max(unqlens)
@@ -284,27 +295,30 @@ gen_rowvalues = function(dfpart,
             labels = rep("", ncrows)
     }
 
-    nms = names(rawvals)
-    if(is.null(nms)) {
-        if(all(nzchar(labels)))
-            nms = labels
-        else
-            nms = paste0("row", seq_len(ncrows))
+    if(is(rv1col, "RowsVerticalSection")) {
+        nms <- value_names(rv1col)
+    } else if(!is.null(names(rv1col))) {
+        nms = names(rv1col)
+    } else if(length(labels) > 0 && all(nzchar(labels))) {
+        nms = labels
+    } else {
+        nms = paste0("row", seq_len(ncrows))
     }
 
 
-
+    imods <- rv1col@indent_mods
+    unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
     ##recycle formats
-    if(ncrows ==  1)  {
-        return(list(rowconstr(val = rawvals,
-                         cinfo = cinfo,
-                         lev = lev,
-                         label = labels,
-                         name = labels,
-                         var = rowvar,
-                         format = format,
-                         indent_mod = indent_mod(rawvals[[1]]))))
-    }
+    ## if(ncrows ==  1)  {
+    ##     return(list(rowconstr(val = unwrapped_vals[[1]],
+    ##                      cinfo = cinfo,
+    ##                      lev = lev,
+    ##                      label = labels,
+    ##                      name = nms, ##labels,
+    ##                      var = rowvar,
+    ##                      format = format,
+    ##                      indent_mod = imods[[1]] %||% 0L)))
+    ## }
     formatvec = NULL
     if(!is.null(format)) {
         if(is.function(format) )
@@ -312,8 +326,10 @@ gen_rowvalues = function(dfpart,
         formatvec = rep(format, length.out = ncrows)
     }
 
+
+
     trows = lapply(1:ncrows, function(i) {
-        rowvals = lapply(rawvals, function(colvals)
+        rowvals = lapply(unwrapped_vals, function(colvals)
             {
                 colvals[[i]]
             })
@@ -324,10 +340,10 @@ gen_rowvalues = function(dfpart,
                   cinfo = cinfo,
                   lev = lev,
                   label = labels[i],
-                  name = labels[i], ## XXX this is probably the wrong thing!
+                  name = nms[i], ##labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
                   format = formatvec[[i]],
-                  indent_mod = imod
+                  indent_mod = imods[[i]] %||% 0L
                   )
 
     })
@@ -532,7 +548,8 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
                              dolab = spvis,
                              partlabel = obj_label(spl),
                              baselines = baselines,
-                             last_splval = last_splval)##partlabel)
+                             last_splval = last_splval)
+    indent_mod(ret) <- indent_mod(spl)
 
     kids = list(ret)
     names(kids) = obj_name(ret)
@@ -556,6 +573,8 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
                   have_controws = have_controws,
                   make_lrow = make_lrow,
                   ...))
+
+
 
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
@@ -722,6 +741,7 @@ recursive_applysplit = function( df,
     nonroot = lvl != 0L
     if(length(splvec) == 0L) {
         kids = list()
+        imod = 0L
     } else {
         spl = splvec[[1]]
         splvec = splvec[-1]
@@ -735,6 +755,7 @@ recursive_applysplit = function( df,
                                 cindent_mod = cindent_mod, cextra_args = cextra_args, cvar =cvar,
                                 baselines = baselines, last_splval = last_splval,
                                 have_controws = nrow(ctab) > 0)
+        imod = indent_mod(spl)
     } ## end length(splvec)
 
     if(is.na(make_lrow))
@@ -747,36 +768,37 @@ recursive_applysplit = function( df,
         ret = kids[[1]]
         indent_mod(ret) = indent_mod(spl)
      } else if(nrow(ctab) > 0L || length(kids) > 0L) {
-        ## avoid visible label rows when the row.names
-        ## directly repeat the info.
+         ## avoid visible label rows when the row.names
+         ## directly repeat the info.
          if(length(kids) == 1L &&
             identical(partlabel, row.names(kids[[1]])))
              tlabel = ""
          else
              tlabel = partlabel
-         kids = lapply(kids, function(x) {
-             indent_mod(x) = indent_mod(spl)
-             x
-         })
+         ## kids = lapply(kids, function(x) {
+         ##     indent_mod(x) = indent_mod(spl)
+         ##     x
+         ## })
          ret = TableTree(cont = ctab,
                          kids = kids,
-                        name = name,
-                        label = tlabel, #partlabel,
-                        lev = lvl,
-                    iscontent = FALSE,
-                    labelrow = LabelRow(lev = lvl,
-                                      label = tlabel,
-                                      cinfo = cinfo,
-                                      vis = make_lrow),
-                    cinfo = cinfo)
-    } else {
-        ret = NULL
-    }
+                         name = name,
+                         label = tlabel, #partlabel,
+                         lev = lvl,
+                         iscontent = FALSE,
+                         labelrow = LabelRow(lev = lvl,
+                                             label = tlabel,
+                                             cinfo = cinfo,
+                                             vis = make_lrow),
+                         cinfo = cinfo,
+                         indent_mod = imod)
+     } else {
+         ret = NULL
+     }
+
     ## message(sprintf("indent modifier: %d", indentmod))
     ## if(!is.null(ret))
     ##     indent_mod(ret) = indentmod
     ret
-
 }
 
 

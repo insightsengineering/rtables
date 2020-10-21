@@ -1506,6 +1506,42 @@ print.CellValue <- function(x, ...) {
 }
 
 
+setClass("RowsVerticalSection", contains = "list",
+         representation = list(row_names = "characterOrNULL",
+                               row_labels = "characterOrNULL",
+                               row_formats = "ANY",
+                               indent_mods = "integerOrNULL"))
+
+RowsVerticalSection = function(values,
+                               names = names(values),
+                               labels = NULL,
+                               indent_mods = NULL,
+                               formats = NULL) {
+    stopifnot(is(values, "list"))
+##    innernms <- value_names(values)
+
+    if(is.null(labels)) {
+        labels <- names(values)
+    }
+    if(is.null(names) && all(nzchar(labels)))
+        names <- labels
+    else if (is.null(labels) && !is.null(names))
+        labels <- names
+    ## if(is.null(names)) {
+    ##     names <- vapply(seq_along(values),
+    ##                     function(i) innernms[[i]] %||% labels[i],
+    ##                     "")
+    ## }
+
+    if(!is.null(indent_mods))
+        indent_mods <- as.integer(indent_mods)
+    new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
+        row_formats = formats)
+}
+
+
+
+
 ## ## Empty default objects to avoid repeated calls
 ## EmptyColInfo <- InstantiatedColumnInfo()
 ## EmptyElTable <- ElementaryTable()

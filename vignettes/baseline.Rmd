@@ -52,7 +52,7 @@ basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
       in_rows("Difference of Averages" = non_ref_rcell(mean(x) - mean(.ref_group),
-                                                       isref = .in_ref_col,
+                                                       is_ref = .in_ref_col,
                                                        format = "xx.xx"))
   }) %>%
   build_table(DM)
@@ -62,7 +62,7 @@ basic_table() %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col){
       in_rows(
           "Difference of Averages" = non_ref_rcell(mean(x) - mean(.ref_group),
-                                                   isref = .in_ref_col,
+                                                   is_ref = .in_ref_col,
                                                    format = "xx.xx"),
          "another row" = non_ref_rcell("aaa", .in_ref_col)
       )
