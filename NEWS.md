@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9035
+
+* Fix bug unearthed by change in 0.3.2.17.9034 where cell formats not retained during column subsetting
+
 ## rtables 0.3.2.17.9034
 
 * Fix internal `value_formats` accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)

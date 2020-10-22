@@ -212,3 +212,20 @@ test_that("cell formats not dropped when cbinding", {
 
 
 })
+
+test_that("cell-level formats are retained when column subsetting", {
+ tbl <- rtable(
+     header = c("Treatement\nN=100", "Comparison\nN=300"),
+     format = "xx (xx.xx%)",
+     rrow("A", c(104, .2), c(100, .4)),
+     rrow("B", c(23, .4), c(43, .5)),
+     rrow(""),
+     rrow("this is a very long section header"),
+     rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
+
+     subset <- tbl[,1]
+     expect_identical(matrix_form(subset)$strings,
+                      matrix_form(tbl)$strings[,-3])
+
+})

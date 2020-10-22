@@ -414,7 +414,7 @@ select_cells_j = function(cells, j) {
     mapply(function(cl, sp) {
         cell_cspan(cl) = sp
         cl
-    }, cl = retcells, sp = newspans)
+    }, cl = retcells, sp = newspans, SIMPLIFY=FALSE)
 }
 
 setMethod("subset_cols", c("ANY", "character"),
@@ -431,7 +431,7 @@ setMethod("subset_cols", c("TableRow", "numeric"),
         newcinfo = subset_cols(cinfo, j, ...)
     }
     tt2 = tt
-    row_values(tt2) =  select_cells_j(row_cells(tt2), j)
+    row_cells(tt2) =  select_cells_j(row_cells(tt2), j)
 
     if(length(row_cspans(tt2)) > 0)
         row_cspans(tt2) = .fix_rowcspans(tt2, j)

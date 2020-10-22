@@ -682,6 +682,15 @@ setGeneric("row_cells", function(obj) standardGeneric("row_cells"))
 #' @exportMethod row_cells
 setMethod("row_cells", "TableRow", function(obj) obj@leaf_value)
 
+#' @rdname row_accessors
+setGeneric("row_cells<-", function(obj, value) standardGeneric("row_cells<-"))
+#' @rdname row_accessors
+#' @exportMethod row_cells
+setMethod("row_cells<-", "TableRow", function(obj, value) {
+    obj@leaf_value <- value
+    obj
+})
+
 #' @export
 #' @rdname row_accessors
 setGeneric("row_values", function(obj) standardGeneric("row_values"))
