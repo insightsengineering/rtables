@@ -26,16 +26,12 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         csps = as.integer(sapply(vals, function(x) {
             attr(x, "colspan") %||% 1L
         }))
-        ## vals = mapply(function(v, sp) {
-        ##     attr(v, "colspan") = NULL
-        ##     rep(list(v), sp)
-        ## }, v = vals, sp = csps,
-        ## SIMPLIFY=FALSE)
-        ## vals = unlist(vals,
-        ##               recursive = FALSE)
-        formats = sapply(vals, obj_format)
-        if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
-            format = unique(formats)
+        ## we have to leave the formats on the cells and NOT the row unless we were
+        ## already told to do so, because row formats get clobbered  when cbinding
+        ## but cell formats do not.
+        ## formats = sapply(vals, obj_format)
+        ## if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
+        ##     format = unique(formats)
         DataRow(val = vals, lev = as.integer(indent), label = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
@@ -704,11 +700,11 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
     for(i in seq_along(xlst)) {
         strt <- strtncols[i]
         end <- cumncols[i]
-        fullvy <- vy <- row_values(xlst[[i]])
+        fullvy <- vy <- row_cells(xlst[[i]])
         fullcspy <- cspy <- row_cspans(xlst[[i]])
 
         if(i > 1 &&
-           vy[[1]] == lastval &&
+           rawvalues(vy[[1]]) == rawvalues(lastval) &&
          ##  cspy[1] == lastspn &&
            lastspn > 1) {
             vy <- vy[-1]

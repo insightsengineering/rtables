@@ -874,10 +874,11 @@ setMethod("value_formats", "ANY",
           function(obj, default) {
     attr(obj, "format") %||% default
 })
+
 #' @rdname int_methods
 setMethod("value_formats", "TableRow",
           function(obj, default) {
-    formats = lapply(row_values(obj), function(x)
+    formats = lapply(row_cells(obj), function(x)
         value_formats(x) %||% default)
     formats
 })

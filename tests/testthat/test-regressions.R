@@ -193,3 +193,22 @@ test_that("cbind_rtables works with 3 tables", {
     expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
 
 })
+
+
+test_that("cell formats not dropped when cbinding", {
+
+    tab1 <- rtable(
+        header = "a",
+        rrow("one", rcell(1.1111111, format = "xx.x"))
+    )
+    tab2 <- rtable(
+        header = "b",
+        rrow("one", rcell(2.2222222, format = "xx.xxxx"))
+    )
+
+    cbtab <- cbind_rtables(tab1, tab2)
+    expect_identical(rtables:::value_formats(tree_children(cbtab)[[1]]),
+                     list("xx.x", "xx.xxxx"))
+
+
+})

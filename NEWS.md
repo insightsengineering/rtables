@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9034
+
+* Fix internal `value_formats` accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)
+* `rrow` constructor no longer interpretes cell formats a row format when they are the same across all cells. Fixes bug in  "correct way" code discussed in #112
 
 ## rtables 0.3.2.17.9033
 
