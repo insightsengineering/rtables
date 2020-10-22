@@ -507,26 +507,40 @@ header <- function(x) col_info(obj = x)
 
 
 
-combine_cinfo = function(ci1, ci2, new_total = col_total(ci1) + col_total(ci2)) {
-    stopifnot(is(ci1, "InstantiatedColumnInfo"),
-              is(ci2, "InstantiatedColumnInfo"))
+combine_cinfo = function(..., new_total = NULL) {
+    cinfs <- list(...)
+    if(are(cinfs, "VTableNodeInfo"))
+        cinfs <- lapply(cinfs, col_info)
+    stopifnot(are(cinfs, "InstantiatedColumnInfo"))
 
-    ctree1 = coltree(ci1)
-    ctree2 = coltree(ci2)
-    newctree = LayoutColTree(kids = list(ctree1, ctree2))
-    ## c(tree_children(ctree1),
-    ##                                   tree_children(ctree2)))
 
-    newcounts = c(col_counts(ci1), col_counts(ci2))
-    newexprs = c(col_exprs(ci1), col_exprs(ci2))
-    newexargs = c(col_extra_args(ci1), col_extra_args(ci2))
-    newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
+    ctrees <- lapply(cinfs, coltree)
+
+    newctree <- LayoutColTree(kids = ctrees)
+    newcounts <- unlist(lapply(cinfs, col_counts))
+    if(is.null(new_total))
+        new_total <- sum(newcounts)
+    newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
+    newexargs <- unlist(lapply(cinfs, col_extra_args)) %||% vector("list", length(newcounts))
+    newdisp <- any(vapply(cinfs, disp_ccounts, NA))
+
+
+    ## ctree1 = coltree(ci1)
+    ## ctree2 = coltree(ci2)
+    ## newctree = LayoutColTree(kids = list(ctree1, ctree2))
+    ## ## c(tree_children(ctree1),
+    ## ##                                   tree_children(ctree2)))
+
+    ## newcounts = c(col_counts(ci1), col_counts(ci2))
+    ## newexprs = c(col_exprs(ci1), col_exprs(ci2))
+    ## newexargs = c(col_extra_args(ci1), col_extra_args(ci2))
+    ## newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
                            extras = newexargs,
                            cnts = newcounts,
                            dispcounts = newdisp,
-                           countformat = colcount_format(ci1),
+                           countformat = colcount_format(cinfs[[1]]),
                            total_cnt = new_total)
 }
 
@@ -568,8 +582,8 @@ chk_cbindable <- function(x,y) {
 
 #' cbind two rtables
 #'
-#' @param x table 1
-#' @param y table 2
+#' @param x A table or row object
+#' @param \dots 1 or more further objects of the same class as \code{x}
 #'
 #' @export
 #'
@@ -578,12 +592,170 @@ chk_cbindable <- function(x,y) {
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 #'
+#' z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
+#'
 #' cbind_rtables(x, y)
 #'
+#' cbind_rtables(x, y, z)
 #'
-cbind_rtables <-  function(x,y) {
-    recurse_cbind(x, y, NULL)
+cbind_rtables <-  function(x, ...) {
+    lst <- list(...)
+    newcinfo <- combine_cinfo(x, ...)
+    recurse_cbindl(x, cinfo = newcinfo, .list = lst)
 }
+
+setGeneric("recurse_cbindl", function(x, cinfo, .list = NULL) standardGeneric("recurse_cbindl"))
+
+setMethod("recurse_cbindl", c(x ="VTableNodeInfo",
+                              cinfo = "NULL"),
+          function(x, cinfo, .list  = NULL) {
+    recurse_cbindl(x, cinfo = combine_cinfo(.list), .list = .list)
+})
+
+setMethod("recurse_cbindl", c(x = "TableTree",
+                             cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo, .list = NULL) {
+    stopifnot(are(.list, class(x)))
+    ## chk_cbindable(x, y)
+    xlst <- c(list(x), .list)
+    xcont <- content_table(x)
+    lstconts <- lapply(.list, content_table)
+    if(all(c(nrow(xcont) == 0,
+             vapply(lstconts, nrow) == 0))) {
+
+        cont = ElementaryTable(cinfo = cinfo)
+    } else {
+        cont = recurse_cbindl(xcont,
+                             .list = lstconts,
+                             cinfo = cinfo)
+    }
+
+    kids = lapply(seq_along(tree_children(x)),
+                  function(i) {
+        recurse_cbindl(x = tree_children(x)[[i]],
+                      cinfo = cinfo,
+                      .list <- lapply(.list, function(tt) tree_children(tt)[[i]]))
+    })
+    names(kids) = names(tree_children(x))
+    TableTree(kids = kids, labelrow = recurse_cbindl(tt_labelrow(x),
+                                                    cinfo = cinfo,
+                                                    .list = lapply(.list, tt_labelrow)),
+              cont = cont,
+              name = obj_name(x),
+              lev = tt_level(x),
+              cinfo = cinfo,
+              format = obj_format(x))
+})
+
+setMethod("recurse_cbindl", c(x = "ElementaryTable",
+                              cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo, .list) {
+    stopifnot(are(.list, class(x)))
+ ##   chk_cbindable(x,y)
+    if(nrow(x) == 0 &&
+       all(vapply(.list, nrow) == 0)) {
+        return(x) ## this needs testing...
+
+    }
+    kids = lapply(seq_along(tree_children(x)),
+                  function(i) {
+        recurse_cbindl(x = tree_children(x)[[i]],
+                      cinfo = cinfo,
+                      .list <- lapply(.list, function(tt) tree_children(tt)[[i]]))
+    })
+    names(kids) = names(tree_children(x))
+
+
+     ElementaryTable(kids = kids,
+                    labelrow = recurse_cbindl(tt_labelrow(x),
+                                             .list = lapply(.list, tt_labelrow),
+                                             cinfo),
+                    name = obj_name(x),
+                    lev = tt_level(x),
+                    cinfo = cinfo,
+                    format = obj_format(x),
+                    var = obj_avar(x))
+})
+
+
+
+
+.combine_rows <- function(x, cinfo = NULL, .list) {
+
+    stopifnot(are(.list, class(x)))
+
+    avars <- c(obj_avar(x), unlist(lapply(.list, obj_avar), recursive = FALSE))
+
+    if(length(unique(avars))>1)
+        stop("Got rows that don't analyze the same variable")
+
+
+    xlst <- c(list(x), .list)
+
+    ncols <- vapply(xlst, ncol, 1L)
+    totcols <- sum(ncols)
+    cumncols <- cumsum(ncols)
+    strtncols <- c(0L, head(cumncols, -1)) + 1L
+    vals <- vector("list", totcols)
+    cspans <- integer(totcols)
+    ## vals[1:ncol(x)] <- row_values(x)
+    ## cpans[1:ncol(x)] <- row_cspans(x)
+
+    for(i in seq_along(xlst)) {
+        strt <- strtncols[i]
+        end <- cumncols[i]
+        fullvy <- vy <- row_values(xlst[[i]])
+        fullcspy <- cspy <- row_cspans(xlst[[i]])
+
+        if(i > 1 &&
+           vy[[1]] == lastval &&
+         ##  cspy[1] == lastspn &&
+           lastspn > 1) {
+            vy <- vy[-1]
+            cspans[strt - 1L] <- lastspn + cspy[1]
+            cspy <- cspy[-1]
+            strt <- strt + 1L
+        }
+        if(length(vy) > 0) {
+            vals[strt:end] <- vy
+            cspans[strt:end] <- cspy
+            lastval <- tail(vy, 1)
+            lastspn <- tail(cspy, 1)
+        } else {
+            ## lastval stays the same
+            lastspn <- cspans[strtncols[i] - 1] ## already updated
+        }
+    }
+
+    ## Could be DataRow or ContentRow
+    ## This is ok because LabelRow is special cased
+    constr_fun <- get(class(x), mode = "function")
+    constr_fun(val = vals,
+               cspan = cspans,
+               cinfo = cinfo,
+               var = obj_avar(x),
+               format = obj_format(x),
+               name = obj_name(x),
+               label = obj_label(x))
+
+}
+setMethod("recurse_cbindl", c("TableRow",
+                              "InstantiatedColumnInfo"),
+          function(x, cinfo = NULL, .list) {
+    .combine_rows(x, cinfo, .list)
+})
+
+setMethod("recurse_cbindl", c(x = "LabelRow",
+                             cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo = NULL, .list) {
+    col_info(x) <- cinfo
+    x
+})
+
+
+
+
+
 
 setGeneric("recurse_cbind", function(x,y, cinfo = NULL) standardGeneric("recurse_cbind"))
 

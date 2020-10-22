@@ -171,3 +171,25 @@ test_that("cbind_rtables works", {
     expect_equal(ncol(rtables:::tt_labelrow(tab)), 3)
     expect_equal(nrow(tab), 2)
 })
+
+
+test_that("cbind_rtables works with 3 tables", {
+
+    tab1 <- rtable(
+        header = "a",
+        rrow("one", 1)
+    )
+    tab2 <- rtable(
+        header = "b",
+        rrow("one", 2)
+    )
+    tab3 <- rtable(
+        header = "c",
+        rrow("one", 3)
+    )
+
+    newtab <- cbind_rtables(tab1, tab2, tab3)
+    expect_equal(ncol(newtab), 3)
+    expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
+
+})
