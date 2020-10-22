@@ -1,3 +1,8 @@
+
+## rtables 0.3.2.17.9031
+
+* cbind_rtables can now take more than 2 tables.
+
 ## rtables 0.3.2.17.9029
 
 * Fix issue underlying spurious length-missmatch warning in some cases when using `analyze_colvars`

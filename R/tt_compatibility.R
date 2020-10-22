@@ -621,7 +621,7 @@ setMethod("recurse_cbindl", c(x = "TableTree",
     xcont <- content_table(x)
     lstconts <- lapply(.list, content_table)
     if(all(c(nrow(xcont) == 0,
-             vapply(lstconts, nrow) == 0))) {
+             vapply(lstconts, nrow, 1L) == 0))) {
 
         cont = ElementaryTable(cinfo = cinfo)
     } else {
