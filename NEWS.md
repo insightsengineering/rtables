@@ -1,4 +1,8 @@
 
+## rtables 0.3.2.17.9033
+
+* Interpret .formats in `in_rows` as *cell* formats rather than row formats.
+
 ## rtables 0.3.2.17.9031
 
 * cbind_rtables can now take more than 2 tables.

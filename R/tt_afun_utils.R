@@ -102,16 +102,15 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     }
 
 
-    l2 <- lapply(l, rcell)## rcell,
+    if(is.null(.formats))
+        .formats <- list(NULL)
+    l2 <- mapply(rcell, x = l, format = .formats, SIMPLIFY = FALSE)
     if(is.null(.labels)) {
         objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
         if(any(nzchar(objlabs)))
             .labels <- objlabs
-                 ## x = l,
-                 ## #label = .labels %||% list(NULL),
-                 ## #indent_mod = .indent_mods %||% list(NULL),
-        ## SIMPLIFY = FALSE)
     }
+
     if(is.null(.names) && !is.null(names(l)))
         .names <- names(l)
     ret <- RowsVerticalSection(l2, names = .names,
