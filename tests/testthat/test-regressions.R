@@ -229,3 +229,16 @@ test_that("cell-level formats are retained when column subsetting", {
                       matrix_form(tbl)$strings[,-3])
 
 })
+
+test_that("row subsetting works on table with only content rows", {
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE") %>%
+        summarize_row_groups()
+    tab <- build_table(l, DM)
+    rw <- tab[1,]
+    expect_identical(cell_values(rw),
+                     cell_values(tab)[[1]])
+    expect_identical(tab[1,1,drop = TRUE],
+                     79*c(1, 1/sum(DM$ARM == "A: Drug X")))
+})

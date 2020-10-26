@@ -1,125 +1,128 @@
 #' Corpare two rtables
-#' 
-#' Prints a matrix where \code{.} means cell matches, \code{X} means cell does 
+#'
+#' Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 #' cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 #' should not be there.
-#' 
+#'
 #' @param object rtable to test
 #' @param expected rtable expected
 #' @param tol numerical tolorance
 #' @param comp.attr boolean compare attributes
-#' 
-#' 
+#'
+#'@note
+#' In its current form \code{compare_rtables} does not take structure into account,
+#' only row and cell position.
+#'
 #' @export
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
 #' t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 #'
-#' compare_rtables(object = t1, expected = t2) 
-#' 
+#' compare_rtables(object = t1, expected = t2)
+#'
 #' \dontrun{
-#' Viewer(t1, t2) 
+#' Viewer(t1, t2)
 #' }
-#' 
-#' # expected <- rtable(
-#' #    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#' #    format = "xx",
-#' #    rrow("row 1", 10, 15),
-#' #    rrow(),
-#' #    rrow("section title"),
-#' #    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-#' # )
-#' 
+#'
+#'  expected <- rtable(
+#'     header = c("ARM A\nN=100", "ARM B\nN=200"),
+#'     format = "xx",
+#'     rrow("row 1", 10, 15),
+#'     rrow(),
+#'     rrow("section title"),
+#'     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'  )
+#'
 #' \dontrun{
 #' Viewer(expected)
 #' }
-#' 
-#' # object <- rtable(
-#' #    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#' #    format = "xx",
-#' #    rrow("row 1", 10, 15),
-#' #    rrow("section title"),
-#' #    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-#' # )
-#' 
-#' # compare_rtables(object, expected)
-#' # 
-#' # compare_rtables(object, expected, comp.attr = FALSE)
-#' # 
-#' # object <- rtable(
-#' #    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#' #    format = "xx",
-#' #    rrow("row 1", 10, 15),
-#' #    rrow(),
-#' #    rrow("section title")
-#' # )
-#' # 
-#' # compare_rtables(object, expected)
-#' # 
-#' # object <- rtable(
-#' #    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#' #    format = "xx",
-#' #    rrow("row 1", 14, 15.03),
-#' #    rrow(),
-#' #    rrow("section title"),
-#' #    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-#' # )
-#' # 
-#' # compare_rtables(object, expected)
-#' # 
-#' # object <- rtable(
-#' #    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#' #    format = "xx",
-#' #    rrow("row 1", 10, 15),
-#' #    rrow(),
-#' #    rrow("section title"),
-#' #    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)"))
-#' # )
-#' # 
-#' # compare_rtables(object, expected)
-#' 
+#'
+#'  object <- rtable(
+#'     header = c("ARM A\nN=100", "ARM B\nN=200"),
+#'     format = "xx",
+#'     rrow("row 1", 10, 15),
+#'     rrow("section title"),
+#'     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'  )
+#'
+#'  compare_rtables(object, expected)
+#'
+#'  compare_rtables(object, expected, comp.attr = FALSE)
+#'
+#'  object <- rtable(
+#'     header = c("ARM A\nN=100", "ARM B\nN=200"),
+#'     format = "xx",
+#'     rrow("row 1", 10, 15),
+#'     rrow(),
+#'     rrow("section title")
+#'  )
+#'
+#'  compare_rtables(object, expected)
+#'
+#'  object <- rtable(
+#'     header = c("ARM A\nN=100", "ARM B\nN=200"),
+#'     format = "xx",
+#'     rrow("row 1", 14, 15.03),
+#'     rrow(),
+#'     rrow("section title"),
+#'     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+#'  )
+#'
+#'  compare_rtables(object, expected)
+#'
+#'  object <- rtable(
+#'     header = c("ARM A\nN=100", "ARM B\nN=200"),
+#'     format = "xx",
+#'     rrow("row 1", 10, 15),
+#'     rrow(),
+#'     rrow("section title"),
+#'     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)"))
+#'  )
+#'
+#'  compare_rtables(object, expected)
+#'
 compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
-  
+
   # if (identical(object, expected)) return(invisible(TRUE))
-  
+
   if (!is(object, "VTableTree")) stop("argument object is expected to be of class rtable")
   if (!is(expected, "VTableTree")) stop("argument expected is expected to be of class rtable")
-  
+
   dim_out <- apply(rbind(dim(object), dim(expected)), 2, max)
-  
+
   X <- matrix(rep(".", dim_out[1] * dim_out[2]), ncol = dim_out[2])
   row.names(X) <- as.character(1:dim_out[1])
   colnames(X) <-  as.character(1:dim_out[2])
-  
+
   if (!identical(names(object), names(expected))) {
     attr(X, "info") <- "column names are not the same"
   }
-  
+
   if (!comp.attr) {
     attr(X, "info") <- c(attr(X, "info"), "cell attributes have not been compared")
   }
-  
+
   nro <- nrow(object)
   nre <- nrow(expected)
   nco <- ncol(object)
   nce <- ncol(expected)
-  
+
   for (i in 1:dim(X)[1]) {
     for (j in 1:dim(X)[2]) {
-      
+
       is_equivalent <- TRUE
       if (i <= nro && i <= nre && j <= nco && j <= nce) {
         x <- object[i,j, drop = TRUE]
         y <- expected[i,j, drop = TRUE]
-        
+
         attr_x <- attributes(x)
         attr_y <- attributes(y)
-        
+
         attr_x_sorted <- if (is.null(attr_x)) NULL else attr_x[order(names(attr_x))]
         attr_y_sorted <- if (is.null(attr_y)) NULL else attr_y[order(names(attr_y))]
-        
+
         if (comp.attr && !identical(attr_x_sorted, attr_y_sorted)) {
           is_equivalent <- FALSE
         } else if (is.numeric(x) && is.numeric(y)) {
@@ -131,7 +134,7 @@ compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
             is_equivalent <- FALSE
           }
         }
-        
+
         if (!is_equivalent) {
           X[i,j] <- "X"
         }
@@ -142,7 +145,7 @@ compare_rtables <- function(object, expected, tol=0.1, comp.attr = TRUE) {
         ## too many elements
         X[i, j] <- "-"
       }
-    } 
+    }
   }
   class(X) <- c("rtable_diff", class(X))
   X

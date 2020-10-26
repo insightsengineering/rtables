@@ -548,7 +548,9 @@ subset_by_rownum = function(tt, i, ... ) {
             }
             kids = kids[sapply(kids, function(x) NROW(x) > 0)]
         }
-        if(length(kids) == 0 && !labelrow_visible(x))
+        if(length(kids) == 0 &&
+           NROW(content_table(x)) == 0 &&
+           !labelrow_visible(x))
             return(valifnone)
         else {
             tree_children(x) = kids

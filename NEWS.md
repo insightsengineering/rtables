@@ -1,4 +1,9 @@
-## rtables 0.3.2.17.9035
+## rtables 0.3.2.17.9036
+
+* Fixed bug in row subsetting when table has only content rows.
+* Basic compare_rtables function now works as in previous versions, no awareness of row or column structure.
+
+## rtables 0.3.2.17.9036
 
 * `summarize_row_groups` can now accept a list of functions for the `cfun` argument as `analyze_colvars` does.
 
