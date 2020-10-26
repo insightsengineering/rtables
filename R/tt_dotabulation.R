@@ -135,10 +135,9 @@ gen_rowvalues = function(dfpart,
 
     if(!gotflist) {
         func <- list(func)
-    } else  if(length(splextra) != length(func)) {
+    } else  if(length(splextra) == 1) {
         splextra  = rep(splextra, length.out = length(func))
     }
-
     ## if(length(func)) == 1 && names(spl)
     ##     splextra = list(splextra)
 
@@ -173,8 +172,8 @@ gen_rowvalues = function(dfpart,
         if(is.null(datcol))
             datcol = list(NULL)
         datcol = rep(datcol, length(colexprs))
-        if(gotflist)
-            length(exargs) <- length(func) ## func is a list
+        ## if(gotflist)
+        ##     length(exargs) <- length(func) ## func is a list
         exargs <- rep(exargs, length.out = length(colexprs))
 
     }
@@ -449,7 +448,8 @@ gen_rowvalues = function(dfpart,
     if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
         cvar = NULL
     if(!is.null(parent_cfun)) {
-        cfunc <- .make_caller(parent_cfun, label)
+        ##cfunc <- .make_caller(parent_cfun, label)
+        cfunc <- lapply(parent_cfun, .make_caller, clabelstr = label)
         contkids = .make_tablerows(df,
                                    lev = lvl,
                                    func = cfunc,
@@ -457,7 +457,7 @@ gen_rowvalues = function(dfpart,
                                    rowconstr = ContentRow,
                                    datcol = cvar,
                                    takesdf = rep(.takes_df(cfunc),
-                                                 ncol(cinfo)),
+                                                 length.out = ncol(cinfo)),
                                    inclNAs = FALSE,
                                    splextra = extra_args,
                                    last_splval = "")

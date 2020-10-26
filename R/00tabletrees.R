@@ -43,6 +43,7 @@ setClass("TreePos", representation(splits = "list",
 
 
 setClassUnion("functionOrNULL", c("NULL", "function"))
+setClassUnion("listOrNULL", c("NULL", "list"))
 ## TODO (?) make "list" more specific, e.g FormatList, or FunctionList?
 setClassUnion("FormatSpec",c("NULL", "character", "function", "list"))
 
@@ -95,7 +96,7 @@ setClass("Split", contains = "VIRTUAL",
              ## NB this is the function which is applied to
              ## get the content rows for the CHILDREN of this
              ## split!!!
-             content_fun = "functionOrNULL",
+             content_fun = "listOrNULL", ##functionOrNULL",
              content_format = "FormatSpec",
              content_var = "character",
              label_children = "logical",

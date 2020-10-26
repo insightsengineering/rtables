@@ -48,7 +48,7 @@ gen_args <- function(df, spl, pos, tt, tr, verbose, colwidths, obj, x,
 #' @param split_format format spec. Format associated with this split.
 #' @param nested boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
 #' @param format FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.
-#' @param cfun function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts
+#' @param cfun list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.
 #' @param cformat format spec. Format for content rows
 #' @param split_fun function/NULL. custom splitting function
 #' @param split_name string. Name associiated with this split (for pathing, etc)

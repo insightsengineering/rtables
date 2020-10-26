@@ -6,6 +6,8 @@
 \alias{obj_avar,ElementaryTable-method}
 \alias{row_cells}
 \alias{row_cells,TableRow-method}
+\alias{row_cells<-}
+\alias{row_cells<-,TableRow-method}
 \alias{row_values}
 \alias{row_values,TableRow-method}
 \alias{row_values<-}
@@ -22,6 +24,10 @@ obj_avar(obj)
 row_cells(obj)
 
 \S4method{row_cells}{TableRow}(obj)
+
+row_cells(obj) <- value
+
+\S4method{row_cells}{TableRow}(obj) <- value
 
 row_values(obj)
 

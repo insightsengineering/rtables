@@ -1,5 +1,9 @@
 ## rtables 0.3.2.17.9035
 
+* `summarize_row_groups` can now accept a list of functions for the `cfun` argument as `analyze_colvars` does.
+
+## rtables 0.3.2.17.9035
+
 * Fix bug unearthed by change in 0.3.2.17.9034 where cell formats not retained during column subsetting
 
 ## rtables 0.3.2.17.9034

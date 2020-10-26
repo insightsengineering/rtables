@@ -68,7 +68,7 @@
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
 

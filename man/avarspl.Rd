@@ -62,7 +62,7 @@ AnalyzeMultiVars(
 
 \item{defrowlab}{character. Default row labels if they are not specified by the return value of \code{afun}}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 

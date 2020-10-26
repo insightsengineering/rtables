@@ -611,6 +611,45 @@ test_that("analyze_colvars works generally", {
     l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d", "e")) %>%
         analyze_colvars(afun = identity)
     tab2 <- build_table(l2, test)
-    expect(TRUE, "succeeded")
+
+    colfuns <- list(function(x, labelstr) in_rows(summary = 5, .labels = "My Summary Row"),
+                    function(x, labelstr) 6,
+                    function(x, labelstr) 7,
+                    function(x, labelstr) 8)
+
+    l3 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+        summarize_row_groups(cfun = colfuns, format = "xx") %>%
+        analyze_colvars(afun = identity)
+    tab3 <- build_table(l3, test)
+    expect_identical(cell_values(content_table(tab3)),
+                     list(a = 5, b = 6, c=7, d = 8))
+    expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
+                     c(summary = "My Summary Row"))
+
+    print(tab3)
+    l4 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+        summarize_row_groups() %>%
+        analyze_colvars(afun = identity)
+    tab4 <- build_table(l4, test)
+    ## this broke before due to formatting missmatches
+    print(tab4)
+    rws4 <- collect_leaves(tab4, TRUE, TRUE)
+    expect_identical(rtables:::obj_format(rws4[[1]]), "xx (xx.x%)")
+    expect_identical(rtables:::obj_format(rws4[[2]]), NULL)
+
+    l5 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("AGE", "BMRKR1")) %>%
+        split_rows_by("RACE") %>%
+        summarize_row_groups(cfun = list(function(x, labelstr) "first fun",
+                                         function(x, labelstr) "second fun"),
+                             format = "xx")
+    tab5 <- build_table(l5, DM)
+    print(tab5)
+    rws5 <- collect_leaves(tab5, TRUE, TRUE)
+    expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
+           "Multiple content fucntions didn't recycle properly in nested context")
+    expect_identical(unname(cell_values(tab5)[[1]]),
+                    rep(list("first fun", "second fun"), length.out = ncol(tab5)))
 
 })

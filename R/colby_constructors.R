@@ -1025,7 +1025,8 @@ setMethod(".add_row_summary", "Split",
     content_fun(lyt) = cfun
     content_indent_mod(lyt) = indent_mod
     content_var(lyt) = cvar
-    obj_format(lyt) = cformat
+    ##obj_format(lyt) = cformat
+    content_format(lyt) <- cformat
     if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
         label_kids(lyt) = lbl_kids
     content_extra_args(lyt) = extra_args
@@ -1101,7 +1102,7 @@ setMethod(".add_row_summary", "NULL",
 
 .validate_cfuns <- function(fun) {
     if(is.list(fun))
-        return(lapply(fun, .validate_cfuns))
+        return(unlist(lapply(fun, .validate_cfuns)))
 
     frmls <- formals(fun)
     ls_pos <- match("labelstr", names(frmls))
@@ -1112,7 +1113,7 @@ setMethod(".add_row_summary", "NULL",
         .Deprecated(old = "Use of content functions which do not accept a named 'labelstr' argument", new = "content functions which explicitly accept 'labelstr'")
         names(formals(fun))[ls_pos] <- "labelstr"
     }
-    fun
+    list(fun)
 }
 
 

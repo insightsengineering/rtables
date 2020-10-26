@@ -23,7 +23,7 @@ summarize_row_groups(
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
