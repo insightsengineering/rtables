@@ -50,6 +50,7 @@ AnalyzeMultiVars(
   extra_args = list(),
   indent_mod = 0L,
   child_labels = c("default", "visible", "hidden"),
+  child_names = var,
   cvar = ""
 )
 }
@@ -83,6 +84,8 @@ AnalyzeMultiVars(
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+
+\item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
 }
 \description{
 Define a subset tabulation/analysis

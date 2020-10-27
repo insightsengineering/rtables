@@ -1,3 +1,4 @@
+## rtables 0.3.2.17.9038
 ## rtables 0.3.2.17.9036
 
 * Fixed bug in row subsetting when table has only content rows.

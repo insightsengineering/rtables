@@ -229,9 +229,10 @@ matrix_form <- function(tt) {
       labs <- names(kids)
       #TODO: XXX remove reliance on old_cell and old_rrowl!!!
     cells <- lapply(names(kids), function(x) {
-      old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
+        ##old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
+        rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
     })
-    rows[[atrow]] <- old_rrowl(row.name = "",
+    rows[[atrow]] <- rrowl(row.name = "", ## old_rrowl(row.name = "",
                               cells)
     atrow <- atrow + 1
     ## otherwise its pasted with the next level...
@@ -249,15 +250,19 @@ matrix_form <- function(tt) {
 
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
-    cs <- attr(x, "colspan")
-    if (is.null(cs)) cs <- 1
-    rep(as.vector(x), cs)
+    cs <- row_cspans(x) ##attr(x, "colspan")
+    if (is.null(cs)) cs <- rep(1, ncol(x))
+    rep(row_values(x), cs) ##as.vector(x), cs)
   }), ncol = nc, byrow = TRUE)
 
-  span <- matrix(rapply(rows, function(x) {
-    cs <- attr(x, "colspan")
-    if (is.null(cs)) cs <- 1
-    rep(cs, cs)
+    span <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x) ##attr(x, "colspan")
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(cs, cs) ##as.vector(x), cs)
+
+    ## cs <- attr(x, "colspan")
+    ## if (is.null(cs)) cs <- 1
+    ## rep(cs, cs)
   }), ncol = nc, byrow = TRUE)
 
 

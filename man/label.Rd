@@ -2,7 +2,7 @@
 % Please edit documentation in R/labels.R
 \name{label}
 \alias{label}
-\title{Get label attribute}
+\title{Get label attribute DEPRECATED}
 \usage{
 label(x)
 }
@@ -13,9 +13,10 @@ label(x)
 the label attribute of an object
 }
 \description{
-Labels are often attached to variables in data.frames.
+The  \code{label} function  is deprecated,  use the  compatible and
+more general \code{obj_label} instead.
 }
 \examples{
 x <- with_label(c(1,2,3), label = "Test")
-label(x)
+obj_label(x)
 }

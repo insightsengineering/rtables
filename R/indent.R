@@ -1,15 +1,15 @@
 
 #' Change indentation of all rrows in an rtable
-#' 
+#'
 #' Change indentation of all rrows in an rtable
-#' 
+#'
 #' @param x \code{\link{rtable}} object
 #' @param by integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
 #'   indentation is set to 0.
-#' 
+#'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' is_setosa <- iris$Species == "setosa"
 #' mtbl <- rtable(
 #'   header = rheader(
@@ -31,52 +31,12 @@
 #' )
 #' indent(mtbl)
 #' indent(mtbl, 2)
-#' 
+#'
 indent <- function(x, by = 1) {
     if(nrow(x) == 0 || by == 0)
         return(x)
-    
+
     indent_mod(x) <- indent_mod(x) + by
     x
 }
-
-## setGeneric("recurse_indent", function(x, by = 1, truncate_at_zero = FALSE) 
-##     standardGeneric("recurse_indent"))
-
-
-## setMethod("recurse_indent", "TableTree",
-##           function(x, by = 1, truncate_at_zero = FALSE) {
-##     newlev = tt_level(x) + by
-##     stopifnot(truncate_at_zero || (newlev >= 0))
-##     tt_level(x) = newlev
-##     ct <- content_table(x)
-##     if(nrow(ct) > 0) {
-##         ct <- recurse_indent(ct, by, truncate_at_zero)
-##         content_table(x) <- ct
-
-##     }
-##     kids = lapply(tree_children(x), recurse_indent, by = by, truncate_at_zero = truncate_at_zero)
-##     if(length(kids) > 0)
-##         tree_children(x) <- kids
-##     x
-## })
-
-## setMethod("recurse_indent", "ElementaryTable",
-##           function(x, by = 1, truncate_at_zero = FALSE) {
-##     newlev = tt_level(x) + by
-##     stopifnot(truncate_at_zero || (newlev >= 0))
-##     tt_level(x) = newlev
-##     kids = lapply(tree_children(x), recurse_indent, by = by, truncate_at_zero = truncate_at_zero)
-##     if(length(kids) > 0)
-##         tree_children(x) <- kids
-##     x
-## })
-
-## setMethod("recurse_indent", "TableRow",
-##           function(x, by = 1, truncate_at_zero = FALSE) {
-##     newlev = tt_level(x) + by
-##     stopifnot(truncate_at_zero || (newlev >= 0))
-##     tt_level(x) = newlev
-##     x
-## })
 

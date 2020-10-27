@@ -48,7 +48,7 @@ the element name of the outer list. Hence, the length and order of each
 collection must match the levels in \code{col_by}. See examples.}
 
 \item{total}{string of column name of an added total column using \code{\link[rtables]{by_add_total}} to
-\code{col_by} and \code{\link[tern]{col_N_add_total}} to \code{col_N}. If \code{NULL} no total column is added.}
+\code{col_by} and to \code{col_N}. If \code{NULL} no total column is added.}
 
 \item{col_N}{numeric. If non-NULL, counts to override total column counts.}
 }

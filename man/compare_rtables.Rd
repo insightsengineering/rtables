@@ -20,6 +20,10 @@ Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 should not be there.
 }
+\note{
+In its current form \code{compare_rtables} does not take structure into account,
+only row and cell position.
+}
 \examples{
 
 t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))

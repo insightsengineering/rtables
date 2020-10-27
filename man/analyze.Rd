@@ -9,6 +9,7 @@ analyze(
   vars,
   afun = rtab_inner,
   var_labels = vars,
+  table_names = vars,
   format = NULL,
   nested = TRUE,
   inclNAs = FALSE,
@@ -25,6 +26,8 @@ analyze(
 \item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
+
+\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 

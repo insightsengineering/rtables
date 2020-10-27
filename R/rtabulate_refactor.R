@@ -83,7 +83,7 @@ setMethod("rtab_inner", "ANY",
 #' @inheritParams compat_args
 #' @param FUN a function that processes the cell data
 #' @param total string of column name of an added total column using \code{\link[rtables]{by_add_total}} to
-#'   \code{col_by} and \code{\link[tern]{col_N_add_total}} to \code{col_N}. If \code{NULL} no total column is added.
+#'   \code{col_by} and to \code{col_N}. If \code{NULL} no total column is added.
 #' @param col_N numeric. If non-NULL, counts to override total column counts.
 #'
 

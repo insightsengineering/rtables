@@ -680,6 +680,7 @@ analyze = function(lyt,
                    vars,
                    afun = rtab_inner,
                    var_labels = vars,
+                   table_names = vars,
                    format = NULL,
                    nested = TRUE,
                    ##can we name this na_rm? symbol conflict with possible afuns!!!
@@ -713,6 +714,7 @@ analyze = function(lyt,
                           inclNAs = inclNAs,
                           extra_args = extra_args,
                           indent_mod = indent_mod,
+                          child_names = table_names,
                           child_labels = show_labels)
 
     if(nested &&

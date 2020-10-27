@@ -17,7 +17,8 @@ constr_args(
   cindent_mod,
   cvar,
   label,
-  cextra_args
+  cextra_args,
+  child_names
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ constr_args(
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
+
+\item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
 }
 \description{
 Constructor Arg Conventions

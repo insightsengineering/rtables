@@ -600,6 +600,7 @@ AnalyzeMultiVars = function(var,
                             extra_args = list(),
                             indent_mod = 0L,
                             child_labels = c("default", "visible", "hidden"),
+                            child_names = var,
                             cvar = ""
                             ) {
     ## NB we used to resolve to strict TRUE/FALSE for label visibillity
@@ -618,6 +619,7 @@ AnalyzeMultiVars = function(var,
         inclNAs = .repoutlst(inclNAs, nv)
         pld = mapply(AnalyzeVarSplit,
                      var = var,
+                     split_name = child_names,
                      split_label =split_label,
                      afun = afun,
                      defrowlab = defrowlab,

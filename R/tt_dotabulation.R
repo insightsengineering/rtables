@@ -589,8 +589,22 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
         return(kids[[1]])
     }
     ## this will be the variables
-    nms = sapply(spl_payload(spl), spl_payload)
+    ##nms = sapply(spl_payload(spl), spl_payload)
+
+    nms <- vapply(kids, obj_name, "")
+    labs <- vapply(kids, obj_label, "")
+    if(length(unique(nms))  != length(nms) &&
+       length(unique(nms))  != length(nms)) {
+        warning("Non-unique sibling analysis table names. Using Labels instead. Use the table_names argument to analyze to avoid this when analyzing the same variable multiple times.")
+        kids <- mapply(function(k, nm) {
+            obj_name(k) <- nm
+            k
+        }, k = kids, nm = labs, SIMPLIFY = FALSE)
+        nms <- labs
+    }
+
     nms[is.na(nms)] = ""
+
     names(kids) = nms
     kids
 })

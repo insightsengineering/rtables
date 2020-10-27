@@ -38,7 +38,8 @@ lyt_args(
   show_labels,
   visible_label,
   var_labels,
-  cvar
+  cvar,
+  table_names
 )
 }
 \arguments{
@@ -109,6 +110,8 @@ lyt_args(
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
+\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
 }
 \description{
 Layouting Function Arg Conventions

@@ -93,6 +93,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .labels = NULL,
                     .formats = NULL,
                     .indent_mods = NULL) {
+    if(is.function(.formats))
+        .formats = list(.formats)
 
     l <- c(list(...), .list)
 

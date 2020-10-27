@@ -967,7 +967,7 @@ setMethod("collect_leaves", "VTree",
 #' @exportMethod collect_leaves
 setMethod("collect_leaves", "VLeaf",
           function(tt, incl.cont, add.labrows) {
-    tt
+    list(tt)
 })
 
 #' @rdname collect_leaves

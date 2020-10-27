@@ -47,7 +47,7 @@ test_that("complex layout works", {
         ## adding more analysis vars "compounds them", placing them at the same
         ## level of nesting as all previous analysis blocks, rather than
         ## attempting to further nest them
-        analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x") %>%
+        analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x", table_names = "AgeRedux") %>%
 
         ## Note nested=TRUE, this creates a NEW subtable directly under the
         ## root split
@@ -78,8 +78,12 @@ test_that("existing table in layout works", {
     thing2 = NULL %>% split_cols_by("ARM") %>%
     ## add nested column split on SEX with value labels from gend_label
     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-    analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"), afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), format = "xx.xx")
+        analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
+                afun = function(x) list(mean = mean(x),
+                                        median = median(x)),
+                format = "xx.xx",
+                table_names = c("AGE1", "AGE2")
+            )
 
 tab2 = build_table(thing2, rawdat)
 
@@ -227,7 +231,7 @@ test_that("ref_group comparisons work", {
 
     blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
         analyze("AGE", show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels = "hidden")
+        analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2")
     ## function(x) list(mean = mean(x)))
 
 
@@ -243,10 +247,10 @@ test_that("ref_group comparisons work", {
         split_cols_by("ARM") %>%
         split_cols_by("SEX", ref_group = "F") %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels="hidden") %>%
+        analyze("AGE", refcompmean, show_labels="hidden", table_names = "AGE2a") %>%
         split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels = "hidden")
+        analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2b")
 
     bltab2 = build_table(lyt, DM)
     d1 = bltab2[4,1, drop = TRUE]
