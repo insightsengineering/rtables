@@ -7,16 +7,8 @@ setGeneric("toString", function(x,...) standardGeneric("toString"))
 ## preserve S3 behavior
 setMethod("toString", "ANY", base::toString)
 
-setMethod("show", "VTableTree", function(object) {
-  cat(toString(object))
-})
-
 #' @export
 setMethod("print", "ANY", base::print)
-#' @rdname int_methods
-setMethod("print", "VTableTree", function(x, ...) {
-  cat(toString(x, ...))
-})
 
 
 #' Convert an `rtable` object to a string
