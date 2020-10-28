@@ -25,7 +25,7 @@ knitr::opts_chunk$set(comment = "")
 
 ## Introduction
 
-In this vignette we create a demographic table, adverse event table, disposition table, and a response table using layouts. We don't aim to create fully specified tables that meet the requirements of most standard analyses, instead we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
+In this vignette we create a demographic table, adverse event table, disposition table, and a response table using rtables layout facility. We don't aim to create fully specified tables that meet the requirements of most standard analyses, instead we only want to demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data. At Roche we have another R package called `tern` to create standard tables with full parameterization to meet the requirements of the analysts.
 
 Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package were created using `random.cdisc.data` another R package that we intend to release as open source soon.
 
@@ -139,7 +139,7 @@ identical(tbl, tbl2)
 stopifnot(identical(tbl, tbl2))
 ```
 
-In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which is commonly referred to as `N`). Column `N`s are added using the `add_colcounts` function:
+In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which outside of clinical trials is commonly referred to as `N`). Column `N`s are added using the `add_colcounts` function:
 
 ```{r}
 basic_table() %>% 
@@ -151,7 +151,7 @@ basic_table() %>%
 
 ### Variations on the demographic table
 
-We will now show a couple of variations of the demographic. These variations are in structure and not in analysis, hence they don't require a modification to the `s_summary` function.
+We will now show a couple of variations of the demographic table. These variations are in structure and not in analysis, hence they don't require a modification to the `s_summary` function.
 
 
 We will start with a standard table analyzing the variables `AGE` and `BMRKR2` variables:
@@ -166,7 +166,7 @@ basic_table() %>%
 
 let's assume we would like to have this analysis carried out per gender encoded in the row space:
 
-```{r}
+```{r, warning=FALSE}
 basic_table() %>% 
   split_cols_by(var = "ARM") %>%
   add_colcounts() %>%
@@ -175,10 +175,10 @@ basic_table() %>%
   build_table(ADSL) 
 ```
 
-We will subset `ADSL` to include only males and females in the analysis in order to reduces the number of rows in the table
+We will now subset `ADSL` to include only males and females in the analysis in order to reduces the number of rows in the table
 
 
-```{r}
+```{r, warning=FALSE}
 ADSL_M_F <- filter(ADSL, SEX %in% c("M", "F"))
 
 basic_table() %>% 
@@ -189,7 +189,7 @@ basic_table() %>%
   build_table(ADSL_M_F) 
 ```
 
-Note that the `UNDIFFERENTIATED` and `U` level still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function. If empty levels should be dropped then the `split_*` function needs to know that via the  `split_fun` argument which excepts a splitting function, i.e. `drop_split_levels` here. Splitting is a bigger topic and we will address this in another vignette in more details. 
+Note that the `UNDIFFERENTIATED` and `U` level still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function. If empty levels should be dropped then the `split_*` functions need to know this via the  `split_fun` argument which excepts a splitting function, i.e. `drop_split_levels` here. Splitting is a bigger topic and we will address this in another vignette in more details. 
  
  
 ```{r}
@@ -221,9 +221,7 @@ basic_table() %>%
   build_table(ADSL_M_F_l)
 ```
 
-**TODO: `labels_var` is not working**.
-
-If we only want to stratify by gender for the `AGE` analyis one can do this using the `nested` argument:
+If we only want to stratify by gender for the `AGE` analysis one can do this using the `nested` argument:
 
 ```{r}
 basic_table() %>% 
