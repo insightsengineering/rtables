@@ -27,6 +27,24 @@ setMethod("ncol", "VTableNodeInfo",
           function(x) {
     ncol(col_info(x))
 })
+
+#' @rdname int_methods
+#' @exportMethod ncol
+setMethod("ncol", "TableRow",
+          function(x) {
+    if(!no_colinfo(x))
+        ncol(col_info(x))
+    else
+        length(spanned_values(x))
+})
+
+#' @rdname int_methods
+#' @exportMethod ncol
+setMethod("ncol", "LabelRow",
+          function(x) {
+    ncol(col_info(x))
+})
+
 #' @rdname int_methods
 #' @exportMethod ncol
 setMethod("ncol", "InstantiatedColumnInfo",

@@ -71,9 +71,6 @@ rrowl = function (row.name, ..., format = NULL, indent = 0)  {
 
 ## rcell moved to tt_afun_utils.R
 
-
-
-
 ##inefficient trash
 paste_em_n = function(lst, n, sep = ".") {
     ret = lst[[1]]
@@ -500,9 +497,6 @@ header_add_N = function(x, N) {
 #' @rdname header_compat
 header <- function(x) col_info(obj = x)
 
-
-
-
 combine_cinfo = function(..., new_total = NULL) {
     cinfs <- list(...)
     if(are(cinfs, "VTableNodeInfo"))
@@ -521,16 +515,6 @@ combine_cinfo = function(..., new_total = NULL) {
     newdisp <- any(vapply(cinfs, disp_ccounts, NA))
 
 
-    ## ctree1 = coltree(ci1)
-    ## ctree2 = coltree(ci2)
-    ## newctree = LayoutColTree(kids = list(ctree1, ctree2))
-    ## ## c(tree_children(ctree1),
-    ## ##                                   tree_children(ctree2)))
-
-    ## newcounts = c(col_counts(ci1), col_counts(ci2))
-    ## newexprs = c(col_exprs(ci1), col_exprs(ci2))
-    ## newexargs = c(col_extra_args(ci1), col_extra_args(ci2))
-    ## newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
                            extras = newexargs,

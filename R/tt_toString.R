@@ -206,66 +206,79 @@ matrix_form <- function(tt) {
   )
 }
 
+## print depths (not to be confused with tree depths)
+.cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
+    if(is(ctree, "LayoutColLeaf"))
+        return(depth)
+    unlist(lapply(tree_children(ctree), .cleaf_depths, depth = depth + 1))
+}
+
+
+.do_tbl_h_piece <- function(ct, padding = 0) {
+    if(is(ct, "LayoutColLeaf")) {
+        return(list(rcell(obj_name(ct), colspan = 1)))
+    }
+
+    nleafs <- length(collect_leaves(ct))
+    kids <- tree_children(ct)
+    kidnms <- vapply(kids, obj_name, "")
+    cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
+    pieces <- mapply(.do_tbl_h_piece,
+    ct = kids, padding = max(cdepths) - cdepths,
+    SIMPLIFY= FALSE)
+    lpieces <- vapply(pieces, length, 1L)
+
+    padcells <- if(padding > 0) list(rep(list(rcell("", colspan = nleafs)), padding))
+    ##nmcell <- if(nchar(obj_name(ct)) > 0) rcell(obj_name(ct), colspan = nleafs) else NULL
+    nmcell <- list(rcell(obj_name(ct), colspan = nleafs))
+
+    stopifnot(length(unique(lpieces)) == 1)
+    rowparts <- lapply(1:max(lpieces),
+                       function(i) {
+        res = lapply(pieces, `[[`, i = i)
+        if(!are(res, "CellValue"))
+            res = unlist(res, recursive = FALSE)
+        res
+    })
+
+
+    c(padcells,
+      nmcell,
+      rowparts)
+}
 
 
 .tbl_header_mat <- function(tt) {
 
-  clyt <- coltree(tt)
+    clyt <- coltree(tt)
+    rowvals <- .do_tbl_h_piece(clyt)
+    rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
+    rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
 
-  atrow <- 1
-  rows <- list()
-  kids <- tree_children(clyt)
-  dispcounts <- disp_ccounts(tt)
-  while(length(kids) > 0 && atrow < 1000) { #we will break from this
 
-      labs <- names(kids)
-      #TODO: XXX remove reliance on old_cell and old_rrowl!!!
-    cells <- lapply(names(kids), function(x) {
-        ##old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
-        rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
-    })
-    rows[[atrow]] <- rrowl(row.name = "", ## old_rrowl(row.name = "",
-                              cells)
-    atrow <- atrow + 1
-    ## otherwise its pasted with the next level...
-    ## XXX todo figure out a better way to do this
-    names(kids) <- NULL
-    kids <- unlist(lapply(kids,
-                         function(k) {
-                           if(is(k, "LayoutColLeaf"))
-                             NULL
-                           else
-                             tree_children(k)
-                         }),
-                  recursive = FALSE)
-  }
 
-  nc <- ncol(tt)
-  body <- matrix(rapply(rows, function(x) {
-    cs <- row_cspans(x) ##attr(x, "colspan")
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(row_values(x), cs) ##as.vector(x), cs)
-  }), ncol = nc, byrow = TRUE)
+    nc <- ncol(tt)
+    body <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x) ##attr(x, "colspan")
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(row_values(x), cs) ##as.vector(x), cs)
+    }), ncol = nc, byrow = TRUE)
 
     span <- matrix(rapply(rows, function(x) {
         cs <- row_cspans(x) ##attr(x, "colspan")
         if (is.null(cs)) cs <- rep(1, ncol(x))
         rep(cs, cs) ##as.vector(x), cs)
-
-    ## cs <- attr(x, "colspan")
-    ## if (is.null(cs)) cs <- 1
-    ## rep(cs, cs)
-  }), ncol = nc, byrow = TRUE)
+    }), ncol = nc, byrow = TRUE)
 
 
-  if (col_info(tt)@display_columncounts) {
-    counts <- col_info(tt)@counts
-    cformat <- col_info(tt)@columncount_format
-    body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
+    if (col_info(tt)@display_columncounts) {
+        counts <- col_info(tt)@counts
+        cformat <- col_info(tt)@columncount_format
+        body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
     span <- rbind(span, rep(1, nc))
-  }
+    }
 
-  list(body = cbind("", body), span = cbind(1, span))
+    list(body = cbind("", body), span = cbind(1, span))
 }
 
 

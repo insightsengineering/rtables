@@ -1,4 +1,7 @@
-## rtables 0.3.2.17.9038
+## rtables 0.3.2.17.9039
+
+* Fix bug in display of column information when column structure is not symetric, as with recursive cbinds.
+
 ## rtables 0.3.2.17.9036
 
 * Fixed bug in row subsetting when table has only content rows.
