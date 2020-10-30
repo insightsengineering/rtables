@@ -7,7 +7,7 @@ treestruct <- function(obj, ind = 0L) {
         crows = nrow(content_table(obj))
         ccols = if(crows == 0) 0 else nc
         cat(sprintf(" [cont: %d x %d]",
-                      crows, ccols))        
+                      crows, ccols))
     }
     if(is(obj, "VTableTree") && length(tree_children(obj))) {
         kids = tree_children(obj)
@@ -22,7 +22,7 @@ treestruct <- function(obj, ind = 0L) {
     invisible(NULL)
 }
 
-    
+
 
 
 docat = function(obj) {
@@ -33,7 +33,7 @@ docat = function(obj) {
                                          obj_label(content_table(obj)),
                                          crows, ccols),
             sep = "")
-        
+
     }
     if(is(obj, "VTableTree") && length(tree_children(obj))) {
         kids = tree_children(obj)
@@ -69,10 +69,7 @@ ploads_to_str = function(x, collapse = ":") {
                collapse = collapse)
     }
 }
-    
 
-setMethod("show", "VTableTree",
-          function(object) print(to_s3compat(object)))
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
 
@@ -106,7 +103,7 @@ spldesc = function(spl, value = "") {
     sprintf(format,
             value,
             payloadmsg)
-            
+
 
 }
 
@@ -121,11 +118,11 @@ layoutmsg = function(obj) {
     if(istree <- is(obj, "LayoutAxisTree")) {
         kids = tree_children(obj)
         return(unlist(lapply(kids, layoutmsg)))
-        
+
     }
-    
+
     msg = paste(collapse = " -> ",
-                mapply(spldesc, 
+                mapply(spldesc,
                        spl = spllst,
                        value = spvallst))
     msg
@@ -144,7 +141,7 @@ setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
 setMethod("spltype_abbrev", "VarLevelSplit",
           function(obj) "lvls")
 
-setMethod("spltype_abbrev", "VarLevWBaselineSplit", 
+setMethod("spltype_abbrev", "VarLevWBaselineSplit",
           function(obj) paste("ref_group", obj@ref_group_value))
 
 
@@ -172,7 +169,7 @@ setMethod("spltype_abbrev", "AnalyzeMultiVars",
 setMethod("spltype_abbrev", "AnalyzeColVarSplit",
           function(obj) "** col-var analysis **")
 
-           
+
 
 
 docat_splitvec = function(object, indent = 0) {
@@ -185,7 +182,7 @@ docat_splitvec = function(object, indent = 0) {
     } else {
 
         plds = ploads_to_str(lapply(object, spl_payload))
-              
+
         tabbrev = sapply(object, spltype_abbrev)
         msg = paste(collapse = " -> ",
                     paste0(plds, " (", tabbrev, ")"))
@@ -239,7 +236,7 @@ setMethod("show", "TreePos",
             paste0(label, " [", val, "]")
         }, label = pos_split_labels(object),
         val = pos_splval_labels(object))
-        
+
     msg = paste(chars, collapse = " -> ")
     cat("An object of class ", class(object), "\n\n", msg)
 })
@@ -257,6 +254,27 @@ setMethod("show", "InstantiatedColumnInfo",
                         collapse = ", ")),
         "",
         sep = "\n")
-    
+
     invisible(object)
+})
+
+
+#' @rdname int_methods
+setMethod("print", "VTableTree", function(x, ...) {
+  cat(toString(x, ...))
+})
+
+#' @rdname int_methods
+setMethod("show", "VTableTree", function(object) {
+  cat(toString(object))
+})
+
+
+setMethod("show", "TableRow", function(object) {
+    cat(sprintf("[%s indent_mod %d]: %s   %s\n",
+                class(object),
+                indent_mod(object),
+                obj_label(object),
+                paste(as.vector(get_formatted_cells(object)),
+                      collapse = "   ")))
 })

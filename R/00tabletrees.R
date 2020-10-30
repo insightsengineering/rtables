@@ -1150,6 +1150,10 @@ setClass("LabelRow", contains = "TableRow",
     if((missing(label) || is.null(label) || identical(label, "")) &&
        sum(nzchar(rlabels)) == 1)
         label = rlabels[nzchar(rlabels)]
+    if(missing(cspan) &&
+       !is.null(unlist(lapply(vals, cell_cspan))))
+        cspan <- vapply(vals, cell_cspan, 0L)
+
 
     rw = new(klass,
              leaf_value = vals,
