@@ -20,4 +20,18 @@ Tree view of table structure
 }
 \examples{
 
+ADSL <- ex_adsl
+tbl <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(vars = c("AGE", "BMRKR1"), afun = function(x) {
+    in_rows(
+      mean_sd = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      range = rcell(range(x), format = "xx.xx - xx.xx"),
+      .labels = c(mean_sd = "Mean (Sd)", range = "Range")
+    )
+  }) \%>\%
+  build_table(ADSL)
+
+
+table_structure(tbl)
 }

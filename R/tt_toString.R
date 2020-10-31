@@ -157,11 +157,14 @@ matrix_form <- function(tt) {
     sp <- row_cspans(rr)
     rep(sp, times = sp)
   })
-    ## the 1 is for row labels
-    if(nrow(tt) > 0)
-        body_spans <- cbind(1L, do.call(rbind, tsptmp))
-    else
-        body_spans <- matrix(1, nrow = 1, ncol = ncol(tt) + 1)
+  ## the 1 is for row labels
+  
+  body_spans <- if(nrow(tt) > 0) {
+    cbind(1L, do.call(rbind, tsptmp))
+  } else {
+    matrix(1, nrow = 1, ncol = ncol(tt) + 1)
+  }
+  
   body <- rbind(header_content$body, body_content_strings)
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
@@ -249,36 +252,34 @@ matrix_form <- function(tt) {
 
 
 .tbl_header_mat <- function(tt) {
-
-    clyt <- coltree(tt)
-    rowvals <- .do_tbl_h_piece(clyt)
-    rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
-    rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
-
-
-
-    nc <- ncol(tt)
-    body <- matrix(rapply(rows, function(x) {
-        cs <- row_cspans(x) ##attr(x, "colspan")
-        if (is.null(cs)) cs <- rep(1, ncol(x))
-        rep(row_values(x), cs) ##as.vector(x), cs)
-    }), ncol = nc, byrow = TRUE)
-
-    span <- matrix(rapply(rows, function(x) {
-        cs <- row_cspans(x) ##attr(x, "colspan")
-        if (is.null(cs)) cs <- rep(1, ncol(x))
-        rep(cs, cs) ##as.vector(x), cs)
-    }), ncol = nc, byrow = TRUE)
-
-
-    if (col_info(tt)@display_columncounts) {
-        counts <- col_info(tt)@counts
-        cformat <- col_info(tt)@columncount_format
-        body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
+  
+  clyt <- coltree(tt)
+  rowvals <- .do_tbl_h_piece(clyt)
+  rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
+  rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
+  
+  nc <- ncol(tt)
+  body <- matrix(rapply(rows, function(x) {
+    cs <- row_cspans(x) ##attr(x, "colspan")
+    if (is.null(cs)) cs <- rep(1, ncol(x))
+    rep(row_values(x), cs) ##as.vector(x), cs)
+  }), ncol = nc, byrow = TRUE)
+  
+  span <- matrix(rapply(rows, function(x) {
+    cs <- row_cspans(x) ##attr(x, "colspan")
+    if (is.null(cs)) cs <- rep(1, ncol(x))
+    rep(cs, cs) ##as.vector(x), cs)
+  }), ncol = nc, byrow = TRUE)
+  
+  
+  if (col_info(tt)@display_columncounts) {
+    counts <- col_info(tt)@counts
+    cformat <- col_info(tt)@columncount_format
+    body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
     span <- rbind(span, rep(1, nc))
-    }
-
-    list(body = cbind("", body), span = cbind(1, span))
+  }
+  
+  list(body = cbind("", body), span = cbind(1, span))
 }
 
 
@@ -324,6 +325,7 @@ setMethod("get_formatted_cells", "TableTree",
 
             do.call(rbind, c(list(lr), list(ct),  els))
           })
+
 #' @rdname gfc
 setMethod("get_formatted_cells", "ElementaryTable",
           function(obj) {
