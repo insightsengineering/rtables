@@ -309,7 +309,7 @@ test_that("cfun args", {
         summarize_row_groups(cfun = cfun1)
 
     tbl <- build_table(lyt, rawdat)
-    expect_null(print(tbl))
+    expect_identical(print(tbl), tbl)
 })
 
 ## regression test for automatically not-nesting
@@ -654,6 +654,15 @@ test_that("analyze_colvars works generally", {
     expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
            "Multiple content fucntions didn't recycle properly in nested context")
     expect_identical(unname(cell_values(tab5)[[1]]),
-                    rep(list("first fun", "second fun"), length.out = ncol(tab5)))
+                     rep(list("first fun", "second fun"), length.out = ncol(tab5)))
 
+
+    ## single column in split_cols_by_multivar and analyze_colvars
+    one_col_lyt <- basic_table() %>%
+        split_cols_by_multivar(vars = "Sepal.Width") %>%
+        analyze_colvars(afun = mean)
+    one_col_tbl <- build_table(one_col_lyt, iris)
+
+    expect_identical(cell_values(one_col_tbl),
+                     list(Sepal.Width = mean(iris$Sepal.Width)))
 })

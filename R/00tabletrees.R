@@ -256,7 +256,7 @@ ManualSplit = function(levels, label, name = "manual",
 setClass("MultiVarSplit", contains = "Split",
          representation(var_labels = "character"),
          validity = function(object) {
-    length(object@payload) > 1 &&
+    length(object@payload) >= 1 &&
         all(!is.na(object@payload)) &&
         (length(object@var_labels) == 0 || length(object@payload) == length(object@var_labels))
 })

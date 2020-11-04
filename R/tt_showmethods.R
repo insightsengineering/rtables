@@ -103,8 +103,6 @@ spldesc = function(spl, value = "") {
     sprintf(format,
             value,
             payloadmsg)
-
-
 }
 
 
@@ -261,7 +259,9 @@ setMethod("show", "InstantiatedColumnInfo",
 
 #' @rdname int_methods
 setMethod("print", "VTableTree", function(x, ...) {
-  cat(toString(x, ...))
+    msg <- toString(x, ...)
+    cat(msg)
+    invisible(x)
 })
 
 #' @rdname int_methods
