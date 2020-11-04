@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9040
+
+* Fix regression caused by 0.3.2.17.9039 where column split values were displayed by name rather than label.
+
 ## rtables 0.3.2.17.9039
 
 * Fix bug in display of column information when column structure is not symetric, as with recursive cbinds.

@@ -1106,13 +1106,13 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
         rawpart = do_split(spl,df, trim =FALSE )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
-        kids = mapply(function(dfpart, value) {
-            ## XXX TODO label
-            partlab = ""
+        labs = rawpart[["labels"]]
+        kids = mapply(function(dfpart, value, partlab) {
             newpos = make_child_pos(pos, spl, value, partlab)
             splitvec_to_coltree(dfpart, splvec, newpos,
                                 lvl + 1L, partlab)
-        }, dfpart = datparts, value = vals, SIMPLIFY=FALSE)
+        }, dfpart = datparts, value = vals,
+        partlab = labs, SIMPLIFY=FALSE)
         LayoutColTree(lev = lvl, label = label,
                       spl = spl,
                       kids = kids, tpos = pos,

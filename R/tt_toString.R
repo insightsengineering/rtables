@@ -216,21 +216,19 @@ matrix_form <- function(tt) {
 
 .do_tbl_h_piece <- function(ct, padding = 0) {
     if(is(ct, "LayoutColLeaf")) {
-        return(list(rcell(obj_name(ct), colspan = 1)))
+        return(list(rcell(obj_label(ct), colspan = 1)))
     }
 
     nleafs <- length(collect_leaves(ct))
     kids <- tree_children(ct)
-    kidnms <- vapply(kids, obj_name, "")
     cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
     pieces <- mapply(.do_tbl_h_piece,
-    ct = kids, padding = max(cdepths) - cdepths,
-    SIMPLIFY= FALSE)
+                     ct = kids, padding = max(cdepths) - cdepths,
+                     SIMPLIFY= FALSE)
     lpieces <- vapply(pieces, length, 1L)
 
     padcells <- if(padding > 0) list(rep(list(rcell("", colspan = nleafs)), padding))
-    ##nmcell <- if(nchar(obj_name(ct)) > 0) rcell(obj_name(ct), colspan = nleafs) else NULL
-    nmcell <- list(rcell(obj_name(ct), colspan = nleafs))
+    nmcell <- list(rcell(obj_label(ct), colspan = nleafs))
 
     stopifnot(length(unique(lpieces)) == 1)
     rowparts <- lapply(1:max(lpieces),
