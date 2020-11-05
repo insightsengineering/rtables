@@ -1,3 +1,8 @@
+## rtables 0.3.2.17.9041
+
+* Allow single variable to be used within `split_cols_by_multivar` 
+* Various removal of defunct 
+
 ## rtables 0.3.2.17.9040
 
 * Fix regression caused by 0.3.2.17.9039 where column split values were displayed by name rather than label.

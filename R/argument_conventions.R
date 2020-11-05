@@ -112,8 +112,6 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan
 #' @param col_by (\code{\link{factor}} or \code{\link{data.frame}}
 #'   if a \code{\link{factor}} of length \code{nrow(x)} that defines
 #'   which levels in \code{col_by} define a column.
-#'   can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-#'   can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}
 #' @param row_by rows in \code{x} to take per row in the resulting table
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}

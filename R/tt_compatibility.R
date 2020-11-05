@@ -1053,7 +1053,7 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 #'
 #' Functions from the  previous API starting  with \code{by_} not listed here may not currently be supported.
 #'
-#' @param name character(1). Label for the added all/total column
+#' @param name character(1). Label for the added all/total column.
 #' @rdname bycompats
 #' @inheritParams lyt_args
 #' @export
