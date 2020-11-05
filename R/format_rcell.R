@@ -1,7 +1,6 @@
-
 formats_1d <- c(
   "xx", "xx.", "xx.x", "xx.xx", "xx.xxx", "xx.xxxx",
-  "xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9", ">999.99",
+  "xx%", "xx.%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)", ">999.9", ">999.99",
   "x.xxxx | (<0.0001)"
 )
 
@@ -142,20 +141,20 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
       stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
     }
     if (format != "xx" && length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
-
+    
     switch(
       format,
       "xx" = if (all(is.na(x))) "NA" else as.character(x),
       "xx." = as.character(round(x, 0)),
-      "xx.x" = as.character(round(x, 1)),
-      "xx.xx" = as.character(round(x, 2)),
-      "xx.xxx" = as.character(round(x, 3)),
-      "xx.xxxx" = as.character(round(x, 4)),
+      "xx.x" = sprintf("%.1f", x),
+      "xx.xx" = sprintf("%.2f", x),
+      "xx.xxx" = sprintf("%.3f", x),
+      "xx.xxxx" = sprintf("%.4f", x),
       "xx%" = paste0(x * 100, "%"),
       "xx.%" = paste0(round(x * 100, 0), "%"),
-      "xx.x%" = paste0(round(x * 100, 1), "%"),
-      "xx.xx%" = paste0(round(x * 100, 2), "%"),
-      "xx.xxx%" = paste0(round(x * 100, 3), "%"),
+      "xx.x%" = sprintf("%.1f%%", x*100),
+      "xx.xx%" = sprintf("%.2f%%", x*100),
+      "xx.xxx%" = sprintf("%.3f%%", x*100),
       "(N=xx)" = paste0("(N=", x, ")"),
       ">999.9" = ifelse(x > 999.9, ">999.9", as.character(round(x, 1))),
       ">999.99" = ifelse(x > 999.99, ">999.99", as.character(round(x, 2))),
