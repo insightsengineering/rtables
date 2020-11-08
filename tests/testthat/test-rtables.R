@@ -103,28 +103,3 @@ test_that("multi-header tables work", {
   expect_equal(names(t1), c("A", "A", "B", "B"))
   
 })
-
-
-test_that("test sprintf based format", {
-  
-  expect_equal(format_rcell(rcell(12.213743534, sprintf_format("%.3f"))), "12.214")
-  expect_equal(format_rcell(rcell(12.2134543534, sprintf_format("%.3f"))), "12.213")
-  
-  expect_equal(format_rcell(rcell(c(12.21, 7.321), sprintf_format("%.1f and %.2f"))), "12.2 and 7.32")
-  
-})
-
-test_that("test p-value format", {
-  
-  expect_equal(format_rcell(rcell(0.02, "x.xxxx | (<0.0001)")), "0.0200")
-  expect_equal(format_rcell(rcell(0.0234934, "x.xxxx | (<0.0001)")), "0.0235")
-  expect_equal(format_rcell(rcell(0.00000001, "x.xxxx | (<0.0001)")), "<0.0001")
-
-})
-
-test_that("test 3d format (estimate and CI)", {
-  
-  expect_equal(format_rcell(rcell(c(0.02, -0.05, 0.0434235), "xx.xx (xx.xx - xx.xx)")), "0.02 (-0.05 - 0.04)")
-  expect_equal(format_rcell(rcell(c(12.34590, 3.2359, 324.2492), "xx.xx (xx.xx - xx.xx)")), "12.35 (3.24 - 324.25)")
-
-})
