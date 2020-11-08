@@ -2,6 +2,10 @@
 % Please edit documentation in R/colby_constructors.R
 \name{.add_row_summary}
 \alias{.add_row_summary}
+\alias{.add_row_summary,PreDataRowLayout-method}
+\alias{.add_row_summary,SplitVector-method}
+\alias{.add_row_summary,Split-method}
+\alias{.add_row_summary,NULL-method}
 \title{Add Row Summary}
 \usage{
 .add_row_summary(
@@ -11,8 +15,70 @@
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
   indent_mod = 0L,
-  cvar = ""
+  cvar = "",
+  extra_args = list()
 )
+
+\S4method{.add_row_summary}{PreDataRowLayout}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+\S4method{.add_row_summary}{SplitVector}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+\S4method{.add_row_summary}{Split}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+\S4method{.add_row_summary}{`NULL`}(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+}
+\arguments{
+\item{lyt}{layout object pre-data used for tabulation}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
+
+\item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+
+\item{cformat}{format spec. Format for content rows}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Add Row Summary

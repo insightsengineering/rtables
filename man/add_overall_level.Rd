@@ -15,9 +15,13 @@ add_overall_level(
 \arguments{
 \item{valname}{character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}}
 
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.}
+
+\item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
 }
 \value{
 a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout

@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Date: 2019-10-11
-Version: 0.3.2.17.9008
+Date: 2020-09-25
+Version: 0.3.2.17.9041
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = "aut"),
@@ -37,13 +37,11 @@ Collate:
     'argument_conventions.R'
     'as_html.R'
     'utils.R'
-    'col_by.R'
     'colby_constructors.R'
     'compare_rtables.R'
     'deprecated.R'
     'format_rcell.R'
     'indent.R'
-    'labels.R'
     'make_subset_expr.R'
     'prune.R'
     'rtable.R'
@@ -61,5 +59,7 @@ Collate:
     'tt_pos_and_access.R'
     'tt_showmethods.R'
     'tt_sort.R'
+    'tt_test_afuns.R'
     'tt_toString.R'
+    'labels.R'
     'zzz_constants.R'

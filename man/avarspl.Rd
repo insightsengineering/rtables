@@ -32,7 +32,7 @@ AnalyzeColVarSplit(
   split_name = "",
   extra_args = list(),
   indent_mod = 0L,
-  visible_varlabel = NA,
+  visible_label = NA,
   cvar = ""
 )
 
@@ -50,6 +50,7 @@ AnalyzeMultiVars(
   extra_args = list(),
   indent_mod = 0L,
   child_labels = c("default", "visible", "hidden"),
+  child_names = var,
   cvar = ""
 )
 }
@@ -60,7 +61,9 @@ AnalyzeMultiVars(
 
 \item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{defrowlab}{character. Default row labels if they are not specified by the return value of \code{afun}}
+
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 
@@ -74,9 +77,15 @@ AnalyzeMultiVars(
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
+\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+
+\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+
+\item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
 }
 \description{
 Define a subset tabulation/analysis

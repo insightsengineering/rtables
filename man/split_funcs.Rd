@@ -26,6 +26,16 @@ of presence in the data).}
 
 \item{reorder}{logical(1). Should the order of \code{only} be used as the order of the children of the split. defaults to \code{TRUE}}
 
+\item{df}{dataset (data.frame or tibble)}
+
+\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
+
+\item{vals}{ANY. For internal use only.}
+
+\item{labels}{character. Labels to use for the remaining levels instead of the existing ones.}
+
+\item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
+
 \item{neworder}{character. New order or factor levels.}
 
 \item{newlabels}{character. Labels for (new order of) factor levels}

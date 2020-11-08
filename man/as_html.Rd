@@ -16,13 +16,15 @@ as_html(
 \arguments{
 \item{x}{\code{rtable} object}
 
-\item{class.table}{class for table tag}
+\item{width}{width}
 
-\item{class.tr}{class for tr tag}
+\item{class_table}{class for table tag}
 
-\item{class.td}{class for td tag}
+\item{class_tr}{class for tr tag}
 
-\item{class.th}{class for th tag}
+\item{class_td}{class for td tag}
+
+\item{class_th}{class for th tag}
 }
 \description{
 The returned \code{html} object can be immediately used in shiny and rmarkdown.

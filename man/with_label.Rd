@@ -16,5 +16,5 @@ Return an object with a label attribute
 }
 \examples{
 x <- with_label(c(1,2,3), label = "Test")
-label(x)
+obj_label(x)
 }

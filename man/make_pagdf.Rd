@@ -2,15 +2,95 @@
 % Please edit documentation in R/tt_paginate.R
 \name{make_pagdf}
 \alias{make_pagdf}
+\alias{make_pagdf,VTableTree-method}
+\alias{make_pagdf,TableRow-method}
+\alias{make_pagdf,LabelRow-method}
 \title{Make layout summary  data.frame for use during pagination}
 \usage{
-make_pagdf(tt, colwidths = NULL)
+make_pagdf(
+  tt,
+  colwidths = NULL,
+  visible_only = TRUE,
+  rownum = 0,
+  indent = 0L,
+  path = character(),
+  incontent = FALSE,
+  repr_ext = 0L,
+  repr_inds = integer(),
+  sibpos = NA_integer_,
+  nsibs = NA_integer_
+)
+
+\S4method{make_pagdf}{VTableTree}(
+  tt,
+  colwidths = NULL,
+  visible_only = TRUE,
+  rownum = 0,
+  indent = 0L,
+  path = character(),
+  incontent = FALSE,
+  repr_ext = 0L,
+  repr_inds = integer(),
+  sibpos = NA_integer_,
+  nsibs = NA_integer_
+)
+
+\S4method{make_pagdf}{TableRow}(
+  tt,
+  colwidths = NULL,
+  visible_only = TRUE,
+  rownum = 0,
+  indent = 0L,
+  path = "root",
+  incontent = FALSE,
+  repr_ext = 0L,
+  repr_inds = integer(),
+  sibpos = NA_integer_,
+  nsibs = NA_integer_
+)
+
+\S4method{make_pagdf}{LabelRow}(
+  tt,
+  colwidths = NULL,
+  visible_only = TRUE,
+  rownum = 0,
+  indent = 0L,
+  path = "root",
+  incontent = FALSE,
+  repr_ext = 0L,
+  repr_inds = integer(),
+  sibpos = NA_integer_,
+  nsibs = NA_integer_
+)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+
+\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.}
+
+\item{rownum}{numeric(1). Internal detail do not set manually.}
+
+\item{indent}{integer(1). Internal detail do not set manually.}
+
+\item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
+
+\item{incontent}{logical(1). Internal detail do not set manually.}
+
+\item{repr_ext}{integer(1). Internal detail do not set manually.}
+
+\item{repr_inds}{integer. Internal detail do not set manually.}
+
+\item{sibpos}{integer(1). Internal detail do not set manually.}
+
+\item{nsibs}{integer(1). Internal detail do not set manually.}
 }
 \description{
 Make layout summary  data.frame for use during pagination
+}
+\details{
+When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
+
+When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
 }

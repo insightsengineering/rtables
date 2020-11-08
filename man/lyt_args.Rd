@@ -34,7 +34,12 @@ lyt_args(
   cutlabelfun,
   cumulative,
   incl_all,
-  indent_mod
+  indent_mod,
+  show_labels,
+  visible_label,
+  var_labels,
+  cvar,
+  table_names
 )
 }
 \arguments{
@@ -43,6 +48,8 @@ lyt_args(
 \item{var}{string, variable name}
 
 \item{vars}{character vector. Multiple variable names.}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
 \item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
@@ -54,7 +61,7 @@ lyt_args(
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 
@@ -96,9 +103,15 @@ lyt_args(
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
-\item{var_label}{string, label, often variable label}
+\item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
+
+\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
+
+\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+
+\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
 }
 \description{
 Layouting Function Arg Conventions

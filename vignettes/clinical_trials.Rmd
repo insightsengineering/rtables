@@ -675,7 +675,7 @@ Note that we have set the `ref_group` argument in `split_cols_by` which for the 
 
 We will now look at 2. Unstratified analysis comparison vs. control group. Let's start with the analysis function:
 
-```{r}
+```{r, eval = FALSE}
 s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
   
   if (.in_ref_col) {
@@ -703,13 +703,17 @@ s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
   )
 
   in_rows(
-    "Difference in Response Rates (%)" = rcell((mean(x) - mean(.ref_group)) * 100, format = "xx.xx") ,
-    "95% CI (Wald, with correction)" = rcell(fit$conf.int * 100, format = "(xx.xx, xx.xx)"),
-    "p-value (Chi-Squared Test)" = rcell(fit$p.value, format = "x.xxxx | (<0.0001)"),
-    "Odds Ratio (95% CI)" = rcell(c(
-      exp(stats::coef(fit_glm)[-1]),
-      exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
-    ), format = "xx.xx (xx.xx - xx.xx)")
+      "Difference in Response Rates (%)" = non_ref_rcell((mean(x) - mean(.ref_group)) * 100,
+                                                         .in_ref_col, format = "xx.xx") ,
+      "95% CI (Wald, with correction)" = non_ref_rcell(fit$conf.int * 100,
+                                                       .in_ref_col, format = "(xx.xx, xx.xx)"),
+      "p-value (Chi-Squared Test)" = non_ref_rcell(fit$p.value,
+                                                   .in_ref_col, format = "x.xxxx | (<0.0001)"),
+      "Odds Ratio (95% CI)" = non_ref_rcell(c(
+          exp(stats::coef(fit_glm)[-1]),
+          exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
+      ),
+      .in_ref_col, format = "xx.xx (xx.xx - xx.xx)")
   )
 }
 
@@ -722,7 +726,7 @@ s_unstratified_response_analysis(
 
 so hence we can now add the next section to the table:
 
-```{r}
+```{r, eval = FALSE}
 basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
@@ -735,7 +739,7 @@ basic_table() %>%
 
 And next we will add the Multinomial response table. We are doing a row-split by response level, and then doing the same thing as we did for the binary response table above. However, when we want to do row-split, that means we need to also take into account the `.N_col` as total and then reconstruct the full logical vector.
 
-```{r}
+```{r, eval = FALSE}
 s_prop <- function(df, .N_col) {
   in_rows(
     "95% CI (Wald, with correction)" = rcell(binom.test(nrow(df), .N_col)$conf.int * 100, format = "(xx.xx, xx.xx)")
@@ -750,7 +754,7 @@ s_prop(
 
 Note that we have added the `labelstr` argument **TODO: this is clunky**
 
-```{r}
+```{r, eval = FALSE}
 basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
@@ -769,7 +773,7 @@ basic_table() %>%
 In case the we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
 
 
-```{r}
+```{r, eval = FALSE}
 rsp_label <- function(x) {
   rsp_full_label <- c(
     CR          = "Complete Response (CR)",

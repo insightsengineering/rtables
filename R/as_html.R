@@ -5,10 +5,11 @@
 #' The returned `html` object can be immediately used in shiny and rmarkdown.
 #' 
 #' @param x `rtable` object
-#' @param class.table class for table tag
-#' @param class.tr class for tr tag
-#' @param class.td class for td tag
-#' @param class.th class for th tag
+#' @param class_table class for table tag
+#' @param class_tr class for tr tag
+#' @param class_td class for td tag
+#' @param class_th class for th tag
+#' @param width width
 #' 
 #' @importFrom htmltools tags
 #' @export

@@ -16,7 +16,7 @@ test_that("manually created label l rows are always visible",
 ## was error before rtables 0.3.2.16
 test_that("printing table with 0 rows works", {
     norows <- rtable(c("hi", "lo"))
-    expect_null(print(norows))
+    expect_identical(print(norows), norows)
 })
 
 
@@ -94,4 +94,151 @@ test_that("repeated multi-var analyzes work as expected", {
         build_table(DM)
 
     expect_identical(works, fails)
+})
+
+
+test_that("summarize_row_groups after analyze call(s) work", {
+    lyt1 <- basic_table() %>%
+        analyze("SEX") %>%
+        split_rows_by("SEX") %>%
+        analyze("SEX")
+    tbl1 <- build_table(lyt1, DM)
+    expect_equal(dim(tbl1), c(24, 1))
+
+    ## further regression when we have multiple analyze calls
+    lyt2 <- basic_table() %>%
+        analyze("SEX") %>%
+        analyze("STRATA1") %>%
+        split_rows_by("SEX") %>%
+        analyze("SEX")
+    tbl2 <- build_table(lyt2, DM)
+    expect_equal(dim(tbl2), c(29, 1))
+})
+
+
+test_that("summarize_row_groups at top level works", {
+    lyt <- basic_table() %>%
+        summarize_row_groups("SEX")
+
+    tbl <- build_table(lyt, DM)
+    expect_equal(length(tree_children(tbl)), 0)
+    expect_equal(dim(tbl), c(1,1))
+})
+
+
+test_that("add_colcounts works as first call", {
+    tbl <- basic_table() %>% add_colcounts() %>%
+        analyze("AGE") %>% build_table(DM)
+
+    expect_equal(tbl[1,1, drop = TRUE], mean(DM$AGE))
+})
+
+test_that("CellValue on something with object labels", {
+    expect_identical(obj_label(CellValue(with_label(5, "hi"))),
+                     "hi")
+
+    expect_identical(obj_label(CellValue(with_label(5, "hi"),
+                                         label = "")),
+                     "")
+
+    expect_identical(obj_label(CellValue(with_label(5, "hi"),
+                                         label = NULL)),
+                     "hi")
+})
+
+
+test_that("rcell on CellValue overrides attrs as necessary", {
+    val <- CellValue(c(100, .5), format = "xx (xx.x%)", label = "oldlabel",
+                     colspan = 2L,
+                     indent_mod = 2L)
+    val2 <-  CellValue(c(100, .5), format = "xx (xx.xx%)", label = "new label",
+                     colspan = 3L,
+                     indent_mod = 3L)
+    expect_identical(rcell(val, format = "xx (xx.xx%)", label = "new label",
+                           colspan = 3L, indent_mod = 3L),
+                     val2)
+})
+
+
+test_that("cbind_rtables works", {
+
+    x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
+
+    y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
+
+    tab <- cbind_rtables(x, y)
+    expect_equal(ncol(tab), 3)
+    expect_equal(ncol(rtables:::tt_labelrow(tab)), 3)
+    expect_equal(nrow(tab), 2)
+})
+
+
+test_that("cbind_rtables works with 3 tables", {
+
+    tab1 <- rtable(
+        header = "a",
+        rrow("one", 1)
+    )
+    tab2 <- rtable(
+        header = "b",
+        rrow("one", 2)
+    )
+    tab3 <- rtable(
+        header = "c",
+        rrow("one", 3)
+    )
+
+    newtab <- cbind_rtables(tab1, tab2, tab3)
+    expect_equal(ncol(newtab), 3)
+    expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
+
+})
+
+
+test_that("cell formats not dropped when cbinding", {
+
+    tab1 <- rtable(
+        header = "a",
+        rrow("one", rcell(1.1111111, format = "xx.x"))
+    )
+    tab2 <- rtable(
+        header = "b",
+        rrow("one", rcell(2.2222222, format = "xx.xxxx"))
+    )
+
+    cbtab <- cbind_rtables(tab1, tab2)
+    expect_identical(rtables:::value_formats(tree_children(cbtab)[[1]]),
+                     list("xx.x", "xx.xxxx"))
+
+
+})
+
+test_that("cell-level formats are retained when column subsetting", {
+ tbl <- rtable(
+     header = c("Treatement\nN=100", "Comparison\nN=300"),
+     format = "xx (xx.xx%)",
+     rrow("A", c(104, .2), c(100, .4)),
+     rrow("B", c(23, .4), c(43, .5)),
+     rrow(""),
+     rrow("this is a very long section header"),
+     rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
+
+     subset <- tbl[,1]
+     expect_identical(matrix_form(subset)$strings,
+                      matrix_form(tbl)$strings[,-3])
+
+})
+
+test_that("row subsetting works on table with only content rows", {
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE") %>%
+        summarize_row_groups()
+    tab <- build_table(l, DM)
+    rw <- tab[1,]
+    expect_identical(cell_values(rw),
+                     cell_values(tab)[[1]])
+    expect_identical(tab[1,1,drop = TRUE],
+                     79*c(1, 1/sum(DM$ARM == "A: Drug X")))
 })

@@ -87,17 +87,17 @@ tbl[3,2]
 tbl[5,1]
 tbl[5,2]
 tbl[1:3] ##XXX TODO not sure this should work...
-# 
-# 
+#
+#
 # # Data Structure methods
-dim(tbl) 
+dim(tbl)
 nrow(tbl)
 ncol(tbl)
 names(tbl)
-# 
-# 
+#
+#
 # # Colspans
-# 
+#
 tbl2 <- rtable(
   c("A", "B", "C", "D", "E"),
   format = "xx",
@@ -107,8 +107,8 @@ tbl2 <- rtable(
 )
 
 tbl2
-# 
-# 
+#
+#
 # # Custom format with functions (might be deprecated soon)
 my_format <- function(x, output) {
    paste(x, collapse = "/")

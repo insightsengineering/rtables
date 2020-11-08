@@ -15,6 +15,7 @@ NULL
 #' @param spl A Split object defining a partitioning or analysis/tabulation of the data.
 #' @param pos numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current
 #' @param tt TableTree (or related class). A TableTree object representing a populated table.
+#' @param tr TableRow (or related class). A TableRow object representing a single row within a populated table.
 #' @param verbose logical. Should additional information be displayed to the user. Defaults to FALSE.
 #' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
 #' @param obj ANY. The object for the accessor to access or modify
@@ -24,9 +25,12 @@ NULL
 #' @param object The object to modify in-place
 #' @param verbose logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.
 #' @param path character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.
+#' @param label character(1). A label (not to be confused with the name) for the object/structure.
+#' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
+#' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @rdname gen_args
-gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
-                     value, object, path, ...) NULL
+gen_args <- function(df, spl, pos, tt, tr, verbose, colwidths, obj, x,
+                     value, object, path, label, visible_label, cvar, ...) NULL
 
 
 
@@ -36,7 +40,6 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param lyt layout object pre-data used for tabulation
 #' @param var string, variable name
 #' @param vars character vector. Multiple variable names.
-#' @param var_label string, label, often variable label
 #' @param var_labels character. Variable labels for 1 or more variables
 #' @param labels_var string, name of variable containing labels to be displayed for the values of \code{var}
 #' @param varlabels character vector. Labels for \code{vars}
@@ -45,7 +48,7 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param split_format format spec. Format associated with this split.
 #' @param nested boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}
 #' @param format FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.
-#' @param cfun function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts
+#' @param cfun list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.
 #' @param cformat format spec. Format for content rows
 #' @param split_fun function/NULL. custom splitting function
 #' @param split_name string. Name associiated with this split (for pathing, etc)
@@ -65,39 +68,50 @@ gen_args <- function(df, spl, pos, tt, verbose, colwidths, obj, x,
 #' @param cutfun function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation
 #' @param incl_all logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.
 #' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.
+#' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
+#' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
+
+
+#' @inheritParams gen_args
 #' @family conventions
 lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, split_format,
                      nested, format, cfun, cformat, split_fun, split_name,
                      split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
-                     incl_all, indent_mod) NULL
+                     incl_all, indent_mod, show_labels, visible_label, var_labels, cvar,
+                     table_names) NULL
 
 
 #' Constructor Arg Conventions
 #' @name constr_args
 #' @family conventions
+#' @inheritParams gen_args
 #' @param kids list. List of direct children.
 #' @param cont ElementaryTable. Content table.
 #' @param lev integer. Nesting level (roughly, indentation level in practical terms).
 #' @param iscontent logical. Is the TableTree/ElementaryTable being constructed the content table for another TableTree.
 #' @param cinfo InstantiatedColumnInfo (or NULL). Column structure for the object being created.
+
 #' @param labelrow LabelRow. The LabelRow object to assign to this Table. Consructed from \code{label} by default if not specified.
 #' @param vals list. cell values for the row
 #' @param cspan integer. Column span. \code{1} indicates no spanning.
+
+#' @param cindent_mod numeric(1). The indent modifier for the content tables generated by this split.
+#' @param cextra_args list. Extra arguments to be passed to the content function when tabulating row group summaries.
+#' @param child_names character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).
 #' @rdname constr_args
-constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan) NULL
+constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan, visible_label, cindent_mod, cvar, label, cextra_args, child_names) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args
 #' @family conventions
+#' @inheritParams gen_args
 #' @param .lst list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.
 #' @param FUN function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value
 #' @param col_by (\code{\link{factor}} or \code{\link{data.frame}}
 #'   if a \code{\link{factor}} of length \code{nrow(x)} that defines
 #'   which levels in \code{col_by} define a column.
-#'   can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-#'   can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}
 #' @param row_by rows in \code{x} to take per row in the resulting table
 #' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
 #'   used as \code{row.name} of the \code{\link{rrow}}
@@ -109,14 +123,17 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan
 #'   elements are then passed to the named argument \code{FUN} corresponding to
 #'   the element name of the outer list. Hence, the length and order of each
 #'   collection must match the levels in \code{col_by}. See examples.
-#' @param label string. Label for the resulting column (or potentially row)
 #' @rdname compat_args
 compat_args <- function(.lst, FUN, col_by, row_by, row.name, format, indent, col_wise_args, label) NULL
 
 
 
-
-
+#' Split Function Arg Conventions
+#' @name sf_args
+#' @inheritParams gen_args
+#' @param trim logical(1). Should splits corresponding with 0 observations be kept when tabulating.
+#' @param first logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).
+sf_args <- function(trim, label, first) NULL
 ## data
 
 #' DM data

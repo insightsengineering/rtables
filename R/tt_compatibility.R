@@ -1,16 +1,16 @@
 
 #' row
-#' 
+#'
 #' @inheritParams compat_args
 #' @param \dots cell values
-#' 
+#'
 #' @export
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' rrow("")
-#' 
+#'
 rrow = function(row.name = "", ..., format = NULL, indent = 0) {
     vals = list(...)
     if(is.null(row.name))
@@ -26,16 +26,12 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
         csps = as.integer(sapply(vals, function(x) {
             attr(x, "colspan") %||% 1L
         }))
-        ## vals = mapply(function(v, sp) {
-        ##     attr(v, "colspan") = NULL
-        ##     rep(list(v), sp)
-        ## }, v = vals, sp = csps,
-        ## SIMPLIFY=FALSE)
-        ## vals = unlist(vals,
-        ##               recursive = FALSE)
-        formats = sapply(vals, obj_format)
-        if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
-            format = unique(formats)
+        ## we have to leave the formats on the cells and NOT the row unless we were
+        ## already told to do so, because row formats get clobbered  when cbinding
+        ## but cell formats do not.
+        ## formats = sapply(vals, obj_format)
+        ## if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
+        ##     format = unique(formats)
         DataRow(val = vals, lev = as.integer(indent), label = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
@@ -45,51 +41,35 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
 
 
 #' rrowl
-#' 
+#'
 #' @inheritParams compat_args
 #' @param \dots values in vector/list form
-#' 
+#'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' rrowl("a", c(1,2,3), format = "xx")
 #' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
-#' 
-#' 
+#'
+#'
 #' rrowl("N", table(iris$Species))
 #' rrowl("N", table(iris$Species), format = "xx")
-#' 
+#'
 #' x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
-#' 
+#'
 #' rrow(row.name = "row 1", x)
 #' rrow("ABC", 2, 3)
-#' 
+#'
 #' rrowl(row.name = "row 1", c(1, 2), c(3,4))
 #' rrow(row.name = "row 2", c(1, 2), c(3,4))
 rrowl = function (row.name, ..., format = NULL, indent = 0)  {
     dots <- list(...)
-    args_list <- c(list(row.name = row.name, format = format, 
+    args_list <- c(list(row.name = row.name, format = format,
         indent = indent), val = unlist(lapply(dots, as.list), recursive = FALSE))
     do.call(rrow, args_list)
 }
 
-
-#' Rcell
-#' 
-#' @inheritParams compat_args
-#' @param x ANY. Cell value
-#' @param label character(1). Label or Null. If non-null, it will be looked at when determining row labels.
-#' @param colspan Columnspan value. NOTE currently column spanning is only supported for defining header structure.
-#' @export
-#' 
-rcell = function(x, format = NULL, colspan = 1L, label = NULL) {
-    if(is(x, "CellValue"))
-        x
-    else
-        CellValue(val = x, format = format, colspan = colspan, label = label)
-}
-
-
+## rcell moved to tt_afun_utils.R
 
 ##inefficient trash
 paste_em_n = function(lst, n, sep = ".") {
@@ -139,7 +119,7 @@ hrows_to_colinfo = function(rows) {
         spl = split(repvals[[i]], psted)
         if( !all( sapply(spl, function(x)
                  identical(x, spl[[1]]) ) ) ) {
-            
+
             fullnest = FALSE
             break
         }
@@ -163,43 +143,43 @@ hrows_to_colinfo = function(rows) {
     ## we will build it up as if it were full nesting and then prune
     ## based on the columns we actually want.
 
- 
+
     fullcolinfo = manual_cols(.lst = unqvals)
     fullbusiness = names(collect_leaves(coltree(fullcolinfo)))
     wanted = paste_em_n(repvals, nr)
     wantcols = match(wanted, fullbusiness)
     stopifnot(all(!is.na(wantcols)))
-    
-   
+
+
     subset_cols(fullcolinfo, wantcols)
 }
 
 
 #' Create a header
-#' 
+#'
 #' @inheritParams compat_args
 #' @param \dots row specifications (either as character vectors or the output from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}}, etc.
-#' 
+#'
 #' @export
 #'
-#' 
+#'
 #' @examples
-#' 
+#'
 #' h1 <- rheader(c("A", "B", "C"))
-#' 
+#'
 #' h2 <- rheader(
 #'   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
 #'   rrow(NULL, "A", "B", "A", "B")
 #' )
-#' 
+#'
 #' h1
-#' 
+#'
 #' h2
-#' 
+#'
 rheader = function(..., format = "xx", .lst = NULL) {
     if(!is.null(.lst))
         args = .lst
-    else 
+    else
         args = list(...)
     rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
         list(rrowl(row.name = NULL, val = args[[1]], format = format))
@@ -228,26 +208,26 @@ rheader = function(..., format = "xx", .lst = NULL) {
 
 
 #' Create a Table
-#' 
+#'
 #' @rdname rtable
-#' 
+#'
 #' @inheritParams compat_args
 #' @param header Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.
 #' @param \dots Rows to place in the table.
-#' 
-#' 
+#'
+#'
 #' @export
-#' 
+#'
 #' @family compatability
-#' @examples 
-#' 
+#' @examples
+#'
 #' rtable(
 #'   header = LETTERS[1:3],
 #'   rrow("one to three", 1, 2, 3),
 #'   rrow("more stuff", rcell(pi, format = "xx.xx"), "test", "and more")
 #' )
-#' 
-#' 
+#'
+#'
 #' # Table with multirow header
 #' sel <- iris$Species == "setosa"
 #' mtbl <- rtable(
@@ -268,13 +248,13 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'     mean(iris$Petal.Length[sel]), median(iris$Petal.Length[sel])
 #'   )
 #' )
-#' 
+#'
 #' mtbl
-#' 
+#'
 #' names(mtbl) # always first row of header
-#' 
+#'
 #' # Single row header
-#' 
+#'
 #' tbl <- rtable(
 #'   header = c("Treatement\nN=100", "Comparison\nN=300"),
 #'   format = "xx (xx.xx%)",
@@ -287,7 +267,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' )
 #' # TODO: coerce c(...) to rheader
 #' tbl
-#' 
+#'
 #' row.names(tbl) # TODO # row.lables
 #' names(tbl)
 #'
@@ -295,10 +275,10 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' # Subsetting
 #' tbl[1, ]
 #' tbl[, 1] # TODO: this seems wrong
-#' 
+#'
 #' tbl[1,2]
 #' tbl[2, 1]
-#' 
+#'
 #'# # TODO access to the cell
 #'# tbl[[2, 1]] # cell ?
 #'# tbl[[c("All Species"), 1]]
@@ -306,17 +286,17 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' tbl[5,1]
 #' tbl[5,2]
 #' tbl[1:3] ##XXX TODO not sure this should work...
-#'# 
-#'# 
+#'#
+#'#
 #'# # Data Structure methods
-#' dim(tbl) 
+#' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
 #' names(tbl)
-#'# 
-#'# 
+#'#
+#'#
 #'# # Colspans
-#'# 
+#'#
 #' tbl2 <- rtable(
 #'   c("A", "B", "C", "D", "E"),
 #'   format = "xx",
@@ -324,10 +304,10 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'
 #'   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 #' )
-#' 
+#'
 #' tbl2
-#'# 
-#'# 
+#'#
+#'#
 #'# # Custom format with functions (might be deprecated soon)
 #' my_format <- function(x, output) {
 #'    paste(x, collapse = "/")
@@ -354,7 +334,7 @@ rtable = function(header, ..., format = NULL) {
         stop("problems")
 
     }
-        
+
     body = list(...)
     ## XXX this shouldn't be needed. hacky
     if(length(body) == 1 && is.list(body[[1]]))
@@ -365,17 +345,17 @@ rtable = function(header, ..., format = NULL) {
        }))) {
         body = lapply(body, function(tb) tree_children(tb)[[1]])
     }
-        
+
     TableTree(kids = body, format = format, cinfo = colinfo,
               labelrow = LabelRow(lev = 0L, label = "", vis = FALSE))
 }
 
 #' @rdname rtable
 #' @export
-rtablel = function (header, ..., format = NULL) 
+rtablel = function (header, ..., format = NULL)
 {
     dots <- list(...)
-    args_list <- c(list(header = header, format = format), unlist(lapply(dots, 
+    args_list <- c(list(header = header, format = format), unlist(lapply(dots,
         as.list), recursive = FALSE))
     do.call(rtable, args_list)
 }
@@ -396,7 +376,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
               firstcols <- col_info(x[[i]])
               i <- i+ 1
           }
-    
+
     lapply(x, function(xi) chk_compat_cinfos(firstcols, col_info(xi)))
 
 
@@ -422,12 +402,15 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 
 
     TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
-    
+
 }
 
 #' rbind TableTree and related objects
 #' @rdname rbind
 #' @exportMethod rbind
+#' @param deparse.level numeric(1). Currently Ignored.
+#' @param \dots ANY. Elements to be stacked.
+#'
 #' @examples
 #' mtbl <- rtable(
 #'    header = rheader(
@@ -441,7 +424,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #'      format = "xx.xx"
 #'    )
 #'  )
-#'  
+#'
 #'  mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
 #'    header = rheader(
 #'      rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
@@ -454,14 +437,15 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #'      format = "xx.xx"
 #'    )
 #'  ))
-#'  
+#'
 #'  rbind(mtbl, mtbl2)
 #' rbind(mtbl, rrow(), mtbl2)
 #' rbind(mtbl, rrow("aaa"), indent(mtbl2))
 #'  # TODO: add functionality
-#'  # 
+#'  #
 #'  # rbind(mtbl, mtbl2, gap = 1)
 #'  # rbind(mtbl, mtbl2, gap = 2)
+
 setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
     rbindl_rtables(list(...), check_headers = TRUE)
@@ -513,29 +497,31 @@ header_add_N = function(x, N) {
 #' @rdname header_compat
 header <- function(x) col_info(obj = x)
 
+combine_cinfo = function(..., new_total = NULL) {
+    cinfs <- list(...)
+    if(are(cinfs, "VTableNodeInfo"))
+        cinfs <- lapply(cinfs, col_info)
+    stopifnot(are(cinfs, "InstantiatedColumnInfo"))
 
 
+    ctrees <- lapply(cinfs, coltree)
 
-combine_cinfo = function(ci1, ci2) {
-    stopifnot(is(ci1, "InstantiatedColumnInfo"),
-              is(ci2, "InstantiatedColumnInfo"))
+    newctree <- LayoutColTree(kids = ctrees)
+    newcounts <- unlist(lapply(cinfs, col_counts))
+    if(is.null(new_total))
+        new_total <- sum(newcounts)
+    newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
+    newexargs <- unlist(lapply(cinfs, col_extra_args)) %||% vector("list", length(newcounts))
+    newdisp <- any(vapply(cinfs, disp_ccounts, NA))
 
-    ctree1 = coltree(ci1)
-    ctree2 = coltree(ci2)
-    newctree = LayoutColTree(kids = list(ctree1, ctree2))
-    ## c(tree_children(ctree1),
-    ##                                   tree_children(ctree2)))
-    
-    newcounts = c(col_counts(ci1), col_counts(ci2))
-    newexprs = c(col_exprs(ci1), col_exprs(ci2))
-    newexargs = c(cextra_args(ci1),cextra_args(ci2))
-    newdisp = disp_ccounts(ci1) || disp_ccounts(ci2)
+
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
                            extras = newexargs,
                            cnts = newcounts,
                            dispcounts = newdisp,
-                           countformat = colcount_format(ci1))
+                           countformat = colcount_format(cinfs[[1]]),
+                           total_cnt = new_total)
 }
 
 
@@ -544,7 +530,7 @@ chk_cbindable <- function(x,y) {
     if(is(x, "TableRow") &&
        is(y, class(x)))
         return(TRUE)
-    
+
     if(!is(x, "VTableTree"))
         stop("x must be a TableTree or ElementaryTableTree, got class ", class(x))
     if(!is(y, class(x)))
@@ -553,9 +539,9 @@ chk_cbindable <- function(x,y) {
         stop("x and y must have the same number of rows, got different row counts (", nrow(x), " / ", nrow(y), ")")
     rnx = row.names(x)
     rny = row.names(y)
-    if(!all(rnx == rny || !nzchar(rny))) 
+    if(!all(rnx == rny || !nzchar(rny)))
         stop("Non-empty row.names in y do not match row.names of x")
-    
+
     rwsx = collect_leaves(x, add.labrows = TRUE)
     rwsy = collect_leaves(y, add.labrows = TRUE)
     rwclsx = sapply(rwsx, class)
@@ -575,26 +561,181 @@ chk_cbindable <- function(x,y) {
 
 
 #' cbind two rtables
-#' 
-#' @param x table 1
-#' @param y table 2
-#' 
+#'
+#' @param x A table or row object
+#' @param \dots 1 or more further objects of the same class as \code{x}
+#'
 #' @export
 #'
 #' @examples
 #' x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
-#' 
-#' \dontrun{
-#' # TODO: error on R 4.0.1
+#'
+#' z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
+#'
 #' cbind_rtables(x, y)
-#' } 
-#' 
-#' 
-cbind_rtables <-  function(x,y) {
-    recurse_cbind(x, y, NULL)
+#'
+#' cbind_rtables(x, y, z)
+#'
+cbind_rtables <-  function(x, ...) {
+    lst <- list(...)
+    newcinfo <- combine_cinfo(x, ...)
+    recurse_cbindl(x, cinfo = newcinfo, .list = lst)
 }
+
+setGeneric("recurse_cbindl", function(x, cinfo, .list = NULL) standardGeneric("recurse_cbindl"))
+
+setMethod("recurse_cbindl", c(x ="VTableNodeInfo",
+                              cinfo = "NULL"),
+          function(x, cinfo, .list  = NULL) {
+    recurse_cbindl(x, cinfo = combine_cinfo(.list), .list = .list)
+})
+
+setMethod("recurse_cbindl", c(x = "TableTree",
+                             cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo, .list = NULL) {
+    stopifnot(are(.list, class(x)))
+    ## chk_cbindable(x, y)
+    xlst <- c(list(x), .list)
+    xcont <- content_table(x)
+    lstconts <- lapply(.list, content_table)
+    if(all(c(nrow(xcont) == 0,
+             vapply(lstconts, nrow, 1L) == 0))) {
+
+        cont = ElementaryTable(cinfo = cinfo)
+    } else {
+        cont = recurse_cbindl(xcont,
+                             .list = lstconts,
+                             cinfo = cinfo)
+    }
+
+    kids = lapply(seq_along(tree_children(x)),
+                  function(i) {
+        recurse_cbindl(x = tree_children(x)[[i]],
+                      cinfo = cinfo,
+                      .list <- lapply(.list, function(tt) tree_children(tt)[[i]]))
+    })
+    names(kids) = names(tree_children(x))
+    TableTree(kids = kids, labelrow = recurse_cbindl(tt_labelrow(x),
+                                                    cinfo = cinfo,
+                                                    .list = lapply(.list, tt_labelrow)),
+              cont = cont,
+              name = obj_name(x),
+              lev = tt_level(x),
+              cinfo = cinfo,
+              format = obj_format(x))
+})
+
+setMethod("recurse_cbindl", c(x = "ElementaryTable",
+                              cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo, .list) {
+    stopifnot(are(.list, class(x)))
+ ##   chk_cbindable(x,y)
+    if(nrow(x) == 0 &&
+       all(vapply(.list, nrow) == 0)) {
+        return(x) ## this needs testing...
+
+    }
+    kids = lapply(seq_along(tree_children(x)),
+                  function(i) {
+        recurse_cbindl(x = tree_children(x)[[i]],
+                      cinfo = cinfo,
+                      .list <- lapply(.list, function(tt) tree_children(tt)[[i]]))
+    })
+    names(kids) = names(tree_children(x))
+
+
+     ElementaryTable(kids = kids,
+                    labelrow = recurse_cbindl(tt_labelrow(x),
+                                             .list = lapply(.list, tt_labelrow),
+                                             cinfo),
+                    name = obj_name(x),
+                    lev = tt_level(x),
+                    cinfo = cinfo,
+                    format = obj_format(x),
+                    var = obj_avar(x))
+})
+
+
+
+
+.combine_rows <- function(x, cinfo = NULL, .list) {
+
+    stopifnot(are(.list, class(x)))
+
+    avars <- c(obj_avar(x), unlist(lapply(.list, obj_avar), recursive = FALSE))
+
+    if(length(unique(avars))>1)
+        stop("Got rows that don't analyze the same variable")
+
+
+    xlst <- c(list(x), .list)
+
+    ncols <- vapply(xlst, ncol, 1L)
+    totcols <- sum(ncols)
+    cumncols <- cumsum(ncols)
+    strtncols <- c(0L, head(cumncols, -1)) + 1L
+    vals <- vector("list", totcols)
+    cspans <- integer(totcols)
+    ## vals[1:ncol(x)] <- row_values(x)
+    ## cpans[1:ncol(x)] <- row_cspans(x)
+
+    for(i in seq_along(xlst)) {
+        strt <- strtncols[i]
+        end <- cumncols[i]
+        fullvy <- vy <- row_cells(xlst[[i]])
+        fullcspy <- cspy <- row_cspans(xlst[[i]])
+
+        if(i > 1 &&
+           rawvalues(vy[[1]]) == rawvalues(lastval) &&
+         ##  cspy[1] == lastspn &&
+           lastspn > 1) {
+            vy <- vy[-1]
+            cspans[strt - 1L] <- lastspn + cspy[1]
+            cspy <- cspy[-1]
+            strt <- strt + 1L
+        }
+        if(length(vy) > 0) {
+            vals[strt:end] <- vy
+            cspans[strt:end] <- cspy
+            lastval <- tail(vy, 1)
+            lastspn <- tail(cspy, 1)
+        } else {
+            ## lastval stays the same
+            lastspn <- cspans[strtncols[i] - 1] ## already updated
+        }
+    }
+
+    ## Could be DataRow or ContentRow
+    ## This is ok because LabelRow is special cased
+    constr_fun <- get(class(x), mode = "function")
+    constr_fun(val = vals,
+               cspan = cspans,
+               cinfo = cinfo,
+               var = obj_avar(x),
+               format = obj_format(x),
+               name = obj_name(x),
+               label = obj_label(x))
+
+}
+setMethod("recurse_cbindl", c("TableRow",
+                              "InstantiatedColumnInfo"),
+          function(x, cinfo = NULL, .list) {
+    .combine_rows(x, cinfo, .list)
+})
+
+setMethod("recurse_cbindl", c(x = "LabelRow",
+                             cinfo = "InstantiatedColumnInfo"),
+          function(x, cinfo = NULL, .list) {
+    col_info(x) <- cinfo
+    x
+})
+
+
+
+
+
 
 setGeneric("recurse_cbind", function(x,y, cinfo = NULL) standardGeneric("recurse_cbind"))
 
@@ -611,7 +752,7 @@ setMethod("recurse_cbind", c("TableTree",
                              "InstantiatedColumnInfo"),
           function(x, y, cinfo) {
     chk_cbindable(x, y)
-    if(nrow(content_table(x)) == 0 && 
+    if(nrow(content_table(x)) == 0 &&
        nrow(content_table(y)) == 0) {
         cont = ElementaryTable(cinfo = cinfo)
     } else {
@@ -626,7 +767,9 @@ setMethod("recurse_cbind", c("TableTree",
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    TableTree(kids = kids, labelrow = tt_labelrow(x),
+    TableTree(kids = kids, labelrow = recurse_cbind(tt_labelrow(x),
+                                                    tt_labelrow(y),
+                                                    cinfo),
               cont = cont,
               name = obj_name(x),
               lev = tt_level(x),
@@ -642,14 +785,16 @@ setMethod("recurse_cbind", c("ElementaryTable",
     if(nrow(x) == 0 &&
        nrow(y) == 0)
         return(x) ## this needs testing...
-    
+
     kids = mapply(recurse_cbind,
                   x = tree_children(x),
                   y = tree_children(y),
                   MoreArgs = list(cinfo = cinfo),
                   SIMPLIFY = FALSE)
     names(kids) = names(tree_children(x))
-    ElementaryTable(kids = kids, labelrow = tt_labelrow(x),
+    ElementaryTable(kids = kids, labelrow = recurse_cbind(tt_labelrow(x),
+                                                          tt_labelrow(y),
+                                                          cinfo),
                   name = obj_name(x),
                   lev = tt_level(x),
                   cinfo = cinfo,
@@ -671,7 +816,7 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
     ## combine the spans IFF they are already
     ## bigger than 1 and x ends with the same
     ## value y begins with
-    if(vx[[length(vx)]] == vy[[1]] && 
+    if(vx[[length(vx)]] == vy[[1]] &&
        (tail(cspx, 1) > 1 || head(cspy, 1) > 1)) {
         retv <- c(vx, vy[-1])
         retcsp <- c(head(cspx, -1),
@@ -696,13 +841,16 @@ setMethod("recurse_cbind", c("TableRow", "TableRow",
 
 setMethod("recurse_cbind", c("LabelRow", "LabelRow",
                              "InstantiatedColumnInfo"),
-          function(x,y, cinfo = NULL) x)
+          function(x,y, cinfo = NULL) {
+    col_info(x) <- cinfo
+    x
+})
 
 ## we don't care about the following discrepencies:
 ## - ci2  having NA counts when ci1 doesn't
 ## - mismatching display_ccounts values
 ## - mismatching colcount formats
-## 
+##
 
 chk_compat_cinfos <- function(ci1, ci2) {
 
@@ -715,19 +863,19 @@ chk_compat_cinfos <- function(ci1, ci2) {
     if(!identical(col_exprs(ci1), col_exprs(ci2))) {
         stop("Column structures not compatible: subset expression lists not identical")
     }
-    
+
     if (any(!is.na(col_counts(ci2))) &&
         !identical(col_counts(ci1),
                    col_counts(ci2))) {
         stop("Column structures not compatible: 2nd column structure has non-matching, non-null column counts")
     }
-    
-    if (any(sapply(cextra_args(ci2),
+
+    if (any(sapply(col_extra_args(ci2),
                    function(x) length(x)>0)) &&
-        !identical(cextra_args(ci1),
-                   cextra_args(ci2))) {
+        !identical(col_extra_args(ci1),
+                   col_extra_args(ci2))) {
         stop("Column structures not compatible: 2nd column structure has non-matching, non-null extra args")
-          
+
     }
     TRUE
 }
@@ -739,9 +887,9 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' @param rrow rrow to append to rtable
 #' @param at position into which to put the rrow, defaults to beginning (ie 1)
 #' @param ascontent logical. Currently ignored.
-#' 
+#'
 #' @return A TableTree of the same specific class as \code{tbl}
-#' 
+#'
 #' @export
 #'
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
@@ -759,8 +907,8 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 #'
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
-#' 
-#' 
+#'
+#'
 insert_rrow <- function(tbl, rrow, at = 1,
                         ascontent = FALSE) {
     stopifnot(is(tbl, "VTableTree"),
@@ -770,7 +918,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
                       col_info(rrow))
     if(no_colinfo(rrow))
         col_info(rrow) <- col_info(tbl)
-    
+
     if (at == 1) {
         return(rbindl_rtables(list(rrow, tbl),
                               check_headers = TRUE))
@@ -797,8 +945,8 @@ insert_rrow <- function(tbl, rrow, at = 1,
              else
                  0
     contnr <- contnr + as.numeric(labelrow_visible(tt))
-    
-  
+
+
     totnr = nrow(tt)
     endpos = pos + totnr
     atend = !islab && endpos == at - 1
@@ -809,7 +957,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
         tt_labelrow(tt) <- row
         return(tt)
     }
-    
+
     if(numkids == 0) {
         kids = list(row)
     } else if (atend) {
@@ -821,8 +969,8 @@ insert_rrow <- function(tbl, rrow, at = 1,
     } else { #have >0 kids
         kidnrs <- sapply(kids, nrow)
         cumpos <- pos + cumsum(kidnrs)
-            
-            
+
+
         ## data rows go in the end of the
         ## preceding subtable (if applicable)
         ## label rows go in the beginning of
@@ -830,7 +978,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
         ind <- min(which((cumpos + !islab) >= at),
                    numkids )
         thekid  = kids[[ind]]
-        
+
         if(is(thekid, "TableRow")) {
             tt_level(row) = tt_level(thekid)
             if(ind == 1) {
@@ -848,9 +996,9 @@ insert_rrow <- function(tbl, rrow, at = 1,
         } else { # kid is not a table row
             newpos <- if(ind==1)
                           pos + contnr
-                      else 
+                      else
                           cumpos[ind - 1]
-            
+
             kids[[ind]] <- recurse_insert(thekid,
                                           row,
                                           at,
@@ -862,7 +1010,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
     tt
 }
 
-    
+
 setGeneric("recurse_insert", function(tt, row, at, pos, ascontent = FALSE) standardGeneric("recurse_insert"))
 setMethod("recurse_insert", "TableTree",
           function(tt, row, at, pos, ascontent = FALSE) {
@@ -870,7 +1018,7 @@ setMethod("recurse_insert", "TableTree",
     contnr = nrow(ctab)
     contpos = pos + contnr
     islab = is(row, "LabelRow")
-    ## this will NOT insert it as 
+    ## this will NOT insert it as
     if((contnr > 0 || islab) &&
        contpos > at) {
         content_table(tt) <- recurse_insert(ctab, row, at, pos, TRUE)
@@ -904,8 +1052,8 @@ order_rrows = function(x, indices = c(1, 1), ...) {
 #' Compatability Layer for Legacy "by_*" functions
 #'
 #' Functions from the  previous API starting  with \code{by_} not listed here may not currently be supported.
-#' 
-#' @param name character(1). Label for the added all/total column
+#'
+#' @param name character(1). Label for the added all/total column.
 #' @rdname bycompats
 #' @inheritParams lyt_args
 #' @export
@@ -931,18 +1079,18 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
 
 
 #' Add N=xx to header
-#' 
-#' Helper function used to add the population total (N) in the 
+#'
+#' Helper function used to add the population total (N) in the
 #' column header of \code{\link{rtable}} object.
-#' 
+#'
 #' @param x \code{rtable}
 #' @param N vector with counts to be displayed in the header. The
 #'   length must match the number of columns in \code{x}
-#'   
+#'
 #' @export
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' tbl <- rtable(
 #'  header = letters[1:3],
 #'  rrow("X", 1, 2, 3),
@@ -950,7 +1098,7 @@ by_add_total <- function(col_by, label = "total", n = NULL) {
 #' )
 #' tbl
 #' header_add_N(tbl, 1:3)
-#' 
+#'
 #' # multiline header
 #' tbl <- rtable(
 #'   header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),

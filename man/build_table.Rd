@@ -4,7 +4,7 @@
 \alias{build_table}
 \title{Create a table from a layout and data}
 \usage{
-build_table(lyt, df, col_counts = NULL, ...)
+build_table(lyt, df, col_counts = NULL, col_total = nrow(df), ...)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -12,7 +12,11 @@ build_table(lyt, df, col_counts = NULL, ...)
 \item{df}{dataset (data.frame or tibble)}
 
 \item{col_counts}{numeric (or \code{NULL}). If non-null, column counts which
-override those calculated automatically during tabulation.}
+override those calculated automatically during tabulation. Must specify
+"counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
+will be replaced with the automatically calculated counts.}
+
+\item{col_total}{integer(1). The total observations across all columns. Defaults to \code{nrow(df)}.}
 
 \item{\dots}{currently ignored.}
 }
@@ -21,7 +25,7 @@ Layouts are used to describe a table pre-data. \code{build_rable} is used to
 create a table using a layout and a dataset.
 }
 \note{
-When overriding the column counts care must be taken that, e.g.,
+When overriding the column counts or totals care must be taken that, e.g.,
 \code{length()} or \code{nrow()} are not called within tabulation functions, because
 those will NOT give the overridden counts. Writing/using tabulation
 functions which accept \code{.N_col} and \code{.N_total} or do not rely on

@@ -4,7 +4,15 @@
 \alias{analyze_colvars}
 \title{Generate Rows Analyzing Different Variables Across Columns}
 \usage{
-analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
+analyze_colvars(
+  lyt,
+  afun,
+  format = NULL,
+  nested = TRUE,
+  extra_args = list(),
+  indent_mod = 0L,
+  inclNAs = FALSE
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -15,7 +23,11 @@ analyze_colvars(lyt, afun, format = NULL, nested = TRUE, indent_mod = 0L)
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 }
 \description{
 Generate Rows Analyzing Different Variables Across Columns

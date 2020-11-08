@@ -9,6 +9,7 @@ analyze(
   vars,
   afun = rtab_inner,
   var_labels = vars,
+  table_names = vars,
   format = NULL,
   nested = TRUE,
   inclNAs = FALSE,
@@ -26,6 +27,8 @@ analyze(
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
+\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
+
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
@@ -33,6 +36,8 @@ analyze(
 \item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+
+\item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
@@ -67,6 +72,7 @@ machinery. These are as follows:
 \item{.N_col}{column-wise N (column count) for the full column being tabulated within}
 \item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
 \item{.N_row}{row-wise N (row group count) for the group of observations being analyzed (ie with no column-based subsetting)}
+\item{.df_row}{ data.frame for observations in the row group being analyzed (ie with no column-based subsetting)}
 \item{.var}{variable that is analyzed}
 \item{.ref_group}{data.frame or vector of subset corresponding to the \code{ref_group} column including subsetting
 defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}
@@ -74,6 +80,16 @@ defined by row-splitting. Optional and only required/meaningful if a \code{ref_g
 defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}
 \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
 }
+}
+\note{
+None of the arguments described in the Details section
+can be overridden via extra_args or when calling
+\code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
+be overridden via the \code{col_counts} argument to
+\code{\link{build_table}}. Alternative values for the others
+must be calculated within \code{afun} based on a combination
+of extra arguments and the unmodified values provided by the
+tabulation framework.
 }
 \examples{
 

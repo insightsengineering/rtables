@@ -1,4 +1,4 @@
-
+#nocov start
 add_analyzed_var = function(lyt, var, label = var, afun,
                             format = NULL,
                             rowlabs = "",
@@ -10,7 +10,7 @@ add_analyzed_var = function(lyt, var, label = var, afun,
                         defrowlab = rowlabs,
                         inclNAs = inclNAs)
   .Deprecated("analyze")
-  
+
   if(!nested &&
      (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
       is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
@@ -20,5 +20,4 @@ add_analyzed_var = function(lyt, var, label = var, afun,
     split_rows(lyt, spl, pos)
   }
 }
-
-
+# nocov end

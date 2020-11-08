@@ -23,9 +23,7 @@ compat_args(
 
 \item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
 if a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column.
-can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
+which levels in \code{col_by} define a column.}
 
 \item{row_by}{rows in \code{x} to take per row in the resulting table}
 
@@ -43,7 +41,7 @@ elements are then passed to the named argument \code{FUN} corresponding to
 the element name of the outer list. Hence, the length and order of each
 collection must match the levels in \code{col_by}. See examples.}
 
-\item{label}{string. Label for the resulting column (or potentially row)}
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 }
 \description{
 Compatability Arg Conventions

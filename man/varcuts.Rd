@@ -96,6 +96,8 @@ split_rows_by_cutfun(
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
+\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 
 \item{cutlabelfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}

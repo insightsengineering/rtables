@@ -163,7 +163,8 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 
 create_colinfo = function(lyt, df, rtpos = TreePos(),
-                          counts = NULL) {
+                          counts = NULL,
+                          total = NULL) {
     ## this will work whether clayout is pre or post
     ## data
     clayout = clayout(lyt)
@@ -175,14 +176,25 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
     ## env = as.environment(df)
     ## parent.env(env) = .GlobalEnv
     ## cexprs = lapply(cexprs, function(e) compiler::compile(e[[1]], env = env))
-    cextras = cextra_args(ctree)
+    colextras = col_extra_args(ctree)
 
     ## calculate the counts based on the df
     ## This presumes that it is called on the WHOLE dataset,
     ## NOT after any splitting has occured. Otherwise
     ## the counts will obviously be wrong.
     if(is.null(counts)) {
-        counts = sapply(cexprs, function(ex) {
+        counts <- rep(NA_integer_, length(cexprs))
+    } else {
+        if(length(counts) != length(cexprs))
+            stop("Length of overriding counts must equal number of columns. Got ",
+                 length(counts), " values for ", length(cexprs), " columns. ",
+                 "Use NAs to specify that the default counting machinery should be ",
+                 "used for that position.")
+        counts <- as.integer(counts)
+    }
+    calcpos <- is.na(counts)
+
+    calccounts = sapply(cexprs, function(ex) {
             if(identical(ex, expression(TRUE)))
                 nrow(df)
             else if (identical(ex, expression(FALSE)))
@@ -194,15 +206,18 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                 else if(is(vec, "logical"))
                     sum(vec, na.rm= TRUE)
             }
-        })
-    }
+    })
+    counts[calcpos] <- calccounts[calcpos]
+    if(is.null(total))
+        total <- sum(counts)
     format =  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
-                           extras = cextras,
+                           extras = colextras,
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
-                           countformat = format)
+                           countformat = format,
+                           total_cnt = total)
 
 }
 

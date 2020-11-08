@@ -29,6 +29,12 @@
 \alias{col_counts<-}
 \alias{col_counts<-,InstantiatedColumnInfo-method}
 \alias{col_counts<-,VTableNodeInfo-method}
+\alias{col_total}
+\alias{col_total,InstantiatedColumnInfo-method}
+\alias{col_total,VTableNodeInfo-method}
+\alias{col_total<-}
+\alias{col_total<-,InstantiatedColumnInfo-method}
+\alias{col_total<-,VTableNodeInfo-method}
 \title{Column information/structure accessors}
 \usage{
 clayout(obj)
@@ -86,6 +92,18 @@ col_counts(obj) <- value
 \S4method{col_counts}{InstantiatedColumnInfo}(obj) <- value
 
 \S4method{col_counts}{VTableNodeInfo}(obj) <- value
+
+col_total(obj)
+
+\S4method{col_total}{InstantiatedColumnInfo}(obj)
+
+\S4method{col_total}{VTableNodeInfo}(obj)
+
+col_total(obj) <- value
+
+\S4method{col_total}{InstantiatedColumnInfo}(obj) <- value
+
+\S4method{col_total}{VTableNodeInfo}(obj) <- value
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}

@@ -6,6 +6,9 @@
 \usage{
 sprintf_format(format)
 }
+\arguments{
+\item{format}{character(1). A format string passed to sprintf.}
+}
 \description{
 Format the rcell data with \code{\link[base]{sprintf}} formatting strings
 }

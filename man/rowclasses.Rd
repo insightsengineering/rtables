@@ -29,7 +29,8 @@ LabelRow(
   cinfo = EmptyColInfo,
   var = NA_character_,
   format = NULL,
-  klass
+  klass,
+  indent_mod = 0L
 )
 
 DataRow(...)
@@ -38,6 +39,8 @@ ContentRow(...)
 }
 \arguments{
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
 \item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
 

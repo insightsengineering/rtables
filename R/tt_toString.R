@@ -7,15 +7,8 @@ setGeneric("toString", function(x,...) standardGeneric("toString"))
 ## preserve S3 behavior
 setMethod("toString", "ANY", base::toString)
 
-setMethod("show", "VTableTree", function(object) {
-  cat(toString(object))
-})
-
 #' @export
 setMethod("print", "ANY", base::print)
-setMethod("print", "VTableTree", function(x, ...) {
-  cat(toString(x, ...))
-})
 
 
 #' Convert an `rtable` object to a string
@@ -122,7 +115,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
 #' map the rtable to an in between state with the formatted cells in a matrix form.
 #'
-#'
+#' @inheritParams gen_args
 #' @note
 #' TODO: Look into `gt` representation
 #'
@@ -146,29 +139,29 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' tbl <- build_table(l, iris2)
 #'
 #' matrix_form(tbl)
-matrix_form <- function(x) {
+matrix_form <- function(tt) {
 
-  stopifnot(is(x, "VTableTree"))
+  stopifnot(is(tt, "VTableTree"))
 
-  header_content <- .tbl_header_mat(x) # first col are for row.names
+  header_content <- .tbl_header_mat(tt) # first col are for row.names
 
-  sr <- summarize_rows(x)
+  sr <- summarize_rows(tt)
 
   body_content_strings <- if (nrow(sr) == 0) {
     ""
   } else {
-    cbind(sr$label, get_formatted_cells(x))
+    cbind(sr$label, get_formatted_cells(tt))
   }
 
-  tsptmp <- lapply(collect_leaves(x, TRUE, TRUE), function(rr) {
+  tsptmp <- lapply(collect_leaves(tt, TRUE, TRUE), function(rr) {
     sp <- row_cspans(rr)
     rep(sp, times = sp)
   })
     ## the 1 is for row labels
-    if(nrow(x) > 0)
+    if(nrow(tt) > 0)
         body_spans <- cbind(1L, do.call(rbind, tsptmp))
     else
-        body_spans <- matrix(1, nrow = 1, ncol = ncol(x) + 1)
+        body_spans <- matrix(1, nrow = 1, ncol = ncol(tt) + 1)
   body <- rbind(header_content$body, body_content_strings)
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
@@ -213,61 +206,77 @@ matrix_form <- function(x) {
   )
 }
 
+## print depths (not to be confused with tree depths)
+.cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
+    if(is(ctree, "LayoutColLeaf"))
+        return(depth)
+    unlist(lapply(tree_children(ctree), .cleaf_depths, depth = depth + 1))
+}
+
+
+.do_tbl_h_piece <- function(ct, padding = 0) {
+    if(is(ct, "LayoutColLeaf")) {
+        return(list(rcell(obj_label(ct), colspan = 1)))
+    }
+
+    nleafs <- length(collect_leaves(ct))
+    kids <- tree_children(ct)
+    cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
+    pieces <- mapply(.do_tbl_h_piece,
+                     ct = kids, padding = max(cdepths) - cdepths,
+                     SIMPLIFY= FALSE)
+    lpieces <- vapply(pieces, length, 1L)
+
+    padcells <- if(padding > 0) list(rep(list(rcell("", colspan = nleafs)), padding))
+    nmcell <- list(rcell(obj_label(ct), colspan = nleafs))
+
+    stopifnot(length(unique(lpieces)) == 1)
+    rowparts <- lapply(1:max(lpieces),
+                       function(i) {
+        res = lapply(pieces, `[[`, i = i)
+        if(!are(res, "CellValue"))
+            res = unlist(res, recursive = FALSE)
+        res
+    })
+
+
+    c(padcells,
+      nmcell,
+      rowparts)
+}
 
 
 .tbl_header_mat <- function(tt) {
 
-  clyt <- coltree(tt)
-
-  atrow <- 1
-  rows <- list()
-  kids <- tree_children(clyt)
-  dispcounts <- disp_ccounts(tt)
-  while(length(kids) > 0 && atrow < 1000) { #we will break from this
-
-      labs <- names(kids)
-      #TODO: XXX remove reliance on old_cell and old_rrowl!!!
-    cells <- lapply(names(kids), function(x) {
-      old_rcell(x, colspan = length(collect_leaves(kids[[x]], incl.cont = FALSE)))
-    })
-    rows[[atrow]] <- old_rrowl(row.name = "",
-                              cells)
-    atrow <- atrow + 1
-    ## otherwise its pasted with the next level...
-    ## XXX todo figure out a better way to do this
-    names(kids) <- NULL
-    kids <- unlist(lapply(kids,
-                         function(k) {
-                           if(is(k, "LayoutColLeaf"))
-                             NULL
-                           else
-                             tree_children(k)
-                         }),
-                  recursive = FALSE)
-  }
-
-  nc <- ncol(tt)
-  body <- matrix(rapply(rows, function(x) {
-    cs <- attr(x, "colspan")
-    if (is.null(cs)) cs <- 1
-    rep(as.vector(x), cs)
-  }), ncol = nc, byrow = TRUE)
-
-  span <- matrix(rapply(rows, function(x) {
-    cs <- attr(x, "colspan")
-    if (is.null(cs)) cs <- 1
-    rep(cs, cs)
-  }), ncol = nc, byrow = TRUE)
+    clyt <- coltree(tt)
+    rowvals <- .do_tbl_h_piece(clyt)
+    rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
+    rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
 
 
-  if (col_info(tt)@display_columncounts) {
-    counts <- col_info(tt)@counts
-    cformat <- col_info(tt)@columncount_format
-    body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
+
+    nc <- ncol(tt)
+    body <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x) ##attr(x, "colspan")
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(row_values(x), cs) ##as.vector(x), cs)
+    }), ncol = nc, byrow = TRUE)
+
+    span <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x) ##attr(x, "colspan")
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(cs, cs) ##as.vector(x), cs)
+    }), ncol = nc, byrow = TRUE)
+
+
+    if (col_info(tt)@display_columncounts) {
+        counts <- col_info(tt)@counts
+        cformat <- col_info(tt)@columncount_format
+        body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
     span <- rbind(span, rep(1, nc))
-  }
+    }
 
-  list(body = cbind("", body), span = cbind(1, span))
+    list(body = cbind("", body), span = cbind(1, span))
 }
 
 
@@ -277,7 +286,7 @@ matrix_form <- function(x) {
 #' get formatted cells
 #'
 #' @export
-#'
+#' @inheritParams gen_args
 #' @examples
 #'
 #' library(dplyr)
@@ -294,9 +303,9 @@ matrix_form <- function(x) {
 #'   build_table(iris2)
 #'
 #' get_formatted_cells(tbl)
-#'
+#' @rdname gfc
 setGeneric("get_formatted_cells", function(obj) standardGeneric("get_formatted_cells"))
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "TableTree",
           function(obj) {
 
@@ -313,7 +322,7 @@ setMethod("get_formatted_cells", "TableTree",
 
             do.call(rbind, c(list(lr), list(ct),  els))
           })
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "ElementaryTable",
           function(obj) {
 
@@ -324,7 +333,7 @@ setMethod("get_formatted_cells", "ElementaryTable",
             do.call(rbind, c(list(lr), els))
           })
 
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj) {
             default_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
@@ -343,7 +352,7 @@ setMethod("get_formatted_cells", "TableRow",
             }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
 
           })
-
+#' @rdname gfc
 setMethod("get_formatted_cells", "LabelRow",
           function(obj) {
             nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
@@ -361,7 +370,7 @@ setMethod("get_formatted_cells", "LabelRow",
 #' The row names are also considered a column for the output
 #'
 #' @param x `rtable` object
-#' @param matrix_form object as created with `matrix_form`
+#' @param mat_form object as created with `matrix_form`
 #'
 #' @export
 #'

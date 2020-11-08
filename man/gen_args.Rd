@@ -9,6 +9,7 @@ gen_args(
   spl,
   pos,
   tt,
+  tr,
   verbose,
   colwidths,
   obj,
@@ -16,6 +17,9 @@ gen_args(
   value,
   object,
   path,
+  label,
+  visible_label,
+  cvar,
   ...
 )
 }
@@ -27,6 +31,8 @@ gen_args(
 \item{pos}{numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current}
 
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{tr}{TableRow (or related class). A TableRow object representing a single row within a populated table.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 
@@ -41,6 +47,12 @@ gen_args(
 \item{object}{The object to modify in-place}
 
 \item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
+
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
+\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+
+\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
 \item{\dots}{Passed on to metthods or tabulation functions.}
 }

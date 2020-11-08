@@ -11,6 +11,7 @@ InstantiatedColumnInfo(
   csubs = list(expression(TRUE)),
   extras = list(list()),
   cnts = NA_integer_,
+  total_cnt = NA_integer_,
   dispcounts = FALSE,
   countformat = "(N=xx)"
 )
@@ -23,6 +24,8 @@ InstantiatedColumnInfo(
 \item{extras}{list. Extra arguments associated with the columns}
 
 \item{cnts}{integer. Counts.}
+
+\item{total_cnt}{integer(1). Total observations represented across all columns.}
 
 \item{dispcounts}{logical. Should the counts be displayed as header info when the associated table is printed.}
 

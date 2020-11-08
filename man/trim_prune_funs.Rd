@@ -16,6 +16,8 @@ prune_empty_level(tt)
 low_obs_pruner(min, type = c("sum", "mean"))
 }
 \arguments{
+\item{tr}{TableRow (or related class). A TableRow object representing a single row within a populated table.}
+
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
 \item{min}{numeric(1). (lob_obs_pruner only). Miminum aggregate count value. Subtables whose combined/average

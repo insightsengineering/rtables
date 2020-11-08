@@ -46,6 +46,8 @@ TableTree(
 
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
 
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+
 \item{labelrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{label} by default if not specified.}
 
 \item{rspans}{data.frame. Currently stored but otherwise ignored.}

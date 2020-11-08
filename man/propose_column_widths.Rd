@@ -9,7 +9,7 @@ propose_column_widths(x, mat_form = matrix_form(x))
 \arguments{
 \item{x}{\code{rtable} object}
 
-\item{matrix_form}{object as created with \code{matrix_form}}
+\item{mat_form}{object as created with \code{matrix_form}}
 }
 \description{
 The row names are also considered a column for the output

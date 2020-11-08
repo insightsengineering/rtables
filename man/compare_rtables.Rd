@@ -20,72 +20,76 @@ Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 should not be there.
 }
+\note{
+In its current form \code{compare_rtables} does not take structure into account,
+only row and cell position.
+}
 \examples{
 
 t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
 t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
-compare_rtables(object = t1, expected = t2) 
+compare_rtables(object = t1, expected = t2)
 
 \dontrun{
-Viewer(t1, t2) 
+Viewer(t1, t2)
 }
 
-# expected <- rtable(
-#    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#    format = "xx",
-#    rrow("row 1", 10, 15),
-#    rrow(),
-#    rrow("section title"),
-#    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-# )
+ expected <- rtable(
+    header = c("ARM A\nN=100", "ARM B\nN=200"),
+    format = "xx",
+    rrow("row 1", 10, 15),
+    rrow(),
+    rrow("section title"),
+    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+ )
 
 \dontrun{
 Viewer(expected)
 }
 
-# object <- rtable(
-#    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#    format = "xx",
-#    rrow("row 1", 10, 15),
-#    rrow("section title"),
-#    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-# )
+ object <- rtable(
+    header = c("ARM A\nN=100", "ARM B\nN=200"),
+    format = "xx",
+    rrow("row 1", 10, 15),
+    rrow("section title"),
+    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+ )
 
-# compare_rtables(object, expected)
-# 
-# compare_rtables(object, expected, comp.attr = FALSE)
-# 
-# object <- rtable(
-#    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#    format = "xx",
-#    rrow("row 1", 10, 15),
-#    rrow(),
-#    rrow("section title")
-# )
-# 
-# compare_rtables(object, expected)
-# 
-# object <- rtable(
-#    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#    format = "xx",
-#    rrow("row 1", 14, 15.03),
-#    rrow(),
-#    rrow("section title"),
-#    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
-# )
-# 
-# compare_rtables(object, expected)
-# 
-# object <- rtable(
-#    header = c("ARM A\nN=100", "ARM B\nN=200"),
-#    format = "xx",
-#    rrow("row 1", 10, 15),
-#    rrow(),
-#    rrow("section title"),
-#    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)"))
-# )
-# 
-# compare_rtables(object, expected)
+ compare_rtables(object, expected)
+
+ compare_rtables(object, expected, comp.attr = FALSE)
+
+ object <- rtable(
+    header = c("ARM A\nN=100", "ARM B\nN=200"),
+    format = "xx",
+    rrow("row 1", 10, 15),
+    rrow(),
+    rrow("section title")
+ )
+
+ compare_rtables(object, expected)
+
+ object <- rtable(
+    header = c("ARM A\nN=100", "ARM B\nN=200"),
+    format = "xx",
+    rrow("row 1", 14, 15.03),
+    rrow(),
+    rrow("section title"),
+    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
+ )
+
+ compare_rtables(object, expected)
+
+ object <- rtable(
+    header = c("ARM A\nN=100", "ARM B\nN=200"),
+    format = "xx",
+    rrow("row 1", 10, 15),
+    rrow(),
+    rrow("section title"),
+    rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.x, xx.x)"))
+ )
+
+ compare_rtables(object, expected)
 
 }

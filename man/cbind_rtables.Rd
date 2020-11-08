@@ -4,12 +4,12 @@
 \alias{cbind_rtables}
 \title{cbind two rtables}
 \usage{
-cbind_rtables(x, y)
+cbind_rtables(x, ...)
 }
 \arguments{
-\item{x}{table 1}
+\item{x}{A table or row object}
 
-\item{y}{table 2}
+\item{\dots}{1 or more further objects of the same class as \code{x}}
 }
 \description{
 cbind two rtables
@@ -19,10 +19,10 @@ x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 
 y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 
-\dontrun{
-# TODO: error on R 4.0.1
-cbind_rtables(x, y)
-} 
+z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
 
+cbind_rtables(x, y)
+
+cbind_rtables(x, y, z)
 
 }

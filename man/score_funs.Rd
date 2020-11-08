@@ -9,6 +9,11 @@ cont_n_allcols(tt)
 
 cont_n_onecol(j)
 }
+\arguments{
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{j}{numeric(1). Number of column to be scored}
+}
 \description{
 Score functions for sorting TableTrees
 }

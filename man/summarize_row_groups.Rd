@@ -10,7 +10,8 @@ summarize_row_groups(
   label_fstr = "\%s",
   format = "xx (xx.x\%)",
   cfun = NULL,
-  indent_mod = 0L
+  indent_mod = 0L,
+  extra_args = list()
 )
 }
 \arguments{
@@ -22,9 +23,11 @@ summarize_row_groups(
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{cfun}{function/NULL. tabulation function for creating content rows. Must accept \code{df} as first parameter. Optionally accepts}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
 \description{
 Add a content row of summary counts
@@ -46,6 +49,25 @@ tbl <- build_table(l, DM)
 tbl
 
 summary(tbl) # summary count is a content table
+
+
+## use a cfun and extra_args to customize summarization
+## behavior
+sfun <- function(x, labelstr, trim) {
+    in_rows(
+        c(mean(x, trim = trim), trim),
+        .formats = "xx (xx.x\%)",
+        .labels = sprintf("\%s (Trimmed mean and trim \%\%)",
+                              labelstr)
+    )
+}
+l2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+    split_rows_by("RACE") \%>\%
+    summarize_row_groups("AGE", cfun = sfun,
+                         extra_args = list(trim = .2)) \%>\%
+    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+tbl2 <- build_table(l2, DM)
+tbl2
 
 }
 \author{
