@@ -178,22 +178,23 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
 
 parse_format_label <- function(format) {
   pattern <- "xx\\.x*%{0,1}|xx%{0,1}"
-  placeholders <- unlist(stringr::str_extract_all(format, pattern))
+  placeholders <- unlist(str_extract_all(format, pattern))
   is_pct_format <- grepl("%", placeholders)
   non_placeholders <- unlist(strsplit(format, pattern))
-  n_decimal <- ifelse(
+  n_decimal <- unlist(ifelse(
     placeholders %in% c("xx", "xx%"),
     NA,
-    nchar(vapply(stringr::str_split(placeholders, "\\."), `[`, "", 2))
-  )
-  sprintf_format <- ifelse(
+    lapply(str_extract_all(placeholders, "\\.x*"), nchar)
+  ))-1L
+  format_strings <- ifelse(
     is.na(n_decimal),
     ifelse(is_pct_format, "%s%%", "%s"),
-    ifelse(is_pct_format, paste0("%.", n_decimal-1L, "f%%"), paste0("%.", n_decimal, "f"))
+    paste0("%.", n_decimal, "f", ifelse(is_pct_format, "%%", ""))
   )
-  fmt <- paste(interleave(non_placeholders, sprintf_format), collapse = "")
+  fmt <- paste(interleave(non_placeholders, format_strings), collapse = "")
   if (length(placeholders) == 1L) {
-    if (is_pct_format) bquote(sprintf(.(fmt), x*100)) else bquote(sprintf(.(fmt), x))
+    arg <- if (is_pct_format) quote(x*100) else quote(x)
+    bquote(sprintf(.(fmt), .(arg)))
   } else {
     args <- Map(function(i, is_pct) {
       if (is_pct) bquote(x[.(i)]*100) else bquote(x[.(i)])

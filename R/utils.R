@@ -39,3 +39,7 @@ interleave <- function(x, y) {
   ord_y <- 2*(1:length(y))
   c(x, y)[order(c(ord_x, ord_y))]
 }
+
+str_extract_all <- function(string, pattern) {
+  regmatches(string, gregexpr(pattern, string))
+}
