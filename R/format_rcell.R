@@ -181,24 +181,36 @@ parse_format_label <- function(format) {
   placeholders <- unlist(str_extract_all(format, pattern))
   is_pct_format <- grepl("%", placeholders)
   non_placeholders <- unlist(strsplit(format, pattern))
-  n_decimal <- unlist(ifelse(
-    placeholders %in% c("xx", "xx%"),
-    NA,
-    lapply(str_extract_all(placeholders, "\\.x*"), nchar)
-  ))-1L
-  format_strings <- ifelse(
-    is.na(n_decimal),
-    ifelse(is_pct_format, "%s%%", "%s"),
-    paste0("%.", n_decimal, "f", ifelse(is_pct_format, "%%", ""))
-  )
+  after_decimal <- str_extract_all(placeholders, "\\.x*")
+  n_decimal <- vapply(after_decimal, function(n) {
+    if (length(n) == 0L) NA_integer_ else nchar(n) - 1L
+  }, integer(1L))
+  format_strings <- create_format_strings(n_decimal, is_pct_format)
+
   fmt <- paste(interleave(non_placeholders, format_strings), collapse = "")
-  if (length(placeholders) == 1L) {
+  create_sprintf_call(fmt, is_pct_format)
+}
+
+create_format_strings <- function(n_decimal, is_pct_format) {
+  mk_fmt_str <- function(n, is_pct) {
+    if (is.na(n)) {
+      if (is_pct) "%s%%" else "%s"
+    } else {
+      suffix <- if (is_pct) "%%" else ""
+      paste0("%.", n, "f", suffix)
+    }
+  }
+  unlist(Map(mk_fmt_str, n_decimal, is_pct_format))
+}
+
+create_sprintf_call <- function(fmt, is_pct_format) {
+  if (length(is_pct_format) == 1L) {
     arg <- if (is_pct_format) quote(x*100) else quote(x)
     bquote(sprintf(.(fmt), .(arg)))
   } else {
     args <- Map(function(i, is_pct) {
       if (is_pct) bquote(x[.(i)]*100) else bquote(x[.(i)])
-    }, seq_along(placeholders), is_pct_format)
+    }, seq_along(is_pct_format), is_pct_format)
     as.call(c(quote(sprintf), fmt, args))
   }
 }
