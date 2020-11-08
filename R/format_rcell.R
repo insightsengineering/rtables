@@ -142,51 +142,15 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
     }
     if (format != "xx" && length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
     
-    switch(
-      format,
-      "xx" = if (all(is.na(x))) "NA" else as.character(x),
-      "xx." = as.character(round(x, 0)),
-      "xx.x" = sprintf("%.1f", x),
-      "xx.xx" = sprintf("%.2f", x),
-      "xx.xxx" = sprintf("%.3f", x),
-      "xx.xxxx" = sprintf("%.4f", x),
-      "xx%" = paste0(x * 100, "%"),
-      "xx.%" = paste0(round(x * 100, 0), "%"),
-      "xx.x%" = sprintf("%.1f%%", x*100),
-      "xx.xx%" = sprintf("%.2f%%", x*100),
-      "xx.xxx%" = sprintf("%.3f%%", x*100),
-      "(N=xx)" = paste0("(N=", x, ")"),
-      ">999.9" = ifelse(x > 999.9, ">999.9", sprintf("%.1f", x)),
-      ">999.99" = ifelse(x > 999.99, ">999.99", sprintf("%.2f", x)),
-      "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
-      "xx / xx" = paste(x, collapse = " / "),
-      "xx. / xx." = sprintf("%.0f / %.0f", x[1], x[2]),
-      "xx.x / xx.x" = sprintf("%.1f / %.1f", x[1], x[2]),
-      "xx.xx / xx.xx" = sprintf("%.2f / %.2f", x[1], x[2]),
-      "xx.xxx / xx.xxx" = sprintf("%.3f / %.3f", x[1], x[2]),
-      "xx (xx%)" = paste0(x[1], " (", x[2]*100, "%)"),
-      "xx (xx.%)" = paste0(x[1], " (", round(x[2]*100, 0), "%)"),
-      "xx (xx.x%)" = sprintf("%d (%.1f%%)", x[1], x[2]*100),
-      "xx (xx.xx%)" = sprintf("%d (%.2f%%)", x[1], x[2]*100),
-      "xx. (xx.%)" = sprintf("%.0f (%.0f%%)", x[1], x[2]*100),
-      "xx.x (xx.x%)" = sprintf("%.1f (%.1f%%)", x[1], x[2]*100),
-      "xx.xx (xx.xx%)" = sprintf("%.2f (%.2f%%)", x[1], x[2]*100),
-      "(xx, xx)" = paste0("(", x[1], ", ", x[2], ")"),
-      "(xx., xx.)" = sprintf("(%.0f, %.0f)", x[1], x[2]),
-      "(xx.x, xx.x)" = sprintf("(%.1f, %.1f)", x[1], x[2]),
-      "(xx.xx, xx.xx)" = sprintf("(%.2f, %.2f)", x[1], x[2]),
-      "(xx.xxx, xx.xxx)" = sprintf("(%.3f, %.3f)", x[1], x[2]),
-      "(xx.xxxx, xx.xxxx)" = sprintf("(%.4f, %.4f)", x[1], x[2]),
-      "xx - xx" = paste(x[1], "-", x[2]),
-      "xx.x - xx.x" = sprintf("%.1f - %.1f", x[1], x[2]),
-      "xx.xx - xx.xx" = sprintf("%.2f - %.2f", x[1], x[2]),
-      "xx.x (xx.x)" = sprintf("%.1f (%.1f)", x[1], x[2]),
-      "xx.xx (xx.xx)" = sprintf("%.2f (%.2f)", x[1], x[2]),
-      "xx.x, xx.x" = sprintf("%.1f, %.1f", x[1], x[2]),
-      "xx.x to xx.x" = sprintf("%.1f to %.1f", x[1], x[2]),
-      "xx.xx (xx.xx - xx.xx)" = sprintf("%.2f (%.2f - %.2f)", x[1], x[2], x[3]),
-      paste("format string", format, "not found")
-    )
+    if (format == ">999.9") {
+      ifelse(x > 999.9, ">999.9", sprintf("%.1f", x))
+    } else if (format == ">999.99") {
+      ifelse(x > 999.99, ">999.99", sprintf("%.2f", x))
+    } else if (format == "x.xxxx | (<0.0001)") {
+      ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x))
+    } else {
+      eval(parse_format_label(format))
+    }
   } else if (is.function(format)) {
     format(x, output = output)
   }
@@ -210,4 +174,30 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
     txt
   }
   
+}
+
+parse_format_label <- function(format) {
+  pattern <- "xx\\.x*%{0,1}|xx%{0,1}"
+  placeholders <- unlist(stringr::str_extract_all(format, pattern))
+  is_pct_format <- grepl("%", placeholders)
+  non_placeholders <- unlist(strsplit(format, pattern))
+  n_decimal <- ifelse(
+    placeholders %in% c("xx", "xx%"),
+    NA,
+    nchar(vapply(stringr::str_split(placeholders, "\\."), `[`, "", 2))
+  )
+  sprintf_format <- ifelse(
+    is.na(n_decimal),
+    ifelse(is_pct_format, "%s%%", "%s"),
+    ifelse(is_pct_format, paste0("%.", n_decimal-1L, "f%%"), paste0("%.", n_decimal, "f"))
+  )
+  fmt <- paste(interleave(non_placeholders, sprintf_format), collapse = "")
+  if (length(placeholders) == 1L) {
+    if (is_pct_format) bquote(sprintf(.(fmt), x*100)) else bquote(sprintf(.(fmt), x))
+  } else {
+    args <- Map(function(i, is_pct) {
+      if (is_pct) bquote(x[.(i)]*100) else bquote(x[.(i)])
+    }, seq_along(placeholders), is_pct_format)
+    as.call(c(quote(sprintf), fmt, args))
+  }
 }

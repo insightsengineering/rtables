@@ -33,3 +33,9 @@ is_logical_vector_modif <- function(x, min_length = 1) {
     !anyNA(x) &&
     ifelse(min_length > 0, length(x) >= min_length, TRUE)
 }
+
+interleave <- function(x, y) {
+  ord_x <- 2*(1:length(x))-1
+  ord_y <- 2*(1:length(y))
+  c(x, y)[order(c(ord_x, ord_y))]
+}
