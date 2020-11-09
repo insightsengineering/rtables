@@ -113,6 +113,75 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     ret
 }
 
+## #' @return a non-missing value guaranteed not to match any of x
+## unobsval <- function(x) {
+##     if(is.integer(x))
+##         min(x) - 1L
+##     else if(is.numeric(x))
+##         min(x) - 1
+##     else if(is.character(x)) {
+##         nc <- nchar(x)
+##         maxpos <- which.max(nc)
+##         paste(x[maxpos], "xxx")
+##     } else {
+##         stop("don't know how to make an unobserved value for class ", class(x))
+##     }
+
+## }
+
+## #' multimatch
+## #'
+## #' @param x values to match
+## #' @param table set of values to lookup against
+## #'
+## #' @details
+## #' This behaves as \code{link{match}} with the important exception that
+## #' when a match occurs \emph{if another occurance of that value exists in table},
+## #' the matched position in \code{table} is modified so that subsequent occurances
+## #' in \code{x} will match later, the value of
+## multimatch <- function(x, table) {
+##     fulltab <- table
+##     res <- integer(length(x))
+##     none_val<- unobsval(x)
+##     for(pos in seq_along(x)) {
+##         oneres <- match(x[pos], table)
+##         if(!is.na(oneres) && !is.na(match(x[pos], table[-oneres])))
+##             table[oneres] <- none_val
+##         res[pos] <- oneres
+##     }
+##     res
+## }
+
+## setGeneric(".make_vord", function(spl, vals) standardGeneric(".make_vord"))
+
+## setMethod(".make_vord", "NULL",
+##           function(spl, vals) seq_along(vals))
+
+## setMethod(".make_vord", "AllSplit",
+##           function(spl, vals) .make_vord(NULL, vals))
+
+## ## this assumes no duplicated values!
+## ## should (?) be a save assumption for non-MultiVarSplits
+## setMethod(".make_vord", "Split",
+##           function(spl, vals) {
+##     if(is.null(spl_child_order(spl)))
+##         return(.make_vord(NULL, vals))
+
+##     vord = match(spl_child_order(spl),
+##                      vals)
+##     vord = vord[!is.na(vord)]
+##     vord
+## })
+
+## setMethod(".make_vord", "MultiVarSplit",
+##           function(spl, vals) {
+##     ## I think this will never happen?
+##     if(is.null(spl_child_order(spl)))
+##         return(.make_vord(NULL, vals))
+
+##     multimatch(spl_child_order(spl),
+##                vals)
+## })
 
 .apply_split_inner = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
@@ -250,7 +319,8 @@ setMethod(".applysplit_rawvals", "VarLevelSplit",
 
 setMethod(".applysplit_rawvals", "MultiVarSplit",
           function(spl, df) {
-    spl_payload(spl)
+##    spl_payload(spl)
+    spl_varnames(spl)
 })
 
 setMethod(".applysplit_rawvals", "AllSplit",
@@ -290,7 +360,14 @@ setMethod(".applysplit_datapart", "VarLevelSplit",
 
 setMethod(".applysplit_datapart", "MultiVarSplit",
           function(spl, df, vals) {
-    ret = lapply(vals, function(cl) {
+    allvnms <- spl_varnames(spl)
+    if(!is.null(vals) && !identical(allvnms, vals)) {
+        incl <- match(vals, allvnms)
+    } else {
+        incl <- seq_along(allvnms)
+    }
+    vars <- spl_payload(spl)[incl]
+    ret = lapply(vars, function(cl) {
         df[!is.na(df[[cl]]),]
     })
     names(ret) = vals
@@ -440,6 +517,7 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
     }
 
     mapply(SplitValue, val = vals, extr = extrs,
+           label = labels,
            SIMPLIFY=FALSE)
 }
 

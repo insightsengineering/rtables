@@ -11,6 +11,7 @@ lyt_args(
   label,
   labels_var,
   varlabels,
+  varnames,
   split_format,
   nested,
   format,
@@ -54,6 +55,8 @@ lyt_args(
 \item{labels_var}{string, name of variable containing labels to be displayed for the values of \code{var}}
 
 \item{varlabels}{character vector. Labels for \code{vars}}
+
+\item{varnames}{character vector. Names for \code{vars} which will appear in pathing. When \code{vars} are all unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce uniqueness.}
 
 \item{split_format}{format spec. Format associated with this split.}
 

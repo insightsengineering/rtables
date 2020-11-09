@@ -98,8 +98,24 @@ test_that("make_pagdf gives paths which all work", {
     pdf2 <- make_pagdf(tab, visible_only = FALSE)
     res2 <- lapply(pdf2$path, function(pth) cell_values(tab, pth))
     expect(TRUE, "some paths in full structure pag_df did not work")
+})
 
 
+test_that("Duplicate colvars path correctly", {
 
+    l <- basic_table() %>%
+        split_cols_by_multivar(c("AGE", "BMRKR1", "AGE"), varlabels = c("Age", "Biomarker 1", "Second Age")) %>%
+        analyze_colvars(mean)
 
+    tbl <- build_table(l, DM)
+
+    matform <- matrix_form(tbl)
+    expect_identical(matrix(c("", "Age", "Biomarker 1", "Second Age",
+                              "mean", mean(DM$AGE), mean(DM$BMRKR1), mean(DM$AGE)),
+                            nrow = 2, byrow = TRUE),
+                     matform$strings)
+
+    res = cell_values(tbl, colpath = c( "multivars", "AGE._[[2]]_."))
+    expect_identical(list("AGE._[[2]]_." = mean(DM$AGE, na.rm= TRUE)),
+                     res)
 })

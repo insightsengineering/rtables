@@ -1,3 +1,9 @@
+## rtables 0.3.2.17.9042
+
+* Fix naming/pathing for columns in multivar case (split itself now has default name "multivars")
+* Fix labelling bug when same variable appears multiple times in MultiVarSplit with different associated levels
+
+
 ## rtables 0.3.2.17.9041
 
 * Allow single variable to be used within `split_cols_by_multivar` 

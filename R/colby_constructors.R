@@ -387,9 +387,11 @@ split_rows_by = function(lyt,
 split_cols_by_multivar = function(lyt,
                                   vars,
                                   varlabels = vars,
+                                  varnames = NULL,
                                   nested = TRUE) {
     spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
-                        varlabels =varlabels)
+                        varlabels =varlabels,
+                        varnames = varnames)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -731,11 +733,11 @@ analyze = function(lyt,
 
 
 get_acolvar_name  <- function(lyt) {
-    clyt <- clayout(lyt)
-    stopifnot(length(clyt) == 1L)
-    vec = clyt[[1]]
-    vcls = vapply(vec, class, "")
-    pos = max(which(vcls ==  "MultiVarSplit"))
+    ## clyt <- clayout(lyt)
+    ## stopifnot(length(clyt) == 1L)
+    ## vec = clyt[[1]]
+    ## vcls = vapply(vec, class, "")
+    ## pos = max(which(vcls ==  "MultiVarSplit"))
     paste(c("ac", get_acolvar_vars(lyt)), collapse = "_")
 }
 
@@ -745,8 +747,11 @@ get_acolvar_vars <- function(lyt) {
     stopifnot(length(clyt) == 1L)
     vec = clyt[[1]]
     vcls = vapply(vec, class, "")
-    pos = max(which(vcls ==  "MultiVarSplit"))
-    spl_payload(vec[[pos]])
+    pos = which(vcls ==  "MultiVarSplit")
+    if(length(pos) > 0)
+        spl_payload(vec[[pos]])
+    else
+        "non_multivar"
 }
 
 

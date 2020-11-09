@@ -654,7 +654,7 @@ setMethod("spl_child_order",
 #' @rdname int_methods
 setMethod("spl_child_order",
           "MultiVarSplit",
-          function(obj) spl_payload(obj))
+          function(obj) spl_varnames(obj))
 #' @rdname int_methods
 setMethod("spl_child_order",
           "AllSplit",
@@ -1778,3 +1778,11 @@ setGeneric("spl_is_cmlcuts", function(obj) standardGeneric("spl_is_cmlcuts"))
 #' @rdname int_methods
 setMethod("spl_is_cmlcuts", "VarDynCutSplit",
           function(obj) obj@cumulative_cuts)
+
+#' @rdname int_methods
+setGeneric("spl_varnames",
+           function(obj) standardGeneric("spl_varnames"))
+#' @rdname int_methods
+setMethod("spl_varnames", "MultiVarSplit",
+          function(obj) obj@var_names)
+

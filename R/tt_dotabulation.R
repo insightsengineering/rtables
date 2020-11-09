@@ -102,6 +102,9 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 }
 
 
+strip_multivar_suffix <- function(x) {
+    gsub( "\\._\\[\\[[0-9]\\]\\]_\\.$", "", x)
+}
 
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
@@ -152,7 +155,9 @@ gen_rowvalues = function(dfpart,
 
             pos = tree_pos(x)
             spls = pos_splits(pos)
-            splvals = rawvalues(pos)
+            ## values have the suffix but we are populating datacol
+            ## so it has to match var numbers so strip the suffixes back off
+            splvals = strip_multivar_suffix(rawvalues(pos))
             n = length(spls)
             datcol[i] <- if(is(spls[[n]], "MultiVarSplit"))
                              splvals[n]
@@ -1113,6 +1118,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                                 lvl + 1L, partlab)
         }, dfpart = datparts, value = vals,
         partlab = labs, SIMPLIFY=FALSE)
+        names(kids) = value_names(vals)
         LayoutColTree(lev = lvl, label = label,
                       spl = spl,
                       kids = kids, tpos = pos,
