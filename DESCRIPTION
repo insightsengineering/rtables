@@ -7,9 +7,11 @@ Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = "aut"),
   person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut")
   )
-Description: Reporting tables are useful to create formated tables with cells that
-  display multiple values. An rtable object will provide access to all the raw data
-  that make up the table.
+Description: Reporting tables often have structure that goes beyond simple rectangular
+  data. The rtables package provides a framework for declaring complex multi-level tabulations
+  and then applying them to data. This framework  including sibling sub-tables, arbitrary splitting
+  or grouping of data in row and column dimensions, cells containing multiple values,
+  and the concept of contextual summary computations.
 Depends: methods, magrittr, R (>= 2.10)
 Imports:
   stats,
