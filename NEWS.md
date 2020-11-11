@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9043
+
+* Rework how reference columns are handled so analyses which use `.in_ref_col` and `.ref_group` work correctly when custom splitting is used (including the provided combination-levels mechanism)
+
 ## rtables 0.3.2.17.9042
 
 * Fix naming/pathing for columns in multivar case (split itself now has default name "multivars")

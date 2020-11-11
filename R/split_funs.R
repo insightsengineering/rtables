@@ -25,7 +25,8 @@ setGeneric(".applysplit_partlabels",
 setGeneric("check_validsplit",
            function(spl, df) standardGeneric("check_validsplit"))
 
-
+setGeneric(".applysplit_ref_vals",
+          function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
 
 
 
@@ -74,17 +75,43 @@ setGeneric("check_validsplit",
     ## we're done with this so take it off
     partinfo$extras = NULL
 
-    names(vals) = labels
+    vnames <- value_names(vals)
+    names(vals) = vnames
     partinfo$values = vals
 
-    if(!identical(names(dpart), labels)) {
-        names(dpart) = labels
+    if(!identical(names(dpart), vnames)) {
+        names(dpart) = vnames
         partinfo$datasplit = dpart
     }
+
 
     partinfo$labels = labels
 
     stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
+    partinfo
+}
+
+.add_ref_extras <- function(spl, df, partinfo) {
+    ## this is only the .in_ref_col booleans
+    refvals <- .applysplit_ref_vals(spl, df, partinfo$values)
+    ref_ind <- which(unlist(refvals))
+    stopifnot(length(ref_ind) == 1)
+
+    vnames <- value_names(partinfo$values)
+    if(is.null(partinfo$extras)) {
+        names(refvals) <- vnames
+        partinfo$extras <- refvals
+    } else {
+        newextras <- mapply(function(old, incol, ref_full)
+            c(old, list(.in_ref_col = incol,
+                        .ref_full = ref_full)),
+            old = partinfo$extras,
+            incol = unlist(refvals),
+            MoreArgs = list(ref_full = partinfo$datasplit[[ref_ind]]),
+                            SIMPLIFY = FALSE)
+        names(newextras) <- vnames
+        partinfo$extras <- newextras
+    }
     partinfo
 }
 
@@ -104,84 +131,20 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     } else {
         ret = .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
     }
+
+    ## this adds .ref_full and .in_ref_col
+    if(is(spl, "VarLevWBaselineSplit"))
+        ret = .add_ref_extras(spl, df, ret)
+
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
     ## - removes the extras element since its redundant after the above
     ## - Ensures datasplit and values lists are named according to labels
     ## - ensures labels are character not factor
     ret = .fixupvals(ret)
+
     ret
 }
-
-## #' @return a non-missing value guaranteed not to match any of x
-## unobsval <- function(x) {
-##     if(is.integer(x))
-##         min(x) - 1L
-##     else if(is.numeric(x))
-##         min(x) - 1
-##     else if(is.character(x)) {
-##         nc <- nchar(x)
-##         maxpos <- which.max(nc)
-##         paste(x[maxpos], "xxx")
-##     } else {
-##         stop("don't know how to make an unobserved value for class ", class(x))
-##     }
-
-## }
-
-## #' multimatch
-## #'
-## #' @param x values to match
-## #' @param table set of values to lookup against
-## #'
-## #' @details
-## #' This behaves as \code{link{match}} with the important exception that
-## #' when a match occurs \emph{if another occurance of that value exists in table},
-## #' the matched position in \code{table} is modified so that subsequent occurances
-## #' in \code{x} will match later, the value of
-## multimatch <- function(x, table) {
-##     fulltab <- table
-##     res <- integer(length(x))
-##     none_val<- unobsval(x)
-##     for(pos in seq_along(x)) {
-##         oneres <- match(x[pos], table)
-##         if(!is.na(oneres) && !is.na(match(x[pos], table[-oneres])))
-##             table[oneres] <- none_val
-##         res[pos] <- oneres
-##     }
-##     res
-## }
-
-## setGeneric(".make_vord", function(spl, vals) standardGeneric(".make_vord"))
-
-## setMethod(".make_vord", "NULL",
-##           function(spl, vals) seq_along(vals))
-
-## setMethod(".make_vord", "AllSplit",
-##           function(spl, vals) .make_vord(NULL, vals))
-
-## ## this assumes no duplicated values!
-## ## should (?) be a save assumption for non-MultiVarSplits
-## setMethod(".make_vord", "Split",
-##           function(spl, vals) {
-##     if(is.null(spl_child_order(spl)))
-##         return(.make_vord(NULL, vals))
-
-##     vord = match(spl_child_order(spl),
-##                      vals)
-##     vord = vord[!is.na(vord)]
-##     vord
-## })
-
-## setMethod(".make_vord", "MultiVarSplit",
-##           function(spl, vals) {
-##     ## I think this will never happen?
-##     if(is.null(spl_child_order(spl)))
-##         return(.make_vord(NULL, vals))
-
-##     multimatch(spl_child_order(spl),
-##                vals)
-## })
 
 .apply_split_inner = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
@@ -441,14 +404,22 @@ setMethod(".applysplit_extras", "Split",
 
 })
 
-setMethod(".applysplit_extras", "VarLevWBaselineSplit",
+
+
+setMethod(".applysplit_ref_vals", "Split",
+          function(spl, df, vals) rep(list(NULL), length(vals)))
+
+setMethod(".applysplit_ref_vals", "VarLevWBaselineSplit",
           function(spl, df, vals) {
-    var = spl_payload(spl)
-    bl_level = spl@ref_group_value #XXX XXX
-    bldata = df[df[[var]] == bl_level,]
-    lapply(vals, function(vl) {
-        list(.ref_full = bldata, .in_ref_col = vl == bl_level)
+    var <- spl_payload(spl)
+    bl_level <- spl@ref_group_value #XXX XXX
+    bldata <- df[df[[var]] %in% bl_level,]
+    vnames <- value_names(vals)
+    ret <- lapply(vnames, function(vl) {
+        list(.in_ref_col = vl == bl_level)
     })
+    names(ret) <- vnames
+    ret
 })
 
 ## XXX TODO FIXME
@@ -510,11 +481,15 @@ subsets_from_factory = function(df, fact) {
 
 
 make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
+    if(length(vals) == 0)
+        return(vals)
+
     if(is(extrs, "AsIs"))
         extrs = unclass(extrs)
-    if(are(vals, "SplitValue")) {
-        return(vals)
-    }
+    ## if(are(vals, "SplitValue")) {
+
+    ##     return(vals)
+    ## }
 
     mapply(SplitValue, val = vals, extr = extrs,
            label = labels,
@@ -622,19 +597,20 @@ trim_levels_in_group = function(innervar) {
 
 .add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {
 
-    value = LevelComboSplitValue(levels, extras, comboname = valuename, label = label)
-    newdat = setNames(list(df), label)
-    newval = setNames(list(value), label)
-    newextra = setNames(list(extras), label)
+    ##    value = LevelComboSplitValue(levels, extras, comboname = valuename, label = label)
+    value = LevelComboSplitValue(valuename, extras, combolevels = levels, label = label)
+    newdat = setNames(list(df), valuename)
+    newval = setNames(list(value), valuename)
+    newextra = setNames(list(extras), valuename)
     if(first) {
         part$datasplit = c(newdat, part$datasplit)
         part$values = c(newval, part$values)
-        part$labels = c(setNames(label, label), part$labels)
+        part$labels = c(setNames(label, valuename), part$labels)
         part$extras = c(newextra, part$extras)
     } else {
         part$datasplit = c(part$datasplit, newdat)
         part$values = c(part$values, newval)
-        part$labels = c(part$labels, setNames(label, label))
+        part$labels = c(part$labels, setNames(label, valuename))
         part$extras = c(part$extras, newextra)
     }
     ## not needed even in custom split function case.

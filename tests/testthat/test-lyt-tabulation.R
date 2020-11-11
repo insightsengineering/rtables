@@ -267,6 +267,29 @@ test_that("ref_group comparisons work", {
     d8 = bltab2[4,4, drop = TRUE]
     d9 = bltab2[5,4, drop = TRUE]
     expect_equivalent(d8 - d7, d9)
+
+    ## with combo levels
+    combodf <- tribble(
+        ~valname, ~label, ~levelcombo, ~exargs,
+        "A_", "Arm 1", c("A: Drug X"), list(),
+        "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
+
+    l3 <- basic_table() %>%
+        split_cols_by(
+            "ARM",
+            split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C")),
+            ref_group = "A_"
+        ) %>%
+        add_colcounts() %>%
+        analyze(c("AGE", "AGE"), afun = list(mean, refcompmean),
+                show_labels = "hidden", table_names = c("AGE1", "AGE2"))
+    bltab3 <- build_table(l3, DM)
+    d10 = bltab3[1,1, drop = TRUE]
+    d11 = bltab3[1,2, drop = TRUE]
+    d12 = bltab3[2,2, drop = TRUE]
+
+    expect_null(cell_values(bltab3, "AGE2", c("ARM", "A_"))[[1]])
+    expect_identical(d12, d11-d10)
 })
 
 test_that("missing vars caught", {

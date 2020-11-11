@@ -1075,10 +1075,16 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
        match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
         return(lyt)
 
-    vec = df[[spl_payload(lyt)]]
-    vals = unique(vec)
-    if(is.factor(vals))
-        vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
+    if(!is.null(split_fun(lyt))) {
+        ## expensive but sadly necessary, I think
+        pinfo = do_split(lyt, df)
+        vals = sort(unlist(value_names(pinfo$values)))
+    } else {
+        vec = df[[spl_payload(lyt)]]
+        vals = unique(vec)
+        if(is.factor(vals))
+            vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
+    }
 
     stopifnot(bline %in% vals)
     pos = match(bline, vals)
