@@ -221,12 +221,14 @@
 \alias{content_indent_mod<-,VTableNodeInfo-method}
 \alias{rawvalues}
 \alias{rawvalues,ValueWrapper-method}
+\alias{rawvalues,LevelComboSplitValue-method}
 \alias{rawvalues,list-method}
 \alias{rawvalues,ANY-method}
 \alias{rawvalues,CellValue-method}
 \alias{rawvalues,TreePos-method}
 \alias{value_names}
 \alias{value_names,ANY-method}
+\alias{value_names,TreePos-method}
 \alias{value_names,list-method}
 \alias{value_names,ValueWrapper-method}
 \alias{value_names,LevelComboSplitValue-method}
@@ -241,6 +243,8 @@
 \alias{value_labels,MultiVarSplit-method}
 \alias{splv_extra}
 \alias{splv_extra,SplitValue-method}
+\alias{splv_extra<-}
+\alias{splv_extra<-,SplitValue-method}
 \alias{split_exargs}
 \alias{split_exargs,Split-method}
 \alias{split_exargs<-}
@@ -737,6 +741,8 @@ rawvalues(obj)
 
 \S4method{rawvalues}{ValueWrapper}(obj)
 
+\S4method{rawvalues}{LevelComboSplitValue}(obj)
+
 \S4method{rawvalues}{list}(obj)
 
 \S4method{rawvalues}{ANY}(obj)
@@ -748,6 +754,8 @@ rawvalues(obj)
 value_names(obj)
 
 \S4method{value_names}{ANY}(obj)
+
+\S4method{value_names}{TreePos}(obj)
 
 \S4method{value_names}{list}(obj)
 
@@ -776,6 +784,10 @@ value_labels(obj)
 splv_extra(obj)
 
 \S4method{splv_extra}{SplitValue}(obj)
+
+splv_extra(obj) <- value
+
+\S4method{splv_extra}{SplitValue}(obj) <- value
 
 split_exargs(obj)
 
