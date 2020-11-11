@@ -60,8 +60,9 @@ setClass("SplitValue",
 
 SplitValue = function(val, extr =list(), label = val) {
     if(is(val, "SplitValue")) {
-        if(length(extr) >0 && !identical(extr, splv_extra(val)))
-            stop("SplitValue  object passed to SplitValue constructor along with non-identical extra")
+        if(length(splv_extra(val)) > 0)
+            extr = c(splv_extra(val), extr)
+        splv_extra(val) <- extr
         return(val)
     }
     if(!is(extr, "list"))
@@ -75,13 +76,13 @@ SplitValue = function(val, extr =list(), label = val) {
 
 setClass("LevelComboSplitValue",
          contains = "SplitValue",
-         representation(comboname = "character"))
+         representation(combolevels = "character"))
 
-LevelComboSplitValue = function(val, extr, comboname, label = comboname) {
+LevelComboSplitValue = function(val, extr, combolevels, label = val) {
     new("LevelComboSplitValue",
         value = val,
         extra = extr,
-        comboname = comboname,
+        combolevels = combolevels,
         label = label)
 }
 
@@ -254,13 +255,34 @@ ManualSplit = function(levels, label, name = "manual",
 
 ## splits across which variables are being analynzed
 setClass("MultiVarSplit", contains = "Split",
-         representation(var_labels = "character"),
+         representation(var_labels = "character",
+                        var_names = "character"),
          validity = function(object) {
-    length(object@payload) > 1 &&
+    length(object@payload) >= 1 &&
         all(!is.na(object@payload)) &&
         (length(object@var_labels) == 0 || length(object@payload) == length(object@var_labels))
 })
 
+
+.make_suffix_vec <- function(n) {
+    c("",
+      sprintf("._[[%d]]_.",
+              seq_len(n - 1) + 1L))
+}
+
+.make_multivar_names <- function(vars) {
+    dups <- duplicated(vars)
+    if(!any(dups))
+        return(vars)
+    dupvars <- unique(vars[dups])
+    ret <- vars
+    for(v in dupvars) {
+        pos <- which(ret == v)
+        ret[pos] <- paste0(ret[pos],
+                           .make_suffix_vec(length(pos)))
+    }
+    ret
+}
 #' Split between two or more different variables
 #'
 #' @inheritParams lyt_args
@@ -270,10 +292,11 @@ setClass("MultiVarSplit", contains = "Split",
 MultiVarSplit = function(vars,
                          split_label = "",
                          varlabels = NULL,
+                         varnames = NULL,
                          cfun = NULL,
                          cformat = NULL,
                          split_format = NULL,
-                         split_name = paste(vars, collapse = ":"),
+                         split_name = "multivars",
                          child_labels = c("default", "visible", "hidden"),
                          extra_args = list(),
                          indent_mod = 0L,
@@ -285,14 +308,18 @@ MultiVarSplit = function(vars,
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
     if(length(varlabels) == 0) ## covers NULL and character()
-       varlabels = vars
+        varlabels = vars
+    vnames <- varnames %||% .make_multivar_names(vars)
+    stopifnot(length(vnames) == length(vars))
     new("MultiVarSplit", payload = vars,
         split_label = split_label,
         var_labels = varlabels,
+        var_names = vnames,
         content_fun = cfun,
         content_format = cformat,
         split_format = split_format,
         label_children = .labelkids_helper(child_labels),
+        name = split_name,
         extra_args = extra_args,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
@@ -559,6 +586,7 @@ setClass("CompoundSplit", contains = "Split",
 
 
 setClass("AnalyzeMultiVars", contains = "CompoundSplit")
+
 .repoutlst = function(x, nv) {
     if(!is.function(x) && length(x) == nv)
         return(x)
@@ -861,7 +889,7 @@ TreePos = function(spls = list(), svals = list(), svlabels =  character(), sub =
 
 make_child_pos = function(parpos, newspl, newval, newlab = newval, newextra = list()) {
     if(!is(newval, "SplitValue"))
-        nsplitval = SplitValue(newval, newextra)
+        nsplitval = SplitValue(newval, extr = newextra, label  = newlab)
     else
         nsplitval = newval
 

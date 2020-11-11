@@ -4,7 +4,13 @@
 \alias{split_cols_by_multivar}
 \title{Associate Multiple Variables with Columns}
 \usage{
-split_cols_by_multivar(lyt, vars, varlabels = vars, nested = TRUE)
+split_cols_by_multivar(
+  lyt,
+  vars,
+  varlabels = vars,
+  varnames = NULL,
+  nested = TRUE
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -12,6 +18,8 @@ split_cols_by_multivar(lyt, vars, varlabels = vars, nested = TRUE)
 \item{vars}{character vector. Multiple variable names.}
 
 \item{varlabels}{character vector. Labels for \code{vars}}
+
+\item{varnames}{character vector. Names for \code{vars} which will appear in pathing. When \code{vars} are all unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce uniqueness.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 }

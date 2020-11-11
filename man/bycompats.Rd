@@ -10,13 +10,11 @@ by_all(name)
 by_add_total(col_by, label = "total", n = NULL)
 }
 \arguments{
-\item{name}{character(1). Label for the added all/total column}
+\item{name}{character(1). Label for the added all/total column.}
 
 \item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
 if a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column.
-can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
+which levels in \code{col_by} define a column.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 

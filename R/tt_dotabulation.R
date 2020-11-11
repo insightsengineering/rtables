@@ -102,6 +102,9 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 }
 
 
+strip_multivar_suffix <- function(x) {
+    gsub( "\\._\\[\\[[0-9]\\]\\]_\\.$", "", x)
+}
 
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
@@ -152,7 +155,9 @@ gen_rowvalues = function(dfpart,
 
             pos = tree_pos(x)
             spls = pos_splits(pos)
-            splvals = rawvalues(pos)
+            ## values have the suffix but we are populating datacol
+            ## so it has to match var numbers so strip the suffixes back off
+            splvals = strip_multivar_suffix(rawvalues(pos))
             n = length(spls)
             datcol[i] <- if(is(spls[[n]], "MultiVarSplit"))
                              splvals[n]
@@ -1070,10 +1075,16 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
        match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
         return(lyt)
 
-    vec = df[[spl_payload(lyt)]]
-    vals = unique(vec)
-    if(is.factor(vals))
-        vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
+    if(!is.null(split_fun(lyt))) {
+        ## expensive but sadly necessary, I think
+        pinfo = do_split(lyt, df)
+        vals = sort(unlist(value_names(pinfo$values)))
+    } else {
+        vec = df[[spl_payload(lyt)]]
+        vals = unique(vec)
+        if(is.factor(vals))
+            vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
+    }
 
     stopifnot(bline %in% vals)
     pos = match(bline, vals)
@@ -1106,13 +1117,14 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
         rawpart = do_split(spl,df, trim =FALSE )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
-        kids = mapply(function(dfpart, value) {
-            ## XXX TODO label
-            partlab = ""
+        labs = rawpart[["labels"]]
+        kids = mapply(function(dfpart, value, partlab) {
             newpos = make_child_pos(pos, spl, value, partlab)
             splitvec_to_coltree(dfpart, splvec, newpos,
                                 lvl + 1L, partlab)
-        }, dfpart = datparts, value = vals, SIMPLIFY=FALSE)
+        }, dfpart = datparts, value = vals,
+        partlab = labs, SIMPLIFY=FALSE)
+        names(kids) = value_names(vals)
         LayoutColTree(lev = lvl, label = label,
                       spl = spl,
                       kids = kids, tpos = pos,

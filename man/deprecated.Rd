@@ -2,59 +2,14 @@
 % Please edit documentation in R/tt_deprecated.R
 \name{indented_row.names}
 \alias{indented_row.names}
-\alias{by_compare_subset}
-\alias{by_factor_to_matrix}
-\alias{by_drop_empty_cols}
-\alias{col_by_to_matrix}
-\alias{by_combine}
 \title{Row names of an \code{\link{rtable}} object with spaces}
 \usage{
 indented_row.names(x, spaces = 2)
-
-by_compare_subset(
-  col_by,
-  subset,
-  label_all = "all",
-  label_subset = "subset",
-  sep = " - "
-)
-
-by_compare_subset(
-  col_by,
-  subset,
-  label_all = "all",
-  label_subset = "subset",
-  sep = " - "
-)
-
-by_factor_to_matrix(x)
-
-by_drop_empty_cols(by)
-
-col_by_to_matrix(col_by, x = NULL)
-
-by_combine(col_by, ...)
 }
 \arguments{
 \item{x}{deprecated.}
 
 \item{spaces}{numeric number of spaces per indent level}
-
-\item{col_by}{factor}
-
-\item{subset}{logical}
-
-\item{label_all}{character, label appended to level of \code{col_by}}
-
-\item{label_subset}{character, label appended to the subset of the corresponding level of \code{col_by}}
-
-\item{sep}{separator of new labels
-
-TODO: make hierarchical headers}
-
-\item{by}{deprecated.}
-
-\item{\dots}{deprecated}
 }
 \value{
 a vector with the row names

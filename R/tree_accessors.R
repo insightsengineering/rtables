@@ -654,7 +654,7 @@ setMethod("spl_child_order",
 #' @rdname int_methods
 setMethod("spl_child_order",
           "MultiVarSplit",
-          function(obj) spl_payload(obj))
+          function(obj) spl_varnames(obj))
 #' @rdname int_methods
 setMethod("spl_child_order",
           "AllSplit",
@@ -1144,6 +1144,8 @@ setGeneric("rawvalues", function(obj) standardGeneric("rawvalues"))
 #' @rdname int_methods
 setMethod("rawvalues", "ValueWrapper",  function(obj) obj@value)
 #' @rdname int_methods
+setMethod("rawvalues",  "LevelComboSplitValue",  function(obj) obj@combolevels)
+#' @rdname int_methods
 setMethod("rawvalues", "list", function(obj) lapply(obj, rawvalues))
 #' @rdname int_methods
 setMethod("rawvalues", "ANY", function(obj) obj)
@@ -1158,11 +1160,14 @@ setGeneric("value_names", function(obj) standardGeneric("value_names"))
 #' @rdname int_methods
 setMethod("value_names", "ANY", function(obj) as.character(rawvalues(obj)))
 #' @rdname int_methods
+setMethod("value_names", "TreePos",
+          function(obj) value_names(pos_splvals(obj)))
+#' @rdname int_methods
 setMethod("value_names", "list", function(obj) lapply(obj, value_names))
 #' @rdname int_methods
 setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
 #' @rdname int_methods
-setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@comboname)
+setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@value) ##obj@comboname)
 #' @rdname int_methods
 setMethod("value_names", "RowsVerticalSection",  function(obj) obj@row_names)
 
@@ -1191,7 +1196,7 @@ setMethod("value_labels", "RowsVerticalSection", function(obj) setNames(obj@row_
 #' @rdname int_methods
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 #' @rdname int_methods
-setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj@comboname)
+setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj_label(obj)) ##obj@comboname)
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
@@ -1212,6 +1217,18 @@ setGeneric("splv_extra", function(obj) standardGeneric("splv_extra"))
 #' @rdname int_methods
 setMethod("splv_extra", "SplitValue",
           function(obj) obj@extra)
+
+#' @rdname int_methods
+setGeneric("splv_extra<-", function(obj, value) standardGeneric("splv_extra<-"))
+#' @rdname int_methods
+setMethod("splv_extra<-", "SplitValue",
+          function(obj, value) {
+    obj@extra <- value
+    obj
+})
+
+
+
 
 #' @rdname int_methods
 setGeneric("split_exargs", function(obj) standardGeneric("split_exargs"))
@@ -1778,3 +1795,11 @@ setGeneric("spl_is_cmlcuts", function(obj) standardGeneric("spl_is_cmlcuts"))
 #' @rdname int_methods
 setMethod("spl_is_cmlcuts", "VarDynCutSplit",
           function(obj) obj@cumulative_cuts)
+
+#' @rdname int_methods
+setGeneric("spl_varnames",
+           function(obj) standardGeneric("spl_varnames"))
+#' @rdname int_methods
+setMethod("spl_varnames", "MultiVarSplit",
+          function(obj) obj@var_names)
+

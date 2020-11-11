@@ -286,6 +286,8 @@
 \alias{spl_cutlabelfun,VarDynCutSplit-method}
 \alias{spl_is_cmlcuts}
 \alias{spl_is_cmlcuts,VarDynCutSplit-method}
+\alias{spl_varnames}
+\alias{spl_varnames,MultiVarSplit-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
 \title{Internal Generics and Methods}
@@ -864,6 +866,10 @@ spl_cutlabelfun(obj)
 spl_is_cmlcuts(obj)
 
 \S4method{spl_is_cmlcuts}{VarDynCutSplit}(obj)
+
+spl_varnames(obj)
+
+\S4method{spl_varnames}{MultiVarSplit}(obj)
 
 \S4method{print}{VTableTree}(x, ...)
 

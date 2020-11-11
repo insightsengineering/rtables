@@ -25,7 +25,8 @@ setGeneric(".applysplit_partlabels",
 setGeneric("check_validsplit",
            function(spl, df) standardGeneric("check_validsplit"))
 
-
+setGeneric(".applysplit_ref_vals",
+          function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
 
 
 
@@ -74,17 +75,43 @@ setGeneric("check_validsplit",
     ## we're done with this so take it off
     partinfo$extras = NULL
 
-    names(vals) = labels
+    vnames <- value_names(vals)
+    names(vals) = vnames
     partinfo$values = vals
 
-    if(!identical(names(dpart), labels)) {
-        names(dpart) = labels
+    if(!identical(names(dpart), vnames)) {
+        names(dpart) = vnames
         partinfo$datasplit = dpart
     }
+
 
     partinfo$labels = labels
 
     stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
+    partinfo
+}
+
+.add_ref_extras <- function(spl, df, partinfo) {
+    ## this is only the .in_ref_col booleans
+    refvals <- .applysplit_ref_vals(spl, df, partinfo$values)
+    ref_ind <- which(unlist(refvals))
+    stopifnot(length(ref_ind) == 1)
+
+    vnames <- value_names(partinfo$values)
+    if(is.null(partinfo$extras)) {
+        names(refvals) <- vnames
+        partinfo$extras <- refvals
+    } else {
+        newextras <- mapply(function(old, incol, ref_full)
+            c(old, list(.in_ref_col = incol,
+                        .ref_full = ref_full)),
+            old = partinfo$extras,
+            incol = unlist(refvals),
+            MoreArgs = list(ref_full = partinfo$datasplit[[ref_ind]]),
+                            SIMPLIFY = FALSE)
+        names(newextras) <- vnames
+        partinfo$extras <- newextras
+    }
     partinfo
 }
 
@@ -104,15 +131,20 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     } else {
         ret = .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
     }
+
+    ## this adds .ref_full and .in_ref_col
+    if(is(spl, "VarLevWBaselineSplit"))
+        ret = .add_ref_extras(spl, df, ret)
+
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
     ## - removes the extras element since its redundant after the above
     ## - Ensures datasplit and values lists are named according to labels
     ## - ensures labels are character not factor
     ret = .fixupvals(ret)
+
     ret
 }
-
 
 .apply_split_inner = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
@@ -250,7 +282,8 @@ setMethod(".applysplit_rawvals", "VarLevelSplit",
 
 setMethod(".applysplit_rawvals", "MultiVarSplit",
           function(spl, df) {
-    spl_payload(spl)
+##    spl_payload(spl)
+    spl_varnames(spl)
 })
 
 setMethod(".applysplit_rawvals", "AllSplit",
@@ -290,7 +323,14 @@ setMethod(".applysplit_datapart", "VarLevelSplit",
 
 setMethod(".applysplit_datapart", "MultiVarSplit",
           function(spl, df, vals) {
-    ret = lapply(vals, function(cl) {
+    allvnms <- spl_varnames(spl)
+    if(!is.null(vals) && !identical(allvnms, vals)) {
+        incl <- match(vals, allvnms)
+    } else {
+        incl <- seq_along(allvnms)
+    }
+    vars <- spl_payload(spl)[incl]
+    ret = lapply(vars, function(cl) {
         df[!is.na(df[[cl]]),]
     })
     names(ret) = vals
@@ -364,14 +404,22 @@ setMethod(".applysplit_extras", "Split",
 
 })
 
-setMethod(".applysplit_extras", "VarLevWBaselineSplit",
+
+
+setMethod(".applysplit_ref_vals", "Split",
+          function(spl, df, vals) rep(list(NULL), length(vals)))
+
+setMethod(".applysplit_ref_vals", "VarLevWBaselineSplit",
           function(spl, df, vals) {
-    var = spl_payload(spl)
-    bl_level = spl@ref_group_value #XXX XXX
-    bldata = df[df[[var]] == bl_level,]
-    lapply(vals, function(vl) {
-        list(.ref_full = bldata, .in_ref_col = vl == bl_level)
+    var <- spl_payload(spl)
+    bl_level <- spl@ref_group_value #XXX XXX
+    bldata <- df[df[[var]] %in% bl_level,]
+    vnames <- value_names(vals)
+    ret <- lapply(vnames, function(vl) {
+        list(.in_ref_col = vl == bl_level)
     })
+    names(ret) <- vnames
+    ret
 })
 
 ## XXX TODO FIXME
@@ -433,13 +481,18 @@ subsets_from_factory = function(df, fact) {
 
 
 make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
+    if(length(vals) == 0)
+        return(vals)
+
     if(is(extrs, "AsIs"))
         extrs = unclass(extrs)
-    if(are(vals, "SplitValue")) {
-        return(vals)
-    }
+    ## if(are(vals, "SplitValue")) {
+
+    ##     return(vals)
+    ## }
 
     mapply(SplitValue, val = vals, extr = extrs,
+           label = labels,
            SIMPLIFY=FALSE)
 }
 
@@ -544,19 +597,20 @@ trim_levels_in_group = function(innervar) {
 
 .add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {
 
-    value = LevelComboSplitValue(levels, extras, comboname = valuename, label = label)
-    newdat = setNames(list(df), label)
-    newval = setNames(list(value), label)
-    newextra = setNames(list(extras), label)
+    ##    value = LevelComboSplitValue(levels, extras, comboname = valuename, label = label)
+    value = LevelComboSplitValue(valuename, extras, combolevels = levels, label = label)
+    newdat = setNames(list(df), valuename)
+    newval = setNames(list(value), valuename)
+    newextra = setNames(list(extras), valuename)
     if(first) {
         part$datasplit = c(newdat, part$datasplit)
         part$values = c(newval, part$values)
-        part$labels = c(setNames(label, label), part$labels)
+        part$labels = c(setNames(label, valuename), part$labels)
         part$extras = c(newextra, part$extras)
     } else {
         part$datasplit = c(part$datasplit, newdat)
         part$values = c(part$values, newval)
-        part$labels = c(part$labels, setNames(label, label))
+        part$labels = c(part$labels, setNames(label, valuename))
         part$extras = c(part$extras, newextra)
     }
     ## not needed even in custom split function case.

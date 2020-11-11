@@ -23,9 +23,7 @@ rtabulate(
 
 \item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
 if a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column.
-can use \code{\link{by_factor_to_matrix}} to create a matrix from a factor to use non-disjoint columns
-can use \code{\link{by_all}} to have a column with all rows, alternatively look at \code{\link{by_add_total}}}
+which levels in \code{col_by} define a column.}
 
 \item{FUN}{a function that processes the cell data}
 
