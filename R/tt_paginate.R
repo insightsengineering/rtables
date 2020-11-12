@@ -80,7 +80,7 @@ pagdfrow = function(row,
                par_extent = repext,
                reprint_inds = I(list(unlist(repind))),
                node_class = rclass,
-               indent = indent,
+               indent = max(0L, indent),
 
                stringsAsFactors = FALSE)
 }
@@ -126,6 +126,7 @@ setMethod("make_pagdf", "VTableTree",
                    sibpos = NA_integer_,
                    nsibs = NA_integer_) {
 
+    indent <- indent + indent_mod(tt)
     orig_rownum <- rownum
     if(incontent)
         path <- c(path, "@content")
@@ -168,11 +169,12 @@ setMethod("make_pagdf", "VTableTree",
     }
 
     if(NROW(content_table(tt)) > 0) {
+        cind <- indent + indent_mod(content_table(tt))
         contdf <-  make_pagdf(content_table(tt),
                               colwidths= colwidths,
                               visible_only = visible_only,
                               rownum = rownum,
-                              indent = indent,
+                              indent = cind,
                               path = path,
                               incontent = TRUE,
                               repr_ext = repr_ext,
@@ -187,6 +189,7 @@ setMethod("make_pagdf", "VTableTree",
             repr_inds <- c(repr_inds, crnums)
         }
         ret <- c(ret, list(contdf))
+        indent <- cind + 1
     }
 
 
@@ -198,7 +201,7 @@ setMethod("make_pagdf", "VTableTree",
                             colwidths= colwidths,
                             visible_only = visible_only,
                             rownum = force(rownum),
-                            indent = indent + 1,
+                            indent = indent, ## + 1,
                             path = path,
                             incontent = incontent,
                             repr_ext = repr_ext,
@@ -227,6 +230,7 @@ setMethod("make_pagdf", "TableRow",
                    repr_inds = integer(),
                    sibpos = NA_integer_,
                    nsibs = NA_integer_) {
+    indent <- indent + indent_mod(tt)
     rownum <- rownum + 1
     ret <- pagdfrow(tt, rnum = rownum,
                   colwidths = colwidths,
@@ -252,6 +256,7 @@ setMethod("make_pagdf", "LabelRow",
                    sibpos = NA_integer_,
                    nsibs = NA_integer_) {
     rownum <- rownum + 1
+    indent <- indent + indent_mod(tt)
     ret <- pagdfrow(tt, rnum = rownum,
                     colwidths = colwidths,
                     sibpos = sibpos,

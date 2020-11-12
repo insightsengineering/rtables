@@ -39,8 +39,7 @@ split_cols_by_cutfun(
   format = NULL,
   nested = TRUE,
   extra_args = list(),
-  cumulative = FALSE,
-  indent_mod = 0L
+  cumulative = FALSE
 )
 
 split_cols_by_quartiles(
@@ -106,9 +105,9 @@ split_rows_by_cutfun(
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
-
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
 \description{
 Create columns (or row splits) based on values (such as quartiles) of \code{var}.
