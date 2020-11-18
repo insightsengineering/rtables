@@ -13,8 +13,9 @@ setMethod("make_subset_expr", "VarLevelSplit",
 
 setMethod("make_subset_expr", "MultiVarSplit",
           function(spl, val) {
-    v = rawvalues(val)
-    as.expression(bquote(!is.na(.(a)), list(a = v)))
+    ## v = rawvalues(val)
+    ## as.expression(bquote(!is.na(.(a)), list(a = v)))
+    expression(TRUE)
 })
 
 setMethod("make_subset_expr", "AnalyzeVarSplit",

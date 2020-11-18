@@ -114,7 +114,8 @@ gen_rowvalues = function(dfpart,
                          func,
                          splextra,
                          takesdf = NULL,
-                         baselines, inclNAs,
+                         baselines,
+                         inclNAs,
                          last_splval = last_splval) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)

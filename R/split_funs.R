@@ -330,9 +330,11 @@ setMethod(".applysplit_datapart", "MultiVarSplit",
         incl <- seq_along(allvnms)
     }
     vars <- spl_payload(spl)[incl]
-    ret = lapply(vars, function(cl) {
-        df[!is.na(df[[cl]]),]
-    })
+    ## don't remove  nas
+    ## ret = lapply(vars, function(cl) {
+    ##     df[!is.na(df[[cl]]),]
+    ## })
+    ret <- rep(list(df), length(vars))
     names(ret) = vals
     ret
 })

@@ -1,3 +1,8 @@
+## rtables 0.3.2.17.9045
+
+* Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits
+* `analyze_colvars`'s `inclNAs` argument now respected.
+
 ## rtables 0.3.2.17.9044
 
 * Fix indent modifier propogation during tabulation
