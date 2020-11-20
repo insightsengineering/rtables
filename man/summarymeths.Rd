@@ -34,7 +34,7 @@ Summary method for elementary table
 \examples{
 library(dplyr)
 
-l <- basic_table() \%>\% 
+l <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     split_rows_by("RND") \%>\%
     analyze(c("Sepal.Length", "Petal.Length"), afun = list_wrap_x(summary) , format = "xx.xx")
