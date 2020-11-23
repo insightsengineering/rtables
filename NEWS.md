@@ -1,3 +1,14 @@
+## rtables 0.3.2.17.9045
+
+* Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits
+* `analyze_colvars`'s `inclNAs` argument now respected.
+
+## rtables 0.3.2.17.9044
+
+* Fix indent modifier propogation during tabulation
+* Fix indent calculation in `make_pagdf`
+* Add significant testing to ensure `make_pagdf` indent calculation remains correct
+
 ## rtables 0.3.2.17.9043
 
 * Rework how reference columns are handled so analyses which use `.in_ref_col` and `.ref_group` work correctly when custom splitting is used (including the provided combination-levels mechanism)

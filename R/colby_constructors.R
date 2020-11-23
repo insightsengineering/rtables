@@ -502,15 +502,14 @@ split_cols_by_cutfun = function(lyt, var,
                                 format = NULL,
                                 nested = TRUE,
                                 extra_args = list(),
-                                cumulative = FALSE,
-                                indent_mod = 0L) {
+                                cumulative = FALSE
+                                ) {
     spl = VarDynCutSplit(var, split_label,
                          cutfun = cutfun,
                          cutlabelfun = cutlabelfun,
                          split_format = format,
                          extra_args = extra_args,
                          cumulative = cumulative,
-                         indent_mod = indent_mod,
                          visible_label = FALSE)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)

@@ -114,7 +114,8 @@ gen_rowvalues = function(dfpart,
                          func,
                          splextra,
                          takesdf = NULL,
-                         baselines, inclNAs,
+                         baselines,
+                         inclNAs,
                          last_splval = last_splval) {
     colexprs = col_exprs(cinfo)
     colcounts = col_counts(cinfo)
@@ -312,17 +313,7 @@ gen_rowvalues = function(dfpart,
 
     imods <- rv1col@indent_mods
     unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
-    ##recycle formats
-    ## if(ncrows ==  1)  {
-    ##     return(list(rowconstr(val = unwrapped_vals[[1]],
-    ##                      cinfo = cinfo,
-    ##                      lev = lev,
-    ##                      label = labels,
-    ##                      name = nms, ##labels,
-    ##                      var = rowvar,
-    ##                      format = format,
-    ##                      indent_mod = imods[[1]] %||% 0L)))
-    ## }
+
     formatvec = NULL
     if(!is.null(format)) {
         if(is.function(format) )
@@ -758,9 +749,17 @@ recursive_applysplit = function( df,
 
 
     nonroot = lvl != 0L
+
+    if(is.na(make_lrow))
+        make_lrow = if(nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
+    ## never print an empty row label for root.
+    if(make_lrow && partlabel == "" && !nonroot)
+        make_lrow = FALSE
+
     if(length(splvec) == 0L) {
         kids = list()
         imod = 0L
+        spl = NULL
     } else {
         spl = splvec[[1]]
         splvec = splvec[-1]
@@ -774,7 +773,12 @@ recursive_applysplit = function( df,
                                 cindent_mod = cindent_mod, cextra_args = cextra_args, cvar =cvar,
                                 baselines = baselines, last_splval = last_splval,
                                 have_controws = nrow(ctab) > 0)
-        imod = indent_mod(spl)
+        ## if(make_lrow && indent_mod(spl) != 0 ) {
+        ##     kids = lapply(kids, `indent_mod<-`, value = 0L)
+        ##     imod = indent_mod(spl)
+        ## } else {
+            imod = 0L
+        ## }
     } ## end length(splvec)
 
     if(is.na(make_lrow))
