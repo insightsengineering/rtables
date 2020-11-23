@@ -39,10 +39,10 @@
 \alias{summarize_rows,ElementaryTable-method}
 \alias{summarize_rows,TableRow-method}
 \alias{summarize_rows,LabelRow-method}
-\alias{summarize_table,TableTree-method}
-\alias{summarize_table,ElementaryTable-method}
-\alias{summarize_table,TableRow-method}
-\alias{summarize_table,LabelRow-method}
+\alias{table_structure,TableTree-method}
+\alias{table_structure,ElementaryTable-method}
+\alias{table_structure,TableRow-method}
+\alias{table_structure,LabelRow-method}
 \alias{internal_methods}
 \alias{nrow,VTableTree-method}
 \alias{nrow,TableRow-method}
@@ -379,13 +379,13 @@ fix_dyncuts(spl, df)
 
 \S4method{summarize_rows}{LabelRow}(obj, depth = 0, indent = 0)
 
-\S4method{summarize_table}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{summarize_table}{ElementaryTable}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure}{ElementaryTable}(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{summarize_table}{TableRow}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure}{TableRow}(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{summarize_table}{LabelRow}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure}{LabelRow}(obj, depth = 0, indent = 0, print_indent = 0)
 
 \S4method{nrow}{VTableTree}(x)
 
@@ -920,7 +920,7 @@ spl_varnames(obj)
 
 \item{indent}{numeric(1).}
 
-\item{print_indent}{numeric(1).}
+\item{print_indent}{numeric(1)}
 
 \item{x}{The object.}
 

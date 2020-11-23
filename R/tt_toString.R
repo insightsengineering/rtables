@@ -614,3 +614,30 @@ spaces <- function(n) {
   strrep(" ", n)
 }
 
+
+#' Convert Matrix of Strings into a String with Aligned Columns
+#' 
+#' Note that this function is intended to print simple rectangular 
+#' matrices and not rtables.
+#' 
+#' @param mat a matrix of strings
+#' @param nheader number of header rows
+#' @param colsep string that separates the columns
+#' 
+#' @return a string
+#' 
+#' @examples 
+#' 
+#' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
+#' cat(rtables:::mat_as_string(mat)); cat("\n")
+mat_as_string <- function(mat, nheader = 1, colsep = "    ") {
+  colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
+  
+  rows_formatted <- apply(mat, 1, function(row) {
+    paste(unlist(mapply(padstr, row, colwidths, "left")), collapse = colsep)
+  })
+  
+  header_rows <- seq_len(nheader)
+  paste(c(rows_formatted[header_rows], strrep("-", nchar(rows_formatted[1])), rows_formatted[-header_rows]), collapse = "\n")
+}
+
