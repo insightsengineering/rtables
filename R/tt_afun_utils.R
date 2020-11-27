@@ -267,6 +267,14 @@ make_afun <- function(fun,
     fun_fnames <- names(formals(fun))
     takes_inrefcol <- ".in_ref_col" %in% fun_fnames
 
+    ## force EVERYTHING otherwise calling this within loops is the stuff of nightmares
+    force(.stats)
+    force(.formats)
+    force(.labels)
+    force(.indent_mods)
+    force(.ungroup_stats)
+    force(.null_ref_cells) ## this one probably isn't needed?
+
     ret <- function(x, ...) { ## remember formals get clobbered here
 
         ## this helper will grab the value and wrap it in a named list if
