@@ -224,3 +224,43 @@ test_that("row subsetting works on table with only content rows", {
     expect_identical(tab[1,1,drop = TRUE],
                      79*c(1, 1/sum(DM$ARM == "A: Drug X")))
 })
+
+
+test_that("calls to make_afun within loop work correctly", {
+
+    dummy_stats_function <- function(x) {
+        list("s_mean" = mean(x))
+    }
+
+    dummy_layout <- function(lyt, vv) {
+
+        for (i in seq_along(vv)) {
+
+            afun <- make_afun(
+                dummy_stats_function,
+      .stats = "s_mean",
+      .labels =  c(s_mean = vv[i]), #set labels here to match variable name
+      .formats = c(s_mean = "xx.x")
+      )
+
+            lyt <- analyze(
+                lyt,
+                vars = vv[i],
+                afun = afun,
+                show_labels = "visible"
+            )
+        }
+
+        lyt
+    }
+
+
+    tab <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        dummy_layout(vv = c("BMRKR1", "AGE")) %>%
+        build_table(DM)
+
+    expect_identical(row.names(tab),
+                     c("BMRKR1", "BMRKR1", "AGE", "AGE"))
+})
+

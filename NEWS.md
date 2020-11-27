@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9046
+
+* `make_afun` now `force()`s all customization arguments immediately, which prevents problems when called within loop/lapply constructs.
+
 ## rtables 0.3.2.17.9045
 
 * Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits
