@@ -311,6 +311,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     j
 }
 
+#' @noRd
 #' @param spanfunc is the thing that gets the counts after subsetting
 ## should be n_leaves for a column tree structure and NROW for
 ## a table tree

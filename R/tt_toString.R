@@ -533,7 +533,7 @@ is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
 #' @param x a character vector
 #' @param indent a vector of length \code{length(x)} with non-negative integers
 #' @param incr non-negative integer: number of spaces per indent level
-#' @param include_newline boolean: should \code{\n} also be indented
+#' @param include_newline boolean: should newlines also be indented
 #' 
 #' @export
 #' 

@@ -511,6 +511,7 @@ gen_rowvalues = function(dfpart,
     ret
 }
 
+#' @noRd
 #' @param \dots ALL arguments to recurse_applysplit, methods may only use some of them.
 #' @return list of children to place at this level
 #'
