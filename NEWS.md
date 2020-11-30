@@ -1,4 +1,4 @@
-## rtables 0.3.2.17.9046
+## rtables 0.3.3
 
 * `make_afun` now `force()`s all customization arguments immediately, which prevents problems when called within loop/lapply constructs.
 
