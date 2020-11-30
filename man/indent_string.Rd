@@ -13,7 +13,7 @@ indent_string(x, indent = 0, incr = 2, including_newline = TRUE)
 
 \item{incr}{non-negative integer: number of spaces per indent level}
 
-\item{include_newline}{boolean: should \code{\n} also be indented}
+\item{including_newline}{boolean: should newlines also be indented}
 }
 \description{
 Used in rtables to indent row names for the ASCII output.
