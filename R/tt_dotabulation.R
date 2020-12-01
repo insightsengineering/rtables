@@ -1106,12 +1106,10 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
 
-    ## nm = unlist(tail(rawvalues(pos), 1)) %||% ""
-    nm = unlist(tail(value_names(pos), 1)) %||% ""
-    lab = unlist(tail(value_labels(pos), 1)) %||% ""
 
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
+        nm = unlist(tail(value_names(pos), 1)) %||% ""
         LayoutColLeaf(lev = lvl - 1L,
                       label = label,
                       tpos = pos,
@@ -1119,6 +1117,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       )
     } else {
         spl = splvec[[lvl]]
+        nm = if(is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos), 1))
         rawpart = do_split(spl,df, trim =FALSE )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]

@@ -526,10 +526,14 @@ remove_split_levels = function(excl) {
 keep_split_levels = function(only, reorder = TRUE) {
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
+        varvec = df[[var]]
+        if(is.factor(varvec) && !all(only %in% levels(varvec)))
+            stop("Attempted to keep invalid factor level(s) in split ", setdiff(only, levels(varvec)))
         df2 = df[df[[var]] %in% only,]
         if(reorder)
             df2[[var]] = factor(df2[[var]], levels = only)
-        .apply_split_inner(spl, df2, vals = vals,
+        spl_child_order(spl) <- only
+        .apply_split_inner(spl, df2, vals = only,
                            labels = labels,
                            trim = trim)
     }

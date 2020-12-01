@@ -633,9 +633,9 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
     stopifnot(are(.list, class(x)))
  ##   chk_cbindable(x,y)
     if(nrow(x) == 0 &&
-       all(vapply(.list, nrow) == 0)) {
-        return(x) ## this needs testing...
-
+       all(vapply(.list, nrow, 1L) == 0)) {
+        col_info(x) = cinfo
+        return(x) ## this needs testing... I was right, it did #136
     }
     kids = lapply(seq_along(tree_children(x)),
                   function(i) {
@@ -699,8 +699,8 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
         if(length(vy) > 0) {
             vals[strt:end] <- vy
             cspans[strt:end] <- cspy
-            lastval <- tail(vy, 1)
-            lastspn <- tail(cspy, 1)
+            lastval <- vy[[length(vy)]]
+            lastspn <- cspy[[length(cspy)]]
         } else {
             ## lastval stays the same
             lastspn <- cspans[strtncols[i] - 1] ## already updated
