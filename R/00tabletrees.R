@@ -1027,7 +1027,8 @@ setClass("InstantiatedColumnInfo",
                         counts = "integer",
                         total_count = "integer",
                         display_columncounts = "logical",
-                        columncount_format = "FormatSpec")
+                        columncount_format = "FormatSpec",
+                        top_left = "character")
          )
 
 #' @rdname cinfo
@@ -1045,7 +1046,8 @@ InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
                                   cnts = NA_integer_,
                                   total_cnt = NA_integer_,
                                   dispcounts = FALSE,
-                                  countformat = "(N=xx)") {
+                                  countformat = "(N=xx)",
+                                  topleft = character()) {
     leaves = collect_leaves(treelyt)
     nl = length(leaves)
     extras = rep(extras, length.out = nl)
@@ -1069,7 +1071,8 @@ InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
         counts = cnts,
         total_count = total_cnt,
         display_columncounts = dispcounts,
-        columncount_format = countformat)
+        columncount_format = countformat,
+        top_left = topleft)
 }
 
 
@@ -1466,13 +1469,16 @@ PreDataRowLayout = function(x = SplitVector(),
 
 setClass("PreDataTableLayouts",
          representation(row_layout = "PreDataRowLayout",
-                        col_layout = "PreDataColLayout"))
+                        col_layout = "PreDataColLayout",
+                        top_left = "character"))
 
 PreDataTableLayouts = function(rlayout = PreDataRowLayout(),
-                               clayout = PreDataColLayout()) {
+                               clayout = PreDataColLayout(),
+                               topleft = character()) {
     new("PreDataTableLayouts",
         row_layout = rlayout,
-        col_layout = clayout)
+        col_layout = clayout,
+        top_left = topleft)
 }
 
 

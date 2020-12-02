@@ -902,6 +902,7 @@ recursive_applysplit = function( df,
 build_table = function(lyt, df,
                        col_counts = NULL,
                        col_total = nrow(df),
+                       topleft = NULL,
                        ...) {
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
@@ -922,7 +923,8 @@ build_table = function(lyt, df,
     rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts,
-                           total = col_total)
+                           total = col_total,
+                           topleft)
     if(!is.null(col_counts))
         disp_ccounts(cinfo) = TRUE
 
@@ -974,6 +976,10 @@ build_table = function(lyt, df,
                         cinfo = cinfo,
                         format = obj_format(rtspl))
     }
+
+    ## this is where the top_left check lives right now. refactor later maybe
+    ## but now just call it so the error gets thrown when I want it to
+    unused <- matrix_form(tab)
     tab
 }
 

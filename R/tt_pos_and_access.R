@@ -505,7 +505,7 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 
 
 ## label rows ARE included in the count
-subset_by_rownum = function(tt, i, ... ) {
+subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter = 0
     nr = nrow(tt)
@@ -578,7 +578,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
     j = .j_to_posj(j, ncol(x))
-    x[i,j, ..., drop = drop]
+    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -587,7 +587,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
-    x[i,j, ..., drop = drop]
+    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -597,7 +597,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
     i = .j_to_posj(i, nrow(x))
-    x[i,j, ..., drop = drop]
+    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -606,7 +606,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j = .j_to_posj(j, ncol(x))
-    x[i,j, ..., drop = drop]
+    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -615,7 +615,7 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -624,7 +624,7 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
 setMethod("[", c("VTableTree", "missing", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 
@@ -635,7 +635,7 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
     j <- .colpath_to_j(j, coltree(x))
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 #' @exportMethod [
@@ -643,7 +643,7 @@ setMethod("[", c("VTableTree", "ANY", "character"),
 setMethod("[", c("VTableTree", "character", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
@@ -653,7 +653,7 @@ setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
     j <- .colpath_to_j(j, coltree(x))
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
 })
 
 
@@ -663,34 +663,47 @@ setMethod("[", c("VTableTree", "character", "character"),
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
-    x[i,j, drop = drop]
+    x[i,j, drop = drop, keep_topleft = keep_topleft]
 })
 
 
 #' @exportMethod [
-#' @param drop logical. Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param keep_topleft logical(1). Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
 #' @rdname brackets
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
-    nr = nrow(x)
-    nc = ncol(x)
-    i = .j_to_posj(i, nr)
-    j = .j_to_posj(j, nc)
+    ## have to do it this way because we can't add an argument since we don't
+    ## own the generic declaration
+    keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not presesnt
+    if(is.null(keep_topleft))
+        keep_topleft <- NA
+
+    nr <- nrow(x)
+    nc <- ncol(x)
+    i <- .j_to_posj(i, nr)
+    j <- .j_to_posj(j, nc)
 
     if(!missing(j) && length(j) < nc)
-        x = subset_cols(x, j)
-    if(!missing(i) && length(i) < nr)
-        x = subset_by_rownum(x, i)
+        x <- subset_cols(x, j)
+    if(!missing(i) && length(i) < nr) {
+        x <- subset_by_rownum(x, i)
+        keep_topleft <- isTRUE(keep_topleft)
+    } else {
+        keep_topleft <- !identical(FALSE, keep_topleft)
+    }
     if(length(j) == 1L &&
        length(i) == 1L &&
        drop) {
-        rw = collect_leaves(x, TRUE, TRUE)[[1]]
+        rw <- collect_leaves(x, TRUE, TRUE)[[1]]
         if(is(rw, "LabelRow"))
-            x = NULL
+            x <- NULL
         else
-            x = row_values(rw)[[1]]
+            x <- row_values(rw)[[1]]
     }
+    if(!keep_topleft)
+        top_left(x) <- character()
     x
 })
 

@@ -13,7 +13,8 @@ InstantiatedColumnInfo(
   cnts = NA_integer_,
   total_cnt = NA_integer_,
   dispcounts = FALSE,
-  countformat = "(N=xx)"
+  countformat = "(N=xx)",
+  topleft = character()
 )
 }
 \arguments{

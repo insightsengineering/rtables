@@ -165,11 +165,13 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 create_colinfo = function(lyt, df, rtpos = TreePos(),
                           counts = NULL,
-                          total = NULL) {
+                          total = NULL,
+                          topleft = NULL) {
     ## this will work whether clayout is pre or post
     ## data
     clayout = clayout(lyt)
-
+    if(is.null(topleft))
+        topleft = top_left(lyt)
     ctree = coltree(clayout, df = df, rtpos = rtpos)
 
     cexprs = make_col_subsets(ctree, df)
@@ -218,7 +220,8 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                            cnts = counts,
                            dispcounts = disp_ccounts(lyt),
                            countformat = format,
-                           total_cnt = total)
+                           total_cnt = total,
+                           topleft = topleft)
 
 }
 
