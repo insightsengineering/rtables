@@ -4,7 +4,7 @@
 #' Criteria functions (and constructors thereof) for trimming and pruning tables.
 #'
 #' @inheritParams gen_args
-#' 
+#'
 #' @details
 #'
 #' \code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning)
@@ -33,7 +33,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
     rows = collect_leaves(tt, TRUE, TRUE)
     torm = vapply(rows, criteria,
                   NA, USE.NAMES = FALSE)
-    tt[!torm,]
+    tt[!torm, , keep_topleft = TRUE]
 }
 
 #' @rdname trim_prune_funs

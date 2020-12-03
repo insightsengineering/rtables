@@ -28,9 +28,10 @@ NULL
 #' @param label character(1). A label (not to be confused with the name) for the object/structure.
 #' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
+#' @param topleft character. Override values for the "top left" material to be displayed during printing.
 #' @rdname gen_args
 gen_args <- function(df, spl, pos, tt, tr, verbose, colwidths, obj, x,
-                     value, object, path, label, visible_label, cvar, ...) NULL
+                     value, object, path, label, visible_label, cvar, topleft, ...) NULL
 
 
 
@@ -71,8 +72,6 @@ gen_args <- function(df, spl, pos, tt, tr, verbose, colwidths, obj, x,
 #' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
-
-
 #' @inheritParams gen_args
 #' @family conventions
 lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
@@ -81,7 +80,7 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
                      incl_all, indent_mod, show_labels, visible_label, var_labels, cvar,
-                     table_names) NULL
+                     table_names, topleft) NULL
 
 
 #' Constructor Arg Conventions

@@ -85,6 +85,46 @@ pagdfrow = function(row,
                stringsAsFactors = FALSE)
 }
 
+
+col_dfrow = function(col,
+                    nm = obj_name(col),
+                    lab = obj_label(col),
+                    cnum,
+                    pth = NULL,
+                    sibpos = NA_integer_,
+                    nsibs = NA_integer_,
+                    leaf_indices = cnum,
+                    span = length(leaf_indices)
+                    ) {
+    if(is.null(pth))
+        pth <- pos_to_path(tree_pos(col))
+    data.frame(stringsAsFactors = FALSE,
+               name = nm,
+               label = lab,
+               abs_pos = cnum,
+               path = I(list(pth)),
+               pos_in_siblings = sibpos,
+               n_siblings = nsibs,
+               leaf_indices = I(list(leaf_indices)),
+               total_span = span)
+}
+
+
+pos_to_path <- function(pos) {
+    spls <- pos_splits(pos)
+    vals <- pos_splvals(pos)
+
+    path <- "root"
+    for(i in seq_along(spls)) {
+        path <- c(path,
+                  obj_name(spls[[i]]),
+                  rawvalues(vals[[i]]))
+    }
+    path
+}
+
+
+
 #' Make layout summary  data.frame for use during pagination
 #' @inheritParams gen_args
 #' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
@@ -102,8 +142,8 @@ pagdfrow = function(row,
 #'
 #' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
 #' @export
-#' @rdname make_pagdf
-setGeneric("make_pagdf", function(tt, colwidths = NULL, visible_only = TRUE,
+#' @rdname make_row_df
+setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                   rownum = 0,
                                   indent = 0L,
                                   path = character(),
@@ -111,11 +151,11 @@ setGeneric("make_pagdf", function(tt, colwidths = NULL, visible_only = TRUE,
                                   repr_ext = 0L,
                                   repr_inds = integer(),
                                   sibpos = NA_integer_,
-                                  nsibs = NA_integer_) standardGeneric("make_pagdf"))
+                                  nsibs = NA_integer_) standardGeneric("make_row_df"))
 
-#' @exportMethod make_pagdf
-#' @rdname make_pagdf
-setMethod("make_pagdf", "VTableTree",
+#' @exportMethod make_row_df
+#' @rdname make_row_df
+setMethod("make_row_df", "VTableTree",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
                    indent = 0L,
@@ -150,7 +190,7 @@ setMethod("make_pagdf", "VTableTree",
     }
     if(labelrow_visible(tt)) {
         lr = tt_labelrow(tt)
-        newdf <- make_pagdf(lr,
+        newdf <- make_row_df(lr,
                             colwidths= colwidths,
                             visible_only = visible_only,
                             rownum = rownum,
@@ -170,7 +210,7 @@ setMethod("make_pagdf", "VTableTree",
 
     if(NROW(content_table(tt)) > 0) {
         cind <- indent + indent_mod(content_table(tt))
-        contdf <-  make_pagdf(content_table(tt),
+        contdf <-  make_row_df(content_table(tt),
                               colwidths= colwidths,
                               visible_only = visible_only,
                               rownum = rownum,
@@ -197,7 +237,7 @@ setMethod("make_pagdf", "VTableTree",
     newnsibs <- length(allkids)
     for(i in seq_along(allkids)) {
         kid <- allkids[[i]]
-        kiddfs <- make_pagdf(kid,
+        kiddfs <- make_row_df(kid,
                             colwidths= colwidths,
                             visible_only = visible_only,
                             rownum = force(rownum),
@@ -218,9 +258,9 @@ setMethod("make_pagdf", "VTableTree",
     do.call(rbind, ret)
 })
 
-#' @exportMethod make_pagdf
-#' @rdname make_pagdf
-setMethod("make_pagdf", "TableRow",
+#' @exportMethod make_row_df
+#' @rdname make_row_df
+setMethod("make_row_df", "TableRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
                    indent = 0L,
@@ -243,9 +283,9 @@ setMethod("make_pagdf", "TableRow",
     ret
 })
 
-#' @exportMethod make_pagdf
-#' @rdname make_pagdf
-setMethod("make_pagdf", "LabelRow",
+#' @exportMethod make_row_df
+#' @rdname make_row_df
+setMethod("make_row_df", "LabelRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
                    indent = 0L,
@@ -270,104 +310,79 @@ setMethod("make_pagdf", "LabelRow",
     ret
 })
 
-## make_pagdf = function(tt, colwidths = NULL, visible_only = TRUE) {
-##     rownum = 0
-##     indent = 0L
+
+setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
+                                   colnum = 0L,
+                                   sibpos = NA_integer_,
+                                   nsibs = NA_integer_) standardGeneric("inner_col_df"))
 
 
-##     pag_df = function(tree, path, incontent = FALSE,
-##                       cwidths,
-##                       repr_ext = 0L,
-##                       repr_inds = integer(),
-##                       indent = 0L) {
-##         ret = list()
-##         if(labelrow_visible(tree)) {
-##             lr = tt_labelrow(tree)
-##             rownum <<- rownum + 1L
-##             ret  =  c(ret,
-##                       list(pagdfrow(row = lr,
-##                                     rnum = rownum,
-##                                     nm = obj_name(tree),
-##                                     pth = path,
-##                                     colwidths = cwidths,
-##                                     repext = repr_ext,
-##                                     repind = list(repr_inds),
-##                                     indent = indent)))
-##             repr_ext = repr_ext + 1L
-##             repr_inds = c(repr_inds, rownum)
-##             indent <- indent + 1L
-##         } else if (!visible_only) {
-##             ret <- c(ret,
-##                      list(pagdfrow(rnum = NA,
-##                                    nm = obj_name(tree),
-##                                    lab = "",
-##                                    pth = path,
-##                                    colwidths = cwidths,
-##                                    repext = repr_ext,
-##                                    repind = list(repr_inds),
-##                                    extent = 0,
-##                                    indent = indent,
-##                                    rclass = class(tree))))
+make_col_df <-    function(ct,
+                           colwidths = propose_column_widths(ct),
+                           visible_only = TRUE,
+                           colnum  = 1L,
+                           sibpos = NA_integer_,
+                           nsubs = NA_integer_) {
+    rows <- inner_col_df(coltree(ct),
+                 colwidths = colwidths,
+                 visible_only = visible_only,
+                 colnum = colnum,
+                 sibpos = 1,
+                 nsibs = 1) ## nsiblings includes current so 1 means "only child"
+    do.call(rbind, rows)
+}
 
-##         }
-##         if(is(tree, "TableTree") &&
-##            nrow(content_table(tree)) > 0) {
-##             ctab = content_table(tree)
-##             ## already put rownum in there if necessary
-##             rnbef = rownum + 1L
-##             crows = pag_df(ctab,
-##                            path = c(path, "@content"),
-##                            cwidths = cwidths,
-##                            repr_ext = repr_ext,
-##                            repr_inds = repr_inds,
-##                            indent = indent)
-##             if(is(crows, "data.frame"))
-##                 crows = list(crows)
-##             ret = c(ret, crows)
-##             repr_ext = repr_ext + nlines(ctab)
-##             repr_inds = c(repr_inds, rnbef:rownum)
-##             indent = indent + 1L
-##         }
-##         kids = tree_children(tree)
-##         nk = length(kids)
-##         for(i in seq_along(kids)) {
-##             k = kids[[i]]
-##             stopifnot(identical(unname(obj_name(k)), names(kids)[i]))
-##             if(is(k, "TableRow")) {
-##                 rownum <<- rownum + 1
-##                 ret = c(ret, list(pagdfrow(k, rnum = rownum,
-##                                          colwidths = cwidths,
-##                                          sibpos = i,
-##                                          nsibs = nk,
-##                                          pth = c(path, obj_name(k)),
-##                                          repext = repr_ext,
-##                                          repind = repr_inds,
-##                                          indent = indent)))
-##             } else {
-##                newrows = pag_df(k, path = c(path, obj_name(k)),
-##                                  cwidths = cwidths, repr_ext = repr_ext,
-##                                  repr_inds = repr_inds,
-##                                  indent = indent)
-##                 if(is(newrows, "data.frame")) {
-##                     newrows = list(newrows)
-##                 }
-##                 ret = c(ret, newrows)
-##             }
-##         }
-##         ret
-
-##     }
-##     rws = pag_df(tt, path = "root", cwidths = colwidths)
-##     do.call(rbind.data.frame, rws)
-## }
+setMethod("inner_col_df", "LayoutColLeaf",
+          function(ct, colwidths, visible_only,
+                   colnum,
+                   sibpos,
+                   nsibs) {
+    list(col_dfrow(col = ct,
+              cnum = colnum,
+              sibpos = sibpos,
+              nsibs = nsibs,
+              leaf_indices = colnum))
+})
 
 
+setMethod("inner_col_df", "LayoutColTree",
+          function(ct, colwidths, visible_only,
+                   colnum,
+                   sibpos,
+                   nsibs) {
 
+    print(paste("in here", colnum))
+    kids <- tree_children(ct)
+    ret <- vector("list", length(kids))
+    for(i in seq_along(kids)) {
+        k <- kids[[i]]
+        nleaves <- length(collect_leaves(k))
+        newrows <- do.call(rbind,
+                           inner_col_df(k,
+                                        colnum = colnum,
+                                        sibpos = i,
+                                        nsibs = length(kids),
+                                        visible_only = visible_only))
+        colnum <- max(newrows$abs_pos, colnum, na.rm = TRUE) + 1
+        ret[[i]] = newrows
+    }
 
+    if(!visible_only) {
+        allindices <- unlist(lapply(ret, function(df) df$abs_pos[!is.na(df$abs_pos)]))
+        thisone  <- list(col_dfrow(col = ct,
+                                   cnum = NA_integer_,
+                                   leaf_indices = allindices,
+                                   sibpos = sibpos,
+                                   nsibs = nsibs,
+                                   pth = c(pos_to_path(tree_pos(ct)), obj_name(ct))))
+        print(thisone)
+        ret <- c(thisone, ret)
+    }
 
+    ret
+})
 
-
-make_pagdf_old = function(tt, colwidths = NULL, visible_only = TRUE) {
+make_row_df_old = function(tt, colwidths = NULL, visible_only = TRUE) {
     rownum = 0
     indent = 0L
 
@@ -547,7 +562,7 @@ pag_tt_indices = function(tt, lpp = 15,
     hlines = nlines(col_info(tt))
     ## row lines per page
     rlpp = lpp - hlines
-    pagdf = make_pagdf(tt, colwidths)
+    pagdf = make_row_df(tt, colwidths)
 
 
     start = 1
@@ -581,5 +596,5 @@ paginate_table = function(tt, lpp = 15,
                           nosplitin = nosplitin,
                           colwidths = colwidths,
                           verbose = verbose)
-    lapply(inds, function(x) tt[x,])
+    lapply(inds, function(x) tt[x,,keep_topleft = TRUE])
 }
