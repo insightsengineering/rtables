@@ -89,10 +89,10 @@ tbl[2:4, in_context = TRUE]
 
 **This is not final**
 
-We can get an idea about the tree structure of the table using the `make_pagedf` function.
+We can get an idea about the tree structure of the table using the `make_row_df` function.
 
 ```{r}
-make_pagdf(tbl) %>%
+make_row_df(tbl) %>%
   select(label, name, abs_rownumber, path, node_class)
 #summary(tbl)
 ```

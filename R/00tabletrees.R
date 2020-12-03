@@ -1018,6 +1018,7 @@ LayoutRowLeaf = function(lev = 0L, label = "",
 ## once its applied to the data.
 
 #' InstantiatedColumnInfo
+#' @inheritParams gen_args
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
 setClass("InstantiatedColumnInfo",

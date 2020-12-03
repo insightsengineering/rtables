@@ -160,7 +160,8 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' @param x TableTree
 #' @param i index
 #' @param j index
-#' @param ... ignored
+#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
 #' @param value Replacement value (list, TableRow, or TableTree)
 #' @exportMethod [<-
 #' @rdname brackets
@@ -578,7 +579,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
     j = .j_to_posj(j, ncol(x))
-    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i,j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -587,7 +588,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
-    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i,j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -597,7 +598,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
     i = .j_to_posj(i, nrow(x))
-    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i,j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -606,7 +607,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j = .j_to_posj(j, ncol(x))
-    x[i,j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i,j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -615,7 +616,7 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
-    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i = i,j = j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -624,7 +625,7 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
 setMethod("[", c("VTableTree", "missing", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
-    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i = i,j = j, ..., drop = drop]
 })
 
 
@@ -635,7 +636,7 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
     j <- .colpath_to_j(j, coltree(x))
-    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i = i,j = j, ..., drop = drop]
 })
 
 #' @exportMethod [
@@ -643,7 +644,7 @@ setMethod("[", c("VTableTree", "ANY", "character"),
 setMethod("[", c("VTableTree", "character", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
-    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i = i,j = j, ..., drop = drop]
 })
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
@@ -653,7 +654,7 @@ setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
     j <- .colpath_to_j(j, coltree(x))
-    x[i = i,j = j, ..., drop = drop, keep_topleft = keep_topleft]
+    x[i = i,j = j, ..., drop = drop]
 })
 
 
@@ -663,13 +664,11 @@ setMethod("[", c("VTableTree", "character", "character"),
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
-    x[i,j, drop = drop, keep_topleft = keep_topleft]
+    x[i,j, drop = drop]
 })
 
 
 #' @exportMethod [
-#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
-#' @param keep_topleft logical(1). Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
 #' @rdname brackets
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
@@ -702,7 +701,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
         else
             x <- row_values(rw)[[1]]
     }
-    if(!keep_topleft)
+    if(!drop && !keep_topleft)
         top_left(x) <- character()
     x
 })

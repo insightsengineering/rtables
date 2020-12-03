@@ -31,6 +31,8 @@ InstantiatedColumnInfo(
 \item{dispcounts}{logical. Should the counts be displayed as header info when the associated table is printed.}
 
 \item{countformat}{string. Format for the counts if thtey are displayed}
+
+\item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 }
 \description{
 InstantiatedColumnInfo

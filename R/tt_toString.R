@@ -289,7 +289,7 @@ matrix_form <- function(tt) {
         tl <- c(tl, rep("", nli - lentl))
 
     ##list(body = cbind("", body), span = cbind(1, span))
-    list(body = cbind(tl, body), span = cbind(1, span))
+    list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span))
 }
 
 

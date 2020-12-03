@@ -1447,3 +1447,33 @@ list_wrap_df = function(f) {
 #'   build_table(DM)
 #'
 basic_table <- function() NULL
+
+
+
+#' Append a description to the 'top-left' materials for the layout
+#' @inheritParams lyt_args
+#' @param newlines character. The new line(s) to be added to the materials
+#' @note Currently, where in the construction of the layout this is called
+#' makes no difference, as it is indepenedent of the actual splitting keywords.
+#' This may change in the future.
+#' @note This function is experimental, its name and the details of
+#' its behavior are subject to change in future versions.
+#'
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   split_rows_by("RACE") %>%
+#'   append_topleft("Ethnicity") %>%
+#'   analyze("AGE", mean) %>%
+#'   append_topleft("  Age")
+#' library(dplyr)
+#' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
+#' build_table(lyt, DM2)
+#' @export
+append_topleft <- function(lyt, newlines) {
+    stopifnot(is(lyt, "PreDataTableLayouts"),
+              is(newlines, "character"))
+    lyt@top_left <- c(lyt@top_left, newlines)
+    lyt
+}

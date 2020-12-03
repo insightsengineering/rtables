@@ -14,7 +14,7 @@ test_that("indent modifiers propogated from analyze calls properly", {
 })
 
 
-test_that("indents are correct in make_pagdf", {
+test_that("indents are correct in make_row_df", {
     l1 <- basic_table() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -26,7 +26,7 @@ test_that("indents are correct in make_pagdf", {
                 format = "xx.xx")
 
     t1 <- build_table(l1, rawdat)
-    pgdf1 <- make_pagdf(t1)
+    pgdf1 <- make_row_df(t1)
     expect_identical(rep(c(0, 1, 2, 2, 1, 2, 2), 2),
                      pgdf1$indent)
 
@@ -34,7 +34,7 @@ test_that("indents are correct in make_pagdf", {
                          afun = range, format = "xx - xx")
 
     t2 <- build_table(l2, rawdat)
-    pgdf2 <- make_pagdf(t2)
+    pgdf2 <- make_row_df(t2)
     expect_identical(rep(c(0, 1, 2, 3, 3, 2, 3, 1, 2, 3, 3, 2, 3), 2),
                      pgdf2$indent)
 
@@ -51,7 +51,7 @@ test_that("indents are correct in make_pagdf", {
                 format = "xx.xx", indent_mod = -1)
 
     t3 <- build_table(l3, rawdat)
-    pgdf3 <- make_pagdf(t3)
+    pgdf3 <- make_row_df(t3)
     expect_identical(rep(c(0, 1, 1, 1, 1, 1, 1), 2),
                      pgdf3$indent)
 
@@ -66,7 +66,7 @@ test_that("indents are correct in make_pagdf", {
                                                                median = median(x)),
                 format = "xx.xx", indent_mod = 1)
     t4 <- build_table(l4, rawdat)
-    pagdf4 <- make_pagdf(t4)
+    pagdf4 <- make_row_df(t4)
     expect_identical(rep(c(0, 0, 2, 2, 0, 2, 2), 2),
                      pagdf4$indent)
 
@@ -81,7 +81,7 @@ test_that("indents are correct in make_pagdf", {
                                                                median = median(x)),
                 format = "xx.xx", indent_mod = 1)
     t5 <- build_table(l5, rawdat)
-    pgdf5 <- make_pagdf(t5)
+    pgdf5 <- make_row_df(t5)
     expect_identical(rep(c(2, 1, 3, 3, 1, 3, 3), 2),
                      pgdf5$indent)
 
@@ -97,7 +97,7 @@ test_that("indents are correct in make_pagdf", {
                                                                median = median(x)),
                 format = "xx.xx", indent_mod = 0)
     t6 <- build_table(l6, rawdat)
-    pgdf6 <- make_pagdf(t6)
+    pgdf6 <- make_row_df(t6)
     expect_identical(c(0, rep(c( 1, 2, 3, 3, 2, 3, 3), 2)),
                      pgdf6$indent)
 
@@ -119,7 +119,7 @@ test_that("indents are correct in make_pagdf", {
                                                                median = median(x)),
                 format = "xx.xx", indent_mod = 0)
     t7 <- build_table(l7, rawdat)
-    pgdf7 <- make_pagdf(t7)
+    pgdf7 <- make_row_df(t7)
     expect_identical(c(2, rep(c( 1, 3, 4, 4, 3, 4, 4), 2)),
                      pgdf7$indent)
 })

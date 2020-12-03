@@ -1799,15 +1799,6 @@ setMethod("spl_varnames", "MultiVarSplit",
           function(obj) obj@var_names)
 
 
-
-append_topleft <- function(lyt, newlines) {
-    stopifnot(is(lyt, "PreDataTableLayouts"),
-              is(newlines, "character"))
-    lyt@top_left <- c(lyt@top_left, newlines)
-    lyt
-}
-
-
 #' Top Left Material (Experimental)
 #' @inheritParams gen_args
 #' @description A TableTree object can have \emph{top left material} which is a sequence

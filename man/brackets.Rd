@@ -49,13 +49,11 @@
 
 \item{j}{index}
 
-\item{...}{ignored}
+\item{\dots}{Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.}
 
 \item{value}{Replacement value (list, TableRow, or TableTree)}
 
 \item{drop}{logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}}
-
-\item{keep_topleft}{logical(1). Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.}
 }
 \description{
 retrieve and assign elements of a TableTree

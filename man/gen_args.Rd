@@ -20,6 +20,7 @@ gen_args(
   label,
   visible_label,
   cvar,
+  topleft,
   ...
 )
 }
@@ -54,9 +55,9 @@ gen_args(
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
-\item{\dots}{Passed on to metthods or tabulation functions.}
-
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+
+\item{\dots}{Passed on to metthods or tabulation functions.}
 }
 \description{
 General Argument Conventions
