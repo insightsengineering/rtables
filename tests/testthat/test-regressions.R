@@ -235,3 +235,10 @@ test_that("keeping non-existent levels doesn't break internal machinery", {
     ## because its a factor and "ABC" isn't a real level
     expect_error(build_table(lyt, DM))
 })
+
+test_that("add_overall_col with no col splits works", {
+
+    lyt <- basic_table() %>% add_overall_col("whaaat") %>% analyze("AGE", mean)
+    tab <- build_table(lyt, DM) ## previously error
+    expect_identical(names(tab), "whaaat")
+})

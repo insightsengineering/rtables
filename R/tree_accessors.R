@@ -167,10 +167,10 @@ setMethod("next_cpos", "PreDataTableLayouts",
 #' @rdname int_methods
 setMethod("next_cpos", "PreDataColLayout",
           function(obj, nested) {
-    if(!nested)
-        length(obj) + 1L
-    else
+    if(nested || length(obj[[length(obj)]]) == 0)
         length(obj)
+    else
+        length(obj) + 1L
 })
 #' @rdname int_methods
 setMethod("next_cpos", "ANY", function(obj, nested) 1L)
