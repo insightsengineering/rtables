@@ -1,7 +1,12 @@
+## rtables 0.3.2.17.9049
+
+* `rbind`/`cbind_rtables` throw errors on non-compatible top-left material
+* `cbind_tables` now correctly checks all things being cbound
+
 ## rtables 0.3.2.17.9048
 
 * **EXPERIMENTAL** support for top-left materials
-* Names and behavior, particular of `append_topleft` subject to change.
+* Names and behavior, particular of `append_topleft` subject to change
 
 ## rtables 0.3.2.17.9047
 

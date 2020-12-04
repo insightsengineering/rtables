@@ -142,59 +142,6 @@ test_that("rcell on CellValue overrides attrs as necessary", {
 })
 
 
-test_that("cbind_rtables works", {
-
-    x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
-
-    y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
-
-    tab <- cbind_rtables(x, y)
-    expect_equal(ncol(tab), 3)
-    expect_equal(ncol(rtables:::tt_labelrow(tab)), 3)
-    expect_equal(nrow(tab), 2)
-})
-
-
-test_that("cbind_rtables works with 3 tables", {
-
-    tab1 <- rtable(
-        header = "a",
-        rrow("one", 1)
-    )
-    tab2 <- rtable(
-        header = "b",
-        rrow("one", 2)
-    )
-    tab3 <- rtable(
-        header = "c",
-        rrow("one", 3)
-    )
-
-    newtab <- cbind_rtables(tab1, tab2, tab3)
-    expect_equal(ncol(newtab), 3)
-    expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
-
-})
-
-
-test_that("cell formats not dropped when cbinding", {
-
-    tab1 <- rtable(
-        header = "a",
-        rrow("one", rcell(1.1111111, format = "xx.x"))
-    )
-    tab2 <- rtable(
-        header = "b",
-        rrow("one", rcell(2.2222222, format = "xx.xxxx"))
-    )
-
-    cbtab <- cbind_rtables(tab1, tab2)
-    expect_identical(rtables:::value_formats(tree_children(cbtab)[[1]]),
-                     list("xx.x", "xx.xxxx"))
-
-
-})
-
 test_that("cell-level formats are retained when column subsetting", {
  tbl <- rtable(
      header = c("Treatement\nN=100", "Comparison\nN=300"),

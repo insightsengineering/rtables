@@ -12,7 +12,17 @@ append_topleft(lyt, newlines)
 \item{newlines}{character. The new line(s) to be added to the materials}
 }
 \description{
-Append a description to the 'top-left' materials for the layout
+This function \emph{adds} \code{newlines} to the current
+set of "top-left materials".
+}
+\details{
+Adds \code{newlines} to the set of strings representing the 'top-left'
+materials declared in the layout (the content displayed to the left of
+the column labels when the resulting tables are printed).
+
+Top-left material strings are stored and then displayed \emph{exactly as is},
+no structure or indenting is applied to them either wheyn they are added
+or when they are displayed.
 }
 \note{
 Currently, where in the construction of the layout this is called
@@ -33,4 +43,7 @@ lyt <- basic_table() \%>\%
 library(dplyr)
 DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
 build_table(lyt, DM2)
+}
+\seealso{
+top_left
 }
