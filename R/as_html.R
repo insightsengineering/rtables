@@ -30,7 +30,9 @@
 #' 
 #' as_html(tbl, class_td = "aaa")
 #' 
+#' \dontrun{
 #' Viewer(tbl)
+#' }
 as_html <- function(x, 
                     width = NULL,
                     class_table = "table table-condensed table-hover",
