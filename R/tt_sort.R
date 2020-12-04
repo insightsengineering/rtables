@@ -59,6 +59,11 @@ cont_n_onecol <- function(j) {
 #' @export
 sort_at_path <- function(tt, path, scorefun, decreasing = NA, na.pos = c("omit", "last", "first")) {
 
+    # If the table is empty, nothing can be sorted, so just return it directly.  
+    if (is.null(tt)) {
+      return(tt)
+    }
+  
     ## XXX hacky fix this!!!
     if(identical(obj_name(tt), path[1]))
         path <- path[-1]

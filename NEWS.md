@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9050
+
+* `sort_at_path` just returns empty input tables instead of failing
+
 ## rtables 0.3.2.17.9049
 
 * `rbind`/`cbind_rtables` throw errors on non-compatible top-left material

@@ -57,5 +57,19 @@ test_that("provided score functions work", {
     expect_identical(scores, setNames(as.numeric(counts), names(counts)))
 })
 
+test_that("sort_at_path just returns an empty input table", {
+    silly_prune_condition <- function(tt) {
+        return(TRUE)
+    }
+    # Note: not sure why there is a warning from below. Probably separate problem.
+    emptytable <- expect_warning(trim_rows(rawtable, silly_prune_condition))
+    result <- sort_at_path(
+        emptytable, 
+        path = c("ARM", "*", "SEX"), 
+        scorefun = cont_n_allcols
+    )
+    expect_identical(emptytable, result)
+})
+
 
 ## todo test sorting proper
