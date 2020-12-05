@@ -6,6 +6,7 @@
 
 * `rbind`/`cbind_rtables` throw errors on non-compatible top-left material
 * `cbind_tables` now correctly checks all things being cbound
+* Fix bug which caused error when `add_overall_col` was called before any column splitting
 
 ## rtables 0.3.2.17.9048
 
