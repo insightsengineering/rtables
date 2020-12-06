@@ -157,14 +157,14 @@ matrix_form <- function(tt) {
     sp <- row_cspans(rr)
     rep(sp, times = sp)
   })
-  
+
   ## the 1 is for row labels
   body_spans <- if (nrow(tt) > 0) {
     cbind(1L, do.call(rbind, tsptmp))
   } else {
     matrix(1, nrow = 1, ncol = ncol(tt) + 1)
   }
-  
+
   body <- rbind(header_content$body, body_content_strings)
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
@@ -250,34 +250,46 @@ matrix_form <- function(tt) {
 
 
 .tbl_header_mat <- function(tt) {
-  
+
   clyt <- coltree(tt)
   rowvals <- .do_tbl_h_piece(clyt)
   rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
   rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
-  
+  cinfo <- col_info(tt)
+
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
     cs <- row_cspans(x) ##attr(x, "colspan")
     if (is.null(cs)) cs <- rep(1, ncol(x))
     rep(row_values(x), cs) ##as.vector(x), cs)
   }), ncol = nc, byrow = TRUE)
-  
+
   span <- matrix(rapply(rows, function(x) {
     cs <- row_cspans(x) ##attr(x, "colspan")
     if (is.null(cs)) cs <- rep(1, ncol(x))
     rep(cs, cs) ##as.vector(x), cs)
   }), ncol = nc, byrow = TRUE)
-  
-  
-  if (col_info(tt)@display_columncounts) {
-    counts <- col_info(tt)@counts
-    cformat <- col_info(tt)@columncount_format
+
+
+  if (disp_ccounts(cinfo)) {
+    counts <- col_counts(cinfo)
+    cformat <- colcount_format(cinfo)
     body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
     span <- rbind(span, rep(1, nc))
   }
-  
-  list(body = cbind("", body), span = cbind(1, span))
+
+    tl <- top_left(cinfo)
+    lentl <- length(tl)
+    nli <- nrow(body)
+    if(lentl == 0)
+        tl <- rep("", nli)
+    else if(lentl > nli)
+        stop("More lines in top-left material than in column header. Not currently supported.")
+    else if (lentl < nli)
+        tl <- c(tl, rep("", nli - lentl))
+
+    ##list(body = cbind("", body), span = cbind(1, span))
+    list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span))
 }
 
 
@@ -528,22 +540,22 @@ is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
 }
 
 #' Indent Strings
-#' 
+#'
 #' Used in rtables to indent row names for the ASCII output.
-#' 
+#'
 #' @param x a character vector
 #' @param indent a vector of length \code{length(x)} with non-negative integers
 #' @param incr non-negative integer: number of spaces per indent level
-#' @param include_newline boolean: should \code{\n} also be indented
-#' 
+#' @param including_newline boolean: should newlines also be indented
+#'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' indent_string("a", 0)
 #' indent_string("a", 1)
 #' indent_string(letters[1:3], 0:2)
 #' indent_string(paste0(letters[1:3], "\n", LETTERS[1:3]), 0:2)
-#' 
+#'
 indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 
   if (length(x) > 0) {
@@ -552,13 +564,13 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
   }
 
   indent_str <- strrep(" ", (indent > 0) * indent * incr)
-  
+
   if (including_newline) {
     x <- unlist(mapply(function(xi, stri) {
       gsub("\n", stri, xi, fixed = TRUE)
     }, x, paste0("\n", indent_str)))
   }
-  
+
   paste0(indent_str, x)
 }
 

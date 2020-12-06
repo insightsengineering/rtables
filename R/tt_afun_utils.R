@@ -103,10 +103,18 @@ in_rows <- function(..., .list = NULL, .names = NULL,
             stop("need a named list")
     }
 
-
     if(is.null(.formats))
         .formats <- list(NULL)
-    l2 <- mapply(rcell, x = l, format = .formats, SIMPLIFY = FALSE)
+    if(length(l) == 0) {
+        if(length(.labels) >0 ||
+           length(.formats) > 0 ||
+           length(.names) > 0 ||
+           length(.indent_mods) > 0)
+            stop("in_rows got 0 rows but length >0 of at leats one of .labels, .formats, .names, .indent_mods. Does your analysis/summary function handle the 0 row df/length 0 x case?")
+        l2 <- list()
+    } else {
+        l2 <- mapply(rcell, x = l, format = .formats, SIMPLIFY = FALSE)
+    }
     if(is.null(.labels)) {
         objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
         if(any(nzchar(objlabs)))
@@ -266,6 +274,14 @@ make_afun <- function(fun,
     fun_args = force(list(...))
     fun_fnames <- names(formals(fun))
     takes_inrefcol <- ".in_ref_col" %in% fun_fnames
+
+    ## force EVERYTHING otherwise calling this within loops is the stuff of nightmares
+    force(.stats)
+    force(.formats)
+    force(.labels)
+    force(.indent_mods)
+    force(.ungroup_stats)
+    force(.null_ref_cells) ## this one probably isn't needed?
 
     ret <- function(x, ...) { ## remember formals get clobbered here
 

@@ -167,10 +167,10 @@ setMethod("next_cpos", "PreDataTableLayouts",
 #' @rdname int_methods
 setMethod("next_cpos", "PreDataColLayout",
           function(obj, nested) {
-    if(!nested)
-        length(obj) + 1L
-    else
+    if(nested || length(obj[[length(obj)]]) == 0)
         length(obj)
+    else
+        length(obj) + 1L
 })
 #' @rdname int_methods
 setMethod("next_cpos", "ANY", function(obj, nested) 1L)
@@ -1408,11 +1408,6 @@ setMethod("coltree", "PreDataTableLayouts",
 #' @export coltree
 setMethod("coltree", "PreDataColLayout",
           function(obj, df, rtpos) {
-    ## ## XXX this [[1]] is WRONG!!
-    ## ## XXXXXXXX
-    ## if(length(obj) == 1L)
-    ##     splitvec_to_coltree(df, obj[[1]], rtpos)
-    ## else
     kids = lapply(obj, function(x) splitvec_to_coltree(df = df, splvec = x, pos = rtpos))
     if(length(kids) == 1)
         res = kids[[1]]
@@ -1803,3 +1798,48 @@ setGeneric("spl_varnames",
 setMethod("spl_varnames", "MultiVarSplit",
           function(obj) obj@var_names)
 
+
+#' Top Left Material (Experimental)
+#' @inheritParams gen_args
+#' @description A TableTree object can have \emph{top left material} which is a sequence
+#' of strings which are printed in the area of the table between the column header display
+#' and the label of the first row.  These functions acccess and modify that material.
+#'
+#' @export
+#' @rdname top_left
+setGeneric("top_left", function(obj) standardGeneric("top_left"))
+#' @export
+#' @rdname top_left
+setMethod("top_left", "VTableTree", function(obj) top_left(col_info(obj)))
+#' @export
+#' @rdname top_left
+setMethod("top_left", "InstantiatedColumnInfo", function(obj) obj@top_left)
+#' @export
+#' @rdname top_left
+setMethod("top_left", "PreDataTableLayouts", function(obj) obj@top_left)
+
+
+#' @export
+#' @rdname top_left
+setGeneric("top_left<-", function(obj, value) standardGeneric("top_left<-"))
+#' @export
+#' @rdname top_left
+setMethod("top_left<-", "VTableTree", function(obj, value) {
+    cinfo <- col_info(obj)
+    top_left(cinfo) <- value
+    col_info(obj) <- cinfo
+    obj
+})
+#' @export
+#' @rdname top_left
+setMethod("top_left<-", "InstantiatedColumnInfo", function(obj, value) {
+    obj@top_left <- value
+    obj
+})
+
+#' @export
+#' @rdname top_left
+setMethod("top_left<-", "PreDataTableLayouts", function(obj, value) {
+    obj@top_left <- value
+    obj
+})

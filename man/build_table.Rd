@@ -4,7 +4,14 @@
 \alias{build_table}
 \title{Create a table from a layout and data}
 \usage{
-build_table(lyt, df, col_counts = NULL, col_total = nrow(df), ...)
+build_table(
+  lyt,
+  df,
+  col_counts = NULL,
+  col_total = nrow(df),
+  topleft = NULL,
+  ...
+)
 }
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
@@ -17,6 +24,8 @@ override those calculated automatically during tabulation. Must specify
 will be replaced with the automatically calculated counts.}
 
 \item{col_total}{integer(1). The total observations across all columns. Defaults to \code{nrow(df)}.}
+
+\item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 
 \item{\dots}{currently ignored.}
 }

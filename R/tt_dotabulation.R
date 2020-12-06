@@ -511,6 +511,7 @@ gen_rowvalues = function(dfpart,
     ret
 }
 
+#' @noRd
 #' @param \dots ALL arguments to recurse_applysplit, methods may only use some of them.
 #' @return list of children to place at this level
 #'
@@ -901,6 +902,7 @@ recursive_applysplit = function( df,
 build_table = function(lyt, df,
                        col_counts = NULL,
                        col_total = nrow(df),
+                       topleft = NULL,
                        ...) {
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
@@ -921,7 +923,8 @@ build_table = function(lyt, df,
     rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts,
-                           total = col_total)
+                           total = col_total,
+                           topleft)
     if(!is.null(col_counts))
         disp_ccounts(cinfo) = TRUE
 
@@ -973,6 +976,10 @@ build_table = function(lyt, df,
                         cinfo = cinfo,
                         format = obj_format(rtspl))
     }
+
+    ## this is where the top_left check lives right now. refactor later maybe
+    ## but now just call it so the error gets thrown when I want it to
+    unused <- matrix_form(tab)
     tab
 }
 
@@ -1105,12 +1112,10 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
     stopifnot(lvl <= length(splvec) + 1L,
               is(splvec, "SplitVector"))
 
-    ## nm = unlist(tail(rawvalues(pos), 1)) %||% ""
-    nm = unlist(tail(value_names(pos), 1)) %||% ""
-    lab = unlist(tail(value_labels(pos), 1)) %||% ""
 
     if(lvl == length(splvec) + 1L) {
         ## XXX this should be a LayoutColTree I Think.
+        nm = unlist(tail(value_names(pos), 1)) %||% ""
         LayoutColLeaf(lev = lvl - 1L,
                       label = label,
                       tpos = pos,
@@ -1118,6 +1123,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
                       )
     } else {
         spl = splvec[[lvl]]
+        nm = if(is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos), 1))
         rawpart = do_split(spl,df, trim =FALSE )
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]

@@ -160,7 +160,8 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' @param x TableTree
 #' @param i index
 #' @param j index
-#' @param ... ignored
+#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
 #' @param value Replacement value (list, TableRow, or TableTree)
 #' @exportMethod [<-
 #' @rdname brackets
@@ -311,6 +312,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     j
 }
 
+#' @noRd
 #' @param spanfunc is the thing that gets the counts after subsetting
 ## should be n_leaves for a column tree structure and NROW for
 ## a table tree
@@ -504,7 +506,7 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 
 
 ## label rows ARE included in the count
-subset_by_rownum = function(tt, i, ... ) {
+subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter = 0
     nr = nrow(tt)
@@ -667,29 +669,40 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 
 #' @exportMethod [
-#' @param drop logical. Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
 #' @rdname brackets
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
-    nr = nrow(x)
-    nc = ncol(x)
-    i = .j_to_posj(i, nr)
-    j = .j_to_posj(j, nc)
+    ## have to do it this way because we can't add an argument since we don't
+    ## own the generic declaration
+    keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not presesnt
+    if(is.null(keep_topleft))
+        keep_topleft <- NA
+
+    nr <- nrow(x)
+    nc <- ncol(x)
+    i <- .j_to_posj(i, nr)
+    j <- .j_to_posj(j, nc)
 
     if(!missing(j) && length(j) < nc)
-        x = subset_cols(x, j)
-    if(!missing(i) && length(i) < nr)
-        x = subset_by_rownum(x, i)
+        x <- subset_cols(x, j)
+    if(!missing(i) && length(i) < nr) {
+        x <- subset_by_rownum(x, i)
+        keep_topleft <- isTRUE(keep_topleft)
+    } else {
+        keep_topleft <- !identical(FALSE, keep_topleft)
+    }
     if(length(j) == 1L &&
        length(i) == 1L &&
        drop) {
-        rw = collect_leaves(x, TRUE, TRUE)[[1]]
+        rw <- collect_leaves(x, TRUE, TRUE)[[1]]
         if(is(rw, "LabelRow"))
-            x = NULL
+            x <- NULL
         else
-            x = row_values(rw)[[1]]
+            x <- row_values(rw)[[1]]
     }
+    if(!drop && !keep_topleft)
+        top_left(x) <- character()
     x
 })
 

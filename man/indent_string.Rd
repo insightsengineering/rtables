@@ -7,17 +7,21 @@
 indent_string(x, indent = 0, incr = 2, including_newline = TRUE)
 }
 \arguments{
-\item{x}{a charactar vector}
+\item{x}{a character vector}
 
 \item{indent}{a vector of length \code{length(x)} with non-negative integers}
 
 \item{incr}{non-negative integer: number of spaces per indent level}
 
-\item{include_newline}{boolean: should \code{\n} also be indented}
+\item{including_newline}{boolean: should newlines also be indented}
 }
 \description{
-Indent Strings
+Used in rtables to indent row names for the ASCII output.
 }
 \examples{
+indent_string("a", 0)
 indent_string("a", 1)
+indent_string(letters[1:3], 0:2)
+indent_string(paste0(letters[1:3], "\n", LETTERS[1:3]), 0:2)
+
 }

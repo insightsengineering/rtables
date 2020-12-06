@@ -40,7 +40,8 @@ lyt_args(
   visible_label,
   var_labels,
   cvar,
-  table_names
+  table_names,
+  topleft
 )
 }
 \arguments{
@@ -115,6 +116,8 @@ lyt_args(
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
 \item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
+
+\item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 }
 \description{
 Layouting Function Arg Conventions

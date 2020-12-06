@@ -142,59 +142,6 @@ test_that("rcell on CellValue overrides attrs as necessary", {
 })
 
 
-test_that("cbind_rtables works", {
-
-    x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
-
-    y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
-
-    tab <- cbind_rtables(x, y)
-    expect_equal(ncol(tab), 3)
-    expect_equal(ncol(rtables:::tt_labelrow(tab)), 3)
-    expect_equal(nrow(tab), 2)
-})
-
-
-test_that("cbind_rtables works with 3 tables", {
-
-    tab1 <- rtable(
-        header = "a",
-        rrow("one", 1)
-    )
-    tab2 <- rtable(
-        header = "b",
-        rrow("one", 2)
-    )
-    tab3 <- rtable(
-        header = "c",
-        rrow("one", 3)
-    )
-
-    newtab <- cbind_rtables(tab1, tab2, tab3)
-    expect_equal(ncol(newtab), 3)
-    expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
-
-})
-
-
-test_that("cell formats not dropped when cbinding", {
-
-    tab1 <- rtable(
-        header = "a",
-        rrow("one", rcell(1.1111111, format = "xx.x"))
-    )
-    tab2 <- rtable(
-        header = "b",
-        rrow("one", rcell(2.2222222, format = "xx.xxxx"))
-    )
-
-    cbtab <- cbind_rtables(tab1, tab2)
-    expect_identical(rtables:::value_formats(tree_children(cbtab)[[1]]),
-                     list("xx.x", "xx.xxxx"))
-
-
-})
-
 test_that("cell-level formats are retained when column subsetting", {
  tbl <- rtable(
      header = c("Treatement\nN=100", "Comparison\nN=300"),
@@ -223,4 +170,75 @@ test_that("row subsetting works on table with only content rows", {
                      cell_values(tab)[[1]])
     expect_identical(tab[1,1,drop = TRUE],
                      79*c(1, 1/sum(DM$ARM == "A: Drug X")))
+})
+
+
+test_that("calls to make_afun within loop work correctly", {
+
+    dummy_stats_function <- function(x) {
+        list("s_mean" = mean(x))
+    }
+
+    dummy_layout <- function(lyt, vv) {
+
+        for (i in seq_along(vv)) {
+
+            afun <- make_afun(
+                dummy_stats_function,
+      .stats = "s_mean",
+      .labels =  c(s_mean = vv[i]), #set labels here to match variable name
+      .formats = c(s_mean = "xx.x")
+      )
+
+            lyt <- analyze(
+                lyt,
+                vars = vv[i],
+                afun = afun,
+                show_labels = "visible"
+            )
+        }
+
+        lyt
+    }
+
+
+    tab <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        dummy_layout(vv = c("BMRKR1", "AGE")) %>%
+        build_table(DM)
+
+    expect_identical(row.names(tab),
+                     c("BMRKR1", "BMRKR1", "AGE", "AGE"))
+})
+
+
+test_that("keeping non-existent levels doesn't break internal machinery", {
+    ANL <- DM
+    ANL$COUNTRY <- as.character(ANL$COUNTRY)
+
+    sfun = keep_split_levels("ABC")
+
+
+    lyt <- basic_table() %>%
+        analyze("AGE") %>%
+        split_rows_by("COUNTRY", split_fun = sfun) %>%
+        summarize_row_groups() %>%
+        analyze("AGE")
+
+    result <- build_table(lyt, df = ANL)
+    expect_identical(dim(result), c(3L, 1L))
+    expect_identical(row.names(result), c("Mean", "ABC", "Mean"))
+    cbres <- cbind_rtables(result, result)
+    expect_identical(dim(cbres), c(3L, 2L))
+    expect_identical(row.names(cbres), c("Mean", "ABC", "Mean"))
+
+    ## because its a factor and "ABC" isn't a real level
+    expect_error(build_table(lyt, DM))
+})
+
+test_that("add_overall_col with no col splits works", {
+
+    lyt <- basic_table() %>% add_overall_col("whaaat") %>% analyze("AGE", mean)
+    tab <- build_table(lyt, DM) ## previously error
+    expect_identical(names(tab), "whaaat")
 })
