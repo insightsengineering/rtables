@@ -636,6 +636,8 @@ spaces <- function(n) {
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
 #' 
+#' @noRd
+#' 
 #' @return a string
 #' 
 #' @examples 

@@ -1433,9 +1433,9 @@ list_wrap_df = function(f) {
 }
 
 
-#' Basic starting table layout with 1 column and zero rows
+#' Layout with 1 column and zero rows
 #'
-#'
+#' Every layout must start with a basic table.
 #'
 #' @export
 #'

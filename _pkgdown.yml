@@ -45,6 +45,7 @@ reference:
     - constr_args
     - compat_args
     - gen_args
+    - sf_args
     
   - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
@@ -81,7 +82,31 @@ reference:
     - format_rcell
     - list_rcell_format_labels
     - is_rcell_format
-
+    
+  - title: Table Structure Information
+    contents:
+    - row_paths
+    - row_paths_summary
+    - table_structure
+    
+  - title: Access and Modify
+    contents:
+    - cell_values
+    - top_left
+    - header
+    - header<-
+    - insert_rrow
+    - insert_rrow
+    
+  - title: Sorting and Pruning
+    contents:
+    - prune_table
+    - all_zero_or_na
+    - trim_zero_rows
+    - trim_rows
+    - sort_at_path
+    - cont_n_allcols
+    
   - title: Manual Table Creation Functions
     desc: These functions (except for `manual_cols`) provide some backwards compatibility to the previous 
           (pre 2021) `rtables` framework.
@@ -93,6 +118,9 @@ reference:
     - rheader
     - rtablel
     - rrowl
+    - rbindl_rtables
+    - indent
+    - header_add_N
     
   - title: rtabulate Framework
     desc: rtabulate is an alternative framework to tabulate tables and mainly use in `rtables` pre 2021. 
@@ -111,6 +139,7 @@ reference:
     - propose_column_widths
     - as_html
     - matrix_form
+    - get_formatted_cells
 
   - title: Utility Functions
     desc: utility functions
@@ -123,32 +152,42 @@ reference:
     - var_labels_remove
     - var_relabel
     - with_label
+    - indent_string
 
   - title: Pagination
     desc: Pagination related functionality
     contents:
     - pag_tt_indices
-
-
-
-  - title: Table sorting and pruning functions
-    desc: funtions to sort rows within tables and list of tables
-    contents:
-    - trim_zero_rows
-
-
-  - title: TableTree Framework Constructors and S4 Classes
-    desc: S4 classes and constructors
-    contents:
-    - ends_with("Split")
-    - ends_with("class")
-    - ends_with("Row")
-    
-
+    - make_row_df
 
   - title: Included Data
     desc: Included datasets
     contents:
     - DM
     - ex_adsl 
+
+  - title: TableTree Framework Accessor Functions
+    contents:
+    - content_table
+    - obj_name
+    - tree_children
+    - collect_leaves
+    - obj_avar
+    - no_colinfo
+    - clayout
+
+  - title: TableTree Framework Constructors and S4 Classes
+    desc: S4 classes and constructors
+    contents:
+    - CellValue
+    - ends_with("Split")
+    - ends_with("class")
+    - ends_with("Row")
+    
+
+    
+  - title: Internal Functions
+    contents:
+    - split_rows
+    
 

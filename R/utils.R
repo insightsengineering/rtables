@@ -1,4 +1,19 @@
 
+#' Check if an object is a valid rtable
+#' 
+#' @param x an object
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' is_rtable(build_table(basic_table(), iris))
+is_rtable <- function(x) {
+  is(x, "VTableTree")
+}
+
+
+
 # nocov start
 ## is each object in a collection from a class
 are <- function(object_collection, class2) {

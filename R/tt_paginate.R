@@ -317,6 +317,12 @@ setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
                                    nsibs = NA_integer_) standardGeneric("inner_col_df"))
 
 
+#' Column Layout Summary
+#' 
+#' Used for Pagination
+#' 
+#' @inheritParams make_row_df
+#' @noRd
 make_col_df <-    function(ct,
                            colwidths = propose_column_widths(ct),
                            visible_only = TRUE,

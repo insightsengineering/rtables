@@ -2,135 +2,122 @@
 
 # paths summary ----
 
-#' Return List with Table Row Paths
+#' @rdname make_col_row_df
+#' 
+#' @title Return List with Table Row/Col Paths
 #' 
 #' @param x an rtable object
 #' 
 #' @export
 #' 
 #' @examples 
-#'# row_paths(get_example_tables()[[1]])
+#' tbl <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("SEX", "AGE")) %>%
+#'   build_table(ex_adsl)
+#' 
+#' tbl
+#' 
+#' row_paths(tbl)
+#' col_paths(tbl)
+#' 
+#' \dontrun{
+#' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo")) 
+#' cell_values(tbl)
+#' }
+#' 
 row_paths <- function(x) {
-  make_pagdf(x, visible_only = TRUE)$path
+  stopifnot(is_rtable(x))
+  make_row_df(x, visible_only = TRUE)$path
 }
 
 
-#' Return List with Table Column Paths
-#' 
-#' @param x an rtable object
-#' 
+#' @rdname make_col_row_df
 #' @export
-#' 
-#' @examples 
-#'# col_paths(get_example_tables()[[1]])
 col_paths <- function(x) {
-  
-  # TODO: replace with make_col_pagedf
-  lapply(lapply(unlist(get_col_paths(x)), get_unit), `[[`, "path")
-}
-
-# class useful for not unlisting vectors
-setClass("Unit", representation(unit = "ANY"))
-get_unit <- function(x) x@unit
-
-get_col_paths <- function(x, path = character(0)) {
-
-  if (is(x, "TableTree") || is(x, "ElementaryTable"))
-    x <- col_info(x)@tree_layout
-
-  if (is(x, "LayoutColTree")) {
-    mapply(function(xi, namei) {
-      get_col_paths(xi, path = c(path, namei))
-    }, tree_children(x), names(tree_children(x)), SIMPLIFY = FALSE, USE.NAMES = FALSE)
-          
-  } else if (is(x, "LayoutColLeaf")) {
-    
-    new("Unit", unit = list(path = path, label = x@label))
-  } else {
-    stop("---")
-  }
-
+  stopifnot(is_rtable(x))
+  make_col_df(x, visible_only = TRUE)$path
 }
 
 
-
-#' Print Row Paths Summary
+#' Print Row/Col Paths Summary
 #' 
 #' @param x an rtable object
 #' 
 #' @export
 #' 
 #' @examples 
-#'# tbls <- get_example_tables()
-#'# 
-#'# row_paths_summary(tbls$demographic)
+#' 
+#' library(dplyr)
+#' 
+#' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
+#' 
+#' tbl <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX", split_fun = drop_split_levels) %>%
+#'   analyze(c("AGE", "BMRKR2")) %>%
+#'   build_table(ex_adsl_MF)
+#' 
+#' tbl
+#' 
+#' df <- row_paths_summary(tbl)
+#' 
+#' df
+#' 
+#' col_paths_summary(tbl)
 row_paths_summary <- function(x) {
-  stopifnot(is(x, "TableTree"))
+  stopifnot(is_rtable(x))
   
   if (nrow(x) == 0)
-    return("rowname     rowtype       path\n---------------------\n")
+    return("rowname     node_class       path\n---------------------\n")
   
-  # make_pagdf has currently issues with indent
-  pagdf <- make_pagdf(x, visible_only = TRUE)
-  sr <- summarize_rows(x)
-  if (nrow(sr) != nrow(pagdf) && !all(pagdf$name == sr$name) && !(all(pagdf$label == sr$label)) )
-    stop("internal error")
-  
-  sr$path <- pagdf$path
-  sr$type <- pagdf$node_class
+  pagdf <- make_row_df(x, visible_only = TRUE)
+  row.names(pagdf) <- NULL
   
   mat <- rbind(
-    c("rowname", "type", "path"),
-    t(apply(sr, 1, function(xi) {
+    c("rowname", "node_class", "path"),
+    t(apply(pagdf, 1, function(xi) {
       c(
         indent_string(xi$label, xi$indent),
-        xi$type,
+        xi$node_class,
         paste(xi$path[-1], collapse = ", ")
       )
     }))
   )
   
   txt <- mat_as_string(mat)
+  cat(txt)
+  cat("\n")
+
+  invisible(pagdf[, c("label", "indent", "node_class", "path")])
+}
+
+
+#' @rdname row_paths_summary
+#' @export
+col_paths_summary <- function(x) {
+  stopifnot(is_rtable(x))
+
+  pagdf <- make_col_df(x, visible_only = TRUE)
+  row.names(pagdf) <- NULL
   
+  mat <- rbind(
+    c("label", "path"),
+    t(apply(pagdf, 1, function(xi) {
+      .GlobalEnv$xi <- xi
+      c(
+        xi$label,
+        paste(xi$path[-1], collapse = ", ")
+      )
+    }))
+  )
+  
+  txt <- mat_as_string(mat)
   cat(txt)
   cat("\n")
   
-  invisible(NULL)
-  
+  invisible(pagdf[, c("label", "path")])
 }
-
-#' Print Column Paths Summary
-#' 
-#' @param x an rtable object
-#' 
-#' @export
-#' 
-#' @examples 
-#'# tbls <- get_example_tables()
-#'# 
-#'# col_paths_summary(tbls$demographic)
-#'# 
-#'# col_paths_summary(tbls$handed)
-col_paths_summary <- function(x) {
-  objs <- lapply(unlist(get_col_paths(x)), get_unit)
- 
-  labels <- vapply(objs, `[[`, character(1), "label")
-  paths <- lapply(objs, `[[`, "path")
-  
-  col_labels <- unlist(Map(indent_string, labels, vapply(paths, length, numeric(1))-1))
-  col_paths <- vapply(paths, paste, character(1), collapse = ", ")
-  
-  mat <- cbind(c("column name", col_labels), c("path", col_paths))
-  
-  cat(mat_as_string(mat))
-  cat("\n")
-  
-  invisible(NULL)
-}
-
-# 
-
-# 
 
 
 # Rows ----
@@ -150,8 +137,8 @@ summarize_row_df_empty <- function(...) {
 #' @inheritParams gen_args
 #' @param depth numeric(1). Depth.
 #' @param indent numeric(1). Indent.
-#' @export
-#'
+#' 
+#' @noRd
 #' @examples
 #'
 #' library(dplyr)
@@ -246,159 +233,6 @@ setMethod("summarize_rows", "LabelRow",
               summarize_row_df_empty()
             }
           })
-
-
-# .  Print Row Paths ----
-#' Print the row paths
-#' 
-#' @param  x rtable object
-#' 
-#' @export
-#' 
-#' @examples 
-#' ADSL <- ex_adsl
-#' tbl <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   analyze(vars = c("AGE", "BMRKR1"), afun = function(x) {
-#'     in_rows(
-#'       mean_sd = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-#'       range = rcell(range(x), format = "xx.xx - xx.xx"),
-#'       .labels = c(mean_sd = "Mean (Sd)", range = "Range")
-#'     )
-#'   }) %>%
-#'   build_table(ADSL)
-#' 
-#' 
-#' row_paths(tbl)
-row_paths3 <- function(x) {
-
-  invisible(sr$path)
-}
-
-
-
-
-
-
-setGeneric("summary", function(object,...) standardGeneric("summary"))
-## preserve S3 behavior
-#' @export
-setMethod("summary", "ANY", base:::summary)
-
-
-#' Show Row and Column summary of a TableTree
-#' 
-#' @param object an object of class \code{TableTree} which is usually created with \code{\link{build_table}}
-#' @param row_type character(1).
-#' @param \dots \dots.
-#' @param depth numeric(1). Depth.
-#' @param indent numeric(1). Indent.
-#' @examples 
-#' library(dplyr)
-#' 
-#' l <- basic_table() %>% 
-#'     split_cols_by("Species") %>%
-#'     split_rows_by("RND") %>%
-#'     analyze(c("Sepal.Length", "Petal.Length"), afun = list_wrap_x(summary) , format = "xx.xx")
-#' l
-#' 
-#' iris2 <- iris %>% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))
-#' 
-#' tbl <- build_table(l, iris2)
-#' tbl
-#' 
-#' summary(tbl)
-#' @rdname summarymeths
-setMethod("summary", "VTableTree", function(object, depth = 0, indent = 0, row_type = "", ...) {
-  
-  if (indent == 0) {
-    cat_row(0, "name", "label", TRUE, "type  |")
-    cat("----------------------------------------------------------\n")
-  }
-  
-  # note to follow the logic of get_formatted_rows
-  
-  lr <- summary(tt_labelrow(object), depth, indent)
-
-  indent <- indent + !is.null(lr)
-  
-  summary(content_table(object), depth = depth, indent = indent, row_type = "cont. |")
-  lapply(tree_children(object), summary, depth = depth + 1, indent = indent + (length(content_table(object)) > 0), row_type = "leaf  |")
-  
-  
-  if (indent == 0) {
-    cat("\n* indicates that row is not visible\n")
-  }
-  invisible(NULL)
-})
-
-
-
-#' Summary method for elementary table
-#' 
-#' @examples 
-#' tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
-#'
-#' @rdname summarymeths
-setMethod("summary", "ElementaryTable", function(object, depth = 0, indent = 0, row_type) {
-
-  lr <- summary(tt_labelrow(object), depth, indent)
-  
-  lapply(tree_children(object), summary, depth = depth + 1, indent = indent + !is.null(lr), row_type)
-  
-  invisible(NULL)
-})
-
-#' @rdname summarymeths
-setMethod("summary", "TableRow", function(object, depth = 0, indent = 0, row_type) {
-  cat_row(indent, obj_name(object), obj_label(object), TRUE, row_type)
-})
-#' @rdname summarymeths
-setMethod("summary", "LabelRow", function(object, depth = 0, indent = 0, ...) {
-
-  if (labelrow_visible(object)) {
-    cat_row(indent, obj_name(object), obj_label(object), object@visible, "label |")
-    TRUE
-  } else {
-    NULL    
-  }
-  
-})
-
-cat_row <- function(indent, name, label, visible, content) {
-  if (is.null(label)) label <- "<no label>"
-  if (is.null(name)) name <- "<no name>"
-  
-  if (requireNamespace("crayon", quietly = TRUE)) {
-    cat(
-      if (visible) " " else "*",
-      crayon::silver(content),
-      indent_string(
-        paste(
-          crayon::blue(name),
-          crayon::black(label),
-          sep = " - "
-        ),
-        indent
-      ),
-      "\n"
-    )
-  } else {
-    cat(
-      if (visible) " " else "*",
-      content,
-      indent_string(
-        paste(
-          name,
-          label,
-          sep = " - "
-        ),
-        indent
-      ),
-      "\n"
-    )
-  }
-}
 
 
 

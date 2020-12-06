@@ -460,12 +460,6 @@ setMethod("rbind2", "VTableNodeInfo",
 })
 
 
-header_add_N = function(x, N) {
-    col_counts(x) = as.integer(N)
-    colcount_format(x) = "(N=xx)"
-    disp_ccounts(x) = TRUE
-    x
-}
 
 #' Miscellaneous Compatability methods for the old API
 #' @inheritParams gen_args
@@ -1112,18 +1106,6 @@ setMethod("recurse_insert", "ElementaryTable",
 })
 
 
-
-
-
-
-
-
-order_rrows = function(x, indices = c(1, 1), ...) {
-
-
-
-
-}
 
 #' Compatability Layer for Legacy "by_*" functions
 #'

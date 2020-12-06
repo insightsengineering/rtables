@@ -2,18 +2,36 @@
 % Please edit documentation in R/summary.R
 \name{row_paths_summary}
 \alias{row_paths_summary}
-\title{Print Row Paths Summary}
+\alias{col_paths_summary}
+\title{Print Row/Col Paths Summary}
 \usage{
 row_paths_summary(x)
+
+col_paths_summary(x)
 }
 \arguments{
 \item{x}{an rtable object}
 }
 \description{
-Print Row Paths Summary
+Print Row/Col Paths Summary
 }
 \examples{
-# tbls <- get_example_tables()
-# 
-# row_paths_summary(tbls$demographic)
+
+library(dplyr)
+
+ex_adsl_MF <- ex_adsl \%>\% filter(SEX \%in\% c("M", "F"))
+
+tbl <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  split_cols_by("SEX", split_fun = drop_split_levels) \%>\%
+  analyze(c("AGE", "BMRKR2")) \%>\%
+  build_table(ex_adsl_MF)
+
+tbl
+
+df <- row_paths_summary(tbl)
+
+df
+
+col_paths_summary(tbl)
 }
