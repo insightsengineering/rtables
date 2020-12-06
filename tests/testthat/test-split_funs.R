@@ -14,7 +14,7 @@ test_that("remove_split_levels works as expected with default flags", {
 })
 
 test_that("remove_split_levels works as expected when dropping not appearing levels", {
-  my_split_fun <- remove_split_levels(excl = "ASIAN", drop = TRUE)
+  my_split_fun <- remove_split_levels(excl = "ASIAN", drop_levels = TRUE)
   
   l <- basic_table() %>% 
     split_cols_by("ARM") %>%
@@ -30,7 +30,7 @@ test_that("remove_split_levels works as expected when dropping not appearing lev
 })
 
 test_that("remove_split_levels works as expected when dropping not appearing levels and keeping data order", {
-  my_split_fun <- remove_split_levels(excl = "ASIAN", drop = TRUE, keep_order = TRUE)
+  my_split_fun <- remove_split_levels(excl = "ASIAN", drop_levels = TRUE, keep_order = TRUE)
   
   l <- basic_table() %>% 
     split_cols_by("ARM") %>%
@@ -47,5 +47,5 @@ test_that("remove_split_levels works as expected when dropping not appearing lev
 })
 
 test_that("remove_split_levels does not allow keeping order without dropping levels", {
-  expect_error(remove_split_levels(excl = "ASIAN", drop = FALSE, keep_order = TRUE))
+  expect_error(remove_split_levels(excl = "ASIAN", drop_levels = FALSE, keep_order = TRUE))
 })
