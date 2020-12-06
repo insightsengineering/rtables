@@ -13,5 +13,5 @@ col_paths(x)
 Return List with Table Column Paths
 }
 \examples{
-col_paths(get_example_tables()[[1]])
+# col_paths(get_example_tables()[[1]])
 }

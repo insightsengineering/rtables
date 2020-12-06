@@ -9,7 +9,7 @@
 #' @export
 #' 
 #' @examples 
-#' row_paths(get_example_tables()[[1]])
+#'# row_paths(get_example_tables()[[1]])
 row_paths <- function(x) {
   make_pagdf(x, visible_only = TRUE)$path
 }
@@ -22,7 +22,7 @@ row_paths <- function(x) {
 #' @export
 #' 
 #' @examples 
-#' col_paths(get_example_tables()[[1]])
+#'# col_paths(get_example_tables()[[1]])
 col_paths <- function(x) {
   
   # TODO: replace with make_col_pagedf
@@ -61,9 +61,9 @@ get_col_paths <- function(x, path = character(0)) {
 #' @export
 #' 
 #' @examples 
-#' tbls <- get_example_tables()
-#' 
-#' row_paths_summary(tbls$demographic)
+#'# tbls <- get_example_tables()
+#'# 
+#'# row_paths_summary(tbls$demographic)
 row_paths_summary <- function(x) {
   stopifnot(is(x, "TableTree"))
   
@@ -106,11 +106,11 @@ row_paths_summary <- function(x) {
 #' @export
 #' 
 #' @examples 
-#' tbls <- get_example_tables()
-#' 
-#' col_paths_summary(tbls$demographic)
-#' 
-#' col_paths_summary(tbls$handed)
+#'# tbls <- get_example_tables()
+#'# 
+#'# col_paths_summary(tbls$demographic)
+#'# 
+#'# col_paths_summary(tbls$handed)
 col_paths_summary <- function(x) {
   objs <- lapply(unlist(get_col_paths(x)), get_unit)
  

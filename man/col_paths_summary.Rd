@@ -13,7 +13,9 @@ col_paths_summary(x)
 Print Column Paths Summary
 }
 \examples{
-tbls <- get_example_tables()
-
-col_paths_summary(tbls$demographic)
+# tbls <- get_example_tables()
+# 
+# col_paths_summary(tbls$demographic)
+# 
+# col_paths_summary(tbls$handed)
 }

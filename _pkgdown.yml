@@ -18,10 +18,9 @@ articles:
     desc: Vignettes aimed at package users
     contents:
     - introduction
-    - tabulation_dplyr
     - clinical_trials
     - tabulation_concepts
-    - varia
+    - tabulation_dplyr
     - rtabulate
     - manual_table_construction
     - formatting_tables
@@ -29,7 +28,6 @@ articles:
     - sorting_pruning
     - pagination
     - baseline
-    - known_issues
     - varia
 
   - title: Developer
@@ -41,20 +39,21 @@ articles:
 reference:
 
   - title: Argument Conventions
-    desc: The following functions are unexported dummy functions that document argument conventions in the framework.
+    desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:
     - lyt_args
     - constr_args
     - compat_args
     - gen_args
     
-  - title: Layouts and Tabulation
+  - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
     contents:
     - build_table
     - basic_table
     - analyze
     - in_rows
+    - append_topleft
     - split_cols_by
     - add_colcounts
     - split_rows_by
@@ -65,25 +64,15 @@ reference:
     - add_overall_level
     - analyze_against_ref_group
     - add_existing_table
-    - manual_cols
-    
-  - title: Table Tree Utility Functions
+
+  - title: Tabulation Utility Functions
     desc: Utility functions
     contents:
+    - make_afun
     - list_wrap_x
     - list_wrap_df
-    - remove_split_levels # split_funcs
+    - remove_split_levels
     - add_combo_levels
-
-  - title: Manual Table Creation Functions
-    desc:  These are the main functions needed to build an rtable.
-    contents:
-    - rtable
-    - rrow
-    - rcell
-    - rheader
-    - rtablel
-    - rrowl
 
   - title: Cell Formatting related Functions
     desc: cell formatting.
@@ -92,9 +81,21 @@ reference:
     - format_rcell
     - list_rcell_format_labels
     - is_rcell_format
+
+  - title: Manual Table Creation Functions
+    desc: These functions (except for `manual_cols`) provide some backwards compatibility to the previous 
+          (pre 2021) `rtables` framework.
+    contents:
+    - manual_cols
+    - rtable
+    - rrow
+    - rcell
+    - rheader
+    - rtablel
+    - rrowl
     
   - title: rtabulate Framework
-    desc: rtabulate is another framework to tabulate rtables
+    desc: rtabulate is an alternative framework to tabulate tables and mainly use in `rtables` pre 2021. 
     contents:
     - rtabulate
     - rtab_inner
@@ -127,36 +128,12 @@ reference:
     desc: Pagination related functionality
     contents:
     - pag_tt_indices
-    - make_pagdf
-    
-  - title: Accessor and Modification Functions
-    desc: Access and Modify Functions
-    contents:
-    - starts_with("nam")
-    - starts_with("row.name")
-    - trim_rows
-    - ends_with("<-")
-    - rbindl_rtables
-    - cbind_rtables
-    - header
-    - header_add_N
-    - indent
-    - insert_rrow
-    - "[<-,VTableTree,ANY,ANY,list-method"
-    - tree_children
-    - starts_with("dim")
-    - "c,SplitVector-method"
-    - CellValue
-    - "length,CellValue-method"
-    
+
+
 
   - title: Table sorting and pruning functions
     desc: funtions to sort rows within tables and list of tables
     contents:
-    - order_rrows
-    - sort_rrows
-    - order_rtables
-    - sort_rtables
     - trim_zero_rows
 
 
@@ -166,21 +143,8 @@ reference:
     - ends_with("Split")
     - ends_with("class")
     - ends_with("Row")
-
-
-
     
-  - title: To Sort
-    desc: These functions need to be moved to another section
-    contents:
-    - "as.vector,TableRow-method"
-    - clayout
-    - collect_leaves
-    - no_colinfo
-    - obj_avar
-    - summary,ElementaryTable-method
-    - summary,TableTree-method 
-    - .add_row_summary
+
 
   - title: Included Data
     desc: Included datasets
@@ -188,7 +152,3 @@ reference:
     - DM
     - ex_adsl 
 
-  - title: Deprecated and Defunct
-    desc: Functions which are not needed/supported in the new API
-    contents:
-    - by_compare_subset # with rdname deprecated

@@ -1,10 +1,10 @@
 ---
-title: "Varia"
+title: "Various Topics"
 author: "Adrian Waddell"
 date: "6/12/2020"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Varia}
+  %\VignetteIndexEntry{Various Topics}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

@@ -13,5 +13,5 @@ row_paths(x)
 Return List with Table Row Paths
 }
 \examples{
-row_paths(get_example_tables()[[1]])
+# row_paths(get_example_tables()[[1]])
 }

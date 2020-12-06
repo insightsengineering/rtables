@@ -1,10 +1,10 @@
 ---
-title: "Tables in Clinical Trials"
+title: "Layout Based Tabulation of Tables found in Clinical Trials"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tables in Clinical Trials}
+  %\VignetteIndexEntry{Layout Based Tabulation of Tables found in Clinical Trials}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -743,7 +743,7 @@ tbl <- basic_table() %>%
           show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
   split_rows_by(
     var = "AVALC",
-    split_fun = keep_split_levels(c("CR", "PR", "SD", "NON CR/PD", "PD"), reorder = TRUE), 
+    split_fun = keep_split_levels(c("CR", "PR", "SD", "PD"), reorder = TRUE), 
     nested = FALSE
   ) %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col) {

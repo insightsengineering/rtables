@@ -13,7 +13,7 @@ row_paths_summary(x)
 Print Row Paths Summary
 }
 \examples{
-tbls <- get_example_tables()
-
-row_paths_summary(tbls$demographic)
+# tbls <- get_example_tables()
+# 
+# row_paths_summary(tbls$demographic)
 }
