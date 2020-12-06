@@ -1,3 +1,7 @@
+## rtables 0.3.2.17.9051
+
+* `remove_split_levels` has now options `drop_levels` and `keep_order` and works correctly.
+
 ## rtables 0.3.2.17.9049
 
 * `rbind`/`cbind_rtables` throw errors on non-compatible top-left material

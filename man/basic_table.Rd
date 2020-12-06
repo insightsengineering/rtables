@@ -9,9 +9,6 @@ basic_table()
 \description{
 Basic starting table layout with 1 column and zero rows
 }
-\note{
-this is represented by \code{NULL} currently
-}
 \examples{
 
 basic_table() \%>\%

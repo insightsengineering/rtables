@@ -506,13 +506,37 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 #' @param labels character. Labels to use for the remaining levels instead of the existing ones.
 #' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 #'   of presence in the data).
+#' @param drop logical(1). Should levels in the data which do not appear be dropped. Defaults to `FALSE`, 
+#'   which keeps all levels (except `excl`) regardless of appearance in the data.
+#' @param keep_order logical(1). Should the order the levels appear in the data be kept. Defaults to `FALSE`,
+#'   which uses the usual alphabetical order via `sort()`. Can only be `TRUE` when `drop` is `TRUE`,
+#'   because it would not be possible to figure out the original data order without appearance of a level.
 #'
 #' @rdname split_funcs
 #' @export
-remove_split_levels = function(excl) {
+remove_split_levels = function(excl, 
+                               drop_levels = FALSE, 
+                               keep_order = FALSE) {
+    stopifnot(
+      is.character(excl),
+      is_logical_single(drop_levels),
+      is_logical_single(keep_order),
+      !(keep_order && !drop_levels)
+    )
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
-        df2 = df[!(df[[var]] %in% excl),]
+        df2 = df[!(df[[var]] %in% excl), ]
+        if(drop_levels) {
+          levels = unique(df2[[var]])
+          if (!keep_order) {
+            levels = sort(levels)
+          }
+        } else {
+          levels = levels(df2[[var]])
+          levels = levels[!(levels %in% excl)]
+        }
+        df2[[var]] = factor(df2[[var]], levels = levels)
+        spl_child_order(spl) = levels
         .apply_split_inner(spl, df2, vals = vals,
                            labels = labels,
                            trim = trim)
