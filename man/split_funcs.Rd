@@ -22,6 +22,9 @@ trim_levels_in_group(innervar)
 \item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 of presence in the data).}
 
+\item{drop_levels}{logical(1). Should levels in the data which do not appear be dropped. Defaults to \code{FALSE},
+which keeps all levels (except \code{excl}) regardless of appearance in the data.}
+
 \item{keep_order}{logical(1). Should the order the levels appear in the data be kept. Defaults to \code{FALSE},
 which uses the usual alphabetical order via \code{sort()}. Can only be \code{TRUE} when \code{drop} is \code{TRUE},
 because it would not be possible to figure out the original data order without appearance of a level.}
@@ -47,9 +50,6 @@ because it would not be possible to figure out the original data order without a
 \item{drlevels}{logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}}
 
 \item{innervar}{character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}}
-
-\item{drop}{logical(1). Should levels in the data which do not appear be dropped. Defaults to \code{FALSE},
-which keeps all levels (except \code{excl}) regardless of appearance in the data.}
 }
 \description{
 Split functions

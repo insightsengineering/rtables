@@ -506,7 +506,7 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 #' @param labels character. Labels to use for the remaining levels instead of the existing ones.
 #' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 #'   of presence in the data).
-#' @param drop logical(1). Should levels in the data which do not appear be dropped. Defaults to `FALSE`, 
+#' @param drop_levels logical(1). Should levels in the data which do not appear be dropped. Defaults to `FALSE`, 
 #'   which keeps all levels (except `excl`) regardless of appearance in the data.
 #' @param keep_order logical(1). Should the order the levels appear in the data be kept. Defaults to `FALSE`,
 #'   which uses the usual alphabetical order via `sort()`. Can only be `TRUE` when `drop` is `TRUE`,
