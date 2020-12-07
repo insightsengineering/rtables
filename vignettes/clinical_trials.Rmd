@@ -1,10 +1,10 @@
 ---
-title: "Layout Based Tabulation of Tables found in Clinical Trials"
+title: "Example Clinical Trials Tables"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Layout Based Tabulation of Tables found in Clinical Trials}
+  %\VignetteIndexEntry{Example Clinical Trials Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

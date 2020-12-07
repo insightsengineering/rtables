@@ -3,6 +3,7 @@
 #' @param x SplitVecttor
 #' @param ... Splits or SplitVector objects
 #' @exportMethod c
+#' @rdname int_methods
 setMethod("c", "SplitVector", function(x, ...) {
     arglst = list(...)
     stopifnot(all(sapply(arglst, is, "Split")))
@@ -679,7 +680,7 @@ split_rows_by_cutfun = function(lyt, var,
 #'
 analyze = function(lyt,
                    vars,
-                   afun = rtab_inner,
+                   afun = simple_analysis,
                    var_labels = vars,
                    table_names = vars,
                    format = NULL,
@@ -905,7 +906,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
 
 ## Add a total column at the next **top level** spot in
 ## the column layout.
-## TODO remove this???
+
 #' Add Overall Column (deprecated?)
 #' @description This function will \emph{only} add an overall
 #' column at the \emph{top} level of splitting, NOT within
@@ -921,11 +922,12 @@ add_overall_col = function(lyt, label) {
                   next_cpos(lyt, FALSE))
 }
 
-#' Add Row Summary
-#'
+
+#' 
 #' @inheritParams lyt_args
-#' @rdname dot_add_row_summary
 #' @export
+#' 
+#' @rdname int_methods
 setGeneric(".add_row_summary",
            function(lyt,
                     label,
@@ -955,7 +957,7 @@ setMethod(".add_row_summary", "PreDataTableLayouts",
     rlayout(lyt) = tmp
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "PreDataRowLayout",
           function(lyt,
                    label,
@@ -990,7 +992,7 @@ setMethod(".add_row_summary", "PreDataRowLayout",
     }
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "SplitVector",
           function(lyt,
                    label,
@@ -1016,7 +1018,7 @@ setMethod(".add_row_summary", "SplitVector",
     lyt[[ind]] = tmp
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "Split",
           function(lyt,
                    label,
@@ -1038,7 +1040,7 @@ setMethod(".add_row_summary", "Split",
     content_extra_args(lyt) = extra_args
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "NULL",
           function(lyt,
                    label,

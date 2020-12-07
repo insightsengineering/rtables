@@ -13,22 +13,42 @@
 #' @param obj The object.
 NULL
 
-#' @rdname int_methods
+#' @rdname dimensions
 #' @exportMethod nrow
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE ,TRUE)))
-#' @rdname int_methods
+
+#' @rdname dimensions
 #' @exportMethod nrow
 setMethod("nrow", "TableRow",
           function(x) 1L)
-#' @rdname int_methods
+
+#' Table Dimensions
+#' @rdname dimensions
+#' 
 #' @exportMethod ncol
+#' 
+#' @param x `TableTree` or `ElementaryTable` object
+#' 
+#' @examples 
+#' tbl <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("SEX", "AGE")) %>%
+#'   build_table(ex_adsl)
+#'   
+#' dim(tbl)
+#' nrow(tbl)
+#' ncol(tbl)
+#' 
+#' NROW(tbl)
+#' NCOL(tbl)
+#' 
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
     ncol(col_info(x))
 })
 
-#' @rdname int_methods
+#' @rdname dimensions
 #' @exportMethod ncol
 setMethod("ncol", "TableRow",
           function(x) {
@@ -38,26 +58,26 @@ setMethod("ncol", "TableRow",
         length(spanned_values(x))
 })
 
-#' @rdname int_methods
+#' @rdname dimensions
 #' @exportMethod ncol
 setMethod("ncol", "LabelRow",
           function(x) {
     ncol(col_info(x))
 })
 
-#' @rdname int_methods
+#' @rdname dimensions
 #' @exportMethod ncol
 setMethod("ncol", "InstantiatedColumnInfo",
           function(x) {
     length(col_exprs(x))
 })
 
-#' Dim of a TableTree-related Object
-#' @param x The Object
+#' @rdname dimensions
 #' @exportMethod dim
 setMethod("dim", "VTableNodeInfo",
           function(x) c(nrow(x), ncol(x)))
-#' Retrieve or set tthe direct children of a Tree-style objecgt
+
+#' Retrieve or set the direct children of a Tree-style object
 #'
 #' @param x An object with a Tree structure
 #' @param value New list of children.

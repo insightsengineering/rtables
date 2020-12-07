@@ -3,10 +3,10 @@
 #' 
 #' @param x an object
 #' 
+#' 
 #' @export
 #' 
 #' @examples 
-#' 
 #' is_rtable(build_table(basic_table(), iris))
 is_rtable <- function(x) {
   is(x, "VTableTree")

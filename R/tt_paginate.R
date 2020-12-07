@@ -591,6 +591,7 @@ pag_tt_indices = function(tt, lpp = 15,
 }
 
 #' @export
+#' @aliases paginate_table
 #' @rdname paginate
 paginate_table = function(tt, lpp = 15,
                            min_siblings = 2,

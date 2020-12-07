@@ -20,21 +20,14 @@ articles:
     - introduction
     - clinical_trials
     - tabulation_concepts
-    - tabulation_dplyr
-    - rtabulate
-    - manual_table_construction
-    - formatting_tables
+    - baseline
     - subsetting_tables
     - sorting_pruning
+    - rendering_tables
     - pagination
-    - baseline
-    - varia
-
-  - title: Developer
-    desc: Vignettes aimed at package developers
-    contents:
-    - tabletree_design
-    - devguide
+    - tabulation_dplyr
+    - manual_table_construction
+    - rtabulate
 
 reference:
 
@@ -53,7 +46,6 @@ reference:
     - build_table
     - basic_table
     - analyze
-    - in_rows
     - append_topleft
     - split_cols_by
     - add_colcounts
@@ -63,15 +55,19 @@ reference:
     - analyze_colvars
     - split_cols_by_cuts 
     - add_overall_level
+    - add_overall_col
     - analyze_against_ref_group
     - add_existing_table
 
   - title: Tabulation Utility Functions
     desc: Utility functions
     contents:
+    - in_rows
+    - simple_analysis
     - make_afun
-    - list_wrap_x
-    - list_wrap_df
+    
+  - title: Split Functions
+    contents:
     - remove_split_levels
     - add_combo_levels
 
@@ -79,12 +75,13 @@ reference:
     desc: cell formatting.
     contents:
     - sprintf_format
-    - format_rcell
     - list_rcell_format_labels
+    - format_rcell
     - is_rcell_format
     
   - title: Table Structure Information
     contents:
+    - dim,VTableNodeInfo-method
     - row_paths
     - row_paths_summary
     - table_structure
@@ -93,10 +90,11 @@ reference:
     contents:
     - cell_values
     - top_left
-    - header
-    - header<-
-    - insert_rrow
-    - insert_rrow
+    - rbind
+    - cbind_rtables
+    - as.vector,TableRow-method
+    - "[<-,VTableTree,ANY,ANY,list-method"
+
     
   - title: Sorting and Pruning
     contents:
@@ -107,30 +105,21 @@ reference:
     - sort_at_path
     - cont_n_allcols
     
-  - title: Manual Table Creation Functions
-    desc: These functions (except for `manual_cols`) provide some backwards compatibility to the previous 
+  - title: Compatibility Layer
+    desc: These functions provide some backwards compatibility to the previous 
           (pre 2021) `rtables` framework.
     contents:
-    - manual_cols
     - rtable
     - rrow
     - rcell
     - rheader
     - rtablel
     - rrowl
-    - rbindl_rtables
     - indent
-    - header_add_N
-    
-  - title: rtabulate Framework
-    desc: rtabulate is an alternative framework to tabulate tables and mainly use in `rtables` pre 2021. 
-    contents:
     - rtabulate
-    - rtab_inner
     - by_all
     - by_add_total
     - by_quartile
-
     
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
@@ -146,18 +135,18 @@ reference:
     contents:
     - Viewer
     - compare_rtables
-    - label
     - var_labels<-
     - var_labels
     - var_labels_remove
     - var_relabel
     - with_label
     - indent_string
+    - is_rtable
 
   - title: Pagination
     desc: Pagination related functionality
     contents:
-    - pag_tt_indices
+    - paginate_table
     - make_row_df
 
   - title: Included Data
@@ -175,15 +164,17 @@ reference:
     - obj_avar
     - no_colinfo
     - clayout
+    - length,CellValue-method
+    - names,VTableNodeInfo-method 
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors
     contents:
+    - manual_cols
     - CellValue
     - ends_with("Split")
     - ends_with("class")
     - ends_with("Row")
-    
 
     
   - title: Internal Functions

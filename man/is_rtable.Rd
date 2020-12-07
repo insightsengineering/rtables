@@ -13,6 +13,5 @@ is_rtable(x)
 Check if an object is a valid rtable
 }
 \examples{
-
 is_rtable(build_table(basic_table(), iris))
 }

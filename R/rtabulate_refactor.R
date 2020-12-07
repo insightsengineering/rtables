@@ -19,26 +19,26 @@
 #' @author Gabriel Becker and Adrian Waddell
 #'
 #' @examples
-#' rtab_inner(1:3)
-#' rtab_inner(iris$Species)
-#' rtab_inner(iris$Species == "setosa")
-setGeneric("rtab_inner", function(x, ...) standardGeneric("rtab_inner"))
+#' simple_analysis(1:3)
+#' simple_analysis(iris$Species)
+#' simple_analysis(iris$Species == "setosa")
+setGeneric("simple_analysis", function(x, ...) standardGeneric("simple_analysis"))
 
 #' @rdname rtinner
-#' @exportMethod rtab_inner
-setMethod("rtab_inner", "numeric", function(x, ...) in_rows("Mean" = rcell(mean(x,...), format = "xx.xx")))
+#' @exportMethod simple_analysis
+setMethod("simple_analysis", "numeric", function(x, ...) in_rows("Mean" = rcell(mean(x,...), format = "xx.xx")))
 
 #' @rdname rtinner
-#' @exportMethod rtab_inner
-setMethod("rtab_inner", "logical", function(x, ...) in_rows("Count" = rcell(sum(x,...), format = "xx")))
+#' @exportMethod simple_analysis
+setMethod("simple_analysis", "logical", function(x, ...) in_rows("Count" = rcell(sum(x,...), format = "xx")))
 
 #' @rdname rtinner
-#' @exportMethod rtab_inner
-setMethod("rtab_inner", "factor", list_wrap_x(table))
+#' @exportMethod simple_analysis
+setMethod("simple_analysis", "factor", list_wrap_x(table))
 
 #' @rdname rtinner
-#' @exportMethod rtab_inner
-setMethod("rtab_inner", "ANY",
+#' @exportMethod simple_analysis
+setMethod("simple_analysis", "ANY",
           function(x, ...) {
               stop("No default rtabulate behavior for class ", class(x), " please specify FUN  explicitly.")
           })
@@ -76,7 +76,7 @@ setMethod("rtab_inner", "ANY",
 #' \code{rtablulate} provides a direct tabulation API conceptually derived from \code{\link{tapply}}.
 #'
 #' In practice, a Pre-data layout is built up based on the
-#' arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{rtab_inner}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
+#' arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{simple_analysis}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
 #'
 #' @param x either a vector or \code{data.frame}
 #' @param ... arguments passed to the tabulation function
@@ -260,7 +260,7 @@ setMethod("rtab_inner", "ANY",
 #' #
 rtabulate <- function(x,
                      col_by = by_all("col_1"),
-                     FUN = rtab_inner,
+                     FUN = simple_analysis,
                      ...,
                      row_by = NULL,
                      format = NULL,
@@ -270,6 +270,7 @@ rtabulate <- function(x,
                      total = NULL,
                      col_N = NULL
                      )  {
+  
     if(missing(FUN) && missing(row.name)) {
         if(inherits(x, "numeric"))
             row.name = "mean"
