@@ -10,7 +10,6 @@
 ^\.travis\.yml$
 ^Jenkinsfile$
 ^logs$
-^redesign$
 ^man-roxygen$
 ^\..*$
 ^temp$

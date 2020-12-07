@@ -1,10 +1,10 @@
 ---
-title: "Formatting Tables"
+title: "Rendering Tables"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Formatting Tables}
+  %\VignetteIndexEntry{Rendering Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

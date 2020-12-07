@@ -1,10 +1,10 @@
 ---
-title: "rtabulate"
+title: "rtabulate Tabulation Framework"
 author: "Adrian Waddell"
 date: "3/21/2018"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rtabulate}
+  %\VignetteIndexEntry{rtabulate Tabulation Framework}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

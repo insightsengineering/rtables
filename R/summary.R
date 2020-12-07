@@ -1,161 +1,127 @@
 
 
-setGeneric("summary", function(object,...) standardGeneric("summary"))
-## preserve S3 behavior
+# paths summary ----
+
+#' @rdname make_col_row_df
+#' 
+#' @title Return List with Table Row/Col Paths
+#' 
+#' @param x an rtable object
+#' 
 #' @export
-setMethod("summary", "ANY", base:::summary)
-
-
-#' Show Row and Column summary of a TableTree
-#'
-#' @param object an object of class \code{TableTree} which is usually created with \code{\link{build_table}}
-#' @param row_type character(1).
-#' @param \dots \dots.
-#' @param depth numeric(1). Depth.
-#' @param indent numeric(1). Indent.
-#' @examples
-#' library(dplyr)
-#'
-#' l <- basic_table() %>%
-#'     split_cols_by("Species") %>%
-#'     split_rows_by("RND") %>%
-#'     analyze(c("Sepal.Length", "Petal.Length"), afun = list_wrap_x(summary) , format = "xx.xx")
-#' l
-#'
-#' iris2 <- iris %>% mutate(RND = sample(c("A", "B"), 150, replace = TRUE))
-#'
-#' tbl <- build_table(l, iris2)
+#' 
+#' @examples 
+#' tbl <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("SEX", "AGE")) %>%
+#'   build_table(ex_adsl)
+#' 
 #' tbl
-#'
-#' summary(tbl)
-#' @rdname summarymeths
-setMethod("summary", "VTableTree", function(object, depth = 0, indent = 0, row_type = "", ...) {
-
-  if (indent == 0) {
-    cat_row(0, "name", "label", TRUE, "type  |")
-    cat("----------------------------------------------------------\n")
-  }
-
-  # note to follow the logic of get_formatted_rows
-
-  lr <- summary(tt_labelrow(object), depth, indent)
-
-  indent <- indent + !is.null(lr)
-
-  summary(content_table(object), depth = depth, indent = indent, row_type = "cont. |")
-  lapply(tree_children(object), summary, depth = depth + 1, indent = indent + (length(content_table(object)) > 0), row_type = "leaf  |")
-
-
-  if (indent == 0) {
-    cat("\n* indicates that row is not visible\n")
-  }
-  invisible(NULL)
-})
-
-
-
-#' Summary method for elementary table
-#'
-#' @examples
-#' tbl <- rtabulate(iris$Sepal.Length, iris$Species, list_wrap_x(summary))
-#'
-#' @rdname summarymeths
-setMethod("summary", "ElementaryTable", function(object, depth = 0, indent = 0, row_type) {
-
-  lr <- summary(tt_labelrow(object), depth, indent)
-
-  lapply(tree_children(object), summary, depth = depth + 1, indent = indent + !is.null(lr), row_type)
-
-  invisible(NULL)
-})
-
-#' @rdname summarymeths
-setMethod("summary", "TableRow", function(object, depth = 0, indent = 0, row_type) {
-  cat_row(indent, obj_name(object), obj_label(object), TRUE, row_type)
-})
-#' @rdname summarymeths
-setMethod("summary", "LabelRow", function(object, depth = 0, indent = 0, ...) {
-
-  if (labelrow_visible(object)) {
-    cat_row(indent, obj_name(object), obj_label(object), object@visible, "label |")
-    TRUE
-  } else {
-    NULL
-  }
-
-})
-
-cat_row <- function(indent, name, label, visible, content) {
-  if (is.null(label)) label <- "<no label>"
-  if (is.null(name)) name <- "<no name>"
-
-  if (requireNamespace("crayon", quietly = TRUE)) {
-    cat(
-      if (visible) " " else "*",
-      crayon::silver(content),
-      indent_string(
-        paste(
-          crayon::blue(name),
-          crayon::black(label),
-          sep = " - "
-        ),
-        indent
-      ),
-      "\n"
-    )
-  } else {
-    cat(
-      if (visible) " " else "*",
-      content,
-      indent_string(
-        paste(
-          name,
-          label,
-          sep = " - "
-        ),
-        indent
-      ),
-      "\n"
-    )
-  }
+#' 
+#' row_paths(tbl)
+#' col_paths(tbl)
+#' 
+#' \dontrun{
+#' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo")) 
+#' cell_values(tbl)
+#' }
+#' 
+row_paths <- function(x) {
+  stopifnot(is_rtable(x))
+  make_row_df(x, visible_only = TRUE)$path
 }
 
 
-# rtables:::treestruct(tbl)
-# rtables:::make_pagdf(tbl)
-# cell_value(tbl, c("B", "Sepal.Length", "Median"), "setosa") # names, not labels
-
-# Column Structure:
-# name                label              col_count
-# - setosa            Setosa Flower         10
-# - versicolor        Versicolor Flower     20
-# - virginica         Viginica Flower       32
-# (don't) show col counts
-#
-# Row Structure:
-# name             label          visible    type
-# - Sepal.Length   Sepal.Length    TRUE      label
-#   - Min.         Min.            TRUE      content
-#   - 1st Qu.      ...             TRUE
-#   - Median       ...             TRUE
-#   - Mean         ...             TRUE
-#   - 3rd. Qu.     ...             TRUE
-#   - Max.         ...             TRUE
-# - Petal.Length   ...             TRUE
-#   - Min.         ...             TRUE
-#   - 1st Qu.      ...             TRUE
-#   - Median       ...             TRUE
-#   - Mean         ...             TRUE
-#   - 3rd. Qu.     ...             TRUE
-#   - Max.         ...             TRUE
-#
+#' @rdname make_col_row_df
+#' @export
+col_paths <- function(x) {
+  stopifnot(is_rtable(x))
+  make_col_df(x, visible_only = TRUE)$path
+}
 
 
-# SOC
-#  TERM           ARM A           ARM B
-# -------------------------------------
-#
+#' Print Row/Col Paths Summary
+#' 
+#' @param x an rtable object
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' library(dplyr)
+#' 
+#' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
+#' 
+#' tbl <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX", split_fun = drop_split_levels) %>%
+#'   analyze(c("AGE", "BMRKR2")) %>%
+#'   build_table(ex_adsl_MF)
+#' 
+#' tbl
+#' 
+#' df <- row_paths_summary(tbl)
+#' 
+#' df
+#' 
+#' col_paths_summary(tbl)
+row_paths_summary <- function(x) {
+  stopifnot(is_rtable(x))
+  
+  if (nrow(x) == 0)
+    return("rowname     node_class       path\n---------------------\n")
+  
+  pagdf <- make_row_df(x, visible_only = TRUE)
+  row.names(pagdf) <- NULL
+  
+  mat <- rbind(
+    c("rowname", "node_class", "path"),
+    t(apply(pagdf, 1, function(xi) {
+      c(
+        indent_string(xi$label, xi$indent),
+        xi$node_class,
+        paste(xi$path[-1], collapse = ", ")
+      )
+    }))
+  )
+  
+  txt <- mat_as_string(mat)
+  cat(txt)
+  cat("\n")
 
+  invisible(pagdf[, c("label", "indent", "node_class", "path")])
+}
+
+
+#' @rdname row_paths_summary
+#' @export
+col_paths_summary <- function(x) {
+  stopifnot(is_rtable(x))
+
+  pagdf <- make_col_df(x, visible_only = TRUE)
+  row.names(pagdf) <- NULL
+  
+  mat <- rbind(
+    c("label", "path"),
+    t(apply(pagdf, 1, function(xi) {
+      .GlobalEnv$xi <- xi
+      c(
+        xi$label,
+        paste(xi$path[-1], collapse = ", ")
+      )
+    }))
+  )
+  
+  txt <- mat_as_string(mat)
+  cat(txt)
+  cat("\n")
+  
+  invisible(pagdf[, c("label", "path")])
+}
+
+
+# Rows ----
+# . Summarize Rows ----
 
 summarize_row_df <- function(name, label, indent, depth, rowtype, indent_mod, level) {
   data.frame(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level,
@@ -171,8 +137,8 @@ summarize_row_df_empty <- function(...) {
 #' @inheritParams gen_args
 #' @param depth numeric(1). Depth.
 #' @param indent numeric(1). Indent.
-#' @export
-#'
+#' 
+#' @noRd
 #' @examples
 #'
 #' library(dplyr)
@@ -270,17 +236,19 @@ setMethod("summarize_rows", "LabelRow",
 
 
 
+# Print Table Structure ----
+
 #' Summarize Table
-#'
-#'
-#' @export
+#' 
+#' 
 #' @inheritParams gen_args
 #' @param depth numeric(1).
 #' @param indent numeric(1).
-#' @param print_indent numeric(1).
-
-#' @examples
-#'
+#' @param print_indent numeric(1)
+#' 
+#' @export
+#' @examples 
+#' 
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -294,10 +262,12 @@ setMethod("summarize_rows", "LabelRow",
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #'
 #' tbl <- build_table(l, iris2)
-#'
-#' summarize_table(tbl)
-#'
-setGeneric("summarize_table", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("summarize_table"))
+#' 
+#' row_paths(tbl)
+#' 
+#' table_structure(tbl)
+#' 
+setGeneric("table_structure", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("table_structure"))
 
 
 scat <- function(..., indent = 0, newline = TRUE) {
@@ -309,6 +279,7 @@ scat <- function(..., indent = 0, newline = TRUE) {
   if (newline) cat("\n")
 }
 
+## helper functions
 obj_visible <- function(x) {
   x@visible
 }
@@ -320,32 +291,25 @@ is_empty_labelrow <- function(x) {
 is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
+
 #' @rdname int_methods
-#' @inheritParams summarize_table
-setMethod("summarize_table", "TableTree",
+#' @inheritParams table_structure
+setMethod("table_structure", "TableTree",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             indent <- indent + indent_mod(obj)
 
             scat("TableTree: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
 
-            visible <- if (is_empty_labelrow(tt_labelrow(obj))) {
-              scat("labelrow: -", indent = print_indent + 1)
-              FALSE
-            } else {
-              scat("labelrow:", indent = print_indent + 1)
-              summarize_table(tt_labelrow(obj), depth, indent, print_indent + 2)
-            }
-
-            indent <- indent + visible
+            table_structure(tt_labelrow(obj), depth, indent, print_indent + 1)
 
             ctab <- content_table(obj)
             visible_content <- if (is_empty_ElementaryTable(ctab)) {
-              scat("content: -", indent = print_indent + 1)
+              # scat("content: -", indent = print_indent + 1)
               FALSE
             } else {
               scat("content:", indent = print_indent + 1)
-              summarize_table(ctab, depth = depth,
+              table_structure(ctab, depth = depth,
                               indent = indent + indent_mod(ctab),
                               print_indent = print_indent + 2)
             }
@@ -354,8 +318,8 @@ setMethod("summarize_table", "TableTree",
               scat("children: - ", indent = print_indent + 1)
             } else {
               scat("children: ", indent = print_indent + 1)
-              lapply(tree_children(obj), summarize_table,
-                     depth = depth + 1,
+              lapply(tree_children(obj), table_structure, 
+                     depth = depth + 1, 
                      indent = indent + visible_content * (1 + indent_mod(ctab)),
                      print_indent = print_indent + 2)
             }
@@ -363,29 +327,24 @@ setMethod("summarize_table", "TableTree",
           invisible(NULL)
 
           })
+
 #' @rdname int_methods
-setMethod("summarize_table", "ElementaryTable",
+setMethod("table_structure", "ElementaryTable",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             scat("ElementaryTable: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
 
 
             indent <- indent + indent_mod(obj)
-
-            visible <- if (is_empty_labelrow(tt_labelrow(obj))) {
-              scat("labelrow: -", indent = print_indent + 1)
-              FALSE
-            } else {
-              scat("labelrow:", indent = print_indent + 1)
-              summarize_table(tt_labelrow(obj), depth, indent, print_indent + 2)
-            }
-
-
+            
+            table_structure(tt_labelrow(obj), depth, indent, print_indent + 1)
+            
+            
             if (length(tree_children(obj)) == 0) {
               scat("children: - ", indent = print_indent + 1)
             } else {
               scat("children: ", indent = print_indent + 1)
-              lapply(tree_children(obj), summarize_table, depth = depth + 1, indent = indent, print_indent = print_indent + 2)
+              lapply(tree_children(obj), table_structure, depth = depth + 1, indent = indent, print_indent = print_indent + 2)
             }
 
             invisible(NULL)
@@ -393,7 +352,7 @@ setMethod("summarize_table", "ElementaryTable",
           })
 
 #' @rdname int_methods
-setMethod("summarize_table", "TableRow",
+setMethod("table_structure", "TableRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             scat(class(obj), ": ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
@@ -402,14 +361,16 @@ setMethod("summarize_table", "TableRow",
 
             invisible(NULL)
           })
+
 #' @rdname int_methods
-setMethod("summarize_table", "LabelRow",
+setMethod("table_structure", "LabelRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             indent <- indent + indent_mod(obj)
-
-            txtvis <- if (!obj_visible(obj)) "- <not visible>" else ""
-            scat("LabelRow: ", "[", obj_name(obj), "] (", obj_label(obj), ")", txtvis,  indent = print_indent)
-
+            
+            txtvis <- if (!obj_visible(obj)) " - <not visible>" else ""
+            
+            scat("labelrow: ", "[", obj_name(obj), "] (", obj_label(obj), ")", txtvis,  indent = print_indent)
+            
             obj_visible(obj)
           })

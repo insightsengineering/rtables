@@ -18,43 +18,35 @@ articles:
     desc: Vignettes aimed at package users
     contents:
     - introduction
-    - tabulation_dplyr
     - clinical_trials
     - tabulation_concepts
-    - varia
-    - rtabulate
-    - manual_table_construction
-    - formatting_tables
+    - baseline
     - subsetting_tables
     - sorting_pruning
+    - rendering_tables
     - pagination
-    - baseline
-    - known_issues
-    - varia
-
-  - title: Developer
-    desc: Vignettes aimed at package developers
-    contents:
-    - tabletree_design
-    - devguide
+    - tabulation_dplyr
+    - manual_table_construction
+    - rtabulate
 
 reference:
 
   - title: Argument Conventions
-    desc: The following functions are unexported dummy functions that document argument conventions in the framework.
+    desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:
     - lyt_args
     - constr_args
     - compat_args
     - gen_args
+    - sf_args
     
-  - title: Layouts and Tabulation
+  - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
     contents:
     - build_table
     - basic_table
     - analyze
-    - in_rows
+    - append_topleft
     - split_cols_by
     - add_colcounts
     - split_rows_by
@@ -63,20 +55,59 @@ reference:
     - analyze_colvars
     - split_cols_by_cuts 
     - add_overall_level
+    - add_overall_col
     - analyze_against_ref_group
     - add_existing_table
-    - manual_cols
-    
-  - title: Table Tree Utility Functions
+
+  - title: Tabulation Utility Functions
     desc: Utility functions
     contents:
-    - list_wrap_x
-    - list_wrap_df
-    - remove_split_levels # split_funcs
+    - in_rows
+    - simple_analysis
+    - make_afun
+    
+  - title: Split Functions
+    contents:
+    - remove_split_levels
     - add_combo_levels
 
-  - title: Manual Table Creation Functions
-    desc:  These are the main functions needed to build an rtable.
+  - title: Cell Formatting related Functions
+    desc: cell formatting.
+    contents:
+    - sprintf_format
+    - list_rcell_format_labels
+    - format_rcell
+    - is_rcell_format
+    
+  - title: Table Structure Information
+    contents:
+    - dim,VTableNodeInfo-method
+    - row_paths
+    - row_paths_summary
+    - table_structure
+    
+  - title: Access and Modify
+    contents:
+    - cell_values
+    - top_left
+    - rbind
+    - cbind_rtables
+    - as.vector,TableRow-method
+    - "[<-,VTableTree,ANY,ANY,list-method"
+
+    
+  - title: Sorting and Pruning
+    contents:
+    - prune_table
+    - all_zero_or_na
+    - trim_zero_rows
+    - trim_rows
+    - sort_at_path
+    - cont_n_allcols
+    
+  - title: Compatibility Layer
+    desc: These functions provide some backwards compatibility to the previous 
+          (pre 2021) `rtables` framework.
     contents:
     - rtable
     - rrow
@@ -84,24 +115,11 @@ reference:
     - rheader
     - rtablel
     - rrowl
-
-  - title: Cell Formatting related Functions
-    desc: cell formatting.
-    contents:
-    - sprintf_format
-    - format_rcell
-    - list_rcell_format_labels
-    - is_rcell_format
-    
-  - title: rtabulate Framework
-    desc: rtabulate is another framework to tabulate rtables
-    contents:
+    - indent
     - rtabulate
-    - rtab_inner
     - by_all
     - by_add_total
     - by_quartile
-
     
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
@@ -110,77 +128,26 @@ reference:
     - propose_column_widths
     - as_html
     - matrix_form
+    - get_formatted_cells
 
   - title: Utility Functions
     desc: utility functions
     contents:
     - Viewer
     - compare_rtables
-    - label
     - var_labels<-
     - var_labels
     - var_labels_remove
     - var_relabel
     - with_label
+    - indent_string
+    - is_rtable
 
   - title: Pagination
     desc: Pagination related functionality
     contents:
-    - pag_tt_indices
-    - make_pagdf
-    
-  - title: Accessor and Modification Functions
-    desc: Access and Modify Functions
-    contents:
-    - starts_with("nam")
-    - starts_with("row.name")
-    - trim_rows
-    - ends_with("<-")
-    - rbindl_rtables
-    - cbind_rtables
-    - header
-    - header_add_N
-    - indent
-    - insert_rrow
-    - "[<-,VTableTree,ANY,ANY,list-method"
-    - tree_children
-    - starts_with("dim")
-    - "c,SplitVector-method"
-    - CellValue
-    - "length,CellValue-method"
-    
-
-  - title: Table sorting and pruning functions
-    desc: funtions to sort rows within tables and list of tables
-    contents:
-    - order_rrows
-    - sort_rrows
-    - order_rtables
-    - sort_rtables
-    - trim_zero_rows
-
-
-  - title: TableTree Framework Constructors and S4 Classes
-    desc: S4 classes and constructors
-    contents:
-    - ends_with("Split")
-    - ends_with("class")
-    - ends_with("Row")
-
-
-
-    
-  - title: To Sort
-    desc: These functions need to be moved to another section
-    contents:
-    - "as.vector,TableRow-method"
-    - clayout
-    - collect_leaves
-    - no_colinfo
-    - obj_avar
-    - summary,ElementaryTable-method
-    - summary,TableTree-method 
-    - .add_row_summary
+    - paginate_table
+    - make_row_df
 
   - title: Included Data
     desc: Included datasets
@@ -188,7 +155,30 @@ reference:
     - DM
     - ex_adsl 
 
-  - title: Deprecated and Defunct
-    desc: Functions which are not needed/supported in the new API
+  - title: TableTree Framework Accessor Functions
     contents:
-    - by_compare_subset # with rdname deprecated
+    - content_table
+    - obj_name
+    - tree_children
+    - collect_leaves
+    - obj_avar
+    - no_colinfo
+    - clayout
+    - length,CellValue-method
+    - names,VTableNodeInfo-method 
+
+  - title: TableTree Framework Constructors and S4 Classes
+    desc: S4 classes and constructors
+    contents:
+    - manual_cols
+    - CellValue
+    - ends_with("Split")
+    - ends_with("class")
+    - ends_with("Row")
+
+    
+  - title: Internal Functions
+    contents:
+    - split_rows
+    
+

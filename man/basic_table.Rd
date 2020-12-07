@@ -2,15 +2,12 @@
 % Please edit documentation in R/colby_constructors.R
 \name{basic_table}
 \alias{basic_table}
-\title{Basic starting table layout with 1 column and zero rows}
+\title{Layout with 1 column and zero rows}
 \usage{
 basic_table()
 }
 \description{
-Basic starting table layout with 1 column and zero rows
-}
-\note{
-this is represented by \code{NULL} currently
+Every layout must start with a basic table.
 }
 \examples{
 

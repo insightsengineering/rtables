@@ -7,7 +7,7 @@
 analyze(
   lyt,
   vars,
-  afun = rtab_inner,
+  afun = simple_analysis,
   var_labels = vars,
   table_names = vars,
   format = NULL,

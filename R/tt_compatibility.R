@@ -406,6 +406,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 
 #' rbind TableTree and related objects
 #' @rdname rbind
+#' @aliases rbind
 #' @exportMethod rbind
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
@@ -444,7 +445,6 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #'  #
 #'  # rbind(mtbl, mtbl2, gap = 1)
 #'  # rbind(mtbl, mtbl2, gap = 2)
-
 setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
     rbindl_rtables(list(...), check_headers = TRUE)
@@ -460,12 +460,6 @@ setMethod("rbind2", "VTableNodeInfo",
 })
 
 
-header_add_N = function(x, N) {
-    col_counts(x) = as.integer(N)
-    colcount_format(x) = "(N=xx)"
-    disp_ccounts(x) = TRUE
-    x
-}
 
 #' Miscellaneous Compatability methods for the old API
 #' @inheritParams gen_args
@@ -1112,18 +1106,6 @@ setMethod("recurse_insert", "ElementaryTable",
 })
 
 
-
-
-
-
-
-
-order_rrows = function(x, indices = c(1, 1), ...) {
-
-
-
-
-}
 
 #' Compatability Layer for Legacy "by_*" functions
 #'

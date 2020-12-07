@@ -7,7 +7,7 @@
 rtabulate(
   x,
   col_by = by_all("col_1"),
-  FUN = rtab_inner,
+  FUN = simple_analysis,
   ...,
   row_by = NULL,
   format = NULL,
@@ -58,7 +58,7 @@ an \code{\link{rtable}} object
 }
 \details{
 In practice, a Pre-data layout is built up based on the
-arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{rtab_inner}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
+arguments using hierarchical splitting for rows and columns as necessary, then analyzing all variables in \code{x} via \code{FUN} (which defaults to \code{\link{simple_analysis}}). This layout is then applied to the full data (the combination of \code{x}, \code{col_by} and, if non-null, \code{row_by}).
 }
 \note{
 For backwards compatibility, all paramters other than \code{x}, \code{col_by} and \code{FUN} appear after \dots so must be specified by full argument name.

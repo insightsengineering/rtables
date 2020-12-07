@@ -3,9 +3,10 @@ Title: Reporting Tables
 Date: 2020-09-25
 Version: 0.3.2.17.9049
 Authors@R: c(
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
-  person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = "aut"),
-  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut")
+  person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
+  person("Daniel", "Sabanés Bové", email = "daniel.sabanes_bove@roche.com", role = "ctb"),
+  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "ctb")
   )
 Description: Reporting tables often have structure that goes beyond simple rectangular
   data. The rtables package provides a framework for declaring complex multi-level tabulations
@@ -15,8 +16,7 @@ Description: Reporting tables often have structure that goes beyond simple recta
 Depends: methods, magrittr, R (>= 2.10)
 Imports:
   stats,
-  htmltools,
-  purrr
+  htmltools
 Suggests:
   dplyr,
   tibble,
