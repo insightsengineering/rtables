@@ -1,6 +1,7 @@
 ## rtables 0.3.2.17.9051
 
-* `remove_split_levels` has now options `drop_levels` and `keep_order` and works correctly.
+* `remove_split_levels` now also works correctly with factor split variables.
+* `drop_and_remove_levels` has been added and both excludes certain split levels as well as drops not occurring levels.
 
 ## rtables 0.3.2.17.9049
 

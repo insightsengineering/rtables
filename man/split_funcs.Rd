@@ -4,15 +4,18 @@
 \alias{remove_split_levels}
 \alias{keep_split_levels}
 \alias{drop_split_levels}
+\alias{drop_and_remove_levels}
 \alias{reorder_split_levels}
 \alias{trim_levels_in_group}
 \title{Split functions}
 \usage{
-remove_split_levels(excl, drop_levels = FALSE, keep_order = FALSE)
+remove_split_levels(excl)
 
 keep_split_levels(only, reorder = TRUE)
 
 drop_split_levels(df, spl, vals = NULL, labels = NULL, trim = FALSE)
+
+drop_and_remove_levels(excl)
 
 reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 
@@ -21,13 +24,6 @@ trim_levels_in_group(innervar)
 \arguments{
 \item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 of presence in the data).}
-
-\item{drop_levels}{logical(1). Should levels in the data which do not appear be dropped. Defaults to \code{FALSE},
-which keeps all levels (except \code{excl}) regardless of appearance in the data.}
-
-\item{keep_order}{logical(1). Should the order the levels appear in the data be kept. Defaults to \code{FALSE},
-which uses the usual alphabetical order via \code{sort()}. Can only be \code{TRUE} when \code{drop} is \code{TRUE},
-because it would not be possible to figure out the original data order without appearance of a level.}
 
 \item{only}{character. Levels to retain (all others will be dropped).}
 
