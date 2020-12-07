@@ -7,7 +7,7 @@
 basic_table()
 }
 \description{
-Every layout must start with a basic table.
+Basic starting table layout with an implicit root column split ( if not further split this will create 1 column for all observations) and no row structure. 
 }
 \examples{
 

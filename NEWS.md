@@ -1,5 +1,6 @@
 ## rtables 0.3.3
 
+
 This version completely refactors the `rtables` package. We do provide a backwards compatibility layer with the
 `rtable`, `rcell`, `rrow`, `rheader`, and `rtabulate` family of functions. However the table data structure and main
 tabulation framework have changed. We provide extensive documentation in the manuals `help(package = "rtables")` and
