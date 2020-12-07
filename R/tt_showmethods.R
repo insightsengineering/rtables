@@ -1,3 +1,4 @@
+
 treestruct <- function(obj, ind = 0L) {
     nc = ncol(obj)
     cat(rep(" ", times = ind),

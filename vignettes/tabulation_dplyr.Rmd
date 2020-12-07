@@ -1,10 +1,10 @@
 ---
-title: "Tabulation using dplyr"
+title: "Comparison with dplyr Tabulation"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tabulation using dplyr}
+  %\VignetteIndexEntry{Comparison with dplyr Tabulation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

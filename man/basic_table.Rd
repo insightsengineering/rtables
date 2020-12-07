@@ -2,12 +2,12 @@
 % Please edit documentation in R/colby_constructors.R
 \name{basic_table}
 \alias{basic_table}
-\title{Basic starting table layout with 1 column and zero rows}
+\title{Layout with 1 column and zero rows}
 \usage{
 basic_table()
 }
 \description{
-Basic starting table layout with 1 column and zero rows
+Basic starting table layout with an implicit root column split ( if not further split this will create 1 column for all observations) and no row structure. 
 }
 \examples{
 
