@@ -3,6 +3,7 @@
 #' @param x SplitVecttor
 #' @param ... Splits or SplitVector objects
 #' @exportMethod c
+#' @rdname int_methods
 setMethod("c", "SplitVector", function(x, ...) {
     arglst = list(...)
     stopifnot(all(sapply(arglst, is, "Split")))
@@ -679,7 +680,7 @@ split_rows_by_cutfun = function(lyt, var,
 #'
 analyze = function(lyt,
                    vars,
-                   afun = rtab_inner,
+                   afun = simple_analysis,
                    var_labels = vars,
                    table_names = vars,
                    format = NULL,
@@ -905,7 +906,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
 
 ## Add a total column at the next **top level** spot in
 ## the column layout.
-## TODO remove this???
+
 #' Add Overall Column (deprecated?)
 #' @description This function will \emph{only} add an overall
 #' column at the \emph{top} level of splitting, NOT within
@@ -921,11 +922,12 @@ add_overall_col = function(lyt, label) {
                   next_cpos(lyt, FALSE))
 }
 
-#' Add Row Summary
-#'
+
+#' 
 #' @inheritParams lyt_args
-#' @rdname dot_add_row_summary
 #' @export
+#' 
+#' @rdname int_methods
 setGeneric(".add_row_summary",
            function(lyt,
                     label,
@@ -955,7 +957,7 @@ setMethod(".add_row_summary", "PreDataTableLayouts",
     rlayout(lyt) = tmp
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "PreDataRowLayout",
           function(lyt,
                    label,
@@ -990,7 +992,7 @@ setMethod(".add_row_summary", "PreDataRowLayout",
     }
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "SplitVector",
           function(lyt,
                    label,
@@ -1016,7 +1018,7 @@ setMethod(".add_row_summary", "SplitVector",
     lyt[[ind]] = tmp
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "Split",
           function(lyt,
                    label,
@@ -1038,7 +1040,7 @@ setMethod(".add_row_summary", "Split",
     content_extra_args(lyt) = extra_args
     lyt
 })
-#' @rdname dot_add_row_summary
+#' @rdname int_methods
 setMethod(".add_row_summary", "NULL",
           function(lyt,
                    label,
@@ -1433,10 +1435,9 @@ list_wrap_df = function(f) {
 }
 
 
-#' Basic starting table layout with 1 column and zero rows
+#' Layout with 1 column and zero rows
 #'
-#'
-#' @note this is represented by \code{NULL} currently
+#' Every layout must start with a basic table.
 #'
 #' @export
 #'
@@ -1446,11 +1447,23 @@ list_wrap_df = function(f) {
 #'   analyze("AGE", afun = mean) %>%
 #'   build_table(DM)
 #'
-basic_table <- function() NULL
+basic_table <- function() PreDataTableLayouts()
 
 
 
 #' Append a description to the 'top-left' materials for the layout
+#'
+#' @description This function \emph{adds} \code{newlines} to the current
+#' set of "top-left materials".
+#' @details
+#'
+#' Adds \code{newlines} to the set of strings representing the 'top-left'
+#' materials declared in the layout (the content displayed to the left of
+#' the column labels when the resulting tables are printed).
+#'
+#' Top-left material strings are stored and then displayed \emph{exactly as is},
+#' no structure or indenting is applied to them either wheyn they are added
+#' or when they are displayed.
 #' @inheritParams lyt_args
 #' @param newlines character. The new line(s) to be added to the materials
 #' @note Currently, where in the construction of the layout this is called
@@ -1458,7 +1471,7 @@ basic_table <- function() NULL
 #' This may change in the future.
 #' @note This function is experimental, its name and the details of
 #' its behavior are subject to change in future versions.
-#'
+#' @seealso top_left
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%

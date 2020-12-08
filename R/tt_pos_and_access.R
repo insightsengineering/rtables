@@ -511,6 +511,10 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
     counter = 0
     nr = nrow(tt)
     i = .j_to_posj(i, nr)
+    if(length(i) == 0) {
+        ret <- TableTree(cinfo = col_info(tt))
+        return(ret)
+    }
 
     prune_rowsbynum = function(x, i, valifnone = NULL) {
         maxi = max(i)

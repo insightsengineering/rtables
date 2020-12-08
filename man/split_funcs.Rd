@@ -4,6 +4,7 @@
 \alias{remove_split_levels}
 \alias{keep_split_levels}
 \alias{drop_split_levels}
+\alias{drop_and_remove_levels}
 \alias{reorder_split_levels}
 \alias{trim_levels_in_group}
 \title{Split functions}
@@ -13,6 +14,8 @@ remove_split_levels(excl)
 keep_split_levels(only, reorder = TRUE)
 
 drop_split_levels(df, spl, vals = NULL, labels = NULL, trim = FALSE)
+
+drop_and_remove_levels(excl)
 
 reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 

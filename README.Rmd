@@ -19,41 +19,48 @@ knitr::opts_chunk$set(
 
 ## Reporting tables with R
 
-The `rtables` R package is a prototype to create and display complex tables with
-R. The cells in an `rtable` may contain any high-dimensional data structure
-which can then be displayed with cell-specific formatting instructions. Currently,
+The `rtables` R package was designed to create and display complex tables with R. The cells in an `rtable` may contain
+any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
 `rtables` can be outputted in `ascii` and `html`.
 
-Some of our requirements and reasons to create this new table package are:
+Note: we have completely refactored the `rtables` package. The new changes are available with the n we officially
+released as per January 2021. If you have learned the pre-2021 `rtables` framework then please spend some time
+familiarizing yourself with the new framework, there is details in the vignettes.
 
+`rtables` is funded by `F. Hoffmann-La Roche` with the aim to analyze clinical trials data and to create tables that can
+be used for regulatory submissions to the health authorities. Hence, roughly summarized the requirements and reasons to
+create this new table package are:
+
+* cell values and their visualization separate (i.e. no string based tables)
 * multiple values displayed within a cell
-* values need to be programmatically accessible for cross-checking
+* values need to be programmatically accessible in their non-rounded state for cross-checking
 * flexible formatting (cell spans, rounding, alignment, etc.)
-* composition of an `rtable` object from other rtable objects
-* multiple output formats (html, ascii, latex, pdf)
+* composition of an `rtable` object from other `rtables` objects
+* multiple output formats (html, ascii, latex, pdf, xml)
 * flexible pagination
+* title, footnotes, cell cell/row/column references
+* flexible tabulation framework
 
-Note that the current state of `rtables` does not fulfill all of those
-requirements. We are looking for collaborators, see the next section.
-
-## Collaboration and Planned API Changes
-
-The `rtables` package is currently in the process of being reworked to address 
-
-The current state of the `rtables` functionality is a first rough prototype. We
-will be changing the API significantly in the coming months without maintaining
-backward compatibility. We will release the `rtable` package on
-[CRAN](https://cran.r-project.org/) once we have a stable version.
-
-We are looking for collaborators to help define and shape the `rtables` package.
-Please [contact me](mailto:adrian.waddell@roche.com) if you would like to align
-your contributions to the current development plans or feel free to fork the
-repository and to send us pull requests with the suggested improvements.
+Note that the current state of `rtables` does not fulfill all of those requirements, however, `rtables` is still under
+active development and we are working on adding the missing features.
 
 
 ## Installation
 
-To install a frozen pre-release version of `rtables` based on the new Layouting and Tabulation API as presented at user!2020 and JSM2020 run the following command in `R`:
+`rtables` is now available on CRAN and you can install the latest released version with:
+
+```r
+install.packages("rtables")
+```
+
+or you can install the latest stable version directly from GitHub with:
+
+```r
+devtool::install_github("Roche/rtables")
+```
+
+To install a frozen pre-release version of `rtables` based on the new Layouting and Tabulation API as presented at
+user!2020 and JSM2020 run the following command in `R`:
 
 ```{r, eval = FALSE}
 devtools::install_github("roche/rtables", ref="v0.3.2.3")
@@ -74,6 +81,7 @@ library(dplyr)
 
 ## for simplicity grab non-sparse subset
 ADSL = ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
+
 biomarker_ave = function(x, ...) {
      val = if(length(x) > 0) round(mean(x), 2) else "no data"
      in_rows(
@@ -97,7 +105,7 @@ basic_table() %>%
 
 We would like to thank everyone who has made `rtables` a better project by providing feedback and improving examples & vignettes. The following list of contributors is alphabetical:
 
-Daniel Sabanes Bove, Francois Collins, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang.
+Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
 

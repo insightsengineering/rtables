@@ -1582,7 +1582,21 @@ RowsVerticalSection = function(values,
 }
 
 
-
+setMethod(f = "show",
+          signature = "RowsVerticalSection",
+          definition = function(object){
+              
+              cat("in_rows object print method:\n----------------------------\n")
+              print(data.frame(
+                  row_name = attr(object, "row_names"),
+                  formatted_cell = vapply(object, format_rcell, character(1)),
+                  indent_mod = vapply(object, indent_mod, numeric(1)),
+                  row_label = attr(object, "row_labels"),
+                  stringsAsFactors = FALSE,
+                  row.names = NULL
+              ), row.names = TRUE)
+              
+          })
 
 ## ## Empty default objects to avoid repeated calls
 ## EmptyColInfo <- InstantiatedColumnInfo()

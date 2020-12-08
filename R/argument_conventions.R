@@ -1,7 +1,6 @@
 ## package imports
 #' @importFrom utils head head.matrix tail tail.matrix
 #' @importFrom stats setNames na.omit prop.test binom.test relevel
-#' @importFrom purrr transpose
 #' @importFrom htmltools tags tagList
 #' @importFrom magrittr %>%
 #' @import methods
@@ -143,7 +142,7 @@ sf_args <- function(trim, label, first) NULL
 
 
 
-#' Simulated CDISC Data for examples
+#' Simulated CDISC Alike Data for Examples
 #'
 #' @format rds (data.frame)
 #' @rdname cdisc_data

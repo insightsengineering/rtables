@@ -506,13 +506,19 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 #' @param labels character. Labels to use for the remaining levels instead of the existing ones.
 #' @param excl character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
 #'   of presence in the data).
-#'
+#'   
 #' @rdname split_funcs
 #' @export
 remove_split_levels = function(excl) {
+    stopifnot(is.character(excl))
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
-        df2 = df[!(df[[var]] %in% excl),]
+        df2 = df[!(df[[var]] %in% excl), ]
+        if(is.factor(df2[[var]])) {
+          levels = levels(df2[[var]])
+          levels = levels[!(levels %in% excl)]
+          df2[[var]] = factor(df2[[var]], levels = levels)
+        }
         .apply_split_inner(spl, df2, vals = vals,
                            labels = labels,
                            trim = trim)
@@ -549,6 +555,25 @@ drop_split_levels <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE)
                            labels = labels,
                            trim = trim)
 }
+
+#' @rdname split_funcs
+#' @export
+drop_and_remove_levels <- function(excl) {
+  stopifnot(is.character(excl))
+  function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    var <- spl_payload(spl)
+    df2 <- df[!(df[[var]] %in% excl), ]
+    df2[[var]] = factor(df2[[var]])
+    .apply_split_inner(
+      spl,
+      df2,
+      vals = vals,
+      labels = labels,
+      trim = trim
+    )
+  }
+}
+
 
 #' @rdname split_funcs
 #' @param neworder character. New order or factor levels.

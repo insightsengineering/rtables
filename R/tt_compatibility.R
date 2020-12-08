@@ -1,4 +1,3 @@
-
 #' row
 #'
 #' @inheritParams compat_args
@@ -401,12 +400,13 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
     }
 
 
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
+    TableTree(kids = x, cinfo = firstcols, name = "rbind_rnoot", label = "")
 
 }
 
 #' rbind TableTree and related objects
 #' @rdname rbind
+#' @aliases rbind
 #' @exportMethod rbind
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
@@ -445,7 +445,6 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
 #'  #
 #'  # rbind(mtbl, mtbl2, gap = 1)
 #'  # rbind(mtbl, mtbl2, gap = 2)
-
 setMethod("rbind", "VTableNodeInfo",
           function(..., deparse.level = 1) {
     rbindl_rtables(list(...), check_headers = TRUE)
@@ -461,12 +460,6 @@ setMethod("rbind2", "VTableNodeInfo",
 })
 
 
-header_add_N = function(x, N) {
-    col_counts(x) = as.integer(N)
-    colcount_format(x) = "(N=xx)"
-    disp_ccounts(x) = TRUE
-    x
-}
 
 #' Miscellaneous Compatability methods for the old API
 #' @inheritParams gen_args
@@ -498,11 +491,10 @@ header_add_N = function(x, N) {
 header <- function(x) col_info(obj = x)
 
 combine_cinfo = function(..., new_total = NULL) {
-    cinfs <- list(...)
-    if(are(cinfs, "VTableNodeInfo"))
-        cinfs <- lapply(cinfs, col_info)
+    tabs <- list(...)
+    chk_cbindable_many(tabs)
+    cinfs <- lapply(tabs, col_info)
     stopifnot(are(cinfs, "InstantiatedColumnInfo"))
-
 
     ctrees <- lapply(cinfs, coltree)
 
@@ -513,20 +505,86 @@ combine_cinfo = function(..., new_total = NULL) {
     newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
     newexargs <- unlist(lapply(cinfs, col_extra_args)) %||% vector("list", length(newcounts))
     newdisp <- any(vapply(cinfs, disp_ccounts, NA))
-
-
+    alltls <- lapply(cinfs, top_left)
+    newtl <- character()
+    if(!are(tabs, "TableRow")) {
+        alltls <- alltls[vapply(alltls, function(x) length(x) > 0, NA)] ## these are already enforced to all be the same
+        if(length(alltls) > 0)
+            newtl <- alltls[[1]]
+    }
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newexprs,
                            extras = newexargs,
                            cnts = newcounts,
                            dispcounts = newdisp,
                            countformat = colcount_format(cinfs[[1]]),
-                           total_cnt = new_total)
+                           total_cnt = new_total,
+                           topleft = newtl)
+}
+
+nz_len_els <- function(lst) {
+    if(is(lst, "list"))
+        lst[vapply(lst, function(x) length(x) > 0, NA)]
+    else if(is(lst, "character"))
+        lst[nzchar(lst)]
+    else
+        lst
+}
+has_one_unq <- function(x) {
+    length(unique(nz_len_els(x))) <= 1
 }
 
 
+classvec <- function(lst, enforce_one = TRUE) {
+    if(enforce_one)
+        vapply(lst, class, "")
+    else
+        lapply(lst, class)
+}
+
+chk_cbindable_many <- function(lst) {
+    ## we actually want is/inherits there but no easy way
+    ## to figure out what the lowest base class is
+    ## that I can think of right now, so we do the
+    ## broken wrong thing instead :(
+    if(are(lst, "TableRow")) {
+        if(!has_one_unq(classvec(lst)))
+            stop("Cannot cbind different types of TableRow objects together")
+        return(TRUE)
+    }
+    ## if(!are(lst, "VTableTree")
+    ##     stop("Not all elements to be bound are TableTrees or TableRows")
+
+    nrs <- vapply(lst, NROW, 1L)
+    if(!has_one_unq(nrs))
+        stop("Not all elements to be bound have matching numbers of rows")
+
+    tls <- lapply(lst, top_left)
+    if(!has_one_unq(tls[vapply(tls, function(x) length(x) > 0, NA)]))
+        stop("Elements to be bound have differing top-left content: ",
+             paste(which(!duplicated(tls)), collapse = " "))
+
+    rns <- matrix(vapply(lst, row.names, rep("", nrs[[1]])),
+                  nrow = nrs[[1]])
+    rnsok <- apply(rns, 1, has_one_unq)
+    if(!all(rnsok)) {
+        stop("Mismatching, non-empty row names detected in rows ",
+             paste(which(!rnsok), collapse = " "))
+    }
+
+    rws <- lapply(lst, collect_leaves, add.labrows = TRUE)
+    rwclsmat <- matrix(unlist(lapply(rws, classvec)),
+                       ncol = length(lst))
+
+    rwsok <- apply(rwclsmat, 1, has_one_unq)
+    if(!all(rwsok))
+        stop("Mismatching row classes found for rows: ",
+             paste(which(!rwsok), collapse = " "))
+    TRUE
+}
 
 chk_cbindable <- function(x,y) {
+
     if(is(x, "TableRow") &&
        is(y, class(x)))
         return(TRUE)
@@ -537,6 +595,12 @@ chk_cbindable <- function(x,y) {
         stop("y must be of a class that inherits from the class of x (", class(x), ") got ", class(y))
     if(nrow(x) != nrow(y))
         stop("x and y must have the same number of rows, got different row counts (", nrow(x), " / ", nrow(y), ")")
+    tl1 <- top_left(x)
+    tl2 <- top_left(y)
+    if(!identical(tl1, tl2) &&
+       length(tl1) > 0 &&
+       length(tl2) > 0)
+        stop("x and y have non-identical, non-empty top-left content")
     rnx = row.names(x)
     rny = row.names(y)
     if(!all(rnx == rny || !nzchar(rny)))
@@ -743,6 +807,7 @@ setMethod("recurse_cbind", c("VTableNodeInfo",
                              "VTableNodeInfo",
                              "NULL"),
           function(x,y, cinfo) {
+    ## forcing combine_cinfo here is ok because this method is for the cinfo is NULL case
     recurse_cbind(x,y, combine_cinfo(col_info(x),
                                      col_info(y)))
 })
@@ -751,7 +816,7 @@ setMethod("recurse_cbind", c("TableTree",
                              "TableTree",
                              "InstantiatedColumnInfo"),
           function(x, y, cinfo) {
-    chk_cbindable(x, y)
+##    chk_cbindable(x, y)
     if(nrow(content_table(x)) == 0 &&
        nrow(content_table(y)) == 0) {
         cont = ElementaryTable(cinfo = cinfo)
@@ -781,7 +846,7 @@ setMethod("recurse_cbind", c("ElementaryTable",
                              "ElementaryTable",
                              "InstantiatedColumnInfo"),
           function(x, y, cinfo) {
-    chk_cbindable(x,y)
+##    chk_cbindable(x,y)
     if(nrow(x) == 0 &&
        nrow(y) == 0)
         return(x) ## this needs testing...
@@ -876,6 +941,11 @@ chk_compat_cinfos <- function(ci1, ci2) {
                    col_extra_args(ci2))) {
         stop("Column structures not compatible: 2nd column structure has non-matching, non-null extra args")
 
+    }
+
+    if(any(nzchar(top_left(ci1))) && any(nzchar(top_left(ci2))) &&
+       !identical(top_left(ci1), top_left(ci2))) {
+        stop("Top-left materials not compatible: Got non-empty, non-matching top-left materials. Clear them using top_left(x)<-character() before binding to force compatibility.")
     }
     TRUE
 }
@@ -1036,18 +1106,6 @@ setMethod("recurse_insert", "ElementaryTable",
 })
 
 
-
-
-
-
-
-
-order_rrows = function(x, indices = c(1, 1), ...) {
-
-
-
-
-}
 
 #' Compatability Layer for Legacy "by_*" functions
 #'

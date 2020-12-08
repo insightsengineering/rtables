@@ -8,7 +8,7 @@
 \alias{tree_children<-}
 \alias{tree_children<-,VTree-method}
 \alias{tree_children<-,VTableTree-method}
-\title{Retrieve or set tthe direct children of a Tree-style objecgt}
+\title{Retrieve or set the direct children of a Tree-style object}
 \usage{
 tree_children(x)
 
@@ -33,5 +33,5 @@ tree_children(x) <- value
 List of direct children of \code{x}
 }
 \description{
-Retrieve or set tthe direct children of a Tree-style objecgt
+Retrieve or set the direct children of a Tree-style object
 }

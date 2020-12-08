@@ -3,6 +3,7 @@
 \name{rbindl_rtables}
 \alias{rbindl_rtables}
 \alias{rbind,VTableNodeInfo-method}
+\alias{rbind}
 \alias{rbind2,VTableNodeInfo,ANY-method}
 \title{rbind TableTree and related objects}
 \usage{
