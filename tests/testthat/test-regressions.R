@@ -242,3 +242,13 @@ test_that("add_overall_col with no col splits works", {
     tab <- build_table(lyt, DM) ## previously error
     expect_identical(names(tab), "whaaat")
 })
+
+
+test_that("cell_values works when you path all the way to the row", {
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(c("SEX", "AGE")) %>%
+        build_table(ex_adsl)
+    res <- cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
+    expect_identical(res[[1]], mean(subset(ex_adsl, ARM == "B: Placebo")$AGE))
+})

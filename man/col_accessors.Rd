@@ -19,6 +19,7 @@
 \alias{coltree,PreDataColLayout-method}
 \alias{coltree,LayoutColTree-method}
 \alias{coltree,VTableTree-method}
+\alias{coltree,TableRow-method}
 \alias{col_exprs}
 \alias{col_exprs,PreDataTableLayouts-method}
 \alias{col_exprs,PreDataColLayout-method}
@@ -72,6 +73,8 @@ coltree(obj, df = NULL, rtpos = TreePos())
 \S4method{coltree}{LayoutColTree}(obj, df = NULL, rtpos = TreePos())
 
 \S4method{coltree}{VTableTree}(obj, df = NULL, rtpos = TreePos())
+
+\S4method{coltree}{TableRow}(obj, df = NULL, rtpos = TreePos())
 
 col_exprs(obj, df = NULL)
 
