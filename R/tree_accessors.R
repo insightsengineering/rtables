@@ -25,24 +25,24 @@ setMethod("nrow", "TableRow",
 
 #' Table Dimensions
 #' @rdname dimensions
-#' 
+#'
 #' @exportMethod ncol
-#' 
+#'
 #' @param x `TableTree` or `ElementaryTable` object
-#' 
-#' @examples 
+#'
+#' @examples
 #' tbl <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("SEX", "AGE")) %>%
 #'   build_table(ex_adsl)
-#'   
+#'
 #' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
-#' 
+#'
 #' NROW(tbl)
 #' NCOL(tbl)
-#' 
+#'
 setMethod("ncol", "VTableNodeInfo",
           function(x) {
     ncol(col_info(x))
@@ -1450,6 +1450,13 @@ setMethod("coltree", "LayoutColTree",
 #' @export coltree
 setMethod("coltree", "VTableTree",
           function(obj, df, rtpos) coltree(col_info(obj)))
+
+#' @rdname col_accessors
+#' @export coltree
+setMethod("coltree", "TableRow",
+          function(obj, df, rtpos) coltree(col_info(obj)))
+
+
 #' @rdname col_accessors
 #' @export
 setGeneric("col_exprs", function(obj, df = NULL) standardGeneric("col_exprs"))
