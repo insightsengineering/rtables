@@ -320,14 +320,14 @@ make_afun <- function(fun,
         ## values int he actual call to this function override customization
         ## done by the constructor. evalparse is to avoid a "... in wrong context" NOTE
         if("..." %in% fun_fnames) {
-            exargs <- eval(parse(text = "list(...)"))
+            exargs <- eval(parser_helper(text = "list(...)"))
             custargs[names(exargs)] <- exargs
             allvars <- unique(c(allvars, names(custargs)))
         }
 
         for(var in allvars) {
             ## not missing, ie specified in the direct call, takes precedence
-            if(var %in% fun_fnames && eval(parse(text = paste0("!missing(", var, ")"))))
+            if(var %in% fun_fnames && eval(parser_helper(text = paste0("!missing(", var, ")"))))
                 sfunargs[[var]] <- get(var)
             ## not specified in the call, but specified in the constructor
             else if(var %in% names(custargs))
@@ -428,4 +428,8 @@ insert_replace <- function(x, nm, newvals = x[[nm]]) {
     ret = c(x[bef], newvals, x[aft])
     names(ret) = c(names(x)[bef], names(newvals), names(x)[aft])
     ret
+}
+
+parser_helper <- function(text, envir = parent.frame(2)) {
+    parse(text = text, keep.source = FALSE)
 }

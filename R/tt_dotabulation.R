@@ -422,10 +422,9 @@ gen_rowvalues = function(dfpart,
     toremove <- c(toremove, labelstrpos)
     formalnms <- formalnms[-1*toremove]
 
-    caller <- eval(parse(text = paste("function() { parent_cfun(",
+    caller <- eval(parser_helper(text = paste("function() { parent_cfun(",
                                       paste(formalnms, "=", formalnms, collapse = ", "),
-                                      ", labelstr = clabelstr, ...)}"),
-                         keep.source = FALSE))
+                                      ", labelstr = clabelstr, ...)}")))
     formals(caller) <- c(formals(parent_cfun)[-labelstrpos], alist("..."=))
     caller
 

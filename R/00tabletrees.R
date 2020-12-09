@@ -1551,12 +1551,14 @@ print.CellValue <- function(x, ...) {
 }
 
 ## too slow
-setClass("RowsVerticalSection", contains = "list",
-         representation = list(row_names = "characterOrNULL",
-                               row_labels = "characterOrNULL",
-                               row_formats = "ANY",
-                               indent_mods = "integerOrNULL"))
+# setClass("RowsVerticalSection", contains = "list",
+#          representation = list(row_names = "characterOrNULL",
+#                                row_labels = "characterOrNULL",
+#                                row_formats = "ANY",
+#                                indent_mods = "integerOrNULL"))
+# 
 
+setOldClass("RowsVerticalSection")
 RowsVerticalSection = function(values,
                                names = names(values),
                                labels = NULL,
