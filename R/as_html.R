@@ -40,6 +40,10 @@ as_html <- function(x,
                     class_td = "",
                     class_th = "") {
   
+  if (is.null(x)) {
+    return(tags$p("Empty Table"))
+  }
+    
   stopifnot(is(x, "VTableTree"))
   
   mat <- matrix_form(x)
