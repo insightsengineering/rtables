@@ -1132,31 +1132,34 @@ LabelRow = function(lev = 1L,
 #' @rdname rowclasses
 #' @exportClass DataRow
 setClass("DataRow", contains = "TableRow",
-         representation(colspans = "integer"),
+         representation(colspans = "integer")##,
                         ##pos_in_tree = "TableRowPos"),
-         validity = function(object) {
-    lcsp = length(object@colspans)
-    length(lcsp ==  0) || lcsp == length(object@leaf_value)
-})
+    ##      validity = function(object) {
+    ## lcsp = length(object@colspans)
+    ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
+         ##}
+)
 
 #' @rdname rowclasses
 #' @exportClass ContentRow
 setClass("ContentRow", contains = "TableRow",
-         representation(colspans = "integer"),
+         representation(colspans = "integer")##,
                         ##pos_in_tree = "TableRowPos"),
-         validity = function(object) {
-    lcsp = length(object@colspans)
-    length(lcsp ==  0) || lcsp == length(object@leaf_value)
-})
+    ##      validity = function(object) {
+    ## lcsp = length(object@colspans)
+    ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
+         ##}
+)
 
 #' @rdname rowclasses
 #' @exportClass LabelRow
 setClass("LabelRow", contains = "TableRow",
-         representation(visible = "logical"),
-         validity = function(object) {
-    identical(object@leaf_value, list()) &&
-        (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
-})
+         representation(visible = "logical")## ,
+         ## validity = function(object) {
+    ## identical(object@leaf_value, list()) &&
+    ##     (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
+##}
+)
 
 
 
@@ -1547,7 +1550,7 @@ print.CellValue <- function(x, ...) {
     cat(paste("rcell:", format_rcell(x), "\n"))
 }
 
-
+## too slow
 setClass("RowsVerticalSection", contains = "list",
          representation = list(row_names = "characterOrNULL",
                                row_labels = "characterOrNULL",
@@ -1569,23 +1572,21 @@ RowsVerticalSection = function(values,
         names <- labels
     else if (is.null(labels) && !is.null(names))
         labels <- names
-    ## if(is.null(names)) {
-    ##     names <- vapply(seq_along(values),
-    ##                     function(i) innernms[[i]] %||% labels[i],
-    ##                     "")
-    ## }
 
     if(!is.null(indent_mods))
         indent_mods <- as.integer(indent_mods)
-    new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
+    ## new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
+    ##     row_formats = formats)
+    structure(values, class = "RowsVerticalSection", row_names = names, row_labels = labels, indent_mods = indent_mods,
         row_formats = formats)
+
 }
 
 
 setMethod(f = "show",
           signature = "RowsVerticalSection",
           definition = function(object){
-              
+
               cat("in_rows object print method:\n----------------------------\n")
               print(data.frame(
                   row_name = attr(object, "row_names"),
@@ -1595,7 +1596,7 @@ setMethod(f = "show",
                   stringsAsFactors = FALSE,
                   row.names = NULL
               ), row.names = TRUE)
-              
+
           })
 
 ## ## Empty default objects to avoid repeated calls
