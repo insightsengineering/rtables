@@ -1132,31 +1132,34 @@ LabelRow = function(lev = 1L,
 #' @rdname rowclasses
 #' @exportClass DataRow
 setClass("DataRow", contains = "TableRow",
-         representation(colspans = "integer"),
+         representation(colspans = "integer")##,
                         ##pos_in_tree = "TableRowPos"),
-         validity = function(object) {
-    lcsp = length(object@colspans)
-    length(lcsp ==  0) || lcsp == length(object@leaf_value)
-})
+    ##      validity = function(object) {
+    ## lcsp = length(object@colspans)
+    ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
+         ##}
+)
 
 #' @rdname rowclasses
 #' @exportClass ContentRow
 setClass("ContentRow", contains = "TableRow",
-         representation(colspans = "integer"),
+         representation(colspans = "integer")##,
                         ##pos_in_tree = "TableRowPos"),
-         validity = function(object) {
-    lcsp = length(object@colspans)
-    length(lcsp ==  0) || lcsp == length(object@leaf_value)
-})
+    ##      validity = function(object) {
+    ## lcsp = length(object@colspans)
+    ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
+         ##}
+)
 
 #' @rdname rowclasses
 #' @exportClass LabelRow
 setClass("LabelRow", contains = "TableRow",
-         representation(visible = "logical"),
-         validity = function(object) {
-    identical(object@leaf_value, list()) &&
-        (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
-})
+         representation(visible = "logical")## ,
+         ## validity = function(object) {
+    ## identical(object@leaf_value, list()) &&
+    ##     (length(object@var_analyzed) == 0 || is.na(object@var_analyzed) || nchar(object@var_analyzed) == 0)
+##}
+)
 
 
 
@@ -1217,20 +1220,23 @@ setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
+etable_validity  = function(object) {
+    kids = tree_children(object)
+    all(sapply(kids,
+               function(k) {
+                   (is(k, "DataRow") || is(k, "ContentRow"))}))###  &&
+    ##                    identical(k@col_info, object@col_info)
+    ## }))
+}
+
 #' TableTree classes
 #' @exportClass ElementaryTable
 #' @author Gabriel Becker
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character"),
-         validity = function(object) {
-    kids = tree_children(object)
-    all(sapply(kids,
-               function(k) {
-                   (is(k, "DataRow") || is(k, "ContentRow")) &&
-                       identical(k@col_info, object@col_info)
-    }))
-})
+         validity = etable_validity ##function(object) {
+ )
 
 .enforce_valid_kids = function(lst, colinfo) {
     ## colinfo
@@ -1311,6 +1317,9 @@ ElementaryTable = function(kids = list(),
     tab
 }
 
+ttable_validity <- function(object) {
+    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
+}
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live
 #' @rdname tabclasses
@@ -1318,9 +1327,7 @@ ElementaryTable = function(kids = list(),
 setClass("TableTree", contains = c("VTableTree"),
          representation(content = "ElementaryTable"
                         ),
-         validity = function(object) {
-    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
-})
+         validity = ttable_validity)
 
 #' @rdname tabclasses
 #' @export
@@ -1547,13 +1554,15 @@ print.CellValue <- function(x, ...) {
     cat(paste("rcell:", format_rcell(x), "\n"))
 }
 
+## too slow
+# setClass("RowsVerticalSection", contains = "list",
+#          representation = list(row_names = "characterOrNULL",
+#                                row_labels = "characterOrNULL",
+#                                row_formats = "ANY",
+#                                indent_mods = "integerOrNULL"))
+#
 
-setClass("RowsVerticalSection", contains = "list",
-         representation = list(row_names = "characterOrNULL",
-                               row_labels = "characterOrNULL",
-                               row_formats = "ANY",
-                               indent_mods = "integerOrNULL"))
-
+setOldClass("RowsVerticalSection")
 RowsVerticalSection = function(values,
                                names = names(values),
                                labels = NULL,
@@ -1569,23 +1578,21 @@ RowsVerticalSection = function(values,
         names <- labels
     else if (is.null(labels) && !is.null(names))
         labels <- names
-    ## if(is.null(names)) {
-    ##     names <- vapply(seq_along(values),
-    ##                     function(i) innernms[[i]] %||% labels[i],
-    ##                     "")
-    ## }
 
     if(!is.null(indent_mods))
         indent_mods <- as.integer(indent_mods)
-    new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
+    ## new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
+    ##     row_formats = formats)
+    structure(values, class = "RowsVerticalSection", row_names = names, row_labels = labels, indent_mods = indent_mods,
         row_formats = formats)
+
 }
 
 
 setMethod(f = "show",
           signature = "RowsVerticalSection",
           definition = function(object){
-              
+
               cat("in_rows object print method:\n----------------------------\n")
               print(data.frame(
                   row_name = attr(object, "row_names"),
@@ -1595,7 +1602,7 @@ setMethod(f = "show",
                   stringsAsFactors = FALSE,
                   row.names = NULL
               ), row.names = TRUE)
-              
+
           })
 
 ## ## Empty default objects to avoid repeated calls

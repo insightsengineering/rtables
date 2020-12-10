@@ -311,7 +311,7 @@ gen_rowvalues = function(dfpart,
     }
 
 
-    imods <- rv1col@indent_mods
+    imods <- indent_mod(rv1col) ##rv1col@indent_mods
     unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
 
     formatvec = NULL
@@ -422,7 +422,7 @@ gen_rowvalues = function(dfpart,
     toremove <- c(toremove, labelstrpos)
     formalnms <- formalnms[-1*toremove]
 
-    caller <- eval(parse(text = paste("function() { parent_cfun(",
+    caller <- eval(parser_helper(text = paste("function() { parent_cfun(",
                                       paste(formalnms, "=", formalnms, collapse = ", "),
                                       ", labelstr = clabelstr, ...)}")))
     formals(caller) <- c(formals(parent_cfun)[-labelstrpos], alist("..."=))

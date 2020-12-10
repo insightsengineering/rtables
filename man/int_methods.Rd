@@ -41,10 +41,11 @@
 \alias{fix_dyncuts,PreDataColLayout-method}
 \alias{fix_dyncuts,SplitVector-method}
 \alias{fix_dyncuts,PreDataTableLayouts-method}
-\alias{summarize_rows,TableTree-method}
-\alias{summarize_rows,ElementaryTable-method}
-\alias{summarize_rows,TableRow-method}
-\alias{summarize_rows,LabelRow-method}
+\alias{summarize_rows_inner}
+\alias{summarize_rows_inner,TableTree-method}
+\alias{summarize_rows_inner,ElementaryTable-method}
+\alias{summarize_rows_inner,TableRow-method}
+\alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure,TableTree-method}
 \alias{table_structure,ElementaryTable-method}
 \alias{table_structure,TableRow-method}
@@ -428,13 +429,15 @@ fix_dyncuts(spl, df)
 
 \S4method{fix_dyncuts}{PreDataTableLayouts}(spl, df)
 
-\S4method{summarize_rows}{TableTree}(obj, depth = 0, indent = 0)
+summarize_rows_inner(obj, depth = 0, indent = 0)
 
-\S4method{summarize_rows}{ElementaryTable}(obj, depth = 0, indent = 0)
+\S4method{summarize_rows_inner}{TableTree}(obj, depth = 0, indent = 0)
 
-\S4method{summarize_rows}{TableRow}(obj, depth = 0, indent = 0)
+\S4method{summarize_rows_inner}{ElementaryTable}(obj, depth = 0, indent = 0)
 
-\S4method{summarize_rows}{LabelRow}(obj, depth = 0, indent = 0)
+\S4method{summarize_rows_inner}{TableRow}(obj, depth = 0, indent = 0)
+
+\S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 \S4method{table_structure}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
@@ -965,9 +968,9 @@ spl_varnames(obj)
 
 \item{obj}{The object.}
 
-\item{depth}{numeric(1).}
+\item{depth}{numeric(1). Depth.}
 
-\item{indent}{numeric(1).}
+\item{indent}{numeric(1). Indent.}
 
 \item{print_indent}{numeric(1)}
 
@@ -988,4 +991,22 @@ spl_varnames(obj)
 \description{
 These are internal methods that are documented only to satisfy
 R CMD check. End users should pay no attention to this documentation.
+}
+\examples{
+
+library(dplyr)
+
+iris2 <- iris \%>\%
+  group_by(Species) \%>\%
+  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) \%>\%
+  ungroup()
+
+l <- basic_table() \%>\%
+  split_cols_by("Species") \%>\%
+  split_cols_by("group") \%>\%
+  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+
+tbl <- build_table(l, iris2)
+
+summarize_rows(tbl)
 }

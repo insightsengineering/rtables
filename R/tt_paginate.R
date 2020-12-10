@@ -114,7 +114,7 @@ pos_to_path <- function(pos) {
     spls <- pos_splits(pos)
     vals <- pos_splvals(pos)
 
-    path <- "root"
+    path <- character()
     for(i in seq_along(spls)) {
         path <- c(path,
                   obj_name(spls[[i]]),
@@ -170,7 +170,7 @@ setMethod("make_row_df", "VTableTree",
     orig_rownum <- rownum
     if(incontent)
         path <- c(path, "@content")
-    else
+    else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
         path <- c(path, obj_name(tt))
 
     ret <- list()
@@ -318,9 +318,9 @@ setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
 
 
 #' Column Layout Summary
-#' 
+#'
 #' Used for Pagination
-#' 
+#'
 #' @inheritParams make_row_df
 #' @noRd
 make_col_df <-    function(ct,
@@ -357,7 +357,6 @@ setMethod("inner_col_df", "LayoutColTree",
                    sibpos,
                    nsibs) {
 
-    print(paste("in here", colnum))
     kids <- tree_children(ct)
     ret <- vector("list", length(kids))
     for(i in seq_along(kids)) {
@@ -381,7 +380,6 @@ setMethod("inner_col_df", "LayoutColTree",
                                    sibpos = sibpos,
                                    nsibs = nsibs,
                                    pth = c(pos_to_path(tree_pos(ct)), obj_name(ct))))
-        print(thisone)
         ret <- c(thisone, ret)
     }
 

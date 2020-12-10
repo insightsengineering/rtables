@@ -1101,7 +1101,11 @@ setMethod("indent_mod", "ANY",
           function(obj) attr(obj, "indent_mod") %||% 0L)
 #' @rdname int_methods
 setMethod("indent_mod", "RowsVerticalSection",
-          function(obj) setNames(obj@indent_mods,names(obj)))
+          ##          function(obj) setNames(obj@indent_mods,names(obj)))
+          function(obj) {
+    val <- attr(obj, "indent_mods") %||% rep(0L, length(obj))
+    setNames(val, names(obj))
+})
 
 #' @rdname int_methods
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
@@ -1128,8 +1132,11 @@ setMethod("indent_mod<-", "RowsVerticalSection",
           function(obj, value) {
     if(length(value) != 1 && length(value) != length(obj))
         stop("When setting indent mods on a RowsVerticalSection the value must have length 1 or the number of rows")
-    obj@indent_mods <- value
+    attr(obj, "indent_mods") <- as.integer(value)
     obj
+
+    ## obj@indent_mods <- value
+    ## obj
 })
 
 
@@ -1174,6 +1181,7 @@ setMethod("rawvalues", "CellValue", function(obj) obj[[1]])
 #' @rdname int_methods
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
+setMethod("rawvalues", "RowsVerticalSection",  function(obj) unlist(obj, recursive = FALSE))
 
 #' @rdname int_methods
 setGeneric("value_names", function(obj) standardGeneric("value_names"))
@@ -1189,7 +1197,7 @@ setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
 #' @rdname int_methods
 setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@value) ##obj@comboname)
 #' @rdname int_methods
-setMethod("value_names", "RowsVerticalSection",  function(obj) obj@row_names)
+setMethod("value_names", "RowsVerticalSection",  function(obj) attr(obj, "row_names")) ##obj@row_names)
 
 ## not sure if I need these anywhere
 ## XXX
@@ -1210,7 +1218,7 @@ setMethod("value_labels", "list", function(obj) {
 })
 
 #' @rdname int_methods
-setMethod("value_labels", "RowsVerticalSection", function(obj) setNames(obj@row_labels, value_names(obj)))
+setMethod("value_labels", "RowsVerticalSection", function(obj) setNames(attr(obj, "row_labels"), value_names(obj))) ##obj@row_labels, value_names(obj)))
 
 
 #' @rdname int_methods
