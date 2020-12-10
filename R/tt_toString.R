@@ -147,7 +147,7 @@ matrix_form <- function(tt) {
 
   sr <- summarize_rows(tt)
 
-  body_content_strings <- if (nrow(sr) == 0) {
+  body_content_strings <- if (NROW(sr) == 0) {
     ""
   } else {
     cbind(sr$label, get_formatted_cells(tt))

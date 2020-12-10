@@ -61,6 +61,7 @@ test_that("provided score functions work", {
 ## todo test sorting proper
 
 
+## contributed by daniel
 test_that("sort_at_path just returns an empty input table", {
     silly_prune_condition <- function(tt) {
         return(TRUE)

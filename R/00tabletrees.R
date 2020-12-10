@@ -1220,20 +1220,23 @@ setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
+etable_validity  = function(object) {
+    kids = tree_children(object)
+    all(sapply(kids,
+               function(k) {
+                   (is(k, "DataRow") || is(k, "ContentRow"))}))###  &&
+    ##                    identical(k@col_info, object@col_info)
+    ## }))
+}
+
 #' TableTree classes
 #' @exportClass ElementaryTable
 #' @author Gabriel Becker
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character"),
-         validity = function(object) {
-    kids = tree_children(object)
-    all(sapply(kids,
-               function(k) {
-                   (is(k, "DataRow") || is(k, "ContentRow")) &&
-                       identical(k@col_info, object@col_info)
-    }))
-})
+         validity = etable_validity ##function(object) {
+ )
 
 .enforce_valid_kids = function(lst, colinfo) {
     ## colinfo
@@ -1314,6 +1317,9 @@ ElementaryTable = function(kids = list(),
     tab
 }
 
+ttable_validity <- function(object) {
+    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
+}
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live
 #' @rdname tabclasses
@@ -1321,9 +1327,7 @@ ElementaryTable = function(kids = list(),
 setClass("TableTree", contains = c("VTableTree"),
          representation(content = "ElementaryTable"
                         ),
-         validity = function(object) {
-    all(sapply(tree_children(object), function(x) is(x, "TableTree") || is(x, "ElementaryTable") || is(x, "TableRow")))
-})
+         validity = ttable_validity)
 
 #' @rdname tabclasses
 #' @export
@@ -1556,7 +1560,7 @@ print.CellValue <- function(x, ...) {
 #                                row_labels = "characterOrNULL",
 #                                row_formats = "ANY",
 #                                indent_mods = "integerOrNULL"))
-# 
+#
 
 setOldClass("RowsVerticalSection")
 RowsVerticalSection = function(values,

@@ -1181,6 +1181,7 @@ setMethod("rawvalues", "CellValue", function(obj) obj[[1]])
 #' @rdname int_methods
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
+setMethod("rawvalues", "RowsVerticalSection",  function(obj) unlist(obj, recursive = FALSE))
 
 #' @rdname int_methods
 setGeneric("value_names", function(obj) standardGeneric("value_names"))

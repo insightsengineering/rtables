@@ -3,29 +3,29 @@
 # paths summary ----
 
 #' @rdname make_col_row_df
-#' 
+#'
 #' @title Return List with Table Row/Col Paths
-#' 
+#'
 #' @param x an rtable object
-#' 
+#'
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' tbl <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("SEX", "AGE")) %>%
 #'   build_table(ex_adsl)
-#' 
+#'
 #' tbl
-#' 
+#'
 #' row_paths(tbl)
 #' col_paths(tbl)
-#' 
+#'
 #' \dontrun{
-#' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo")) 
+#' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
 #' cell_values(tbl)
 #' }
-#' 
+#'
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
   make_row_df(x, visible_only = TRUE)$path
@@ -41,39 +41,39 @@ col_paths <- function(x) {
 
 
 #' Print Row/Col Paths Summary
-#' 
+#'
 #' @param x an rtable object
-#' 
+#'
 #' @export
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' library(dplyr)
-#' 
+#'
 #' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
-#' 
+#'
 #' tbl <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_cols_by("SEX", split_fun = drop_split_levels) %>%
 #'   analyze(c("AGE", "BMRKR2")) %>%
 #'   build_table(ex_adsl_MF)
-#' 
+#'
 #' tbl
-#' 
+#'
 #' df <- row_paths_summary(tbl)
-#' 
+#'
 #' df
-#' 
+#'
 #' col_paths_summary(tbl)
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
-  
+
   if (nrow(x) == 0)
     return("rowname     node_class       path\n---------------------\n")
-  
+
   pagdf <- make_row_df(x, visible_only = TRUE)
   row.names(pagdf) <- NULL
-  
+
   mat <- rbind(
     c("rowname", "node_class", "path"),
     t(apply(pagdf, 1, function(xi) {
@@ -84,7 +84,7 @@ row_paths_summary <- function(x) {
       )
     }))
   )
-  
+
   txt <- mat_as_string(mat)
   cat(txt)
   cat("\n")
@@ -100,7 +100,7 @@ col_paths_summary <- function(x) {
 
   pagdf <- make_col_df(x, visible_only = TRUE)
   row.names(pagdf) <- NULL
-  
+
   mat <- rbind(
     c("label", "path"),
     t(apply(pagdf, 1, function(xi) {
@@ -111,11 +111,11 @@ col_paths_summary <- function(x) {
       )
     }))
   )
-  
+
   txt <- mat_as_string(mat)
   cat(txt)
   cat("\n")
-  
+
   invisible(pagdf[, c("label", "path")])
 }
 
@@ -123,13 +123,44 @@ col_paths_summary <- function(x) {
 # Rows ----
 # . Summarize Rows ----
 
+
+
 summarize_row_df <- function(name, label, indent, depth, rowtype, indent_mod, level) {
   data.frame(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level,
-             stringsAsFactors = FALSE)
+            stringsAsFactors = FALSE)
 }
 
-summarize_row_df_empty <- function(...) {
-  data.frame(name = character(0), label = character(0), indent = integer(0), depth = integer(0), rowtype = character(0), indent_mod = integer(0), level = integer(0))
+summarize_row_df_unclassed <- function(name, label, indent, depth, rowtype, indent_mod, level) {
+  list(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level)##,
+            ## stringsAsFactors = FALSE)
+}
+
+srow_df_names <- names(summarize_row_df("hi", "hi", 0L, 0L, "hi", 0L, 0L))
+
+summarize_row_df_empty <- NULL ##list(name = character(0), label = character(0), indent = integer(0), depth = integer(0), rowtype = character(0), indent_mod = integer(0), level = integer(0), stringsAsFactors = FALSE)
+
+fast_rsummry_bind <- function(lst) {
+    if(length(lst) == 0)
+        return(summarize_row_df_empty)
+    else if(length(lst) == 1L)
+        return(lst[[1]])
+    else {
+        res = lapply(seq_along(srow_df_names),
+                 function(i) do.call(c, lapply(lst, function(x) if(length(x) > 0) x[[i]] else x)))
+        names(res) = srow_df_names
+        res <- as.data.frame(res)
+    }
+    res
+}
+
+
+
+#' summarize_rows
+#' @param obj VTableTree.
+#' @export
+summarize_rows <- function(obj) {
+    rows <- summarize_rows_inner(obj, 0, 0)
+    fast_rsummry_bind(rows)
 }
 
 #' Summarize Rows
@@ -137,8 +168,7 @@ summarize_row_df_empty <- function(...) {
 #' @inheritParams gen_args
 #' @param depth numeric(1). Depth.
 #' @param indent numeric(1). Indent.
-#' 
-#' @noRd
+#'
 #' @examples
 #'
 #' library(dplyr)
@@ -156,53 +186,77 @@ summarize_row_df_empty <- function(...) {
 #' tbl <- build_table(l, iris2)
 #'
 #' summarize_rows(tbl)
-#'
-setGeneric("summarize_rows", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows"))
 #' @rdname int_methods
-setMethod("summarize_rows", "TableTree",
+setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows_inner"))
+#' @rdname int_methods
+setMethod("summarize_rows_inner", "TableTree",
           function(obj, depth = 0, indent = 0) {
 
-            indent <- max(0L, indent + indent_mod(obj))
+    indent <- max(0L, indent + indent_mod(obj))
 
-            lr <- summarize_rows(tt_labelrow(obj), depth, indent)
+    lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
+    if(!is.null(lr))
+        ret <- list(lr)
+    else
+        ret <- list()
 
-            indent <- indent + (nrow(lr) > 0)
+    indent <- indent + (!is.null(lr))
 
-            ctab <- content_table(obj)
-            ct <- summarize_rows(ctab, depth = depth, indent = indent + indent_mod(ctab))
+    ctab <- content_table(obj)
+    if(NROW(ctab)) {
+        ct <- summarize_rows_inner(ctab, depth = depth, indent = indent + indent_mod(ctab))
+        ret <- c(ret, ct)
+        indent <- indent + (length(ct) > 0) * (1+ indent_mod(ctab))
+    }
 
-            els <- lapply(tree_children(obj), summarize_rows,
-                          depth = depth + 1, indent = indent + (nrow(ct) > 0) * (1 + indent_mod(ctab)))
+    kids <- tree_children(obj)
+    els <-lapply(tree_children(obj), summarize_rows_inner,
+                 depth = depth + 1, indent = indent)
+    if(!are(kids, "TableRow")) {
+        if(!are(kids, "VTableTree")) {
+            ## hatchet job of a hack, wrap em just so we can unlist em all at the same level
+            rowinds <- vapply(kids, is, NA, class2 = "TableRow")
+            els[rowinds] <- lapply(els[rowinds], function(x) list(x))
+        }
+        els <- unlist(els, recursive = FALSE)
+    }
+    ret <- c(ret, els)
+    ret
+    ## df <- do.call(rbind, c(list(lr), list(ct), els))
 
-            df <- do.call(rbind, c(list(lr), list(ct), els))
-
-            row.names(df) <- NULL
-            df
+            ## row.names(df) <- NULL
+            ## df
 
           })
 #' @rdname int_methods
-setMethod("summarize_rows", "ElementaryTable",
+setMethod("summarize_rows_inner", "ElementaryTable",
           function(obj, depth = 0, indent = 0) {
 
-            indent <- max(0L, indent + indent_mod(obj))
+    indent <- max(0L, indent + indent_mod(obj))
+    lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
+    if(!is.null(lr)) {
+        ret <- list(lr)
+        indent <- indent + 1
+    } else {
+        ret <- list()
+    }
 
-            lr <- summarize_rows(tt_labelrow(obj), depth, indent)
+    els <- lapply(tree_children(obj), summarize_rows_inner, depth = depth + 1, indent = indent)
 
-            els <- lapply(tree_children(obj), summarize_rows, depth = depth + 1, indent = indent + (nrow(lr) > 0))
-
-            df <- do.call(rbind, c(list(lr), els))
-            row.names(df) <- NULL
-            df
+    c(ret, els)
+            ## df <- do.call(rbind, c(list(lr), els))
+            ## row.names(df) <- NULL
+            ## df
 
           })
 
 #' @rdname int_methods
-setMethod("summarize_rows", "TableRow",
+setMethod("summarize_rows_inner", "TableRow",
           function(obj, depth = 0, indent = 0) {
 
             indent <- max(0L, indent + indent_mod(obj))
 
-            summarize_row_df(
+            summarize_row_df_unclassed(
               name = obj_name(obj),
               label = obj_label(obj),
               indent = indent,
@@ -214,13 +268,13 @@ setMethod("summarize_rows", "TableRow",
 
           })
 #' @rdname int_methods
-setMethod("summarize_rows", "LabelRow",
+setMethod("summarize_rows_inner", "LabelRow",
           function(obj, depth = 0, indent = 0) {
 
             indent <- max(0L, indent + indent_mod(obj))
 
             if (labelrow_visible(obj)) {
-              summarize_row_df(
+              summarize_row_df_unclassed(
                 name = obj_name(obj),
                 label = obj_label(obj),
                 indent = indent,
@@ -230,7 +284,7 @@ setMethod("summarize_rows", "LabelRow",
                 level = tt_level(obj)
               )
             } else {
-              summarize_row_df_empty()
+              summarize_row_df_empty
             }
           })
 
@@ -239,16 +293,16 @@ setMethod("summarize_rows", "LabelRow",
 # Print Table Structure ----
 
 #' Summarize Table
-#' 
-#' 
+#'
+#'
 #' @inheritParams gen_args
 #' @param depth numeric(1).
 #' @param indent numeric(1).
 #' @param print_indent numeric(1)
-#' 
+#'
 #' @export
-#' @examples 
-#' 
+#' @examples
+#'
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -262,11 +316,11 @@ setMethod("summarize_rows", "LabelRow",
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #'
 #' tbl <- build_table(l, iris2)
-#' 
+#'
 #' row_paths(tbl)
-#' 
+#'
 #' table_structure(tbl)
-#' 
+#'
 setGeneric("table_structure", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("table_structure"))
 
 
@@ -318,8 +372,8 @@ setMethod("table_structure", "TableTree",
               scat("children: - ", indent = print_indent + 1)
             } else {
               scat("children: ", indent = print_indent + 1)
-              lapply(tree_children(obj), table_structure, 
-                     depth = depth + 1, 
+              lapply(tree_children(obj), table_structure,
+                     depth = depth + 1,
                      indent = indent + visible_content * (1 + indent_mod(ctab)),
                      print_indent = print_indent + 2)
             }
@@ -336,10 +390,10 @@ setMethod("table_structure", "ElementaryTable",
 
 
             indent <- indent + indent_mod(obj)
-            
+
             table_structure(tt_labelrow(obj), depth, indent, print_indent + 1)
-            
-            
+
+
             if (length(tree_children(obj)) == 0) {
               scat("children: - ", indent = print_indent + 1)
             } else {
@@ -367,10 +421,10 @@ setMethod("table_structure", "LabelRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             indent <- indent + indent_mod(obj)
-            
+
             txtvis <- if (!obj_visible(obj)) " - <not visible>" else ""
-            
+
             scat("labelrow: ", "[", obj_name(obj), "] (", obj_label(obj), ")", txtvis,  indent = print_indent)
-            
+
             obj_visible(obj)
           })

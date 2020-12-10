@@ -94,6 +94,7 @@ test_that("make_row_df gives paths which all work", {
 
     pdf <- make_row_df(tab)
     res <- lapply(pdf$path, function(pth) cell_values(tab, pth))
+    ## we expect true here cause we're checking for errors rather than against values
     expect(TRUE, "some paths in visible_only pag_df did not work")
     pdf2 <- make_row_df(tab, visible_only = FALSE)
     res2 <- lapply(pdf2$path, function(pth) cell_values(tab, pth))
