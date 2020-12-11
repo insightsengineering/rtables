@@ -115,6 +115,22 @@ setGeneric(".applysplit_ref_vals",
     partinfo
 }
 
+.add_col_extras <- function(spl, df, partinfo) {
+  vnames <- value_names(partinfo$values)
+  if(is.null(partinfo$extras)) {
+    # not sure if this is the right structure or needed:
+    partinfo$extras <- setNames(replicate(length(vnames), list()), vnames)
+  } else {
+    newextras <- mapply(function(old, df)
+      c(old, list(.df_col = df, .n_col = nrow(df))),
+      old = partinfo$extras,
+      df = partinfo$datasplit,
+      SIMPLIFY = FALSE)
+    names(newextras) <- vnames
+    partinfo$extras <- newextras
+  }
+  partinfo
+}
 
 ### NB This is called at EACH level of recursive splitting
 do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
@@ -135,6 +151,10 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     ## this adds .ref_full and .in_ref_col
     if(is(spl, "VarLevWBaselineSplit"))
         ret = .add_ref_extras(spl, df, ret)
+    
+    ## this adds .df_col and .n_col
+    if(is(spl, "VarLevelSplit"))
+      ret = .add_col_extras(spl, df, ret)
 
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
