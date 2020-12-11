@@ -1,6 +1,6 @@
 
-match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, .parent_splval = NULL, .N_row, .df_row, extras) {
-    possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row, .df_row = .df_row),
+match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_full = NULL, .in_ref_col = NULL, .parent_splval = NULL, .N_row, .df_row, .df_col, extras) {
+    possargs = c(list(.N_col = .N_col, .N_total = .N_total, .N_row = .N_row, .df_row = .df_row, .df_col = .df_col),
                  extras)
     ## specialized arguments that must be named in formals, cannot go anonymously into ...
     if(!is.null(.var) && nzchar(.var))
@@ -52,6 +52,10 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
         if(!is.null(fullrefcoldat))
             cextr$.in_ref_col = NULL
 
+        dfcol = cextr$.df_col
+        if(!is.null(dfcol))
+            cextr$.df_col = NULL
+        
         exargs = c(cextr, splextra)
 
         ## behavior for x/df and ref-data (full and group)
@@ -74,6 +78,7 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                                   .in_ref_col = inrefcol,
                                   .N_row = NROW(dfpart),
                                   .df_row = dfpart,
+                                  .df_col = dfcol,
                                   .parent_splval = last_splval,
                                   extras = c(cextr,
                                              splextra)))

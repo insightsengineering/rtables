@@ -602,6 +602,22 @@ test_that(".df_row analysis function argument works", {
                                ARM2 = c(nfemale, narm2))))
 })
 
+test_that(".df_col works", {
+  afun <- function(df, .N_col, .df_col) {
+    n_col <- nrow(.df_col)
+    rcell(c(n_col, .N_col), format = "xx / xx")
+  }
+  
+  l <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    add_colcounts() %>%
+    # split_cols_by("STRATA1") %>%
+    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    analyze("AGE", afun = afun) 
+  
+  result <- expect_silent(build_table(l, DM, col_counts = c(200, 300, 400)))
+})
+
 test_that("analyze_colvars inclNAs works", {
 
     ## inclNAs

@@ -122,7 +122,7 @@ setGeneric(".applysplit_ref_vals",
     partinfo$extras <- setNames(replicate(length(vnames), list()), vnames)
   } else {
     newextras <- mapply(function(old, df)
-      c(old, list(.df_col = df, .n_col = nrow(df))),
+      c(old, list(.df_col = df)),
       old = partinfo$extras,
       df = partinfo$datasplit,
       SIMPLIFY = FALSE)
@@ -152,7 +152,7 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     if(is(spl, "VarLevWBaselineSplit"))
         ret = .add_ref_extras(spl, df, ret)
     
-    ## this adds .df_col and .n_col
+    ## this adds .df_col
     if(is(spl, "VarLevelSplit"))
       ret = .add_col_extras(spl, df, ret)
 
