@@ -264,15 +264,16 @@ setMethod("[<-", c("VTableTree", value = "list"),
 ## we have two options here: path like we do with rows and positional
 ## in leaf space.
 
-setGeneric("subset_cols", function(tt, j, newcinfo = NULL, ...) standardGeneric("subset_cols"))
+setGeneric("subset_cols", function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) standardGeneric("subset_cols"))
 
 setMethod("subset_cols", c("TableTree", "numeric"),
-          function(tt, j, newcinfo = NULL, ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft, ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
-        newcinfo = subset_cols(cinfo, j, ...)
+        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft, ...)
     }
+    ## topleft taken care of in creation of newcinfo
     kids = tree_children(tt)
     newkids = lapply(kids, subset_cols, j= j, newcinfo = newcinfo,  ...)
     cont = content_table(tt)
@@ -281,23 +282,30 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     col_info(tt2) <- newcinfo
     content_table(tt2) <- newcont
     tree_children(tt2) <- newkids
-    tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
+    tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo,  ...)
+    ## if(keep_topleft)
+    ##     top_left(tt2) <- top_left(tt)
+    ## else
+    ##     top_left(tt2) <- character()
     tt2
 })
 
 setMethod("subset_cols", c("ElementaryTable", "numeric"),
-          function(tt, j, newcinfo = NULL, ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft, ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
-        newcinfo = subset_cols(cinfo, j, ...)
+        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft, ...)
     }
+    ## topleft handled in creation of newcinfo
     kids = tree_children(tt)
     newkids = lapply(kids, subset_cols, j= j, newcinfo = newcinfo,  ...)
     tt2 = tt
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
+    ## if(keep_topleft)
+    ##     top_left(tt2) <- top_left(tt)
     tt2
 })
 
@@ -420,17 +428,17 @@ select_cells_j = function(cells, j) {
 }
 
 setMethod("subset_cols", c("ANY", "character"),
-          function(tt, j, newcinfo = NULL, ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     j <- .colpath_to_j(j, coltree(tt))
-    subset_cols(tt, j, newcinfo = newcinfo, ...)
+    subset_cols(tt, j, newcinfo = newcinfo, keep_topleft = keep_topleft,  ...)
 })
 
 setMethod("subset_cols", c("TableRow", "numeric"),
-          function(tt, j, newcinfo = NULL,  ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft = TRUE,  ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
-        newcinfo = subset_cols(cinfo, j, ...)
+        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft,  ...)
     }
     tt2 = tt
     row_cells(tt2) =  select_cells_j(row_cells(tt2), j)
@@ -442,11 +450,11 @@ setMethod("subset_cols", c("TableRow", "numeric"),
 })
 
 setMethod("subset_cols", c("LabelRow", "numeric"),
-          function(tt, j, newcinfo = NULL,  ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
-        newcinfo = subset_cols(cinfo, j, ...)
+        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft, ...)
     }
     col_info(tt) = newcinfo
     tt
@@ -454,20 +462,22 @@ setMethod("subset_cols", c("LabelRow", "numeric"),
 
 
 setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
-          function(tt, j, newcinfo = NULL,  ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft = TRUE,  ...) {
     if(!is.null(newcinfo))
         return(newcinfo)
-    j = .j_to_posj(j, length(col_exprs(tt)))
-    newctree = subset_cols(coltree(tt), j, NULL)
-    newcextra = col_extra_args(tt)[j]
-    newcsubs = col_exprs(tt)[j]
-    newcounts = col_counts(tt)[j]
+    j <- .j_to_posj(j, length(col_exprs(tt)))
+    newctree <- subset_cols(coltree(tt), j, NULL)
+    newcextra <- col_extra_args(tt)[j]
+    newcsubs <- col_exprs(tt)[j]
+    newcounts <- col_counts(tt)[j]
+    tl <- if(keep_topleft) top_left(tt) else character()
     InstantiatedColumnInfo(treelyt = newctree,
                            csubs = newcsubs,
                            extras = newcextra,
                            cnts = newcounts,
                            dispcounts = disp_ccounts(tt),
-                           countformat = colcount_format(tt))
+                           countformat = colcount_format(tt),
+                           topleft = tl)
 })
 
 setMethod("subset_cols", c("LayoutColTree", "numeric"),
@@ -513,6 +523,8 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
     i = .j_to_posj(i, nr)
     if(length(i) == 0) {
         ret <- TableTree(cinfo = col_info(tt))
+        if(isTRUE(keep_topleft))
+            top_left(ret) <- top_left(tt)
         return(ret)
     }
 
@@ -572,7 +584,10 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
         ##     valifnone
         ## }
     }
-    prune_rowsbynum(tt, i)
+    ret <- prune_rowsbynum(tt, i)
+    if(isTRUE(keep_topleft))
+        top_left(ret) <- top_left(tt)
+    ret
 }
 
 
@@ -658,7 +673,7 @@ setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
     j <- .colpath_to_j(j, coltree(x))
-    x[i = i,j = j, ..., drop = drop]
+    x[i = i, j = j, ..., drop = drop]
 })
 
 
@@ -668,7 +683,7 @@ setMethod("[", c("VTableTree", "character", "character"),
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
-    x[i,j, drop = drop]
+    x[i,j, ..., drop = drop]
 })
 
 
@@ -688,14 +703,17 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     i <- .j_to_posj(i, nr)
     j <- .j_to_posj(j, nc)
 
-    if(!missing(j) && length(j) < nc)
-        x <- subset_cols(x, j)
-    if(!missing(i) && length(i) < nr) {
-        x <- subset_by_rownum(x, i)
+    ##  if(!missing(i) && length(i) < nr) {
+    if(length(i) < nr) { ## already populated by .j_to_posj
         keep_topleft <- isTRUE(keep_topleft)
+        x <- subset_by_rownum(x, i, keep_topleft = keep_topleft)
     } else {
         keep_topleft <- !identical(FALSE, keep_topleft)
     }
+    ##  if(!missing(j) && length(j) < nc)
+    if(length(j) < nc)
+        x <- subset_cols(x, j, keep_topleft = keep_topleft)
+
     if(length(j) == 1L &&
        length(i) == 1L &&
        drop) {
