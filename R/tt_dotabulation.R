@@ -792,17 +792,10 @@ recursive_applysplit = function( df,
         ret = kids[[1]]
         indent_mod(ret) = indent_mod(spl)
      } else if(nrow(ctab) > 0L || length(kids) > 0L) {
-         ## avoid visible label rows when the row.names
-         ## directly repeat the info.
-         if(length(kids) == 1L &&
-            identical(partlabel, row.names(kids[[1]])))
-             tlabel = ""
-         else
-             tlabel = partlabel
-         ## kids = lapply(kids, function(x) {
-         ##     indent_mod(x) = indent_mod(spl)
-         ##     x
-         ## })
+         ## previously we checked if the child had an identical label
+         ## but I don't think tahts needed anymore.
+         tlabel = partlabel
+
          ret = TableTree(cont = ctab,
                          kids = kids,
                          name = name,
