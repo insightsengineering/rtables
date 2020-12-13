@@ -19,7 +19,7 @@ test_that("summarize_row_groups works with provided funcs", {
 
 ## this
 test_that("complex layout works", {
-    lyt = NULL %>% split_cols_by("ARM") %>%
+    lyt = basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         ## No row splits have been introduced, so this adds
@@ -87,7 +87,7 @@ test_that("complex layout works", {
 
 
 test_that("existing table in layout works", {
-    thing2 = NULL %>% split_cols_by("ARM") %>%
+    thing2 = basic_table() %>% split_cols_by("ARM") %>%
     ## add nested column split on SEX with value labels from gend_label
     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
@@ -100,7 +100,7 @@ test_that("existing table in layout works", {
 tab2 = build_table(thing2, rawdat)
 
 
-    thing3 = NULL %>% split_cols_by("ARM") %>%
+    thing3 = basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value labels from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -118,7 +118,7 @@ tab2 = build_table(thing2, rawdat)
 
 
 test_that("labelkids parameter works", {
-    yeslabellyt <- NULL %>% split_cols_by("ARM") %>%
+    yeslabellyt <- basic_table() %>% split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -136,7 +136,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis"))
 
 
-    misslabellyt <- NULL %>%
+    misslabellyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "default") %>%
@@ -153,7 +153,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian (n)", "Level A", "mean", "median"))
 
 
-    nolabellyt <- NULL %>%
+    nolabellyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
@@ -171,7 +171,7 @@ test_that("labelkids parameter works", {
     expect_identical(row.names(tabno)[1:4],
                      c("Caucasian (n)", "mean", "median", "mean"))
 
-    mixedlyt2 <- NULL %>%
+    mixedlyt2 <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
@@ -189,7 +189,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian (n)", "Age Analysis", "mean", "median"))
 
 
-    mixedlyt <- NULL %>%
+    mixedlyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
@@ -207,7 +207,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian", "Caucasian (n)", "Level A", "mean"))
 
 
-    varshowlyt <- NULL %>%
+    varshowlyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -241,7 +241,7 @@ refcompmean = function(x, .ref_group, .in_ref_col, ...) {
 
 test_that("ref_group comparisons work", {
 
-    blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
+    blthing = basic_table() %>% split_cols_by("ARM", ref_group = "ARM1") %>%
         analyze("AGE", show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2")
     ## function(x) list(mean = mean(x)))
@@ -305,14 +305,14 @@ test_that("ref_group comparisons work", {
 })
 
 test_that("missing vars caught", {
-    misscol = NULL %>% split_cols_by("ARM") %>%
+    misscol = basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SX", "Gender") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), format = "xx.xx")
 
     expect_error(build_table(misscol, rawdat))
 
-    missrsplit =  NULL %>% split_cols_by("ARM") %>%
+    missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACER", "ethn") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
@@ -320,7 +320,7 @@ test_that("missing vars caught", {
 
     expect_error(build_table(missrsplit, rawdat))
 
-    missavar =  NULL %>% split_cols_by("ARM") %>%
+    missavar =  basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACE", "ethn") %>%
     analyze("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
