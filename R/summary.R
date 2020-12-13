@@ -80,7 +80,7 @@ row_paths_summary <- function(x) {
       c(
         indent_string(xi$label, xi$indent),
         xi$node_class,
-        paste(xi$path[-1], collapse = ", ")
+        paste(xi$path, collapse = ", ")
       )
     }))
   )
@@ -107,7 +107,7 @@ col_paths_summary <- function(x) {
       .GlobalEnv$xi <- xi
       c(
         xi$label,
-        paste(xi$path[-1], collapse = ", ")
+        paste(xi$path, collapse = ", ")
       )
     }))
   )

@@ -8,7 +8,8 @@ test_that("summarize_row_groups works with provided funcs", {
         analyze("AGE", mean)
 
     tb1 <- build_table(l1, DM)
-    print(tb1)
+    tbl_str <- toString(tb1)
+    
     expect(TRUE, "succeeded")
 
 
@@ -64,7 +65,7 @@ test_that("complex layout works", {
                  "mean", "median", "Age Analysis redux", "range",
                  "level1", "level2")
     tab = build_table(lyt, rawdat)
-    print(tab)
+    tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
     expect_identical(dim(tab), c(28L, 4L))
     expect_identical(row.names(tab), expnames)
@@ -664,13 +665,12 @@ test_that("analyze_colvars works generally", {
     expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
                      c(summary = "My Summary Row"))
 
-    print(tab3)
     l4 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
         summarize_row_groups() %>%
         analyze_colvars(afun = identity)
     tab4 <- build_table(l4, test)
     ## this broke before due to formatting missmatches
-    print(tab4)
+    toString(tab4)
     rws4 <- collect_leaves(tab4, TRUE, TRUE)
     expect_identical(rtables:::obj_format(rws4[[1]]), "xx (xx.x%)")
     expect_identical(rtables:::obj_format(rws4[[2]]), NULL)
@@ -683,7 +683,7 @@ test_that("analyze_colvars works generally", {
                                          function(x, labelstr) "second fun"),
                              format = "xx")
     tab5 <- build_table(l5, DM)
-    print(tab5)
+    toString(tab5)
     rws5 <- collect_leaves(tab5, TRUE, TRUE)
     expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
            "Multiple content fucntions didn't recycle properly in nested context")
