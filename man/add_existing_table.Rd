@@ -28,9 +28,12 @@ tbl2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
    analyze("AGE", afun = sd, format = "xx.xx") \%>\%
    add_existing_table(tbl1) \%>\%
    build_table(DM)
+   
+tbl2
 
-summary(tbl2)
+table_structure(tbl2)
 
+row_paths_summary(tbl2)
 }
 \author{
 Gabriel Becker

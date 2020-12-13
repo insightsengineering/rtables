@@ -1,10 +1,5 @@
 context("make_afun and related machinery")
 
-    value_labels <- rtables:::value_labels
-    obj_format <- rtables:::obj_format
-
-
-
 test_that("afun internals coverage", {
 
     ## use existing funcs to ensure coverage numbers are correct

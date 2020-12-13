@@ -1592,7 +1592,7 @@ RowsVerticalSection = function(values,
 
 #' @method print RowsVerticalSection
 #' @export
-print.RowsVerticalSection <- function(x) {
+print.RowsVerticalSection <- function(x, ...) {
   cat("in_rows object print method:\n----------------------------\n")
   print(data.frame(
     row_name = attr(x, "row_names"),

@@ -15,14 +15,20 @@ cbind_rtables(x, ...)
 cbind two rtables
 }
 \examples{
+
 x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 
 y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 
 z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
 
-cbind_rtables(x, y)
+t1 <- cbind_rtables(x, y)
+t1
 
-cbind_rtables(x, y, z)
+t2 <- cbind_rtables(x, y, z)
+t2
+
+col_paths_summary(t1)
+col_paths_summary(t2)
 
 }

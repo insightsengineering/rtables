@@ -4,22 +4,18 @@
 \alias{table_structure}
 \title{Summarize Table}
 \usage{
-table_structure(obj, depth = 0, indent = 0, print_indent = 0)
+table_structure(x, expand = TRUE)
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{x}{a table object}
 
-\item{depth}{numeric(1).}
-
-\item{indent}{numeric(1).}
-
-\item{print_indent}{numeric(1)}
+\item{expand}{logical(1), if \code{TRUE} an unfolded table tree is displayed, if \code{FALSE} no details on the rows are
+displayed.}
 }
 \description{
 Summarize Table
 }
 \examples{
-
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -33,9 +29,11 @@ l <- basic_table() \%>\%
   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 
 tbl <- build_table(l, iris2)
+tbl
 
 row_paths(tbl)
 
 table_structure(tbl)
 
+table_structure(tbl, expand = FALSE)
 }

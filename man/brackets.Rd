@@ -58,3 +58,23 @@
 \description{
 retrieve and assign elements of a TableTree
 }
+\examples{
+l <- basic_table() \%>\%
+   split_cols_by("ARM") \%>\%
+   analyze(c("SEX", "AGE"))
+   
+tbl <- build_table(l, DM)
+
+tbl
+
+tbl[1, ]
+tbl[1:2, 2]
+
+tbl[2, 1]
+tbl[2, 1, drop = TRUE]
+
+tbl[, 1]
+
+tbl[-2, ]
+tbl[, -1]
+}

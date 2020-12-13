@@ -217,30 +217,43 @@ setMethod("cmpnd_last_colsplit", "ANY",
 #'
 #' @inheritParams lyt_args
 #'
-#' @param ref_group character(1) or NULL. Level of \code{var} which should be considered ref_group/reference
-#' @param incl_all logical(1). Should a column representing all observations at this level of nesting be added. defaults to \code{FALSE}
+#' @param ref_group character(1) or `NULL`. Level of `var` which should be considered ref_group/reference
+#' @param incl_all logical(1). Should a column representing all observations at this level of nesting be added. defaults to `FALSE`
 #'
 #' @export
 #'
 #' @author Gabriel Becker
+#' 
 #' @examples
+#' 
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2"))
+#'   
+#' build_table(lyt, ex_adsl)
+#' 
+#' # Let's look at the splits in more detail
+#' 
 #' l <- basic_table() %>% split_cols_by("ARM")
 #' l
 #'
 #' # add an analysis (summary)
 #' l2 <- l %>%
-#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+#'     analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary) , format = "xx.xx")
 #' l2
-#'
+#' 
 #' build_table(l2, DM)
 #'
 #' # By default sequentially adding layouts results in nesting
+#' library(dplyr)
+#' DM_MF <- DM %>% filter(SEX %in% c("M", "F")) %>% mutate(SEX = droplevels(SEX))
+#' 
 #' l3 <- basic_table() %>% split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
-#'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
+#'   analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary), format = "xx.xx")
 #' l3
 #'
-#'  build_table(l3, DM)
+#'  build_table(l3, DM_MF)
 #'
 #' # nested=TRUE vs not
 #' l4 <- basic_table() %>% split_cols_by("ARM") %>%
@@ -312,41 +325,52 @@ split_cols_by = function(lyt,
 #' @examples
 #'
 #' l <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
-#'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
-#'
+#'     split_cols_by("ARM") %>%
+#'     split_rows_by("RACE", split_fun = drop_split_levels) %>%
+#'     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+#' 
 #' build_table(l, DM)
-#'
-#'
+#' 
+#' 
 #' basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("RACE") %>%
-#'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
-#'   build_table(DM)
-#'
-#'
-#'  l <- basic_table() %>%
-#'    split_cols_by("ARM") %>%
-#'    split_cols_by("SEX") %>%
-#'    summarize_row_groups(label_fstr = "Overall (N)") %>%
-#'      split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
-#'                    split_fun = drop_split_levels) %>%
-#'    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-#'    analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
-#'
-#'  l
-#'
-#'  DM2 <- DM
-#'  DM2$gender_lab <- DM2$SEX
-#' levels(DM2$gender_lab) <- c("Female", "Male", "Unknown", "Undifferentiated")
-#' DM2$ethn_lab <- c("Asian", "African American", "Caucasian", "Am Indian or Alaska Native",
-#'                   "Multiple", "Pacific Islander", "Other", "Unknown")[DM2$RACE]
-#'
+#'     split_cols_by("ARM") %>%
+#'     split_rows_by("RACE") %>%
+#'     analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
+#'     build_table(DM)
+#' 
+#' 
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by("SEX") %>%
+#'     summarize_row_groups(label_fstr = "Overall (N)") %>%
+#'     split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
+#'                   split_fun = drop_split_levels) %>%
+#'     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+#'     analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+#' 
+#' l
+#' 
+#' library(dplyr)
+#' DM2 <- DM %>% 
+#'     filter(SEX %in% c("M", "F")) %>%
+#'     mutate(
+#'         SEX = droplevels(SEX),
+#'         gender_lab = c("F" = "Female", "M" = "Male",
+#'                        "U" = "Unknown", "UNDIFFERENTIATED" = "Undifferentiated")[SEX],
+#'         ethn_lab = c(
+#'             "ASIAN" = "Asian", 
+#'             "BLACK OR AFRICAN AMERICAN" = "Black or African American", 
+#'             "WHITE" = "White",
+#'             "AMERICAN INDIAN OR ALASKA NATIVE" = "American Indian or Alaska Native",
+#'              "MULTIPLE" = "Multiple", 
+#'              "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" =
+#'                  "Native Hawaiian or Other Pacific Islander",
+#'              "OTHER" = "Other", "UNKNOWN" = "Unknown"
+#'         )[RACE]
+#'     )
+#' 
 #' build_table(l, DM2)
-#'
-#'
-#'
+#' 
 split_rows_by = function(lyt,
                          var,
                          labels_var = var,
@@ -376,15 +400,37 @@ split_rows_by = function(lyt,
 #'
 #' In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
 #' need columns to reflect different variables entirely, rather than different levels of a single variable, we use
-#' \code{split_cols_by_multivar}
+#' `split_cols_by_multivar`
 #'
 #' @inheritParams lyt_args
 #'
 #' @export
 #'
-#' @seealso \code{\link{analyze_colvars}}
 #' @author Gabriel Becker
-
+#' 
+#' @seealso \code{\link{analyze_colvars}}
+#' 
+#' @examples 
+#' 
+#' library(dplyr)
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
+#' ## toy example where we take the mean of the first variable and the
+#' ## count of >.5 for the second.
+#' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
+#'                 function(x) rcell(sum(x > .5), format = "xx"))
+#'
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by_multivar(c("value", "pctdiff")) %>%
+#'     split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
+#'     summarize_row_groups() %>%
+#'     analyze_colvars(afun = colfuns)
+#'
+#' l
+#'
+#' build_table(l, ANL)
+#' 
 split_cols_by_multivar = function(lyt,
                                   vars,
                                   varlabels = vars,
@@ -435,13 +481,53 @@ split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
 #' @author Gabriel Becker
 #'
 #' @examples
+#' library(dplyr)
+#' 
+#' # split_cols_by_cuts
 #' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
 #'     split_cols_by_cuts("AGE", split_label = "Age",
 #'                        cuts = c(0, 25, 35, 1000),
 #'                        cutlabels = c("young", "medium", "old")) %>%
-#'     analyze("RACE", afun = length)
-#'
-#' build_table(l, DM)
+#'     analyze(c("BMRKR2", "STRATA2")) %>%
+#'     append_topleft("counts")
+#' 
+#' build_table(l, ex_adsl)
+#' 
+#' 
+#' # split_rows_by_cuts
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_rows_by_cuts("AGE", split_label = "Age",
+#'                   cuts = c(0, 25, 35, 1000),
+#'                   cutlabels = c("young", "medium", "old")) %>%
+#'     analyze(c("BMRKR2", "STRATA2")) %>%
+#'     append_topleft("counts")
+#' 
+#' 
+#' build_table(l, ex_adsl)
+#' 
+#' 
+#' # split_cols_by_quartiles
+#' 
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by_quartiles("AGE", split_label = "Age") %>%
+#'     analyze(c("BMRKR2", "STRATA2")) %>%
+#'     append_topleft("counts")
+#' 
+#' build_table(l, ex_adsl)
+#' 
+#' # split_rows_by_quartiles
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     add_colcounts() %>%
+#'     split_rows_by_quartiles("AGE", split_label = "Age") %>%
+#'     analyze("BMRKR2") %>%
+#'     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
+#' 
+#' build_table(l, ex_adsl)
+#' 
 #'
 split_cols_by_cuts = function(lyt, var, cuts,
                               cutlabels = NULL,
@@ -768,21 +854,23 @@ get_acolvar_vars <- function(lyt) {
 #' @author Gabriel Becker
 #'
 #' @examples
+#' 
+#' library(dplyr)
+#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' 
 #' ## toy example where we take the mean of the first variable and the
 #' ## count of >.5 for the second.
 #' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
 #'                 function(x) rcell(sum(x > .5), format = "xx"))
 #'
-#' l <- basic_table() %>% split_cols_by("ARM") %>%
+#' l <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff")) %>%
 #'     split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = colfuns)
 #'
 #' l
-#'
-#' library(dplyr)
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
 #' build_table(l, ANL)
 #'
@@ -793,7 +881,7 @@ get_acolvar_vars <- function(lyt) {
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = mean, format = "xx.xx") %>%
 #'     build_table(ANL)
-
+#'     
 analyze_colvars = function(lyt, afun,
                            format = NULL,
                            nested = TRUE,
@@ -834,11 +922,27 @@ analyze_colvars = function(lyt, afun,
 }
 
 #' Add ref_group comparison analysis recipe
-#'
-#' @inheritParams lyt_args
-#' @author Gabriel Becker
-#' @export
+#' 
 #' @rdname bline_analyses
+#' 
+#' @details Please see the `baseline` vignette for more details.
+#' 
+#' @inheritParams lyt_args
+#' 
+#' @author Gabriel Becker
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' basic_table() %>%
+#'     split_cols_by("ARM", ref_group = "B: Placebo") %>%
+#'     analyze("AGE", afun = function(x, .ref_group) {
+#'         in_rows(
+#'             "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
+#'         )
+#'     }) %>%
+#'     build_table(DM)
 analyze_against_ref_group = function(lyt, var = NA_character_,
                                      afun,
                                      label = if(is.na(var)) "" else var,
@@ -908,13 +1012,29 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
 ## the column layout.
 
 #' Add Overall Column (deprecated?)
+#' 
 #' @description This function will \emph{only} add an overall
 #' column at the \emph{top} level of splitting, NOT within
 #' existing column splits.
 #' See \code{\link{add_overall_level}} for the recommended
 #' way to add overall columns more generally within existing splits.
+#' 
 #' @inheritParams lyt_args
+#' 
 #' @export
+#' 
+#' @seealso \code{\link{add_overall_level}}
+#' 
+#' @examples 
+#' l <- basic_table() %>%
+#'    split_cols_by("ARM") %>%
+#'    add_overall_col("All Patients") %>%
+#'    analyze("AGE")
+#'    
+#' l
+#' 
+#' build_table(l, DM)
+#' 
 add_overall_col = function(lyt, label) {
     spl = AllSplit(label)
     split_cols(lyt,
@@ -1129,25 +1249,33 @@ setMethod(".add_row_summary", "NULL",
 #'
 #' @inheritParams lyt_args
 #'
-#' @details if \code{format} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
+#' @details If `format` expects 2 values (i.e. `xx` appears twice in the format string, then both raw and percent of
+#'   column total counts are calculated. Otherwise only raw counts are used.
 #'
-#' \code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
+#' `cfun` must accept `df` as its first argument and will receive the subset `data.frame` corresponding
+#' with the row- and column-splitting for the cell being calculated. Must accept `labelstr` as the second
+#' parameter, which accepts the `label` of the level of the parent split currently being summarized. Optionally can
+#' accept `.N_col` or `.N_total` (see \code{\link{analyze}}).
 #'
 #' @export
+#' 
 #' @author Gabriel Becker
 #'
 #' @examples
+#' 
+#' DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
+#' 
 #' l <- basic_table() %>% split_cols_by("ARM") %>%
-#'     split_rows_by("RACE") %>%
+#'     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
 #'     summarize_row_groups(label_fstr = "%s (n)") %>%
 #'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 #' l
 #'
-#' tbl <- build_table(l, DM)
+#' tbl <- build_table(l, DM2)
 #'
 #' tbl
 #'
-#' summary(tbl) # summary count is a content table
+#' row_paths_summary(tbl) # summary count is a content table
 #'
 #'
 #' ## use a cfun and extra_args to customize summarization
@@ -1155,17 +1283,21 @@ setMethod(".add_row_summary", "NULL",
 #' sfun <- function(x, labelstr, trim) {
 #'     in_rows(
 #'         c(mean(x, trim = trim), trim),
-#'         .formats = "xx (xx.x%)",
+#'         .formats = "xx.x (xx.x%)",
 #'         .labels = sprintf("%s (Trimmed mean and trim %%)",
 #'                               labelstr)
 #'     )
 #' }
+#' 
 #' l2 <- basic_table() %>% split_cols_by("ARM") %>%
-#'     split_rows_by("RACE") %>%
+#'     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+#'     add_colcounts() %>%
 #'     summarize_row_groups("AGE", cfun = sfun,
 #'                          extra_args = list(trim = .2)) %>%
-#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-#' tbl2 <- build_table(l2, DM)
+#'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") %>%
+#'     append_topleft(c("Country", "  Age"))
+#'     
+#' tbl2 <- build_table(l2, DM2)
 #' tbl2
 #'
 summarize_row_groups = function(lyt,
@@ -1247,9 +1379,12 @@ add_colcounts = function(lyt, format = "(N=xx)") {
 #'    analyze("AGE", afun = sd, format = "xx.xx") %>%
 #'    add_existing_table(tbl1) %>%
 #'    build_table(DM)
+#'    
+#' tbl2
+#' 
+#' table_structure(tbl2)
 #'
-#' summary(tbl2)
-#'
+#' row_paths_summary(tbl2)
 add_existing_table = function(lyt, tt, indent_mod = 0) {
     indent_mod(tt) = indent_mod
     lyt = split_rows(lyt,
@@ -1443,9 +1578,10 @@ list_wrap_df = function(f) {
 #'
 #' @examples
 #'
-#' basic_table() %>%
-#'   analyze("AGE", afun = mean) %>%
-#'   build_table(DM)
+#' lyt <- basic_table() %>%
+#'   analyze("AGE", afun = mean)
+#'   
+#' build_table(lyt, DM)
 #'
 basic_table <- function() PreDataTableLayouts()
 
@@ -1471,19 +1607,24 @@ basic_table <- function() PreDataTableLayouts()
 #' This may change in the future.
 #' @note This function is experimental, its name and the details of
 #' its behavior are subject to change in future versions.
+#' 
+#' @export
 #' @seealso top_left
+#' 
 #' @examples
+#' library(dplyr)
+#' 
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
 #'   split_rows_by("RACE") %>%
 #'   append_topleft("Ethnicity") %>%
-#'   analyze("AGE", mean) %>%
+#'   analyze("AGE") %>%
 #'   append_topleft("  Age")
-#' library(dplyr)
+#'   
 #' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
+#' 
 #' build_table(lyt, DM2)
-#' @export
 append_topleft <- function(lyt, newlines) {
     stopifnot(is(lyt, "PreDataTableLayouts"),
               is(newlines, "character"))

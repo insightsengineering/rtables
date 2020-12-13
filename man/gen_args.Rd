@@ -66,6 +66,7 @@ General Argument Conventions
 Other conventions: 
 \code{\link{compat_args}()},
 \code{\link{constr_args}()},
-\code{\link{lyt_args}()}
+\code{\link{lyt_args}()},
+\code{\link{sf_args}()}
 }
 \concept{conventions}

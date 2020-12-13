@@ -54,13 +54,12 @@ reference:
     - split_cols_by_multivar
     - analyze_colvars
     - split_cols_by_cuts 
-    - add_overall_level
     - add_overall_col
     - analyze_against_ref_group
     - add_existing_table
 
   - title: Tabulation Utility Functions
-    desc: Utility functions
+    desc: Functions that are useful to be used with the `analyze*` functions.
     contents:
     - in_rows
     - simple_analysis
@@ -68,6 +67,7 @@ reference:
     
   - title: Split Functions
     contents:
+    - add_overall_level
     - remove_split_levels
     - add_combo_levels
 

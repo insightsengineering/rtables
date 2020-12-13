@@ -14,9 +14,11 @@ prune_table(
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
-\item{prune_func}{function. A Function to be called on each subtree which returns TRUE if the entire subtree should be removed.}
+\item{prune_func}{function. A Function to be called on each subtree which returns TRUE if the entire subtree should
+be removed.}
 
-\item{stop_depth}{numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA} which indicates pruning should happen at all levels}
+\item{stop_depth}{numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA}
+which indicates pruning should happen at all levels}
 
 \item{depth}{numeric(1). Used internally, not intended to be set by the end user.}
 }
