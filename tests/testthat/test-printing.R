@@ -53,3 +53,17 @@ test_that("labels correctly used for columns rather than names", {
                      c("", vlabs))
 
 })
+
+test_that("nested identical labels work ok", {
+    df <- data.frame(
+        h2 = factor(c("<Missing>")),
+        x = factor(c("<Missing>"))
+    )
+
+    t2 <- basic_table() %>%
+        split_rows_by("h2") %>%
+        analyze("x") %>%
+        build_table(df)
+    mat <- matrix_form(t2)
+    expect_identical(mat$strings[,1], c("", "<Missing>", "<Missing>"))
+})

@@ -120,3 +120,24 @@ test_that("Duplicate colvars path correctly", {
     expect_identical(list("AGE._[[2]]_." = mean(DM$AGE, na.rm= TRUE)),
                      res)
 })
+
+test_that("top_left retention behavior is correct across all scenarios", {
+    tlval <- "hi"
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        append_topleft(tlval) %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", mean)
+    tbl <- build_table(lyt, DM)
+
+    expect_identical(top_left(tbl), tlval)
+    expect_identical(top_left(tbl[,1]), tlval) ## default column-only subsetting is TRUE
+    expect_identical(top_left(tbl[,1,keep_topleft = FALSE]), character())
+    expect_identical(top_left(tbl[,1,keep_topleft = TRUE]), tlval)
+    expect_identical(top_left(tbl[1,]), character()) ## default with any row subsetting is FALSE
+    expect_identical(top_left(tbl[1, ,keep_topleft = FALSE]), character())
+    expect_identical(top_left(tbl[1, ,keep_topleft = TRUE]), tlval)
+    expect_identical(top_left(tbl[1:2, 1:2]), character())
+    expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
+    expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
+})
