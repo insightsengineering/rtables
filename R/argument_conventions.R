@@ -11,6 +11,8 @@ NULL
 #' @name gen_args
 #' @family conventions
 #' @param df dataset (data.frame or tibble)
+#' @param alt_counts_df dataset (data.frame or tibble). Alternative full data the rtables framework will use (\emph{only})
+#' when calculating column counts.
 #' @param spl A Split object defining a partitioning or analysis/tabulation of the data.
 #' @param pos numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current
 #' @param tt TableTree (or related class). A TableTree object representing a populated table.
@@ -29,7 +31,7 @@ NULL
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
 #' @rdname gen_args
-gen_args <- function(df, spl, pos, tt, tr, verbose, colwidths, obj, x,
+gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, visible_label, cvar, topleft, ...) NULL
 
 
