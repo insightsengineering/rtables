@@ -25,11 +25,17 @@ insert rrows at (before) a specific location
 Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 }
 \examples{
-tbl <- rtabulate(iris$Sepal.Length, iris$Species)
+tbl <- basic_table() \%>\% split_cols_by("Species") \%>\% analyze("Sepal.Length") \%>\% build_table(iris)
 
 insert_rrow(tbl, rrow("Hello World"))
 insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
-tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
+
+tbl2 <- basic_table() \%>\%
+    split_cols_by("Species") \%>\%
+    split_rows_by("Species") \%>\%
+    analyze("Sepal.Length") \%>\% 
+    build_table(iris)
+
 insert_rrow(tbl2, rrow("Hello World"))
 insert_rrow(tbl2, rrow("Hello World"), at = 2)
 insert_rrow(tbl2, rrow("Hello World"), at = 4)
@@ -42,8 +48,6 @@ insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 }
 \seealso{
 Other compatability: 
-\code{\link{by_all}()},
-\code{\link{header<-}()},
 \code{\link{rtable}()}
 }
 \concept{compatability}
