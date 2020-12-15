@@ -4,7 +4,7 @@
 \alias{propose_column_widths}
 \title{Propose Column Widths of an \code{rtable} object}
 \usage{
-propose_column_widths(x, mat_form = matrix_form(x))
+propose_column_widths(x, mat_form = matrix_form(x, indent_rownames = TRUE))
 }
 \arguments{
 \item{x}{\code{rtable} object}

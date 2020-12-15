@@ -4,10 +4,13 @@
 \alias{matrix_form}
 \title{Transform rtable to a list of matrices which can be used for outputting}
 \usage{
-matrix_form(tt)
+matrix_form(tt, indent_rownames = FALSE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{indent_rownames}{logical(1), if TRUE the column with the row names in the \code{strings} matrix of has indented row
+names (strings pre-fixed)}
 }
 \description{
 Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to

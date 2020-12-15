@@ -39,10 +39,8 @@ setMethod("print", "ANY", base::print)
 setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 
   ## we create a matrix with the formatted cell contents
-  mat <- matrix_form(x)
+  mat <- matrix_form(x, indent_rownames = TRUE)
 
-  # indent rownames
-  mat$strings[, 1] <- indent_string(mat$strings[, 1], c(rep(0, attr(mat, "nrow_header")), mat$row_info$indent))
 
   if (is.null(widths)) {
     widths <- propose_column_widths(x, mat_form = mat)
@@ -116,6 +114,9 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' map the rtable to an in between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
+#' @param indent_rownames logical(1), if TRUE the column with the row names in the `strings` matrix of has indented row
+#'   names (strings pre-fixed)
+#'   
 #' @note
 #' TODO: Look into `gt` representation
 #'
@@ -139,7 +140,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' tbl <- build_table(l, iris2)
 #'
 #' matrix_form(tbl)
-matrix_form <- function(tt) {
+matrix_form <- function(tt, indent_rownames = FALSE) {
 
   stopifnot(is(tt, "VTableTree"))
 
@@ -196,6 +197,10 @@ matrix_form <- function(tt) {
     print_cells
   }))
 
+  
+  if (indent_rownames) {
+    body[, 1] <- indent_string(body[, 1], c(rep(0, nrow(header_content$body)), sr$indent))
+  }
 
   structure(
     list(
@@ -404,7 +409,7 @@ setMethod("get_formatted_cells", "LabelRow",
 #' tbl <- build_table(l, iris2)
 #'
 #' propose_column_widths(tbl)
-propose_column_widths <- function(x, mat_form = matrix_form(x)) {
+propose_column_widths <- function(x, mat_form = matrix_form(x, indent_rownames = TRUE)) {
   stopifnot(is(x, "VTableTree"))
 
   body <- mat_form$strings
