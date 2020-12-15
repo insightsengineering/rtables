@@ -42,7 +42,3 @@ setMethod("simple_analysis", "ANY",
           function(x, ...) {
               stop("No default simple_analysis behavior for class ", class(x), " please specify FUN  explicitly.")
           })
-
-
-
-

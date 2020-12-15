@@ -212,29 +212,29 @@ test_that("calls to make_afun within loop work correctly", {
 })
 
 
-# test_that("keeping non-existent levels doesn't break internal machinery", {
-#     ANL <- DM
-#     ANL$COUNTRY <- as.character(ANL$COUNTRY)
-# 
-#     sfun = keep_split_levels("ABC")
-# 
-# 
-#     lyt <- basic_table() %>%
-#         analyze("AGE") %>%
-#         split_rows_by("COUNTRY", split_fun = sfun) %>%
-#         summarize_row_groups() %>%
-#         analyze("AGE")
-# 
-#     result <- build_table(lyt, df = ANL)
-#     expect_identical(dim(result), c(3L, 1L))
-#     expect_identical(row.names(result), c("Mean", "ABC", "Mean"))
-#     cbres <- cbind_rtables(result, result)
-#     expect_identical(dim(cbres), c(3L, 2L))
-#     expect_identical(row.names(cbres), c("Mean", "ABC", "Mean"))
-# 
-#     ## because its a factor and "ABC" isn't a real level
-#     expect_error(build_table(lyt, DM))
-# })
+test_that("keeping non-existent levels doesn't break internal machinery", {
+  ANL <- DM
+  ANL$COUNTRY <- as.character(ANL$COUNTRY)
+  
+  sfun = keep_split_levels("ABC")
+  
+  
+  lyt <- basic_table() %>%
+    analyze("AGE") %>%
+    split_rows_by("COUNTRY", split_fun = sfun) %>%
+    summarize_row_groups() %>%
+    analyze("AGE")
+  
+  result <- build_table(lyt, df = ANL)
+  expect_identical(dim(result), c(3L, 1L))
+  expect_identical(row.names(result), c("Mean", "ABC", "Mean"))
+  cbres <- cbind_rtables(result, result)
+  expect_identical(dim(cbres), c(3L, 2L))
+  expect_identical(row.names(cbres), c("Mean", "ABC", "Mean"))
+  
+  ## because its a factor and "ABC" isn't a real level
+  expect_error(build_table(lyt, DM))
+})
 
 test_that("add_overall_col with no col splits works", {
   

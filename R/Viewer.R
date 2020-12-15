@@ -26,7 +26,7 @@
 #'    build_table(df)
 #' 
 #' Viewer(tbl)
-#' Viewer(tbl, tbl) 
+#' Viewer(tbl, tbl)
 #' 
 #' 
 #' tbl2 <-htmltools::tags$div(
