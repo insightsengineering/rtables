@@ -63,6 +63,7 @@ reference:
     - in_rows
     - simple_analysis
     - make_afun
+    - list_wrap_x
     
   - title: Split Functions
     contents:
@@ -114,11 +115,9 @@ reference:
     - rheader
     - rtablel
     - rrowl
+    - insert_rrow
     - indent
-    - rtabulate
-    - by_all
-    - by_add_total
-    - by_quartile
+    
     
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
