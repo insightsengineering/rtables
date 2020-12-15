@@ -276,7 +276,13 @@ setMethod("[<-", c("VTableTree", value = "list"),
     replace_rowsbynum(x, i, ...)
 })
 
-
+#' @exportMethod [<-
+#' @rdname brackets
+setMethod("[<-", c("VTableTree", value = "CellValue"),
+          function(x, i, j, ...,  value) {
+    x[i = i, j = j, ...] <- unclass(value)
+    x
+})
 
 
 

@@ -700,3 +700,27 @@ test_that("analyze_colvars works generally", {
     expect_identical(cell_values(one_col_tbl),
                      list(Sepal.Width = mean(iris$Sepal.Width)))
 })
+
+
+test_that("alt_counts_df works", {
+    minidm <- DM[1,]
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        add_colcounts() %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups() %>%
+        analyze("AGE")
+
+    tbl <- build_table(lyt, DM, minidm)
+
+    ## this inherently checks both taht the correct counts (0, 1, 0) are
+    ## retrieved and that they propogate to the summary functions
+    expect_identical(list("A: Drug X" = c(70, Inf), ##70/0
+                          "B: Placebo" = c(56, 56), ## 56/1
+                          "C: Combination" = c(61, Inf)), ##61/0
+                     cell_values(tbl[1,]))
+
+    ## breaks (with useful message) when given incompatible alt_counts_df
+    expect_error(build_table(lyt, DM, iris), "Offending column subset expression")
+})

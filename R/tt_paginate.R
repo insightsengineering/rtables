@@ -125,7 +125,7 @@ pos_to_path <- function(pos) {
 
 
 
-#' Make layout summary  data.frame for use during pagination
+#' Make row and column layout summary data.frames for use during pagination
 #' @inheritParams gen_args
 #' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
 #' @param incontent logical(1). Internal detail do not set manually.
@@ -135,12 +135,17 @@ pos_to_path <- function(pos) {
 #' @param nsibs integer(1). Internal detail do not set manually.
 #' @param rownum numeric(1). Internal detail do not set manually.
 #' @param indent integer(1). Internal detail do not set manually.
-#'
+
+#' @param colwidths numeric. Internal detail do not set manually.
 #'
 #' @details
 #' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
 #'
 #' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+#'
+#' @note the technically present root tree node is excluded from the summary returne dby
+#' both \code{make_row_df} and \code{make_col_df}, as it is simply the
+#' row/column structure of \code{tt} and thus not useful for pathing or pagination.
 #' @export
 #' @rdname make_row_df
 setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
@@ -320,21 +325,17 @@ setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
 #' Column Layout Summary
 #'
 #' Used for Pagination
-#'
 #' @inheritParams make_row_df
-#' @noRd
-make_col_df <-    function(ct,
-                           colwidths = propose_column_widths(ct),
-                           visible_only = TRUE,
-                           colnum  = 1L,
-                           sibpos = NA_integer_,
-                           nsubs = NA_integer_) {
-    rows <- inner_col_df(coltree(ct),
-                 colwidths = colwidths,
+#' @rdname make_row_df
+#' @export
+make_col_df <-    function(tt,
+                           visible_only = TRUE) {
+    rows <- inner_col_df(coltree(tt), ## this is a null op if its already a coltree object
+                 colwidths = propose_column_widths(tt),
                  visible_only = visible_only,
-                 colnum = colnum,
-                 sibpos = 1,
-                 nsibs = 1) ## nsiblings includes current so 1 means "only child"
+                 colnum = 1L,
+                 sibpos = 1L,
+                 nsibs = 1L) ## nsiblings includes current so 1 means "only child"
     do.call(rbind, rows)
 }
 
@@ -374,13 +375,16 @@ setMethod("inner_col_df", "LayoutColTree",
 
     if(!visible_only) {
         allindices <- unlist(lapply(ret, function(df) df$abs_pos[!is.na(df$abs_pos)]))
-        thisone  <- list(col_dfrow(col = ct,
-                                   cnum = NA_integer_,
-                                   leaf_indices = allindices,
-                                   sibpos = sibpos,
-                                   nsibs = nsibs,
-                                   pth = c(pos_to_path(tree_pos(ct)), obj_name(ct))))
-        ret <- c(thisone, ret)
+        thispth <- pos_to_path(tree_pos(ct))
+        if(any(nzchar(thispth))) {
+            thisone  <- list(col_dfrow(col = ct,
+                                       cnum = NA_integer_,
+                                       leaf_indices = allindices,
+                                       sibpos = sibpos,
+                                       nsibs = nsibs,
+                                       pth = thispth))
+            ret <- c(thisone, ret)
+        }
     }
 
     ret
