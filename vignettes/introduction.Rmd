@@ -16,6 +16,12 @@ editor_options:
 knitr::opts_chunk$set(comment = "")
 ```
 
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
 ## Introduction
 
 The `rtables` R package provides a framework to create, tabulate and output tables in `R`. Most of the design requirements for `rtables` have their origin in studying tables that are commonly used to report analyses from clinical trials; however, we were careful to keep `rtables` a general purpose toolkit.

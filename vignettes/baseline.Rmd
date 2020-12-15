@@ -13,6 +13,21 @@ editor_options:
 
 
 
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+```{css, echo=FALSE}
+
+.sourcecode {
+  background-color:lightblue;
+}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+
 ## Introduction
 
 

@@ -9,5 +9,16 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
 ## Introduction
 
