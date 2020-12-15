@@ -50,7 +50,7 @@ cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Co
 
 test_that("make_row_df, make_col_df give paths which all work", {
     ## duplicated from test-lyt-tabulation.R :(
-    lyt = NULL %>% split_cols_by("ARM") %>%
+    lyt = basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         ## No row splits have been introduced, so this adds

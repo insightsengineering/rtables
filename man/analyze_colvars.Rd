@@ -33,21 +33,23 @@ analyze_colvars(
 Generate Rows Analyzing Different Variables Across Columns
 }
 \examples{
+
+library(dplyr)
+ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
+
 ## toy example where we take the mean of the first variable and the
 ## count of >.5 for the second.
 colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
                 function(x) rcell(sum(x > .5), format = "xx"))
 
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff")) \%>\%
     split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = colfuns)
 
 l
-
-library(dplyr)
-ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 build_table(l, ANL)
 
@@ -58,6 +60,7 @@ basic_table() \%>\% split_cols_by("ARM") \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = mean, format = "xx.xx") \%>\%
     build_table(ANL)
+    
 }
 \seealso{
 \code{\link{split_cols_by_multivar}}

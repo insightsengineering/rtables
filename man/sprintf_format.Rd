@@ -14,6 +14,20 @@ Format the rcell data with \code{\link[base]{sprintf}} formatting strings
 }
 \examples{
 
+basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", function(x) {
+    in_rows(
+      "mean_sd" = c(mean(x), sd(x)),
+      "range" = range(x),
+      .formats = c(mean_sd = sprintf_format("\%.4f - \%.2f"), range = "xx.xx - xx.xx")
+    )
+  }) \%>\%
+  build_table(DM)
+
+rcell(100, format = sprintf_format("(N=\%i)"))
+
+rcell(c(4,9999999999), format = sprintf_format("(\%.2f, >999.9)"))
 
 rtable(LETTERS[1:2], rrow("", 1 ,2), format = sprintf_format("\%.2f"))
 

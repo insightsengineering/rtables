@@ -33,15 +33,18 @@ This function is experimental, its name and the details of
 its behavior are subject to change in future versions.
 }
 \examples{
+library(dplyr)
+
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
   split_rows_by("RACE") \%>\%
   append_topleft("Ethnicity") \%>\%
-  analyze("AGE", mean) \%>\%
+  analyze("AGE") \%>\%
   append_topleft("  Age")
-library(dplyr)
+  
 DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
+
 build_table(lyt, DM2)
 }
 \seealso{

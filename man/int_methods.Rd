@@ -46,10 +46,11 @@
 \alias{summarize_rows_inner,ElementaryTable-method}
 \alias{summarize_rows_inner,TableRow-method}
 \alias{summarize_rows_inner,LabelRow-method}
-\alias{table_structure,TableTree-method}
-\alias{table_structure,ElementaryTable-method}
-\alias{table_structure,TableRow-method}
-\alias{table_structure,LabelRow-method}
+\alias{table_structure_inner}
+\alias{table_structure_inner,TableTree-method}
+\alias{table_structure_inner,ElementaryTable-method}
+\alias{table_structure_inner,TableRow-method}
+\alias{table_structure_inner,LabelRow-method}
 \alias{internal_methods}
 \alias{next_rpos}
 \alias{next_rpos,PreDataTableLayouts-method}
@@ -439,13 +440,15 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 
 \S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
-\S4method{table_structure}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{table_structure}{ElementaryTable}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure_inner}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{table_structure}{TableRow}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure_inner}{ElementaryTable}(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{table_structure}{LabelRow}(obj, depth = 0, indent = 0, print_indent = 0)
+\S4method{table_structure_inner}{TableRow}(obj, depth = 0, indent = 0, print_indent = 0)
+
+\S4method{table_structure_inner}{LabelRow}(obj, depth = 0, indent = 0, print_indent = 0)
 
 next_rpos(obj, nested = TRUE, for_analyze = FALSE)
 
@@ -968,11 +971,11 @@ spl_varnames(obj)
 
 \item{obj}{The object.}
 
-\item{depth}{numeric(1). Depth.}
+\item{depth}{depth in tree}
 
-\item{indent}{numeric(1). Indent.}
+\item{indent}{indent}
 
-\item{print_indent}{numeric(1)}
+\item{print_indent}{indent for print}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 

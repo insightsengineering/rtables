@@ -11,8 +11,9 @@ Every layout must start with a basic table.
 }
 \examples{
 
-basic_table() \%>\%
-  analyze("AGE", afun = mean) \%>\%
-  build_table(DM)
+lyt <- basic_table() \%>\%
+  analyze("AGE", afun = mean)
+  
+build_table(lyt, DM)
 
 }

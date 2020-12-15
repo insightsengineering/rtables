@@ -8,7 +8,8 @@ test_that("summarize_row_groups works with provided funcs", {
         analyze("AGE", mean)
 
     tb1 <- build_table(l1, DM)
-    print(tb1)
+    tbl_str <- toString(tb1)
+    
     expect(TRUE, "succeeded")
 
 
@@ -18,7 +19,7 @@ test_that("summarize_row_groups works with provided funcs", {
 
 ## this
 test_that("complex layout works", {
-    lyt = NULL %>% split_cols_by("ARM") %>%
+    lyt = basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         ## No row splits have been introduced, so this adds
@@ -64,7 +65,7 @@ test_that("complex layout works", {
                  "mean", "median", "Age Analysis redux", "range",
                  "level1", "level2")
     tab = build_table(lyt, rawdat)
-    print(tab)
+    tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
     expect_identical(dim(tab), c(28L, 4L))
     expect_identical(row.names(tab), expnames)
@@ -86,7 +87,7 @@ test_that("complex layout works", {
 
 
 test_that("existing table in layout works", {
-    thing2 = NULL %>% split_cols_by("ARM") %>%
+    thing2 = basic_table() %>% split_cols_by("ARM") %>%
     ## add nested column split on SEX with value labels from gend_label
     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
@@ -99,7 +100,7 @@ test_that("existing table in layout works", {
 tab2 = build_table(thing2, rawdat)
 
 
-    thing3 = NULL %>% split_cols_by("ARM") %>%
+    thing3 = basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value labels from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -117,7 +118,7 @@ tab2 = build_table(thing2, rawdat)
 
 
 test_that("labelkids parameter works", {
-    yeslabellyt <- NULL %>% split_cols_by("ARM") %>%
+    yeslabellyt <- basic_table() %>% split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -135,7 +136,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis"))
 
 
-    misslabellyt <- NULL %>%
+    misslabellyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "default") %>%
@@ -152,7 +153,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian (n)", "Level A", "mean", "median"))
 
 
-    nolabellyt <- NULL %>%
+    nolabellyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
@@ -170,7 +171,7 @@ test_that("labelkids parameter works", {
     expect_identical(row.names(tabno)[1:4],
                      c("Caucasian (n)", "mean", "median", "mean"))
 
-    mixedlyt2 <- NULL %>%
+    mixedlyt2 <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "hidden") %>%
@@ -188,7 +189,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian (n)", "Age Analysis", "mean", "median"))
 
 
-    mixedlyt <- NULL %>%
+    mixedlyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
@@ -206,7 +207,7 @@ test_that("labelkids parameter works", {
                      c("Caucasian", "Caucasian (n)", "Level A", "mean"))
 
 
-    varshowlyt <- NULL %>%
+    varshowlyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -240,7 +241,7 @@ refcompmean = function(x, .ref_group, .in_ref_col, ...) {
 
 test_that("ref_group comparisons work", {
 
-    blthing = NULL %>% split_cols_by("ARM", ref_group = "ARM1") %>%
+    blthing = basic_table() %>% split_cols_by("ARM", ref_group = "ARM1") %>%
         analyze("AGE", show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2")
     ## function(x) list(mean = mean(x)))
@@ -304,14 +305,14 @@ test_that("ref_group comparisons work", {
 })
 
 test_that("missing vars caught", {
-    misscol = NULL %>% split_cols_by("ARM") %>%
+    misscol = basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SX", "Gender") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), format = "xx.xx")
 
     expect_error(build_table(misscol, rawdat))
 
-    missrsplit =  NULL %>% split_cols_by("ARM") %>%
+    missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACER", "ethn") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
@@ -319,7 +320,7 @@ test_that("missing vars caught", {
 
     expect_error(build_table(missrsplit, rawdat))
 
-    missavar =  NULL %>% split_cols_by("ARM") %>%
+    missavar =  basic_table() %>% split_cols_by("ARM") %>%
     split_cols_by("SEX", "Gender") %>%
     split_rows_by("RACE", "ethn") %>%
     analyze("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
@@ -664,13 +665,12 @@ test_that("analyze_colvars works generally", {
     expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
                      c(summary = "My Summary Row"))
 
-    print(tab3)
     l4 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
         summarize_row_groups() %>%
         analyze_colvars(afun = identity)
     tab4 <- build_table(l4, test)
     ## this broke before due to formatting missmatches
-    print(tab4)
+    toString(tab4)
     rws4 <- collect_leaves(tab4, TRUE, TRUE)
     expect_identical(rtables:::obj_format(rws4[[1]]), "xx (xx.x%)")
     expect_identical(rtables:::obj_format(rws4[[2]]), NULL)
@@ -683,7 +683,7 @@ test_that("analyze_colvars works generally", {
                                          function(x, labelstr) "second fun"),
                              format = "xx")
     tab5 <- build_table(l5, DM)
-    print(tab5)
+    toString(tab5)
     rws5 <- collect_leaves(tab5, TRUE, TRUE)
     expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
            "Multiple content fucntions didn't recycle properly in nested context")

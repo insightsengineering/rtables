@@ -34,7 +34,7 @@ setMethod("simple_analysis", "logical", function(x, ...) in_rows("Count" = rcell
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
-setMethod("simple_analysis", "factor", list_wrap_x(table))
+setMethod("simple_analysis", "factor", function(x, ...) in_rows(.list = as.list(table(x))))
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis

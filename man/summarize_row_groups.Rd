@@ -33,22 +33,29 @@ summarize_row_groups(
 Add a content row of summary counts
 }
 \details{
-if \code{format} expects 2 values (ie \code{xx} appears twice in the format string, then both raw and percent of column total counts are calculated. Otherwise only raw counts are used.
+If \code{format} expects 2 values (i.e. \code{xx} appears twice in the format string, then both raw and percent of
+column total counts are calculated. Otherwise only raw counts are used.
 
-\code{cfun} must accept \code{df} as its first argument and will receive the subset \emph{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second parameter, which accepts the \emph{label} of the level of the parent split currently being summarized. Optionally can accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
+\code{cfun} must accept \code{df} as its first argument and will receive the subset \code{data.frame} corresponding
+with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second
+parameter, which accepts the \code{label} of the level of the parent split currently being summarized. Optionally can
+accept \code{.N_col} or \code{.N_total} (see \code{\link{analyze}}).
 }
 \examples{
+
+DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
+
 l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-    split_rows_by("RACE") \%>\%
+    split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
     summarize_row_groups(label_fstr = "\%s (n)") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
 
-tbl <- build_table(l, DM)
+tbl <- build_table(l, DM2)
 
 tbl
 
-summary(tbl) # summary count is a content table
+row_paths_summary(tbl) # summary count is a content table
 
 
 ## use a cfun and extra_args to customize summarization
@@ -56,17 +63,21 @@ summary(tbl) # summary count is a content table
 sfun <- function(x, labelstr, trim) {
     in_rows(
         c(mean(x, trim = trim), trim),
-        .formats = "xx (xx.x\%)",
+        .formats = "xx.x (xx.x\%)",
         .labels = sprintf("\%s (Trimmed mean and trim \%\%)",
                               labelstr)
     )
 }
+
 l2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-    split_rows_by("RACE") \%>\%
+    split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
+    add_colcounts() \%>\%
     summarize_row_groups("AGE", cfun = sfun,
                          extra_args = list(trim = .2)) \%>\%
-    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-tbl2 <- build_table(l2, DM)
+    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%
+    append_topleft(c("Country", "  Age"))
+    
+tbl2 <- build_table(l2, DM2)
 tbl2
 
 }

@@ -19,9 +19,6 @@ all_zero_or_na = function(tr) {
     all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
 }
 
-
-
-
 #' Trim rows from a populated table without regard for table structure
 #' @inheritParams gen_args
 #' @param criteria function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \code{\link{all_zero_or_na}}
@@ -108,13 +105,20 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 }
 
 #' Recursively prune a TableTree
+#' 
 #' @inheritParams gen_args
-#' @param prune_func function. A Function to be called on each subtree which returns TRUE if the entire subtree should be removed.
-#' @param stop_depth numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA} which indicates pruning should happen at all levels
+#' @param prune_func function. A Function to be called on each subtree which returns TRUE if the entire subtree should
+#'   be removed.
+#' @param stop_depth numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA}
+#'   which indicates pruning should happen at all levels
 #' @param depth numeric(1). Used internally, not intended to be set by the end user.
+#' 
 #' @return A TableTree pruned via recursive application of \code{prune_func}.
-#' @seealso [prune_empty_level()]
+#' 
 #' @export
+#' 
+#' @seealso [prune_empty_level()]
+#' 
 prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_, depth = 0) {
     if(!is.na(stop_depth) && depth > stop_depth)
         return(tt)
