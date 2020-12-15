@@ -163,9 +163,12 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' @param x TableTree
 #' @param i index
 #' @param j index
-#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
-#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
-#' @param value Replacement value (list, TableRow, or TableTree)
+#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of
+#'   \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be
+#'   retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
+#'   subsetting was by column), and drops it otherwise.
+#' @param value Replacement value (list, `TableRow`, or `TableTree`)
 #' 
 #' @exportMethod [<-
 #' 
@@ -188,6 +191,8 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' 
 #' tbl[-2, ]
 #' tbl[, -1]
+#' 
+#' 
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 

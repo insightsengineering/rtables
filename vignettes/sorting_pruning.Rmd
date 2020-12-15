@@ -11,10 +11,15 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, echo = FALSE}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "")
 ```
 
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
 ## Introduction
 
 Often we want to filter or reorder subsections of a table in ways that take into account the table structure. For example

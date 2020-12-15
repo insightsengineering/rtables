@@ -11,9 +11,22 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
 ## Introduction
 
-`rtable` objects are based on a tree data structure. However, the package is written such that the user does not need to walk trees for many basic table manipulations. Walking trees will still be necessary for certain manipulation and will be the subject of a different vignette.
+`TableTree` objects are based on a tree data structure as the name indicates. The package is written such that the user
+does not need to walk trees for many basic table manipulations. Walking trees will still be necessary for certain
+manipulation and will be the subject of a different vignette.
 
 In this vignette we show some methods to subset tables and to extract cell values.
 
@@ -32,31 +45,20 @@ tbl <- basic_table() %>%
 tbl
 ```
 
-and another table
 
-```{r}
-tbl2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX", split_fun = drop_split_levels) %>%
-  analyze(c("AGE", "STRATA1")) %>%
-  build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
-
-tbl2
-```
-
-The `[` accessor function always returns an rtable object if not stated otherwise using `drop=TRUE`. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
+The `[` accessor function always returns an `TableTree` object if `drop=TRUE` is not set. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
 
 ```{r}
 tbl[1, 1]
 ```
 
-is empty  because the first row is a label row. We need to access a cell with actual cell data:
+is a table with an empty cell  because the first row is a label row. We need to access a cell with actual cell data:
 
 ```{r}
 tbl[3, 1]
 ```
 
-which is another rtable and not an `rcell`. If we wanted the `rcell` we need to use the `drop` argument:
+which is another `TableTree` and not an `rcell`. If we wanted the `rcell` we need to use the `drop` argument:
 
 ```{r}
 tbl[3, 1, drop = TRUE]
@@ -76,43 +78,45 @@ Note that we do not repeat label rows for descending children, e.g.
 tbl[2:4, ]
 ```
 
-does not show that the first row is derived from `AGE`. In order to repeat content/label infromation one can use
+does not show that the first row is derived from `AGE`. In order to repeat content/label information one should use the pagination feature. Please read the related vignette.
 
-```{r, eval=FALSE}
-tbl[2:4, in_context = TRUE]
-```
-
-**TODO: (Adrian and Gabe to discuss)**.
 
 
 ## Path Based Cell Value Accessing:
 
-**This is not final**
+Cell values can also be access via path information. The functions `row_paths`, `col_paths`, `row_paths_summary`, `col_paths_summary` are helpful to get information on the paths.
 
-We can get an idea about the tree structure of the table using the `make_row_df` function.
 
 ```{r}
-make_row_df(tbl) %>%
-  select(label, name, abs_rownumber, path, node_class)
-#summary(tbl)
+tbl2 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("SEX", split_fun = drop_split_levels) %>%
+  analyze(c("AGE", "STRATA1")) %>%
+  build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
+
+tbl2
 ```
 
-So in order to get the age value for column "Arm A" we would have to run
+So the column paths are as follows:
+
+```{r}
+col_paths_summary(tbl2)
+```
+
+and the row paths are as follows:
+
+```{r}
+row_paths_summary(tbl2)
+```
+
+So in order to get the average age for all female patients in arm `A: Drug X`:
 
 ```{r, eval = FALSE}
-cell_value(tbl, c("root", "AGE"), "ARM A")
+cell_values(tbl2, c("AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 ```
 
+You can also request information from non-cell specific paths:
 
-
-## Comparing two rtables
-
-Because we have the original data for each cell accessible for the `rtable` data
-structure it is possible to programmatically compare two tables:
-
-```{r}
-t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
-t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
-
-##compare_rtables(object = t1, expected = t2) 
+```{r, eval = FALSE}
+cell_values(tbl2, c("AGE", "Mean"), c("ARM", "A: Drug X"))
 ```

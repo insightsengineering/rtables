@@ -15,6 +15,17 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+
 
 ```{r, echo = FALSE}
 library(rtables)

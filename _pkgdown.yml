@@ -176,9 +176,4 @@ reference:
     - ends_with("class")
     - ends_with("Row")
 
-    
-  - title: Internal Functions
-    contents:
-    - split_rows
-    
 

@@ -95,15 +95,14 @@ row_paths_summary <- function(x) {
 col_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
-  pagdf <- make_col_df(x, visible_only = TRUE)
+  pagdf <- make_col_df(x, visible_only = FALSE)[-1, ] # todo why
   row.names(pagdf) <- NULL
 
   mat <- rbind(
     c("label", "path"),
     t(apply(pagdf, 1, function(xi) {
-      .GlobalEnv$xi <- xi
       c(
-        xi$label,
+        indent_string(xi$label, floor(length(xi$path)/2 - 1)),
         paste(xi$path, collapse = ", ")
       )
     }))
