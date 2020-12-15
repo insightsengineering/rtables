@@ -193,6 +193,7 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' tbl[, -1]
 #' 
 #' 
+#' 
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
