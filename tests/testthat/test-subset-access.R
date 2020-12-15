@@ -48,7 +48,7 @@ cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Co
 })
 
 
-test_that("make_row_df gives paths which all work", {
+test_that("make_row_df, make_col_df give paths which all work", {
     ## duplicated from test-lyt-tabulation.R :(
     lyt = NULL %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
@@ -99,6 +99,19 @@ test_that("make_row_df gives paths which all work", {
     pdf2 <- make_row_df(tab, visible_only = FALSE)
     res2 <- lapply(pdf2$path, function(pth) cell_values(tab, pth))
     expect(TRUE, "some paths in full structure pag_df did not work")
+
+    subset_cols <- rtables:::subset_cols
+    cdf <- make_col_df(tab)
+    res3 <- lapply(cdf$path, function(pth) subset_cols(tab, pth))
+    expect(TRUE, "some paths in visible_only make_col_df did not work")
+    cdf2 <- make_col_df(tab, visible_only=FALSE)
+    cdf2sub <- cdf2[-c(1,4),]
+    row.names(cdf2sub) <- NULL
+    expect_identical(cdf, cdf2sub)
+    res4 <- lapply(cdf2$path, function(pth) subset_cols(tab, pth))
+    expect(TRUE, "some paths in visible_only=FALSE make_col_df did not work")
+    ## root omitted
+    expect_identical(cdf2$name[1], "ARM1")
 })
 
 
@@ -140,4 +153,26 @@ test_that("top_left retention behavior is correct across all scenarios", {
     expect_identical(top_left(tbl[1:2, 1:2]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
+})
+
+
+test_that("setters work ok", {
+       tlval <- "hi"
+       lyt <- basic_table() %>%
+           split_cols_by("ARM") %>%
+           split_rows_by("SEX") %>%
+           summarize_row_groups() %>%
+           analyze("AGE", mean)
+       tbl <- build_table(lyt, DM)
+
+       tbl2 <- tbl
+
+       tbl2[1, 1] <- CellValue(c(1, .1))
+       matform2 <- matrix_form(tbl2)
+       expect_identical("1 (10%)", matform2$strings[2, 2])
+
+       tbl3 <- tbl
+       tbl3[3, 1:2] <- list(CellValue(c(1, 1)), CellValue(c(1, 1)))
+       matform3 <- matrix_form(tbl3)
+       expect_identical(rep("1 (100%)", 2), matform3$strings[4, 2:3])
 })

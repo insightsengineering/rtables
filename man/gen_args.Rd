@@ -6,6 +6,7 @@
 \usage{
 gen_args(
   df,
+  alt_counts_df,
   spl,
   pos,
   tt,
@@ -26,6 +27,9 @@ gen_args(
 }
 \arguments{
 \item{df}{dataset (data.frame or tibble)}
+
+\item{alt_counts_df}{dataset (data.frame or tibble). Alternative full data the rtables framework will use (\emph{only})
+when calculating column counts.}
 
 \item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
 
