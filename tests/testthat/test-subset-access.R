@@ -141,3 +141,25 @@ test_that("top_left retention behavior is correct across all scenarios", {
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
 })
+
+
+test_that("setters work ok", {
+       tlval <- "hi"
+       lyt <- basic_table() %>%
+           split_cols_by("ARM") %>%
+           split_rows_by("SEX") %>%
+           summarize_row_groups() %>%
+           analyze("AGE", mean)
+       tbl <- build_table(lyt, DM)
+
+       tbl2 <- tbl
+
+       tbl2[1, 1] <- CellValue(c(1, .1))
+       matform2 <- matrix_form(tbl2)
+       expect_identical("1 (10%)", matform2$strings[2, 2])
+
+       tbl3 <- tbl
+       tbl3[3, 1:2] <- list(CellValue(c(1, 1)), CellValue(c(1, 1)))
+       matform3 <- matrix_form(tbl3)
+       expect_identical(rep("1 (100%)", 2), matform3$strings[4, 2:3])
+})
