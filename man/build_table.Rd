@@ -7,8 +7,9 @@
 build_table(
   lyt,
   df,
+  alt_counts_df = NULL,
   col_counts = NULL,
-  col_total = nrow(df),
+  col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
   topleft = NULL,
   ...
 )
@@ -18,7 +19,10 @@ build_table(
 
 \item{df}{dataset (data.frame or tibble)}
 
-\item{col_counts}{numeric (or \code{NULL}). If non-null, column counts which
+\item{alt_counts_df}{dataset (data.frame or tibble). Alternative full data the rtables framework will use (\emph{only})
+when calculating column counts.}
+
+\item{col_counts}{numeric (or \code{NULL}). Deprecated. If non-null, column counts which
 override those calculated automatically during tabulation. Must specify
 "counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
 will be replaced with the automatically calculated counts.}
@@ -32,6 +36,15 @@ will be replaced with the automatically calculated counts.}
 \description{
 Layouts are used to describe a table pre-data. \code{build_rable} is used to
 create a table using a layout and a dataset.
+}
+\details{
+When \code{alt_counts_df} is specified, column counts are calculated by applying the exact
+column subsetting expressions determined when applying column splitting to the main data
+(\code{df}) to \code{alt_counts_df} and counting the observations in each resulting subset.
+
+In particular, this means that in the case of splitting based on cuts of the data, any
+dynamic cuts will have been calculated based on \code{df} and simply re-used for
+the count calculation.
 }
 \note{
 When overriding the column counts or totals care must be taken that, e.g.,
@@ -84,9 +97,15 @@ l2 <- l \%>\%
   add_colcounts()
 build_table(l2, DM)
 
-# with manual column counts
-build_table(l, DM, col_counts = 1:3)
 
+# with column counts calculated based on different data
+miniDM <- DM[sample(1:NROW(DM), 100),]
+build_table(l2, DM, alt_counts_df = miniDM)
+
+\dontrun{
+# DEPRECATED with manual column counts
+build_table(l, DM, col_counts = 1:3)
+}
 }
 \author{
 Gabriel Becker

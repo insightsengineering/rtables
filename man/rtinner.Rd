@@ -24,7 +24,7 @@ simple_analysis(x, ...)
 \item{\dots}{passed on directly}
 }
 \description{
-This function is used when \code{\link{rtabulate}} is invoked
+This function is used when \code{\link{analyze}} is invoked
 }
 \details{
 This function has the following behavior given particular types of inputs:

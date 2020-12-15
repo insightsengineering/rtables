@@ -1,24 +1,3 @@
-NULL
-
-#' Get label attribute DEPRECATED
-#'
-#' The  \code{label} function  is deprecated,  use the  compatible and
-#' more general \code{obj_label} instead.
-#'
-#' @param x an object
-#'
-#' @return the label attribute of an object
-#'
-#' @export
-#'
-#' @examples
-#' x <- with_label(c(1,2,3), label = "Test")
-#' obj_label(x)
-label <- function(x) {
-    .Deprecated("obj_label(x)")
-    obj_label(x)
-}
-
 
 #' Return an object with a label attribute
 #'

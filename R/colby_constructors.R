@@ -1525,7 +1525,7 @@ manual_cols = function(..., .lst = list(...)) {
 #' @details \code{list_wrap_x} generates a wrapper which takes \code{x} as its first argument, while \code{list_wrap_df}
 #'   generates an otherwise identical wrapper function whose first argument is named \code{df}.
 #'
-#'   We provide both because when using the functions as tabulation functions via \code{\link{rtabulate}} or
+#'   We provide both because when using the functions as tabulation in 
 #'   \code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe,
 #'   while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the
 #'   variable being analyzed.

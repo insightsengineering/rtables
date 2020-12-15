@@ -5,7 +5,8 @@
 \alias{make_row_df,VTableTree-method}
 \alias{make_row_df,TableRow-method}
 \alias{make_row_df,LabelRow-method}
-\title{Make layout summary  data.frame for use during pagination}
+\alias{make_col_df}
+\title{Make row and column layout summary data.frames for use during pagination}
 \usage{
 make_row_df(
   tt,
@@ -62,11 +63,13 @@ make_row_df(
   sibpos = NA_integer_,
   nsibs = NA_integer_
 )
+
+make_col_df(tt, visible_only = TRUE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+\item{colwidths}{numeric. Internal detail do not set manually.}
 
 \item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.}
 
@@ -87,10 +90,15 @@ make_row_df(
 \item{nsibs}{integer(1). Internal detail do not set manually.}
 }
 \description{
-Make layout summary  data.frame for use during pagination
+Used for Pagination
 }
 \details{
 When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
 
 When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+}
+\note{
+the technically present root tree node is excluded from the summary returne dby
+both \code{make_row_df} and \code{make_col_df}, as it is simply the
+row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }

@@ -165,6 +165,7 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 create_colinfo = function(lyt, df, rtpos = TreePos(),
                           counts = NULL,
+                          alt_counts_df = NULL,
                           total = NULL,
                           topleft = NULL) {
     ## this will work whether clayout is pre or post
@@ -195,15 +196,21 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                  "used for that position.")
         counts <- as.integer(counts)
     }
+
+    if(is.null(alt_counts_df))
+        alt_counts_df <- df
     calcpos <- is.na(counts)
 
     calccounts = sapply(cexprs, function(ex) {
             if(identical(ex, expression(TRUE)))
-                nrow(df)
+                nrow(alt_counts_df)
             else if (identical(ex, expression(FALSE)))
                 0
             else {
-                vec = eval(ex, envir = df)
+                vec = try(eval(ex, envir = alt_counts_df), silent = TRUE)
+                if(is(vec, "try-error"))
+                    stop(sprintf("alt_counts_df (or df) appears incompatible with column-split structure. Offending column subset expression: %s\nOriginal error message: %s", deparse(ex[[1]]),
+                                 conditionMessage(attr(vec, "condition"))))
                 if(is(vec, "numeric"))
                     length(vec) ## sum(is.na(.)) ????
                 else if(is(vec, "logical"))

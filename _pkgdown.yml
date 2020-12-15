@@ -27,7 +27,6 @@ articles:
     - pagination
     - tabulation_dplyr
     - manual_table_construction
-    - rtabulate
 
 reference:
 

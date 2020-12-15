@@ -2,6 +2,7 @@
 % Please edit documentation in R/tt_pos_and_access.R
 \name{[<-,VTableTree,ANY,ANY,list-method}
 \alias{[<-,VTableTree,ANY,ANY,list-method}
+\alias{[<-,VTableTree,ANY,ANY,CellValue-method}
 \alias{[,VTableTree,logical,logical-method}
 \alias{[,VTableTree,logical,ANY-method}
 \alias{[,VTableTree,logical,missing-method}
@@ -17,6 +18,8 @@
 \title{retrieve and assign elements of a TableTree}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
+
+\S4method{[}{VTableTree,ANY,ANY,CellValue}(x, i, j, ...) <- value
 
 \S4method{[}{VTableTree,logical,logical}(x, i, j, ..., drop = FALSE)
 

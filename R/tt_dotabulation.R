@@ -685,7 +685,7 @@ setMethod(".make_split_kids", "Split",
                              cinfo = cinfo,
                              make_lrow = label_kids(spl),
                              parent_cfun = content_fun(spl),
-                             cformat = obj_format(spl),
+                             cformat = content_format(spl),
                              partlabel = label,
                              cindent_mod = content_indent_mod(spl),
                              cvar = content_var(spl),
@@ -828,12 +828,22 @@ recursive_applysplit = function( df,
 #'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param col_counts numeric (or `NULL`). If non-null, column counts which
+#' @param col_counts numeric (or `NULL`). Deprecated. If non-null, column counts which
 #'   override those calculated automatically during tabulation. Must specify
 #' "counts" for \emph{all} resulting columns if non-NULL. \code{NA} elements
 #' will be replaced with the automatically calculated counts.
 #' @param col_total integer(1). The total observations across all columns. Defaults to \code{nrow(df)}.
 #' @param \dots currently ignored.
+#'
+#' @details
+#'
+#' When \code{alt_counts_df} is specified, column counts are calculated by applying the exact
+#' column subsetting expressions determined when applying column splitting to the main data
+#' (\code{df}) to \code{alt_counts_df} and counting the observations in each resulting subset.
+#'
+#' In particular, this means that in the case of splitting based on cuts of the data, any
+#' dynamic cuts will have been calculated based on \code{df} and simply re-used for
+#' the count calculation.
 #'
 #' @note When overriding the column counts or totals care must be taken that, e.g.,
 #'   `length()` or `nrow()` are not called within tabulation functions, because
@@ -889,14 +899,24 @@ recursive_applysplit = function( df,
 #'   add_colcounts()
 #' build_table(l2, DM)
 #'
-#' # with manual column counts
-#' build_table(l, DM, col_counts = 1:3)
 #'
+#' # with column counts calculated based on different data
+#' miniDM <- DM[sample(1:NROW(DM), 100),]
+#' build_table(l2, DM, alt_counts_df = miniDM)
+#'
+#' \dontrun{
+#' # DEPRECATED with manual column counts
+#' build_table(l, DM, col_counts = 1:3)
+#' }
 build_table = function(lyt, df,
+                       alt_counts_df = NULL,
                        col_counts = NULL,
-                       col_total = nrow(df),
+                       col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                        topleft = NULL,
                        ...) {
+
+    if(!is.null(col_counts))
+        .Deprecated(msg = "'build_table( , col_counts = .)' is deprecated.\n Use 'build_table( , alt_counts_df = .)' during construction or 'col_counts(tbl) <- .' on existing tables instead.")
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
     ## table column structure that makes sense
@@ -916,9 +936,10 @@ build_table = function(lyt, df,
     rtpos = TreePos()
     cinfo = create_colinfo(lyt, df, rtpos,
                            counts = col_counts,
+                           alt_counts_df = alt_counts_df,
                            total = col_total,
                            topleft)
-    if(!is.null(col_counts))
+      if(!is.null(col_counts))
         disp_ccounts(cinfo) = TRUE
 
     rlyt = rlayout(lyt)
@@ -946,7 +967,7 @@ build_table = function(lyt, df,
                              ## XXX are these ALWAYS right?
                              make_lrow = label_kids(firstspl),
                              parent_cfun = NULL,
-                             cformat = obj_format(firstspl),
+                             cformat = content_format(firstspl),
                              cvar = content_var(firstspl),
                              cextra_args = content_extra_args(firstspl),
                              last_splval = NULL)
@@ -998,7 +1019,7 @@ fix_one_split_var <- function(spl, df) {
             stop(sprintf("There does not appear to be a 1-1 correspondence between values in split var [%s] and label var [%s]",
                          var, lblvar))
 
-        if(!is(varvec, "character") && !is.factor(varvec)) {
+        if(!is(lblvec, "character") && !is.factor(lblvec)) {
             message(sprintf("Split label var [%s] was not character or factor. Converting to factor",
                             var))
             lblvec <- factor(lblvec)

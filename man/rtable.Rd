@@ -122,8 +122,6 @@ tbl3
 }
 \seealso{
 Other compatability: 
-\code{\link{by_all}()},
-\code{\link{header<-}()},
 \code{\link{insert_rrow}()}
 }
 \concept{compatability}
