@@ -302,8 +302,7 @@ setMethod("summarize_rows_inner", "LabelRow",
 #' Summarize Table
 #'
 #' @param x a table object
-#' @param expand logical(1), if `TRUE` an unfolded table tree is displayed, if `FALSE` no details on the rows are
-#'   displayed.
+#' @param detail either `row` or `subtable` 
 #'   
 #' @export
 #' 
@@ -327,14 +326,18 @@ setMethod("summarize_rows_inner", "LabelRow",
 #'
 #' table_structure(tbl)
 #' 
-#' table_structure(tbl, expand = FALSE)
-table_structure <- function(x, expand = TRUE) {
+#' table_structure(tbl, detail = "row")
+table_structure <- function(x, detail = c("subtable", "row")) {
   
-  if (expand) {
-    table_structure_inner(x)
-  } else {
-    treestruct(x)
-  }
+  detail <- match.arg(detail)
+  
+  switch(
+    detail,
+    subtable = treestruct(x),
+    row =  table_structure_inner(x),
+    stop("unsupported level of detail ", detail)
+  )
+
 }
 
 

@@ -4,13 +4,12 @@
 \alias{table_structure}
 \title{Summarize Table}
 \usage{
-table_structure(x, expand = TRUE)
+table_structure(x, detail = c("subtable", "row"))
 }
 \arguments{
 \item{x}{a table object}
 
-\item{expand}{logical(1), if \code{TRUE} an unfolded table tree is displayed, if \code{FALSE} no details on the rows are
-displayed.}
+\item{detail}{either \code{row} or \code{subtable}}
 }
 \description{
 Summarize Table
@@ -35,5 +34,5 @@ row_paths(tbl)
 
 table_structure(tbl)
 
-table_structure(tbl, expand = FALSE)
+table_structure(tbl, detail = "row")
 }

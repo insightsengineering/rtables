@@ -84,6 +84,8 @@ tbl[, 1]
 tbl[-2, ]
 tbl[, -1]
 
-
-
+tbl[2, 1] <- rcell(999)
+tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
+tbl[3, ] <- list(-111, -222, -333)
+tbl
 }

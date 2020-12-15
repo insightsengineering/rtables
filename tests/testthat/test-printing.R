@@ -16,6 +16,8 @@ test_that("toString method works correclty", {
         }) %>%
         build_table(iris)
     
+    print(tbl)
+    
     expect_identical(
         toString(tbl), 
         paste(
