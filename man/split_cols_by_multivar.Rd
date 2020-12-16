@@ -35,8 +35,8 @@ ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the
 ## count of >.5 for the second.
-colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
-                function(x) rcell(sum(x > .5), format = "xx"))
+colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
+                function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
 
 l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%

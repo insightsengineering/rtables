@@ -49,8 +49,6 @@ tbl <- rtable(
   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
   rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
-
-# tbl TODO rrow() does not know ncol()
 ```
 
 

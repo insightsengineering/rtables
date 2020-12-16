@@ -111,12 +111,12 @@ row_paths_summary(tbl2)
 
 So in order to get the average age for all female patients in arm `A: Drug X`:
 
-```{r, eval = FALSE}
+```{r}
 cell_values(tbl2, c("AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 ```
 
 You can also request information from non-cell specific paths:
 
-```{r, eval = FALSE}
+```{r}
 cell_values(tbl2, c("AGE", "Mean"), c("ARM", "A: Drug X"))
 ```

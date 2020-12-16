@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{add_overall_col}
 \alias{add_overall_col}
-\title{Add Overall Column (deprecated?)}
+\title{Add Overall Column}
 \usage{
 add_overall_col(lyt, label)
 }

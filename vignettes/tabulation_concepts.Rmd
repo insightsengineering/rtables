@@ -94,8 +94,6 @@ basic_table() %>%
   build_table(df)
 ```
 
-**TODO: why are the labels showing up twice?**
-
 of if we wanted the `x` variable instead of the data frame:
 
 ```
@@ -279,7 +277,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-note that the subset of the `y` variable is passed as `x` argument to `mean` **TODO: or first argument?**. We could also get the tibble instead of the variable:
+note that the subset of the `y` variable is passed as `x` argument to `mean`. We could also get the `data.frame` instead of the variable:
 
 ```{r}
 basic_table() %>%

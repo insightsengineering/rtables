@@ -71,12 +71,17 @@ split_cols_by(var = "ARM") \%>\%
     analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary) 
 
 tbl <- build_table(lyt, ex_adsl)
+tbl
 
 nrow(tbl)
+
+row_paths_summary(tbl)
 
 tbls <- paginate_table(tbl)
 
 w_tbls <- propose_column_widths(tbl) # so that we have the same column widths
+
+tmp <- lapply(tbls, print, widths = w_tbls)
 
 tmp <- lapply(tbls, function(tbli) {
   cat(toString(tbli, widths = w_tbls))

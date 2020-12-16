@@ -14,33 +14,30 @@ data structure which can then be displayed with cell-specific formatting
 instructions. Currently, `rtables` can be outputted in `ascii` and
 `html`.
 
-Note: we have completely refactored the `rtables` package and officially
-released as per January 2021. If you have learned the pre-2021 `rtables`
-framework then please spend some time familiarizing yourself with the
-new framework, there is details in the vignettes.
+Note: we have completely refactored the `rtables` package which is
+officially released on CRAN in December 2020. With this significant
+change please familiarize yourself with the new framework by reading the
+package vignettes.
 
-`rtables` is developed on copy right by `F. Hoffmann-La Roche` and it is
-released open source under the Apache License Version 2 to further the
-adoption of R and to spawn collaboration in the space of clinical trials
-data analysis and reporting.
+`rtables` is developed and copy written by `F. Hoffmann-La Roche` and it
+is released open source under Apache License Version 2.
 
-An important driver for writing `rtables` was to create regulatory
-submissions ready tables for the health authorities. Hence, summarized
-the requirements:
+`rtables` development is driven by the need to create regulatory ready
+tables for health authority review. Some of the key requirements for
+this undertaking are listed below:
 
   - cell values and their visualization separate (i.e. no string based
     tables)
+      - values need to be programmatically accessible in their
+        non-rounded state for cross-checking
   - multiple values displayed within a cell
-  - values need to be programmatically accessible in their non-rounded
-    state for cross-checking
+  - flexible tabulation framework
   - flexible formatting (cell spans, rounding, alignment, etc.)
-  - composition of an `rtable` object from other `rtables` objects
   - multiple output formats (html, ascii, latex, pdf, xml)
   - flexible pagination
   - distinguish between name and label in the data structure to work
     with CDISC standards
   - title, footnotes, cell cell/row/column references
-  - flexible tabulation framework
 
 Note that the current state of `rtables` does not fulfill all of those
 requirements, however, `rtables` is still under active development and
@@ -66,7 +63,7 @@ Layouting and Tabulation API as presented at user\!2020 and JSM2020 run
 the following command in `R`:
 
 ``` r
-devtools::install_github("roche/rtables", ref="v0.3.2.3")
+devtools::install_github("roche/rtables", ref="v0.3.3")
 ```
 
 To install the latest development version of the new test version of

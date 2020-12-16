@@ -116,9 +116,6 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in the `strings` matrix of has indented row
 #'   names (strings pre-fixed)
-#'   
-#' @note
-#' TODO: Look into `gt` representation
 #'
 #' @export
 #'

@@ -77,12 +77,14 @@ tbl3
 The `Viewer` functions takes an `rtable` object and displays it with
 [bootstrap](https://getbootstrap.com/) styling in RStudio's Viewer pane.
 
-```{r, eval = FALSE}
+```{r}
 tbl <- basic_table() %>%
   split_cols_by("Species") %>%
   analyze("Sepal.Length", mean) %>%
   build_table(iris)
+```
 
+```{r, eval = FALSE}
 Viewer(tbl)
 ```
 
@@ -93,7 +95,9 @@ tbl2 <- basic_table() %>%
   split_cols_by("Species") %>%
   analyze("Sepal.Width", mean) %>%
   build_table(iris)
+```
 
+```{r, eval = FALSE}
 Viewer(tbl, tbl2)
 ```
 

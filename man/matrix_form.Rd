@@ -16,9 +16,6 @@ names (strings pre-fixed)}
 Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
 map the rtable to an in between state with the formatted cells in a matrix form.
 }
-\note{
-TODO: Look into \code{gt} representation
-}
 \examples{
 library(dplyr)
 

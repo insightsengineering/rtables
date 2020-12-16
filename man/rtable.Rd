@@ -66,38 +66,32 @@ tbl <- rtable(
   rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
   rrow("95\% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
 )
-# TODO: coerce c(...) to rheader
 tbl
 
-row.names(tbl) # TODO # row.lables
+row.names(tbl)
 names(tbl)
 
 
 # Subsetting
 tbl[1, ]
-tbl[, 1] # TODO: this seems wrong
+tbl[, 1]
 
 tbl[1,2]
 tbl[2, 1]
 
-# # TODO access to the cell
-# tbl[[2, 1]] # cell ?
-# tbl[[c("All Species"), 1]]
 tbl[3,2]
 tbl[5,1]
 tbl[5,2]
-tbl[1:3] ##XXX TODO not sure this should work...
-#
-#
+
 # # Data Structure methods
 dim(tbl)
 nrow(tbl)
 ncol(tbl)
 names(tbl)
-#
-#
-# # Colspans
-#
+
+
+# Colspans
+
 tbl2 <- rtable(
   c("A", "B", "C", "D", "E"),
   format = "xx",
@@ -107,18 +101,7 @@ tbl2 <- rtable(
 )
 
 tbl2
-#
-#
-# # Custom format with functions (might be deprecated soon)
-my_format <- function(x, output) {
-   paste(x, collapse = "/")
-}
-tbl3 <- rtable(
-  c("A", "B"),
-  format = my_format,
-  rrow("row1", c(1,2,3,4), letters[1:10])
-)
-tbl3
+
 }
 \seealso{
 Other compatability: 

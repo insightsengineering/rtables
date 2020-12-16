@@ -25,10 +25,13 @@ insert rrows at (before) a specific location
 Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 }
 \examples{
-tbl <- basic_table() \%>\% split_cols_by("Species") \%>\% analyze("Sepal.Length") \%>\% build_table(iris)
+tbl <- basic_table() \%>\%
+    split_cols_by("Species") \%>\% 
+    analyze("Sepal.Length") \%>\% 
+    build_table(iris)
 
 insert_rrow(tbl, rrow("Hello World"))
-insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
+insert_rrow(tbl, rrow("Hello World"), at = 2)
 
 tbl2 <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
