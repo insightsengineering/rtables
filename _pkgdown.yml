@@ -23,8 +23,6 @@ articles:
     - baseline
     - subsetting_tables
     - sorting_pruning
-    - rendering_tables
-    - pagination
     - tabulation_dplyr
     - manual_table_construction
 
