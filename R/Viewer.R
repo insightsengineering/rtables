@@ -57,17 +57,10 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   html_output <- if (is.null(y)) {
     x_tag
   } else {
-    htmltools::tags$div(
-      class = ".container-fluid",
-      htmltools::tags$div(
-        class= "col-xs-6",
-        x_tag
-      ),
-      htmltools::tags$div(
-        class= "col-xs-6",
-        y_tag
-      )
-    )
+    htmltools::tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
+      htmltools::tags$div(class= "col-xs-6", x_tag),
+      htmltools::tags$div(class= "col-xs-6", y_tag)
+    ))
   }
   
   sandbox_folder <- file.path(tempdir(), "rtable")
@@ -76,7 +69,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
     dir.create(sandbox_folder, recursive = TRUE)
     pbs <- file.path(path.package(package = "rtables"), "bootstrap/")
     file.copy(list.files(pbs, full.names = TRUE, recursive = FALSE), sandbox_folder, recursive = TRUE)
-    list.files(sandbox_folder)
+    # list.files(sandbox_folder)
   }
   
   # get html name

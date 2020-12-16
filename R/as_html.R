@@ -50,7 +50,7 @@ as_html <- function(x,
   
   nrh <- attr(mat, "nrow_header")
   nc <- ncol(x) + 1
-  is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$row_info))), ncol = nc, byrow = TRUE)
+  is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$strings)- nrh)), ncol = nc, byrow = TRUE)
     
   cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {
     if (dsp) {
