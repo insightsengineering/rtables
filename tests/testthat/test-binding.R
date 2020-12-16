@@ -52,9 +52,9 @@ test_that("cell formats not dropped when cbinding", {
 
 
 ## unit tests for chk_cbindable_many
-chk_cbindable_many <- rtables:::chk_cbindable_many
-test_that("chk_cbindable_many works", {
 
+test_that("chk_cbindable_many works", {
+    chk_cbindable_many <- rtables:::chk_cbindable_many
     tr <- rrow("", 5, 6, 7)
     expect_true(chk_cbindable_many(list(tr, tr, tr)))
     tr2 <- rrow("label")

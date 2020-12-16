@@ -38,6 +38,20 @@ analyze_against_ref_group(
 \description{
 Add ref_group comparison analysis recipe
 }
+\details{
+Please see the \code{baseline} vignette for more details.
+}
+\examples{
+
+basic_table() \%>\%
+    split_cols_by("ARM", ref_group = "B: Placebo") \%>\%
+    analyze("AGE", afun = function(x, .ref_group) {
+        in_rows(
+            "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
+        )
+    }) \%>\%
+    build_table(DM)
+}
 \author{
 Gabriel Becker
 }

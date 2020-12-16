@@ -20,3 +20,6 @@
 \description{
 convert to a vector
 }
+\note{
+This only works for a table with a single row or a row object.
+}

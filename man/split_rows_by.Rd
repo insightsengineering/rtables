@@ -51,40 +51,51 @@ but that will change in the future.
 \examples{
 
 l <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
-  analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+    split_cols_by("ARM") \%>\%
+    split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
+    analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
 build_table(l, DM)
 
 
 basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("RACE") \%>\%
-  analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
-  build_table(DM)
+    split_cols_by("ARM") \%>\%
+    split_rows_by("RACE") \%>\%
+    analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
+    build_table(DM)
 
 
- l <- basic_table() \%>\%
-   split_cols_by("ARM") \%>\%
-   split_cols_by("SEX") \%>\%
-   summarize_row_groups(label_fstr = "Overall (N)") \%>\%
-     split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
-                   split_fun = drop_split_levels) \%>\%
-   summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
-   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
+    split_cols_by("SEX") \%>\%
+    summarize_row_groups(label_fstr = "Overall (N)") \%>\%
+    split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
+                  split_fun = drop_split_levels) \%>\%
+    summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
+    analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
- l
+l
 
- DM2 <- DM
- DM2$gender_lab <- DM2$SEX
-levels(DM2$gender_lab) <- c("Female", "Male", "Unknown", "Undifferentiated")
-DM2$ethn_lab <- c("Asian", "African American", "Caucasian", "Am Indian or Alaska Native",
-                  "Multiple", "Pacific Islander", "Other", "Unknown")[DM2$RACE]
+library(dplyr)
+DM2 <- DM \%>\% 
+    filter(SEX \%in\% c("M", "F")) \%>\%
+    mutate(
+        SEX = droplevels(SEX),
+        gender_lab = c("F" = "Female", "M" = "Male",
+                       "U" = "Unknown", "UNDIFFERENTIATED" = "Undifferentiated")[SEX],
+        ethn_lab = c(
+            "ASIAN" = "Asian", 
+            "BLACK OR AFRICAN AMERICAN" = "Black or African American", 
+            "WHITE" = "White",
+            "AMERICAN INDIAN OR ALASKA NATIVE" = "American Indian or Alaska Native",
+             "MULTIPLE" = "Multiple", 
+             "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" =
+                 "Native Hawaiian or Other Pacific Islander",
+             "OTHER" = "Other", "UNKNOWN" = "Unknown"
+        )[RACE]
+    )
 
 build_table(l, DM2)
-
-
 
 }
 \author{

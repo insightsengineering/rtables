@@ -509,7 +509,16 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 #'   
 #' @rdname split_funcs
 #' @export
-remove_split_levels = function(excl) {
+#' 
+#' @examples 
+#' l <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("COUNTRY", split_fun = remove_split_levels(c("USA", "CAN", "CHE", "BRA"))) %>%
+#'   analyze("AGE")
+#'   
+#' build_table(l, DM)
+#'   
+remove_split_levels <- function(excl) {
     stopifnot(is.character(excl))
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
@@ -529,6 +538,14 @@ remove_split_levels = function(excl) {
 #' @param only character. Levels to retain (all others will be dropped).
 #' @param reorder logical(1). Should the order of \code{only} be used as the order of the children of the split. defaults to \code{TRUE}
 #' @export
+#' 
+#' @examples
+#' l <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("USA", "CAN", "BRA"))) %>%
+#'   analyze("AGE")
+#'   
+#' build_table(l, DM)
 keep_split_levels = function(only, reorder = TRUE) {
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
@@ -547,6 +564,14 @@ keep_split_levels = function(only, reorder = TRUE) {
 
 #' @rdname split_funcs
 #' @export
+#' 
+#' @examples 
+#' l <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
+#'   analyze("AGE")
+#'   
+#' build_table(l, DM)
 drop_split_levels <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var = spl_payload(spl)
         df2 = df
@@ -558,6 +583,14 @@ drop_split_levels <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE)
 
 #' @rdname split_funcs
 #' @export
+#' 
+#' @examples 
+#' l <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) %>%
+#'   analyze("AGE")
+#'   
+#' build_table(l, DM)
 drop_and_remove_levels <- function(excl) {
   stopifnot(is.character(excl))
   function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
@@ -580,6 +613,7 @@ drop_and_remove_levels <- function(excl) {
 #' @param newlabels character. Labels for (new order of) factor levels
 #' @param drlevels logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}
 #' @export
+#' 
 reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE) {
     function(df, spl,  trim, ...) {
         df2 = df
@@ -661,17 +695,23 @@ trim_levels_in_group = function(innervar) {
 #' @export
 #'
 #' @examples
-#' l <- NULL %>%
+#' 
+#' l <- basic_table() %>%
+#'    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) %>%
+#'    analyze("AGE")
+#'    
+#' build_table(l, DM)
+#' 
+#' 
+#' l <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>%
 #'    summarize_row_groups(label_fstr = "%s (n)") %>%
-#'    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+#'    analyze("AGE")
 #'
 #' l
 #'
-#' tbl <- build_table(l, DM)
-#'
-#' tbl
+#' build_table(l, DM)
 #'
 add_overall_level = function(valname = "Overall", label = valname, extra_args = list(), first = TRUE, trim = FALSE) {
     combodf <- data.frame(valname = valname,

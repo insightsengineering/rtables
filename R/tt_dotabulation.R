@@ -904,10 +904,7 @@ recursive_applysplit = function( df,
 #' miniDM <- DM[sample(1:NROW(DM), 100),]
 #' build_table(l2, DM, alt_counts_df = miniDM)
 #'
-#' \dontrun{
-#' # DEPRECATED with manual column counts
 #' build_table(l, DM, col_counts = 1:3)
-#' }
 build_table = function(lyt, df,
                        alt_counts_df = NULL,
                        col_counts = NULL,
@@ -915,8 +912,6 @@ build_table = function(lyt, df,
                        topleft = NULL,
                        ...) {
 
-    if(!is.null(col_counts))
-        .Deprecated(msg = "'build_table( , col_counts = .)' is deprecated.\n Use 'build_table( , alt_counts_df = .)' during construction or 'col_counts(tbl) <- .' on existing tables instead.")
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
     ## table column structure that makes sense
@@ -930,7 +925,7 @@ build_table = function(lyt, df,
     lyt = fix_dyncuts(lyt, df)
     lyt = set_def_child_ord(lyt, df)
     lyt = fix_analyze_vis(lyt)
-    df <- fix_split_vars(lyt, df)
+    df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
 
 
     rtpos = TreePos()
@@ -997,7 +992,7 @@ build_table = function(lyt, df,
     tab
 }
 
-fix_one_split_var <- function(spl, df) {
+fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     var <- spl_payload(spl)
     varvec <- df[[var]]
     if(!is(varvec, "character") && !is.factor(varvec)) {
@@ -1005,6 +1000,9 @@ fix_one_split_var <- function(spl, df) {
                         var))
         varvec <- factor(varvec)
         df[[var]] <- varvec
+    } else if (is(varvec, "character") && !char_ok) {
+        stop("Overriding column counts is not supported when splitting on character variables.\n",
+             "  Please convert all column split variables to factors.")
     }
 
     ## handle label var
@@ -1036,17 +1034,28 @@ fix_one_split_var <- function(spl, df) {
     df
 }
 
-fix_split_vars <- function(lyt, df) {
-    clyt <- clayout(lyt)
-    rlyt <- rlayout(lyt)
 
-    allspls <- unlist(list(clyt, rlyt))
+fix_split_vars <- function(lyt, df, char_ok) {
+    df <- fix_split_vars_inner(clayout(lyt), df, char_ok = char_ok)
+    df <- fix_split_vars_inner(rlayout(lyt), df, char_ok = TRUE)
+    df
+
+    ## clyt <- clayout(lyt)
+    ## rlyt <- rlayout(lyt)
+
+    ## allspls <- unlist(list(clyt, rlyt))
     ## VarLevelSplit includes sublclass VarLevWBaselineSplit
+
+}
+
+fix_split_vars_inner <- function(lyt, df, char_ok) {
+    stopifnot(is(lyt, "PreDataAxisLayout"))
+    allspls <- unlist(lyt)
     varspls <- allspls[sapply(allspls, is, "VarLevelSplit")]
     unqvarinds <- !duplicated(sapply(varspls, spl_payload))
     unqvarspls <- varspls[unqvarinds]
     for(spl in unqvarspls)
-        df <- fix_one_split_var(spl, df)
+        df <- fix_one_split_var(spl, df, char_ok = char_ok)
 
     df
 }

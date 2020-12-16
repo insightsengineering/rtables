@@ -157,14 +157,45 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 
 
 #' retrieve and assign elements of a TableTree
+#' 
+#' @rdname brackets
+#' 
 #' @param x TableTree
 #' @param i index
 #' @param j index
-#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}
-#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.
-#' @param value Replacement value (list, TableRow, or TableTree)
+#' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of
+#'   \code{i} and \code{j}. Defaults to \code{FALSE}
+#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be
+#'   retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
+#'   subsetting was by column), and drops it otherwise.
+#' @param value Replacement value (list, `TableRow`, or `TableTree`)
+#' 
 #' @exportMethod [<-
-#' @rdname brackets
+#' 
+#' @examples 
+#' l <- basic_table() %>%
+#'    split_cols_by("ARM") %>%
+#'    analyze(c("SEX", "AGE"))
+#'    
+#' tbl <- build_table(l, DM)
+#' 
+#' tbl
+#' 
+#' tbl[1, ]
+#' tbl[1:2, 2]
+#' 
+#' tbl[2, 1]
+#' tbl[2, 1, drop = TRUE]
+#' 
+#' tbl[, 1]
+#' 
+#' tbl[-2, ]
+#' tbl[, -1]
+#' 
+#' tbl[2, 1] <- rcell(999)
+#' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
+#' tbl[3, ] <- list(-111, -222, -333)
+#' tbl
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
@@ -792,6 +823,9 @@ setMethod("head", "VTableTree",
 )
 
 #' Retrieve cell values by row and column path
+#' 
+#' @rdname cell_values
+#'
 #' @inheritParams gen_args
 #' @param rowpath character. Path in row-split space to the desired row(s). Can include \code{"@content"}.
 #' @param colpath character. Path in column-split space to the desired column(s). Can include \code{"*"}.
@@ -802,6 +836,7 @@ setMethod("head", "VTableTree",
 #' row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
 #'
 #' @export
+#' 
 #' @examples
 #'  l <- basic_table() %>% split_cols_by("ARM") %>%
 #'    split_cols_by("SEX") %>%
@@ -812,14 +847,19 @@ setMethod("head", "VTableTree",
 #'
 #' library(dplyr) ## for mutate
 #' tbl <- build_table(l, DM %>% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
-#'
+#' 
+#' row_paths_summary(tbl)
+#' col_paths_summary(tbl)
+#' 
+#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
+#' 
+#' # it's also possible to access multiple values by being less specific 
+#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 #'
-#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
-#'
-#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
 #'
 #' ## any arm, male columns from the ASIAN content (ie summary) row
+#' cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "B: Placebo", "SEX", "M"))
 #' cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
 #'
 #' ## all columns
@@ -827,7 +867,6 @@ setMethod("head", "VTableTree",
 #'
 #' ## all columns for the Combination arm
 #' cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
-#'@rdname cell_values
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
     standardGeneric("cell_values"))
 #'@rdname cell_values

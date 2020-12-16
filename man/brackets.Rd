@@ -52,12 +52,40 @@
 
 \item{j}{index}
 
-\item{\dots}{Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie subsetting was by column), and drops it otherwise.}
+\item{\dots}{Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be
+retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
+subsetting was by column), and drops it otherwise.}
 
-\item{value}{Replacement value (list, TableRow, or TableTree)}
+\item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
 
-\item{drop}{logical(1). Should the value in the cell be returned if only one cell is selected by the combination of \code{i} and \code{j}. Defaults to \code{FALSE}}
+\item{drop}{logical(1). Should the value in the cell be returned if only one cell is selected by the combination of
+\code{i} and \code{j}. Defaults to \code{FALSE}}
 }
 \description{
 retrieve and assign elements of a TableTree
+}
+\examples{
+l <- basic_table() \%>\%
+   split_cols_by("ARM") \%>\%
+   analyze(c("SEX", "AGE"))
+   
+tbl <- build_table(l, DM)
+
+tbl
+
+tbl[1, ]
+tbl[1:2, 2]
+
+tbl[2, 1]
+tbl[2, 1, drop = TRUE]
+
+tbl[, 1]
+
+tbl[-2, ]
+tbl[, -1]
+
+tbl[2, 1] <- rcell(999)
+tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
+tbl[3, ] <- list(-111, -222, -333)
+tbl
 }

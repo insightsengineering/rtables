@@ -26,9 +26,6 @@ tbl
 row_paths(tbl)
 col_paths(tbl)
 
-\dontrun{
 cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
-cell_values(tbl)
-}
 
 }

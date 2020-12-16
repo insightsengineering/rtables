@@ -15,9 +15,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
 ```
 
 ## Introduction
@@ -531,4 +536,4 @@ label 2        foo(x_A)  bar(x_B)  zoo(x_C)
 label 3        foo(x_A)  bar(x_B)  zoo(x_C)
 ```
 
-**TODO: currently this is not possible**
+We will discuss that in a future release of `rtables`.

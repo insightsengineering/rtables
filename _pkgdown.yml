@@ -27,7 +27,6 @@ articles:
     - pagination
     - tabulation_dplyr
     - manual_table_construction
-    - rtabulate
 
 reference:
 
@@ -54,20 +53,21 @@ reference:
     - split_cols_by_multivar
     - analyze_colvars
     - split_cols_by_cuts 
-    - add_overall_level
     - add_overall_col
     - analyze_against_ref_group
     - add_existing_table
 
   - title: Tabulation Utility Functions
-    desc: Utility functions
+    desc: Functions that are useful to be used with the `analyze*` functions.
     contents:
     - in_rows
     - simple_analysis
     - make_afun
+    - list_wrap_x
     
   - title: Split Functions
     contents:
+    - add_overall_level
     - remove_split_levels
     - add_combo_levels
 
@@ -115,11 +115,9 @@ reference:
     - rheader
     - rtablel
     - rrowl
+    - insert_rrow
     - indent
-    - rtabulate
-    - by_all
-    - by_add_total
-    - by_quartile
+    
     
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
@@ -176,9 +174,4 @@ reference:
     - ends_with("class")
     - ends_with("Row")
 
-    
-  - title: Internal Functions
-    contents:
-    - split_rows
-    
 

@@ -118,13 +118,53 @@ dataset}, before proceeding. Thus even when nested within another split in colum
 reflect the overall vaalues (e.g., quartiles) in the dataset, NOT the values for subset  it is nested under.
 }
 \examples{
+library(dplyr)
+
+# split_cols_by_cuts
 l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
     split_cols_by_cuts("AGE", split_label = "Age",
                        cuts = c(0, 25, 35, 1000),
                        cutlabels = c("young", "medium", "old")) \%>\%
-    analyze("RACE", afun = length)
+    analyze(c("BMRKR2", "STRATA2")) \%>\%
+    append_topleft("counts")
 
-build_table(l, DM)
+build_table(l, ex_adsl)
+
+
+# split_rows_by_cuts
+l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
+    split_rows_by_cuts("AGE", split_label = "Age",
+                  cuts = c(0, 25, 35, 1000),
+                  cutlabels = c("young", "medium", "old")) \%>\%
+    analyze(c("BMRKR2", "STRATA2")) \%>\%
+    append_topleft("counts")
+
+
+build_table(l, ex_adsl)
+
+
+# split_cols_by_quartiles
+
+l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
+    split_cols_by_quartiles("AGE", split_label = "Age") \%>\%
+    analyze(c("BMRKR2", "STRATA2")) \%>\%
+    append_topleft("counts")
+
+build_table(l, ex_adsl)
+
+# split_rows_by_quartiles
+l <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\%
+    add_colcounts() \%>\%
+    split_rows_by_quartiles("AGE", split_label = "Age") \%>\%
+    analyze("BMRKR2") \%>\%
+    append_topleft(c("Age Quartiles", " Counts BMRKR2"))
+
+build_table(l, ex_adsl)
+
 
 }
 \author{

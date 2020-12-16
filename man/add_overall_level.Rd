@@ -30,16 +30,22 @@ a closure suitable for use as a splitting function (\code{splfun}) when creating
 Add an implicit 'overall' level to split
 }
 \examples{
-l <- NULL \%>\%
+
+l <- basic_table() \%>\%
+   split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) \%>\%
+   analyze("AGE")
+   
+build_table(l, DM)
+
+
+l <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) \%>\%
    summarize_row_groups(label_fstr = "\%s (n)") \%>\%
-   analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+   analyze("AGE")
 
 l
 
-tbl <- build_table(l, DM)
-
-tbl
+build_table(l, DM)
 
 }

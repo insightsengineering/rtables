@@ -34,4 +34,15 @@ df <- row_paths_summary(tbl)
 df
 
 col_paths_summary(tbl)
+
+# manually constructed table
+tbl3 <- rtable(
+   rheader(
+     rrow("row 1", rcell("a", colspan = 2), 
+     rcell("b", colspan = 2)
+   ),
+   rrow("h2", "a", "b", "c", "d")),
+   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
+)
+col_paths_summary(tbl3)
 }

@@ -461,35 +461,6 @@ setMethod("rbind2", "VTableNodeInfo",
 
 
 
-#' Miscellaneous Compatability methods for the old API
-#' @inheritParams gen_args
-#' @export
-#' @rdname header_compat
-#' @family compatability
-`header<-` = function(x, value) {
-    if(is(value, "list")) {
-        value = rheader(.lst = value)
-    } else if(!is(value, "InstantiatedColumnInfo")) {
-        ## XXX we could be more defensive here, some
-        ## bad invalid values could get through.
-        value = rheader(value)
-    }
-
-    stopifnot(ncol(value) == ncol(x))
-    ## value must be an InstantiatedColumnInfo object
-    ## by this point.
-
-    ## this is recursive so its all we need here.
-    col_info(x) = value
-    x
-}
-
-#' Header info
-#' @export
-#' @family compatability
-#' @rdname header_compat
-header <- function(x) col_info(obj = x)
-
 combine_cinfo = function(..., new_total = NULL) {
     tabs <- list(...)
     chk_cbindable_many(tabs)
@@ -632,16 +603,22 @@ chk_cbindable <- function(x,y) {
 #' @export
 #'
 #' @examples
+#' 
 #' x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 #'
 #' z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
 #'
-#' cbind_rtables(x, y)
-#'
-#' cbind_rtables(x, y, z)
-#'
+#' t1 <- cbind_rtables(x, y)
+#' t1
+#' 
+#' t2 <- cbind_rtables(x, y, z)
+#' t2
+#' 
+#' col_paths_summary(t1)
+#' col_paths_summary(t2)
+#' 
 cbind_rtables <-  function(x, ...) {
     lst <- list(...)
     newcinfo <- combine_cinfo(x, ...)
@@ -752,7 +729,7 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
         fullcspy <- cspy <- row_cspans(xlst[[i]])
 
         if(i > 1 &&
-           rawvalues(vy[[1]]) == rawvalues(lastval) &&
+           identical(rawvalues(vy[[1]]), rawvalues(lastval))&&
          ##  cspy[1] == lastspn &&
            lastspn > 1) {
             vy <- vy[-1]
@@ -965,11 +942,17 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 #' @family compatability
 #' @examples
-#' tbl <- rtabulate(iris$Sepal.Length, iris$Species)
+#' tbl <- basic_table() %>% split_cols_by("Species") %>% analyze("Sepal.Length") %>% build_table(iris)
 #'
 #' insert_rrow(tbl, rrow("Hello World"))
 #' insert_rrow(tbl, rrow("Hello World"), at = 2) ## XXX TODO this seeems wrong!!!
-#' tbl2 <- rtabulate(iris$Sepal.Length, iris$Species, row_by = iris$Species)
+#' 
+#' tbl2 <- basic_table() %>%
+#'     split_cols_by("Species") %>%
+#'     split_rows_by("Species") %>%
+#'     analyze("Sepal.Length") %>% 
+#'     build_table(iris)
+#' 
 #' insert_rrow(tbl2, rrow("Hello World"))
 #' insert_rrow(tbl2, rrow("Hello World"), at = 2)
 #' insert_rrow(tbl2, rrow("Hello World"), at = 4)
@@ -1107,68 +1090,3 @@ setMethod("recurse_insert", "ElementaryTable",
 
 
 
-#' Compatability Layer for Legacy "by_*" functions
-#'
-#' Functions from the  previous API starting  with \code{by_} not listed here may not currently be supported.
-#'
-#' @param name character(1). Label for the added all/total column.
-#' @rdname bycompats
-#' @inheritParams lyt_args
-#' @export
-#' @family compatability
-by_all <- function(name) {
-    AllSplit(split_label = name)
-}
-
-#' @inheritParams compat_args
-#' @param n If non-null, the count to use for the tottal of the new column.
-#' @family compatability
-#' @rdname bycompats
-#' @export
-by_add_total <- function(col_by, label = "total", n = NULL) {
-    ret = add_overall_col(col_by, label = label)
-    if(!is.null(ret)) {
-        cc = col_counts(ret)
-        cc[length(cc)] <- n
-        col_counts(ret) <- cc
-    }
-    ret
-}
-
-
-#' Add N=xx to header
-#'
-#' Helper function used to add the population total (N) in the
-#' column header of \code{\link{rtable}} object.
-#'
-#' @param x \code{rtable}
-#' @param N vector with counts to be displayed in the header. The
-#'   length must match the number of columns in \code{x}
-#'
-#' @export
-#'
-#' @examples
-#'
-#' tbl <- rtable(
-#'  header = letters[1:3],
-#'  rrow("X", 1, 2, 3),
-#'  rrow("Y", 4, 5, 6)
-#' )
-#' tbl
-#' header_add_N(tbl, 1:3)
-#'
-#' # multiline header
-#' tbl <- rtable(
-#'   header = rheader(rrowl(NULL, letters[1:3]), rrowl(NULL, letters[4:6])),
-#'   rrow("X", 1, 2, 3),
-#'   rrow("Y", 4, 5, 6)
-#' )
-#' tbl
-#' header_add_N(tbl, 1:3)
-header_add_N <- function(x, N = NULL) {
-    stopifnot(is.null(N) || length(N) == ncol(x))
-    disp_ccounts(x) <- TRUE
-    if(is.null(N))
-        col_counts(x) <- N
-    x
-}

@@ -21,10 +21,7 @@
 #' row_paths(tbl)
 #' col_paths(tbl)
 #'
-#' \dontrun{
 #' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
-#' cell_values(tbl)
-#' }
 #'
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
@@ -65,6 +62,17 @@ col_paths <- function(x) {
 #' df
 #'
 #' col_paths_summary(tbl)
+#' 
+#' # manually constructed table
+#' tbl3 <- rtable(
+#'    rheader(
+#'      rrow("row 1", rcell("a", colspan = 2), 
+#'      rcell("b", colspan = 2)
+#'    ),
+#'    rrow("h2", "a", "b", "c", "d")),
+#'    rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
+#' )
+#' col_paths_summary(tbl3)
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
@@ -80,7 +88,7 @@ row_paths_summary <- function(x) {
       c(
         indent_string(xi$label, xi$indent),
         xi$node_class,
-        paste(xi$path[-1], collapse = ", ")
+        paste(xi$path, collapse = ", ")
       )
     }))
   )
@@ -98,16 +106,15 @@ row_paths_summary <- function(x) {
 col_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
-  pagdf <- make_col_df(x, visible_only = TRUE)
+  pagdf <- make_col_df(x, visible_only = FALSE)
   row.names(pagdf) <- NULL
 
   mat <- rbind(
     c("label", "path"),
     t(apply(pagdf, 1, function(xi) {
-      .GlobalEnv$xi <- xi
       c(
-        xi$label,
-        paste(xi$path[-1], collapse = ", ")
+        indent_string(xi$label, floor(length(xi$path)/2 - 1)),
+        paste(xi$path, collapse = ", ")
       )
     }))
   )
@@ -294,15 +301,12 @@ setMethod("summarize_rows_inner", "LabelRow",
 
 #' Summarize Table
 #'
-#'
-#' @inheritParams gen_args
-#' @param depth numeric(1).
-#' @param indent numeric(1).
-#' @param print_indent numeric(1)
-#'
+#' @param x a table object
+#' @param detail either `row` or `subtable` 
+#'   
 #' @export
+#' 
 #' @examples
-#'
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -316,12 +320,34 @@ setMethod("summarize_rows_inner", "LabelRow",
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #'
 #' tbl <- build_table(l, iris2)
-#'
+#' tbl
+#' 
 #' row_paths(tbl)
 #'
 #' table_structure(tbl)
-#'
-setGeneric("table_structure", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("table_structure"))
+#' 
+#' table_structure(tbl, detail = "row")
+table_structure <- function(x, detail = c("subtable", "row")) {
+  
+  detail <- match.arg(detail)
+  
+  switch(
+    detail,
+    subtable = treestruct(x),
+    row =  table_structure_inner(x),
+    stop("unsupported level of detail ", detail)
+  )
+
+}
+
+
+#' @rdname int_methods
+#' 
+#' @param obj a table object
+#' @param depth depth in tree
+#' @param indent indent
+#' @param print_indent indent for print
+setGeneric("table_structure_inner", function(obj, depth = 0, indent = 0, print_indent = 0) standardGeneric("table_structure_inner"))
 
 
 scat <- function(..., indent = 0, newline = TRUE) {
@@ -347,15 +373,15 @@ is_empty_ElementaryTable <- function(x) {
 }
 
 #' @rdname int_methods
-#' @inheritParams table_structure
-setMethod("table_structure", "TableTree",
+#' @inheritParams table_structure_inner
+setMethod("table_structure_inner", "TableTree",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             indent <- indent + indent_mod(obj)
 
             scat("TableTree: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
 
-            table_structure(tt_labelrow(obj), depth, indent, print_indent + 1)
+            table_structure_inner(tt_labelrow(obj), depth, indent, print_indent + 1)
 
             ctab <- content_table(obj)
             visible_content <- if (is_empty_ElementaryTable(ctab)) {
@@ -363,7 +389,7 @@ setMethod("table_structure", "TableTree",
               FALSE
             } else {
               scat("content:", indent = print_indent + 1)
-              table_structure(ctab, depth = depth,
+              table_structure_inner(ctab, depth = depth,
                               indent = indent + indent_mod(ctab),
                               print_indent = print_indent + 2)
             }
@@ -372,7 +398,7 @@ setMethod("table_structure", "TableTree",
               scat("children: - ", indent = print_indent + 1)
             } else {
               scat("children: ", indent = print_indent + 1)
-              lapply(tree_children(obj), table_structure,
+              lapply(tree_children(obj), table_structure_inner,
                      depth = depth + 1,
                      indent = indent + visible_content * (1 + indent_mod(ctab)),
                      print_indent = print_indent + 2)
@@ -383,7 +409,7 @@ setMethod("table_structure", "TableTree",
           })
 
 #' @rdname int_methods
-setMethod("table_structure", "ElementaryTable",
+setMethod("table_structure_inner", "ElementaryTable",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             scat("ElementaryTable: ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
@@ -391,14 +417,14 @@ setMethod("table_structure", "ElementaryTable",
 
             indent <- indent + indent_mod(obj)
 
-            table_structure(tt_labelrow(obj), depth, indent, print_indent + 1)
+            table_structure_inner(tt_labelrow(obj), depth, indent, print_indent + 1)
 
 
             if (length(tree_children(obj)) == 0) {
               scat("children: - ", indent = print_indent + 1)
             } else {
               scat("children: ", indent = print_indent + 1)
-              lapply(tree_children(obj), table_structure, depth = depth + 1, indent = indent, print_indent = print_indent + 2)
+              lapply(tree_children(obj), table_structure_inner, depth = depth + 1, indent = indent, print_indent = print_indent + 2)
             }
 
             invisible(NULL)
@@ -406,7 +432,7 @@ setMethod("table_structure", "ElementaryTable",
           })
 
 #' @rdname int_methods
-setMethod("table_structure", "TableRow",
+setMethod("table_structure_inner", "TableRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             scat(class(obj), ": ", "[", obj_name(obj), "] (", obj_label(obj), ")", indent = print_indent)
@@ -417,7 +443,7 @@ setMethod("table_structure", "TableRow",
           })
 
 #' @rdname int_methods
-setMethod("table_structure", "LabelRow",
+setMethod("table_structure_inner", "LabelRow",
           function(obj, depth = 0, indent = 0, print_indent = 0) {
 
             indent <- indent + indent_mod(obj)

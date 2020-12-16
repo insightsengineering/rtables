@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -23,13 +25,15 @@ The `rtables` R package was designed to create and display complex tables with R
 any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
 `rtables` can be outputted in `ascii` and `html`.
 
-Note: we have completely refactored the `rtables` package. The new changes are available with the n we officially
-released as per January 2021. If you have learned the pre-2021 `rtables` framework then please spend some time
-familiarizing yourself with the new framework, there is details in the vignettes.
+Note: we have completely refactored the `rtables` package and officially released as per January 2021. If you have
+learned the pre-2021 `rtables` framework then please spend some time familiarizing yourself with the new framework,
+there is details in the vignettes.
 
-`rtables` is funded by `F. Hoffmann-La Roche` with the aim to analyze clinical trials data and to create tables that can
-be used for regulatory submissions to the health authorities. Hence, roughly summarized the requirements and reasons to
-create this new table package are:
+`rtables` is developed on copy right by `F. Hoffmann-La Roche` and it is released open source under the Apache License
+Version 2 to further the adoption of R and to spawn collaboration in the space of clinical trials data analysis and
+reporting.
+
+An important driver for writing `rtables` was to create regulatory submissions ready tables for the health authorities. Hence, summarized the requirements:
 
 * cell values and their visualization separate (i.e. no string based tables)
 * multiple values displayed within a cell
@@ -38,6 +42,7 @@ create this new table package are:
 * composition of an `rtable` object from other `rtables` objects
 * multiple output formats (html, ascii, latex, pdf, xml)
 * flexible pagination
+* distinguish between name and label in the data structure to work with CDISC standards
 * title, footnotes, cell cell/row/column references
 * flexible tabulation framework
 
@@ -74,6 +79,33 @@ devtools::install_github("roche/rtables", ref = "gabe_tabletree_work")
 
 
 ## Usage
+
+We first begin with a demographic table alike example and then show the creation of a more complex table.
+
+
+```{r}
+library(rtables)
+
+lyt <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(c("AGE", "BMRKR1", "BMRKR2"), function(x, ...) {
+    if (is.numeric(x)) {
+      in_rows(
+        "Mean (sd)" = c(mean(x), sd(x)),
+        "Median" = median(x),
+        "Min - Max" = range(x),
+        .formats = c("xx.xx (xx.xx)", "xx.xx", "xx.xx - xx.xx")
+      )
+    } else if (is.factor(x) || is.character(x)) {
+      in_rows(.list = list_wrap_x(table)(x))
+    } else {
+      stop("type not supproted")
+    }
+  })
+
+build_table(lyt, ex_adsl)
+```
+
 
 ```{r}
 library(rtables)

@@ -552,14 +552,64 @@ find_pag = function(pagdf,
     guess
 }
 
-#' Determine pagination of a TableTree
+#' Pagination of a TableTree
+#' 
+#' 
+#' @note This is our first take on pagination. We will refine pagination in subsequent releases. Currently only
+#'   pagination in the row space work. Pagination in the column space will be added in the future.
+#' 
+#' 
 #' @inheritParams gen_args
 #' @param lpp numeric. Maximum lines per page including (re)printed header and context rows
-#' @param min_siblings  numeric. Minimum sibling rows which must appear on either side of pagination row for a mid-subtable split to be valid. Defaults to 2.
-#' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other considerations. Defaults to none.
-#'
+#' @param min_siblings  numeric. Minimum sibling rows which must appear on either side of pagination row for a
+#'   mid-subtable split to be valid. Defaults to 2.
+#' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other
+#'   considerations. Defaults to none.
+#'   
 #' @export
 #' @rdname paginate
+#' 
+#' @examples 
+#' 
+#' s_summary <- function(x) {
+#'  if (is.numeric(x)) {
+#'      in_rows(
+#'          "n" = rcell(sum(!is.na(x)), format = "xx"),
+#'          "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)), format = "xx.xx (xx.xx)"),
+#'          "IQR" = rcell(IQR(x, na.rm = TRUE), format = "xx.xx"),
+#'          "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
+#'      )
+#'  } else if (is.factor(x)) {
+#'      
+#'      vs <- as.list(table(x))
+#'      do.call(in_rows, lapply(vs, rcell, format = "xx"))
+#'      
+#'  } else (
+#'      stop("type not supported")
+#'  )
+#' }
+#' 
+#' 
+#' lyt <- basic_table() %>% 
+#' split_cols_by(var = "ARM") %>%
+#'     analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary) 
+#' 
+#' tbl <- build_table(lyt, ex_adsl)
+#' 
+#' nrow(tbl)
+#' 
+#' tbls <- paginate_table(tbl)
+#' 
+#' w_tbls <- propose_column_widths(tbl) # so that we have the same column widths
+#' 
+#' tmp <- lapply(tbls, function(tbli) {
+#'   cat(toString(tbli, widths = w_tbls))
+#'   cat("\n\n")
+#'   cat("~~~~ PAGE BREAK ~~~~")
+#'   cat("\n\n")
+#' })
+#' 
+#' 
 pag_tt_indices = function(tt, lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),

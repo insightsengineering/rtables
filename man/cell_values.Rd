@@ -37,13 +37,18 @@ Retrieve cell values by row and column path
 library(dplyr) ## for mutate
 tbl <- build_table(l, DM \%>\% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 
-cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
-
-cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
+row_paths_summary(tbl)
+col_paths_summary(tbl)
 
 cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
 
+# it's also possible to access multiple values by being less specific 
+cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
+cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
+
+
 ## any arm, male columns from the ASIAN content (ie summary) row
+cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "B: Placebo", "SEX", "M"))
 cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
 
 ## all columns

@@ -14,17 +14,19 @@ data structure which can then be displayed with cell-specific formatting
 instructions. Currently, `rtables` can be outputted in `ascii` and
 `html`.
 
-Note: we have completely refactored the `rtables` package. The new
-changes are available with the n we officially released as per January
-2021. If you have learned the pre-2021 `rtables` framework then please
-spend some time familiarizing yourself with the new framework, there is
-details in the vignettes.
+Note: we have completely refactored the `rtables` package and officially
+released as per January 2021. If you have learned the pre-2021 `rtables`
+framework then please spend some time familiarizing yourself with the
+new framework, there is details in the vignettes.
 
-`rtables` is funded by `F. Hoffmann-La Roche` with the aim to analyze
-clinical trials data and to create tables that can be used for
-regulatory submissions to the health authorities. Hence, roughly
-summarized the requirements and reasons to create this new table package
-are:
+`rtables` is developed on copy right by `F. Hoffmann-La Roche` and it is
+released open source under the Apache License Version 2 to further the
+adoption of R and to spawn collaboration in the space of clinical trials
+data analysis and reporting.
+
+An important driver for writing `rtables` was to create regulatory
+submissions ready tables for the health authorities. Hence, summarized
+the requirements:
 
   - cell values and their visualization separate (i.e. no string based
     tables)
@@ -35,6 +37,8 @@ are:
   - composition of an `rtable` object from other `rtables` objects
   - multiple output formats (html, ascii, latex, pdf, xml)
   - flexible pagination
+  - distinguish between name and label in the data structure to work
+    with CDISC standards
   - title, footnotes, cell cell/row/column references
   - flexible tabulation framework
 
@@ -74,9 +78,49 @@ devtools::install_github("roche/rtables", ref = "gabe_tabletree_work")
 
 ## Usage
 
+We first begin with a demographic table alike example and then show the
+creation of a more complex table.
+
 ``` r
 library(rtables)
 #> Loading required package: magrittr
+
+lyt <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(c("AGE", "BMRKR1", "BMRKR2"), function(x, ...) {
+    if (is.numeric(x)) {
+      in_rows(
+        "Mean (sd)" = c(mean(x), sd(x)),
+        "Median" = median(x),
+        "Min - Max" = range(x),
+        .formats = c("xx.xx (xx.xx)", "xx.xx", "xx.xx - xx.xx")
+      )
+    } else if (is.factor(x) || is.character(x)) {
+      in_rows(.list = list_wrap_x(table)(x))
+    } else {
+      stop("type not supproted")
+    }
+  })
+
+build_table(lyt, ex_adsl)
+#>                A: Drug X      B: Placebo    C: Combination
+#> ----------------------------------------------------------
+#> AGE                                                       
+#>   Mean (sd)   33.77 (6.55)   35.43 (7.9)     35.43 (7.72) 
+#>   Median           33             35              35      
+#>   Min - Max     21 - 50        21 - 62         20 - 69    
+#> BMRKR1                                                    
+#>   Mean (sd)   5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  
+#>   Median          5.39           4.81            4.61     
+#>   Min - Max   0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 
+#> BMRKR2                                                    
+#>   LOW              50             45              40      
+#>   MEDIUM           37             56              42      
+#>   HIGH             47             33              50
+```
+
+``` r
+library(rtables)
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'

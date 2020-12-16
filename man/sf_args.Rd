@@ -16,3 +16,11 @@ sf_args(trim, label, first)
 \description{
 Split Function Arg Conventions
 }
+\seealso{
+Other conventions: 
+\code{\link{compat_args}()},
+\code{\link{constr_args}()},
+\code{\link{gen_args}()},
+\code{\link{lyt_args}()}
+}
+\concept{conventions}
