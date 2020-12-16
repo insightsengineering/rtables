@@ -10,6 +10,82 @@ The changes to `rtables` have been undertaken to better meet the requirements of
 tables in the context of clinical trials.
 
 
+## rtables 0.3.2.17.9046
+
+* `make_afun` now `force()`s all customization arguments immediately, which prevents problems when called within loop/lapply constructs.
+
+## rtables 0.3.2.17.9045
+
+* Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits
+* `analyze_colvars`'s `inclNAs` argument now respected.
+
+## rtables 0.3.2.17.9044
+
+* Fix indent modifier propogation during tabulation
+* Fix indent calculation in `make_pagdf`
+* Add significant testing to ensure `make_pagdf` indent calculation remains correct
+
+## rtables 0.3.2.17.9043
+
+* Rework how reference columns are handled so analyses which use `.in_ref_col` and `.ref_group` work correctly when custom splitting is used (including the provided combination-levels mechanism)
+
+## rtables 0.3.2.17.9042
+
+* Fix naming/pathing for columns in multivar case (split itself now has default name "multivars")
+* Fix labelling bug when same variable appears multiple times in MultiVarSplit with different associated levels
+
+
+## rtables 0.3.2.17.9041
+
+* Allow single variable to be used within `split_cols_by_multivar` 
+* Various removal of defunct 
+
+## rtables 0.3.2.17.9040
+
+* Fix regression caused by 0.3.2.17.9039 where column split values were displayed by name rather than label.
+
+## rtables 0.3.2.17.9039
+
+* Fix bug in display of column information when column structure is not symetric, as with recursive cbinds.
+
+## rtables 0.3.2.17.9036
+
+* Fixed bug in row subsetting when table has only content rows.
+* Basic compare_rtables function now works as in previous versions, no awareness of row or column structure.
+
+## rtables 0.3.2.17.9036
+
+* `summarize_row_groups` can now accept a list of functions for the `cfun` argument as `analyze_colvars` does.
+
+## rtables 0.3.2.17.9035
+
+* Fix bug unearthed by change in 0.3.2.17.9034 where cell formats not retained during column subsetting
+
+## rtables 0.3.2.17.9034
+
+* Fix internal `value_formats` accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)
+* `rrow` constructor no longer interpretes cell formats a row format when they are the same across all cells. Fixes bug in  "correct way" code discussed in #112
+
+## rtables 0.3.2.17.9033
+
+* Interpret .formats in `in_rows` as *cell* formats rather than row formats.
+
+## rtables 0.3.2.17.9031
+
+* cbind_rtables can now take more than 2 tables.
+
+## rtables 0.3.2.17.9029
+
+* Fix issue underlying spurious length-missmatch warning in some cases when using `analyze_colvars`
+
+## rtables 0.3.2.17.9028
+
+* `analyze_colvars` now takes and adheres to `inclNAs` argument
+
+## rtables 0.3.2.17.9027
+
+* issues with no news: 
+
 ## rtables 0.1.7
 
 * added format `xx.xx (xx.xx - xx.xx)` and `x.xxxx | (<0.0001)`
