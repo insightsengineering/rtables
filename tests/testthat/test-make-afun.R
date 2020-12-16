@@ -1,5 +1,6 @@
 context("make_afun and related machinery")
 
+value_labels <- rtables:::value_labels
 test_that("afun internals coverage", {
 
     ## use existing funcs to ensure coverage numbers are correct
@@ -14,7 +15,7 @@ test_that("afun internals coverage", {
                           grp = "grp"))
 
     res_tafun2 <- rtables:::test_afun_grp(1:10, 5)
-    expect_identical(lapply(res_tafun2, obj_format),
+    expect_identical(lapply(res_tafun2, rtables:::obj_format),
                      list("Min." = "xx.x",
                           "1st Qu." = "xx.xx",
                           Median = NULL,
@@ -47,7 +48,7 @@ test_that("make_afun works for x arg", {
 
     asres1 <- a_summary(x = iris$Sepal.Length)
     expect_identical(c(n = "n", mean_sd = "Mean (sd)", min_max = "min - max"),
-                     rtables:::value_labels(asres1))
+                     value_labels(asres1))
 
  a_summary2 <- make_afun(a_summary, .stats = c("n", "mean_sd"))
     expect_identical(formals(a_summary2),
@@ -86,14 +87,14 @@ test_that("make_afun works for df functions", {
  expect_identical(formals(a_foo),
                   formals(s_foo))
     ares1 <- a_foo(iris, .N_col = 40)
-    expect_identical(unlist(unname(rtables:::value_labels(ares1))),
+    expect_identical(unlist(unname(value_labels(ares1))),
                      c("Nrow df", "n in cols", "a value", "b value"))
 
     expect_equal(unlist(ares1$b), 4)
     expect_equal(unlist(ares1$a), 1)
 
     ares1b <- a_foo(iris, .N_col = 40, b = 8)
-    expect_identical(unlist(unname(rtables:::value_labels(ares1))),
+    expect_identical(unlist(unname(value_labels(ares1))),
                      c("Nrow df", "n in cols", "a value", "b value"))
 
     expect_equal(unlist(ares1b$b), 8)
@@ -101,7 +102,7 @@ test_that("make_afun works for df functions", {
  a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
     ares2 <- a_foo2(iris, .N_col = 40, b = 6)
     expect(unlist(ares2$b), 6)
-    expect_identical(unlist(unname(rtables:::value_labels(ares2))),
+    expect_identical(unlist(unname(value_labels(ares2))),
                      c("Number of Rows", "n in cols", "a value", "b value"))
 })
 

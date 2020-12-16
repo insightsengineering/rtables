@@ -9,7 +9,7 @@ test_that("summarize_row_groups works with provided funcs", {
 
     tb1 <- build_table(l1, DM)
     tbl_str <- toString(tb1)
-    
+
     expect(TRUE, "succeeded")
 
 
@@ -509,11 +509,14 @@ test_that("Colcounts work correctly", {
     expect_identical(col_counts(tbl2),
                      as.integer(table(DM$ARM)))
 
+    DMchar <- DM
+    DMchar$ARM <- as.character(DM$ARM)
+    tbl2chr <- build_table(lyt2, DMchar)
 
     tbl3 <- build_table(lyt2, DM, col_counts = c(500L, NA, NA))
     expect_identical(col_counts(tbl3),
                      c(500L, as.integer(table(DM$ARM))[2:3]))
-
+    expect_error(build_table(lyt2, DMchar, col_counts = c(500L, NA, NA)))
     expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
 })
 
