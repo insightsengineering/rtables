@@ -729,7 +729,7 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
         fullcspy <- cspy <- row_cspans(xlst[[i]])
 
         if(i > 1 &&
-           rawvalues(vy[[1]]) == rawvalues(lastval) &&
+           identical(rawvalues(vy[[1]]), rawvalues(lastval))&&
          ##  cspy[1] == lastspn &&
            lastspn > 1) {
             vy <- vy[-1]
