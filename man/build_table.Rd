@@ -102,10 +102,7 @@ build_table(l2, DM)
 miniDM <- DM[sample(1:NROW(DM), 100),]
 build_table(l2, DM, alt_counts_df = miniDM)
 
-\dontrun{
-# DEPRECATED with manual column counts
 build_table(l, DM, col_counts = 1:3)
-}
 }
 \author{
 Gabriel Becker
