@@ -157,9 +157,9 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 
 
 #' retrieve and assign elements of a TableTree
-#' 
+#'
 #' @rdname brackets
-#' 
+#'
 #' @param x TableTree
 #' @param i index
 #' @param j index
@@ -169,29 +169,29 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #'   retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
 #'   subsetting was by column), and drops it otherwise.
 #' @param value Replacement value (list, `TableRow`, or `TableTree`)
-#' 
+#'
 #' @exportMethod [<-
-#' 
-#' @examples 
+#'
+#' @examples
 #' l <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    analyze(c("SEX", "AGE"))
-#'    
+#'
 #' tbl <- build_table(l, DM)
-#' 
+#'
 #' tbl
-#' 
+#'
 #' tbl[1, ]
 #' tbl[1:2, 2]
-#' 
+#'
 #' tbl[2, 1]
 #' tbl[2, 1, drop = TRUE]
-#' 
+#'
 #' tbl[, 1]
-#' 
+#'
 #' tbl[-2, ]
 #' tbl[, -1]
-#' 
+#'
 #' tbl[2, 1] <- rcell(999)
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[3, ] <- list(-111, -222, -333)
@@ -823,7 +823,7 @@ setMethod("head", "VTableTree",
 )
 
 #' Retrieve cell values by row and column path
-#' 
+#'
 #' @rdname cell_values
 #'
 #' @inheritParams gen_args
@@ -832,11 +832,19 @@ setMethod("head", "VTableTree",
 #' @param omit_labrows logical(1). Should label rows underneath \code{rowpath} be omitted
 #' (\code{TRUE}, the default), or return empty lists of cell "values" (\code{FALSE}).
 #'
-#' @return a \emph{list} (regardless of the type of value the cells hold). if \code{rowpath} defines a path to a single row, \code{cell_values} returns the list of cell values for that
-#' row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
+#' @return for \code{cell_values}, a \emph{list} (regardless of the type of value the cells hold).
+#' if \code{rowpath} defines a path to a single row, \code{cell_values} returns the list of cell values
+#' for that row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
+#' This occurs after subsetting to \code{colpath} has occured.
+#'
+#' For \code{value_at} the "unwrapped" value of a single cell, or an error, if the combination of
+#' \code{rowpath} and \code{colpath} do not define the location of a single cell in \code{tt}.
+#'
+#' @note \code{cell_values} will return a single cell's value wrapped in a list. Use \code{value_at}
+#' to recieve the "bare" cell value.
 #'
 #' @export
-#' 
+#'
 #' @examples
 #'  l <- basic_table() %>% split_cols_by("ARM") %>%
 #'    split_cols_by("SEX") %>%
@@ -847,13 +855,13 @@ setMethod("head", "VTableTree",
 #'
 #' library(dplyr) ## for mutate
 #' tbl <- build_table(l, DM %>% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
-#' 
+#'
 #' row_paths_summary(tbl)
 #' col_paths_summary(tbl)
-#' 
+#'
 #' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
-#' 
-#' # it's also possible to access multiple values by being less specific 
+#'
+#' # it's also possible to access multiple values by being less specific
 #' cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 #'
@@ -867,12 +875,33 @@ setMethod("head", "VTableTree",
 #'
 #' ## all columns for the Combination arm
 #' cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
+#'
+#' cvlist <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+#'                       c("ARM", "B: Placebo", "SEX", "M"))
+#' cvnolist <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+#'                      c("ARM", "B: Placebo", "SEX", "M"))
+#' stopifnot(identical(cvlist[[1]], cvnolist))
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
     standardGeneric("cell_values"))
 #'@rdname cell_values
 #' @exportMethod cell_values
 setMethod("cell_values", "VTableTree",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE){
+    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath, omit_labrows = omit_labrows, value_at = FALSE)
+})
+
+#'@rdname cell_values
+#' @export
+setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL)
+    standardGeneric("value_at"))
+#'@rdname cell_values
+#' @exportMethod cell_values
+setMethod("value_at", "VTableTree",
+          function(tt, rowpath, colpath = NULL){
+    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath, omit_labrows = FALSE, value_at = TRUE)
+})
+
+.inner_cell_value <- function(tt, rowpath, colpath = NULL, omit_labrows = TRUE, value_at = FALSE){
     if(is.null(rowpath))
         subtree <- tt
     else
@@ -881,8 +910,15 @@ setMethod("cell_values", "VTableTree",
         subtree <- subset_cols(subtree, colpath)
 
     rows <- collect_leaves(subtree, TRUE, !omit_labrows)
-    if(length(rows)== 1)
-        row_values(rows[[1]])
-    else
+    if(value_at && (ncol(subtree) != 1 || length(rows) != 1))
+        stop("Combination of rowpath and colpath does not select individual cell.\n",
+             "  To retrieve more than one cell value at a time use cell_values().", call. = FALSE)
+    if(length(rows)== 1) {
+        ret <- row_values(rows[[1]])
+        if(value_at && ncol(subtree) == 1)
+            ret <- ret[[1]]
+        ret
+    } else
         lapply(rows, row_values)
-})
+
+}

@@ -45,6 +45,13 @@ cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Co
 
   expect_identical(cvres6[5:6],
                    cvres7)
+
+  cvres8 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX", "M"))
+  vares8 <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX", "M"))
+  expect_identical(cvres8[[1]], vares8)
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination", "SEX", "M")))
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX")))
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination")))
 })
 
 

@@ -3,11 +3,17 @@
 \name{cell_values}
 \alias{cell_values}
 \alias{cell_values,VTableTree-method}
+\alias{value_at}
+\alias{value_at,VTableTree-method}
 \title{Retrieve cell values by row and column path}
 \usage{
 cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
 \S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+value_at(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{VTableTree}(tt, rowpath = NULL, colpath = NULL)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -20,40 +26,18 @@ cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 (\code{TRUE}, the default), or return empty lists of cell "values" (\code{FALSE}).}
 }
 \value{
-a \emph{list} (regardless of the type of value the cells hold). if \code{rowpath} defines a path to a single row, \code{cell_values} returns the list of cell values for that
-row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
+for \code{cell_values}, a \emph{list} (regardless of the type of value the cells hold).
+if \code{rowpath} defines a path to a single row, \code{cell_values} returns the list of cell values
+for that row, otherwise a list of such lists, one for each row captured underneath \code{rowpath}.
+This occurs after subsetting to \code{colpath} has occured.
+
+For \code{value_at} the "unwrapped" value of a single cell, or an error, if the combination of
+\code{rowpath} and \code{colpath} do not define the location of a single cell in \code{tt}.
 }
 \description{
 Retrieve cell values by row and column path
 }
-\examples{
- l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-   split_cols_by("SEX") \%>\%
-   split_rows_by("RACE") \%>\%
-   summarize_row_groups() \%>\%
-   split_rows_by("STRATA1") \%>\%
-   analyze("AGE")
-
-library(dplyr) ## for mutate
-tbl <- build_table(l, DM \%>\% mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
-
-row_paths_summary(tbl)
-col_paths_summary(tbl)
-
-cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "F"))
-
-# it's also possible to access multiple values by being less specific 
-cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "F"))
-cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
-
-
-## any arm, male columns from the ASIAN content (ie summary) row
-cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "B: Placebo", "SEX", "M"))
-cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
-
-## all columns
-cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
-
-## all columns for the Combination arm
-cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
+\note{
+\code{cell_values} will return a single cell's value wrapped in a list. Use \code{value_at}
+to recieve the "bare" cell value.
 }
