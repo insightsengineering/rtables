@@ -112,11 +112,19 @@ row_paths_summary(tbl2)
 So in order to get the average age for all female patients in arm `A: Drug X`:
 
 ```{r}
-cell_values(tbl2, c("AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
+value_at(tbl2, c("AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 ```
 
-You can also request information from non-cell specific paths:
+You can also request information from non-cell specific paths with the `cell_values` function:
 
 ```{r}
 cell_values(tbl2, c("AGE", "Mean"), c("ARM", "A: Drug X"))
 ```
+
+Note the return value of `cell_values` is always a list even if you specify a path to a cell:
+
+```{r}
+cell_values(tbl2, c("AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
+```
+
+Hence, use `value_at` if you want to access data from a cell, and `cell_values` if you want to access data from multiple cells.
