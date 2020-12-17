@@ -1594,7 +1594,7 @@ RowsVerticalSection = function(values,
 #' @method print RowsVerticalSection
 #' @export
 print.RowsVerticalSection <- function(x, ...) {
-  cat("in_rows object print method:\n----------------------------\n")
+  cat("RowsVerticalSection (in_rows) object print method:\n----------------------------\n")
   print(data.frame(
     row_name = attr(x, "row_names"),
     formatted_cell = vapply(x, format_rcell, character(1)),
