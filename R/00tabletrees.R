@@ -1553,6 +1553,7 @@ CellValue = function(val, format = NULL, colspan = 1L, label = NULL, indent_mod 
 #' @export
 print.CellValue <- function(x, ...) {
     cat(paste("rcell:", format_rcell(x), "\n"))
+    invisible(x)
 }
 
 ## too slow
@@ -1602,6 +1603,7 @@ print.RowsVerticalSection <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   ), row.names = TRUE)
+  invisible(x)
 }
 
 

@@ -207,6 +207,7 @@ setMethod("show", "PreDataColLayout",
           function(object) {
     cat("A Pre-data Column Layout Object\n\n")
     docat_predataxis(object)
+    invisible(object)
 })
 
 
@@ -214,6 +215,7 @@ setMethod("show", "PreDataRowLayout",
           function(object) {
     cat("A Pre-data Row Layout Object\n\n")
     docat_predataxis(object)
+    invisible(object)
 })
 
 
@@ -225,6 +227,7 @@ setMethod("show", "PreDataTableLayouts",
     cat("\nRow-Split Structure:\n")
     docat_predataxis(object@row_layout)
     cat("\n")
+    invisible(object)
 })
 
 
@@ -238,6 +241,7 @@ setMethod("show", "TreePos",
 
     msg = paste(chars, collapse = " -> ")
     cat("An object of class ", class(object), "\n\n", msg)
+    invisible(object)
 })
 
 
@@ -253,7 +257,6 @@ setMethod("show", "InstantiatedColumnInfo",
                         collapse = ", ")),
         "",
         sep = "\n")
-
     invisible(object)
 })
 
@@ -267,7 +270,8 @@ setMethod("print", "VTableTree", function(x, ...) {
 
 #' @rdname int_methods
 setMethod("show", "VTableTree", function(object) {
-  cat(toString(object))
+    cat(toString(object))
+    invisible(object)
 })
 
 
@@ -278,4 +282,5 @@ setMethod("show", "TableRow", function(object) {
                 obj_label(object),
                 paste(as.vector(get_formatted_cells(object)),
                       collapse = "   ")))
+    invisible(object)
 })

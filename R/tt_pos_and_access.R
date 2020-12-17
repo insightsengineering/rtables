@@ -809,10 +809,15 @@ extract_colvals = function(tt, j) {
 
 }
 
+#' @importFrom utils compareVersion
+
 setGeneric("tail", tail)
 setMethod("tail", "VTableTree",
           function(x, n = 6L, ...) {
-    tail.matrix(x, n, addrownums = FALSE)
+    if(compareVersion("4.0.0", as.character(getRversion())) <= 0)
+        tail.matrix(x, n, keepnums = FALSE)
+    else
+        tail.matrix(x, n, addrownums = FALSE)
 })
 
 setGeneric("head", head)
