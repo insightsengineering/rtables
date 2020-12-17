@@ -260,3 +260,21 @@ test_that("(xx,xx) format works correctly", {
                      format_rcell(rcell(c(2, 5), format = "(xx, xx)")))
 
 })
+
+test_that("inclNAs with empty factor levels behaves", {
+
+    ## no NAs in DM$RACE so following 2 tables should be fully identical
+
+    ## NO TIBBLES!!!!!!!!!!!!!!!!!!!
+    dfdm <- as.data.frame(DM)
+    tbl <- basic_table() %>%
+        split_rows_by("RACE") %>%
+        analyze("COUNTRY", function(x) in_rows(nobs = length(x)), inclNAs = TRUE) %>%
+        build_table(dfdm)
+
+    tbl2 <- basic_table() %>%
+        split_rows_by("RACE") %>%
+        analyze("COUNTRY", function(x) in_rows(nobs = length(x)), inclNAs = FALSE) %>%
+        build_table(dfdm)
+    expect_identical(tbl,tbl2)
+})

@@ -1,4 +1,7 @@
-
+## NB handling the case where there are no values is done during tabulation
+## which is the only reason expression(TRUE) is ok, because otherwise
+## we (sometimes) run into
+## factor()[TRUE] giving <NA> (ie length 1)
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {

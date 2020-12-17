@@ -38,67 +38,60 @@ gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                      baselinedf,
                      inclNAs,
                      last_splval) {
+
+    ## workaround for https://github.com/Roche/rtables/issues/159
+    if(NROW(dfpart) > 0) {
         inds = eval(csub, envir = dfpart)
-
         dat = dfpart[inds,,drop = FALSE]
+    } else {
+        dat <- dfpart
+    }
+    if(!is.null(col) && !inclNAs)
+        dat <- dat[!is.na(dat[[col]]),,drop = FALSE]
 
-        if(!is.null(col) && !inclNAs)
-            dat <- dat[!is.na(dat[[col]]),,drop = FALSE]
+    fullrefcoldat = cextr$.ref_full
+    if(!is.null(fullrefcoldat))
+        cextr$.ref_full = NULL
+    inrefcol = cextr$.in_ref_col
+    if(!is.null(fullrefcoldat))
+        cextr$.in_ref_col = NULL
 
-        fullrefcoldat = cextr$.ref_full
-        if(!is.null(fullrefcoldat))
-            cextr$.ref_full = NULL
-        inrefcol = cextr$.in_ref_col
-        if(!is.null(fullrefcoldat))
-            cextr$.in_ref_col = NULL
+    exargs = c(cextr, splextra)
 
-        exargs = c(cextr, splextra)
-
-        ## behavior for x/df and ref-data (full and group)
-        ## match
-        if(!is.null(col) && !takesdf) {
-            dat = dat[[col]]
-            fullrefcoldat = fullrefcoldat[[col]]
-            baselinedf = baselinedf[[col]]
-        }
-        args = list(dat)
+    ## behavior for x/df and ref-data (full and group)
+    ## match
+    if(!is.null(col) && !takesdf) {
+        dat = dat[[col]]
+        fullrefcoldat = fullrefcoldat[[col]]
+        baselinedf = baselinedf[[col]]
+    }
+    args = list(dat)
 
 
-        args = c(args,
-                 match_extra_args(func,
-                                  .N_col = count,
-                                  .N_total = totcount,
-                                  .var = col,
-                                  .ref_group = baselinedf,
-                                  .ref_full = fullrefcoldat,
+    args = c(args,
+             match_extra_args(func,
+                              .N_col = count,
+                              .N_total = totcount,
+                              .var = col,
+                              .ref_group = baselinedf,
+                              .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
-                                  .N_row = NROW(dfpart),
-                                  .df_row = dfpart,
-                                  .parent_splval = last_splval,
-                                  extras = c(cextr,
-                                             splextra)))
+                              .N_row = NROW(dfpart),
+                              .df_row = dfpart,
+                              .parent_splval = last_splval,
+                              extras = c(cextr,
+                                         splextra)))
 
-        val = do.call(func, args)
-        if(!is(val, "RowsVerticalSection")) {
-            if(!is(val, "list"))
-                val <- list(val)
-            ret <- in_rows(.list = val, .labels = unlist(value_labels(val)), .names = names(val))
+    val = do.call(func, args)
+    if(!is(val, "RowsVerticalSection")) {
+        if(!is(val, "list"))
+            val <- list(val)
+        ret <- in_rows(.list = val, .labels = unlist(value_labels(val)), .names = names(val))
 
-        } else {
+    } else {
             ret <- val
-        }
-        ## if(!is(val, "CellValue") && is.list(val)) {
-        ##     ret = lapply(val, rcell)
-        ##     if(length(ret) == 1) {
-        ##         nm = names(ret)
-        ##         ret = ret[[1]]
-        ##         if(is.null(obj_label(ret)))
-        ##             obj_label(ret) = nm
-        ##     }
-        ## } else {
-        ##     ret = rcell(val)
-        ## }
-        ret
+    }
+    ret
 }
 
 
