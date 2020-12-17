@@ -1,0 +1,14 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  baseline: baseline.html
+  clinical_trials: clinical_trials.html
+  introduction: introduction.html
+  manual_table_construction: manual_table_construction.html
+  sorting_pruning: sorting_pruning.html
+  subsetting_tables: subsetting_tables.html
+  tabulation_concepts: tabulation_concepts.html
+  tabulation_dplyr: tabulation_dplyr.html
+last_built: 2020-12-17T14:41Z
+
