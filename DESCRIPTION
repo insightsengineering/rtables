@@ -23,7 +23,8 @@ Suggests:
   tidyr,
   testthat,
   xml2,
-  knitr
+  knitr,
+  rmarkdown
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true

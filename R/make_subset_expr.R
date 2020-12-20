@@ -72,15 +72,15 @@ setMethod("make_subset_expr", "CumulativeCutSplit",
 ## static ones.
 ##
 ## XXX TODO fixme
-setMethod("make_subset_expr", "VarDynCutSplit",
-          function(spl, val) {
-    v = rawvalues(val)
-    ##   as.expression(bquote(which(.(fun)(.(a)) == .(b)),
-       as.expression(bquote(.(fun)(.(a)) == .(b)),
-                  list(a = as.name(spl_payload(spl)),
-                       b = v,
-                       fun = spl@cut_fun))
-})
+## setMethod("make_subset_expr", "VarDynCutSplit",
+##           function(spl, val) {
+##     v = rawvalues(val)
+##     ##   as.expression(bquote(which(.(fun)(.(a)) == .(b)),
+##     as.expression(bquote(.(fun)(.(a)) == .(b)),
+##                   list(a = as.name(spl_payload(spl)),
+##                        b = v,
+##                        fun = spl@cut_fun))
+## })
 
 setMethod("make_subset_expr", "AllSplit",
           function(spl, val) expression(TRUE))
