@@ -1,7 +1,10 @@
-## rtables 0.3.3.9000
+## rtables 0.3.4.9000
+
+## rtables 0.3.4
+
+Minor changes to the 0.3.3 version in order to submit rtables to CRAN.
 
 ## rtables 0.3.3
-
 
 This version completely refactors the `rtables` package. We do provide a backwards compatibility layer with the
 `rtable`, `rcell`, `rrow`, `rheader`, and `rtabulate` family of functions. However the table data structure and main
