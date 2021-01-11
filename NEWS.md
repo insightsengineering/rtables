@@ -1,7 +1,12 @@
-## rtables 0.3.3.9000
+## rtables 0.3.5
+
+Documentation-text only changes to introduction vignette to pass CRAN's URL checks. All package, example, test, and vignette code fully identical to that in tagged github release 0.3.4
+
+## rtables 0.3.4
+
+Minor changes to the 0.3.3 version in order to submit rtables to CRAN.
 
 ## rtables 0.3.3
-
 
 This version completely refactors the `rtables` package. We do provide a backwards compatibility layer with the
 `rtable`, `rcell`, `rrow`, `rheader`, and `rtabulate` family of functions. However the table data structure and main
