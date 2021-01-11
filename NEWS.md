@@ -1,4 +1,6 @@
-## rtables 0.3.4.9000
+## rtables 0.3.5
+
+Documentation-text only changes to introduction vignette to pass CRAN's URL checks. All package, example, test, and vignette code fully identical to that in tagged github release 0.3.4
 
 ## rtables 0.3.4
 
