@@ -22,6 +22,9 @@ add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 
 \item{keep_levels}{character or NULL. If non-NULL, the levels to retain across both combination and individual levels.}
 }
+\value{
+a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+}
 \description{
 Add Combination Levels to split
 }

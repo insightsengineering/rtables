@@ -21,6 +21,9 @@ get_formatted_cells(obj)
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
 }
+\value{
+the formatted print-strings for all (body) cells in \code{obj}.
+}
 \description{
 get formatted cells
 }

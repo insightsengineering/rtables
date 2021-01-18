@@ -29,6 +29,9 @@ analyze_colvars(
 
 \item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Generate Rows Analyzing Different Variables Across Columns
 }
@@ -60,7 +63,7 @@ basic_table() \%>\% split_cols_by("ARM") \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = mean, format = "xx.xx") \%>\%
     build_table(ANL)
-    
+
 }
 \seealso{
 \code{\link{split_cols_by_multivar}}

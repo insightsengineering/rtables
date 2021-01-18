@@ -16,6 +16,9 @@ Viewer(x, y = NULL, row.names.bold = FALSE, ...)
 
 \item{...}{arguments passed to \code{as_html}}
 }
+\value{
+not meaningful. Called for the side effect of opening a browser or viewer pane.
+}
 \description{
 The table will be displayed using the bootstrap styling for tables.
 }

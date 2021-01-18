@@ -26,8 +26,8 @@ Label rows (ie a row with no data values, only a row.name) can only be inserted 
 }
 \examples{
 tbl <- basic_table() \%>\%
-    split_cols_by("Species") \%>\% 
-    analyze("Sepal.Length") \%>\% 
+    split_cols_by("Species") \%>\%
+    analyze("Sepal.Length") \%>\%
     build_table(iris)
 
 insert_rrow(tbl, rrow("Hello World"))
@@ -36,7 +36,7 @@ insert_rrow(tbl, rrow("Hello World"), at = 2)
 tbl2 <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     split_rows_by("Species") \%>\%
-    analyze("Sepal.Length") \%>\% 
+    analyze("Sepal.Length") \%>\%
     build_table(iris)
 
 insert_rrow(tbl2, rrow("Hello World"))

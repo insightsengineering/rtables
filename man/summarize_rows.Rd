@@ -9,6 +9,9 @@ summarize_rows(obj)
 \arguments{
 \item{obj}{VTableTree.}
 }
+\value{
+A data.frame summarizing the rows in \code{obj}.
+}
 \description{
 summarize_rows
 }

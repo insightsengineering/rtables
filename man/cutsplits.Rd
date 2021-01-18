@@ -102,6 +102,9 @@ VarDynCutSplit(
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 }
+\value{
+a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
+}
 \description{
 Splits for cutting by values of a numeric variable
 }

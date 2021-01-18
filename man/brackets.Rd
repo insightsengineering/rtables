@@ -61,6 +61,9 @@ subsetting was by column), and drops it otherwise.}
 \item{drop}{logical(1). Should the value in the cell be returned if only one cell is selected by the combination of
 \code{i} and \code{j}. Defaults to \code{FALSE}}
 }
+\value{
+a \code{TableTree} (or \code{ElementaryTable}) object, unless a single cell was selected with \code{drop=TRUE}, in which case the (possibly multi-valued) fully stripped raw value of the selected cell.
+}
 \description{
 retrieve and assign elements of a TableTree
 }

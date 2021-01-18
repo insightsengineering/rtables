@@ -11,6 +11,9 @@ add_overall_col(lyt, label)
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 This function will \emph{only} add an overall
 column at the \emph{top} level of splitting, NOT within
@@ -23,7 +26,7 @@ l <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    add_overall_col("All Patients") \%>\%
    analyze("AGE")
-   
+
 l
 
 build_table(l, DM)

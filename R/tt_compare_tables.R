@@ -10,6 +10,7 @@
 #' \code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning)
 #' for any \emph{non-LabelRow} \code{TableRow} which contain only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and \code{-Inf} values.
 #' @rdname trim_prune_funs
+#' @return A logical value indicating whether \code{tr} should be included (\code{TRUE}) or pruned (\code{FALSE}) during pruning.
 #' @seealso [prune_table()], [trim_rows()]
 #' @export
 all_zero_or_na = function(tr) {
@@ -105,20 +106,20 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 }
 
 #' Recursively prune a TableTree
-#' 
+#'
 #' @inheritParams gen_args
 #' @param prune_func function. A Function to be called on each subtree which returns TRUE if the entire subtree should
 #'   be removed.
 #' @param stop_depth numeric(1). The depth after which subtrees should not be checked for pruning. Defaults to \code{NA}
 #'   which indicates pruning should happen at all levels
 #' @param depth numeric(1). Used internally, not intended to be set by the end user.
-#' 
+#'
 #' @return A TableTree pruned via recursive application of \code{prune_func}.
-#' 
+#'
 #' @export
-#' 
+#'
 #' @seealso [prune_empty_level()]
-#' 
+#'
 prune_table = function(tt, prune_func = prune_empty_level, stop_depth = NA_real_, depth = 0) {
     if(!is.na(stop_depth) && depth > stop_depth)
         return(tt)

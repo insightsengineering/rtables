@@ -12,6 +12,9 @@ indent(x, by = 1)
 \item{by}{integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
 indentation is set to 0.}
 }
+\value{
+\code{x} with its indent modifier incremented by \code{by}.
+}
 \description{
 Change indentation of all rrows in an rtable
 }

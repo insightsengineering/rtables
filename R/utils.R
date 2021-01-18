@@ -1,12 +1,12 @@
 
 #' Check if an object is a valid rtable
-#' 
+#'
 #' @param x an object
-#' 
-#' 
+#'
+#'
 #' @export
-#' 
-#' @examples 
+#' @return \code{TRUE} if \code{x} is a formal Table object, \code{FALSE} otherwise.
+#' @examples
 #' is_rtable(build_table(basic_table(), iris))
 is_rtable <- function(x) {
   is(x, "VTableTree")

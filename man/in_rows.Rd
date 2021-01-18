@@ -26,6 +26,9 @@ in_rows(
 
 \item{.indent_mods}{integer or NULL. Indent modificatons for the defined rows.}
 }
+\value{
+an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
+}
 \description{
 define the cells that get placed into multiple rows in \code{afun}
 }

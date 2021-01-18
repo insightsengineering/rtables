@@ -9,6 +9,9 @@
 \arguments{
 \item{x}{x.}
 }
+\value{
+Always returns \code{1L}
+}
 \description{
 Length of a Cell value
 }

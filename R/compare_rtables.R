@@ -13,6 +13,8 @@
 #' In its current form \code{compare_rtables} does not take structure into account,
 #' only row and cell position.
 #'
+#' @return a matrix of class \code{"rtables_diff"} representing the differences
+#' between \code{object} and \code{expected} as described above.
 #' @export
 #'
 #' @examples

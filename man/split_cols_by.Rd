@@ -41,6 +41,9 @@ split_cols_by(
 
 \item{incl_all}{logical(1). Should a column representing all observations at this level of nesting be added. defaults to \code{FALSE}}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Will generate children for each subset of a categorical variable
 }
@@ -49,7 +52,7 @@ Will generate children for each subset of a categorical variable
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2"))
-  
+
 build_table(lyt, ex_adsl)
 
 # Let's look at the splits in more detail

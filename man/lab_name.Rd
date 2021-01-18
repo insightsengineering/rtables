@@ -62,6 +62,10 @@ obj_label(obj) <- value
 
 \item{value}{character(1). The new value}
 }
+\value{
+the name or label of \code{obj} for getters, or \code{obj} after modification
+for setters.
+}
 \description{
 Label and Name accessors
 }

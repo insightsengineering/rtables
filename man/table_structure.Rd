@@ -11,6 +11,9 @@ table_structure(x, detail = c("subtable", "row"))
 
 \item{detail}{either \code{row} or \code{subtable}}
 }
+\value{
+currently no return value. Called for the side-effect of printing a row- or subtable-structure summary of \code{x}.
+}
 \description{
 Summarize Table
 }

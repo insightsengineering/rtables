@@ -11,6 +11,10 @@ propose_column_widths(x, mat_form = matrix_form(x, indent_rownames = TRUE))
 
 \item{mat_form}{object as created with \code{matrix_form}}
 }
+\value{
+a vector of column widths based on the content of \code{x} (or \code{mat_form} if explictly provided)
+for use in printing and, in the future, in pagination.
+}
 \description{
 The row names are also considered a column for the output
 }

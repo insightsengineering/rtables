@@ -6,6 +6,9 @@
 \usage{
 list_rcell_format_labels()
 }
+\value{
+A nested list, with elements listing the supported 1d, 2d, and 3d format strings.
+}
 \description{
 Currently valid format labels can not be added dynamically. Format functions
 must be used for special cases

@@ -846,7 +846,8 @@ recursive_applysplit = function( df,
 #'   counts are fully respected.
 #'
 #' @export
-#'
+#' @return A \code{TableTree} or \code{ElementaryTable} object representing the table created by performing
+#' the tabulations declared in \code{lyt} to the data \code{df}.
 #' @author Gabriel Becker
 #'
 #' @examples

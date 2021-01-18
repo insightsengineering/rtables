@@ -89,6 +89,9 @@ make_col_df(tt, visible_only = TRUE)
 
 \item{nsibs}{integer(1). Internal detail do not set manually.}
 }
+\value{
+a data.frame of row/column-structure information used by the pagination machinery.
+}
 \description{
 Used for Pagination
 }

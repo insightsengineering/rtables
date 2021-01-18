@@ -1,21 +1,22 @@
 
 
 #' Convert an `rtable` object to a `shiny.tag` html object
-#' 
+#'
 #' The returned `html` object can be immediately used in shiny and rmarkdown.
-#' 
+#'
 #' @param x `rtable` object
 #' @param class_table class for table tag
 #' @param class_tr class for tr tag
 #' @param class_td class for td tag
 #' @param class_th class for th tag
 #' @param width width
-#' 
+#'
+#' @return A \code{shiny.tag} object representing \code{x} in HTML.
 #' @importFrom htmltools tags
 #' @export
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' tbl <- rtable(
 #'   header = LETTERS[1:3],
 #'   format = "xx",
@@ -23,35 +24,35 @@
 #'   rrow("r2", 4,3,2, indent = 1),
 #'   rrow("r3", indent = 2)
 #' )
-#' 
+#'
 #' as_html(tbl)
-#' 
+#'
 #' as_html(tbl, class_table = "table", class_tr = "row")
-#' 
+#'
 #' as_html(tbl, class_td = "aaa")
-#' 
+#'
 #' \dontrun{
 #' Viewer(tbl)
 #' }
-as_html <- function(x, 
+as_html <- function(x,
                     width = NULL,
                     class_table = "table table-condensed table-hover",
                     class_tr = "",
                     class_td = "",
                     class_th = "") {
-  
+
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
-    
+
   stopifnot(is(x, "VTableTree"))
-  
+
   mat <- matrix_form(x)
-  
+
   nrh <- attr(mat, "nrow_header")
   nc <- ncol(x) + 1
   is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$strings)- nrh)), ncol = nc, byrow = TRUE)
-    
+
   cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {
     if (dsp) {
       args <- list(class = paste(class_th, paste0("text-", algn), collapse = " "), colspan = spn)
@@ -64,18 +65,18 @@ as_html <- function(x,
 
   # indent row names
   for (i in seq_len(nrow(x))) {
-    indent <- mat$row_info$indent[i] 
+    indent <- mat$row_info$indent[i]
     if (indent > 0) {
-      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]], 
+      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
                                                           style = paste0("padding-left: ", indent * 3, "ch"))
     }
   }
-  
+
   rows <- apply(cells, 1, function(row) {
     do.call(tags$tr, c(row, list(class = class_tr)))
   })
-  
+
   do.call(tags$table, c(rows, list(class = class_table)))
-  
+
 }
 

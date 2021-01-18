@@ -11,6 +11,10 @@ with_label(x, label)
 
 \item{label}{label attribute to to attached to  \code{x}}
 }
+\value{
+\code{x} labeled by \code{label}. Note: the exact mechanism of labeling should be
+considered an internal implementation detail, but the label will always be retrieved via \code{obj_label}.
+}
 \description{
 Return an object with a label attribute
 }

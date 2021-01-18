@@ -29,6 +29,9 @@ summarize_row_groups(
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Add a content row of summary counts
 }
@@ -76,7 +79,7 @@ l2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
                          extra_args = list(trim = .2)) \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%
     append_topleft(c("Country", "  Age"))
-    
+
 tbl2 <- build_table(l2, DM2)
 tbl2
 

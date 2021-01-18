@@ -4,7 +4,7 @@
 #' @param \dots cell values
 #'
 #' @export
-#'
+#' @return A row object of the context-appropriate type (label or data)
 #' @examples
 #'
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
@@ -44,6 +44,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
 #' @inheritParams compat_args
 #' @param \dots values in vector/list form
 #'
+#' @inherit rrow return
 #' @export
 #'
 #' @examples
@@ -160,7 +161,7 @@ hrows_to_colinfo = function(rows) {
 #' @param \dots row specifications (either as character vectors or the output from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}}, etc.
 #'
 #' @export
-#'
+#' @return a \code{InstantiatedColumnInfo} object.
 #'
 #' @examples
 #'
@@ -216,7 +217,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'
 #'
 #' @export
-#'
+#' @return a formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree})
 #' @family compatability
 #' @examples
 #'
@@ -280,14 +281,14 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' tbl[3,2]
 #' tbl[5,1]
 #' tbl[5,2]
-#' 
+#'
 #'# # Data Structure methods
 #' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
 #' names(tbl)
-#' 
-#' 
+#'
+#'
 #'# Colspans
 #'
 #' tbl2 <- rtable(
@@ -299,7 +300,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' )
 #'
 #' tbl2
-#' 
+#'
 rtable = function(header, ..., format = NULL) {
     if(is.character(header))
         header = .char_to_hrows(header) #list(rrowl(NULL, header))
@@ -344,6 +345,7 @@ rtablel = function (header, ..., format = NULL)
 
 
 #' @rdname rbind
+#' @return A formal table object.
 #' @export
 #' @param gap deprecated. Ignored.
 #' @param check_headers deprecated. Ignored.
@@ -578,11 +580,11 @@ chk_cbindable <- function(x,y) {
 #'
 #' @param x A table or row object
 #' @param \dots 1 or more further objects of the same class as \code{x}
-#'
+#' @inherit rbindl_rtables return
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
@@ -591,13 +593,13 @@ chk_cbindable <- function(x,y) {
 #'
 #' t1 <- cbind_rtables(x, y)
 #' t1
-#' 
+#'
 #' t2 <- cbind_rtables(x, y, z)
 #' t2
-#' 
+#'
 #' col_paths_summary(t1)
 #' col_paths_summary(t2)
-#' 
+#'
 cbind_rtables <-  function(x, ...) {
     lst <- list(...)
     newcinfo <- combine_cinfo(x, ...)
@@ -918,23 +920,25 @@ chk_compat_cinfos <- function(ci1, ci2) {
 #'
 #' @export
 #'
+#' @inherit rbindl_rtables return
+#'
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 #' @family compatability
 #' @examples
 #' tbl <- basic_table() %>%
-#'     split_cols_by("Species") %>% 
-#'     analyze("Sepal.Length") %>% 
+#'     split_cols_by("Species") %>%
+#'     analyze("Sepal.Length") %>%
 #'     build_table(iris)
 #'
 #' insert_rrow(tbl, rrow("Hello World"))
 #' insert_rrow(tbl, rrow("Hello World"), at = 2)
-#' 
+#'
 #' tbl2 <- basic_table() %>%
 #'     split_cols_by("Species") %>%
 #'     split_rows_by("Species") %>%
-#'     analyze("Sepal.Length") %>% 
+#'     analyze("Sepal.Length") %>%
 #'     build_table(iris)
-#' 
+#'
 #' insert_rrow(tbl2, rrow("Hello World"))
 #' insert_rrow(tbl2, rrow("Hello World"), at = 2)
 #' insert_rrow(tbl2, rrow("Hello World"), at = 4)

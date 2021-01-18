@@ -17,6 +17,10 @@ CellValue(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
+\value{
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and sholud not be relied upon beyond calling accessors for the class.
+}
 \description{
 Cell Value constructor
 }

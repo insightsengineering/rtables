@@ -12,6 +12,9 @@ col_paths(x)
 \arguments{
 \item{x}{an rtable object}
 }
+\value{
+a list of paths to each row/column within \code{x}
+}
 \description{
 Return List with Table Row/Col Paths
 }

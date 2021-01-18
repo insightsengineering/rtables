@@ -35,6 +35,9 @@ ManualSplit(
 
 \item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
 }
+\value{
+A \code{ManualSplit} object.
+}
 \description{
 Manually defined split
 }

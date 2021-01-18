@@ -17,6 +17,9 @@ then the \code{format} is applied}
 
 \item{indent}{deprecated.}
 }
+\value{
+A row object of the context-appropriate type (label or data)
+}
 \description{
 row
 }

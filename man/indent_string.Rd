@@ -15,6 +15,9 @@ indent_string(x, indent = 0, incr = 2, including_newline = TRUE)
 
 \item{including_newline}{boolean: should newlines also be indented}
 }
+\value{
+\code{x} indented by left-padding with code{indent*incr} white-spaces.
+}
 \description{
 Used in rtables to indent row names for the ASCII output.
 }

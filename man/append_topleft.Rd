@@ -11,6 +11,9 @@ append_topleft(lyt, newlines)
 
 \item{newlines}{character. The new line(s) to be added to the materials}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 This function \emph{adds} \code{newlines} to the current
 set of "top-left materials".
@@ -42,7 +45,7 @@ lyt <- basic_table() \%>\%
   append_topleft("Ethnicity") \%>\%
   analyze("AGE") \%>\%
   append_topleft("  Age")
-  
+
 DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
 
 build_table(lyt, DM2)

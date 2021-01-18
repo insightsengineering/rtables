@@ -5,7 +5,8 @@
 #' @param label label attribute to to attached to  \code{x}
 #'
 #' @export
-#'
+#' @return \code{x} labeled by \code{label}. Note: the exact mechanism of labeling should be
+#' considered an internal implementation detail, but the label will always be retrieved via \code{obj_label}.
 #' @examples
 #' x <- with_label(c(1,2,3), label = "Test")
 #' obj_label(x)

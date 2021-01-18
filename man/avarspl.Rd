@@ -87,6 +87,11 @@ AnalyzeMultiVars(
 
 \item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
 }
+\value{
+An \code{AnalyzeVarSplit} object.
+
+An \code{AnalyzeMultiVars} split object.
+}
 \description{
 Define a subset tabulation/analysis
 

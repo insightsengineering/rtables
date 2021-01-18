@@ -24,6 +24,8 @@ trim_zero_rows <- function(tbl) {
 #' Score functions for sorting TableTrees
 #' @rdname score_funs
 #' @inheritParams gen_args
+#' @return A single numeric value indicating score according to the relevant metric for \code{tt}, to be used
+#' when sorting.
 #' @export
 cont_n_allcols <- function(tt) {
     ctab <- content_table(tt)

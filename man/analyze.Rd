@@ -41,6 +41,9 @@ analyze(
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
 calls to \code{analyze} and/or \code{\link{analyze_colvars}} into our layout pipeline. As with
@@ -97,7 +100,6 @@ l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
 l
-
 build_table(l, DM)
 
 

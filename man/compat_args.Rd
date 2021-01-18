@@ -43,6 +43,9 @@ collection must match the levels in \code{col_by}. See examples.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 }
+\value{
+NULL (this is an argument template dummy function)
+}
 \description{
 Compatability Arg Conventions
 }

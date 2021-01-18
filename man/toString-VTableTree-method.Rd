@@ -13,6 +13,9 @@
 
 \item{col_gap}{gap between columns}
 }
+\value{
+a string representation of \code{x} as it appears when printed.
+}
 \description{
 Convert an \code{rtable} object to a string
 }

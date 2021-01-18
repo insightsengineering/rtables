@@ -26,6 +26,9 @@ as_html(
 
 \item{class_th}{class for th tag}
 }
+\value{
+A \code{shiny.tag} object representing \code{x} in HTML.
+}
 \description{
 The returned \code{html} object can be immediately used in shiny and rmarkdown.
 }

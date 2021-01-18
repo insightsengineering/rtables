@@ -15,6 +15,10 @@ no_colinfo(obj)
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
 }
+\value{
+\code{TRUE} if the object has no/empty instantiated column information,
+\code{FALSE} otherwise.
+}
 \description{
 Does the table/row/InstantiatedColumnInfo object contain no column structure information?
 }

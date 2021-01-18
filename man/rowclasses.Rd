@@ -62,6 +62,9 @@ ContentRow(...)
 
 \item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }
+\value{
+A formal object representing a table row of the constructed type.
+}
 \description{
 Row classes and constructors
 

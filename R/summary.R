@@ -9,7 +9,7 @@
 #' @param x an rtable object
 #'
 #' @export
-#'
+#' @return a list of paths to each row/column within \code{x}
 #' @examples
 #' tbl <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -42,7 +42,7 @@ col_paths <- function(x) {
 #' @param x an rtable object
 #'
 #' @export
-#'
+#' @return A data.frame summarizing the row- or column-structure of \code{x}.
 #' @examples
 #'
 #' library(dplyr)
@@ -62,11 +62,11 @@ col_paths <- function(x) {
 #' df
 #'
 #' col_paths_summary(tbl)
-#' 
+#'
 #' # manually constructed table
 #' tbl3 <- rtable(
 #'    rheader(
-#'      rrow("row 1", rcell("a", colspan = 2), 
+#'      rrow("row 1", rcell("a", colspan = 2),
 #'      rcell("b", colspan = 2)
 #'    ),
 #'    rrow("h2", "a", "b", "c", "d")),
@@ -164,6 +164,7 @@ fast_rsummry_bind <- function(lst) {
 
 #' summarize_rows
 #' @param obj VTableTree.
+#' @return A data.frame summarizing the rows in \code{obj}.
 #' @export
 summarize_rows <- function(obj) {
     rows <- summarize_rows_inner(obj, 0, 0)
@@ -302,10 +303,11 @@ setMethod("summarize_rows_inner", "LabelRow",
 #' Summarize Table
 #'
 #' @param x a table object
-#' @param detail either `row` or `subtable` 
-#'   
+#' @param detail either `row` or `subtable`
+#'
 #' @export
-#' 
+#'
+#' @return currently no return value. Called for the side-effect of printing a row- or subtable-structure summary of \code{x}.
 #' @examples
 #' library(dplyr)
 #'
@@ -321,16 +323,16 @@ setMethod("summarize_rows_inner", "LabelRow",
 #'
 #' tbl <- build_table(l, iris2)
 #' tbl
-#' 
+#'
 #' row_paths(tbl)
 #'
 #' table_structure(tbl)
-#' 
+#'
 #' table_structure(tbl, detail = "row")
 table_structure <- function(x, detail = c("subtable", "row")) {
-  
+
   detail <- match.arg(detail)
-  
+
   switch(
     detail,
     subtable = treestruct(x),
@@ -342,7 +344,7 @@ table_structure <- function(x, detail = c("subtable", "row")) {
 
 
 #' @rdname int_methods
-#' 
+#'
 #' @param obj a table object
 #' @param depth depth in tree
 #' @param indent indent

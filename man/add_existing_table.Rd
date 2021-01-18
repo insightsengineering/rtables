@@ -13,6 +13,9 @@ add_existing_table(lyt, tt, indent_mod = 0)
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Add an already calculated table to the layout
 }
@@ -28,7 +31,7 @@ tbl2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
    analyze("AGE", afun = sd, format = "xx.xx") \%>\%
    add_existing_table(tbl1) \%>\%
    build_table(DM)
-   
+
 tbl2
 
 table_structure(tbl2)

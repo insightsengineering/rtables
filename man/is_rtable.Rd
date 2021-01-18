@@ -9,6 +9,9 @@ is_rtable(x)
 \arguments{
 \item{x}{an object}
 }
+\value{
+\code{TRUE} if \code{x} is a formal Table object, \code{FALSE} otherwise.
+}
 \description{
 Check if an object is a valid rtable
 }

@@ -169,7 +169,7 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #'   retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
 #'   subsetting was by column), and drops it otherwise.
 #' @param value Replacement value (list, `TableRow`, or `TableTree`)
-#'
+#' @return a \code{TableTree} (or \code{ElementaryTable}) object, unless a single cell was selected with \code{drop=TRUE}, in which case the (possibly multi-valued) fully stripped raw value of the selected cell.
 #' @exportMethod [<-
 #'
 #' @examples

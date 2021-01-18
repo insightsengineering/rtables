@@ -44,6 +44,9 @@ row_values(obj) <- value
 
 \item{value}{The new value}
 }
+\value{
+various, depending on the accessor called.
+}
 \description{
 Row attribute accessors
 }

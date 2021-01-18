@@ -119,6 +119,7 @@ setClass("VarLevelSplit", contains = "CustomizableSplit",
 #' Split on levels within a variable
 #'
 #' @inheritParams lyt_args
+#' @return a \code{VarLevelSplit} object.
 #' @inheritParams constr_args
 #' @export
 VarLevelSplit = function(var,
@@ -231,6 +232,7 @@ setClass("ManualSplit", contains = "AllSplit",
 #' @inheritParams gen_args
 #' @param levels character. Levels of the split (ie the children of the manual split)
 #' @author Gabriel Becker
+#' @return A \code{ManualSplit} object.
 #' @export
 ManualSplit = function(levels, label, name = "manual",
                        extra_args = list(),
@@ -288,6 +290,7 @@ setClass("MultiVarSplit", contains = "Split",
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
 #' @author Gabriel Becker
+#' @return A \code{MultiVarSplit} object.
 #' @export
 MultiVarSplit = function(vars,
                          split_label = "",
@@ -338,6 +341,7 @@ setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
 #' @rdname cutsplits
+#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
 #' @export
 VarStaticCutSplit = function(var,
                              split_label = var,
@@ -506,6 +510,7 @@ setClass("AnalyzeColVarSplit", contains = "VAnalyzeSplit",
 #' @inheritParams constr_args
 #' @param defrowlab character. Default row labels if they are not specified by the return value of \code{afun}
 #' @rdname avarspl
+#' @return An \code{AnalyzeVarSplit} object.
 #' @author Gabriel Becker
 #' @export
 AnalyzeVarSplit = function(var,
@@ -614,6 +619,7 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 
 #' @rdname avarspl
 #' @param .payload Used internally, not intended to be set by end users.
+#' @return An \code{AnalyzeMultiVars} split object.
 #' @export
 AnalyzeMultiVars = function(var,
                             split_label = "",
@@ -1041,6 +1047,7 @@ setClass("InstantiatedColumnInfo",
 #' @param total_cnt integer(1). Total observations represented across all columns.
 #' @param dispcounts logical. Should the counts be displayed as header info when the associated table is printed.
 #' @param countformat string. Format for the counts if thtey are displayed
+#' @return an \code{InstantiateadColumnInfo} object.
 InstantiatedColumnInfo = function(treelyt = LayoutColTree(),
                                   csubs = list(expression(TRUE)),
                                   extras = list(list()),
@@ -1109,6 +1116,7 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
 #' @inheritParams lyt_args
 #' @param vis logical. Should the row be visible (\code{LabelRow} only).
 #' @author Gabriel Becker
+#' @return A formal object representing a table row of the constructed type.
 #' @export
 LabelRow = function(lev = 1L,
                     label = "",
@@ -1232,6 +1240,7 @@ etable_validity  = function(object) {
 #' TableTree classes
 #' @exportClass ElementaryTable
 #' @author Gabriel Becker
+#' @return A formal object representing a populated table.
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
          representation(var_analyzed = "character"),
@@ -1502,6 +1511,7 @@ setOldClass("CellValue")
 #' Length of a Cell value
 #'
 #' @exportMethod length
+#' @return Always returns \code{1L}
 #' @param x x.
 setMethod("length", "CellValue",
           function(x) 1L)
@@ -1513,7 +1523,8 @@ setMethod("length", "CellValue",
 #' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
 #' @param colspan integer. Generally ignored currently.
 #' @param label used as row name if the row name is not specified by `in_rows`
-#'
+#' @return An object representing the value within a single cell within a populated table. The underlying structure
+#' of this object is an implementation detail and sholud not be relied upon beyond calling accessors for the class.
 #' @export
 #'
 ## CellValue = function(val, format = NULL, colspan = 1L, label = NULL)  {

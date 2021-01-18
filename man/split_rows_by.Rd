@@ -38,6 +38,9 @@ split_rows_by(
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Add Rows according to levels of a variable
 }
@@ -77,18 +80,18 @@ l <- basic_table() \%>\%
 l
 
 library(dplyr)
-DM2 <- DM \%>\% 
+DM2 <- DM \%>\%
     filter(SEX \%in\% c("M", "F")) \%>\%
     mutate(
         SEX = droplevels(SEX),
         gender_lab = c("F" = "Female", "M" = "Male",
                        "U" = "Unknown", "UNDIFFERENTIATED" = "Undifferentiated")[SEX],
         ethn_lab = c(
-            "ASIAN" = "Asian", 
-            "BLACK OR AFRICAN AMERICAN" = "Black or African American", 
+            "ASIAN" = "Asian",
+            "BLACK OR AFRICAN AMERICAN" = "Black or African American",
             "WHITE" = "White",
             "AMERICAN INDIAN OR ALASKA NATIVE" = "American Indian or Alaska Native",
-             "MULTIPLE" = "Multiple", 
+             "MULTIPLE" = "Multiple",
              "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" =
                  "Native Hawaiian or Other Pacific Islander",
              "OTHER" = "Other", "UNKNOWN" = "Unknown"

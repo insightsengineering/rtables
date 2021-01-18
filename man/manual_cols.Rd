@@ -12,6 +12,9 @@ in the column splace. If more than one set of levels is given, the values of the
 
 \item{.lst}{A list of sets of levels, by default populated via \code{list(...)}.}
 }
+\value{
+An InstantiatedColumnInfo object, suitable for use declaring the column structure for a manually constructed table.
+}
 \description{
 Manual column declaration
 }

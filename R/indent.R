@@ -8,7 +8,7 @@
 #'   indentation is set to 0.
 #'
 #' @export
-#'
+#' @return \code{x} with its indent modifier incremented by \code{by}.
 #' @examples
 #' is_setosa <- iris$Species == "setosa"
 #' mtbl <- rtable(

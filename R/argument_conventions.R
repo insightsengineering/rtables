@@ -30,6 +30,7 @@ NULL
 #' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
+#' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, visible_label, cvar, topleft, ...) NULL
@@ -39,7 +40,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' Layouting Function Arg Conventions
 #' @name lyt_args
 #' @rdname lyt_args
-#' 
+#'
 #' @param lyt layout object pre-data used for tabulation
 #' @param var string, variable name
 #' @param vars character vector. Multiple variable names.
@@ -75,7 +76,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
 #' @inheritParams gen_args
-#' 
+#' @inherit gen_args return
 #' @family conventions
 lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
                      nested, format, cfun, cformat, split_fun, split_name,
@@ -89,7 +90,8 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
 #' Constructor Arg Conventions
 #' @name constr_args
 #' @family conventions
-#' 
+#' @inherit gen_args return
+#'
 #' @inheritParams gen_args
 #' @param kids list. List of direct children.
 #' @param cont ElementaryTable. Content table.
@@ -108,6 +110,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan
 #' Compatability Arg Conventions
 #' @name compat_args
 #' @family conventions
+#' @inherit gen_args return
 #' @inheritParams gen_args
 #' @param .lst list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.
 #' @param FUN function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value
@@ -133,11 +136,12 @@ compat_args <- function(.lst, FUN, col_by, row_by, row.name, format, indent, col
 #' Split Function Arg Conventions
 #' @name sf_args
 #' @family conventions
-#' 
+#' @inherit gen_args return
+#'
 #' @inheritParams gen_args
 #' @param trim logical(1). Should splits corresponding with 0 observations be kept when tabulating.
 #' @param first logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).
-#' 
+#'
 sf_args <- function(trim, label, first) NULL
 ## data
 

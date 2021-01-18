@@ -17,6 +17,9 @@
 
 \item{mode}{character(1). Passed on to \code{\link[base]{as.vector}}}
 }
+\value{
+a vector of the chosen mode (or an error is raised if more than one row was present).
+}
 \description{
 convert to a vector
 }

@@ -34,6 +34,9 @@ InstantiatedColumnInfo(
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 }
+\value{
+an \code{InstantiateadColumnInfo} object.
+}
 \description{
 InstantiatedColumnInfo
 }

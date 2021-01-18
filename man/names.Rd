@@ -18,6 +18,9 @@
 \arguments{
 \item{x}{the object.}
 }
+\value{
+The column names of \code{x}, as defined in the details above.
+}
 \description{
 Names of a TableTree
 }

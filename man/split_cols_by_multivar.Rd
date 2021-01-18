@@ -23,6 +23,9 @@ split_cols_by_multivar(
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
 need columns to reflect different variables entirely, rather than different levels of a single variable, we use

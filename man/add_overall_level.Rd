@@ -34,7 +34,7 @@ Add an implicit 'overall' level to split
 l <- basic_table() \%>\%
    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) \%>\%
    analyze("AGE")
-   
+
 build_table(l, DM)
 
 

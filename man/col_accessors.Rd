@@ -122,6 +122,8 @@ generated from a  Pre-Data layout object}
 }
 \value{
 A \code{LayoutColTree} object.
+
+Various column information, depending on the accessor used.
 }
 \description{
 Column information/structure accessors

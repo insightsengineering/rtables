@@ -26,6 +26,9 @@ count are below this threshhold will be pruned}
 \item{type}{character(1). How count values should be aggregated. Must be \code{"sum"} (the default) or
 \code{"mean"}}
 }
+\value{
+A logical value indicating whether \code{tr} should be included (\code{TRUE}) or pruned (\code{FALSE}) during pruning.
+}
 \description{
 Criteria functions (and constructors thereof) for trimming and pruning tables.
 }

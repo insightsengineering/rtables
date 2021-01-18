@@ -119,6 +119,9 @@ lyt_args(
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 }
+\value{
+NULL (this is an argument template dummy function)
+}
 \description{
 Layouting Function Arg Conventions
 }

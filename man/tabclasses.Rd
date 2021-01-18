@@ -64,6 +64,9 @@ TableTree(
 
 \item{cont}{ElementaryTable. Content table.}
 }
+\value{
+A formal object representing a populated table.
+}
 \description{
 TableTree classes
 

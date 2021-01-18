@@ -15,6 +15,9 @@ then the \code{format} is applied}
 
 \item{output}{output type}
 }
+\value{
+formatted text representing the cell \code{x}.
+}
 \description{
 Convert the contets of an \code{\link{rcell}} to a string using the
 \code{format} information

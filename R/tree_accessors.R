@@ -14,6 +14,7 @@
 NULL
 
 #' @rdname dimensions
+#' @return the number of rows (nrow), columns (ncol) or both (dim) of the object.
 #' @exportMethod nrow
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE ,TRUE)))
@@ -122,6 +123,8 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 #' Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise
 #'
 #' @param obj TableTree. The TableTree
+#' @return the \code{ElementaryTable} containing the (top level) \emph{content rows} of \code{obj} ( or \code{NULL}
+#' if \code{obj} is not a formal table object).
 #' @export
 #' @rdname content_table
 setGeneric("content_table", function(obj) standardGeneric("content_table"))
@@ -369,6 +372,8 @@ setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
 #' Label and Name accessors
 #' @param obj ANY. The object.
 #' @rdname lab_name
+#' @return the name or label of \code{obj} for getters, or \code{obj} after modification
+#' for setters.
 #' @export
 setGeneric("obj_name", function(obj) standardGeneric("obj_name"))
 #' @rdname lab_name
@@ -701,6 +706,7 @@ setMethod("root_spl<-", "PreDataAxisLayout",
 
 #' Row attribute accessors
 #' @inheritParams gen_args
+#' @return various, depending on the accessor called.
 #' @rdname row_accessors
 #' @export
 #'
@@ -1369,6 +1375,7 @@ setMethod("col_info", "VTableNodeInfo",
 #' @export
 setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
 #'@rdname col_accessors
+#' @return Various column information, depending on the accessor used.
 #' @exportMethod col_info<-
 setMethod("col_info<-", "TableRow",
           function(obj, value) {
@@ -1716,7 +1723,8 @@ setMethod("colcount_format<-", "PreDataTableLayouts",
 #'
 #' @inheritParams gen_args
 #' @rdname no_info
-#'
+#' @return \code{TRUE} if the object has no/empty instantiated column information,
+#' \code{FALSE} otherwise.
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
 
@@ -1737,6 +1745,7 @@ setMethod("no_colinfo", "InstantiatedColumnInfo",
 #' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
 #'   split values repped out across the columns that they span.
 #' @rdname names
+#' @return The column names of \code{x}, as defined in the details above.
 #' @exportMethod names
 setMethod("names", "VTableNodeInfo",
           function(x) names(col_info(x)))
@@ -1771,14 +1780,15 @@ setMethod("row.names", "VTableTree",
 
 
 #' convert to a vector
-#' 
+#'
 #' @note  This only works for a table with a single row or a row object.
-#' 
+#'
 #' @rdname asvec
 #' @param x ANY. The object to be converted to a vector
 #' @param mode character(1). Passed on to \code{\link[base]{as.vector}}
+#' @return a vector of the chosen mode (or an error is raised if more than one row was present).
 #' @exportMethod as.vector
-#' 
+#'
 setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
 #'@rdname asvec
 #' @exportMethod as.vector
@@ -1844,6 +1854,8 @@ setMethod("spl_varnames", "MultiVarSplit",
 #' of strings which are printed in the area of the table between the column header display
 #' and the label of the first row.  These functions acccess and modify that material.
 #'
+#' @return A character vector representing the top-left material of \code{obj} (or
+#' \code{obj} after modification, in the case of the setter).
 #' @export
 #' @rdname top_left
 setGeneric("top_left", function(obj) standardGeneric("top_left"))

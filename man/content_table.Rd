@@ -23,6 +23,10 @@ content_table(obj) <- value
 
 \item{value}{ElementaryTable. The new content table for \code{obj}.}
 }
+\value{
+the \code{ElementaryTable} containing the (top level) \emph{content rows} of \code{obj} ( or \code{NULL}
+if \code{obj} is not a formal table object).
+}
 \description{
 Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise
 }

@@ -12,6 +12,9 @@ list_wrap_df(f)
 \arguments{
 \item{f}{The function to wrap.}
 }
+\value{
+A function which calls \code{f} and converts the result to a list of \code{CellValue} objects.
+}
 \description{
 Returns a function that coerces the return values of f to a list
 }

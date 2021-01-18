@@ -11,6 +11,9 @@ cbind_rtables(x, ...)
 
 \item{\dots}{1 or more further objects of the same class as \code{x}}
 }
+\value{
+A formal table object.
+}
 \description{
 cbind two rtables
 }

@@ -53,6 +53,9 @@ MultiVarSplit(
 
 \item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
 }
+\value{
+A \code{MultiVarSplit} object.
+}
 \description{
 Split between two or more different variables
 }

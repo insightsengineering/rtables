@@ -38,6 +38,10 @@ considerations. Defaults to none.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 }
+\value{
+for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
+The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
+}
 \description{
 Pagination of a TableTree
 }
@@ -51,25 +55,25 @@ s_summary <- function(x) {
  if (is.numeric(x)) {
      in_rows(
          "n" = rcell(sum(!is.na(x)), format = "xx"),
-         "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)), 
+         "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
                              format = "xx.xx (xx.xx)"),
          "IQR" = rcell(IQR(x, na.rm = TRUE), format = "xx.xx"),
          "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
      )
  } else if (is.factor(x)) {
-     
+
      vs <- as.list(table(x))
      do.call(in_rows, lapply(vs, rcell, format = "xx"))
-     
+
  } else (
      stop("type not supported")
  )
 }
 
 
-lyt <- basic_table() \%>\% 
+lyt <- basic_table() \%>\%
 split_cols_by(var = "ARM") \%>\%
-    analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary) 
+    analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary)
 
 tbl <- build_table(lyt, ex_adsl)
 tbl

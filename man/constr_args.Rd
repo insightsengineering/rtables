@@ -50,6 +50,9 @@ constr_args(
 
 \item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
 }
+\value{
+NULL (this is an argument template dummy function)
+}
 \description{
 Constructor Arg Conventions
 }

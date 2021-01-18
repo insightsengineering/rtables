@@ -82,6 +82,9 @@ VarLevWBaselineSplit(
 
 \item{label_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 }
+\value{
+a \code{VarLevelSplit} object.
+}
 \description{
 Split on levels within a variable
 }

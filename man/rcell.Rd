@@ -35,6 +35,10 @@ then the \code{format} is applied}
 \item{refval}{ANY. Value to use when in the reference column. Defaults
 to \code{NULL}}
 }
+\value{
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and sholud not be relied upon beyond calling accessors for the class.
+}
 \description{
 Construct a cell value and associate formatting, labeling,
 indenting, and column spanning information with it.

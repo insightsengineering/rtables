@@ -13,11 +13,13 @@
 #' \item{factor}{calls \code{\link{length}} on \code{x}}
 #' }
 #'
+#' \code{in_rows} is called on the resulting value(s).
+#'
 #' All other classes of input currently lead to an error.
 #' @export
 #' @rdname rtinner
 #' @author Gabriel Becker and Adrian Waddell
-#'
+#' @inherit in_rows return
 #' @examples
 #' simple_analysis(1:3)
 #' simple_analysis(iris$Species)

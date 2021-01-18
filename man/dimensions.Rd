@@ -27,6 +27,9 @@
 \arguments{
 \item{x}{\code{TableTree} or \code{ElementaryTable} object}
 }
+\value{
+the number of rows (nrow), columns (ncol) or both (dim) of the object.
+}
 \description{
 Table Dimensions
 }

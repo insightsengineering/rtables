@@ -6,6 +6,9 @@
 \usage{
 basic_table()
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Every layout must start with a basic table.
 }
@@ -13,7 +16,7 @@ Every layout must start with a basic table.
 
 lyt <- basic_table() \%>\%
   analyze("AGE", afun = mean)
-  
+
 build_table(lyt, DM)
 
 }

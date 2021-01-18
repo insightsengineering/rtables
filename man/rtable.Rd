@@ -17,6 +17,9 @@ rtablel(header, ..., format = NULL)
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 }
+\value{
+a formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree})
+}
 \description{
 Create a Table
 }

@@ -23,6 +23,9 @@ simple_analysis(x, ...)
 
 \item{\dots}{passed on directly}
 }
+\value{
+an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
+}
 \description{
 This function is used when \code{\link{analyze}} is invoked
 }
@@ -33,6 +36,8 @@ This function has the following behavior given particular types of inputs:
 \item{logical}{calls \code{\link{sum}} on \code{x}}
 \item{factor}{calls \code{\link{length}} on \code{x}}
 }
+
+\code{in_rows} is called on the resulting value(s).
 
 All other classes of input currently lead to an error.
 }

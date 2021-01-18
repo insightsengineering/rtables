@@ -27,7 +27,7 @@ formats_3d <- c(
 #' must be used for special cases
 #'
 #' @export
-#'
+#' @return A nested list, with elements listing the supported 1d, 2d, and 3d format strings.
 #' @examples
 #'
 #' list_rcell_format_labels()
@@ -48,6 +48,8 @@ list_rcell_format_labels <- function() {
 #' @param x either format string or an object returned by \code{sprintf_format}
 #' @param stop_otherwise logical, if \code{x} is not a format should an error be
 #'   thrown
+#' @note No check if the function is actually a formatter is performed.
+#' @return \code{TRUE} if \code{x} is \code{NULL}, a supported format string, or a function; \code{FALSE} otherwise.
 #'
 #' @export
 #'
@@ -72,11 +74,11 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 #' @param format character(1). A format string passed to sprintf.
 #'
 #' @export
-#'
+#' @return A formating function which wraps and will apply the specified \code{printf} style format string \code{format}.
 #' @seealso \code{\link[base]{sprintf}}
 #'
 #' @examples
-#' 
+#'
 #' basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", function(x) {
@@ -87,7 +89,7 @@ is_rcell_format <- function(x, stop_otherwise=FALSE) {
 #'     )
 #'   }) %>%
 #'   build_table(DM)
-#' 
+#'
 #' rcell(100, format = sprintf_format("(N=%i)"))
 #'
 #' rcell(c(4,9999999999), format = sprintf_format("(%.2f, >999.9)"))
@@ -118,7 +120,7 @@ sprintf_format_old <- function(format) {
 #' @inheritParams rtable
 #' @param output output type
 #'
-#'
+#' @return formatted text representing the cell \code{x}.
 #' @export
 #'
 #' @examples

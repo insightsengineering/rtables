@@ -12,6 +12,9 @@ col_paths_summary(x)
 \arguments{
 \item{x}{an rtable object}
 }
+\value{
+A data.frame summarizing the row- or column-structure of \code{x}.
+}
 \description{
 Print Row/Col Paths Summary
 }
@@ -38,7 +41,7 @@ col_paths_summary(tbl)
 # manually constructed table
 tbl3 <- rtable(
    rheader(
-     rrow("row 1", rcell("a", colspan = 2), 
+     rrow("row 1", rcell("a", colspan = 2),
      rcell("b", colspan = 2)
    ),
    rrow("h2", "a", "b", "c", "d")),

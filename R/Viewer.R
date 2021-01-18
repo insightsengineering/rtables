@@ -10,7 +10,8 @@
 #' 
 #' 
 #' @export
-#' 
+#'
+#' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #' 
 #' @examples 
 #' 

@@ -991,6 +991,9 @@ spl_varnames(obj)
 
 \item{default}{FormatSpec.}
 }
+\value{
+Various, but should be considered implementation details.
+}
 \description{
 These are internal methods that are documented only to satisfy
 R CMD check. End users should pay no attention to this documentation.

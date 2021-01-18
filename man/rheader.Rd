@@ -14,6 +14,9 @@ then the \code{format} is applied}
 
 \item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
 }
+\value{
+a \code{InstantiatedColumnInfo} object.
+}
 \description{
 Create a header
 }

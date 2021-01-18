@@ -13,6 +13,9 @@ sf_args(trim, label, first)
 
 \item{first}{logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
 }
+\value{
+NULL (this is an argument template dummy function)
+}
 \description{
 Split Function Arg Conventions
 }

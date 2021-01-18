@@ -26,6 +26,9 @@ rbindl_rtables(x, gap = 0, check_headers = FALSE)
 
 \item{y}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
 }
+\value{
+A formal table object.
+}
 \description{
 rbind TableTree and related objects
 }

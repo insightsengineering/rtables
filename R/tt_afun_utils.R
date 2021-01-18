@@ -10,6 +10,7 @@
 #' @param colspan integer(1). Columnspan value.
 #' @note currently column spanning is only supported for defining header structure.
 #' @rdname rcell
+#' @inherit CellValue return
 #' @export
 rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
 
@@ -68,7 +69,7 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
 #'
 #' @export
-#'
+#' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
 #' @seealso `analyze`
 #'
 #' @examples

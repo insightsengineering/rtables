@@ -12,6 +12,12 @@ is_rcell_format(x, stop_otherwise = FALSE)
 \item{stop_otherwise}{logical, if \code{x} is not a format should an error be
 thrown}
 }
+\value{
+\code{TRUE} if \code{x} is \code{NULL}, a supported format string, or a function; \code{FALSE} otherwise.
+}
 \description{
 Check if a format is a valid rcell format
+}
+\note{
+No check if the function is actually a formatter is performed.
 }

@@ -63,6 +63,9 @@ when calculating column counts.}
 
 \item{\dots}{Passed on to metthods or tabulation functions.}
 }
+\value{
+NULL (this is an argument template dummy function)
+}
 \description{
 General Argument Conventions
 }

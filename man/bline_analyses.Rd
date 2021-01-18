@@ -35,6 +35,9 @@ analyze_against_ref_group(
 
 \item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 }
+\value{
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+}
 \description{
 Add ref_group comparison analysis recipe
 }

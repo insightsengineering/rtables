@@ -14,6 +14,10 @@ cont_n_onecol(j)
 
 \item{j}{numeric(1). Number of column to be scored}
 }
+\value{
+A single numeric value indicating score according to the relevant metric for \code{tt}, to be used
+when sorting.
+}
 \description{
 Score functions for sorting TableTrees
 }
