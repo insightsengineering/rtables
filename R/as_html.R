@@ -31,7 +31,7 @@
 #'
 #' as_html(tbl, class_td = "aaa")
 #'
-#' \dontrun{
+#' if(interactive()) {
 #' Viewer(tbl)
 #' }
 as_html <- function(x,

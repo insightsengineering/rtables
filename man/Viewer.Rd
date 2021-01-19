@@ -24,7 +24,7 @@ The table will be displayed using the bootstrap styling for tables.
 }
 \examples{
 
-\dontrun{
+if(interactive()) {
 sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
    labels = c("S.L > 5", "S.L <= 5"))
 

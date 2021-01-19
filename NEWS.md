@@ -1,4 +1,6 @@
-## rtables 0.3.5.9000
+## rtables 0.3.6
+
+Documentation revisions as requested by CRAN. No change to package code.
 
 ## rtables 0.3.5
 

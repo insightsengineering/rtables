@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare_rtables.R
 \name{compare_rtables}
 \alias{compare_rtables}
-\title{Corpare two rtables}
+\title{Compare two rtables}
 \usage{
 compare_rtables(object, expected, tol = 0.1, comp.attr = TRUE)
 }
@@ -35,7 +35,7 @@ t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 
 compare_rtables(object = t1, expected = t2)
 
-\dontrun{
+if(interactive()){
 Viewer(t1, t2)
 }
 
@@ -48,9 +48,7 @@ Viewer(t1, t2)
     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
  )
 
-\dontrun{
-Viewer(expected)
-}
+expected
 
  object <- rtable(
     header = c("ARM A\nN=100", "ARM B\nN=200"),

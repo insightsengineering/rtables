@@ -1,4 +1,4 @@
-#' Corpare two rtables
+#' Compare two rtables
 #'
 #' Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 #' cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
@@ -24,7 +24,7 @@
 #'
 #' compare_rtables(object = t1, expected = t2)
 #'
-#' \dontrun{
+#' if(interactive()){
 #' Viewer(t1, t2)
 #' }
 #'
@@ -37,9 +37,7 @@
 #'     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
 #'  )
 #'
-#' \dontrun{
-#' Viewer(expected)
-#' }
+#' expected
 #'
 #'  object <- rtable(
 #'     header = c("ARM A\nN=100", "ARM B\nN=200"),

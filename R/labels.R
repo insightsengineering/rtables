@@ -85,7 +85,7 @@ var_labels <- function(x, fill = FALSE) {
 #' var_labels(x) <- paste("label for", names(iris))
 #' var_labels(x)
 #'
-#' \dontrun{
+#' if(interactive()){
 #' View(x) # in RStudio data viewer labels are displayed
 #' }
 `var_labels<-` <- function(x, value) {

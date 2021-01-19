@@ -615,7 +615,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' padstr("abc", 5, "left")
 #' padstr("abc", 5, "right")
 #'
-#' \dontrun{
+#' if(interactive()){
 #' padstr("abc", 1)
 #' }
 #'
