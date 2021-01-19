@@ -48,7 +48,7 @@ as_html(tbl, class_table = "table", class_tr = "row")
 
 as_html(tbl, class_td = "aaa")
 
-\dontrun{
+if(interactive()) {
 Viewer(tbl)
 }
 }
