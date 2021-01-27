@@ -1,46 +1,68 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+parameters:
+  docker-image:
+    type: string
+    default: "rocker/tidyverse:3.6.3"
+
 jobs:
-  build_check_install:
-    parameters:
-      package:
-        type: string
+
+  version_validation:
     docker:
-      - image: rocker/tidyverse:3.6.2
+      - image: cimg/base:2020.01
     steps:
-      - checkout:
-          path: pkgsource
+      - checkout
+      - run:
+          name: "Check version in NEWS.md and DESCRIPTION"
+          command: |
+            DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
+            NEWS_VERSION=$(awk '/^# /{print $3; exit}' NEWS.md)
+            echo "NEWS.md version: $NEWS_VERSION"
+            echo "DESCRIPTION version: $DESC_VERSION"
+            if (test $DESC_VERSION = $NEWS_VERSION ); then
+                echo "NEWS.md and DESCRIPTION have the same version"
+            else
+                echo "NEWS.md and DESCRIPTION have different versions"
+                exit 1
+            fi
+
+
+  build_check_install:
+    docker:
+      - image: << pipeline.parameters.docker-image >>
+    steps:
+      - checkout
       - run:
           name: "Build R package"
           command: |
-            R CMD build pkgsource
-            echo "export PKGBUILD=$(echo *.tar.gz)" >> $BASH_ENV
-      - run:
-          name: "Install R package"
-          command: R CMD INSTALL ${PKGBUILD}    
+            R CMD build .
+            echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
       - run:
           name: "Check R package"
           command: |
-            R CMD check --no-manual ${PKGBUILD}
-            result=$(tail -1 << parameters.package >>.Rcheck/00check.log)
+            R CMD check --no-manual ${PKG}
+            result=$(tail -1 ${CIRCLE_PROJECT_REPONAME}.Rcheck/00check.log)
             [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
             [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
       - run:
-         name: "Prepare Artifacts"
-         command: |
-           mkdir artifacts
-           cp ${PKGBUILD} artifacts/
+          name: "Install R package"
+          command: R CMD INSTALL ${PKG}
+      - run:
+          name: "Prepare artifacts"
+          command: mv ${CIRCLE_PROJECT_REPONAME}.Rcheck rpackage.Rcheck
       - store_artifacts:
-          path: "artifacts"
-          destination: /
+          path: "rpackage.Rcheck/00check.log"
+          destination: 00check.log
       - store_test_results:
-          path: << parameters.package >>.Rcheck/tests
-
+          path: "rpackage.Rcheck/tests"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "*.tar.gz"
 
   roxygen:
     docker:
-      - image: rocker/tidyverse:3.6.2
+      - image: << pipeline.parameters.docker-image >>
     steps:
       - checkout
       - run:
@@ -56,42 +78,29 @@ jobs:
               echo "manuals are upto date with roxygen comments"
             fi
 
-
   pkgdown:
     docker:
-      - image: rocker/tidyverse:3.6.2
+      - image: << pipeline.parameters.docker-image >>
     steps:
       - checkout
       - run:
           name: "create pkgdown website"
           command: R -e 'pkgdown::build_site(".", devel = FALSE)'
       - store_artifacts:
-          path: docs
+          path: ./docs
           destination: pkgdown
-
-  TODOs:
-    docker:
-      - image: cimg/base:2020.01
-    steps:
-      - checkout:
-          path: pkgsource
-      - run:
-          command: grep -R -A 2 "TODO" pkgsource/R > TODOs.txt
-      - store_artifacts:
-          path: TODOs.txt
-          destination: TODOs.txt
-
 
 workflows:
   version: 2
   Rworkflow:
     jobs:
+      - version_validation
       - roxygen
       - pkgdown:
           requires:
             - roxygen
+            - version_validation
       - build_check_install:
-          package: rtables
           requires:
             - roxygen
-      - TODOs
+            - version_validation
