@@ -106,7 +106,7 @@ jobs:
       - run:
           name: install deps
           command: |
-            npm install -g --silent gh-pages@3.1.0
+            npm install -g --silent gh-pages@3.0.0
             git config user.email "ci-build@roche.com"
             git config user.name "ci-build"
       - add_ssh_keys:
