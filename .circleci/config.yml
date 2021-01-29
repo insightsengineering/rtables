@@ -98,6 +98,9 @@ jobs:
       - image: node:14
     steps:
       - checkout
+      - run:
+          name: remove old docs
+          command: rm -rf docs
       - attach_workspace:
           at: docs
       - run:
