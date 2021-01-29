@@ -131,6 +131,7 @@ workflows:
             - roxygen
             - version_validation
       - pkgdown_deploy:
+          type: approval
           requires:
             - pkgdown_build
           filters:
