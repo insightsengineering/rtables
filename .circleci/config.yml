@@ -98,14 +98,11 @@ jobs:
       - image: node:14
     steps:
       - checkout
-      - run:
-          name: remove old docs
-          command: rm -rf docs
       - attach_workspace:
           at: docs
       - run:
           name: disable jekyll
-          command: touch docs/.nojekyll
+          command: touch docs/docs/.nojekyll
       - run:
           name: install deps
           command: |
@@ -117,7 +114,7 @@ jobs:
             - "e3:e8:03:cb:2a:09:8f:70:b9:3a:66:f0:e8:ee:4f:59"
       - run:
           name: deploys docs
-          command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs
+          command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs/docs
 
 workflows:
   version: 2
