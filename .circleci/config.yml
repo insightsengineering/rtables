@@ -123,7 +123,6 @@ workflows:
       - version_validation
       - roxygen
       - pkgdown_build:
-          type: approval
           requires:
             - roxygen
             - version_validation
@@ -131,9 +130,13 @@ workflows:
           requires:
             - roxygen
             - version_validation
+      - approve_deploy_pkgdown:
+          type: approval
+          requires:
+           - pkgdown_build
       - pkgdown_deploy:
           requires:
-            - pkgdown_build
+            - approve_deploy_pkgdown
           filters:
             branches:
               only: master
