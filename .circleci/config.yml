@@ -133,7 +133,7 @@ workflows:
       - approve_deploy_pkgdown:
           type: approval
           requires:
-           - pkgdown_build
+            - pkgdown_build
       - pkgdown_deploy:
           requires:
             - approve_deploy_pkgdown
