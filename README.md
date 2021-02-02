@@ -204,4 +204,4 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
   - [baselR November
     2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing),
-    this presentation was written for version `v0.0.1`
+    this presentation was written for version `v0.0.1`  
