@@ -28,7 +28,6 @@ jobs:
                 exit 1
             fi
 
-
   build_check_install:
     docker:
       - image: << pipeline.parameters.docker-image >>
