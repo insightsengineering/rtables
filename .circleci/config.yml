@@ -46,6 +46,10 @@ jobs:
             result=$(tail -1 ${CIRCLE_PROJECT_REPONAME}.Rcheck/00check.log)
             [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
             [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
+      - slack/notify:
+          channel: nots
+          event: fail
+          template: basic_fail_1
       - run:
           name: "Install R package"
           command: R CMD INSTALL ${PKG}
@@ -117,14 +121,6 @@ jobs:
       - run:
           name: deploys docs
           command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs/docs
-  notify_on_fail:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-      - slack/notify:
-          channel: nots
-#          event: fail
-          template: basic_fail_1
 
 workflows:
   version: 2
@@ -140,6 +136,7 @@ workflows:
           requires:
             - roxygen
             - version_validation
+          context: poc
       - approve_deploy_pkgdown:
           type: approval
           requires:
@@ -150,7 +147,3 @@ workflows:
           filters:
             branches:
               only: master
-  send-notification-60:
-    jobs:
-      - notify_on_fail:
-          context: poc
