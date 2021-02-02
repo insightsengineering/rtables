@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.2.0
 
 parameters:
   docker-image:
@@ -59,6 +61,10 @@ jobs:
           root: ./
           paths:
             - "*.tar.gz"
+      - slack/notify:
+          channel: nots
+#          event: fail
+          template: basic_fail_1
 
   roxygen:
     docker:
@@ -140,3 +146,7 @@ workflows:
           filters:
             branches:
               only: master
+  send-notification-60:
+    jobs:
+      - notify_on_fail:
+          context: poc
