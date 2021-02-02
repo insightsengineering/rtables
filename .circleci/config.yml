@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.2.0
 
 parameters:
   docker-image:
@@ -44,6 +46,10 @@ jobs:
             result=$(tail -1 ${CIRCLE_PROJECT_REPONAME}.Rcheck/00check.log)
             [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
             [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
+      - slack/notify:
+          channel: nots
+          event: fail
+          template: basic_fail_1
       - run:
           name: "Install R package"
           command: R CMD INSTALL ${PKG}
@@ -130,6 +136,7 @@ workflows:
           requires:
             - roxygen
             - version_validation
+          context: poc
       - approve_deploy_pkgdown:
           type: approval
           requires:
