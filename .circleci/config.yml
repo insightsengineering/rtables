@@ -28,6 +28,7 @@ jobs:
                 exit 1
             fi
 
+
   build_check_install:
     docker:
       - image: << pipeline.parameters.docker-image >>
@@ -60,10 +61,6 @@ jobs:
           root: ./
           paths:
             - "*.tar.gz"
-      - slack/notify:
-          channel: nots
-#          event: fail
-          template: basic_fail_1
 
   roxygen:
     docker:
@@ -120,6 +117,14 @@ jobs:
       - run:
           name: deploys docs
           command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs/docs
+  notify_on_fail:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          channel: nots
+#          event: fail
+          template: basic_fail_1
 
 workflows:
   version: 2
