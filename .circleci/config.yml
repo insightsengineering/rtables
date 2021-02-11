@@ -68,7 +68,7 @@ jobs:
             fi
 
 
-  build_check_install_dev:
+  build_check_install:
     docker:
       - image: "<< pipeline.parameters.r-docker-image >>:<< pipeline.parameters.r-docker-image-tag >>"
     steps:
