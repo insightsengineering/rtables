@@ -10,6 +10,20 @@ parameters:
     type: string
     default: "3.6.3"
 
+build_check_install_defaults: &build_check_install_defaults
+  parameters:
+    r-docker-image:
+      type: string
+      default: "rocker/tidyverse"
+    r-docker-image-tag:
+      type: string
+      default: "3.6.3"
+  docker:
+    - image: "<< pipeline.parameters.r-docker-image >>:<< parameters.r-docker-image-tag >>"
+  steps:
+    - build_check_install_cmd
+
+
 commands:
   build_check_install_cmd:
     steps:
@@ -67,15 +81,14 @@ jobs:
                 exit 1
             fi
 
-  build_check_install:
-    parameters:
-      r-docker-image-tag:
-        type: string
-        default: "3.6.3"
-    docker:
-      - image: "<< pipeline.parameters.r-docker-image >>:<< parameters.r-docker-image-tag >>"
-    steps:
-      - build_check_install_cmd
+  build_check_install_dev:
+    <<: *build_check_install_defaults
+
+  build_check_install_pre_release:
+    <<: *build_check_install_defaults
+
+  build_check_install_master:
+    <<: *build_check_install_defaults
 
   roxygen:
     docker:
@@ -143,14 +156,49 @@ workflows:
           requires:
             - roxygen
             - version_validation
-      - build_check_install:
+      - build_check_install_dev:
           matrix:
             parameters:
+              r-docker-image: ["rocker/tidyverse"]
               r-docker-image-tag: ["3.6.3", "3.6.2", "3.6.1"]
           requires:
             - roxygen
             - version_validation
           context: poc
+          filters:
+            branches:
+              ignore:
+                - pre-release
+                - /^prf.*/
+                - master
+      - build_check_install_pre_release:
+          matrix:
+            parameters:
+              r-docker-image: ["rocker/tidyverse"]
+              r-docker-image-tag: ["3.6.3", "3.6.2", "3.6.1"]
+          requires:
+            - roxygen
+            - version_validation
+          context: poc
+          filters:
+            branches:
+              only:
+                - pre-release
+                - /^prf.*/
+      - build_check_install_master:
+          matrix:
+            parameters:
+              r-docker-image: ["rocker/tidyverse"]
+              r-docker-image-tag: ["3.6.3", "3.6.2", "3.6.1"]
+          requires:
+            - roxygen
+            - version_validation
+          context: poc
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: master
       - approve_deploy_pkgdown:
           type: approval
           requires:
