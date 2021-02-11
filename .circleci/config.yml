@@ -67,7 +67,6 @@ jobs:
                 exit 1
             fi
 
-
   build_check_install:
     parameters:
       r-docker-image-tag:
