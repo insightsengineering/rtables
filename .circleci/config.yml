@@ -69,8 +69,12 @@ jobs:
 
 
   build_check_install:
+    parameters:
+      r-docker-image-tag:
+        type: string
+        default: "3.6.3"
     docker:
-      - image: "<< pipeline.parameters.r-docker-image >>:<< pipeline.parameters.r-docker-image-tag >>"
+      - image: "<< pipeline.parameters.r-docker-image >>:<< parameters.r-docker-image-tag >>"
     steps:
       - build_check_install_cmd
 
