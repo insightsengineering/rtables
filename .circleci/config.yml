@@ -141,6 +141,9 @@ workflows:
           type: approval
           requires:
             - pkgdown_build
+          filters:
+            branches:
+              only: master
       - pkgdown_deploy:
           requires:
             - approve_deploy_pkgdown
