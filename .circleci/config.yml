@@ -3,9 +3,48 @@ orbs:
   slack: circleci/slack@4.2.0
 
 parameters:
-  docker-image:
+  r-docker-image:
     type: string
-    default: "rocker/tidyverse:3.6.3"
+    default: "rocker/tidyverse"
+  r-docker-image-tag:
+    type: string
+    default: "3.6.3"
+
+commands:
+  build_check_install_cmd:
+    steps:
+      - checkout
+      - run:
+          name: "Build R package"
+          command: |
+            R CMD build .
+            echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
+      - run:
+          name: "Check R package"
+          command: |
+            R CMD check --no-manual ${PKG}
+            result=$(tail -1 ${CIRCLE_PROJECT_REPONAME}.Rcheck/00check.log)
+            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
+            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
+      - run:
+          name: "Install R package"
+          command: R CMD INSTALL ${PKG}
+      - slack/notify:
+          channel: nots
+          event: fail
+          template: basic_fail_1
+      - run:
+          name: "Prepare artifacts"
+          command: mv ${CIRCLE_PROJECT_REPONAME}.Rcheck rpackage.Rcheck
+      - store_artifacts:
+          path: "rpackage.Rcheck/00check.log"
+          destination: 00check.log
+      - store_test_results:
+          path: "rpackage.Rcheck/tests"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "*.tar.gz"
 
 jobs:
 
@@ -29,46 +68,15 @@ jobs:
             fi
 
 
-  build_check_install:
+  build_check_install_dev:
     docker:
-      - image: << pipeline.parameters.docker-image >>
+      - image: "<< pipeline.parameters.r-docker-image >>:<< pipeline.parameters.r-docker-image-tag >>"
     steps:
-      - checkout
-      - run:
-          name: "Build R package"
-          command: |
-            R CMD build .
-            echo "export PKG=$(echo *.tar.gz)" >> $BASH_ENV
-      - run:
-          name: "Check R package"
-          command: |
-            R CMD check --no-manual ${PKG}
-            result=$(tail -1 ${CIRCLE_PROJECT_REPONAME}.Rcheck/00check.log)
-            [[ $result = Status:* ]] || echo "could not get Status line"; set -o errexit
-            [[ $result = *"Error"* ]] && echo "checks result in errors"; set -o errexit
-      - slack/notify:
-          channel: nots
-          event: fail
-          template: basic_fail_1
-      - run:
-          name: "Install R package"
-          command: R CMD INSTALL ${PKG}
-      - run:
-          name: "Prepare artifacts"
-          command: mv ${CIRCLE_PROJECT_REPONAME}.Rcheck rpackage.Rcheck
-      - store_artifacts:
-          path: "rpackage.Rcheck/00check.log"
-          destination: 00check.log
-      - store_test_results:
-          path: "rpackage.Rcheck/tests"
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - "*.tar.gz"
+      - build_check_install_cmd
 
   roxygen:
     docker:
-      - image: << pipeline.parameters.docker-image >>
+      - image: "<< pipeline.parameters.r-docker-image >>:<< pipeline.parameters.r-docker-image-tag >>"
     steps:
       - checkout
       - run:
@@ -86,7 +94,7 @@ jobs:
 
   pkgdown_build:
     docker:
-      - image: << pipeline.parameters.docker-image >>
+      - image: "<< pipeline.parameters.r-docker-image >>:<< pipeline.parameters.r-docker-image-tag >>"
     steps:
       - checkout
       - run:
@@ -133,6 +141,9 @@ workflows:
             - roxygen
             - version_validation
       - build_check_install:
+          matrix:
+            parameters:
+              r-docker-image-tag: ["3.6.3", "3.6.2", "3.6.1"]
           requires:
             - roxygen
             - version_validation
