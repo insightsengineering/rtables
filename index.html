@@ -14,9 +14,11 @@
 <script src="pkgdown.js"></script><meta property="og:title" content="Reporting Tables">
 <meta property="og:description" content="Reporting tables often have structure that goes beyond simple rectangular
   data. The rtables package provides a framework for declaring complex multi-level tabulations
-  and then applying them to data. This framework  including sibling sub-tables, arbitrary splitting
+  and then applying them to data. This framework models both tabulation and the resulting
+  tables as hierarchical, tree-like objects which support sibling sub-tables, arbitrary splitting
   or grouping of data in row and column dimensions, cells containing multiple values,
-  and the concept of contextual summary computations.">
+  and the concept of contextual summary computations. A convenient pipe-able interface is provided
+  for declaring table layouts and the corresponding computations, and then applying them to data.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -35,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -256,6 +258,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=rtables">https://​cloud.r-project.org/​package=rtables</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/roche/rtables/">https://​github.com/​roche/​rtables/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/roche/rtables/issues">https://​github.com/​roche/​rtables/​issues</a>

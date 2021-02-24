@@ -74,7 +74,7 @@ adding further splitting, the tabulation will occur at the current/next level of
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -190,6 +190,9 @@ adding further splitting, the tabulation will occur at the current/next level of
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code>build_table</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>When non-NULL <code>format</code> is used to specify formats for all generated rows, and can be a character vector, a function, or a list of functions. It will be repped out to the number of rows once this is known during the tabulation process, but will be overridden by formats specified within <code>rcell</code> calls in <code>afun</code>.</p>
@@ -246,8 +249,7 @@ tabulation framework.</p>
 #&gt; 
 #&gt; Row-Split Structure:
 #&gt; AGE (** analysis **) 
-#&gt; </div><div class='input'>
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
+#&gt; </div><div class='input'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           A: Drug X   B: Placebo   C: Combination
 #&gt; -------------------------------------------------
 #&gt; Min.         20           21             22      

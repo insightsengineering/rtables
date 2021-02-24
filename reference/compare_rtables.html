@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Corpare two rtables — compare_rtables • rtables</title>
+<title>Compare two rtables — compare_rtables • rtables</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Corpare two rtables — compare_rtables" />
+<meta property="og:title" content="Compare two rtables — compare_rtables" />
 <meta property="og:description" content="Prints a matrix where . means cell matches, X means cell does
 cells do not match, + cell (row) is missing, and - cell (row)
 should not be there." />
@@ -74,7 +74,7 @@ should not be there." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ should not be there." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Corpare two rtables</h1>
+    <h1>Compare two rtables</h1>
     <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/compare_rtables.R'><code>R/compare_rtables.R</code></a></small>
     <div class="hidden name"><code>compare_rtables.Rd</code></div>
     </div>
@@ -150,6 +150,10 @@ should not be there.</p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a matrix of class <code>"rtables_diff"</code> representing the differences
+between <code>object</code> and <code>expected</code> as described above.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>In its current form <code>compare_rtables</code> does not take structure into account,
@@ -167,7 +171,7 @@ only row and cell position.</p>
 #&gt; [1] "column names are not the same"
 #&gt; attr(,"class")
 #&gt; [1] "rtable_diff" "matrix"      "array"      </div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
 <span class='fu'><a href='Viewer.html'>Viewer</a></span><span class='op'>(</span><span class='va'>t1</span>, <span class='va'>t2</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -180,10 +184,14 @@ only row and cell position.</p>
     <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"row colspan"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.345543</span>, <span class='fl'>.4432423</span><span class='op'>)</span>, colspan <span class='op'>=</span> <span class='fl'>2</span>, format <span class='op'>=</span> <span class='st'>"(xx.xx, xx.xx)"</span><span class='op'>)</span><span class='op'>)</span>
  <span class='op'>)</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='Viewer.html'>Viewer</a></span><span class='op'>(</span><span class='va'>expected</span><span class='op'>)</span>
-<span class='op'>}</span>
-
+<span class='va'>expected</span>
+</div><div class='output co'>#&gt;                 ARM A    ARM B 
+#&gt;                 N=100    N=200 
+#&gt; -------------------------------
+#&gt; row 1             10       15  
+#&gt;                                
+#&gt; section title                  
+#&gt; row colspan      (0.35, 0.44)  </div><div class='input'>
  <span class='va'>object</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span><span class='op'>(</span>
     header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM A\nN=100"</span>, <span class='st'>"ARM B\nN=200"</span><span class='op'>)</span>,
     format <span class='op'>=</span> <span class='st'>"xx"</span>,

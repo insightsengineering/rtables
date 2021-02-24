@@ -73,7 +73,7 @@ set of &quot;top-left materials&quot;." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -140,6 +140,9 @@ set of "top-left materials".</p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code>build_table</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Adds <code>newlines</code> to the set of strings representing the 'top-left'
@@ -169,7 +172,7 @@ its behavior are subject to change in future versions.</p>
   <span class='fu'>append_topleft</span><span class='op'>(</span><span class='st'>"Ethnicity"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>append_topleft</span><span class='op'>(</span><span class='st'>"  Age"</span><span class='op'>)</span>
-  
+
 <span class='va'>DM2</span> <span class='op'>&lt;-</span> <span class='va'>DM</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>RACE</span><span class='op'>)</span>, SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>SEX</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>lyt</span>, <span class='va'>DM2</span><span class='op'>)</span>

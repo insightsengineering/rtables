@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -166,6 +166,9 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code>build_table</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If <code>format</code> expects 2 values (i.e. <code>xx</code> appears twice in the format string, then both raw and percent of
@@ -264,7 +267,7 @@ accept <code>.N_col</code> or <code>.N_total</code> (see <code><a href='analyze.
                          extra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>trim <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='append_topleft.html'>append_topleft</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Country"</span>, <span class='st'>"  Age"</span><span class='op'>)</span><span class='op'>)</span>
-    
+
 <span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l2</span>, <span class='va'>DM2</span><span class='op'>)</span>
 <span class='va'>tbl2</span>
 </div><div class='output co'>#&gt; Country                         A: Drug X    B: Placebo   C: Combination
