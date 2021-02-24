@@ -80,7 +80,7 @@ as_html <- function(x,
     do.call(tags$tr, c(row, list(class = class_tr)))
   })
 
-    if(!is.null(caption)) {
+    if(!is.null(caption_txt)) {
         if(!is.null(link_label))
             labtxt <- sprintf("(#tab:%s)", link_label)
         else
