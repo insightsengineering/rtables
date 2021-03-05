@@ -367,6 +367,10 @@ setMethod("spl_payload<-", "Split", function(obj, value) {
 setGeneric("spl_label_var", function(obj) standardGeneric("spl_label_var"))
 #' @rdname int_methods
 setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
+## TODO revisit. do we want to do this? used in vars_in_layout, but only
+## for convenience.
+#' @rdname int_methods
+setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
 #' Label and Name accessors
@@ -1894,3 +1898,90 @@ setMethod("top_left<-", "PreDataTableLayouts", function(obj, value) {
     obj@top_left <- value
     obj
 })
+
+
+vil_collapse <- function(x) {
+    x <- unlist(x)
+    x <- x[!is.na(x)]
+    x <- unique(x)
+    x[nzchar(x)]
+}
+
+#' List Variables required by a pre-data table layout
+#'
+#' @param lyt The Layout (or a component thereof)
+#'
+#' @details This will walk the  layout declaration and return a vector
+#'     of the  names of the unique  variables that are used  in any of
+#'     the following ways:
+#'
+#' \itemize{
+#' \item{Variable being split on (directly or via cuts)}
+#' \item{Element of a Multi-variable column split}
+#' \item{Content variable}
+#' \item{Value-label variable}
+#' }
+#'
+#' @note This function will not detect dependencies implicit in
+#' analysis or summary functions which accept \code{df} and then
+#' rely on the existence of particular variables not being split on/
+#' analyzed.
+#'
+#' @note The order these variable names appear within the return vector
+#' is undefined and should not be relied upon.
+#'
+#' @return A character vector containing the unique variables explicitly used in the layout (see Notes).
+#'
+#' @examples
+#' lyt <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by("SEX") %>%
+#'     summarize_row_groups(label_fstr = "Overall (N)") %>%
+#'     split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
+#'                   split_fun = drop_split_levels) %>%
+#'     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+#'     analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+#'
+#' vars_in_layout(lyt)
+#'
+#' @export
+#' @rdname vil
+setGeneric("vars_in_layout", function(lyt) standardGeneric("vars_in_layout"))
+
+#' @rdname vil
+setMethod("vars_in_layout", "PreDataTableLayouts",
+          function(lyt) {
+    vil_collapse(c(vars_in_layout(clayout(lyt)),
+             vars_in_layout(rlayout(lyt))))
+})
+
+#' @rdname vil
+setMethod("vars_in_layout", "PreDataAxisLayout",
+          function(lyt) {
+    vil_collapse(lapply(lyt, vars_in_layout))
+})
+
+#' @rdname vil
+setMethod("vars_in_layout", "SplitVector",
+          function(lyt) {
+    vil_collapse(lapply(lyt, vars_in_layout))
+})
+
+#' @rdname vil
+setMethod("vars_in_layout", "Split",
+          function(lyt) vil_collapse(c(spl_payload(lyt),
+                                       ## for an AllSplit/RootSplit
+                                       ## doesn't have to be same as payload
+                                       content_var(lyt),
+                                       spl_label_var(lyt))))
+
+#' @rdname vil
+setMethod("vars_in_layout", "CompoundSplit",
+          function(lyt) vil_collapse(lapply(spl_payload(lyt), vars_in_layout)))
+
+#' @rdname vil
+setMethod("vars_in_layout", "ManualSplit",
+          function(lyt) character())
+
+
+
