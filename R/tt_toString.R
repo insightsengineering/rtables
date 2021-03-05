@@ -302,9 +302,12 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     nli <- nrow(body)
     if(lentl == 0)
         tl <- rep("", nli)
-    else if(lentl > nli)
-        stop("More lines in top-left material than in column header. Not currently supported.")
-    else if (lentl < nli)
+    else if(lentl > nli) {
+        npad <- lentl - nli
+        ##        stop("More lines in top-left material than in column header. Not currently supported.")
+        body <- rbind(matrix("", nrow = npad, ncol = ncol(body)), body)
+        span <- rbind(matrix(1, nrow = npad, ncol = ncol(span)), span)
+    } else if (lentl < nli)
         tl <- c(tl, rep("", nli - lentl))
 
     ##list(body = cbind("", body), span = cbind(1, span))
