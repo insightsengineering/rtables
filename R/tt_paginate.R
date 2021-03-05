@@ -51,7 +51,7 @@ setMethod("nlines", "InstantiatedColumnInfo",
           function(x, colwidths) {
     lfs = collect_leaves(coltree(x))
     depths = sapply(lfs, function(l) length(pos_splits(l)))
-    max(depths) + divider_height(x)
+    max(depths, length(top_left(x))) + divider_height(x)
 
 })
 
