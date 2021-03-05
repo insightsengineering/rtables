@@ -83,7 +83,11 @@ reference:
     - row_paths
     - row_paths_summary
     - table_structure
-    
+
+  - title: Layout Structure Information
+    contents:
+    - vars_in_layout
+
   - title: Access and Modify
     contents:
     - cell_values

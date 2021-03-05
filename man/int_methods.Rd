@@ -106,6 +106,7 @@
 \alias{spl_payload<-,Split-method}
 \alias{spl_label_var}
 \alias{spl_label_var,VarLevelSplit-method}
+\alias{spl_label_var,Split-method}
 \alias{tt_labelrow}
 \alias{tt_labelrow,VTableTree-method}
 \alias{tt_labelrow<-}
@@ -557,6 +558,8 @@ spl_payload(obj) <- value
 spl_label_var(obj)
 
 \S4method{spl_label_var}{VarLevelSplit}(obj)
+
+\S4method{spl_label_var}{Split}(obj)
 
 tt_labelrow(obj)
 
