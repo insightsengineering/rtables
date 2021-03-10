@@ -1,4 +1,8 @@
 
+label_pos_values <- c("hidden", "visible", "topleft")
+
+
+
 #' combine SplitVector objects
 #' @param x SplitVecttor
 #' @param ... Splits or SplitVector objects
@@ -65,9 +69,21 @@ setMethod("split_rows", "SplitVector",
 #' @rdname int_methods
 setMethod("split_rows", "PreDataTableLayouts",
           function(lyt, spl, pos){
-    rlyt = lyt@row_layout
-    rlyt = split_rows(rlyt, spl, pos)
-    lyt@row_layout = rlyt
+    rlyt <- rlayout(lyt)
+    addtl <- FALSE
+    split_label <- obj_label(spl)
+    if(is(spl, "Split") && ## exclude existing tables that are being tacked in
+       identical(label_position(spl), "topleft") &&
+       length(split_label) == 1  && nzchar(split_label)) {
+        addtl <- TRUE
+        label_position(spl) <- "hidden"
+    }
+
+    rlyt <- split_rows(rlyt, spl, pos)
+    rlayout(lyt) <- rlyt
+    if(addtl) {
+        lyt <- append_topleft(lyt, indent_string(split_label, .tl_indent(lyt)))
+    }
     lyt
 })
 #' @rdname int_methods
@@ -309,6 +325,29 @@ split_cols_by = function(lyt,
 }
 
 
+setGeneric(".tl_indent_inner", function(lyt) standardGeneric(".tl_indent_inner"))
+setMethod(".tl_indent_inner", "PreDataTableLayouts",
+          function(lyt) .tl_indent_inner(rlayout(lyt)))
+setMethod(".tl_indent_inner", "PreDataRowLayout",
+          function(lyt) {
+    if(length(lyt) == 0 || length(lyt[[1]]) == 0)
+        0L
+    else
+        .tl_indent_inner(lyt[[length(lyt)]])
+})
+
+setMethod(".tl_indent_inner", "SplitVector",
+          function(lyt) length(lyt)  - 1L)
+
+
+.tl_indent <- function(lyt, nested = TRUE) {
+    if(!nested)
+        0L
+    else
+        .tl_indent_inner(lyt)
+}
+
+
 #' Add Rows according to levels of a variable
 #'
 #'
@@ -381,21 +420,29 @@ split_rows_by = function(lyt,
                          format = NULL,
                          nested = TRUE,
                          child_labels = c("default", "visible", "hidden"),
-                         visible_label = FALSE,
+                         label_pos = "hidden",
                          indent_mod = 0L) {
+    label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     spl = VarLevelSplit(var = var,
                         split_label = split_label,
-                        visible_label = visible_label,
+                        label_pos = label_pos,
                         labels_var = labels_var,
                         split_fun = split_fun,
                         split_format = format,
                         child_labels = child_labels,
                         indent_mod = indent_mod)
-    pos = next_rpos(lyt, nested)
-    split_rows(lyt, spl, pos)
-}
+    addtl <- identical(label_pos, "topleft")
+    ## if(addtl)
+    ##     label_pos <- "hidden"
 
+    pos <- next_rpos(lyt, nested)
+    ret <- split_rows(lyt, spl, pos)
+    ## if(addtl) {
+    ##     ret <- append_topleft(ret, indent_string(split_label, .tl_indent(ret)))
+    ## }
+    ret
+}
 
 
 #' Associate Multiple Variables with Columns
@@ -550,10 +597,11 @@ split_rows_by_cuts = function(lyt, var, cuts,
                               split_label = var,
                               nested = TRUE,
                               cumulative = FALSE,
-                              visible_label = FALSE) {
+                              label_pos = "hidden") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     spl = VarStaticCutSplit(var, split_label, cuts = cuts,
                             cutlabels = cutlabels,
-                            visible_label = visible_label)
+                            label_pos = label_pos)
     if(cumulative)
         spl = as(spl, "CumulativeCutSplit")
     pos = next_rpos(lyt, nested)
@@ -599,7 +647,7 @@ split_cols_by_cutfun = function(lyt, var,
                          split_format = format,
                          extra_args = extra_args,
                          cumulative = cumulative,
-                         visible_label = FALSE)
+                         label_pos = "hidden")
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -619,7 +667,7 @@ split_cols_by_quartiles = function(lyt, var, split_label = var,
                          split_format = format,
                          extra_args = extra_args,
                          cumulative = cumulative,
-                         visible_label = FALSE)
+                         label_pos = "hidden")
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -634,7 +682,8 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                              extra_args = list(),
                              cumulative= FALSE,
                              indent_mod = 0L,
-                             visible_label = FALSE) {
+                             label_pos = "hidden") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
                          cutlabelfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
@@ -645,7 +694,7 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                          extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod,
-                         visible_label = visible_label)
+                         label_pos = label_pos)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 }
@@ -673,7 +722,8 @@ split_rows_by_cutfun = function(lyt, var,
                                 extra_args = list(),
                                 cumulative = FALSE,
                                 indent_mod = 0L,
-                                visible_label = FALSE) {
+                                label_pos = "hidden") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     spl = VarDynCutSplit(var, split_label, cutfun = cutfun,
                          cutlabelfun = cutlabelfun,
@@ -682,7 +732,7 @@ split_rows_by_cutfun = function(lyt, var,
                          extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod,
-                         visible_label = visible_label)
+                         label_pos = label_pos)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 }
@@ -781,7 +831,6 @@ analyze = function(lyt,
                    extra_args = list(),
                    show_labels = c("default", "visible", "hidden"),
                    indent_mod = 0L) {
-
     show_labels = match.arg(show_labels)
     subafun = substitute(afun)
     if(is.name(subafun) &&
@@ -1004,7 +1053,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                           split_format = format,
                           defrowlab = defrowlab,
                           indent_mod = indent_mod,
-                          visible_label = .labelkids_helper(show_labels))
+                          label_pos = .labelkids_helper(show_labels))
     if(nested &&
        (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
         is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
@@ -1160,14 +1209,14 @@ setMethod(".add_row_summary", "Split",
                    cvar = "",
                    extra_args = list()) {
     child_labels = match.arg(child_labels)
-    lbl_kids = .labelkids_helper(child_labels)
+ #   lbl_kids = .labelkids_helper(child_labels)
     content_fun(lyt) = cfun
     content_indent_mod(lyt) = indent_mod
     content_var(lyt) = cvar
     ##obj_format(lyt) = cformat
     content_format(lyt) <- cformat
-    if(!is.na(lbl_kids) && !identical(lbl_kids, label_kids(lyt)))
-        label_kids(lyt) = lbl_kids
+    if(!identical(child_labels, "default") && !identical(child_labels, label_kids(lyt)))
+        label_kids(lyt) = child_labels
     content_extra_args(lyt) = extra_args
     lyt
 })

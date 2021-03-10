@@ -477,7 +477,7 @@ setMethod("obj_label<-", "VTableTree",
     lr = tt_labelrow(obj)
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
-        labelrow_visible(lr) = TRUE
+        labelrow_visible(lr) = "visible" ## TRUE
 
     tt_labelrow(obj) = lr
     obj
@@ -512,7 +512,7 @@ setMethod("labelrow_visible", "LabelRow",
           function(obj) obj@visible)
 #' @rdname int_methods
 setMethod("labelrow_visible", "VAnalyzeSplit",
-          function(obj) obj@var_label_visible)
+          function(obj) .labelkids_helper(obj@var_label_position))
 
 #' @rdname int_methods
 setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_visible<-"))
@@ -535,7 +535,7 @@ setMethod("labelrow_visible<-", "LabelRow",
 #' @rdname int_methods
 setMethod("labelrow_visible<-", "VAnalyzeSplit",
           function(obj, value) {
-    obj@var_label_visible = value
+    obj@var_label_position = value
     obj
 })
 
@@ -563,17 +563,45 @@ setMethod("label_kids<-", c("Split", "logical"), function(spl, value) {
 #' @rdname int_methods
 setGeneric("vis_label", function(spl) standardGeneric("vis_label"))
 #' @rdname int_methods
-setMethod("vis_label", "Split", function(spl) spl@split_label_visible)
+setMethod("vis_label", "Split", function(spl) {
+    .labelkids_helper(label_position(spl))
+})
 
 #' @rdname int_methods
 setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
 #' @rdname int_methods
 setMethod("vis_label<-", "Split", function(spl, value) {
+    stop("defunct")
     if(is.na(value))
         stop("split label visibility must be TRUE or FALSE, got NA")
-    spl@split_label_visible <- value
+#    spl@split_label_visible <- value
     spl
 })
+
+
+
+#' @rdname int_methods
+setGeneric("label_position", function(spl) standardGeneric("label_position"))
+#' @rdname int_methods
+setMethod("label_position", "Split", function(spl) spl@split_label_position)
+
+#' @rdname int_methods
+setMethod("label_position", "VAnalyzeSplit", function(spl) spl@var_label_position) ##split_label_position)
+
+
+#' @rdname int_methods
+setGeneric("label_position<-", function(spl, value) standardGeneric("label_position<-"))
+#' @rdname int_methods
+setMethod("label_position<-", "Split", function(spl, value) {
+    value <- match.arg(value, valid_lbl_pos)
+    spl@split_label_position <- value
+    spl
+})
+
+
+
+
+
 
 
 ### Function acessors (summary, tabulation and split)

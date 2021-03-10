@@ -10,11 +10,13 @@
 ## multicolumn: each child analyzes a different column
 ## arbitrary: children are not related to eachother in any systematic fashion.
 
+valid_lbl_pos <- c("default", "visible", "hidden", "topleft")
 .labelkids_helper = function(charval) {
     ret = switch(charval,
                  "default" = NA,
                  "visible" = TRUE,
                  "hidden" = FALSE,
+                 "topleft" = FALSE,
                  stop("unrecognized charval in .labelkids_helper. this shouldn't ever happen"))
 }
 
@@ -93,7 +95,7 @@ setClass("Split", contains = "VIRTUAL",
              name = "character",
              split_label = "character",
              split_format = "FormatSpec",
-             split_label_visible = "logical",
+             split_label_position = "character",
              ## NB this is the function which is applied to
              ## get the content rows for the CHILDREN of this
              ## split!!!
@@ -134,7 +136,7 @@ VarLevelSplit = function(var,
                          child_labels = c("default", "visible", "hidden"),
                          extra_args = list(),
                          indent_mod = 0L,
-                         visible_label = FALSE,
+                         label_pos = c("topleft", "hidden", "visible"),
                          cindent_mod = 0L,
                          cvar = "",
                          cextra_args = list()
@@ -156,7 +158,7 @@ VarLevelSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label,
+        split_label_position = label_pos,
         content_extra_args = cextra_args
         )
 }
@@ -173,7 +175,7 @@ NULLSplit = function(...) {
         indent_modifier = 0L,
         content_indent_modifier = 0L,
         content_var = "",
-        visible_label = FALSE)
+        label_pos = FALSE)
 }
 
 setClass("AllSplit", contains = "Split")
@@ -202,7 +204,7 @@ AllSplit = function(split_label = "",
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = FALSE,
+        split_label_position = "hidden",
         content_extra_args = cextra_args)
 }
 
@@ -218,7 +220,7 @@ RootSplit = function(split_label = "", cfun = NULL, cformat = NULL, cvar = "", s
         indent_modifier = 0L,
         content_indent_modifier = 0L,
         content_var = cvar,
-        split_label_visible = FALSE,
+        split_label_position = "hidden",
         content_extra_args = cextra_args)
 }
 
@@ -240,7 +242,8 @@ ManualSplit = function(levels, label, name = "manual",
                        cindent_mod = 0L,
                        cvar = "",
                        cextra_args = list(),
-                       visible_label = FALSE) {
+                       label_pos = "visible") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     new("ManualSplit",
         split_label = label,
         levels = levels,
@@ -250,7 +253,7 @@ ManualSplit = function(levels, label, name = "manual",
         indent_modifier = 0L,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label)
+        split_label_position = label_pos)
 
 }
 
@@ -306,7 +309,9 @@ MultiVarSplit = function(vars,
                          cindent_mod = 0L,
                          cvar = "",
                          cextra_args = list(),
-                         visible_label = FALSE) {
+                         label_pos = "visible") {
+    ## no topleft allowed
+    label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels = match.arg(child_labels)
     if(length(vars) == 1 && grepl(":", vars))
         vars = strsplit(vars, ":")[[1]]
@@ -327,7 +332,7 @@ MultiVarSplit = function(vars,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label,
+        split_label_position = label_pos,
         content_extra_args = cextra_args)
 }
 
@@ -357,7 +362,8 @@ VarStaticCutSplit = function(var,
                              cindent_mod = 0L,
                              cvar = "",
                              cextra_args = list(),
-                             visible_label = FALSE) {
+                             label_pos = "visible") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
@@ -383,7 +389,7 @@ VarStaticCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label,
+        split_label_position = label_pos,
         content_extra_args = cextra_args)
 }
 
@@ -410,7 +416,8 @@ CumulativeCutSplit = function(var,
                              cindent_mod = 0L,
                              cvar = "",
                              cextra_args = list(),
-                             visible_label = FALSE) {
+                             label_pos = "visible") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
        is.character(cuts[[2]]) &&
@@ -436,7 +443,7 @@ CumulativeCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label,
+        split_label_position = label_pos,
         content_extra_args = cextra_args)
 }
 
@@ -470,7 +477,8 @@ VarDynCutSplit = function(var,
                           cindent_mod = 0L,
                           cvar = "",
                           cextra_args = list(),
-                          visible_label = FALSE) {
+                          label_pos = "visible") {
+    label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
         split_label = split_label,
@@ -486,7 +494,7 @@ VarDynCutSplit = function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_visible = visible_label,
+        split_label_position = label_pos,
         content_extra_args = cextra_args)
 }
 
@@ -496,7 +504,7 @@ VarDynCutSplit = function(var,
 setClass("VAnalyzeSplit", contains = "Split",
          representation(default_rowlabel = "character",
                         include_NAs = "logical",
-                        var_label_visible = "logical"))
+                        var_label_position = "character"))
 
 setClass("AnalyzeVarSplit", contains = "VAnalyzeSplit",
          representation(analysis_fun = "function"))
@@ -524,9 +532,10 @@ AnalyzeVarSplit = function(var,
                            split_name = var,
                            extra_args = list(),
                            indent_mod = 0L,
-                           visible_label = NA,
+                           label_pos = "default",
                            cvar = ""
                            ) {
+    label_pos <- match.arg(label_pos, c("default", label_pos_values))
     if(!any(nzchar(defrowlab))) {
         defrowlab = as.character(substitute(afun))
         if(length(defrowlab) > 1 || startsWith(defrowlab, "function("))
@@ -546,7 +555,7 @@ AnalyzeVarSplit = function(var,
         extra_args = extra_args,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
-        var_label_visible = visible_label,
+        var_label_position = label_pos,
         content_var = cvar) ## no content_extra_args
 }
 
@@ -566,8 +575,9 @@ AnalyzeColVarSplit = function(afun,
                               split_name = "",
                               extra_args = list(),
                               indent_mod = 0L,
-                              visible_label = NA,
+                              label_pos = "default",
                               cvar = "") {
+    label_pos <- match.arg(label_pos, c("default", label_pos_values))
     new("AnalyzeColVarSplit",
         payload = NA_character_,
         split_label = "",
@@ -582,7 +592,7 @@ AnalyzeColVarSplit = function(afun,
         extra_args = extra_args,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
-        var_label_visible = visible_label,
+        var_label_position = label_pos,
         content_var = cvar) ## no content_extra_args
 }
 
@@ -633,7 +643,7 @@ AnalyzeMultiVars = function(var,
                             split_name = NULL,
                             extra_args = list(),
                             indent_mod = 0L,
-                            child_labels = c("default", "visible", "hidden"),
+                            child_labels = c("default", "topleft", "visible", "hidden"),
                             child_names = var,
                             cvar = ""
                             ) {
@@ -641,7 +651,9 @@ AnalyzeMultiVars = function(var,
     ## in this function but that was too greedy for repeated
     ## analyze calls, so that now occurs in the tabulation machinery
     ## when the table is actually being built.
-    show_kidlabs = .labelkids_helper(match.arg(child_labels))
+    ##  show_kidlabs = .labelkids_helper(match.arg(child_labels))
+    child_labels <- match.arg(child_labels)
+    show_kidlabs <- child_labels
     if(is.null(.payload)) {
         nv = length(var)
         defrowlab = .repoutlst(defrowlab, nv)
@@ -663,7 +675,7 @@ AnalyzeMultiVars = function(var,
                      inclNAs = inclNAs,
                      MoreArgs = list(extra_args = extra_args,
                                      indent_mod = indent_mod,
-                                     visible_label = show_kidlabs,
+                                     label_pos = show_kidlabs,
                                      split_format = split_format
                                      ),##rvis),
                      SIMPLIFY = FALSE)
@@ -676,12 +688,12 @@ AnalyzeMultiVars = function(var,
         ## and the child was at NA before
         pld = lapply(pld,
                      function(x) {
-            rvis = labelrow_visible(x)
-            if(!is.na(show_kidlabs)) {
-                if(is.na(rvis))
+            rvis = label_position(x) ##labelrow_visible(x)
+            if(!identical(show_kidlabs, "default")) { ##is.na(show_kidlabs)) {
+                if(identical(rvis, "default")) ##ois.na(rvis))
                     rvis = show_kidlabs
             }
-            labelrow_visible(x) = rvis
+            label_position(x) = rvis
             x
         })
     }
@@ -700,7 +712,8 @@ AnalyzeMultiVars = function(var,
                    ## I beleive this is superfluous now
                    ## the payloads carry aroudn the real instructions
                    ## XXX
-                   label_children = show_kidlabs,
+                   label_children = .labelkids_helper(show_kidlabs),
+                   split_label_position = "hidden", ## XXX is this right?
                    extra_args = extra_args,
                    ## modifier applied on splits in payload
                    indent_modifier = 0L,

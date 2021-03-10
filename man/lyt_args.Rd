@@ -37,7 +37,7 @@ lyt_args(
   incl_all,
   indent_mod,
   show_labels,
-  visible_label,
+  label_pos,
   var_labels,
   cvar,
   table_names,
@@ -109,7 +109,7 @@ lyt_args(
 
 \item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 

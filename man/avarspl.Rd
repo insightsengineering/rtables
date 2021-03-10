@@ -18,7 +18,7 @@ AnalyzeVarSplit(
   split_name = var,
   extra_args = list(),
   indent_mod = 0L,
-  visible_label = NA,
+  label_pos = "default",
   cvar = ""
 )
 
@@ -32,7 +32,7 @@ AnalyzeColVarSplit(
   split_name = "",
   extra_args = list(),
   indent_mod = 0L,
-  visible_label = NA,
+  label_pos = "default",
   cvar = ""
 )
 
@@ -49,7 +49,7 @@ AnalyzeMultiVars(
   split_name = NULL,
   extra_args = list(),
   indent_mod = 0L,
-  child_labels = c("default", "visible", "hidden"),
+  child_labels = c("default", "topleft", "visible", "hidden"),
   child_names = var,
   cvar = ""
 )
@@ -77,7 +77,7 @@ AnalyzeMultiVars(
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.}
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
