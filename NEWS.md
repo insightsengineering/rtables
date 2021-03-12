@@ -1,3 +1,7 @@
+## rtables 0.3.6.0002
+ * Added `vars_in_layout` to list (explicitly named only) variables used in a layout
+ * Fix column label ordering bug when value label variable is a factor (#173)
+
 ## rtables 0.3.6
 
 Documentation revisions as requested by CRAN. No change to package code.
