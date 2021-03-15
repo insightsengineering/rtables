@@ -278,3 +278,28 @@ test_that("inclNAs with empty factor levels behaves", {
         build_table(dfdm)
     expect_identical(tbl,tbl2)
 })
+
+
+## #173
+test_that("column labeling works correctly when value label var is a factor", {
+
+    ex_adsl$ARMLAB <- factor(ex_adsl$ARM,
+                             labels = c("Drug X", "Placebo", "Combination"))
+    lyt_orig <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze(c("AGE", "BMRKR2"))
+    tbl_orig <- build_table(lyt_orig, ex_adsl)
+
+    lyt_lab <- basic_table() %>%
+        split_cols_by("ARM", labels_var = "ARMLAB") %>%
+        analyze(c("AGE", "BMRKR2"))
+    tbl_lab <- build_table(lyt_lab, ex_adsl)
+
+    tbl_orig
+    tbl_lab # wrong labeling here
+    expect_identical(names(tbl_lab),
+                     names(tbl_orig))
+    str <- matrix_form(tbl_lab)$strings
+    expect_identical(as.vector(str[1,]),
+                     c("", "Drug X", "Placebo", "Combination"))
+})
