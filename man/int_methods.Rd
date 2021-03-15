@@ -128,6 +128,11 @@
 \alias{vis_label,Split-method}
 \alias{vis_label<-}
 \alias{vis_label<-,Split-method}
+\alias{label_position}
+\alias{label_position,Split-method}
+\alias{label_position,VAnalyzeSplit-method}
+\alias{label_position<-}
+\alias{label_position<-,Split-method}
 \alias{content_fun}
 \alias{content_fun,Split-method}
 \alias{content_fun<-}
@@ -602,6 +607,16 @@ vis_label(spl)
 vis_label(spl) <- value
 
 \S4method{vis_label}{Split}(spl) <- value
+
+label_position(spl)
+
+\S4method{label_position}{Split}(spl)
+
+\S4method{label_position}{VAnalyzeSplit}(spl)
+
+label_position(spl) <- value
+
+\S4method{label_position}{Split}(spl) <- value
 
 content_fun(obj)
 

@@ -579,6 +579,7 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
                 ## the value of the label but
                 ## that shold really probably change)
                 labelrow_visible(x) <- FALSE
+               ## labelrow_visible(x) <- "hidden"
             }
         }
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {

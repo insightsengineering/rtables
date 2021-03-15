@@ -25,7 +25,7 @@ VarStaticCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  visible_label = FALSE
+  label_pos = "visible"
 )
 
 CumulativeCutSplit(
@@ -43,7 +43,7 @@ CumulativeCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  visible_label = FALSE
+  label_pos = "visible"
 )
 
 VarDynCutSplit(
@@ -62,7 +62,7 @@ VarDynCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  visible_label = FALSE
+  label_pos = "visible"
 )
 }
 \arguments{
@@ -94,7 +94,7 @@ VarDynCutSplit(
 
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.}
 
 \item{cutfun}{function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation}
 

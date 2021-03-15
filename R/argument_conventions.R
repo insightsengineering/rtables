@@ -27,13 +27,15 @@ NULL
 #' @param verbose logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.
 #' @param path character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.
 #' @param label character(1). A label (not to be confused with the name) for the object/structure.
-#' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
+#' @param label_pos character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.
+# #' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
-                     value, object, path, label, visible_label, cvar, topleft, ...) NULL
+                     value, object, path, label, label_pos, # visible_label,
+                     cvar, topleft, ...) NULL
 
 
 
@@ -83,7 +85,8 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
-                     incl_all, indent_mod, show_labels, visible_label, var_labels, cvar,
+                     incl_all, indent_mod, show_labels, label_pos, #visible_label,
+                     var_labels, cvar,
                      table_names, topleft) NULL
 
 
@@ -105,7 +108,8 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
 #' @param cextra_args list. Extra arguments to be passed to the content function when tabulating row group summaries.
 #' @param child_names character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).
 #' @rdname constr_args
-constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan, visible_label, cindent_mod, cvar, label, cextra_args, child_names) NULL
+constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan, label_pos, #visible_label,
+                        cindent_mod, cvar, label, cextra_args, child_names) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args

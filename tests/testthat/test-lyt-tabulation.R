@@ -19,7 +19,7 @@ test_that("summarize_row_groups works with provided funcs", {
 
 ## this
 test_that("complex layout works", {
-    lyt = basic_table() %>% split_cols_by("ARM") %>%
+    lyt <- basic_table() %>% split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         ## No row splits have been introduced, so this adds
@@ -28,7 +28,7 @@ test_that("complex layout works", {
         ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
         add_colcounts() %>%
         ## add a new subtable that splits on RACE, value labels from ethn_label
-        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "hidden") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
         ##
         ## Add nested row split within Race categories for FACTOR2
@@ -36,7 +36,8 @@ test_that("complex layout works", {
         ## value labels from fac2_label
         split_rows_by("FACTOR2", "Factor2",
                             split_fun = remove_split_levels("C"),
-                            labels_var = "fac2_label") %>%
+                      labels_var = "fac2_label",
+                      label_pos = "hidden") %>%
         ## Add count summary within FACTOR2 categories
         summarize_row_groups("FACTOR2") %>%
         ## Add analysis/data rows by analyzing AGE variable
@@ -57,14 +58,14 @@ test_that("complex layout works", {
         analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
 
 
-    expnames = c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
+    expnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
                  "Age Analysis redux", "range", "Level B", "Age Analysis",
                  "mean", "median", "Age Analysis redux", "range",
                  "African American (n)", "Level A", "Age Analysis", "mean", "median",
                  "Age Analysis redux", "range", "Level B", "Age Analysis",
                  "mean", "median", "Age Analysis redux", "range",
                  "level1", "level2")
-    tab = build_table(lyt, rawdat)
+    tab <- build_table(lyt, rawdat)
     tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
     expect_identical(dim(tab), c(28L, 4L))
@@ -75,11 +76,14 @@ test_that("complex layout works", {
     tab2 <- build_table(lyt2, rawdat)
     expect_identical(top_left(tab2), tlvals)
 
-    ## this is too many, won't fit
-    lyt3 <- lyt2 %>%
-        append_topleft(tlvals)
-    ## ensure error at build time (NOT print time) for top-left material overflow.
-    expect_error(build_table(lyt3, rawdat), "More lines in top-left [^[:space:]]* than in column header")
+    ## TODO remove this entirely
+
+    ## This constaint has been experimentally relaxed
+    ## ## this is too many, won't fit
+    ## lyt3 <- lyt2 %>%
+    ##     append_topleft(tlvals)
+    ## ## ensure error at build time (NOT print time) for top-left material overflow.
+    ## expect_error(build_table(lyt3, rawdat), "More lines in top-left [^[:space:]]* than in column header")
 })
 
 
@@ -215,7 +219,7 @@ test_that("labelkids parameter works", {
         split_rows_by("FACTOR2", "Factor2",
                       split_fun = remove_split_levels("C"),
                       labels_var = "fac2_label",
-                      visible_label = TRUE) %>%
+                      label_pos = "visible") %>%
         analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                median = median(x)),
                 format = "xx.xx",

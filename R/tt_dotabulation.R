@@ -1187,9 +1187,10 @@ setMethod("fix_analyze_vis", "SplitVector",
          is(lastspl, "AnalyzeMultivar")))
         return(lyt)
 
-    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl)))
-        labelrow_visible(lastspl) = FALSE
-    else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
+    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl))) {
+        ##  labelrow_visible(lastspl) = FALSE
+        labelrow_visible(lastspl) = "hidden"
+    } else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
         pld = spl_payload(lastspl)
         newpld = lapply(pld, function(sp, havesibs) {
             if(is.na(labelrow_visible(sp)))
