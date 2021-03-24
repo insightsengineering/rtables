@@ -41,6 +41,11 @@ setMethod("nlines", "LabelRow",
         0L
 })
 
+setMethod("nlines", "RefFootnote",
+          function(x, colwidths) {
+    1L
+})
+
 
 setMethod("nlines", "VTableTree",
           function(x, colwidths) {
@@ -55,6 +60,16 @@ setMethod("nlines", "InstantiatedColumnInfo",
 
 })
 
+## XXX beware. I think it is dangerous
+setMethod("nlines", "list",
+          function(x, colwidths) {
+    if(length(x) == 0)
+        0L
+    else
+        sum(unlist(vapply(x, nlines, NA_integer_, colwidths = colwidths)))
+})
+
+setMethod("nlines", "NULL", function(x, colwidths) 0L)
 pagdfrow = function(row,
                     nm = obj_name(row),
                     lab = obj_label(row),
@@ -67,7 +82,10 @@ pagdfrow = function(row,
                     repext = 0L,
                     repind = integer(),
                     indent = 0L,
-                    rclass = class(row)
+                    rclass = class(row),
+                    nrowrefs = 0L,
+                    ncellrefs = 0L,
+                    nreflines = 0L
                     ) {
 
     data.frame(label = lab,
@@ -81,6 +99,9 @@ pagdfrow = function(row,
                reprint_inds = I(list(unlist(repind))),
                node_class = rclass,
                indent = max(0L, indent),
+               nrowrefs = nrowrefs,
+               ncellrefs = ncellrefs,
+               nreflines = nreflines,
 
                stringsAsFactors = FALSE)
 }
@@ -157,7 +178,10 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                   repr_ext = 0L,
                                   repr_inds = integer(),
                                   sibpos = NA_integer_,
-                                  nsibs = NA_integer_) standardGeneric("make_row_df"))
+                                  nsibs = NA_integer_,
+                                  nrowrefs = 0L,
+                                  ncellrefs = 0L,
+                                  nreflines = 0L) standardGeneric("make_row_df"))
 
 #' @exportMethod make_row_df
 #' @rdname make_row_df
@@ -192,7 +216,10 @@ setMethod("make_row_df", "VTableTree",
                                extent = 0,
                                indent = indent,
                                rclass = class(tt), sibpos = sibpos,
-                               nsibs = nsibs)))
+                               nsibs = nsibs,
+                               nrowrefs = 0L,
+                               ncellrefs = 0L,
+                               nreflines = 0L)))
     }
     if(labelrow_visible(tt)) {
         lr = tt_labelrow(tt)
@@ -278,6 +305,9 @@ setMethod("make_row_df", "TableRow",
                    nsibs = NA_integer_) {
     indent <- indent + indent_mod(tt)
     rownum <- rownum + 1
+    rrefs <- row_footnotes(tt)
+    crefs <- cell_footnotes(tt)
+    reflines <- sum(sapply(c(rrefs, crefs), nlines))
     ret <- pagdfrow(tt, rnum = rownum,
                   colwidths = colwidths,
                   sibpos = sibpos,
@@ -285,7 +315,12 @@ setMethod("make_row_df", "TableRow",
                   pth = c(path, obj_name(tt)),
                   repext = repr_ext,
                   repind = repr_inds,
-                  indent = indent)
+                  indent = indent,
+                  ## these two are unlist calls cause they come in lists even with no footnotes
+                  nrowrefs = length(rrefs) ,
+                  ncellrefs = length(unlist(crefs)),
+                  nreflines = reflines
+                  )
     ret
 })
 
@@ -310,7 +345,10 @@ setMethod("make_row_df", "LabelRow",
                     pth = path,
                     repext = repr_ext,
                     repind = repr_inds,
-                    indent = indent)
+                    indent = indent,
+                    nrowrefs = length(row_footnotes(tt)),
+                    ncellrefs = 0L,
+                    nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_)))
     if(!labelrow_visible(tt))
         ret <- ret[0,]
     ret
@@ -625,10 +663,19 @@ pag_tt_indices = function(tt, lpp = 15,
                            colwidths = NULL,
                            verbose = FALSE) {
 
+    dheight <- divider_height(tt)
 
-    hlines = nlines(col_info(tt))
+    cinfo_lines <- nlines(col_info(tt))
+    if(any(nzchar(all_titles(tt)))) {
+        tlines <- length(all_titles(tt)) + dheight + 1L
+    } else {
+        tlines <- 0
+    }
+    flines <- length(all_footers(tt))
+    if(flines > 0)
+        flines <- flines + dheight + 1L
     ## row lines per page
-    rlpp = lpp - hlines
+    rlpp = lpp - cinfo_lines - tlines - flines
     pagdf = make_row_df(tt, colwidths)
 
 

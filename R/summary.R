@@ -137,8 +137,13 @@ summarize_row_df <- function(name, label, indent, depth, rowtype, indent_mod, le
             stringsAsFactors = FALSE)
 }
 
-summarize_row_df_unclassed <- function(name, label, indent, depth, rowtype, indent_mod, level) {
-  list(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level)##,
+summarize_row_df_unclassed <- function(name, label, indent, depth, rowtype, indent_mod, level,## footnotes = list()
+                                       num_row_refs =0L,
+                                       num_cell_refs = 0L) {
+    list(name = name, label = label, indent = indent, depth = level, rowtype = rowtype, indent_mod = indent_mod, level = level,
+         num_row_refs = num_row_refs,
+         num_cell_refs = num_cell_refs)
+         ##  footnotes = footnotes)##,
             ## stringsAsFactors = FALSE)
 }
 
@@ -150,7 +155,7 @@ fast_rsummry_bind <- function(lst) {
     if(length(lst) == 0)
         return(summarize_row_df_empty)
     else if(length(lst) == 1L)
-        return(lst[[1]])
+        return(as.data.frame(lst[[1]]))
     else {
         res = lapply(seq_along(srow_df_names),
                  function(i) do.call(c, lapply(lst, function(x) if(length(x) > 0) x[[i]] else x)))
@@ -257,6 +262,11 @@ setMethod("summarize_rows_inner", "ElementaryTable",
             ## df
 
           })
+.num_cell_refs <- function(tr) {
+    sum(vapply(cell_footnotes(tr),
+               function(cfn) length(cfn) > 0,
+               FALSE))
+}
 
 #' @rdname int_methods
 setMethod("summarize_rows_inner", "TableRow",
@@ -271,7 +281,9 @@ setMethod("summarize_rows_inner", "TableRow",
               depth = depth,
               rowtype = "TableRow",
               indent_mod = indent_mod(obj),
-              level = tt_level(obj)
+              level = tt_level(obj),
+              num_row_refs = length(row_footnotes(obj)),
+              num_cell_refs = .num_cell_refs(obj)
             )
 
           })
@@ -289,7 +301,9 @@ setMethod("summarize_rows_inner", "LabelRow",
                 depth = depth,
                 rowtype = "LabelRow",
                 indent_mod = indent_mod(obj),
-                level = tt_level(obj)
+                level = tt_level(obj),
+                num_row_refs = length(row_footnotes(obj)),
+                num_cell_refs = 0
               )
             } else {
               summarize_row_df_empty

@@ -1118,7 +1118,8 @@ setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
          representation(leaf_value = "ANY",
                         var_analyzed = "character",
                ##         var_label = "character",
-                        label = "character"))
+                        label = "character",
+                        row_footnotes = "list"))
 
 
 
@@ -1199,7 +1200,8 @@ setClass("LabelRow", contains = "TableRow",
                     var = NA_character_,
                     format = NULL,
                     klass,
-                    indent_mod = 0L) {
+                    indent_mod = 0L,
+                    footnotes = list()) {
     if ((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
        !missing(label))
         name <- label
@@ -1222,7 +1224,8 @@ setClass("LabelRow", contains = "TableRow",
              col_info = cinfo,
              var_analyzed = var,
              format = NULL,
-             indent_modifier = indent_mod
+             indent_modifier = indent_mod,
+             row_footnotes = footnotes
              )
     rw <- set_format_recursive(rw, format, FALSE)
     rw
@@ -1236,7 +1239,14 @@ DataRow <- function(...) .tablerow(..., klass = "DataRow")
 #' @export
 ContentRow <- function(...) .tablerow(..., klass = "ContentRow")
 
-setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree"),
+setClass("VTitleFooter", contains = "VIRTUAL",
+         representation(main_title = "character",
+                        subtitles = "character",
+                        main_footer = "character",
+                        provenance_footer = "character"))
+
+
+setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitleFooter"),
          representation(children = "list",
                         rowspans = "data.frame",
                         labelrow = "LabelRow"
@@ -1316,7 +1326,11 @@ ElementaryTable <- function(kids = list(),
                            iscontent = NA,
                            var = NA_character_,
                            format = NULL,
-                           indent_mod = 0L) {
+                           indent_mod = 0L,
+                           title = "",
+                           subtitles = character(),
+                           main_footer = character(),
+                           prov_footer = character()) {
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1336,7 +1350,12 @@ ElementaryTable <- function(kids = list(),
               col_info = cinfo,
               var_analyzed = var,
               format = NULL,
-              indent_modifier = as.integer(indent_mod))
+              indent_modifier = as.integer(indent_mod),
+              main_title = title,
+              subtitles = subtitles,
+              main_footer = main_footer,
+              provenance_footer = prov_footer
+              )
     tab <- set_format_recursive(tab, format, FALSE)
     tab
 }
@@ -1368,7 +1387,11 @@ TableTree <- function(kids = list(),
                      var = NA_character_,
                      cinfo = NULL,
                      format = NULL,
-                     indent_mod = 0L) {
+                     indent_mod = 0L,
+                     title = "",
+                     subtitles = character(),
+                     main_footer = character(),
+                     prov_footer = character()) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)
@@ -1394,7 +1417,11 @@ TableTree <- function(kids = list(),
                         cinfo = cinfo,
                         var = var,
                         format = format,
-                        indent_mod = indent_mod)
+                        indent_mod = indent_mod,
+                        title = title,
+                        subtitles = subtitles,
+                        main_footer = main_footer,
+                        prov_footer = prov_footer)
     } else {
         tab <- new("TableTree", content = cont,
                   children = kids,
@@ -1404,7 +1431,11 @@ TableTree <- function(kids = list(),
                   rowspans = rspans,
                   col_info = cinfo,
                   format = NULL,
-                  indent_modifier = as.integer(indent_mod))
+                  indent_modifier = as.integer(indent_mod),
+                  main_title = title,
+                  subtitles = subtitles,
+                  main_footer = main_footer,
+                  provenance_footer = prov_footer)
         tab <- set_format_recursive(tab, format, FALSE)
         tab
     }
@@ -1499,18 +1530,28 @@ PreDataRowLayout <- function(x = SplitVector(),
 }
 
 
-setClass("PreDataTableLayouts",
+
+
+setClass("PreDataTableLayouts", contains= "VTitleFooter",
          representation(row_layout = "PreDataRowLayout",
                         col_layout = "PreDataColLayout",
                         top_left = "character"))
 
 PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                clayout = PreDataColLayout(),
-                               topleft = character()) {
+                               topleft = character(),
+                               title = "",
+                               subtitles = character(),
+                               main_footer = character(),
+                               prov_footer = character()) {
     new("PreDataTableLayouts",
         row_layout = rlayout,
         col_layout = clayout,
-        top_left = topleft)
+        top_left = topleft,
+        main_title = title,
+        subtitles = subtitles,
+        main_footer = main_footer,
+        provenance_footer = prov_footer)
 }
 
 
@@ -1531,6 +1572,18 @@ setOldClass("CellValue")
 setMethod("length", "CellValue",
           function(x) 1L)
 
+setClass("RefFootnote", representation(value = "character",
+                                       index = "integer"))
+
+
+RefFootnote = function(note, index = NA_integer_) {
+    if(is(note, "RefFootnote"))
+        return(note)
+    else if(length(note) == 0)
+        return(NULL)
+
+    new("RefFootnote", value = note, index = index)
+}
 
 #' Cell Value constructor
 #'
@@ -1557,7 +1610,7 @@ setMethod("length", "CellValue",
 ## colspan: column span info for cell
 ## label: row label to be used for parent row
 ## indent_mod: indent modifier to be used for parent row
-CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)  {
+CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL)  {
 
     if (is.null(colspan))
         colspan <- 1L
@@ -1570,8 +1623,10 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod
     if ((is.null(label) || is.na(label)) &&
        !is.null(obj_label(val)))
         label <- obj_label(val)
+    if(!is.list(footnotes))
+        footnotes <- lapply(footnotes, RefFootnote)
     ret <- structure(list(val), format = format, colspan = colspan, label = label,
-              indent_mod = indent_mod, class = "CellValue")
+              indent_mod = indent_mod, footnotes = footnotes, class = "CellValue")
 }
 
 
@@ -1595,7 +1650,8 @@ RowsVerticalSection <- function(values,
                                names = names(values),
                                labels = NULL,
                                indent_mods = NULL,
-                               formats = NULL) {
+                               formats = NULL,
+                               footnotes = NULL) {
     stopifnot(is(values, "list"))
 ##    innernms <- value_names(values)
 
@@ -1612,7 +1668,11 @@ RowsVerticalSection <- function(values,
     ## new("RowsVerticalSection", values, row_names = names, row_labels = labels, indent_mods = indent_mods,
     ##     row_formats = formats)
     structure(values, class = "RowsVerticalSection", row_names = names, row_labels = labels, indent_mods = indent_mods,
-        row_formats = formats)
+              row_formats = formats,
+              row_footnotes = lapply(footnotes,
+                                     ## cause each row needs to accept
+                                     ## a *list* of row footnotes
+                                     function(fns) lapply(fns, RefFootnote)))
 
 }
 

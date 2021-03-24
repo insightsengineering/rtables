@@ -293,8 +293,10 @@ gen_rowvalues = function(dfpart,
             labels = rep("", ncrows)
     }
 
+    rfootnotes <- rep(list(list(), length(rv1col)))
     if(is(rv1col, "RowsVerticalSection")) {
         nms <- value_names(rv1col)
+        rfootnotes <- row_footnotes(rv1col)
     } else if(!is.null(names(rv1col))) {
         nms = names(rv1col)
     } else if(length(labels) > 0 && all(nzchar(labels))) {
@@ -331,7 +333,8 @@ gen_rowvalues = function(dfpart,
                   name = nms[i], ##labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
                   format = formatvec[[i]],
-                  indent_mod = imods[[i]] %||% 0L
+                  indent_mod = imods[[i]] %||% 0L,
+                  footnotes = rfootnotes[[i]] ## one bracket so list
                   )
 
     })
@@ -969,6 +972,10 @@ build_table = function(lyt, df,
        length(kids) == 1L &&
        is(kids[[1]], "VTableTree")) {
         tab = kids[[1]]
+        main_title(tab) <- main_title(lyt)
+        subtitles(tab) <- subtitles(lyt)
+        main_footer(tab) <- main_footer(lyt)
+        prov_footer(tab) <- prov_footer(lyt)
     } else {
         tab = TableTree(cont = ctab,
                         kids = kids,
@@ -977,7 +984,11 @@ build_table = function(lyt, df,
                         label="",
                         iscontent = FALSE,
                         cinfo = cinfo,
-                        format = obj_format(rtspl))
+                        format = obj_format(rtspl),
+                        title = main_title(lyt),
+                        subtitles = subtitles(lyt),
+                        main_footer = main_footer(lyt),
+                        prov_footer = prov_footer(lyt))
     }
 
     ## this is where the top_left check lives right now. refactor later maybe

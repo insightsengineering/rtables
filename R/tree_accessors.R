@@ -2013,3 +2013,113 @@ setMethod("vars_in_layout", "ManualSplit",
 
 
 
+
+
+## Titles and footers
+
+setGeneric("main_title", function(obj) standardGeneric("main_title"))
+setMethod("main_title", "VTitleFooter",
+          function(obj) obj@main_title)
+
+setGeneric("main_title<-", function(obj, value) standardGeneric("main_title<-"))
+setMethod("main_title<-", "VTitleFooter",
+          function(obj, value) {
+    stopifnot(length(value) == 1)
+    obj@main_title <- value
+    obj
+})
+
+
+setGeneric("subtitles", function(obj) standardGeneric("subtitles"))
+setMethod("subtitles", "VTitleFooter",
+          function(obj) obj@subtitles)
+
+
+setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-"))
+setMethod("subtitles<-", "VTitleFooter",
+          function(obj, value) {
+    obj@subtitles <- value
+    obj
+})
+
+all_titles <- function(obj) c(main_title(obj), subtitles(obj))
+
+
+setGeneric("main_footer", function(obj) standardGeneric("main_footer"))
+setMethod("main_footer", "VTitleFooter",
+          function(obj) obj@main_footer)
+
+
+setGeneric("main_footer<-", function(obj, value) standardGeneric("main_footer<-"))
+setMethod("main_footer<-", "VTitleFooter",
+          function(obj, value) {
+    obj@main_footer <- value
+    obj
+})
+
+
+
+setGeneric("prov_footer", function(obj) standardGeneric("prov_footer"))
+setMethod("prov_footer", "VTitleFooter",
+          function(obj) obj@provenance_footer)
+
+
+setGeneric("prov_footer<-", function(obj, value) standardGeneric("prov_footer<-"))
+setMethod("prov_footer<-", "VTitleFooter",
+          function(obj, value) {
+    obj@provenance_footer <- value
+    obj
+})
+
+all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
+
+
+setGeneric("row_footnotes", function(obj) standardGeneric("row_footnotes"))
+setMethod("row_footnotes", "TableRow",
+          function(obj) obj@row_footnotes)
+
+
+setMethod("row_footnotes", "RowsVerticalSection",
+          function(obj) attr(obj, "row_footnotes") %||% list())
+
+setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnotes<-"))
+setMethod("row_footnotes<-", "TableRow",
+          function(obj, value) {
+    obj@row_footnotes <- value
+    obj
+})
+
+
+
+setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
+setMethod("cell_footnotes", "CellValue",
+          function(obj) attr(obj, "footnote") %||% list())
+setMethod("cell_footnotes", "TableRow",
+          function(obj) {
+    lapply(row_cells(obj), cell_footnotes)
+})
+
+setMethod("cell_footnotes", "LabelRow",
+          function(obj) {
+    rep(list(list()), ncol(obj))
+})
+
+setMethod("cell_footnotes", "ElementaryTable",
+          function(obj) {
+    rws <- collect_leaves(obj, TRUE, TRUE)
+    cells <- lapply(rws, cell_footnotes)
+    do.call(rbind, cells)
+})
+
+
+setGeneric("cell_footnotes<-", function(obj, value) standardGeneric("cell_footnotes<-"))
+setMethod("cell_footnotes<-", "CellValue",
+          function(obj, value) {
+    if(is(value, "RefFootnote"))
+        value <- list(value)
+    else if (!is.list(value))
+        value <- lapply(value, RefFootnote)
+    attr(obj, "footnote") <- value
+    obj
+})
+

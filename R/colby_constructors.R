@@ -1653,8 +1653,15 @@ list_wrap_df = function(f) {
 #'
 #' build_table(lyt, DM)
 #'
-basic_table <- function() PreDataTableLayouts()
-
+basic_table <- function(title = "",
+                        subtitles = character(),
+                        main_footer = character(),
+                        prov_footer = character()) {
+    PreDataTableLayouts(title = title,
+                        subtitles = subtitles,
+                        main_footer = main_footer,
+                        prov_footer = prov_footer)
+}
 
 
 #' Append a description to the 'top-left' materials for the layout

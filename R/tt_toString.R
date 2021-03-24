@@ -102,7 +102,14 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   txt_head <- apply(head(content, nr_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nr_header), 1, .paste_no_na, collapse = gap_str)
 
-  paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
+  allts <- all_titles(x)
+  titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
+    ## TODO make titles affect width...
+
+  allfoots <- all_footers(x)
+
+  footer_txt <- if(any(nzchar(allfoots))) c(div, "", allfoots) else NULL
+  paste0(paste(c(titles_txt, txt_head, div, txt_body, footer_txt), collapse = "\n"), "\n")
 
 })
 
@@ -160,7 +167,8 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
 
   header_content <- .tbl_header_mat(tt) # first col are for row.names
 
-  sr <- summarize_rows(tt)
+    ##sr <- summarize_rows(tt)
+    sr <- make_row_df(tt)
 
   body_content_strings <- if (NROW(sr) == 0) {
     ""
@@ -227,6 +235,18 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     nrow_header = nrow(header_content$body)
   )
 }
+
+
+get_footnotes_matrix <- function(tt) {
+    rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
+    lsts <- lapply(rows, cell_footnotes)
+    bodymat <- matrix(unlist(lsts, recursive = FALSE, use.names = FALSE),
+                      byrow = TRUE,
+                      nrow = nrow(tt),
+                      ncol = ncol(tt))
+    cbind(lapply(rows, row_footnotes), bodymat)
+}
+
 
 ## print depths (not to be confused with tree depths)
 .cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
@@ -345,61 +365,56 @@ setGeneric("get_formatted_cells", function(obj) standardGeneric("get_formatted_c
 setMethod("get_formatted_cells", "TableTree",
           function(obj) {
 
-            lr <- get_formatted_cells(tt_labelrow(obj))
+    lr <- get_formatted_cells(tt_labelrow(obj))
 
-            ct <- get_formatted_cells(content_table(obj))
+    ct <- get_formatted_cells(content_table(obj))
 
-            els <- lapply(tree_children(obj), get_formatted_cells)
+    els <- lapply(tree_children(obj), get_formatted_cells)
 
-            # TODO fix ncol problem for rrow()
-            if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
-              ct <- lr[NULL, ]
-            }
+    ## TODO fix ncol problem for rrow()
+    if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
+        ct <- lr[NULL, ]
+    }
 
-            do.call(rbind, c(list(lr), list(ct),  els))
-          })
+    do.call(rbind, c(list(lr), list(ct),  els))
+})
 
 #' @rdname gfc
 setMethod("get_formatted_cells", "ElementaryTable",
           function(obj) {
-
-            lr <- get_formatted_cells(tt_labelrow(obj))
-
-            els <- lapply(tree_children(obj), get_formatted_cells)
-
-            do.call(rbind, c(list(lr), els))
-          })
+    lr <- get_formatted_cells(tt_labelrow(obj))
+    els <- lapply(tree_children(obj), get_formatted_cells)
+    do.call(rbind, c(list(lr), els))
+})
 
 #' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj) {
             default_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
-
             format <- lapply(row_cells(obj), function(x) {
-              format <- obj_format(x)
-              if (is.null(format))
-                default_format
-              else
-                format
+                format <- obj_format(x)
+                if (is.null(format))
+                    default_format
+                else
+                    format
             })
 
             matrix(unlist(Map(function(val, format, spn) {
-              stopifnot(is(spn, "integer"))
-              rep(paste(format_rcell(val, format), collapse = ", "), spn)
+                stopifnot(is(spn, "integer"))
+                rep(paste(format_rcell(val, format), collapse = ", "), spn)
             }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
+})
 
-          })
 #' @rdname gfc
 setMethod("get_formatted_cells", "LabelRow",
           function(obj) {
-            nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
-            if (labelrow_visible(obj)) {
-              matrix(rep("", nc), ncol = nc)
-            } else {
+    nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
+    if (labelrow_visible(obj)) {
+        matrix(rep("", nc), ncol = nc)
+    } else {
               matrix(character(0), ncol = nc)
-            }
-
-          })
+    }
+})
 
 
 #' Propose Column Widths of an `rtable` object
