@@ -1,3 +1,7 @@
+## rtables 0.3.7
+
+Synchronize release with GitHub commit sha.
+
 ## rtables 0.3.6
 
 Documentation revisions as requested by CRAN. No change to package code.
