@@ -48,3 +48,14 @@ set.seed(0)
 rawdat <- makefakedat()
 rawdat2 <- makefakedat2()
 
+## used in multiple test files
+refcompmean = function(x, .ref_group, .in_ref_col, ...) {
+    if(.in_ref_col)
+        val <- rcell(NULL)
+    else
+        val <- rcell(mean(x, ...) - mean(.ref_group,...), format = "xx.xx")
+
+    in_rows(
+        "Diff from reference - mean" = val
+    )
+}

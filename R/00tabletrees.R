@@ -627,6 +627,16 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
         unlist(lapply(pld, .uncompound))
 }
 
+strip_compound_name <- function(obj) {
+    nm <- obj_name(obj)
+    gsub("^ma_", "", nm)
+}
+
+make_ma_name <- function(spl, pld = spl_payload(spl)) {
+    paste(c("ma",
+            vapply(pld, strip_compound_name, "")),
+          collapse = "_")
+}
 
 #' @rdname avarspl
 #' @param .payload Used internally, not intended to be set by end users.
@@ -701,10 +711,10 @@ AnalyzeMultiVars <- function(var,
     if (length(pld) == 1) {
         ret <- pld[[1]]
      } else {
-         if (is.null(split_name))
-             split_name <- paste(.payload, collapse = ":")
+        if(is.null(split_name))
+            split_name <- paste(c("ma", vapply(pld, obj_name, "")), collapse = "_")
 
-         ret <- new("AnalyzeMultiVars",
+        ret <- new("AnalyzeMultiVars",
                    payload = pld,
                    split_label = "",
                    split_format = NULL,
@@ -715,6 +725,7 @@ AnalyzeMultiVars <- function(var,
                    ## XXX
                    label_children = .labelkids_helper(show_kidlabs),
                    split_label_position = "hidden", ## XXX is this right?
+                   name = split_name,
                    extra_args = extra_args,
                    ## modifier applied on splits in payload
                    indent_modifier = 0L,
@@ -1588,9 +1599,8 @@ RefFootnote = function(note, index = NA_integer_) {
 #' Cell Value constructor
 #'
 #' @inheritParams lyt_args
+#' @inheritParams rcell
 #' @param val ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted
-#' @param colspan integer. Generally ignored currently.
-#' @param label used as row name if the row name is not specified by `in_rows`
 #' @return An object representing the value within a single cell within a populated table. The underlying structure
 #' of this object is an implementation detail and sholud not be relied upon beyond calling accessors for the class.
 #' @export

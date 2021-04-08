@@ -4,18 +4,27 @@
 \alias{CellValue}
 \title{Cell Value constructor}
 \usage{
-CellValue(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL)
+CellValue(
+  val,
+  format = NULL,
+  colspan = 1L,
+  label = NULL,
+  indent_mod = NULL,
+  footnotes = NULL
+)
 }
 \arguments{
 \item{val}{ANY. value in the cell exactly as it should be passed to a formatter or returned when extracted}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{colspan}{integer. Generally ignored currently.}
+\item{colspan}{integer(1). Columnspan value.}
 
-\item{label}{used as row name if the row name is not specified by \code{in_rows}}
+\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{footnotes}{list or NULL. Referential footnote messages for the cell.}
 }
 \value{
 An object representing the value within a single cell within a populated table. The underlying structure

@@ -950,7 +950,7 @@ build_table = function(lyt, df,
         if(length(splvec) == 0)
             return(NULL)
         firstspl = splvec[[1]]
-        nm = obj_label(firstspl) ## XXX this should be name!
+        nm = obj_name(firstspl) ##obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,

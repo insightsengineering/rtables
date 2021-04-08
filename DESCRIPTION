@@ -65,4 +65,5 @@ Collate:
     'tt_test_afuns.R'
     'tt_toString.R'
     'labels.R'
+    'index_footnotes.R'
     'zzz_constants.R'

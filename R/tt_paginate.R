@@ -139,7 +139,8 @@ pos_to_path <- function(pos) {
     for(i in seq_along(spls)) {
         path <- c(path,
                   obj_name(spls[[i]]),
-                  rawvalues(vals[[i]]))
+                  ##rawvalues(vals[[i]]))
+                  value_names(vals[[i]]))
     }
     path
 }
@@ -158,6 +159,9 @@ pos_to_path <- function(pos) {
 #' @param indent integer(1). Internal detail do not set manually.
 
 #' @param colwidths numeric. Internal detail do not set manually.
+#' @param nrowrefs integer(1). Internal detail do not set manually.
+#' @param ncellrefs integer(1). Internal detail do not set manually.
+#' @param nreflines integer(1). Internal detail do not set manually.
 #'
 #' @details
 #' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
@@ -201,9 +205,11 @@ setMethod("make_row_df", "VTableTree",
     if(incontent)
         path <- c(path, "@content")
     else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
+    ##else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root
         path <- c(path, obj_name(tt))
 
     ret <- list()
+    ## note this is the **table** not the label row
     if(!visible_only) {
         ret <- c(ret,
                  list(pagdfrow(rnum = NA,
@@ -240,6 +246,7 @@ setMethod("make_row_df", "VTableTree",
         repr_inds = c(repr_inds, rownum)
         indent <- indent + 1L
     }
+
 
     if(NROW(content_table(tt)) > 0) {
         cind <- indent + indent_mod(content_table(tt))

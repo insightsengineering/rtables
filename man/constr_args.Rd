@@ -18,7 +18,12 @@ constr_args(
   cvar,
   label,
   cextra_args,
-  child_names
+  child_names,
+  title,
+  subtitles,
+  main_footer,
+  prov_footer,
+  footnotes
 )
 }
 \arguments{
@@ -49,6 +54,16 @@ constr_args(
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 
 \item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
+
+\item{title}{character(1). Main title. Ignored for subtables.}
+
+\item{subtitles}{character. Subtitles. Ignored for subtables.}
+
+\item{main_footer}{character. Main global (non-referential) footer materials.}
+
+\item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
+
+\item{footnotes}{list or NULL. Referential footnotes to be applied at current level}
 }
 \value{
 NULL (this is an argument template dummy function)

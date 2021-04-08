@@ -4,7 +4,21 @@
 \alias{basic_table}
 \title{Layout with 1 column and zero rows}
 \usage{
-basic_table()
+basic_table(
+  title = "",
+  subtitles = character(),
+  main_footer = character(),
+  prov_footer = character()
+)
+}
+\arguments{
+\item{title}{character(1). Main title. Ignored for subtables.}
+
+\item{subtitles}{character. Subtitles. Ignored for subtables.}
+
+\item{main_footer}{character. Main global (non-referential) footer materials.}
+
+\item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

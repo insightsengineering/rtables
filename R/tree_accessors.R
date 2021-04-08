@@ -2074,15 +2074,29 @@ setMethod("prov_footer<-", "VTitleFooter",
 all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
 
 
+#' Referential Footnote Accessors
+#'
+#' Get and set referential footnotes on aspects of a built table
+#'
+#' @inheritParams gen_args
+#' @export
+#' @rdname ref_fnotes
+
 setGeneric("row_footnotes", function(obj) standardGeneric("row_footnotes"))
+#' @export
+#' @rdname ref_fnotes
 setMethod("row_footnotes", "TableRow",
           function(obj) obj@row_footnotes)
-
-
+#' @export
+#' @rdname ref_fnotes
 setMethod("row_footnotes", "RowsVerticalSection",
           function(obj) attr(obj, "row_footnotes") %||% list())
 
+#' @export
+#' @rdname ref_fnotes
 setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnotes<-"))
+#' @export
+#' @rdname ref_fnotes
 setMethod("row_footnotes<-", "TableRow",
           function(obj, value) {
     obj@row_footnotes <- value
@@ -2091,19 +2105,29 @@ setMethod("row_footnotes<-", "TableRow",
 
 
 
+#' @export
+#' @rdname ref_fnotes
 setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
+#' @export
+#' @rdname ref_fnotes
 setMethod("cell_footnotes", "CellValue",
           function(obj) attr(obj, "footnote") %||% list())
+#' @export
+#' @rdname ref_fnotes
 setMethod("cell_footnotes", "TableRow",
           function(obj) {
     lapply(row_cells(obj), cell_footnotes)
 })
 
+#' @export
+#' @rdname ref_fnotes
 setMethod("cell_footnotes", "LabelRow",
           function(obj) {
     rep(list(list()), ncol(obj))
 })
 
+#' @export
+#' @rdname ref_fnotes
 setMethod("cell_footnotes", "ElementaryTable",
           function(obj) {
     rws <- collect_leaves(obj, TRUE, TRUE)
@@ -2112,7 +2136,11 @@ setMethod("cell_footnotes", "ElementaryTable",
 })
 
 
+#' @export
+#' @rdname ref_fnotes
 setGeneric("cell_footnotes<-", function(obj, value) standardGeneric("cell_footnotes<-"))
+#' @export
+#' @rdname ref_fnotes
 setMethod("cell_footnotes<-", "CellValue",
           function(obj, value) {
     if(is(value, "RefFootnote"))
@@ -2120,6 +2148,45 @@ setMethod("cell_footnotes<-", "CellValue",
     else if (!is.list(value))
         value <- lapply(value, RefFootnote)
     attr(obj, "footnote") <- value
+    obj
+})
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes<-", "DataRow",
+          function(obj, value) {
+    if(length(value) != ncol(obj))
+        stop("Did not get the right number of footnote ref values for cell_footnotes<- on a full row.")
+
+    row_cells(obj) <- mapply(function(cell, fns) {
+        if(is.list(fns))
+            cell_footnotes(cell) <- lapply(fns, RefFootnote)
+        else
+            cell_footnotes(cell) <- list(RefFootnote(fns))
+        cell
+    },
+    cell = row_cells(obj),
+    fns = value, SIMPLIFY=FALSE)
+    obj
+})
+
+
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_index", function(obj) standardGeneric("ref_index"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("ref_index", "RefFootnote",
+          function(obj) obj@index)
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_index<-", function(obj, value) standardGeneric("ref_index<-"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("ref_index<-", "RefFootnote",
+          function(obj, value) {
+    obj@index <- value
     obj
 })
 

@@ -8,6 +8,7 @@
 #' @param x ANY. Cell value
 #' @param label character(1). Label or Null. If non-null, it will be looked at when determining row labels.
 #' @param colspan integer(1). Columnspan value.
+#' @param footnotes list or NULL. Referential footnote messages for the cell.
 #' @note currently column spanning is only supported for defining header structure.
 #' @rdname rcell
 #' @inherit CellValue return
@@ -70,6 +71,8 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .labels character or NULL. labels for the defined rows
 #' @param .formats character or NULL. Formats for the values
 #' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
+#' @param .cell_footnotes list. Referential footnote messages to be associated by name with \emph{cells}
+#' @param .row_footnotes list. Referential footnotes messages to be associated by name with \emph{rows}
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.

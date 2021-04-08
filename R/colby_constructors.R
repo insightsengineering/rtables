@@ -113,8 +113,9 @@ setMethod("cmpnd_last_rowsplit", "SplitVector",
     lst = lyt[[pos]]
     tmp = if(is(lst, "CompoundSplit")) {
               spl_payload(lst) = c(.uncompound(spl_payload(lst)), .uncompound(spl))
+              obj_name(lst) <- make_ma_name(spl = lst)
               lst
-          } else {
+          } else { ## XXX never reached because AnalzyeMultiVars inherits from CompoundSplit???
               constructor(.payload = list(lst, spl))
           }
     lyt[[pos]] = tmp
@@ -1643,7 +1644,7 @@ list_wrap_df = function(f) {
 #' Every layout must start with a basic table.
 #'
 #' @export
-#'
+#' @inheritParams constr_args
 #' @inherit split_cols_by return
 #'
 #' @examples

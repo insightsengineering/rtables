@@ -20,7 +20,11 @@ ElementaryTable(
   iscontent = NA,
   var = NA_character_,
   format = NULL,
-  indent_mod = 0L
+  indent_mod = 0L,
+  title = "",
+  subtitles = character(),
+  main_footer = character(),
+  prov_footer = character()
 )
 
 TableTree(
@@ -36,7 +40,11 @@ TableTree(
   var = NA_character_,
   cinfo = NULL,
   format = NULL,
-  indent_mod = 0L
+  indent_mod = 0L,
+  title = "",
+  subtitles = character(),
+  main_footer = character(),
+  prov_footer = character()
 )
 }
 \arguments{
@@ -61,6 +69,14 @@ TableTree(
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{title}{character(1). Main title. Ignored for subtables.}
+
+\item{subtitles}{character. Subtitles. Ignored for subtables.}
+
+\item{main_footer}{character. Main global (non-referential) footer materials.}
+
+\item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
 
 \item{cont}{ElementaryTable. Content table.}
 }

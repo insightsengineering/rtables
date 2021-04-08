@@ -232,16 +232,6 @@ test_that("labelkids parameter works", {
 
 
 
-refcompmean = function(x, .ref_group, .in_ref_col, ...) {
-    if(.in_ref_col)
-        val <- rcell(NULL)
-    else
-        val <- rcell(mean(x, ...) - mean(.ref_group,...), format = "xx.xx")
-
-    in_rows(
-        "Diff from reference - mean" = val
-    )
-}
 
 test_that("ref_group comparisons work", {
 

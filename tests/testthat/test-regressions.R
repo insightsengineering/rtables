@@ -303,3 +303,34 @@ test_that("column labeling works correctly when value label var is a factor", {
     expect_identical(as.vector(str[1,]),
                      c("", "Drug X", "Placebo", "Combination"))
 })
+
+
+## pathing regression tests
+test_that("pathing works", {
+    ## issue https://github.com/Roche/rtables/issues/172
+    result_overall <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        add_colcounts() %>%
+        add_overall_col("overall") %>%
+        analyze(c("AGE", "SEX")) %>%
+        build_table(ex_adsl)
+
+    va <- value_at(result_overall, c("AGE", "Mean"), c("ARM", "C: Combination"))
+    expect_identical(va, result_overall[2, 3, drop=TRUE])
+
+    ## issue https://github.com/Roche/rtables/issues/178
+    t2 <- basic_table() %>%
+        split_cols_by("ARMCD") %>%
+        split_rows_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
+        analyze("SEX") %>%
+        analyze("AGE", nested = FALSE) %>%
+        analyze("BMRKR1") %>%
+        build_table(ex_adsl)
+
+    ## this may get changed, but for now enforce it
+    expect_error(cell_values(t2, "AGE"))
+    expect_identical(cell_values(t2, c("ma_AGE_BMRKR1", "AGE")),
+                     cell_values(t2, c("ma_AGE_BMRKR1", "AGE", "Mean")))
+    expect_identical(cell_values(t2, c("ma_AGE_BMRKR1", "AGE")),
+                     lapply(split(ex_adsl$AGE, ex_adsl$ARMCD), mean))
+})
