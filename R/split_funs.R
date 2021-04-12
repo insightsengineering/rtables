@@ -637,7 +637,7 @@ reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE)
 
 
 #' @rdname split_funcs
-#' @param innervar character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
+#' @param innervar character(1). Variable whose factor levels should be trimmed (e.g., empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
 #' @export
 trim_levels_in_group = function(innervar) {
     myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
@@ -662,6 +662,33 @@ trim_levels_in_group = function(innervar) {
     }
     myfun
 }
+
+#' @rdname split_funcs
+#' @param outervar character(1). Parent split variable to trim \code{innervar} levels within. Must appear in map
+#' @param map data.frame. Data frame mapping \code{outervar} values  to allowable \code{innervar} values. If no map exists a-priori, use
+#' @export
+trim_levels_by_map = function(innervar, outervar, map = NULL) {
+    if(is.null(map))
+        stop("no map dataframe was provided. Use trim_levels_in_group to trim combinations present in the data being tabulated.")
+    myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+        ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
+
+        outval <- unique(as.character(df[[outervar]]))
+        oldlevs <- spl_child_order(spl)
+        newlevs <- oldlevs[oldlevs %in% map[as.character(map[[outervar]]) == outval, innervar, drop =TRUE]]
+
+        keep <- ret$values %in% newlevs
+        ret <- lapply(ret, function(x) x[keep])
+        ret$datasplit <- lapply(ret$datasplit, function(df) {
+            df[[innervar]] <- factor(as.character(df[[innervar]]), levels = newlevs)
+            df
+        })
+        ret$labels <- as.character(ret$labels) # TODO
+        ret
+    }
+    myfun
+}
+
 
 .add_combo_part_info = function(part, df, valuename, levels, label, extras, first = TRUE) {
 
