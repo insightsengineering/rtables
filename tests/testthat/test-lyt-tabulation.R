@@ -721,3 +721,20 @@ test_that("alt_counts_df works", {
     ## breaks (with useful message) when given incompatible alt_counts_df
     expect_error(build_table(lyt, DM, iris), "Offending column subset expression")
 })
+
+
+
+test_that("deeply nested column layouts work", {
+    lyt <- basic_table() %>%
+        split_cols_by(var = "ARM") %>%
+        split_cols_by("STRATA1") %>%
+        split_cols_by("STRATA2") %>%
+        add_overall_col("All Patients") %>%
+        add_colcounts() %>%
+        analyze("AGE")
+  tbl <- build_table(lyt, ex_adsl)
+
+
+
+
+})
