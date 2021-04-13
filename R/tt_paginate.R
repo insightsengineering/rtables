@@ -718,5 +718,6 @@ paginate_table = function(tt, lpp = 15,
                           nosplitin = nosplitin,
                           colwidths = colwidths,
                           verbose = verbose)
-    lapply(inds, function(x) tt[x,,keep_topleft = TRUE])
+    lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
+                                keep_titles = TRUE])
 }

@@ -323,10 +323,10 @@ setMethod("[<-", c("VTableTree", value = "CellValue"),
 ## we have two options here: path like we do with rows and positional
 ## in leaf space.
 
-setGeneric("subset_cols", function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) standardGeneric("subset_cols"))
+setGeneric("subset_cols", function(tt, j, newcinfo = NULL, keep_topleft = TRUE, keep_titles = TRUE, ...) standardGeneric("subset_cols"))
 
 setMethod("subset_cols", c("TableTree", "numeric"),
-          function(tt, j, newcinfo = NULL, keep_topleft, ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft, keep_titles, ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
@@ -342,6 +342,17 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     content_table(tt2) <- newcont
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo,  ...)
+
+    if(isTRUE(keep_titles)) {
+        main_title(tt2) <- main_title(tt)
+        subtitles(tt2) <- subtitles(tt)
+        main_footer(tt2) <- main_footer(tt)
+        prov_footer(tt2) <- prov_footer(tt)
+
+    } else {
+        main_title(tt2) <- ""
+        subtitles(tt2) <- character()
+    }
     ## if(keep_topleft)
     ##     top_left(tt2) <- top_left(tt)
     ## else
@@ -350,11 +361,12 @@ setMethod("subset_cols", c("TableTree", "numeric"),
 })
 
 setMethod("subset_cols", c("ElementaryTable", "numeric"),
-          function(tt, j, newcinfo = NULL, keep_topleft, ...) {
+          function(tt, j, newcinfo = NULL, keep_topleft, keep_titles, ...) {
     j = .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo = col_info(tt)
-        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft, ...)
+        newcinfo = subset_cols(cinfo, j, keep_topleft = keep_topleft,
+                               keep_titles = keep_titles, ...)
     }
     ## topleft handled in creation of newcinfo
     kids = tree_children(tt)
@@ -363,6 +375,13 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) = subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
+    if(keep_titles) {
+        main_title(tt2) <- main_title(tt)
+        subtitles(tt2) <- subtitles(tt)
+        main_footer(tt2) <- main_footer(tt)
+        prov_footer(tt2) <- prov_footer(tt)
+
+    }
     ## if(keep_topleft)
     ##     top_left(tt2) <- top_left(tt)
     tt2
@@ -652,7 +671,7 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 
 
 ## label rows ARE included in the count
-subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
+subset_by_rownum = function(tt, i, keep_topleft = NA, keep_titles = TRUE, ... ) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter = 0
     nr = nrow(tt)
@@ -678,7 +697,7 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
                 ## the value of the label but
                 ## that shold really probably change)
                 labelrow_visible(x) <- FALSE
-               ## labelrow_visible(x) <- "hidden"
+                ## labelrow_visible(x) <- "hidden"
             }
         }
         if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
@@ -724,6 +743,13 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, ... ) {
     ret <- prune_rowsbynum(tt, i)
     if(isTRUE(keep_topleft))
         top_left(ret) <- top_left(tt)
+    if(isTRUE(keep_titles) || (isTRUE(keep_topleft) && is.na(keep_titles))) {
+        main_title(ret) <- main_title(tt)
+        subtitles(ret) <- subtitles(tt)
+        main_footer(ret) <- main_footer(tt)
+        prov_footer(ret) <- prov_footer(tt)
+    }
+
     ret
 }
 
@@ -833,9 +859,11 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
+    browser()
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
     keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not presesnt
+    keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     if(is.null(keep_topleft))
         keep_topleft <- NA
 
@@ -847,13 +875,13 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     ##  if(!missing(i) && length(i) < nr) {
     if(length(i) < nr) { ## already populated by .j_to_posj
         keep_topleft <- isTRUE(keep_topleft)
-        x <- subset_by_rownum(x, i, keep_topleft = keep_topleft)
+        x <- subset_by_rownum(x, i, keep_topleft = keep_topleft, keep_titles = keep_titles)
     } else {
         keep_topleft <- !identical(FALSE, keep_topleft)
     }
     ##  if(!missing(j) && length(j) < nc)
     if(length(j) < nc)
-        x <- subset_cols(x, j, keep_topleft = keep_topleft)
+        x <- subset_cols(x, j, keep_topleft = keep_topleft, keep_titles = keep_titles)
 
     if(length(j) == 1L &&
        length(i) == 1L &&
