@@ -52,9 +52,14 @@
 
 \item{j}{index}
 
-\item{\dots}{Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be
+\item{\dots}{Includes
+\describe{
+\item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the 'top-left' material for the table be
 retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
 subsetting was by column), and drops it otherwise.}
+\item{\emph{keep_titles}}{logical(1) Should title and non-referential footer information be retained. Defaults to \code{FALSE}}
+\item{\emph{reindex_refs}}{logical(1). Should referential footnotes be re-indexed as if the resulting subset is the entire table. Defaults to \code{TRUE}}
+}}
 
 \item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
 

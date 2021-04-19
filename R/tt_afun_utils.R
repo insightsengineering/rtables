@@ -147,9 +147,14 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if(is.null(.names) && !is.null(names(l)))
         .names <- names(l)
     stopifnot(is.list(.row_footnotes))
-    if(length(.row_footnotes) != length(l2))
-        length(.row_footnotes) <- length(l2)
-
+    if(length(.row_footnotes) != length(l2)) {
+        tmp <- .row_footnotes
+        .row_footnotes <- vector("list", length(l2))
+        pos <- match(names(tmp), .names)
+        nonna <- which(!is.na(pos))
+        .row_footnotes[pos] <- tmp[nonna]
+        #        length(.row_footnotes) <- length(l2)
+    }
     ret <- RowsVerticalSection(l2, names = .names,
                                labels = .labels,
                                indent_mods = .indent_mods,

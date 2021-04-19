@@ -994,6 +994,7 @@ build_table = function(lyt, df,
     ## this is where the top_left check lives right now. refactor later maybe
     ## but now just call it so the error gets thrown when I want it to
     unused <- matrix_form(tab)
+    tab <- update_ref_indexing(tab)
     tab
 }
 

@@ -2103,7 +2103,14 @@ setMethod("row_footnotes<-", "TableRow",
     obj
 })
 
-
+#' @export
+#' @rdname ref_fnotes
+setMethod("row_footnotes", "ElementaryTable",
+          function(obj) {
+    rws <- collect_leaves(obj, TRUE, TRUE)
+    cells <- lapply(rws, row_footnotes)
+    cells
+})
 
 #' @export
 #' @rdname ref_fnotes

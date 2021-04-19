@@ -732,9 +732,6 @@ test_that("deeply nested column layouts work", {
         add_overall_col("All Patients") %>%
         add_colcounts() %>%
         analyze("AGE")
-  tbl <- build_table(lyt, ex_adsl)
-
-
-
-
+    tbl <- build_table(lyt, ex_adsl)
+    expect_identical(ncol(tbl), 19L)
 })

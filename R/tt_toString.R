@@ -54,7 +54,8 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   aligns <- mat$aligns
   keep_mat <- mat$display
   spans <- mat$spans
-  ri <- mat$row_info
+    ri <- mat$row_info
+    ref_fnotes <- mat$ref_footnotes
 
 
   # xxxx <- 1
@@ -106,9 +107,11 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
     ## TODO make titles affect width...
 
-  allfoots <- all_footers(x)
+    allfoots <- all_footers(x)
 
-  footer_txt <- if(any(nzchar(allfoots))) c(div, "", allfoots) else NULL
+
+    footer_txt <- c(if(length(ref_fnotes) > 0) c(div, "", ref_fnotes),
+                    if(any(nzchar(allfoots))) c(div, "", allfoots))
   paste0(paste(c(titles_txt, txt_head, div, txt_body, footer_txt), collapse = "\n"), "\n")
 
 })
@@ -171,7 +174,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     sr <- make_row_df(tt)
 
   body_content_strings <- if (NROW(sr) == 0) {
-    ""
+    character()
   } else {
     cbind(as.character(sr$label), get_formatted_cells(tt))
   }
@@ -185,7 +188,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
   body_spans <- if (nrow(tt) > 0) {
     cbind(1L, do.call(rbind, tsptmp))
   } else {
-    matrix(1, nrow = 1, ncol = ncol(tt) + 1)
+    matrix(1, nrow = 0, ncol = ncol(tt) + 1)
   }
 
   body <- rbind(header_content$body, body_content_strings)
@@ -224,28 +227,89 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     body[, 1] <- indent_string(body[, 1], c(rep(0, nrow(header_content$body)), sr$indent))
   }
 
+    body_ref_strs <- get_ref_matrix(tt)
+    body <- matrix(paste0(body,
+                         rbind(matrix("", nrow(header_content$body), ncol = ncol(body)),
+                               body_ref_strs)),
+                   nrow = nrow(body),
+                   ncol = ncol(body))
+
+    ref_fnotes <- get_formatted_fnotes(tt)
   structure(
     list(
       strings = body,
       spans = spans,
       aligns = aligns,
       display = display,
-      row_info = sr
+      row_info = sr,
+      ref_footnotes = ref_fnotes
     ),
     nrow_header = nrow(header_content$body)
   )
 }
 
+format_fnote_ref <- function(fn) {
+    if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+        return("")
+    else if(is.list(fn) && all(vapply(fn, is.list, TRUE)))
+        return(vapply(fn, format_fnote_ref, ""))
+    if(is.list(fn)) {
+        inds <- unlist(lapply(unlist(fn), function(x) if(is(x, "RefFootnote")) x@index else NULL))
+    } else {
+        inds <- fn@index
+    }
+    if(length(inds) > 0) {
+        paste0(" {", paste(inds, collapse = ", "), "}")
+    } else {
+        ""
+    }
+}
 
-get_footnotes_matrix <- function(tt) {
+
+format_fnote_note <- function(fn) {
+    if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+        return(character())
+    if(is.list(fn)) {
+        return(unlist(lapply(unlist(fn), format_fnote_note)))
+    }
+
+    if(is(fn, "RefFootnote")) {
+        paste0("{", fn@index, "} - ", fn@value)
+    } else {
+        NULL
+    }
+}
+
+.fn_ind_extractor <- function(strs) {
+    res <- suppressWarnings(as.numeric(gsub("\\{([[:digit:]]+)\\}.*", "\\1", strs)))
+    if(!(sum(is.na(res)) %in% c(0L, length(res))))
+        stop("Got NAs mixed with non-NAS for extracted footnote indices. This should not happen")
+    res
+}
+get_ref_matrix <- function(tt) {
+    if(ncol(tt) == 0 || nrow(tt) == 0) {
+        return(matrix("", nrow = nrow(tt), ncol = ncol(tt) + 1L))
+    }
     rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
-    lsts <- lapply(rows, cell_footnotes)
-    bodymat <- matrix(unlist(lsts, recursive = FALSE, use.names = FALSE),
+    lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
+    cstrs <- unlist(lapply(lst, format_fnote_ref))
+    bodymat <- matrix(cstrs,
                       byrow = TRUE,
                       nrow = nrow(tt),
                       ncol = ncol(tt))
-    cbind(lapply(rows, row_footnotes), bodymat)
+    cbind(vapply(rows, function(rw) format_fnote_ref(row_footnotes(rw)), ""), bodymat)
 }
+
+get_formatted_fnotes <- function(tt) {
+    rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
+    lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
+    cstrs <- unlist(lapply(lst, format_fnote_note))
+    rstrs <- unlist(lapply(rows, function(rw) format_fnote_note(row_footnotes(rw))))
+    allstrs <- c(rstrs, cstrs)
+    inds <- .fn_ind_extractor(allstrs)
+    allstrs[order(inds)]
+}
+
 
 
 ## print depths (not to be confused with tree depths)

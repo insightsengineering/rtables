@@ -5,6 +5,7 @@
 \alias{tt_at_path,VTableTree-method}
 \alias{tt_at_path<-}
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
+\alias{tt_at_path<-,VTableTree,ANY,NULL-method}
 \alias{tt_at_path<-,VTableTree,ANY,TableRow-method}
 \title{Get or set table elements at specified path}
 \usage{
@@ -15,6 +16,8 @@ tt_at_path(tt, path, ...)
 tt_at_path(tt, path, ...) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,VTableTree}(tt, path, ...) <- value
+
+\S4method{tt_at_path}{VTableTree,ANY,`NULL`}(tt, path, ...) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,TableRow}(tt, path, ...) <- value
 }

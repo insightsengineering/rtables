@@ -6,6 +6,7 @@
 \alias{row_footnotes,RowsVerticalSection-method}
 \alias{row_footnotes<-}
 \alias{row_footnotes<-,TableRow-method}
+\alias{row_footnotes,ElementaryTable-method}
 \alias{cell_footnotes}
 \alias{cell_footnotes,CellValue-method}
 \alias{cell_footnotes,TableRow-method}
@@ -29,6 +30,8 @@ row_footnotes(obj)
 row_footnotes(obj) <- value
 
 \S4method{row_footnotes}{TableRow}(obj) <- value
+
+\S4method{row_footnotes}{ElementaryTable}(obj)
 
 cell_footnotes(obj)
 

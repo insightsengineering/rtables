@@ -34,6 +34,10 @@
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
+    ## TODO when column refs are a thing we will
+    ## still need to do those here before returning!!!
+    if(nrow(tt) == 0)
+        return(tt)
     curind <- 0L
     cur_index <- function() {
         curind <<- curind + 1L

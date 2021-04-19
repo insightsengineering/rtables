@@ -4,7 +4,9 @@ do_recursive_replace = function(tab, path, incontent = FALSE, rows = NULL,
     ## don't want this in the recursive function
     ## so thats why we have the do_ variant
     if(is.character(path) && length(path) > 1)
-        path = as.list(path)
+        path <- as.list(path)
+    if(length(path) > 0 && path[[1]] == obj_name(tab))
+        path <- path[-1]
    recursive_replace(tab, path, incontent, rows, cols,value)
 }
 
@@ -112,17 +114,32 @@ setGeneric("tt_at_path<-", function(tt, path, ..., value) standardGeneric("tt_at
 #' @rdname ttap
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
           function(tt, path, ..., value) {
-    recursive_replace(tt, path = path, value = value)
+    do_recursive_replace(tt, path = path, value = value)
 
 })
+
+## this one removes the child at path from the parents list of children,
+## becuase thats how lists behave.
+#' @export
+#' @rdname ttap
+setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
+          function(tt, path, ..., value) {
+    do_recursive_replace(tt, path = path, value = value)
+
+})
+
 
 #' @export
 #' @rdname ttap
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
           function(tt, path, ..., value) {
-    ##i <- .path_to_pos(path = path, seq_len(nrow(tt)), tt, NROW)
-    i <- .path_to_pos(path = path, tt = tt)
-    replace_rows(tt, i = i, value = list(value))
+    stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))
+    do_recursive_replace(tt, path = path, value = value)
+
+    ## ##i <- .path_to_pos(path = path, seq_len(nrow(tt)), tt, NROW)
+    ## i <- .path_to_pos(path = path, tt = tt)
+
+    ## replace_rows(tt, i = i, value = list(value))
 })
 
 
@@ -187,9 +204,14 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' @param j index
 #' @param drop logical(1). Should the value in the cell be returned if only one cell is selected by the combination of
 #'   \code{i} and \code{j}. Defaults to \code{FALSE}
-#' @param \dots Includes \emph{keep_topleft} logical(1) (\code{[} only) Should the 'top-left' material for the table be
+#' @param \dots Includes
+#' \describe{
+#' \item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the 'top-left' material for the table be
 #'   retained after subsetting. Defaults to \code{NA}, which retains the material if all rows are included (ie
-#'   subsetting was by column), and drops it otherwise.
+#'   subsetting was by column), and drops it otherwise.}
+#' \item{\emph{keep_titles}}{logical(1) Should title and non-referential footer information be retained. Defaults to \code{FALSE}}
+#' \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be re-indexed as if the resulting subset is the entire table. Defaults to \code{TRUE}}
+#' }
 #' @param value Replacement value (list, `TableRow`, or `TableTree`)
 #' @return a \code{TableTree} (or \code{ElementaryTable}) object, unless a single cell was selected with \code{drop=TRUE}, in which case the (possibly multi-valued) fully stripped raw value of the selected cell.
 #' @exportMethod [<-
@@ -859,11 +881,11 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
-    browser()
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
     keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not presesnt
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
+    reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
     if(is.null(keep_topleft))
         keep_topleft <- NA
 
@@ -892,8 +914,12 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
         else
             x <- row_values(rw)[[1]]
     }
-    if(!drop && !keep_topleft)
-        top_left(x) <- character()
+    if(!drop) {
+        if(!keep_topleft)
+            top_left(x) <- character()
+        if(reindex_refs)
+            x <- update_ref_indexing(x)
+    }
     x
 })
 

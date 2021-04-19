@@ -30,13 +30,14 @@ setGeneric("nlines",
 
 setMethod("nlines", "TableRow",
           function(x, colwidths) {
-    1L
+    fns <- sum(unlist(lapply(row_footnotes(x), nlines))) + sum(unlist(lapply(cell_footnotes(x), nlines)))
+    1L + fns
 })
 
 setMethod("nlines", "LabelRow",
           function(x, colwidths) {
     if(labelrow_visible(x))
-        1L
+        1L + sum(unlist(lapply(row_footnotes(x), nlines)))
     else
         0L
 })
@@ -436,99 +437,6 @@ setMethod("inner_col_df", "LayoutColTree",
     ret
 })
 
-make_row_df_old = function(tt, colwidths = NULL, visible_only = TRUE) {
-    rownum = 0
-    indent = 0L
-
-
-    pag_df = function(tree, path, incontent = FALSE,
-                      cwidths,
-                      repr_ext = 0L,
-                      repr_inds = integer(),
-                      indent = 0L) {
-        ret = list()
-        if(labelrow_visible(tree)) {
-            lr = tt_labelrow(tree)
-            rownum <<- rownum + 1L
-            ret  =  c(ret,
-                      list(pagdfrow(row = lr,
-                                    rnum = rownum,
-                                    nm = obj_name(tree),
-                                    pth = path,
-                                    colwidths = cwidths,
-                                    repext = repr_ext,
-                                    repind = list(repr_inds),
-                                    indent = indent)))
-            repr_ext = repr_ext + 1L
-            repr_inds = c(repr_inds, rownum)
-            indent <- indent + 1L
-        } else if (!visible_only) {
-            ret <- c(ret,
-                     list(pagdfrow(rnum = NA,
-                                   nm = obj_name(tree),
-                                   lab = "",
-                                   pth = path,
-                                   colwidths = cwidths,
-                                   repext = repr_ext,
-                                   repind = list(repr_inds),
-                                   extent = 0,
-                                   indent = indent,
-                                   rclass = class(tree))))
-
-        }
-        if(is(tree, "TableTree") &&
-           nrow(content_table(tree)) > 0) {
-            ctab = content_table(tree)
-            ## already put rownum in there if necessary
-            rnbef = rownum + 1L
-            crows = pag_df(ctab,
-                           path = c(path, "@content"),
-                           cwidths = cwidths,
-                           repr_ext = repr_ext,
-                           repr_inds = repr_inds,
-                           indent = indent)
-            if(is(crows, "data.frame"))
-                crows = list(crows)
-            ret = c(ret, crows)
-            repr_ext = repr_ext + nlines(ctab)
-            repr_inds = c(repr_inds, rnbef:rownum)
-            indent = indent + 1L
-        }
-        kids = tree_children(tree)
-        nk = length(kids)
-        for(i in seq_along(kids)) {
-            k = kids[[i]]
-            stopifnot(identical(unname(obj_name(k)), names(kids)[i]))
-            if(is(k, "TableRow")) {
-                rownum <<- rownum + 1
-                ret = c(ret, list(pagdfrow(k, rnum = rownum,
-                                         colwidths = cwidths,
-                                         sibpos = i,
-                                         nsibs = nk,
-                                         pth = c(path, obj_name(k)),
-                                         repext = repr_ext,
-                                         repind = repr_inds,
-                                         indent = indent)))
-            } else {
-
-                newrows = pag_df(k, path = c(path, obj_name(k)),
-                                 cwidths = cwidths, repr_ext = repr_ext,
-                                 repr_inds = repr_inds,
-                                 indent = indent)
-                if(is(newrows, "data.frame")) {
-                    newrows = list(newrows)
-                }
-                ret = c(ret, newrows)
-            }
-        }
-        ret
-
-    }
-    rws = pag_df(tt, path = "root", cwidths = colwidths)
-    do.call(rbind.data.frame, rws)
-}
-
-
 
 valid_pag = function(pagdf,
                      guess,
@@ -719,5 +627,6 @@ paginate_table = function(tt, lpp = 15,
                           colwidths = colwidths,
                           verbose = verbose)
     lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
-                                keep_titles = TRUE])
+                                keep_titles = TRUE,
+                                reindex_refs = FALSE])
 }
