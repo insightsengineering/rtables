@@ -341,3 +341,13 @@ test_that("pagination works on tables with only 1 row", {
     expect_identical(nrow(tt), 1L)
     expect_identical(pag_tt_indices(tt), list(1L))
 })
+
+
+test_that("in_rows doesn't clobber cell format when only 1 row", {
+    afun <- function(x) {in_rows("name" = rcell(123.31241231, format= "xx.xx"))}
+    lyt <- basic_table() %>%
+        analyze("AGE", afun = afun)
+    tbl <- build_table(lyt, DM)
+    mf <- matrix_form(tbl)
+    expect_identical(mf$strings[2,2, drop = TRUE], "123.31")
+})

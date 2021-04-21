@@ -908,6 +908,9 @@ build_table = function(lyt, df,
                        col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                        topleft = NULL,
                        ...) {
+    if(!is(lyt, "PreDataTableLayouts")) {
+        stop("lyt must be a PreDataTableLayouts object. Got object of class ", class(lyt))
+    }
 
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
