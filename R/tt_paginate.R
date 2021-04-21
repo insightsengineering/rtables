@@ -440,43 +440,54 @@ setMethod("inner_col_df", "LayoutColTree",
 
 valid_pag = function(pagdf,
                      guess,
+                     start,
+                     rlpp,
                      min_sibs,
                      nosplit = NULL,
                      verbose = FALSE) {
-    rw = pagdf[guess,]
+    rw <- pagdf[guess,]
+
 
     if(verbose)
         message("Checking pagination after row ", guess)
+    reflines <-  sum(pagdf[start:guess, "nreflines"])
+    if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
+    lines <- guess - start + reflines
+    if(lines > rlpp) {
+        if(verbose)
+            message("\t....................... FAIL: Referential footnotes take up too much space")
+        return(FALSE)
+    }
     if(rw[["node_class"]] %in% c("LabelRow", "ContentRow")) {
         if(verbose)
             message("\t....................... FAIL: last row is a label or content row")
         return(FALSE)
     }
 
-    sibpos = rw[["pos_in_siblings"]]
-    nsib = rw[["n_siblings"]]
-    okpos = min(min_sibs + 1, rw[["n_siblings"]])
+    sibpos <- rw[["pos_in_siblings"]]
+    nsib <- rw[["n_siblings"]]
+    okpos <- min(min_sibs + 1, rw[["n_siblings"]])
     if( sibpos != nsib){
-        retfalse = FALSE
+        retfalse <- FALSE
         if(sibpos < min_sibs + 1) {
-            retfalse = TRUE
+            retfalse <- TRUE
             if(verbose)
-                message("\t....................... FAIL: last row had only ", sibpos - 1, "preceeding siblings, needed ", min_sibs)
+                message("\t....................... FAIL: last row had only ", sibpos - 1, " preceeding siblings, needed ", min_sibs)
         } else if (nsib - sibpos < min_sibs + 1) {
-            retfalse = TRUE
+            retfalse <- TRUE
             if(verbose)
-                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, "following siblings, needed ", min_sibs)
+                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, " following siblings, needed ", min_sibs)
         }
         if(retfalse)
             return(FALSE)
     }
     if(guess < nrow(pagdf)) {
-        curpth = unlist(rw$path)
-        nxtpth = unlist(pagdf$path[[guess+1]])
-        inplay = nosplit[(nosplit %in% intersect(curpth, nxtpth))]
+        curpth <- unlist(rw$path)
+        nxtpth <- unlist(pagdf$path[[guess+1]])
+        inplay <- nosplit[(nosplit %in% intersect(curpth, nxtpth))]
         if(length(inplay) > 0) {
-            curvals = curpth[match(inplay, curpth) + 1]
-            nxtvals = nxtpth[match(inplay, nxtpth) + 1]
+            curvals <- curpth[match(inplay, curpth) + 1]
+            nxtvals <- nxtpth[match(inplay, nxtpth) + 1]
             if(identical(curvals, nxtvals)) {
                 if(verbose)
                     message("\t....................... FAIL: values of unsplitable vars before [", curvals, "] and after [", nxtvals, "] match")
@@ -498,7 +509,7 @@ find_pag = function(pagdf,
                     nosplitin = character(),
                     verbose = FALSE) {
     origuess = guess
-    while(guess >= start && !valid_pag(pagdf, guess, min_sibs = min_siblings, nosplit = nosplitin, verbose)) {
+    while(guess >= start && !valid_pag(pagdf, guess, start = start, rlpp  = rlpp, min_sibs = min_siblings, nosplit = nosplitin, verbose)) {
         guess = guess - 1
     }
     if(guess < start)
