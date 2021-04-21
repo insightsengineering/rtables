@@ -608,7 +608,7 @@ pag_tt_indices = function(tt, lpp = 15,
     start = 1
     nr = nrow(pagdf)
     ret = list()
-    while(start < nr) {
+    while(start <= nr) {
         adjrlpp = rlpp - pagdf$par_extent[start]
         stopifnot(adjrlpp > 0)
         guess = min(nr, start + adjrlpp - 1)

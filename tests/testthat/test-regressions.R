@@ -334,3 +334,10 @@ test_that("pathing works", {
     expect_identical(cell_values(t2, c("ma_AGE_BMRKR1", "AGE")),
                      lapply(split(ex_adsl$AGE, ex_adsl$ARMCD), mean))
 })
+
+## issue https://github.com/Roche/rtables/issues/175
+test_that("pagination works on tables with only 1 row", {
+    tt <- rtable(header = " ", rrow("", "NUll report"))
+    expect_identical(nrow(tt), 1L)
+    expect_identical(pag_tt_indices(tt), list(1L))
+})
