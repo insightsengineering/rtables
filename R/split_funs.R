@@ -618,17 +618,21 @@ drop_and_remove_levels <- function(excl) {
 #' @export
 #'
 reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE) {
+    if(length(neworder) != length(newlabels)) {
+        stop("Got mismatching lengths for neworder and newlabels.")
+    }
     function(df, spl,  trim, ...) {
-        df2 = df
+         df2 <- df
         valvec <- df2[[spl_payload(spl)]]
-        vals = if(is.factor(valvec)) levels(valvec) else unique(valvec)
+        vals <- if(is.factor(valvec)) levels(valvec) else unique(valvec)
         if(!drlevels)
             neworder <- c(neworder, setdiff(vals, neworder))
         df2[[spl_payload(spl)]] = factor(valvec, levels = neworder)
         if(drlevels) {
-            df2[[spl_payload(spl)]] = droplevels(df2[[spl_payload(spl)]] )
-            neworder = levels(df2[[spl_payload(spl)]])
-            newlabels = newlabels[newlabels %in% neworder]
+            orig_order <- neworder
+            df2[[spl_payload(spl)]] <- droplevels(df2[[spl_payload(spl)]] )
+            neworder <- levels(df2[[spl_payload(spl)]])
+            newlabels <- newlabels[orig_order %in% neworder]
         }
         spl_child_order(spl) <- neworder
         .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)

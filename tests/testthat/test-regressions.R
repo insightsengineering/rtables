@@ -351,3 +351,24 @@ test_that("in_rows doesn't clobber cell format when only 1 row", {
     mf <- matrix_form(tbl)
     expect_identical(mf$strings[2,2, drop = TRUE], "123.31")
 })
+
+
+## newlabels works in reorder_split_levels (https://github.com/Roche/rtables/issues/191)
+
+test_that("newlabels works in reorder_split_levels", {
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by(
+            "COUNTRY",
+            split_fun = reorder_split_levels(
+                neworder = c("CAN", "PAK", "BRA"),
+                newlabels = c(CAN = "Canada", PAK = "Pakistan", BRA = "Brazil")
+            )
+        ) %>%
+        analyze("AGE")
+    tab <- build_table(lyt, ex_adsl)
+    expect_identical(c("Canada", "Mean", "Pakistan", "Mean", "Brazil", "Mean"),
+                     row.names(tab))
+
+})
