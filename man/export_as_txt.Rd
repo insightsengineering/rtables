@@ -15,7 +15,7 @@ export_as_txt(tt, file = NULL, paginate = FALSE, ..., page_break = "\\\\s")
 
 \item{\dots}{Passed directly to \code{\link{paginate_table}}}
 
-\item{page_break}{character(1). Page break symbol (defualts to outputting \code{\s}).}
+\item{page_break}{character(1). Page break symbol (defualts to outputting \code{"\\s"}).}
 }
 \value{
 \code{file} (this function is called for the side effect of writing the file.

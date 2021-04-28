@@ -236,7 +236,6 @@ setMethod("cmpnd_last_colsplit", "ANY",
 #' @inheritParams lyt_args
 #'
 #' @param ref_group character(1) or `NULL`. Level of `var` which should be considered ref_group/reference
-#' @param incl_all logical(1). Should a column representing all observations at this level of nesting be added. defaults to `FALSE`
 #'
 #' @export
 #'
@@ -301,8 +300,7 @@ split_cols_by = function(lyt,
                          nested = TRUE,
                          child_labels = c("default", "visible", "hidden"),
                          extra_args = list(),
-                         ref_group = NULL,
-                         incl_all = FALSE) {
+                         ref_group = NULL) {##,
     if(is.null(ref_group)) {
         spl = VarLevelSplit(var = var,
                             split_label = split_label,
@@ -314,7 +312,6 @@ split_cols_by = function(lyt,
     } else {
         spl = VarLevWBaselineSplit(var = var,
                                    ref_group = ref_group,
-                                   incl_all = incl_all,
                                    split_label = split_label,
                                    split_fun = split_fun,
                                    labels_var = labels_var,

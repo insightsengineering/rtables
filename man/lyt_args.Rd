@@ -34,7 +34,6 @@ lyt_args(
   cutfun,
   cutlabelfun,
   cumulative,
-  incl_all,
   indent_mod,
   show_labels,
   label_pos,
@@ -102,8 +101,6 @@ lyt_args(
 \item{cutlabelfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
-
-\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 

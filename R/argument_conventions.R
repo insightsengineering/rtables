@@ -73,7 +73,6 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param cutlabelfun function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}
 #' @param cutfun function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation
-#' @param incl_all logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.
 #' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
@@ -85,7 +84,7 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
-                     incl_all, indent_mod, show_labels, label_pos, #visible_label,
+                     indent_mod, show_labels, label_pos, #visible_label,
                      var_labels, cvar,
                      table_names, topleft) NULL
 

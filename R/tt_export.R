@@ -77,7 +77,7 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 ##' @param file character(1). File to write.
 ##' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
 ##' @param \dots Passed directly to \code{\link{paginate_table}}
-##' @param page_break character(1). Page break symbol (defualts to outputting \code{\s}).
+##' @param page_break character(1). Page break symbol (defualts to outputting \code{"\\s"}).
 ##' @return \code{file} (this function is called for the side effect of writing the file.
 export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s") {
     if(paginate)

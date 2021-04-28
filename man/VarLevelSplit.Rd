@@ -30,7 +30,6 @@ VarLevWBaselineSplit(
   var,
   ref_group,
   labels_var = var,
-  incl_all = FALSE,
   split_label,
   split_fun = NULL,
   label_fstr = "\%s - \%s",
@@ -77,8 +76,6 @@ VarLevWBaselineSplit(
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 
 \item{ref_group}{character. Value of \code{var} to be taken as the ref_group/control to be compared against.}
-
-\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
 
 \item{label_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
 }

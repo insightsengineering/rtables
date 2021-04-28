@@ -824,14 +824,13 @@ SubsetSplit <- function(subset, vall = TRUE, vnon = FALSE,
 
 setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
          representation(var = "character",
-                        ref_group_value = "character",
-                        incl_allcategory = "logical"))
+                        ref_group_value = "character"))#,
+
 #' @rdname VarLevelSplit
 #' @export
 VarLevWBaselineSplit <- function(var,
                                 ref_group,
                                 labels_var = var,
-                                incl_all = FALSE,
                                 split_label,
                                 split_fun = NULL,
 #                             comparison = `-`,
@@ -847,7 +846,6 @@ VarLevWBaselineSplit <- function(var,
     new("VarLevWBaselineSplit",
         payload = var,
         ref_group_value = ref_group,
-        incl_allcategory = incl_all,
         ## This will occur at the row level not on the column split, for now
         ## TODO revisit this to confirm its right
         ##        comparison_func = comparison,
