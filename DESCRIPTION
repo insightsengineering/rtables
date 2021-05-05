@@ -67,4 +67,5 @@ Collate:
     'tt_export.R'
     'labels.R'
     'index_footnotes.R'
+    'tt_from_df.R'
     'zzz_constants.R'
