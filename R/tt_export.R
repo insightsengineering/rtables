@@ -72,13 +72,26 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 
 }
 
-##' export as plain text with page break symbol
-##' @inheritParams gen_args
-##' @param file character(1). File to write.
-##' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
-##' @param \dots Passed directly to \code{\link{paginate_table}}
-##' @param page_break character(1). Page break symbol (defualts to outputting \code{"\\s"}).
-##' @return \code{file} (this function is called for the side effect of writing the file.
+#' export as plain text with page break symbol
+#' @inheritParams gen_args
+#' @param file character(1). File to write.
+#' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
+#' @param \dots Passed directly to \code{\link{paginate_table}}
+#' @param page_break character(1). Page break symbol (defualts to outputting \code{"\\s"}).
+#' @return \code{file} (this function is called for the side effect of writing the file.
+#' @export
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#' ## this just displays it
+#' export_as_txt(tbl, file = NULL)
+#' \dontrun{
+#' tf <- tempfile(file.ext = ".txt")
+#' export_as_txt(tt, file = tf)
+#' }
 export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s") {
     if(paginate)
         tbls <- paginate_table(tt, ...)

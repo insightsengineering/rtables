@@ -23,3 +23,16 @@ export_as_txt(tt, file = NULL, paginate = FALSE, ..., page_break = "\\\\s")
 \description{
 export as plain text with page break symbol
 }
+\examples{
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(c("AGE", "BMRKR2"))
+
+tbl <- build_table(lyt, ex_adsl)
+## this just displays it
+export_as_txt(tbl, file = NULL)
+\dontrun{
+tf <- tempfile(file.ext = ".txt")
+export_as_txt(tt, file = tf)
+}
+}
