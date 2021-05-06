@@ -106,7 +106,8 @@ lyt_args(
 
 \item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 
-\item{label_pos}{character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 

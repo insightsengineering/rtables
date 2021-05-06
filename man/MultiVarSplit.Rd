@@ -51,7 +51,8 @@ MultiVarSplit(
 
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 
-\item{label_pos}{character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 }
 \value{
 A \code{MultiVarSplit} object.

@@ -27,7 +27,8 @@ NULL
 #' @param verbose logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.
 #' @param path character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.
 #' @param label character(1). A label (not to be confused with the name) for the object/structure.
-#' @param label_pos character(1). Location the variable label should be displayed, Accepts default (analysis-related layouting only), visible, hidden, and topleft.
+#' @param label_pos character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+#' should be visible if and only if multiple variables are analyzed at the same level of nesting.
 # #' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
