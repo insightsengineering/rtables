@@ -19,7 +19,7 @@ gen_args(
   object,
   path,
   label,
-  visible_label,
+  label_pos,
   cvar,
   topleft,
   ...
@@ -55,7 +55,8 @@ when calculating column counts.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 

@@ -10,7 +10,9 @@ in_rows(
   .names = NULL,
   .labels = NULL,
   .formats = NULL,
-  .indent_mods = NULL
+  .indent_mods = NULL,
+  .cell_footnotes = list(NULL),
+  .row_footnotes = list(NULL)
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ in_rows(
 \item{.formats}{character or NULL. Formats for the values}
 
 \item{.indent_mods}{integer or NULL. Indent modificatons for the defined rows.}
+
+\item{.cell_footnotes}{list. Referential footnote messages to be associated by name with \emph{cells}}
+
+\item{.row_footnotes}{list. Referential footnotes messages to be associated by name with \emph{rows}}
 }
 \value{
 an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.

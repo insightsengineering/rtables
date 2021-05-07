@@ -293,8 +293,10 @@ gen_rowvalues = function(dfpart,
             labels = rep("", ncrows)
     }
 
+    rfootnotes <- rep(list(list(), length(rv1col)))
     if(is(rv1col, "RowsVerticalSection")) {
         nms <- value_names(rv1col)
+        rfootnotes <- row_footnotes(rv1col)
     } else if(!is.null(names(rv1col))) {
         nms = names(rv1col)
     } else if(length(labels) > 0 && all(nzchar(labels))) {
@@ -331,7 +333,8 @@ gen_rowvalues = function(dfpart,
                   name = nms[i], ##labels[i], ## XXX this is probably the wrong thing!
                   var = rowvar,
                   format = formatvec[[i]],
-                  indent_mod = imods[[i]] %||% 0L
+                  indent_mod = imods[[i]] %||% 0L,
+                  footnotes = rfootnotes[[i]] ## one bracket so list
                   )
 
     })
@@ -905,6 +908,9 @@ build_table = function(lyt, df,
                        col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                        topleft = NULL,
                        ...) {
+    if(!is(lyt, "PreDataTableLayouts")) {
+        stop("lyt must be a PreDataTableLayouts object. Got object of class ", class(lyt))
+    }
 
     ## if no columns are defined (e.g. because lyt is NULL)
     ## add a single overall column as the "most basic"
@@ -947,7 +953,7 @@ build_table = function(lyt, df,
         if(length(splvec) == 0)
             return(NULL)
         firstspl = splvec[[1]]
-        nm = obj_label(firstspl) ## XXX this should be name!
+        nm = obj_name(firstspl) ##obj_label(firstspl) ## XXX this should be name!
         lab = obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,
@@ -969,6 +975,10 @@ build_table = function(lyt, df,
        length(kids) == 1L &&
        is(kids[[1]], "VTableTree")) {
         tab = kids[[1]]
+        main_title(tab) <- main_title(lyt)
+        subtitles(tab) <- subtitles(lyt)
+        main_footer(tab) <- main_footer(lyt)
+        prov_footer(tab) <- prov_footer(lyt)
     } else {
         tab = TableTree(cont = ctab,
                         kids = kids,
@@ -977,12 +987,17 @@ build_table = function(lyt, df,
                         label="",
                         iscontent = FALSE,
                         cinfo = cinfo,
-                        format = obj_format(rtspl))
+                        format = obj_format(rtspl),
+                        title = main_title(lyt),
+                        subtitles = subtitles(lyt),
+                        main_footer = main_footer(lyt),
+                        prov_footer = prov_footer(lyt))
     }
 
     ## this is where the top_left check lives right now. refactor later maybe
     ## but now just call it so the error gets thrown when I want it to
     unused <- matrix_form(tab)
+    tab <- update_ref_indexing(tab)
     tab
 }
 
@@ -1187,9 +1202,10 @@ setMethod("fix_analyze_vis", "SplitVector",
          is(lastspl, "AnalyzeMultivar")))
         return(lyt)
 
-    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl)))
-        labelrow_visible(lastspl) = FALSE
-    else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
+    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl))) {
+        ##  labelrow_visible(lastspl) = FALSE
+        labelrow_visible(lastspl) = "hidden"
+    } else if (is(lastspl, "AnalyzeMultiVar")) { ## must be AnalyzeMultiVar by check above
         pld = spl_payload(lastspl)
         newpld = lapply(pld, function(sp, havesibs) {
             if(is.na(labelrow_visible(sp)))

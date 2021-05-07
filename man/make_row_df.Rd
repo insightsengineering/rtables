@@ -19,7 +19,10 @@ make_row_df(
   repr_ext = 0L,
   repr_inds = integer(),
   sibpos = NA_integer_,
-  nsibs = NA_integer_
+  nsibs = NA_integer_,
+  nrowrefs = 0L,
+  ncellrefs = 0L,
+  nreflines = 0L
 )
 
 \S4method{make_row_df}{VTableTree}(
@@ -88,6 +91,12 @@ make_col_df(tt, visible_only = TRUE)
 \item{sibpos}{integer(1). Internal detail do not set manually.}
 
 \item{nsibs}{integer(1). Internal detail do not set manually.}
+
+\item{nrowrefs}{integer(1). Internal detail do not set manually.}
+
+\item{ncellrefs}{integer(1). Internal detail do not set manually.}
+
+\item{nreflines}{integer(1). Internal detail do not set manually.}
 }
 \value{
 a data.frame of row/column-structure information used by the pagination machinery.

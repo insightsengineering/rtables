@@ -10,6 +10,8 @@
 #' @param class_td class for td tag
 #' @param class_th class for th tag
 #' @param width width
+#' @param caption_txt Caption text (not including label anchor) for the table
+#' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
 #'
 #' @return A \code{shiny.tag} object representing \code{x} in HTML.
 #' @importFrom htmltools tags
@@ -31,7 +33,7 @@
 #'
 #' as_html(tbl, class_td = "aaa")
 #'
-#' if(interactive()) {
+#' \dontrun{
 #' Viewer(tbl)
 #' }
 as_html <- function(x,
@@ -39,7 +41,9 @@ as_html <- function(x,
                     class_table = "table table-condensed table-hover",
                     class_tr = "",
                     class_td = "",
-                    class_th = "") {
+                    class_th = "",
+                    caption_txt = NULL,
+                    link_label = NULL) {
 
   if (is.null(x)) {
     return(tags$p("Empty Table"))
@@ -76,7 +80,16 @@ as_html <- function(x,
     do.call(tags$tr, c(row, list(class = class_tr)))
   })
 
-  do.call(tags$table, c(rows, list(class = class_table)))
+    if(!is.null(caption_txt)) {
+        if(!is.null(link_label))
+            labtxt <- sprintf("(#tab:%s)", link_label)
+        else
+            labtxt <- NULL
+        captxt <- paste(labtxt, caption_txt)
+        captag <- tags$caption(class = "Table Caption", captxt)
+    } else {
+        captag <- NULL
+    }
+  do.call(tags$table, c(rows, if(!is.null(captag)) list(captag)))
 
 }
-

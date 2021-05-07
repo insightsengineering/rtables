@@ -8,11 +8,12 @@
 #' @param x ANY. Cell value
 #' @param label character(1). Label or Null. If non-null, it will be looked at when determining row labels.
 #' @param colspan integer(1). Columnspan value.
+#' @param footnotes list or NULL. Referential footnote messages for the cell.
 #' @note currently column spanning is only supported for defining header structure.
 #' @rdname rcell
 #' @inherit CellValue return
 #' @export
-rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL) {
+rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL) {
 
     if(is(x, "CellValue")) {
         if(!is.null(label))
@@ -23,6 +24,8 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
             indent_mod(x) <- indent_mod
         if(!is.null(format))
             obj_format(x) <- format
+        if(!is.null(footnotes))
+            cell_footnotes(x) <- lapply(footnotes, RefFootnote)
         ret <- x
     } else {
         if(is.null(label))
@@ -31,7 +34,8 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
             format <- obj_format(x)
         if(is.null(indent_mod))
             indent_mod <- indent_mod(x)
-        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod)
+        footnotes <- lapply(footnotes, RefFootnote)
+        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes)# RefFootnote(footnote))
     }
     ret
 }
@@ -67,6 +71,8 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .labels character or NULL. labels for the defined rows
 #' @param .formats character or NULL. Formats for the values
 #' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
+#' @param .cell_footnotes list. Referential footnote messages to be associated by name with \emph{cells}
+#' @param .row_footnotes list. Referential footnotes messages to be associated by name with \emph{rows}
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
@@ -93,7 +99,9 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 in_rows <- function(..., .list = NULL, .names = NULL,
                     .labels = NULL,
                     .formats = NULL,
-                    .indent_mods = NULL) {
+                    .indent_mods = NULL,
+                    .cell_footnotes = list(NULL),
+                    .row_footnotes = list(NULL)) {
     if(is.function(.formats))
         .formats = list(.formats)
 
@@ -102,6 +110,9 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if (missing(.names) && missing(.labels)) {
         if (length(l) > 0 && is.null(names(l)))
             stop("need a named list")
+        else
+            .names <- names(l)
+        stopifnot(!anyNA(.names))
     }
 
     if(is.null(.formats))
@@ -114,7 +125,18 @@ in_rows <- function(..., .list = NULL, .names = NULL,
             stop("in_rows got 0 rows but length >0 of at leats one of .labels, .formats, .names, .indent_mods. Does your analysis/summary function handle the 0 row df/length 0 x case?")
         l2 <- list()
     } else {
-        l2 <- mapply(rcell, x = l, format = .formats, SIMPLIFY = FALSE)
+        stopifnot(is.list(.cell_footnotes))
+        if(length(.cell_footnotes) != length(l)) {
+            .cell_footnotes <- c(.cell_footnotes, setNames(rep(list(character()),
+                                                               length.out = length(setdiff(names(l), names(.cell_footnotes)))),
+                                                           setdiff(names(l), names(.cell_footnotes))))
+            .cell_footnotes <- .cell_footnotes[names(l)]
+        }
+         ##   length(.cell_footnotes) <- length(l) ## this pads with NULL elements, as desired
+
+        l2 <- mapply(rcell, x = l, format = .formats,
+                     footnotes = .cell_footnotes %||% list(NULL),
+                     SIMPLIFY = FALSE)
     }
     if(is.null(.labels)) {
         objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
@@ -124,10 +146,20 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
     if(is.null(.names) && !is.null(names(l)))
         .names <- names(l)
+    stopifnot(is.list(.row_footnotes))
+    if(length(.row_footnotes) != length(l2)) {
+        tmp <- .row_footnotes
+        .row_footnotes <- vector("list", length(l2))
+        pos <- match(names(tmp), .names)
+        nonna <- which(!is.na(pos))
+        .row_footnotes[pos] <- tmp[nonna]
+        #        length(.row_footnotes) <- length(l2)
+    }
     ret <- RowsVerticalSection(l2, names = .names,
                                labels = .labels,
                                indent_mods = .indent_mods,
-                               formats = .formats)
+                               formats = .formats,
+                               footnotes = .row_footnotes)
     ## if(!is.null(.names))
     ##     names(l2) <- .names
     ## else

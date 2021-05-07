@@ -34,10 +34,9 @@ lyt_args(
   cutfun,
   cutlabelfun,
   cumulative,
-  incl_all,
   indent_mod,
   show_labels,
-  visible_label,
+  label_pos,
   var_labels,
   cvar,
   table_names,
@@ -103,13 +102,12 @@ lyt_args(
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
-\item{incl_all}{logical(1). Should an "all" comparison column be created. Defaults to \code{FALSE}.}
-
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
 \item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 

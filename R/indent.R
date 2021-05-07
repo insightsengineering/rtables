@@ -40,3 +40,37 @@ indent <- function(x, by = 1) {
     x
 }
 
+#' Clear All Indent Mods from a Table
+#' @inheritParams gen_args
+#' @return The same class as \code{tt}, with all indent mods set to zero.
+#' @examples
+#' t1 <- basic_table() %>%
+#'  summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
+#'  split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+#'  summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+#'  analyze("AGE", indent_mod = -1L) %>%
+#'  build_table(ex_adae)
+#' t1
+#' clear_indent_mods(t1)
+#' @export
+#' @rdname clear_imods
+setGeneric("clear_indent_mods", function(tt) standardGeneric("clear_indent_mods"))
+#' @export
+#' @rdname clear_imods
+setMethod("clear_indent_mods", "VTableTree",
+          function(tt) {
+    ct <- content_table(tt)
+    if(!is.null(ct)) {
+        content_table(tt) <- clear_indent_mods(ct)
+    }
+    tree_children(tt) <- lapply(tree_children(tt), clear_indent_mods)
+    indent_mod(tt) <- 0L
+    tt
+})
+#' @export
+#' @rdname clear_imods
+setMethod("clear_indent_mods", "TableRow",
+          function(tt) {
+    indent_mod(tt) <- 0L
+    tt
+})

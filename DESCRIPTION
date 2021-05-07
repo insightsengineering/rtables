@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2021-03-24
-Version: 0.3.7.0002
+Version: 0.3.7.0003
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -64,5 +64,8 @@ Collate:
     'tt_sort.R'
     'tt_test_afuns.R'
     'tt_toString.R'
+    'tt_export.R'
     'labels.R'
+    'index_footnotes.R'
+    'tt_from_df.R'
     'zzz_constants.R'

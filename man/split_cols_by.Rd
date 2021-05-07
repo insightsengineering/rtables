@@ -14,8 +14,7 @@ split_cols_by(
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
-  ref_group = NULL,
-  incl_all = FALSE
+  ref_group = NULL
 )
 }
 \arguments{
@@ -38,8 +37,6 @@ split_cols_by(
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
 \item{ref_group}{character(1) or \code{NULL}. Level of \code{var} which should be considered ref_group/reference}
-
-\item{incl_all}{logical(1). Should a column representing all observations at this level of nesting be added. defaults to \code{FALSE}}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

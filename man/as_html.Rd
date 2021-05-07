@@ -10,7 +10,9 @@ as_html(
   class_table = "table table-condensed table-hover",
   class_tr = "",
   class_td = "",
-  class_th = ""
+  class_th = "",
+  caption_txt = NULL,
+  link_label = NULL
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ as_html(
 \item{class_td}{class for td tag}
 
 \item{class_th}{class for th tag}
+
+\item{caption_txt}{Caption text (not including label anchor) for the table}
+
+\item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
@@ -48,7 +54,7 @@ as_html(tbl, class_table = "table", class_tr = "row")
 
 as_html(tbl, class_td = "aaa")
 
-if(interactive()) {
+\dontrun{
 Viewer(tbl)
 }
 }

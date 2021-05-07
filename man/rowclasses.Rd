@@ -30,7 +30,8 @@ LabelRow(
   var = NA_character_,
   format = NULL,
   klass,
-  indent_mod = 0L
+  indent_mod = 0L,
+  footnotes = list()
 )
 
 DataRow(...)
@@ -59,6 +60,8 @@ ContentRow(...)
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{klass}{Internal detail.}
+
+\item{footnotes}{list or NULL. Referential footnotes to be applied at current level}
 
 \item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }

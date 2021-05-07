@@ -27,7 +27,7 @@ split_rows_by_cuts(
   split_label = var,
   nested = TRUE,
   cumulative = FALSE,
-  visible_label = FALSE
+  label_pos = "hidden"
 )
 
 split_cols_by_cutfun(
@@ -62,7 +62,7 @@ split_rows_by_quartiles(
   extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
-  visible_label = FALSE
+  label_pos = "hidden"
 )
 
 split_rows_by_cutfun(
@@ -77,7 +77,7 @@ split_rows_by_cutfun(
   extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
-  visible_label = FALSE
+  label_pos = "hidden"
 )
 }
 \arguments{
@@ -95,7 +95,8 @@ split_rows_by_cutfun(
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 
-\item{visible_label}{logical(1). Should the \emph{split} label be visible in the resulting table.}
+\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 

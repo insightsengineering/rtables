@@ -30,15 +30,21 @@ setGeneric("nlines",
 
 setMethod("nlines", "TableRow",
           function(x, colwidths) {
-    1L
+    fns <- sum(unlist(lapply(row_footnotes(x), nlines))) + sum(unlist(lapply(cell_footnotes(x), nlines)))
+    1L + fns
 })
 
 setMethod("nlines", "LabelRow",
           function(x, colwidths) {
     if(labelrow_visible(x))
-        1L
+        1L + sum(unlist(lapply(row_footnotes(x), nlines)))
     else
         0L
+})
+
+setMethod("nlines", "RefFootnote",
+          function(x, colwidths) {
+    1L
 })
 
 
@@ -51,10 +57,20 @@ setMethod("nlines", "InstantiatedColumnInfo",
           function(x, colwidths) {
     lfs = collect_leaves(coltree(x))
     depths = sapply(lfs, function(l) length(pos_splits(l)))
-    max(depths) + divider_height(x)
+    max(depths, length(top_left(x))) + divider_height(x)
 
 })
 
+## XXX beware. I think it is dangerous
+setMethod("nlines", "list",
+          function(x, colwidths) {
+    if(length(x) == 0)
+        0L
+    else
+        sum(unlist(vapply(x, nlines, NA_integer_, colwidths = colwidths)))
+})
+
+setMethod("nlines", "NULL", function(x, colwidths) 0L)
 pagdfrow = function(row,
                     nm = obj_name(row),
                     lab = obj_label(row),
@@ -67,7 +83,10 @@ pagdfrow = function(row,
                     repext = 0L,
                     repind = integer(),
                     indent = 0L,
-                    rclass = class(row)
+                    rclass = class(row),
+                    nrowrefs = 0L,
+                    ncellrefs = 0L,
+                    nreflines = 0L
                     ) {
 
     data.frame(label = lab,
@@ -81,6 +100,9 @@ pagdfrow = function(row,
                reprint_inds = I(list(unlist(repind))),
                node_class = rclass,
                indent = max(0L, indent),
+               nrowrefs = nrowrefs,
+               ncellrefs = ncellrefs,
+               nreflines = nreflines,
 
                stringsAsFactors = FALSE)
 }
@@ -118,7 +140,8 @@ pos_to_path <- function(pos) {
     for(i in seq_along(spls)) {
         path <- c(path,
                   obj_name(spls[[i]]),
-                  rawvalues(vals[[i]]))
+                  ##rawvalues(vals[[i]]))
+                  value_names(vals[[i]]))
     }
     path
 }
@@ -137,6 +160,9 @@ pos_to_path <- function(pos) {
 #' @param indent integer(1). Internal detail do not set manually.
 
 #' @param colwidths numeric. Internal detail do not set manually.
+#' @param nrowrefs integer(1). Internal detail do not set manually.
+#' @param ncellrefs integer(1). Internal detail do not set manually.
+#' @param nreflines integer(1). Internal detail do not set manually.
 #'
 #' @details
 #' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
@@ -157,7 +183,10 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                   repr_ext = 0L,
                                   repr_inds = integer(),
                                   sibpos = NA_integer_,
-                                  nsibs = NA_integer_) standardGeneric("make_row_df"))
+                                  nsibs = NA_integer_,
+                                  nrowrefs = 0L,
+                                  ncellrefs = 0L,
+                                  nreflines = 0L) standardGeneric("make_row_df"))
 
 #' @exportMethod make_row_df
 #' @rdname make_row_df
@@ -177,9 +206,11 @@ setMethod("make_row_df", "VTableTree",
     if(incontent)
         path <- c(path, "@content")
     else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
+    ##else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root
         path <- c(path, obj_name(tt))
 
     ret <- list()
+    ## note this is the **table** not the label row
     if(!visible_only) {
         ret <- c(ret,
                  list(pagdfrow(rnum = NA,
@@ -192,7 +223,10 @@ setMethod("make_row_df", "VTableTree",
                                extent = 0,
                                indent = indent,
                                rclass = class(tt), sibpos = sibpos,
-                               nsibs = nsibs)))
+                               nsibs = nsibs,
+                               nrowrefs = 0L,
+                               ncellrefs = 0L,
+                               nreflines = 0L)))
     }
     if(labelrow_visible(tt)) {
         lr = tt_labelrow(tt)
@@ -213,6 +247,7 @@ setMethod("make_row_df", "VTableTree",
         repr_inds = c(repr_inds, rownum)
         indent <- indent + 1L
     }
+
 
     if(NROW(content_table(tt)) > 0) {
         cind <- indent + indent_mod(content_table(tt))
@@ -278,6 +313,9 @@ setMethod("make_row_df", "TableRow",
                    nsibs = NA_integer_) {
     indent <- indent + indent_mod(tt)
     rownum <- rownum + 1
+    rrefs <- row_footnotes(tt)
+    crefs <- cell_footnotes(tt)
+    reflines <- sum(sapply(c(rrefs, crefs), nlines))
     ret <- pagdfrow(tt, rnum = rownum,
                   colwidths = colwidths,
                   sibpos = sibpos,
@@ -285,7 +323,12 @@ setMethod("make_row_df", "TableRow",
                   pth = c(path, obj_name(tt)),
                   repext = repr_ext,
                   repind = repr_inds,
-                  indent = indent)
+                  indent = indent,
+                  ## these two are unlist calls cause they come in lists even with no footnotes
+                  nrowrefs = length(rrefs) ,
+                  ncellrefs = length(unlist(crefs)),
+                  nreflines = reflines
+                  )
     ret
 })
 
@@ -310,7 +353,10 @@ setMethod("make_row_df", "LabelRow",
                     pth = path,
                     repext = repr_ext,
                     repind = repr_inds,
-                    indent = indent)
+                    indent = indent,
+                    nrowrefs = length(row_footnotes(tt)),
+                    ncellrefs = 0L,
+                    nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_)))
     if(!labelrow_visible(tt))
         ret <- ret[0,]
     ret
@@ -391,139 +437,57 @@ setMethod("inner_col_df", "LayoutColTree",
     ret
 })
 
-make_row_df_old = function(tt, colwidths = NULL, visible_only = TRUE) {
-    rownum = 0
-    indent = 0L
-
-
-    pag_df = function(tree, path, incontent = FALSE,
-                      cwidths,
-                      repr_ext = 0L,
-                      repr_inds = integer(),
-                      indent = 0L) {
-        ret = list()
-        if(labelrow_visible(tree)) {
-            lr = tt_labelrow(tree)
-            rownum <<- rownum + 1L
-            ret  =  c(ret,
-                      list(pagdfrow(row = lr,
-                                    rnum = rownum,
-                                    nm = obj_name(tree),
-                                    pth = path,
-                                    colwidths = cwidths,
-                                    repext = repr_ext,
-                                    repind = list(repr_inds),
-                                    indent = indent)))
-            repr_ext = repr_ext + 1L
-            repr_inds = c(repr_inds, rownum)
-            indent <- indent + 1L
-        } else if (!visible_only) {
-            ret <- c(ret,
-                     list(pagdfrow(rnum = NA,
-                                   nm = obj_name(tree),
-                                   lab = "",
-                                   pth = path,
-                                   colwidths = cwidths,
-                                   repext = repr_ext,
-                                   repind = list(repr_inds),
-                                   extent = 0,
-                                   indent = indent,
-                                   rclass = class(tree))))
-
-        }
-        if(is(tree, "TableTree") &&
-           nrow(content_table(tree)) > 0) {
-            ctab = content_table(tree)
-            ## already put rownum in there if necessary
-            rnbef = rownum + 1L
-            crows = pag_df(ctab,
-                           path = c(path, "@content"),
-                           cwidths = cwidths,
-                           repr_ext = repr_ext,
-                           repr_inds = repr_inds,
-                           indent = indent)
-            if(is(crows, "data.frame"))
-                crows = list(crows)
-            ret = c(ret, crows)
-            repr_ext = repr_ext + nlines(ctab)
-            repr_inds = c(repr_inds, rnbef:rownum)
-            indent = indent + 1L
-        }
-        kids = tree_children(tree)
-        nk = length(kids)
-        for(i in seq_along(kids)) {
-            k = kids[[i]]
-            stopifnot(identical(unname(obj_name(k)), names(kids)[i]))
-            if(is(k, "TableRow")) {
-                rownum <<- rownum + 1
-                ret = c(ret, list(pagdfrow(k, rnum = rownum,
-                                         colwidths = cwidths,
-                                         sibpos = i,
-                                         nsibs = nk,
-                                         pth = c(path, obj_name(k)),
-                                         repext = repr_ext,
-                                         repind = repr_inds,
-                                         indent = indent)))
-            } else {
-
-                newrows = pag_df(k, path = c(path, obj_name(k)),
-                                 cwidths = cwidths, repr_ext = repr_ext,
-                                 repr_inds = repr_inds,
-                                 indent = indent)
-                if(is(newrows, "data.frame")) {
-                    newrows = list(newrows)
-                }
-                ret = c(ret, newrows)
-            }
-        }
-        ret
-
-    }
-    rws = pag_df(tt, path = "root", cwidths = colwidths)
-    do.call(rbind.data.frame, rws)
-}
-
-
 
 valid_pag = function(pagdf,
                      guess,
+                     start,
+                     rlpp,
                      min_sibs,
                      nosplit = NULL,
                      verbose = FALSE) {
-    rw = pagdf[guess,]
+    rw <- pagdf[guess,]
+
 
     if(verbose)
         message("Checking pagination after row ", guess)
+    reflines <-  sum(pagdf[start:guess, "nreflines"])
+    if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
+    lines <- guess - start + reflines
+    if(lines > rlpp) {
+        if(verbose)
+            message("\t....................... FAIL: Referential footnotes take up too much space")
+        return(FALSE)
+    }
     if(rw[["node_class"]] %in% c("LabelRow", "ContentRow")) {
         if(verbose)
             message("\t....................... FAIL: last row is a label or content row")
         return(FALSE)
     }
 
-    sibpos = rw[["pos_in_siblings"]]
-    nsib = rw[["n_siblings"]]
-    okpos = min(min_sibs + 1, rw[["n_siblings"]])
+    sibpos <- rw[["pos_in_siblings"]]
+    nsib <- rw[["n_siblings"]]
+    okpos <- min(min_sibs + 1, rw[["n_siblings"]])
     if( sibpos != nsib){
-        retfalse = FALSE
+        retfalse <- FALSE
         if(sibpos < min_sibs + 1) {
-            retfalse = TRUE
+            retfalse <- TRUE
             if(verbose)
-                message("\t....................... FAIL: last row had only ", sibpos - 1, "preceeding siblings, needed ", min_sibs)
+                message("\t....................... FAIL: last row had only ", sibpos - 1, " preceeding siblings, needed ", min_sibs)
         } else if (nsib - sibpos < min_sibs + 1) {
-            retfalse = TRUE
+            retfalse <- TRUE
             if(verbose)
-                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, "following siblings, needed ", min_sibs)
+                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, " following siblings, needed ", min_sibs)
         }
         if(retfalse)
             return(FALSE)
     }
     if(guess < nrow(pagdf)) {
-        curpth = unlist(rw$path)
-        nxtpth = unlist(pagdf$path[[guess+1]])
-        inplay = nosplit[(nosplit %in% intersect(curpth, nxtpth))]
+        curpth <- unlist(rw$path)
+        nxtpth <- unlist(pagdf$path[[guess+1]])
+        inplay <- nosplit[(nosplit %in% intersect(curpth, nxtpth))]
         if(length(inplay) > 0) {
-            curvals = curpth[match(inplay, curpth) + 1]
-            nxtvals = nxtpth[match(inplay, nxtpth) + 1]
+            curvals <- curpth[match(inplay, curpth) + 1]
+            nxtvals <- nxtpth[match(inplay, nxtpth) + 1]
             if(identical(curvals, nxtvals)) {
                 if(verbose)
                     message("\t....................... FAIL: values of unsplitable vars before [", curvals, "] and after [", nxtvals, "] match")
@@ -545,7 +509,7 @@ find_pag = function(pagdf,
                     nosplitin = character(),
                     verbose = FALSE) {
     origuess = guess
-    while(guess >= start && !valid_pag(pagdf, guess, min_sibs = min_siblings, nosplit = nosplitin, verbose)) {
+    while(guess >= start && !valid_pag(pagdf, guess, start = start, rlpp  = rlpp, min_sibs = min_siblings, nosplit = nosplitin, verbose)) {
         guess = guess - 1
     }
     if(guess < start)
@@ -625,17 +589,26 @@ pag_tt_indices = function(tt, lpp = 15,
                            colwidths = NULL,
                            verbose = FALSE) {
 
+    dheight <- divider_height(tt)
 
-    hlines = nlines(col_info(tt))
+    cinfo_lines <- nlines(col_info(tt))
+    if(any(nzchar(all_titles(tt)))) {
+        tlines <- length(all_titles(tt)) + dheight + 1L
+    } else {
+        tlines <- 0
+    }
+    flines <- length(all_footers(tt))
+    if(flines > 0)
+        flines <- flines + dheight + 1L
     ## row lines per page
-    rlpp = lpp - hlines
+    rlpp = lpp - cinfo_lines - tlines - flines
     pagdf = make_row_df(tt, colwidths)
 
 
     start = 1
     nr = nrow(pagdf)
     ret = list()
-    while(start < nr) {
+    while(start <= nr) {
         adjrlpp = rlpp - pagdf$par_extent[start]
         stopifnot(adjrlpp > 0)
         guess = min(nr, start + adjrlpp - 1)
@@ -664,5 +637,7 @@ paginate_table = function(tt, lpp = 15,
                           nosplitin = nosplitin,
                           colwidths = colwidths,
                           verbose = verbose)
-    lapply(inds, function(x) tt[x,,keep_topleft = TRUE])
+    lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
+                                keep_titles = TRUE,
+                                reindex_refs = FALSE])
 }

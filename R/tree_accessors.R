@@ -477,7 +477,7 @@ setMethod("obj_label<-", "VTableTree",
     lr = tt_labelrow(obj)
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
-        labelrow_visible(lr) = TRUE
+        labelrow_visible(lr) = "visible" ## TRUE
 
     tt_labelrow(obj) = lr
     obj
@@ -512,7 +512,7 @@ setMethod("labelrow_visible", "LabelRow",
           function(obj) obj@visible)
 #' @rdname int_methods
 setMethod("labelrow_visible", "VAnalyzeSplit",
-          function(obj) obj@var_label_visible)
+          function(obj) .labelkids_helper(obj@var_label_position))
 
 #' @rdname int_methods
 setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_visible<-"))
@@ -535,7 +535,7 @@ setMethod("labelrow_visible<-", "LabelRow",
 #' @rdname int_methods
 setMethod("labelrow_visible<-", "VAnalyzeSplit",
           function(obj, value) {
-    obj@var_label_visible = value
+    obj@var_label_position = value
     obj
 })
 
@@ -563,17 +563,45 @@ setMethod("label_kids<-", c("Split", "logical"), function(spl, value) {
 #' @rdname int_methods
 setGeneric("vis_label", function(spl) standardGeneric("vis_label"))
 #' @rdname int_methods
-setMethod("vis_label", "Split", function(spl) spl@split_label_visible)
+setMethod("vis_label", "Split", function(spl) {
+    .labelkids_helper(label_position(spl))
+})
 
 #' @rdname int_methods
 setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
 #' @rdname int_methods
 setMethod("vis_label<-", "Split", function(spl, value) {
+    stop("defunct")
     if(is.na(value))
         stop("split label visibility must be TRUE or FALSE, got NA")
-    spl@split_label_visible <- value
+#    spl@split_label_visible <- value
     spl
 })
+
+
+
+#' @rdname int_methods
+setGeneric("label_position", function(spl) standardGeneric("label_position"))
+#' @rdname int_methods
+setMethod("label_position", "Split", function(spl) spl@split_label_position)
+
+#' @rdname int_methods
+setMethod("label_position", "VAnalyzeSplit", function(spl) spl@var_label_position) ##split_label_position)
+
+
+#' @rdname int_methods
+setGeneric("label_position<-", function(spl, value) standardGeneric("label_position<-"))
+#' @rdname int_methods
+setMethod("label_position<-", "Split", function(spl, value) {
+    value <- match.arg(value, valid_lbl_pos)
+    spl@split_label_position <- value
+    spl
+})
+
+
+
+
+
 
 
 ### Function acessors (summary, tabulation and split)
@@ -1984,4 +2012,188 @@ setMethod("vars_in_layout", "ManualSplit",
           function(lyt) character())
 
 
+
+
+
+## Titles and footers
+
+setGeneric("main_title", function(obj) standardGeneric("main_title"))
+setMethod("main_title", "VTitleFooter",
+          function(obj) obj@main_title)
+
+setGeneric("main_title<-", function(obj, value) standardGeneric("main_title<-"))
+setMethod("main_title<-", "VTitleFooter",
+          function(obj, value) {
+    stopifnot(length(value) == 1)
+    obj@main_title <- value
+    obj
+})
+
+
+setGeneric("subtitles", function(obj) standardGeneric("subtitles"))
+setMethod("subtitles", "VTitleFooter",
+          function(obj) obj@subtitles)
+
+
+setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-"))
+setMethod("subtitles<-", "VTitleFooter",
+          function(obj, value) {
+    obj@subtitles <- value
+    obj
+})
+
+all_titles <- function(obj) c(main_title(obj), subtitles(obj))
+
+
+setGeneric("main_footer", function(obj) standardGeneric("main_footer"))
+setMethod("main_footer", "VTitleFooter",
+          function(obj) obj@main_footer)
+
+
+setGeneric("main_footer<-", function(obj, value) standardGeneric("main_footer<-"))
+setMethod("main_footer<-", "VTitleFooter",
+          function(obj, value) {
+    obj@main_footer <- value
+    obj
+})
+
+
+
+setGeneric("prov_footer", function(obj) standardGeneric("prov_footer"))
+setMethod("prov_footer", "VTitleFooter",
+          function(obj) obj@provenance_footer)
+
+
+setGeneric("prov_footer<-", function(obj, value) standardGeneric("prov_footer<-"))
+setMethod("prov_footer<-", "VTitleFooter",
+          function(obj, value) {
+    obj@provenance_footer <- value
+    obj
+})
+
+all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
+
+
+#' Referential Footnote Accessors
+#'
+#' Get and set referential footnotes on aspects of a built table
+#'
+#' @inheritParams gen_args
+#' @export
+#' @rdname ref_fnotes
+
+setGeneric("row_footnotes", function(obj) standardGeneric("row_footnotes"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("row_footnotes", "TableRow",
+          function(obj) obj@row_footnotes)
+#' @export
+#' @rdname ref_fnotes
+setMethod("row_footnotes", "RowsVerticalSection",
+          function(obj) attr(obj, "row_footnotes") %||% list())
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnotes<-"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("row_footnotes<-", "TableRow",
+          function(obj, value) {
+    obj@row_footnotes <- value
+    obj
+})
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("row_footnotes", "ElementaryTable",
+          function(obj) {
+    rws <- collect_leaves(obj, TRUE, TRUE)
+    cells <- lapply(rws, row_footnotes)
+    cells
+})
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes", "CellValue",
+          function(obj) attr(obj, "footnote") %||% list())
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes", "TableRow",
+          function(obj) {
+    lapply(row_cells(obj), cell_footnotes)
+})
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes", "LabelRow",
+          function(obj) {
+    rep(list(list()), ncol(obj))
+})
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes", "ElementaryTable",
+          function(obj) {
+    rws <- collect_leaves(obj, TRUE, TRUE)
+    cells <- lapply(rws, cell_footnotes)
+    do.call(rbind, cells)
+})
+
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("cell_footnotes<-", function(obj, value) standardGeneric("cell_footnotes<-"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes<-", "CellValue",
+          function(obj, value) {
+    if(is(value, "RefFootnote"))
+        value <- list(value)
+    else if (!is.list(value))
+        value <- lapply(value, RefFootnote)
+    attr(obj, "footnote") <- value
+    obj
+})
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes<-", "DataRow",
+          function(obj, value) {
+    if(length(value) != ncol(obj))
+        stop("Did not get the right number of footnote ref values for cell_footnotes<- on a full row.")
+
+    row_cells(obj) <- mapply(function(cell, fns) {
+        if(is.list(fns))
+            cell_footnotes(cell) <- lapply(fns, RefFootnote)
+        else
+            cell_footnotes(cell) <- list(RefFootnote(fns))
+        cell
+    },
+    cell = row_cells(obj),
+    fns = value, SIMPLIFY=FALSE)
+    obj
+})
+
+
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_index", function(obj) standardGeneric("ref_index"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("ref_index", "RefFootnote",
+          function(obj) obj@index)
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_index<-", function(obj, value) standardGeneric("ref_index<-"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("ref_index<-", "RefFootnote",
+          function(obj, value) {
+    obj@index <- value
+    obj
+})
 

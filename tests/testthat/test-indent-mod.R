@@ -87,7 +87,7 @@ test_that("indents are correct in make_row_df", {
 
     l6 <-  basic_table() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 0,
-                      visible_label = TRUE) %>%
+                      label_pos = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
         split_rows_by("FACTOR2", "Factor2",
                       split_fun = remove_split_levels("C"),
@@ -109,7 +109,7 @@ test_that("indents are correct in make_row_df", {
 
     l7 <-  basic_table() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2,
-                      visible_label = TRUE) %>%
+                      label_pos = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)", indent_mod = -1) %>%
         split_rows_by("FACTOR2", "Factor2",
                       split_fun = remove_split_levels("C"),
@@ -124,3 +124,25 @@ test_that("indents are correct in make_row_df", {
                      pgdf7$indent)
 })
 
+test_that("clear_indent_mods works as desired", {
+
+
+    tm <- basic_table() %>%
+        summarize_row_groups("STUDYID",label_fstr = "overall summary", indent_mod = 1L) %>%
+        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+        analyze("AGE", indent_mod = -1L) %>%
+        build_table(ex_adae)
+    
+    t0 <-  basic_table() %>%
+        summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
+        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+        analyze("AGE") %>%
+        build_table(ex_adae)
+    
+    expect_identical(matrix_form(clear_indent_mods(tm)),
+                     matrix_form(t0))
+    
+
+})

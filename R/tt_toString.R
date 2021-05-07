@@ -54,7 +54,8 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   aligns <- mat$aligns
   keep_mat <- mat$display
   spans <- mat$spans
-  ri <- mat$row_info
+    ri <- mat$row_info
+    ref_fnotes <- mat$ref_footnotes
 
 
   # xxxx <- 1
@@ -102,7 +103,16 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   txt_head <- apply(head(content, nr_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nr_header), 1, .paste_no_na, collapse = gap_str)
 
-  paste0(paste(c(txt_head, div, txt_body), collapse = "\n"), "\n")
+  allts <- all_titles(x)
+  titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
+    ## TODO make titles affect width...
+
+    allfoots <- all_footers(x)
+
+
+    footer_txt <- c(if(length(ref_fnotes) > 0) c(div, "", ref_fnotes),
+                    if(any(nzchar(allfoots))) c(div, "", allfoots))
+  paste0(paste(c(titles_txt, txt_head, div, txt_body, footer_txt), collapse = "\n"), "\n")
 
 })
 
@@ -160,10 +170,11 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
 
   header_content <- .tbl_header_mat(tt) # first col are for row.names
 
-  sr <- summarize_rows(tt)
+    ##sr <- summarize_rows(tt)
+    sr <- make_row_df(tt)
 
   body_content_strings <- if (NROW(sr) == 0) {
-    ""
+    character()
   } else {
     cbind(as.character(sr$label), get_formatted_cells(tt))
   }
@@ -177,7 +188,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
   body_spans <- if (nrow(tt) > 0) {
     cbind(1L, do.call(rbind, tsptmp))
   } else {
-    matrix(1, nrow = 1, ncol = ncol(tt) + 1)
+    matrix(1, nrow = 0, ncol = ncol(tt) + 1)
   }
 
   body <- rbind(header_content$body, body_content_strings)
@@ -216,17 +227,90 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     body[, 1] <- indent_string(body[, 1], c(rep(0, nrow(header_content$body)), sr$indent))
   }
 
+    body_ref_strs <- get_ref_matrix(tt)
+    body <- matrix(paste0(body,
+                         rbind(matrix("", nrow(header_content$body), ncol = ncol(body)),
+                               body_ref_strs)),
+                   nrow = nrow(body),
+                   ncol = ncol(body))
+
+    ref_fnotes <- get_formatted_fnotes(tt)
   structure(
     list(
       strings = body,
       spans = spans,
       aligns = aligns,
       display = display,
-      row_info = sr
+      row_info = sr,
+      ref_footnotes = ref_fnotes
     ),
     nrow_header = nrow(header_content$body)
   )
 }
+
+format_fnote_ref <- function(fn) {
+    if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+        return("")
+    else if(is.list(fn) && all(vapply(fn, is.list, TRUE)))
+        return(vapply(fn, format_fnote_ref, ""))
+    if(is.list(fn)) {
+        inds <- unlist(lapply(unlist(fn), function(x) if(is(x, "RefFootnote")) x@index else NULL))
+    } else {
+        inds <- fn@index
+    }
+    if(length(inds) > 0) {
+        paste0(" {", paste(inds, collapse = ", "), "}")
+    } else {
+        ""
+    }
+}
+
+
+format_fnote_note <- function(fn) {
+    if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+        return(character())
+    if(is.list(fn)) {
+        return(unlist(lapply(unlist(fn), format_fnote_note)))
+    }
+
+    if(is(fn, "RefFootnote")) {
+        paste0("{", fn@index, "} - ", fn@value)
+    } else {
+        NULL
+    }
+}
+
+.fn_ind_extractor <- function(strs) {
+    res <- suppressWarnings(as.numeric(gsub("\\{([[:digit:]]+)\\}.*", "\\1", strs)))
+    if(!(sum(is.na(res)) %in% c(0L, length(res))))
+        stop("Got NAs mixed with non-NAS for extracted footnote indices. This should not happen")
+    res
+}
+get_ref_matrix <- function(tt) {
+    if(ncol(tt) == 0 || nrow(tt) == 0) {
+        return(matrix("", nrow = nrow(tt), ncol = ncol(tt) + 1L))
+    }
+    rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
+    lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
+    cstrs <- unlist(lapply(lst, format_fnote_ref))
+    bodymat <- matrix(cstrs,
+                      byrow = TRUE,
+                      nrow = nrow(tt),
+                      ncol = ncol(tt))
+    cbind(vapply(rows, function(rw) format_fnote_ref(row_footnotes(rw)), ""), bodymat)
+}
+
+get_formatted_fnotes <- function(tt) {
+    rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
+    lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
+    cstrs <- unlist(lapply(lst, format_fnote_note))
+    rstrs <- unlist(lapply(rows, function(rw) format_fnote_note(row_footnotes(rw))))
+    allstrs <- c(rstrs, cstrs)
+    inds <- .fn_ind_extractor(allstrs)
+    allstrs[order(inds)]
+}
+
+
 
 ## print depths (not to be confused with tree depths)
 .cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
@@ -236,78 +320,161 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
 }
 
 
-.do_tbl_h_piece <- function(ct, padding = 0) {
-    if(is(ct, "LayoutColLeaf")) {
-        return(list(rcell(obj_label(ct), colspan = 1)))
+## .do_tbl_h_piece <- function(ct, padding = 0, span = 1) {
+
+##     if(is(ct, "LayoutColLeaf")) {
+##       ##   padcells <- if(padding > 0) list(rep(list(rcell("", colspan = 1)), padding))
+
+##         return(c(list(rcell(obj_label(ct), colspan = 1))))
+##     }
+
+
+##     nleafs <- length(collect_leaves(ct))
+##     padcells <- if(padding > 0) list(rep(list(rcell("", colspan = 1)), padding))
+
+##     kids <- tree_children(ct)
+##     cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
+##     pieces <- mapply(.do_tbl_h_piece,
+##                      ct = kids, padding = max(cdepths) - cdepths,
+##                      SIMPLIFY= FALSE)
+##     ## listpieces <- vapply(pieces, function(x) {
+##     ##     any(vapply(x, function(y) is.list(y) && !is(y, "CellValue"), NA))
+##     ##     }, NA)
+##     ## if(any(listpieces))
+##     ##     pieces[listpieces] <- lapply(pieces[listpieces], unlist)
+##     lpieces <- vapply(pieces, length, 1L)
+
+##     nmcell <- list(rcell(obj_label(ct), colspan = nleafs))
+
+##     stopifnot(length(unique(lpieces)) == 1)
+##     rowparts <- lapply(1:max(lpieces),
+##                        function(i) {
+##         res = lapply(pieces, `[[`, i = i)
+##         if(!are(res, "CellValue"))
+##             res = unlist(res, recursive = FALSE)
+##         res
+##     })
+
+
+##     c(padcells,
+##       nmcell,
+##       rowparts)
+## }
+
+.do_tbl_h_piece2 <- function(tt) {
+    coldf <- make_col_df(tt, visible_only = FALSE)
+    remain <- seq_len(nrow(coldf))
+    chunks <- list()
+    cur <- 1
+    retmat <- NULL
+
+    ## each iteration of this loop identifies
+    ## all rows corresponding to one top-level column
+    ## label and its children, then processes those
+    ## with .do_header_chunk
+    while(length(remain) > 0) {
+        rw <- remain[1]
+        inds <- coldf$leaf_indices[[rw]]
+        endblock <- which(coldf$abs_pos == max(inds))
+
+        stopifnot(endblock >= rw)
+        chunks[[cur]] <- .do_header_chunk(coldf[rw:endblock,])
+        remain <- remain[remain > endblock]
+        cur <- cur + 1
     }
+    chunks <- .pad_tops(chunks)
+    lapply(seq_len(length(chunks[[1]])),
+           function(i) {
+        DataRow(unlist(lapply(chunks, `[[`, i), recursive = FALSE))
+    })
+}
+.pad_end <- function(lst, padto, ncols) {
+    curcov <- sum(vapply(lst, cell_cspan, 0L))
+    if(curcov == padto)
+        return(lst)
 
-    nleafs <- length(collect_leaves(ct))
-    kids <- tree_children(ct)
-    cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
-    pieces <- mapply(.do_tbl_h_piece,
-                     ct = kids, padding = max(cdepths) - cdepths,
-                     SIMPLIFY= FALSE)
-    lpieces <- vapply(pieces, length, 1L)
+    c(lst, list(rcell("", colspan = padto - curcov)))
+}
 
-    padcells <- if(padding > 0) list(rep(list(rcell("", colspan = nleafs)), padding))
-    nmcell <- list(rcell(obj_label(ct), colspan = nleafs))
 
-    stopifnot(length(unique(lpieces)) == 1)
-    rowparts <- lapply(1:max(lpieces),
-                       function(i) {
-        res = lapply(pieces, `[[`, i = i)
-        if(!are(res, "CellValue"))
-            res = unlist(res, recursive = FALSE)
-        res
+.pad_tops <- function(chunks) {
+    lens <- vapply(chunks, length, 1L)
+    padto <- max(lens)
+    needpad <- lens != padto
+    if(all(!needpad))
+        return(chunks)
+
+    chunks[needpad] <- lapply(chunks[needpad],
+                              function(chk) {
+        span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
+        needed <- padto - length(chk)
+        c(replicate(rcell("", colspan = span),
+                    n = needed),
+          chk)
+    })
+    chunks
+
+}
+
+.do_header_chunk <- function(coldf) {
+    ## hard assumption that coldf is a section
+    ## of a column dataframe summary that was
+    ## created with visible_only=FALSE
+    nleafcols <- length(coldf$leaf_indices[[1]])
+
+    spldfs <- split(coldf, lengths(coldf$path))
+    toret <- lapply(seq_along(spldfs),
+                    function(i) {
+        rws <- spldfs[[i]]
+
+        thisbit <- lapply(seq_len(nrow(rws)), function(ri) rcell(rws[ri, "label", drop = TRUE], colspan = rws$total_span[ri]))
+        .pad_end(thisbit, nleafcols)
     })
 
-
-    c(padcells,
-      nmcell,
-      rowparts)
+    toret
 }
+
 
 
 .tbl_header_mat <- function(tt) {
 
-  clyt <- coltree(tt)
-  rowvals <- .do_tbl_h_piece(clyt)
-  rowvals <- rowvals[sapply(rowvals, function(x) any(nzchar(unlist(x))))]
-  rows <- lapply(rowvals, DataRow, cinfo = col_info(tt))
-  cinfo <- col_info(tt)
+    clyt <- coltree(tt)
+    rows <- .do_tbl_h_piece2(tt) ##(clyt)
+    cinfo <- col_info(tt)
 
-  nc <- ncol(tt)
-  body <- matrix(rapply(rows, function(x) {
-    cs <- row_cspans(x) ##attr(x, "colspan")
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(row_values(x), cs) ##as.vector(x), cs)
-  }), ncol = nc, byrow = TRUE)
+    nc <- ncol(tt)
+    body <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x)
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(row_values(x), cs)
+    }), ncol = nc, byrow = TRUE)
 
-  span <- matrix(rapply(rows, function(x) {
-    cs <- row_cspans(x) ##attr(x, "colspan")
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(cs, cs) ##as.vector(x), cs)
-  }), ncol = nc, byrow = TRUE)
+    span <- matrix(rapply(rows, function(x) {
+        cs <- row_cspans(x)
+        if (is.null(cs)) cs <- rep(1, ncol(x))
+        rep(cs, cs)
+    }), ncol = nc, byrow = TRUE)
 
 
-  if (disp_ccounts(cinfo)) {
-    counts <- col_counts(cinfo)
-    cformat <- colcount_format(cinfo)
-    body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
-    span <- rbind(span, rep(1, nc))
-  }
+    if (disp_ccounts(cinfo)) {
+        counts <- col_counts(cinfo)
+        cformat <- colcount_format(cinfo)
+        body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
+        span <- rbind(span, rep(1, nc))
+    }
 
     tl <- top_left(cinfo)
     lentl <- length(tl)
     nli <- nrow(body)
     if(lentl == 0)
         tl <- rep("", nli)
-    else if(lentl > nli)
-        stop("More lines in top-left material than in column header. Not currently supported.")
-    else if (lentl < nli)
+    else if(lentl > nli) {
+        npad <- lentl - nli
+        body <- rbind(matrix("", nrow = npad, ncol = ncol(body)), body)
+        span <- rbind(matrix(1, nrow = npad, ncol = ncol(span)), span)
+    } else if (lentl < nli)
         tl <- c(tl, rep("", nli - lentl))
 
-    ##list(body = cbind("", body), span = cbind(1, span))
     list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span))
 }
 
@@ -342,61 +509,56 @@ setGeneric("get_formatted_cells", function(obj) standardGeneric("get_formatted_c
 setMethod("get_formatted_cells", "TableTree",
           function(obj) {
 
-            lr <- get_formatted_cells(tt_labelrow(obj))
+    lr <- get_formatted_cells(tt_labelrow(obj))
 
-            ct <- get_formatted_cells(content_table(obj))
+    ct <- get_formatted_cells(content_table(obj))
 
-            els <- lapply(tree_children(obj), get_formatted_cells)
+    els <- lapply(tree_children(obj), get_formatted_cells)
 
-            # TODO fix ncol problem for rrow()
-            if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
-              ct <- lr[NULL, ]
-            }
+    ## TODO fix ncol problem for rrow()
+    if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
+        ct <- lr[NULL, ]
+    }
 
-            do.call(rbind, c(list(lr), list(ct),  els))
-          })
+    do.call(rbind, c(list(lr), list(ct),  els))
+})
 
 #' @rdname gfc
 setMethod("get_formatted_cells", "ElementaryTable",
           function(obj) {
-
-            lr <- get_formatted_cells(tt_labelrow(obj))
-
-            els <- lapply(tree_children(obj), get_formatted_cells)
-
-            do.call(rbind, c(list(lr), els))
-          })
+    lr <- get_formatted_cells(tt_labelrow(obj))
+    els <- lapply(tree_children(obj), get_formatted_cells)
+    do.call(rbind, c(list(lr), els))
+})
 
 #' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj) {
             default_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
-
             format <- lapply(row_cells(obj), function(x) {
-              format <- obj_format(x)
-              if (is.null(format))
-                default_format
-              else
-                format
+                format <- obj_format(x)
+                if (is.null(format))
+                    default_format
+                else
+                    format
             })
 
             matrix(unlist(Map(function(val, format, spn) {
-              stopifnot(is(spn, "integer"))
-              rep(paste(format_rcell(val, format), collapse = ", "), spn)
+                stopifnot(is(spn, "integer"))
+                rep(paste(format_rcell(val, format), collapse = ", "), spn)
             }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
+})
 
-          })
 #' @rdname gfc
 setMethod("get_formatted_cells", "LabelRow",
           function(obj) {
-            nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
-            if (labelrow_visible(obj)) {
-              matrix(rep("", nc), ncol = nc)
-            } else {
+    nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
+    if (labelrow_visible(obj)) {
+        matrix(rep("", nc), ncol = nc)
+    } else {
               matrix(character(0), ncol = nc)
-            }
-
-          })
+    }
+})
 
 
 #' Propose Column Widths of an `rtable` object
