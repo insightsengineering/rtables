@@ -1,3 +1,11 @@
+## rtables 0.3.7.0004
+ * Resync NEWS.md file
+
+## rtables 0.3.7.0003
+ * Introduce titles and footnotes
+ * Support automatic population of top-left
+ * Introduce referential footnote support for cells and row labels
+ 
 ## rtables 0.3.7.0002
  * Added `vars_in_layout` to list (explicitly named only) variables used in a layout
  * Fix column label ordering bug when value label variable is a factor (#173)
