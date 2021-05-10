@@ -372,3 +372,26 @@ test_that("newlabels works in reorder_split_levels", {
                      row.names(tab))
 
 })
+
+
+
+
+test_that("no extraneous footnote attribute", {
+
+    library(rtables)
+    r1 <- in_rows(
+        .list = list(
+            ncols = rcell(5L, "xx", label = "ncol")
+        )
+    )
+    expect_false("footnote" %in% names(attributes(r1$ncols)))
+
+    r2 <- in_rows(
+        .list = list(
+            ncols = rcell(5L, "xx", label = "ncol"),
+            nrows = rcell(10L, "xx", label = "nrow")
+        )
+    )
+    expect_false("footnote" %in% names(attributes(r2$ncols)))
+
+})

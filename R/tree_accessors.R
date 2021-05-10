@@ -2118,7 +2118,7 @@ setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
 #' @export
 #' @rdname ref_fnotes
 setMethod("cell_footnotes", "CellValue",
-          function(obj) attr(obj, "footnote") %||% list())
+          function(obj) attr(obj, "footnotes") %||% list())
 #' @export
 #' @rdname ref_fnotes
 setMethod("cell_footnotes", "TableRow",
@@ -2154,7 +2154,7 @@ setMethod("cell_footnotes<-", "CellValue",
         value <- list(value)
     else if (!is.list(value))
         value <- lapply(value, RefFootnote)
-    attr(obj, "footnote") <- value
+    attr(obj, "footnotes") <- value
     obj
 })
 #' @export
