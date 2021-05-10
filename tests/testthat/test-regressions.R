@@ -375,7 +375,7 @@ test_that("newlabels works in reorder_split_levels", {
 
 
 
-
+## https://github.com/Roche/rtables/issues/198
 test_that("no extraneous footnote attribute", {
 
     library(rtables)
@@ -393,5 +393,30 @@ test_that("no extraneous footnote attribute", {
         )
     )
     expect_false("footnote" %in% names(attributes(r2$ncols)))
+
+})
+
+
+## https://github.com/Roche/rtables/issues/200
+test_that("no max is -Inf warnings from make_row_df when content rows exist in places that don't have any child rows in the subsequent split", {
+
+    dat2 <- data.frame(
+        l1 = factor(c("A", "B")),
+        l2 = factor(c("aa1", "bb1")),
+        l3 = c("aaa1", "bbb1"),
+        stringsAsFactors = FALSE
+    )
+
+    lyt <- basic_table() %>%
+        split_rows_by("l1") %>%
+        summarize_row_groups() %>%
+        split_rows_by("l2") %>%
+        summarize_row_groups() %>%
+        split_rows_by("l3") %>%
+        summarize_row_groups()
+    tbl <- build_table(lyt, dat2)
+    ## again, regexp of NA tests for ***no warnings***
+    ## I know, I know, but I didn't design testthat!
+    expect_warning(make_row_df(tbl), regexp = NA)
 
 })

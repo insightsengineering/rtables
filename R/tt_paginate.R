@@ -291,8 +291,7 @@ setMethod("make_row_df", "VTableTree",
                             sibpos = i)
 
  #       print(kiddfs$abs_rownumber)
-
-        rownum <- max(kiddfs$abs_rownumber, na.rm = TRUE) ##max(kiddfs[[length(kiddfs)]]$abs_rownumber, na.rm = TRUE)
+        rownum <- max(rownum + 1L, kiddfs$abs_rownumber, na.rm = TRUE) ##max(kiddfs[[length(kiddfs)]]$abs_rownumber, na.rm = TRUE)
         ret <- c(ret, list(kiddfs))
     }
 
