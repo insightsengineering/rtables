@@ -2123,7 +2123,11 @@ setMethod("cell_footnotes", "CellValue",
 #' @rdname ref_fnotes
 setMethod("cell_footnotes", "TableRow",
           function(obj) {
-    lapply(row_cells(obj), cell_footnotes)
+    ret <- lapply(row_cells(obj), cell_footnotes)
+    if(length(ret) != ncol(obj)) {
+        ret <- rep(ret, row_cspans(obj))
+    }
+    ret
 })
 
 #' @export

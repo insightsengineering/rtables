@@ -153,6 +153,8 @@ test_that("cell-level formats are retained when column subsetting", {
     rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
 
+  ## this tests for no warnings, because testthat is terribly designed
+  expect_warning(toString(tbl), regexp = NA)
   subset <- tbl[,1]
   expect_identical(matrix_form(subset)$strings,
                    matrix_form(tbl)$strings[,-3])
