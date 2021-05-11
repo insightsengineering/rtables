@@ -1,3 +1,9 @@
+## rtables 0.3.7.0005
+ * inserting a DataRow with incorrect number of columns is now an error (#199)
+ * Referential footer machinery now works in colspan case.
+ * Fix extraneous footnote attribute bug (#198)
+ * Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (#200)
+
 ## rtables 0.3.7.0004
  * Resync NEWS.md file
 
