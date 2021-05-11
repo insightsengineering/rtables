@@ -104,3 +104,15 @@ test_that("c/rbind and top-left behave", {
     expect_error(cbind_rtables(tab, tab2))
     expect_error(rbind(tab, tab2))
 })
+
+test_that("insert_rrow works", {
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze("AGE") %>%
+        build_table(ex_adsl)
+
+    ## column numbers don't match
+    expect_error(insert_rrow(tbl, rrow("Total xx", ""), at = 1))
+    ## this is ok cause its a LabelRow not a DataRow
+    expect_silent(insert_rrow(tbl, rrow("Total xx"), at = 1))
+})

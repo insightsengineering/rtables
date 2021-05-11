@@ -361,7 +361,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
               i <- i+ 1
           }
 
-    lapply(x, function(xi) chk_compat_cinfos(firstcols, col_info(xi)))
+    lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
 
     ## if we got only ElementaryTable and
@@ -875,10 +875,16 @@ setMethod("recurse_cbind", c("LabelRow", "LabelRow",
 ## - mismatching colcount formats
 ##
 
-chk_compat_cinfos <- function(ci1, ci2) {
-
-    if(no_colinfo(ci2))
+#chk_compat_cinfos <- function(ci1, ci2) {
+chk_compat_cinfos <- function(tt1, tt2) {
+    nc1 <- ncol(tt1)
+    nc2 <- ncol(tt2)
+    if(nc1 != nc2 && nc1 > 0 && nc2 > 0)
+        stop("Column structures contain different non-zero numbers of columns: ", nc1, ", ", nc2)
+    if(no_colinfo(tt1) || no_colinfo(tt2))
         return(TRUE)
+    ci1 <- col_info(tt1)
+    ci2 <- col_info(tt2)
     ## this will enforce same length and
     ## same names, in addition to same
     ## expressions so we dont need
@@ -953,8 +959,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
     stopifnot(is(tbl, "VTableTree"),
               is(rrow, "TableRow"),
               at >= 1 && at <= nrow(tbl) + 1)
-    chk_compat_cinfos(col_info(tbl),
-                      col_info(rrow))
+    chk_compat_cinfos(tbl, rrow)
     if(no_colinfo(rrow))
         col_info(rrow) <- col_info(tbl)
 
