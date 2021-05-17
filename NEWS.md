@@ -1,3 +1,6 @@
+## rtables 0.3.7.0006
+ * Fix bug where tables output using `as_html` (or viewed in `Viewer`) were missing the table class attribute (#194)
+
 ## rtables 0.3.7.0005
  * inserting a DataRow with incorrect number of columns is now an error (#199)
  * Referential footer machinery now works in colspan case.

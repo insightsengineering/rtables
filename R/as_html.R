@@ -90,6 +90,6 @@ as_html <- function(x,
     } else {
         captag <- NULL
     }
-  do.call(tags$table, c(rows, if(!is.null(captag)) list(captag)))
+  do.call(tags$table, c(rows, list(class = class_table), if(!is.null(captag)) list(captag)))
 
 }
