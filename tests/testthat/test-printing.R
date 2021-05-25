@@ -1,7 +1,7 @@
 context("Printing tables")
 
 test_that("toString method works correclty", {
-    
+
     tbl <- basic_table() %>%
         split_cols_by("Species") %>%
         add_colcounts() %>%
@@ -15,22 +15,22 @@ test_that("toString method works correclty", {
             )
         }) %>%
         build_table(iris)
-    
+
     print(tbl)
-    
+
     expect_identical(
-        toString(tbl), 
+        toString(tbl),
         paste(
             c("                 setosa      versicolor     virginica ",
-              "                 (N=50)        (N=50)        (N=50)   ", 
+              "                 (N=50)        (N=50)        (N=50)   ",
               "------------------------------------------------------",
-              "Sepal.Length                                          ", 
+              "Sepal.Length                                          ",
               "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
-              "  Variance        0.124         0.266         0.404   ", 
+              "  Variance        0.124         0.266         0.404   ",
               "  Min - Max     4.3 - 5.8      4.9 - 7      4.9 - 7.9 ",
-              "Petal.Width                                           ", 
+              "Petal.Width                                           ",
               "  Mean (sd)    0.25 (0.11)   1.33 (0.2)    2.03 (0.27)",
-              "  Variance        0.011         0.039         0.075   ", 
+              "  Variance        0.011         0.039         0.075   ",
               "  Min - Max     0.1 - 0.6      1 - 1.8      1.4 - 2.5 \n"),
             collapse = "\n"
         )
@@ -102,4 +102,81 @@ test_that("nested identical labels work ok", {
         build_table(df)
     mat <- matrix_form(t2)
     expect_identical(mat$strings[,1], c("", "<Missing>", "<Missing>"))
+})
+
+
+test_that("newline in column names and possibly cell values work", {
+
+
+    df <- data.frame(
+        n = 1,
+        median = 10
+    )
+
+    lyt <- basic_table() %>%
+        split_cols_by_multivar(vars = c("n", "median"), varlabels = c("N", "Median\n(Days)")) %>%
+        analyze_colvars(afun = mean)
+    tbl <- build_table(lyt, df)
+
+    mat <- matrix_form(tbl)
+    expect_identical(mat$strings,
+                     matrix(c("", "", "Median",
+                              "", "N", "(Days)",
+                              "mean", "1", "10"),
+                            nrow = 3, byrow = TRUE))
+    ## Test top_left preservation
+    rawdat2 <- rawdat
+    rawdat2$arm_label <- ifelse(rawdat2$ARM=="ARM1", "Arm\n 1 ", "Arm\n 2 ")
+
+    lyt2 <- basic_table() %>% split_cols_by("ARM", labels_var = "arm_label") %>%
+        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+        add_colcounts() %>%
+        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
+        split_rows_by("FACTOR2", "Factor2",
+                      split_fun = remove_split_levels("C"),
+                      labels_var = "fac2_label",
+                      label_pos = "topleft") %>%
+        analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                               median = median(x)),
+                format = "xx.xx")
+
+    tbl2 <- build_table(lyt2, rawdat2)
+    matform2 <- matrix_form(tbl2)
+    expect_identical(dim(matform2$strings),
+                     c(18L, 5L))
+    expect_identical(attr(matform2, "nrow_header"),
+                     4L)
+    expect_identical(matform2$strings[1:4, 1, drop = TRUE],
+                     c("Ethnicity", "  Factor2", "", ""))
+
+    ## cell has \n
+
+    lyt3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", afun = function(x) {
+            mn <- round(mean(x), 2)
+            if(!is.nan(mn) && mn > mean(DM$AGE))
+                val <- paste(mn, "  ^  ", sep = "\n")
+            else
+                val <- paste(mn)
+            in_rows(my_row_label = rcell(val,
+                                         format = "xx"))
+        })
+    tbl3 <- build_table(lyt3, DM)
+    matform3 <- matrix_form(tbl3)
+    expect_identical(matform3$strings[,1, drop = TRUE],
+                     c("",
+                       "F", "my_row_label", "",
+                       "M", "my_row_label", "",
+                       "U", "my_row_label",
+                       "UNDIFFERENTIATED", "my_row_label"))
+    expect_identical(matform3$strings[,2, drop = TRUE],
+                     c("A: Drug X",
+                       "", "33.71", "",
+                       "", "36.55", "  ^  ",
+                       "", "NaN",
+                       "", "NaN"))
+
+
 })

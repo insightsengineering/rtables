@@ -71,6 +71,9 @@ setMethod("nlines", "list",
 })
 
 setMethod("nlines", "NULL", function(x, colwidths) 0L)
+
+setMethod("nlines", "character", function(x, colwidths) max(vapply(strsplit(x, "\n", fixed = TRUE), length, 1L)))
+
 pagdfrow = function(row,
                     nm = obj_name(row),
                     lab = obj_label(row),

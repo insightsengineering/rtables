@@ -116,6 +116,64 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 
 })
 
+pad_vert_center <- function(x, len) {
+    needed <- len - length(x)
+    if(needed < 0) stop("got vector already longer than target length this shouldn't happen")
+    if(needed > 0) {
+        bf <- ceiling(needed/2)
+        af <- needed - bf
+        x <- c(if(bf > 0) rep("", bf), x, if(af > 0) rep("", af))
+    }
+    x
+}
+
+pad_vert_top <- function(x, len) {
+    c(x, rep("", len - length(x)))
+}
+
+pad_vert_bottom <- function(x, len) {
+    c(rep("", len - length(x)), x)
+}
+
+pad_vec_to_len <- function(vec, len, cpadder = pad_vert_top, rlpadder = cpadder) {
+    dat <- unlist(lapply(vec[-1], cpadder, len = len))
+    dat <- c(rlpadder(vec[[1]], len = len), dat)
+    matrix(dat,  nrow = len)
+}
+
+rep_vec_to_len <- function(vec, len, ...) {
+    matrix(unlist(lapply(vec, rep, times = len)),
+           nrow = len)
+}
+
+
+safe_strsplit <- function(x, split, ...) {
+    ret <- strsplit(x, split, ...)
+    lapply(ret, function(reti) if(length(reti) == 0) "" else reti)
+}
+
+.expand_mat_rows_inner <- function(i, mat, row_nlines, expfun, ...) {
+    leni <- row_nlines[i]
+    rw <- mat[i,]
+    if(is.character(rw))
+        rw <- safe_strsplit(rw, "\n", fixed = TRUE)
+    expfun(rw, len = leni, ...)
+}
+
+expand_mat_rows <- function(mat, row_nlines = apply(mat, 1, nlines), expfun = pad_vec_to_len, ...) {
+
+    rinds <- 1:nrow(mat)
+    exprows <- lapply(rinds, .expand_mat_rows_inner,
+                      mat = mat,
+                      row_nlines = row_nlines,
+                      expfun = expfun,
+                      ...)
+    do.call(rbind, exprows)
+
+}
+
+
+
 
 
 
@@ -199,8 +257,8 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
   aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
   aligns[, 1] <- "left" # row names
 
-  if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-    stop("no \\n allowed at the moment")
+  ## if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
+  ##   stop("no \\n allowed at the moment")
 
   display <- matrix(rep(TRUE, length(body)), ncol = ncol(body))
 
@@ -223,16 +281,35 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
   }))
 
 
-  if (indent_rownames) {
-    body[, 1] <- indent_string(body[, 1], c(rep(0, nrow(header_content$body)), sr$indent))
-  }
+    nr_header <- nrow(header_content$body)
+    if (indent_rownames) {
+        body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent))
+    }
 
     body_ref_strs <- get_ref_matrix(tt)
+
     body <- matrix(paste0(body,
-                         rbind(matrix("", nrow(header_content$body), ncol = ncol(body)),
+                         rbind(matrix("", nr_header, ncol = ncol(body)),
                                body_ref_strs)),
                    nrow = nrow(body),
                    ncol = ncol(body))
+    row_nlines <- apply(body, 1, nlines)
+
+    if (any(row_nlines > 1)) {
+        hdr_inds <- 1:nr_header
+        ## groundwork for sad haxx to get tl to not be messed up
+        tl <- body[hdr_inds, 1]
+        body <- rbind(expand_mat_rows(body[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
+                      expand_mat_rows(body[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
+        spans <- expand_mat_rows(spans, row_nlines, rep_vec_to_len)
+        aligns <- expand_mat_rows(aligns, row_nlines, rep_vec_to_len)
+        display <- expand_mat_rows(display, row_nlines, rep_vec_to_len)
+        nr_header <- sum(row_nlines[1:nr_header])
+        ## sad haxx :(
+        if(length(tl) != nr_header) {
+            body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+        }
+    }
 
     ref_fnotes <- get_formatted_fnotes(tt)
   structure(
@@ -244,7 +321,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
       row_info = sr,
       ref_footnotes = ref_fnotes
     ),
-    nrow_header = nrow(header_content$body)
+    nrow_header = nr_header
   )
 }
 

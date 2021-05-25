@@ -1246,42 +1246,42 @@ setMethod(".add_row_summary", "NULL",
 
 .count_raw_constr = function(var, format, label_fstr) {
     function(df, labelstr = "") {
-        label = sprintf(label_fstr, labelstr)
+        if(grepl("%s", label_fstr, fixed = TRUE))
+            label <- sprintf(label_fstr, labelstr)
+        else
+            label <- label_fstr
         if(is(df, "data.frame")) {
             if(!is.null(var) && nzchar(var))
-                cnt = sum(!is.na(df[[var]]))
+                cnt <- sum(!is.na(df[[var]]))
             else
-                cnt = nrow(df)
+                cnt <- nrow(df)
         } else { # df is the data column vector
-            cnt = sum(!is.na(df))
+            cnt <- sum(!is.na(df))
         }
-        ret = rcell(cnt, format = format,
+        ret <- rcell(cnt, format = format,
                     label = label)
-
-        ## attr(ret, "format") = format
-        ## names(ret) = label
         ret
     }
 }
 
 .count_wpcts_constr = function(var, format, label_fstr) {
     function(df, labelstr = "", .N_col) {
-        label = sprintf(label_fstr, labelstr)
+        if(grepl("%s", label_fstr, fixed = TRUE))
+            label <- sprintf(label_fstr, labelstr)
+        else
+            label <- label_fstr
         if(is(df, "data.frame")) {
             if(!is.null(var) && nzchar(var))
-                cnt = sum(!is.na(df[[var]]))
+                cnt <- sum(!is.na(df[[var]]))
             else
-                cnt = nrow(df)
+                cnt <- nrow(df)
         } else { # df is the data column vector
-            cnt = sum(!is.na(df))
+            cnt <- sum(!is.na(df))
         }
         ## the formatter does the *100 so we don't here.
-        ret = rcell(c(cnt, cnt/.N_col),
+        ret <- rcell(c(cnt, cnt/.N_col),
                     format = format,
                     label = label)
-
-        ## attr(ret, "format") = format
-        ## names(ret) = label
         ret
     }
 }

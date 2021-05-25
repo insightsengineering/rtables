@@ -127,12 +127,12 @@ test_that("indents are correct in make_row_df", {
 test_that("clear_indent_mods works as desired", {
 
 
-    tm <- basic_table() %>%
+    lytm <- basic_table() %>%
         summarize_row_groups("STUDYID",label_fstr = "overall summary", indent_mod = 1L) %>%
         split_rows_by("AEBODSYS",  child_labels = "visible") %>%
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
-        analyze("AGE", indent_mod = -1L) %>%
-        build_table(ex_adae)
+        analyze("AGE", indent_mod = -1L)
+    tm <- build_table(lytm, ex_adae)
     
     t0 <-  basic_table() %>%
         summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
