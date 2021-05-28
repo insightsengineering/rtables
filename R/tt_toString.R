@@ -66,7 +66,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
   # insert_gap_before <- insert_gap_before[insert_gap_before != 1]
 
   nr <- nrow(body)
-  nr_header <- attr(mat, "nrow_header")
+  nl_header <- attr(mat, "nlines_header")
 
   cell_widths_mat <- matrix(rep(widths, nr), nrow = nr, byrow = TRUE)
   nc <- ncol(cell_widths_mat)
@@ -100,8 +100,8 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 
   div <- strrep("-", sum(widths) + (length(widths) - 1) * col_gap)
 
-  txt_head <- apply(head(content, nr_header), 1, .paste_no_na, collapse = gap_str)
-  txt_body <- apply(tail(content, -nr_header), 1, .paste_no_na, collapse = gap_str)
+  txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
+  txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
 
   allts <- all_titles(x)
   titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
@@ -294,7 +294,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
                    nrow = nrow(body),
                    ncol = ncol(body))
     row_nlines <- apply(body, 1, nlines)
-
+    nrows <- nrow(body)
     if (any(row_nlines > 1)) {
         hdr_inds <- 1:nr_header
         ## groundwork for sad haxx to get tl to not be messed up
@@ -304,11 +304,13 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
         spans <- expand_mat_rows(spans, row_nlines, rep_vec_to_len)
         aligns <- expand_mat_rows(aligns, row_nlines, rep_vec_to_len)
         display <- expand_mat_rows(display, row_nlines, rep_vec_to_len)
-        nr_header <- sum(row_nlines[1:nr_header])
+        nlines_header <- sum(row_nlines[1:nr_header])
         ## sad haxx :(
-        if(length(tl) != nr_header) {
-            body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
-        }
+  ##      if(length(tl) != nr_header) {
+        body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+
+    } else {
+        nlines_header <- nr_header
     }
 
     ref_fnotes <- get_formatted_fnotes(tt)
@@ -319,10 +321,11 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
       aligns = aligns,
       display = display,
       row_info = sr,
+      line_grouping = rep(1:nrows, times = row_nlines),
       ref_footnotes = ref_fnotes
     ),
-    nrow_header = nr_header
-  )
+    nlines_header = nlines_header,
+    nrow_header = nr_header)
 }
 
 format_fnote_ref <- function(fn) {

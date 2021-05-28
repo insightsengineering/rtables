@@ -1,3 +1,8 @@
+## rtables 0.3.7.0007
+ * Add experimental support for newlines in column names, row labels, and cell values (not supported in top-left annotations)
+ * `as_html` refactored to support newlines while respecting table structure
+ * self_extent column of df returned by `make_row_df` now reflects extent *in lines*, thus will return larger values if the row-label or any cell values contain newlines.
+
 ## rtables 0.3.7.0006
  * Fix bug where tables output using `as_html` (or viewed in `Viewer`) were missing the table class attribute (#194)
 

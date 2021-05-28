@@ -31,13 +31,17 @@ setGeneric("nlines",
 setMethod("nlines", "TableRow",
           function(x, colwidths) {
     fns <- sum(unlist(lapply(row_footnotes(x), nlines))) + sum(unlist(lapply(cell_footnotes(x), nlines)))
-    1L + fns
+    fcells <- get_formatted_cells(x)
+    rowext <- max(vapply(strsplit(c(obj_label(x), fcells), "\n", fixed = TRUE),
+                         length,
+                         1L))
+    rowext + fns
 })
 
 setMethod("nlines", "LabelRow",
           function(x, colwidths) {
     if(labelrow_visible(x))
-        1L + sum(unlist(lapply(row_footnotes(x), nlines)))
+        length(strsplit(obj_label(x), "\n", fixed = TRUE)[[1]]) + sum(unlist(lapply(row_footnotes(x), nlines)))
     else
         0L
 })

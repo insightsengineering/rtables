@@ -1,5 +1,21 @@
 
 
+insert_brs <- function(vec) {
+    if(length(vec) == 1)
+        ret <- list(vec)
+    else {
+        nout <- length(vec) * 2 - 1
+        ret <- vector("list", nout)
+        for(i in 1:length(vec)) {
+            ret[[2*i - 1]] <- vec[i]
+            if(2*i < nout) {
+                ret[[2*i]] <- tags$br()
+            }
+        }
+    }
+    ret
+}
+
 #' Convert an `rtable` object to a `shiny.tag` html object
 #'
 #' The returned `html` object can be immediately used in shiny and rmarkdown.
@@ -57,16 +73,44 @@ as_html <- function(x,
   nc <- ncol(x) + 1
   is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$strings)- nrh)), ncol = nc, byrow = TRUE)
 
-  cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {
-    if (dsp) {
-      args <- list(class = paste(class_th, paste0("text-", algn), collapse = " "), colspan = spn)
-      do.call(ifelse(hdr, tags$th, tags$td), c(list(str), args))
-    } else {
-      NULL
+  ## cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {
+  ##   if (dsp) {
+  ##     args <- list(class = paste(class_th, paste0("text-", algn), collapse = " "), colspan = spn)
+  ##     do.call(ifelse(hdr, tags$th, tags$td), c(list(str), args))
+  ##   } else {
+  ##     NULL
+  ##   }
+  ## }, mat$strings, mat$spans, mat$aligns, mat$display, is_header,  USE.NAMES = FALSE, SIMPLIFY = FALSE), ncol = ncol(x) + 1)
+    cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (ncol(x) + 1)),
+                      ncol = ncol(x) + 1)
+    for(i in unique(mat$line_grouping)) {
+        rows <- which(mat$line_grouping == i)
+        for(j in 1:ncol(mat$strings)) {
+            curstrs <- mat$strings[rows,j]
+            curspans <- mat$spans[rows,j]
+            curaligns <- mat$aligns[rows,j]
+            curdisp <- mat$display[rows,j]
+
+            curspn <- unique(curspans)
+            stopifnot(length(curspn) == 1)
+            inhdr <- i <= attr(mat, "nrow_header")
+            tagfun <- if(inhdr) tags$th else tags$td
+            algn <- unique(curaligns)
+            stopifnot(length(algn) == 1)
+            args <- list(class = paste(if(inhdr) class_th else class_tr, if(j > 1 || i > nrh) paste0("text-", algn), collapse = " "), colspan = curspn)
+            cells[i, j][[1]] <- do.call(tagfun, c(insert_brs(curstrs), args))
+        }
     }
-  }, mat$strings, mat$spans, mat$aligns, mat$display, is_header,  USE.NAMES = FALSE, SIMPLIFY = FALSE), ncol = ncol(x) + 1)
 
-
+    ## special casing hax for top_left. We probably want to do this better someday
+    cells[1:attr(mat, "nrow_header"), 1] <- mapply(function(x, algn) {
+        tags$th(x,
+                class = class_th,
+                style = "white-space:pre;")
+    },
+    x = mat$strings[1:nrh, 1],
+    algn = mat$aligns[1:nrh, 1],
+    SIMPLIFY= FALSE)
   # indent row names
   for (i in seq_len(nrow(x))) {
     indent <- mat$row_info$indent[i]
