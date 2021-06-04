@@ -72,21 +72,27 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 
 }
 
-#' export as plain text with page break symbol
+#' Export as plain text with page break symbol
+#' 
 #' @inheritParams gen_args
 #' @param file character(1). File to write.
 #' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
 #' @param \dots Passed directly to \code{\link{paginate_table}}
-#' @param page_break character(1). Page break symbol (defualts to outputting \code{"\\s"}).
+#' @param page_break character(1). Page break symbol (defaults to outputting \code{"\\s"}).
 #' @return \code{file} (this function is called for the side effect of writing the file.
+#' 
+#' 
 #' @export
-#' @examples
+#' 
+#' @examples 
+#' 
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   analyze(c("AGE", "BMRKR2"))
+#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' ## this just displays it
+#' 
+#' cat(export_as_txt(tbl, paginate = TRUE, lpp = 8))
 #' export_as_txt(tbl, file = NULL)
 #' \dontrun{
 #' tf <- tempfile(file.ext = ".txt")
@@ -98,10 +104,56 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
     else
         tbls <- list(tt)
 
-    res <- paste(sapply(tbls, toString),
-                 collapse = paste0("\n", page_break, "\n\n"))
+    res <- paste(sapply(tbls, toString), collapse = page_break)
+    
     if(!is.null(file))
         cat(res, file = file)
     else
         res
+}
+
+
+#' Export as PDF
+#' 
+#' The PDF output is based on the `export_as_text` function
+#' 
+#' @inheritParams export_as_txt
+#' @param ... arguments passed on to `export_as_txt`
+#' 
+#' @seealso `export_as_txt`
+#' 
+#' 
+#' @importFrom grid textGrob
+#' @export
+#' 
+#' @examples 
+#' 
+#' 
+export_as_pdf <- function(tt, file, ...) {
+    force(file)
+    
+   
+    colwidths <- propose_column_widths(tt)
+    tbls <- paginate_table(tt, ...)
+    stbls <- lapply(tbls, toString, widths = colwidths)
+    gtbls <- lapply(stbls, function(txt) {
+        textGrob(
+            label = txt,
+            x = unit(0, "npc"), y = unit(1, "npc"), 
+            just = c("left", "top"),
+            gp = gpar(fontsize = 8, fontfamily = "monospace")
+        )
+    })
+
+    p <- 
+    grid.newpage()
+    grid.draw(p)
+    
+    gpf <- gpar(fontsize = 8, family = "")
+    
+    grid.newpage()
+    pushViewport(plotViewport())
+    #grid.rect()
+    grid.text(x[[1]],  )
+    
 }

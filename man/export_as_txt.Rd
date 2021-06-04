@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_export.R
 \name{export_as_txt}
 \alias{export_as_txt}
-\title{export as plain text with page break symbol}
+\title{Export as plain text with page break symbol}
 \usage{
 export_as_txt(tt, file = NULL, paginate = FALSE, ..., page_break = "\\\\s")
 }
@@ -15,13 +15,23 @@ export_as_txt(tt, file = NULL, paginate = FALSE, ..., page_break = "\\\\s")
 
 \item{\dots}{Passed directly to \code{\link{paginate_table}}}
 
-\item{page_break}{character(1). Page break symbol (defualts to outputting \code{"\\s"}).}
+\item{page_break}{character(1). Page break symbol (defaults to outputting \code{"\\s"}).}
 }
 \value{
 \code{file} (this function is called for the side effect of writing the file.
 }
 \description{
-export as plain text with page break symbol
+Export as plain text with page break symbol
+}
+\examples{
+
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(c("AGE", "BMRKR2", "COUNTRY"))
+
+tbl <- build_table(lyt, ex_adsl)
+
+export_as_txt(tbl, paginate = TRUE)
 }
 \examples{
 lyt <- basic_table() \%>\%
