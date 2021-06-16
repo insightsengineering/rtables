@@ -1,7 +1,12 @@
 Package: rtables
 Title: Reporting Tables
+<<<<<<< HEAD
 Date: 2021-07-07
 Version: 0.3.8.9000
+=======
+Date: 2021-03-24
+Version: 0.3.7.0009
+>>>>>>> Fix bug where names weren't showing up for .prev_splvals. #203 dev vbump
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
