@@ -675,7 +675,7 @@ setMethod(".make_split_kids", "Split",
     inner = unlist(mapply(function(dfpart,  nm, label, baselines, splval) {
         rsplval <- rawvalues(splval)
         if(length(rsplval) > 0)
-            setNames(rsplval, obj_name(spl))
+            rsplval <- setNames(rsplval, obj_name(spl))
         recursive_applysplit(df = dfpart,
                              name = nm,
                              lvl = innerlev,
