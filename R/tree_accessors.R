@@ -1205,6 +1205,7 @@ setMethod("content_indent_mod<-", "VTableNodeInfo",
 
 ## TODO export these?
 #' @rdname int_methods
+#' @export
 setGeneric("rawvalues", function(obj) standardGeneric("rawvalues"))
 #' @rdname int_methods
 setMethod("rawvalues", "ValueWrapper",  function(obj) obj@value)
@@ -1219,9 +1220,11 @@ setMethod("rawvalues", "CellValue", function(obj) obj[[1]])
 #' @rdname int_methods
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
+#' @rdname int_methods
 setMethod("rawvalues", "RowsVerticalSection",  function(obj) unlist(obj, recursive = FALSE))
 
 #' @rdname int_methods
+#' @export
 setGeneric("value_names", function(obj) standardGeneric("value_names"))
 #' @rdname int_methods
 setMethod("value_names", "ANY", function(obj) as.character(rawvalues(obj)))
@@ -1517,9 +1520,10 @@ setMethod("col_exprs", "PreDataTableLayouts",
 #' @export col_exprs
 setMethod("col_exprs", "PreDataColLayout",
           function(obj, df = NULL) {
-    unlist(recursive = FALSE,
-           lapply(obj, build_splits_expr,
-                  df = df))
+    if(is.null(df))
+        stop("can't determine col_exprs without data")
+    ct <- coltree(obj, df = df)
+    make_col_subsets(ct, df = df)
 })
 
 #' @rdname col_accessors
