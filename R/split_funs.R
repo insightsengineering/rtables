@@ -115,9 +115,13 @@ setGeneric(".applysplit_ref_vals",
     partinfo
 }
 
+func_takes <- function(fun, argname, truefordots = FALSE) {
+    fnames <- names(formals(fun))
+    argname %in% fnames || (truefordots && "..." %in% fnames)
+}
 
 ### NB This is called at EACH level of recursive splitting
-do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
+do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, prev_splvals) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
     ## can't be applied to df
@@ -127,21 +131,26 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
         ## Currently the contract is that split_functions take df, vals, labels and
         ## return list(values=., datasplit=., labels = .), optionally with
         ## an additional extras element
-        ret = splfun(df, spl, vals, labels, trim = trim)
+        if(func_takes(splfun, ".prev_splvals")) {
+            print(prev_splvals)
+            ret <- splfun(df, spl, vals, labels, trim = trim, .prev_splvals = rawvalues(prev_splvals ))
+        } else {
+            ret <- splfun(df, spl, vals, labels, trim = trim)
+        }
     } else {
-        ret = .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
+        ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
     }
 
     ## this adds .ref_full and .in_ref_col
     if(is(spl, "VarLevWBaselineSplit"))
-        ret = .add_ref_extras(spl, df, ret)
+        ret <- .add_ref_extras(spl, df, ret)
 
     ## this:
     ## - guarantees that ret$values contains SplitValue objects
     ## - removes the extras element since its redundant after the above
     ## - Ensures datasplit and values lists are named according to labels
     ## - ensures labels are character not factor
-    ret = .fixupvals(ret)
+    ret <- .fixupvals(ret)
 
     ret
 }

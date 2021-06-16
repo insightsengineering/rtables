@@ -1642,6 +1642,9 @@ list_wrap_df = function(f) {
 #'
 #' @export
 #' @inheritParams constr_args
+#' @param show_colcounts logical(1). Should column counts be displayed in the resulting table
+#' when this layout is applied to data
+#'
 #' @inherit split_cols_by return
 #'
 #' @examples
@@ -1654,11 +1657,15 @@ list_wrap_df = function(f) {
 basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
-                        prov_footer = character()) {
-    PreDataTableLayouts(title = title,
+                        prov_footer = character(),
+                        show_colcounts = FALSE) {
+    ret <- PreDataTableLayouts(title = title,
                         subtitles = subtitles,
                         main_footer = main_footer,
                         prov_footer = prov_footer)
+    if(show_colcounts)
+        ret <- add_colcounts(ret)
+    ret
 }
 
 
