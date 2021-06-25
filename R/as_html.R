@@ -60,80 +60,74 @@ as_html <- function(x,
                     class_th = "",
                     caption_txt = NULL,
                     link_label = NULL) {
-
+  
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
-
+  
   stopifnot(is(x, "VTableTree"))
-
+  
   mat <- matrix_form(x)
-
+  
   nrh <- attr(mat, "nrow_header")
   nc <- ncol(x) + 1
-  is_header <- matrix(rep(c(TRUE, FALSE), nc * c(nrh, nrow(mat$strings)- nrh)), ncol = nc, byrow = TRUE)
-
-  ## cells <- matrix(mapply(function(str, spn, algn, dsp, hdr) {
-  ##   if (dsp) {
-  ##     args <- list(class = paste(class_th, paste0("text-", algn), collapse = " "), colspan = spn)
-  ##     do.call(ifelse(hdr, tags$th, tags$td), c(list(str), args))
-  ##   } else {
-  ##     NULL
-  ##   }
-  ## }, mat$strings, mat$spans, mat$aligns, mat$display, is_header,  USE.NAMES = FALSE, SIMPLIFY = FALSE), ncol = ncol(x) + 1)
-    cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (ncol(x) + 1)),
-                      ncol = ncol(x) + 1)
-    for(i in unique(mat$line_grouping)) {
-        rows <- which(mat$line_grouping == i)
-        for(j in 1:ncol(mat$strings)) {
-            curstrs <- mat$strings[rows,j]
-            curspans <- mat$spans[rows,j]
-            curaligns <- mat$aligns[rows,j]
-            curdisp <- mat$display[rows,j]
-
-            curspn <- unique(curspans)
-            stopifnot(length(curspn) == 1)
-            inhdr <- i <= attr(mat, "nrow_header")
-            tagfun <- if(inhdr) tags$th else tags$td
-            algn <- unique(curaligns)
-            stopifnot(length(algn) == 1)
-            args <- list(class = paste(if(inhdr) class_th else class_tr, if(j > 1 || i > nrh) paste0("text-", algn), collapse = " "), colspan = curspn)
-            cells[i, j][[1]] <- do.call(tagfun, c(insert_brs(curstrs), args))
-        }
+  
+  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (ncol(x) + 1)),
+                  ncol = ncol(x) + 1)
+  
+  for(i in unique(mat$line_grouping)) {
+    rows <- which(mat$line_grouping == i)
+    for(j in 1:ncol(mat$strings)) {
+      curstrs <- mat$strings[rows,j]
+      curspans <- mat$spans[rows,j]
+      curaligns <- mat$aligns[rows,j]
+      
+      curspn <- unique(curspans)
+      stopifnot(length(curspn) == 1)
+      inhdr <- i <= attr(mat, "nrow_header")
+      tagfun <- if(inhdr) tags$th else tags$td
+      algn <- unique(curaligns)
+      stopifnot(length(algn) == 1)
+      args <- list(class = paste(if(inhdr) class_th else class_tr, if(j > 1 || i > nrh) paste0("text-", algn), collapse = " "), colspan = curspn)
+      cells[i, j][[1]] <- do.call(tagfun, c(insert_brs(curstrs), args))
     }
-
-    ## special casing hax for top_left. We probably want to do this better someday
-    cells[1:attr(mat, "nrow_header"), 1] <- mapply(function(x, algn) {
-        tags$th(x,
-                class = class_th,
-                style = "white-space:pre;")
+  }
+  
+  ## special casing hax for top_left. We probably want to do this better someday
+  cells[1:nrh, 1] <- mapply(
+    FUN = function(x, algn) {
+      tags$th(x, class = class_th, style = "white-space:pre;")
     },
     x = mat$strings[1:nrh, 1],
     algn = mat$aligns[1:nrh, 1],
-    SIMPLIFY= FALSE)
+    SIMPLIFY = FALSE
+  )
+  
   # indent row names
   for (i in seq_len(nrow(x))) {
     indent <- mat$row_info$indent[i]
     if (indent > 0) {
       cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
-                                                          style = paste0("padding-left: ", indent * 3, "ch"))
+                                                               style = paste0("padding-left: ", indent * 3, "ch"))
     }
   }
-
+  
+  cells[!mat$display] <- NA_integer_
+  
   rows <- apply(cells, 1, function(row) {
-    do.call(tags$tr, c(row, list(class = class_tr)))
+    do.call(tags$tr, c(Filter(function(x) !identical(x, NA_integer_), row), list(class = class_tr)))
   })
-
-    if(!is.null(caption_txt)) {
-        if(!is.null(link_label))
-            labtxt <- sprintf("(#tab:%s)", link_label)
-        else
-            labtxt <- NULL
-        captxt <- paste(labtxt, caption_txt)
-        captag <- tags$caption(class = "Table Caption", captxt)
-    } else {
-        captag <- NULL
-    }
+  
+  if(!is.null(caption_txt)) {
+    if(!is.null(link_label))
+      labtxt <- sprintf("(#tab:%s)", link_label)
+    else
+      labtxt <- NULL
+    captxt <- paste(labtxt, caption_txt)
+    captag <- tags$caption(class = "Table Caption", captxt)
+  } else {
+    captag <- NULL
+  }
   do.call(tags$table, c(rows, list(class = class_table), if(!is.null(captag)) list(captag)))
-
+  
 }
