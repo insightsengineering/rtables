@@ -1,33 +1,22 @@
-## rtables 0.3.7.0007
+## rtables 0.3.8
  * Add experimental support for newlines in column names, row labels, and cell values (not supported in top-left annotations)
  * `as_html` refactored to support newlines while respecting table structure
  * self_extent column of df returned by `make_row_df` now reflects extent *in lines*, thus will return larger values if the row-label or any cell values contain newlines.
-
-## rtables 0.3.7.0006
  * Fix bug where tables output using `as_html` (or viewed in `Viewer`) were missing the table class attribute (#194)
-
-## rtables 0.3.7.0005
  * inserting a DataRow with incorrect number of columns is now an error (#199)
  * Referential footer machinery now works in colspan case.
  * Fix extraneous footnote attribute bug (#198)
  * Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (#200)
-
-## rtables 0.3.7.0004
  * Resync NEWS.md file
-
-## rtables 0.3.7.0003
  * Introduce titles and footnotes
  * Support automatic population of top-left
  * Introduce referential footnote support for cells and row labels
- 
-## rtables 0.3.7.0002
  * Added `vars_in_layout` to list (explicitly named only) variables used in a layout
  * Fix column label ordering bug when value label variable is a factor (#173)
 
 ## rtables 0.3.7
 
 Synchronize release with GitHub commit sha.
-
 
 ## rtables 0.3.6
 
