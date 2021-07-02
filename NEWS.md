@@ -1,3 +1,5 @@
+## rtables 0.3.8.9000
+
 ## rtables 0.3.8
  * Add experimental support for newlines in column names, row labels, and cell values (not supported in top-left annotations)
  * `as_html` refactored to support newlines while respecting table structure
