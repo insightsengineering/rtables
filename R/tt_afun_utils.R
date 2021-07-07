@@ -357,7 +357,7 @@ make_afun <- function(fun,
             custargs[names(exargs)] <- exargs
             allvars <- unique(c(allvars, names(custargs)))
         }
-
+        sfunargs <- as.list(sfunargs)
         for(var in allvars) {
             ## not missing, ie specified in the direct call, takes precedence
             if(var %in% fun_fnames && eval(parser_helper(text = paste0("!missing(", var, ")"))))
