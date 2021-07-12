@@ -54,6 +54,10 @@ jobs:
         with:
           path: ${{ github.event.repository.name }}
 
+
+      - name: Install Git
+        run: apt-get update -y && apt-get install -y git
+        
       - name: Print Branch Name
         run: |
            cd ${{ github.event.repository.name }}
