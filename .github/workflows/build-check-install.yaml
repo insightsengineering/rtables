@@ -70,11 +70,11 @@ jobs:
           setwd("${{ github.event.repository.name }}")
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
           
-          "remotes" %in% installed.packages() || install.packages("remotes", upgrade = "never")
+          if (!("remotes" %in% installed.packages()))
+             install.packages("remotes", upgrade = "never")
           remotes::install_deps(dependencies = TRUE, upgrade = "never")
           
           if (file.exists("staged_dependencies.yaml")) {
-            "remotes" %in% installed.packages() || install.packages("remotes", upgrade = "never")
             remotes::install_github("openpharma/staged.dependencies", ref = "main")
             cat("\nInstall Spaged Dependencies\n\n\n")
             staged.dependencies::install_deps(install_project = FALSE, verbose = TRUE)
