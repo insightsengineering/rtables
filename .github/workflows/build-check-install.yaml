@@ -40,6 +40,10 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
+      - name: Install Git
+        run: apt-get update -y && apt-get install -y git
+        shell: bash
+        
       - name: Checkout repo during PR
         uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
@@ -47,16 +51,13 @@ jobs:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
           ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
           path: ${{ github.event.repository.name }}
+          depth: 0
 
       - name: Checkout repo from push
         uses: actions/checkout@v2
         if: github.event_name == 'push'
         with:
           path: ${{ github.event.repository.name }}
-
-
-      - name: Install Git
-        run: apt-get update -y && apt-get install -y git
         
       - name: Print Branch Name
         run: |
