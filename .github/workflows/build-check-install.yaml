@@ -40,8 +40,8 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-      - name: Install Git
-        run: apt-get update -y && apt-get install -y git
+      - name: Install OS dependencies
+        run: apt-get update -y && apt-get install -y git qpdf
         shell: bash
         
       - name: Checkout repo during PR
@@ -148,7 +148,7 @@ jobs:
           x <- tail(readLines("${{ github.event.repository.name }}.Rcheck/00check.log"), 1)
           if (!grepl("^Status", x)) stop("No status line found in R CMD check log")
           if (grepl("ERROR", x)) stop("R CMD check has errors")
-          if (grepl("WARNINGs", x)) stop("R CMD check has warnings")
+          if (grepl("WARNING", x)) stop("R CMD check has warnings")
         shell: Rscript {0}
 
       - name: Upload check results
