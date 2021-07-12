@@ -61,6 +61,7 @@ jobs:
       - name: Print Branch Name
         run: |
            cd ${{ github.event.repository.name }}
+           ls -a
            git branch --show-current
 
       - name: Install Dependencies
