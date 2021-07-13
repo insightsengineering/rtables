@@ -98,8 +98,9 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
     else
         tbls <- list(tt)
 
+    ## toString seems to take care of newline?
     res <- paste(sapply(tbls, toString),
-                 collapse = paste0("\n", page_break, "\n\n"))
+                 collapse = paste0(page_break, "\n"))
     if(!is.null(file))
         cat(res, file = file)
     else

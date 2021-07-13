@@ -458,10 +458,10 @@ valid_pag = function(pagdf,
         message("Checking pagination after row ", guess)
     reflines <-  sum(pagdf[start:guess, "nreflines"])
     if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
-    lines <- guess - start + reflines
+    lines <- guess - start + 1 + reflines  # guess - start + 1 because inclusive of start
     if(lines > rlpp) {
         if(verbose)
-            message("\t....................... FAIL: Referential footnotes take up too much space")
+            message("\t....................... FAIL: Referential footnotes take up too much space (", reflines, " lines)")
         return(FALSE)
     }
     if(rw[["node_class"]] %in% c("LabelRow", "ContentRow")) {
