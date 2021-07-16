@@ -120,9 +120,12 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' 
 #' The PDF output is based on the ASCII output created with `toString`
 #' 
-#' @inheritParams grDevices::pdf
+#' @inheritParams export_as_txt
 #' @inheritParams grid::plotViewport
-#' 
+#' @param file file to write, must have `.pdf` extension
+#' @param width the width and height of the graphics region in inches
+#' @param height the width and height of the graphics region in inches
+#' @param fontsize the size of text (in points)
 #' @param ... arguments passed on to `paginate_table`
 #' 
 #' @importFrom grDevices pdf

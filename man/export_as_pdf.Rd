@@ -16,29 +16,20 @@ export_as_pdf(
 )
 }
 \arguments{
-\item{file}{a character string giving the file path.
-    If it is of the form \code{"|cmd"}, the output is piped to the
-    command given by \command{cmd}.  If it is \code{NULL},
-    then no external file is created (effectively, no drawing occurs),
-    but the device may still be queried (e.g., for size of text).
+\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
-    For use with \code{onefile = FALSE} give a C integer format such
-    as \code{"Rplot\%03d.pdf"} (the default in that case).
-    (See \code{\link[grDevices]{postscript}} for further details.)
+\item{file}{file to write, must have \code{.pdf} extension}
 
-    Tilde expansion (see \code{\link{path.expand}}) is done. An input with
-    a marked encoding is converted to the native encoding or an error is
-    given.
-  }
+\item{width}{the width and height of the graphics region in inches}
 
-\item{width}{the width and height of the graphics region in
-    inches.  The default values are \code{7}.}
-
-\item{height}{the width and height of the graphics region in
-    inches.  The default values are \code{7}.}
+\item{height}{the width and height of the graphics region in inches}
 
 \item{margins}{ A numeric vector interpreted in the same way
     as \code{par(mar)} in base graphics. }
+
+\item{fontsize}{the size of text (in points)}
+
+\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
 
 \item{...}{arguments passed on to \code{paginate_table}}
 }
