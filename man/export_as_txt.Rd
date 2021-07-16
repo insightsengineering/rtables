@@ -4,7 +4,13 @@
 \alias{export_as_txt}
 \title{Export as plain text with page break symbol}
 \usage{
-export_as_txt(tt, file = NULL, paginate = FALSE, ..., page_break = "\\\\s")
+export_as_txt(
+  tt,
+  file = NULL,
+  paginate = FALSE,
+  ...,
+  page_break = "\\n\\\\s\\n"
+)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -31,18 +37,14 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, ex_adsl)
 
-export_as_txt(tbl, paginate = TRUE)
-}
-\examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  analyze(c("AGE", "BMRKR2"))
+cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
 
-tbl <- build_table(lyt, ex_adsl)
-## this just displays it
-export_as_txt(tbl, file = NULL)
 \dontrun{
-tf <- tempfile(file.ext = ".txt")
-export_as_txt(tt, file = tf)
+tf <- tempfile(fileext = ".txt")
+export_as_txt(tbl, file = tf)
+system2("cat", tf)
 }
+}
+\seealso{
+\code{export_as_pdf}
 }

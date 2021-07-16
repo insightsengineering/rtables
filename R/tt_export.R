@@ -84,6 +84,8 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 #' 
 #' @export
 #' 
+#' @seealso `export_as_pdf`
+#' 
 #' @examples 
 #' 
 #' lyt <- basic_table() %>%
@@ -92,13 +94,14 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 #'
 #' tbl <- build_table(lyt, ex_adsl)
 #' 
-#' cat(export_as_txt(tbl, paginate = TRUE, lpp = 8))
-#' export_as_txt(tbl, file = NULL)
+#' cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
+#' 
 #' \dontrun{
-#' tf <- tempfile(file.ext = ".txt")
-#' export_as_txt(tt, file = tf)
+#' tf <- tempfile(fileext = ".txt")
+#' export_as_txt(tbl, file = tf)
+#' system2("cat", tf)
 #' }
-export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s") {
+export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\n\\s\n") {
     if(paginate)
         tbls <- paginate_table(tt, ...)
     else
@@ -115,10 +118,16 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 
 #' Export as PDF
 #' 
-#' The PDF output is based on the `export_as_text` function
+#' The PDF output is based on the ASCII output created with `toString`
 #' 
-#' @inheritParams export_as_txt
-#' @param ... arguments passed on to `export_as_txt`
+#' @inheritParams grDevices::pdf
+#' @inheritParams grid::plotViewport
+#' 
+#' @param ... arguments passed on to `paginate_table`
+#' 
+#' @importFrom grDevices pdf
+#' @importFrom grid textGrob grid.newpage gpar pushViewport plotViewport unit grid.draw
+#'   convertWidth convertHeight grobHeight grobWidth
 #' 
 #' @seealso `export_as_txt`
 #' 
@@ -127,33 +136,66 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' @export
 #' 
 #' @examples 
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
 #' 
+#' \dontrun{
+#' tf <- tempfile(fileext = ".pdf")
+#' export_as_pdf(tbl, file = tf,  lpp = 8)
+#' }
 #' 
-export_as_pdf <- function(tt, file, ...) {
-    force(file)
+export_as_pdf <- function(tt, 
+                          file, width = 11.7, height = 8.3, # passed to pdf()
+                          margins = c(4, 4, 4, 4), fontsize = 8,  # grid parameters
+                          paginate = TRUE, ... # passed to paginate_table
+) {
+    stopifnot(tools::file_ext(file) != ".pdf")
     
-   
     colwidths <- propose_column_widths(tt)
-    tbls <- paginate_table(tt, ...)
+    tbls <- if (paginate)
+        paginate_table(tt, ...)
+    else 
+        list(tt)
+    
     stbls <- lapply(tbls, toString, widths = colwidths)
+    
     gtbls <- lapply(stbls, function(txt) {
         textGrob(
             label = txt,
             x = unit(0, "npc"), y = unit(1, "npc"), 
             just = c("left", "top"),
-            gp = gpar(fontsize = 8, fontfamily = "monospace")
+            gp = gpar(fontsize = fontsize, fontfamily = "mono")
         )
     })
-
-    p <- 
-    grid.newpage()
-    grid.draw(p)
     
-    gpf <- gpar(fontsize = 8, family = "")
+    npages <- length(gtbls)
+    exceeds_width = rep(FALSE, npages)
+    exceeds_height = rep(FALSE, npages)
     
-    grid.newpage()
-    pushViewport(plotViewport())
-    #grid.rect()
-    grid.text(x[[1]],  )
+    pdf(file = file, width = width, height = height)
+    for (i in seq_along(gtbls)) {
+        g <- gtbls[[i]]
     
+        grid.newpage()
+        pushViewport(plotViewport(margins = margins))
+        
+        if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) > 
+            convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) {
+            exceeds_height[i] <- TRUE
+            message("height of page", i, "exceeds the available space")
+        }
+        if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) > 
+            convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) {
+            exceeds_width[i] <- TRUE
+            message("width of page", i, "exceeds the available space")
+        }
+        
+        grid.draw(g)
+    }
+    dev.off()
+    
+    list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height)
 }

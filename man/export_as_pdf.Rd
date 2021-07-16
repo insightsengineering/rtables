@@ -4,20 +4,58 @@
 \alias{export_as_pdf}
 \title{Export as PDF}
 \usage{
-export_as_pdf(tt, file, ...)
+export_as_pdf(
+  tt,
+  file,
+  width = 11.7,
+  height = 8.3,
+  margins = c(4, 4, 4, 4),
+  fontsize = 8,
+  paginate = TRUE,
+  ...
+)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{file}{a character string giving the file path.
+    If it is of the form \code{"|cmd"}, the output is piped to the
+    command given by \command{cmd}.  If it is \code{NULL},
+    then no external file is created (effectively, no drawing occurs),
+    but the device may still be queried (e.g., for size of text).
 
-\item{file}{character(1). File to write.}
+    For use with \code{onefile = FALSE} give a C integer format such
+    as \code{"Rplot\%03d.pdf"} (the default in that case).
+    (See \code{\link[grDevices]{postscript}} for further details.)
 
-\item{...}{arguments passed on to \code{export_as_txt}}
+    Tilde expansion (see \code{\link{path.expand}}) is done. An input with
+    a marked encoding is converted to the native encoding or an error is
+    given.
+  }
+
+\item{width}{the width and height of the graphics region in
+    inches.  The default values are \code{7}.}
+
+\item{height}{the width and height of the graphics region in
+    inches.  The default values are \code{7}.}
+
+\item{margins}{ A numeric vector interpreted in the same way
+    as \code{par(mar)} in base graphics. }
+
+\item{...}{arguments passed on to \code{paginate_table}}
 }
 \description{
-The PDF output is based on the \code{export_as_text} function
+The PDF output is based on the ASCII output created with \code{toString}
 }
 \examples{
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
+tbl <- build_table(lyt, ex_adsl)
+
+\dontrun{
+tf <- tempfile(fileext = ".pdf")
+export_as_pdf(tbl, file = tf,  lpp = 8)
+}
 
 }
 \seealso{
