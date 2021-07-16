@@ -240,6 +240,13 @@ setMethod("replace_rows", c(value = "ElementaryTable"),
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[3, ] <- list(-111, -222, -333)
 #' tbl
+#' @aliases [,VTableTree,logical,logical,ANY-method
+#' [,VTableTree,logical,ANY,ANY-method
+#' [,VTableTree,logical,missing,ANY-method
+#' [,VTableTree,ANY,logical,ANY-method
+#' [,VTableTree,ANY,missing,ANY-method
+#' [,VTableTree,ANY,character,ANY-method
+#' [,VTableTree,character,ANY,ANY-method
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
@@ -778,7 +785,7 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, keep_titles = TRUE, ... ) 
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,logical,logical-method
 setMethod("[", c("VTableTree", "logical", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
@@ -788,7 +795,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,logical,ANY-method
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i = .j_to_posj(i, nrow(x))
@@ -797,7 +804,7 @@ setMethod("[", c("VTableTree", "logical", "ANY"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,logical,missing-method
 setMethod("[", c("VTableTree", "logical", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
@@ -807,7 +814,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,ANY,logical-method
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j = .j_to_posj(j, ncol(x))
@@ -816,7 +823,7 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,ANY,missing-method
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j = seq_len(ncol(x))
@@ -825,6 +832,7 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
 
 #' @exportMethod [
 #' @rdname brackets
+#' @aliases [,VTableTree,missing,ANY-method
 
 setMethod("[", c("VTableTree", "missing", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
@@ -836,7 +844,7 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,ANY,character-method
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##j <- .colpath_to_j(j, coltree(x))
@@ -846,6 +854,7 @@ setMethod("[", c("VTableTree", "ANY", "character"),
 
 #' @exportMethod [
 #' @rdname brackets
+#' @aliases [,VTableTree,character,ANY-method
 setMethod("[", c("VTableTree", "character", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -856,6 +865,7 @@ setMethod("[", c("VTableTree", "character", "ANY"),
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
 #' @exportMethod [
 #' @rdname brackets
+#' @aliases [,VTableTree,character,character-method
 setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -868,7 +878,7 @@ setMethod("[", c("VTableTree", "character", "character"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,missing,numeric-method
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i = seq_len(nrow(x))
@@ -878,7 +888,7 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 #' @exportMethod [
 #' @rdname brackets
-
+#' @aliases [,VTableTree,numeric,numeric-method
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't

@@ -234,6 +234,7 @@
 \alias{rawvalues,ANY-method}
 \alias{rawvalues,CellValue-method}
 \alias{rawvalues,TreePos-method}
+\alias{rawvalues,RowsVerticalSection-method}
 \alias{value_names}
 \alias{value_names,ANY-method}
 \alias{value_names,TreePos-method}
@@ -819,6 +820,8 @@ rawvalues(obj)
 \S4method{rawvalues}{CellValue}(obj)
 
 \S4method{rawvalues}{TreePos}(obj)
+
+\S4method{rawvalues}{RowsVerticalSection}(obj)
 
 value_names(obj)
 
