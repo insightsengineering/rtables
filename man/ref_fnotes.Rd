@@ -19,6 +19,8 @@
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-}
 \alias{ref_index<-,RefFootnote-method}
+\alias{fnotes_at_path<-}
+\alias{fnotes_at_path<-,VTableTree,character-method}
 \title{Referential Footnote Accessors}
 \usage{
 row_footnotes(obj)
@@ -56,11 +58,19 @@ ref_index(obj)
 ref_index(obj) <- value
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
+
+fnotes_at_path(obj, rowpath = NULL, colpath = NULL) <- value
+
+\S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL) <- value
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{value}{The new value}
+
+\item{rowpath}{character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.}
+
+\item{colpath}{character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell}
 }
 \description{
 Get and set referential footnotes on aspects of a built table

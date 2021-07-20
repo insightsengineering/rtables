@@ -2205,3 +2205,61 @@ setMethod("ref_index<-", "RefFootnote",
     obj
 })
 
+
+
+setGeneric(".fnote_set_inner<-", function(ttrp, colpath, value) standardGeneric(".fnote_set_inner<-"))
+
+setMethod(".fnote_set_inner<-", c("TableRow", "NULL"),
+          function(ttrp, colpath, value) {
+    row_footnotes(ttrp) <- value
+    ttrp
+})
+
+setMethod(".fnote_set_inner<-", c("TableRow", "character"),
+          function(ttrp, colpath, value) {
+    ind <- .path_to_pos(ttrp, colpath, cols = TRUE)
+    cfns <- cell_footnotes(ttrp)
+    cnfs[[ind]] <- value
+    cell_footnotes(ttrp) <- cnfs
+    ttrp
+})
+
+setMethod(".fnote_set_inner<-", c("InstantiatedColumnInfo", "character"),
+          function(ttrp, colpath, value) {
+    stop("Adding column referential footnotes is not yet implemented.")
+})
+
+
+setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
+          function(ttrp, colpath, value) {
+      if(labelrow_visible(ttrp) && is.null(value)) {
+          lblrw <- tt_labelrow(ttrp)
+          row_footnotes(lblrow) <- value
+          tt_labelrow(ttrp) <- lblrw
+      } else if(NROW(content_table(ttrp)) == 1L) {
+          ctbl <- content_table(ttrp)
+          pth <- make_row_df(ctbl)$path[[1]]
+          fnotes_at_path(ctbl, pth, colpath) <- value
+          content_table(ttrp) <- ctbl
+      }
+      ttrp
+})
+
+
+
+#' @param rowpath character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.
+#' @param colpath character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell
+#' @export
+#' @rdname ref_fnotes
+setGeneric("fnotes_at_path<-", function(obj, rowpath = NULL, colpath = NULL, value) standardGeneric("fnotes_at_path<-"))
+
+## non-null rowpath, null or non-null colpath
+#' @export
+#' @rdname ref_fnotes
+setMethod("fnotes_at_path<-", c("VTableTree", "character"),
+          function(obj, rowpath = NULL, colpath = NULL, value) {
+    rw <- tt_at_path(obj, rowpath)
+    .fnote_set_inner(rw, colpath) <- value
+    tt_at_path(obj, rowpath) <- rw
+    obj
+})
