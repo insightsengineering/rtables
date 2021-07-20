@@ -46,7 +46,16 @@ recursive_replace = function(tab, path, incontent = FALSE, rows = NULL, cols = N
             }
         }
         return(newkid)
-    } else { ## length(path) > 1, more recursing to do
+    } else if( path[[1]] == "@content") {
+        ctb <- content_table(tab)
+        ctb <- recursive_replace(ctb,
+                                 path = path[-1],
+                                 rows = rows,
+                                 cols = cols,
+                                 value = value)
+        content_table(tab) <- ctb
+        tab
+    } else {## length(path) > 1, more recursing to do
         kidel = path[[1]]
         ## broken up for debugabiliity, could be a single complex
         ## expression
