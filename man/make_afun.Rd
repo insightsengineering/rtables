@@ -125,6 +125,8 @@ s_ref <- function(x, .in_ref_col, .ref_group) {
 a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
 a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
+
+
 }
 \seealso{
 \code{\link[=analyze]{analyze()}}

@@ -24,6 +24,12 @@ test_that("afun internals coverage", {
                           "Max." = "xx.x",
                           range = "xx - xx",
                           n_unique = "xx - xx"))
+    
+    
+    foo <- function(x, .N_col, ...) {list(a = character(0))}
+    afoo <- make_afun(foo)
+    expect_silent(afoo(factor(character(0)), .N_col = 100))
+    
 })
 
 
@@ -109,6 +115,7 @@ test_that("make_afun works for df functions", {
 
 test_that("make_afun works for funs with ...", {
  ## with dots
+  
 
  sfun3 <- function(x, .ref_group = NULL, ...) "hi"
  afun3 <- make_afun(sfun3)
