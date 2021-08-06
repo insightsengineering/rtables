@@ -289,7 +289,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #' a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
 #' a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 #' a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
-
+#' 
+#' 
 make_afun <- function(fun,
                       .stats = NULL,
                       .formats = NULL,
@@ -335,7 +336,7 @@ make_afun <- function(fun,
         in_rc_argl <- .if_in_formals(".in_ref_col")
         .in_ref_col <- if(length(in_rc_argl) > 0) in_rc_argl[[1]] else FALSE
 
-        sfunargs <- c(
+        sfunargs <- list(
             ## these are either named lists containing the arg, or list()
             ## depending on whether fun accept the argument or not
             .if_in_formals("x"),
@@ -347,8 +348,9 @@ make_afun <- function(fun,
             in_rc_argl,
             .if_in_formals(".df_row"),
             .if_in_formals(".var"),
-            .if_in_formals(".ref_full"))
-
+            .if_in_formals(".ref_full")
+        )
+        
         allvars <- setdiff(fun_fnames, c("...", names(sfunargs)))
         ## values int he actual call to this function override customization
         ## done by the constructor. evalparse is to avoid a "... in wrong context" NOTE
