@@ -324,7 +324,7 @@ make_afun <- function(fun,
         ## We define it in here so that the scoping hackery works correctly
         .if_in_formals <- function(nm, ifnot = list(), named_lwrap = TRUE) {
             val <- if(nm %in% fun_fnames) get(nm) else ifnot
-            if(named_lwrap && length(val) > 0)
+            if(named_lwrap && !identical(val, ifnot))
                 setNames(list(val), nm)
             else
                 val
@@ -336,7 +336,7 @@ make_afun <- function(fun,
         in_rc_argl <- .if_in_formals(".in_ref_col")
         .in_ref_col <- if(length(in_rc_argl) > 0) in_rc_argl[[1]] else FALSE
 
-        sfunargs <- list(
+        sfunargs <- c(
             ## these are either named lists containing the arg, or list()
             ## depending on whether fun accept the argument or not
             .if_in_formals("x"),
