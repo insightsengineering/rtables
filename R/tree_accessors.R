@@ -2078,6 +2078,15 @@ setMethod("prov_footer<-", "VTitleFooter",
 all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
 
 
+make_ref_value <-  function(value) {
+    if(is(value, "RefFootnote"))
+        value <- list(value)
+    else if (!is.list(value) || any(!sapply(value, is, "RefFootnote")))
+        value <- lapply(value, RefFootnote)
+    value
+}
+
+
 #' Referential Footnote Accessors
 #'
 #' Get and set referential footnotes on aspects of a built table
@@ -2103,7 +2112,8 @@ setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnote
 #' @rdname ref_fnotes
 setMethod("row_footnotes<-", "TableRow",
           function(obj, value) {
-    obj@row_footnotes <- value
+
+    obj@row_footnotes <- make_ref_value(value)
     obj
 })
 
@@ -2158,17 +2168,11 @@ setGeneric("cell_footnotes<-", function(obj, value) standardGeneric("cell_footno
 #' @rdname ref_fnotes
 setMethod("cell_footnotes<-", "CellValue",
           function(obj, value) {
-    if(is(value, "RefFootnote"))
-        value <- list(value)
-    else if (!is.list(value))
-        value <- lapply(value, RefFootnote)
-    attr(obj, "footnotes") <- value
+    attr(obj, "footnotes") <- make_ref_value(value)
     obj
 })
-#' @export
-#' @rdname ref_fnotes
-setMethod("cell_footnotes<-", "DataRow",
-          function(obj, value) {
+
+.cfn_set_helper <- function(obj, value) {
     if(length(value) != ncol(obj))
         stop("Did not get the right number of footnote ref values for cell_footnotes<- on a full row.")
 
@@ -2182,7 +2186,18 @@ setMethod("cell_footnotes<-", "DataRow",
     cell = row_cells(obj),
     fns = value, SIMPLIFY=FALSE)
     obj
-})
+}
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes<-", "DataRow",
+          definition = .cfn_set_helper)
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("cell_footnotes<-", "ContentRow",
+          definition = .cfn_set_helper)
+
 
 
 
@@ -2217,10 +2232,10 @@ setMethod(".fnote_set_inner<-", c("TableRow", "NULL"),
 
 setMethod(".fnote_set_inner<-", c("TableRow", "character"),
           function(ttrp, colpath, value) {
-    ind <- .path_to_pos(ttrp, colpath, cols = TRUE)
+    ind <- .path_to_pos(path = colpath, tt = ttrp, cols = TRUE)
     cfns <- cell_footnotes(ttrp)
-    cnfs[[ind]] <- value
-    cell_footnotes(ttrp) <- cnfs
+    cfns[[ind]] <- value
+    cell_footnotes(ttrp) <- cfns
     ttrp
 })
 
@@ -2249,17 +2264,20 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 
 #' @param rowpath character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.
 #' @param colpath character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell
+#' @param reset_idx logical(1). Should the numbering for referential footnotes be immediately recalculated. Defaults to TRUE.
 #' @export
 #' @rdname ref_fnotes
-setGeneric("fnotes_at_path<-", function(obj, rowpath = NULL, colpath = NULL, value) standardGeneric("fnotes_at_path<-"))
+setGeneric("fnotes_at_path<-", function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) standardGeneric("fnotes_at_path<-"))
 
 ## non-null rowpath, null or non-null colpath
 #' @export
 #' @rdname ref_fnotes
 setMethod("fnotes_at_path<-", c("VTableTree", "character"),
-          function(obj, rowpath = NULL, colpath = NULL, value) {
+          function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) {
     rw <- tt_at_path(obj, rowpath)
     .fnote_set_inner(rw, colpath) <- value
     tt_at_path(obj, rowpath) <- rw
+    if(reset_idx)
+        obj <- update_ref_indexing(obj)
     obj
 })

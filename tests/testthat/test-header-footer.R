@@ -40,3 +40,35 @@ test_that("referential footnotes work", {
     expect_identical(rdf2$nrowrefs, c(0L, 0L))
     expect_identical(rdf2$ncellrefs, c(2L, 0L))
 })
+
+
+test_that("post-processing addition of referential footnotes works", {
+
+    race_levels <- c("WHITE",
+                     "BLACK OR AFRICAN AMERICAN",
+                     "ASIAN",
+                     "AMERICAN INDIAN OR ALASKA NATIVE",
+                     "MULTIPLE")
+    l1 <- basic_table() %>% split_cols_by("ARM") %>%
+        split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) %>%
+        summarize_row_groups() %>%
+        analyze("AGE", mean)
+
+
+    tb1 <- build_table(l1, DM)
+    fnotes_at_path(tb1, rowpath = c("RACE", "WHITE", "AGE", "mean"),
+                   colpath = c("ARM", "B: Placebo")) <- "white arm b mean"
+
+    fnotes_at_path(tb1, rowpath = c("RACE", "ASIAN", "@content", "ASIAN"),
+                   colpath = c("ARM", "C: Combination")) <- "asian arm c content"
+
+    fnotes_at_path(tb1, rowpath = c("RACE", "MULTIPLE", "@content", "MULTIPLE"),
+                   colpath = NULL) <-  c("race multiple row fn 1", "race multiple row fn 2")
+
+    rdf <- make_row_df(tb1)
+
+    expect_identical(rdf$nrowrefs[[9]], 2L)
+    expect_identical(rdf$ncellrefs,
+                     c(0L, 1L, 0L, 0L, 1L, rep(0L, 5)))
+
+})
