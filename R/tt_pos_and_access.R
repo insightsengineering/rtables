@@ -79,8 +79,31 @@ recursive_replace = function(tab, path, incontent = FALSE, rows = NULL, cols = N
         tree_children(tab)[[kidel]] = newkid
         tab
     }
+}
 
+coltree_split <- function(ctree) ctree@split
 
+col_fnotes_at_path <- function(ctree, path, fnotes) {
+    if(length(path) == 0) {
+        col_fnotes_here(ctree) <- fnotes
+        return(ctree)
+    }
+
+    if(identical(path[1], obj_name(coltree_split(ctree))))
+        path <- path[-1]
+    else
+        stop(paste("Path appears invalid at step:", path[1]))
+
+    kids <- tree_children(ctree)
+    kidel <- path[[1]]
+    knms <- names(kids)
+    stopifnot(kidel %in% knms)
+    newkid <- col_fnotes_at_path(kids[[kidel]],
+                       path[-1],
+                       fnotes = fnotes)
+    kids[[kidel]] <- newkid
+    tree_children(ctree) <- kids
+    ctree
 }
 
 #' Get or set table elements at specified path

@@ -286,10 +286,16 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
         body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent))
     }
 
+    col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
+        if(length(x) == 0)
+            ""
+        else
+            paste(vapply(x, format_fnote_ref, ""), collapse = " ")
+    }, ""), ncol = ncol(body))
     body_ref_strs <- get_ref_matrix(tt)
 
     body <- matrix(paste0(body,
-                         rbind(matrix("", nr_header, ncol = ncol(body)),
+                         rbind(col_ref_strs,
                                body_ref_strs)),
                    nrow = nrow(body),
                    ncol = ncol(body))
@@ -366,6 +372,24 @@ format_fnote_note <- function(fn) {
         stop("Got NAs mixed with non-NAS for extracted footnote indices. This should not happen")
     res
 }
+
+.colref_mat_helper <- function(vals, span) {
+        val <- paste(lapply(vals, format_fnote_ref), collapse = " ")
+        if(length(val) == 0)
+            val <- ""
+        rep(val, times = span)
+}
+
+get_colref_matrix <- function(tt) {
+    cdf <- make_col_df(tt, visible_only=FALSE)
+    objs <- cdf$col_fnotes
+    spans <- cdf$total_span
+    vals <- mapply(.colref_mat_helper,
+                   vals = objs,
+                   span = spans)
+    vals
+}
+
 get_ref_matrix <- function(tt) {
     if(ncol(tt) == 0 || nrow(tt) == 0) {
         return(matrix("", nrow = nrow(tt), ncol = ncol(tt) + 1L))
@@ -381,11 +405,13 @@ get_ref_matrix <- function(tt) {
 }
 
 get_formatted_fnotes <- function(tt) {
+    colresfs <- unlist(make_col_df(tt, visible_only = FALSE)$col_fnotes)
+    colstrs <- unlist(lapply(colresfs, format_fnote_note))
     rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
     lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
-    cstrs <- unlist(lapply(lst, format_fnote_note))
+    cellstrs <- unlist(lapply(lst, format_fnote_note))
     rstrs <- unlist(lapply(rows, function(rw) format_fnote_note(row_footnotes(rw))))
-    allstrs <- c(rstrs, cstrs)
+    allstrs <- c(colstrs, rstrs, cellstrs)
     inds <- .fn_ind_extractor(allstrs)
     allstrs[order(inds)]
 }
@@ -507,7 +533,11 @@ get_formatted_fnotes <- function(tt) {
                     function(i) {
         rws <- spldfs[[i]]
 
-        thisbit <- lapply(seq_len(nrow(rws)), function(ri) rcell(rws[ri, "label", drop = TRUE], colspan = rws$total_span[ri]))
+        thisbit <- lapply(seq_len(nrow(rws)),
+                          function(ri) {
+            rcell(rws[ri, "label", drop = TRUE], colspan = rws$total_span[ri],
+                  footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]])
+        })
         .pad_end(thisbit, nleafcols)
     })
 
@@ -535,12 +565,19 @@ get_formatted_fnotes <- function(tt) {
         rep(cs, cs)
     }), ncol = nc, byrow = TRUE)
 
+    fnote <- do.call(rbind,
+                           lapply(rows, function(x) {
+                              cell_footnotes(x)
+                           }))
+
+
 
     if (disp_ccounts(cinfo)) {
         counts <- col_counts(cinfo)
         cformat <- colcount_format(cinfo)
         body <- rbind(body, vapply(counts, format_rcell, character(1), cformat))
         span <- rbind(span, rep(1, nc))
+        fnote <- rbind(fnote, rep(list(list()), nc))
     }
 
     tl <- top_left(cinfo)
@@ -552,10 +589,12 @@ get_formatted_fnotes <- function(tt) {
         npad <- lentl - nli
         body <- rbind(matrix("", nrow = npad, ncol = ncol(body)), body)
         span <- rbind(matrix(1, nrow = npad, ncol = ncol(span)), span)
+        fnote <- rbind(matrix(list(), nrow = npad, ncol = ncol(body)), fnote)
     } else if (lentl < nli)
         tl <- c(tl, rep("", nli - lentl))
 
-    list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span))
+    list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span),
+         footnotes = cbind(list(list()), fnote))
 }
 
 

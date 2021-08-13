@@ -1506,6 +1506,21 @@ setMethod("coltree", "VTableTree",
 setMethod("coltree", "TableRow",
           function(obj, df, rtpos) coltree(col_info(obj)))
 
+setGeneric("coltree<-", function(obj, value) standardGeneric("coltree<-"))
+setMethod("coltree<-", c("InstantiatedColumnInfo", "LayoutColTree"),
+          function(obj, value) {
+    obj@tree_layout <- value
+    obj
+})
+
+setMethod("coltree<-", c("VTableTree", "LayoutColTree"),
+          function(obj, value) {
+    cinfo <- col_info(obj)
+    coltree(cinfo) <- value
+    col_info(obj) <- cinfo
+    obj
+})
+
 
 #' @rdname col_accessors
 #' @export
@@ -2198,7 +2213,32 @@ setMethod("cell_footnotes<-", "DataRow",
 setMethod("cell_footnotes<-", "ContentRow",
           definition = .cfn_set_helper)
 
+#' @export
+#' @rdname ref_fnotes
+setGeneric("col_fnotes_here", function(obj) standardGeneric("col_fnotes_here"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("col_fnotes_here", c("LayoutColTree"), function(obj) obj@col_footnotes)
+#' @export
+#' @rdname ref_fnotes
+setMethod("col_fnotes_here", c("LayoutColLeaf"), function(obj) obj@col_footnotes)
 
+#' @export
+#' @rdname ref_fnotes
+setGeneric("col_fnotes_here<-", function(obj, value) standardGeneric("col_fnotes_here<-"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("col_fnotes_here<-", "LayoutColTree", function(obj, value) {
+    obj@col_footnotes <- make_ref_value(value)
+    obj
+})
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
+    obj@col_footnotes <- make_ref_value(value)
+    obj
+})
 
 
 #' @export
@@ -2241,7 +2281,9 @@ setMethod(".fnote_set_inner<-", c("TableRow", "character"),
 
 setMethod(".fnote_set_inner<-", c("InstantiatedColumnInfo", "character"),
           function(ttrp, colpath, value) {
-    stop("Adding column referential footnotes is not yet implemented.")
+    ctree <- col_fnotes_at_path(coltree(ttrp), colpath, fnotes = value)
+    coltree(ttrp) <- ctree
+    ttrp
 })
 
 
@@ -2281,3 +2323,22 @@ setMethod("fnotes_at_path<-", c("VTableTree", "character"),
         obj <- update_ref_indexing(obj)
     obj
 })
+
+#' @export
+#' @rdname ref_fnotes
+setMethod("fnotes_at_path<-", c("VTableTree", "NULL"),
+          function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) {
+    cinfo <- col_info(obj)
+    .fnote_set_inner(cinfo, colpath) <- value
+    col_info(obj) <- cinfo
+    if(reset_idx)
+        obj <- update_ref_indexing(obj)
+    obj
+
+
+})
+
+`col_footnotes_here<-` <- function(obj, value) {
+    obj@col_footnotes <- make_ref_value(value)
+    obj
+}

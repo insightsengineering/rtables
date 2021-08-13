@@ -52,7 +52,7 @@ test_that("post-processing addition of referential footnotes works", {
     l1 <- basic_table() %>% split_cols_by("ARM") %>%
         split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) %>%
         summarize_row_groups() %>%
-        analyze("AGE", mean)
+        analyze("AGE", mean, format = "xx.x")
 
 
     tb1 <- build_table(l1, DM)
@@ -65,8 +65,30 @@ test_that("post-processing addition of referential footnotes works", {
     fnotes_at_path(tb1, rowpath = c("RACE", "MULTIPLE", "@content", "MULTIPLE"),
                    colpath = NULL) <-  c("race multiple row fn 1", "race multiple row fn 2")
 
-    rdf <- make_row_df(tb1)
+    fnotes_at_path(tb1, rowpath = NULL,
+                   colpath = c("ARM", "A: Drug X")) <- "drug x is a fake drug that isn't real"
 
+
+
+
+    mform <- matrix_form(tb1)
+
+    expect_identical(unname(mform$ref_footnotes),
+                     c("{1} - drug x is a fake drug that isn't real",
+                       "{2} - white arm b mean",
+                       "{3} - asian arm c content",
+                       "{4} - race multiple row fn 1",
+                       "{5} - race multiple row fn 2"))
+
+    expect_identical(mform$strings[10, 1, drop = TRUE],
+                     "MULTIPLE {4, 5}")
+
+    expect_identical(mform$strings[1, 2, drop = TRUE],
+                     "A: Drug X {1}")
+
+    expect_identical(mform$strings[3, 3, drop = TRUE],
+                     "36.9 {2}")
+    rdf <- make_row_df(tb1)
     expect_identical(rdf$nrowrefs[[9]], 2L)
     expect_identical(rdf$ncellrefs,
                      c(0L, 1L, 0L, 0L, 1L, rep(0L, 5)))
