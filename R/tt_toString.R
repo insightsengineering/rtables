@@ -262,23 +262,39 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
 
   display <- matrix(rep(TRUE, length(body)), ncol = ncol(body))
 
-  display <- t(apply(spans, 1, function(row) {
-    print_cells <- row == 1
+    print_cells_mat <- spans == 1L
+    if(!all(print_cells_mat)) {
+        display_rws  <- lapply(seq_len(nrow(spans)),
+                               function(i) {
+            print_cells <- print_cells_mat[i,]
+            row <- spans[i,]
+            ##         display <- t(apply(spans, 1, function(row) {
+            ## print_cells <- row == 1
 
-    if (!all(print_cells)) {
-      # need to calculate which cell need to be printed
-      tmp <- 0
-      for (i in seq_along(print_cells)) {
-        if (!print_cells[i] && tmp <= 0) {
-          print_cells[i] <- TRUE
-          tmp <- row[i] - 1
-        } else {
-          tmp <- tmp - 1
-        }
-      }
+            if (!all(print_cells)) {
+                ## need to calculate which cell need to be printed
+                myrle <- rle(row)
+                print_cells <- unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
+                                                                  times = ln/vl),
+                                             SIMPLIFY = FALSE,
+                                             vl = myrle$values,
+                                             ln = myrle$lengths),
+                                      recursive = FALSE)
+
+                ## tmp <- 0
+                ## for (i in seq_along(print_cells)) {
+                ##   if (!print_cells[i] && tmp <= 0) {
+                ##     print_cells[i] <- TRUE
+                ##     tmp <- row[i] - 1
+                ##   } else {
+                ##     tmp <- tmp - 1
+                ##   }
+                ## }
+            }
+            print_cells
+        })
+        display <- do.call(rbind, display_rws)
     }
-    print_cells
-  }))
 
 
     nr_header <- nrow(header_content$body)
