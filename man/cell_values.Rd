@@ -3,17 +3,29 @@
 \name{cell_values}
 \alias{cell_values}
 \alias{cell_values,VTableTree-method}
+\alias{cell_values,TableRow-method}
+\alias{cell_values,LabelRow-method}
 \alias{value_at}
 \alias{value_at,VTableTree-method}
+\alias{value_at,TableRow-method}
+\alias{value_at,LabelRow-method}
 \title{Retrieve cell values by row and column path}
 \usage{
 cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
 \S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
+\S4method{cell_values}{TableRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{LabelRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
 value_at(tt, rowpath = NULL, colpath = NULL)
 
 \S4method{value_at}{VTableTree}(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{TableRow}(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{LabelRow}(tt, rowpath = NULL, colpath = NULL)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}

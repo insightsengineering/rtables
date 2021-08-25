@@ -272,3 +272,24 @@ test_that("setters work ok", {
 })
 
 
+test_that("cell_values and value_at work on row objects", {
+
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("STRATA2") %>%
+        analyze("AEDECOD") %>%
+        build_table(ex_adae, ex_adsl)
+    
+    first_row <- collect_leaves(tbl)[[1]]
+
+    va <- value_at(first_row, colpath = c("ARM", "A: Drug X", "STRATA2", "S2"))
+
+    cv <- cell_values(first_row, colpath = c("ARM", "C: Combination"))
+
+    expect_identical(va, 33L)
+
+    expect_identical(cv,
+                     setNames(list(32L, 56L),
+                              c("C: Combination.S1",
+                                "C: Combination.S2")))
+})

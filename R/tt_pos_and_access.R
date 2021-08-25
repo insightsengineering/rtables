@@ -1096,15 +1096,50 @@ setMethod("cell_values", "VTableTree",
 })
 
 #'@rdname cell_values
+#' @exportMethod cell_values
+setMethod("cell_values", "TableRow",
+          function(tt, rowpath, colpath = NULL, omit_labrows = TRUE){
+    if(!is.null(rowpath))
+       stop("cell_values on TableRow objects must have NULL rowpath")
+    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath, omit_labrows = omit_labrows, value_at = FALSE)
+})
+
+#'@rdname cell_values
+#' @exportMethod cell_values
+setMethod("cell_values", "LabelRow",
+          function(tt, rowpath, colpath = NULL, omit_labrows = TRUE){
+    stop("calling cell_values on LabelRow is not meaningful")
+})
+
+
+
+#'@rdname cell_values
 #' @export
 setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL)
     standardGeneric("value_at"))
 #'@rdname cell_values
-#' @exportMethod cell_values
+#' @exportMethod value_at
 setMethod("value_at", "VTableTree",
           function(tt, rowpath, colpath = NULL){
     .inner_cell_value(tt, rowpath = rowpath, colpath = colpath, omit_labrows = FALSE, value_at = TRUE)
 })
+
+#'@rdname cell_values
+#' @exportMethod value_at
+setMethod("value_at", "TableRow",
+          function(tt, rowpath, colpath = NULL){
+    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath, omit_labrows = FALSE, value_at = TRUE)
+})
+
+
+#'@rdname cell_values
+#' @exportMethod value_at
+setMethod("value_at", "LabelRow",
+          function(tt, rowpath, colpath = NULL){
+    stop("calling value_at for LabelRow objects is not meaningful")
+})
+
+
 
 .inner_cell_value <- function(tt, rowpath, colpath = NULL, omit_labrows = TRUE, value_at = FALSE){
     if(is.null(rowpath))
