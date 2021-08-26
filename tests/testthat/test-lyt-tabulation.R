@@ -58,32 +58,17 @@ test_that("complex layout works", {
         analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
 
 
-    expnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
-                 "Age Analysis redux", "range", "Level B", "Age Analysis",
-                 "mean", "median", "Age Analysis redux", "range",
-                 "African American (n)", "Level A", "Age Analysis", "mean", "median",
-                 "Age Analysis redux", "range", "Level B", "Age Analysis",
-                 "mean", "median", "Age Analysis redux", "range",
-                 "level1", "level2")
     tab <- build_table(lyt, rawdat)
     tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
     expect_identical(dim(tab), c(28L, 4L))
-    expect_identical(row.names(tab), expnames)
+    expect_identical(row.names(tab), complx_lyt_rnames)
 
     tlvals <- c("Ethnicity", "Factor 2")
     lyt2 <- lyt %>% append_topleft(tlvals)
     tab2 <- build_table(lyt2, rawdat)
     expect_identical(top_left(tab2), tlvals)
 
-    ## TODO remove this entirely
-
-    ## This constaint has been experimentally relaxed
-    ## ## this is too many, won't fit
-    ## lyt3 <- lyt2 %>%
-    ##     append_topleft(tlvals)
-    ## ## ensure error at build time (NOT print time) for top-left material overflow.
-    ## expect_error(build_table(lyt3, rawdat), "More lines in top-left [^[:space:]]* than in column header")
 })
 
 

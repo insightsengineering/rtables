@@ -569,14 +569,14 @@ setMethod("vis_label", "Split", function(spl) {
 
 #' @rdname int_methods
 setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
-#' @rdname int_methods
-setMethod("vis_label<-", "Split", function(spl, value) {
-    stop("defunct")
-    if(is.na(value))
-        stop("split label visibility must be TRUE or FALSE, got NA")
-#    spl@split_label_visible <- value
-    spl
-})
+## #' @rdname int_methods
+## setMethod("vis_label<-", "Split", function(spl, value) {
+##     stop("defunct")
+##     if(is.na(value))
+##         stop("split label visibility must be TRUE or FALSE, got NA")
+## #    spl@split_label_visible <- value
+##     spl
+## })
 
 
 
@@ -963,6 +963,8 @@ setMethod("value_formats", "ANY",
 #' @rdname int_methods
 setMethod("value_formats", "TableRow",
           function(obj, default) {
+    if(!is.null(obj_format(obj)))
+        default <- obj_format(obj)
     formats = lapply(row_cells(obj), function(x)
         value_formats(x) %||% default)
     formats
@@ -975,10 +977,12 @@ setMethod("value_formats", "LabelRow",
 #' @rdname int_methods
 setMethod("value_formats", "VTableTree",
           function(obj, default) {
+    if(!is.null(obj_format(obj)))
+        default <- obj_format(obj)
     rws = collect_leaves(obj, TRUE, TRUE)
-    formatrws = lapply(rws, value_formats)
+    formatrws = lapply(rws, value_formats, default = default)
     mat = do.call(rbind, formatrws)
-    row.names(mat) = NULL
+    row.names(mat) = row.names(obj)
     mat
 })
 
@@ -2127,7 +2131,6 @@ setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnote
 #' @rdname ref_fnotes
 setMethod("row_footnotes<-", "TableRow",
           function(obj, value) {
-
     obj@row_footnotes <- make_ref_value(value)
     obj
 })
@@ -2289,15 +2292,17 @@ setMethod(".fnote_set_inner<-", c("InstantiatedColumnInfo", "character"),
 
 setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
           function(ttrp, colpath, value) {
-      if(labelrow_visible(ttrp) && is.null(value)) {
+      if(labelrow_visible(ttrp) && !is.null(value)) {
           lblrw <- tt_labelrow(ttrp)
-          row_footnotes(lblrow) <- value
+          row_footnotes(lblrw) <- value
           tt_labelrow(ttrp) <- lblrw
       } else if(NROW(content_table(ttrp)) == 1L) {
           ctbl <- content_table(ttrp)
           pth <- make_row_df(ctbl)$path[[1]]
           fnotes_at_path(ctbl, pth, colpath) <- value
           content_table(ttrp) <- ctbl
+      } else {
+          stop("an error occured. this shouldn't happen. please contact the maintainer")
       }
       ttrp
 })

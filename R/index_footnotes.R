@@ -10,7 +10,11 @@
 }
 
 
-.idx_helper <- function(tr , cur_idx_fun) {
+setGeneric(".idx_helper", function(tr, cur_idx_fun) standardGeneric(".idx_helper"))
+
+
+setMethod(".idx_helper", "TableRow",
+          function(tr , cur_idx_fun) {
     row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
                                           cur_idx_fun)
 
@@ -27,7 +31,22 @@
                                      cur_idx_fun = cur_idx_fun
                                      )
     tr
-}
+})
+
+setMethod(".idx_helper", "VTableTree",
+          function(tr, cur_idx_fun) {
+    if(!labelrow_visible(tr)) {
+        stop("got a row footnote on a non-visible label row. this should never happen")
+    }
+    lr <- tt_labelrow(tr)
+
+    row_footnotes(lr) <- .reindex_one_pos(row_footnotes(lr),
+                                          cur_idx_fun)
+
+    tt_labelrow(tr) <- lr
+
+    tr
+})
 
 index_col_refs <- function(tt, cur_idx_fun) {
     ctree <- coltree(tt)

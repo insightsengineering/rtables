@@ -68,29 +68,46 @@ test_that("post-processing addition of referential footnotes works", {
     fnotes_at_path(tb1, rowpath = NULL,
                    colpath = c("ARM", "A: Drug X")) <- "drug x is a fake drug that isn't real"
 
-
-
-
+    fnotes_at_path(tb1, rowpath = c("RACE", "WHITE")) <- "didn't specify content"
+    fnotes_at_path(tb1, rowpath = c("RACE", "WHITE"),
+                   colpath = c("ARM", "C: Combination")) <- "cell fnote didn't specify content"
     mform <- matrix_form(tb1)
 
     expect_identical(unname(mform$ref_footnotes),
                      c("{1} - drug x is a fake drug that isn't real",
-                       "{2} - white arm b mean",
-                       "{3} - asian arm c content",
-                       "{4} - race multiple row fn 1",
-                       "{5} - race multiple row fn 2"))
+                       "{2} - didn't specify content",
+                       "{3} - cell fnote didn't specify content",
+                       "{4} - white arm b mean",
+                       "{5} - asian arm c content",
+                       "{6} - race multiple row fn 1",
+                       "{7} - race multiple row fn 2"))
 
     expect_identical(mform$strings[10, 1, drop = TRUE],
-                     "MULTIPLE {4, 5}")
+                     "MULTIPLE {6, 7}")
 
     expect_identical(mform$strings[1, 2, drop = TRUE],
                      "A: Drug X {1}")
 
     expect_identical(mform$strings[3, 3, drop = TRUE],
-                     "36.9 {2}")
+                     "36.9 {4}")
     rdf <- make_row_df(tb1)
     expect_identical(rdf$nrowrefs[[9]], 2L)
     expect_identical(rdf$ncellrefs,
-                     c(0L, 1L, 0L, 0L, 1L, rep(0L, 5)))
+                     c(1L, 1L, 0L, 0L, 1L, rep(0L, 5)))
+
+
+
+    l2 <- basic_table() %>% split_cols_by("ARM") %>%
+        split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) %>%
+        analyze("AGE", mean, format = "xx.x")
+
+    tb2 <- build_table(l2, DM)
+
+    fnotes_at_path(tb2, rowpath = c("RACE", "WHITE")) <- "fnote on label row"
+
+    mform2 <- matrix_form(tb2)
+
+    expect_identical(unname(mform2$ref_footnotes),
+                     "{1} - fnote on label row")
 
 })

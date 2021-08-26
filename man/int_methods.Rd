@@ -127,7 +127,6 @@
 \alias{vis_label}
 \alias{vis_label,Split-method}
 \alias{vis_label<-}
-\alias{vis_label<-,Split-method}
 \alias{label_position}
 \alias{label_position,Split-method}
 \alias{label_position,VAnalyzeSplit-method}
@@ -606,8 +605,6 @@ vis_label(spl)
 \S4method{vis_label}{Split}(spl)
 
 vis_label(spl) <- value
-
-\S4method{vis_label}{Split}(spl) <- value
 
 label_position(spl)
 
