@@ -2,7 +2,7 @@
 % Please edit documentation in R/split_funs.R
 \name{add_overall_level}
 \alias{add_overall_level}
-\title{Add an implicit 'overall' level to split}
+\title{Add an virtual 'overall' level to split}
 \usage{
 add_overall_level(
   valname = "Overall",
@@ -27,7 +27,7 @@ add_overall_level(
 a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
 }
 \description{
-Add an implicit 'overall' level to split
+Add an virtual 'overall' level to split
 }
 \examples{
 

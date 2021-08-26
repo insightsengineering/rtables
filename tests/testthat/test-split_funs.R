@@ -115,3 +115,34 @@ test_that("trim_levels_to_map split function works", {
 
 
 })
+
+test_that("trim_levels_in_group works", {
+
+    dat1 <- data.frame(
+        l1 = factor(c("A", "B", "C"), levels = c("A", "B", "C")), # note that level X is not included
+        l2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
+    )
+
+    ## This works
+    tbl1 <- basic_table() %>%
+        split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
+        analyze("l2") %>%
+        build_table(dat1)
+
+
+    dat2 <- data.frame(
+        l1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "X")), # here we add X to "l1"
+        l2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
+    )
+
+    ## This previously gave an error because trim_levels_in_group did not drop the empty "l1" levels
+    tbl2 <- basic_table() %>%
+        split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
+        analyze("l2") %>%
+        build_table(dat2)
+
+    expect_identical(nrow(tbl1), 6L)
+    expect_identical(as.vector(compare_rtables(tbl1, tbl2)),
+                     rep(".", nrow(tbl1)))
+
+})

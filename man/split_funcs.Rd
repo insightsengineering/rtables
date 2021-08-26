@@ -19,7 +19,7 @@ drop_and_remove_levels(excl)
 
 reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 
-trim_levels_in_group(innervar)
+trim_levels_in_group(innervar, drop_outlevs = TRUE)
 }
 \arguments{
 \item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
@@ -46,6 +46,9 @@ of presence in the data).}
 \item{drlevels}{logical(1). Should levels in the data which do not appear in \code{neworder} be dropped. Defaults to \code{TRUE}}
 
 \item{innervar}{character(1). Variable whose factor levels should be trimmed (e.g., empty levels dropped) \emph{separately within each grouping defined at this point in the structure}}
+
+\item{drop_outlevs}{logical(1). Should empty levels in the variable being split on (ie the 'outer' variable, not \code{innervar})
+be dropped? Defaults to \code{TRUE}}
 }
 \value{
 a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout

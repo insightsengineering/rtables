@@ -162,10 +162,12 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, prev_splv
         vals = .applysplit_rawvals(spl, df)
     extr = .applysplit_extras(spl, df, vals)
 
-    ## in some cases, currently ComparisonSplit, we don't know the
+    ## in some cases, we don't know the
     ## values until after we know the extra args, since the values
     ## themselves are meaningless. If this is the case, fix them
     ## before generating the data partition
+
+    ## I don't know if the above is still true... ~G
     if(is.null(vals) && length(extr) > 0) {
         vals = seq_along(extr)
         names(vals) = names(extr)
@@ -361,21 +363,6 @@ setMethod(".applysplit_datapart", "NULLSplit",
           function(spl, df, vals) list(df[FALSE,]))
 
 
-## This happens in the tabulation machinery now
-## setMethod(".applysplit_datapart", "VAnalyzeSplit",
-##           function(spl, df, vals) {
-##     ## for now, this will work later
-##     stopifnot(length(vals) == 1L)
-##     if(!is.na(vals) && !all(vals %in% names(df))) {
-##         badcols = setdiff(vals, names(df))
-##         stop("Specified analysis vars (", paste(badcols, collapse = ", "), ") not present in data")
-##     }
-##     ret = df
-##     if(!is.na(vals) && !avar_inclNAs(spl))
-##         ret = df[!is.na(df[[vals]]),]
-##     list(ret)
-## })
-
 setMethod(".applysplit_datapart", "VarStaticCutSplit",
           function(spl, df, vals) {
   #  lbs = spl_cutlabels(spl)
@@ -479,19 +466,19 @@ setMethod(".applysplit_partlabels", "MultiVarSplit",
 
 
 
-subsets_from_factory = function(df, fact) {
-   if(is.character(fact)) {
-       tmpvals = unique(df[[fact]])
-       fctor = factor(df[[fact]], levels = tmpvals)
-       ssets = split(df, fctor)
-       ## I think split already does this...
-       names(ssets) = tmpvals
-   } else {
-       ssets = fact(df)
-   }
+## subsets_from_factory = function(df, fact) {
+##    if(is.character(fact)) {
+##        tmpvals = unique(df[[fact]])
+##        fctor = factor(df[[fact]], levels = tmpvals)
+##        ssets = split(df, fctor)
+##        ## I think split already does this...
+##        names(ssets) = tmpvals
+##    } else {
+##        ssets = fact(df)
+##    }
 
-   ssets
-}
+##    ssets
+## }
 
 
 make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
@@ -651,10 +638,15 @@ reorder_split_levels = function(neworder, newlabels = neworder, drlevels = TRUE)
 
 #' @rdname split_funcs
 #' @param innervar character(1). Variable whose factor levels should be trimmed (e.g., empty levels dropped) \emph{separately within each grouping defined at this point in the structure}
+#' @param drop_outlevs logical(1). Should empty levels in the variable being split on (ie the 'outer' variable, not \code{innervar})
+#' be dropped? Defaults to \code{TRUE}
 #' @export
-trim_levels_in_group = function(innervar) {
+trim_levels_in_group = function(innervar, drop_outlevs = TRUE) {
     myfun = function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-        ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
+        if(!drop_outlevs)
+            ret <- .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
+        else
+            ret <- drop_split_levels(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
 
         ret$datasplit = lapply(ret$datasplit, function(x) {
             coldat = x[[innervar]]
@@ -726,7 +718,7 @@ trim_levels_in_group = function(innervar) {
     part
 }
 
-#' Add an implicit 'overall' level to split
+#' Add an virtual 'overall' level to split
 #'
 #' @inheritParams lyt_args
 #' @inheritParams sf_args
