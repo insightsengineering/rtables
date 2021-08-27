@@ -976,28 +976,32 @@ setClass("LayoutAxisTree", contains = "VLayoutTree",
          validity = function(object) all(sapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf"))))
 
 setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ##"VNodeInfo",
-         representation(func = "function"))
+         representation(func = "function",
+                        col_footnotes = "list"))
 
 
 setClass("LayoutColTree", contains = "LayoutAxisTree",
          representation(display_columncounts = "logical",
-                        columncount_format = "character"))
+                        columncount_format = "character",
+                        col_footnotes = "list"))
 
 setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
 setClass("LayoutRowTree", contains = "LayoutAxisTree")
 setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree <- function(lev = 0L,
-                         name = label,
-                         label = "",
+                         name = obj_name(spl),
+                         label = obj_label(spl),
                          kids = list(),
                          spl = EmptyAllSplit,
                          tpos = TreePos(),
                          summary_function = NULL,
                          disp_colcounts = FALSE,
-                         colcount_format = "(N=xx)") {## ,
+                         colcount_format = "(N=xx)",
+                         footnotes = list()) {## ,
                          ## sub = expression(TRUE),
                          ## svar = NA_character_,
     ## slab = NA_character_) {
+    footnotes <- make_ref_value(footnotes)
     if (!is.null(spl)) {
         new("LayoutColTree", level = lev, children = kids,
             name = .chkname(name),
@@ -1008,7 +1012,8 @@ LayoutColTree <- function(lev = 0L,
             ## splitvar = svar,
             label = label,
             display_columncounts = disp_colcounts,
-            columncount_format = colcount_format)
+            columncount_format = colcount_format,
+            col_footnotes = footnotes)
     } else {
         stop("problema my manitar")
         LayoutColLeaf(lev = lev, label = label, tpos = tpos,

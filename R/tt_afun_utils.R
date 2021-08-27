@@ -468,3 +468,6 @@ insert_replace <- function(x, nm, newvals = x[[nm]]) {
 parser_helper <- function(text, envir = parent.frame(2)) {
     parse(text = text, keep.source = FALSE)
 }
+
+
+length_w_name <- function(x, .parent_splval) in_rows(length(x), .names = value_labels(.parent_splval))

@@ -15,10 +15,20 @@
 \alias{cell_footnotes<-}
 \alias{cell_footnotes<-,CellValue-method}
 \alias{cell_footnotes<-,DataRow-method}
+\alias{cell_footnotes<-,ContentRow-method}
+\alias{col_fnotes_here}
+\alias{col_fnotes_here,LayoutColTree-method}
+\alias{col_fnotes_here,LayoutColLeaf-method}
+\alias{col_fnotes_here<-}
+\alias{col_fnotes_here<-,LayoutColTree-method}
+\alias{col_fnotes_here<-,LayoutColLeaf-method}
 \alias{ref_index}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-}
 \alias{ref_index<-,RefFootnote-method}
+\alias{fnotes_at_path<-}
+\alias{fnotes_at_path<-,VTableTree,character-method}
+\alias{fnotes_at_path<-,VTableTree,NULL-method}
 \title{Referential Footnote Accessors}
 \usage{
 row_footnotes(obj)
@@ -49,6 +59,20 @@ cell_footnotes(obj) <- value
 
 \S4method{cell_footnotes}{DataRow}(obj) <- value
 
+\S4method{cell_footnotes}{ContentRow}(obj) <- value
+
+col_fnotes_here(obj)
+
+\S4method{col_fnotes_here}{LayoutColTree}(obj)
+
+\S4method{col_fnotes_here}{LayoutColLeaf}(obj)
+
+col_fnotes_here(obj) <- value
+
+\S4method{col_fnotes_here}{LayoutColTree}(obj) <- value
+
+\S4method{col_fnotes_here}{LayoutColLeaf}(obj) <- value
+
 ref_index(obj)
 
 \S4method{ref_index}{RefFootnote}(obj)
@@ -56,11 +80,23 @@ ref_index(obj)
 ref_index(obj) <- value
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
+
+fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
+
+\S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
+
+\S4method{fnotes_at_path}{VTableTree,`NULL`}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{value}{The new value}
+
+\item{rowpath}{character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.}
+
+\item{colpath}{character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell}
+
+\item{reset_idx}{logical(1). Should the numbering for referential footnotes be immediately recalculated. Defaults to TRUE.}
 }
 \description{
 Get and set referential footnotes on aspects of a built table

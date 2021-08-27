@@ -2,43 +2,43 @@ context("Split Functions")
 
 test_that("remove_split_levels works as expected with factor variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
-  
+
   stopifnot(is.factor(DM$RACE))
-  l <- basic_table() %>% 
+  l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
     summarize_row_groups()
-  
+
   tab <- build_table(l, DM)
-  
+
   expect_false("ASIAN" %in% row.names(tab))
 })
 
 test_that("remove_split_levels works as expected with character variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
-  
-  l <- basic_table() %>% 
+
+  l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
     summarize_row_groups()
-  
+
   DM2 <- DM
   DM2$RACE <- as.character(DM2$RACE)
   tab <- build_table(l, DM2)
-  
+
   expect_false("ASIAN" %in% row.names(tab))
 })
 
 test_that("drop_and_remove_levels works as expected when dropping not appearing levels", {
   my_split_fun <- drop_and_remove_levels(excl = "ASIAN")
-  
-  l <- basic_table() %>% 
+
+  l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
     summarize_row_groups()
-  
+
   tab <- build_table(l, DM)
-  
+
   expect_setequal(
     row.names(tab),
     setdiff(unique(DM$RACE), "ASIAN")
@@ -47,18 +47,102 @@ test_that("drop_and_remove_levels works as expected when dropping not appearing 
 
 test_that("drop_and_remove_levels also works with character variables", {
   my_split_fun <- drop_and_remove_levels(excl = "ASIAN")
-  
-  l <- basic_table() %>% 
+
+  l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
     summarize_row_groups()
-  
+
   DM2 <- DM
   DM2$RACE <- as.character(DM2$RACE)
   tab <- build_table(l, DM2)
-  
+
   expect_setequal(
     row.names(tab),
     setdiff(unique(DM$RACE), "ASIAN")
   )
+})
+
+test_that("trim_levels_to_map split function works", {
+
+
+    map <- data.frame(
+        LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
+        PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
+        ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
+        stringsAsFactors = FALSE
+    )
+
+    lyt <- basic_table() %>%
+        split_rows_by("LBCAT") %>%
+        split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+        analyze("ANRIND")
+    tbl1 <- build_table(lyt, ex_adlb)
+
+    expect_identical(row.names(tbl1),
+                     c("CHEMISTRY", "ALT", "LOW",
+                                    "CRP", "LOW",
+                                           "HIGH",
+                       "IMMUNOLOGY", "IGA", "HIGH"))
+
+    map2 <- tribble(
+        ~ARM, ~RACE,
+        "A: Drug X", "ASIAN",
+        "A: Drug X", "WHITE",
+        "C: Combination", "BLACK OR AFRICAN AMERICAN",
+        "C: Combination", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER")
+
+    lyt2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) %>%
+        analyze("AGE")
+
+    expect_error(build_table(lyt2, DM), regexp = "map does not allow")
+
+    lyt3 <- basic_table() %>%
+        split_cols_by("ARM", split_fun = trim_levels_to_map(map = map2)) %>%
+        split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) %>%
+        analyze("AGE")
+
+    tbl3 <- build_table(lyt3, DM)
+
+    coldf <- make_col_df(tbl3)
+    expect_identical(unclass(coldf$path), ## unclass because of the "AsIs" 'class'
+                     list(c("ARM", "A: Drug X", "RACE", "ASIAN"),
+                          c("ARM", "A: Drug X", "RACE", "WHITE"),
+                          c("ARM", "C: Combination", "RACE", "BLACK OR AFRICAN AMERICAN"),
+                          c("ARM", "C: Combination", "RACE", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER")))
+
+
+})
+
+test_that("trim_levels_in_group works", {
+
+    dat1 <- data.frame(
+        l1 = factor(c("A", "B", "C"), levels = c("A", "B", "C")), # note that level X is not included
+        l2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
+    )
+
+    ## This works
+    tbl1 <- basic_table() %>%
+        split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
+        analyze("l2") %>%
+        build_table(dat1)
+
+
+    dat2 <- data.frame(
+        l1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "X")), # here we add X to "l1"
+        l2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
+    )
+
+    ## This previously gave an error because trim_levels_in_group did not drop the empty "l1" levels
+    tbl2 <- basic_table() %>%
+        split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
+        analyze("l2") %>%
+        build_table(dat2)
+
+    expect_identical(nrow(tbl1), 6L)
+    expect_identical(as.vector(compare_rtables(tbl1, tbl2)),
+                     rep(".", nrow(tbl1)))
+
 })

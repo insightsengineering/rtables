@@ -99,9 +99,12 @@ setMethod("make_subset_expr", "character",
 })
 
 .combine_subset_exprs = function(ex1, ex2) {
-    if(is.null(ex1) && is.expression(ex2))
-        return(ex2)
-
+    if(is.null(ex1) || identical(ex1, expression(TRUE))) {
+        if( is.expression(ex2) && !identical(ex2, expression(TRUE)))
+            return(ex2)
+        else
+            return(expression(TRUE))
+    }
     stopifnot(is.expression(ex1), is.expression(ex2))
     as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
@@ -138,20 +141,6 @@ get_col_extras = function(ctree) {
 }
 
 setGeneric("make_col_subsets",function(lyt, df) standardGeneric("make_col_subsets"))
-setMethod("make_col_subsets", "PreDataTableLayouts",
-          function(lyt, df) {
-    make_col_subsets(clayout(lyt), df)
-})
-setMethod("make_col_subsets", "PreDataColLayout",
-          function(lyt, df) {
-    unlist(lapply(lyt, make_col_subsets, df = df))
-})
-
-setMethod("make_col_subsets", "SplitVector",
-          function(lyt, df) {
-    build_splits_expr(lyt, df)
-
-})
 
 setMethod("make_col_subsets", "LayoutColTree",
           function(lyt, df) {

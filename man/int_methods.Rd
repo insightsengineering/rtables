@@ -127,7 +127,6 @@
 \alias{vis_label}
 \alias{vis_label,Split-method}
 \alias{vis_label<-}
-\alias{vis_label<-,Split-method}
 \alias{label_position}
 \alias{label_position,Split-method}
 \alias{label_position,VAnalyzeSplit-method}
@@ -234,6 +233,7 @@
 \alias{rawvalues,ANY-method}
 \alias{rawvalues,CellValue-method}
 \alias{rawvalues,TreePos-method}
+\alias{rawvalues,RowsVerticalSection-method}
 \alias{value_names}
 \alias{value_names,ANY-method}
 \alias{value_names,TreePos-method}
@@ -606,8 +606,6 @@ vis_label(spl)
 
 vis_label(spl) <- value
 
-\S4method{vis_label}{Split}(spl) <- value
-
 label_position(spl)
 
 \S4method{label_position}{Split}(spl)
@@ -819,6 +817,8 @@ rawvalues(obj)
 \S4method{rawvalues}{CellValue}(obj)
 
 \S4method{rawvalues}{TreePos}(obj)
+
+\S4method{rawvalues}{RowsVerticalSection}(obj)
 
 value_names(obj)
 

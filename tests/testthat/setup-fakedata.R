@@ -59,3 +59,11 @@ refcompmean = function(x, .ref_group, .in_ref_col, ...) {
         "Diff from reference - mean" = val
     )
 }
+
+complx_lyt_rnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
+                 "Age Analysis redux", "range", "Level B", "Age Analysis",
+                 "mean", "median", "Age Analysis redux", "range",
+                 "African American (n)", "Level A", "Age Analysis", "mean", "median",
+                 "Age Analysis redux", "range", "Level B", "Age Analysis",
+                 "mean", "median", "Age Analysis redux", "range",
+                 "level1", "level2")

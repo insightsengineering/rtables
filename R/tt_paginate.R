@@ -123,7 +123,8 @@ col_dfrow = function(col,
                     sibpos = NA_integer_,
                     nsibs = NA_integer_,
                     leaf_indices = cnum,
-                    span = length(leaf_indices)
+                    span = length(leaf_indices),
+                    col_fnotes = list()
                     ) {
     if(is.null(pth))
         pth <- pos_to_path(tree_pos(col))
@@ -135,7 +136,9 @@ col_dfrow = function(col,
                pos_in_siblings = sibpos,
                n_siblings = nsibs,
                leaf_indices = I(list(leaf_indices)),
-               total_span = span)
+               total_span = span,
+               col_fnotes = I(list(col_fnotes)),
+               n_col_fnotes = length(col_fnotes))
 }
 
 
@@ -372,7 +375,8 @@ setMethod("make_row_df", "LabelRow",
 setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
                                    colnum = 0L,
                                    sibpos = NA_integer_,
-                                   nsibs = NA_integer_) standardGeneric("inner_col_df"))
+                                   nsibs = NA_integer_,
+                                   ncolref = 0L) standardGeneric("inner_col_df"))
 
 
 #' Column Layout Summary
@@ -383,12 +387,14 @@ setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
 #' @export
 make_col_df <-    function(tt,
                            visible_only = TRUE) {
-    rows <- inner_col_df(coltree(tt), ## this is a null op if its already a coltree object
+    ctree <- coltree(tt)
+    rows <- inner_col_df(ctree, ## this is a null op if its already a coltree object
                  colwidths = propose_column_widths(tt),
                  visible_only = visible_only,
                  colnum = 1L,
                  sibpos = 1L,
-                 nsibs = 1L) ## nsiblings includes current so 1 means "only child"
+                 nsibs = 1L)  ## nsiblings includes current so 1 means "only child"
+
     do.call(rbind, rows)
 }
 
@@ -401,7 +407,8 @@ setMethod("inner_col_df", "LayoutColLeaf",
               cnum = colnum,
               sibpos = sibpos,
               nsibs = nsibs,
-              leaf_indices = colnum))
+              leaf_indices = colnum,
+              col_fnotes = col_fnotes_here(ct)))
 })
 
 
@@ -410,7 +417,6 @@ setMethod("inner_col_df", "LayoutColTree",
                    colnum,
                    sibpos,
                    nsibs) {
-
     kids <- tree_children(ct)
     ret <- vector("list", length(kids))
     for(i in seq_along(kids)) {
@@ -435,7 +441,8 @@ setMethod("inner_col_df", "LayoutColTree",
                                        leaf_indices = allindices,
                                        sibpos = sibpos,
                                        nsibs = nsibs,
-                                       pth = thispth))
+                                       pth = thispth,
+                                       col_fnotes = col_fnotes_here(ct)))
             ret <- c(thisone, ret)
         }
     }
@@ -458,10 +465,10 @@ valid_pag = function(pagdf,
         message("Checking pagination after row ", guess)
     reflines <-  sum(pagdf[start:guess, "nreflines"])
     if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
-    lines <- guess - start + reflines
+    lines <- guess - start + 1 + reflines  # guess - start + 1 because inclusive of start
     if(lines > rlpp) {
         if(verbose)
-            message("\t....................... FAIL: Referential footnotes take up too much space")
+            message("\t....................... FAIL: Referential footnotes take up too much space (", reflines, " lines)")
         return(FALSE)
     }
     if(rw[["node_class"]] %in% c("LabelRow", "ContentRow")) {

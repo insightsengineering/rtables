@@ -1,3 +1,13 @@
+## rtables 0.3.8.9001
+ * new `trim_levels_to_map` split function based on wwojtek's work in #203
+ * support for column referential footnotes
+ * support for adding footnotes to existint table via `fnotes_at_path<-` function
+ * `trim_levels_in_group` now trims empty levels of outer (split) variable by default
+ * `value_at` and `cell_values` now work for tablerow objects
+ * Fixed `as_html` bug in multvar split columns case 
+ * Fixed pagination off-by-one error
+
+
 ## rtables 0.3.8.9000
 
 ## rtables 0.3.8
