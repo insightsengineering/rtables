@@ -5,7 +5,12 @@
 \alias{import_from_tsv}
 \title{Create Enriched flat value table with paths}
 \usage{
-export_as_tsv(tt, file = NULL, pathproc = collapse_path)
+export_as_tsv(
+  tt,
+  file = NULL,
+  path_fun = collapse_path,
+  value_fun = collapse_values
+)
 
 import_from_tsv(file)
 }
@@ -14,7 +19,10 @@ import_from_tsv(file)
 
 \item{file}{character(1). The path of the file to written to or read from.}
 
-\item{pathproc}{function. Internal detail,  not intended for use by end users.}
+\item{path_fun}{function. Function to transform paths into single-string row/column names.}
+
+\item{value_fun}{function. Functiont to transform cell values into cells of the data.frame. Defaults to \code{collapse_values} which
+creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
 }
 \value{
 \code{NULL} silently for \code{export_as_tsv}, a data.frame with
@@ -22,9 +30,11 @@ re-constituted list values for \code{export_as_tsv}.
 }
 \description{
 This function creates a flat tabular file of cell values and
-corresponding paths.
+corresponding paths via \code{\link{path_enriched_df}}. I then
+writes that data.frame out as a tsv file.
 }
 \details{
+By default (ie when \code{value_func} is not specified,
 List columns where at least one value has length > 1 are collapsed
 to character vectors by collapsing the list element with \code{"|"}.
 }
