@@ -101,13 +101,17 @@ path_enriched_df <- function(tt, pathproc = collapse_path) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\n\\s\n") {
-    if(paginate)
+export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n") {
+    
+    colwidths <- propose_column_widths(tt)
+    
+    if(paginate) {
         tbls <- paginate_table(tt, ...)
-    else
+    } else {
         tbls <- list(tt)
-
-    res <- paste(sapply(tbls, toString), collapse = page_break)
+    }
+        
+    res <- paste(sapply(tbls, toString, widths = colwidths), collapse = page_break)
     
     if(!is.null(file))
         cat(res, file = file)
@@ -139,7 +143,7 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' @export
 #' 
 #' @examples 
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table(title = ) %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
@@ -147,30 +151,45 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' 
 #' \dontrun{
 #' tf <- tempfile(fileext = ".pdf")
-#' export_as_pdf(tbl, file = tf,  lpp = 8)
+#' export_as_pdf(tab, file = tf, height = 4)
+#' tf <- tempfile(fileext = ".pdf")
+#' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
 #' 
 export_as_pdf <- function(tt, 
                           file, width = 11.7, height = 8.3, # passed to pdf()
                           margins = c(4, 4, 4, 4), fontsize = 8,  # grid parameters
-                          paginate = TRUE, ... # passed to paginate_table
+                          paginate = TRUE, lpp = NULL, ... # passed to paginate_table
 ) {
     stopifnot(tools::file_ext(file) != ".pdf")
     
-    colwidths <- propose_column_widths(tt)
-    tbls <- if (paginate)
-        paginate_table(tt, ...)
-    else 
-        list(tt)
+    gp_plot <- gpar(fontsize = fontsize, fontfamily = "mono")
     
-    stbls <- lapply(tbls, toString, widths = colwidths)
+    pdf(file = file, width = width, height = height)
+    grid.newpage()
+    pushViewport(plotViewport(margins = margins, gp = gp_plot))
+    
+    colwidths <- propose_column_widths(tt)
+    tbls <- if (paginate) {
+        
+        if (is.null(lpp)) {
+            cur_gpar <-  get.gpar()
+            lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
+                             (cur_gpar$cex * cur_gpar$lineheight)) 
+        }
+        
+        paginate_table(tt, lpp = lpp, ...)
+    } else {
+        list(tt) 
+    }
+    
+    stbls <- lapply(lapply(tbls, toString, widths = colwidths), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
     
     gtbls <- lapply(stbls, function(txt) {
         textGrob(
             label = txt,
             x = unit(0, "npc"), y = unit(1, "npc"), 
-            just = c("left", "top"),
-            gp = gpar(fontsize = fontsize, fontfamily = "mono")
+            just = c("left", "top")
         )
     })
     
@@ -178,27 +197,28 @@ export_as_pdf <- function(tt,
     exceeds_width = rep(FALSE, npages)
     exceeds_height = rep(FALSE, npages)
     
-    pdf(file = file, width = width, height = height)
     for (i in seq_along(gtbls)) {
         g <- gtbls[[i]]
     
-        grid.newpage()
-        pushViewport(plotViewport(margins = margins))
+        if (i > 1) {
+            grid.newpage()
+            pushViewport(plotViewport(margins = margins, gp = gp_plot))
+        }
         
         if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) > 
             convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) {
             exceeds_height[i] <- TRUE
-            message("height of page", i, "exceeds the available space")
+            warning("height of page ", i, " exceeds the available space")
         }
         if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) > 
             convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) {
             exceeds_width[i] <- TRUE
-            message("width of page", i, "exceeds the available space")
+            warning("width of page ", i, " exceeds the available space")
         }
         
         grid.draw(g)
     }
     dev.off()
     
-    list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height)
+    list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp)
 }
