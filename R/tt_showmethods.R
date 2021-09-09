@@ -90,6 +90,9 @@ setMethod("payloadmsg", "VarLevWBaselineSplit",
 setMethod("payloadmsg", "ManualSplit",
           function(spl) "mnl")
 
+setMethod("payloadmsg", "AllSplit",
+          function(spl) "all")
+
 
 setMethod("payloadmsg", "ANY",
           function(spl) {

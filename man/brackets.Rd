@@ -2,6 +2,13 @@
 % Please edit documentation in R/tt_pos_and_access.R
 \name{[<-,VTableTree,ANY,ANY,list-method}
 \alias{[<-,VTableTree,ANY,ANY,list-method}
+\alias{[,VTableTree,logical,logical,ANY-method}
+\alias{[,VTableTree,logical,ANY,ANY-method}
+\alias{[,VTableTree,logical,missing,ANY-method}
+\alias{[,VTableTree,ANY,logical,ANY-method}
+\alias{[,VTableTree,ANY,missing,ANY-method}
+\alias{[,VTableTree,ANY,character,ANY-method}
+\alias{[,VTableTree,character,ANY,ANY-method}
 \alias{[<-,VTableTree,ANY,ANY,CellValue-method}
 \alias{[,VTableTree,logical,logical-method}
 \alias{[,VTableTree,logical,ANY-method}

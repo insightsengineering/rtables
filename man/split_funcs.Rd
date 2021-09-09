@@ -7,7 +7,6 @@
 \alias{drop_and_remove_levels}
 \alias{reorder_split_levels}
 \alias{trim_levels_in_group}
-\alias{trim_levels_by_map}
 \title{Split functions}
 \usage{
 remove_split_levels(excl)
@@ -20,9 +19,7 @@ drop_and_remove_levels(excl)
 
 reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 
-trim_levels_in_group(innervar)
-
-trim_levels_by_map(innervar, outervar, map = NULL)
+trim_levels_in_group(innervar, drop_outlevs = TRUE)
 }
 \arguments{
 \item{excl}{character. Levels to be excluded (they will not be reflected in the resulting table structure regardless
@@ -50,9 +47,8 @@ of presence in the data).}
 
 \item{innervar}{character(1). Variable whose factor levels should be trimmed (e.g., empty levels dropped) \emph{separately within each grouping defined at this point in the structure}}
 
-\item{outervar}{character(1). Parent split variable to trim \code{innervar} levels within. Must appear in map}
-
-\item{map}{data.frame. Data frame mapping \code{outervar} values  to allowable \code{innervar} values. If no map exists a-priori, use}
+\item{drop_outlevs}{logical(1). Should empty levels in the variable being split on (ie the 'outer' variable, not \code{innervar})
+be dropped? Defaults to \code{TRUE}}
 }
 \value{
 a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout

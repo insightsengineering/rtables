@@ -163,31 +163,6 @@ visible_only and not")
 
 
 
-    ## test_rowpaths(tab)
-    ## pdf <- make_row_df(tab)
-    ## ##res <- lapply(pdf$path, function(pth) cell_values(tab, pth))
-    ## ## we expect true here cause we're checking for errors rather than against values
-    ## test_rowpaths(tab)
-    ## expect(TRUE, "some paths in visible_only pag_df did not work")
-    ## ##pdf2 <- make_row_df(tab, visible_only = FALSE)
-
-    ## ##res2 <- lapply(pdf2$path, function(pth) cell_values(tab, pth))
-    ## test_rowpaths(tab, FALSE)
-    ## expect(TRUE, "some paths in full structure pag_df did not work")
-
-    ## ## subset_cols <- rtables:::subset_cols
-    ## ## cdf <- make_col_df(tab)
-    ## ## res3 <- lapply(cdf$path, function(pth) subset_cols(tab, pth))
-    ## test_colpaths(tab)
-    ## expect(TRUE, "some paths in visible_only make_col_df did not work")
-    ## cdf2 <- make_col_df(tab, visible_only=FALSE)
-    ## cdf2sub <- cdf2[-c(1,4),]
-    ## row.names(cdf2sub) <- NULL
-    ## expect_identical(cdf, cdf2sub)
-    ## res4 <- lapply(cdf2$path, function(pth) subset_cols(tab, pth))
-    ## expect(TRUE, "some paths in visible_only=FALSE make_col_df did not work")
-    ## ## root omitted
-    ## expect_identical(cdf2$name[1], "ARM1")
 
     combodf <- tibble::tribble(
                            ~valname, ~label, ~levelcombo, ~exargs,
@@ -272,3 +247,24 @@ test_that("setters work ok", {
 })
 
 
+test_that("cell_values and value_at work on row objects", {
+
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("STRATA2") %>%
+        analyze("AEDECOD") %>%
+        build_table(ex_adae, ex_adsl)
+
+    first_row <- collect_leaves(tbl)[[1]]
+
+    va <- value_at(first_row, colpath = c("ARM", "A: Drug X", "STRATA2", "S2"))
+
+    cv <- cell_values(first_row, colpath = c("ARM", "C: Combination"))
+
+    expect_identical(va, 33L)
+
+    expect_identical(cv,
+                     setNames(list(32L, 56L),
+                              c("C: Combination.S1",
+                                "C: Combination.S2")))
+})

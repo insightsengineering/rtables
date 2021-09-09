@@ -8,7 +8,8 @@ basic_table(
   title = "",
   subtitles = character(),
   main_footer = character(),
-  prov_footer = character()
+  prov_footer = character(),
+  show_colcounts = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ basic_table(
 \item{main_footer}{character. Main global (non-referential) footer materials.}
 
 \item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
+
+\item{show_colcounts}{logical(1). Should column counts be displayed in the resulting table
+when this layout is applied to data}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

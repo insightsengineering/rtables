@@ -102,9 +102,9 @@ sprintf_format <- function(format) {
     }
 }
 
-sprintf_format_old <- function(format) {
-  structure(format, "format_type" = "sprintf")
-}
+## sprintf_format_old <- function(format) {
+##   structure(format, "format_type" = "sprintf")
+## }
 
 
 
