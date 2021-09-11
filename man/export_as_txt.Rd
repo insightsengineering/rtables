@@ -9,7 +9,7 @@ export_as_txt(
   file = NULL,
   paginate = FALSE,
   ...,
-  page_break = "\\n\\\\s\\n"
+  page_break = "\\\\s\\\\n"
 )
 }
 \arguments{

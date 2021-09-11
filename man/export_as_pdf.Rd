@@ -12,6 +12,7 @@ export_as_pdf(
   margins = c(4, 4, 4, 4),
   fontsize = 8,
   paginate = TRUE,
+  lpp = NULL,
   ...
 )
 }
@@ -31,13 +32,15 @@ export_as_pdf(
 
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
 
+\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+
 \item{...}{arguments passed on to \code{paginate_table}}
 }
 \description{
 The PDF output is based on the ASCII output created with \code{toString}
 }
 \examples{
-lyt <- basic_table() \%>\%
+lyt <- basic_table(title = ) \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
@@ -45,7 +48,9 @@ tbl <- build_table(lyt, ex_adsl)
 
 \dontrun{
 tf <- tempfile(fileext = ".pdf")
-export_as_pdf(tbl, file = tf,  lpp = 8)
+export_as_pdf(tab, file = tf, height = 4)
+tf <- tempfile(fileext = ".pdf")
+export_as_pdf(tbl, file = tf, lpp = 8)
 }
 
 }
