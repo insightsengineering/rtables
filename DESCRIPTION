@@ -18,7 +18,8 @@ Description: Reporting tables often have structure that goes beyond simple recta
 Depends: methods, magrittr, R (>= 2.10)
 Imports:
   stats,
-  htmltools
+  htmltools,
+  grid
 Suggests:
   dplyr,
   tibble,

@@ -139,6 +139,9 @@
 \alias{analysis_fun}
 \alias{analysis_fun,AnalyzeVarSplit-method}
 \alias{analysis_fun,AnalyzeColVarSplit-method}
+\alias{analysis_fun<-}
+\alias{analysis_fun<-,AnalyzeVarSplit-method}
+\alias{analysis_fun<-,AnalyzeColVarSplit-method}
 \alias{split_fun}
 \alias{split_fun,CustomizableSplit-method}
 \alias{split_fun,Split-method}
@@ -249,6 +252,10 @@
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
+\alias{spl_varlabels}
+\alias{spl_varlabels,MultiVarSplit-method}
+\alias{spl_varlabels<-}
+\alias{spl_varlabels<-,MultiVarSplit-method}
 \alias{splv_extra}
 \alias{splv_extra,SplitValue-method}
 \alias{splv_extra<-}
@@ -300,6 +307,8 @@
 \alias{spl_is_cmlcuts,VarDynCutSplit-method}
 \alias{spl_varnames}
 \alias{spl_varnames,MultiVarSplit-method}
+\alias{spl_varnames<-}
+\alias{spl_varnames<-,MultiVarSplit-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
 \title{combine SplitVector objects}
@@ -630,6 +639,12 @@ analysis_fun(obj)
 
 \S4method{analysis_fun}{AnalyzeColVarSplit}(obj)
 
+analysis_fun(object) <- value
+
+\S4method{analysis_fun}{AnalyzeVarSplit}(object) <- value
+
+\S4method{analysis_fun}{AnalyzeColVarSplit}(object) <- value
+
 split_fun(obj)
 
 \S4method{split_fun}{CustomizableSplit}(obj)
@@ -850,6 +865,14 @@ value_labels(obj)
 
 \S4method{value_labels}{MultiVarSplit}(obj)
 
+spl_varlabels(obj)
+
+\S4method{spl_varlabels}{MultiVarSplit}(obj)
+
+spl_varlabels(object) <- value
+
+\S4method{spl_varlabels}{MultiVarSplit}(object) <- value
+
 splv_extra(obj)
 
 \S4method{splv_extra}{SplitValue}(obj)
@@ -951,6 +974,10 @@ spl_is_cmlcuts(obj)
 spl_varnames(obj)
 
 \S4method{spl_varnames}{MultiVarSplit}(obj)
+
+spl_varnames(object) <- value
+
+\S4method{spl_varnames}{MultiVarSplit}(object) <- value
 
 \S4method{print}{VTableTree}(x, ...)
 
