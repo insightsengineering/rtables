@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2021-07-07
-Version: 0.3.8.9001
+Version: 0.3.8.9000.182
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -18,7 +18,8 @@ Description: Reporting tables often have structure that goes beyond simple recta
 Depends: methods, magrittr, R (>= 2.10)
 Imports:
   stats,
-  htmltools
+  htmltools,
+  grid
 Suggests:
   dplyr,
   tibble,

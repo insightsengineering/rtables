@@ -626,6 +626,25 @@ setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 setMethod("analysis_fun", "AnalyzeColVarSplit", function(obj) obj@analysis_fun)
 
 #' @rdname int_methods
+setGeneric("analysis_fun<-", function(object, value) standardGeneric("analysis_fun<-"))
+
+#' @rdname int_methods
+setMethod("analysis_fun<-", "AnalyzeVarSplit", function(object, value) {
+    object@analysis_fun <- value
+    object
+})
+#' @rdname int_methods
+setMethod("analysis_fun<-", "AnalyzeColVarSplit", function(object, value) {
+    if(is(value, "function"))
+        value <- list(value)
+    object@analysis_fun <- value
+    object
+})
+
+
+
+
+#' @rdname int_methods
 setGeneric("split_fun", function(obj) standardGeneric("split_fun"))
 #' @rdname int_methods
 setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
@@ -1274,7 +1293,18 @@ setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj_label(obj))
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
 
+#' @rdname int_methods
+setGeneric("spl_varlabels", function(obj) standardGeneric("spl_varlabels"))
+#' @rdname int_methods
+setMethod("spl_varlabels", "MultiVarSplit", function(obj) obj@var_labels)
 
+#' @rdname int_methods
+setGeneric("spl_varlabels<-", function(object, value) standardGeneric("spl_varlabels<-"))
+#' @rdname int_methods
+setMethod("spl_varlabels<-", "MultiVarSplit", function(object, value) {
+    object@var_labels <- value
+    object
+})
 
 
 
@@ -1901,6 +1931,16 @@ setGeneric("spl_varnames",
 #' @rdname int_methods
 setMethod("spl_varnames", "MultiVarSplit",
           function(obj) obj@var_names)
+
+#' @rdname int_methods
+setGeneric("spl_varnames<-",
+           function(object, value) standardGeneric("spl_varnames<-"))
+#' @rdname int_methods
+setMethod("spl_varnames<-", "MultiVarSplit",
+          function(object, value) {
+    object@var_names <- value
+    object
+})
 
 
 #' Top Left Material (Experimental)

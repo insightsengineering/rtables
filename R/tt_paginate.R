@@ -110,7 +110,6 @@ pagdfrow = function(row,
                nrowrefs = nrowrefs,
                ncellrefs = ncellrefs,
                nreflines = nreflines,
-
                stringsAsFactors = FALSE)
 }
 
