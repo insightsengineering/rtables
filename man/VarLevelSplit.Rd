@@ -53,9 +53,9 @@ VarLevWBaselineSplit(
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{split_fun}{function/NULL. custom splitting function}
+\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
 
-\item{split_format}{format spec. Format associated with this split.}
+\item{split_format}{FormatSpec. Default format associated with the split being created.}
 
 \item{valorder}{character vector. Order that the split children should appear in resulting table.}
 

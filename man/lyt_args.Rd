@@ -58,7 +58,7 @@ lyt_args(
 
 \item{varnames}{character vector. Names for \code{vars} which will appear in pathing. When \code{vars} are all unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce uniqueness.}
 
-\item{split_format}{format spec. Format associated with this split.}
+\item{split_format}{FormatSpec. Default format associated with the split being created.}
 
 \item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
 
@@ -68,7 +68,7 @@ lyt_args(
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{split_fun}{function/NULL. custom splitting function}
+\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
 
 \item{split_name}{string. Name associiated with this split (for pathing, etc)}
 

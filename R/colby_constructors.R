@@ -233,6 +233,9 @@ setMethod("cmpnd_last_colsplit", "ANY",
 #'
 #' Will generate children for each subset of a categorical variable
 #'
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
+#'
 #' @inheritParams lyt_args
 #'
 #' @param ref_group character(1) or `NULL`. Level of `var` which should be considered ref_group/reference
@@ -347,6 +350,9 @@ setMethod(".tl_indent_inner", "SplitVector",
 
 
 #' Add Rows according to levels of a variable
+#'
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
 #'
 #'
 #' @inheritParams lyt_args
@@ -736,6 +742,43 @@ split_rows_by_cutfun = function(lyt, var,
 }
 
 
+#' @title spl_context within analysis and split functions
+#'
+#' .spl_context in analysis and split functions
+#'
+#' @name spl_context
+#' @rdname spl_context
+#'
+#' @section .spl_context Details:
+#' The `.spl_context` `data.frame` gives information about the subsets of data corresponding to the
+#' splits within-which the current `analyze` action is nested. Taken together, these correspond to the
+#' path that the resulting (set of) rows the analysis function is creating, although the information is
+#' in a slighlyt different form. Each split (which correspond to groups of rows in the resulting table) is
+#' represented via the following columns:
+#' \describe{
+#'   \item{split}{The name of the split (often the variable being split in the simple case)}
+#'   \item{value}{The string representation of the value at that split}
+#'   \item{full_parent_df}{a dataframe containing the full data (ie across all columns) corresponding to the path
+#' defined by the combination of `split` and `value` of this row \emph{and all rows above this row}}
+#'   \item{all_cols_n}{the number of observations  corresponding to this row grouping (union of all columns)}
+#'   \item{\emph{(row-split and analyze contexts only)} <1 column for each column in the table structure}{ These
+#' list columns (named the same as \code{names(col_exprs(tab))}) contain logical vectors corresponding to the
+#' subset of this row's `full_parent_df` corresponding to that column}
+#'   \item{cur_col_subset}{List column containing logical vectors indicating the subset of that row's `full_parent_df` for the column currently being created by the analysis function}
+#'   \item{cur_col_n}{integer column containing the observation counts for that split}
+#' }
+#'
+#' \emph{note Within analysis functions that accept `.spl_context`, the `all_cols_n` and `cur_col_n` columns of
+#' the dataframe will contain the 'true' observation counts corresponding to the row-group and
+#' row-group x column subsets of the data. These numbers will not, and currently cannot, reflect alternate
+#' column observation counts provided by the `alt_counts_df`, `col_counts` or `col_total` arguments
+#' to \code{\link{build_table}}}
+NULL
+
+
+
+
+
 #' Generate Rows Analyzing Variables Across Columns
 #'
 #' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
@@ -779,7 +822,11 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.ref_full}{data.frame or vector of subset corresponding to the `ref_group` column without subsetting
 #'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
 #'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
+#'   \item{.spl_context}{data.frame, each row gives information about a previous/'ancestor' split state. see below}
 #' }
+#'
+#' @inheritSection spl_context .spl_context Details
+#'
 #'
 #' @note None of the arguments described in the Details section
 #' can be overridden via extra_args or when calling
@@ -1314,8 +1361,7 @@ setMethod(".add_row_summary", "NULL",
 #'
 #' `cfun` must accept `df` as its first argument and will receive the subset `data.frame` corresponding
 #' with the row- and column-splitting for the cell being calculated. Must accept `labelstr` as the second
-#' parameter, which accepts the `label` of the level of the parent split currently being summarized. Optionally can
-#' accept `.N_col` or `.N_total` (see \code{\link{analyze}}).
+#' parameter, which accepts the `label` of the level of the parent split currently being summarized. Can additionally take any optional argument supported by analysis functions. (see \code{\link{analyze}}).
 #'
 #' @export
 #'

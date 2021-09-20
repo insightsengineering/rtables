@@ -35,7 +35,7 @@ MultiVarSplit(
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{split_format}{format spec. Format associated with this split.}
+\item{split_format}{FormatSpec. Default format associated with the split being created.}
 
 \item{split_name}{string. Name associiated with this split (for pathing, etc)}
 

@@ -146,6 +146,9 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' Create a FlexTable object representing an rtables TableTree
 #'
 #' @inheritParams gen_args
+#' @param paginate logical(1). Should \code{tt} be paginated and exported as multiple flextables. Defaults to \code{FALSE}
+#' @inheritParams paginate_table
+#' @param total_width numeric(1). Total width in inches for the resulting flextable(s). Defaults to 5.
 #' @return a flextable object
 #' @export
 #' @examples
@@ -165,10 +168,22 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' ft <- tt_to_flextable(tbl)
 #' ft
 
-tt_to_flextable <- function(tt) {
+tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ..., colwidths = propose_column_widths(tt),
+                            total_width = 5) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
         stop("this function requires the flextable and officer packages. Please install them if you wish to use it")
     }
+
+    ## if we're paginating, just call
+    if(paginate) {
+        if(is.null(lpp))
+            stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
+        colwidths <- propose_column_widths(tt)
+        tabs <- paginate_table(tt, lpp = lpp, ...)
+        return(lapply(tabs, tt_to_flextable, paginate=FALSE, total_width = total_width, colwidths = colwidths))
+    }
+
+    final_cwidths <- total_width * colwidths / sum(colwidths)
     matform <- matrix_form(tt, indent_rownames = TRUE)
 
     hnum <- attr(matform, "nrow_header")
@@ -182,6 +197,7 @@ tt_to_flextable <- function(tt) {
     flx <- flextable::qflextable(content)
 
     flx <- flextable::set_header_labels(flx, values = setNames(as.vector(hdr[hnum, , drop = TRUE]), names(content)))
+    flx <- flextable::width(flx, width = final_cwidths)
 
     if(hnum > 1) {
         for(i in (hnum-1):1) {
@@ -212,9 +228,7 @@ tt_to_flextable <- function(tt) {
     }
 
     flextable::set_table_properties(flx, layout = "autofit")
-
 }
-
 
 #' Export as PDF
 #'

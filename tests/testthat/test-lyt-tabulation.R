@@ -760,3 +760,52 @@ test_that("topleft label position works", {
                    nrow(tab))
 })
 
+
+
+test_that(".spl_context works in content and analysis functions", {
+
+    ageglobmean <- mean(DM$AGE)
+    cfun <- function(df, labelstr, .spl_context) {
+            lastrow <- .spl_context[nrow(.spl_context) - 1,]
+            in_rows(c(nrow(df), lastrow$cur_col_n),
+                    .names = labelstr,
+                    .labels = sprintf("%s (%d)", labelstr, nrow(lastrow$full_parent_df[[1]])),
+                    .formats = "xx / xx")
+    }
+
+    afun <- function(x, .spl_context) {
+        lastrow <- .spl_context[nrow(.spl_context),]
+        in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
+                .names = "age_analysis",
+                .labels = sprintf("counts (out of %d)", nrow(lastrow$full_parent_df[[1]])),
+                .formats = "xx / xx")
+    }
+
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
+        split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+        summarize_row_groups() %>%
+        split_rows_by("STRATA1") %>%
+        summarize_row_groups(cfun = cfun) %>%
+        analyze("AGE", afun = afun)
+
+    tab <-  build_table(lyt, DM)
+
+    strmat <- matrix_form(tab)$strings
+
+    rwcount4 <- as.integer(gsub("[^0-9]", "", strmat[4,1]))
+    crowvals <- cell_values(tab, c("COUNTRY", "CHN", "@content"))
+    expect_equal(rwcount4,
+                 sum(sapply(crowvals,
+                            `[[`, 1)))
+
+    expect_equal(crowvals[[1]][[1]],
+                 cell_values(tab, c("COUNTRY", "CHN", "STRATA1", "A", "@content"))[[1]][[2]])
+
+    expect_equal(unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "@content")),
+                               `[[`, 1L)),
+                 unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
+                               `[[`, 2L)))
+})

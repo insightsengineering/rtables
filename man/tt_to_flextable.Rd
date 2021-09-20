@@ -4,10 +4,27 @@
 \alias{tt_to_flextable}
 \title{Create a FlexTable object representing an rtables TableTree}
 \usage{
-tt_to_flextable(tt)
+tt_to_flextable(
+  tt,
+  paginate = FALSE,
+  lpp = NULL,
+  ...,
+  colwidths = propose_column_widths(tt),
+  total_width = 5
+)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{paginate}{logical(1). Should \code{tt} be paginated and exported as multiple flextables. Defaults to \code{FALSE}}
+
+\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+
+\item{...}{Passed on to metthods or tabulation functions.}
+
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+
+\item{total_width}{numeric(1). Total width in inches for the resulting flextable(s). Defaults to 5.}
 }
 \value{
 a flextable object
