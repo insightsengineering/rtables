@@ -214,7 +214,8 @@ gen_rowvalues = function(dfpart,
                                      totcount = totcount,
 #                                     splextra= splextra,
                                      inclNAs = inclNAs,
-                                     spl_context = spl_context[,1:3]), ## parent value full_parent_df
+                                     spl_context = spl_context),
+                                   ##  spl_context = spl_context[,1:3]), ## parent value full_parent_df
                      SIMPLIFY= FALSE)
 
 

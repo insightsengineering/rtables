@@ -772,6 +772,7 @@ test_that(".spl_context works in content and analysis functions", {
 
     ageglobmean <- mean(DM$AGE)
     cfun <- function(df, labelstr, .spl_context) {
+        stopifnot( "A: Drug X.M" %in% names(.spl_context))
             lastrow <- .spl_context[nrow(.spl_context) - 1,]
             in_rows(c(nrow(df), lastrow$cur_col_n),
                     .names = labelstr,
@@ -780,6 +781,7 @@ test_that(".spl_context works in content and analysis functions", {
     }
 
     afun <- function(x, .spl_context) {
+        stopifnot( "A: Drug X.M" %in% names(.spl_context))
         lastrow <- .spl_context[nrow(.spl_context),]
         in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
                 .names = "age_analysis",
