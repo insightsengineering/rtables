@@ -145,7 +145,7 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' @export
 #'
 #' @examples
-#' lyt <- basic_table(title = ) %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
@@ -153,7 +153,7 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #'
 #' \dontrun{
 #' tf <- tempfile(fileext = ".pdf")
-#' export_as_pdf(tab, file = tf, height = 4)
+#' export_as_pdf(tbl, file = tf, height = 4)
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
