@@ -26,36 +26,36 @@ treestruct <- function(obj, ind = 0L) {
 
 
 
-docat = function(obj) {
-    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
-        crows = nrow(obj@content)
-        ccols = if(crows == 0) 0 else ncol(obj@content)
-        cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
-                                         obj_label(content_table(obj)),
-                                         crows, ccols),
-            sep = "")
+## docat = function(obj) {
+##     if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
+##         crows = nrow(obj@content)
+##         ccols = if(crows == 0) 0 else ncol(obj@content)
+##         cat(rep("*", obj@level), sprintf(" %s [%d x %d]\n",
+##                                          obj_label(content_table(obj)),
+##                                          crows, ccols),
+##             sep = "")
 
-    }
-    if(is(obj, "VTableTree") && length(tree_children(obj))) {
-        kids = tree_children(obj)
-        isr = which(sapply(kids, is, "TableRow"))
-        ## can they ever be inteerspersed, I don't think so
-        if(length(isr)) {
-            r = kids[[isr[1]]]
-            lv = r@level
-            if(is.na(lv)) lv = 0
-            cat(rep("*", lv),
-                sprintf(" %s [%d x %d] \n",
-                        obj_label(obj),
-                        length(kids),
-                        length(row_values(r))),
-                sep="")
-            kids = kids[-isr]
-        }
-        lapply(kids, docat)
-    }
-    invisible(NULL)
-}
+##     }
+##     if(is(obj, "VTableTree") && length(tree_children(obj))) {
+##         kids = tree_children(obj)
+##         isr = which(sapply(kids, is, "TableRow"))
+##         ## can they ever be inteerspersed, I don't think so
+##         if(length(isr)) {
+##             r = kids[[isr[1]]]
+##             lv = r@level
+##             if(is.na(lv)) lv = 0
+##             cat(rep("*", lv),
+##                 sprintf(" %s [%d x %d] \n",
+##                         obj_label(obj),
+##                         length(kids),
+##                         length(row_values(r))),
+##                 sep="")
+##             kids = kids[-isr]
+##         }
+##         lapply(kids, docat)
+##     }
+##     invisible(NULL)
+## }
 
 ploads_to_str = function(x, collapse = ":") {
     if(is(x, "Split")) {

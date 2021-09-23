@@ -58,6 +58,8 @@ test_that("complex layout works", {
         analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
 
 
+    ## ensure print method works for predata layout
+    print(lyt)
     tab <- build_table(lyt, rawdat)
     tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
@@ -593,7 +595,8 @@ test_that("analyze_colvars inclNAs works", {
         b = c(1, NA)
     )
 
-    l <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+    l <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = TRUE)
 
                                         # We expect:
@@ -606,7 +609,8 @@ test_that("analyze_colvars inclNAs works", {
     res1 <- cell_values(tab)
     expect_equal(ans, res1)
 
-    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+    l2 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = FALSE)
 
     ans2 <- lapply(test, function(x) sum(!is.na(x)))
@@ -626,10 +630,10 @@ test_that("analyze_colvars works generally", {
         d = 4,
         e = 5
     )
-    l1 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l1 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         analyze_colvars(afun = identity)
     tab1 <- build_table(l1, test)
-    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d", "e")) %>%
+    l2 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d", "e")) %>%
         analyze_colvars(afun = identity)
     tab2 <- build_table(l2, test)
 
@@ -638,7 +642,8 @@ test_that("analyze_colvars works generally", {
                     function(x, labelstr) 7,
                     function(x, labelstr) 8)
 
-    l3 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l3 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         summarize_row_groups(cfun = colfuns, format = "xx") %>%
         analyze_colvars(afun = identity)
     tab3 <- build_table(l3, test)
@@ -647,7 +652,8 @@ test_that("analyze_colvars works generally", {
     expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
                      c(summary = "My Summary Row"))
 
-    l4 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l4 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         summarize_row_groups() %>%
         analyze_colvars(afun = identity)
     tab4 <- build_table(l4, test)

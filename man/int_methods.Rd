@@ -4,7 +4,6 @@
 \name{c,SplitVector-method}
 \alias{c,SplitVector-method}
 \alias{split_rows}
-\alias{split_rows,NULL-method}
 \alias{split_rows,PreDataRowLayout-method}
 \alias{split_rows,SplitVector-method}
 \alias{split_rows,PreDataTableLayouts-method}
@@ -16,7 +15,6 @@
 \alias{cmpnd_last_rowsplit,PreDataTableLayouts-method}
 \alias{cmpnd_last_rowsplit,ANY-method}
 \alias{split_cols}
-\alias{split_cols,NULL-method}
 \alias{split_cols,PreDataColLayout-method}
 \alias{split_cols,SplitVector-method}
 \alias{split_cols,PreDataTableLayouts-method}
@@ -32,7 +30,6 @@
 \alias{.add_row_summary,PreDataRowLayout-method}
 \alias{.add_row_summary,SplitVector-method}
 \alias{.add_row_summary,Split-method}
-\alias{.add_row_summary,NULL-method}
 \alias{fix_dyncuts}
 \alias{fix_dyncuts,Split-method}
 \alias{fix_dyncuts,VarDynCutSplit-method}
@@ -317,8 +314,6 @@
 
 split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
-\S4method{split_rows}{`NULL`}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
-
 \S4method{split_rows}{PreDataRowLayout}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
 \S4method{split_rows}{SplitVector}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
@@ -340,8 +335,6 @@ cmpnd_last_rowsplit(lyt, spl, constructor)
 \S4method{cmpnd_last_rowsplit}{ANY}(lyt, spl, constructor)
 
 split_cols(lyt = NULL, spl, pos)
-
-\S4method{split_cols}{`NULL`}(lyt = NULL, spl, pos)
 
 \S4method{split_cols}{PreDataColLayout}(lyt = NULL, spl, pos)
 
@@ -408,17 +401,6 @@ cmpnd_last_colsplit(lyt, spl, constructor)
 )
 
 \S4method{.add_row_summary}{Split}(
-  lyt,
-  label,
-  cfun,
-  child_labels = c("default", "visible", "hidden"),
-  cformat = NULL,
-  indent_mod = 0L,
-  cvar = "",
-  extra_args = list()
-)
-
-\S4method{.add_row_summary}{`NULL`}(
   lyt,
   label,
   cfun,

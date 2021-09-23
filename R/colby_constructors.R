@@ -33,12 +33,12 @@ setMethod("c", "SplitVector", function(x, ...) {
 #' @rdname int_methods
 setGeneric("split_rows", function(lyt = NULL, spl, pos,
                                   cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
-#' @rdname int_methods
-setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
-    rl = PreDataRowLayout(SplitVector(spl))
-    cl = PreDataColLayout()
-    PreDataTableLayouts(rlayout = rl, clayout = cl)
-})
+## #' @rdname int_methods
+## setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
+##     rl = PreDataRowLayout(SplitVector(spl))
+##     cl = PreDataColLayout()
+##     PreDataTableLayouts(rlayout = rl, clayout = cl)
+## })
 #' @rdname int_methods
 setMethod("split_rows", "PreDataRowLayout",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
@@ -138,12 +138,12 @@ setMethod("cmpnd_last_rowsplit", "ANY",
 
 #' @rdname int_methods
 setGeneric("split_cols", function(lyt = NULL, spl, pos) standardGeneric("split_cols"))
-#' @rdname int_methods
-setMethod("split_cols", "NULL", function(lyt, spl, pos) {
-    cl = PreDataColLayout(SplitVector(spl))
-    rl = PreDataRowLayout()
-    PreDataTableLayouts(rlayout = rl, clayout = cl)
-})
+## #' @rdname int_methods
+## setMethod("split_cols", "NULL", function(lyt, spl, pos) {
+##     cl = PreDataColLayout(SplitVector(spl))
+##     rl = PreDataRowLayout()
+##     PreDataTableLayouts(rlayout = rl, clayout = cl)
+## })
 #' @rdname int_methods
 setMethod("split_cols", "PreDataColLayout",
           function(lyt, spl, pos) {
@@ -1054,60 +1054,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                                      nested = TRUE,
                                      indent_mod = 0L,
                                      show_labels = c("default", "hidden", "visible")) {
-    .Deprecated("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
-
-    show_labels = match.arg(show_labels)
-    if(is.character(afun)) {
-        afnm = afun
-        afun = get(afun, mode = "function")
-    } else {
-        afnm = as.character(substitute(afun))
-    }
-    defrowlab = "Diff from Baseline"
-    if(is.character(compfun))
-        compfun = get(compfun, mode = "function")
-    afun2 = function(x, .ref_group = NULL, .in_ref_col, .N_col, .N_total, ...) {
-        if(is.null(.ref_group))
-            stop("did not receive ref_group aggregataion value required for comparison")
-        if(!is.na(var) && !.takes_df(afun))
-            blinevardat = .ref_group[[var]]
-        else
-            blinevardat = .ref_group
-        if(.in_ref_col)
-            return(NULL) ## we are in the ref_group
-
-        args = list()
-        if(takes_coln(afun))
-            args = c(args, list(.N_col = .N_col))
-        if(takes_totn(afun))
-            args = c(args, list(.N_total = .N_total))
-        ##XXX totdo extras
-        datvalue = do.call(afun, c(list(x), args))
-        blvalue = do.call(afun, c(list(blinevardat), args))
-        ## TODO(?) compfun cmight need .N_col or .N_total??
-        compargs = list(datvalue, blvalue)
-        ret = do.call(compfun, compargs)
-        if(length(ret) == 1 && is.null(names(ret)))
-            names(ret) = afnm
-        ret
-    }
-
-    spl = AnalyzeVarSplit(var,
-                          label,
-                          afun = afun2,
-                          split_format = format,
-                          defrowlab = defrowlab,
-                          indent_mod = indent_mod,
-                          label_pos = .labelkids_helper(show_labels))
-    if(nested &&
-       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
-        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
-        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
-    } else {
-
-        pos = next_rpos(lyt, nested, for_analyze = TRUE)
-        split_rows(lyt, spl, pos)
-    }
+    .Defunct("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
 }
 
 
@@ -1265,31 +1212,31 @@ setMethod(".add_row_summary", "Split",
     content_extra_args(lyt) = extra_args
     lyt
 })
-#' @rdname int_methods
-setMethod(".add_row_summary", "NULL",
-          function(lyt,
-                   label,
-                   cfun,
-                   child_labels = c("default", "visible", "hidden"),
-                   cformat = NULL,
-                   indent_mod = 0L,
-                   cvar = "",
-                   extra_args = list()) {
+## #' @rdname int_methods
+## setMethod(".add_row_summary", "NULL",
+##           function(lyt,
+##                    label,
+##                    cfun,
+##                    child_labels = c("default", "visible", "hidden"),
+##                    cformat = NULL,
+##                    indent_mod = 0L,
+##                    cvar = "",
+##                    extra_args = list()) {
 
-    rlyt <- PreDataRowLayout()
-    rtspl <- root_spl(rlyt)
+##     rlyt <- PreDataRowLayout()
+##     rtspl <- root_spl(rlyt)
 
-    rtspl <- .add_row_summary(lyt = rtspl,
-                     label = label,
-                     cfun = cfun,
-                     child_labels = child_labels,
-                     cformat = cformat,
-                     indent_mod = indent_mod,
-                     cvar = cvar,
-                     extra_args = extra_args)
-    root_spl(rlyt) <- rtspl
-    PreDataTableLayouts(rlayout = rlyt)
-})
+##     rtspl <- .add_row_summary(lyt = rtspl,
+##                      label = label,
+##                      cfun = cfun,
+##                      child_labels = child_labels,
+##                      cformat = cformat,
+##                      indent_mod = indent_mod,
+##                      cvar = cvar,
+##                      extra_args = extra_args)
+##     root_spl(rlyt) <- rtspl
+##     PreDataTableLayouts(rlayout = rlyt)
+## })
 
 .count_raw_constr = function(var, format, label_fstr) {
     function(df, labelstr = "") {
