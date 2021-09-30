@@ -91,7 +91,7 @@ as_html <- function(x,
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
         class = if(j > 1 || i > nrh) paste0("text-", algn),
-        colspan = curspn,
+        colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
     }
