@@ -477,8 +477,9 @@ setMethod("obj_label<-", "VTableTree",
     lr = tt_labelrow(obj)
     obj_label(lr) = value
     if( !is.na(value) && nzchar(value))
-        labelrow_visible(lr) = "visible" ## TRUE
-
+        labelrow_visible(lr) = TRUE
+    else if(is.na(value))
+        labelrow_visible(lr) = FALSE
     tt_labelrow(obj) = lr
     obj
 })
