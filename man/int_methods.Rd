@@ -4,7 +4,6 @@
 \name{c,SplitVector-method}
 \alias{c,SplitVector-method}
 \alias{split_rows}
-\alias{split_rows,NULL-method}
 \alias{split_rows,PreDataRowLayout-method}
 \alias{split_rows,SplitVector-method}
 \alias{split_rows,PreDataTableLayouts-method}
@@ -16,7 +15,6 @@
 \alias{cmpnd_last_rowsplit,PreDataTableLayouts-method}
 \alias{cmpnd_last_rowsplit,ANY-method}
 \alias{split_cols}
-\alias{split_cols,NULL-method}
 \alias{split_cols,PreDataColLayout-method}
 \alias{split_cols,SplitVector-method}
 \alias{split_cols,PreDataTableLayouts-method}
@@ -32,7 +30,6 @@
 \alias{.add_row_summary,PreDataRowLayout-method}
 \alias{.add_row_summary,SplitVector-method}
 \alias{.add_row_summary,Split-method}
-\alias{.add_row_summary,NULL-method}
 \alias{fix_dyncuts}
 \alias{fix_dyncuts,Split-method}
 \alias{fix_dyncuts,VarDynCutSplit-method}
@@ -195,11 +192,6 @@
 \alias{content_format,Split-method}
 \alias{content_format<-}
 \alias{content_format<-,Split-method}
-\alias{value_formats}
-\alias{value_formats,ANY-method}
-\alias{value_formats,TableRow-method}
-\alias{value_formats,LabelRow-method}
-\alias{value_formats,VTableTree-method}
 \alias{row_cspans}
 \alias{row_cspans,TableRow-method}
 \alias{row_cspans,LabelRow-method}
@@ -317,8 +309,6 @@
 
 split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
-\S4method{split_rows}{`NULL`}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
-
 \S4method{split_rows}{PreDataRowLayout}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
 \S4method{split_rows}{SplitVector}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
@@ -340,8 +330,6 @@ cmpnd_last_rowsplit(lyt, spl, constructor)
 \S4method{cmpnd_last_rowsplit}{ANY}(lyt, spl, constructor)
 
 split_cols(lyt = NULL, spl, pos)
-
-\S4method{split_cols}{`NULL`}(lyt = NULL, spl, pos)
 
 \S4method{split_cols}{PreDataColLayout}(lyt = NULL, spl, pos)
 
@@ -408,17 +396,6 @@ cmpnd_last_colsplit(lyt, spl, constructor)
 )
 
 \S4method{.add_row_summary}{Split}(
-  lyt,
-  label,
-  cfun,
-  child_labels = c("default", "visible", "hidden"),
-  cformat = NULL,
-  indent_mod = 0L,
-  cvar = "",
-  extra_args = list()
-)
-
-\S4method{.add_row_summary}{`NULL`}(
   lyt,
   label,
   cfun,
@@ -751,16 +728,6 @@ content_format(obj) <- value
 
 \S4method{content_format}{Split}(obj) <- value
 
-value_formats(obj, default = obj_format(obj))
-
-\S4method{value_formats}{ANY}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{TableRow}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{LabelRow}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{VTableTree}(obj, default = obj_format(obj))
-
 row_cspans(obj)
 
 \S4method{row_cspans}{TableRow}(obj)
@@ -1033,8 +1000,6 @@ spl_varnames(object) <- value
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{override}{logical(1).}
-
-\item{default}{FormatSpec.}
 }
 \value{
 Various, but should be considered implementation details.

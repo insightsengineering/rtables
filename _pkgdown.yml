@@ -67,7 +67,13 @@ reference:
     contents:
     - add_overall_level
     - remove_split_levels
+    - keep_split_levels
     - add_combo_levels
+    - drop_split_levels
+    - drop_and_remove_levels
+    - reorder_split_levels
+    - trim_levels_in_group
+    - trim_levels_to_map
 
   - title: Cell Formatting related Functions
     desc: cell formatting.
@@ -124,9 +130,11 @@ reference:
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
+    - as_html
+    - starts_with("export_as")
+    - tt_to_flextable
     - toString,VTableTree-method 
     - propose_column_widths
-    - as_html
     - matrix_form
     - get_formatted_cells
 

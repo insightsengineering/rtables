@@ -47,3 +47,6 @@ of the previous and current split.
        analyze("ANRIND")
    tbl1 <- build_table(lyt, ex_adlb)
 }
+\seealso{
+trim_levels_in_group
+}

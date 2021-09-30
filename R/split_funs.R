@@ -28,7 +28,44 @@ setGeneric("check_validsplit",
 setGeneric(".applysplit_ref_vals",
           function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
 
-
+#' @name custom_split_funs
+#' @rdname custom_split_funs
+#' @title Custom Split Functions
+#'
+#' Split functions provide the work-horse for `rtables`'s generalized
+#' partitioning. These functions accept a (sub)set of incoming data, a split
+#' object, and return 'splits' of that data.
+#'
+#' @section Custom Splitting Function Details:
+#'
+#' User-defined custom split functions can perform any type of computation
+#' on the incoming data provided that they meed the contract for generating
+#' 'splits' of the incoming data 'based on' the split object.
+#'
+#' Split functions are functions that accept:
+#' \describe{
+#' \item{df}{data.frame of incoming data to be split}
+#' \item{spl}{a Split object. this is largely an internal detail custom functions will not need to worry about,
+#' but  \code{obj_name(spl)}, for example, will give the name of the split as it will appear in paths in the resulting table}
+#' \item{vals}{Any pre-calculated values. If given non-null values, the values returned should match these. Should be NULL in most cases and can likely be ignored}
+#' \item{labels}{Any pre-calculated value labels. Same as above for \code{values}}
+#' \item{trim}{If \code{TRUE}, resulting splits that are empty should be removed}
+#' \item{(Optional) .spl_context}{a data.frame describing previously performed splits which collectively arrived at \code{df}}
+#' }
+#'
+#' The function must then output a \code{named list} with the following elements:
+#'
+#' \describe{
+#' \item{values}{The vector of all values corresponding to the splits of \code{df}}
+#' \item{datasplit}{a list of data.frames representing the groupings of the actual observations from \code{df}.}
+#' \item{labels}{a character vector giving a string label for each value listed in the \code{values} element above}
+#' \item{(Optional) extras}{If present, extra arguments to be passed to summary and analysis functions
+#'  whenever they are executed on the corresponding element of \code{datasplit} or a subset thereof}
+#' }
+#'
+#' One way to generate custom splitting functions is to wrap existing split functions and modify either
+#' the incoming data before they are called, or their outputs.
+NULL
 
 ## do various cleaning, and naming, plus
 ## ensure partinfo$values contains SplitValue objects only
@@ -121,7 +158,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 }
 
 ### NB This is called at EACH level of recursive splitting
-do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, prev_splvals) {
+do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, spl_context) {
     ## this will error if, e.g., df doesn't have columns
     ## required by spl, or generally any time the spl
     ## can't be applied to df
@@ -131,9 +168,9 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, prev_splv
         ## Currently the contract is that split_functions take df, vals, labels and
         ## return list(values=., datasplit=., labels = .), optionally with
         ## an additional extras element
-        if(func_takes(splfun, ".prev_splvals")) {
-            stopifnot(is.null(prev_splvals) || identical(names(prev_splvals), c("split", "value")))
-            ret <- splfun(df, spl, vals, labels, trim = trim, .prev_splvals = prev_splvals) ## rawvalues(prev_splvals ))
+        if(func_takes(splfun, ".spl_context")) {
+            ##stopifnot(is.null(spl_context) || identical(names(spl_context), names(context_df_row())))
+            ret <- splfun(df, spl, vals, labels, trim = trim, .spl_context = spl_context) ## rawvalues(spl_context ))
         } else {
             ret <- splfun(df, spl, vals, labels, trim = trim)
         }
@@ -499,6 +536,10 @@ make_splvalue_vec = function(vals, extrs = list(list()), labels = vals) {
 
 
 #' Split functions
+#'
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
+#'
 #' @inheritParams sf_args
 #' @inheritParams gen_args
 #' @param vals ANY. For internal use only.
@@ -862,6 +903,8 @@ add_combo_levels = function(combosdf, trim = FALSE, first = FALSE, keep_levels =
 #' data, both for the variable being split and those present in the data but not associated
 #' with this split or any parents of it.
 #' @return a fun
+#'
+#' @seealso trim_levels_in_group
 #' @export
 #' @examples
 #'  map <- data.frame(
@@ -881,12 +924,12 @@ trim_levels_to_map <- function(map = NULL) {
     if (is.null(map) || any(sapply(map, class) != "character"))
         stop("No map dataframe was provided or not all of the columns are of type character.")
 
-    myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE, .prev_splvals) {
+    myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE, .spl_context) {
 
         allvars <- colnames(map)
         splvar <- spl_payload(spl)
 
-        allvmatches <- match(.prev_splvals, allvars)
+        allvmatches <- match(.spl_context, allvars)
         outvars <- allvars[na.omit(allvmatches)]
         ## invars are variables present in data, but not in
         ## previous or current splits
@@ -900,7 +943,7 @@ trim_levels_to_map <- function(map = NULL) {
         ## outvars <- allvars[-(which(allvars == splvar):length(allvars))]
         if(length(outvars) > 0) {
             indfilters <- vapply(outvars, function(ivar) {
-                obsval <- .prev_splvals$value[match(ivar, .prev_splvals$split)]
+                obsval <- .spl_context$value[match(ivar, .spl_context$split)]
                 sprintf("%s == '%s'", ivar, obsval)
             }, "")
 
@@ -914,7 +957,7 @@ trim_levels_to_map <- function(map = NULL) {
 
   ##      browser()
         if(length(ret$datasplit) == 0) {
-            msg <- paste(sprintf("%s[%s]", .prev_splvals$split, .prev_splvals$value),
+            msg <- paste(sprintf("%s[%s]", .spl_context$split, .spl_context$value),
                          collapse = "->")
             stop("map does not allow any values present in data for split variable ", splvar, " under the following parent splits:\n\t", msg)
         }

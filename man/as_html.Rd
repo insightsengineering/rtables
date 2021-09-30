@@ -11,7 +11,6 @@ as_html(
   class_tr = "",
   class_td = "",
   class_th = "",
-  caption_txt = NULL,
   link_label = NULL
 )
 }
@@ -27,8 +26,6 @@ as_html(
 \item{class_td}{class for td tag}
 
 \item{class_th}{class for th tag}
-
-\item{caption_txt}{Caption text (not including label anchor) for the table}
 
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
 }

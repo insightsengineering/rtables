@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2021-07-07
-Version: 0.3.8.9002
+Version: 0.3.8.9012
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -27,7 +27,9 @@ Suggests:
   testthat,
   xml2,
   knitr,
-  rmarkdown
+  rmarkdown,
+  flextable,
+  officer
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true

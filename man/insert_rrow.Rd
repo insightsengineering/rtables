@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{insert_rrow}
 \alias{insert_rrow}
-\title{insert rrows at (before) a specific location}
+\title{[DEPRECATED] insert rrows at (before) a specific location}
 \usage{
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
@@ -19,12 +19,15 @@ insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 A TableTree of the same specific class as \code{tbl}
 }
 \description{
-insert rrows at (before) a specific location
+This function is deprecated and will be removed in a future release of
+rtables. Please use \code{\link{insert_row_at_path}} or
+\code{\link{label_at_path}} instead.
 }
 \note{
 Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 }
 \examples{
+o <- options(warn = 0)
 tbl <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     analyze("Sepal.Length") \%>\%
@@ -47,7 +50,7 @@ insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 
 insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 
-
+options(o)
 }
 \seealso{
 Other compatability: 

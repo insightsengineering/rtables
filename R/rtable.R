@@ -1,3 +1,5 @@
+## nocov
+
 ## TODO: REMOVE RELIANCE ON THESE FUNCTIONS IN .tbl_header_mat!!!
 
 
@@ -119,3 +121,5 @@ old_rrowl <- function(row.name, ..., format = NULL, indent = 0) {
 
   do.call(old_rrow, args_list)
 }
+
+## nocov end

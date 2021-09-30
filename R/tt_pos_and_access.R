@@ -106,6 +106,125 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
     ctree
 }
 
+
+#' Insert Row at Path
+#'
+#' Insert a row into an existing table directly before or directly after an existing
+#' data (i.e., non-content and non-label) row, specified by its path.
+#'
+#' @inheritParams gen_args
+#' @param after logical(1). Should `value` be added as a row directly before (`FALSE`,
+#' the default) or after (`TRUE`) the row specified by `path`.
+#'
+#'@export
+#'@examples
+#'
+#' lyt <- basic_table() %>%
+#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+#'   analyze("AGE")
+#'
+#' tab <- build_table(lyt, DM)
+#'
+#' tab2 <- insert_row_at_path(tab, c("COUNTRY", "CHN", "AGE", "Mean"),
+#'                           rrow("new row", 555))
+#' tab2
+#' tab2 <- insert_row_at_path(tab2, c("COUNTRY", "CHN", "AGE", "Mean"),
+#'                           rrow("new row redux", 888),
+#'                           after = TRUE)
+#' tab2
+#' @seealso DataRow rrow
+
+setGeneric("insert_row_at_path",signature = c("tt", "value"),  function(tt, path, value, after = FALSE) standardGeneric("insert_row_at_path"))
+#' @rdname insert_row_at_path
+setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
+          function(tt, path, value, after = FALSE) {
+    if(no_colinfo(value))
+        col_info(value) <- col_info(tt)
+    else
+        chk_compat_cinfos(tt, value)
+
+    origpath <- path
+    idx_row <- tt_at_path(tt, path)
+    if(!is(idx_row, "DataRow"))
+        stop("path must resolve fully to a non-content data row. Insertion of rows elsewhere in the tree is not currently supported.")
+
+    posnm <- tail(path, 1)
+
+    path <- head(path, -1)
+
+    subtt <- tt_at_path(tt, path)
+    kids <- tree_children(subtt)
+    ind <- which(names(kids) == posnm)
+    if(length(ind) != 1L)
+        stop("table children do not appear to be named correctly at this path. This should not happen, please contact the maintainer of rtables.")
+    if(after)
+        ind <- ind + 1
+
+    sq <- seq_along(kids)
+    tree_children(subtt) <- c(kids[sq < ind],
+                              setNames(list(value), obj_name(value)),
+                              kids[sq >= ind])
+    tt_at_path(tt, path) <- subtt
+    tt
+})
+#' @rdname insert_row_at_path
+setMethod("insert_row_at_path", c("VTableTree", "ANY"),
+          function(tt, path, value)
+    stop("Currently only insertion of DataRow objects is supported. Got object of class ", class(value), ". Please use rrow() or DataRow() to construct your row before insertion."))
+
+
+#' Label at Path
+#'
+#' Gets or sets the label at a path
+#' @inheritParams gen_args
+#' @details
+#'
+#' If `path` resolves to a single row, the label for that row
+#' is retrieved or set. If, instead, `path` resolves to a subtable,
+#' the text for the row-label associated with that path is retrieved
+#' or set. In the subtable case, if the label text is set to a non-NA
+#' value, the labelrow will be set to visible, even if it was not before.
+#' Similarly, if the label row text for a subtable is set to NA,
+#' the label row will bet set to non-visible, so the row will not
+#' appear at all when the table is printed.
+#'
+#' @note When changing the row labels for content rows, it is important to
+#' path all the way to the \emph{row}. Paths ending in `"@content"` will
+#' not exhibit the behavior you want, and are thus an error. See
+#' \code{\link{row_paths}} for help determining the full paths to content
+#' rows.
+#'
+#' @examples
+#'
+#' lyt <- basic_table() %>%
+#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+#'   analyze("AGE")
+#'
+#' tab <- build_table(lyt, DM)
+#'
+#' label_at_path(tab, c("COUNTRY", "CHN"))
+#'
+#' label_at_path(tab, c("COUNTRY", "USA")) <- "United States"
+#' tab
+#' @export
+label_at_path <- function(tt, path) {
+    obj_label(tt_at_path(tt, path))
+}
+#' @export
+#' @rdname label_at_path
+`label_at_path<-` <- function(tt, path, value) {
+    if(!is(tt, "VTableTree"))
+        stop("tt must be a TableTree or ElementaryTable object")
+    if(is.null(value) || is.na(value))
+        value <- NA_character_
+    subt <- tt_at_path(tt, path)
+    obj_label(subt) <- value
+    tt_at_path(tt, path) <- subt
+    tt
+}
+
+
+
 #' Get or set table elements at specified path
 #' @inheritParams gen_args
 #' @param \dots unused.
@@ -460,30 +579,30 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
 }
 
 
-.colpath_to_j <- function(path, tt) {
-    if(length(path) == 0)
-        stop("got length 0 path")
+## .colpath_to_j <- function(path, tt) {
+##     if(length(path) == 0)
+##         stop("got length 0 path")
 
-    if(length(path) >=1 && identical(path[[1]], "root"))
-        path <- path[-1]
+##     if(length(path) >=1 && identical(path[[1]], "root"))
+##         path <- path[-1]
 
-    paths <- col_paths(tt)
-    ret <- rep(TRUE, ncol(tt))
-    for(i in seq_len(length(path))) {
-        pi <- path[i]
-        if(!identical(pi, "*"))
-            stepi <- vapply(paths,
-                            function(cpath) {
-                length(cpath) < i ||
-                    identical(cpath[i], pi)
-            }, TRUE)
-        ret <- ret & stepi
-        if(!any(ret))
-            stop("Column path ", path, " appears to be invalid at step ", pi)
-    }
-    j <- which(ret)
-    j
-}
+##     paths <- col_paths(tt)
+##     ret <- rep(TRUE, ncol(tt))
+##     for(i in seq_len(length(path))) {
+##         pi <- path[i]
+##         if(!identical(pi, "*"))
+##             stepi <- vapply(paths,
+##                             function(cpath) {
+##                 length(cpath) < i ||
+##                     identical(cpath[i], pi)
+##             }, TRUE)
+##         ret <- ret & stepi
+##         if(!any(ret))
+##             stop("Column path ", path, " appears to be invalid at step ", pi)
+##     }
+##     j <- which(ret)
+##     j
+## }
 #' @noRd
 #' @param spanfunc is the thing that gets the counts after subsetting
 ## should be n_leaves for a column tree structure and NROW for

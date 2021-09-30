@@ -268,3 +268,69 @@ test_that("cell_values and value_at work on row objects", {
                               c("C: Combination.S1",
                                 "C: Combination.S2")))
 })
+
+test_that("label_at_path works", {
+    lyt <- make_big_lyt()
+
+    tab <- build_table(lyt, rawdat)
+    orig_labs <- row.names(tab)
+
+    tab4 <- tab
+
+    label_at_path(tab4, c("root", "RACE", "WHITE", "FACTOR2", "B", "AGE")) <- NA_character_
+
+    expect_identical(row.names(tab4), orig_labs[-9])
+
+    tab5 <- tab
+
+    newlab5 <- "race var label"
+    label_at_path(tab5, c("root", "RACE")) <-  newlab5
+    expect_identical(row.names(tab5), c(newlab5, orig_labs))
+
+    rps <- row_paths(tab)
+
+    labs <- vapply(rps, function(pth) label_at_path(tab, pth), "", USE.NAMES=FALSE)
+    expect_identical(labs, orig_labs)
+
+    newthangalangs <- paste(orig_labs, "redux")
+
+    tab7 <- tab
+    for(i in seq_along(orig_labs))
+        label_at_path(tab7, rps[[i]]) <- newthangalangs[i]
+
+    expect_identical(newthangalangs,
+                     row.names(tab7))
+})
+
+test_that("insert_row_at_path works", {
+ lyt <- basic_table() %>%
+     split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+     summarize_row_groups() %>%
+   analyze("AGE")
+
+ tab <- build_table(lyt, DM)
+ orig_rns <- row.names(tab)
+ tab2 <- insert_row_at_path(tab, c("COUNTRY", "CHN", "AGE", "Mean"),
+                           rrow("new row", 555))
+ expect_identical(row.names(tab2),
+                  c(orig_rns[1],
+                    "new row",
+                    orig_rns[-1]))
+
+ tab3 <- insert_row_at_path(tab2, c("COUNTRY", "CHN", "AGE", "Mean"),
+                           rrow("new row redux", 888),
+                           after = TRUE)
+ expect_identical(row.names(tab3),
+                  c(orig_rns[1],
+                    "new row",
+                    orig_rns[2],
+                    "new row redux",
+                    orig_rns[-c(1:2)]))
+
+ myrow <- rrow("whaaat", 578)
+ rps <- row_paths(tab)
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY"), myrow))
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN"), myrow))
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN", "AGE"), myrow))
+ expect_error(insert_row_at_path(tab, rps[[1]], myrow))
+})

@@ -323,7 +323,7 @@ Layouts have a couple of advantages over tabulating the tables directly:
 Here is an example that demonstrates the reusability of layouts:
 
 ```{r}
-lyt <- NULL %>% 
+lyt <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
   analyze(c("AGE", "SEX"), afun = s_summary)
