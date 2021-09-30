@@ -248,7 +248,7 @@ setMethod("make_row_df", "VTableTree",
                             incontent = TRUE,
                             repr_ext = repr_ext,
                             repr_inds = repr_inds)
-        rownum <- max(newdf$abs_rownum,na.rm = TRUE)
+        rownum <- max(newdf$abs_rownumber,na.rm = TRUE)
 
         ret  =  c(ret,
                   list(newdf))

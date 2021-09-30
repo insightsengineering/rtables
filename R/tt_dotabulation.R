@@ -328,7 +328,7 @@ gen_rowvalues = function(dfpart,
         imod = unique(vapply(rowvals, indent_mod, 0L))
         if(length(imod) != 1)
             stop("Different cells in the same row appear to have been given different indent_mod values")
-        rowconstr(val = rowvals,
+        rowconstr(vals = rowvals,
                   cinfo = cinfo,
                   lev = lev,
                   label = labels[i],
