@@ -971,16 +971,32 @@ setMethod("content_format<-", "Split", function(obj, value) {
 ## this one tiny utility function is NOT worth a dependency.
 ## modified it so any length 0 x grabs y
 `%||%` = function(L, R) if(length(L) == 0) R else L
-#' @rdname int_methods
+#' Value Formats
+#'
+#' Returns a matrix of formats for the cells in a table
+#' @param obj A table or row object.
 #' @param default FormatSpec.
+#' @export
+#' @return Matrix (storage mode list) containing the effective format for each
+#' cell position in the table (including 'virtual' cells implied by label rows,
+#' whose formats are always `NULL`)
+#' @examples
+#'
+#' lyt <- basic_table() %>%
+#' split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+#' analyze("AGE")
+#'
+#' tbl <- build_table(lyt, DM)
+#' value_formats(tbl)
+
 setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGeneric("value_formats"))
-#' @rdname int_methods
+#' @rdname value_formats
 setMethod("value_formats", "ANY",
           function(obj, default) {
     attr(obj, "format") %||% default
 })
 
-#' @rdname int_methods
+#' @rdname value_formats
 setMethod("value_formats", "TableRow",
           function(obj, default) {
     if(!is.null(obj_format(obj)))
@@ -989,12 +1005,12 @@ setMethod("value_formats", "TableRow",
         value_formats(x) %||% default)
     formats
 })
-#' @rdname int_methods
+#' @rdname value_formats
 setMethod("value_formats", "LabelRow",
           function(obj, default) {
     rep(list(NULL), ncol(obj))
 })
-#' @rdname int_methods
+#' @rdname value_formats
 setMethod("value_formats", "VTableTree",
           function(obj, default) {
     if(!is.null(obj_format(obj)))
