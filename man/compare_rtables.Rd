@@ -4,7 +4,13 @@
 \alias{compare_rtables}
 \title{Compare two rtables}
 \usage{
-compare_rtables(object, expected, tol = 0.1, comp.attr = TRUE)
+compare_rtables(
+  object,
+  expected,
+  tol = 0.1,
+  comp.attr = TRUE,
+  structure = FALSE
+)
 }
 \arguments{
 \item{object}{rtable to test}
@@ -13,7 +19,9 @@ compare_rtables(object, expected, tol = 0.1, comp.attr = TRUE)
 
 \item{tol}{numerical tolorance}
 
-\item{comp.attr}{boolean compare attributes}
+\item{comp.attr}{boolean. Compare format of cells. Other attributes are silently ignored.}
+
+\item{structure}{boolean. Should structure (in the form of column and row paths to cells) be compared. Currently defaults to \code{FALSE}, but this is subject to change in future versions.}
 }
 \value{
 a matrix of class \code{"rtables_diff"} representing the differences
@@ -22,7 +30,9 @@ between \code{object} and \code{expected} as described above.
 \description{
 Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
-should not be there.
+should not be there. If \code{structure} is set to \code{TRUE}, \code{C} indicates
+columnar structure mismatch, \code{R} indicates row-structure mismatch, and
+\code{S} indicates mismatch in both row and column structure.
 }
 \note{
 In its current form \code{compare_rtables} does not take structure into account,
@@ -58,9 +68,7 @@ expected
     rrow("row colspan", rcell(c(.345543, .4432423), colspan = 2, format = "(xx.xx, xx.xx)"))
  )
 
- compare_rtables(object, expected)
-
- compare_rtables(object, expected, comp.attr = FALSE)
+compare_rtables(object, expected, comp.attr = FALSE)
 
  object <- rtable(
     header = c("ARM A\nN=100", "ARM B\nN=200"),
@@ -93,5 +101,4 @@ expected
  )
 
  compare_rtables(object, expected)
-
 }
