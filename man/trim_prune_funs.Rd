@@ -2,16 +2,22 @@
 % Please edit documentation in R/tt_compare_tables.R
 \name{all_zero_or_na}
 \alias{all_zero_or_na}
+\alias{all_zero}
 \alias{content_all_zeros_nas}
 \alias{prune_empty_level}
+\alias{prune_zeros_only}
 \alias{low_obs_pruner}
 \title{Trimming and Pruning Criteria}
 \usage{
 all_zero_or_na(tr)
 
-content_all_zeros_nas(tt)
+all_zero(tr)
+
+content_all_zeros_nas(tt, criteria = all_zero_or_na)
 
 prune_empty_level(tt)
+
+prune_zeros_only(tt)
 
 low_obs_pruner(min, type = c("sum", "mean"))
 }
@@ -19,6 +25,8 @@ low_obs_pruner(min, type = c("sum", "mean"))
 \item{tr}{TableRow (or related class). A TableRow object representing a single row within a populated table.}
 
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{criteria}{function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \code{\link{all_zero_or_na}}}
 
 \item{min}{numeric(1). (lob_obs_pruner only). Miminum aggregate count value. Subtables whose combined/average
 count are below this threshhold will be pruned}
@@ -36,6 +44,8 @@ Criteria functions (and constructors thereof) for trimming and pruning tables.
 \code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning)
 for any \emph{non-LabelRow} \code{TableRow} which contain only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and \code{-Inf} values.
 
+\code{all_zero} returns \code{TRUE} for any non-Label row which contains only (non-missing) zero values.
+
 \code{content_all_zeros_nas} Prunes a subtable if a) it has a content table with exactly one row in it, and
 b) \code{all_zero_or_na} returns \code{TRUE} for that single content row. In practice, when the default
 summary/content function was used, this represents pruning any subtable which corresponds to an empty set of
@@ -45,6 +55,9 @@ were present in the data).
 \code{prune_empty_level} combines \code{all_zero_or_na} behavior for \code{TableRow} objects,
 \code{content_all_zeros_nas} on \code{content_table(tt)} for \code{TableTree} objects, and an addition check
 that returns \code{TRUE} if the \code{tt} has no children.
+
+\code{prune_zeros_only} behaves as \code{prune_empty_levels} does, except that like \code{all_zero} it
+prunes only in the case of all non-missing zero values.
 
 \code{lob_obs_pruner} is a \emph{constructor function} which, when called, returns a pruning criteria function
 which will prune on content rows by comparing sum or mean (dictated by \code{type})of the count count portions
