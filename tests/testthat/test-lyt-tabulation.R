@@ -780,3 +780,13 @@ test_that(".spl_context works in content and analysis functions", {
                  unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
                                `[[`, 2L)))
 })
+
+
+test_that("deprecated things are still there and work kinda", {
+
+
+    expect_warning(lyt11 <- split_cols_by(lyt = NULL,"ARM"), "deprecated")
+    expect_identical(lyt11, basic_table() %>% split_cols_by("ARM"))
+    expect_warning(lyt22 <- split_rows_by(lyt = NULL,"ARM"), "deprecated")
+    expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
+})

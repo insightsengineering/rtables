@@ -33,12 +33,13 @@ setMethod("c", "SplitVector", function(x, ...) {
 #' @rdname int_methods
 setGeneric("split_rows", function(lyt = NULL, spl, pos,
                                   cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
-## #' @rdname int_methods
-## setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
-##     rl = PreDataRowLayout(SplitVector(spl))
-##     cl = PreDataColLayout()
-##     PreDataTableLayouts(rlayout = rl, clayout = cl)
-## })
+#' @rdname int_methods
+setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
+    .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
+    rl = PreDataRowLayout(SplitVector(spl))
+    cl = PreDataColLayout()
+    PreDataTableLayouts(rlayout = rl, clayout = cl)
+})
 #' @rdname int_methods
 setMethod("split_rows", "PreDataRowLayout",
           function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
@@ -138,12 +139,13 @@ setMethod("cmpnd_last_rowsplit", "ANY",
 
 #' @rdname int_methods
 setGeneric("split_cols", function(lyt = NULL, spl, pos) standardGeneric("split_cols"))
-## #' @rdname int_methods
-## setMethod("split_cols", "NULL", function(lyt, spl, pos) {
-##     cl = PreDataColLayout(SplitVector(spl))
-##     rl = PreDataRowLayout()
-##     PreDataTableLayouts(rlayout = rl, clayout = cl)
-## })
+#' @rdname int_methods
+setMethod("split_cols", "NULL", function(lyt, spl, pos) {
+    .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
+    cl = PreDataColLayout(SplitVector(spl))
+    rl = PreDataRowLayout()
+    PreDataTableLayouts(rlayout = rl, clayout = cl)
+})
 #' @rdname int_methods
 setMethod("split_cols", "PreDataColLayout",
           function(lyt, spl, pos) {
