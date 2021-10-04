@@ -1,3 +1,6 @@
+## rtables 0.3.8.9103
+ * Initializing layouts with `NULL` is now deprecated
+
 ## rtables 0.3.8.9101
  * insert_rrow is deprecated in favor of new `insert_row_at_path` and `label_at_path<-` functions
  * split and analysis/content functions can now depend on values of splits they are nested inside by accepting and using the new `.spl_context` optional argument
