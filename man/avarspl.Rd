@@ -67,7 +67,7 @@ AnalyzeMultiVars(
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{split_format}{format spec. Format associated with this split.}
+\item{split_format}{FormatSpec. Default format associated with the split being created.}
 
 \item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
 

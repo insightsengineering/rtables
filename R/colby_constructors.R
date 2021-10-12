@@ -35,6 +35,7 @@ setGeneric("split_rows", function(lyt = NULL, spl, pos,
                                   cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
 #' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
+    .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
     rl = PreDataRowLayout(SplitVector(spl))
     cl = PreDataColLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
@@ -140,6 +141,7 @@ setMethod("cmpnd_last_rowsplit", "ANY",
 setGeneric("split_cols", function(lyt = NULL, spl, pos) standardGeneric("split_cols"))
 #' @rdname int_methods
 setMethod("split_cols", "NULL", function(lyt, spl, pos) {
+    .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
     cl = PreDataColLayout(SplitVector(spl))
     rl = PreDataRowLayout()
     PreDataTableLayouts(rlayout = rl, clayout = cl)
@@ -232,6 +234,9 @@ setMethod("cmpnd_last_colsplit", "ANY",
 #' Declaring a column-split based on levels of a variable
 #'
 #' Will generate children for each subset of a categorical variable
+#'
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
 #'
 #' @inheritParams lyt_args
 #'
@@ -347,6 +352,9 @@ setMethod(".tl_indent_inner", "SplitVector",
 
 
 #' Add Rows according to levels of a variable
+#'
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
 #'
 #'
 #' @inheritParams lyt_args
@@ -736,6 +744,43 @@ split_rows_by_cutfun = function(lyt, var,
 }
 
 
+#' @title spl_context within analysis and split functions
+#'
+#' .spl_context in analysis and split functions
+#'
+#' @name spl_context
+#' @rdname spl_context
+#'
+#' @section .spl_context Details:
+#' The `.spl_context` `data.frame` gives information about the subsets of data corresponding to the
+#' splits within-which the current `analyze` action is nested. Taken together, these correspond to the
+#' path that the resulting (set of) rows the analysis function is creating, although the information is
+#' in a slighlyt different form. Each split (which correspond to groups of rows in the resulting table) is
+#' represented via the following columns:
+#' \describe{
+#'   \item{split}{The name of the split (often the variable being split in the simple case)}
+#'   \item{value}{The string representation of the value at that split}
+#'   \item{full_parent_df}{a dataframe containing the full data (ie across all columns) corresponding to the path
+#' defined by the combination of `split` and `value` of this row \emph{and all rows above this row}}
+#'   \item{all_cols_n}{the number of observations  corresponding to this row grouping (union of all columns)}
+#'   \item{\emph{(row-split and analyze contexts only)} <1 column for each column in the table structure}{ These
+#' list columns (named the same as \code{names(col_exprs(tab))}) contain logical vectors corresponding to the
+#' subset of this row's `full_parent_df` corresponding to that column}
+#'   \item{cur_col_subset}{List column containing logical vectors indicating the subset of that row's `full_parent_df` for the column currently being created by the analysis function}
+#'   \item{cur_col_n}{integer column containing the observation counts for that split}
+#' }
+#'
+#' \emph{note Within analysis functions that accept `.spl_context`, the `all_cols_n` and `cur_col_n` columns of
+#' the dataframe will contain the 'true' observation counts corresponding to the row-group and
+#' row-group x column subsets of the data. These numbers will not, and currently cannot, reflect alternate
+#' column observation counts provided by the `alt_counts_df`, `col_counts` or `col_total` arguments
+#' to \code{\link{build_table}}}
+NULL
+
+
+
+
+
 #' Generate Rows Analyzing Variables Across Columns
 #'
 #' Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
@@ -779,7 +824,11 @@ split_rows_by_cutfun = function(lyt, var,
 #'   \item{.ref_full}{data.frame or vector of subset corresponding to the `ref_group` column without subsetting
 #'   defined by row-splitting. Optional and only required/meaningful if a `ref_group` column has been defined}
 #'   \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
+#'   \item{.spl_context}{data.frame, each row gives information about a previous/'ancestor' split state. see below}
 #' }
+#'
+#' @inheritSection spl_context .spl_context Details
+#'
 #'
 #' @note None of the arguments described in the Details section
 #' can be overridden via extra_args or when calling
@@ -1007,60 +1056,7 @@ analyze_against_ref_group = function(lyt, var = NA_character_,
                                      nested = TRUE,
                                      indent_mod = 0L,
                                      show_labels = c("default", "hidden", "visible")) {
-    .Deprecated("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
-
-    show_labels = match.arg(show_labels)
-    if(is.character(afun)) {
-        afnm = afun
-        afun = get(afun, mode = "function")
-    } else {
-        afnm = as.character(substitute(afun))
-    }
-    defrowlab = "Diff from Baseline"
-    if(is.character(compfun))
-        compfun = get(compfun, mode = "function")
-    afun2 = function(x, .ref_group = NULL, .in_ref_col, .N_col, .N_total, ...) {
-        if(is.null(.ref_group))
-            stop("did not receive ref_group aggregataion value required for comparison")
-        if(!is.na(var) && !.takes_df(afun))
-            blinevardat = .ref_group[[var]]
-        else
-            blinevardat = .ref_group
-        if(.in_ref_col)
-            return(NULL) ## we are in the ref_group
-
-        args = list()
-        if(takes_coln(afun))
-            args = c(args, list(.N_col = .N_col))
-        if(takes_totn(afun))
-            args = c(args, list(.N_total = .N_total))
-        ##XXX totdo extras
-        datvalue = do.call(afun, c(list(x), args))
-        blvalue = do.call(afun, c(list(blinevardat), args))
-        ## TODO(?) compfun cmight need .N_col or .N_total??
-        compargs = list(datvalue, blvalue)
-        ret = do.call(compfun, compargs)
-        if(length(ret) == 1 && is.null(names(ret)))
-            names(ret) = afnm
-        ret
-    }
-
-    spl = AnalyzeVarSplit(var,
-                          label,
-                          afun = afun2,
-                          split_format = format,
-                          defrowlab = defrowlab,
-                          indent_mod = indent_mod,
-                          label_pos = .labelkids_helper(show_labels))
-    if(nested &&
-       (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
-        is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
-        cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
-    } else {
-
-        pos = next_rpos(lyt, nested, for_analyze = TRUE)
-        split_rows(lyt, spl, pos)
-    }
+    .Defunct("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
 }
 
 
@@ -1218,31 +1214,31 @@ setMethod(".add_row_summary", "Split",
     content_extra_args(lyt) = extra_args
     lyt
 })
-#' @rdname int_methods
-setMethod(".add_row_summary", "NULL",
-          function(lyt,
-                   label,
-                   cfun,
-                   child_labels = c("default", "visible", "hidden"),
-                   cformat = NULL,
-                   indent_mod = 0L,
-                   cvar = "",
-                   extra_args = list()) {
+## #' @rdname int_methods
+## setMethod(".add_row_summary", "NULL",
+##           function(lyt,
+##                    label,
+##                    cfun,
+##                    child_labels = c("default", "visible", "hidden"),
+##                    cformat = NULL,
+##                    indent_mod = 0L,
+##                    cvar = "",
+##                    extra_args = list()) {
 
-    rlyt <- PreDataRowLayout()
-    rtspl <- root_spl(rlyt)
+##     rlyt <- PreDataRowLayout()
+##     rtspl <- root_spl(rlyt)
 
-    rtspl <- .add_row_summary(lyt = rtspl,
-                     label = label,
-                     cfun = cfun,
-                     child_labels = child_labels,
-                     cformat = cformat,
-                     indent_mod = indent_mod,
-                     cvar = cvar,
-                     extra_args = extra_args)
-    root_spl(rlyt) <- rtspl
-    PreDataTableLayouts(rlayout = rlyt)
-})
+##     rtspl <- .add_row_summary(lyt = rtspl,
+##                      label = label,
+##                      cfun = cfun,
+##                      child_labels = child_labels,
+##                      cformat = cformat,
+##                      indent_mod = indent_mod,
+##                      cvar = cvar,
+##                      extra_args = extra_args)
+##     root_spl(rlyt) <- rtspl
+##     PreDataTableLayouts(rlayout = rlyt)
+## })
 
 .count_raw_constr = function(var, format, label_fstr) {
     function(df, labelstr = "") {
@@ -1314,8 +1310,7 @@ setMethod(".add_row_summary", "NULL",
 #'
 #' `cfun` must accept `df` as its first argument and will receive the subset `data.frame` corresponding
 #' with the row- and column-splitting for the cell being calculated. Must accept `labelstr` as the second
-#' parameter, which accepts the `label` of the level of the parent split currently being summarized. Optionally can
-#' accept `.N_col` or `.N_total` (see \code{\link{analyze}}).
+#' parameter, which accepts the `label` of the level of the parent split currently being summarized. Can additionally take any optional argument supported by analysis functions. (see \code{\link{analyze}}).
 #'
 #' @export
 #'

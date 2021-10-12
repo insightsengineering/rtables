@@ -13,7 +13,7 @@ trim_zero_rows <- function(tbl) {
 
   rows <- collect_leaves(tbl, TRUE, TRUE)
   torm <- vapply(rows, function(x) {
-    identical(unname(unlist(row_values(x))), c(0L, 0L, 0L))
+    identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
   }, NA, USE.NAMES = FALSE)
   tbl[!torm, , keep_topleft = TRUE ]
 

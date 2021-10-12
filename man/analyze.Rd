@@ -82,6 +82,7 @@ defined by row-splitting. Optional and only required/meaningful if a \code{ref_g
 \item{.ref_full}{data.frame or vector of subset corresponding to the \code{ref_group} column without subsetting
 defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}
 \item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
+\item{.spl_context}{data.frame, each row gives information about a previous/'ancestor' split state. see below}
 }
 }
 \note{
@@ -94,6 +95,33 @@ must be calculated within \code{afun} based on a combination
 of extra arguments and the unmodified values provided by the
 tabulation framework.
 }
+\section{.spl_context Details}{
+
+The \code{.spl_context} \code{data.frame} gives information about the subsets of data corresponding to the
+splits within-which the current \code{analyze} action is nested. Taken together, these correspond to the
+path that the resulting (set of) rows the analysis function is creating, although the information is
+in a slighlyt different form. Each split (which correspond to groups of rows in the resulting table) is
+represented via the following columns:
+\describe{
+\item{split}{The name of the split (often the variable being split in the simple case)}
+\item{value}{The string representation of the value at that split}
+\item{full_parent_df}{a dataframe containing the full data (ie across all columns) corresponding to the path
+defined by the combination of \code{split} and \code{value} of this row \emph{and all rows above this row}}
+\item{all_cols_n}{the number of observations  corresponding to this row grouping (union of all columns)}
+\item{\emph{(row-split and analyze contexts only)} <1 column for each column in the table structure}{ These
+list columns (named the same as \code{names(col_exprs(tab))}) contain logical vectors corresponding to the
+subset of this row's \code{full_parent_df} corresponding to that column}
+\item{cur_col_subset}{List column containing logical vectors indicating the subset of that row's \code{full_parent_df} for the column currently being created by the analysis function}
+\item{cur_col_n}{integer column containing the observation counts for that split}
+}
+
+\emph{note Within analysis functions that accept \code{.spl_context}, the \code{all_cols_n} and \code{cur_col_n} columns of
+the dataframe will contain the 'true' observation counts corresponding to the row-group and
+row-group x column subsets of the data. These numbers will not, and currently cannot, reflect alternate
+column observation counts provided by the \code{alt_counts_df}, \code{col_counts} or \code{col_total} arguments
+to \code{\link{build_table}}}
+}
+
 \examples{
 
 l <- basic_table() \%>\%

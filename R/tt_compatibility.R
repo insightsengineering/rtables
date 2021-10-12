@@ -915,8 +915,11 @@ chk_compat_cinfos <- function(tt1, tt2) {
 }
 
 
-#' insert rrows at (before) a specific location
+#' \[DEPRECATED\] insert rrows at (before) a specific location
 #'
+#' This function is deprecated and will be removed in a future release of
+#' rtables. Please use \code{\link{insert_row_at_path}} or
+#' \code{\link{label_at_path}} instead.
 #' @param tbl rtable
 #' @param rrow rrow to append to rtable
 #' @param at position into which to put the rrow, defaults to beginning (ie 1)
@@ -931,6 +934,7 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
 #' @family compatability
 #' @examples
+#' o <- options(warn = 0)
 #' tbl <- basic_table() %>%
 #'     split_cols_by("Species") %>%
 #'     analyze("Sepal.Length") %>%
@@ -953,9 +957,10 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #'
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 #'
-#'
+#' options(o)
 insert_rrow <- function(tbl, rrow, at = 1,
                         ascontent = FALSE) {
+    .Deprecated("insert_row_at_path or label_at_path(tab)<-", old = "insert_rrow")
     stopifnot(is(tbl, "VTableTree"),
               is(rrow, "TableRow"),
               at >= 1 && at <= nrow(tbl) + 1)

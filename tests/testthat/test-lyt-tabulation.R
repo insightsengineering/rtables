@@ -19,45 +19,10 @@ test_that("summarize_row_groups works with provided funcs", {
 
 ## this
 test_that("complex layout works", {
-    lyt <- basic_table() %>% split_cols_by("ARM") %>%
-        ## add nested column split on SEX with value lables from gend_label
-        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        ## No row splits have been introduced, so this adds
-        ## a root split and puts summary content on it labelled Overall (N)
-        ## add_colby_total(label = "All") %>%
-        ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
-        add_colcounts() %>%
-        ## add a new subtable that splits on RACE, value labels from ethn_label
-        split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "hidden") %>%
-        summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-        ##
-        ## Add nested row split within Race categories for FACTOR2
-        ## using a split function that excludes level C
-        ## value labels from fac2_label
-        split_rows_by("FACTOR2", "Factor2",
-                            split_fun = remove_split_levels("C"),
-                      labels_var = "fac2_label",
-                      label_pos = "hidden") %>%
-        ## Add count summary within FACTOR2 categories
-        summarize_row_groups("FACTOR2") %>%
-        ## Add analysis/data rows by analyzing AGE variable
-        ## Note afun is a function that returns 2 values in a named list
-        ## this will create 2 data rows
-        analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                         median = median(x)),
-                          format = "xx.xx") %>%
-        ## adding more analysis vars "compounds them", placing them at the same
-        ## level of nesting as all previous analysis blocks, rather than
-        ## attempting to further nest them
-        analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x", table_names = "AgeRedux") %>%
+    lyt <- make_big_lyt()
 
-        ## Note nested=TRUE, this creates a NEW subtable directly under the
-        ## root split
-        ## afun of table() gives us k count rows, where k is the number of
-        ## levels of VAR3, in this case 2.
-        analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
-
-
+    ## ensure print method works for predata layout
+    print(lyt)
     tab <- build_table(lyt, rawdat)
     tab_str <- toString(tab)
     ## XXX TODO this assumes we want no var label on VAR3 subtable
@@ -593,7 +558,8 @@ test_that("analyze_colvars inclNAs works", {
         b = c(1, NA)
     )
 
-    l <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+    l <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = TRUE)
 
                                         # We expect:
@@ -606,7 +572,8 @@ test_that("analyze_colvars inclNAs works", {
     res1 <- cell_values(tab)
     expect_equal(ans, res1)
 
-    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b")) %>%
+    l2 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = FALSE)
 
     ans2 <- lapply(test, function(x) sum(!is.na(x)))
@@ -626,10 +593,10 @@ test_that("analyze_colvars works generally", {
         d = 4,
         e = 5
     )
-    l1 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l1 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         analyze_colvars(afun = identity)
     tab1 <- build_table(l1, test)
-    l2 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d", "e")) %>%
+    l2 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d", "e")) %>%
         analyze_colvars(afun = identity)
     tab2 <- build_table(l2, test)
 
@@ -638,7 +605,8 @@ test_that("analyze_colvars works generally", {
                     function(x, labelstr) 7,
                     function(x, labelstr) 8)
 
-    l3 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l3 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         summarize_row_groups(cfun = colfuns, format = "xx") %>%
         analyze_colvars(afun = identity)
     tab3 <- build_table(l3, test)
@@ -647,7 +615,8 @@ test_that("analyze_colvars works generally", {
     expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
                      c(summary = "My Summary Row"))
 
-    l4 <- split_cols_by_multivar(lyt = NULL, c("a", "b", "c", "d")) %>%
+    l4 <- basic_table() %>%
+        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
         summarize_row_groups() %>%
         analyze_colvars(afun = identity)
     tab4 <- build_table(l4, test)
@@ -760,3 +729,64 @@ test_that("topleft label position works", {
                    nrow(tab))
 })
 
+
+
+test_that(".spl_context works in content and analysis functions", {
+
+    ageglobmean <- mean(DM$AGE)
+    cfun <- function(df, labelstr, .spl_context) {
+        stopifnot( "A: Drug X.M" %in% names(.spl_context))
+            lastrow <- .spl_context[nrow(.spl_context) - 1,]
+            in_rows(c(nrow(df), lastrow$cur_col_n),
+                    .names = labelstr,
+                    .labels = sprintf("%s (%d)", labelstr, nrow(lastrow$full_parent_df[[1]])),
+                    .formats = "xx / xx")
+    }
+
+    afun <- function(x, .spl_context) {
+        stopifnot( "A: Drug X.M" %in% names(.spl_context))
+        lastrow <- .spl_context[nrow(.spl_context),]
+        in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
+                .names = "age_analysis",
+                .labels = sprintf("counts (out of %d)", nrow(lastrow$full_parent_df[[1]])),
+                .formats = "xx / xx")
+    }
+
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
+        split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+        summarize_row_groups() %>%
+        split_rows_by("STRATA1") %>%
+        summarize_row_groups(cfun = cfun) %>%
+        analyze("AGE", afun = afun)
+
+    tab <-  build_table(lyt, DM)
+
+    strmat <- matrix_form(tab)$strings
+
+    rwcount4 <- as.integer(gsub("[^0-9]", "", strmat[4,1]))
+    crowvals <- cell_values(tab, c("COUNTRY", "CHN", "@content"))
+    expect_equal(rwcount4,
+                 sum(sapply(crowvals,
+                            `[[`, 1)))
+
+    expect_equal(crowvals[[1]][[1]],
+                 cell_values(tab, c("COUNTRY", "CHN", "STRATA1", "A", "@content"))[[1]][[2]])
+
+    expect_equal(unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "@content")),
+                               `[[`, 1L)),
+                 unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
+                               `[[`, 2L)))
+})
+
+
+test_that("deprecated things are still there and work kinda", {
+
+
+    expect_warning(lyt11 <- split_cols_by(lyt = NULL,"ARM"), "deprecated")
+    expect_identical(lyt11, basic_table() %>% split_cols_by("ARM"))
+    expect_warning(lyt22 <- split_rows_by(lyt = NULL,"ARM"), "deprecated")
+    expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
+})

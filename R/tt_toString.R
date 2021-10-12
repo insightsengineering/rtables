@@ -174,7 +174,17 @@ expand_mat_rows <- function(mat, row_nlines = apply(mat, 1, nlines), expfun = pa
 
 
 
-
+spans_to_viscell <- function(spans) {
+    if(!is.vector(spans))
+        spans <- as.vector(spans)
+    myrle <- rle(spans)
+    unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
+                                                                  times = ln/vl),
+                                             SIMPLIFY = FALSE,
+                                             vl = myrle$values,
+                                             ln = myrle$lengths),
+                                      recursive = FALSE)
+}
 
 
 
@@ -274,12 +284,12 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
             if (!all(print_cells)) {
                 ## need to calculate which cell need to be printed
                 myrle <- rle(row)
-                print_cells <- unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
-                                                                  times = ln/vl),
-                                             SIMPLIFY = FALSE,
-                                             vl = myrle$values,
-                                             ln = myrle$lengths),
-                                      recursive = FALSE)
+                print_cells <- spans_to_viscell(row) ## unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
+                                      ##                             times = ln/vl),
+                                      ##        SIMPLIFY = FALSE,
+                                      ##        vl = myrle$values,
+                                      ##        ln = myrle$lengths),
+                                      ## recursive = FALSE)
 
                 ## tmp <- 0
                 ## for (i in seq_along(print_cells)) {

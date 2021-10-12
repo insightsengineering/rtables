@@ -32,7 +32,6 @@
 \alias{.add_row_summary,PreDataRowLayout-method}
 \alias{.add_row_summary,SplitVector-method}
 \alias{.add_row_summary,Split-method}
-\alias{.add_row_summary,NULL-method}
 \alias{fix_dyncuts}
 \alias{fix_dyncuts,Split-method}
 \alias{fix_dyncuts,VarDynCutSplit-method}
@@ -195,11 +194,6 @@
 \alias{content_format,Split-method}
 \alias{content_format<-}
 \alias{content_format<-,Split-method}
-\alias{value_formats}
-\alias{value_formats,ANY-method}
-\alias{value_formats,TableRow-method}
-\alias{value_formats,LabelRow-method}
-\alias{value_formats,VTableTree-method}
 \alias{row_cspans}
 \alias{row_cspans,TableRow-method}
 \alias{row_cspans,LabelRow-method}
@@ -408,17 +402,6 @@ cmpnd_last_colsplit(lyt, spl, constructor)
 )
 
 \S4method{.add_row_summary}{Split}(
-  lyt,
-  label,
-  cfun,
-  child_labels = c("default", "visible", "hidden"),
-  cformat = NULL,
-  indent_mod = 0L,
-  cvar = "",
-  extra_args = list()
-)
-
-\S4method{.add_row_summary}{`NULL`}(
   lyt,
   label,
   cfun,
@@ -751,16 +734,6 @@ content_format(obj) <- value
 
 \S4method{content_format}{Split}(obj) <- value
 
-value_formats(obj, default = obj_format(obj))
-
-\S4method{value_formats}{ANY}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{TableRow}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{LabelRow}(obj, default = obj_format(obj))
-
-\S4method{value_formats}{VTableTree}(obj, default = obj_format(obj))
-
 row_cspans(obj)
 
 \S4method{row_cspans}{TableRow}(obj)
@@ -1033,8 +1006,6 @@ spl_varnames(object) <- value
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{override}{logical(1).}
-
-\item{default}{FormatSpec.}
 }
 \value{
 Various, but should be considered implementation details.

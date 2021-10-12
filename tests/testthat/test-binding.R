@@ -105,6 +105,7 @@ test_that("c/rbind and top-left behave", {
     expect_error(rbind(tab, tab2))
 })
 
+## NB: insert_rrow is now deprecated. 
 test_that("insert_rrow works", {
     tbl <- basic_table() %>%
         split_cols_by("ARM") %>%
@@ -112,7 +113,7 @@ test_that("insert_rrow works", {
         build_table(ex_adsl)
 
     ## column numbers don't match
-    expect_error(insert_rrow(tbl, rrow("Total xx", ""), at = 1))
+    expect_error(suppressWarnings(insert_rrow(tbl, rrow("Total xx", ""), at = 1)))
     ## this is ok cause its a LabelRow not a DataRow
-    expect_silent(insert_rrow(tbl, rrow("Total xx"), at = 1))
+    expect_silent(suppressWarnings(insert_rrow(tbl, rrow("Total xx"), at = 1)))
 })

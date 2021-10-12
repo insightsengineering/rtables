@@ -20,6 +20,19 @@ all_zero_or_na = function(tr) {
     all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
 }
 
+#' @rdname trim_prune_funs
+#'
+#' @details
+#'
+#' \code{all_zero} returns \code{TRUE} for any non-Label row which contains only (non-missing) zero values.
+#'
+#' @export
+all_zero <- function(tr) {
+    if(!is(tr, "TableRow") || is(tr, "LabelRow"))
+        return(FALSE)
+    rvs = unlist(unname(row_values(tr)))
+    isTRUE(all(rvs == 0))
+}
 #' Trim rows from a populated table without regard for table structure
 #' @inheritParams gen_args
 #' @param criteria function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \code{\link{all_zero_or_na}}
@@ -35,6 +48,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 }
 
 #' @rdname trim_prune_funs
+#' @inheritParams trim_rows
 #' @details
 #'
 #' \code{content_all_zeros_nas} Prunes a subtable if a) it has a content table with exactly one row in it, and
@@ -44,7 +58,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 #' were present in the data).
 #'
 #' @export
-content_all_zeros_nas = function(tt) {
+content_all_zeros_nas = function(tt, criteria = all_zero_or_na) {
     ## this will be NULL if
     ## tt is something that doesn't have a content table
     ct <- content_table(tt)
@@ -53,7 +67,7 @@ content_all_zeros_nas = function(tt) {
         return(FALSE)
 
     cr <- tree_children(ct)[[1]]
-    all_zero_or_na(cr)
+    criteria(cr)
 }
 
 
@@ -65,7 +79,7 @@ content_all_zeros_nas = function(tt) {
 #'
 #' @export
 #' @rdname trim_prune_funs
-prune_empty_level = function(tt) {
+prune_empty_level = function(tt ) {
     if(is(tt, "TableRow"))
         return(all_zero_or_na(tt))
 
@@ -75,6 +89,21 @@ prune_empty_level = function(tt) {
     length(kids) == 0
 }
 
+#' @details
+#'
+#' \code{prune_zeros_only} behaves as \code{prune_empty_levels} does, except that like \code{all_zero} it
+#' prunes only in the case of all non-missing zero values.
+#' @rdname trim_prune_funs
+#' @export
+prune_zeros_only <- function(tt) {
+    if(is(tt, "TableRow"))
+        return(all_zero(tt))
+
+    if(content_all_zeros_nas(tt, criteria = all_zero))
+        return(TRUE)
+    kids <- tree_children(tt)
+    length(kids) == 0
+}
 
 #' @param min numeric(1). (lob_obs_pruner only). Miminum aggregate count value. Subtables whose combined/average
 #' count are below this threshhold will be pruned
