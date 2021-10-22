@@ -2096,12 +2096,25 @@ setMethod("vars_in_layout", "ManualSplit",
 
 
 ## Titles and footers
-
+##' Titles and Footers
+##'
+##' Get or set the titles and footers on an object
+##'
+##' @inheritParams gen_args
+##'
+##' @rdname title_footer
+##' @export
 setGeneric("main_title", function(obj) standardGeneric("main_title"))
+##' @rdname title_footer
+##' @export
 setMethod("main_title", "VTitleFooter",
           function(obj) obj@main_title)
 
+##' @rdname title_footer
+##' @export
 setGeneric("main_title<-", function(obj, value) standardGeneric("main_title<-"))
+##' @rdname title_footer
+##' @export
 setMethod("main_title<-", "VTitleFooter",
           function(obj, value) {
     stopifnot(length(value) == 1)
@@ -2110,27 +2123,45 @@ setMethod("main_title<-", "VTitleFooter",
 })
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("subtitles", function(obj) standardGeneric("subtitles"))
+##' @rdname title_footer
+##' @export
 setMethod("subtitles", "VTitleFooter",
           function(obj) obj@subtitles)
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-"))
+##' @rdname title_footer
+##' @export
 setMethod("subtitles<-", "VTitleFooter",
           function(obj, value) {
     obj@subtitles <- value
     obj
 })
 
+##' @rdname title_footer
+##' @export
 all_titles <- function(obj) c(main_title(obj), subtitles(obj))
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("main_footer", function(obj) standardGeneric("main_footer"))
+##' @rdname title_footer
+##' @export
 setMethod("main_footer", "VTitleFooter",
           function(obj) obj@main_footer)
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("main_footer<-", function(obj, value) standardGeneric("main_footer<-"))
+##' @rdname title_footer
+##' @export
 setMethod("main_footer<-", "VTitleFooter",
           function(obj, value) {
     obj@main_footer <- value
@@ -2139,18 +2170,28 @@ setMethod("main_footer<-", "VTitleFooter",
 
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("prov_footer", function(obj) standardGeneric("prov_footer"))
+##' @rdname title_footer
+##' @export
 setMethod("prov_footer", "VTitleFooter",
           function(obj) obj@provenance_footer)
 
 
+##' @rdname title_footer
+##' @export
 setGeneric("prov_footer<-", function(obj, value) standardGeneric("prov_footer<-"))
+##' @rdname title_footer
+##' @export
 setMethod("prov_footer<-", "VTitleFooter",
           function(obj, value) {
     obj@provenance_footer <- value
     obj
 })
 
+##' @rdname title_footer
+##' @export
 all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
 
 

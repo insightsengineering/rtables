@@ -2,9 +2,12 @@
 % Please edit documentation in R/tt_toString.R
 \name{toString,VTableTree-method}
 \alias{toString,VTableTree-method}
+\alias{toString,MatrixPrintForm-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
 \S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3)
+
+\S4method{toString}{MatrixPrintForm}(x, widths = NULL, col_gap = 3)
 }
 \arguments{
 \item{x}{table object}
