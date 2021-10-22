@@ -17,8 +17,6 @@ setMethod("print", "ANY", base::print)
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
-#' @param linesep character to create line separator
-#'
 #' @exportMethod toString
 #'
 #' @return a string representation of \code{x} as it appears when printed.
@@ -39,15 +37,27 @@ setMethod("print", "ANY", base::print)
 #' tbl <- build_table(l, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
-#' cat(toString(tbl, col_gap = 3, linesep = "+-"))
-setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, linesep = "\u2014") {
+#' @rdname tostring
+setMethod("toString", "VTableTree", function(x,
+                                             widths = NULL,
+                                             col_gap = 3) {
+    toString(matrix_form(x, indent_row_names = TRUE),
+             widths = widths, col_gap = col_gap)
+})
+
+#' @rdname tostring
+#' @exportMethod toString
+setMethod("toString", "MatrixPrintForm", function(x,
+                                                  widths = NULL,
+                                                  col_gap = 3) {
+    mat <- x
 
   ## we create a matrix with the formatted cell contents
-  mat <- matrix_form(x, indent_rownames = TRUE)
+##  mat <- matrix_form(x, indent_rownames = TRUE)
 
 
   if (is.null(widths)) {
-    widths <- propose_column_widths(x, mat_form = mat)
+    widths <- propose_column_widths(mat_form = mat)
   }
   stopifnot(length(widths) == ncol(mat$strings))
 
@@ -56,7 +66,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, line
   aligns <- mat$aligns
   keep_mat <- mat$display
   spans <- mat$spans
-    ri <- mat$row_info
+#    ri <- mat$row_info
     ref_fnotes <- mat$ref_footnotes
 
 
@@ -360,7 +370,8 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
       ref_footnotes = ref_fnotes
     ),
     nlines_header = nlines_header,
-    nrow_header = nr_header)
+    nrow_header = nr_header,
+    class = c("MatrixPrintForm", "list"))
 }
 
 format_fnote_ref <- function(fn) {
@@ -736,7 +747,8 @@ setMethod("get_formatted_cells", "LabelRow",
 #'
 #' propose_column_widths(tbl)
 propose_column_widths <- function(x, mat_form = matrix_form(x, indent_rownames = TRUE)) {
-  stopifnot(is(x, "VTableTree"))
+
+    ##stopifnot(is(x, "VTableTree"))
 
   body <- mat_form$strings
   spans <- mat_form$spans
