@@ -141,69 +141,69 @@ format_rcell <- function(x, format, output = c("ascii", "html")) {
     x <- rawvalues(x)
 
   txt <- if (is.null(format)) {
-    toString(x)
-  } else if (identical(attr(format, "format_type"), "sprintf")) {
-    do.call(sprintf, c(list(format), x))
-  } else if (is.character(format)) {
-    l <- if (format %in% formats_1d) {
-      1
-    } else if (format %in% formats_2d) {
-      2
-    } else if (format %in% formats_3d) {
-      3
-    } else {
-      stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
-    }
-    if (format != "xx" && length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
+             toString(x)
+         } else if (identical(attr(format, "format_type"), "sprintf")) {
+             do.call(sprintf, c(list(format), x))
+         } else if (is.character(format)) {
+             l <- if (format %in% formats_1d) {
+                      1
+                  } else if (format %in% formats_2d) {
+                      2
+                  } else if (format %in% formats_3d) {
+                      3
+                  } else {
+                      stop("unknown format label: ", format, ". use list_rcell_format_labels() to get a list of all formats")
+                  }
+             if (format != "xx" && length(x) != l) stop("cell <", paste(x), "> and format ", format, " are of different length")
 
-    switch(
-      format,
-      "xx" = if (all(is.na(x))) "NA" else as.character(x),
-      "xx." = as.character(round(x, 0)),
-      "xx.x" = as.character(round(x, 1)),
-      "xx.xx" = as.character(round(x, 2)),
-      "xx.xxx" = as.character(round(x, 3)),
-      "xx.xxxx" = as.character(round(x, 4)),
-      "xx%" = paste0(x * 100, "%"),
-      "xx.%" = paste0(round(x * 100, 0), "%"),
-      "xx.x%" = paste0(round(x * 100, 1), "%"),
-      "xx.xx%" = paste0(round(x * 100, 2), "%"),
-      "xx.xxx%" = paste0(round(x * 100, 3), "%"),
-      "(N=xx)" = paste0("(N=", x, ")"),
-      ">999.9" = ifelse(x > 999.9, ">999.9", as.character(round(x, 1))),
-      ">999.99" = ifelse(x > 999.99, ">999.99", as.character(round(x, 2))),
-      "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
-      "xx / xx" = paste(x, collapse = " / "),
-      "xx. / xx." = paste(lapply(x, round, 0)),
-      "xx.x / xx.x" = paste(lapply(x, round, 1)),
-      "xx.xx / xx.xx" = paste(lapply(x, round, 2)),
-      "xx.xxx / xx.xxx" = paste(lapply(x, round, 3)),
-      "xx (xx%)" = paste0(x[1], " (", x[2]*100, "%)"),
-      "xx (xx.%)" = paste0(x[1], " (", round(x[2]*100, 0), "%)"),
-      "xx (xx.x%)" = paste0(x[1], " (", round(x[2]*100, 1), "%)"),
-      "xx (xx.xx%)" = paste0(x[1], " (", round(x[2]*100, 2), "%)"),
-      "xx. (xx.%)" = paste0(round(x[1],0), " (", round(x[2]*100, 1), "%)"),
-      "xx.x (xx.x%)" = paste0(round(x[1],1), " (", round(x[2]*100, 1), "%)"),
-      "xx.xx (xx.xx%)" = paste0(round(x[1],2), " (", round(x[2]*100, 2), "%)"),
-      "(xx, xx)" = paste0("(",x[1],", ", x[2], ")"),
-      "(xx., xx.)" = paste0("(", paste(lapply(x, round, 0), collapse = ", ") , ")"),
-      "(xx.x, xx.x)" = paste0("(", paste(lapply(x, round, 1), collapse = ", ") , ")"),
-      "(xx.xx, xx.xx)" = paste0("(", paste(lapply(x, round, 2), collapse = ", ") , ")"),
-      "(xx.xxx, xx.xxx)" = paste0("(", paste(lapply(x, round, 3), collapse = ", ") , ")"),
-      "(xx.xxxx, xx.xxxx)" = paste0("(", paste(lapply(x, round, 4), collapse = ", ") , ")"),
-      "xx - xx" = paste(x[1], "-", x[2]),
-      "xx.x - xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " - "),
-      "xx.xx - xx.xx" = paste(vapply(x, round, numeric(1), 2), collapse = " - "),
-      "xx.x (xx.x)" = paste0(round(x[1], 1), " (",round(x[2], 1), ")"),
-      "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
-      "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
-      "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to "),
-      "xx.xx (xx.xx - xx.xx)" = paste0(round(x[1], 2), " (", paste(round(x[2:3], 2), collapse = " - "), ")"),
-      paste("format string", format, "not found")
-    )
-  } else if (is.function(format)) {
-    format(x, output = output)
-  }
+             switch(
+                 format,
+                 "xx" = if (all(is.na(x))) "NA" else as.character(x),
+                 "xx." = as.character(round(x, 0)),
+                 "xx.x" = as.character(round(x, 1)),
+                 "xx.xx" = as.character(round(x, 2)),
+                 "xx.xxx" = as.character(round(x, 3)),
+                 "xx.xxxx" = as.character(round(x, 4)),
+                 "xx%" = paste0(x * 100, "%"),
+                 "xx.%" = paste0(round(x * 100, 0), "%"),
+                 "xx.x%" = paste0(round(x * 100, 1), "%"),
+                 "xx.xx%" = paste0(round(x * 100, 2), "%"),
+                 "xx.xxx%" = paste0(round(x * 100, 3), "%"),
+                 "(N=xx)" = paste0("(N=", x, ")"),
+                 ">999.9" = ifelse(x > 999.9, ">999.9", as.character(round(x, 1))),
+                 ">999.99" = ifelse(x > 999.99, ">999.99", as.character(round(x, 2))),
+                 "x.xxxx | (<0.0001)" = ifelse(x < 0.0001, "<0.0001", sprintf("%.4f", x)),
+                 "xx / xx" = paste(x, collapse = " / "),
+                 "xx. / xx." = paste(lapply(x, round, 0)),
+                 "xx.x / xx.x" = paste(lapply(x, round, 1)),
+                 "xx.xx / xx.xx" = paste(lapply(x, round, 2)),
+                 "xx.xxx / xx.xxx" = paste(lapply(x, round, 3)),
+                 "xx (xx%)" = paste0(x[1], " (", x[2]*100, "%)"),
+                 "xx (xx.%)" = paste0(x[1], " (", round(x[2]*100, 0), "%)"),
+                 "xx (xx.x%)" = paste0(x[1], " (", round(x[2]*100, 1), "%)"),
+                 "xx (xx.xx%)" = paste0(x[1], " (", round(x[2]*100, 2), "%)"),
+                 "xx. (xx.%)" = paste0(round(x[1],0), " (", round(x[2]*100, 1), "%)"),
+                 "xx.x (xx.x%)" = paste0(round(x[1],1), " (", round(x[2]*100, 1), "%)"),
+                 "xx.xx (xx.xx%)" = paste0(round(x[1],2), " (", round(x[2]*100, 2), "%)"),
+                 "(xx, xx)" = paste0("(",x[1],", ", x[2], ")"),
+                 "(xx., xx.)" = paste0("(", paste(lapply(x, round, 0), collapse = ", ") , ")"),
+                 "(xx.x, xx.x)" = paste0("(", paste(lapply(x, round, 1), collapse = ", ") , ")"),
+                 "(xx.xx, xx.xx)" = paste0("(", paste(lapply(x, round, 2), collapse = ", ") , ")"),
+                 "(xx.xxx, xx.xxx)" = paste0("(", paste(lapply(x, round, 3), collapse = ", ") , ")"),
+                 "(xx.xxxx, xx.xxxx)" = paste0("(", paste(lapply(x, round, 4), collapse = ", ") , ")"),
+                 "xx - xx" = paste(x[1], "-", x[2]),
+                 "xx.x - xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " - "),
+                 "xx.xx - xx.xx" = paste(vapply(x, round, numeric(1), 2), collapse = " - "),
+                 "xx.x (xx.x)" = paste0(round(x[1], 1), " (",round(x[2], 1), ")"),
+                 "xx.xx (xx.xx)" = paste0(round(x[1], 2), " (",round(x[2], 2), ")"),
+                 "xx.x, xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = ", "),
+                 "xx.x to xx.x" = paste(vapply(x, round, numeric(1), 1), collapse = " to "),
+                 "xx.xx (xx.xx - xx.xx)" = paste0(round(x[1], 2), " (", paste(round(x[2:3], 2), collapse = " - "), ")"),
+                 paste("format string", format, "not found")
+             )
+         } else if (is.function(format)) {
+             format(x, output = output)
+         }
 
   if (output == "ascii") {
     txt

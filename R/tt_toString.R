@@ -41,7 +41,7 @@ setMethod("print", "ANY", base::print)
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3) {
-    toString(matrix_form(x, indent_row_names = TRUE),
+    toString(matrix_form(x, indent_rownames = TRUE),
              widths = widths, col_gap = col_gap)
 })
 

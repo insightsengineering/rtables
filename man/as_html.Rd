@@ -11,7 +11,6 @@ as_html(
   class_tr = NULL,
   class_td = NULL,
   class_th = NULL,
-  caption_txt = NULL,
   link_label = NULL
 )
 }
