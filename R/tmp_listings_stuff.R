@@ -122,8 +122,7 @@ listing_matrix_form <- function(df) {
     if(length(nonkeycols) > 0) {
         for(nonk in nonkeycols) {
             vec <- listing[[nonk]]
-            if(!is.null(obj_format(vec)))
-                vec <- vapply(vec, format_rcell, "", format = obj_format(vec))
+            vec <- vapply(vec, format_rcell, "", format = obj_format(vec))
             bodymat[,nonk] <- vec
         }
     }
