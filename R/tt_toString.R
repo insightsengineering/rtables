@@ -337,41 +337,77 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
                                body_ref_strs)),
                    nrow = nrow(body),
                    ncol = ncol(body))
-    row_nlines <- apply(body, 1, nlines)
-    nrows <- nrow(body)
-    if (any(row_nlines > 1)) {
-        hdr_inds <- 1:nr_header
-        ## groundwork for sad haxx to get tl to not be messed up
-        tl <- body[hdr_inds, 1]
-        body <- rbind(expand_mat_rows(body[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
-                      expand_mat_rows(body[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
-        spans <- expand_mat_rows(spans, row_nlines, rep_vec_to_len)
-        aligns <- expand_mat_rows(aligns, row_nlines, rep_vec_to_len)
-        display <- expand_mat_rows(display, row_nlines, rep_vec_to_len)
-        nlines_header <- sum(row_nlines[1:nr_header])
-        ## sad haxx :(
-  ##      if(length(tl) != nr_header) {
-        body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
 
-    } else {
-        nlines_header <- nr_header
-    }
+  ##   row_nlines <- apply(body, 1, nlines)
+  ##   nrows <- nrow(body)
+  ##   if (any(row_nlines > 1)) {
+  ##       hdr_inds <- 1:nr_header
+  ##       ## groundwork for sad haxx to get tl to not be messed up
+  ##       tl <- body[hdr_inds, 1]
+  ##       body <- rbind(expand_mat_rows(body[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
+  ##                     expand_mat_rows(body[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
+  ##       spans <- expand_mat_rows(spans, row_nlines, rep_vec_to_len)
+  ##       aligns <- expand_mat_rows(aligns, row_nlines, rep_vec_to_len)
+  ##       display <- expand_mat_rows(display, row_nlines, rep_vec_to_len)
+  ##       nlines_header <- sum(row_nlines[1:nr_header])
+  ##       ## sad haxx :(
+  ## ##      if(length(tl) != nr_header) {
+  ##       body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+
+  ##   } else {
+  ##       nlines_header <- nr_header
+  ##   }
 
     ref_fnotes <- get_formatted_fnotes(tt)
-  structure(
+  ret <- structure(
     list(
       strings = body,
       spans = spans,
       aligns = aligns,
       display = display,
       row_info = sr,
-      line_grouping = rep(1:nrows, times = row_nlines),
+      line_grouping = 1:nrow(body), # this is done for real in .do_mat_expand now
       ref_footnotes = ref_fnotes
     ),
-    nlines_header = nlines_header,
+    nlines_header = nr_header, ## this is done for real in .do_mat_expand nownlines_header,
     nrow_header = nr_header,
     class = c("MatrixPrintForm", "list"))
+    .do_mat_expand(ret)
 }
+
+
+.do_mat_expand <- function(matform, has_topleft = TRUE) {
+
+    row_nlines <- apply(matform$strings, 1, nlines)
+    nlines_header <- attr(matform, "nlines_header")
+    nr_header <- attr(matform, "nrow_header")
+    nrows <- nrow(matform$strings)
+    if (any(row_nlines > 1)) {
+        hdr_inds <- 1:nr_header
+        ## groundwork for sad haxx to get tl to not be messed up
+        if(has_topleft)
+            tl <- matform$strings[hdr_inds, 1]
+        else
+            tl <- character()
+        matform$strings <- rbind(expand_mat_rows(matform$strings[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
+                      expand_mat_rows(matform$strings[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
+        matform$spans <- expand_mat_rows(matform$spans, row_nlines, rep_vec_to_len)
+        matform$aligns <- expand_mat_rows(matform$aligns, row_nlines, rep_vec_to_len)
+        matform$display <- expand_mat_rows(matform$display, row_nlines, rep_vec_to_len)
+        attr(matform, "nlines_header") <- sum(row_nlines[1:nr_header])
+        ## sad haxx :(
+  ##      if(length(tl) != nr_header) {
+        matform$strings[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+        matform$line_grouping <- rep(1:nrows, times = row_nlines)
+
+    }
+
+    matform
+}
+
+
+
+
 
 format_fnote_ref <- function(fn) {
     if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))

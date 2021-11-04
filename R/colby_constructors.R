@@ -1,7 +1,9 @@
 
 label_pos_values <- c("hidden", "visible", "topleft")
 
-
+#' @name internal_methods
+#' @rdname int_methods
+NULL
 
 #' combine SplitVector objects
 #' @param x SplitVecttor
