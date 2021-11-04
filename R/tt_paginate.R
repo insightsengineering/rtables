@@ -95,7 +95,6 @@ pagdfrow = function(row,
                     ncellrefs = 0L,
                     nreflines = 0L
                     ) {
-
     data.frame(label = lab,
                name = nm,
                abs_rownumber = rnum,
@@ -104,7 +103,7 @@ pagdfrow = function(row,
                n_siblings = nsibs,
                self_extent = extent,
                par_extent = repext,
-               reprint_inds = I(list(unlist(repind))),
+               reprint_inds = I(rep(list(unlist(repind)), length.out = length(nm))),
                node_class = rclass,
                indent = max(0L, indent),
                nrowrefs = nrowrefs,
@@ -616,6 +615,15 @@ pag_tt_indices = function(tt, lpp = 15,
     rlpp = lpp - cinfo_lines - tlines - flines
     pagdf = make_row_df(tt, colwidths)
 
+    pag_tt_indices_inner(pagdf, rlpp = rlpp, min_siblings = min_siblings,
+                         nosplitin = nosplitin,
+                         verbose = verbose)
+}
+
+pag_tt_indices_inner <- function(pagdf, rlpp,
+                                 min_siblings,
+                                 nosplitin = character(),
+                                 verbose = FALSE) {
 
     start = 1
     nr = nrow(pagdf)
@@ -635,6 +643,7 @@ pag_tt_indices = function(tt, lpp = 15,
     }
     ret
 }
+
 
 #' @export
 #' @aliases paginate_table

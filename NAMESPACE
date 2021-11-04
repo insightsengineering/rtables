@@ -2,6 +2,7 @@
 
 S3method(print,CellValue)
 S3method(print,RowsVerticalSection)
+S3method(print,listing_df)
 export("cell_footnotes<-")
 export("clayout<-")
 export("col_counts<-")
