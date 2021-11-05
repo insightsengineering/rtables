@@ -325,7 +325,9 @@ setMethod("prov_footer", "listing_df",
           function(obj) attr(obj, "prov_footer") %||% character())
 
 
-
+#' @rdname paginate
+#' @param lsting listing_df. The listing to paginate.
+#' @export
 paginate_listing <- function(lsting, lpp = 15,
                              min_siblings = 2,
                              nosplitin = character(),
