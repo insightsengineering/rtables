@@ -68,8 +68,11 @@ as_listing <- function(df,
 #' @export
 #' @rdname tmp_listings
 as_keycol <- function(vec) {
-    if(is.factor(vec))
+    if(is.factor(vec)) {
+        lab <- obj_label(vec)
         vec <- as.character(vec)
+        obj_label(vec) <- lab
+    }
     class(vec) <- c("listing_keycol", class(vec))
     vec
 }
