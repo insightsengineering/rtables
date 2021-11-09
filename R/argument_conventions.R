@@ -66,8 +66,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param compfun function/string. The comparison function which accepts the analysis function outputs for two different partitions and returns a single value. Defaults to subraction. If a string, taken as the name of a function.
 #' @param label_fstr string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.
 #' @param child_labels string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.
-#' @param extra_args list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.
-#' @param name character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.
+#' @param extra_args list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the tabulation function.
+#' @param name character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding label, but is not required to be.
 #' @param cuts numeric. Cuts to use
 #' @param cutlabels character (or NULL). Labels for the cuts
 #' @param cutlabelfun function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}
