@@ -1050,6 +1050,8 @@ build_table = function(lyt, df,
 
 fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     var <- spl_payload(spl)
+    if(!(var %in% names(df)))
+        stop("Split variable [", var, "] not found in data being tabulated.")
     varvec <- df[[var]]
     if(!is(varvec, "character") && !is.factor(varvec)) {
         message(sprintf("Split var [%s] was not character or factor. Converting to factor",
@@ -1065,6 +1067,8 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     lblvar <- spl_label_var(spl)
     have_lblvar <- !identical(var, lblvar)
     if(have_lblvar) {
+        if(!(lblvar %in% names(df)))
+            stop("Value label variable [", lblvar, "] not found in data being tabulated.")
         lblvec <- df[[lblvar]]
         tab <- table(varvec, lblvec)
 

@@ -254,24 +254,32 @@ test_that("missing vars caught", {
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(misscol, rawdat))
+    expect_error(build_table(misscol, rawdat), "Split variable [[]SX[]] not found in data being tabulated.")
 
     missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX", "Gender") %>%
-    split_rows_by("RACER", "ethn") %>%
+    split_cols_by("SEX", "gend_label") %>%
+    split_rows_by("RACER", "ethn_label") %>%
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                            median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(missrsplit, rawdat))
+    expect_error(build_table(missrsplit, rawdat), "Split variable [[]RACER[]] not found in data being tabulated.")
+
+    missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
+    split_cols_by("SEX", "gend_label") %>%
+    split_rows_by("RACE", "ethnNA_label") %>%
+    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
+                                                           median = median(x)), format = "xx.xx")
+
+    expect_error(build_table(missrsplit, rawdat), "Value label variable [[]ethnNA_label[]] not found in data being tabulated.")
 
     missavar =  basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX", "Gender") %>%
-    split_rows_by("RACE", "ethn") %>%
+    split_cols_by("SEX", labels_var = "gend_label") %>%
+    split_rows_by("RACE", labels_var = "ethn_label") %>%
     analyze("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
                                                                     median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(missavar, rawdat))
-    })
+    expect_error(build_table(missavar, rawdat), ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
+})
 
 
 
