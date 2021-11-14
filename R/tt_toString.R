@@ -396,8 +396,8 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
         matform$display <- expand_mat_rows(matform$display, row_nlines, rep_vec_to_len)
         attr(matform, "nlines_header") <- sum(row_nlines[1:nr_header])
         ## sad haxx :(
-  ##      if(length(tl) != nr_header) {
-        matform$strings[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+        if(has_topleft)
+            matform$strings[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
         matform$line_grouping <- rep(1:nrows, times = row_nlines)
 
     }
