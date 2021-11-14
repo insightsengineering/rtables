@@ -432,6 +432,13 @@ setMethod("rbind", "VTableNodeInfo",
 })
 
 #' @exportMethod rbind2
+#' @rdname rbind
+setMethod("rbind2", c("VTableNodeInfo", "missing"),
+          function(x, y) {
+    x
+})
+
+#' @exportMethod rbind2
 #' @param x VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
 #' @param y VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
 #' @rdname rbind
