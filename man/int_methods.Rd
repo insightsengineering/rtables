@@ -998,7 +998,7 @@ spl_varnames(object) <- value
 
 \item{print_indent}{indent for print}
 
-\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
 

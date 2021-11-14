@@ -21,7 +21,7 @@ split_cols_by_multivar(
 
 \item{varnames}{character vector. Names for \code{vars} which will appear in pathing. When \code{vars} are all unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce uniqueness.}
 
-\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
