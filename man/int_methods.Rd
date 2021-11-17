@@ -204,6 +204,10 @@
 \alias{cell_cspan,CellValue-method}
 \alias{cell_cspan<-}
 \alias{cell_cspan<-,CellValue-method}
+\alias{cell_align}
+\alias{cell_align,CellValue-method}
+\alias{cell_align<-}
+\alias{cell_align<-,CellValue-method}
 \alias{tt_level}
 \alias{tt_level,VNodeInfo-method}
 \alias{tt_level<-}
@@ -754,6 +758,14 @@ cell_cspan(obj)
 cell_cspan(obj) <- value
 
 \S4method{cell_cspan}{CellValue}(obj) <- value
+
+cell_align(obj)
+
+\S4method{cell_align}{CellValue}(obj)
+
+cell_align(obj) <- value
+
+\S4method{cell_align}{CellValue}(obj) <- value
 
 tt_level(obj)
 

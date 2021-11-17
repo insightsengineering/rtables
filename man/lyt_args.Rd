@@ -40,7 +40,8 @@ lyt_args(
   var_labels,
   cvar,
   table_names,
-  topleft
+  topleft,
+  align
 )
 }
 \arguments{
@@ -116,6 +117,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+
+\item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
 }
 \value{
 NULL (this is an argument template dummy function)

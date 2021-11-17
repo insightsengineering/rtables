@@ -798,3 +798,5 @@ test_that("deprecated things are still there and work kinda", {
     expect_warning(lyt22 <- split_rows_by(lyt = NULL,"ARM"), "deprecated")
     expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
 })
+
+

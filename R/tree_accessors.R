@@ -1141,6 +1141,29 @@ setMethod("cell_cspan<-", "CellValue", function(obj, value) {
     obj
 })
 
+#' @rdname int_methods
+setGeneric("cell_align", function(obj) standardGeneric("cell_align"))
+#' @rdname int_methods
+setMethod("cell_align", "CellValue", function(obj) attr(obj, "align") %||% "center") ##obj@colspan)
+
+#' @rdname int_methods
+setGeneric("cell_align<-", function(obj, value) standardGeneric("cell_align<-"))
+#' @rdname int_methods
+setMethod("cell_align<-", "CellValue", function(obj, value) {
+    ##  obj@colspan = value
+    if(is.null(value))
+        value <- "center"
+    else {
+        value <- tolower(value)
+        if(!(value %in% rtables_aligns()))
+            stop("Unsupported cell value alignment: ", value)
+    }
+    attr(obj, "align") <- value
+    obj
+})
+
+
+
 
 ### Level (indent) in tree structure
 #' @rdname int_methods

@@ -11,7 +11,8 @@ rcell(
   colspan = 1L,
   label = NULL,
   indent_mod = NULL,
-  footnotes = NULL
+  footnotes = NULL,
+  align = NULL
 )
 
 non_ref_rcell(
@@ -21,7 +22,8 @@ non_ref_rcell(
   colspan = 1L,
   label = NULL,
   indent_mod = NULL,
-  refval = NULL
+  refval = NULL,
+  align = "center"
 )
 }
 \arguments{
@@ -37,6 +39,8 @@ then the \code{format} is applied}
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
 
 \item{footnotes}{list or NULL. Referential footnote messages for the cell.}
+
+\item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
 
 \item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
 .in_ref_col shoul be passed to this argument)}

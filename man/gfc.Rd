@@ -6,6 +6,11 @@
 \alias{get_formatted_cells,ElementaryTable-method}
 \alias{get_formatted_cells,TableRow-method}
 \alias{get_formatted_cells,LabelRow-method}
+\alias{get_cell_aligns}
+\alias{get_cell_aligns,TableTree-method}
+\alias{get_cell_aligns,ElementaryTable-method}
+\alias{get_cell_aligns,TableRow-method}
+\alias{get_cell_aligns,LabelRow-method}
 \title{get formatted cells}
 \usage{
 get_formatted_cells(obj)
@@ -17,6 +22,16 @@ get_formatted_cells(obj)
 \S4method{get_formatted_cells}{TableRow}(obj)
 
 \S4method{get_formatted_cells}{LabelRow}(obj)
+
+get_cell_aligns(obj)
+
+\S4method{get_cell_aligns}{TableTree}(obj)
+
+\S4method{get_cell_aligns}{ElementaryTable}(obj)
+
+\S4method{get_cell_aligns}{TableRow}(obj)
+
+\S4method{get_cell_aligns}{LabelRow}(obj)
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}

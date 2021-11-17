@@ -50,3 +50,11 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
+#' Currently supported cell value alignments
+#' @export
+#' @return a vector of alignments currently supported.
+rtables_aligns <- function() {
+    c("left", "right", "center")
+}
+
+
