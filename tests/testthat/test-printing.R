@@ -180,3 +180,35 @@ test_that("newline in column names and possibly cell values work", {
 
 
 })
+
+
+test_that("alignment works", {
+
+    lyt <- basic_table() %>%
+        analyze("AGE", function(x) {
+            in_rows(left = rcell("l", align = "left"),
+                    right = rcell("r", align = "right"),
+                    center = rcell("c", align = "center"))
+        })
+
+    aligntab <- build_table(lyt, DM)
+
+    matform <- matrix_form(aligntab)
+    expect_identical(matform$aligns,
+                     cbind("left", c("center", "left", "right", "center")))
+
+    str <- toString(aligntab)
+    expect_identical(str,
+                     "         all obs\n----------------\nleft     l      \nright          r\ncenter      c   \n")
+
+    lyt2 <-  basic_table() %>%
+        analyze("AGE", function(x) {
+            in_rows(.list = list(left = "l", right = "r", center = "c"),
+                    .aligns = c(left = "left", right = "right", center = "center"))
+        })
+
+    aligntab2 <- build_table(lyt, DM)
+    expect_identical(aligntab, aligntab2)
+
+
+})

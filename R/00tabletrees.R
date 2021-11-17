@@ -1623,7 +1623,8 @@ RefFootnote = function(note, index = NA_integer_) {
 ## colspan: column span info for cell
 ## label: row label to be used for parent row
 ## indent_mod: indent modifier to be used for parent row
-CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL)  {
+CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL,
+                      align = NULL)  {
 
     if (is.null(colspan))
         colspan <- 1L
@@ -1639,7 +1640,9 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod
     if(!is.list(footnotes))
         footnotes <- lapply(footnotes, RefFootnote)
     ret <- structure(list(val), format = format, colspan = colspan, label = label,
-              indent_mod = indent_mod, footnotes = footnotes, class = "CellValue")
+                     indent_mod = indent_mod, footnotes = footnotes,
+                     align = align,
+                     class = "CellValue")
 }
 
 

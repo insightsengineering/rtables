@@ -272,13 +272,21 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
     matrix(1, nrow = 0, ncol = ncol(tt) + 1)
   }
 
+    body_aligns <- if(NROW(sr) == 0) {
+                              character()
+                          } else {
+                              cbind("left", get_cell_aligns(tt))
+                          }
+
   body <- rbind(header_content$body, body_content_strings)
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
 
   space <- matrix(rep(0, length(body)), nrow = nrow(body))
-  aligns <- matrix(rep("center", length(body)), nrow = nrow(body))
-  aligns[, 1] <- "left" # row names
+    aligns <- rbind(matrix(rep("center", length(header_content$body)), nrow = nrow(header_content$body)),
+                    body_aligns)
+
+  aligns[, 1] <- "left" # row names and topleft (still needed for topleft)
 
   ## if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
   ##   stop("no \\n allowed at the moment")
@@ -297,22 +305,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
             if (!all(print_cells)) {
                 ## need to calculate which cell need to be printed
                 myrle <- rle(row)
-                print_cells <- spans_to_viscell(row) ## unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
-                                      ##                             times = ln/vl),
-                                      ##        SIMPLIFY = FALSE,
-                                      ##        vl = myrle$values,
-                                      ##        ln = myrle$lengths),
-                                      ## recursive = FALSE)
-
-                ## tmp <- 0
-                ## for (i in seq_along(print_cells)) {
-                ##   if (!print_cells[i] && tmp <= 0) {
-                ##     print_cells[i] <- TRUE
-                ##     tmp <- row[i] - 1
-                ##   } else {
-                ##     tmp <- tmp - 1
-                ##   }
-                ## }
+                print_cells <- spans_to_viscell(row)
             }
             print_cells
         })
@@ -754,6 +747,56 @@ setMethod("get_formatted_cells", "LabelRow",
               matrix(character(0), ncol = nc)
     }
 })
+
+
+#' @rdname gfc
+setGeneric("get_cell_aligns", function(obj) standardGeneric("get_cell_aligns"))
+#' @rdname gfc
+setMethod("get_cell_aligns", "TableTree",
+          function(obj) {
+
+    lr <- get_cell_aligns(tt_labelrow(obj))
+
+    ct <- get_cell_aligns(content_table(obj))
+
+    els <- lapply(tree_children(obj), get_cell_aligns)
+
+    ## TODO fix ncol problem for rrow()
+    if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
+        ct <- lr[NULL, ]
+    }
+
+    do.call(rbind, c(list(lr), list(ct),  els))
+})
+
+#' @rdname gfc
+setMethod("get_cell_aligns", "ElementaryTable",
+          function(obj) {
+    lr <- get_cell_aligns(tt_labelrow(obj))
+    els <- lapply(tree_children(obj), get_cell_aligns)
+    do.call(rbind, c(list(lr), els))
+})
+
+#' @rdname gfc
+setMethod("get_cell_aligns", "TableRow",
+          function(obj) {
+    als <- vapply(row_cells(obj), cell_align, "")
+    matrix(als, ncol = ncol(obj))
+})
+
+#' @rdname gfc
+setMethod("get_cell_aligns", "LabelRow",
+          function(obj) {
+    nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
+    if (labelrow_visible(obj)) {
+        matrix(rep("center", nc), ncol = nc)
+    } else {
+              matrix(character(0), ncol = nc)
+    }
+})
+
+
+
 
 
 #' Propose Column Widths of an `rtable` object
