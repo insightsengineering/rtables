@@ -771,49 +771,49 @@ setClassUnion("VarOrFactory", c("function", "character"))
 ## of the data to be accessible  from all of the children
 ## so that they can perform the comparison
 
-setClass("MultiSubsetCompSplit", contains = "VCompSplit",
-         representation(subset1_gen = "VarOrFactory",
-                        subset2_gen = "VarOrFactory"))
+## setClass("MultiSubsetCompSplit", contains = "VCompSplit",
+##          representation(subset1_gen = "VarOrFactory",
+##                         subset2_gen = "VarOrFactory"))
 
-MultiSubsetCompSplit <- function(factory1, factory2, label_fstr = "%s - %s",
-                           split_label = "",
-                           comparison = `-`,
-                           ## not needed i think...
-                           cfun = NULL, cformat = NULL, split_format = NULL) {
-    new("MultiSubsetCompSplit",
-        subset1_gen = factory1,
-        subset2_gen = factory2,
-        label_format = label_fstr,
-        split_label = split_label,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        comparison_func = comparison)
-}
+## MultiSubsetCompSplit <- function(factory1, factory2, label_fstr = "%s - %s",
+##                            split_label = "",
+##                            comparison = `-`,
+##                            ## not needed i think...
+##                            cfun = NULL, cformat = NULL, split_format = NULL) {
+##     new("MultiSubsetCompSplit",
+##         subset1_gen = factory1,
+##         subset2_gen = factory2,
+##         label_format = label_fstr,
+##         split_label = split_label,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         comparison_func = comparison)
+## }
 
-setClass("SubsetSplit", contains = "Split",
-         representation(subset_gen = "VarOrFactory",
-                        vs_all = "logical",
-                        vs_non = "logical",
-                        child_order = "character"),
-         validity = function(object) object@vs_all || object@vs_non,
-         prototype = prototype(vs_all = TRUE,
-                               vs_non = FALSE))
+## setClass("SubsetSplit", contains = "Split",
+##          representation(subset_gen = "VarOrFactory",
+##                         vs_all = "logical",
+##                         vs_non = "logical",
+##                         child_order = "character"),
+##          validity = function(object) object@vs_all || object@vs_non,
+##          prototype = prototype(vs_all = TRUE,
+##                                vs_non = FALSE))
 
-SubsetSplit <- function(subset, vall = TRUE, vnon = FALSE,
-                       order = c("subset", if (vnon) "non", if (vall) "all"),
-                       split_label,
-                       cfun = NULL, cformat = NULL, split_format = NULL) {
-    new("SubsetSplit",
-        split_label = split_label,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        subset_gen = subset,
-        vs_all = vall,
-        vs_non = vnon,
-        child_order = order)
-}
+## SubsetSplit <- function(subset, vall = TRUE, vnon = FALSE,
+##                        order = c("subset", if (vnon) "non", if (vall) "all"),
+##                        split_label,
+##                        cfun = NULL, cformat = NULL, split_format = NULL) {
+##     new("SubsetSplit",
+##         split_label = split_label,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         subset_gen = subset,
+##         vs_all = vall,
+##         vs_non = vnon,
+##         child_order = order)
+## }
 
 ### This is HARD. do we want this to inherit from VCompSplit
 ### or VarLevelSplit????

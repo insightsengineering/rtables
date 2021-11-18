@@ -36,6 +36,8 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
     !is.null(formals(f)) && names(formals(f))[1] == "df"
 }
 
+#' @return a RowsVerticalSection object representing the k x 1 section of the table
+#' being generated, with k the number of rows the analysis function generates
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                      takesdf = .takes_df(func),
                      baselinedf,
@@ -108,6 +110,8 @@ strip_multivar_suffix <- function(x) {
 
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
+#' @return A list of m RowsVerticalSection objects, one for each
+#' (leaf) column in the table.
 gen_rowvalues = function(dfpart,
                          datcol,
                          cinfo,
@@ -277,25 +281,16 @@ gen_rowvalues = function(dfpart,
 
     ## look if we got labels, if not apply the
     ## default row labels
+    ## this is guaranteed to be a RowsVerticalSection object.
     rv1col = rawvals[[maxind]]
-    if(is(rv1col, "RowsVerticalSection")) {
-        labels <- value_labels(rv1col)
-    } else if(is(rv1col, "CellValue"))
-        labels = obj_label(rv1col)
-    else if(are(rv1col, "CellValue"))
-        labels = unlist(value_labels(rv1col))
-    else if (!is.null(names(rv1col)))
-        labels = names(rv1col)
-    else
-        labels = NULL
-
-
+    if(!is(rv1col, "RowsVerticalSection"))
+        stop("gen_rowvalues appears to have generated something that was not a RowsVerticalSection object. Please contact the maintainer.")
+    labels <- value_labels(rv1col)
 
     ncrows = max(unqlens)
     if(ncrows == 0)
         return(list())
     stopifnot(ncrows > 0)
-
 
     if(is.null(labels)) {
         if(length(rawvals[[maxind]]) == length(defrowlabs))
@@ -305,17 +300,8 @@ gen_rowvalues = function(dfpart,
     }
 
     rfootnotes <- rep(list(list(), length(rv1col)))
-    if(is(rv1col, "RowsVerticalSection")) {
-        nms <- value_names(rv1col)
-        rfootnotes <- row_footnotes(rv1col)
-    } else if(!is.null(names(rv1col))) {
-        nms = names(rv1col)
-    } else if(length(labels) > 0 && all(nzchar(labels))) {
-        nms = labels
-    } else {
-        nms = paste0("row", seq_len(ncrows))
-    }
-
+    nms <- value_names(rv1col)
+    rfootnotes <- row_footnotes(rv1col)
 
     imods <- indent_mod(rv1col) ##rv1col@indent_mods
     unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
@@ -1193,16 +1179,16 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
 ## because they're for indexing. this is NOT for that, here
 ## we give a named character vector where the names are the spl names
 ## and the values are the spl values
-pos_to_prevsplvals <- function(pos) {
-    if(is.null(pos) || identical(pos, TreePos()))
-        return(context_df_row())
+## pos_to_prevsplvals <- function(pos) {
+##     if(is.null(pos) || identical(pos, TreePos()))
+##         return(context_df_row())
 
-    vals <- unlist(value_names(pos_splvals(pos)),
-                   recursive = FALSE)
+##     vals <- unlist(value_names(pos_splvals(pos)),
+##                    recursive = FALSE)
 
-    nms <- vapply(pos_splits(pos), obj_name, "")
-    context_df_row(split = nms, value = vals)
-}
+##     nms <- vapply(pos_splits(pos), obj_name, "")
+##     context_df_row(split = nms, value = vals)
+## }
 
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
@@ -1224,7 +1210,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
         spl = splvec[[lvl]]
         nm = if(is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos), 1))
         rawpart = do_split(spl,df, trim =FALSE ,
-                           spl_context = spl_context) ##rbind(prev_splval, context_df_row(split = nm,  pos_to_prevsplvals(pos))
+                           spl_context = spl_context)
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         labs = rawpart[["labels"]]
