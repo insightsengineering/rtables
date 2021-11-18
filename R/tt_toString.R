@@ -98,7 +98,7 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 
   gap_str <- strrep(" ", col_gap)
 
-  div <- strrep("-", sum(widths) + (length(widths) - 1) * col_gap)
+  div <- strrep("—", sum(widths) + (length(widths) - 1) * col_gap)
 
   txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
@@ -980,6 +980,6 @@ mat_as_string <- function(mat, nheader = 1, colsep = "    ") {
   })
 
   header_rows <- seq_len(nheader)
-  paste(c(rows_formatted[header_rows], strrep("-", nchar(rows_formatted[1])), rows_formatted[-header_rows]), collapse = "\n")
+  paste(c(rows_formatted[header_rows], strrep("—", nchar(rows_formatted[1])), rows_formatted[-header_rows]), collapse = "\n")
 }
 
