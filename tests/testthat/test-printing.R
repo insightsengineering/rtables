@@ -212,3 +212,22 @@ test_that("alignment works", {
 
 
 })
+
+
+test_that("Various Printing things work", {
+
+    lyt <- make_big_lyt()
+
+    ## ensure print method works for predata layout
+    print(lyt)
+    tab <- build_table(lyt, rawdat)
+
+    treestruct(tab)
+
+    pos <- TreePos()
+    print(pos)
+    print(col_info(tab))
+    show(col_info(tab))
+    print(collect_leaves(tab)[[2]])
+    expect_true(TRUE) ## so the whole chunk isn't skipped
+})
