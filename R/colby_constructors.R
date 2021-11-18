@@ -1651,7 +1651,7 @@ list_wrap_df = function(f) {
 #' 
 #' 
 #' lyt <- basic_table(title = "Title of table", subtitles = c("a number", "of subtitles"),
-#'                    main_footer = "test footer", prov_footer = paste("test.R file created at", Sys.time())) %>%
+#'                    main_footer = "test footer", prov_footer = paste("test.R program, executed at", Sys.time())) %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", mean)
 #'   
