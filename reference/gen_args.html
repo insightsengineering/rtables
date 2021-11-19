@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -138,7 +138,7 @@
   <span class='va'>object</span>,
   <span class='va'>path</span>,
   <span class='va'>label</span>,
-  <span class='va'>visible_label</span>,
+  <span class='va'>label_pos</span>,
   <span class='va'>cvar</span>,
   <span class='va'>topleft</span>,
   <span class='va'>...</span>
@@ -205,8 +205,9 @@ when calculating column counts.</p></td>
       <td><p>character(1). A label (not to be confused with the name) for the object/structure.</p></td>
     </tr>
     <tr>
-      <th>visible_label</th>
-      <td><p>logical(1). Should the <em>split</em> label be visible in the resulting table.</p></td>
+      <th>label_pos</th>
+      <td><p>character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, <code>default</code> indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.</p></td>
     </tr>
     <tr>
       <th>cvar</th>

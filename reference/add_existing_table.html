@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -150,34 +150,38 @@
     <p>Gabriel Becker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tbl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='va'>mean</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span>
-
-<span class='va'>tbl1</span>
-</div><div class='output co'>#&gt;        A: Drug X   B: Placebo   C: Combination
-#&gt; ----------------------------------------------
-#&gt; mean     34.91       33.02          34.57     </div><div class='input'>
-<span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='va'>sd</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'>add_existing_table</span><span class='op'>(</span><span class='va'>tbl1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span>
-
-<span class='va'>tbl2</span>
-</div><div class='output co'>#&gt;        A: Drug X   B: Placebo   C: Combination
-#&gt; ----------------------------------------------
-#&gt; sd       7.79         6.34           6.5      
-#&gt; mean     34.91       33.02          34.57     </div><div class='input'>
-<span class='fu'><a href='table_structure.html'>table_structure</a></span><span class='op'>(</span><span class='va'>tbl2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [TableTree] root
-#&gt;  [ElementaryTable] AGE (1 x 3)
-#&gt;  [ElementaryTable] AGE (1 x 3)</div><div class='input'>
-<span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; rowname    node_class    path           
-#&gt; ----------------------------------------
-#&gt; sd         DataRow       root, AGE, sd  
-#&gt; mean       DataRow       root, AGE, mean</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>tbl1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='va'>mean</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mean     34.91       33.02          34.57     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='va'>sd</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'>add_existing_table</span><span class='op'>(</span><span class='va'>tbl1</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sd       7.79         6.34           6.5      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mean     34.91       33.02          34.57     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='table_structure.html'>table_structure</a></span><span class='op'>(</span><span class='va'>tbl2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [TableTree] root</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [ElementaryTable] AGE (1 x 3)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [ElementaryTable] AGE (1 x 3)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowname    node_class    path           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sd         DataRow       root, AGE, sd  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mean       DataRow       root, AGE, mean</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

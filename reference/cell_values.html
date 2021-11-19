@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -128,9 +128,21 @@
 <span class='co'># S4 method for VTableTree</span>
 <span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span>, omit_labrows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
+<span class='co'># S4 method for TableRow</span>
+<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span>, omit_labrows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># S4 method for LabelRow</span>
+<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span>, omit_labrows <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
 <span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S4 method for VTableTree</span>
+<span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
+<span class='co'># S4 method for TableRow</span>
+<span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
+<span class='co'># S4 method for LabelRow</span>
 <span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tt</span>, rowpath <span class='op'>=</span> <span class='cn'>NULL</span>, colpath <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -169,141 +181,150 @@ This occurs after subsetting to <code>colpath</code> has occured.</p>
 to recieve the "bare" cell value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"RACE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"STRATA1"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span> <span class='co'>## for mutate</span>
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>SEX</span><span class='op'>)</span>, RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>RACE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; rowname                      node_class    path                                                                
-#&gt; ---------------------------------------------------------------------------------------------------------------
-#&gt; ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        
-#&gt;   A                          LabelRow      RACE, ASIAN, STRATA1, A                                             
-#&gt;     Mean                     DataRow       RACE, ASIAN, STRATA1, A, AGE, Mean                                  
-#&gt;   B                          LabelRow      RACE, ASIAN, STRATA1, B                                             
-#&gt;     Mean                     DataRow       RACE, ASIAN, STRATA1, B, AGE, Mean                                  
-#&gt;   C                          LabelRow      RACE, ASIAN, STRATA1, C                                             
-#&gt;     Mean                     DataRow       RACE, ASIAN, STRATA1, C, AGE, Mean                                  
-#&gt; BLACK OR AFRICAN AMERICAN    ContentRow    RACE, BLACK OR AFRICAN AMERICAN, @content, BLACK OR AFRICAN AMERICAN
-#&gt;   A                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, A                         
-#&gt;     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, A, AGE, Mean              
-#&gt;   B                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B                         
-#&gt;     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B, AGE, Mean              
-#&gt;   C                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C                         
-#&gt;     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C, AGE, Mean              
-#&gt; WHITE                        ContentRow    RACE, WHITE, @content, WHITE                                        
-#&gt;   A                          LabelRow      RACE, WHITE, STRATA1, A                                             
-#&gt;     Mean                     DataRow       RACE, WHITE, STRATA1, A, AGE, Mean                                  
-#&gt;   B                          LabelRow      RACE, WHITE, STRATA1, B                                             
-#&gt;     Mean                     DataRow       RACE, WHITE, STRATA1, B, AGE, Mean                                  
-#&gt;   C                          LabelRow      RACE, WHITE, STRATA1, C                                             
-#&gt;     Mean                     DataRow       RACE, WHITE, STRATA1, C, AGE, Mean                                  </div><div class='input'><span class='fu'><a href='row_paths_summary.html'>col_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; label             path                       
-#&gt; ---------------------------------------------
-#&gt; A: Drug X         ARM, A: Drug X             
-#&gt;   F               ARM, A: Drug X, SEX, F     
-#&gt;   M               ARM, A: Drug X, SEX, M     
-#&gt; B: Placebo        ARM, B: Placebo            
-#&gt;   F               ARM, B: Placebo, SEX, F    
-#&gt;   M               ARM, B: Placebo, SEX, M    
-#&gt; C: Combination    ARM, C: Combination        
-#&gt;   F               ARM, C: Combination, SEX, F
-#&gt;   M               ARM, C: Combination, SEX, M</div><div class='input'>
-<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`A: Drug X.F`
-#&gt; [1] 33.75
-#&gt; </div><div class='input'>
-<span class='co'># it's also possible to access multiple values by being less specific</span>
-<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $A.AGE.Mean
-#&gt; $A.AGE.Mean$`A: Drug X.F`
-#&gt; [1] 30.4
-#&gt; 
-#&gt; 
-#&gt; $B.AGE.Mean
-#&gt; $B.AGE.Mean$`A: Drug X.F`
-#&gt; [1] 33.75
-#&gt; 
-#&gt; 
-#&gt; $C.AGE.Mean
-#&gt; $C.AGE.Mean$`A: Drug X.F`
-#&gt; [1] 36.92308
-#&gt; 
-#&gt; </div><div class='input'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ASIAN
-#&gt; $ASIAN$`A: Drug X.M`
-#&gt; [1] 35.0000000  0.6862745
-#&gt; 
-#&gt; 
-#&gt; $STRATA1.A.AGE.Mean
-#&gt; $STRATA1.A.AGE.Mean$`A: Drug X.M`
-#&gt; [1] 34.41667
-#&gt; 
-#&gt; 
-#&gt; $STRATA1.B.AGE.Mean
-#&gt; $STRATA1.B.AGE.Mean$`A: Drug X.M`
-#&gt; [1] 34.875
-#&gt; 
-#&gt; 
-#&gt; $STRATA1.C.AGE.Mean
-#&gt; $STRATA1.C.AGE.Mean$`A: Drug X.M`
-#&gt; [1] 35.6
-#&gt; 
-#&gt; </div><div class='input'>
-
-<span class='co'>## any arm, male columns from the ASIAN content (ie summary) row</span>
-<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"@content"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`B: Placebo.M`
-#&gt; [1] 31.00  0.62
-#&gt; </div><div class='input'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"@content"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"*"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`A: Drug X.M`
-#&gt; [1] 35.0000000  0.6862745
-#&gt; 
-#&gt; $`B: Placebo.M`
-#&gt; [1] 31.00  0.62
-#&gt; 
-#&gt; $`C: Combination.M`
-#&gt; [1] 44.0000000  0.6470588
-#&gt; </div><div class='input'>
-<span class='co'>## all columns</span>
-<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`A: Drug X.F`
-#&gt; [1] 33.75
-#&gt; 
-#&gt; $`A: Drug X.M`
-#&gt; [1] 34.875
-#&gt; 
-#&gt; $`B: Placebo.F`
-#&gt; [1] 32.46154
-#&gt; 
-#&gt; $`B: Placebo.M`
-#&gt; [1] 30.9375
-#&gt; 
-#&gt; $`C: Combination.F`
-#&gt; [1] 33.3
-#&gt; 
-#&gt; $`C: Combination.M`
-#&gt; [1] 35.91667
-#&gt; </div><div class='input'>
-<span class='co'>## all columns for the Combination arm</span>
-<span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"C: Combination"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`C: Combination.F`
-#&gt; [1] 33.3
-#&gt; 
-#&gt; $`C: Combination.M`
-#&gt; [1] 35.91667
-#&gt; </div><div class='input'>
-<span class='va'>cvlist</span> <span class='op'>&lt;-</span> <span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span>, <span class='st'>"AGE"</span>, <span class='st'>"Mean"</span><span class='op'>)</span>,
-                      <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>cvnolist</span> <span class='op'>&lt;-</span> <span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span>, <span class='st'>"AGE"</span>, <span class='st'>"Mean"</span><span class='op'>)</span>,
-                     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>cvlist</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>cvnolist</span><span class='op'>)</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'> <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"RACE"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"STRATA1"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span> <span class='co'>## for mutate</span></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/mutate.html'>mutate</a></span><span class='op'>(</span>SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>SEX</span><span class='op'>)</span>, RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>RACE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowname                      node_class    path                                                                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A                          LabelRow      RACE, ASIAN, STRATA1, A                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, ASIAN, STRATA1, A, AGE, Mean                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   B                          LabelRow      RACE, ASIAN, STRATA1, B                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, ASIAN, STRATA1, B, AGE, Mean                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   C                          LabelRow      RACE, ASIAN, STRATA1, C                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, ASIAN, STRATA1, C, AGE, Mean                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BLACK OR AFRICAN AMERICAN    ContentRow    RACE, BLACK OR AFRICAN AMERICAN, @content, BLACK OR AFRICAN AMERICAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, A                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, A, AGE, Mean              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   B                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B, AGE, Mean              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   C                          LabelRow      RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C, AGE, Mean              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHITE                        ContentRow    RACE, WHITE, @content, WHITE                                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A                          LabelRow      RACE, WHITE, STRATA1, A                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, WHITE, STRATA1, A, AGE, Mean                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   B                          LabelRow      RACE, WHITE, STRATA1, B                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, WHITE, STRATA1, B, AGE, Mean                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   C                          LabelRow      RACE, WHITE, STRATA1, C                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Mean                     DataRow       RACE, WHITE, STRATA1, C, AGE, Mean                                  </span>
+<span class='r-in'><span class='fu'><a href='row_paths_summary.html'>col_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> label             path                       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A: Drug X         ARM, A: Drug X             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, A: Drug X, SEX, F     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, A: Drug X, SEX, M     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B: Placebo        ARM, B: Placebo            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, B: Placebo, SEX, F    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, B: Placebo, SEX, M    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C: Combination    ARM, C: Combination        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, C: Combination, SEX, F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, C: Combination, SEX, M</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`A: Drug X.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33.75</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># it's also possible to access multiple values by being less specific</span></span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $A.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $A.AGE.Mean$`A: Drug X.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 30.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $B.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $B.AGE.Mean$`A: Drug X.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33.75</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $C.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $C.AGE.Mean$`A: Drug X.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 36.92308</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"A: Drug X"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ASIAN$`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 35.0000000  0.6862745</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.A.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.A.AGE.Mean$`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 34.41667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.B.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.B.AGE.Mean$`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 34.875</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.C.AGE.Mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $STRATA1.C.AGE.Mean$`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 35.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## any arm, male columns from the ASIAN content (ie summary) row</span></span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"@content"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`B: Placebo.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 31.00  0.62</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"@content"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"*"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 35.0000000  0.6862745</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`B: Placebo.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 31.00  0.62</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`C: Combination.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 44.0000000  0.6470588</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## all columns</span></span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`A: Drug X.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33.75</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`A: Drug X.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 34.875</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`B: Placebo.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32.46154</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`B: Placebo.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 30.9375</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`C: Combination.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`C: Combination.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 35.91667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## all columns for the Combination arm</span></span>
+<span class='r-in'><span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"C: Combination"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`C: Combination.F`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`C: Combination.M`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 35.91667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>cvlist</span> <span class='op'>&lt;-</span> <span class='fu'>cell_values</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span>, <span class='st'>"AGE"</span>, <span class='st'>"Mean"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                      <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cvnolist</span> <span class='op'>&lt;-</span> <span class='fu'>value_at</span><span class='op'>(</span><span class='va'>tbl</span>,  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, <span class='st'>"ASIAN"</span>, <span class='st'>"STRATA1"</span>, <span class='st'>"B"</span>, <span class='st'>"AGE"</span>, <span class='st'>"Mean"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, <span class='st'>"B: Placebo"</span>, <span class='st'>"SEX"</span>, <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>cvlist</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>cvnolist</span><span class='op'>)</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

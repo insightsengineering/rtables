@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,15 +70,15 @@
 
       
 
-      </header><script src="introduction_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="introduction_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to rtables</h1>
                         <h4 class="author">Gabriel Becker and Adrian Waddell</h4>
             
-            <h4 class="date">2021-02-24</h4>
+            <h4 class="date">2021-11-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/../rtables_ghpages/vignettes/introduction.Rmd"><code>../rtables_ghpages/vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
 
     </div>
@@ -107,31 +107,31 @@
 </ul>
 <p>In the remainder of this vignette, we give a short introduction into <code>rtables</code> and tabulating a table. The content is based on the <a href="https://www.youtube.com/watch?v=CBQzZ8ZhXLA">useR 2020 presentation from Gabriel Becker</a>.</p>
 <p>The packages used for this vignette are <code>rtables</code> and <code>dplyr</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h2>
 <p>The data used in this vignette is a made up using random number generators. The data content is relatively simple: one row per imaginary person and one column per measurement: study arm, the country of origin, gender, handedness, age, and weight.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">400</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">400</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html">tibble</a></span><span class="op">(</span>
   arm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Arm A"</span>, <span class="st">"Arm B"</span><span class="op">)</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Arm A"</span>, <span class="st">"Arm B"</span><span class="op">)</span><span class="op">)</span>,
   country <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CAN"</span>, <span class="st">"USA"</span><span class="op">)</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.55</span>, <span class="fl">.45</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CAN"</span>, <span class="st">"USA"</span><span class="op">)</span><span class="op">)</span>,
   gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span><span class="op">)</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span><span class="op">)</span><span class="op">)</span>,
   handed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Right"</span><span class="op">)</span>, <span class="va">n</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.6</span>, <span class="fl">.4</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Right"</span><span class="op">)</span><span class="op">)</span>,
   age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">30</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span>
-<span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+<span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>
   weight <span class="op">=</span> <span class="fl">35</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, sd <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span>, <span class="fl">140</span>, <span class="fl">180</span><span class="op">)</span>
 <span class="op">)</span> 
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></pre></div>
-<pre><code># A tibble: 6 x 6
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></code></pre></div>
+<pre><code># A tibble: 6 × 6
   arm   country gender handed   age weight
   &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 1 Arm A USA     Female Left    31.3   139.
@@ -165,11 +165,11 @@ USA        51 (53.1%)    41 (39%)     46 (50%)    45 (42.1%)
 <h2 class="hasAnchor">
 <a href="#starting-simple" class="anchor"></a>Starting Simple</h2>
 <p>In <code>rtables</code> a basic table is defined to have 0 rows and one column representing all data. Analyzing a variable is one way of adding a row:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>       all obs
 --------------
 mean    39.4  </code></pre>
@@ -178,8 +178,8 @@ mean    39.4  </code></pre>
 <a href="#layout-instructions" class="anchor"></a>Layout Instructions</h3>
 <p>In the code above we first described the table and assigned that description to a variable <code>l</code>. We then built the table using the actual data with <code>build_table</code>. The description of a table is called a table layout. <code>basic_table</code> is the start of every table layout and contains the information that we have one column representing all data. The <code>analyze</code> instruction adds to the layout that the <code>age</code> variable should be analyzed with the <code>mean</code> analysis function and the result should be rounded to <code>1</code> decimal place.</p>
 <p>Hence, a layout is “pre-data”, that is, it’s a description of how to build a table once we get data. We can look at the layout isolated:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">l</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span></code></pre></div>
 <pre><code>A Pre-data Table Layout
 
 Column-Split Structure:
@@ -210,24 +210,24 @@ age (** analysis **) </code></pre>
 <h3 class="hasAnchor">
 <a href="#adding-column-structure" class="anchor"></a>Adding Column Structure</h3>
 <p>We will now add more structure to the columns by adding a column split based on the factor variable <code>arm</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>       Arm A   Arm B
 --------------------
 mean   39.5    39.4 </code></pre>
 <p>The resulting table has one column per factor level of <code>arm</code>. So the data represented by the first column is <code>df[df$arm == "ARM A", ]</code>. Hence, the <code>split_cols_by</code> partitions the data among the columns by default.</p>
 <p>Column splitting can be done in a recursive/nested manner by adding sequential <code>split_cols_by</code> layout instruction. It’s also possible to add a non-nested split. Here we splitting each arm further by the gender:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>           Arm A           Arm B    
        Female   Male   Female   Male
 ------------------------------------
@@ -238,14 +238,14 @@ mean    38.8    40.1    39.6    39.2</code></pre>
 <h3 class="hasAnchor">
 <a href="#adding-row-structure" class="anchor"></a>Adding Row Structure</h3>
 <p>So far, we have created layouts with analysis and column splitting instructions, i.e. <code>analyze</code> and <code>split_cols_by</code>, respectively. This resulted with a table with multiple columns and one data row. We will add more row structure by stratifying the mean analysis by country (i.e. adding a split in the row space):</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>             Arm A           Arm B    
          Female   Male   Female   Male
 --------------------------------------
@@ -254,23 +254,23 @@ CAN
 USA                                   
   mean    39.2    39.7    38.9    39.6</code></pre>
 <p>In this table the data used to derive the first data cell (average of age of female canadians in Arm A) is where <code>df$country == "CAN" &amp; df$arm == "Arm A" &amp; df$gender == "Female"</code>. This cell value can also be calculated manually:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">]</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>[1] 38.22447</code></pre>
 </div>
 <div id="adding-group-information" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adding-group-information" class="anchor"></a>Adding Group Information</h3>
 <p>When adding row splits we get by default label rows for each split level, for example <code>CAN</code> and <code>USA</code> in the table above. Besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful when defining a row splitting to display information about each row group. In <code>rtables</code> this is referred to as content information, i.e. <code>mean</code> on row 2 is a descendant of <code>CAN</code> (visible via the indenting, though the table has an underlying tree structure that is not of importance for this vignette). In order to add content information and turn the <code>CAN</code> label row into a content row the <code>summarize_row_groups</code> function is required. By default, the count (<code>nrows</code>) and percentage of data relative to the column associated data is calculated:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>                 Arm A                   Arm B        
            Female       Male      Female       Male   
 ------------------------------------------------------
@@ -279,25 +279,25 @@ CAN      45 (46.9%)   64 (61%)   46 (50%)   62 (57.9%)
 USA      51 (53.1%)   41 (39%)   46 (50%)   45 (42.1%)
   mean      39.2        39.7       38.9        39.6   </code></pre>
 <p>The relative percentage for average age of female Canadians is calculated as follows:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="va">df_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span>
 <span class="va">df_col_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_cell</span><span class="op">)</span>, percentage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_cell</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_col_1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_cell</span><span class="op">)</span>, percentage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_cell</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_col_1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>     count percentage 
   45.00000    0.46875 </code></pre>
 <p>so the group percentages per row split sum up to 1 for each column.</p>
 <p>We can further split the row space by dividing each country by handedness:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>                   Arm A                   Arm B        
              Female       Male      Female       Male   
 --------------------------------------------------------
@@ -312,17 +312,17 @@ USA        51 (53.1%)   41 (39%)   46 (50%)   45 (42.1%)
   Right                                                 
     mean      36.9        39.8       38.5         39    </code></pre>
 <p>Next, we further add a count and percentage summary for handedness within each country:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <pre><code>                    Arm A                     Arm B         
              Female        Male        Female        Male   
 ------------------------------------------------------------

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,9 @@
   .names <span class='op'>=</span> <span class='cn'>NULL</span>,
   .labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   .formats <span class='op'>=</span> <span class='cn'>NULL</span>,
-  .indent_mods <span class='op'>=</span> <span class='cn'>NULL</span>
+  .indent_mods <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .cell_footnotes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span><span class='op'>)</span>,
+  .row_footnotes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,6 +161,14 @@
       <th>.indent_mods</th>
       <td><p>integer or NULL. Indent modificatons for the defined rows.</p></td>
     </tr>
+    <tr>
+      <th>.cell_footnotes</th>
+      <td><p>list. Referential footnote messages to be associated by name with <em>cells</em></p></td>
+    </tr>
+    <tr>
+      <th>.row_footnotes</th>
+      <td><p>list. Referential footnotes messages to be associated by name with <em>rows</em></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -172,52 +182,58 @@
     <div class='dont-index'><p><code>analyze</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1        a              1          0         a
-#&gt; 2        b              2          0         b
-#&gt; 3        c              3          0         c</div><div class='input'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1        a              1          0         a
-#&gt; 2        b              2          0         b
-#&gt; 3        c              3          0         c</div><div class='input'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span>, .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AAA"</span>, <span class='st'>"BBB"</span>, <span class='st'>"CCC"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1        a              1          0       AAA
-#&gt; 2        b              2          0       BBB
-#&gt; 3        c              3          0       CCC</div><div class='input'>
-<span class='fu'>in_rows</span><span class='op'>(</span>.list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1        a              1          0         a
-#&gt; 2        b              2          0         b
-#&gt; 3        c              3          0         c</div><div class='input'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, .list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1        a              1          0         a
-#&gt; 2        b              2          0         b
-#&gt; 3        c              3          0         c</div><div class='input'>
-<span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>in_rows</span><span class='op'>(</span>
-       <span class='st'>"Mean (sd)"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx (xx.xx)"</span><span class='op'>)</span>,
-       <span class='st'>"Range"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx - xx.xx"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>ex_adsl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              A: Drug X     B: Placebo    C: Combination
-#&gt; -------------------------------------------------------
-#&gt; Mean (sd)   33.77 (6.55)   35.43 (7.9)    35.43 (7.72) 
-#&gt; Range         21 - 50        21 - 62        20 - 69    </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        a              1          0         a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        b              2          0         b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        c              3          0         c</span>
+<span class='r-in'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        a              1          0         a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        b              2          0         b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        c              3          0         c</span>
+<span class='r-in'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span>, .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AAA"</span>, <span class='st'>"BBB"</span>, <span class='st'>"CCC"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        a              1          0       AAA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        b              2          0       BBB</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        c              3          0       CCC</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>in_rows</span><span class='op'>(</span>.list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        a              1          0         a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        b              2          0         b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        c              3          0         c</span>
+<span class='r-in'><span class='fu'>in_rows</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, .list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>, .names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        a              1          0         a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        b              2          0         b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        c              3          0         c</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>in_rows</span><span class='op'>(</span></span>
+<span class='r-in'>       <span class='st'>"Mean (sd)"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx (xx.xx)"</span><span class='op'>)</span>,</span>
+<span class='r-in'>       <span class='st'>"Range"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx - xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>ex_adsl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              A: Drug X     B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mean (sd)   33.77 (6.55)   35.43 (7.9)    35.43 (7.72) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Range         21 - 50        21 - 62        20 - 69    </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

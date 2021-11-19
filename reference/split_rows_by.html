@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   nested <span class='op'>=</span> <span class='cn'>TRUE</span>,
   child_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"default"</span>, <span class='st'>"visible"</span>, <span class='st'>"hidden"</span><span class='op'>)</span>,
-  visible_label <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  label_pos <span class='op'>=</span> <span class='st'>"hidden"</span>,
   indent_mod <span class='op'>=</span> <span class='fl'>0L</span>
 <span class='op'>)</span></pre>
 
@@ -157,7 +157,7 @@
     </tr>
     <tr>
       <th>split_fun</th>
-      <td><p>function/NULL. custom splitting function</p></td>
+      <td><p>function/NULL. custom splitting function See <code><a href='custom_split_funs.html'>custom_split_funs</a></code></p></td>
     </tr>
     <tr>
       <th>format</th>
@@ -172,8 +172,9 @@
       <td><p>string. One of <code>"default"</code>, <code>"visible"</code>, <code>"hidden"</code>. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to <code>"default"</code> which flags the label row as visible only if the child has 0 content rows.</p></td>
     </tr>
     <tr>
-      <th>visible_label</th>
-      <td><p>logical(1). Should the <em>split</em> label be visible in the resulting table.</p></td>
+      <th>label_pos</th>
+      <td><p>character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, <code>default</code> indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.</p></td>
     </tr>
     <tr>
       <th>indent_mod</th>
@@ -191,100 +192,135 @@
 with the same number of levels as <code>var</code>. Currently the
 error that occurs when this is not hte case is not very informative,
 but that will change in the future.</p>
+    <h2 class="hasAnchor" id="custom-splitting-function-details"><a class="anchor" href="#custom-splitting-function-details"></a>Custom Splitting Function Details</h2>
+
+    
+
+
+<p>User-defined custom split functions can perform any type of computation
+on the incoming data provided that they meed the contract for generating
+'splits' of the incoming data 'based on' the split object.</p>
+<p>Split functions are functions that accept:</p><dl>
+<dt>df</dt><dd><p>data.frame of incoming data to be split</p></dd>
+<dt>spl</dt><dd><p>a Split object. this is largely an internal detail custom functions will not need to worry about,
+but  <code>obj_name(spl)</code>, for example, will give the name of the split as it will appear in paths in the resulting table</p></dd>
+<dt>vals</dt><dd><p>Any pre-calculated values. If given non-null values, the values returned should match these. Should be NULL in most cases and can likely be ignored</p></dd>
+<dt>labels</dt><dd><p>Any pre-calculated value labels. Same as above for <code>values</code></p></dd>
+<dt>trim</dt><dd><p>If <code>TRUE</code>, resulting splits that are empty should be removed</p></dd>
+<dt>(Optional) .spl_context</dt><dd><p>a data.frame describing previously performed splits which collectively arrived at <code>df</code></p></dd>
+
+</dl>
+
+<p>The function must then output a <code>named list</code> with the following elements:</p>
+<dl>
+<dt>values</dt><dd><p>The vector of all values corresponding to the splits of <code>df</code></p></dd>
+<dt>datasplit</dt><dd><p>a list of data.frames representing the groupings of the actual observations from <code>df</code>.</p></dd>
+<dt>labels</dt><dd><p>a character vector giving a string label for each value listed in the <code>values</code> element above</p></dd>
+<dt>(Optional) extras</dt><dd><p>If present, extra arguments to be passed to summary and analysis functions
+whenever they are executed on the corresponding element of <code>datasplit</code> or a subset thereof</p></dd>
+
+</dl>
+
+<p>One way to generate custom splitting functions is to wrap existing split functions and modify either
+the incoming data before they are called, or their outputs.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Gabriel Becker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='va'>mean</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                             A: Drug X   B: Placebo   C: Combination
-#&gt; -------------------------------------------------------------------
-#&gt; ASIAN                                                              
-#&gt;   mean                        34.2        32.68          34.63     
-#&gt; BLACK OR AFRICAN AMERICAN                                          
-#&gt;   mean                        34.68       31.71            34      
-#&gt; WHITE                                                              
-#&gt;   mean                        39.36       36.93          35.11     </div><div class='input'>
-
-<span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='va'>mean</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                                             A: Drug X   B: Placebo   C: Combination
-#&gt; -----------------------------------------------------------------------------------
-#&gt; ASIAN                                                                              
-#&gt;   mean                                        34.2        32.68          34.63     
-#&gt; BLACK OR AFRICAN AMERICAN                                                          
-#&gt;   mean                                        34.68       31.71            34      
-#&gt; WHITE                                                                              
-#&gt;   mean                                        39.36       36.93          35.11     
-#&gt; AMERICAN INDIAN OR ALASKA NATIVE                                                   
-#&gt;   mean                                         NaN         NaN            NaN      
-#&gt; MULTIPLE                                                                           
-#&gt;   mean                                         NaN         NaN            NaN      
-#&gt; NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER                                          
-#&gt;   mean                                         NaN         NaN            NaN      
-#&gt; OTHER                                                                              
-#&gt;   mean                                         NaN         NaN            NaN      
-#&gt; UNKNOWN                                                                            
-#&gt;   mean                                         NaN         NaN            NaN      </div><div class='input'>
-
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"Overall (N)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span>, split_label <span class='op'>=</span> <span class='st'>"Ethnicity"</span>, labels_var <span class='op'>=</span> <span class='st'>"ethn_lab"</span>,
-                  split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, afun <span class='op'>=</span> <span class='va'>mean</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>
-
-<span class='va'>l</span>
-</div><div class='output co'>#&gt; A Pre-data Table Layout
-#&gt; 
-#&gt; Column-Split Structure:
-#&gt; ARM (lvls) -&gt; SEX (lvls) 
-#&gt; 
-#&gt; Row-Split Structure:
-#&gt; RACE (lvls) -&gt; AGE (** analysis **) 
-#&gt; </div><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-<span class='va'>DM2</span> <span class='op'>&lt;-</span> <span class='va'>DM</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>SEX</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-        SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>SEX</span><span class='op'>)</span>,
-        gender_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span>, <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,
-                       <span class='st'>"U"</span> <span class='op'>=</span> <span class='st'>"Unknown"</span>, <span class='st'>"UNDIFFERENTIATED"</span> <span class='op'>=</span> <span class='st'>"Undifferentiated"</span><span class='op'>)</span><span class='op'>[</span><span class='va'>SEX</span><span class='op'>]</span>,
-        ethn_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-            <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,
-            <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"Black or African American"</span>,
-            <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,
-            <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American Indian or Alaska Native"</span>,
-             <span class='st'>"MULTIPLE"</span> <span class='op'>=</span> <span class='st'>"Multiple"</span>,
-             <span class='st'>"NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER"</span> <span class='op'>=</span>
-                 <span class='st'>"Native Hawaiian or Other Pacific Islander"</span>,
-             <span class='st'>"OTHER"</span> <span class='op'>=</span> <span class='st'>"Other"</span>, <span class='st'>"UNKNOWN"</span> <span class='op'>=</span> <span class='st'>"Unknown"</span>
-        <span class='op'>)</span><span class='op'>[</span><span class='va'>RACE</span><span class='op'>]</span>
-    <span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                                          A: Drug X                B: Placebo             C: Combination     
-#&gt;                                       F            M            F            M           F            M     
-#&gt; ------------------------------------------------------------------------------------------------------------
-#&gt; Overall (N)                       70 (100%)    51 (100%)    56 (100%)    50 (100%)   61 (100%)    68 (100%) 
-#&gt;   Asian (n)                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62%)    40 (65.6%)   44 (64.7%)
-#&gt;     mean                            33.55        35.03          34         31.1         34.9        34.39   
-#&gt;   Black or African American (n)   18 (25.7%)   10 (19.6%)   12 (21.4%)   12 (24%)    13 (21.3%)   14 (20.6%)
-#&gt;     mean                            33.17         37.4        30.58        32.83       33.85        34.14   
-#&gt;   White (n)                       8 (11.4%)    6 (11.8%)    7 (12.5%)     7 (14%)    8 (13.1%)    10 (14.7%)
-#&gt;     mean                            35.88          44         38.57        35.29        36.5          34    </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='va'>mean</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                             A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ASIAN                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                        34.2        32.68          34.63     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BLACK OR AFRICAN AMERICAN                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                        34.68       31.71            34      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHITE                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                        39.36       36.93          35.11     </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='va'>mean</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                             A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ASIAN                                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                        34.2        32.68          34.63     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BLACK OR AFRICAN AMERICAN                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                        34.68       31.71            34      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHITE                                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                        39.36       36.93          35.11     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AMERICAN INDIAN OR ALASKA NATIVE                                                   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                         NaN         NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MULTIPLE                                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                         NaN         NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                         NaN         NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OTHER                                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                         NaN         NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UNKNOWN                                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   mean                                         NaN         NaN            NaN      </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"Overall (N)"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>split_rows_by</span><span class='op'>(</span><span class='st'>"RACE"</span>, split_label <span class='op'>=</span> <span class='st'>"Ethnicity"</span>, labels_var <span class='op'>=</span> <span class='st'>"ethn_lab"</span>,</span>
+<span class='r-in'>                  split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, var_labels <span class='op'>=</span> <span class='st'>"Age"</span>, afun <span class='op'>=</span> <span class='va'>mean</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A Pre-data Table Layout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Column-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARM (lvls) -&gt; SEX (lvls) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Row-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RACE (lvls) -&gt; AGE (** analysis **) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>DM2</span> <span class='op'>&lt;-</span> <span class='va'>DM</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>SEX</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/mutate.html'>mutate</a></span><span class='op'>(</span></span>
+<span class='r-in'>        SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>SEX</span><span class='op'>)</span>,</span>
+<span class='r-in'>        gender_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span>, <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,</span>
+<span class='r-in'>                       <span class='st'>"U"</span> <span class='op'>=</span> <span class='st'>"Unknown"</span>, <span class='st'>"UNDIFFERENTIATED"</span> <span class='op'>=</span> <span class='st'>"Undifferentiated"</span><span class='op'>)</span><span class='op'>[</span><span class='va'>SEX</span><span class='op'>]</span>,</span>
+<span class='r-in'>        ethn_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>            <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,</span>
+<span class='r-in'>            <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"Black or African American"</span>,</span>
+<span class='r-in'>            <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,</span>
+<span class='r-in'>            <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American Indian or Alaska Native"</span>,</span>
+<span class='r-in'>             <span class='st'>"MULTIPLE"</span> <span class='op'>=</span> <span class='st'>"Multiple"</span>,</span>
+<span class='r-in'>             <span class='st'>"NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER"</span> <span class='op'>=</span></span>
+<span class='r-in'>                 <span class='st'>"Native Hawaiian or Other Pacific Islander"</span>,</span>
+<span class='r-in'>             <span class='st'>"OTHER"</span> <span class='op'>=</span> <span class='st'>"Other"</span>, <span class='st'>"UNKNOWN"</span> <span class='op'>=</span> <span class='st'>"Unknown"</span></span>
+<span class='r-in'>        <span class='op'>)</span><span class='op'>[</span><span class='va'>RACE</span><span class='op'>]</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                          A: Drug X                B: Placebo             C: Combination     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                       F            M            F            M           F            M     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Overall (N)                       70 (100%)    51 (100%)    56 (100%)    50 (100%)   61 (100%)    68 (100%) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Asian (n)                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62%)    40 (65.6%)   44 (64.7%)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mean                            33.55        35.03          34         31.1         34.9        34.39   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Black or African American (n)   18 (25.7%)   10 (19.6%)   12 (21.4%)   12 (24%)    13 (21.3%)   14 (20.6%)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mean                            33.17         37.4        30.58        32.83       33.85        34.14   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   White (n)                       8 (11.4%)    6 (11.8%)    7 (12.5%)     7 (14%)    8 (13.1%)    10 (14.7%)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mean                            35.88          44         38.57        35.29        36.5          34    </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

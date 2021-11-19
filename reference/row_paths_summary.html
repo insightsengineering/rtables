@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -141,74 +141,79 @@
     <p>A data.frame summarizing the row- or column-structure of <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-
-<span class='va'>ex_adsl_MF</span> <span class='op'>&lt;-</span> <span class='va'>ex_adsl</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>SEX</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>ex_adsl_MF</span><span class='op'>)</span>
-
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;              A: Drug X      B: Placebo      C: Combination  
-#&gt;              F       M       F       M        F         M   
-#&gt; ------------------------------------------------------------
-#&gt; AGE                                                         
-#&gt;   Mean     32.76   35.57   34.12   37.44    35.2      35.38 
-#&gt; BMRKR2                                                      
-#&gt;   LOW       26      21      21      23       26        11   
-#&gt;   MEDIUM    21      15      38      18       17        23   
-#&gt;   HIGH      32      15      18      14       23        26   </div><div class='input'>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>row_paths_summary</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; rowname     node_class    path          
-#&gt; ----------------------------------------
-#&gt; AGE         LabelRow      AGE           
-#&gt;   Mean      DataRow       AGE, Mean     
-#&gt; BMRKR2      LabelRow      BMRKR2        
-#&gt;   LOW       DataRow       BMRKR2, LOW   
-#&gt;   MEDIUM    DataRow       BMRKR2, MEDIUM
-#&gt;   HIGH      DataRow       BMRKR2, HIGH  </div><div class='input'>
-<span class='va'>df</span>
-</div><div class='output co'>#&gt;    label indent node_class         path
-#&gt; 1    AGE      0   LabelRow          AGE
-#&gt; 2   Mean      1    DataRow    AGE, Mean
-#&gt; 3 BMRKR2      0   LabelRow       BMRKR2
-#&gt; 4    LOW      1    DataRow  BMRKR2, LOW
-#&gt; 5 MEDIUM      1    DataRow BMRKR2, ....
-#&gt; 6   HIGH      1    DataRow BMRKR2, HIGH</div><div class='input'>
-<span class='fu'>col_paths_summary</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; label             path                       
-#&gt; ---------------------------------------------
-#&gt; A: Drug X         ARM, A: Drug X             
-#&gt;   F               ARM, A: Drug X, SEX, F     
-#&gt;   M               ARM, A: Drug X, SEX, M     
-#&gt; B: Placebo        ARM, B: Placebo            
-#&gt;   F               ARM, B: Placebo, SEX, F    
-#&gt;   M               ARM, B: Placebo, SEX, M    
-#&gt; C: Combination    ARM, C: Combination        
-#&gt;   F               ARM, C: Combination, SEX, F
-#&gt;   M               ARM, C: Combination, SEX, M</div><div class='input'>
-<span class='co'># manually constructed table</span>
-<span class='va'>tbl3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span><span class='op'>(</span>
-   <span class='fu'><a href='rheader.html'>rheader</a></span><span class='op'>(</span>
-     <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"row 1"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"a"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-     <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"b"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-   <span class='op'>)</span>,
-   <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"h2"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span><span class='op'>)</span><span class='op'>)</span>,
-   <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'>col_paths_summary</span><span class='op'>(</span><span class='va'>tbl3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; label    path                
-#&gt; -----------------------------
-#&gt; a        manual, a           
-#&gt;   a      manual, a, manual, a
-#&gt;   b      manual, a, manual, b
-#&gt; b        manual, b           
-#&gt;   c      manual, b, manual, c
-#&gt;   d      manual, b, manual, d</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ex_adsl_MF</span> <span class='op'>&lt;-</span> <span class='va'>ex_adsl</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>SEX</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"F"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>ex_adsl_MF</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              A: Drug X      B: Placebo      C: Combination  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              F       M       F       M        F         M   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     32.76   35.57   34.12   37.44    35.2      35.38 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2                                                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW       26      21      21      23       26        11   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM    21      15      38      18       17        23   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH      32      15      18      14       23        26   </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>row_paths_summary</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowname     node_class    path                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE         LabelRow      ma_AGE_BMRKR2, AGE           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean      DataRow       ma_AGE_BMRKR2, AGE, Mean     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2      LabelRow      ma_AGE_BMRKR2, BMRKR2        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW       DataRow       ma_AGE_BMRKR2, BMRKR2, LOW   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM    DataRow       ma_AGE_BMRKR2, BMRKR2, MEDIUM</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH      DataRow       ma_AGE_BMRKR2, BMRKR2, HIGH  </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>df</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    label indent node_class         path</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    AGE      0   LabelRow ma_AGE_B....</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   Mean      1    DataRow ma_AGE_B....</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 BMRKR2      0   LabelRow ma_AGE_B....</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    LOW      1    DataRow ma_AGE_B....</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 MEDIUM      1    DataRow ma_AGE_B....</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   HIGH      1    DataRow ma_AGE_B....</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>col_paths_summary</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> label             path                       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A: Drug X         ARM, A: Drug X             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, A: Drug X, SEX, F     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, A: Drug X, SEX, M     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B: Placebo        ARM, B: Placebo            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, B: Placebo, SEX, F    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, B: Placebo, SEX, M    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> C: Combination    ARM, C: Combination        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F               ARM, C: Combination, SEX, F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M               ARM, C: Combination, SEX, M</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># manually constructed table</span></span>
+<span class='r-in'><span class='va'>tbl3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span><span class='op'>(</span></span>
+<span class='r-in'>   <span class='fu'><a href='rheader.html'>rheader</a></span><span class='op'>(</span></span>
+<span class='r-in'>     <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"row 1"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"a"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>     <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"b"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'>   <span class='op'>)</span>,</span>
+<span class='r-in'>   <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"h2"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>   <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>col_paths_summary</span><span class='op'>(</span><span class='va'>tbl3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> label    path                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a        manual, a           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   a      manual, a, manual, a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   b      manual, a, manual, b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> b        manual, b           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   c      manual, b, manual, c</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   d      manual, b, manual, d</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

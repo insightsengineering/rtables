@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,8 @@
   class_table <span class='op'>=</span> <span class='st'>"table table-condensed table-hover"</span>,
   class_tr <span class='op'>=</span> <span class='st'>""</span>,
   class_td <span class='op'>=</span> <span class='st'>""</span>,
-  class_th <span class='op'>=</span> <span class='st'>""</span>
+  class_th <span class='op'>=</span> <span class='st'>""</span>,
+  link_label <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,6 +160,10 @@
       <th>class_th</th>
       <td><p>class for th tag</p></td>
     </tr>
+    <tr>
+      <th>link_label</th>
+      <td><p>link anchor label (not including <code>tab:</code> prefix) for the table.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -166,100 +171,133 @@
     <p>A <code>shiny.tag</code> object representing <code>x</code> in HTML.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span><span class='op'>(</span>
-  header <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>,
-  format <span class='op'>=</span> <span class='st'>"xx"</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fl'>4</span>,<span class='fl'>3</span>,<span class='fl'>2</span>, indent <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r3"</span>, indent <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;table class="table table-condensed table-hover"&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;th class=" text-left" colspan="1"&gt;&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;A&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;B&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;C&lt;/th&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;4&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt; &lt;/table&gt;</div><div class='input'>
-<span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span>, class_table <span class='op'>=</span> <span class='st'>"table"</span>, class_tr <span class='op'>=</span> <span class='st'>"row"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;table class="table"&gt;
-#&gt;   &lt;tr class="row"&gt;
-#&gt;     &lt;th class=" text-left" colspan="1"&gt;&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;A&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;B&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;C&lt;/th&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class="row"&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class="row"&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;4&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class="row"&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt; &lt;/table&gt;</div><div class='input'>
-<span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span>, class_td <span class='op'>=</span> <span class='st'>"aaa"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;table class="table table-condensed table-hover"&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;th class=" text-left" colspan="1"&gt;&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;A&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;B&lt;/th&gt;
-#&gt;     &lt;th class=" text-center" colspan="1"&gt;C&lt;/th&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;1&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r2&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;4&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;2&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr class=""&gt;
-#&gt;     &lt;td class=" text-left" colspan="1"&gt;r3&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;     &lt;td class=" text-center" colspan="1"&gt;&lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt; &lt;/table&gt;</div><div class='input'>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='Viewer.html'>Viewer</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rtable.html'>rtable</a></span><span class='op'>(</span></span>
+<span class='r-in'>  header <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>,</span>
+<span class='r-in'>  format <span class='op'>=</span> <span class='st'>"xx"</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fl'>4</span>,<span class='fl'>3</span>,<span class='fl'>2</span>, indent <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r3"</span>, indent <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="rtables-all-parts-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;table class="table table-condensed table-hover"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th style="white-space:pre;"&gt;&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;A&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;B&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;C&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;4&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;caption style="caption-side:top;"&gt;&lt;div class="rtables-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-main-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           &lt;p class="rtables-main-title"&gt;&lt;/p&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-subtitles-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/caption&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/table&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;div class="rtables-footers-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span>, class_table <span class='op'>=</span> <span class='st'>"table"</span>, class_tr <span class='op'>=</span> <span class='st'>"row"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="rtables-all-parts-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;table class="table"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr class="row"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th style="white-space:pre;"&gt;&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;A&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;B&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;C&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr class="row"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-left"&gt;r1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr class="row"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-left"&gt;r2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;4&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr class="row"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-left"&gt;r3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="row text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;caption style="caption-side:top;"&gt;&lt;div class="rtables-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-main-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           &lt;p class="rtables-main-title"&gt;&lt;/p&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-subtitles-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/caption&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/table&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;div class="rtables-footers-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>as_html</span><span class='op'>(</span><span class='va'>tbl</span>, class_td <span class='op'>=</span> <span class='st'>"aaa"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="rtables-all-parts-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;table class="table table-condensed table-hover"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th style="white-space:pre;"&gt;&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;A&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;B&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;th class="text-center"&gt;C&lt;/th&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;1&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;4&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;2&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-left"&gt;r3&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;td class="text-center"&gt;&lt;/td&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/tr&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;caption style="caption-side:top;"&gt;&lt;div class="rtables-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-main-titles-block rtables-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           &lt;p class="rtables-main-title"&gt;&lt;/p&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         &lt;div class="rtables-subtitles-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/caption&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/table&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;div class="rtables-footers-block rtables-container"&gt;&lt;/div&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='Viewer.html'>Viewer</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

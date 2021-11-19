@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -132,12 +132,17 @@
   <span class='va'>labelrow</span>,
   <span class='va'>vals</span>,
   <span class='va'>cspan</span>,
-  <span class='va'>visible_label</span>,
+  <span class='va'>label_pos</span>,
   <span class='va'>cindent_mod</span>,
   <span class='va'>cvar</span>,
   <span class='va'>label</span>,
   <span class='va'>cextra_args</span>,
-  <span class='va'>child_names</span>
+  <span class='va'>child_names</span>,
+  <span class='va'>title</span>,
+  <span class='va'>subtitles</span>,
+  <span class='va'>main_footer</span>,
+  <span class='va'>prov_footer</span>,
+  <span class='va'>footnotes</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -176,8 +181,9 @@
       <td><p>integer. Column span. <code>1</code> indicates no spanning.</p></td>
     </tr>
     <tr>
-      <th>visible_label</th>
-      <td><p>logical(1). Should the <em>split</em> label be visible in the resulting table.</p></td>
+      <th>label_pos</th>
+      <td><p>character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, <code>default</code> indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.</p></td>
     </tr>
     <tr>
       <th>cindent_mod</th>
@@ -198,6 +204,26 @@
     <tr>
       <th>child_names</th>
       <td><p>character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>character(1). Main title. Ignored for subtables.</p></td>
+    </tr>
+    <tr>
+      <th>subtitles</th>
+      <td><p>character. Subtitles. Ignored for subtables.</p></td>
+    </tr>
+    <tr>
+      <th>main_footer</th>
+      <td><p>character. Main global (non-referential) footer materials.</p></td>
+    </tr>
+    <tr>
+      <th>prov_footer</th>
+      <td><p>character. Provenance-related global footer materials. Generally should not be modified by hand.</p></td>
+    </tr>
+    <tr>
+      <th>footnotes</th>
+      <td><p>list or NULL. Referential footnotes to be applied at current level</p></td>
     </tr>
     </table>
 

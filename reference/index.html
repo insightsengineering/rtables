@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -318,7 +318,7 @@
         <td>
           <p><code><a href="add_overall_level.html">add_overall_level()</a></code> </p>
         </td>
-        <td><p>Add an implicit 'overall' level to split</p></td>
+        <td><p>Add an virtual 'overall' level to split</p></td>
       </tr><tr>
         
         <td>
@@ -331,6 +331,12 @@
           <p><code><a href="add_combo_levels.html">select_all_levels</a></code> <code><a href="add_combo_levels.html">add_combo_levels()</a></code> </p>
         </td>
         <td><p>Add Combination Levels to split</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="trim_levels_to_map.html">trim_levels_to_map()</a></code> </p>
+        </td>
+        <td><p>Trim Levels to map</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -410,6 +416,25 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
+          <h2 id="section-layout-structure-information" class="hasAnchor"><a href="#section-layout-structure-information" class="anchor"></a>Layout Structure Information</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="vil.html">vars_in_layout()</a></code> </p>
+        </td>
+        <td><p>List Variables required by a pre-data table layout</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
           <h2 id="section-access-and-modify" class="hasAnchor"><a href="#section-access-and-modify" class="anchor"></a>Access and Modify</h2>
           <p class="section-desc"></p>
         </th>
@@ -477,7 +502,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="trim_prune_funs.html">all_zero_or_na()</a></code> <code><a href="trim_prune_funs.html">content_all_zeros_nas()</a></code> <code><a href="trim_prune_funs.html">prune_empty_level()</a></code> <code><a href="trim_prune_funs.html">low_obs_pruner()</a></code> </p>
+          <p><code><a href="trim_prune_funs.html">all_zero_or_na()</a></code> <code><a href="trim_prune_funs.html">all_zero()</a></code> <code><a href="trim_prune_funs.html">content_all_zeros_nas()</a></code> <code><a href="trim_prune_funs.html">prune_empty_level()</a></code> <code><a href="trim_prune_funs.html">prune_zeros_only()</a></code> <code><a href="trim_prune_funs.html">low_obs_pruner()</a></code> </p>
         </td>
         <td><p>Trimming and Pruning Criteria</p></td>
       </tr><tr>
@@ -552,7 +577,7 @@
         <td>
           <p><code><a href="insert_rrow.html">insert_rrow()</a></code> </p>
         </td>
-        <td><p>insert rrows at (before) a specific location</p></td>
+        <td><p>[DEPRECATED] insert rrows at (before) a specific location</p></td>
       </tr><tr>
         
         <td>
@@ -575,6 +600,36 @@
       <tr>
         
         <td>
+          <p><code><a href="as_html.html">as_html()</a></code> </p>
+        </td>
+        <td><p>Convert an <code>rtable</code> object to a <code>shiny.tag</code> html object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="export_as_pdf.html">export_as_pdf()</a></code> </p>
+        </td>
+        <td><p>Export as PDF</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="export_as_txt.html">export_as_txt()</a></code> </p>
+        </td>
+        <td><p>Export as plain text with page break symbol</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tsv_io.html">export_as_tsv()</a></code> <code><a href="tsv_io.html">import_from_tsv()</a></code> </p>
+        </td>
+        <td><p>Create Enriched flat value table with paths</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tt_to_flextable.html">tt_to_flextable()</a></code> </p>
+        </td>
+        <td><p>Create a FlexTable object representing an rtables TableTree</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="toString-VTableTree-method.html">toString(<i>&lt;VTableTree&gt;</i>)</a></code> </p>
         </td>
         <td><p>Convert an <code>rtable</code> object to a string</p></td>
@@ -584,12 +639,6 @@
           <p><code><a href="propose_column_widths.html">propose_column_widths()</a></code> </p>
         </td>
         <td><p>Propose Column Widths of an <code>rtable</code> object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_html.html">as_html()</a></code> </p>
-        </td>
-        <td><p>Convert an <code>rtable</code> object to a <code>shiny.tag</code> html object</p></td>
       </tr><tr>
         
         <td>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
 
 <span class='fu'>reorder_split_levels</span><span class='op'>(</span><span class='va'>neworder</span>, newlabels <span class='op'>=</span> <span class='va'>neworder</span>, drlevels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>trim_levels_in_group</span><span class='op'>(</span><span class='va'>innervar</span><span class='op'>)</span></pre>
+<span class='fu'>trim_levels_in_group</span><span class='op'>(</span><span class='va'>innervar</span>, drop_outlevs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,69 +185,109 @@ of presence in the data).</p></td>
     </tr>
     <tr>
       <th>innervar</th>
-      <td><p>character(1). Variable whose factor levels should be trimmed (ie empty levels dropped) <em>separately within each grouping defined at this point in the structure</em></p></td>
+      <td><p>character(1). Variable whose factor levels should be trimmed (e.g., empty levels dropped) <em>separately within each grouping defined at this point in the structure</em></p></td>
+    </tr>
+    <tr>
+      <th>drop_outlevs</th>
+      <td><p>logical(1). Should empty levels in the variable being split on (ie the 'outer' variable, not <code>innervar</code>)
+be dropped? Defaults to <code>TRUE</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a closure suitable for use as a splitting function (<code>splfun</code>) when creating a table layout</p>
+    <h2 class="hasAnchor" id="custom-splitting-function-details"><a class="anchor" href="#custom-splitting-function-details"></a>Custom Splitting Function Details</h2>
+
+    
+
+
+<p>User-defined custom split functions can perform any type of computation
+on the incoming data provided that they meed the contract for generating
+'splits' of the incoming data 'based on' the split object.</p>
+<p>Split functions are functions that accept:</p><dl>
+<dt>df</dt><dd><p>data.frame of incoming data to be split</p></dd>
+<dt>spl</dt><dd><p>a Split object. this is largely an internal detail custom functions will not need to worry about,
+but  <code>obj_name(spl)</code>, for example, will give the name of the split as it will appear in paths in the resulting table</p></dd>
+<dt>vals</dt><dd><p>Any pre-calculated values. If given non-null values, the values returned should match these. Should be NULL in most cases and can likely be ignored</p></dd>
+<dt>labels</dt><dd><p>Any pre-calculated value labels. Same as above for <code>values</code></p></dd>
+<dt>trim</dt><dd><p>If <code>TRUE</code>, resulting splits that are empty should be removed</p></dd>
+<dt>(Optional) .spl_context</dt><dd><p>a data.frame describing previously performed splits which collectively arrived at <code>df</code></p></dd>
+
+</dl>
+
+<p>The function must then output a <code>named list</code> with the following elements:</p>
+<dl>
+<dt>values</dt><dd><p>The vector of all values corresponding to the splits of <code>df</code></p></dd>
+<dt>datasplit</dt><dd><p>a list of data.frames representing the groupings of the actual observations from <code>df</code>.</p></dd>
+<dt>labels</dt><dd><p>a character vector giving a string label for each value listed in the <code>values</code> element above</p></dd>
+<dt>(Optional) extras</dt><dd><p>If present, extra arguments to be passed to summary and analysis functions
+whenever they are executed on the corresponding element of <code>datasplit</code> or a subset thereof</p></dd>
+
+</dl>
+
+<p>One way to generate custom splitting functions is to wrap existing split functions and modify either
+the incoming data before they are called, or their outputs.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='fu'>remove_split_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"CHE"</span>, <span class='st'>"BRA"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------
-#&gt; CHN                                             
-#&gt;   Mean     36.08       34.12          33.71     
-#&gt; PAK                                             
-#&gt;   Mean     35.38       33.12          36.75     
-#&gt; NGA                                             
-#&gt;   Mean     31.2         31.4          35.78     
-#&gt; RUS                                             
-#&gt;   Mean     33.33        34.2            33      
-#&gt; JPN                                             
-#&gt;   Mean     31.2         32.5           36.2     
-#&gt; GBR                                             
-#&gt;   Mean      32           29             30      </div><div class='input'>
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='fu'>keep_split_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"BRA"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------
-#&gt; USA                                             
-#&gt;   Mean     36.77       32.57          36.41     
-#&gt; CAN                                             
-#&gt;   Mean      36           34            29.5     
-#&gt; BRA                                             
-#&gt;   Mean     31.78       30.62          36.14     </div><div class='input'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------
-#&gt; F                                               
-#&gt;   Mean     33.71       33.84          34.89     
-#&gt; M                                               
-#&gt;   Mean     36.55        32.1          34.28     </div><div class='input'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='fu'>drop_and_remove_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"U"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------
-#&gt; F                                               
-#&gt;   Mean     33.71       33.84          34.89     </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='fu'>remove_split_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"CHE"</span>, <span class='st'>"BRA"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CHN                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     36.08       34.12          33.71     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PAK                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     35.38       33.12          36.75     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NGA                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     31.2         31.4          35.78     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RUS                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     33.33        34.2            33      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JPN                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     31.2         32.5           36.2     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GBR                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean      32           29             30      </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='fu'>keep_split_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"BRA"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USA                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     36.77       32.57          36.41     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAN                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean      36           34            29.5     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BRA                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     31.78       30.62          36.14     </span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F                                               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     33.71       33.84          34.89     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> M                                               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     36.55        32.1          34.28     </span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, split_fun <span class='op'>=</span> <span class='fu'>drop_and_remove_levels</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"M"</span>, <span class='st'>"U"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F                                               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean     33.71       33.84          34.89     </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

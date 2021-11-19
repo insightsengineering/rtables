@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -136,7 +136,7 @@
   child_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"default"</span>, <span class='st'>"visible"</span>, <span class='st'>"hidden"</span><span class='op'>)</span>,
   extra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   indent_mod <span class='op'>=</span> <span class='fl'>0L</span>,
-  visible_label <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  label_pos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"topleft"</span>, <span class='st'>"hidden"</span>, <span class='st'>"visible"</span><span class='op'>)</span>,
   cindent_mod <span class='op'>=</span> <span class='fl'>0L</span>,
   cvar <span class='op'>=</span> <span class='st'>""</span>,
   cextra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -146,7 +146,6 @@
   <span class='va'>var</span>,
   <span class='va'>ref_group</span>,
   labels_var <span class='op'>=</span> <span class='va'>var</span>,
-  incl_all <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>split_label</span>,
   split_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   label_fstr <span class='op'>=</span> <span class='st'>"%s - %s"</span>,
@@ -184,11 +183,11 @@
     </tr>
     <tr>
       <th>split_fun</th>
-      <td><p>function/NULL. custom splitting function</p></td>
+      <td><p>function/NULL. custom splitting function See <code><a href='custom_split_funs.html'>custom_split_funs</a></code></p></td>
     </tr>
     <tr>
       <th>split_format</th>
-      <td><p>format spec. Format associated with this split.</p></td>
+      <td><p>FormatSpec. Default format associated with the split being created.</p></td>
     </tr>
     <tr>
       <th>valorder</th>
@@ -211,8 +210,9 @@
       <td><p>numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which corresponds to the unmodified default behavior.</p></td>
     </tr>
     <tr>
-      <th>visible_label</th>
-      <td><p>logical(1). Should the <em>split</em> label be visible in the resulting table.</p></td>
+      <th>label_pos</th>
+      <td><p>character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, <code>default</code> indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.</p></td>
     </tr>
     <tr>
       <th>cindent_mod</th>
@@ -229,10 +229,6 @@
     <tr>
       <th>ref_group</th>
       <td><p>character. Value of <code>var</code> to be taken as the ref_group/control to be compared against.</p></td>
-    </tr>
-    <tr>
-      <th>incl_all</th>
-      <td><p>logical(1). Should an "all" comparison column be created. Defaults to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label_fstr</th>

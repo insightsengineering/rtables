@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -182,211 +182,216 @@ The subtables defined by subsetting by the indices defined by <code>pag_tt_indic
 pagination in the row space work. Pagination in the column space will be added in the future.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>s_summary</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
- <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-     <span class='fu'><a href='in_rows.html'>in_rows</a></span><span class='op'>(</span>
-         <span class='st'>"n"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx"</span><span class='op'>)</span>,
-         <span class='st'>"Mean (sd)"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
-                             format <span class='op'>=</span> <span class='st'>"xx.xx (xx.xx)"</span><span class='op'>)</span>,
-         <span class='st'>"IQR"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/IQR.html'>IQR</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>,
-         <span class='st'>"min - max"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx - xx.xx"</span><span class='op'>)</span>
-     <span class='op'>)</span>
- <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>is.factor</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-     <span class='va'>vs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
-     <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>in_rows</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>vs</span>, <span class='va'>rcell</span>, format <span class='op'>=</span> <span class='st'>"xx"</span><span class='op'>)</span><span class='op'>)</span>
-
- <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>(</span>
-     <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"type not supported"</span><span class='op'>)</span>
- <span class='op'>)</span>
-<span class='op'>}</span>
-
-
-<span class='va'>lyt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-<span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span>var <span class='op'>=</span> <span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"SEX"</span>, <span class='st'>"BEP01FL"</span>, <span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span>, <span class='st'>"COUNTRY"</span><span class='op'>)</span>, afun <span class='op'>=</span> <span class='va'>s_summary</span><span class='op'>)</span>
-
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>lyt</span>, <span class='va'>ex_adsl</span><span class='op'>)</span>
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; AGE                                                              
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) 
-#&gt;   IQR                     11             10              10      
-#&gt;   min - max            21 - 50        21 - 62         20 - 69    
-#&gt; SEX                                                              
-#&gt;   F                       79             77              66      
-#&gt;   M                       51             55              60      
-#&gt;   U                       3              2               4       
-#&gt;   UNDIFFERENTIATED        1              0               2       
-#&gt; BEP01FL                                                          
-#&gt;   Y                       68             63              66      
-#&gt;   N                       66             71              66      
-#&gt; BMRKR1                                                           
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  
-#&gt;   IQR                    4.16           4.06            3.88     
-#&gt;   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 
-#&gt; BMRKR2                                                           
-#&gt;   LOW                     50             45              40      
-#&gt;   MEDIUM                  37             56              42      
-#&gt;   HIGH                    47             33              50      
-#&gt; COUNTRY                                                          
-#&gt;   CHN                     74             81              64      
-#&gt;   USA                     10             13              17      
-#&gt;   BRA                     13             7               10      
-#&gt;   PAK                     12             9               10      
-#&gt;   NGA                     8              7               11      
-#&gt;   RUS                     5              8               6       
-#&gt;   JPN                     5              4               9       
-#&gt;   GBR                     4              3               2       
-#&gt;   CAN                     3              2               3       
-#&gt;   CHE                     0              0               0       </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 33</div><div class='input'>
-<span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; rowname               node_class    path                 
-#&gt; ---------------------------------------------------------
-#&gt; AGE                   LabelRow      AGE                  
-#&gt;   n                   DataRow       AGE, n               
-#&gt;   Mean (sd)           DataRow       AGE, Mean (sd)       
-#&gt;   IQR                 DataRow       AGE, IQR             
-#&gt;   min - max           DataRow       AGE, min - max       
-#&gt; SEX                   LabelRow      SEX                  
-#&gt;   F                   DataRow       SEX, F               
-#&gt;   M                   DataRow       SEX, M               
-#&gt;   U                   DataRow       SEX, U               
-#&gt;   UNDIFFERENTIATED    DataRow       SEX, UNDIFFERENTIATED
-#&gt; BEP01FL               LabelRow      BEP01FL              
-#&gt;   Y                   DataRow       BEP01FL, Y           
-#&gt;   N                   DataRow       BEP01FL, N           
-#&gt; BMRKR1                LabelRow      BMRKR1               
-#&gt;   n                   DataRow       BMRKR1, n            
-#&gt;   Mean (sd)           DataRow       BMRKR1, Mean (sd)    
-#&gt;   IQR                 DataRow       BMRKR1, IQR          
-#&gt;   min - max           DataRow       BMRKR1, min - max    
-#&gt; BMRKR2                LabelRow      BMRKR2               
-#&gt;   LOW                 DataRow       BMRKR2, LOW          
-#&gt;   MEDIUM              DataRow       BMRKR2, MEDIUM       
-#&gt;   HIGH                DataRow       BMRKR2, HIGH         
-#&gt; COUNTRY               LabelRow      COUNTRY              
-#&gt;   CHN                 DataRow       COUNTRY, CHN         
-#&gt;   USA                 DataRow       COUNTRY, USA         
-#&gt;   BRA                 DataRow       COUNTRY, BRA         
-#&gt;   PAK                 DataRow       COUNTRY, PAK         
-#&gt;   NGA                 DataRow       COUNTRY, NGA         
-#&gt;   RUS                 DataRow       COUNTRY, RUS         
-#&gt;   JPN                 DataRow       COUNTRY, JPN         
-#&gt;   GBR                 DataRow       COUNTRY, GBR         
-#&gt;   CAN                 DataRow       COUNTRY, CAN         
-#&gt;   CHE                 DataRow       COUNTRY, CHE         </div><div class='input'>
-<span class='va'>tbls</span> <span class='op'>&lt;-</span> <span class='fu'>paginate_table</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-
-<span class='va'>w_tbls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='propose_column_widths.html'>propose_column_widths</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span> <span class='co'># so that we have the same column widths</span>
-
-<span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>tbls</span>, <span class='va'>print</span>, widths <span class='op'>=</span> <span class='va'>w_tbls</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; AGE                                                              
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) 
-#&gt;   IQR                     11             10              10      
-#&gt;   min - max            21 - 50        21 - 62         20 - 69    
-#&gt; SEX                                                              
-#&gt;   F                       79             77              66      
-#&gt;   M                       51             55              60      
-#&gt;   U                       3              2               4       
-#&gt;   UNDIFFERENTIATED        1              0               2       
-#&gt; BEP01FL                                                          
-#&gt;   Y                       68             63              66      
-#&gt;   N                       66             71              66      
-#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; BMRKR1                                                           
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  
-#&gt;   IQR                    4.16           4.06            3.88     
-#&gt;   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 
-#&gt; BMRKR2                                                           
-#&gt;   LOW                     50             45              40      
-#&gt;   MEDIUM                  37             56              42      
-#&gt;   HIGH                    47             33              50      
-#&gt; COUNTRY                                                          
-#&gt;   CHN                     74             81              64      
-#&gt;   USA                     10             13              17      
-#&gt;   BRA                     13             7               10      
-#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; COUNTRY                                                          
-#&gt;   PAK                     12             9               10      
-#&gt;   NGA                     8              7               11      
-#&gt;   RUS                     5              8               6       
-#&gt;   JPN                     5              4               9       
-#&gt;   GBR                     4              3               2       
-#&gt;   CAN                     3              2               3       
-#&gt;   CHE                     0              0               0       </div><div class='input'>
-<span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>tbls</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>tbli</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/toString.html'>toString</a></span><span class='op'>(</span><span class='va'>tbli</span>, widths <span class='op'>=</span> <span class='va'>w_tbls</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"\n\n"</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"~~~~ PAGE BREAK ~~~~"</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"\n\n"</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; AGE                                                              
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) 
-#&gt;   IQR                     11             10              10      
-#&gt;   min - max            21 - 50        21 - 62         20 - 69    
-#&gt; SEX                                                              
-#&gt;   F                       79             77              66      
-#&gt;   M                       51             55              60      
-#&gt;   U                       3              2               4       
-#&gt;   UNDIFFERENTIATED        1              0               2       
-#&gt; BEP01FL                                                          
-#&gt;   Y                       68             63              66      
-#&gt;   N                       66             71              66      
-#&gt; 
-#&gt; 
-#&gt; ~~~~ PAGE BREAK ~~~~
-#&gt; 
-#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; BMRKR1                                                           
-#&gt;   n                      134            134             132      
-#&gt;   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  
-#&gt;   IQR                    4.16           4.06            3.88     
-#&gt;   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 
-#&gt; BMRKR2                                                           
-#&gt;   LOW                     50             45              40      
-#&gt;   MEDIUM                  37             56              42      
-#&gt;   HIGH                    47             33              50      
-#&gt; COUNTRY                                                          
-#&gt;   CHN                     74             81              64      
-#&gt;   USA                     10             13              17      
-#&gt;   BRA                     13             7               10      
-#&gt; 
-#&gt; 
-#&gt; ~~~~ PAGE BREAK ~~~~
-#&gt; 
-#&gt;                       A: Drug X      B: Placebo    C: Combination
-#&gt; -----------------------------------------------------------------
-#&gt; COUNTRY                                                          
-#&gt;   PAK                     12             9               10      
-#&gt;   NGA                     8              7               11      
-#&gt;   RUS                     5              8               6       
-#&gt;   JPN                     5              4               9       
-#&gt;   GBR                     4              3               2       
-#&gt;   CAN                     3              2               3       
-#&gt;   CHE                     0              0               0       
-#&gt; 
-#&gt; 
-#&gt; ~~~~ PAGE BREAK ~~~~
-#&gt; </div><div class='input'>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>s_summary</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>     <span class='fu'><a href='in_rows.html'>in_rows</a></span><span class='op'>(</span></span>
+<span class='r-in'>         <span class='st'>"n"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx"</span><span class='op'>)</span>,</span>
+<span class='r-in'>         <span class='st'>"Mean (sd)"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                             format <span class='op'>=</span> <span class='st'>"xx.xx (xx.xx)"</span><span class='op'>)</span>,</span>
+<span class='r-in'>         <span class='st'>"IQR"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/IQR.html'>IQR</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>,</span>
+<span class='r-in'>         <span class='st'>"min - max"</span> <span class='op'>=</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"xx.xx - xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'>     <span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>is.factor</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>     <span class='va'>vs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>     <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>in_rows</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>vs</span>, <span class='va'>rcell</span>, format <span class='op'>=</span> <span class='st'>"xx"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'> <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>(</span></span>
+<span class='r-in'>     <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"type not supported"</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>lyt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'><span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span>var <span class='op'>=</span> <span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"SEX"</span>, <span class='st'>"BEP01FL"</span>, <span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span>, <span class='st'>"COUNTRY"</span><span class='op'>)</span>, afun <span class='op'>=</span> <span class='va'>s_summary</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>lyt</span>, <span class='va'>ex_adsl</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                     11             10              10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max            21 - 50        21 - 62         20 - 69    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                       79             77              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                       51             55              60      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                       3              2               4       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED        1              0               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Y                       68             63              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N                       66             71              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                    4.16           4.06            3.88     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW                     50             45              40      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM                  37             56              42      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH                    47             33              50      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHN                     74             81              64      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   USA                     10             13              17      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   BRA                     13             7               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   PAK                     12             9               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   NGA                     8              7               11      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   RUS                     5              8               6       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   JPN                     5              4               9       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   GBR                     4              3               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CAN                     3              2               3       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHE                     0              0               0       </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowname               node_class    path                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                   LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, AGE                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, AGE, n               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)           DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, AGE, Mean (sd)       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, AGE, IQR             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max           DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, AGE, min - max       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                   LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, SEX                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, SEX, F               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, SEX, M               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, SEX, U               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED    DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, SEX, UNDIFFERENTIATED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL               LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BEP01FL              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Y                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BEP01FL, Y           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BEP01FL, N           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1                LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR1               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                   DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR1, n            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)           DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR1, Mean (sd)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR1, IQR          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max           DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR1, min - max    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2                LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR2               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR2, LOW          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM              DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR2, MEDIUM       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH                DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, BMRKR2, HIGH         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY               LabelRow      ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHN                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, CHN         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   USA                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, USA         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   BRA                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, BRA         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   PAK                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, PAK         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   NGA                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, NGA         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   RUS                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, RUS         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   JPN                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, JPN         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   GBR                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, GBR         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CAN                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, CAN         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHE                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, CHE         </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbls</span> <span class='op'>&lt;-</span> <span class='fu'>paginate_table</span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>w_tbls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='propose_column_widths.html'>propose_column_widths</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span> <span class='co'># so that we have the same column widths</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>tbls</span>, <span class='va'>print</span>, widths <span class='op'>=</span> <span class='va'>w_tbls</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                     11             10              10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max            21 - 50        21 - 62         20 - 69    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                       79             77              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                       51             55              60      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                       3              2               4       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED        1              0               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Y                       68             63              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N                       66             71              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                    4.16           4.06            3.88     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW                     50             45              40      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM                  37             56              42      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH                    47             33              50      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHN                     74             81              64      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   USA                     10             13              17      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   BRA                     13             7               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   PAK                     12             9               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   NGA                     8              7               11      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   RUS                     5              8               6       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   JPN                     5              4               9       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   GBR                     4              3               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CAN                     3              2               3       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHE                     0              0               0       </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>tbls</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>tbli</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/toString.html'>toString</a></span><span class='op'>(</span><span class='va'>tbli</span>, widths <span class='op'>=</span> <span class='va'>w_tbls</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"\n\n"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"~~~~ PAGE BREAK ~~~~"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"\n\n"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          33.77 (6.55)   35.43 (7.9)     35.43 (7.72) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                     11             10              10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max            21 - 50        21 - 62         20 - 69    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                       79             77              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                       51             55              60      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                       3              2               4       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED        1              0               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Y                       68             63              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N                       66             71              66      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ~~~~ PAGE BREAK ~~~~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   n                      134            134             132      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean (sd)          5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IQR                    4.16           4.06            3.88     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   min - max          0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2                                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LOW                     50             45              40      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   MEDIUM                  37             56              42      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   HIGH                    47             33              50      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHN                     74             81              64      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   USA                     10             13              17      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   BRA                     13             7               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ~~~~ PAGE BREAK ~~~~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       A: Drug X      B: Placebo    C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY                                                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   PAK                     12             9               10      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   NGA                     8              7               11      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   RUS                     5              8               6       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   JPN                     5              4               9       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   GBR                     4              3               2       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CAN                     3              2               3       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   CHE                     0              0               0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ~~~~ PAGE BREAK ~~~~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

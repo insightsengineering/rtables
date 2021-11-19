@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -125,9 +125,13 @@
 
     <pre class="usage"><span class='fu'>all_zero_or_na</span><span class='op'>(</span><span class='va'>tr</span><span class='op'>)</span>
 
-<span class='fu'>content_all_zeros_nas</span><span class='op'>(</span><span class='va'>tt</span><span class='op'>)</span>
+<span class='fu'>all_zero</span><span class='op'>(</span><span class='va'>tr</span><span class='op'>)</span>
+
+<span class='fu'>content_all_zeros_nas</span><span class='op'>(</span><span class='va'>tt</span>, criteria <span class='op'>=</span> <span class='va'>all_zero_or_na</span><span class='op'>)</span>
 
 <span class='fu'>prune_empty_level</span><span class='op'>(</span><span class='va'>tt</span><span class='op'>)</span>
+
+<span class='fu'>prune_zeros_only</span><span class='op'>(</span><span class='va'>tt</span><span class='op'>)</span>
 
 <span class='fu'>low_obs_pruner</span><span class='op'>(</span><span class='va'>min</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sum"</span>, <span class='st'>"mean"</span><span class='op'>)</span><span class='op'>)</span></pre>
 
@@ -141,6 +145,10 @@
     <tr>
       <th>tt</th>
       <td><p>TableTree (or related class). A TableTree object representing a populated table.</p></td>
+    </tr>
+    <tr>
+      <th>criteria</th>
+      <td><p>function. Function which takes a TableRow object and returns <code>TRUE</code> if that row should be removed. Defaults to <code>all_zero_or_na</code></p></td>
     </tr>
     <tr>
       <th>min</th>
@@ -161,14 +169,17 @@ count are below this threshhold will be pruned</p></td>
 
     <p><code>all_zero_or_na</code> returns <code>TRUE</code> (and thus indicates trimming/pruning)
 for any <em>non-LabelRow</em> <code>TableRow</code> which contain only any mix of <code>NA</code> (including <code>NaN</code>), <code>0</code>, <code>Inf</code> and <code>-Inf</code> values.</p>
+<p><code>all_zero</code> returns <code>TRUE</code> for any non-Label row which contains only (non-missing) zero values.</p>
 <p><code>content_all_zeros_nas</code> Prunes a subtable if a) it has a content table with exactly one row in it, and
 b) <code>all_zero_or_na</code> returns <code>TRUE</code> for that single content row. In practice, when the default
 summary/content function was used, this represents pruning any subtable which corresponds to an empty set of
 the input data (e.g., because a factor variable was used in <code><a href='split_rows_by.html'>split_rows_by</a></code> but not all levels
 were present in the data).</p>
 <p><code>prune_empty_level</code> combines <code>all_zero_or_na</code> behavior for <code>TableRow</code> objects,
-<code>content_all_zeros_nas</code> on <code><a href='content_table.html'>content_table(tt)</a></code> for <code>TableTree</code> objects, and an addition check
+<code>content_all_zeros_nas</code> on <code>content_table(tt)</code> for <code>TableTree</code> objects, and an addition check
 that returns <code>TRUE</code> if the <code>tt</code> has no children.</p>
+<p><code>prune_zeros_only</code> behaves as <code>prune_empty_levels</code> does, except that like <code>all_zero</code> it
+prunes only in the case of all non-missing zero values.</p>
 <p><code>lob_obs_pruner</code> is a <em>constructor function</em> which, when called, returns a pruning criteria function
 which will prune on content rows by comparing sum or mean (dictated by <code>type</code>)of the count count portions
 of the cell values (defined as the first value per cell regardless of how many values per cell there are)

@@ -73,7 +73,7 @@ R CMD check. End users should pay no attention to this documentation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ R CMD check. End users should pay no attention to this documentation." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -244,18 +244,6 @@ R CMD check. End users should pay no attention to this documentation.</p>
 <span class='op'>)</span>
 
 <span class='co'># S4 method for Split</span>
-<span class='fu'>.add_row_summary</span><span class='op'>(</span>
-  <span class='va'>lyt</span>,
-  <span class='va'>label</span>,
-  <span class='va'>cfun</span>,
-  child_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"default"</span>, <span class='st'>"visible"</span>, <span class='st'>"hidden"</span><span class='op'>)</span>,
-  cformat <span class='op'>=</span> <span class='cn'>NULL</span>,
-  indent_mod <span class='op'>=</span> <span class='fl'>0L</span>,
-  cvar <span class='op'>=</span> <span class='st'>""</span>,
-  extra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># S4 method for `NULL`</span>
 <span class='fu'>.add_row_summary</span><span class='op'>(</span>
   <span class='va'>lyt</span>,
   <span class='va'>label</span>,
@@ -464,6 +452,9 @@ R CMD check. End users should pay no attention to this documentation.</p>
 <span class='co'># S4 method for VarLevelSplit</span>
 <span class='fu'>spl_label_var</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
+<span class='co'># S4 method for Split</span>
+<span class='fu'>spl_label_var</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
 <span class='fu'>tt_labelrow</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
 <span class='co'># S4 method for VTableTree</span>
@@ -516,8 +507,18 @@ R CMD check. End users should pay no attention to this documentation.</p>
 
 <span class='fu'>vis_label</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
+<span class='fu'>label_position</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span>
+
 <span class='co'># S4 method for Split</span>
-<span class='fu'>vis_label</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+<span class='fu'>label_position</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span>
+
+<span class='co'># S4 method for VAnalyzeSplit</span>
+<span class='fu'>label_position</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span>
+
+<span class='fu'>label_position</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for Split</span>
+<span class='fu'>label_position</span><span class='op'>(</span><span class='va'>spl</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
 <span class='fu'>content_fun</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
@@ -536,6 +537,14 @@ R CMD check. End users should pay no attention to this documentation.</p>
 
 <span class='co'># S4 method for AnalyzeColVarSplit</span>
 <span class='fu'>analysis_fun</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='fu'>analysis_fun</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for AnalyzeVarSplit</span>
+<span class='fu'>analysis_fun</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for AnalyzeColVarSplit</span>
+<span class='fu'>analysis_fun</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
 <span class='fu'>split_fun</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
@@ -676,20 +685,6 @@ R CMD check. End users should pay no attention to this documentation.</p>
 <span class='co'># S4 method for Split</span>
 <span class='fu'>content_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
-<span class='fu'>value_formats</span><span class='op'>(</span><span class='va'>obj</span>, default <span class='op'>=</span> <span class='fu'>obj_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># S4 method for ANY</span>
-<span class='fu'>value_formats</span><span class='op'>(</span><span class='va'>obj</span>, default <span class='op'>=</span> <span class='fu'>obj_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># S4 method for TableRow</span>
-<span class='fu'>value_formats</span><span class='op'>(</span><span class='va'>obj</span>, default <span class='op'>=</span> <span class='fu'>obj_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># S4 method for LabelRow</span>
-<span class='fu'>value_formats</span><span class='op'>(</span><span class='va'>obj</span>, default <span class='op'>=</span> <span class='fu'>obj_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># S4 method for VTableTree</span>
-<span class='fu'>value_formats</span><span class='op'>(</span><span class='va'>obj</span>, default <span class='op'>=</span> <span class='fu'>obj_format</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span><span class='op'>)</span>
-
 <span class='fu'>row_cspans</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TableRow</span>
@@ -785,6 +780,9 @@ R CMD check. End users should pay no attention to this documentation.</p>
 <span class='fu'>rawvalues</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
 <span class='co'># S4 method for TreePos</span>
+<span class='fu'>rawvalues</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='co'># S4 method for RowsVerticalSection</span>
 <span class='fu'>rawvalues</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
 <span class='fu'>value_names</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
@@ -829,6 +827,16 @@ R CMD check. End users should pay no attention to this documentation.</p>
 
 <span class='co'># S4 method for MultiVarSplit</span>
 <span class='fu'>value_labels</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='fu'>spl_varlabels</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='co'># S4 method for MultiVarSplit</span>
+<span class='fu'>spl_varlabels</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='fu'>spl_varlabels</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for MultiVarSplit</span>
+<span class='fu'>spl_varlabels</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
 <span class='fu'>splv_extra</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
@@ -966,12 +974,17 @@ R CMD check. End users should pay no attention to this documentation.</p>
 
 <span class='co'># S4 method for MultiVarSplit</span>
 <span class='fu'>spl_varnames</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
+
+<span class='fu'>spl_varnames</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for MultiVarSplit</span>
+<span class='fu'>spl_varnames</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
 <span class='co'># S4 method for VTableTree</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for VTableTree</span>
-<span class='fu'>show</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/methods/show.html'>show</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -1076,10 +1089,6 @@ R CMD check. End users should pay no attention to this documentation.</p>
       <th>override</th>
       <td><p>logical(1).</p></td>
     </tr>
-    <tr>
-      <th>default</th>
-      <td><p>FormatSpec.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -1087,52 +1096,53 @@ R CMD check. End users should pay no attention to this documentation.</p>
     <p>Various, but should be considered implementation details.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-
-<span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep_len</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"Species"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"group"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, <span class='st'>"Petal.Width"</span><span class='op'>)</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>
-
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>iris2</span><span class='op'>)</span>
-
-<span class='fu'><a href='summarize_rows.html'>summarize_rows</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                              name        label indent depth  rowtype indent_mod
-#&gt; Sepal.Length1        Sepal.Length Sepal.Length      0     1 LabelRow          0
-#&gt; Sepal.Length.Min.            Min.         Min.      1     2 TableRow          0
-#&gt; Sepal.Length.1st Qu.      1st Qu.      1st Qu.      1     2 TableRow          0
-#&gt; Sepal.Length.Median        Median       Median      1     2 TableRow          0
-#&gt; Sepal.Length.Mean            Mean         Mean      1     2 TableRow          0
-#&gt; Sepal.Length.3rd Qu.      3rd Qu.      3rd Qu.      1     2 TableRow          0
-#&gt; Sepal.Length.Max.            Max.         Max.      1     2 TableRow          0
-#&gt; Petal.Width1          Petal.Width  Petal.Width      0     1 LabelRow          0
-#&gt; Petal.Width.Min.             Min.         Min.      1     2 TableRow          0
-#&gt; Petal.Width.1st Qu.       1st Qu.      1st Qu.      1     2 TableRow          0
-#&gt; Petal.Width.Median         Median       Median      1     2 TableRow          0
-#&gt; Petal.Width.Mean             Mean         Mean      1     2 TableRow          0
-#&gt; Petal.Width.3rd Qu.       3rd Qu.      3rd Qu.      1     2 TableRow          0
-#&gt; Petal.Width.Max.             Max.         Max.      1     2 TableRow          0
-#&gt;                      level
-#&gt; Sepal.Length1            1
-#&gt; Sepal.Length.Min.        2
-#&gt; Sepal.Length.1st Qu.     2
-#&gt; Sepal.Length.Median      2
-#&gt; Sepal.Length.Mean        2
-#&gt; Sepal.Length.3rd Qu.     2
-#&gt; Sepal.Length.Max.        2
-#&gt; Petal.Width1             1
-#&gt; Petal.Width.Min.         2
-#&gt; Petal.Width.1st Qu.      2
-#&gt; Petal.Width.Median       2
-#&gt; Petal.Width.Mean         2
-#&gt; Petal.Width.3rd Qu.      2
-#&gt; Petal.Width.Max.         2</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/mutate.html'>mutate</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep_len</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"Species"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"group"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, <span class='st'>"Petal.Width"</span><span class='op'>)</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>iris2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='summarize_rows.html'>summarize_rows</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                              name        label indent depth  rowtype indent_mod</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length1        Sepal.Length Sepal.Length      0     1 LabelRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Min.            Min.         Min.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.1st Qu.      1st Qu.      1st Qu.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Median        Median       Median      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Mean            Mean         Mean      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.3rd Qu.      3rd Qu.      3rd Qu.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Max.            Max.         Max.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width1          Petal.Width  Petal.Width      0     1 LabelRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Min.             Min.         Min.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.1st Qu.       1st Qu.      1st Qu.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Median         Median       Median      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Mean             Mean         Mean      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.3rd Qu.       3rd Qu.      3rd Qu.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Max.             Max.         Max.      1     2 TableRow          0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      level</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length1            1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Min.        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.1st Qu.     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Median      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Mean        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.3rd Qu.     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length.Max.        2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width1             1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Min.         2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.1st Qu.      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Median       2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Mean         2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.3rd Qu.      2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width.Max.         2</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

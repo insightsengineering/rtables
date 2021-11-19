@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -117,6 +117,71 @@
       <small>Source: <a href='https://github.com/roche/rtables/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rtables-040" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-040" class="anchor"></a>rtables 0.4.0</h2>
+<ul>
+<li>Initializing layouts with <code>NULL</code> is now deprecated</li>
+<li>insert_rrow is deprecated in favor of new <code>insert_row_at_path</code> and <code>label_at_path&lt;-</code> functions</li>
+<li>split and analysis/content functions can now depend on values of splits they are nested inside by accepting and using the new <code>.spl_context</code> optional argument</li>
+<li>new <code>trim_levels_to_map</code> split function for dictating exact combinations of values which should appear across splits</li>
+<li>
+<code>value_formats</code> function now exported which returns/displays the effective formats of all cells in a table</li>
+<li>
+<code>compare_rtables</code> is now <em>much</em> faster for tables with many cells</li>
+<li>
+<code>compare_rtables</code> now accepts <code>structure</code> argument which adds comparison of structure (by way of row- and column-path positions)</li>
+<li>new <code>tt_to_flextable</code> coercion function</li>
+<li>new <code>export_as_pdf</code> exporter function</li>
+<li>
+<code>value_at</code> and <code>cell_values</code> functions now have methods for <code>TableRow</code> objects making them usable in sorting/pruning functions</li>
+</ul>
+</div>
+    <div id="rtables-0389001" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-0389001" class="anchor"></a>rtables 0.3.8.9001</h2>
+<ul>
+<li>new <code>trim_levels_to_map</code> split function based on wwojtek’s work in <a href='https://github.com/roche/rtables/issues/203'>#203</a></li>
+<li>support for column referential footnotes</li>
+<li>support for adding footnotes to existint table via <code>fnotes_at_path&lt;-</code> function</li>
+<li>
+<code>trim_levels_in_group</code> now trims empty levels of outer (split) variable by default</li>
+<li>
+<code>value_at</code> and <code>cell_values</code> now work for tablerow objects</li>
+<li>Fixed <code>as_html</code> bug in multvar split columns case</li>
+<li>Fixed pagination off-by-one error</li>
+</ul>
+</div>
+    <div id="rtables-0389000" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-0389000" class="anchor"></a>rtables 0.3.8.9000</h2>
+</div>
+    <div id="rtables-038" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-038" class="anchor"></a>rtables 0.3.8</h2>
+<ul>
+<li>Add experimental support for newlines in column names, row labels, and cell values (not supported in top-left annotations)</li>
+<li>
+<code>as_html</code> refactored to support newlines while respecting table structure</li>
+<li>self_extent column of df returned by <code>make_row_df</code> now reflects extent <em>in lines</em>, thus will return larger values if the row-label or any cell values contain newlines.</li>
+<li>Fix bug where tables output using <code>as_html</code> (or viewed in <code>Viewer</code>) were missing the table class attribute (<a href='https://github.com/roche/rtables/issues/194'>#194</a>)</li>
+<li>inserting a DataRow with incorrect number of columns is now an error (<a href='https://github.com/roche/rtables/issues/199'>#199</a>)</li>
+<li>Referential footer machinery now works in colspan case.</li>
+<li>Fix extraneous footnote attribute bug (<a href='https://github.com/roche/rtables/issues/198'>#198</a>)</li>
+<li>Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (<a href='https://github.com/roche/rtables/issues/200'>#200</a>)</li>
+<li>Resync NEWS.md file</li>
+<li>Introduce titles and footnotes</li>
+<li>Support automatic population of top-left</li>
+<li>Introduce referential footnote support for cells and row labels</li>
+<li>Added <code>vars_in_layout</code> to list (explicitly named only) variables used in a layout</li>
+<li>Fix column label ordering bug when value label variable is a factor (<a href='https://github.com/roche/rtables/issues/173'>#173</a>)</li>
+</ul>
+</div>
+    <div id="rtables-037" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rtables-037" class="anchor"></a>rtables 0.3.7</h2>
+<p>Synchronize release with GitHub commit sha.</p>
+</div>
     <div id="rtables-036" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rtables-036" class="anchor"></a>rtables 0.3.6</h2>
@@ -339,7 +404,7 @@
 <a href="#rtables-012" class="anchor"></a>rtables 0.1.2</h2>
 <ul>
 <li>
-<code>rbind.rtable</code> now supports binding rtables with rows, e.g. <code><a href="../reference/rbindl_rtables.html">rbind(tbl1, rrow(), tbl2)</a></code> or <code><a href="../reference/rbindl_rtables.html">rbind(tbl1, rrow("row name"), tbl2)</a></code>.</li>
+<code>rbind.rtable</code> now supports binding rtables with rows, e.g. <code>rbind(tbl1, rrow(), tbl2)</code> or <code>rbind(tbl1, rrow("row name"), tbl2)</code>.</li>
 <li>
 <code>rbindl_rtables</code> supports <code>NULL</code> objects in the list (except for the first element).</li>
 <li>Add <code>indent</code> function.</li>
@@ -383,11 +448,11 @@
 <ul>
 <li>Version <code>0.1.0</code> is a major re-design with lots of internal refactoring and the following API changes:
 <ul>
-<li>Redesign: <code>rtable</code> has now <code>header</code> argument instead of <code>col.names</code>. A <code>header</code> can be created with <code>rheader</code> and is a collection of <code>rrow</code>s. If <code>header</code> is set to <code><a href="https://rdrr.io/r/base/c.html">c("A", "B")</a></code> then <code>rtable</code> will create the <code>rheader</code> with a single <code>rrow</code> and by setting <code>row.name</code> to <code>NULL</code>.</li>
+<li>Redesign: <code>rtable</code> has now <code>header</code> argument instead of <code>col.names</code>. A <code>header</code> can be created with <code>rheader</code> and is a collection of <code>rrow</code>s. If <code>header</code> is set to <code>c("A", "B")</code> then <code>rtable</code> will create the <code>rheader</code> with a single <code>rrow</code> and by setting <code>row.name</code> to <code>NULL</code>.</li>
 <li>
 <code>header</code> and <code>header&lt;-</code> function added.</li>
 <li>Renamed <code>get_rcell_formats</code> to <code>list_rcell_format_labels</code>.</li>
-<li>If <code>rcell</code> format is <code>NULL</code> then the cell content will be converted to a string with <code><a href="https://rdrr.io/r/base/paste.html">paste(as.character(x), collapse = ', ')</a></code>.</li>
+<li>If <code>rcell</code> format is <code>NULL</code> then the cell content will be converted to a string with <code>paste(as.character(x), collapse = ', ')</code>.</li>
 <li>Accessor <code>[i,]</code> works now to subset a table.</li>
 <li>
 <code>rbind</code> method for rtables.</li>

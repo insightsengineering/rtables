@@ -73,7 +73,7 @@ indenting, and column spanning information with it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ indenting, and column spanning information with it." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -125,7 +125,14 @@ indenting, and column spanning information with it." />
 indenting, and column spanning information with it.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rcell</span><span class='op'>(</span><span class='va'>x</span>, format <span class='op'>=</span> <span class='cn'>NULL</span>, colspan <span class='op'>=</span> <span class='fl'>1L</span>, label <span class='op'>=</span> <span class='cn'>NULL</span>, indent_mod <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>rcell</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  format <span class='op'>=</span> <span class='cn'>NULL</span>,
+  colspan <span class='op'>=</span> <span class='fl'>1L</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  indent_mod <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnotes <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
 <span class='fu'>non_ref_rcell</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -160,6 +167,10 @@ then the <code>format</code> is applied</p></td>
     <tr>
       <th>indent_mod</th>
       <td><p>numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which corresponds to the unmodified default behavior.</p></td>
+    </tr>
+    <tr>
+      <th>footnotes</th>
+      <td><p>list or NULL. Referential footnote messages for the cell.</p></td>
     </tr>
     <tr>
       <th>is_ref</th>

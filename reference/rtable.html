@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -154,134 +154,152 @@ then the <code>format</code> is applied</p></td>
 <code><a href='insert_rrow.html'>insert_rrow</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>rtable</span><span class='op'>(</span>
-  header <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"one to three"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"more stuff"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='va'>pi</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>, <span class='st'>"test"</span>, <span class='st'>"and more"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;                 A      B        C    
-#&gt; -------------------------------------
-#&gt; one to three    1      2        3    
-#&gt; more stuff     3.14   test   and more</div><div class='input'>
-
-<span class='co'># Table with multirow header</span>
-<span class='va'>sel</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>==</span> <span class='st'>"setosa"</span>
-<span class='va'>mtbl</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span>
-  header <span class='op'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span><span class='op'>(</span>
-    <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span>row.name <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-         <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"Petal.Length"</span>, colspan<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span><span class='op'>)</span>
-  <span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span>
-    row.name <span class='op'>=</span> <span class='st'>"All Species"</span>,
-    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>)</span>,
-    format <span class='op'>=</span> <span class='st'>"xx.xx"</span>
-  <span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span>
-    row.name <span class='op'>=</span> <span class='st'>"Setosa"</span>,
-    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='va'>mtbl</span>
-</div><div class='output co'>#&gt;                Sepal.Length      Petal.Length  
-#&gt;                mean    median    mean    median
-#&gt; -----------------------------------------------
-#&gt; All Species    5.84     5.8      3.76     4.35 
-#&gt; Setosa        5.006      5      1.462     1.5  </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtbl</span><span class='op'>)</span> <span class='co'># always first row of header</span>
-</div><div class='output co'>#&gt; [1] "Sepal.Length" "Sepal.Length" "Petal.Length" "Petal.Length"</div><div class='input'>
-<span class='co'># Single row header</span>
-
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span>
-  header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Treatement\nN=100"</span>, <span class='st'>"Comparison\nN=300"</span><span class='op'>)</span>,
-  format <span class='op'>=</span> <span class='st'>"xx (xx.xx%)"</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>104</span>, <span class='fl'>.2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>.4</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>23</span>, <span class='fl'>.4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>43</span>, <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>""</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"this is a very long section header"</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"estimate"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fl'>55.23</span>, <span class='st'>"xx.xx"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"95% CI"</span>, indent <span class='op'>=</span> <span class='fl'>1</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>44.8</span>, <span class='fl'>67.4</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"(xx.x, xx.x)"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;                                      Treatement   Comparison
-#&gt;                                        N=100        N=300   
-#&gt; ------------------------------------------------------------
-#&gt; A                                    104 (20%)    100 (40%) 
-#&gt; B                                     23 (40%)     43 (50%) 
-#&gt;                                                             
-#&gt; this is a very long section header                          
-#&gt; estimate                                      55.23         
-#&gt; 95% CI                                    (44.8, 67.4)      </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "A"                                  "B"                                 
-#&gt; [3] ""                                   "this is a very long section header"
-#&gt; [5] "estimate"                           "95% CI"                            </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Treatement" "Comparison"</div><div class='input'>
-
-<span class='co'># Subsetting</span>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>
-</div><div class='output co'>#&gt;     Treatement   Comparison
-#&gt;       N=100        N=300   
-#&gt; ---------------------------
-#&gt; A   104 (20%)    100 (40%) </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;                                       Treatement 
-#&gt;                                         N=100    
-#&gt; -------------------------------------------------
-#&gt; A                                     104 (20%)  
-#&gt; B                                      23 (40%)  
-#&gt;                                                  
-#&gt; this is a very long section header               
-#&gt; estimate                                55.23    
-#&gt; 95% CI                               (44.8, 67.4)</div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     Comparison
-#&gt;       N=300   
-#&gt; --------------
-#&gt; A   100 (40%) </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     Treatement
-#&gt;       N=100   
-#&gt; --------------
-#&gt; B    23 (40%) </div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>3</span>,<span class='fl'>2</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    Comparison
-#&gt;      N=300   
-#&gt; -------------
-#&gt;              </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;            Treatement
-#&gt;              N=100   
-#&gt; ---------------------
-#&gt; estimate     55.23   </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>5</span>,<span class='fl'>2</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;            Comparison
-#&gt;              N=300   
-#&gt; ---------------------
-#&gt; estimate     55.23   </div><div class='input'>
-<span class='co'># # Data Structure methods</span>
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 6 2</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 6</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Treatement" "Comparison"</div><div class='input'>
-
-<span class='co'># Colspans</span>
-
-<span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span>, <span class='st'>"E"</span><span class='op'>)</span>,
-  format <span class='op'>=</span> <span class='st'>"xx"</span>,
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span><span class='op'>)</span>,
-
-  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"sp2"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, <span class='st'>"sp1"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"sp2-2"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='va'>tbl2</span>
-</div><div class='output co'>#&gt;      A    B    C     D    E 
-#&gt; ----------------------------
-#&gt; r1   1    2    3     4    5 
-#&gt; r2    sp2     sp1    sp2-2  </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>rtable</span><span class='op'>(</span></span>
+<span class='r-in'>  header <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"one to three"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"more stuff"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='va'>pi</span>, format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>, <span class='st'>"test"</span>, <span class='st'>"and more"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 A      B        C    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> one to three    1      2        3    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> more stuff     3.14   test   and more</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Table with multirow header</span></span>
+<span class='r-in'><span class='va'>sel</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>==</span> <span class='st'>"setosa"</span></span>
+<span class='r-in'><span class='va'>mtbl</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span></span>
+<span class='r-in'>  header <span class='op'>=</span> <span class='fu'><a href='rheader.html'>rheader</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span>row.name <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>         <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"Petal.Length"</span>, colspan<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span>, <span class='st'>"mean"</span>, <span class='st'>"median"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span></span>
+<span class='r-in'>    row.name <span class='op'>=</span> <span class='st'>"All Species"</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>)</span>,</span>
+<span class='r-in'>    format <span class='op'>=</span> <span class='st'>"xx.xx"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span></span>
+<span class='r-in'>    row.name <span class='op'>=</span> <span class='st'>"Setosa"</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Sepal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span><span class='op'>[</span><span class='va'>sel</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>mtbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                Sepal.Length      Petal.Length  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                mean    median    mean    median</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> All Species    5.84     5.8      3.76     4.35 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Setosa        5.006      5      1.462     1.5  </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtbl</span><span class='op'>)</span> <span class='co'># always first row of header</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Sepal.Length" "Sepal.Length" "Petal.Length" "Petal.Length"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Single row header</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span></span>
+<span class='r-in'>  header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Treatement\nN=100"</span>, <span class='st'>"Comparison\nN=300"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  format <span class='op'>=</span> <span class='st'>"xx (xx.xx%)"</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>104</span>, <span class='fl'>.2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>.4</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>23</span>, <span class='fl'>.4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>43</span>, <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>""</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"this is a very long section header"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"estimate"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fl'>55.23</span>, <span class='st'>"xx.xx"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"95% CI"</span>, indent <span class='op'>=</span> <span class='fl'>1</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>44.8</span>, <span class='fl'>67.4</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"(xx.x, xx.x)"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                      Treatement   Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                        N=100        N=300   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A                                    104 (20%)    100 (40%) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B                                     23 (40%)     43 (50%) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> this is a very long section header                          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> estimate                                      55.23         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 95% CI                                    (44.8, 67.4)      </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "A"                                  "B"                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3] ""                                   "this is a very long section header"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] "estimate"                           "95% CI"                            </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Treatement" "Comparison"</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Subsetting</span></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Treatement   Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       N=100        N=300   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A   104 (20%)    100 (40%) </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                       Treatement </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                         N=100    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A                                     104 (20%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B                                      23 (40%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> this is a very long section header               </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> estimate                                55.23    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 95% CI                               (44.8, 67.4)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       N=300   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> --------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A   100 (40%) </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Treatement</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       N=100   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> --------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> B    23 (40%) </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>3</span>,<span class='fl'>2</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N=300   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Treatement</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              N=100   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> estimate     55.23   </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>5</span>,<span class='fl'>2</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              N=300   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> estimate     55.23   </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># # Data Structure methods</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 6 2</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 6</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Treatement" "Comparison"</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Colspans</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'>rtable</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span>, <span class='st'>"E"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  format <span class='op'>=</span> <span class='st'>"xx"</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r1"</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span><span class='op'>)</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"r2"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"sp2"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, <span class='st'>"sp1"</span>, <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='st'>"sp2-2"</span>, colspan <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      A    B    C     D    E </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> r1   1    2    3     4    5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> r2    sp2     sp1    sp2-2  </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

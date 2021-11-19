@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -45,7 +45,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -109,28 +109,28 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p><code>rtables</code> is now available on CRAN and you can install the latest released version with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"rtables"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"rtables"</span><span class="op">)</span></code></pre></div>
 <p>or you can install the latest stable version directly from GitHub with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu">devtool</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Roche/rtables"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtool</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Roche/rtables"</span><span class="op">)</span></code></pre></div>
 <p>To install a frozen pre-release version of <code>rtables</code> based on the new Layouting and Tabulation API as presented at user!2020 and JSM2020 run the following command in <code>R</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"roche/rtables"</span>, ref<span class="op">=</span><span class="st">"v0.3.3"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"roche/rtables"</span>, ref<span class="op">=</span><span class="st">"v0.3.3"</span><span class="op">)</span></code></pre></div>
 <p>To install the latest development version of the new test version of <code>rtables</code> run</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"roche/rtables"</span>, ref <span class="op">=</span> <span class="st">"gabe_tabletree_work"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"roche/rtables"</span>, ref <span class="op">=</span> <span class="st">"gabe_tabletree_work"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>We first begin with a demographic table alike example and then show the creation of a more complex table.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: magrittr</span>
 
-<span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR1"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
       <span class="fu"><a href="reference/in_rows.html">in_rows</a></span><span class="op">(</span>
@@ -160,9 +160,9 @@
 <span class="co">#&gt; BMRKR2                                                    </span>
 <span class="co">#&gt;   LOW              50             45              40      </span>
 <span class="co">#&gt;   MEDIUM           37             56              42      </span>
-<span class="co">#&gt;   HIGH             47             33              50</span></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
+<span class="co">#&gt;   HIGH             47             33              50</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'dplyr'</span>
@@ -174,7 +174,7 @@
 <span class="co">#&gt;     intersect, setdiff, setequal, union</span>
 
 <span class="co">## for simplicity grab non-sparse subset</span>
-<span class="va">ADSL</span> <span class="op">=</span> <span class="va">ex_adsl</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ADSL</span> <span class="op">=</span> <span class="va">ex_adsl</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
 
 <span class="va">biomarker_ave</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
      <span class="va">val</span> <span class="op">=</span> <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span> <span class="kw">else</span> <span class="st">"no data"</span>
@@ -183,14 +183,14 @@
      <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"BMRKR2"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="reference/remove_split_levels.html">trim_levels_in_group</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR1"</span>, <span class="va">biomarker_ave</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"BMRKR2"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="reference/remove_split_levels.html">trim_levels_in_group</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR1"</span>, <span class="va">biomarker_ave</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span>
 <span class="co">#&gt;                                                          A: Drug X                            B: Placebo                           C: Combination           </span>
 <span class="co">#&gt;                                                LOW        MEDIUM        HIGH         LOW         MEDIUM       HIGH         LOW         MEDIUM        HIGH   </span>
@@ -223,7 +223,7 @@
 <span class="co">#&gt; MULTIPLE                                                                                                                                                    </span>
 <span class="co">#&gt; NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER                                                                                                                   </span>
 <span class="co">#&gt; OTHER                                                                                                                                                       </span>
-<span class="co">#&gt; UNKNOWN</span></pre></div>
+<span class="co">#&gt; UNKNOWN</span></code></pre></div>
 </div>
 </div>
 <div id="acknowledgements" class="section level1">

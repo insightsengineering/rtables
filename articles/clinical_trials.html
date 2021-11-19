@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,15 +70,15 @@
 
       
 
-      </header><script src="clinical_trials_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="clinical_trials_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Example Clinical Trials Tables</h1>
                         <h4 class="author">Gabriel Becker and Adrian Waddell</h4>
             
-            <h4 class="date">2021-02-24</h4>
+            <h4 class="date">2021-11-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/vignettes/clinical_trials.Rmd"><code>vignettes/clinical_trials.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/../rtables_ghpages/vignettes/clinical_trials.Rmd"><code>../rtables_ghpages/vignettes/clinical_trials.Rmd</code></a></small>
       <div class="hidden name"><code>clinical_trials.Rmd</code></div>
 
     </div>
@@ -102,43 +102,43 @@
 <p>using the <code>rtables</code> layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.</p>
 <p>Note that all the data is created using random number generators. All <code>ex_*</code> data which is currently attached to the <code>rtables</code> package were created using <code>random.cdisc.data</code> another R package that we intend to release as open source soon.</p>
 <p>The packages used in this vignette are:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="demographic-table" class="section level2">
 <h2 class="hasAnchor">
 <a href="#demographic-table" class="anchor"></a>Demographic Table</h2>
 <p>Demographic tables summarize the variables content for different population subsets (encoded in the columns).</p>
 <p>One feature of <code>analyze</code> that we have not introduced in the previous vignette is that the analysis function <code>afun</code> can specify multiple rows with the <code>in_rows</code> function:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span>  <span class="co"># Example ADSL dataset</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span>  <span class="co"># Example ADSL dataset</span>
 
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span>vars <span class="op">=</span> <span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
       <span class="st">"Mean (sd)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx)"</span><span class="op">)</span>,
       <span class="st">"Range"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx - xx.xx"</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></pre></div>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></code></pre></div>
 <pre><code>             A: Drug X     B: Placebo    C: Combination
 -------------------------------------------------------
 Mean (sd)   33.77 (6.55)   35.43 (7.9)    35.43 (7.72) 
 Range         21 - 50        21 - 62        20 - 69    </code></pre>
 <p>Multiple variables can be analyzed in one <code>analyze</code> call:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span>vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
       <span class="st">"Mean (sd)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx)"</span><span class="op">)</span>,
       <span class="st">"Range"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx - xx.xx"</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></pre></div>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></code></pre></div>
 <pre><code>               A: Drug X      B: Placebo    C: Combination
 ----------------------------------------------------------
 AGE                                                       
@@ -148,8 +148,8 @@ BMRKR1
   Mean (sd)   5.97 (3.55)     5.7 (3.31)     5.62 (3.49)  
   Range       0.41 - 17.67   0.65 - 14.24    0.17 - 21.39 </code></pre>
 <p>Hence, if <code>afun</code> can process different data vector types (i.e. variables selected from the data) then we are fairly close to a standard demographic table. Here is a function that either creates a count table or some number summary if the argument <code>x</code> is a factor or numeric, respectively:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">s_summary</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">s_summary</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
       <span class="st">"n"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx"</span><span class="op">)</span>,
@@ -165,10 +165,10 @@ BMRKR1
   <span class="op">}</span> <span class="kw">else</span> <span class="op">(</span>
     <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"type not supported"</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>Note we use <code>rcell</code>s to wrap the results in order to add formatting instructions for <code>rtables</code>. We can use <code>s_summary</code> outside the context of tabulation:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu">s_summary</span><span class="op">(</span><span class="va">ADSL</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">s_summary</span><span class="op">(</span><span class="va">ADSL</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
    row_name formatted_cell indent_mod row_label
@@ -177,8 +177,8 @@ BMRKR1
 3       IQR             10          0       IQR
 4 min - max        20 - 69          0 min - max</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu">s_summary</span><span class="op">(</span><span class="va">ADSL</span><span class="op">$</span><span class="va">SEX</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">s_summary</span><span class="op">(</span><span class="va">ADSL</span><span class="op">$</span><span class="va">SEX</span><span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
           row_name formatted_cell indent_mod        row_label
@@ -187,13 +187,13 @@ BMRKR1
 3                U              9          0                U
 4 UNDIFFERENTIATED              3          0 UNDIFFERENTIATED</code></pre>
 <p>We can now create a commonly used variant of the demographic table:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="va">s_summary</span><span class="op">)</span> 
 
 <span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span>
-<span class="va">tbl</span></pre></div>
+<span class="va">tbl</span></code></pre></div>
 <pre><code>                      A: Drug X     B: Placebo    C: Combination
 ----------------------------------------------------------------
 AGE                                                             
@@ -207,14 +207,14 @@ SEX
   U                       3              2              4       
   UNDIFFERENTIATED        1              0              2       </code></pre>
 <p>Note that <code>analyze</code> can also be called multiple times in sequence:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> 
 
-<span class="va">tbl2</span></pre></div>
+<span class="va">tbl2</span></code></pre></div>
 <pre><code>                      A: Drug X     B: Placebo    C: Combination
 ----------------------------------------------------------------
 AGE                                                             
@@ -228,16 +228,16 @@ SEX
   U                       3              2              4       
   UNDIFFERENTIATED        1              0              2       </code></pre>
 <p>which leads to the identical table as <code>tbl</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="va">tbl2</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="va">tbl2</span><span class="op">)</span></code></pre></div>
 <pre><code>[1] TRUE</code></pre>
 <p>In clinical trials analyses the number of patients per column is often referred to as <code>N</code> (rather than the overall population which outside of clinical trials is commonly referred to as <code>N</code>). Column <code>N</code>s are added using the <code>add_colcounts</code> function:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARMCD"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARMCD"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </code></pre></div>
 <pre><code>                        ARM A          ARM B         ARM C    
                        (N=134)        (N=134)       (N=132)   
 --------------------------------------------------------------
@@ -256,12 +256,12 @@ SEX
 <a href="#variations-on-the-demographic-table" class="anchor"></a>Variations on the demographic table</h3>
 <p>We will now show a couple of variations of the demographic table that we developed above. These variations are in structure and not in analysis, hence they don’t require a modification to the <code>s_summary</code> function.</p>
 <p>We will start with a standard table analyzing the variables <code>AGE</code> and <code>BMRKR2</code> variables:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </code></pre></div>
 <pre><code>               A: Drug X     B: Placebo    C: Combination
                 (N=134)        (N=134)        (N=132)    
 ---------------------------------------------------------
@@ -275,13 +275,13 @@ BMRKR2
   MEDIUM           37            56              42      
   HIGH             47            33              50      </code></pre>
 <p>Assume we would like to have this analysis carried out per gender encoded in the row space:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span> </code></pre></div>
 <pre><code>                    A: Drug X      B: Placebo    C: Combination
                      (N=134)        (N=134)         (N=132)    
 ---------------------------------------------------------------
@@ -326,15 +326,15 @@ UNDIFFERENTIATED
     MEDIUM              0              0               0       
     HIGH                0              0               0       </code></pre>
 <p>We will now subset <code>ADSL</code> to include only males and females in the analysis in order to reduces the number of rows in the table:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit">
-<span class="va">ADSL_M_F</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">SEX</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ADSL_M_F</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span> </pre></div>
+<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span> </code></pre></div>
 <pre><code>                    A: Drug X      B: Placebo    C: Combination
                      (N=130)        (N=132)         (N=126)    
 ---------------------------------------------------------------
@@ -379,13 +379,13 @@ UNDIFFERENTIATED
     MEDIUM              0              0               0       
     HIGH                0              0               0       </code></pre>
 <p>Note that the <code>UNDIFFERENTIATED</code> and <code>U</code> levels still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the <code>split</code> and <code>table</code> function do. If empty levels should be dropped then <code>rtables</code> needs to know that at splitting time via the <code>split_fun</code> argument in <code>split_rows_by</code>. There are a number of predefined functions. For this example <code>drop_split_levels</code> is required to drop the empty levels at splitting time. Splitting is a big topic and will be eventually addressed in a specific package vignette.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span> </code></pre></div>
 <pre><code>                 A: Drug X      B: Placebo    C: Combination
                   (N=130)        (N=132)         (N=126)    
 ------------------------------------------------------------
@@ -410,21 +410,21 @@ M
     MEDIUM           15             18              23      
     HIGH             15             14              26      </code></pre>
 <p>In the table above the labels <code>M</code> and <code>F</code> are not very descriptive. You can add the full label as follows:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
-<span class="va">ADSL_M_F_l</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>lbl_sex <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ADSL_M_F_l</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>lbl_sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/case_when.html">case_when</a></span><span class="op">(</span>
     <span class="va">SEX</span> <span class="op">==</span> <span class="st">"M"</span> <span class="op">~</span> <span class="st">"Male"</span>,
     <span class="va">SEX</span> <span class="op">==</span> <span class="st">"F"</span> <span class="op">~</span> <span class="st">"Female"</span>,
     <span class="va">SEX</span> <span class="op">==</span> <span class="st">"U"</span> <span class="op">~</span> <span class="st">"Unknown"</span>,
     <span class="va">SEX</span> <span class="op">==</span> <span class="st">"UNDIFFERENTIATED"</span> <span class="op">~</span> <span class="st">"Undifferentiated"</span>
   <span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span></code></pre></div>
 <pre><code>                 A: Drug X      B: Placebo    C: Combination
                   (N=130)        (N=132)         (N=126)    
 ------------------------------------------------------------
@@ -449,14 +449,14 @@ Male
     MEDIUM           15             18              23      
     HIGH             15             14              26      </code></pre>
 <p>For the next table variation we only stratify by gender for the <code>AGE</code> analysis. To do this the <code>nested</code> argument has to be set to <code>FALSE</code> in <code>analyze</code> call:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span> </code></pre></div>
 <pre><code>                 A: Drug X      B: Placebo    C: Combination
                   (N=130)        (N=132)         (N=126)    
 ------------------------------------------------------------
@@ -477,23 +477,23 @@ BMRKR2
   MEDIUM             36             56              40      
   HIGH               47             32              49      </code></pre>
 <p>Once we split the rows into groups (<code>Male</code> and <code>Female</code> here) one might want to summarize groups: usually by showing count and column percentages. This is especially important if we have missing data. For example if we create the above table but add missing data to the <code>AGE</code> variable:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit">
-<span class="va">insert_NAs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">insert_NAs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
   <span class="va">x</span>
 <span class="op">}</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">ADSL_NA</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F_l</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>AGE <span class="op">=</span> <span class="fu">insert_NAs</span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">ADSL_NA</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F_l</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>AGE <span class="op">=</span> <span class="fu">insert_NAs</span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </pre></div>
+<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>               A: Drug X      B: Placebo    C: Combination
                 (N=130)        (N=132)         (N=126)    
 ----------------------------------------------------------
@@ -512,15 +512,15 @@ BMRKR2
   MEDIUM           36             56              40      
   HIGH             47             32              49      </code></pre>
 <p>Here it is not easy to see how many females and males there are in each arm as <code>n</code> represents the number of non-missing data elements in the variables. Groups within rows that are defined by splitting can be summarized with <code>summarize_row_groups</code>, for example:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>               A: Drug X      B: Placebo    C: Combination
                 (N=130)        (N=132)         (N=126)    
 ----------------------------------------------------------
@@ -544,20 +544,20 @@ BMRKR2
 <li>Conceptually the content rows summarize the patient population which is analyzed and hence is often the count &amp; group percentages (default behavior of <code>summarize_row_groups</code>).</li>
 </ul>
 <p>We can recreate this default behavior (count percentage) by defining a <code>cfun</code> for illustrative purposes here as it results in the same table as above:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
       <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx (xx.xx%)"</span><span class="op">)</span>,
       .labels <span class="op">=</span> <span class="va">labelstr</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>  <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </pre></div>
+  <span class="op">}</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>               A: Drug X      B: Placebo    C: Combination
                 (N=130)        (N=132)         (N=126)    
 ----------------------------------------------------------
@@ -575,19 +575,19 @@ BEP01FL
   Y                67             63              65      
   N                63             69              61      </code></pre>
 <p>Note that <code>cfun</code> differs from <code>afun</code> (which is used in <code>analyze</code>) in that <code>cfun</code> does not operate on variables but rather on <code>data.frame</code>s or <code>tibble</code>s which are passed via the <code>df</code> argument (<code>afun</code> can optionally request <code>df</code> too). Further, <code>cfun</code> gives the default group label (factor level from splitting) as an argument to <code>labelstr</code> and hence it could be modified:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
        <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx (xx.xx%)"</span><span class="op">)</span>,
        .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">labelstr</span>, <span class="st">": count (perc.)"</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>  <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </pre></div>
+  <span class="op">}</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>                         A: Drug X      B: Placebo    C: Combination
 --------------------------------------------------------------------
 Female: count (perc.)   79 (60.77%)    77 (58.33%)     66 (52.38%)  
@@ -618,13 +618,13 @@ BEP01FL
 <li>layouts can be reused</li>
 </ul>
 <p>Here is an example that demonstrates the reusability of layouts:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit">
-<span class="va">lyt</span> <span class="op">&lt;-</span> <span class="cn">NULL</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="va">s_summary</span><span class="op">)</span>
 
-<span class="va">lyt</span></pre></div>
+<span class="va">lyt</span></code></pre></div>
 <pre><code>A Pre-data Table Layout
 
 Column-Split Structure:
@@ -633,8 +633,8 @@ ARM (lvls)
 Row-Split Structure:
 ( (** multivar analysis **) -&gt; AGE, SEX (** multivar analysis **) -&gt; ) (** multivar analysis **) </code></pre>
 <p>We can now build a table for <code>ADSL</code></p>
-<div class="sourceCode" id="cb41"><pre class="downlit">
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></code></pre></div>
 <pre><code>                      A: Drug X     B: Placebo    C: Combination
                        (N=134)        (N=134)        (N=132)    
 ----------------------------------------------------------------
@@ -649,8 +649,8 @@ SEX
   U                       3              2              4       
   UNDIFFERENTIATED        1              0              2       </code></pre>
 <p>or for all patients that are older than 18:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit">
-<span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">18</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">18</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>                      A: Drug X     B: Placebo    C: Combination
                        (N=134)        (N=134)        (N=132)    
 ----------------------------------------------------------------
@@ -671,10 +671,10 @@ SEX
 <a href="#adverse-events" class="anchor"></a>Adverse Events</h2>
 <p>There are a number of different adverse event tables. We will now present two tables that show adverse events by id and then by grade and by id.</p>
 <p>This time we won’t use the <code>ADAE</code> dataset from <code>random.cdisc.data</code> but rather generate a dataset on the fly (see <a href="https://github.com/waddella/phuse2016_adverse_events">Adrian’s 2016 Phuse paper</a>):</p>
-<div class="sourceCode" id="cb45"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 
-<span class="va">lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span>
+<span class="va">lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tribble.html">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">AEDECOD</span>,                          <span class="op">~</span><span class="va">AEBODSYS</span>,                                         <span class="op">~</span><span class="va">AETOXGR</span>,
   <span class="st">'HEADACHE'</span>,                        <span class="st">"NERVOUS SYSTEM DISORDERS"</span>,                        <span class="st">"5"</span>,
   <span class="st">'BACK PAIN'</span>,                       <span class="st">"MUSCULOSKELETAL AND CONNECTIVE TISSUE DISORDERS"</span>, <span class="st">"2"</span>,
@@ -704,51 +704,51 @@ SEX
 <span class="va">l.adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html">mapply</a></span><span class="op">(</span><span class="va">ADSL2</span><span class="op">$</span><span class="va">USUBJID</span>, <span class="va">ADSL2</span><span class="op">$</span><span class="va">ARM</span>, <span class="va">ADSL2</span><span class="op">$</span><span class="va">SEX</span>, <span class="va">ADSL2</span><span class="op">$</span><span class="va">AGE</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">arm</span>, <span class="va">sex</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">n_ae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="va">weightsA</span> <span class="kw">else</span> <span class="va">weightsB</span><span class="op">)</span>
   <span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">lookup</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">n_ae</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fl">16</span><span class="op">)</span>
-  <span class="va">lookup</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-      AESEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  <span class="va">lookup</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+    <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>
+      AESEQ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
       USUBJID <span class="op">=</span> <span class="va">id</span>, ARM <span class="op">=</span> <span class="va">arm</span>, SEX <span class="op">=</span> <span class="va">sex</span>, AGE <span class="op">=</span> <span class="va">age</span>
     <span class="op">)</span>
 <span class="op">}</span>, SIMPLIFY <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="va">ADAE2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">l.adae</span><span class="op">)</span>
-<span class="va">ADAE2</span> <span class="op">&lt;-</span> <span class="va">ADAE2</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+<span class="va">ADAE2</span> <span class="op">&lt;-</span> <span class="va">ADAE2</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>
     ARM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">ARM</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ARM A"</span>, <span class="st">"ARM B"</span><span class="op">)</span><span class="op">)</span>,
     AEDECOD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span>,
     AEBODSYS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">AEBODSYS</span><span class="op">)</span>, 
     AETOXGR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">AETOXGR</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">ARM</span>, <span class="va">AGE</span>, <span class="va">SEX</span>, <span class="va">AESEQ</span>, <span class="va">AEDECOD</span>, <span class="va">AEBODSYS</span>, <span class="va">AETOXGR</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">ARM</span>, <span class="va">AGE</span>, <span class="va">SEX</span>, <span class="va">AESEQ</span>, <span class="va">AEDECOD</span>, <span class="va">AEBODSYS</span>, <span class="va">AETOXGR</span><span class="op">)</span>
   
-<span class="va">ADAE2</span></pre></div>
-<pre><code># A tibble: 3,118 x 8
-   USUBJID ARM     AGE SEX   AESEQ AEDECOD           AEBODSYS            AETOXGR
-     &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;fct&gt;             &lt;fct&gt;               &lt;fct&gt;  
- 1       1 ARM A    45 F         1 NAUSEA (INTERMIT… GASTROINTESTINAL D… 2      
- 2       1 ARM A    45 F         2 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 3       1 ARM A    45 F         3 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 4       1 ARM A    45 F         4 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 5       1 ARM A    45 F         5 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 6       1 ARM A    45 F         6 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 7       1 ARM A    45 F         7 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 8       1 ARM A    45 F         8 HEADACHE          NERVOUS SYSTEM DIS… 5      
- 9       1 ARM A    45 F         9 HEADACHE          NERVOUS SYSTEM DIS… 5      
-10       1 ARM A    45 F        10 FAECES SOFT       GASTROINTESTINAL D… 2      
+<span class="va">ADAE2</span></code></pre></div>
+<pre><code># A tibble: 3,118 × 8
+   USUBJID ARM     AGE SEX   AESEQ AEDECOD               AEBODSYS        AETOXGR
+     &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;fct&gt;                 &lt;fct&gt;           &lt;fct&gt;  
+ 1       1 ARM A    45 F         1 NAUSEA (INTERMITTENT) GASTROINTESTIN… 2      
+ 2       1 ARM A    45 F         2 HEADACHE              NERVOUS SYSTEM… 5      
+ 3       1 ARM A    45 F         3 HEADACHE              NERVOUS SYSTEM… 5      
+ 4       1 ARM A    45 F         4 HEADACHE              NERVOUS SYSTEM… 5      
+ 5       1 ARM A    45 F         5 HEADACHE              NERVOUS SYSTEM… 5      
+ 6       1 ARM A    45 F         6 HEADACHE              NERVOUS SYSTEM… 5      
+ 7       1 ARM A    45 F         7 HEADACHE              NERVOUS SYSTEM… 5      
+ 8       1 ARM A    45 F         8 HEADACHE              NERVOUS SYSTEM… 5      
+ 9       1 ARM A    45 F         9 HEADACHE              NERVOUS SYSTEM… 5      
+10       1 ARM A    45 F        10 FAECES SOFT           GASTROINTESTIN… 2      
 # … with 3,108 more rows</code></pre>
 <div id="adverse-events-by-id" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adverse-events-by-id" class="anchor"></a>Adverse Events By ID</h3>
 <p>We start by defining an events summary function:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit">
-<span class="va">s_events_patients</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">s_events_patients</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
     <span class="st">"Total number of patients with at least one event"</span> <span class="op">=</span> 
       <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx (xx.xx%)"</span><span class="op">)</span>,
     
     <span class="st">"Total number of events"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx"</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>So, for a population of <code>5</code> patients where</p>
 <ul>
 <li>one patient has 2 AEs</li>
@@ -756,8 +756,8 @@ SEX
 <li>three patients have no AEs</li>
 </ul>
 <p>we would get the following summary:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit">
-<span class="fu">s_events_patients</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id 1"</span>, <span class="st">"id 1"</span>, <span class="st">"id 2"</span><span class="op">)</span>, .N_col <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">s_events_patients</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id 1"</span>, <span class="st">"id 1"</span>, <span class="st">"id 2"</span><span class="op">)</span>, .N_col <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
                                           row_name formatted_cell indent_mod
@@ -768,45 +768,45 @@ SEX
 2                           Total number of events</code></pre>
 <p>The <code>.N_col</code> argument is a special keyword argument which <code>build_table</code> passes the population size for each respective column. For a list of keyword arguments for the functions passed to <code>afun</code> in <code>analyze</code> refer to the documentation with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
 <p>We now use the <code>s_events_patients</code> summary function in a tabulation:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                      ARM A         ARM B    
                                                     (N=2060)       (N=1058)  
 -----------------------------------------------------------------------------
 Total number of patients with at least one event   114 (5.53%)   150 (14.18%)
 Total number of events                                2060           1058    </code></pre>
 <p>Note that the column <code>N</code>’s are wrong as by default they are set to the number of rows per group (i.e. number of AEs per arm here). This also affects the percentages. For this table we are interested in the number of patients per column/arm which is usually taken from <code>ADSL</code> (variable <code>ADSL2</code> here):</p>
-<div class="sourceCode" id="cb52"><pre class="downlit">
-<span class="va">N_per_arm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">ADSL2</span><span class="op">$</span><span class="va">ARM</span><span class="op">)</span>
-<span class="va">N_per_arm</span></pre></div>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">N_per_arm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">ADSL2</span><span class="op">$</span><span class="va">ARM</span><span class="op">)</span>
+<span class="va">N_per_arm</span></code></pre></div>
 <pre><code>
 ARM A ARM B 
   146   154 </code></pre>
 <p>Since this information is not “pre-data” it needs to go to the table creation function <code>build_table</code>:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                      ARM A          ARM B   
                                                      (N=146)        (N=154)  
 -----------------------------------------------------------------------------
 Total number of patients with at least one event   114 (78.08%)   150 (97.4%)
 Total number of events                                 2060          1058    </code></pre>
 <p>We next calculate this information per system organ class:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit">
-<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                        ARM A          ARM B    
                                                        (N=146)        (N=154)   
 --------------------------------------------------------------------------------
@@ -825,16 +825,16 @@ VASCULAR DISORDERS
   Total number of patients with at least one event    93 (63.7%)     75 (48.7%) 
   Total number of events                                 240            122     </code></pre>
 <p>We now have to the add a count table of <code>AEDECOD</code> for each <code>AEBODSYS</code>. The default <code>analyze</code> behavior for a factor is to create the count table per level (using <code>rtab_inner</code>):</p>
-<div class="sourceCode" id="cb58"><pre class="downlit">
-<span class="va">tbl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span>
 
-<span class="va">tbl1</span></pre></div>
+<span class="va">tbl1</span></code></pre></div>
 <pre><code>                                                          ARM A          ARM B    
                                                          (N=146)        (N=154)   
 ----------------------------------------------------------------------------------
@@ -896,8 +896,8 @@ VASCULAR DISORDERS
     WEAKNESS                                                0              0      </code></pre>
 <p>The <code>indent_mod</code> argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation by default.</p>
 <p>This table so far is however not the usual adverse event table as it counts the total number of events and not the number of subjects one or more events for a particular term. To get the correct table we need to write a custom analysis function:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit">
-<span class="va">table_count_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">termvar</span> <span class="op">=</span> <span class="st">"AEDECOD"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">table_count_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">termvar</span> <span class="op">=</span> <span class="st">"AEDECOD"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span><span class="op">)</span> <span class="op">{</span>
 
   <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="va">termvar</span><span class="op">]</span><span class="op">]</span>
   <span class="va">id</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="va">idvar</span><span class="op">]</span><span class="op">]</span>
@@ -910,7 +910,7 @@ VASCULAR DISORDERS
   <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu">table_count_once_per_id</span><span class="op">(</span><span class="va">ADAE2</span><span class="op">)</span></pre></div>
+<span class="fu">table_count_once_per_id</span><span class="op">(</span><span class="va">ADAE2</span><span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
                         row_name formatted_cell indent_mod
@@ -938,14 +938,14 @@ VASCULAR DISORDERS
 10       ORTHOSTATIC HYPOTENSION
 11                      WEAKNESS</code></pre>
 <p>So the desired AE table is:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, afun <span class="op">=</span> <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, afun <span class="op">=</span> <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                          ARM A          ARM B    
                                                          (N=146)        (N=154)   
 ----------------------------------------------------------------------------------
@@ -1006,17 +1006,17 @@ VASCULAR DISORDERS
     ORTHOSTATIC HYPOTENSION                                 49             44     
     WEAKNESS                                                0              0      </code></pre>
 <p>Note that we are missing the overall summary in the first two rows. This can be added with another <code>analyze</code> call and then setting <code>nested</code> to <code>FALSE</code> in the subsequent <code>summarize_row_groups</code> call:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit">
-<span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, afun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, afun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span>
 
-<span class="va">tbl</span></pre></div>
+<span class="va">tbl</span></code></pre></div>
 <pre><code>                                                          ARM A          ARM B    
                                                          (N=146)        (N=154)   
 ----------------------------------------------------------------------------------
@@ -1079,8 +1079,8 @@ Total number of events                                     2060           1058
     ORTHOSTATIC HYPOTENSION                                 49             44     
     WEAKNESS                                                0              0      </code></pre>
 <p>Finally, if we wanted to prune the 0 counts row we can do that with the <code>trim_rows</code> function:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit">
-<span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                          ARM A          ARM B    
                                                          (N=146)        (N=154)   
 ----------------------------------------------------------------------------------
@@ -1116,14 +1116,14 @@ Total number of events                                     2060           1058
 <a href="#adverse-events-by-id-and-by-grade" class="anchor"></a>Adverse Events By ID and By Grade</h3>
 <p>The adverse events table by ID and by grade shows how many patients had at least one adverse event per grade for different subsets of the data (e.g. defined by system organ class).</p>
 <p>For this table we do not show the zero count grades. Note that we add the “overall” groups with a custom split function.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit">
-<span class="va">table_count_grade_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span> <span class="op">=</span> <span class="st">""</span>, <span class="va">gradevar</span> <span class="op">=</span> <span class="st">"AETOXGR"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span>, <span class="va">grade_levels</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">table_count_grade_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span> <span class="op">=</span> <span class="st">""</span>, <span class="va">gradevar</span> <span class="op">=</span> <span class="st">"AETOXGR"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span>, <span class="va">grade_levels</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="va">id</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="va">idvar</span><span class="op">]</span><span class="op">]</span>
   <span class="va">grade</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="va">gradevar</span><span class="op">]</span><span class="op">]</span>
   
   <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">grade_levels</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">grade</span> <span class="op">%in%</span> <span class="va">grade_levels</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">grade</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">grade_levels</span><span class="op">)</span><span class="op">)</span>
     <span class="va">grade</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">grade</span>, levels <span class="op">=</span> <span class="va">grade_levels</span><span class="op">)</span>
   <span class="op">}</span>
   
@@ -1135,7 +1135,7 @@ Total number of events                                     2060           1058
     <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu">table_count_grade_once_per_id</span><span class="op">(</span><span class="va">ex_adae</span>, grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></pre></div>
+<span class="fu">table_count_grade_once_per_id</span><span class="op">(</span><span class="va">ex_adae</span>, grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
        row_name formatted_cell indent_mod     row_label
@@ -1146,21 +1146,21 @@ Total number of events                                     2060           1058
 5             4             25          0             4
 6             5             65          0             5</code></pre>
 <p>All of the layouting concepts needed to create this table have already been introduced so far:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AETOXGR"</span>, 
           afun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>, 
           extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,
-          var_labels <span class="op">=</span> <span class="st">"- Any adverse events -"</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>, format <span class="op">=</span> <span class="st">"xx"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+          var_labels <span class="op">=</span> <span class="st">"- Any adverse events -"</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>, format <span class="op">=</span> <span class="st">"xx"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AETOXGR"</span>, 
           afun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>, 
-          extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></pre></div>
+          extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, col_counts <span class="op">=</span> <span class="va">N_per_arm</span><span class="op">)</span></code></pre></div>
 <pre><code>                                                     ARM A     ARM B 
                                                     (N=146)   (N=154)
 ---------------------------------------------------------------------
@@ -1519,11 +1519,11 @@ Total number of events                                     2060           1058
 <li>Multinomial response table</li>
 </ol>
 <p>Let’s start with the first part which is fairly simple to derive:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit">
-<span class="va">ADRS_BESRSPI</span> <span class="op">&lt;-</span> <span class="va">ex_adrs</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"BESRSPI"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-    rsp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">AVALC</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Responders"</span>, <span class="st">"Non-Responders"</span><span class="op">)</span><span class="op">)</span>,
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ADRS_BESRSPI</span> <span class="op">&lt;-</span> <span class="va">ex_adrs</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"BESRSPI"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html">mutate</a></span><span class="op">(</span>
+    rsp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">AVALC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Responders"</span>, <span class="st">"Non-Responders"</span><span class="op">)</span><span class="op">)</span>,
     is_rsp <span class="op">=</span> <span class="op">(</span><span class="va">rsp</span> <span class="op">==</span> <span class="st">"Responders"</span><span class="op">)</span>
   <span class="op">)</span>
 
@@ -1531,11 +1531,11 @@ Total number of events                                     2060           1058
    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">xi</span><span class="op">)</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="va">xi</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx%)"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></code></pre></div>
 <pre><code>                    ARM A          ARM B         ARM C    
                    (N=134)        (N=134)       (N=132)   
 ----------------------------------------------------------
@@ -1543,8 +1543,8 @@ Responders       114 (85.07%)   90 (67.16%)   120 (90.91%)
 Non-Responders   20 (14.93%)    44 (32.84%)    12 (9.09%) </code></pre>
 <p>Note that we did set the <code>ref_group</code> argument in <code>split_cols_by</code> which for the current table had no effect as we only use the cell data for the responder and non-responder counting. The <code>ref_group</code> argument is needed for the part 2. and 3. of the table.</p>
 <p>We will now look the implementation of part “2. Unstratified analysis comparison vs. control group.” Let’s start with the analysis function:</p>
-<div class="sourceCode" id="cb74"><pre class="downlit">
-<span class="va">s_unstratified_response_analysis</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">s_unstratified_response_analysis</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="kw">if</span> <span class="op">(</span><span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
@@ -1586,10 +1586,10 @@ Non-Responders   20 (14.93%)    44 (32.84%)    12 (9.09%) </code></pre>
 <span class="op">}</span>
 
 <span class="fu">s_unstratified_response_analysis</span><span class="op">(</span>
-  x <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"A: Drug X"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">is_rsp</span><span class="op">)</span>, 
-  .ref_group <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">is_rsp</span><span class="op">)</span>,
+  x <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"A: Drug X"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html">pull</a></span><span class="op">(</span><span class="va">is_rsp</span><span class="op">)</span>, 
+  .ref_group <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html">pull</a></span><span class="op">(</span><span class="va">is_rsp</span><span class="op">)</span>,
   .in_ref_col <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
                           row_name     formatted_cell indent_mod
@@ -1603,13 +1603,13 @@ Non-Responders   20 (14.93%)    44 (32.84%)    12 (9.09%) </code></pre>
 3       p-value (Chi-Squared Test)
 4              Odds Ratio (95% CI)</code></pre>
 <p>Hence we can now add the next vignette to the table:</p>
-<div class="sourceCode" id="cb76"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstratified_response_analysis</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstratified_response_analysis</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></code></pre></div>
 <pre><code>                                        ARM A             ARM B               ARM C       
                                        (N=134)           (N=134)             (N=132)      
 ------------------------------------------------------------------------------------------
@@ -1621,17 +1621,17 @@ Unstratified Response Analysis
   p-value (Chi-Squared Test)                             0.0006               0.1436      
   Odds Ratio (95% CI)                               0.36 (0.2 - 0.65)   1.75 (0.82 - 3.75)</code></pre>
 <p>Next we will add part 3. the “multinomial response table”. To do so, we are adding a row-split by response level, and then doing the same thing as we did for the binary response table above.</p>
-<div class="sourceCode" id="cb78"><pre class="downlit">
-<span class="va">s_prop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">s_prop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
     <span class="st">"95% CI (Wald, with correction)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html">binom.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="va">.N_col</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span> <span class="op">*</span> <span class="fl">100</span>, format <span class="op">=</span> <span class="st">"(xx.xx, xx.xx)"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span>
 
 <span class="fu">s_prop</span><span class="op">(</span>
-  df <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"A: Drug X"</span>, <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"CR"</span><span class="op">)</span>, 
+  df <span class="op">=</span> <span class="va">ADRS_BESRSPI</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"A: Drug X"</span>, <span class="va">AVALC</span> <span class="op">==</span> <span class="st">"CR"</span><span class="op">)</span>, 
   .N_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">$</span><span class="va">ARM</span> <span class="op">==</span> <span class="st">"A: Drug X"</span><span class="op">)</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 <pre><code>RowsVerticalSection (in_rows) object print method:
 ----------------------------
                         row_name formatted_cell indent_mod
@@ -1639,21 +1639,21 @@ Unstratified Response Analysis
                        row_label
 1 95% CI (Wald, with correction)</code></pre>
 <p>We can now create the final response table with all three parts:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit">
-<span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstratified_response_analysis</span>, 
-          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span>
     var <span class="op">=</span> <span class="st">"AVALC"</span>,
     split_fun <span class="op">=</span> <span class="fu"><a href="../reference/remove_split_levels.html">reorder_split_levels</a></span><span class="op">(</span>neworder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"SD"</span>, <span class="st">"NON CR/PD"</span>, <span class="st">"PD"</span>, <span class="st">"NE"</span><span class="op">)</span>, drlevels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
     nested <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></pre></div>
+  <span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></code></pre></div>
 <pre><code>                                         ARM A              ARM B               ARM C       
                                         (N=134)            (N=134)             (N=132)      
 --------------------------------------------------------------------------------------------
@@ -1671,8 +1671,8 @@ PR                                     36 (26.9%)        35 (26.1%)           23
 SD                                     20 (14.9%)        44 (32.8%)           12 (9.1%)     
   95% CI (Wald, with correction)     (9.36, 22.11)     (24.97, 41.47)       (4.79, 15.34)   </code></pre>
 <p>In case the we wanted to rename the levels of <code>AVALC</code> and remove the CI for <code>NE</code> we could do that as follows:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit">
-<span class="va">rsp_label</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rsp_label</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">rsp_full_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
     CR          <span class="op">=</span> <span class="st">"Complete Response (CR)"</span>,
     PR          <span class="op">=</span> <span class="st">"Partial Response (PR)"</span>,
@@ -1683,32 +1683,32 @@ SD                                     20 (14.9%)        44 (32.8%)           12
     Missing     <span class="op">=</span> <span class="st">"Missing"</span>,
     `NE/Missing` <span class="op">=</span> <span class="st">"Missing or unevaluable"</span>
   <span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">x</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">rsp_full_label</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">x</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">rsp_full_label</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
   <span class="va">rsp_full_label</span><span class="op">[</span><span class="va">x</span><span class="op">]</span>
 <span class="op">}</span>
 
 
-<span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstratified_response_analysis</span>, 
-          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span>
     var <span class="op">=</span> <span class="st">"AVALC"</span>,
     split_fun <span class="op">=</span> <span class="fu"><a href="../reference/remove_split_levels.html">keep_split_levels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CR"</span>, <span class="st">"PR"</span>, <span class="st">"SD"</span>, <span class="st">"PD"</span><span class="op">)</span>, reorder <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
     nested <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, .formats <span class="op">=</span> <span class="st">"xx (xx.xx%)"</span>, .labels <span class="op">=</span> <span class="fu">rsp_label</span><span class="op">(</span><span class="va">labelstr</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span><span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="st">"NE"</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">/</span><span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx%)"</span><span class="op">)</span>, .labels <span class="op">=</span> <span class="fu">rsp_label</span><span class="op">(</span><span class="st">"NE"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="op">}</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span>
 
-<span class="va">tbl</span></pre></div>
+<span class="va">tbl</span></code></pre></div>
 <pre><code>                                         ARM A              ARM B               ARM C       
                                         (N=134)            (N=134)             (N=132)      
 --------------------------------------------------------------------------------------------

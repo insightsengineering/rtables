@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -169,21 +169,24 @@
     <p>Gabriel Becker and Adrian Waddell</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1     Mean              2          0      Mean</div><div class='input'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;     row_name formatted_cell indent_mod  row_label
-#&gt; 1     setosa             50          0     setosa
-#&gt; 2 versicolor             50          0 versicolor
-#&gt; 3  virginica             50          0  virginica</div><div class='input'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>==</span> <span class='st'>"setosa"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; RowsVerticalSection (in_rows) object print method:
-#&gt; ----------------------------
-#&gt;   row_name formatted_cell indent_mod row_label
-#&gt; 1    Count             50          0     Count</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     Mean              2          0      Mean</span>
+<span class='r-in'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     row_name formatted_cell indent_mod  row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     setosa             50          0     setosa</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 versicolor             50          0 versicolor</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  virginica             50          0  virginica</span>
+<span class='r-in'><span class='fu'>simple_analysis</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>==</span> <span class='st'>"setosa"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   row_name formatted_cell indent_mod row_label</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    Count             50          0     Count</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

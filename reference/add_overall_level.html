@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add an implicit 'overall' level to split — add_overall_level • rtables</title>
+<title>Add an virtual 'overall' level to split — add_overall_level • rtables</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Add an implicit 'overall' level to split — add_overall_level" />
-<meta property="og:description" content="Add an implicit 'overall' level to split" />
+<meta property="og:title" content="Add an virtual 'overall' level to split — add_overall_level" />
+<meta property="og:description" content="Add an virtual 'overall' level to split" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,13 +114,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add an implicit 'overall' level to split</h1>
+    <h1>Add an virtual 'overall' level to split</h1>
     <small class="dont-index">Source: <a href='https://github.com/roche/rtables/blob/master/R/split_funs.R'><code>R/split_funs.R</code></a></small>
     <div class="hidden name"><code>add_overall_level.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add an implicit 'overall' level to split</p>
+    <p>Add an virtual 'overall' level to split</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_overall_level</span><span class='op'>(</span>
@@ -161,53 +161,56 @@
     <p>a closure suitable for use as a splitting function (<code>splfun</code>) when creating a table layout</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, split_fun <span class='op'>=</span> <span class='fu'>add_overall_level</span><span class='op'>(</span><span class='st'>"All Patients"</span>, first <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        A: Drug X   B: Placebo   C: Combination   All Patients
-#&gt; -------------------------------------------------------------
-#&gt; Mean     34.91       33.02          34.57           34.22    </div><div class='input'>
-
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, split_fun <span class='op'>=</span> <span class='fu'>add_overall_level</span><span class='op'>(</span><span class='st'>"All Ethnicities"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span>
-
-<span class='va'>l</span>
-</div><div class='output co'>#&gt; A Pre-data Table Layout
-#&gt; 
-#&gt; Column-Split Structure:
-#&gt; ARM (lvls) 
-#&gt; 
-#&gt; Row-Split Structure:
-#&gt; RACE (lvls) -&gt; AGE (** analysis **) 
-#&gt; </div><div class='input'>
-<span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                                                 A: Drug X    B: Placebo   C: Combination
-#&gt; ----------------------------------------------------------------------------------------
-#&gt; All Ethnicities (n)                             121 (100%)   106 (100%)     129 (100%)  
-#&gt;   Mean                                            34.91        33.02          34.57     
-#&gt; ASIAN (n)                                       79 (65.3%)   68 (64.2%)     84 (65.1%)  
-#&gt;   Mean                                             34.2        32.68          34.63     
-#&gt; BLACK OR AFRICAN AMERICAN (n)                   28 (23.1%)   24 (22.6%)     27 (20.9%)  
-#&gt;   Mean                                            34.68        31.71            34      
-#&gt; WHITE (n)                                       14 (11.6%)   14 (13.2%)      18 (14%)   
-#&gt;   Mean                                            39.36        36.93          35.11     
-#&gt; AMERICAN INDIAN OR ALASKA NATIVE (n)              0 (0%)       0 (0%)         0 (0%)    
-#&gt;   Mean                                             NaN          NaN            NaN      
-#&gt; MULTIPLE (n)                                      0 (0%)       0 (0%)         0 (0%)    
-#&gt;   Mean                                             NaN          NaN            NaN      
-#&gt; NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER (n)     0 (0%)       0 (0%)         0 (0%)    
-#&gt;   Mean                                             NaN          NaN            NaN      
-#&gt; OTHER (n)                                         0 (0%)       0 (0%)         0 (0%)    
-#&gt;   Mean                                             NaN          NaN            NaN      
-#&gt; UNKNOWN (n)                                       0 (0%)       0 (0%)         0 (0%)    
-#&gt;   Mean                                             NaN          NaN            NaN      </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span>, split_fun <span class='op'>=</span> <span class='fu'>add_overall_level</span><span class='op'>(</span><span class='st'>"All Patients"</span>, first <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        A: Drug X   B: Placebo   C: Combination   All Patients</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mean     34.91       33.02          34.57           34.22    </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"RACE"</span>, split_fun <span class='op'>=</span> <span class='fu'>add_overall_level</span><span class='op'>(</span><span class='st'>"All Ethnicities"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='summarize_row_groups.html'>summarize_row_groups</a></span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A Pre-data Table Layout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Column-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARM (lvls) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Row-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RACE (lvls) -&gt; AGE (** analysis **) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                 A: Drug X    B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> All Ethnicities (n)                             121 (100%)   106 (100%)     129 (100%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                            34.91        33.02          34.57     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ASIAN (n)                                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             34.2        32.68          34.63     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BLACK OR AFRICAN AMERICAN (n)                   28 (23.1%)   24 (22.6%)     27 (20.9%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                            34.68        31.71            34      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHITE (n)                                       14 (11.6%)   14 (13.2%)      18 (14%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                            39.36        36.93          35.11     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AMERICAN INDIAN OR ALASKA NATIVE (n)              0 (0%)       0 (0%)         0 (0%)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             NaN          NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MULTIPLE (n)                                      0 (0%)       0 (0%)         0 (0%)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             NaN          NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER (n)     0 (0%)       0 (0%)         0 (0%)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             NaN          NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OTHER (n)                                         0 (0%)       0 (0%)         0 (0%)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             NaN          NaN            NaN      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UNKNOWN (n)                                       0 (0%)       0 (0%)         0 (0%)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                                             NaN          NaN            NaN      </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

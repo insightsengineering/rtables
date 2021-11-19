@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -175,126 +175,129 @@
 column total counts are calculated. Otherwise only raw counts are used.</p>
 <p><code>cfun</code> must accept <code>df</code> as its first argument and will receive the subset <code>data.frame</code> corresponding
 with the row- and column-splitting for the cell being calculated. Must accept <code>labelstr</code> as the second
-parameter, which accepts the <code>label</code> of the level of the parent split currently being summarized. Optionally can
-accept <code>.N_col</code> or <code>.N_total</code> (see <code><a href='analyze.html'>analyze</a></code>).</p>
+parameter, which accepts the <code>label</code> of the level of the parent split currently being summarized. Can additionally take any optional argument supported by analysis functions. (see <code><a href='analyze.html'>analyze</a></code>).</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Gabriel Becker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>DM2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>DM</span>, <span class='va'>COUNTRY</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"CHN"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>summarize_row_groups</span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span>
-<span class='va'>l</span>
-</div><div class='output co'>#&gt; A Pre-data Table Layout
-#&gt; 
-#&gt; Column-Split Structure:
-#&gt; ARM (lvls) 
-#&gt; 
-#&gt; Row-Split Structure:
-#&gt; COUNTRY (lvls) -&gt; AGE (** analysis **) 
-#&gt; </div><div class='input'>
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM2</span><span class='op'>)</span>
-
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;             A: Drug X    B: Placebo   C: Combination
-#&gt; ----------------------------------------------------
-#&gt; CHN (n)     62 (79.5%)    48 (75%)      69 (78.4%)  
-#&gt;   Min.          22           25             24      
-#&gt;   1st Qu.     29.25          30             30      
-#&gt;   Median        34          33.5            33      
-#&gt;   Mean        36.08        34.12          33.71     
-#&gt;   3rd Qu.       41           38             37      
-#&gt;   Max.          60           55             51      
-#&gt; USA (n)     13 (16.7%)   14 (21.9%)     17 (19.3%)  
-#&gt;   Min.          23           24             22      
-#&gt;   1st Qu.       31           28             31      
-#&gt;   Median        36           30             37      
-#&gt;   Mean        36.77        32.57          36.41     
-#&gt;   3rd Qu.       41          37.5            41      
-#&gt;   Max.          58           47             51      
-#&gt; CAN (n)      3 (3.8%)     2 (3.1%)       2 (2.3%)   
-#&gt;   Min.          29           30             28      
-#&gt;   1st Qu.      32.5          32           28.75     
-#&gt;   Median        36           34            29.5     
-#&gt;   Mean          36           34            29.5     
-#&gt;   3rd Qu.      39.5          36           30.25     
-#&gt;   Max.          43           38             31      </div><div class='input'>
-<span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span> <span class='co'># summary count is a content table</span>
-</div><div class='output co'>#&gt; rowname      node_class    path                           
-#&gt; ----------------------------------------------------------
-#&gt; CHN (n)      ContentRow    COUNTRY, CHN, @content, CHN (n)
-#&gt;   Min.       DataRow       COUNTRY, CHN, AGE, Min.        
-#&gt;   1st Qu.    DataRow       COUNTRY, CHN, AGE, 1st Qu.     
-#&gt;   Median     DataRow       COUNTRY, CHN, AGE, Median      
-#&gt;   Mean       DataRow       COUNTRY, CHN, AGE, Mean        
-#&gt;   3rd Qu.    DataRow       COUNTRY, CHN, AGE, 3rd Qu.     
-#&gt;   Max.       DataRow       COUNTRY, CHN, AGE, Max.        
-#&gt; USA (n)      ContentRow    COUNTRY, USA, @content, USA (n)
-#&gt;   Min.       DataRow       COUNTRY, USA, AGE, Min.        
-#&gt;   1st Qu.    DataRow       COUNTRY, USA, AGE, 1st Qu.     
-#&gt;   Median     DataRow       COUNTRY, USA, AGE, Median      
-#&gt;   Mean       DataRow       COUNTRY, USA, AGE, Mean        
-#&gt;   3rd Qu.    DataRow       COUNTRY, USA, AGE, 3rd Qu.     
-#&gt;   Max.       DataRow       COUNTRY, USA, AGE, Max.        
-#&gt; CAN (n)      ContentRow    COUNTRY, CAN, @content, CAN (n)
-#&gt;   Min.       DataRow       COUNTRY, CAN, AGE, Min.        
-#&gt;   1st Qu.    DataRow       COUNTRY, CAN, AGE, 1st Qu.     
-#&gt;   Median     DataRow       COUNTRY, CAN, AGE, Median      
-#&gt;   Mean       DataRow       COUNTRY, CAN, AGE, Mean        
-#&gt;   3rd Qu.    DataRow       COUNTRY, CAN, AGE, 3rd Qu.     
-#&gt;   Max.       DataRow       COUNTRY, CAN, AGE, Max.        </div><div class='input'>
-
-<span class='co'>## use a cfun and extra_args to customize summarization</span>
-<span class='co'>## behavior</span>
-<span class='va'>sfun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>labelstr</span>, <span class='va'>trim</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'><a href='in_rows.html'>in_rows</a></span><span class='op'>(</span>
-        <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span>, trim <span class='op'>=</span> <span class='va'>trim</span><span class='op'>)</span>, <span class='va'>trim</span><span class='op'>)</span>,
-        .formats <span class='op'>=</span> <span class='st'>"xx.x (xx.x%)"</span>,
-        .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"%s (Trimmed mean and trim %%)"</span>,
-                              <span class='va'>labelstr</span><span class='op'>)</span>
-    <span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>l2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='add_colcounts.html'>add_colcounts</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>summarize_row_groups</span><span class='op'>(</span><span class='st'>"AGE"</span>, cfun <span class='op'>=</span> <span class='va'>sfun</span>,
-                         extra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>trim <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='append_topleft.html'>append_topleft</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Country"</span>, <span class='st'>"  Age"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l2</span>, <span class='va'>DM2</span><span class='op'>)</span>
-<span class='va'>tbl2</span>
-</div><div class='output co'>#&gt; Country                         A: Drug X    B: Placebo   C: Combination
-#&gt;   Age                             (N=78)       (N=64)         (N=88)    
-#&gt; ------------------------------------------------------------------------
-#&gt; CHN (Trimmed mean and trim %)   35.1 (20%)   33.4 (20%)     33.4 (20%)  
-#&gt;   Min.                              22           25             24      
-#&gt;   1st Qu.                         29.25          30             30      
-#&gt;   Median                            34          33.5            33      
-#&gt;   Mean                            36.08        34.12          33.71     
-#&gt;   3rd Qu.                           41           38             37      
-#&gt;   Max.                              60           55             51      
-#&gt; USA (Trimmed mean and trim %)   36.1 (20%)   31.9 (20%)     36.1 (20%)  
-#&gt;   Min.                              23           24             22      
-#&gt;   1st Qu.                           31           28             31      
-#&gt;   Median                            36           30             37      
-#&gt;   Mean                            36.77        32.57          36.41     
-#&gt;   3rd Qu.                           41          37.5            41      
-#&gt;   Max.                              58           47             51      
-#&gt; CAN (Trimmed mean and trim %)    36 (20%)     34 (20%)      29.5 (20%)  
-#&gt;   Min.                              29           30             28      
-#&gt;   1st Qu.                          32.5          32           28.75     
-#&gt;   Median                            36           34            29.5     
-#&gt;   Mean                              36           34            29.5     
-#&gt;   3rd Qu.                          39.5          36           30.25     
-#&gt;   Max.                              43           38             31      </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>DM2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>DM</span>, <span class='va'>COUNTRY</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USA"</span>, <span class='st'>"CAN"</span>, <span class='st'>"CHN"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>summarize_row_groups</span><span class='op'>(</span>label_fstr <span class='op'>=</span> <span class='st'>"%s (n)"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>l</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A Pre-data Table Layout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Column-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARM (lvls) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Row-Split Structure:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY (lvls) -&gt; AGE (** analysis **) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             A: Drug X    B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CHN (n)     62 (79.5%)    48 (75%)      69 (78.4%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.          22           25             24      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.     29.25          30             30      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median        34          33.5            33      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean        36.08        34.12          33.71     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.       41           38             37      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.          60           55             51      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USA (n)     13 (16.7%)   14 (21.9%)     17 (19.3%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.          23           24             22      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.       31           28             31      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median        36           30             37      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean        36.77        32.57          36.41     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.       41          37.5            41      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.          58           47             51      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAN (n)      3 (3.8%)     2 (3.1%)       2 (2.3%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.          29           30             28      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.      32.5          32           28.75     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median        36           34            29.5     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean          36           34            29.5     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.      39.5          36           30.25     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.          43           38             31      </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='row_paths_summary.html'>row_paths_summary</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span> <span class='co'># summary count is a content table</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowname      node_class    path                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CHN (n)      ContentRow    COUNTRY, CHN, @content, CHN (n)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.       DataRow       COUNTRY, CHN, AGE, Min.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.    DataRow       COUNTRY, CHN, AGE, 1st Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median     DataRow       COUNTRY, CHN, AGE, Median      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean       DataRow       COUNTRY, CHN, AGE, Mean        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.    DataRow       COUNTRY, CHN, AGE, 3rd Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.       DataRow       COUNTRY, CHN, AGE, Max.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USA (n)      ContentRow    COUNTRY, USA, @content, USA (n)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.       DataRow       COUNTRY, USA, AGE, Min.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.    DataRow       COUNTRY, USA, AGE, 1st Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median     DataRow       COUNTRY, USA, AGE, Median      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean       DataRow       COUNTRY, USA, AGE, Mean        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.    DataRow       COUNTRY, USA, AGE, 3rd Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.       DataRow       COUNTRY, USA, AGE, Max.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAN (n)      ContentRow    COUNTRY, CAN, @content, CAN (n)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.       DataRow       COUNTRY, CAN, AGE, Min.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.    DataRow       COUNTRY, CAN, AGE, 1st Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median     DataRow       COUNTRY, CAN, AGE, Median      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean       DataRow       COUNTRY, CAN, AGE, Mean        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.    DataRow       COUNTRY, CAN, AGE, 3rd Qu.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.       DataRow       COUNTRY, CAN, AGE, Max.        </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## use a cfun and extra_args to customize summarization</span></span>
+<span class='r-in'><span class='co'>## behavior</span></span>
+<span class='r-in'><span class='va'>sfun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>labelstr</span>, <span class='va'>trim</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='in_rows.html'>in_rows</a></span><span class='op'>(</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>x</span>, trim <span class='op'>=</span> <span class='va'>trim</span><span class='op'>)</span>, <span class='va'>trim</span><span class='op'>)</span>,</span>
+<span class='r-in'>        .formats <span class='op'>=</span> <span class='st'>"xx.x (xx.x%)"</span>,</span>
+<span class='r-in'>        .labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"%s (Trimmed mean and trim %%)"</span>,</span>
+<span class='r-in'>                              <span class='va'>labelstr</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>l2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='split_rows_by.html'>split_rows_by</a></span><span class='op'>(</span><span class='st'>"COUNTRY"</span>, split_fun <span class='op'>=</span> <span class='va'>drop_split_levels</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='add_colcounts.html'>add_colcounts</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>summarize_row_groups</span><span class='op'>(</span><span class='st'>"AGE"</span>, cfun <span class='op'>=</span> <span class='va'>sfun</span>,</span>
+<span class='r-in'>                         extra_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>trim <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, afun <span class='op'>=</span> <span class='fu'><a href='list_wrap_x.html'>list_wrap_x</a></span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> , format <span class='op'>=</span> <span class='st'>"xx.xx"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='append_topleft.html'>append_topleft</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Country"</span>, <span class='st'>"  Age"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l2</span>, <span class='va'>DM2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Country                         A: Drug X    B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Age                             (N=78)       (N=64)         (N=88)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CHN (Trimmed mean and trim %)   35.1 (20%)   33.4 (20%)     33.4 (20%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.                              22           25             24      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.                         29.25          30             30      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median                            34          33.5            33      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                            36.08        34.12          33.71     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.                           41           38             37      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.                              60           55             51      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USA (Trimmed mean and trim %)   36.1 (20%)   31.9 (20%)     36.1 (20%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.                              23           24             22      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.                           31           28             31      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median                            36           30             37      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                            36.77        32.57          36.41     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.                           41          37.5            41      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.                              58           47             51      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAN (Trimmed mean and trim %)    36 (20%)     34 (20%)      29.5 (20%)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Min.                              29           30             28      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1st Qu.                          32.5          32           28.75     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Median                            36           34            29.5     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                              36           34            29.5     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3rd Qu.                          39.5          36           30.25     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Max.                              43           38             31      </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -182,9 +182,14 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Includes <em>keep_topleft</em> logical(1) (<code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code> only) Should the 'top-left' material for the table be
+      <td><p>Includes</p><dl>
+<dt><em>keep_topleft</em></dt><dd><p>logical(1) (<code>[</code> only) Should the 'top-left' material for the table be
 retained after subsetting. Defaults to <code>NA</code>, which retains the material if all rows are included (ie
-subsetting was by column), and drops it otherwise.</p></td>
+subsetting was by column), and drops it otherwise.</p></dd>
+<dt><em>keep_titles</em></dt><dd><p>logical(1) Should title and non-referential footer information be retained. Defaults to <code>FALSE</code></p></dd>
+<dt><em>reindex_refs</em></dt><dd><p>logical(1). Should referential footnotes be re-indexed as if the resulting subset is the entire table. Defaults to <code>TRUE</code></p></dd>
+
+</dl></td>
     </tr>
     <tr>
       <th>value</th>
@@ -202,76 +207,85 @@ subsetting was by column), and drops it otherwise.</p></td>
     <p>a <code>TableTree</code> (or <code>ElementaryTable</code>) object, unless a single cell was selected with <code>drop=TRUE</code>, in which case the (possibly multi-valued) fully stripped raw value of the selected cell.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"AGE"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span>
-
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;                      A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------------------
-#&gt; SEX                                                         
-#&gt;   F                     70           56             61      
-#&gt;   M                     51           50             68      
-#&gt;   U                      0           0              0       
-#&gt;   UNDIFFERENTIATED       0           0              0       
-#&gt; AGE                                                         
-#&gt;   Mean                 34.91       33.02          34.57     </div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span>
-</div><div class='output co'>#&gt;       A: Drug X   B: Placebo   C: Combination
-#&gt; ---------------------------------------------
-#&gt; SEX                                          </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;       B: Placebo
-#&gt; ----------------
-#&gt; SEX             
-#&gt;   F       56    </div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     A: Drug X
-#&gt; -------------
-#&gt; F      70    </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span>, drop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; [1] 70</div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;                      A: Drug X
-#&gt; ------------------------------
-#&gt; SEX                           
-#&gt;   F                     70    
-#&gt;   M                     51    
-#&gt;   U                      0    
-#&gt;   UNDIFFERENTIATED       0    
-#&gt; AGE                           
-#&gt;   Mean                 34.91  </div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>2</span>, <span class='op'>]</span>
-</div><div class='output co'>#&gt;                      A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------------------
-#&gt; SEX                                                         
-#&gt;   M                     51           50             68      
-#&gt;   U                      0           0              0       
-#&gt;   UNDIFFERENTIATED       0           0              0       
-#&gt; AGE                                                         
-#&gt;   Mean                 34.91       33.02          34.57     </div><div class='input'><span class='va'>tbl</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;                      B: Placebo   C: Combination
-#&gt; ------------------------------------------------
-#&gt; SEX                                             
-#&gt;   F                      56             61      
-#&gt;   M                      50             68      
-#&gt;   U                      0              0       
-#&gt;   UNDIFFERENTIATED       0              0       
-#&gt; AGE                                             
-#&gt;   Mean                 33.02          34.57     </div><div class='input'>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fl'>999</span><span class='op'>)</span>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"FFF"</span>, <span class='fl'>888</span>, <span class='fl'>666</span>, <span class='fl'>777</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>tbl</span><span class='op'>[</span><span class='fl'>3</span>, <span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>111</span>, <span class='op'>-</span><span class='fl'>222</span>, <span class='op'>-</span><span class='fl'>333</span><span class='op'>)</span>
-<span class='va'>tbl</span>
-</div><div class='output co'>#&gt;                      A: Drug X   B: Placebo   C: Combination
-#&gt; ------------------------------------------------------------
-#&gt; SEX                                                         
-#&gt;   FFF                   888         666            777      
-#&gt;   M                    -111         -222           -333     
-#&gt;   U                      0           0              0       
-#&gt;   UNDIFFERENTIATED       0           0              0       
-#&gt; AGE                                                         
-#&gt;   Mean                 34.91       33.02          34.57     </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='basic_table.html'>basic_table</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='split_cols_by.html'>split_cols_by</a></span><span class='op'>(</span><span class='st'>"ARM"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>   <span class='fu'><a href='analyze.html'>analyze</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"AGE"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='build_table.html'>build_table</a></span><span class='op'>(</span><span class='va'>l</span>, <span class='va'>DM</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                     70           56             61      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                     51           50             68      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                      0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                          </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       B: Placebo</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F       56    </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     A: Drug X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F      70    </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span>, drop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 70</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      A: Drug X</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                     70    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                     51    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                      0    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED       0    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                 34.91  </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>2</span>, <span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                     51           50             68      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                      0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   F                      56             61      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                      50             68      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                      0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED       0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                 33.02          34.57     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rcell.html'>rcell</a></span><span class='op'>(</span><span class='fl'>999</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>2</span>, <span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='rrow.html'>rrow</a></span><span class='op'>(</span><span class='st'>"FFF"</span>, <span class='fl'>888</span>, <span class='fl'>666</span>, <span class='fl'>777</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl</span><span class='op'>[</span><span class='fl'>3</span>, <span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>111</span>, <span class='op'>-</span><span class='fl'>222</span>, <span class='op'>-</span><span class='fl'>333</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   FFF                   888         666            777      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   M                    -111         -222           -333     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   U                      0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

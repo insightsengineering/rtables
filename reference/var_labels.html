@@ -74,7 +74,7 @@ This functions returns a named character vector with the variable labels
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ This functions returns a named character vector with the variable labels
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -149,15 +149,17 @@ This functions returns a named character vector with the variable labels
 correspond to the variable names</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
-<span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
-#&gt;           NA           NA           NA           NA           NA </div><div class='input'><span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"label for"</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             Sepal.Length              Sepal.Width             Petal.Length 
-#&gt; "label for Sepal.Length"  "label for Sepal.Width" "label for Petal.Length" 
-#&gt;              Petal.Width                  Species 
-#&gt;  "label for Petal.Width"      "label for Species" </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>iris</span></span>
+<span class='r-in'><span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           NA           NA           NA           NA           NA </span>
+<span class='r-in'><span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"label for"</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>var_labels</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Sepal.Length              Sepal.Width             Petal.Length </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "label for Sepal.Length"  "label for Sepal.Width" "label for Petal.Length" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              Petal.Width                  Species </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "label for Petal.Width"      "label for Species" </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

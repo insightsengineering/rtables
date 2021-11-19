@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -153,10 +153,9 @@
   <span class='va'>cutfun</span>,
   <span class='va'>cutlabelfun</span>,
   <span class='va'>cumulative</span>,
-  <span class='va'>incl_all</span>,
   <span class='va'>indent_mod</span>,
   <span class='va'>show_labels</span>,
-  <span class='va'>visible_label</span>,
+  <span class='va'>label_pos</span>,
   <span class='va'>var_labels</span>,
   <span class='va'>cvar</span>,
   <span class='va'>table_names</span>,
@@ -196,7 +195,7 @@
     </tr>
     <tr>
       <th>split_format</th>
-      <td><p>format spec. Format associated with this split.</p></td>
+      <td><p>FormatSpec. Default format associated with the split being created.</p></td>
     </tr>
     <tr>
       <th>nested</th>
@@ -216,7 +215,7 @@
     </tr>
     <tr>
       <th>split_fun</th>
-      <td><p>function/NULL. custom splitting function</p></td>
+      <td><p>function/NULL. custom splitting function See <code><a href='custom_split_funs.html'>custom_split_funs</a></code></p></td>
     </tr>
     <tr>
       <th>split_name</th>
@@ -283,10 +282,6 @@
       <td><p>logical. Should the cuts be treated as cumulative. Defaults to <code>FALSE</code></p></td>
     </tr>
     <tr>
-      <th>incl_all</th>
-      <td><p>logical(1). Should an "all" comparison column be created. Defaults to <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
       <th>indent_mod</th>
       <td><p>numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which corresponds to the unmodified default behavior.</p></td>
     </tr>
@@ -295,8 +290,9 @@
       <td><p>character(1). Should the variable labels for corresponding to the variable(s) in <code>vars</code> be visible in the resulting table.</p></td>
     </tr>
     <tr>
-      <th>visible_label</th>
-      <td><p>logical(1). Should the <em>split</em> label be visible in the resulting table.</p></td>
+      <th>label_pos</th>
+      <td><p>character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, <code>default</code> indicates that the variable
+should be visible if and only if multiple variables are analyzed at the same level of nesting.</p></td>
     </tr>
     <tr>
       <th>var_labels</th>

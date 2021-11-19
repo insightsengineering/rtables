@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -123,7 +123,14 @@
     <p>Cell Value constructor</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CellValue</span><span class='op'>(</span><span class='va'>val</span>, format <span class='op'>=</span> <span class='cn'>NULL</span>, colspan <span class='op'>=</span> <span class='fl'>1L</span>, label <span class='op'>=</span> <span class='cn'>NULL</span>, indent_mod <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>CellValue</span><span class='op'>(</span>
+  <span class='va'>val</span>,
+  format <span class='op'>=</span> <span class='cn'>NULL</span>,
+  colspan <span class='op'>=</span> <span class='fl'>1L</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  indent_mod <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnotes <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,15 +145,19 @@
     </tr>
     <tr>
       <th>colspan</th>
-      <td><p>integer. Generally ignored currently.</p></td>
+      <td><p>integer(1). Columnspan value.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>used as row name if the row name is not specified by <code>in_rows</code></p></td>
+      <td><p>character(1). A label (not to be confused with the name) for the object/structure.</p></td>
     </tr>
     <tr>
       <th>indent_mod</th>
       <td><p>numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which corresponds to the unmodified default behavior.</p></td>
+    </tr>
+    <tr>
+      <th>footnotes</th>
+      <td><p>list or NULL. Referential footnote messages for the cell.</p></td>
     </tr>
     </table>
 

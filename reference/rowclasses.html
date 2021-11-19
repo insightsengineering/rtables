@@ -73,7 +73,7 @@ Row constructors and Classes" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ Row constructors and Classes" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -144,7 +144,8 @@ Row constructors and Classes" />
   var <span class='op'>=</span> <span class='cn'>NA_character_</span>,
   format <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>klass</span>,
-  indent_mod <span class='op'>=</span> <span class='fl'>0L</span>
+  indent_mod <span class='op'>=</span> <span class='fl'>0L</span>,
+  footnotes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='fu'>DataRow</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
@@ -197,6 +198,10 @@ Row constructors and Classes" />
     <tr>
       <th>klass</th>
       <td><p>Internal detail.</p></td>
+    </tr>
+    <tr>
+      <th>footnotes</th>
+      <td><p>list or NULL. Referential footnotes to be applied at current level</p></td>
     </tr>
     <tr>
       <th>...</th>

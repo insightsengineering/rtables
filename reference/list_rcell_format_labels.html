@@ -73,7 +73,7 @@ must be used for special cases" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ must be used for special cases" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,31 +133,32 @@ must be used for special cases</p>
     <p>A nested list, with elements listing the supported 1d, 2d, and 3d format strings.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>list_rcell_format_labels</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $`1d`
-#&gt;  [1] "xx"                 "xx."                "xx.x"              
-#&gt;  [4] "xx.xx"              "xx.xxx"             "xx.xxxx"           
-#&gt;  [7] "xx%"                "xx.x%"              "xx.xx%"            
-#&gt; [10] "xx.xxx%"            "(N=xx)"             "&gt;999.9"            
-#&gt; [13] "&gt;999.99"            "x.xxxx | (&lt;0.0001)"
-#&gt; 
-#&gt; $`2d`
-#&gt;  [1] "xx / xx"            "xx. / xx."          "xx.x / xx.x"       
-#&gt;  [4] "xx.xx / xx.xx"      "xx (xx%)"           "xx (xx.%)"         
-#&gt;  [7] "xx (xx.x%)"         "xx (xx.xx%)"        "xx. (xx.%)"        
-#&gt; [10] "xx.x (xx.x%)"       "xx.xx (xx.xx%)"     "(xx, xx)"          
-#&gt; [13] "(xx., xx.)"         "(xx.x, xx.x)"       "(xx.xx, xx.xx)"    
-#&gt; [16] "(xx.xxx, xx.xxx)"   "(xx.xxxx, xx.xxxx)" "xx - xx"           
-#&gt; [19] "xx.x - xx.x"        "xx.xx - xx.xx"      "xx.x (xx.x)"       
-#&gt; [22] "xx.xx (xx.xx)"      "xx.x, xx.x"         "xx.x to xx.x"      
-#&gt; 
-#&gt; $`3d`
-#&gt; [1] "xx.xx (xx.xx - xx.xx)"
-#&gt; 
-#&gt; attr(,"info")
-#&gt; [1] "xx does not modify the element, and xx. rounds a number to 0 digits"</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>list_rcell_format_labels</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`1d`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "xx"                 "xx."                "xx.x"              </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4] "xx.xx"              "xx.xxx"             "xx.xxxx"           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "xx%"                "xx.x%"              "xx.xx%"            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10] "xx.xxx%"            "(N=xx)"             "&gt;999.9"            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13] "&gt;999.99"            "x.xxxx | (&lt;0.0001)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`2d`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "xx / xx"            "xx. / xx."          "xx.x / xx.x"       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4] "xx.xx / xx.xx"      "xx (xx%)"           "xx (xx.%)"         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "xx (xx.x%)"         "xx (xx.xx%)"        "xx. (xx.%)"        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10] "xx.x (xx.x%)"       "xx.xx (xx.xx%)"     "(xx, xx)"          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13] "(xx., xx.)"         "(xx.x, xx.x)"       "(xx.xx, xx.xx)"    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [16] "(xx.xxx, xx.xxx)"   "(xx.xxxx, xx.xxxx)" "xx - xx"           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [19] "xx.x - xx.x"        "xx.xx - xx.xx"      "xx.x (xx.x)"       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [22] "xx.xx (xx.xx)"      "xx.x, xx.x"         "xx.x to xx.x"      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $`3d`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "xx.xx (xx.xx - xx.xx)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"info")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "xx does not modify the element, and xx. rounds a number to 0 digits"</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
