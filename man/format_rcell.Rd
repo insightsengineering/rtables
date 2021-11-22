@@ -5,7 +5,7 @@
 \title{Convert the contets of an \code{\link{rcell}} to a string using the
 \code{format} information}
 \usage{
-format_rcell(x, format, output = c("ascii", "html"))
+format_rcell(x, format, output = c("ascii", "html"), na_str = "NA")
 }
 \arguments{
 \item{x}{an object of class \code{\link{rcell}}}
@@ -14,6 +14,8 @@ format_rcell(x, format, output = c("ascii", "html"))
 then the \code{format} is applied}
 
 \item{output}{output type}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 }
 \value{
 formatted text representing the cell \code{x}.
@@ -29,4 +31,7 @@ x
 
 format_rcell(x, output = "ascii")
 
+}
+\seealso{
+\code{\link[=round_fmt]{round_fmt()}}
 }

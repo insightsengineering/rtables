@@ -10,7 +10,7 @@ test_that("toString method works correclty", {
                 mean_sd = c(mean(x), sd(x)),
                 var = var(x),
                 min_max = range(x),
-                .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.xx - xx.xx"),
+                .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.x - xx.x"),
                 .labels = c("Mean (sd)", "Variance", "Min - Max")
             )
         }) %>%
@@ -27,11 +27,11 @@ test_that("toString method works correclty", {
               "Sepal.Length                                          ",
               "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
               "  Variance        0.124         0.266         0.404   ",
-              "  Min - Max     4.3 - 5.8      4.9 - 7      4.9 - 7.9 ",
+              "  Min - Max     4.3 - 5.8     4.9 - 7.0     4.9 - 7.9 ",
               "Petal.Width                                           ",
-              "  Mean (sd)    0.25 (0.11)   1.33 (0.2)    2.03 (0.27)",
+              "  Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)",
               "  Variance        0.011         0.039         0.075   ",
-              "  Min - Max     0.1 - 0.6      1 - 1.8      1.4 - 2.5 \n"),
+              "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n"),
             collapse = "\n"
         )
     )
@@ -223,9 +223,10 @@ test_that("Various Printing things work", {
     tab <- build_table(lyt, rawdat)
     ## treestruct(tab)
 
+    table_structure(tab, detail = "subtable") ##treestruct(tab)
+
     ## pos <- TreePos()
     ## print(pos)
-    table_structure(tab)
     print(col_info(tab))
     show(col_info(tab))
     print(coltree(tab))

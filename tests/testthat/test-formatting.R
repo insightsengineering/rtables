@@ -162,3 +162,25 @@ test_that("each format", {
     expect_identical(format_rcell(rcell(c(values, 10.1235), format = "xx.xx (xx.xx - xx.xx)")),
                      "5.12 (7.89 - 10.12)")
 })
+
+test_that("formatting is ok with NAs at the format_rcell level", {
+
+    forms <- list_rcell_format_labels()
+
+    results <- vapply(forms[["1d"]], function(fmt) format_rcell(rcell(NA, format = fmt)), "")
+    justnastr <- results == "NA"
+
+    expect_identical(names(results)[!justnastr],
+                     c("xx%", "xx.x%", "xx.xx%", "xx.xxx%", "(N=xx)"))
+
+    expect_identical(format_rcell(rcell(NA, "xx."), na_str = "-"),
+                     "-")
+})
+
+test_that("trialing 0s show up", {
+    expect_identical(format_rcell(0, "xx."), "0") ## XXX TODO is this right? what is xx. supposed to do????
+    expect_identical(format_rcell(0, "xx.x"), "0.0")
+    expect_identical(format_rcell(0, "xx.xx"), "0.00")
+    expect_identical(format_rcell(0, "xx.xxx"), "0.000")
+    expect_identical(format_rcell(0, "xx.xxxx"), "0.0000")
+})

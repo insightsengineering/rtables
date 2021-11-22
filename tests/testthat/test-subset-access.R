@@ -238,12 +238,12 @@ test_that("setters work ok", {
 
        tbl2[1, 1] <- CellValue(c(1, .1))
        matform2 <- matrix_form(tbl2)
-       expect_identical("1 (10%)", matform2$strings[2, 2])
+       expect_identical("1 (10.0%)", matform2$strings[2, 2])
 
        tbl3 <- tbl
        tbl3[3, 1:2] <- list(CellValue(c(1, 1)), CellValue(c(1, 1)))
        matform3 <- matrix_form(tbl3)
-       expect_identical(rep("1 (100%)", 2), matform3$strings[4, 2:3])
+       expect_identical(rep("1 (100.0%)", 2), matform3$strings[4, 2:3])
 })
 
 

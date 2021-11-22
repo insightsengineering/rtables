@@ -1,3 +1,5 @@
+# nocov start
+
 ## Empty default objects to avoid repeated calls
 .onLoad <- function(libname, pkgname) {
     ns <- asNamespace(pkgname)
@@ -17,3 +19,5 @@
 #' @aliases EmptyElTable EmptyRootSplit EmptyAllSplit
 #' @description Empty objects of various types to compare against efficiently.
 NULL
+
+# nocov end
