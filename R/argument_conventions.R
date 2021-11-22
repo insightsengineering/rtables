@@ -1,3 +1,6 @@
+# nocov start
+
+
 ## package imports
 #' @importFrom utils head head.matrix tail tail.matrix
 #' @importFrom stats setNames na.omit prop.test binom.test relevel quantile
@@ -196,3 +199,5 @@ sf_args <- function(trim, label, first) NULL
 
 #' @rdname cdisc_data
 "ex_advs"
+
+# nocov end
