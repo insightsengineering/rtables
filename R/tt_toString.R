@@ -39,7 +39,7 @@ setMethod("print", "ANY", base::print)
 #' tbl <- build_table(l, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
-setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, linesep = "—") {
+setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, linesep = "\u2014") {
 
   ## we create a matrix with the formatted cell contents
   mat <- matrix_form(x, indent_rownames = TRUE)
@@ -974,7 +974,7 @@ spaces <- function(n) {
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(rtables:::mat_as_string(mat)); cat("\n")
-mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "—") {
+mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "\u2014") {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 
   rows_formatted <- apply(mat, 1, function(row) {
