@@ -39,6 +39,7 @@ setMethod("print", "ANY", base::print)
 #' tbl <- build_table(l, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
+#' cat(toString(tbl, col_gap = 3, linesep = "+-"))
 setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, linesep = "\u2014") {
 
   ## we create a matrix with the formatted cell contents
@@ -99,7 +100,8 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, line
 
   gap_str <- strrep(" ", col_gap)
 
-  div <- strrep(linesep, sum(widths) + (length(widths) - 1) * col_gap)
+  ncchar <-  sum(widths) + (length(widths) - 1) * col_gap
+  div <- substr(strrep(linesep, ncchar), 1, ncchar)
 
   txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
@@ -982,6 +984,8 @@ mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "\u2014")
   })
 
   header_rows <- seq_len(nheader)
-  paste(c(rows_formatted[header_rows], strrep(linesep, nchar(rows_formatted[1])), rows_formatted[-header_rows]), collapse = "\n")
+  paste(c(rows_formatted[header_rows], 
+          substr(strrep(linesep, nchar(rows_formatted[1])), 1, nchar(rows_formatted[1])),
+          rows_formatted[-header_rows]), collapse = "\n")
 }
 
