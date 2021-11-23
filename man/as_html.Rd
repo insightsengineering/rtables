@@ -28,6 +28,8 @@ as_html(
 
 \item{class_th}{class for th tag}
 
+\item{caption_txt}{caption of html table}
+
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
 }
 \value{
