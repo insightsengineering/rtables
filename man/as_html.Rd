@@ -8,9 +8,10 @@ as_html(
   x,
   width = NULL,
   class_table = "table table-condensed table-hover",
-  class_tr = "",
-  class_td = "",
-  class_th = "",
+  class_tr = NULL,
+  class_td = NULL,
+  class_th = NULL,
+  caption_txt = NULL,
   link_label = NULL
 )
 }
@@ -26,6 +27,8 @@ as_html(
 \item{class_td}{class for td tag}
 
 \item{class_th}{class for th tag}
+
+\item{caption_txt}{caption of html table}
 
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
 }

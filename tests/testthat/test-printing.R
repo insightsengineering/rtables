@@ -23,7 +23,7 @@ test_that("toString method works correclty", {
         paste(
             c("                 setosa      versicolor     virginica ",
               "                 (N=50)        (N=50)        (N=50)   ",
-              "------------------------------------------------------",
+              "——————————————————————————————————————————————————————",
               "Sepal.Length                                          ",
               "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
               "  Variance        0.124         0.266         0.404   ",

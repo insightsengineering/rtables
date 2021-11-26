@@ -17,6 +17,7 @@ setMethod("print", "ANY", base::print)
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
+#' @param linesep character to create line separator
 #'
 #' @exportMethod toString
 #'
@@ -38,7 +39,8 @@ setMethod("print", "ANY", base::print)
 #' tbl <- build_table(l, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
-setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
+#' cat(toString(tbl, col_gap = 3, linesep = "+-"))
+setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3, linesep = "\u2014") {
 
   ## we create a matrix with the formatted cell contents
   mat <- matrix_form(x, indent_rownames = TRUE)
@@ -98,7 +100,8 @@ setMethod("toString", "VTableTree", function(x, widths = NULL, col_gap = 3) {
 
   gap_str <- strrep(" ", col_gap)
 
-  div <- strrep("-", sum(widths) + (length(widths) - 1) * col_gap)
+  ncchar <-  sum(widths) + (length(widths) - 1) * col_gap
+  div <- substr(strrep(linesep, ncchar), 1, ncchar)
 
   txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
@@ -963,7 +966,8 @@ spaces <- function(n) {
 #' @param mat a matrix of strings
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
-#'
+#' @param linesep character to build line separator
+#' 
 #' @noRd
 #'
 #' @return a string
@@ -972,7 +976,7 @@ spaces <- function(n) {
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(rtables:::mat_as_string(mat)); cat("\n")
-mat_as_string <- function(mat, nheader = 1, colsep = "    ") {
+mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "\u2014") {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 
   rows_formatted <- apply(mat, 1, function(row) {
@@ -980,6 +984,8 @@ mat_as_string <- function(mat, nheader = 1, colsep = "    ") {
   })
 
   header_rows <- seq_len(nheader)
-  paste(c(rows_formatted[header_rows], strrep("-", nchar(rows_formatted[1])), rows_formatted[-header_rows]), collapse = "\n")
+  paste(c(rows_formatted[header_rows], 
+          substr(strrep(linesep, nchar(rows_formatted[1])), 1, nchar(rows_formatted[1])),
+          rows_formatted[-header_rows]), collapse = "\n")
 }
 
