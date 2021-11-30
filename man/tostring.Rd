@@ -5,9 +5,9 @@
 \alias{toString,MatrixPrintForm-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
-\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3)
+\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3, linesep = "—")
 
-\S4method{toString}{MatrixPrintForm}(x, widths = NULL, col_gap = 3)
+\S4method{toString}{MatrixPrintForm}(x, widths = NULL, col_gap = 3, linesep = "—")
 }
 \arguments{
 \item{x}{table object}
@@ -15,6 +15,8 @@
 \item{widths}{widths of row.name and columns columns}
 
 \item{col_gap}{gap between columns}
+
+\item{linesep}{character to create line separator}
 }
 \value{
 a string representation of \code{x} as it appears when printed.
