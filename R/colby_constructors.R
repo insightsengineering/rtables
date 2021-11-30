@@ -1650,7 +1650,16 @@ list_wrap_df = function(f) {
 #'   analyze("AGE", afun = mean)
 #'
 #' build_table(lyt, DM)
-#'
+#' 
+#' 
+#' lyt <- basic_table(title = "Title of table", subtitles = c("a number", "of subtitles"),
+#'                    main_footer = "test footer",
+#'                    prov_footer = paste("test.R program, executed at", Sys.time())) %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze("AGE", mean)
+#'   
+#' build_table(lyt, DM)
+#' 
 basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),

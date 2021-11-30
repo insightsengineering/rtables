@@ -1061,7 +1061,8 @@ spaces <- function(n) {
 #' @param mat a matrix of strings
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
-#'
+#' @param linesep character to build line separator
+#' 
 #' @noRd
 #'
 #' @return a string
