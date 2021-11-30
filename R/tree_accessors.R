@@ -302,41 +302,43 @@ setMethod("pos_split_labels", "TreePos",
 setMethod("pos_split_labels", "VLayoutNode",
            function(obj) pos_split_labels(tree_pos(obj)))
 
-#' @rdname int_methods
-setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
-#' @rdname int_methods
-setMethod("split_texttype", "VarLevelSplit", function(obj) "varlevels")
-#' @rdname int_methods
-setMethod("split_texttype", "MultiVarSplit", function(obj) "multivar")
-#' @rdname int_methods
-setMethod("split_texttype", "AllSplit", function(obj) "allobs")
-#' @rdname int_methods
-setMethod("split_texttype", "RootSplit", function(obj) "root")
-#' @rdname int_methods
-setMethod("split_texttype", "NULLSplit", function(obj) "null")
-#' @rdname int_methods
-setMethod("split_texttype", "VarStaticCutSplit", function(obj) "scut")
-#' @rdname int_methods
-setMethod("split_texttype", "VarDynCutSplit", function(obj) "dyncut")
-#' @rdname int_methods
-setMethod("split_texttype", "ManualSplit", function(obj) "manual")
-#' @rdname int_methods
-setMethod("split_texttype", "ANY", function(obj) stop("unknown split type"))
+## unreachable code...
 
-#' @rdname int_methods
-setGeneric("pos_spltypes", function(obj) standardGeneric("pos_spltypes"))
-#' @rdname int_methods
-setMethod("pos_spltypes", "TreePos",
-          function(obj) {
-    spls = pos_splits(obj)
-    sapply(spls, split_texttype)
-})
+## #' @rdname int_methods
+## setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
+## #' @rdname int_methods
+## setMethod("split_texttype", "VarLevelSplit", function(obj) "varlevels")
+## #' @rdname int_methods
+## setMethod("split_texttype", "MultiVarSplit", function(obj) "multivar")
+## #' @rdname int_methods
+## setMethod("split_texttype", "AllSplit", function(obj) "allobs")
+## #' @rdname int_methods
+## setMethod("split_texttype", "RootSplit", function(obj) "root")
+## #' @rdname int_methods
+## setMethod("split_texttype", "NULLSplit", function(obj) "null")
+## #' @rdname int_methods
+## setMethod("split_texttype", "VarStaticCutSplit", function(obj) "scut")
+## #' @rdname int_methods
+## setMethod("split_texttype", "VarDynCutSplit", function(obj) "dyncut")
+## #' @rdname int_methods
+## setMethod("split_texttype", "ManualSplit", function(obj) "manual")
+## #' @rdname int_methods
+## setMethod("split_texttype", "ANY", function(obj) stop("unknown split type"))
 
-## setMethod("pos_spltypes", "VNodeInfo",
+## #' @rdname int_methods
+## setGeneric("pos_spltypes", function(obj) standardGeneric("pos_spltypes"))
+## #' @rdname int_methods
+## setMethod("pos_spltypes", "TreePos",
+##           function(obj) {
+##     spls = pos_splits(obj)
+##     sapply(spls, split_texttype)
+## })
+
+## ## setMethod("pos_spltypes", "VNodeInfo",
+## ##           function(obj) pos_spltypes(tree_pos(obj)))
+## #' @rdname int_methods
+## setMethod("pos_spltypes", "VLayoutNode",
 ##           function(obj) pos_spltypes(tree_pos(obj)))
-#' @rdname int_methods
-setMethod("pos_spltypes", "VLayoutNode",
-          function(obj) pos_spltypes(tree_pos(obj)))
 
 #' @rdname int_methods
 setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels"))
@@ -1122,7 +1124,7 @@ setMethod("row_cspans<-", "TableRow", function(obj, value) {
 })
 #' @rdname int_methods
 setMethod("row_cspans<-", "LabelRow", function(obj, value) {
-    stop("attempted to set colspans for LabelRow")
+    stop("attempted to set colspans for LabelRow") # nocov
 })
 
 
@@ -1190,6 +1192,7 @@ setMethod("tt_level<-", "VTableTree",
 })
 
 #' @rdname int_methods
+#' @export
 setGeneric("indent_mod", function(obj) standardGeneric("indent_mod"))
 #' @rdname int_methods
 setMethod("indent_mod", "Split",
@@ -1204,11 +1207,16 @@ setMethod("indent_mod", "ANY",
 setMethod("indent_mod", "RowsVerticalSection",
           ##          function(obj) setNames(obj@indent_mods,names(obj)))
           function(obj) {
-    val <- attr(obj, "indent_mods") %||% rep(0L, length(obj))
+    val <- attr(obj, "indent_mods") %||% vapply(obj, indent_mod, 1L) ##rep(0L, length(obj))
     setNames(val, names(obj))
 })
 
 #' @rdname int_methods
+#' @export
+#' @examples
+#' indent_mod(tbl)
+#' indent_mod(tbl) <- 1L
+#' tbl
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
 #' @rdname int_methods
 setMethod("indent_mod<-", "Split",
@@ -1222,13 +1230,13 @@ setMethod("indent_mod<-", "VTableNodeInfo",
     obj@indent_modifier = as.integer(value)
     obj
 })
-
+#' @rdname int_methods
 setMethod("indent_mod<-", "CellValue",
           function(obj, value) {
     attr(obj, "indent_mod") <- as.integer(value)
     obj
 })
-
+#' @rdname int_methods
 setMethod("indent_mod<-", "RowsVerticalSection",
           function(obj, value) {
     if(length(value) != 1 && length(value) != length(obj))
@@ -2423,7 +2431,7 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
           fnotes_at_path(ctbl, pth, colpath) <- value
           content_table(ttrp) <- ctbl
       } else {
-          stop("an error occured. this shouldn't happen. please contact the maintainer")
+          stop("an error occured. this shouldn't happen. please contact the maintainer") # nocov
       }
       ttrp
 })
@@ -2463,8 +2471,3 @@ setMethod("fnotes_at_path<-", c("VTableTree", "NULL"),
 
 
 })
-
-`col_footnotes_here<-` <- function(obj, value) {
-    obj@col_footnotes <- make_ref_value(value)
-    obj
-}

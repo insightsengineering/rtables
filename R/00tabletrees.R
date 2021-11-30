@@ -162,6 +162,8 @@ VarLevelSplit <- function(var,
         content_extra_args = cextra_args
         )
 }
+
+## XXX TODO not sure if this class is needed for anything???
 setClass("NULLSplit", contains = "Split")
 
 NULLSplit <- function(...) {
@@ -986,8 +988,6 @@ setClass("LayoutColTree", contains = "LayoutAxisTree",
                         col_footnotes = "list"))
 
 setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
-setClass("LayoutRowTree", contains = "LayoutAxisTree")
-setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree <- function(lev = 0L,
                          name = obj_name(spl),
                          label = obj_label(spl),
@@ -1001,24 +1001,20 @@ LayoutColTree <- function(lev = 0L,
                          ## sub = expression(TRUE),
                          ## svar = NA_character_,
     ## slab = NA_character_) {
+    if(is.null(spl))
+        stop("LayoutColTree constructor got NULL for spl. This should never happen. Please contact the maintainer.") # nocov
     footnotes <- make_ref_value(footnotes)
-    if (!is.null(spl)) {
-        new("LayoutColTree", level = lev, children = kids,
-            name = .chkname(name),
-            summary_func = summary_function,
-            pos_in_tree = tpos,
-            split = spl,
-            ## subset = sub,
-            ## splitvar = svar,
-            label = label,
-            display_columncounts = disp_colcounts,
-            columncount_format = colcount_format,
-            col_footnotes = footnotes)
-    } else {
-        stop("problema my manitar")
-        LayoutColLeaf(lev = lev, label = label, tpos = tpos,
-                      name = .chkname(name))
-    }
+    new("LayoutColTree", level = lev, children = kids,
+        name = .chkname(name),
+        summary_func = summary_function,
+        pos_in_tree = tpos,
+        split = spl,
+        ## subset = sub,
+        ## splitvar = svar,
+        label = label,
+        display_columncounts = disp_colcounts,
+        columncount_format = colcount_format,
+        col_footnotes = footnotes)
 }
 
 LayoutColLeaf <- function(lev = 0L, name = label, label = "", tpos = TreePos()#,
@@ -1033,15 +1029,6 @@ LayoutColLeaf <- function(lev = 0L, name = label, label = "", tpos = TreePos()#,
         )
 }
 
-LayoutRowTree <- function(lev = 0L, kids = list()) {
-    new("LayoutRowTree", level = lev, children = kids)
-}
-
-LayoutRowLeaf <- function(lev = 0L, label = "",
-                       pos) {##, sub, n) {
-    new("LayoutRowLeaf", level = lev, label = label,
-        pos_in_tree = pos)##subset = sub, N_count = n)
-}
 
 
 ## Instantiated column info class
@@ -1267,14 +1254,15 @@ setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitl
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
+## covered because it's ElementaryTable's validity method but covr misses it
+## nocov start
 etable_validity  <- function(object) {
     kids <- tree_children(object)
     all(sapply(kids,
                function(k) {
                    (is(k, "DataRow") || is(k, "ContentRow"))}))###  &&
-    ##                    identical(k@col_info, object@col_info)
-    ## }))
 }
+## nocov end
 
 #' TableTree classes
 #' @exportClass ElementaryTable
@@ -1700,7 +1688,7 @@ print.RowsVerticalSection <- function(x, ...) {
   print(data.frame(
     row_name = attr(x, "row_names"),
     formatted_cell = vapply(x, format_rcell, character(1)),
-    indent_mod = vapply(x, indent_mod, numeric(1)),
+    indent_mod = indent_mod(x), ##vapply(x, indent_mod, numeric(1)),
     row_label = attr(x, "row_labels"),
     stringsAsFactors = FALSE,
     row.names = NULL

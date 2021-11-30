@@ -36,7 +36,7 @@ setMethod(".idx_helper", "TableRow",
 setMethod(".idx_helper", "VTableTree",
           function(tr, cur_idx_fun) {
     if(!labelrow_visible(tr)) {
-        stop("got a row footnote on a non-visible label row. this should never happen")
+        stop("got a row footnote on a non-visible label row. this should never happen") # nocov
     }
     lr <- tt_labelrow(tr)
 

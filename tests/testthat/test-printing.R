@@ -199,7 +199,7 @@ test_that("alignment works", {
 
     str <- toString(aligntab)
     expect_identical(str,
-                     "         all obs\n----------------\nleft     l      \nright          r\ncenter      c   \n")
+                      "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n")
 
     lyt2 <-  basic_table() %>%
         analyze("AGE", function(x) {
@@ -221,13 +221,15 @@ test_that("Various Printing things work", {
     ## ensure print method works for predata layout
     print(lyt)
     tab <- build_table(lyt, rawdat)
+    ## treestruct(tab)
 
-    treestruct(tab)
-
-    pos <- TreePos()
-    print(pos)
+    ## pos <- TreePos()
+    ## print(pos)
+    table_structure(tab)
     print(col_info(tab))
     show(col_info(tab))
+    print(coltree(tab))
+    show(coltree(tab))
     print(collect_leaves(tab)[[2]])
     expect_true(TRUE) ## so the whole chunk isn't skipped
 })

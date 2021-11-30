@@ -156,7 +156,7 @@ setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
     kids <- tree_children(subtt)
     ind <- which(names(kids) == posnm)
     if(length(ind) != 1L)
-        stop("table children do not appear to be named correctly at this path. This should not happen, please contact the maintainer of rtables.")
+        stop("table children do not appear to be named correctly at this path. This should not happen, please contact the maintainer of rtables.") # nocov
     if(after)
         ind <- ind + 1
 
@@ -295,50 +295,50 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 
 
 
-setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows"))
-setMethod("replace_rows", c(value = "TableRow"),
-          function(x, i, value) replace_rows(x, i = i, value = list(value)))
-setMethod("replace_rows", c(value = "list"),
-          function(x, i, value) {
-    if(is.null(i)) {
-        i = seq_along(tree_children(x))
-        if(labelrow_visible(x))
-            i = i[-1]
-    } else if(is.logical(i)) {
-        i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
-    }
+## setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows"))
+## setMethod("replace_rows", c(value = "TableRow"),
+##           function(x, i, value) replace_rows(x, i = i, value = list(value)))
+## setMethod("replace_rows", c(value = "list"),
+##           function(x, i, value) {
+##     if(is.null(i)) {
+##         i = seq_along(tree_children(x))
+##         if(labelrow_visible(x))
+##             i = i[-1]
+##     } else if(is.logical(i)) {
+##         i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
+##     }
 
-    if(labelrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
-        stop("attempted to assign values into a LabelRow")
+##     if(labelrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
+##         stop("attempted to assign values into a LabelRow")
 
-    if(length(value) != length(i))
-        value = rep(value, length.out = length(i))
+##     if(length(value) != length(i))
+##         value = rep(value, length.out = length(i))
 
-    if(are(value, "TableRow")) {
-        newrows =value
-    } else {
-        newrows = lapply(i,
-                         function(ind) {
-            .tablerow(value[[ind]],
-                     cinfo = col_info(x),
-                     klass = class(tree_children(x)[[ind]]),
-                     )
-        })
-    }
+##     if(are(value, "TableRow")) {
+##         newrows =value
+##     } else {
+##         newrows = lapply(i,
+##                          function(ind) {
+##             .tablerow(value[[ind]],
+##                      cinfo = col_info(x),
+##                      klass = class(tree_children(x)[[ind]]),
+##                      )
+##         })
+##     }
 
-    kids = tree_children(x)
-    kids[i] = newrows
-    tree_children(x) = kids
-    x
-})
+##     kids = tree_children(x)
+##     kids[i] = newrows
+##     tree_children(x) = kids
+##     x
+## })
 
 
 
-setMethod("replace_rows", c(value = "ElementaryTable"),
-           function(x,i,value) {
-    stopifnot(identical(col_info(x), col_info(value)))
-    replace_rows(x, i, tree_children(value))
-})
+## setMethod("replace_rows", c(value = "ElementaryTable"),
+##            function(x,i,value) {
+##     stopifnot(identical(col_info(x), col_info(value)))
+##     replace_rows(x, i, tree_children(value))
+## })
 
 
 

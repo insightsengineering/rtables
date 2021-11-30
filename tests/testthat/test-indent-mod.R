@@ -124,6 +124,54 @@ test_that("indents are correct in make_row_df", {
                      pgdf7$indent)
 })
 
+test_that("getters and setters work", {
+
+
+    t0 <-  basic_table() %>%
+        summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
+        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+        analyze("AGE") %>%
+        build_table(ex_adae)
+
+    expect_equal(indent_mod(t0), 0)
+    tm3 <- t0
+
+    indent_mod(tm3) <- 3L
+
+    expect_identical(indent_mod(tm3), 3L)
+
+    cv <- CellValue(15)
+    expect_equal(indent_mod(cv), 0)
+    indent_mod(cv) <- 3L
+    expect_equal(indent_mod(cv), 3)
+
+    origimods <- c(hi = 0L, lo = 0L, med = 1L)
+    rvs <- in_rows(hi = 5, lo = 2, med = 17.5, .indent_mods = origimods)
+    expect_identical(indent_mod(rvs), origimods)
+    indent_mod(rvs) <- c(2, 3, -1)
+
+    sink(textConnection("outputstr2", open = "w"))
+    print(rvs)
+    sink(NULL)
+
+    expect_equal(c(2, 3, -1),
+                 as.numeric(substr(outputstr2[4:6], 35, 36)))
+
+    expect_equal(indent_mod(rvs),
+                 c(hi = 2, lo = 3, med = -1))
+
+    spl <- VarLevelSplit("age", "myagesplit")
+    expect_equal(indent_mod(spl), 0)
+    indent_mod(spl) <- 3
+    expect_identical(indent_mod(spl), 3L) ## this tests implicit conversion
+
+
+
+})
+
+
+
 test_that("clear_indent_mods works as desired", {
 
 
@@ -133,16 +181,16 @@ test_that("clear_indent_mods works as desired", {
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
         analyze("AGE", indent_mod = -1L)
     tm <- build_table(lytm, ex_adae)
-    
+
     t0 <-  basic_table() %>%
         summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
         split_rows_by("AEBODSYS",  child_labels = "visible") %>%
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
         analyze("AGE") %>%
         build_table(ex_adae)
-    
+
     expect_identical(matrix_form(clear_indent_mods(tm)),
                      matrix_form(t0))
-    
+
 
 })

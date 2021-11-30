@@ -34,3 +34,22 @@ test_that("path summaries", {
                      rpathsum$path)
 
 })
+
+test_that("vars_in_layout works", {
+    lyt <- make_big_lyt()
+    vars <- vars_in_layout(lyt)
+    expect_identical(vars,
+                     c("ARM", # split_cols_by
+                       "SEX", # split_cols_by
+                       "gend_label", # split_cols_by labels_var
+                       "RACE", # split_rows_by
+                       "ethn_label", # split_rows_by labels_var
+                       "FACTOR2", # split_rows_by
+                       "fac2_label", # split_rows_by labels_var
+                       "AGE", # analyze
+                       "VAR3") #analyze
+                     )
+
+    expect_identical(vars_in_layout(ManualSplit(c("A", "B"), label = "stuff")),
+                     character())
+})

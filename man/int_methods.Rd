@@ -83,19 +83,6 @@
 \alias{pos_split_labels}
 \alias{pos_split_labels,TreePos-method}
 \alias{pos_split_labels,VLayoutNode-method}
-\alias{split_texttype}
-\alias{split_texttype,VarLevelSplit-method}
-\alias{split_texttype,MultiVarSplit-method}
-\alias{split_texttype,AllSplit-method}
-\alias{split_texttype,RootSplit-method}
-\alias{split_texttype,NULLSplit-method}
-\alias{split_texttype,VarStaticCutSplit-method}
-\alias{split_texttype,VarDynCutSplit-method}
-\alias{split_texttype,ManualSplit-method}
-\alias{split_texttype,ANY-method}
-\alias{pos_spltypes}
-\alias{pos_spltypes,TreePos-method}
-\alias{pos_spltypes,VLayoutNode-method}
 \alias{pos_splval_labels}
 \alias{pos_splval_labels,TreePos-method}
 \alias{pos_splval_labels,VLayoutNode-method}
@@ -221,6 +208,8 @@
 \alias{indent_mod<-}
 \alias{indent_mod<-,Split-method}
 \alias{indent_mod<-,VTableNodeInfo-method}
+\alias{indent_mod<-,CellValue-method}
+\alias{indent_mod<-,RowsVerticalSection-method}
 \alias{content_indent_mod}
 \alias{content_indent_mod,Split-method}
 \alias{content_indent_mod,VTableNodeInfo-method}
@@ -517,32 +506,6 @@ pos_split_labels(obj)
 
 \S4method{pos_split_labels}{VLayoutNode}(obj)
 
-split_texttype(obj)
-
-\S4method{split_texttype}{VarLevelSplit}(obj)
-
-\S4method{split_texttype}{MultiVarSplit}(obj)
-
-\S4method{split_texttype}{AllSplit}(obj)
-
-\S4method{split_texttype}{RootSplit}(obj)
-
-\S4method{split_texttype}{NULLSplit}(obj)
-
-\S4method{split_texttype}{VarStaticCutSplit}(obj)
-
-\S4method{split_texttype}{VarDynCutSplit}(obj)
-
-\S4method{split_texttype}{ManualSplit}(obj)
-
-\S4method{split_texttype}{ANY}(obj)
-
-pos_spltypes(obj)
-
-\S4method{pos_spltypes}{TreePos}(obj)
-
-\S4method{pos_spltypes}{VLayoutNode}(obj)
-
 pos_splval_labels(obj)
 
 \S4method{pos_splval_labels}{TreePos}(obj)
@@ -792,6 +755,10 @@ indent_mod(obj) <- value
 \S4method{indent_mod}{Split}(obj) <- value
 
 \S4method{indent_mod}{VTableNodeInfo}(obj) <- value
+
+\S4method{indent_mod}{CellValue}(obj) <- value
+
+\S4method{indent_mod}{RowsVerticalSection}(obj) <- value
 
 content_indent_mod(obj)
 
@@ -1046,4 +1013,7 @@ l <- basic_table() \%>\%
 tbl <- build_table(l, iris2)
 
 summarize_rows(tbl)
+indent_mod(tbl)
+indent_mod(tbl) <- 1L
+tbl
 }

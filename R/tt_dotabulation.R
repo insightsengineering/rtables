@@ -287,7 +287,7 @@ gen_rowvalues = function(dfpart,
     ## this is guaranteed to be a RowsVerticalSection object.
     rv1col = rawvals[[maxind]]
     if(!is(rv1col, "RowsVerticalSection"))
-        stop("gen_rowvalues appears to have generated something that was not a RowsVerticalSection object. Please contact the maintainer.")
+        stop("gen_rowvalues appears to have generated something that was not a RowsVerticalSection object. Please contact the maintainer.") # nocov
     labels <- value_labels(rv1col)
 
     ncrows = max(unqlens)
@@ -340,64 +340,6 @@ gen_rowvalues = function(dfpart,
     })
     trows
 }
-
-## ## THIS IS HORRIBLE!!!!!!!!!!!!
-## ## I don't think I've ever written hackier code in my entire life
-## rename_caller_arg <- function(fun, oldname, newname) {
-##     forms = formals(fun)
-##     formpos = match(names(forms), oldname)
-##     if(is.na(formpos))
-##         stop("the hacky argument renamer for ")
-##     names(forms)[formpos] = newname
-## }
-
-.both_caller = function(pcfun, labelstr) {
-    function(df2, .N_col, .N_total, ...) {
-        pcfun(df2, labelstr, .N_col = .N_col, .N_total = .N_total, ...)
-    }
-}
-
-.ncol_caller = function(pcfun, labelstr) {
-    function(df2, .N_col, ...) {
-        pcfun(df2, labelstr, .N_col = .N_col, ...)
-    }
-}
-
-.ntot_caller  = function(pcfun, labelstr) {
-    function(df2, .N_total, ...) {
-        pcfun(df2, labelstr, .N_total = .N_total, ...)
-    }
-}
-
-.neither_caller = .ntot_caller  = function(pcfun, labelstr) {
-    function(df2,  ...) {
-        pcfun(df2, labelstr, ...)
-    }
-}
-
-
-## .make_caller = function(parent_cfun, clabelstr) {
-##     ## XXX Ugh. Combinatorial explosion X.X
-##     ## This is what I get for abusing scope to do
-##     ## the content label thing. Bad design.
-
-##     ## Ugh number 2. If we assign each of htese to the same name
-##     ## R CMD check complains so we return them as anon funcs to sneak
-##     ## by. Yet mr
-##     if(takes_coln(parent_cfun)) {
-##         if(takes_totn(parent_cfun)) {
-##             .both_caller(parent_cfun, clabelstr)
-##         } else {
-##             .ncol_caller(parent_cfun, clabelstr)
-##         }
-##     } else {
-##         if(takes_totn(parent_cfun)) {
-##             .ntot_caller(parent_cfun, clabelstr)
-##         } else {
-##             .neither_caller(parent_cfun, clabelstr)
-##         }
-##     }
-## }
 
 .make_caller <- function(parent_cfun, clabelstr="") {
 

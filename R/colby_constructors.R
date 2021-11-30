@@ -99,7 +99,7 @@ setMethod("split_rows", "ANY",
 setGeneric("cmpnd_last_rowsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_rowsplit"))
 #' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "NULL", function(lyt, spl, constructor) {
-    stop("no existing splits to compound with. contact the maintainer")
+    stop("no existing splits to compound with. contact the maintainer") # nocov
 })
 #' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "PreDataRowLayout",
@@ -184,7 +184,7 @@ setMethod("split_cols", "ANY",
 setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
 #' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "NULL", function(lyt, spl, constructor) {
-    stop("no existing splits to compound with. contact the maintainer")
+    stop("no existing splits to compound with. contact the maintainer") # nocov
 })
 #' @rdname int_methods
 setMethod("cmpnd_last_colsplit", "PreDataColLayout",
