@@ -36,6 +36,7 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
     !is.null(formals(f)) && names(formals(f))[1] == "df"
 }
 
+#' @noRd
 #' @return a RowsVerticalSection object representing the k x 1 section of the table
 #' being generated, with k the number of rows the analysis function generates
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
@@ -108,8 +109,10 @@ strip_multivar_suffix <- function(x) {
     gsub( "\\._\\[\\[[0-9]\\]\\]_\\.$", "", x)
 }
 
+
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
+#' @noRd
 #' @return A list of m RowsVerticalSection objects, one for each
 #' (leaf) column in the table.
 gen_rowvalues = function(dfpart,
