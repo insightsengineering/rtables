@@ -28,8 +28,6 @@ as_html(
 \item{class_th}{class for th tag}
 
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
-
-\item{caption_txt}{caption of html table}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
