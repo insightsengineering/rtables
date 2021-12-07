@@ -50,7 +50,8 @@ TableTree(
 \arguments{
 \item{kids}{list. List of direct children.}
 
-\item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
+\item{name}{character(1). Name of the split/table/row being created. Defaults to same as the corresponding label,
+but is not required to be.}
 
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
 
@@ -66,9 +67,12 @@ TableTree(
 
 \item{var}{string, variable name}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or
+function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this
+function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
 \item{title}{character(1). Main title. Ignored for subtables.}
 

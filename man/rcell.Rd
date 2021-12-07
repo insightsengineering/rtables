@@ -36,11 +36,11 @@ then the \code{format} is applied}
 
 \item{label}{character(1). Label or Null. If non-null, it will be looked at when determining row labels.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this
+function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
 \item{footnotes}{list or NULL. Referential footnote messages for the cell.}
-
-\item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
 
 \item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
 .in_ref_col shoul be passed to this argument)}

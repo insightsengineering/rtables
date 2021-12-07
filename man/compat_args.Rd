@@ -2,7 +2,7 @@
 % Please edit documentation in R/argument_conventions.R
 \name{compat_args}
 \alias{compat_args}
-\title{Compatability Arg Conventions}
+\title{Compatibility Arg Conventions}
 \usage{
 compat_args(
   .lst,
@@ -19,7 +19,7 @@ compat_args(
 \arguments{
 \item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
 
-\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
+\item{FUN}{function. Tabulation function. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
 
 \item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
 if a \code{\link{factor}} of length \code{nrow(x)} that defines
@@ -47,7 +47,7 @@ collection must match the levels in \code{col_by}. See examples.}
 NULL (this is an argument template dummy function)
 }
 \description{
-Compatability Arg Conventions
+Compatibility Arg Conventions
 }
 \seealso{
 Other conventions: 

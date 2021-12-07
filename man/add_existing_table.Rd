@@ -11,7 +11,9 @@ add_existing_table(lyt, tt, indent_mod = 0)
 
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this
+function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

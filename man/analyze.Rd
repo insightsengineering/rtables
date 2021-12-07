@@ -23,23 +23,34 @@ analyze(
 
 \item{vars}{character vector. Multiple variable names.}
 
-\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take
+other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
-\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
+\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}. This is
+the name that appears in the row paths, i.e. see \code{row_paths_summary}. This is sometimes useful if the same
+variable is analyzed.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or
+function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
+\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to
+\code{FALSE}}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
+\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this
+analysis. Defaults to \code{FALSE}}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not
+match a formal argument of the tabulation function.}
 
-\item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
+\item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be
+visible in the resulting table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this
+function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
