@@ -114,6 +114,37 @@ test_that("trim_levels_to_map split function works", {
                           c("ARM", "C: Combination", "RACE", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER")))
 
 
+    data <- data.frame(LBCAT = c(rep("a", 4), rep("b", 4)),
+                       PARAM = c(rep("param1", 4), rep("param2", 4)),
+                       VISIT = rep(c("V1", "V2"), 4),
+                       ABN = rep(c("H", "L"), 4),
+                       stringsAsFactors = TRUE)
+
+    map <- data.frame(LBCAT = c(rep("a", 4), rep("b", 4)),
+                      PARAM = c(rep("param1", 4), rep("param2", 4)),
+                      VISIT = rep(c("V1", "V1", "V2", "V2"), 2),
+                      ABN = rep(c("H", "L"), 4),
+                      stringsAsFactors = FALSE)
+
+    lyt4 <- basic_table() %>%
+        split_rows_by("LBCAT", split_fun = trim_levels_to_map(map = map)) %>%
+        split_rows_by("PARAM", split_fun = trim_levels_to_map(map = map)) %>%
+        split_rows_by("VISIT", split_fun = trim_levels_to_map(map = map)) %>%
+        analyze("ABN")
+
+    tbl4 <- build_table(lyt4, df = data)
+    rpths4 <- row_paths(tbl4)
+    expect_identical(rpths4[[7]],
+                     c("LBCAT", "a", "PARAM", "param1", "VISIT", "V2", "ABN", "H"))
+
+    expect_equal(unlist(cell_values(tbl4, rpths4[[7]]), use.names = FALSE), 0)
+    expect_identical(rpths4[[13]],
+                     c("LBCAT", "b", "PARAM", "param2", "VISIT", "V1", "ABN", "L"))
+
+    expect_equal(unlist(cell_values(tbl4, rpths4[[13]]), use.names = FALSE), 0)
+
+    expect_equal(length(rpths4), 16)
+
 })
 
 test_that("trim_levels_in_group works", {

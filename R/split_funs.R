@@ -929,7 +929,7 @@ trim_levels_to_map <- function(map = NULL) {
         allvars <- colnames(map)
         splvar <- spl_payload(spl)
 
-        allvmatches <- match(.spl_context, allvars)
+        allvmatches <- match(.spl_context$split, allvars)
         outvars <- allvars[na.omit(allvmatches)]
         ## invars are variables present in data, but not in
         ## previous or current splits
