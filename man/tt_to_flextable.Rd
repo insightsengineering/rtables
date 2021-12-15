@@ -9,7 +9,7 @@ tt_to_flextable(
   paginate = FALSE,
   lpp = NULL,
   ...,
-  colwidths = propose_column_widths(tt),
+  colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
   total_width = 5
 )
 }

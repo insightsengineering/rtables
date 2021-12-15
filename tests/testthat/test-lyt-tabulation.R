@@ -69,6 +69,23 @@ tab2 = build_table(thing2, rawdat)
     tab3
 })
 
+test_that("Nested splits in column space work", {
+
+    tbl2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", split_fun = drop_split_levels) %>%
+        analyze(c("AGE", "STRATA1")) %>%
+        build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
+
+    mf <- matrix_form(tbl2)
+    expect_identical(unname(mf$strings[1, , drop = TRUE]),
+                     c("", "A: Drug X", "A: Drug X", "B: Placebo", "B: Placebo",
+                       "C: Combination", "C: Combination"))
+    expect_identical(unname(mf$display[1, , drop = TRUE]),
+                     c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
+
+})
+
 
 test_that("labelkids parameter works", {
     yeslabellyt <- basic_table() %>% split_cols_by("ARM") %>%

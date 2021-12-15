@@ -16,18 +16,6 @@
 
 
 
-## this is where we will take wordwrapping
-## into account when it is added
-##
-## ALL calculations of vertical space for pagination
-## purposes must go through nlines and divider_height!!!!!!!!
-
-## this will be customizable someday. I have foreseen it (spooky noises)
-divider_height = function(cinfo) 1L
-
-setGeneric("nlines",
-           function(x, colwidths) standardGeneric("nlines"))
-
 setMethod("nlines", "TableRow",
           function(x, colwidths) {
     fns <- sum(unlist(lapply(row_footnotes(x), nlines))) + sum(unlist(lapply(cell_footnotes(x), nlines)))
@@ -65,18 +53,6 @@ setMethod("nlines", "InstantiatedColumnInfo",
 
 })
 
-## XXX beware. I think it is dangerous
-setMethod("nlines", "list",
-          function(x, colwidths) {
-    if(length(x) == 0)
-        0L
-    else
-        sum(unlist(vapply(x, nlines, NA_integer_, colwidths = colwidths)))
-})
-
-setMethod("nlines", "NULL", function(x, colwidths) 0L)
-
-setMethod("nlines", "character", function(x, colwidths) max(vapply(strsplit(x, "\n", fixed = TRUE), length, 1L)))
 
 pagdfrow = function(row,
                     nm = obj_name(row),
@@ -387,7 +363,7 @@ make_col_df <-    function(tt,
                            visible_only = TRUE) {
     ctree <- coltree(tt)
     rows <- inner_col_df(ctree, ## this is a null op if its already a coltree object
-                 colwidths = propose_column_widths(tt),
+                 colwidths = propose_column_widths(matrix_form(tt)),
                  visible_only = visible_only,
                  colnum = 1L,
                  sibpos = 1L,
@@ -583,8 +559,8 @@ find_pag = function(pagdf,
 #' row_paths_summary(tbl)
 #'
 #' tbls <- paginate_table(tbl)
-#'
-#' w_tbls <- propose_column_widths(tbl) # so that we have the same column widths
+#' mf <- matrix_form(tbl)
+#' w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 #'
 #' tmp <- lapply(tbls, print, widths = w_tbls)
 #'

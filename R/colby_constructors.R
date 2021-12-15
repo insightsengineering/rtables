@@ -180,6 +180,8 @@ setMethod("split_cols", "ANY",
           function(lyt, spl, pos) stop("nope. can't add a col split to that (", class(lyt), "). contact the maintaner.")
           )
 
+## no longer needed (if it ever was) AFAICT
+
 #' @rdname int_methods
 setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
 #' @rdname int_methods

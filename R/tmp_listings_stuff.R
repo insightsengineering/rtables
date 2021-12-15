@@ -141,19 +141,31 @@ listing_matrix_form <- function(df) {
     keycolaligns <- rbind(rep("center", length(keycols)),
                           matrix("left", ncol = length(keycols),
                            nrow = nrow(fullmat) - 1))
-    ret <- structure(list(strings = fullmat,
-                   spans = matrix(1, nrow = nrow(fullmat),
-                                  ncol = ncol(fullmat)),
-                   ref_footnotes = list(),
-                   display = matrix(TRUE, nrow = nrow(fullmat),
-                                    ncol = ncol(fullmat)),
-                   aligns = cbind(keycolaligns,
-                                  matrix("center", nrow = nrow(fullmat),
-                                         ncol = ncol(fullmat)- length(keycols)))),
-              nlines_header = 1, ## XXX this is wrong!
-              nrow_header = 1,
-              class = c("MatrixPrintForm", "list"))
-    .do_mat_expand(ret, has_topleft = FALSE)
+    ## ret <- structure(list(strings = fullmat,
+    ##                spans = matrix(1, nrow = nrow(fullmat),
+    ##                               ncol = ncol(fullmat)),
+    ##                ref_footnotes = list(),
+    ##                display = matrix(TRUE, nrow = nrow(fullmat),
+    ##                                 ncol = ncol(fullmat)),
+    ##                aligns = cbind(keycolaligns,
+    ##                               matrix("center", nrow = nrow(fullmat),
+    ##                                      ncol = ncol(fullmat)- length(keycols)))),
+    ##           nlines_header = 1, ## XXX this is wrong!
+    ##           nrow_header = 1,
+    ##           class = c("MatrixPrintForm", "list"))
+    ## .do_mat_expand(ret, has_topleft = FALSE)
+    MatrixPrintForm(strings = fullmat,
+                    spans = matrix(1, nrow = nrow(fullmat),
+                                   ncol = ncol(fullmat)),
+                    ref_fnotes =list(),
+                    aligns = cbind(keycolaligns,
+                                   matrix("center", nrow = nrow(fullmat),
+                                          ncol = ncol(fullmat)- length(keycols))),
+                    row_info = make_row_df(df),
+                    nlines_header = 1, ## XXX this is probably wrong!!!
+                    nrow_header = 1,
+                    has_topleft = FALSE,
+                    expand_newlines = TRUE)
 }
 
 

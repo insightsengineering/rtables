@@ -199,7 +199,7 @@ test_that("alignment works", {
 
     str <- toString(aligntab)
     expect_identical(str,
-                      "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n")
+                     "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n")
 
     lyt2 <-  basic_table() %>%
         analyze("AGE", function(x) {

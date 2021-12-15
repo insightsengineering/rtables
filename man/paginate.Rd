@@ -95,8 +95,8 @@ nrow(tbl)
 row_paths_summary(tbl)
 
 tbls <- paginate_table(tbl)
-
-w_tbls <- propose_column_widths(tbl) # so that we have the same column widths
+mf <- matrix_form(tbl)
+w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 
 tmp <- lapply(tbls, print, widths = w_tbls)
 
