@@ -1,5 +1,12 @@
-#' @param x an object of class \code{\link{CellValue}}, or a raw value.
+#'Format rcell
 #'
+#' This is a wrapper around \code{\link[formatable:format_value]{formatable::format_value}}
+#' for use with \code{CellValue} objects
+#'
+#' @param x an object of class \code{\link{CellValue}}, or a raw value.
+#' @param format character(1) or function. The format label (string) or formatter function to apply to \code{x}.
+#' @param na_str character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.
+#' @param output character(1). output type
 #' @return formatted text representing the cell
 #' @export
 #' @examples

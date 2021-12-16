@@ -4,7 +4,7 @@
 \alias{toString,VTableTree-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
-\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3)
+\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3, linesep = "—")
 }
 \arguments{
 \item{x}{table object}

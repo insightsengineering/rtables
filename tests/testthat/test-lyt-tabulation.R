@@ -71,11 +71,12 @@ tab2 = build_table(thing2, rawdat)
 
 test_that("Nested splits in column space work", {
 
+    dat2 <- subset(ex_adsl, SEX %in% c("M", "F"))
     tbl2 <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", split_fun = drop_split_levels) %>%
         analyze(c("AGE", "STRATA1")) %>%
-        build_table(ex_adsl %>% filter(SEX %in% c("M", "F")))
+        build_table(dat2)
 
     mf <- matrix_form(tbl2)
     expect_identical(unname(mf$strings[1, , drop = TRUE]),

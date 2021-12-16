@@ -281,7 +281,7 @@ export_as_pdf <- function(tt,
     grid.newpage()
     pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
-    colwidths <- propose_column_widths(matrix_form(tt))
+    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
     tbls <- if (paginate) {
 
         if (is.null(lpp)) {

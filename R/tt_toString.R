@@ -1,6 +1,6 @@
-## #' @import formatable
-## #' @importMethodsFrom formatable toString matrix_form nlines
-## NULL
+#' @import formatable
+#' @importMethodsFrom formatable toString matrix_form nlines
+NULL
 
 
 
@@ -966,7 +966,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
 #' @param linesep character to build line separator
-#' 
+#'
 #' @noRd
 #'
 #' @return a string

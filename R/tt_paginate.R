@@ -363,7 +363,7 @@ make_col_df <-    function(tt,
                            visible_only = TRUE) {
     ctree <- coltree(tt)
     rows <- inner_col_df(ctree, ## this is a null op if its already a coltree object
-                 colwidths = propose_column_widths(matrix_form(tt)),
+                 colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
                  visible_only = visible_only,
                  colnum = 1L,
                  sibpos = 1L,
@@ -559,7 +559,7 @@ find_pag = function(pagdf,
 #' row_paths_summary(tbl)
 #'
 #' tbls <- paginate_table(tbl)
-#' mf <- matrix_form(tbl)
+#' mf <- matrix_form(tbl, indent_rownames = TRUE)
 #' w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 #'
 #' tmp <- lapply(tbls, print, widths = w_tbls)
