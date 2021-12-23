@@ -55,7 +55,7 @@ install.packages("rtables")
 or you can install the latest stable version directly from GitHub with:
 
 ``` r
-devtool::install_github("Roche/rtables")
+devtools::install_github("Roche/rtables")
 ```
 
 To install a frozen pre-release version of `rtables` based on the new
