@@ -805,3 +805,161 @@ test_that(".spl_context works in content and analysis functions", {
                  unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
                                `[[`, 2L)))
 })
+
+test_that("cut functions work", {
+
+    ctnames <- c("young", "medium", "old")
+    ## split_cols_by_cuts
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_cuts("AGE", split_label = "Age",
+                           cuts = c(0, 25, 35, 1000),
+                           cutlabels = ctnames) %>%
+        analyze(c("BMRKR2", "STRATA2")) %>%
+        append_topleft("counts")
+
+    tbl <- build_table(l, ex_adsl)
+
+    chkvals <- cell_values(tbl, c("BMRKR2", "LOW"), c("ARM", "A: Drug X"))
+    expect_identical(unname(unlist(chkvals)),
+                     c(nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE <= 25)),
+                       nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 25 & AGE <= 35)),
+                       nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 35))))
+
+    mf <- matrix_form(tbl)
+    expect_identical(mf$strings[2,, drop = TRUE],
+                     c("", rep(ctnames, 3)))
+
+    lcm <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_cuts("AGE", split_label = "Age",
+                           cuts = c(0, 25, 35, 1000),
+                           cutlabels = c("young", "young+medium", "all"),
+                           cumulative = TRUE) %>%
+        analyze(c("BMRKR2", "STRATA2")) %>%
+        append_topleft("counts")
+
+    tblcm <- build_table(lcm, ex_adsl)
+
+    medpth <- c("BMRKR2", "MEDIUM")
+    bpth <- c("ARM", "B: Placebo")
+    expect_identical(cumsum(unname(unlist(cell_values(tbl, medpth, bpth)))),
+                     unname(unlist(cell_values(tblcm, medpth, bpth))))
+    ## split_rows_by_cuts
+    l2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by_cuts("AGE", split_label = "Age",
+                           cuts = c(0, 25, 35, 1000),
+                           cutlabels = ctnames) %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+
+    tbl2 <- build_table(l2, ex_adsl)
+
+    mf2 <- matrix_form(tbl2)
+
+    expect_identical(mf2$strings[c(2, 6, 10), 1,drop = TRUE],
+                     ctnames)
+
+
+    l2cm <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by_cuts("AGE", split_label = "Age",
+                           cuts = c(0, 25, 35, 1000),
+                           cutlabels = ctnames, cumulative = TRUE) %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+
+    tbl2cm <- build_table(l2cm, ex_adsl)
+
+    medlow <- c("AGE", "young", "BMRKR2", "HIGH")
+    cpth <- c("ARM", "C: Combination")
+    getvals <- function(tt) {
+        sapply(ctnames,
+               function(pth) {
+            unname(unlist(cell_values(tt, c("AGE", pth, "BMRKR2", "HIGH"), cpth)))
+        })
+    }
+    expect_identical(getvals(tbl2cm),
+                     cumsum(getvals(tbl2)))
+ # split_cols_by_quartiles
+
+    l3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_cutfun("AGE") %>% ##(quartiles("AGE", split_label = "Age") %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+    tbl3 <- build_table(l3, ex_adsl)
+
+    l3b <-  basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_cuts("AGE", cuts = rtables:::qtile_cuts(ex_adsl$AGE)) %>% ##(quartiles("AGE", split_label = "Age") %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+    tbl3b <- build_table(l3b, ex_adsl)
+
+    expect_identical(tbl3, tbl3b)
+
+    l3c <-  basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_quartiles("AGE") %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+    tbl3c <- build_table(l3c, ex_adsl)
+
+    expect_identical(unname(unlist(cell_values(tbl3))),
+                     unname(unlist(cell_values(tbl3c))))
+
+
+    l3c_cm <-  basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_quartiles("AGE", cumulative = TRUE) %>%
+        analyze("BMRKR2") %>%
+        append_topleft("counts")
+
+    tbl3c_cm <- build_table(l3c_cm, ex_adsl)
+ # split_rows_by_quartiles
+ l4 <- basic_table() %>%
+     split_cols_by("ARM") %>%
+     add_colcounts() %>%
+     split_rows_by_quartiles("AGE", split_label = "Age") %>%
+     analyze("BMRKR2") %>%
+     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
+
+ tbl4 <- build_table(l4, ex_adsl)
+
+
+    cvs4 <- unlist(cell_values(tbl4))
+
+    valslst4 <- unlist(lapply(1:3, function(i) lapply(cvs4, function(lst) lst[i])))
+
+    names(valslst4) <- gsub("^(.*)\\.BMRKR2\\.(.*)$", "\\2.\\1", names(valslst4))
+    valslst3 <- unlist(cell_values(tbl3c))
+    expect_identical(valslst3,
+                     valslst4[names(valslst3)])
+
+    l4cm <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        add_colcounts() %>%
+        split_rows_by_quartiles("AGE", split_label = "Age", cumulative = TRUE) %>%
+        analyze("BMRKR2") %>%
+        append_topleft(c("Age Cumulative Quartiles", " Counts BMRKR2"))
+    tbl4cm <- build_table(l4cm, ex_adsl)
+
+
+    cvs4cm <- unlist(cell_values(tbl4cm))
+
+    valslst4cm <- unlist(lapply(1:3, function(i) lapply(cvs4cm, function(lst) lst[i])))
+
+    names(valslst4cm) <- gsub("^(.*)\\.BMRKR2\\.(.*)$", "\\2.\\1", names(valslst4cm))
+    valslst3cm <- unlist(cell_values(tbl3c_cm))
+    expect_identical(valslst3cm,
+                     valslst4cm[names(valslst3cm)])
+
+
+})

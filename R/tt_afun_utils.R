@@ -15,6 +15,8 @@
 #' @export
 rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL, align = NULL){
 
+    if(!is.null(align))
+        align <- chk_rtables_align(align)
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -26,8 +28,6 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
             obj_format(x) <- format
         if(!is.null(footnotes))
             cell_footnotes(x) <- lapply(footnotes, RefFootnote)
-        if(!is.null(align))
-            cell_align(x) <- align
         ret <- x
     } else {
         if(is.null(label))
@@ -37,8 +37,10 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
         if(is.null(indent_mod))
             indent_mod <- indent_mod(x)
         footnotes <- lapply(footnotes, RefFootnote)
-        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes, align = align)# RefFootnote(footnote))
+        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes)# RefFootnote(footnote))
     }
+    if(!is.null(align))
+        cell_align(ret) <- chk_rtables_align(align)
     ret
 }
 

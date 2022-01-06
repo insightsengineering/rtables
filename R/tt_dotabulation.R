@@ -1119,22 +1119,6 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
     lyt
 })
 
-## Note this is similar to pos_to_path but those paths
-## have seperate vector elements for split names and split values
-## because they're for indexing. this is NOT for that, here
-## we give a named character vector where the names are the spl names
-## and the values are the spl values
-## pos_to_prevsplvals <- function(pos) {
-##     if(is.null(pos) || identical(pos, TreePos()))
-##         return(context_df_row())
-
-##     vals <- unlist(value_names(pos_splvals(pos)),
-##                    recursive = FALSE)
-
-##     nms <- vapply(pos_splits(pos), obj_name, "")
-##     context_df_row(split = nms, value = vals)
-## }
-
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, label = "",

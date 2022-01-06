@@ -58,3 +58,8 @@ rtables_aligns <- function() {
 }
 
 
+chk_rtables_align <- function(algn) {
+    if(any(is.na(algn) | !(algn %in% rtables_aligns())))
+        stop("Unsupported text-alignment: ", algn)
+    algn
+}

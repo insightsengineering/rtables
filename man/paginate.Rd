@@ -3,6 +3,8 @@
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
 \alias{paginate_table}
+\alias{vpag_tt_indices}
+\alias{vpaginate_table}
 \alias{paginate_listing}
 \title{Pagination of a TableTree}
 \usage{
@@ -23,6 +25,10 @@ paginate_table(
   colwidths = NULL,
   verbose = FALSE
 )
+
+vpag_tt_indices(tt, cpp = 40, verbose = FALSE)
+
+vpaginate_table(tt, cpp = 40, verbose = FALSE)
 
 paginate_listing(
   lsting,
@@ -47,6 +53,8 @@ considerations. Defaults to none.}
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
+
+\item{cpp}{numeric(1). Column characters per page}
 
 \item{lsting}{listing_df. The listing to paginate.}
 }

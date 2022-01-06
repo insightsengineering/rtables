@@ -287,20 +287,22 @@ setMethod("pos_splvals", "TreePos",
 setMethod("pos_splvals", "VLayoutNode",
           function(obj) pos_splvals(tree_pos(obj)))
 
-#' @rdname int_methods
-setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
-#' @rdname int_methods
-setMethod("pos_split_labels", "TreePos",
-          function(obj) {
-    spls = pos_splits(obj)
-    sapply(spls, function(x) x@split_label)
-})
+## unreachable code only used in TreePos show method, but that
+## class isn't exported so potentially taking these out fully.
+## #' @rdname int_methods
+## setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
+## #' @rdname int_methods
+## setMethod("pos_split_labels", "TreePos",
+##           function(obj) {
+##     spls = pos_splits(obj)
+##     sapply(spls, function(x) x@split_label)
+## })
 
-## setMethod("pos_split_labels", "VNodeInfo",
+## ## setMethod("pos_split_labels", "VNodeInfo",
+## ##            function(obj) pos_split_labels(tree_pos(obj)))
+## #' @rdname int_methods
+## setMethod("pos_split_labels", "VLayoutNode",
 ##            function(obj) pos_split_labels(tree_pos(obj)))
-#' @rdname int_methods
-setMethod("pos_split_labels", "VLayoutNode",
-           function(obj) pos_split_labels(tree_pos(obj)))
 
 ## unreachable code...
 
@@ -345,11 +347,13 @@ setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels
 #' @rdname int_methods
 setMethod("pos_splval_labels", "TreePos",
           function(obj) obj@sval_labels)
+## no longer used
+
 ## setMethod("pos_splval_labels", "VNodeInfo",
 ##            function(obj) pos_splval_labels(tree_pos(obj)))
-#' @rdname int_methods
-setMethod("pos_splval_labels", "VLayoutNode",
-           function(obj) pos_splval_labels(tree_pos(obj)))
+## #' @rdname int_methods
+## setMethod("pos_splval_labels", "VLayoutNode",
+##            function(obj) pos_splval_labels(tree_pos(obj)))
 
 
 #' @rdname int_methods
@@ -570,8 +574,8 @@ setMethod("vis_label", "Split", function(spl) {
     .labelkids_helper(label_position(spl))
 })
 
-#' @rdname int_methods
-setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
+## #' @rdname int_methods
+## setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
 ## #' @rdname int_methods
 ## setMethod("vis_label<-", "Split", function(spl, value) {
 ##     stop("defunct")
@@ -628,21 +632,23 @@ setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 #' @rdname int_methods
 setMethod("analysis_fun", "AnalyzeColVarSplit", function(obj) obj@analysis_fun)
 
-#' @rdname int_methods
-setGeneric("analysis_fun<-", function(object, value) standardGeneric("analysis_fun<-"))
 
-#' @rdname int_methods
-setMethod("analysis_fun<-", "AnalyzeVarSplit", function(object, value) {
-    object@analysis_fun <- value
-    object
-})
-#' @rdname int_methods
-setMethod("analysis_fun<-", "AnalyzeColVarSplit", function(object, value) {
-    if(is(value, "function"))
-        value <- list(value)
-    object@analysis_fun <- value
-    object
-})
+## not used and probably not needed
+## #' @rdname int_methods
+## setGeneric("analysis_fun<-", function(object, value) standardGeneric("analysis_fun<-"))
+
+## #' @rdname int_methods
+## setMethod("analysis_fun<-", "AnalyzeVarSplit", function(object, value) {
+##     object@analysis_fun <- value
+##     object
+## })
+## #' @rdname int_methods
+## setMethod("analysis_fun<-", "AnalyzeColVarSplit", function(object, value) {
+##     if(is(value, "function"))
+##         value <- list(value)
+##     object@analysis_fun <- value
+##     object
+## })
 
 
 
@@ -1171,9 +1177,8 @@ setMethod("cell_align<-", "CellValue", function(obj, value) {
         value <- "center"
     else {
         value <- tolower(value)
-        if(!(value %in% rtables_aligns()))
-            stop("Unsupported cell value alignment: ", value)
     }
+    chk_rtables_align(value)
     attr(obj, "align") <- value
     obj
 })
@@ -1188,22 +1193,24 @@ setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 #' @rdname int_methods
 setMethod("tt_level", "VNodeInfo", function(obj) obj@level)
 
-#' @rdname int_methods
-setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
-## this will hit everyhing via inheritence
-#' @rdname int_methods
-setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
-    obj@level = as.integer(value)
-    obj
-})
-#' @rdname int_methods
-setMethod("tt_level<-", "VTableTree",
-          function(obj, value) {
-    obj@level = as.integer(value)
-    tree_children(obj) = lapply(tree_children(obj),
-                                `tt_level<-`, value = as.integer(value) + 1L)
-    obj
-})
+## not used anywhere or exported.  Slated for removal
+
+## #' @rdname int_methods
+## setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
+## ## this will hit everyhing via inheritence
+## #' @rdname int_methods
+## setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
+##     obj@level = as.integer(value)
+##     obj
+## })
+## #' @rdname int_methods
+## setMethod("tt_level<-", "VTableTree",
+##           function(obj, value) {
+##     obj@level = as.integer(value)
+##     tree_children(obj) = lapply(tree_children(obj),
+##                                 `tt_level<-`, value = as.integer(value) + 1L)
+##     obj
+## })
 
 #' @rdname int_methods
 #' @export

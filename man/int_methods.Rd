@@ -80,12 +80,8 @@
 \alias{pos_splvals}
 \alias{pos_splvals,TreePos-method}
 \alias{pos_splvals,VLayoutNode-method}
-\alias{pos_split_labels}
-\alias{pos_split_labels,TreePos-method}
-\alias{pos_split_labels,VLayoutNode-method}
 \alias{pos_splval_labels}
 \alias{pos_splval_labels,TreePos-method}
-\alias{pos_splval_labels,VLayoutNode-method}
 \alias{spl_payload}
 \alias{spl_payload,Split-method}
 \alias{spl_payload<-}
@@ -112,7 +108,6 @@
 \alias{label_kids<-,Split,logical-method}
 \alias{vis_label}
 \alias{vis_label,Split-method}
-\alias{vis_label<-}
 \alias{label_position}
 \alias{label_position,Split-method}
 \alias{label_position,VAnalyzeSplit-method}
@@ -125,9 +120,6 @@
 \alias{analysis_fun}
 \alias{analysis_fun,AnalyzeVarSplit-method}
 \alias{analysis_fun,AnalyzeColVarSplit-method}
-\alias{analysis_fun<-}
-\alias{analysis_fun<-,AnalyzeVarSplit-method}
-\alias{analysis_fun<-,AnalyzeColVarSplit-method}
 \alias{split_fun}
 \alias{split_fun,CustomizableSplit-method}
 \alias{split_fun,Split-method}
@@ -200,9 +192,6 @@
 \alias{cell_align<-,CellValue-method}
 \alias{tt_level}
 \alias{tt_level,VNodeInfo-method}
-\alias{tt_level<-}
-\alias{tt_level<-,VNodeInfo-method}
-\alias{tt_level<-,VTableTree-method}
 \alias{indent_mod}
 \alias{indent_mod,Split-method}
 \alias{indent_mod,VTableNodeInfo-method}
@@ -503,17 +492,9 @@ pos_splvals(obj)
 
 \S4method{pos_splvals}{VLayoutNode}(obj)
 
-pos_split_labels(obj)
-
-\S4method{pos_split_labels}{TreePos}(obj)
-
-\S4method{pos_split_labels}{VLayoutNode}(obj)
-
 pos_splval_labels(obj)
 
 \S4method{pos_splval_labels}{TreePos}(obj)
-
-\S4method{pos_splval_labels}{VLayoutNode}(obj)
 
 spl_payload(obj)
 
@@ -567,8 +548,6 @@ vis_label(spl)
 
 \S4method{vis_label}{Split}(spl)
 
-vis_label(spl) <- value
-
 label_position(spl)
 
 \S4method{label_position}{Split}(spl)
@@ -592,12 +571,6 @@ analysis_fun(obj)
 \S4method{analysis_fun}{AnalyzeVarSplit}(obj)
 
 \S4method{analysis_fun}{AnalyzeColVarSplit}(obj)
-
-analysis_fun(object) <- value
-
-\S4method{analysis_fun}{AnalyzeVarSplit}(object) <- value
-
-\S4method{analysis_fun}{AnalyzeColVarSplit}(object) <- value
 
 split_fun(obj)
 
@@ -742,12 +715,6 @@ cell_align(obj) <- value
 tt_level(obj)
 
 \S4method{tt_level}{VNodeInfo}(obj)
-
-tt_level(obj) <- value
-
-\S4method{tt_level}{VNodeInfo}(obj) <- value
-
-\S4method{tt_level}{VTableTree}(obj) <- value
 
 indent_mod(obj)
 

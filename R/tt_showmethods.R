@@ -233,19 +233,20 @@ setMethod("show", "PreDataTableLayouts",
     invisible(object)
 })
 
+## this class and its constructor and accessors (For slots of this
+## class on larger objects) are all non-exported, unreachable code
+## setMethod("show", "TreePos",
+##           function(object) {
+##     chars = mapply(function(label, val)
+##         {
+##             paste0(label, " [", val, "]")
+##         }, label = pos_split_labels(object),
+##         val = pos_splval_labels(object))
 
-setMethod("show", "TreePos",
-          function(object) {
-    chars = mapply(function(label, val)
-        {
-            paste0(label, " [", val, "]")
-        }, label = pos_split_labels(object),
-        val = pos_splval_labels(object))
-
-    msg = paste(chars, collapse = " -> ")
-    cat("An object of class ", class(object), "\n\n", msg)
-    invisible(object)
-})
+##     msg = paste(chars, collapse = " -> ")
+##     cat("An object of class ", class(object), "\n\n", msg)
+##     invisible(object)
+## })
 
 
 setMethod("show", "InstantiatedColumnInfo",

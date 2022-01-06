@@ -10,7 +10,7 @@ tt_to_flextable(
   lpp = NULL,
   ...,
   colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
-  total_width = 5
+  total_width = 10
 )
 }
 \arguments{

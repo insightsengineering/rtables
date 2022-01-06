@@ -437,11 +437,17 @@ valid_pag = function(pagdf,
 
     if(verbose)
         message("Checking pagination after row ", guess)
+    rowlines <- sum(pagdf[start:guess, "self_extent"])
     reflines <-  sum(pagdf[start:guess, "nreflines"])
     rowlines <- sum(pagdf[start:guess, "self_extent"]) - reflines ## self extent includes reflines
 
     if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
-    lines <- guess - start + 1 + reflines  # guess - start + 1 because inclusive of start
+    lines <- rowlines + reflines  # guess - start + 1 because inclusive of start
+    if(rowlines > rlpp) {
+        if(verbose)
+            message("\t....................... FAIL: Rows take up too much space (", rowlines, " lines)")
+        return(FALSE)
+    }
     if(lines > rlpp) {
         if(verbose)
             message("\t....................... FAIL: Referential footnotes take up too much space (", reflines, " lines)")
@@ -639,4 +645,48 @@ paginate_table = function(tt, lpp = 15,
     lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
                                 keep_titles = TRUE,
                                 reindex_refs = FALSE])
+}
+
+
+#' @export
+#' @param cpp numeric(1). Column characters per page
+#' @aliases paginate_table
+#' @rdname paginate
+vpag_tt_indices <- function(tt, cpp = 40, verbose = FALSE) {
+
+    strm <- matrix_form(tt, TRUE)
+
+    nhl <- attr(strm, "nlines_header")
+
+    clwds <- propose_column_widths(strm)
+
+
+    pdfrows <- lapply(1:ncol(tt),
+                      function(i) {pagdfrow(row = NA,
+                                            nm = i,
+                                            lab = i,
+                                            rnum = i,
+                                            pth = NA,
+                                            extent = clwds[1+i],
+                                            rclass = "stuff",
+                                            sibpos = 1,
+                                            nsibs = 1)
+    })
+
+    pdf <- do.call(rbind, pdfrows)
+    res <- pag_tt_indices_inner(pdf, rlpp = cpp - clwds[1], verbose = verbose, min_siblings = 1)
+    res
+}
+
+
+#' @export
+#' @aliases paginate_table
+#' @rdname paginate
+vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
+    inds <- vpag_tt_indices(tt, cpp = cpp, verbose = verbose)
+
+    lapply(inds, function(j) tt[,j, keep_topleft = TRUE,
+                                keep_titles = TRUE,
+                                reindex_refs = FALSE])
+
 }

@@ -595,9 +595,10 @@ split_cols_by_cuts = function(lyt, var, cuts,
                               split_label = var,
                               nested = TRUE,
                               cumulative = FALSE) {
-    spl = VarStaticCutSplit(var, split_label, cuts, cutlabels)
-    if(cumulative)
-        spl = as(spl, "CumulativeCutSplit")
+    spl<- make_static_cut_split(var = var, split_label = split_label, cuts = cuts,
+                                cutlabels = cutlabels, cumulative = cumulative) ##= VarStaticCutSplit(var, split_label, cuts, cutlabels)
+    ## if(cumulative)
+    ##     spl = as(spl, "CumulativeCutSplit")
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -611,11 +612,13 @@ split_rows_by_cuts = function(lyt, var, cuts,
                               cumulative = FALSE,
                               label_pos = "hidden") {
     label_pos <- match.arg(label_pos, label_pos_values)
-    spl = VarStaticCutSplit(var, split_label, cuts = cuts,
+##    VarStaticCutSplit(
+    spl <- make_static_cut_split(var, split_label, cuts = cuts,
                             cutlabels = cutlabels,
-                            label_pos = label_pos)
-    if(cumulative)
-        spl = as(spl, "CumulativeCutSplit")
+                            label_pos = label_pos,
+                            cumulative = cumulative)
+    ## if(cumulative)
+    ##     spl = as(spl, "CumulativeCutSplit")
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 }
@@ -671,17 +674,29 @@ split_cols_by_quartiles = function(lyt, var, split_label = var,
                              nested = TRUE,
                              extra_args = list(),
                              cumulative = FALSE) {
-    spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
+      split_cols_by_cutfun(lyt = lyt,
+                         var = var,
+                         split_label = split_label,
+                         format = format,
+                         cutfun = qtile_cuts,
                          cutlabelfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
                                                    "(Q2, Q3]",
                                                    "(Q3, max]"),
-                         split_format = format,
+                         nested = nested,
                          extra_args = extra_args,
-                         cumulative = cumulative,
-                         label_pos = "hidden")
-    pos = next_cpos(lyt, nested)
-    split_cols(lyt, spl, pos)
+                         cumulative = cumulative)
+    ## spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
+    ##                      cutlabelfun = function(x) c("[min, Q1]",
+    ##                                                "(Q1, Q2]",
+    ##                                                "(Q2, Q3]",
+    ##                                                "(Q3, max]"),
+    ##                      split_format = format,
+    ##                      extra_args = extra_args,
+    ##                      cumulative = cumulative,
+    ##                      label_pos = "hidden")
+    ## pos = next_cpos(lyt, nested)
+    ## split_cols(lyt, spl, pos)
 }
 
 
@@ -695,27 +710,41 @@ split_rows_by_quartiles = function(lyt, var, split_label = var,
                              cumulative= FALSE,
                              indent_mod = 0L,
                              label_pos = "hidden") {
-    label_pos <- match.arg(label_pos, label_pos_values)
-    spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
+    split_rows_by_cutfun(lyt = lyt,
+                         var = var,
+                         split_label = split_label,
+                         format = format,
+                         cutfun = qtile_cuts,
                          cutlabelfun = function(x) c("[min, Q1]",
                                                    "(Q1, Q2]",
                                                    "(Q2, Q3]",
                                                    "(Q3, max]"),
-                         split_format = format,
+                         nested = nested,
                          child_labels = child_labels,
                          extra_args = extra_args,
                          cumulative = cumulative,
                          indent_mod = indent_mod,
                          label_pos = label_pos)
-    pos = next_rpos(lyt, nested)
-    split_rows(lyt, spl, pos)
+
+    ## label_pos <- match.arg(label_pos, label_pos_values)
+    ## spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
+    ##                      cutlabelfun = ,
+    ##                      split_format = format,
+    ##                      child_labels = child_labels,
+    ##                      extra_args = extra_args,
+    ##                      cumulative = cumulative,
+    ##                      indent_mod = indent_mod,
+    ##                      label_pos = label_pos)
+    ## pos = next_rpos(lyt, nested)
+    ## split_rows(lyt, spl, pos)
 }
 
 
 
 qtile_cuts = function(x) {
     ret = quantile(x)
-    levels(ret) = c("1st qrtile",
+    names(ret) = c("",
+                   "1st qrtile",
                     "2nd qrtile",
                     "3rd qrtile",
                     "4th qrtile")
@@ -1294,13 +1323,16 @@ setMethod(".add_row_summary", "Split",
 
     frmls <- formals(fun)
     ls_pos <- match("labelstr", names(frmls))
-    if(is.na(ls_pos)) {
-        ls_pos <- grep("lbl_{0,1}str", names(frmls))
-        if(length(ls_pos) == 0)
-            stop("Invalid content function - does not accept the required labelstr argument")
-        .Deprecated(old = "Use of content functions which do not accept a named 'labelstr' argument", new = "content functions which explicitly accept 'labelstr'")
-        names(formals(fun))[ls_pos] <- "labelstr"
-    }
+    if(is.na(ls_pos))
+        stop("content functions must explicitly accept a 'labelstr' argument")
+
+    ## if(is.na(ls_pos)) {
+    ##     ls_pos <- grep("lbl_{0,1}str", names(frmls))
+    ##     if(length(ls_pos) == 0)
+    ##         stop("Invalid content function - does not accept the required labelstr argument")
+    ##     .Deprecated(old = "Use of content functions which do not accept a named 'labelstr' argument", new = "content functions which explicitly accept 'labelstr'")
+    ##     names(formals(fun))[ls_pos] <- "labelstr"
+    ## }
     list(fun)
 }
 
@@ -1459,19 +1491,19 @@ add_existing_table = function(lyt, tt, indent_mod = 0) {
 }
 
 
-takes_coln = function(f) {
-    stopifnot(is(f, "function"))
-    forms = names(formals(f))
-    res = ".N_col" %in% forms
-    res
-}
+## takes_coln = function(f) {
+##     stopifnot(is(f, "function"))
+##     forms = names(formals(f))
+##     res = ".N_col" %in% forms
+##     res
+## }
 
-takes_totn = function(f) {
-    stopifnot(is(f, "function"))
-    forms = names(formals(f))
-    res = ".N_total" %in% forms
-    res
-}
+## takes_totn = function(f) {
+##     stopifnot(is(f, "function"))
+##     forms = names(formals(f))
+##     res = ".N_total" %in% forms
+##     res
+## }
 
 
 ## use data to transform dynamic cuts to static cuts
@@ -1494,13 +1526,16 @@ setMethod("fix_dyncuts", "VarDynCutSplit",
         cutlabels <- names(cuts)[-1]
     }
 
-    ret = VarStaticCutSplit(var = var, split_label = obj_label(spl),
-                      cuts = cuts, cutlabels = cutlabels)
-    ## classes are tthe same structurally CumulativeCutSplit
-    ## is just a sentinal so it can hit different make_subset_expr
-    ## method
-    if(spl_is_cmlcuts(spl))
-        ret = as(ret, "CumulativeCutSplit")
+    ret <- make_static_cut_split(var = var, split_label = obj_label(spl),
+                                 cuts = cuts, cutlabels = cutlabels,
+                                 cumulative = spl_is_cmlcuts(spl))
+    ## ret = VarStaticCutSplit(var = var, split_label = obj_label(spl),
+    ##                   cuts = cuts, cutlabels = cutlabels)
+    ## ## classes are tthe same structurally CumulativeCutSplit
+    ## ## is just a sentinal so it can hit different make_subset_expr
+    ## ## method
+    ## if(spl_is_cmlcuts(spl))
+    ##     ret = as(ret, "CumulativeCutSplit")
     ret
 })
 #' @rdname int_methods

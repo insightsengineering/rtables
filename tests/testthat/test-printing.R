@@ -229,8 +229,9 @@ test_that("Various Printing things work", {
     ## print(pos)
     print(col_info(tab))
     show(col_info(tab))
-    print(coltree(tab))
-    show(coltree(tab))
+    ctr <- coltree(tab)
+    print(ctr)
+    show(ctr)
     print(collect_leaves(tab)[[2]])
     expect_true(TRUE) ## so the whole chunk isn't skipped
 })

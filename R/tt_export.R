@@ -170,7 +170,7 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 
 tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
                             colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
-                            total_width = 5) {
+                            total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
         stop("this function requires the flextable and officer packages. Please install them if you wish to use it")
     }
@@ -295,7 +295,7 @@ export_as_pdf <- function(tt,
         list(tt)
     }
 
-    stbls <- lapply(lapply(tbls, toString, widths = colwidths), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+    stbls <- lapply(lapply(tbls, toString, widths = colwidths, linesep = "-"), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
 
     gtbls <- lapply(stbls, function(txt) {
         textGrob(
