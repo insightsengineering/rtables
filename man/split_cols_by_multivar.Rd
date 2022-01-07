@@ -7,6 +7,7 @@
 split_cols_by_multivar(
   lyt,
   vars,
+  split_fun = NULL,
   varlabels = vars,
   varnames = NULL,
   nested = TRUE
@@ -16,6 +17,8 @@ split_cols_by_multivar(
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{vars}{character vector. Multiple variable names.}
+
+\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
 
 \item{varlabels}{character vector. Labels for \code{vars}}
 

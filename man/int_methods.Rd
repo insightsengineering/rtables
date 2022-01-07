@@ -131,6 +131,9 @@
 \alias{split_fun}
 \alias{split_fun,CustomizableSplit-method}
 \alias{split_fun,Split-method}
+\alias{split_fun<-}
+\alias{split_fun<-,CustomizableSplit-method}
+\alias{split_fun<-,Split-method}
 \alias{content_extra_args}
 \alias{content_extra_args,Split-method}
 \alias{content_extra_args<-}
@@ -601,6 +604,12 @@ split_fun(obj)
 \S4method{split_fun}{CustomizableSplit}(obj)
 
 \S4method{split_fun}{Split}(obj)
+
+split_fun(obj) <- value
+
+\S4method{split_fun}{CustomizableSplit}(obj) <- value
+
+\S4method{split_fun}{Split}(obj) <- value
 
 content_extra_args(obj)
 

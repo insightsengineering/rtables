@@ -157,6 +157,46 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
     argname %in% fnames || (truefordots && "..." %in% fnames)
 }
 
+#' Apply Basic Split (For Use In Custom Split Functions)
+#'
+#' This function is intended for use inside custom split functions. It applies the
+#' current split \emph{as if it had no custom splitting function} so that those
+#' default splits can be further manipulated.
+#'
+#' @inheritParams gen_args
+#' @param vals ANY. Already calculated/known values of the split. Generally should be left as \code{NULL}.
+#' @param trim logical(1). Should groups corresponding to empty data subsets be removed. Defaults to \code{FALSE}.
+#'
+#' @return the result of the split being applied as if it had no custom split function, see
+#' \code{\link{custom_split_funs}}
+#'
+#' @export
+#' @examples
+#'
+#' uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+#'     ret <- do_base_split(spl, df, vals, labels, trim)
+#'     if(NROW(df) == 0)
+#'         ret <- lapply(tmp, function(x) x[1])
+#'     ret
+#' }
+#'
+#' lyt <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
+#'                            varlabels = c("N", "E", "BMR1"),
+#'                            split_fun = uneven_splfun) %>%
+#'     analyze_colvars(list(USUBJID = function(x, ...) length(unique(x)),
+#'                          AESEQ = max,
+#'                          BMRKR1 = mean))
+#'
+#' build_table(lyt, subset(ex_adae, as.numeric(ARM) < 2))
+do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
+    spl2 <- spl
+    spl_fun(spl2) <- NULL
+    do_split(spl2, df = df, vals = vals, labels = labels, trim = trim, spl_context = NULL)
+}
+
+
 ### NB This is called at EACH level of recursive splitting
 do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, spl_context) {
     ## this will error if, e.g., df doesn't have columns

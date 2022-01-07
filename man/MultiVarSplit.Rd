@@ -19,7 +19,8 @@ MultiVarSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  label_pos = "visible"
+  label_pos = "visible",
+  split_fun = NULL
 )
 }
 \arguments{
@@ -53,6 +54,8 @@ MultiVarSplit(
 
 \item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
+
+\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
 }
 \value{
 A \code{MultiVarSplit} object.

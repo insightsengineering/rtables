@@ -658,6 +658,20 @@ setMethod("split_fun", "CustomizableSplit", function(obj) obj@split_fun)
 #' @rdname int_methods
 setMethod("split_fun", "Split", function(obj) NULL)
 
+#' @rdname int_methods
+setGeneric("split_fun<-", function(obj, value) standardGeneric("split_fun"))
+#' @rdname int_methods
+setMethod("split_fun<-", "CustomizableSplit", function(obj, value) {
+    obj@split_fun <- value
+    obj
+})
+
+## Only that type of split currently has the slot
+## this should probably change? for now  define
+## an accessor that just returns NULL
+#' @rdname int_methods
+setMethod("split_fun<-", "Split", function(obj, value) stop("Attempted to set a custom split function on a non-customizable split. This should not happen, please contact the maintainers."))
+
 
 ## Content specification related accessors
 #' @rdname int_methods

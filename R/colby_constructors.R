@@ -490,12 +490,14 @@ split_rows_by = function(lyt,
 #'
 split_cols_by_multivar = function(lyt,
                                   vars,
+                                  split_fun = NULL,
                                   varlabels = vars,
                                   varnames = NULL,
                                   nested = TRUE) {
     spl = MultiVarSplit(vars = vars, split_label = "",##split_label,
                         varlabels =varlabels,
-                        varnames = varnames)
+                        varnames = varnames,
+                        split_fun = split_fun)
     pos = next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
@@ -1650,16 +1652,16 @@ list_wrap_df = function(f) {
 #'   analyze("AGE", afun = mean)
 #'
 #' build_table(lyt, DM)
-#' 
-#' 
+#'
+#'
 #' lyt <- basic_table(title = "Title of table", subtitles = c("a number", "of subtitles"),
 #'                    main_footer = "test footer",
 #'                    prov_footer = paste("test.R program, executed at", Sys.time())) %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", mean)
-#'   
+#'
 #' build_table(lyt, DM)
-#' 
+#'
 basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),

@@ -262,7 +262,7 @@ ManualSplit <- function(levels, label, name = "manual",
 
 
 ## splits across which variables are being analynzed
-setClass("MultiVarSplit", contains = "Split",
+setClass("MultiVarSplit", contains = "CustomizableSplit", ##"Split",
          representation(var_labels = "character",
                         var_names = "character"),
          validity = function(object) {
@@ -312,7 +312,8 @@ MultiVarSplit <- function(vars,
                          cindent_mod = 0L,
                          cvar = "",
                          cextra_args = list(),
-                         label_pos = "visible") {
+                         label_pos = "visible",
+                         split_fun = NULL) {
     ## no topleft allowed
     label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels = match.arg(child_labels)
@@ -336,7 +337,8 @@ MultiVarSplit <- function(vars,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        split_fun = split_fun)
 }
 
 
