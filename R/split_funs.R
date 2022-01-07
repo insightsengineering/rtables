@@ -165,6 +165,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #'
 #' @inheritParams gen_args
 #' @param vals ANY. Already calculated/known values of the split. Generally should be left as \code{NULL}.
+#' @param labels character. Labels associated with \code{vals}. Should be \code{NULL} when \code{vals} is, whic should almost always be the case.
 #' @param trim logical(1). Should groups corresponding to empty data subsets be removed. Defaults to \code{FALSE}.
 #'
 #' @return the result of the split being applied as if it had no custom split function, see
@@ -176,7 +177,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #' uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
 #'     ret <- do_base_split(spl, df, vals, labels, trim)
 #'     if(NROW(df) == 0)
-#'         ret <- lapply(tmp, function(x) x[1])
+#'         ret <- lapply(ret, function(x) x[1])
 #'     ret
 #' }
 #'
@@ -189,10 +190,10 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #'                          AESEQ = max,
 #'                          BMRKR1 = mean))
 #'
-#' build_table(lyt, subset(ex_adae, as.numeric(ARM) < 2))
+#' build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     spl2 <- spl
-    spl_fun(spl2) <- NULL
+    split_fun(spl2) <- NULL
     do_split(spl2, df = df, vals = vals, labels = labels, trim = trim, spl_context = NULL)
 }
 

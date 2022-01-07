@@ -13,6 +13,8 @@ do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 
 \item{vals}{ANY. Already calculated/known values of the split. Generally should be left as \code{NULL}.}
 
+\item{labels}{character. Labels associated with \code{vals}. Should be \code{NULL} when \code{vals} is, whic should almost always be the case.}
+
 \item{trim}{logical(1). Should groups corresponding to empty data subsets be removed. Defaults to \code{FALSE}.}
 }
 \value{
@@ -29,7 +31,7 @@ default splits can be further manipulated.
 uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     ret <- do_base_split(spl, df, vals, labels, trim)
     if(NROW(df) == 0)
-        ret <- lapply(tmp, function(x) x[1])
+        ret <- lapply(ret, function(x) x[1])
     ret
 }
 
