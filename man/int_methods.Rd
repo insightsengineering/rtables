@@ -192,6 +192,9 @@
 \alias{cell_align<-,CellValue-method}
 \alias{tt_level}
 \alias{tt_level,VNodeInfo-method}
+\alias{tt_level<-}
+\alias{tt_level<-,VNodeInfo-method}
+\alias{tt_level<-,VTableTree-method}
 \alias{indent_mod}
 \alias{indent_mod,Split-method}
 \alias{indent_mod,VTableNodeInfo-method}
@@ -715,6 +718,12 @@ cell_align(obj) <- value
 tt_level(obj)
 
 \S4method{tt_level}{VNodeInfo}(obj)
+
+tt_level(obj) <- value
+
+\S4method{tt_level}{VNodeInfo}(obj) <- value
+
+\S4method{tt_level}{VTableTree}(obj) <- value
 
 indent_mod(obj)
 

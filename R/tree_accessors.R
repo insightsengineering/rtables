@@ -1193,24 +1193,22 @@ setGeneric("tt_level", function(obj) standardGeneric("tt_level"))
 #' @rdname int_methods
 setMethod("tt_level", "VNodeInfo", function(obj) obj@level)
 
-## not used anywhere or exported.  Slated for removal
-
-## #' @rdname int_methods
-## setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
-## ## this will hit everyhing via inheritence
-## #' @rdname int_methods
-## setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
-##     obj@level = as.integer(value)
-##     obj
-## })
-## #' @rdname int_methods
-## setMethod("tt_level<-", "VTableTree",
-##           function(obj, value) {
-##     obj@level = as.integer(value)
-##     tree_children(obj) = lapply(tree_children(obj),
-##                                 `tt_level<-`, value = as.integer(value) + 1L)
-##     obj
-## })
+#' @rdname int_methods
+setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
+## this will hit everyhing via inheritence
+#' @rdname int_methods
+setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
+    obj@level = as.integer(value)
+    obj
+})
+#' @rdname int_methods
+setMethod("tt_level<-", "VTableTree",
+          function(obj, value) {
+    obj@level = as.integer(value)
+    tree_children(obj) = lapply(tree_children(obj),
+                                `tt_level<-`, value = as.integer(value) + 1L)
+    obj
+})
 
 #' @rdname int_methods
 #' @export
