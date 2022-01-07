@@ -462,6 +462,8 @@ valid_pag = function(pagdf,
     if(verbose)
         message("Checking pagination after row ", guess)
     reflines <-  sum(pagdf[start:guess, "nreflines"])
+    rowlines <- sum(pagdf[start:guess, "self_extent"]) - reflines ## self extent includes reflines
+
     if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
     lines <- guess - start + 1 + reflines  # guess - start + 1 because inclusive of start
     if(lines > rlpp) {
