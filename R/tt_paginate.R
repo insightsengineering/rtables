@@ -53,42 +53,6 @@ setMethod("nlines", "InstantiatedColumnInfo",
 
 })
 
-
-pagdfrow = function(row,
-                    nm = obj_name(row),
-                    lab = obj_label(row),
-                    rnum,
-                    pth ,
-                    sibpos = NA_integer_,
-                    nsibs = NA_integer_,
-                    extent = nlines(row, colwidths),
-                    colwidths = NULL,
-                    repext = 0L,
-                    repind = integer(),
-                    indent = 0L,
-                    rclass = class(row),
-                    nrowrefs = 0L,
-                    ncellrefs = 0L,
-                    nreflines = 0L
-                    ) {
-    data.frame(label = lab,
-               name = nm,
-               abs_rownumber = rnum,
-               path = I(list(pth)),
-               pos_in_siblings = sibpos,
-               n_siblings = nsibs,
-               self_extent = extent,
-               par_extent = repext,
-               reprint_inds = I(rep(list(unlist(repind)), length.out = length(nm))),
-               node_class = rclass,
-               indent = max(0L, indent),
-               nrowrefs = nrowrefs,
-               ncellrefs = ncellrefs,
-               nreflines = nreflines,
-               stringsAsFactors = FALSE)
-}
-
-
 col_dfrow = function(col,
                     nm = obj_name(col),
                     lab = obj_label(col),
@@ -132,48 +96,37 @@ pos_to_path <- function(pos) {
 
 
 
-#' Make row and column layout summary data.frames for use during pagination
-#' @inheritParams gen_args
-#' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
-#' @param incontent logical(1). Internal detail do not set manually.
-#' @param repr_ext integer(1). Internal detail do not set manually.
-#' @param repr_inds integer. Internal detail do not set manually.
-#' @param sibpos integer(1). Internal detail do not set manually.
-#' @param nsibs integer(1). Internal detail do not set manually.
-#' @param rownum numeric(1). Internal detail do not set manually.
-#' @param indent integer(1). Internal detail do not set manually.
+## ' Make row and column layout summary data.frames for use during pagination
+## ' @inheritParams gen_args
+## ' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
+## ' @param incontent logical(1). Internal detail do not set manually.
+## ' @param repr_ext integer(1). Internal detail do not set manually.
+## ' @param repr_inds integer. Internal detail do not set manually.
+## ' @param sibpos integer(1). Internal detail do not set manually.
+## ' @param nsibs integer(1). Internal detail do not set manually.
+## ' @param rownum numeric(1). Internal detail do not set manually.
+## ' @param indent integer(1). Internal detail do not set manually.
 
-#' @param colwidths numeric. Internal detail do not set manually.
-#' @param nrowrefs integer(1). Internal detail do not set manually.
-#' @param ncellrefs integer(1). Internal detail do not set manually.
-#' @param nreflines integer(1). Internal detail do not set manually.
-#'
-#' @details
-#' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
-#'
-#' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+## ' @param colwidths numeric. Internal detail do not set manually.
+## ' @param nrowrefs integer(1). Internal detail do not set manually.
+## ' @param ncellrefs integer(1). Internal detail do not set manually.
+## ' @param nreflines integer(1). Internal detail do not set manually.
+## '
+## ' @details
+## ' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
+## '
+## ' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+#' @inherit formatable::make_row_df
 #'
 #' @note the technically present root tree node is excluded from the summary returne dby
 #' both \code{make_row_df} and \code{make_col_df}, as it is simply the
 #' row/column structure of \code{tt} and thus not useful for pathing or pagination.
 #' @export
 #' @return a data.frame of row/column-structure information used by the pagination machinery.
+#' @name make_row_df
 #' @rdname make_row_df
-setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
-                                  rownum = 0,
-                                  indent = 0L,
-                                  path = character(),
-                                  incontent = FALSE,
-                                  repr_ext = 0L,
-                                  repr_inds = integer(),
-                                  sibpos = NA_integer_,
-                                  nsibs = NA_integer_,
-                                  nrowrefs = 0L,
-                                  ncellrefs = 0L,
-                                  nreflines = 0L) standardGeneric("make_row_df"))
-
-#' @exportMethod make_row_df
-#' @rdname make_row_df
+#' @aliases make_row_df,VTableTree-method
+# #' @exportMethod make_row_df
 setMethod("make_row_df", "VTableTree",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
@@ -282,7 +235,9 @@ setMethod("make_row_df", "VTableTree",
     do.call(rbind, ret)
 })
 
-#' @exportMethod make_row_df
+                                        # #' @exportMethod make_row_df
+#' @inherit formatable::make_row_df
+#' @export
 #' @rdname make_row_df
 setMethod("make_row_df", "TableRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
@@ -299,23 +254,25 @@ setMethod("make_row_df", "TableRow",
     rrefs <- row_footnotes(tt)
     crefs <- cell_footnotes(tt)
     reflines <- sum(sapply(c(rrefs, crefs), nlines))
-    ret <- pagdfrow(tt, rnum = rownum,
-                  colwidths = colwidths,
-                  sibpos = sibpos,
-                  nsibs = nsibs,
-                  pth = c(path, obj_name(tt)),
-                  repext = repr_ext,
-                  repind = repr_inds,
-                  indent = indent,
-                  ## these two are unlist calls cause they come in lists even with no footnotes
-                  nrowrefs = length(rrefs) ,
-                  ncellrefs = length(unlist(crefs)),
-                  nreflines = reflines
-                  )
+    ret <- pagdfrow(row = tt,
+                    rnum = rownum,
+                    colwidths = colwidths,
+                    sibpos = sibpos,
+                    nsibs = nsibs,
+                    pth = c(path, obj_name(tt)),
+                    repext = repr_ext,
+                    repind = repr_inds,
+                    indent = indent,
+                    ## these two are unlist calls cause they come in lists even with no footnotes
+                    nrowrefs = length(rrefs) ,
+                    ncellrefs = length(unlist(crefs)),
+                    nreflines = reflines
+                    )
     ret
 })
 
-#' @exportMethod make_row_df
+# #' @exportMethod make_row_df
+#' @export
 #' @rdname make_row_df
 setMethod("make_row_df", "LabelRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
@@ -425,93 +382,6 @@ setMethod("inner_col_df", "LayoutColTree",
 })
 
 
-valid_pag = function(pagdf,
-                     guess,
-                     start,
-                     rlpp,
-                     min_sibs,
-                     nosplit = NULL,
-                     verbose = FALSE) {
-    rw <- pagdf[guess,]
-
-
-    if(verbose)
-        message("Checking pagination after row ", guess)
-    rowlines <- sum(pagdf[start:guess, "self_extent"])
-    reflines <-  sum(pagdf[start:guess, "nreflines"])
-    rowlines <- sum(pagdf[start:guess, "self_extent"]) - reflines ## self extent includes reflines
-
-    if(reflines > 0) reflines <- reflines + 2 ## divider plus empty line
-    lines <- rowlines + reflines  # guess - start + 1 because inclusive of start
-    if(rowlines > rlpp) {
-        if(verbose)
-            message("\t....................... FAIL: Rows take up too much space (", rowlines, " lines)")
-        return(FALSE)
-    }
-    if(lines > rlpp) {
-        if(verbose)
-            message("\t....................... FAIL: Referential footnotes take up too much space (", reflines, " lines)")
-        return(FALSE)
-    }
-    if(rw[["node_class"]] %in% c("LabelRow", "ContentRow")) {
-        if(verbose)
-            message("\t....................... FAIL: last row is a label or content row")
-        return(FALSE)
-    }
-
-    sibpos <- rw[["pos_in_siblings"]]
-    nsib <- rw[["n_siblings"]]
-    okpos <- min(min_sibs + 1, rw[["n_siblings"]])
-    if( sibpos != nsib){
-        retfalse <- FALSE
-        if(sibpos < min_sibs + 1) {
-            retfalse <- TRUE
-            if(verbose)
-                message("\t....................... FAIL: last row had only ", sibpos - 1, " preceeding siblings, needed ", min_sibs)
-        } else if (nsib - sibpos < min_sibs + 1) {
-            retfalse <- TRUE
-            if(verbose)
-                message("\t....................... FAIL: last row had only ", nsib - sibpos - 1, " following siblings, needed ", min_sibs)
-        }
-        if(retfalse)
-            return(FALSE)
-    }
-    if(guess < nrow(pagdf)) {
-        curpth <- unlist(rw$path)
-        nxtpth <- unlist(pagdf$path[[guess+1]])
-        inplay <- nosplit[(nosplit %in% intersect(curpth, nxtpth))]
-        if(length(inplay) > 0) {
-            curvals <- curpth[match(inplay, curpth) + 1]
-            nxtvals <- nxtpth[match(inplay, nxtpth) + 1]
-            if(identical(curvals, nxtvals)) {
-                if(verbose)
-                    message("\t....................... FAIL: values of unsplitable vars before [", curvals, "] and after [", nxtvals, "] match")
-                return(FALSE)
-            }
-        }
-    }
-    if(verbose)
-        message("\t....................... OK")
-    TRUE
-}
-
-
-find_pag = function(pagdf,
-                    start,
-                    guess,
-                    rlpp,
-                    min_siblings,
-                    nosplitin = character(),
-                    verbose = FALSE) {
-    origuess = guess
-    while(guess >= start && !valid_pag(pagdf, guess, start = start, rlpp  = rlpp, min_sibs = min_siblings, nosplit = nosplitin, verbose)) {
-        guess = guess - 1
-    }
-    if(guess < start)
-        stop("Unable to find any valid pagination between ", start, " and ", origuess)
-    guess
-}
-
 #' Pagination of a TableTree
 #'
 #'
@@ -599,33 +469,9 @@ pag_tt_indices = function(tt, lpp = 15,
     rlpp = lpp - cinfo_lines - tlines - flines
     pagdf = make_row_df(tt, colwidths)
 
-    pag_tt_indices_inner(pagdf, rlpp = rlpp, min_siblings = min_siblings,
+    pag_indices_inner(pagdf, rlpp = rlpp, min_siblings = min_siblings,
                          nosplitin = nosplitin,
                          verbose = verbose)
-}
-
-pag_tt_indices_inner <- function(pagdf, rlpp,
-                                 min_siblings,
-                                 nosplitin = character(),
-                                 verbose = FALSE) {
-
-    start = 1
-    nr = nrow(pagdf)
-    ret = list()
-    while(start <= nr) {
-        adjrlpp = rlpp - pagdf$par_extent[start]
-        stopifnot(adjrlpp > 0)
-        guess = min(nr, start + adjrlpp - 1)
-        end = find_pag(pagdf, start, guess,
-                       rlpp = adjrlpp,
-                       min_siblings = min_siblings,
-                       nosplitin = nosplitin,
-                       verbose = verbose)
-        ret = c(ret, list(c(pagdf$reprint_inds[[start]],
-                            start:end)))
-        start = end + 1
-    }
-    ret
 }
 
 
@@ -648,42 +494,13 @@ paginate_table = function(tt, lpp = 15,
 }
 
 
-#' @export
-#' @param cpp numeric(1). Column characters per page
-#' @aliases paginate_table
-#' @rdname paginate
-vpag_tt_indices <- function(tt, cpp = 40, verbose = FALSE) {
-
-    strm <- matrix_form(tt, TRUE)
-
-    nhl <- attr(strm, "nlines_header")
-
-    clwds <- propose_column_widths(strm)
-
-
-    pdfrows <- lapply(1:ncol(tt),
-                      function(i) {pagdfrow(row = NA,
-                                            nm = i,
-                                            lab = i,
-                                            rnum = i,
-                                            pth = NA,
-                                            extent = clwds[1+i],
-                                            rclass = "stuff",
-                                            sibpos = 1,
-                                            nsibs = 1)
-    })
-
-    pdf <- do.call(rbind, pdfrows)
-    res <- pag_tt_indices_inner(pdf, rlpp = cpp - clwds[1], verbose = verbose, min_siblings = 1)
-    res
-}
-
 
 #' @export
 #' @aliases paginate_table
+#' @inheritParams formatable::vert_pag_indices
 #' @rdname paginate
 vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
-    inds <- vpag_tt_indices(tt, cpp = cpp, verbose = verbose)
+    inds <- vert_pag_indices(tt, cpp = cpp, verbose = verbose)
 
     lapply(inds, function(j) tt[,j, keep_topleft = TRUE,
                                 keep_titles = TRUE,

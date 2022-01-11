@@ -322,16 +322,18 @@ setMethod("matrix_form", "VTableTree",
 
     ref_fnotes <- get_formatted_fnotes(obj)
     MatrixPrintForm(strings = body,
-                      spans = spans,
-                      aligns = aligns,
-                      ## display = display, purely a function of spans, handled in constructor now
-                      row_info = sr,
-                      ## line_grouping handled internally now line_grouping = 1:nrow(body),
-                      ref_fnotes = ref_fnotes,
-                      nlines_header = nr_header, ## this is fixed internally
-                      nrow_header = nr_header,
-                      expand_newlines = TRUE ## incase the default ever changes
-                      )
+                    spans = spans,
+                    aligns = aligns,
+                    ## display = display, purely a function of spans, handled in constructor now
+                    row_info = sr,
+                    ## line_grouping handled internally now line_grouping = 1:nrow(body),
+                    ref_fnotes = ref_fnotes,
+                    nlines_header = nr_header, ## this is fixed internally
+                    nrow_header = nr_header,
+                    expand_newlines = TRUE, ## incase the default ever changes
+                    has_rowlabs = TRUE,
+                    has_topleft = TRUE
+                    )
 
     ## ret <- structure(
     ##     list(

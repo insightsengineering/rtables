@@ -40,8 +40,6 @@ test_that("Accessors for Split objects work", {
     obj_label(myspl) <- "new label"
     expect_identical(obj_label(myspl), "new label")
 
-    obj_format <- rtables:::obj_format
-    `obj_format<-` <- rtables:::`obj_format<-`
     expect_identical(obj_format(myspl), "xx.xx")
     obj_format(myspl) <- "xx.x"
     expect_identical(obj_format(myspl), "xx.x")

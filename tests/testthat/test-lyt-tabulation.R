@@ -648,8 +648,8 @@ test_that("analyze_colvars works generally", {
     ## this broke before due to formatting missmatches
     toString(tab4)
     rws4 <- collect_leaves(tab4, TRUE, TRUE)
-    expect_identical(rtables:::obj_format(rws4[[1]]), "xx (xx.x%)")
-    expect_identical(rtables:::obj_format(rws4[[2]]), NULL)
+    expect_identical(obj_format(rws4[[1]]), "xx (xx.x%)")
+    expect_identical(obj_format(rws4[[2]]), NULL)
 
     l5 <- basic_table() %>%
         split_cols_by("ARM") %>%
