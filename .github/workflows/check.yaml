@@ -17,6 +17,8 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      enable-staged-dependencies-check: false
   coverage:
     if: github.event_name == 'pull_request'
     name: Coverage 📔 
