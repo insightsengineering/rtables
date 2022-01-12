@@ -1,14 +1,20 @@
+#' @import formatable
+#' @importMethodsFrom formatable toString matrix_form nlines
+NULL
+
+
+
 
 # toString ----
 
-#' @export
-setGeneric("toString", function(x,...) standardGeneric("toString"))
+## #' @export
+## setGeneric("toString", function(x,...) standardGeneric("toString"))
 
-## preserve S3 behavior
-setMethod("toString", "ANY", base::toString)
+## ## preserve S3 behavior
+## setMethod("toString", "ANY", base::toString)
 
-#' @export
-setMethod("print", "ANY", base::print)
+## #' @export
+## setMethod("print", "ANY", base::print)
 
 
 #' Convert an `rtable` object to a string
@@ -48,160 +54,158 @@ setMethod("toString", "VTableTree", function(x,
              linesep = linesep)
 })
 
-#' @rdname tostring
-#' @exportMethod toString
-setMethod("toString", "MatrixPrintForm", function(x,
-                                                  widths = NULL,
-                                                  col_gap = 3,
-                                                  linesep = "\u2014") {
-    mat <- x
+## #' @rdname tostring
+## #' @exportMethod toString
+## setMethod("toString", "MatrixPrintForm", function(x,
+##                                                   widths = NULL,
+##                                                   col_gap = 3) {
+##     mat <- x
 
-  ## we create a matrix with the formatted cell contents
-##  mat <- matrix_form(x, indent_rownames = TRUE)
-
-
-  if (is.null(widths)) {
-    widths <- propose_column_widths(mat_form = mat)
-  }
-  stopifnot(length(widths) == ncol(mat$strings))
-
-  # format the to ASCII
-  body <- mat$strings
-  aligns <- mat$aligns
-  keep_mat <- mat$display
-  spans <- mat$spans
-#    ri <- mat$row_info
-    ref_fnotes <- mat$ref_footnotes
+##   ## we create a matrix with the formatted cell contents
+## ##  mat <- matrix_form(x, indent_rownames = TRUE)
 
 
-  # xxxx <- 1
-  # # get rowgap position
-  # insert_gap_before <- which(ri$depth == sort(ri$depth)[seq_len(xxxx)])
-  # # which(ri$rowtype == "LabelRow" & ri$depth == min(ri$depth))
-  # insert_gap_before <- remove_consecutive_numbers(insert_gap_before)
-  # insert_gap_before <- insert_gap_before[insert_gap_before != 1]
+##   if (is.null(widths)) {
+##     widths <- propose_column_widths(mat_form = mat)
+##   }
+##   stopifnot(length(widths) == ncol(mat$strings))
 
-  nr <- nrow(body)
-  nl_header <- attr(mat, "nlines_header")
-
-  cell_widths_mat <- matrix(rep(widths, nr), nrow = nr, byrow = TRUE)
-  nc <- ncol(cell_widths_mat)
-
-  for (i in seq_len(nrow(body))) {
-    if (any(!keep_mat[i, ])) { # any spans?
-      j <- 1
-      while (j <= nc) {
-        nj <- spans[i, j]
-        j <- if (nj > 1) {
-          js <- seq(j, j + nj - 1)
-          cell_widths_mat[i, js] <- sum(cell_widths_mat[i, js]) + col_gap * (nj - 1)
-          j + nj
-        } else {
-          j + 1
-        }
-      }
-    }
-  }
-
-  # Are the total characters per row the same?
-  # A <- cell_widths_mat
-  # A[!keep_mat] <- 0
-  # apply(A, 1, sum)
-
-  content <- matrix(mapply(padstr, body, cell_widths_mat, aligns), ncol = ncol(body))
-  content[!keep_mat] <- NA
-  # apply(content, 1, function(x) sum(nchar(x), na.rm = TRUE))
-
-  gap_str <- strrep(" ", col_gap)
-
-  ncchar <-  sum(widths) + (length(widths) - 1) * col_gap
-  div <- substr(strrep(linesep, ncchar), 1, ncchar)
-
-  txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
-  txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
-
-  allts <- all_titles(x)
-  titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
-    ## TODO make titles affect width...
-
-    allfoots <- all_footers(x)
+##   # format the to ASCII
+##   body <- mat$strings
+##   aligns <- mat$aligns
+##   keep_mat <- mat$display
+##   spans <- mat$spans
+## #    ri <- mat$row_info
+##     ref_fnotes <- mat$ref_footnotes
 
 
-    footer_txt <- c(if(length(ref_fnotes) > 0) c(div, "", ref_fnotes),
-                    if(any(nzchar(allfoots))) c(div, "", allfoots))
-  paste0(paste(c(titles_txt, txt_head, div, txt_body, footer_txt), collapse = "\n"), "\n")
+##   # xxxx <- 1
+##   # # get rowgap position
+##   # insert_gap_before <- which(ri$depth == sort(ri$depth)[seq_len(xxxx)])
+##   # # which(ri$rowtype == "LabelRow" & ri$depth == min(ri$depth))
+##   # insert_gap_before <- remove_consecutive_numbers(insert_gap_before)
+##   # insert_gap_before <- insert_gap_before[insert_gap_before != 1]
 
-})
+##   nr <- nrow(body)
+##   nl_header <- attr(mat, "nlines_header")
 
-pad_vert_center <- function(x, len) {
-    needed <- len - length(x)
-    if(needed < 0) stop("got vector already longer than target length this shouldn't happen")
-    if(needed > 0) {
-        bf <- ceiling(needed/2)
-        af <- needed - bf
-        x <- c(if(bf > 0) rep("", bf), x, if(af > 0) rep("", af))
-    }
-    x
-}
+##   cell_widths_mat <- matrix(rep(widths, nr), nrow = nr, byrow = TRUE)
+##   nc <- ncol(cell_widths_mat)
 
-pad_vert_top <- function(x, len) {
-    c(x, rep("", len - length(x)))
-}
+##   for (i in seq_len(nrow(body))) {
+##     if (any(!keep_mat[i, ])) { # any spans?
+##       j <- 1
+##       while (j <= nc) {
+##         nj <- spans[i, j]
+##         j <- if (nj > 1) {
+##           js <- seq(j, j + nj - 1)
+##           cell_widths_mat[i, js] <- sum(cell_widths_mat[i, js]) + col_gap * (nj - 1)
+##           j + nj
+##         } else {
+##           j + 1
+##         }
+##       }
+##     }
+##   }
 
-pad_vert_bottom <- function(x, len) {
-    c(rep("", len - length(x)), x)
-}
+##   # Are the total characters per row the same?
+##   # A <- cell_widths_mat
+##   # A[!keep_mat] <- 0
+##   # apply(A, 1, sum)
 
-pad_vec_to_len <- function(vec, len, cpadder = pad_vert_top, rlpadder = cpadder) {
-    dat <- unlist(lapply(vec[-1], cpadder, len = len))
-    dat <- c(rlpadder(vec[[1]], len = len), dat)
-    matrix(dat,  nrow = len)
-}
+##   content <- matrix(mapply(padstr, body, cell_widths_mat, aligns), ncol = ncol(body))
+##   content[!keep_mat] <- NA
+##   # apply(content, 1, function(x) sum(nchar(x), na.rm = TRUE))
 
-rep_vec_to_len <- function(vec, len, ...) {
-    matrix(unlist(lapply(vec, rep, times = len)),
-           nrow = len)
-}
+##   gap_str <- strrep(" ", col_gap)
+
+##   div <- strrep("-", sum(widths) + (length(widths) - 1) * col_gap)
+
+##   txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
+##   txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
+
+##   allts <- all_titles(x)
+##   titles_txt <- if(any(nzchar(allts))) c(allts, "", div)  else NULL
+##     ## TODO make titles affect width...
+
+##     allfoots <- all_footers(x)
 
 
-safe_strsplit <- function(x, split, ...) {
-    ret <- strsplit(x, split, ...)
-    lapply(ret, function(reti) if(length(reti) == 0) "" else reti)
-}
+##     footer_txt <- c(if(length(ref_fnotes) > 0) c(div, "", ref_fnotes),
+##                     if(any(nzchar(allfoots))) c(div, "", allfoots))
+##   paste0(paste(c(titles_txt, txt_head, div, txt_body, footer_txt), collapse = "\n"), "\n")
 
-.expand_mat_rows_inner <- function(i, mat, row_nlines, expfun, ...) {
-    leni <- row_nlines[i]
-    rw <- mat[i,]
-    if(is.character(rw))
-        rw <- safe_strsplit(rw, "\n", fixed = TRUE)
-    expfun(rw, len = leni, ...)
-}
+## })
 
-expand_mat_rows <- function(mat, row_nlines = apply(mat, 1, nlines), expfun = pad_vec_to_len, ...) {
+## pad_vert_center <- function(x, len) {
+##     needed <- len - length(x)
+##     if(needed < 0) stop("got vector already longer than target length this shouldn't happen")
+##     if(needed > 0) {
+##         bf <- ceiling(needed/2)
+##         af <- needed - bf
+##         x <- c(if(bf > 0) rep("", bf), x, if(af > 0) rep("", af))
+##     }
+##     x
+## }
 
-    rinds <- 1:nrow(mat)
-    exprows <- lapply(rinds, .expand_mat_rows_inner,
-                      mat = mat,
-                      row_nlines = row_nlines,
-                      expfun = expfun,
-                      ...)
-    do.call(rbind, exprows)
+## pad_vert_top <- function(x, len) {
+##     c(x, rep("", len - length(x)))
+## }
 
-}
+## pad_vert_bottom <- function(x, len) {
+##     c(rep("", len - length(x)), x)
+## }
+
+## pad_vec_to_len <- function(vec, len, cpadder = pad_vert_top, rlpadder = cpadder) {
+##     dat <- unlist(lapply(vec[-1], cpadder, len = len))
+##     dat <- c(rlpadder(vec[[1]], len = len), dat)
+##     matrix(dat,  nrow = len)
+## }
+
+## rep_vec_to_len <- function(vec, len, ...) {
+##     matrix(unlist(lapply(vec, rep, times = len)),
+##            nrow = len)
+## }
+
+
+## safe_strsplit <- function(x, split, ...) {
+##     ret <- strsplit(x, split, ...)
+##     lapply(ret, function(reti) if(length(reti) == 0) "" else reti)
+## }
+
+## .expand_mat_rows_inner <- function(i, mat, row_nlines, expfun, ...) {
+##     leni <- row_nlines[i]
+##     rw <- mat[i,]
+##     if(is.character(rw))
+##         rw <- safe_strsplit(rw, "\n", fixed = TRUE)
+##     expfun(rw, len = leni, ...)
+## }
+
+## expand_mat_rows <- function(mat, row_nlines = apply(mat, 1, nlines), expfun = pad_vec_to_len, ...) {
+
+##     rinds <- 1:nrow(mat)
+##     exprows <- lapply(rinds, .expand_mat_rows_inner,
+##                       mat = mat,
+##                       row_nlines = row_nlines,
+##                       expfun = expfun,
+##                       ...)
+##     do.call(rbind, exprows)
+
+## }
 
 
 
-spans_to_viscell <- function(spans) {
-    if(!is.vector(spans))
-        spans <- as.vector(spans)
-    myrle <- rle(spans)
-    unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
-                                                                  times = ln/vl),
-                                             SIMPLIFY = FALSE,
-                                             vl = myrle$values,
-                                             ln = myrle$lengths),
-                                      recursive = FALSE)
-}
+## spans_to_viscell <- function(spans) {
+##     if(!is.vector(spans))
+##         spans <- as.vector(spans)
+##     myrle <- rle(spans)
+##     unlist(mapply(function(vl, ln) rep(c(TRUE, rep(FALSE, vl - 1L)),
+##                                                                   times = ln/vl),
+##                                              SIMPLIFY = FALSE,
+##                                              vl = myrle$values,
+##                                              ln = myrle$lengths),
+##                                       recursive = FALSE)
+## }
 
 
 
@@ -249,37 +253,38 @@ spans_to_viscell <- function(spans) {
 #' tbl <- build_table(l, iris2)
 #'
 #' matrix_form(tbl)
-matrix_form <- function(tt, indent_rownames = FALSE) {
+setMethod("matrix_form", "VTableTree",
+          function(obj, indent_rownames = FALSE) {
 
-  stopifnot(is(tt, "VTableTree"))
+  stopifnot(is(obj, "VTableTree"))
 
-  header_content <- .tbl_header_mat(tt) # first col are for row.names
+  header_content <- .tbl_header_mat(obj) # first col are for row.names
 
-    ##sr <- summarize_rows(tt)
-    sr <- make_row_df(tt)
+    ##sr <- summarize_rows(obj)
+    sr <- make_row_df(obj)
 
   body_content_strings <- if (NROW(sr) == 0) {
     character()
   } else {
-    cbind(as.character(sr$label), get_formatted_cells(tt))
+    cbind(as.character(sr$label), get_formatted_cells(obj))
   }
 
-  tsptmp <- lapply(collect_leaves(tt, TRUE, TRUE), function(rr) {
+  tsptmp <- lapply(collect_leaves(obj, TRUE, TRUE), function(rr) {
     sp <- row_cspans(rr)
     rep(sp, times = sp)
   })
 
   ## the 1 is for row labels
-  body_spans <- if (nrow(tt) > 0) {
+  body_spans <- if (nrow(obj) > 0) {
     cbind(1L, do.call(rbind, tsptmp))
   } else {
-    matrix(1, nrow = 0, ncol = ncol(tt) + 1)
+    matrix(1, nrow = 0, ncol = ncol(obj) + 1)
   }
 
     body_aligns <- if(NROW(sr) == 0) {
                               character()
                           } else {
-                              cbind("left", get_cell_aligns(tt))
+                              cbind("left", get_cell_aligns(obj))
                           }
 
   body <- rbind(header_content$body, body_content_strings)
@@ -295,27 +300,6 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
   ## if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
   ##   stop("no \\n allowed at the moment")
 
-  display <- matrix(rep(TRUE, length(body)), ncol = ncol(body))
-
-    print_cells_mat <- spans == 1L
-    if(!all(print_cells_mat)) {
-        display_rws  <- lapply(seq_len(nrow(spans)),
-                               function(i) {
-            print_cells <- print_cells_mat[i,]
-            row <- spans[i,]
-            ##         display <- t(apply(spans, 1, function(row) {
-            ## print_cells <- row == 1
-
-            if (!all(print_cells)) {
-                ## need to calculate which cell need to be printed
-                myrle <- rle(row)
-                print_cells <- spans_to_viscell(row)
-            }
-            print_cells
-        })
-        display <- do.call(rbind, display_rws)
-    }
-
 
     nr_header <- nrow(header_content$body)
     if (indent_rownames) {
@@ -328,7 +312,7 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
         else
             paste(vapply(x, format_fnote_ref, ""), collapse = " ")
     }, ""), ncol = ncol(body))
-    body_ref_strs <- get_ref_matrix(tt)
+    body_ref_strs <- get_ref_matrix(obj)
 
     body <- matrix(paste0(body,
                          rbind(col_ref_strs,
@@ -336,72 +320,37 @@ matrix_form <- function(tt, indent_rownames = FALSE) {
                    nrow = nrow(body),
                    ncol = ncol(body))
 
-  ##   row_nlines <- apply(body, 1, nlines)
-  ##   nrows <- nrow(body)
-  ##   if (any(row_nlines > 1)) {
-  ##       hdr_inds <- 1:nr_header
-  ##       ## groundwork for sad haxx to get tl to not be messed up
-  ##       tl <- body[hdr_inds, 1]
-  ##       body <- rbind(expand_mat_rows(body[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
-  ##                     expand_mat_rows(body[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
-  ##       spans <- expand_mat_rows(spans, row_nlines, rep_vec_to_len)
-  ##       aligns <- expand_mat_rows(aligns, row_nlines, rep_vec_to_len)
-  ##       display <- expand_mat_rows(display, row_nlines, rep_vec_to_len)
-  ##       nlines_header <- sum(row_nlines[1:nr_header])
-  ##       ## sad haxx :(
-  ## ##      if(length(tl) != nr_header) {
-  ##       body[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
+    ref_fnotes <- get_formatted_fnotes(obj)
+    MatrixPrintForm(strings = body,
+                    spans = spans,
+                    aligns = aligns,
+                    ## display = display, purely a function of spans, handled in constructor now
+                    row_info = sr,
+                    ## line_grouping handled internally now line_grouping = 1:nrow(body),
+                    ref_fnotes = ref_fnotes,
+                    nlines_header = nr_header, ## this is fixed internally
+                    nrow_header = nr_header,
+                    expand_newlines = TRUE, ## incase the default ever changes
+                    has_rowlabs = TRUE,
+                    has_topleft = TRUE
+                    )
 
-  ##   } else {
-  ##       nlines_header <- nr_header
-  ##   }
-
-    ref_fnotes <- get_formatted_fnotes(tt)
-  ret <- structure(
-    list(
-      strings = body,
-      spans = spans,
-      aligns = aligns,
-      display = display,
-      row_info = sr,
-      line_grouping = 1:nrow(body), # this is done for real in .do_mat_expand now
-      ref_footnotes = ref_fnotes
-    ),
-    nlines_header = nr_header, ## this is done for real in .do_mat_expand nownlines_header,
-    nrow_header = nr_header,
-    class = c("MatrixPrintForm", "list"))
-    .do_mat_expand(ret)
-}
-
-
-.do_mat_expand <- function(matform, has_topleft = TRUE) {
-
-    row_nlines <- apply(matform$strings, 1, nlines)
-    nlines_header <- attr(matform, "nlines_header")
-    nr_header <- attr(matform, "nrow_header")
-    nrows <- nrow(matform$strings)
-    if (any(row_nlines > 1)) {
-        hdr_inds <- 1:nr_header
-        ## groundwork for sad haxx to get tl to not be messed up
-        if(has_topleft)
-            tl <- matform$strings[hdr_inds, 1]
-        else
-            tl <- character()
-        matform$strings <- rbind(expand_mat_rows(matform$strings[hdr_inds, , drop = FALSE], row_nlines[hdr_inds], cpadder = pad_vert_bottom),
-                      expand_mat_rows(matform$strings[-1*hdr_inds,, drop = FALSE], row_nlines[-hdr_inds]))
-        matform$spans <- expand_mat_rows(matform$spans, row_nlines, rep_vec_to_len)
-        matform$aligns <- expand_mat_rows(matform$aligns, row_nlines, rep_vec_to_len)
-        matform$display <- expand_mat_rows(matform$display, row_nlines, rep_vec_to_len)
-        attr(matform, "nlines_header") <- sum(row_nlines[1:nr_header])
-        ## sad haxx :(
-        if(has_topleft)
-            matform$strings[1:nr_header,1] <- c(tl, rep("", nr_header - length(tl)))
-        matform$line_grouping <- rep(1:nrows, times = row_nlines)
-
-    }
-
-    matform
-}
+    ## ret <- structure(
+    ##     list(
+    ##         strings = body,
+    ##         spans = spans,
+    ##         aligns = aligns,
+    ##         display = display,
+    ##         row_info = sr,
+    ##         line_grouping = 1:nrow(body), # this is done for real in .do_mat_expand now
+    ##         ref_footnotes = ref_fnotes
+    ##     ),
+    ##     nlines_header = nr_header, ## this is done for real in .do_mat_expand nownlines_header,
+    ##     nrow_header = nr_header,
+    ##     class = c("MatrixPrintForm", "list"))
+    ## ## .do_mat_expand(ret)
+    ## mform_handle_newlines(ret, has_topleft = TRUE)
+})
 
 
 
@@ -491,12 +440,12 @@ get_formatted_fnotes <- function(tt) {
 
 
 
-## print depths (not to be confused with tree depths)
-.cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
-    if(is(ctree, "LayoutColLeaf"))
-        return(depth)
-    unlist(lapply(tree_children(ctree), .cleaf_depths, depth = depth + 1))
-}
+## ## print depths (not to be confused with tree depths)
+## .cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
+##     if(is(ctree, "LayoutColLeaf"))
+##         return(depth)
+##     unlist(lapply(tree_children(ctree), .cleaf_depths, depth = depth + 1))
+## }
 
 
 ## .do_tbl_h_piece <- function(ct, padding = 0, span = 1) {
@@ -795,7 +744,7 @@ setMethod("get_cell_aligns", "LabelRow",
     if (labelrow_visible(obj)) {
         matrix(rep("center", nc), ncol = nc)
     } else {
-              matrix(character(0), ncol = nc)
+        matrix(character(0), ncol = nc)
     }
 })
 
@@ -803,78 +752,78 @@ setMethod("get_cell_aligns", "LabelRow",
 
 
 
-#' Propose Column Widths of an `rtable` object
-#'
-#' The row names are also considered a column for the output
-#'
-#' @param x `rtable` object
-#' @param mat_form object as created with `matrix_form`
-#'
-#' @export
-#' @return a vector of column widths based on the content of \code{x} (or \code{mat_form} if explictly provided)
-#' for use in printing and, in the future, in pagination.
-#' @examples
-#' library(dplyr)
-#'
-#' iris2 <- iris %>%
-#'   group_by(Species) %>%
-#'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
-#'   ungroup()
-#'
-#' l <- basic_table() %>%
-#'   split_cols_by("Species") %>%
-#'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
-#'
-#' tbl <- build_table(l, iris2)
-#'
-#' propose_column_widths(tbl)
-propose_column_widths <- function(x, mat_form = matrix_form(x, indent_rownames = TRUE)) {
+## #' Propose Column Widths of an `rtable` object
+## #'
+## #' The row names are also considered a column for the output
+## #'
+## #' @param x `rtable` object
+## #' @param mat_form object as created with `matrix_form`
+## #'
+## #' @export
+## #' @return a vector of column widths based on the content of \code{x} (or \code{mat_form} if explictly provided)
+## #' for use in printing and, in the future, in pagination.
+## #' @examples
+## #' library(dplyr)
+## #'
+## #' iris2 <- iris %>%
+## #'   group_by(Species) %>%
+## #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+## #'   ungroup()
+## #'
+## #' l <- basic_table() %>%
+## #'   split_cols_by("Species") %>%
+## #'   split_cols_by("group") %>%
+## #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+## #'
+## #' tbl <- build_table(l, iris2)
+## #'
+## #' propose_column_widths(tbl)
+## propose_column_widths <- function(x, mat_form = matrix_form(x, indent_rownames = TRUE)) {
 
-    ##stopifnot(is(x, "VTableTree"))
+##     ##stopifnot(is(x, "VTableTree"))
 
-  body <- mat_form$strings
-  spans <- mat_form$spans
-  aligns <- mat_form$aligns
-  display <- mat_form$display
+##   body <- mat_form$strings
+##   spans <- mat_form$spans
+##   aligns <- mat_form$aligns
+##   display <- mat_form$display
 
-  chars <- nchar(body)
+##   chars <- nchar(body)
 
-  # first check column widths without colspan
-  has_spans <- spans != 1
-  chars_ns <- chars
-  chars_ns[has_spans] <- 0
-  widths <- apply(chars_ns, 2, max)
+##   # first check column widths without colspan
+##   has_spans <- spans != 1
+##   chars_ns <- chars
+##   chars_ns[has_spans] <- 0
+##   widths <- apply(chars_ns, 2, max)
 
-  # now check if the colspans require extra width
-  if (any(has_spans)) {
-    has_row_spans <- apply(has_spans, 1, any)
+##   # now check if the colspans require extra width
+##   if (any(has_spans)) {
+##     has_row_spans <- apply(has_spans, 1, any)
 
-    chars_sp <- chars[has_row_spans, , drop = FALSE]
-    spans_sp <- spans[has_row_spans, , drop = FALSE]
-    disp_sp <- display[has_row_spans, , drop = FALSE]
+##     chars_sp <- chars[has_row_spans, , drop = FALSE]
+##     spans_sp <- spans[has_row_spans, , drop = FALSE]
+##     disp_sp <- display[has_row_spans, , drop = FALSE]
 
-    nc <- ncol(spans)
-    for (i in seq_len(nrow(chars_sp))) {
-      for (j in seq_len(nc)) {
-        if (disp_sp[i, j] && spans_sp[i, j] != 1) {
-          i_cols <- seq(j, j + spans_sp[i, j] - 1)
+##     nc <- ncol(spans)
+##     for (i in seq_len(nrow(chars_sp))) {
+##       for (j in seq_len(nc)) {
+##         if (disp_sp[i, j] && spans_sp[i, j] != 1) {
+##           i_cols <- seq(j, j + spans_sp[i, j] - 1)
 
-          nchar_i <- chars_sp[i, j]
-          cw_i <- widths[i_cols]
-          available_width <- sum(cw_i)
+##           nchar_i <- chars_sp[i, j]
+##           cw_i <- widths[i_cols]
+##           available_width <- sum(cw_i)
 
-          if (nchar_i > available_width) {
-            # need to update widths to fit content with colspans
-            # spread width among columns
-            widths[i_cols] <- cw_i + spread_integer(nchar_i - available_width, length(cw_i))
-          }
-        }
-      }
-    }
-  }
-  widths
-}
+##           if (nchar_i > available_width) {
+##             # need to update widths to fit content with colspans
+##             # spread width among columns
+##             widths[i_cols] <- cw_i + spread_integer(nchar_i - available_width, length(cw_i))
+##           }
+##         }
+##       }
+##     }
+##   }
+##   widths
+## }
 
 # utility functions ----
 
@@ -922,49 +871,6 @@ empty_string_after <- function(x, indices) {
   x
 }
 
-#' spread x into len elements
-#'
-#' @noRd
-#'
-#' @examples
-#' spread_integer(3, 1)
-#' spread_integer(0, 3)
-#' spread_integer(1, 3)
-#' spread_integer(2, 3)
-#' spread_integer(3, 3)
-#' spread_integer(4, 3)
-#' spread_integer(5, 3)
-#' spread_integer(6, 3)
-#' spread_integer(7, 3)
-spread_integer <- function(x, len) {
-  stopifnot(
-    is.wholenumber(x), length(x) == 1, x >= 0,
-    is.wholenumber(len), length(len) == 1, len >= 0,
-    !(len == 0 && x > 0)
-  )
-
-
-  if (len == 0) {
-    integer(0)
-  } else {
-    y <- rep(floor(x/len), len)
-    i <- 1
-    while (sum(y) < x) {
-      y[i] <- y[i] + 1
-      if (i == len) {
-        i <- 1
-      } else {
-        i <- i + 1
-      }
-    }
-    y
-  }
-}
-
-is.wholenumber <- function(x, tol = .Machine$double.eps^0.5){
-  abs(x - round(x)) < tol
-}
-
 #' Indent Strings
 #'
 #' Used in rtables to indent row names for the ASCII output.
@@ -1000,57 +906,57 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
   paste0(indent_str, x)
 }
 
-.paste_no_na <- function(x, ...) {
-  paste(na.omit(x), ...)
-}
+## .paste_no_na <- function(x, ...) {
+##   paste(na.omit(x), ...)
+## }
 
 
-#' Pad a string and align within string
-#'
-#' @param x string
-#' @param n number of character of the output string, if `n < nchar(x)` an error is thrown
-#'
-#' @noRd
-#'
-#' @examples
-#'
-#' padstr("abc", 3)
-#' padstr("abc", 4)
-#' padstr("abc", 5)
-#' padstr("abc", 5, "left")
-#' padstr("abc", 5, "right")
-#'
-#' if(interactive()){
-#' padstr("abc", 1)
-#' }
-#'
-padstr <- function(x, n, just = c("center", "left", "right")) {
+## #' Pad a string and align within string
+## #'
+## #' @param x string
+## #' @param n number of character of the output string, if `n < nchar(x)` an error is thrown
+## #'
+## #' @noRd
+## #'
+## #' @examples
+## #'
+## #' padstr("abc", 3)
+## #' padstr("abc", 4)
+## #' padstr("abc", 5)
+## #' padstr("abc", 5, "left")
+## #' padstr("abc", 5, "right")
+## #'
+## #' if(interactive()){
+## #' padstr("abc", 1)
+## #' }
+## #'
+## padstr <- function(x, n, just = c("center", "left", "right")) {
 
-  just <- match.arg(just)
+##   just <- match.arg(just)
 
-  if (length(x) != 1) stop("length of x needs to be 1 and not", length(x))
-  if (is.na(n) || !is.numeric(n) || n < 0) stop("n needs to be numeric and > 0")
+##   if (length(x) != 1) stop("length of x needs to be 1 and not", length(x))
+##   if (is.na(n) || !is.numeric(n) || n < 0) stop("n needs to be numeric and > 0")
 
-  if (is.na(x)) x <- "<NA>"
+##   if (is.na(x)) x <- "<NA>"
 
-  nc <- nchar(x)
+##   nc <- nchar(x)
 
-  if (n < nc) stop("\"", x, "\" has more than ", n, " characters")
+##   if (n < nc) stop("\"", x, "\" has more than ", n, " characters")
 
-  switch(
-    just,
-    center = {
-      pad <- (n - nc)/2
-      paste0(spaces(floor(pad)), x, spaces(ceiling(pad)))
-    },
-    left = paste0(x, spaces(n - nc)),
-    right = paste0(spaces(n - nc), x)
-  )
-}
+##   switch(
+##     just,
+##     center = {
+##       pad <- (n - nc)/2
+##       paste0(spaces(floor(pad)), x, spaces(ceiling(pad)))
+##     },
+##     left = paste0(x, spaces(n - nc)),
+##     right = paste0(spaces(n - nc), x)
+##   )
+## }
 
-spaces <- function(n) {
-  strrep(" ", n)
-}
+## spaces <- function(n) {
+##   strrep(" ", n)
+## }
 
 
 #' Convert Matrix of Strings into a String with Aligned Columns
@@ -1062,7 +968,7 @@ spaces <- function(n) {
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
 #' @param linesep character to build line separator
-#' 
+#'
 #' @noRd
 #'
 #' @return a string

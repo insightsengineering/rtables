@@ -44,5 +44,5 @@ lyt <- basic_table() \%>\%
                          AESEQ = max,
                          BMRKR1 = mean))
 
-build_table(lyt, subset(ex_adae, as.numeric(ARM) < 2))
+build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 }

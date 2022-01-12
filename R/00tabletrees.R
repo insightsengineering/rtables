@@ -350,64 +350,61 @@ MultiVarSplit <- function(vars,
 setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
+## #' @rdname cutsplits
+## #' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
+## #' @export
+## VarStaticCutSplit <- function(var,
+##                              split_label = var,
+##                              cuts,
+##                              cutlabels = NULL,
+##                              cfun = NULL,
+##                              cformat = NULL,
+##                              split_format = NULL,
+##                              split_name = var,
+##                              child_labels = c("default", "visible", "hidden"),
+##                              extra_args = list(),
+##                              indent_mod = 0L,
+##                              cindent_mod = 0L,
+##                              cvar = "",
+##                              cextra_args = list(),
+##                              label_pos = "visible") {
+##     label_pos <- match.arg(label_pos, label_pos_values)
+##     child_labels = match.arg(child_labels)
+##     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+##        is.character(cuts[[2]]) &&
+##        length(cuts[[1]]) == length(cuts[[2]])) {
+##         cutlabels <- cuts[[2]]
+##         cuts <- cuts[[1]]
+##     }
+##     if (is.unsorted(cuts, strictly = TRUE))
+##         stop("invalid cuts vector. not sorted unique values.")
+
+##     if (is.null(cutlabels) && !is.null(names(cuts)))
+##         cutlabels <- names(cuts)[-1] ## XXX is this always right?
+##     new("VarStaticCutSplit", payload = var,
+##         split_label = split_label,
+##         cuts = cuts,
+##         cut_labels = cutlabels,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         name = split_name,
+##         label_children = .labelkids_helper(child_labels),
+##         extra_args = extra_args,
+##         indent_modifier = as.integer(indent_mod),
+##         content_indent_modifier = as.integer(cindent_mod),
+##         content_var = cvar,
+##         split_label_position = label_pos,
+##         content_extra_args = cextra_args)
+## }
+
+#' Create static cut or static cumulative cut split
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
 #' @rdname cutsplits
-#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
-#' @export
-VarStaticCutSplit <- function(var,
-                             split_label = var,
-                             cuts,
-                             cutlabels = NULL,
-                             cfun = NULL,
-                             cformat = NULL,
-                             split_format = NULL,
-                             split_name = var,
-                             child_labels = c("default", "visible", "hidden"),
-                             extra_args = list(),
-                             indent_mod = 0L,
-                             cindent_mod = 0L,
-                             cvar = "",
-                             cextra_args = list(),
-                             label_pos = "visible") {
-    label_pos <- match.arg(label_pos, label_pos_values)
-    child_labels = match.arg(child_labels)
-    if(is.list(cuts) && is.numeric(cuts[[1]]) &&
-       is.character(cuts[[2]]) &&
-       length(cuts[[1]]) == length(cuts[[2]])) {
-        cutlabels <- cuts[[2]]
-        cuts <- cuts[[1]]
-    }
-    if (is.unsorted(cuts, strictly = TRUE))
-        stop("invalid cuts vector. not sorted unique values.")
-
-    if (is.null(cutlabels) && !is.null(names(cuts)))
-        cutlabels <- names(cuts)[-1] ## XXX is this always right?
-    new("VarStaticCutSplit", payload = var,
-        split_label = split_label,
-        cuts = cuts,
-        cut_labels = cutlabels,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        name = split_name,
-        label_children = .labelkids_helper(child_labels),
-        extra_args = extra_args,
-        indent_modifier = as.integer(indent_mod),
-        content_indent_modifier = as.integer(cindent_mod),
-        content_var = cvar,
-        split_label_position = label_pos,
-        content_extra_args = cextra_args)
-}
-
-
-
-#' @rdname cutsplits
-#' @exportClass CumulativeCutSplit
-
-setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
-
-#' @rdname cutsplits
-#' @export
-CumulativeCutSplit <- function(var,
+#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for \code{make_static_cut_split},
+#' or a \code{VarDynCutSplit} object for \code{VarDynCutSplit()}
+make_static_cut_split <- function(var,
                              split_label,
                              cuts,
                              cutlabels = NULL,
@@ -421,7 +418,10 @@ CumulativeCutSplit <- function(var,
                              cindent_mod = 0L,
                              cvar = "",
                              cextra_args = list(),
-                             label_pos = "visible") {
+                             label_pos = "visible",
+                             cumulative = FALSE) {
+    cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
+
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
@@ -435,7 +435,8 @@ CumulativeCutSplit <- function(var,
 
     if (is.null(cutlabels) && !is.null(names(cuts)))
         cutlabels <- names(cuts)[-1] ## XXX is this always right?
-    new("CumulativeCutSplit", payload = var,
+
+    new(cls, payload = var,
         split_label = split_label,
         cuts = cuts,
         cut_labels = cutlabels,
@@ -450,7 +451,95 @@ CumulativeCutSplit <- function(var,
         content_var = cvar,
         split_label_position = label_pos,
         content_extra_args = cextra_args)
+
 }
+    ## ret <- VarStaticCutSplit(var = var,
+    ##                          split_label = split_label,
+    ##                          cuts = cuts,
+    ##                          cutlabels = cutlabels,
+    ##                          cfun = cfun,
+    ##                          cformat = cformat,
+    ##                          split_format = split_format,
+    ##                          split_name = split_name,
+    ##                          child_labels = match.arg(child_labels),
+    ##                          extra_args = extra_args,
+    ##                          indent_mod = indent_mod,
+    ##                          cindent_mod = cindent_mod,
+    ##                          cvar = cvar,
+    ##                          cextra_args = cextra_args,
+    ##                          label_pos = label_pos)
+
+
+
+#' @rdname cutsplits
+#' @exportClass CumulativeCutSplit
+
+setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
+
+## ## make_static_cut_split with cumulative=TRUE is the constructor for this class
+## #' @rdname cutsplits
+## #' @export
+## CumulativeCutSplit <- function(var,
+##                              split_label,
+##                              cuts,
+##                              cutlabels = NULL,
+##                              cfun = NULL,
+##                              cformat = NULL,
+##                              split_format = NULL,
+##                              split_name = var,
+##                              child_labels = c("default", "visible", "hidden"),
+##                              extra_args = list(),
+##                              indent_mod = 0L,
+##                              cindent_mod = 0L,
+##                              cvar = "",
+##                              cextra_args = list(),
+##                              label_pos = "visible") {
+##     ret <- VarStaticCutSplit(var = var,
+##                              split_label = split_label,
+##                              cuts = cuts,
+##                              cutlabels = cutlabels,
+##                              cfun = cfun,
+##                              cformat = cformat,
+##                              split_format = split_format,
+##                              split_name = split_name,
+##                              child_labels = match.arg(child_labels),
+##                              extra_args = extra_args,
+##                              indent_mod = indent_mod,
+##                              cindent_mod = cindent_mod,
+##                              cvar = cvar,
+##                              cextra_args = cextra_args,
+##                              label_pos = label_pos)
+##     as(ret, "CumulativeCutSplit")
+
+##     ## label_pos <- match.arg(label_pos, label_pos_values)
+##     ## child_labels = match.arg(child_labels)
+##     ## if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+##     ##    is.character(cuts[[2]]) &&
+##     ##    length(cuts[[1]]) == length(cuts[[2]])) {
+##     ##     cutlabels <- cuts[[2]]
+##     ##     cuts <- cuts[[1]]
+##     ## }
+##     ## if (is.unsorted(cuts, strictly = TRUE))
+##     ##     stop("invalid cuts vector. not sorted unique values.")
+
+##     ## if (is.null(cutlabels) && !is.null(names(cuts)))
+##     ##     cutlabels <- names(cuts)[-1] ## XXX is this always right?
+##     ## new("CumulativeCutSplit", payload = var,
+##     ##     split_label = split_label,
+##     ##     cuts = cuts,
+##     ##     cut_labels = cutlabels,
+##     ##     content_fun = cfun,
+##     ##     content_format = cformat,
+##     ##     split_format = split_format,
+##     ##     name = split_name,
+##     ##     label_children = .labelkids_helper(child_labels),
+##     ##     extra_args = extra_args,
+##     ##     indent_modifier = as.integer(indent_mod),
+##     ##     content_indent_modifier = as.integer(cindent_mod),
+##     ##     content_var = cvar,
+##     ##     split_label_position = label_pos,
+##     ##     content_extra_args = cextra_args)
+## }
 
 
 

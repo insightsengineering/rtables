@@ -287,20 +287,22 @@ setMethod("pos_splvals", "TreePos",
 setMethod("pos_splvals", "VLayoutNode",
           function(obj) pos_splvals(tree_pos(obj)))
 
-#' @rdname int_methods
-setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
-#' @rdname int_methods
-setMethod("pos_split_labels", "TreePos",
-          function(obj) {
-    spls = pos_splits(obj)
-    sapply(spls, function(x) x@split_label)
-})
+## unreachable code only used in TreePos show method, but that
+## class isn't exported so potentially taking these out fully.
+## #' @rdname int_methods
+## setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
+## #' @rdname int_methods
+## setMethod("pos_split_labels", "TreePos",
+##           function(obj) {
+##     spls = pos_splits(obj)
+##     sapply(spls, function(x) x@split_label)
+## })
 
-## setMethod("pos_split_labels", "VNodeInfo",
+## ## setMethod("pos_split_labels", "VNodeInfo",
+## ##            function(obj) pos_split_labels(tree_pos(obj)))
+## #' @rdname int_methods
+## setMethod("pos_split_labels", "VLayoutNode",
 ##            function(obj) pos_split_labels(tree_pos(obj)))
-#' @rdname int_methods
-setMethod("pos_split_labels", "VLayoutNode",
-           function(obj) pos_split_labels(tree_pos(obj)))
 
 ## unreachable code...
 
@@ -345,11 +347,13 @@ setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels
 #' @rdname int_methods
 setMethod("pos_splval_labels", "TreePos",
           function(obj) obj@sval_labels)
+## no longer used
+
 ## setMethod("pos_splval_labels", "VNodeInfo",
 ##            function(obj) pos_splval_labels(tree_pos(obj)))
-#' @rdname int_methods
-setMethod("pos_splval_labels", "VLayoutNode",
-           function(obj) pos_splval_labels(tree_pos(obj)))
+## #' @rdname int_methods
+## setMethod("pos_splval_labels", "VLayoutNode",
+##            function(obj) pos_splval_labels(tree_pos(obj)))
 
 
 #' @rdname int_methods
@@ -375,13 +379,7 @@ setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
 setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
-#' Label and Name accessors
-#' @param obj ANY. The object.
-#' @rdname lab_name
-#' @return the name or label of \code{obj} for getters, or \code{obj} after modification
-#' for setters.
-#' @export
-setGeneric("obj_name", function(obj) standardGeneric("obj_name"))
+#' @inherit formatable::lab_name
 #' @rdname lab_name
 #' @exportMethod obj_name
 setMethod("obj_name", "VNodeInfo",
@@ -391,10 +389,6 @@ setMethod("obj_name", "VNodeInfo",
 #' @exportMethod obj_name
 setMethod("obj_name", "Split",
           function(obj) obj@name)
-#' @rdname lab_name
-#' @param value character(1). The new value
-#' @export
-setGeneric("obj_name<-", function(obj, value) standardGeneric("obj_name<-"))
 #' @rdname lab_name
 #' @exportMethod obj_name<-
 setMethod("obj_name<-", "VNodeInfo",
@@ -413,14 +407,8 @@ setMethod("obj_name<-", "Split",
 
 ### Label related things
 #' @rdname lab_name
-#' @export
-setGeneric("obj_label", function(obj) standardGeneric("obj_label"))
-#' @rdname lab_name
 #' @exportMethod obj_label
 setMethod("obj_label", "Split", function(obj) obj@split_label)
-#' @rdname lab_name
-#' @exportMethod obj_label
-setMethod("obj_label", "ANY", function(obj) attr(obj, "label"))
 
 #' @rdname lab_name
 #' @exportMethod obj_label
@@ -437,9 +425,6 @@ setMethod("obj_label", "VTableTree",
 #' @exportMethod obj_label
 setMethod("obj_label", "ValueWrapper", function(obj) obj@label)
 
-#' @rdname lab_name
-#' @export
-setGeneric("obj_label<-", function(obj, value) standardGeneric("obj_label<-"))
 #' @rdname lab_name
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "Split",
@@ -464,13 +449,6 @@ setMethod("obj_label<-", "ValueWrapper",
     obj
 })
 
-#' @rdname lab_name
-#' @exportMethod obj_label<-
-setMethod("obj_label<-", "ANY",
-          function(obj, value){
-    attr(obj, "label") = value
-    obj
-})
 
 #' @rdname lab_name
 #' @exportMethod obj_label<-
@@ -570,8 +548,8 @@ setMethod("vis_label", "Split", function(spl) {
     .labelkids_helper(label_position(spl))
 })
 
-#' @rdname int_methods
-setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
+## #' @rdname int_methods
+## setGeneric("vis_label<-", function(spl, value) standardGeneric("vis_label<-"))
 ## #' @rdname int_methods
 ## setMethod("vis_label<-", "Split", function(spl, value) {
 ##     stop("defunct")
@@ -628,21 +606,23 @@ setMethod("analysis_fun", "AnalyzeVarSplit", function(obj) obj@analysis_fun)
 #' @rdname int_methods
 setMethod("analysis_fun", "AnalyzeColVarSplit", function(obj) obj@analysis_fun)
 
-#' @rdname int_methods
-setGeneric("analysis_fun<-", function(object, value) standardGeneric("analysis_fun<-"))
 
-#' @rdname int_methods
-setMethod("analysis_fun<-", "AnalyzeVarSplit", function(object, value) {
-    object@analysis_fun <- value
-    object
-})
-#' @rdname int_methods
-setMethod("analysis_fun<-", "AnalyzeColVarSplit", function(object, value) {
-    if(is(value, "function"))
-        value <- list(value)
-    object@analysis_fun <- value
-    object
-})
+## not used and probably not needed
+## #' @rdname int_methods
+## setGeneric("analysis_fun<-", function(object, value) standardGeneric("analysis_fun<-"))
+
+## #' @rdname int_methods
+## setMethod("analysis_fun<-", "AnalyzeVarSplit", function(object, value) {
+##     object@analysis_fun <- value
+##     object
+## })
+## #' @rdname int_methods
+## setMethod("analysis_fun<-", "AnalyzeColVarSplit", function(object, value) {
+##     if(is(value, "function"))
+##         value <- list(value)
+##     object@analysis_fun <- value
+##     object
+## })
 
 
 
@@ -894,31 +874,22 @@ setMethod("spanned_values<-", "LabelRow",
 ### Format manipulation
 ### obj_format<- is not recursive
 ## TODO export these?
-#' @rdname int_methods
-setGeneric("obj_format", function(obj) standardGeneric("obj_format"))
-## this covers rcell, etc
-#' @rdname int_methods
-setMethod("obj_format", "ANY", function(obj) attr(obj, "format"))
-#' @rdname int_methods
+#' @rdname lab_name
+#' @export
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
 ##setMethod("obj_format", "CellValue", function(obj) obj@format)
-#' @rdname int_methods
+#' @rdname lab_name
+#' @export
 setMethod("obj_format", "Split", function(obj) obj@split_format)
 
-#' @rdname int_methods
-setGeneric("obj_format<-", function(obj, value) standardGeneric("obj_format<-"))
-## this covers rcell, etc
-#' @rdname int_methods
-setMethod("obj_format<-", "ANY", function(obj, value) {
-    attr(obj, "format") = value
-    obj
-})
-#' @rdname int_methods
+#' @rdname lab_name
+#' @export
 setMethod("obj_format<-", "VTableNodeInfo", function(obj, value) {
     obj@format = value
     obj
 })
-#' @rdname int_methods
+#' @rdname lab_name
+#' @export
 setMethod("obj_format<-", "Split", function(obj, value) {
     obj@split_format = value
     obj
@@ -983,10 +954,7 @@ setMethod("content_format<-", "Split", function(obj, value) {
     obj
 })
 
-## credit: rlang, Henry and Wickham.
-## this one tiny utility function is NOT worth a dependency.
-## modified it so any length 0 x grabs y
-`%||%` = function(L, R) if(length(L) == 0) R else L
+
 #' Value Formats
 #'
 #' Returns a matrix of formats for the cells in a table
@@ -1171,9 +1139,8 @@ setMethod("cell_align<-", "CellValue", function(obj, value) {
         value <- "center"
     else {
         value <- tolower(value)
-        if(!(value %in% rtables_aligns()))
-            stop("Unsupported cell value alignment: ", value)
     }
+    chk_rtables_align(value)
     attr(obj, "align") <- value
     obj
 })
@@ -2149,15 +2116,10 @@ setMethod("vars_in_layout", "ManualSplit",
 ##'
 ##' @rdname title_footer
 ##' @export
-setGeneric("main_title", function(obj) standardGeneric("main_title"))
-##' @rdname title_footer
 ##' @export
 setMethod("main_title", "VTitleFooter",
           function(obj) obj@main_title)
 
-##' @rdname title_footer
-##' @export
-setGeneric("main_title<-", function(obj, value) standardGeneric("main_title<-"))
 ##' @rdname title_footer
 ##' @export
 setMethod("main_title<-", "VTitleFooter",
@@ -2170,16 +2132,10 @@ setMethod("main_title<-", "VTitleFooter",
 
 ##' @rdname title_footer
 ##' @export
-setGeneric("subtitles", function(obj) standardGeneric("subtitles"))
-##' @rdname title_footer
-##' @export
 setMethod("subtitles", "VTitleFooter",
           function(obj) obj@subtitles)
 
 
-##' @rdname title_footer
-##' @export
-setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-"))
 ##' @rdname title_footer
 ##' @export
 setMethod("subtitles<-", "VTitleFooter",
@@ -2188,23 +2144,13 @@ setMethod("subtitles<-", "VTitleFooter",
     obj
 })
 
-##' @rdname title_footer
-##' @export
-all_titles <- function(obj) c(main_title(obj), subtitles(obj))
 
-
-##' @rdname title_footer
-##' @export
-setGeneric("main_footer", function(obj) standardGeneric("main_footer"))
 ##' @rdname title_footer
 ##' @export
 setMethod("main_footer", "VTitleFooter",
           function(obj) obj@main_footer)
 
 
-##' @rdname title_footer
-##' @export
-setGeneric("main_footer<-", function(obj, value) standardGeneric("main_footer<-"))
 ##' @rdname title_footer
 ##' @export
 setMethod("main_footer<-", "VTitleFooter",
@@ -2217,16 +2163,10 @@ setMethod("main_footer<-", "VTitleFooter",
 
 ##' @rdname title_footer
 ##' @export
-setGeneric("prov_footer", function(obj) standardGeneric("prov_footer"))
-##' @rdname title_footer
-##' @export
 setMethod("prov_footer", "VTitleFooter",
           function(obj) obj@provenance_footer)
 
 
-##' @rdname title_footer
-##' @export
-setGeneric("prov_footer<-", function(obj, value) standardGeneric("prov_footer<-"))
 ##' @rdname title_footer
 ##' @export
 setMethod("prov_footer<-", "VTitleFooter",
@@ -2234,10 +2174,6 @@ setMethod("prov_footer<-", "VTitleFooter",
     obj@provenance_footer <- value
     obj
 })
-
-##' @rdname title_footer
-##' @export
-all_footers <- function(obj) c(main_footer(obj), prov_footer(obj))
 
 
 make_ref_value <-  function(value) {

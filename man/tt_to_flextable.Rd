@@ -9,8 +9,8 @@ tt_to_flextable(
   paginate = FALSE,
   lpp = NULL,
   ...,
-  colwidths = propose_column_widths(tt),
-  total_width = 5
+  colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
+  total_width = 10
 )
 }
 \arguments{

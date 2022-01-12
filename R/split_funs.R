@@ -449,8 +449,22 @@ setMethod(".applysplit_datapart", "VarStaticCutSplit",
     cts = spl_cuts(spl)
     cfct = cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
     split(df, cfct, drop = FALSE)
-
 })
+
+
+setMethod(".applysplit_datapart", "CumulativeCutSplit",
+          function(spl, df, vals) {
+  #  lbs = spl_cutlabels(spl)
+    var = spl_payload(spl)
+    varvec = df[[var]]
+    cts = spl_cuts(spl)
+    cfct = cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
+    ret <- lapply(seq_len(length(levels(cfct))),
+                  function(i) df[as.integer(cfct) <= i,])
+    names(ret) <- levels(cfct)
+    ret
+})
+
 ## XXX TODO *CutSplit Methods
 
 

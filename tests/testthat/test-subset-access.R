@@ -52,6 +52,12 @@ cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Co
   expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination", "SEX", "M")))
   expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX")))
   expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination")))
+
+  allrows <- collect_leaves(tbl, TRUE, TRUE)
+  crow <- allrows[[1]]
+  lrow <- allrows[[2]]
+  expect_error(cell_values(crow, rowpath = "@content"), "cell_values on TableRow objects must have NULL rowpath")
+  expect_error(cell_values(lrow), "cell_values on LabelRow is not meaningful")
 })
 
 
@@ -78,44 +84,6 @@ test_rowpaths <- function(tt, visonly = TRUE) {
 
 
 test_that("make_row_df, make_col_df give paths which all work", {
-    ## duplicated from test-lyt-tabulation.R :(
-    ## lyt = basic_table() %>% split_cols_by("ARM") %>%
-    ##     ## add nested column split on SEX with value lables from gend_label
-    ##     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-    ##     ## No row splits have been introduced, so this adds
-    ##     ## a root split and puts summary content on it labelled Overall (N)
-    ##     ## add_colby_total(label = "All") %>%
-    ##     ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
-    ##     add_colcounts() %>%
-    ##     ## add a new subtable that splits on RACE, value labels from ethn_label
-    ##     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
-    ##     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
-    ##     ##
-    ##     ## Add nested row split within Race categories for FACTOR2
-    ##     ## using a split function that excludes level C
-    ##     ## value labels from fac2_label
-    ##     split_rows_by("FACTOR2", "Factor2",
-    ##                         split_fun = remove_split_levels("C"),
-    ##                         labels_var = "fac2_label") %>%
-    ##     ## Add count summary within FACTOR2 categories
-    ##     summarize_row_groups("FACTOR2") %>%
-    ##     ## Add analysis/data rows by analyzing AGE variable
-    ##     ## Note afun is a function that returns 2 values in a named list
-    ##     ## this will create 2 data rows
-    ##     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-    ##                                                                      median = median(x)),
-    ##                       format = "xx.xx") %>%
-    ##     ## adding more analysis vars "compounds them", placing them at the same
-    ##     ## level of nesting as all previous analysis blocks, rather than
-    ##     ## attempting to further nest them
-    ##     analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x",
-    ##             table_names = "AgeRedux") %>%
-
-    ##     ## Note nested=TRUE, this creates a NEW subtable directly under the
-    ##     ## root split
-    ##     ## afun of table() gives us k count rows, where k is the number of
-    ##     ## levels of VAR3, in this case 2.
-    ##     analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
 
      lyt <- basic_table() %>%
         split_cols_by("ARM") %>%
@@ -224,7 +192,6 @@ test_that("top_left retention behavior is correct across all scenarios", {
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
 })
 
-
 test_that("setters work ok", {
        tlval <- "hi"
        lyt <- basic_table() %>%
@@ -238,12 +205,12 @@ test_that("setters work ok", {
 
        tbl2[1, 1] <- CellValue(c(1, .1))
        matform2 <- matrix_form(tbl2)
-       expect_identical("1 (10%)", matform2$strings[2, 2])
+       expect_identical("1 (10.0%)", matform2$strings[2, 2])
 
        tbl3 <- tbl
        tbl3[3, 1:2] <- list(CellValue(c(1, 1)), CellValue(c(1, 1)))
        matform3 <- matrix_form(tbl3)
-       expect_identical(rep("1 (100%)", 2), matform3$strings[4, 2:3])
+       expect_identical(rep("1 (100.0%)", 2), matform3$strings[4, 2:3])
 })
 
 
