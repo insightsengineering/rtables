@@ -16,18 +16,18 @@ jobs:
     name: R CMD Check 🧬
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   coverage:
     if: github.event_name == 'pull_request'
     name: Coverage 📔 
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   roxygen:
     name: Roxygen 🅾
     uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@main
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   gitleaks:
     name: gitleaks 💧
     uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main
