@@ -62,6 +62,7 @@ reference:
     - simple_analysis
     - make_afun
     - list_wrap_x
+    - spl_context
     
   - title: Split Functions
     contents:
@@ -74,21 +75,25 @@ reference:
     - reorder_split_levels
     - trim_levels_in_group
     - trim_levels_to_map
+    - custom_split_funs
+    - do_base_split
+    
 
   - title: Cell Formatting related Functions
     desc: cell formatting.
     contents:
-    - sprintf_format
-    - list_rcell_format_labels
     - format_rcell
-    - is_rcell_format
-    
+    - value_formats
+    - round_fmt
+    - rtables_aligns
+     
   - title: Table Structure Information
     contents:
     - dim,VTableNodeInfo-method
     - row_paths
     - row_paths_summary
     - table_structure
+    - summarize_rows
 
   - title: Layout Structure Information
     contents:
@@ -102,6 +107,7 @@ reference:
     - cbind_rtables
     - as.vector,TableRow-method
     - "[<-,VTableTree,ANY,ANY,list-method"
+    - clear_indent_mods
 
     
   - title: Sorting and Pruning
@@ -125,6 +131,7 @@ reference:
     - rrowl
     - insert_rrow
     - indent
+    - df_to_tt
     
     
   - title: Output Functions
@@ -134,20 +141,14 @@ reference:
     - starts_with("export_as")
     - tt_to_flextable
     - toString,VTableTree-method 
-    - propose_column_widths
-    - matrix_form
     - get_formatted_cells
+    - path_enriched_df
 
   - title: Utility Functions
     desc: utility functions
     contents:
     - Viewer
     - compare_rtables
-    - var_labels<-
-    - var_labels
-    - var_labels_remove
-    - var_relabel
-    - with_label
     - indent_string
     - is_rtable
 
@@ -157,16 +158,9 @@ reference:
     - paginate_table
     - make_row_df
 
-  - title: Included Data
-    desc: Included datasets
-    contents:
-    - DM
-    - ex_adsl 
-
   - title: TableTree Framework Accessor Functions
     contents:
     - content_table
-    - obj_name
     - tree_children
     - collect_leaves
     - obj_avar
@@ -184,4 +178,29 @@ reference:
     - ends_with("class")
     - ends_with("Row")
 
+  - title: Pathing Related Functions
+    desc: Pathing and insertion related functions
+    contents:
+    - label_at_path
+    - tt_at_path
+    - insert_row_at_path
 
+  - title: Referential Footnotes
+    desc: Functions related to referential footnotes
+    contents:
+    - row_footnotes
+    - update_ref_indexing
+
+  - title: formatable Interface Methods
+    desc: Methods for generics defined in formatable
+    contents:
+    - obj_name,VNodeInfo-method
+    - matrix_form,VTableTree-method
+    - main_title,VTitleFooter-method
+    
+
+
+  - title: Internal Methods
+    desc: Internal documented methods
+    contents:
+    - internal_methods

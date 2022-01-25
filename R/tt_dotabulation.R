@@ -654,7 +654,9 @@ setMethod(".make_split_kids", "Split",
                                              vis = isTRUE(vis_label(spl))),
                          cinfo = cinfo,
                          iscontent = FALSE,
-                         indent_mod = indent_mod(spl))
+                         indent_mod = indent_mod(spl),
+                         page_title = ptitle_prefix(spl)
+                         )
     ##kids = inner
     kids = list(innertab)
     kids

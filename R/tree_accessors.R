@@ -2421,3 +2421,29 @@ setMethod("fnotes_at_path<-", c("VTableTree", "NULL"),
 
 
 })
+
+
+setGeneric("has_force_pag", function(obj) standardGeneric("has_force_pag"))
+
+setMethod("has_force_pag", "TableTree", function(obj) !is.na(ptitle_prefix(obj)))
+
+setMethod("has_force_pag", "VTableNodeInfo", function(obj) FALSE)
+
+setGeneric("ptitle_prefix", function(obj) standardGeneric("ptitle_prefix"))
+
+setMethod("ptitle_prefix", "TableTree", function(obj) obj@page_title_prefix)
+setMethod("ptitle_prefix", "Split", function(obj) obj@page_title_prefix)
+
+setMethod("ptitle_prefix", "ANY", function(obj) NULL)
+
+setMethod("page_titles", "VTableTree", function(obj) obj@page_titles)
+
+setMethod("page_titles<-", "VTableTree", function(obj, value) {
+    obj@page_titles <- value
+    obj
+})
+
+
+
+
+

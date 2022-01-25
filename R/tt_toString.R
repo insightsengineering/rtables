@@ -332,7 +332,12 @@ setMethod("matrix_form", "VTableTree",
                     nrow_header = nr_header,
                     expand_newlines = TRUE, ## incase the default ever changes
                     has_rowlabs = TRUE,
-                    has_topleft = TRUE
+                    has_topleft = TRUE,
+                    main_title = main_title(obj),
+                    subtitles = subtitles(obj),
+                    page_titles = page_titles(obj),
+                    main_footer = main_footer(obj),
+                    prov_footer = prov_footer(obj)
                     )
 
     ## ret <- structure(

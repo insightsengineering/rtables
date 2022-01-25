@@ -475,14 +475,89 @@ pag_tt_indices = function(tt, lpp = 15,
 }
 
 
+copy_title_footer <- function(to, from, newptitle) {
+    main_title(to) <- main_title(from)
+    subtitles(to) <- subtitles(from)
+    page_titles(to) <- c(page_titles(from), newptitle)
+    main_footer(to) <- main_footer(from)
+    prov_footer(to) <- prov_footer(from)
+    to
+}
+
+pag_btw_kids <- function(tt) {
+    pref <- ptitle_prefix(tt)
+    lapply(tree_children(tt),
+           function(tbl) {
+        tbl <- copy_title_footer(tbl, tt,
+                                 paste(pref, obj_label(tbl), sep = ": "))
+        labelrow_visible(tbl) <- FALSE
+        tbl
+    })
+}
+
+
+do_force_paginate <- function(tt,
+                              force_pag = vapply(tree_children(tt), has_force_pag, NA),
+                              verbose = FALSE) {
+
+
+    ## forced pagination is happening at this
+    if(has_force_pag(tt)) {
+        ret <- pag_btw_kids(tt)
+        return(lapply(ret, do_force_paginate))
+
+    }
+    chunks <- list()
+    kinds <- seq_along(force_pag)
+    while(length(kinds) > 0 ) {
+        if(force_pag[kinds[1]]) {
+            outertbl <- copy_title_footer(tree_children(tt)[[kinds[1]]],
+                                          tt,
+                                          NULL)
+
+            chunks <- c(chunks, do_force_paginate(outertbl))
+            kinds <- kinds[-1]
+        } else {
+            tmptbl <- tt
+            runend <- min(which(force_pag[kinds]), length(kinds))
+            useinds <- 1:runend
+            tree_children(tmptbl) <- tree_children(tt)[useinds]
+            chunks <- c(chunks, tmptbl)
+            kinds <- kinds[-useinds]
+        }
+    }
+    chunks
+}
+
+
+
+
 #' @export
 #' @aliases paginate_table
 #' @rdname paginate
 paginate_table = function(tt, lpp = 15,
-                           min_siblings = 2,
-                           nosplitin = character(),
-                           colwidths = NULL,
-                           verbose = FALSE) {
+                          min_siblings = 2,
+                          nosplitin = character(),
+                          colwidths = NULL,
+                          verbose = FALSE) {
+
+    force_pag <- vapply(tree_children(tt), has_force_pag, TRUE)
+    if(has_force_pag(tt) || any(force_pag)) {
+        if(is.null(colwidths)) {
+            colwidths <- propose_column_widths(matrix_form(tt))
+        }
+
+        spltabs <- do_force_paginate(tt, verbose = verbose)
+        spltabs <- unlist(spltabs, recursive = TRUE)
+        ret <- lapply(spltabs, paginate_table,
+                      lpp = lpp,
+                      min_siblings = min_siblings,
+                      nosplitin = nosplitin,
+                      colwidths = colwidths,
+                      verbose = verbose)
+        return(unlist(ret, recursive = TRUE))
+
+    }
     inds = pag_tt_indices(tt, lpp = lpp,
                           min_siblings = min_siblings,
                           nosplitin = nosplitin,

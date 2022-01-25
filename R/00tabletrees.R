@@ -106,7 +106,8 @@ setClass("Split", contains = "VIRTUAL",
              extra_args = "list",
              indent_modifier = "integer",
              content_indent_modifier = "integer",
-             content_extra_args = "list"))
+             content_extra_args = "list",
+             page_title_prefix = "character"))
 
 
 setClass("CustomizableSplit", contains = "Split",
@@ -139,7 +140,8 @@ VarLevelSplit <- function(var,
                          label_pos = c("topleft", "hidden", "visible"),
                          cindent_mod = 0L,
                          cvar = "",
-                         cextra_args = list()
+                         cextra_args = list(),
+                         page_prefix = NA_character_
                          ) {
     child_labels <- match.arg(child_labels)
     if (is.null(labels_var))
@@ -159,7 +161,8 @@ VarLevelSplit <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix
         )
 }
 
@@ -207,7 +210,8 @@ AllSplit <- function(split_label = "",
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = "hidden",
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = NA_character_)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -245,7 +249,8 @@ ManualSplit <- function(levels, label, name = "manual",
                        cindent_mod = 0L,
                        cvar = "",
                        cextra_args = list(),
-                       label_pos = "visible") {
+                       label_pos = "visible",
+                       page_prefix = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     new("ManualSplit",
         split_label = label,
@@ -256,7 +261,8 @@ ManualSplit <- function(levels, label, name = "manual",
         indent_modifier = 0L,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_position = label_pos)
+        split_label_position = label_pos,
+        page_title_prefix = page_prefix)
 
 }
 
@@ -313,7 +319,8 @@ MultiVarSplit <- function(vars,
                          cvar = "",
                          cextra_args = list(),
                          label_pos = "visible",
-                         split_fun = NULL) {
+                         split_fun = NULL,
+                         page_prefix = NA_character_) {
     ## no topleft allowed
     label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels = match.arg(child_labels)
@@ -338,7 +345,8 @@ MultiVarSplit <- function(vars,
         content_var = cvar,
         split_label_position = label_pos,
         content_extra_args = cextra_args,
-        split_fun = split_fun)
+        split_fun = split_fun,
+        page_title_prefix = page_prefix)
 }
 
 
@@ -419,7 +427,8 @@ make_static_cut_split <- function(var,
                              cvar = "",
                              cextra_args = list(),
                              label_pos = "visible",
-                             cumulative = FALSE) {
+                             cumulative = FALSE,
+                             page_prefix = NA_character_) {
     cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
 
     label_pos <- match.arg(label_pos, label_pos_values)
@@ -450,7 +459,8 @@ make_static_cut_split <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix)
 
 }
     ## ret <- VarStaticCutSplit(var = var,
@@ -571,7 +581,8 @@ VarDynCutSplit <- function(var,
                           cindent_mod = 0L,
                           cvar = "",
                           cextra_args = list(),
-                          label_pos = "visible") {
+                          label_pos = "visible",
+                          page_prefix = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
@@ -589,7 +600,8 @@ VarDynCutSplit <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix)
 }
 
 
@@ -650,7 +662,8 @@ AnalyzeVarSplit <- function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_position = label_pos,
-        content_var = cvar) ## no content_extra_args
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## no content_extra_args
 }
 
 #' Define a subset tabulation/analysis
@@ -687,7 +700,8 @@ AnalyzeColVarSplit <- function(afun,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_position = label_pos,
-        content_var = cvar) ## no content_extra_args
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## no content_extra_args
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -823,7 +837,8 @@ AnalyzeMultiVars <- function(var,
                    ## modifier applied on splits in payload
                    indent_modifier = 0L,
                    content_indent_modifier = 0L,
-                   content_var = cvar)
+                   content_var = cvar,
+                   page_title_prefix = NA_character_)
      }
     ret
 }
@@ -955,7 +970,8 @@ VarLevWBaselineSplit <- function(var,
         ## this is always a column split
         indent_modifier = 0L,
         content_indent_modifier = 0L,
-        content_var = cvar)
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## so long as this is columnspace only
 }
 
 
@@ -1341,7 +1357,8 @@ setClass("VTitleFooter", contains = "VIRTUAL",
 setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitleFooter"),
          representation(children = "list",
                         rowspans = "data.frame",
-                        labelrow = "LabelRow"
+                        labelrow = "LabelRow",
+                        page_titles = "character"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
@@ -1461,7 +1478,8 @@ ttable_validity <- function(object) {
 #' @rdname tabclasses
 #' @exportClass TableTree
 setClass("TableTree", contains = c("VTableTree"),
-         representation(content = "ElementaryTable"
+         representation(content = "ElementaryTable",
+                        page_title_prefix = "character"
                         ),
          validity = ttable_validity)
 
@@ -1484,7 +1502,8 @@ TableTree <- function(kids = list(),
                      title = "",
                      subtitles = character(),
                      main_footer = character(),
-                     prov_footer = character()) {
+                     prov_footer = character(),
+                     page_title = NA_character_) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)
@@ -1501,6 +1520,8 @@ TableTree <- function(kids = list(),
     if (no_colinfo(labelrow))
         col_info(labelrow) <- cinfo
     if ((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
+        if(!is.na(page_title))
+            stop("Got a page title prefix for an Elementary Table")
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids,
                         name = .chkname(name),
@@ -1528,7 +1549,8 @@ TableTree <- function(kids = list(),
                   main_title = title,
                   subtitles = subtitles,
                   main_footer = main_footer,
-                  provenance_footer = prov_footer)
+                  provenance_footer = prov_footer,
+                  page_title_prefix = page_title)
         tab <- set_format_recursive(tab, format, FALSE)
         tab
     }
