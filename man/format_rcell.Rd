@@ -26,6 +26,3 @@ for use with \code{CellValue} objects
 cll <- CellValue(pi, format = "xx.xxx")
 format_rcell(cll)
 }
-\seealso{
-\code{\link[=round_fmt]{round_fmt()}}
-}

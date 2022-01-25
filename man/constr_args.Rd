@@ -23,7 +23,9 @@ constr_args(
   subtitles,
   main_footer,
   prov_footer,
-  footnotes
+  footnotes,
+  page_title,
+  page_prefix
 )
 }
 \arguments{
@@ -65,6 +67,10 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current level}
+
+\item{page_title}{character. Page specific title(s).}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 }
 \value{
 NULL (this is an argument template dummy function)

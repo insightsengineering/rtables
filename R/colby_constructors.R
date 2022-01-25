@@ -433,7 +433,7 @@ split_rows_by = function(lyt,
                          label_pos = "hidden",
                          indent_mod = 0L,
                          page_by = FALSE,
-                         page_label = split_label) {
+                         page_prefix = split_label) {
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     spl = VarLevelSplit(var = var,
@@ -444,7 +444,7 @@ split_rows_by = function(lyt,
                         split_format = format,
                         child_labels = child_labels,
                         indent_mod = indent_mod,
-                        page_prefix = if(page_by) page_label else NA_character_)
+                        page_prefix = if(page_by) page_prefix else NA_character_)
     addtl <- identical(label_pos, "topleft")
 
     pos <- next_rpos(lyt, nested)

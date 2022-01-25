@@ -41,7 +41,9 @@ lyt_args(
   cvar,
   table_names,
   topleft,
-  align
+  align,
+  page_by,
+  page_prefix
 )
 }
 \arguments{
@@ -119,6 +121,10 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 
 \item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
+
+\item{page_by}{logical(1). Should pagination be forced between different children resulting form this split.}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 }
 \value{
 NULL (this is an argument template dummy function)

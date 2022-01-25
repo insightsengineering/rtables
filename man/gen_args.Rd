@@ -22,6 +22,7 @@ gen_args(
   label_pos,
   cvar,
   topleft,
+  page_prefix,
   ...
 )
 }
@@ -62,7 +63,9 @@ should be visible if and only if multiple variables are analyzed at the same lev
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
 
-\item{\dots}{Passed on to metthods or tabulation functions.}
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{\dots}{Passed on to methods or tabulation functions.}
 }
 \value{
 NULL (this is an argument template dummy function)

@@ -23,7 +23,8 @@ VarLevelSplit(
   label_pos = c("topleft", "hidden", "visible"),
   cindent_mod = 0L,
   cvar = "",
-  cextra_args = list()
+  cextra_args = list(),
+  page_prefix = NA_character_
 )
 
 VarLevWBaselineSplit(
@@ -75,6 +76,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
 
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 
 \item{ref_group}{character. Value of \code{var} to be taken as the ref_group/control to be compared against.}
 

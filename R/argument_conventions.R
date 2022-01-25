@@ -25,7 +25,7 @@ NULL
 #' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
 #' @param obj ANY. The object for the accessor to access or modify
 #' @param x An object
-#' @param \dots Passed on to metthods or tabulation functions.
+#' @param \dots Passed on to methods or tabulation functions.
 #' @param value The new value
 #' @param object The object to modify in-place
 #' @param verbose logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.
@@ -36,11 +36,14 @@ NULL
 # #' @param visible_label logical(1). Should the \emph{split} label be visible in the resulting table.
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
+#' @param page_prefix character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table
+
+
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
-                     cvar, topleft, ...) NULL
+                     cvar, topleft, page_prefix,  ...) NULL
 
 
 
@@ -81,6 +84,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param indent_mod numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
+#' @param page_by logical(1). Should pagination be forced between different children resulting form this split.
 #' @inheritParams gen_args
 #' @inherit gen_args return
 #' @family conventions
@@ -91,7 +95,7 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
                      indent_mod, show_labels, label_pos, #visible_label,
                      var_labels, cvar,
-                     table_names, topleft, align) NULL
+                     table_names, topleft, align, page_by, page_prefix) NULL
 
 
 #' Constructor Arg Conventions
@@ -116,12 +120,12 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
 #' @param main_footer character. Main global (non-referential) footer materials.
 #' @param prov_footer character. Provenance-related global footer materials. Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current level
-
+#' @param page_title character. Page specific title(s).
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan, label_pos, #visible_label,
                         cindent_mod, cvar, label, cextra_args, child_names,
                         title, subtitles, main_footer, prov_footer,
-                        footnotes) NULL
+                        footnotes, page_title, page_prefix) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args

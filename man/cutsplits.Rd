@@ -25,7 +25,8 @@ make_static_cut_split(
   cvar = "",
   cextra_args = list(),
   label_pos = "visible",
-  cumulative = FALSE
+  cumulative = FALSE,
+  page_prefix = NA_character_
 )
 
 VarDynCutSplit(
@@ -44,7 +45,8 @@ VarDynCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  label_pos = "visible"
+  label_pos = "visible",
+  page_prefix = NA_character_
 )
 }
 \arguments{
@@ -80,6 +82,8 @@ VarDynCutSplit(
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 
 \item{cutfun}{function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation}
 
