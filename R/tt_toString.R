@@ -739,7 +739,10 @@ setMethod("get_cell_aligns", "ElementaryTable",
 setMethod("get_cell_aligns", "TableRow",
           function(obj) {
     als <- vapply(row_cells(obj), cell_align, "")
-    matrix(als, ncol = ncol(obj))
+    spns <- row_cspans(obj)
+
+    matrix(rep(als, times = spns),
+           ncol = ncol(obj))
 })
 
 #' @rdname gfc

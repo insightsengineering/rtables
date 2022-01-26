@@ -813,11 +813,12 @@ setGeneric("spanned_values", function(obj) standardGeneric("spanned_values"))
 #' @rdname int_methods
 setMethod("spanned_values", "TableRow",
           function(obj) {
-    sp = row_cspans(obj)
-    rvals = row_values(obj)
-    unlist(mapply(function(v, s) rep(list(v), times = s),
-                  v = rvals, s = sp),
-           recursive = FALSE)
+    ## sp = row_cspans(obj)
+    ## rvals = row_values(obj)
+    ## unlist(mapply(function(v, s) rep(list(v), times = s),
+    ##               v = rvals, s = sp),
+    ##        recursive = FALSE)
+    rawvalues(spanned_cells(obj))
 })
 
 #' @rdname int_methods
@@ -833,7 +834,8 @@ setMethod("spanned_cells", "TableRow",
           function(obj) {
     sp = row_cspans(obj)
     rvals = row_cells(obj)
-    unlist(mapply(function(v, s) rep(list(v), times = s)),
+    unlist(mapply(function(v, s) rep(list(v), times = s),
+                  v = rvals, s = sp),
            recursive = FALSE)
 })
 #' @rdname int_methods
