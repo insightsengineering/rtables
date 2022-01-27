@@ -216,6 +216,8 @@ test_that("alignment works", {
 
 test_that("Various Printing things work", {
 
+    txtcon <- textConnection("printoutput", "w")
+    sink(txtcon)
     lyt <- make_big_lyt()
 
     ## ensure print method works for predata layout
@@ -225,6 +227,30 @@ test_that("Various Printing things work", {
 
     table_structure(tab, detail = "subtable") ##treestruct(tab)
 
+    ## this is not intended to be a valid layout, it just
+    ## tries to hit every type of split for the print machinery
+    splvec <- rtables:::SplitVector(lst = list(##rtables:::NULLSplit(),
+                                        rtables:::AllSplit(split_label = "MyAll"),
+                                        rtables:::RootSplit("MyRoot"),
+                                        ManualSplit(c("0", "1", "2"), label = LETTERS[1:3]),
+                                        rtables:::make_static_cut_split("x", "StaticCut", c(1, 3, 5),
+                                                                        cutlabels = LETTERS[1:3]),
+                                        rtables:::make_static_cut_split("x", "CumuStaticCut", c(1, 3, 5),
+                                                                        cutlabels = LETTERS[1:3],
+                                                                        cumulative = TRUE),
+                                        VarDynCutSplit("x", "DynCut", rtables:::qtile_cuts),
+                                        VarLevWBaselineSplit("X", "ref", split_label = "VWBaseline"),
+                                        AnalyzeColVarSplit(list(mean))))
+    splvec <- rtables:::cmpnd_last_rowsplit(splvec, AnalyzeVarSplit("x", afun = mean), AnalyzeMultiVars)
+    print(splvec)
+
+    fakelyt <- rtables:::PreDataTableLayouts(rlayout = rtables:::PreDataRowLayout(splvec),
+                                   clayout = rtables:::PreDataColLayout(splvec))
+    print(fakelyt)
+    print(rtables:::rlayout(fakelyt))
+    print(rtables:::clayout(fakelyt))
+
+
     ## pos <- TreePos()
     ## print(pos)
     print(col_info(tab))
@@ -233,5 +259,6 @@ test_that("Various Printing things work", {
     print(ctr)
     show(ctr)
     print(collect_leaves(tab)[[2]])
-    expect_true(TRUE) ## so the whole chunk isn't skipped
+    sink(NULL)
+    expect_false(any(grepl( "new..AnalyzeColVarSplit., analysis_fun =", printoutput)))
 })

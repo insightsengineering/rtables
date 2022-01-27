@@ -22,12 +22,6 @@
 \alias{split_cols,SplitVector-method}
 \alias{split_cols,PreDataTableLayouts-method}
 \alias{split_cols,ANY-method}
-\alias{cmpnd_last_colsplit}
-\alias{cmpnd_last_colsplit,NULL-method}
-\alias{cmpnd_last_colsplit,PreDataColLayout-method}
-\alias{cmpnd_last_colsplit,SplitVector-method}
-\alias{cmpnd_last_colsplit,PreDataTableLayouts-method}
-\alias{cmpnd_last_colsplit,ANY-method}
 \alias{.add_row_summary}
 \alias{.add_row_summary,PreDataTableLayouts-method}
 \alias{.add_row_summary,PreDataRowLayout-method}
@@ -238,10 +232,6 @@
 \alias{split_exargs,Split-method}
 \alias{split_exargs<-}
 \alias{split_exargs<-,Split-method}
-\alias{clayout_splits}
-\alias{clayout_splits,LayoutColTree-method}
-\alias{clayout_splits,LayoutColLeaf-method}
-\alias{clayout_splits,VTableNodeInfo-method}
 \alias{col_extra_args}
 \alias{col_extra_args,InstantiatedColumnInfo-method}
 \alias{col_extra_args,PreDataTableLayouts-method}
@@ -324,18 +314,6 @@ split_cols(lyt = NULL, spl, pos)
 \S4method{split_cols}{PreDataTableLayouts}(lyt = NULL, spl, pos)
 
 \S4method{split_cols}{ANY}(lyt = NULL, spl, pos)
-
-cmpnd_last_colsplit(lyt, spl, constructor)
-
-\S4method{cmpnd_last_colsplit}{`NULL`}(lyt, spl, constructor)
-
-\S4method{cmpnd_last_colsplit}{PreDataColLayout}(lyt, spl, constructor)
-
-\S4method{cmpnd_last_colsplit}{SplitVector}(lyt, spl, constructor)
-
-\S4method{cmpnd_last_colsplit}{PreDataTableLayouts}(lyt, spl, constructor)
-
-\S4method{cmpnd_last_colsplit}{ANY}(lyt, spl, constructor)
 
 .add_row_summary(
   lyt,
@@ -801,14 +779,6 @@ split_exargs(obj)
 split_exargs(obj) <- value
 
 \S4method{split_exargs}{Split}(obj) <- value
-
-clayout_splits(obj)
-
-\S4method{clayout_splits}{LayoutColTree}(obj)
-
-\S4method{clayout_splits}{LayoutColLeaf}(obj)
-
-\S4method{clayout_splits}{VTableNodeInfo}(obj)
 
 col_extra_args(obj, df = NULL)
 

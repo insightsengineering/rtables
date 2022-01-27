@@ -813,11 +813,6 @@ setGeneric("spanned_values", function(obj) standardGeneric("spanned_values"))
 #' @rdname int_methods
 setMethod("spanned_values", "TableRow",
           function(obj) {
-    ## sp = row_cspans(obj)
-    ## rvals = row_values(obj)
-    ## unlist(mapply(function(v, s) rep(list(v), times = s),
-    ##               v = rvals, s = sp),
-    ##        recursive = FALSE)
     rawvalues(spanned_cells(obj))
 })
 
@@ -851,15 +846,25 @@ setMethod("spanned_values<-", "TableRow",
           function(obj, value) {
     sp = row_cspans(obj)
     ## this is 3 times too clever!!!
-    splvec = cumsum(unlist(lapply(sp, function(x) c(1, rep(0, x - 1)))))
+    valindices = unlist(lapply(sp, function(x) c(TRUE, rep(FALSE, x - 1))))
 
-    rvals = lapply(split(value, splvec),
-                   function(v) {
-        if(length(v) == 1)
-            return(v)
-        stopifnot(length(unique(v)) == 1L)
-        rcell(unique(v), colspan= length(v))
+    splvec <- cumsum(valindices)
+    lapply(split(value, splvec),
+           function(v) {
+        if(length(unique(v)) > 1)
+            stop("Got more than one unique value within a span, new spanned values do not appear to match the existing spanning pattern of the row (", paste(sp, collapse = " "), ")")
     })
+    rvals <- value[valindices]
+
+    ## rvals = lapply(split(value, splvec),
+    ##                function(v) {
+    ##     if(length(v) == 1)
+    ##         return(v)
+    ##     stopifnot(length(unique(v)) == 1L)
+    ##     rcell(unique(v), colspan= length(v))
+    ## })
+    ## if(any(splvec > 1))
+    ##     rvals <- lapply(rvals, function(x) x[[1]])
     row_values(obj) = rvals
     obj
 })
@@ -1393,20 +1398,20 @@ spl_ref_group = function(obj) {
 ## XXX this is probably not thee right model for column layouts because
 ## we don't find ourselves consuming/walking a layout as a tree often
 ##
-#' @rdname int_methods
-setGeneric("clayout_splits", function(obj) standardGeneric("clayout_splits"))
-#' @rdname int_methods
-setMethod("clayout_splits", "LayoutColTree", function(obj) {
-    ##this is going to descend to the first ("leftmost") leaf
-    clayout_splits(tree_children(obj)[[1]])
-})
-#' @rdname int_methods
-setMethod("clayout_splits", "LayoutColLeaf", function(obj) {
-    pos_splits(tree_pos(obj))
-})
-#' @rdname int_methods
-setMethod("clayout_splits", "VTableNodeInfo",
-          function(obj) clayout_splits(clayout(obj)))
+## #' @rdname int_methods
+## setGeneric("clayout_splits", function(obj) standardGeneric("clayout_splits"))
+## #' @rdname int_methods
+## setMethod("clayout_splits", "LayoutColTree", function(obj) {
+##     ##this is going to descend to the first ("leftmost") leaf
+##     clayout_splits(tree_children(obj)[[1]])
+## })
+## #' @rdname int_methods
+## setMethod("clayout_splits", "LayoutColLeaf", function(obj) {
+##     pos_splits(tree_pos(obj))
+## })
+## #' @rdname int_methods
+## setMethod("clayout_splits", "VTableNodeInfo",
+##           function(obj) clayout_splits(clayout(obj)))
 
 ## XXX this seems bad. the class that is returned
 ## depends on whether we are pre or post data.
@@ -1430,7 +1435,7 @@ setGeneric("clayout", function(obj) standardGeneric("clayout"))
 #'@rdname col_accessors
 #' @exportMethod clayout
 setMethod("clayout", "VTableNodeInfo",
-          function(obj) obj@col_info@tree_layout)
+          function(obj) coltree(col_info(obj)))
 
 #'@rdname col_accessors
 #' @exportMethod clayout
@@ -1543,6 +1548,7 @@ setMethod("coltree", "PreDataTableLayouts",
 #' @export coltree
 setMethod("coltree", "PreDataColLayout",
           function(obj, df, rtpos) {
+    obj <- set_def_child_ord(obj, df)
     kids = lapply(obj, function(x) splitvec_to_coltree(df = df, splvec = x, pos = rtpos))
     if(length(kids) == 1)
         res = kids[[1]]
@@ -1787,22 +1793,29 @@ setMethod("disp_ccounts<-", "PreDataTableLayouts",
 })
 
 #' @rdname int_methods
+#' @export
 setGeneric("colcount_format", function(obj) standardGeneric("colcount_format"))
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format", "InstantiatedColumnInfo",
           function(obj) obj@columncount_format)
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format", "VTableNodeInfo",
           function(obj) colcount_format(col_info(obj)))
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format", "PreDataColLayout",
           function(obj) obj@columncount_format)
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format", "PreDataTableLayouts",
           function(obj) colcount_format(clayout(obj)))
 
 #' @rdname int_methods
+#' @export
 setGeneric("colcount_format<-", function(obj,value) standardGeneric("colcount_format<-"))
+#' @export
 #' @rdname int_methods
 setMethod("colcount_format<-", "InstantiatedColumnInfo",
           function(obj, value) {
@@ -1810,6 +1823,7 @@ setMethod("colcount_format<-", "InstantiatedColumnInfo",
     obj
 })
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format<-", "VTableNodeInfo",
           function(obj, value) {
     cinfo = col_info(obj)
@@ -1818,12 +1832,14 @@ setMethod("colcount_format<-", "VTableNodeInfo",
     obj
 })
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format<-", "PreDataColLayout",
           function(obj, value) {
     obj@columncount_format = value
     obj
 })
 #' @rdname int_methods
+#' @export
 setMethod("colcount_format<-", "PreDataTableLayouts",
           function(obj, value) {
     clyt = clayout(obj)
@@ -1969,7 +1985,11 @@ setGeneric("spl_varnames<-",
 #' @rdname int_methods
 setMethod("spl_varnames<-", "MultiVarSplit",
           function(object, value) {
+    oldvnms <- spl_varnames(object)
+    oldvlbls <- spl_varlabels(object)
     object@var_names <- value
+    if(identical(oldvnms, oldvlbls))
+        spl_varlabels(object) <- value
     object
 })
 

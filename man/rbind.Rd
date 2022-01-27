@@ -8,7 +8,7 @@
 \alias{rbind2,VTableNodeInfo,ANY-method}
 \title{rbind TableTree and related objects}
 \usage{
-rbindl_rtables(x, gap = 0, check_headers = FALSE)
+rbindl_rtables(x, gap = 0, check_headers = TRUE)
 
 \S4method{rbind}{VTableNodeInfo}(..., deparse.level = 1)
 

@@ -182,47 +182,47 @@ setMethod("split_cols", "ANY",
 
 ## no longer needed (if it ever was) AFAICT
 
-#' @rdname int_methods
-setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
-#' @rdname int_methods
-setMethod("cmpnd_last_colsplit", "NULL", function(lyt, spl, constructor) {
-    stop("no existing splits to compound with. contact the maintainer") # nocov
-})
-#' @rdname int_methods
-setMethod("cmpnd_last_colsplit", "PreDataColLayout",
-          function(lyt, spl, constructor) {
-    pos = length(lyt)
-    tmp = cmpnd_last_colsplit(lyt[[pos]], spl, constructor)
-    lyt[[pos]] = tmp
-    lyt
-})
-#' @rdname int_methods
-setMethod("cmpnd_last_colsplit", "SplitVector",
-          function(lyt, spl, constructor) {
-    pos = length(lyt)
-    lst = lyt[[pos]]
-    tmp = if(is(lst, "CompoundSplit")) {
-              spl_payload(lst) = c(spl_payload(lst), spl)
-              lst
-          } else {
-              constructor(.payload = list(lst, spl))
-          }
-    lyt[[pos]] = tmp
-    lyt
-})
+## #' @rdname int_methods
+## setGeneric("cmpnd_last_colsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_colsplit"))
+## #' @rdname int_methods
+## setMethod("cmpnd_last_colsplit", "NULL", function(lyt, spl, constructor) {
+##     stop("no existing splits to compound with. contact the maintainer") # nocov
+## })
+## #' @rdname int_methods
+## setMethod("cmpnd_last_colsplit", "PreDataColLayout",
+##           function(lyt, spl, constructor) {
+##     pos = length(lyt)
+##     tmp = cmpnd_last_colsplit(lyt[[pos]], spl, constructor)
+##     lyt[[pos]] = tmp
+##     lyt
+## })
+## #' @rdname int_methods
+## setMethod("cmpnd_last_colsplit", "SplitVector",
+##           function(lyt, spl, constructor) {
+##     pos = length(lyt)
+##     lst = lyt[[pos]]
+##     tmp = if(is(lst, "CompoundSplit")) {
+##               spl_payload(lst) = c(spl_payload(lst), spl)
+##               lst
+##           } else {
+##               constructor(.payload = list(lst, spl))
+##           }
+##     lyt[[pos]] = tmp
+##     lyt
+## })
 
-#' @rdname int_methods
-setMethod("cmpnd_last_colsplit", "PreDataTableLayouts",
-          function(lyt, spl, constructor){
-    clyt = clayout(lyt)
-    clyt = cmpnd_last_colsplit(clyt, spl, constructor)
-    clayout(lyt)= clyt
-    lyt
-})
-#' @rdname int_methods
-setMethod("cmpnd_last_colsplit", "ANY",
-          function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_colsplit to that (", class(lyt), "). contact the maintaner.")
-          )
+## #' @rdname int_methods
+## setMethod("cmpnd_last_colsplit", "PreDataTableLayouts",
+##           function(lyt, spl, constructor){
+##     clyt = clayout(lyt)
+##     clyt = cmpnd_last_colsplit(clyt, spl, constructor)
+##     clayout(lyt)= clyt
+##     lyt
+## })
+## #' @rdname int_methods
+## setMethod("cmpnd_last_colsplit", "ANY",
+##           function(lyt, spl, constructor) stop("nope. can't do cmpnd_last_colsplit to that (", class(lyt), "). contact the maintaner.")
+##           )
 
 
 
@@ -504,16 +504,20 @@ split_cols_by_multivar = function(lyt,
 }
 
 
-split_rows_by_multivar = function(lyt, vars, split_label, varlabels,
-                              format = NULL,
-                              nested = TRUE,
-                              child_labels = c("default", "visible", "hidden"),
-                              indent_mod = 0L) {
+split_rows_by_multivar = function(lyt,
+                                  vars,
+                                  split_fun = NULL,
+                                  varlabels = vars,
+                                  format = NULL,
+                                  nested = TRUE,
+                                  child_labels = c("default", "visible", "hidden"),
+                                  indent_mod = 0L) {
     child_labels = match.arg(child_labels)
-    spl = MultiVarSplit(vars = vars, split_label = split_label, varlabels,
+    spl = MultiVarSplit(vars = vars, split_label = "", varlabels,
                         split_format = format,
                         child_labels = child_labels,
-                        indent_mod = indent_mod)
+                        indent_mod = indent_mod,
+                        split_fun = split_fun)
     pos = next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 }

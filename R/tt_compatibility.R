@@ -349,7 +349,7 @@ rtablel = function (header, ..., format = NULL)
 #' @export
 #' @param gap deprecated. Ignored.
 #' @param check_headers deprecated. Ignored.
-rbindl_rtables <- function(x, gap = 0, check_headers = FALSE) {
+rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     if(!check_headers)
         warning("check_headers = FALSE is no longer supported, ignoring.")
 

@@ -57,19 +57,51 @@ treestruct <- function(obj, ind = 0L) {
 ##     invisible(NULL)
 ## }
 
-ploads_to_str = function(x, collapse = ":") {
-    if(is(x, "Split")) {
-        sapply(spl_payload(x), ploads_to_str)
-    } else if (is.list(x) && are(x, "list")) {
-        paste0(c("(", paste(sapply(x, ploads_to_str), collapse = ", "), ")"))
-    } else if(is.list(x) && are(x, "Split")) {
-        ploads_to_str(lapply(x, spl_payload))
-    } else {
-        sapply(x,
-               paste,
-               collapse = collapse)
-    }
-}
+
+setGeneric("ploads_to_str", function(x, collapse = ":") standardGeneric("ploads_to_str"))
+
+setMethod("ploads_to_str", "Split",
+          function(x, collapse = ":") {
+        paste(sapply(spl_payload(x), ploads_to_str),
+              collapse = collapse)
+})
+
+setMethod("ploads_to_str", "CompoundSplit",
+          function(x, collapse = ":") {
+    paste(sapply(spl_payload(x), ploads_to_str),
+          collapse = collapse)
+})
+
+setMethod("ploads_to_str", "list",
+          function(x, collapse = ":") {
+    stop("Please contact the maintainer")
+})
+
+setMethod("ploads_to_str", "SplitVector",
+          function(x, collapse = ":") {
+    sapply(x, ploads_to_str)
+})
+
+
+setMethod("ploads_to_str", "ANY",
+          function(x, collapse = ":") {
+    paste(x)
+})
+## ploads_to_str = function(x, collapse = ":") {
+##     if(is(x, "Split")) {
+##     } else if (is.list(x) && are(x, "list")) {
+##         paste0(c("(", paste(sapply(x, ploads_to_str), collapse = ", "), ")"))
+##     } else if(is.list(x) && are(x, "Split")) {
+##         ploads_to_str(lapply(x, spl_payload))
+##     } else if(is.list(x)) {
+##         sapply(
+
+##     } else {
+##         sapply(x,
+##                paste,
+##                collapse = collapse)
+##     }
+## }
 
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
@@ -183,7 +215,7 @@ docat_splitvec = function(object, indent = 0) {
                       nrow(tab), ncol(tab))
     } else {
 
-        plds = ploads_to_str(lapply(object, spl_payload))
+        plds = ploads_to_str(object) ##lapply(object, spl_payload))
 
         tabbrev = sapply(object, spltype_abbrev)
         msg = paste(collapse = " -> ",
