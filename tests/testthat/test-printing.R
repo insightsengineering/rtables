@@ -226,6 +226,7 @@ test_that("Various Printing things work", {
     ## treestruct(tab)
 
     table_structure(tab, detail = "subtable") ##treestruct(tab)
+    table_structure(tab, detail = "row") ##treestruct(tab)
 
     ## this is not intended to be a valid layout, it just
     ## tries to hit every type of split for the print machinery

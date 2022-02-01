@@ -204,3 +204,34 @@ test_that("Custom functions in mutlivar splits work", {
     expect_equal(ncol(tab), 7)
 
 })
+
+test_that("add_overall_level works", {
+
+
+    l <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) %>%
+        analyze("AGE")
+
+    tab <- build_table(l, DM)
+
+    lb <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = TRUE)) %>%
+        analyze("AGE")
+
+    tab_b <- build_table(lb, DM)
+
+    cvs <- cell_values(tab)
+    expect_identical(cvs[c(4, 1:3)],
+                     cell_values(tab_b))
+
+    expect_identical(cvs[[4]], mean(DM$AGE))
+
+    l2 <- basic_table() %>%
+        split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>%
+        summarize_row_groups(label_fstr = "%s (n)") %>%
+        analyze("AGE")
+
+    tab2 <- build_table(l2, DM)
+    expect_identical(c(nrow(DM), 1),
+                     cell_values(tab2)[[1]][[1]])
+})
