@@ -211,6 +211,29 @@ test_that("setters work ok", {
        tbl3[3, 1:2] <- list(CellValue(c(1, 1)), CellValue(c(1, 1)))
        matform3 <- matrix_form(tbl3)
        expect_identical(rep("1 (100.0%)", 2), matform3$strings[4, 2:3])
+
+       tbl2 <- tbl
+       tt_at_path(tbl2, c("SEX", "UNDIFFERENTIATED")) <- NULL
+       expect_equal(nrow(tbl2), 6)
+
+       tbl3 <- tbl
+       tt_at_path(tbl3, c("SEX", "UNDIFFERENTIATED", "AGE", "mean")) <- NULL
+       expect_equal(nrow(tbl3), 7)
+
+       lyt4 <- basic_table() %>%
+           split_cols_by("ARM") %>%
+           split_rows_by("SEX") %>%
+           analyze("AGE", mean)
+       tbl4 <- build_table(lyt4, DM)
+
+       tbl4[5:6,] <- list(rrow("new label"), rrow("new mean", 5, 7, 8))
+       mform4 <- matrix_form(tbl4)
+       expect_identical(mform4$strings[6,, drop = TRUE],
+                        c("new label", "", "", ""))
+       expect_identical(cell_values(tbl4)[["U.AGE.mean"]],
+                        list(5, 7, 8))
+
+
 })
 
 
@@ -296,8 +319,52 @@ test_that("insert_row_at_path works", {
 
  myrow <- rrow("whaaat", 578)
  rps <- row_paths(tab)
- expect_error(insert_row_at_path(tab, c("root", "COUNTRY"), myrow))
- expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN"), myrow))
- expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN", "AGE"), myrow))
- expect_error(insert_row_at_path(tab, rps[[1]], myrow))
+ msg <- "path must resolve fully to a non-content data row."
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY"), myrow), msg)
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN"), myrow), msg)
+ expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN", "AGE"), myrow), msg)
+ expect_error(insert_row_at_path(tab, rps[[1]], myrow), msg)
+
+ lyt4 <- basic_table() %>%
+     split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+     analyze("AGE")
+
+ tab4 <- build_table(lyt4, DM)
+
+ expect_identical(label_at_path(tab4, c("COUNTRY", "CHN")),
+                  "CHN")
+
+ label_at_path(tab4, c("COUNTRY", "CHN")) <- "China"
+
+ expect_identical(row.names(tab4),
+                  c("China", "Mean", "USA", "Mean"))
+
+ label_at_path(tab4, c("COUNTRY", "CHN", "AGE", "Mean")) <- "Age Mean"
+ expect_identical(row.names(tab4),
+                  c("China", "Age Mean", "USA", "Mean"))
+})
+
+
+test_that("bracket methods all work", {
+
+    tbl <- tt_to_export()
+
+    nrtot <- nrow(tbl)
+
+    tbl_a_white <- tbl[1:19,]
+    expect_identical(tbl[rep(c(TRUE, FALSE), c(19, nrtot-19)),],
+                     tbl_a_white)
+    expect_identical(tt_at_path(tbl_a_white, c("STRATA1", "A", "RACE", "WHITE")),
+                     tt_at_path(tbl, c("STRATA1", "A", "RACE", "WHITE")))
+
+
+    tbl_sub1 <- tbl[ 1:25, c(1, 4, 6)]
+
+    expect_identical(tbl_sub1,
+                     tbl[rep(c(TRUE, FALSE), c(25, nrtot - 25)),
+                         c(TRUE, FALSE , FALSE, TRUE, FALSE, TRUE)])
+
+    expect_identical(tbl[, c(1, 4, 6)],
+                     tbl[, c(TRUE, FALSE , FALSE, TRUE, FALSE, TRUE)])
+
 })

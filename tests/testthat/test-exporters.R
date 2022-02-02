@@ -21,16 +21,7 @@ test_that("export_as_txt works with and without pagination", {
 
 test_that("tsv roundtripping for path_enriched_df", {
 
-
-    lyt <- basic_table() %>%
-        split_cols_by("ARM") %>%
-        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
-        split_rows_by("STRATA1") %>%
-        summarize_row_groups() %>%
-        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
-        analyze(c("AGE", "BMRKR2", "COUNTRY"))
-
-    tbl2 <- build_table(lyt, ex_adsl)
+    tbl2 <- tt_to_export()
 
     df <- path_enriched_df(tbl2)
 
@@ -46,15 +37,8 @@ test_that("tsv roundtripping for path_enriched_df", {
 })
 
 test_that("export_as_pdf works", {
-    lyt <- basic_table() %>%
-        split_cols_by("ARM") %>%
-        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
-        split_rows_by("STRATA1") %>%
-        summarize_row_groups() %>%
-        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
-        analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
-    tbl <- build_table(lyt, ex_adsl)
+    tbl <- tt_to_export()
     tmpf <- tempfile(fileext = ".pdf")
 
     expect_warning(export_as_pdf(tbl, file = tmpf, width = 1, paginate = FALSE ),
@@ -95,4 +79,17 @@ test_that("flextable export works", {
 
     ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20)
     expect_equal(length(ft2), 6)
+})
+
+
+test_that("as_html smoke test", {
+
+    tmpf <- tempfile(fileext = ".html")
+
+    tbl <- tt_to_export()
+    oldo <- options(viewer = identity)
+    fl <- Viewer(tbl)
+    xml2::read_html(fl)
+    expect_true(TRUE)
+    options(oldo)
 })

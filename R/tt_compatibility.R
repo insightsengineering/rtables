@@ -385,7 +385,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     }
 
 
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_rnoot", label = "")
+    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
 
 }
 
@@ -435,7 +435,7 @@ setMethod("rbind", "VTableNodeInfo",
 #' @rdname rbind
 setMethod("rbind2", c("VTableNodeInfo", "missing"),
           function(x, y) {
-    x
+    TableTree(kids = list(x), cinfo = col_info(x), name = "rbind_root", label = "")
 })
 
 #' @exportMethod rbind2
@@ -523,6 +523,9 @@ chk_cbindable_many <- function(lst) {
         stop("Elements to be bound have differing top-left content: ",
              paste(which(!duplicated(tls)), collapse = " "))
 
+    if(all(vapply(lst, function(x) nrow(x) == 0, NA)))
+        return(TRUE)
+    
     rns <- matrix(vapply(lst, row.names, rep("", nrs[[1]])),
                   nrow = nrs[[1]])
     rnsok <- apply(rns, 1, has_one_unq)

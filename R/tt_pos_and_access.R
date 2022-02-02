@@ -238,8 +238,10 @@ setMethod("tt_at_path", "VTableTree",
     stopifnot(is(path, "character"),
               length(path) > 0,
               !anyNA(path))
+    if(identical(path[1], "root"))
+        path <- path[-1]
     ## handle pathing that hits the root split by name
-    if(obj_name(tt) == path[1])
+    if(identical(obj_name(tt), path[1]))
         path = path[-1]
     cur <- tt
     curpath <- path

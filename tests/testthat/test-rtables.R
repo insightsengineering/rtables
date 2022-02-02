@@ -118,3 +118,15 @@ test_that("test 3d format (estimate and CI)", {
   expect_equal(format_rcell(rcell(c(12.34590, 3.2359, 324.2492), "xx.xx (xx.xx - xx.xx)")), "12.35 (3.24 - 324.25)")
 
 })
+
+
+test_that("df_to_tt works", {
+
+    mttt <- df_to_tt(mtcars)
+
+    expect_identical(dim(mttt), dim(mtcars))
+    expect_identical(names(mttt), names(mtcars))
+    expect_identical(row.names(mttt), row.names(mtcars))
+    expect_equal(lapply(1:nrow(mtcars), function(i) unclass(mtcars[i,])),
+                     unname(cell_values(mttt)), check.attributes=FALSE)
+})

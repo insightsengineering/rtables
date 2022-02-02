@@ -236,6 +236,8 @@ test_that("keeping non-existent levels doesn't break internal machinery", {
 
   ## because its a factor and "ABC" isn't a real level
   expect_error(build_table(lyt, DM))
+
+  expect_error( cbind_rtables(result[-1, ], result[-3,]), "Mismatching, non-empty row names")
 })
 
 test_that("add_overall_col with no col splits works", {
@@ -380,7 +382,6 @@ test_that("newlabels works in reorder_split_levels", {
 ## https://github.com/Roche/rtables/issues/198
 test_that("no extraneous footnote attribute", {
 
-    library(rtables)
     r1 <- in_rows(
         .list = list(
             ncols = rcell(5L, "xx", label = "ncol")

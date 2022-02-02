@@ -109,3 +109,23 @@ make_big_lyt <- function() {
             analyze("VAR3", "Var3 Counts", afun = list_wrap_x(table), nested = FALSE)
         lyt
 }
+
+export_fact <- function() {
+    tbl2 <- NULL
+    function() {
+        if(is.null(tbl2)) {
+            lyt <- basic_table() %>%
+                split_cols_by("ARM") %>%
+                split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
+                split_rows_by("STRATA1") %>%
+                summarize_row_groups() %>%
+                split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
+                analyze(c("AGE", "BMRKR2", "COUNTRY"))
+
+            tbl2 <<- build_table(lyt, ex_adsl)
+        }
+        tbl2
+    }
+}
+
+tt_to_export <- export_fact()

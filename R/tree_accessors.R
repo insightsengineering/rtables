@@ -474,8 +474,10 @@ setMethod("tt_labelrow", "VTableTree",
 #' @rdname int_methods
 setGeneric("tt_labelrow<-", function(obj, value) standardGeneric("tt_labelrow<-"))
 #' @rdname int_methods
-setMethod("tt_labelrow<-", "VTableTree",
+setMethod("tt_labelrow<-", c("VTableTree", "LabelRow"),
           function(obj, value) {
+    if(no_colinfo(value))
+        col_info(value) <- col_info(obj)
     obj@labelrow = value
     obj
 })
