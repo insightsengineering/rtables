@@ -86,7 +86,7 @@
 \alias{tt_labelrow}
 \alias{tt_labelrow,VTableTree-method}
 \alias{tt_labelrow<-}
-\alias{tt_labelrow<-,VTableTree-method}
+\alias{tt_labelrow<-,VTableTree,LabelRow-method}
 \alias{labelrow_visible}
 \alias{labelrow_visible,VTableTree-method}
 \alias{labelrow_visible,LabelRow-method}
@@ -488,7 +488,7 @@ tt_labelrow(obj)
 
 tt_labelrow(obj) <- value
 
-\S4method{tt_labelrow}{VTableTree}(obj) <- value
+\S4method{tt_labelrow}{VTableTree,LabelRow}(obj) <- value
 
 labelrow_visible(obj)
 
