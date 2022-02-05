@@ -2,8 +2,8 @@ current_repo:
   repo: Roche/rtables
   host: https://github.com
 upstream_repos:
-  shajoezhu/formatable:
-    repo: shajoezhu/formatable
+  insightsengineering/formatable:
+    repo: insightsengineering/formatable
     host: https://github.com
 downstream_repos:
   insightsengineering/tern:
