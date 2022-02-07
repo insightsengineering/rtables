@@ -5,4 +5,31 @@ upstream_repos:
   insightsengineering/formatable:
     repo: insightsengineering/formatable
     host: https://github.com
-downstream_repos: {}
+downstream_repos:
+  insightsengineering/tern:
+    repo: insightsengineering/tern
+    host: https://github.com
+  insightsengineering/teal:
+    repo: insightsengineering/teal
+    host: https://github.com
+  insightsengineering/teal.devel:
+    repo: insightsengineering/teal.devel
+    host: https://github.com
+  insightsengineering/teal.modules.clinical:
+    repo: insightsengineering/teal.modules.clinical
+    host: https://github.com
+  insightsengineering/teal.modules.general:
+    repo: insightsengineering/teal.modules.general
+    host: https://github.com
+  insightsengineering/teal.modules.hermes:
+    repo: insightsengineering/teal.modules.hermes
+    host: https://github.com
+  insightsengineering/osprey:
+    repo: insightsengineering/osprey
+    host: https://github.com
+  insightsengineering/chevron:
+    repo: insightsengineering/chevron
+    host: https://github.com
+  insightsengineering/teal.osprey:
+    repo: insightsengineering/teal.osprey
+    host: https://github.com
