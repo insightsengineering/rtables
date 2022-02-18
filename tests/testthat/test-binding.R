@@ -107,6 +107,9 @@ test_that("c/rbind and top-left behave", {
     expect_identical(obj_name(rbind(tab)),
                      "rbind_root")
 
+    expect_identical(tt_at_path(rbind(tab), c("rbind_root", obj_name(tab))),
+                     tab)
+
     mform <- matrix_form(cbind_rtables(tab[0,], tab[0,]))
     expect_identical(mform$strings[1,, drop= TRUE],
                      c("",rep("all obs", 2)))

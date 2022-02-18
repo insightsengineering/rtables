@@ -353,3 +353,17 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
     res2 <- af2(iris, a = 5, b = 7)
     expect_identical(list(b=7), rtables:::rawvalues(res2))
 })
+
+test_that("list_wrap functions work", {
+
+    f1 <- list_wrap_x(summary)
+
+    expect_identical(f1(1:10),
+                     as.list(summary(1:10)))
+
+
+    infun <- function(df) summary(df[[1]])
+    f2 <- list_wrap_df(infun)
+    expect_identical(f2(mtcars),
+                     f1(mtcars[[1]]))
+})

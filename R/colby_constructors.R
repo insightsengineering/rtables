@@ -1062,42 +1062,6 @@ analyze_colvars = function(lyt, afun,
     split_rows(lyt, spl, pos)
 }
 
-#' Add ref_group comparison analysis recipe
-#'
-#' @rdname bline_analyses
-#'
-#' @details Please see the `baseline` vignette for more details.
-#'
-#' @inheritParams lyt_args
-#'
-#' @inherit split_cols_by return
-#'
-#' @author Gabriel Becker
-#'
-#' @export
-#'
-#' @examples
-#'
-#' basic_table() %>%
-#'     split_cols_by("ARM", ref_group = "B: Placebo") %>%
-#'     analyze("AGE", afun = function(x, .ref_group) {
-#'         in_rows(
-#'             "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
-#'         )
-#'     }) %>%
-#'     build_table(DM)
-analyze_against_ref_group = function(lyt, var = NA_character_,
-                                     afun,
-                                     label = if(is.na(var)) "" else var,
-                                     compfun = `-`,
-                                     format = NULL,
-                                     nested = TRUE,
-                                     indent_mod = 0L,
-                                     show_labels = c("default", "hidden", "visible")) {
-    .Defunct("analyze", msg = "use analyze with a function that takes .ref_group and .in_ref_col params instead.")
-}
-
-
 ## Add a total column at the next **top level** spot in
 ## the column layout.
 
