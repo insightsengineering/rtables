@@ -34,3 +34,10 @@ h1
 h2
 
 }
+\seealso{
+Other compatability: 
+\code{\link{rrowl}()},
+\code{\link{rrow}()},
+\code{\link{rtable}()}
+}
+\concept{compatability}

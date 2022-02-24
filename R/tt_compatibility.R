@@ -5,6 +5,7 @@
 #'
 #' @export
 #' @return A row object of the context-appropriate type (label or data)
+#' @family compatability
 #' @examples
 #'
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
@@ -46,7 +47,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
 #'
 #' @inherit rrow return
 #' @export
-#'
+#' @family compatability
 #' @examples
 #' rrowl("a", c(1,2,3), format = "xx")
 #' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
@@ -162,7 +163,7 @@ hrows_to_colinfo = function(rows) {
 #'
 #' @export
 #' @return a \code{InstantiatedColumnInfo} object.
-#'
+#' @family compatability
 #' @examples
 #'
 #' h1 <- rheader(c("A", "B", "C"))
@@ -525,7 +526,7 @@ chk_cbindable_many <- function(lst) {
 
     if(all(vapply(lst, function(x) nrow(x) == 0, NA)))
         return(TRUE)
-    
+
     rns <- matrix(vapply(lst, row.names, rep("", nrs[[1]])),
                   nrow = nrs[[1]])
     rnsok <- apply(rns, 1, has_one_unq)
@@ -789,7 +790,6 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' @inherit rbindl_rtables return
 #'
 #' @note Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
-#' @family compatability
 #' @examples
 #' o <- options(warn = 0)
 #' tbl <- basic_table() %>%

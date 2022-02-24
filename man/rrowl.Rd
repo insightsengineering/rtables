@@ -39,3 +39,10 @@ rrow("ABC", 2, 3)
 rrowl(row.name = "row 1", c(1, 2), c(3,4))
 rrow(row.name = "row 2", c(1, 2), c(3,4))
 }
+\seealso{
+Other compatability: 
+\code{\link{rheader}()},
+\code{\link{rrow}()},
+\code{\link{rtable}()}
+}
+\concept{compatability}
