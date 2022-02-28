@@ -855,9 +855,12 @@ add_overall_level = function(valname = "Overall", label = valname, extra_args = 
     }
 
 setClass("AllLevelsSentinel", contains = "character")
+
+# nocov start
 #' @export
 #' @rdname add_combo_levels
 select_all_levels = new("AllLevelsSentinel")
+# nocov end
 
 #' Add Combination Levels to split
 #' @inheritParams sf_args

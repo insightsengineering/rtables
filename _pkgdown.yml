@@ -52,7 +52,6 @@ reference:
     - analyze_colvars
     - split_cols_by_cuts 
     - add_overall_col
-    - analyze_against_ref_group
     - add_existing_table
 
   - title: Tabulation Utility Functions
@@ -84,7 +83,6 @@ reference:
     contents:
     - format_rcell
     - value_formats
-    - round_fmt
     - rtables_aligns
      
   - title: Table Structure Information

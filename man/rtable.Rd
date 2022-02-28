@@ -108,6 +108,8 @@ tbl2
 }
 \seealso{
 Other compatability: 
-\code{\link{insert_rrow}()}
+\code{\link{rheader}()},
+\code{\link{rrowl}()},
+\code{\link{rrow}()}
 }
 \concept{compatability}

@@ -2368,6 +2368,16 @@ setMethod("ref_index<-", "RefFootnote",
 
 
 
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_msg", function(obj) standardGeneric("ref_msg"))
+#' @export
+#' @rdname ref_fnotes
+setMethod("ref_msg", "RefFootnote",
+          function(obj) obj@value)
+
+
 setGeneric(".fnote_set_inner<-", function(ttrp, colpath, value) standardGeneric(".fnote_set_inner<-"))
 
 setMethod(".fnote_set_inner<-", c("TableRow", "NULL"),

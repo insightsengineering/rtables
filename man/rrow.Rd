@@ -29,3 +29,10 @@ rrow("ABC", c(1,2), c(3,2), format = "xx (xx.\%)")
 rrow("")
 
 }
+\seealso{
+Other compatability: 
+\code{\link{rheader}()},
+\code{\link{rrowl}()},
+\code{\link{rtable}()}
+}
+\concept{compatability}

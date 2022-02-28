@@ -387,7 +387,7 @@ format_fnote_note <- function(fn) {
     }
 
     if(is(fn, "RefFootnote")) {
-        paste0("{", fn@index, "} - ", fn@value)
+        paste0("{", ref_index(fn), "} - ", ref_msg(fn))
     } else {
         NULL
     }

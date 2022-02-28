@@ -130,3 +130,21 @@ test_that("df_to_tt works", {
     expect_equal(lapply(1:nrow(mtcars), function(i) unclass(mtcars[i,])),
                      unname(cell_values(mttt)), check.attributes=FALSE)
 })
+
+test_that("non-ref-rcell works", {
+
+    expect_identical(format_rcell(non_ref_rcell(5, TRUE)), "")
+    expect_identical(format_rcell(non_ref_rcell(5, FALSE)), "5")
+})
+
+test_that("rtablel works", {
+
+    tbl <- rtablel(c("hi", "there"),
+                   list(rrow("", 5, 6), rrow("B", 6, "")),
+                   list(rrow("C", 7, 8), rrow("what", 10, 11)))
+    expect_identical(dim(tbl), c(4L, 2L))
+
+
+    expect_identical(unname(unlist(cell_values(tbl))),
+                     c("5", "6", "6", "", "7", "8", "10", "11"))
+})
