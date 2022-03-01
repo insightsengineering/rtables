@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2021-10-06
-Version: 0.4.1
+Version: 0.4.1.0001
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -15,7 +15,7 @@ Description: Reporting tables often have structure that goes beyond simple recta
   or grouping of data in row and column dimensions, cells containing multiple values,
   and the concept of contextual summary computations. A convenient pipe-able interface is provided
   for declaring table layouts and the corresponding computations, and then applying them to data.
-Depends: methods, magrittr, R (>= 2.10)
+Depends: methods, magrittr, formatable (>= 0.1.0.0001), R (>= 2.10)
 Imports:
   stats,
   htmltools,
@@ -50,8 +50,6 @@ Collate:
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
-    'prune.R'
-    'rtable.R'
     'simple_analysis.R'
     'split_funs.R'
     'summary.R'
@@ -59,7 +57,6 @@ Collate:
     'tt_afun_utils.R'
     'tt_compare_tables.R'
     'tt_compatibility.R'
-    'tt_deprecated.R'
     'tt_dotabulation.R'
     'tt_paginate.R'
     'tt_pos_and_access.R'
@@ -68,7 +65,6 @@ Collate:
     'tt_test_afuns.R'
     'tt_toString.R'
     'tt_export.R'
-    'labels.R'
     'index_footnotes.R'
     'tt_from_df.R'
     'zzz_constants.R'

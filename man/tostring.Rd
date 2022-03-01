@@ -37,5 +37,4 @@ l <- basic_table() \%>\%
 tbl <- build_table(l, iris2)
 
 cat(toString(tbl, col_gap = 3))
-cat(toString(tbl, col_gap = 3, linesep = "+-"))
 }

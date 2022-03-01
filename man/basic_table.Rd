@@ -43,7 +43,7 @@ lyt <- basic_table(title = "Title of table", subtitles = c("a number", "of subti
                    prov_footer = paste("test.R program, executed at", Sys.time())) \%>\%
   split_cols_by("ARM") \%>\%
   analyze("AGE", mean)
-  
+
 build_table(lyt, DM)
 
 }

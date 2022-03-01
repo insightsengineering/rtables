@@ -12,7 +12,8 @@ in_rows(
   .formats = NULL,
   .indent_mods = NULL,
   .cell_footnotes = list(NULL),
-  .row_footnotes = list(NULL)
+  .row_footnotes = list(NULL),
+  .aligns = NULL
 )
 }
 \arguments{
@@ -31,15 +32,14 @@ in_rows(
 \item{.cell_footnotes}{list. Referential footnote messages to be associated by name with \emph{cells}}
 
 \item{.row_footnotes}{list. Referential footnotes messages to be associated by name with \emph{rows}}
+
+\item{.aligns}{character or NULL. Alignments for the cells}
 }
 \value{
 an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
 }
 \description{
 define the cells that get placed into multiple rows in \code{afun}
-}
-\note{
-currently the \code{.name} argument is not used
 }
 \examples{
 in_rows(1, 2, 3, .names = c("a", "b", "c"))

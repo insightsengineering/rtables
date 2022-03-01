@@ -7,9 +7,11 @@ test_that("remove_split_levels works as expected with factor variables", {
   l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
-    summarize_row_groups()
+    summarize_row_groups(format = "xx")
 
   tab <- build_table(l, DM)
+  expect_identical(unname(unlist(cell_values(tab)[[1]])),
+                   c(28L, 24L, 27L))
 
   expect_false("ASIAN" %in% row.names(tab))
 })
@@ -114,6 +116,37 @@ test_that("trim_levels_to_map split function works", {
                           c("ARM", "C: Combination", "RACE", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER")))
 
 
+    data <- data.frame(LBCAT = c(rep("a", 4), rep("b", 4)),
+                       PARAM = c(rep("param1", 4), rep("param2", 4)),
+                       VISIT = rep(c("V1", "V2"), 4),
+                       ABN = rep(c("H", "L"), 4),
+                       stringsAsFactors = TRUE)
+
+    map <- data.frame(LBCAT = c(rep("a", 4), rep("b", 4)),
+                      PARAM = c(rep("param1", 4), rep("param2", 4)),
+                      VISIT = rep(c("V1", "V1", "V2", "V2"), 2),
+                      ABN = rep(c("H", "L"), 4),
+                      stringsAsFactors = FALSE)
+
+    lyt4 <- basic_table() %>%
+        split_rows_by("LBCAT", split_fun = trim_levels_to_map(map = map)) %>%
+        split_rows_by("PARAM", split_fun = trim_levels_to_map(map = map)) %>%
+        split_rows_by("VISIT", split_fun = trim_levels_to_map(map = map)) %>%
+        analyze("ABN")
+
+    tbl4 <- build_table(lyt4, df = data)
+    rpths4 <- row_paths(tbl4)
+    expect_identical(rpths4[[7]],
+                     c("LBCAT", "a", "PARAM", "param1", "VISIT", "V2", "ABN", "H"))
+
+    expect_equal(unlist(cell_values(tbl4, rpths4[[7]]), use.names = FALSE), 0)
+    expect_identical(rpths4[[13]],
+                     c("LBCAT", "b", "PARAM", "param2", "VISIT", "V1", "ABN", "L"))
+
+    expect_equal(unlist(cell_values(tbl4, rpths4[[13]]), use.names = FALSE), 0)
+
+    expect_equal(length(rpths4), 16)
+
 })
 
 test_that("trim_levels_in_group works", {
@@ -145,4 +178,60 @@ test_that("trim_levels_in_group works", {
     expect_identical(as.vector(compare_rtables(tbl1, tbl2)),
                      rep(".", nrow(tbl1)))
 
+})
+
+
+test_that("Custom functions in mutlivar splits work", {
+
+    uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+        ret <- do_base_split(spl, df, vals, labels, trim)
+        if(NROW(df) == 0)
+            ret <- lapply(ret, function(x) x[1])
+        ret
+    }
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
+                               varlabels = c("N", "E", "BMR1"),
+                               split_fun = uneven_splfun) %>%
+        analyze_colvars(list(USUBJID = function(x, ...) length(unique(x)),
+                             AESEQ = max,
+                             BMRKR1 = mean))
+
+    tab <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+
+    expect_equal(ncol(tab), 7)
+
+})
+
+test_that("add_overall_level works", {
+
+
+    l <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) %>%
+        analyze("AGE")
+
+    tab <- build_table(l, DM)
+
+    lb <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = TRUE)) %>%
+        analyze("AGE")
+
+    tab_b <- build_table(lb, DM)
+
+    cvs <- cell_values(tab)
+    expect_identical(cvs[c(4, 1:3)],
+                     cell_values(tab_b))
+
+    expect_identical(cvs[[4]], mean(DM$AGE))
+
+    l2 <- basic_table() %>%
+        split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>%
+        summarize_row_groups(label_fstr = "%s (n)") %>%
+        analyze("AGE")
+
+    tab2 <- build_table(l2, DM)
+    expect_identical(c(nrow(DM), 1),
+                     cell_values(tab2)[[1]][[1]])
 })

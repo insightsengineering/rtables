@@ -40,7 +40,10 @@ lyt_args(
   var_labels,
   cvar,
   table_names,
-  topleft
+  topleft,
+  align,
+  page_by,
+  page_prefix
 )
 }
 \arguments{
@@ -60,7 +63,7 @@ lyt_args(
 
 \item{split_format}{FormatSpec. Default format associated with the split being created.}
 
-\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -116,6 +119,12 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+
+\item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
+
+\item{page_by}{logical(1). Should pagination be forced between different children resulting form this split.}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 }
 \value{
 NULL (this is an argument template dummy function)

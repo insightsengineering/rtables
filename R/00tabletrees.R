@@ -106,7 +106,8 @@ setClass("Split", contains = "VIRTUAL",
              extra_args = "list",
              indent_modifier = "integer",
              content_indent_modifier = "integer",
-             content_extra_args = "list"))
+             content_extra_args = "list",
+             page_title_prefix = "character"))
 
 
 setClass("CustomizableSplit", contains = "Split",
@@ -139,7 +140,8 @@ VarLevelSplit <- function(var,
                          label_pos = c("topleft", "hidden", "visible"),
                          cindent_mod = 0L,
                          cvar = "",
-                         cextra_args = list()
+                         cextra_args = list(),
+                         page_prefix = NA_character_
                          ) {
     child_labels <- match.arg(child_labels)
     if (is.null(labels_var))
@@ -159,9 +161,12 @@ VarLevelSplit <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix
         )
 }
+
+## XXX TODO not sure if this class is needed for anything???
 setClass("NULLSplit", contains = "Split")
 
 NULLSplit <- function(...) {
@@ -205,7 +210,8 @@ AllSplit <- function(split_label = "",
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = "hidden",
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = NA_character_)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -243,7 +249,8 @@ ManualSplit <- function(levels, label, name = "manual",
                        cindent_mod = 0L,
                        cvar = "",
                        cextra_args = list(),
-                       label_pos = "visible") {
+                       label_pos = "visible",
+                       page_prefix = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     new("ManualSplit",
         split_label = label,
@@ -254,13 +261,14 @@ ManualSplit <- function(levels, label, name = "manual",
         indent_modifier = 0L,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
-        split_label_position = label_pos)
+        split_label_position = label_pos,
+        page_title_prefix = page_prefix)
 
 }
 
 
 ## splits across which variables are being analynzed
-setClass("MultiVarSplit", contains = "Split",
+setClass("MultiVarSplit", contains = "CustomizableSplit", ##"Split",
          representation(var_labels = "character",
                         var_names = "character"),
          validity = function(object) {
@@ -310,7 +318,9 @@ MultiVarSplit <- function(vars,
                          cindent_mod = 0L,
                          cvar = "",
                          cextra_args = list(),
-                         label_pos = "visible") {
+                         label_pos = "visible",
+                         split_fun = NULL,
+                         page_prefix = NA_character_) {
     ## no topleft allowed
     label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels = match.arg(child_labels)
@@ -334,7 +344,9 @@ MultiVarSplit <- function(vars,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        split_fun = split_fun,
+        page_title_prefix = page_prefix)
 }
 
 
@@ -346,64 +358,61 @@ MultiVarSplit <- function(vars,
 setClass("VarStaticCutSplit", contains = "Split",
          representation(cuts = "numeric",
                         cut_labels = "character"))
+## #' @rdname cutsplits
+## #' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
+## #' @export
+## VarStaticCutSplit <- function(var,
+##                              split_label = var,
+##                              cuts,
+##                              cutlabels = NULL,
+##                              cfun = NULL,
+##                              cformat = NULL,
+##                              split_format = NULL,
+##                              split_name = var,
+##                              child_labels = c("default", "visible", "hidden"),
+##                              extra_args = list(),
+##                              indent_mod = 0L,
+##                              cindent_mod = 0L,
+##                              cvar = "",
+##                              cextra_args = list(),
+##                              label_pos = "visible") {
+##     label_pos <- match.arg(label_pos, label_pos_values)
+##     child_labels = match.arg(child_labels)
+##     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+##        is.character(cuts[[2]]) &&
+##        length(cuts[[1]]) == length(cuts[[2]])) {
+##         cutlabels <- cuts[[2]]
+##         cuts <- cuts[[1]]
+##     }
+##     if (is.unsorted(cuts, strictly = TRUE))
+##         stop("invalid cuts vector. not sorted unique values.")
+
+##     if (is.null(cutlabels) && !is.null(names(cuts)))
+##         cutlabels <- names(cuts)[-1] ## XXX is this always right?
+##     new("VarStaticCutSplit", payload = var,
+##         split_label = split_label,
+##         cuts = cuts,
+##         cut_labels = cutlabels,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         name = split_name,
+##         label_children = .labelkids_helper(child_labels),
+##         extra_args = extra_args,
+##         indent_modifier = as.integer(indent_mod),
+##         content_indent_modifier = as.integer(cindent_mod),
+##         content_var = cvar,
+##         split_label_position = label_pos,
+##         content_extra_args = cextra_args)
+## }
+
+#' Create static cut or static cumulative cut split
+#' @inheritParams lyt_args
+#' @inheritParams constr_args
 #' @rdname cutsplits
-#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
-#' @export
-VarStaticCutSplit <- function(var,
-                             split_label = var,
-                             cuts,
-                             cutlabels = NULL,
-                             cfun = NULL,
-                             cformat = NULL,
-                             split_format = NULL,
-                             split_name = var,
-                             child_labels = c("default", "visible", "hidden"),
-                             extra_args = list(),
-                             indent_mod = 0L,
-                             cindent_mod = 0L,
-                             cvar = "",
-                             cextra_args = list(),
-                             label_pos = "visible") {
-    label_pos <- match.arg(label_pos, label_pos_values)
-    child_labels = match.arg(child_labels)
-    if(is.list(cuts) && is.numeric(cuts[[1]]) &&
-       is.character(cuts[[2]]) &&
-       length(cuts[[1]]) == length(cuts[[2]])) {
-        cutlabels <- cuts[[2]]
-        cuts <- cuts[[1]]
-    }
-    if (is.unsorted(cuts, strictly = TRUE))
-        stop("invalid cuts vector. not sorted unique values.")
-
-    if (is.null(cutlabels) && !is.null(names(cuts)))
-        cutlabels <- names(cuts)[-1] ## XXX is this always right?
-    new("VarStaticCutSplit", payload = var,
-        split_label = split_label,
-        cuts = cuts,
-        cut_labels = cutlabels,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        name = split_name,
-        label_children = .labelkids_helper(child_labels),
-        extra_args = extra_args,
-        indent_modifier = as.integer(indent_mod),
-        content_indent_modifier = as.integer(cindent_mod),
-        content_var = cvar,
-        split_label_position = label_pos,
-        content_extra_args = cextra_args)
-}
-
-
-
-#' @rdname cutsplits
-#' @exportClass CumulativeCutSplit
-
-setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
-
-#' @rdname cutsplits
-#' @export
-CumulativeCutSplit <- function(var,
+#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for \code{make_static_cut_split},
+#' or a \code{VarDynCutSplit} object for \code{VarDynCutSplit()}
+make_static_cut_split <- function(var,
                              split_label,
                              cuts,
                              cutlabels = NULL,
@@ -417,7 +426,11 @@ CumulativeCutSplit <- function(var,
                              cindent_mod = 0L,
                              cvar = "",
                              cextra_args = list(),
-                             label_pos = "visible") {
+                             label_pos = "visible",
+                             cumulative = FALSE,
+                             page_prefix = NA_character_) {
+    cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
+
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     if(is.list(cuts) && is.numeric(cuts[[1]]) &&
@@ -431,7 +444,8 @@ CumulativeCutSplit <- function(var,
 
     if (is.null(cutlabels) && !is.null(names(cuts)))
         cutlabels <- names(cuts)[-1] ## XXX is this always right?
-    new("CumulativeCutSplit", payload = var,
+
+    new(cls, payload = var,
         split_label = split_label,
         cuts = cuts,
         cut_labels = cutlabels,
@@ -445,8 +459,97 @@ CumulativeCutSplit <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix)
+
 }
+    ## ret <- VarStaticCutSplit(var = var,
+    ##                          split_label = split_label,
+    ##                          cuts = cuts,
+    ##                          cutlabels = cutlabels,
+    ##                          cfun = cfun,
+    ##                          cformat = cformat,
+    ##                          split_format = split_format,
+    ##                          split_name = split_name,
+    ##                          child_labels = match.arg(child_labels),
+    ##                          extra_args = extra_args,
+    ##                          indent_mod = indent_mod,
+    ##                          cindent_mod = cindent_mod,
+    ##                          cvar = cvar,
+    ##                          cextra_args = cextra_args,
+    ##                          label_pos = label_pos)
+
+
+
+#' @rdname cutsplits
+#' @exportClass CumulativeCutSplit
+
+setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
+
+## ## make_static_cut_split with cumulative=TRUE is the constructor for this class
+## #' @rdname cutsplits
+## #' @export
+## CumulativeCutSplit <- function(var,
+##                              split_label,
+##                              cuts,
+##                              cutlabels = NULL,
+##                              cfun = NULL,
+##                              cformat = NULL,
+##                              split_format = NULL,
+##                              split_name = var,
+##                              child_labels = c("default", "visible", "hidden"),
+##                              extra_args = list(),
+##                              indent_mod = 0L,
+##                              cindent_mod = 0L,
+##                              cvar = "",
+##                              cextra_args = list(),
+##                              label_pos = "visible") {
+##     ret <- VarStaticCutSplit(var = var,
+##                              split_label = split_label,
+##                              cuts = cuts,
+##                              cutlabels = cutlabels,
+##                              cfun = cfun,
+##                              cformat = cformat,
+##                              split_format = split_format,
+##                              split_name = split_name,
+##                              child_labels = match.arg(child_labels),
+##                              extra_args = extra_args,
+##                              indent_mod = indent_mod,
+##                              cindent_mod = cindent_mod,
+##                              cvar = cvar,
+##                              cextra_args = cextra_args,
+##                              label_pos = label_pos)
+##     as(ret, "CumulativeCutSplit")
+
+##     ## label_pos <- match.arg(label_pos, label_pos_values)
+##     ## child_labels = match.arg(child_labels)
+##     ## if(is.list(cuts) && is.numeric(cuts[[1]]) &&
+##     ##    is.character(cuts[[2]]) &&
+##     ##    length(cuts[[1]]) == length(cuts[[2]])) {
+##     ##     cutlabels <- cuts[[2]]
+##     ##     cuts <- cuts[[1]]
+##     ## }
+##     ## if (is.unsorted(cuts, strictly = TRUE))
+##     ##     stop("invalid cuts vector. not sorted unique values.")
+
+##     ## if (is.null(cutlabels) && !is.null(names(cuts)))
+##     ##     cutlabels <- names(cuts)[-1] ## XXX is this always right?
+##     ## new("CumulativeCutSplit", payload = var,
+##     ##     split_label = split_label,
+##     ##     cuts = cuts,
+##     ##     cut_labels = cutlabels,
+##     ##     content_fun = cfun,
+##     ##     content_format = cformat,
+##     ##     split_format = split_format,
+##     ##     name = split_name,
+##     ##     label_children = .labelkids_helper(child_labels),
+##     ##     extra_args = extra_args,
+##     ##     indent_modifier = as.integer(indent_mod),
+##     ##     content_indent_modifier = as.integer(cindent_mod),
+##     ##     content_var = cvar,
+##     ##     split_label_position = label_pos,
+##     ##     content_extra_args = cextra_args)
+## }
 
 
 
@@ -478,7 +581,8 @@ VarDynCutSplit <- function(var,
                           cindent_mod = 0L,
                           cvar = "",
                           cextra_args = list(),
-                          label_pos = "visible") {
+                          label_pos = "visible",
+                          page_prefix = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
@@ -496,7 +600,8 @@ VarDynCutSplit <- function(var,
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        page_title_prefix = page_prefix)
 }
 
 
@@ -557,7 +662,8 @@ AnalyzeVarSplit <- function(var,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_position = label_pos,
-        content_var = cvar) ## no content_extra_args
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## no content_extra_args
 }
 
 #' Define a subset tabulation/analysis
@@ -594,7 +700,8 @@ AnalyzeColVarSplit <- function(afun,
         indent_modifier = as.integer(indent_mod),
         content_indent_modifier = 0L,
         var_label_position = label_pos,
-        content_var = cvar) ## no content_extra_args
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## no content_extra_args
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -730,7 +837,8 @@ AnalyzeMultiVars <- function(var,
                    ## modifier applied on splits in payload
                    indent_modifier = 0L,
                    content_indent_modifier = 0L,
-                   content_var = cvar)
+                   content_var = cvar,
+                   page_title_prefix = NA_character_)
      }
     ret
 }
@@ -771,49 +879,49 @@ setClassUnion("VarOrFactory", c("function", "character"))
 ## of the data to be accessible  from all of the children
 ## so that they can perform the comparison
 
-setClass("MultiSubsetCompSplit", contains = "VCompSplit",
-         representation(subset1_gen = "VarOrFactory",
-                        subset2_gen = "VarOrFactory"))
+## setClass("MultiSubsetCompSplit", contains = "VCompSplit",
+##          representation(subset1_gen = "VarOrFactory",
+##                         subset2_gen = "VarOrFactory"))
 
-MultiSubsetCompSplit <- function(factory1, factory2, label_fstr = "%s - %s",
-                           split_label = "",
-                           comparison = `-`,
-                           ## not needed i think...
-                           cfun = NULL, cformat = NULL, split_format = NULL) {
-    new("MultiSubsetCompSplit",
-        subset1_gen = factory1,
-        subset2_gen = factory2,
-        label_format = label_fstr,
-        split_label = split_label,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        comparison_func = comparison)
-}
+## MultiSubsetCompSplit <- function(factory1, factory2, label_fstr = "%s - %s",
+##                            split_label = "",
+##                            comparison = `-`,
+##                            ## not needed i think...
+##                            cfun = NULL, cformat = NULL, split_format = NULL) {
+##     new("MultiSubsetCompSplit",
+##         subset1_gen = factory1,
+##         subset2_gen = factory2,
+##         label_format = label_fstr,
+##         split_label = split_label,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         comparison_func = comparison)
+## }
 
-setClass("SubsetSplit", contains = "Split",
-         representation(subset_gen = "VarOrFactory",
-                        vs_all = "logical",
-                        vs_non = "logical",
-                        child_order = "character"),
-         validity = function(object) object@vs_all || object@vs_non,
-         prototype = prototype(vs_all = TRUE,
-                               vs_non = FALSE))
+## setClass("SubsetSplit", contains = "Split",
+##          representation(subset_gen = "VarOrFactory",
+##                         vs_all = "logical",
+##                         vs_non = "logical",
+##                         child_order = "character"),
+##          validity = function(object) object@vs_all || object@vs_non,
+##          prototype = prototype(vs_all = TRUE,
+##                                vs_non = FALSE))
 
-SubsetSplit <- function(subset, vall = TRUE, vnon = FALSE,
-                       order = c("subset", if (vnon) "non", if (vall) "all"),
-                       split_label,
-                       cfun = NULL, cformat = NULL, split_format = NULL) {
-    new("SubsetSplit",
-        split_label = split_label,
-        content_fun = cfun,
-        content_format = cformat,
-        split_format = split_format,
-        subset_gen = subset,
-        vs_all = vall,
-        vs_non = vnon,
-        child_order = order)
-}
+## SubsetSplit <- function(subset, vall = TRUE, vnon = FALSE,
+##                        order = c("subset", if (vnon) "non", if (vall) "all"),
+##                        split_label,
+##                        cfun = NULL, cformat = NULL, split_format = NULL) {
+##     new("SubsetSplit",
+##         split_label = split_label,
+##         content_fun = cfun,
+##         content_format = cformat,
+##         split_format = split_format,
+##         subset_gen = subset,
+##         vs_all = vall,
+##         vs_non = vnon,
+##         child_order = order)
+## }
 
 ### This is HARD. do we want this to inherit from VCompSplit
 ### or VarLevelSplit????
@@ -862,7 +970,8 @@ VarLevWBaselineSplit <- function(var,
         ## this is always a column split
         indent_modifier = 0L,
         content_indent_modifier = 0L,
-        content_var = cvar)
+        content_var = cvar,
+        page_title_prefix = NA_character_) ## so long as this is columnspace only
 }
 
 
@@ -986,8 +1095,6 @@ setClass("LayoutColTree", contains = "LayoutAxisTree",
                         col_footnotes = "list"))
 
 setClass("LayoutColLeaf", contains = "LayoutAxisLeaf")
-setClass("LayoutRowTree", contains = "LayoutAxisTree")
-setClass("LayoutRowLeaf", contains = "LayoutAxisLeaf")
 LayoutColTree <- function(lev = 0L,
                          name = obj_name(spl),
                          label = obj_label(spl),
@@ -1001,24 +1108,20 @@ LayoutColTree <- function(lev = 0L,
                          ## sub = expression(TRUE),
                          ## svar = NA_character_,
     ## slab = NA_character_) {
+    if(is.null(spl))
+        stop("LayoutColTree constructor got NULL for spl. This should never happen. Please contact the maintainer.") # nocov
     footnotes <- make_ref_value(footnotes)
-    if (!is.null(spl)) {
-        new("LayoutColTree", level = lev, children = kids,
-            name = .chkname(name),
-            summary_func = summary_function,
-            pos_in_tree = tpos,
-            split = spl,
-            ## subset = sub,
-            ## splitvar = svar,
-            label = label,
-            display_columncounts = disp_colcounts,
-            columncount_format = colcount_format,
-            col_footnotes = footnotes)
-    } else {
-        stop("problema my manitar")
-        LayoutColLeaf(lev = lev, label = label, tpos = tpos,
-                      name = .chkname(name))
-    }
+    new("LayoutColTree", level = lev, children = kids,
+        name = .chkname(name),
+        summary_func = summary_function,
+        pos_in_tree = tpos,
+        split = spl,
+        ## subset = sub,
+        ## splitvar = svar,
+        label = label,
+        display_columncounts = disp_colcounts,
+        columncount_format = colcount_format,
+        col_footnotes = footnotes)
 }
 
 LayoutColLeaf <- function(lev = 0L, name = label, label = "", tpos = TreePos()#,
@@ -1033,15 +1136,6 @@ LayoutColLeaf <- function(lev = 0L, name = label, label = "", tpos = TreePos()#,
         )
 }
 
-LayoutRowTree <- function(lev = 0L, kids = list()) {
-    new("LayoutRowTree", level = lev, children = kids)
-}
-
-LayoutRowLeaf <- function(lev = 0L, label = "",
-                       pos) {##, sub, n) {
-    new("LayoutRowLeaf", level = lev, label = label,
-        pos_in_tree = pos)##subset = sub, N_count = n)
-}
 
 
 ## Instantiated column info class
@@ -1263,18 +1357,20 @@ setClass("VTitleFooter", contains = "VIRTUAL",
 setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitleFooter"),
          representation(children = "list",
                         rowspans = "data.frame",
-                        labelrow = "LabelRow"
+                        labelrow = "LabelRow",
+                        page_titles = "character"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
+## covered because it's ElementaryTable's validity method but covr misses it
+## nocov start
 etable_validity  <- function(object) {
     kids <- tree_children(object)
     all(sapply(kids,
                function(k) {
                    (is(k, "DataRow") || is(k, "ContentRow"))}))###  &&
-    ##                    identical(k@col_info, object@col_info)
-    ## }))
 }
+## nocov end
 
 #' TableTree classes
 #' @exportClass ElementaryTable
@@ -1382,7 +1478,8 @@ ttable_validity <- function(object) {
 #' @rdname tabclasses
 #' @exportClass TableTree
 setClass("TableTree", contains = c("VTableTree"),
-         representation(content = "ElementaryTable"
+         representation(content = "ElementaryTable",
+                        page_title_prefix = "character"
                         ),
          validity = ttable_validity)
 
@@ -1405,7 +1502,8 @@ TableTree <- function(kids = list(),
                      title = "",
                      subtitles = character(),
                      main_footer = character(),
-                     prov_footer = character()) {
+                     prov_footer = character(),
+                     page_title = NA_character_) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)
@@ -1422,6 +1520,8 @@ TableTree <- function(kids = list(),
     if (no_colinfo(labelrow))
         col_info(labelrow) <- cinfo
     if ((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
+        if(!is.na(page_title))
+            stop("Got a page title prefix for an Elementary Table")
         ## constructor takes care of recursive format application
         ElementaryTable(kids = kids,
                         name = .chkname(name),
@@ -1449,7 +1549,8 @@ TableTree <- function(kids = list(),
                   main_title = title,
                   subtitles = subtitles,
                   main_footer = main_footer,
-                  provenance_footer = prov_footer)
+                  provenance_footer = prov_footer,
+                  page_title_prefix = page_title)
         tab <- set_format_recursive(tab, format, FALSE)
         tab
     }
@@ -1623,7 +1724,8 @@ RefFootnote = function(note, index = NA_integer_) {
 ## colspan: column span info for cell
 ## label: row label to be used for parent row
 ## indent_mod: indent modifier to be used for parent row
-CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL)  {
+CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL,
+                      align = NULL)  {
 
     if (is.null(colspan))
         colspan <- 1L
@@ -1639,7 +1741,9 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod
     if(!is.list(footnotes))
         footnotes <- lapply(footnotes, RefFootnote)
     ret <- structure(list(val), format = format, colspan = colspan, label = label,
-              indent_mod = indent_mod, footnotes = footnotes, class = "CellValue")
+                     indent_mod = indent_mod, footnotes = footnotes,
+                     align = align,
+                     class = "CellValue")
 }
 
 
@@ -1697,7 +1801,7 @@ print.RowsVerticalSection <- function(x, ...) {
   print(data.frame(
     row_name = attr(x, "row_names"),
     formatted_cell = vapply(x, format_rcell, character(1)),
-    indent_mod = vapply(x, indent_mod, numeric(1)),
+    indent_mod = indent_mod(x), ##vapply(x, indent_mod, numeric(1)),
     row_label = attr(x, "row_labels"),
     stringsAsFactors = FALSE,
     row.names = NULL

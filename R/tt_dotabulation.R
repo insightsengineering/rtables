@@ -36,6 +36,9 @@ match_extra_args = function(f, .N_col, .N_total, .var, .ref_group = NULL, .ref_f
     !is.null(formals(f)) && names(formals(f))[1] == "df"
 }
 
+#' @noRd
+#' @return a RowsVerticalSection object representing the k x 1 section of the table
+#' being generated, with k the number of rows the analysis function generates
 gen_onerv = function(csub, col, count, cextr, dfpart, func, totcount, splextra,
                      takesdf = .takes_df(func),
                      baselinedf,
@@ -106,8 +109,12 @@ strip_multivar_suffix <- function(x) {
     gsub( "\\._\\[\\[[0-9]\\]\\]_\\.$", "", x)
 }
 
+
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
+#' @noRd
+#' @return A list of m RowsVerticalSection objects, one for each
+#' (leaf) column in the table.
 gen_rowvalues = function(dfpart,
                          datcol,
                          cinfo,
@@ -277,25 +284,16 @@ gen_rowvalues = function(dfpart,
 
     ## look if we got labels, if not apply the
     ## default row labels
+    ## this is guaranteed to be a RowsVerticalSection object.
     rv1col = rawvals[[maxind]]
-    if(is(rv1col, "RowsVerticalSection")) {
-        labels <- value_labels(rv1col)
-    } else if(is(rv1col, "CellValue"))
-        labels = obj_label(rv1col)
-    else if(are(rv1col, "CellValue"))
-        labels = unlist(value_labels(rv1col))
-    else if (!is.null(names(rv1col)))
-        labels = names(rv1col)
-    else
-        labels = NULL
-
-
+    if(!is(rv1col, "RowsVerticalSection"))
+        stop("gen_rowvalues appears to have generated something that was not a RowsVerticalSection object. Please contact the maintainer.") # nocov
+    labels <- value_labels(rv1col)
 
     ncrows = max(unqlens)
     if(ncrows == 0)
         return(list())
     stopifnot(ncrows > 0)
-
 
     if(is.null(labels)) {
         if(length(rawvals[[maxind]]) == length(defrowlabs))
@@ -305,17 +303,8 @@ gen_rowvalues = function(dfpart,
     }
 
     rfootnotes <- rep(list(list(), length(rv1col)))
-    if(is(rv1col, "RowsVerticalSection")) {
-        nms <- value_names(rv1col)
-        rfootnotes <- row_footnotes(rv1col)
-    } else if(!is.null(names(rv1col))) {
-        nms = names(rv1col)
-    } else if(length(labels) > 0 && all(nzchar(labels))) {
-        nms = labels
-    } else {
-        nms = paste0("row", seq_len(ncrows))
-    }
-
+    nms <- value_names(rv1col)
+    rfootnotes <- row_footnotes(rv1col)
 
     imods <- indent_mod(rv1col) ##rv1col@indent_mods
     unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
@@ -351,64 +340,6 @@ gen_rowvalues = function(dfpart,
     })
     trows
 }
-
-## ## THIS IS HORRIBLE!!!!!!!!!!!!
-## ## I don't think I've ever written hackier code in my entire life
-## rename_caller_arg <- function(fun, oldname, newname) {
-##     forms = formals(fun)
-##     formpos = match(names(forms), oldname)
-##     if(is.na(formpos))
-##         stop("the hacky argument renamer for ")
-##     names(forms)[formpos] = newname
-## }
-
-.both_caller = function(pcfun, labelstr) {
-    function(df2, .N_col, .N_total, ...) {
-        pcfun(df2, labelstr, .N_col = .N_col, .N_total = .N_total, ...)
-    }
-}
-
-.ncol_caller = function(pcfun, labelstr) {
-    function(df2, .N_col, ...) {
-        pcfun(df2, labelstr, .N_col = .N_col, ...)
-    }
-}
-
-.ntot_caller  = function(pcfun, labelstr) {
-    function(df2, .N_total, ...) {
-        pcfun(df2, labelstr, .N_total = .N_total, ...)
-    }
-}
-
-.neither_caller = .ntot_caller  = function(pcfun, labelstr) {
-    function(df2,  ...) {
-        pcfun(df2, labelstr, ...)
-    }
-}
-
-
-## .make_caller = function(parent_cfun, clabelstr) {
-##     ## XXX Ugh. Combinatorial explosion X.X
-##     ## This is what I get for abusing scope to do
-##     ## the content label thing. Bad design.
-
-##     ## Ugh number 2. If we assign each of htese to the same name
-##     ## R CMD check complains so we return them as anon funcs to sneak
-##     ## by. Yet mr
-##     if(takes_coln(parent_cfun)) {
-##         if(takes_totn(parent_cfun)) {
-##             .both_caller(parent_cfun, clabelstr)
-##         } else {
-##             .ncol_caller(parent_cfun, clabelstr)
-##         }
-##     } else {
-##         if(takes_totn(parent_cfun)) {
-##             .ntot_caller(parent_cfun, clabelstr)
-##         } else {
-##             .neither_caller(parent_cfun, clabelstr)
-##         }
-##     }
-## }
 
 .make_caller <- function(parent_cfun, clabelstr="") {
 
@@ -723,7 +654,9 @@ setMethod(".make_split_kids", "Split",
                                              vis = isTRUE(vis_label(spl))),
                          cinfo = cinfo,
                          iscontent = FALSE,
-                         indent_mod = indent_mod(spl))
+                         indent_mod = indent_mod(spl),
+                         page_title = ptitle_prefix(spl)
+                         )
     ##kids = inner
     kids = list(innertab)
     kids
@@ -1050,6 +983,8 @@ build_table = function(lyt, df,
 
 fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     var <- spl_payload(spl)
+    if(!(var %in% names(df)))
+        stop("Split variable [", var, "] not found in data being tabulated.")
     varvec <- df[[var]]
     if(!is(varvec, "character") && !is.factor(varvec)) {
         message(sprintf("Split var [%s] was not character or factor. Converting to factor",
@@ -1065,6 +1000,8 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     lblvar <- spl_label_var(spl)
     have_lblvar <- !identical(var, lblvar)
     if(have_lblvar) {
+        if(!(lblvar %in% names(df)))
+            stop("Value label variable [", lblvar, "] not found in data being tabulated.")
         lblvec <- df[[lblvar]]
         tab <- table(varvec, lblvec)
 
@@ -1184,22 +1121,6 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
     lyt
 })
 
-## Note this is similar to pos_to_path but those paths
-## have seperate vector elements for split names and split values
-## because they're for indexing. this is NOT for that, here
-## we give a named character vector where the names are the spl names
-## and the values are the spl values
-pos_to_prevsplvals <- function(pos) {
-    if(is.null(pos) || identical(pos, TreePos()))
-        return(context_df_row())
-
-    vals <- unlist(value_names(pos_splvals(pos)),
-                   recursive = FALSE)
-
-    nms <- vapply(pos_splits(pos), obj_name, "")
-    context_df_row(split = nms, value = vals)
-}
-
 
 splitvec_to_coltree = function(df, splvec, pos = NULL,
                                lvl = 1L, label = "",
@@ -1220,7 +1141,7 @@ splitvec_to_coltree = function(df, splvec, pos = NULL,
         spl = splvec[[lvl]]
         nm = if(is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos), 1))
         rawpart = do_split(spl,df, trim =FALSE ,
-                           spl_context = spl_context) ##rbind(prev_splval, context_df_row(split = nm,  pos_to_prevsplvals(pos))
+                           spl_context = spl_context)
         datparts = rawpart[["datasplit"]]
         vals = rawpart[["values"]]
         labs = rawpart[["labels"]]

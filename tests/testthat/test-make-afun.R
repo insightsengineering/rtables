@@ -15,7 +15,7 @@ test_that("afun internals coverage", {
                           grp = "grp"))
 
     res_tafun2 <- rtables:::test_afun_grp(1:10, 5)
-    expect_identical(lapply(res_tafun2, rtables:::obj_format),
+    expect_identical(lapply(res_tafun2, obj_format),
                      list("Min." = "xx.x",
                           "1st Qu." = "xx.xx",
                           Median = NULL,
@@ -24,12 +24,12 @@ test_that("afun internals coverage", {
                           "Max." = "xx.x",
                           range = "xx - xx",
                           n_unique = "xx - xx"))
-    
-    
+
+
     foo <- function(x, .N_col, ...) {list(a = character(0))}
     afoo <- make_afun(foo)
     expect_silent(afoo(factor(character(0)), .N_col = 100))
-    
+
 })
 
 
@@ -65,7 +65,7 @@ test_that("make_afun works for x arg", {
  a_summary3 <- make_afun(a_summary, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
 
     asres3 <- a_summary3(iris$Sepal.Length)
-    expect_equal(lapply(asres3, rtables:::obj_format),
+    expect_equal(lapply(asres3, obj_format),
                  list(n = "xx",
                       mean_sd = "(xx.xxx, xx.xxx)",
                       min_max= "xx.xx - xx.xx"))
@@ -115,7 +115,7 @@ test_that("make_afun works for df functions", {
 
 test_that("make_afun works for funs with ...", {
  ## with dots
-  
+
 
  sfun3 <- function(x, .ref_group = NULL, ...) "hi"
  afun3 <- make_afun(sfun3)
@@ -352,4 +352,18 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
     af2 <- make_afun(f2, .stats = "b")
     res2 <- af2(iris, a = 5, b = 7)
     expect_identical(list(b=7), rtables:::rawvalues(res2))
+})
+
+test_that("list_wrap functions work", {
+
+    f1 <- list_wrap_x(summary)
+
+    expect_identical(f1(1:10),
+                     as.list(summary(1:10)))
+
+
+    infun <- function(df) summary(df[[1]])
+    f2 <- list_wrap_df(infun)
+    expect_identical(f2(mtcars),
+                     f1(mtcars[[1]]))
 })

@@ -103,9 +103,19 @@ test_that("c/rbind and top-left behave", {
     ## but its not hurting anything so just leave it
     expect_error(cbind_rtables(tab, tab2))
     expect_error(rbind(tab, tab2))
+
+    expect_identical(obj_name(rbind(tab)),
+                     "rbind_root")
+
+    expect_identical(tt_at_path(rbind(tab), c("rbind_root", obj_name(tab))),
+                     tab)
+
+    mform <- matrix_form(cbind_rtables(tab[0,], tab[0,]))
+    expect_identical(mform$strings[1,, drop= TRUE],
+                     c("",rep("all obs", 2)))
 })
 
-## NB: insert_rrow is now deprecated. 
+## NB: insert_rrow is now deprecated.
 test_that("insert_rrow works", {
     tbl <- basic_table() %>%
         split_cols_by("ARM") %>%

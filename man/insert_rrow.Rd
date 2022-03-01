@@ -52,8 +52,3 @@ insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 
 options(o)
 }
-\seealso{
-Other compatability: 
-\code{\link{rtable}()}
-}
-\concept{compatability}

@@ -9,8 +9,8 @@ tt_to_flextable(
   paginate = FALSE,
   lpp = NULL,
   ...,
-  colwidths = propose_column_widths(tt),
-  total_width = 5
+  colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
+  total_width = 10
 )
 }
 \arguments{
@@ -20,7 +20,7 @@ tt_to_flextable(
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
-\item{...}{Passed on to metthods or tabulation functions.}
+\item{...}{Passed on to methods or tabulation functions.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 

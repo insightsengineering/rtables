@@ -157,6 +157,47 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
     argname %in% fnames || (truefordots && "..." %in% fnames)
 }
 
+#' Apply Basic Split (For Use In Custom Split Functions)
+#'
+#' This function is intended for use inside custom split functions. It applies the
+#' current split \emph{as if it had no custom splitting function} so that those
+#' default splits can be further manipulated.
+#'
+#' @inheritParams gen_args
+#' @param vals ANY. Already calculated/known values of the split. Generally should be left as \code{NULL}.
+#' @param labels character. Labels associated with \code{vals}. Should be \code{NULL} when \code{vals} is, whic should almost always be the case.
+#' @param trim logical(1). Should groups corresponding to empty data subsets be removed. Defaults to \code{FALSE}.
+#'
+#' @return the result of the split being applied as if it had no custom split function, see
+#' \code{\link{custom_split_funs}}
+#'
+#' @export
+#' @examples
+#'
+#' uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+#'     ret <- do_base_split(spl, df, vals, labels, trim)
+#'     if(NROW(df) == 0)
+#'         ret <- lapply(ret, function(x) x[1])
+#'     ret
+#' }
+#'
+#' lyt <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
+#'                            varlabels = c("N", "E", "BMR1"),
+#'                            split_fun = uneven_splfun) %>%
+#'     analyze_colvars(list(USUBJID = function(x, ...) length(unique(x)),
+#'                          AESEQ = max,
+#'                          BMRKR1 = mean))
+#'
+#' build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
+    spl2 <- spl
+    split_fun(spl2) <- NULL
+    do_split(spl2, df = df, vals = vals, labels = labels, trim = trim, spl_context = NULL)
+}
+
+
 ### NB This is called at EACH level of recursive splitting
 do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, spl_context) {
     ## this will error if, e.g., df doesn't have columns
@@ -408,8 +449,22 @@ setMethod(".applysplit_datapart", "VarStaticCutSplit",
     cts = spl_cuts(spl)
     cfct = cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
     split(df, cfct, drop = FALSE)
-
 })
+
+
+setMethod(".applysplit_datapart", "CumulativeCutSplit",
+          function(spl, df, vals) {
+  #  lbs = spl_cutlabels(spl)
+    var = spl_payload(spl)
+    varvec = df[[var]]
+    cts = spl_cuts(spl)
+    cfct = cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
+    ret <- lapply(seq_len(length(levels(cfct))),
+                  function(i) df[as.integer(cfct) <= i,])
+    names(ret) <- levels(cfct)
+    ret
+})
+
 ## XXX TODO *CutSplit Methods
 
 
@@ -800,9 +855,12 @@ add_overall_level = function(valname = "Overall", label = valname, extra_args = 
     }
 
 setClass("AllLevelsSentinel", contains = "character")
+
+# nocov start
 #' @export
 #' @rdname add_combo_levels
 select_all_levels = new("AllLevelsSentinel")
+# nocov end
 
 #' Add Combination Levels to split
 #' @inheritParams sf_args

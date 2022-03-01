@@ -1,13 +1,13 @@
 
-do_recursive_replace = function(tab, path, incontent = FALSE, rows = NULL,
-                                cols = NULL, value) {
+do_recursive_replace = function(tab, path, incontent = FALSE, value) {## rows = NULL,
+                                ## cols = NULL, value) {
     ## don't want this in the recursive function
     ## so thats why we have the do_ variant
     if(is.character(path) && length(path) > 1)
         path <- as.list(path)
     if(length(path) > 0 && path[[1]] == obj_name(tab))
         path <- path[-1]
-   recursive_replace(tab, path, incontent, rows, cols,value)
+   recursive_replace(tab, path, value) ## incontent, rows, cols,value)
 }
 
 
@@ -20,38 +20,38 @@ do_recursive_replace = function(tab, path, incontent = FALSE, rows = NULL,
 ## 5. replace data cell values for specific row/col positions within the content table at a particular position within the tree
 
 ## XXX This is wrong, what happens if a split (or more accurately, value)  happens more than once in the overall tree???
-recursive_replace = function(tab, path, incontent = FALSE, rows = NULL, cols = NULL, value) {
+recursive_replace = function(tab, path, value) { ##incontent = FALSE, rows = NULL, cols = NULL, value) {
     if(length(path) == 0) { ## done recursing
-        if(is.null(rows) && is.null(cols)) { ## replacing whole subtree a this position
-            if(incontent) {
-                newkid = tab
-                content_table(newkid) = value
-            } else
+        ## if(is.null(rows) && is.null(cols)) { ## replacing whole subtree a this position
+        ##     if(incontent) {
+        ##         newkid = tab
+        ##         content_table(newkid) = value
+        ##     } else
                 newkid = value
             ## newkid has either thee content table
             ## replaced on the old kid or is the new
             ## kid
-        } else { ## rows or cols (or both)  non-null
-            if(incontent) {
-                ctab = content_table(tab)
-                ctab[rows, cols] = value
-                content_table(tab) = ctab
-                newkid = tab
+      #  } ## else { ## rows or cols (or both)  non-null
+        ##     if(incontent) {
+        ##         ctab = content_table(tab)
+        ##         ctab[rows, cols] = value
+        ##         content_table(tab) = ctab
+        ##         newkid = tab
 
-            } else {
-                allkids = tree_children(tab)
-                stopifnot(are(allkids, "TableRow"))
-                newkid = tab
-                newkid[rows, cols] = value
-            }
-        }
+        ##     } else {
+        ##         allkids = tree_children(tab)
+        ##         stopifnot(are(allkids, "TableRow"))
+        ##         newkid = tab
+        ##         newkid[rows, cols] = value
+        ##     }
+        ## }
         return(newkid)
     } else if( path[[1]] == "@content") {
         ctb <- content_table(tab)
         ctb <- recursive_replace(ctb,
                                  path = path[-1],
-                                 rows = rows,
-                                 cols = cols,
+                                 ## rows = rows,
+                                 ## cols = cols,
                                  value = value)
         content_table(tab) <- ctb
         tab
@@ -72,9 +72,9 @@ recursive_replace = function(tab, path, incontent = FALSE, rows = NULL, cols = N
         newkid = recursive_replace(
             tree_children(tab)[[kidel]],
             path[-1],
-            incontent = incontent,
-            rows = rows,
-            cols = cols,
+            ## incontent = incontent,
+            ## rows = rows,
+            ## cols = cols,
             value)
         tree_children(tab)[[kidel]] = newkid
         tab
@@ -156,7 +156,7 @@ setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
     kids <- tree_children(subtt)
     ind <- which(names(kids) == posnm)
     if(length(ind) != 1L)
-        stop("table children do not appear to be named correctly at this path. This should not happen, please contact the maintainer of rtables.")
+        stop("table children do not appear to be named correctly at this path. This should not happen, please contact the maintainer of rtables.") # nocov
     if(after)
         ind <- ind + 1
 
@@ -238,8 +238,10 @@ setMethod("tt_at_path", "VTableTree",
     stopifnot(is(path, "character"),
               length(path) > 0,
               !anyNA(path))
+    if(identical(path[1], "root"))
+        path <- path[-1]
     ## handle pathing that hits the root split by name
-    if(obj_name(tt) == path[1])
+    if(identical(obj_name(tt), path[1]))
         path = path[-1]
     cur <- tt
     curpath <- path
@@ -295,50 +297,50 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 
 
 
-setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows"))
-setMethod("replace_rows", c(value = "TableRow"),
-          function(x, i, value) replace_rows(x, i = i, value = list(value)))
-setMethod("replace_rows", c(value = "list"),
-          function(x, i, value) {
-    if(is.null(i)) {
-        i = seq_along(tree_children(x))
-        if(labelrow_visible(x))
-            i = i[-1]
-    } else if(is.logical(i)) {
-        i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
-    }
+## setGeneric("replace_rows", function(x, i, value) standardGeneric("replace_rows"))
+## setMethod("replace_rows", c(value = "TableRow"),
+##           function(x, i, value) replace_rows(x, i = i, value = list(value)))
+## setMethod("replace_rows", c(value = "list"),
+##           function(x, i, value) {
+##     if(is.null(i)) {
+##         i = seq_along(tree_children(x))
+##         if(labelrow_visible(x))
+##             i = i[-1]
+##     } else if(is.logical(i)) {
+##         i = which(rep(i, length.out = length(collect_leaves(x, TRUE, TRUE))))
+##     }
 
-    if(labelrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
-        stop("attempted to assign values into a LabelRow")
+##     if(labelrow_visible(x) && 1 %in% i && !are(value, "TableRow") && !is.null(value[[1]]))
+##         stop("attempted to assign values into a LabelRow")
 
-    if(length(value) != length(i))
-        value = rep(value, length.out = length(i))
+##     if(length(value) != length(i))
+##         value = rep(value, length.out = length(i))
 
-    if(are(value, "TableRow")) {
-        newrows =value
-    } else {
-        newrows = lapply(i,
-                         function(ind) {
-            .tablerow(value[[ind]],
-                     cinfo = col_info(x),
-                     klass = class(tree_children(x)[[ind]]),
-                     )
-        })
-    }
+##     if(are(value, "TableRow")) {
+##         newrows =value
+##     } else {
+##         newrows = lapply(i,
+##                          function(ind) {
+##             .tablerow(value[[ind]],
+##                      cinfo = col_info(x),
+##                      klass = class(tree_children(x)[[ind]]),
+##                      )
+##         })
+##     }
 
-    kids = tree_children(x)
-    kids[i] = newrows
-    tree_children(x) = kids
-    x
-})
+##     kids = tree_children(x)
+##     kids[i] = newrows
+##     tree_children(x) = kids
+##     x
+## })
 
 
 
-setMethod("replace_rows", c(value = "ElementaryTable"),
-           function(x,i,value) {
-    stopifnot(identical(col_info(x), col_info(value)))
-    replace_rows(x, i, tree_children(value))
-})
+## setMethod("replace_rows", c(value = "ElementaryTable"),
+##            function(x,i,value) {
+##     stopifnot(identical(col_info(x), col_info(value)))
+##     replace_rows(x, i, tree_children(value))
+## })
 
 
 

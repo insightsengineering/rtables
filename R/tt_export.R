@@ -126,7 +126,7 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' }
 export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n") {
 
-    colwidths <- propose_column_widths(tt)
+    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
 
     if(paginate) {
         tbls <- paginate_table(tt, ...)
@@ -168,8 +168,9 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' ft <- tt_to_flextable(tbl)
 #' ft
 
-tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ..., colwidths = propose_column_widths(tt),
-                            total_width = 5) {
+tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
+                            colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
+                            total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
         stop("this function requires the flextable and officer packages. Please install them if you wish to use it")
     }
@@ -178,7 +179,6 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ..., colwidths = p
     if(paginate) {
         if(is.null(lpp))
             stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
-        colwidths <- propose_column_widths(tt)
         tabs <- paginate_table(tt, lpp = lpp, ...)
         return(lapply(tabs, tt_to_flextable, paginate=FALSE, total_width = total_width, colwidths = colwidths))
     }
@@ -281,7 +281,7 @@ export_as_pdf <- function(tt,
     grid.newpage()
     pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
-    colwidths <- propose_column_widths(tt)
+    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
     tbls <- if (paginate) {
 
         if (is.null(lpp)) {
@@ -295,7 +295,7 @@ export_as_pdf <- function(tt,
         list(tt)
     }
 
-    stbls <- lapply(lapply(tbls, toString, widths = colwidths), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+    stbls <- lapply(lapply(tbls, toString, widths = colwidths, linesep = "-"), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
 
     gtbls <- lapply(stbls, function(txt) {
         textGrob(

@@ -19,7 +19,9 @@ MultiVarSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  label_pos = "visible"
+  label_pos = "visible",
+  split_fun = NULL,
+  page_prefix = NA_character_
 )
 }
 \arguments{
@@ -53,6 +55,10 @@ MultiVarSplit(
 
 \item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
+
+\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 }
 \value{
 A \code{MultiVarSplit} object.

@@ -14,7 +14,9 @@ split_rows_by(
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
   label_pos = "hidden",
-  indent_mod = 0L
+  indent_mod = 0L,
+  page_by = FALSE,
+  page_prefix = split_label
 )
 }
 \arguments{
@@ -30,7 +32,7 @@ split_rows_by(
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{nested}{boolean, Add this as a new top-level split  (defining a new subtable directly under root). Defaults to \code{FALSE}}
+\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
 
@@ -38,6 +40,10 @@ split_rows_by(
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{page_by}{logical(1). Should pagination be forced between different children resulting form this split.}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

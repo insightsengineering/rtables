@@ -10,7 +10,7 @@ test_that("toString method works correclty", {
                 mean_sd = c(mean(x), sd(x)),
                 var = var(x),
                 min_max = range(x),
-                .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.xx - xx.xx"),
+                .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.x - xx.x"),
                 .labels = c("Mean (sd)", "Variance", "Min - Max")
             )
         }) %>%
@@ -27,11 +27,11 @@ test_that("toString method works correclty", {
               "Sepal.Length                                          ",
               "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
               "  Variance        0.124         0.266         0.404   ",
-              "  Min - Max     4.3 - 5.8      4.9 - 7      4.9 - 7.9 ",
+              "  Min - Max     4.3 - 5.8     4.9 - 7.0     4.9 - 7.9 ",
               "Petal.Width                                           ",
-              "  Mean (sd)    0.25 (0.11)   1.33 (0.2)    2.03 (0.27)",
+              "  Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)",
               "  Variance        0.011         0.039         0.075   ",
-              "  Min - Max     0.1 - 0.6      1 - 1.8      1.4 - 2.5 \n"),
+              "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n"),
             collapse = "\n"
         )
     )
@@ -179,4 +179,87 @@ test_that("newline in column names and possibly cell values work", {
                        "", "NaN"))
 
 
+})
+
+
+test_that("alignment works", {
+
+    lyt <- basic_table() %>%
+        analyze("AGE", function(x) {
+            in_rows(left = rcell("l", align = "left"),
+                    right = rcell("r", align = "right"),
+                    center = rcell("c", align = "center"))
+        })
+
+    aligntab <- build_table(lyt, DM)
+
+    matform <- matrix_form(aligntab)
+    expect_identical(matform$aligns,
+                     cbind("left", c("center", "left", "right", "center")))
+
+    str <- toString(aligntab)
+    expect_identical(str,
+                     "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n")
+
+    lyt2 <-  basic_table() %>%
+        analyze("AGE", function(x) {
+            in_rows(.list = list(left = "l", right = "r", center = "c"),
+                    .aligns = c(left = "left", right = "right", center = "center"))
+        })
+
+    aligntab2 <- build_table(lyt, DM)
+    expect_identical(aligntab, aligntab2)
+
+
+})
+
+
+test_that("Various Printing things work", {
+
+    txtcon <- textConnection("printoutput", "w")
+    sink(txtcon)
+    lyt <- make_big_lyt()
+
+    ## ensure print method works for predata layout
+    print(lyt)
+    tab <- build_table(lyt, rawdat)
+    ## treestruct(tab)
+
+    table_structure(tab, detail = "subtable") ##treestruct(tab)
+    table_structure(tab, detail = "row") ##treestruct(tab)
+
+    ## this is not intended to be a valid layout, it just
+    ## tries to hit every type of split for the print machinery
+    splvec <- rtables:::SplitVector(lst = list(##rtables:::NULLSplit(),
+                                        rtables:::AllSplit(split_label = "MyAll"),
+                                        rtables:::RootSplit("MyRoot"),
+                                        ManualSplit(c("0", "1", "2"), label = LETTERS[1:3]),
+                                        rtables:::make_static_cut_split("x", "StaticCut", c(1, 3, 5),
+                                                                        cutlabels = LETTERS[1:3]),
+                                        rtables:::make_static_cut_split("x", "CumuStaticCut", c(1, 3, 5),
+                                                                        cutlabels = LETTERS[1:3],
+                                                                        cumulative = TRUE),
+                                        VarDynCutSplit("x", "DynCut", rtables:::qtile_cuts),
+                                        VarLevWBaselineSplit("X", "ref", split_label = "VWBaseline"),
+                                        AnalyzeColVarSplit(list(mean))))
+    splvec <- rtables:::cmpnd_last_rowsplit(splvec, AnalyzeVarSplit("x", afun = mean), AnalyzeMultiVars)
+    print(splvec)
+
+    fakelyt <- rtables:::PreDataTableLayouts(rlayout = rtables:::PreDataRowLayout(splvec),
+                                   clayout = rtables:::PreDataColLayout(splvec))
+    print(fakelyt)
+    print(rtables:::rlayout(fakelyt))
+    print(rtables:::clayout(fakelyt))
+
+
+    ## pos <- TreePos()
+    ## print(pos)
+    print(col_info(tab))
+    show(col_info(tab))
+    ctr <- coltree(tab)
+    print(ctr)
+    show(ctr)
+    print(collect_leaves(tab)[[2]])
+    sink(NULL)
+    expect_false(any(grepl( "new..AnalyzeColVarSplit., analysis_fun =", printoutput)))
 })

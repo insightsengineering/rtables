@@ -13,8 +13,10 @@
 #' @rdname rcell
 #' @inherit CellValue return
 #' @export
-rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL) {
+rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL, align = NULL){
 
+    if(!is.null(align))
+        align <- chk_rtables_align(align)
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -37,6 +39,8 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
         footnotes <- lapply(footnotes, RefFootnote)
         ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes)# RefFootnote(footnote))
     }
+    if(!is.null(align))
+        cell_align(ret) <- chk_rtables_align(align)
     ret
 }
 
@@ -52,10 +56,11 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
 #' @export
 non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
                          label = NULL, indent_mod = NULL,
-                         refval = NULL) {
+                         refval = NULL,
+                         align = "center") {
     val <- if(is_ref) refval else x
     rcell(val, format = format, colspan = colspan, label = label,
-          indent_mod = indent_mod)
+          indent_mod = indent_mod, align = align)
 }
 
 
@@ -63,7 +68,6 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #'
 #' define the cells that get placed into multiple rows in `afun`
 #'
-#' @note currently the `.name` argument is not used
 #'
 #' @param ... single row defining expressions
 #' @param .list list. list cell content, usually `rcells`, the `.list` is concatenated to `...`
@@ -73,6 +77,7 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
 #' @param .cell_footnotes list. Referential footnote messages to be associated by name with \emph{cells}
 #' @param .row_footnotes list. Referential footnotes messages to be associated by name with \emph{rows}
+#' @param .aligns character or NULL. Alignments for the cells
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
@@ -101,7 +106,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .formats = NULL,
                     .indent_mods = NULL,
                     .cell_footnotes = list(NULL),
-                    .row_footnotes = list(NULL)) {
+                    .row_footnotes = list(NULL),
+                    .aligns = NULL) {
     if(is.function(.formats))
         .formats = list(.formats)
 
@@ -133,10 +139,13 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                                                            setdiff(names(l), names(.cell_footnotes))))
             .cell_footnotes <- .cell_footnotes[names(l)]
         }
-         ##   length(.cell_footnotes) <- length(l) ## this pads with NULL elements, as desired
+        if(is.null(.aligns))
+            .aligns <- list(NULL)
+        ##   length(.cell_footnotes) <- length(l) ## this pads with NULL elements, as desired
 
         l2 <- mapply(rcell, x = l, format = .formats,
                      footnotes = .cell_footnotes %||% list(NULL),
+                     align = .aligns,
                      SIMPLIFY = FALSE)
     }
     if(is.null(.labels)) {

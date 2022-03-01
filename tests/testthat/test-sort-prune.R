@@ -37,9 +37,40 @@ test_that("pruning and trimming work", {
 
     ptab <- prune_table(smallertab, silly_prune)
     ## ensure that empty subtables are removed when pruning
+
+    expect_identical(prune_table(smallertab),
+                     smallertab[1:4,])
+
+
+
+
+    ## this one doesn't remove NA rows
+    expect_identical(prune_table(smallertab, prune_zeros_only),
+                     smallertab)
     expect_identical(dim(ptab), c(4L, 3L))
     ## ensure/retain structure unawareness of trim_rows
     expect_identical(dim(trim_rows(smallertab)), c(6L, 3L))
+
+    smallertab2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        summarize_row_groups() %>%
+        analyze("AGE") %>%
+        build_table(DM)
+
+    expect_identical(row.names(prune_table(smallertab)),
+                     row.names(prune_table(smallertab2)))
+
+    expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
+                     smallertab2[1:2,])
+
+    expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
+                     smallertab2[1:2,])
+
+    expect_identical(prune_table(smallertab2, low_obs_pruner(180)),
+                     smallertab2[1:2,])
+
+
 
 })
 
@@ -55,6 +86,15 @@ test_that("provided score functions work", {
     scores <- sapply(kids, cont_n_allcols)
     counts <- table(DM$SEX)
     expect_identical(scores, setNames(as.numeric(counts), names(counts)))
+
+    onecol_fun <- cont_n_onecol(1)
+    expect_true(is.na(cont_n_onecol(1)(smallertab2)))
+    expect_true(is.na(cont_n_onecol(1)(smallertab2)))
+    scores2 <- sapply(kids, onecol_fun)
+    dmsub<- subset(DM, ARM == "A: Drug X")
+    counts2 <- table(dmsub$SEX)
+    expect_identical(scores2, setNames(as.numeric(counts2), names(counts2)))
+
 })
 
 

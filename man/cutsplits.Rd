@@ -3,32 +3,13 @@
 \docType{class}
 \name{VarStaticCutSplit-class}
 \alias{VarStaticCutSplit-class}
-\alias{VarStaticCutSplit}
+\alias{make_static_cut_split}
 \alias{CumulativeCutSplit-class}
-\alias{CumulativeCutSplit}
 \alias{VarDynCutSplit-class}
 \alias{VarDynCutSplit}
 \title{Splits for cutting by values of a numeric variable}
 \usage{
-VarStaticCutSplit(
-  var,
-  split_label = var,
-  cuts,
-  cutlabels = NULL,
-  cfun = NULL,
-  cformat = NULL,
-  split_format = NULL,
-  split_name = var,
-  child_labels = c("default", "visible", "hidden"),
-  extra_args = list(),
-  indent_mod = 0L,
-  cindent_mod = 0L,
-  cvar = "",
-  cextra_args = list(),
-  label_pos = "visible"
-)
-
-CumulativeCutSplit(
+make_static_cut_split(
   var,
   split_label,
   cuts,
@@ -43,7 +24,9 @@ CumulativeCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  label_pos = "visible"
+  label_pos = "visible",
+  cumulative = FALSE,
+  page_prefix = NA_character_
 )
 
 VarDynCutSplit(
@@ -62,7 +45,8 @@ VarDynCutSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  label_pos = "visible"
+  label_pos = "visible",
+  page_prefix = NA_character_
 )
 }
 \arguments{
@@ -97,15 +81,20 @@ VarDynCutSplit(
 \item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
+\item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
+
+\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
 \item{cutfun}{function. Function which accepts the \emph{full vector} of \code{var} values and returns cut points to be used (via \code{cut}) when splitting data during tabulation}
 
 \item{cutlabelfun}{function. Function which returns either labels for the cuts or NULL when passed the return value of \code{cutfun}}
-
-\item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults to \code{FALSE}}
 }
 \value{
-a \code{VarStaticCutSplit}, \code{CumulativeCutSplit}, or  \code{VarDynCutSplit} object.
+a \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for \code{make_static_cut_split},
+or a \code{VarDynCutSplit} object for \code{VarDynCutSplit()}
 }
 \description{
 Splits for cutting by values of a numeric variable
+
+Create static cut or static cumulative cut split
 }

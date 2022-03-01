@@ -18,12 +18,3 @@ test_that("sprintf_format works correctly", {
                      c("mean", "hi there 3.4280", myfun(2.77), myfun(mean(subset(iris, Species == "virginica")$Sepal.Width))))
 })
 
-
-test_that("formats supported", {
-
-
-    forms <- list_rcell_format_labels()
-
-    res <- sapply(forms, function(vc) all(sapply(vc, is_rcell_format)))
-    expect_true(all(res))
-})

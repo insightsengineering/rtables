@@ -44,7 +44,8 @@ TableTree(
   title = "",
   subtitles = character(),
   main_footer = character(),
-  prov_footer = character()
+  prov_footer = character(),
+  page_title = NA_character_
 )
 }
 \arguments{
@@ -79,6 +80,8 @@ TableTree(
 \item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
 
 \item{cont}{ElementaryTable. Content table.}
+
+\item{page_title}{character. Page specific title(s).}
 }
 \value{
 A formal object representing a populated table.

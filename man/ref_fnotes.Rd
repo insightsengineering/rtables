@@ -26,6 +26,8 @@
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-}
 \alias{ref_index<-,RefFootnote-method}
+\alias{ref_msg}
+\alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
@@ -80,6 +82,10 @@ ref_index(obj)
 ref_index(obj) <- value
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
+
+ref_msg(obj)
+
+\S4method{ref_msg}{RefFootnote}(obj)
 
 fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 

@@ -30,7 +30,6 @@ div_helper <- function(lst, class) {
 #' @param class_tr class for tr tag
 #' @param class_td class for td tag
 #' @param class_th class for th tag
-#' @param caption_txt caption of html table
 #' @param width width
 #' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
 #'
@@ -63,7 +62,6 @@ as_html <- function(x,
                     class_tr = NULL,
                     class_td = NULL,
                     class_th = NULL,
-                    caption_txt = NULL,
                     link_label = NULL) {
 
   if (is.null(x)) {

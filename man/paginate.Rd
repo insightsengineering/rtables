@@ -3,6 +3,7 @@
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
 \alias{paginate_table}
+\alias{vpaginate_table}
 \title{Pagination of a TableTree}
 \usage{
 pag_tt_indices(
@@ -22,6 +23,8 @@ paginate_table(
   colwidths = NULL,
   verbose = FALSE
 )
+
+vpaginate_table(tt, cpp = 40, verbose = FALSE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -37,6 +40,8 @@ considerations. Defaults to none.}
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
+
+\item{cpp}{numeric(1). Number of columns per page}
 }
 \value{
 for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
@@ -83,8 +88,8 @@ nrow(tbl)
 row_paths_summary(tbl)
 
 tbls <- paginate_table(tbl)
-
-w_tbls <- propose_column_widths(tbl) # so that we have the same column widths
+mf <- matrix_form(tbl, indent_rownames = TRUE)
+w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 
 tmp <- lapply(tbls, print, widths = w_tbls)
 
