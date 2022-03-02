@@ -1,4 +1,4 @@
-## rtables 0.4.0.x
+## rtables 0.4.1.0001
  * added `linesep` argument to `toString` to specify a character to create the line separator. Previously we used the en dash as the line separator character, now we changed the default to the em dash reducing the gap between the dash line elements.
 
 ## rtables 0.4.0
