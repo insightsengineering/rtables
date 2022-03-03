@@ -86,8 +86,20 @@ table_shell <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
 #' @rdname table_shell
 #' @export
 table_shell_str <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
+
     matform <- matrix_form(tt, indent_rownames = TRUE)
-    matform$strings <- matform$formats
+    format_strs <- vapply(as.vector(matform$formats),
+                          function(x) {
+        if(inherits(x, "function"))
+            "<fnc>"
+        else if(inherits(x, "character"))
+            x
+        else
+            stop("Don't know how to make a shell with formats of class: ", class(x))
+    }, "")
+
+    matform$strings <- matrix(format_strs, ncol = ncol(matform$strings),
+                              nrow = nrow(matform$strings))
     toString(matform, widths = widths, col_gap = col_gap, linesep = linesep)
 }
 
@@ -590,8 +602,8 @@ setMethod("get_formatted_cells", "TableRow",
 
             matrix(unlist(Map(function(val, format, spn) {
                 stopifnot(is(spn, "integer"))
-                vstrng <- if(shell) format else format_rcell(val, format)
-                rep(paste(vstrng, collapse = ", "), spn)
+                val <- if(shell) format else paste(format_rcell(val, format), collapse = ", ")
+                rep(list(val), spn)
             }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
 })
 
