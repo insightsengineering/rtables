@@ -13,15 +13,15 @@
 \alias{get_cell_aligns,LabelRow-method}
 \title{get formatted cells}
 \usage{
-get_formatted_cells(obj)
+get_formatted_cells(obj, shell = FALSE)
 
-\S4method{get_formatted_cells}{TableTree}(obj)
+\S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE)
 
-\S4method{get_formatted_cells}{ElementaryTable}(obj)
+\S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE)
 
-\S4method{get_formatted_cells}{TableRow}(obj)
+\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE)
 
-\S4method{get_formatted_cells}{LabelRow}(obj)
+\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE)
 
 get_cell_aligns(obj)
 
@@ -35,6 +35,9 @@ get_cell_aligns(obj)
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
+
+\item{shell}{logical(1). Should the formats themselves be returned instead of the
+values with formats applied. Defaults to \code{FALSE}.}
 }
 \value{
 the formatted print-strings for all (body) cells in \code{obj}.
