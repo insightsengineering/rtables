@@ -45,6 +45,8 @@ NULL
 #'
 #' cat(toString(tbl, col_gap = 3))
 #' @rdname tostring
+#' @name tostring
+#' @aliases toString,VTableTree-method
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,

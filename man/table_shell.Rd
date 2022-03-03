@@ -11,6 +11,12 @@ table_shell_str(tt, widths = NULL, col_gap = 3, linesep = "—")
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+
+\item{widths}{widths of row.name and columns columns}
+
+\item{col_gap}{gap between columns}
+
+\item{linesep}{character to create line separator}
 }
 \value{
 for \code{table_shell_str} the string representing the table shell, for \code{table_shell},
