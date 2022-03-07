@@ -9,8 +9,8 @@ downstream_repos:
   insightsengineering/tern:
     repo: insightsengineering/tern
     host: https://github.com
-  insightsengineering/teal.devel:
-    repo: insightsengineering/teal.devel
+  insightsengineering/teal.widgets:
+    repo: insightsengineering/teal.widgets
     host: https://github.com
   insightsengineering/teal.modules.clinical:
     repo: insightsengineering/teal.modules.clinical
