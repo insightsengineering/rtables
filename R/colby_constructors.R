@@ -1310,8 +1310,9 @@ setMethod(".add_row_summary", "Split",
 #'
 #' @inherit split_cols_by return
 #'
-#' @details If `format` expects 2 values (i.e. `xx` appears twice in the format string, then both raw and percent of
-#'   column total counts are calculated. Otherwise only raw counts are used.
+#' @details If `format` expects 1 value (i.e. it is specified as a format string and `xx` appears  `xx` apepars  values (i.e. `xx` appears twice in the format string) or is specified as a function,
+#' then both raw and percent of column total counts are calculated. If `format` is a format string where `xx` appears
+#' only one time, only raw counts are used.
 #'
 #' `cfun` must accept `df` as its first argument and will receive the subset `data.frame` corresponding
 #' with the row- and column-splitting for the cell being calculated. Must accept `labelstr` as the second
@@ -1369,10 +1370,10 @@ summarize_row_groups = function(lyt,
                                 extra_args = list()){
 
     if(is.null(cfun)) {
-        if(length(gregexpr("xx", format)[[1]]) == 2)
-            cfun = .count_wpcts_constr(var, format, label_fstr)
-        else
+        if(is.character(format) && length(gregexpr("xx(\\.x*){0,1}", format)[[1]]) == 1)
             cfun = .count_raw_constr(var,format, label_fstr)
+        else
+            cfun = .count_wpcts_constr(var, format, label_fstr)
     }
     cfun <- .validate_cfuns(cfun)
     .add_row_summary(lyt,

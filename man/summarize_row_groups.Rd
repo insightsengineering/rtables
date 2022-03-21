@@ -36,8 +36,9 @@ A \code{PreDataTableLayouts} object suitable for passing to further layouting fu
 Add a content row of summary counts
 }
 \details{
-If \code{format} expects 2 values (i.e. \code{xx} appears twice in the format string, then both raw and percent of
-column total counts are calculated. Otherwise only raw counts are used.
+If \code{format} expects 1 value (i.e. it is specified as a format string and \code{xx} appears  \code{xx} apepars  values (i.e. \code{xx} appears twice in the format string) or is specified as a function,
+then both raw and percent of column total counts are calculated. If \code{format} is a format string where \code{xx} appears
+only one time, only raw counts are used.
 
 \code{cfun} must accept \code{df} as its first argument and will receive the subset \code{data.frame} corresponding
 with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second
