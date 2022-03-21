@@ -1,3 +1,7 @@
+## rtables 0.4.1.0004
+ * Fix bug when function format combined with NULL cfun caused error (#307)
+ * Fix bug in `path_enriched_df` (which powers tsv export), related to (#308)
+ 
 ## rtables 0.4.1.0002
  * added `table_shell` to display shell of table with formats
 
