@@ -58,8 +58,10 @@ collapse_path <- function(paths) {
 }
 
 collapse_values <- function(colvals) {
-    if(!is.list(colvals) || all(vapply(colvals, length, 1L) == 1))
+    if(!is.list(colvals)) ## || all(vapply(colvals, length, 1L) == 1))
         return(colvals)
+    else if(all(vapply(colvals, length, 1L) == 1))
+        return(unlist(colvals))
     vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
