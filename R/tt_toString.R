@@ -1,5 +1,5 @@
-#' @import formatable
-#' @importMethodsFrom formatable toString matrix_form nlines
+#' @import formatters
+#' @importMethodsFrom formatters toString matrix_form nlines
 NULL
 
 

@@ -1,6 +1,6 @@
 #'Format rcell
 #'
-#' This is a wrapper around \code{\link[formatable:format_value]{formatable::format_value}}
+#' This is a wrapper around \code{\link[formatters:format_value]{formatters::format_value}}
 #' for use with \code{CellValue} objects
 #'
 #' @param x an object of class \code{\link{CellValue}}, or a raw value.

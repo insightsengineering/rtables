@@ -19,7 +19,7 @@ format_rcell(x, format, output = c("ascii", "html"), na_str = "NA")
 formatted text representing the cell
 }
 \description{
-This is a wrapper around \code{\link[formatable:format_value]{formatable::format_value}}
+This is a wrapper around \code{\link[formatters:format_value]{formatters::format_value}}
 for use with \code{CellValue} objects
 }
 \examples{

@@ -189,8 +189,8 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: formatable Interface Methods
-    desc: Methods for generics defined in formatable
+  - title: formatters Interface Methods
+    desc: Methods for generics defined in formatters
     contents:
     - obj_name,VNodeInfo-method
     - matrix_form,VTableTree-method

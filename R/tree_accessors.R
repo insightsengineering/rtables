@@ -379,7 +379,7 @@ setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
 setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
-#' @inherit formatable::lab_name
+#' @inherit formatters::lab_name
 #' @rdname lab_name
 #' @exportMethod obj_name
 setMethod("obj_name", "VNodeInfo",
