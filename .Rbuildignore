@@ -7,6 +7,7 @@
 ^\.github$
 ^README\.Rmd$
 ^README-.*\.png$
+^staged_dependencies\.yaml$
 ^\.travis\.yml$
 ^Jenkinsfile$
 ^logs$
