@@ -116,7 +116,7 @@ pos_to_path <- function(pos) {
 ## ' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
 ## '
 ## ' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
-#' @inherit formatable::make_row_df
+#' @inherit formatters::make_row_df
 #'
 #' @note the technically present root tree node is excluded from the summary returne dby
 #' both \code{make_row_df} and \code{make_col_df}, as it is simply the
@@ -236,7 +236,7 @@ setMethod("make_row_df", "VTableTree",
 })
 
                                         # #' @exportMethod make_row_df
-#' @inherit formatable::make_row_df
+#' @inherit formatters::make_row_df
 #' @export
 #' @rdname make_row_df
 setMethod("make_row_df", "TableRow",
@@ -572,7 +572,7 @@ paginate_table = function(tt, lpp = 15,
 
 #' @export
 #' @aliases paginate_table
-#' @inheritParams formatable::vert_pag_indices
+#' @inheritParams formatters::vert_pag_indices
 #' @rdname paginate
 vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
     inds <- vert_pag_indices(tt, cpp = cpp, verbose = verbose)
