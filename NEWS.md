@@ -1,3 +1,7 @@
+## rtables 0.5.0
+ * `formatable` dependency renamed to `formatters` for suitability of release to CRAN
+ * Update versioned dependency of `formatters` (previously `formatable`) to `>=0.2.0` 
+ 
 ## rtables 0.4.1.0004
  * Fix bug when function format combined with NULL cfun caused error (#307)
  * Fix bug in `path_enriched_df` (which powers tsv export), related to (#308)
