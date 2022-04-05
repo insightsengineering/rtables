@@ -1,3 +1,6 @@
+## rtables 0.5.0.1
+ * `split_rows_by(var, child_labels="hidden")` no longer removes the structural subtable corresponding to levels of `var` (#314)
+ 
 ## rtables 0.5.0
  * `formatable` dependency renamed to `formatters` for suitability of release to CRAN
  * Update versioned dependency of `formatters` (previously `formatable`) to `>=0.2.0` 

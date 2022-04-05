@@ -441,3 +441,45 @@ test_that("specifying function format with no cfun in summarize_row_groups works
     mat <- matrix_form(tbl)
     expect_identical(mat$strings[4, 2, drop = TRUE], "0")
 })
+
+## https://github.com/Roche/rtables/issues/314
+test_that("child_label = hidden does not affect tree structure/pathing", {
+
+    df <- expand.grid(
+        ARM = factor(paste("ARM", c("A", "B"))),
+        FCT = factor(c("f1", "f2"))
+    )
+    df <- cbind(df, val = 1:NROW(df))
+
+    df
+
+    s_test <- function(df, ...) in_rows(mn = 1, sd = 2)
+
+    lyt <- basic_table() %>%
+        split_cols_by("ARM", ref_group = "ARM A") %>%
+        split_rows_by("FCT", child_labels = "hidden") %>%
+        analyze("val", afun = s_test)
+
+    tbl <- build_table(lyt, df)
+
+    lyt2 <-  basic_table() %>%
+        split_cols_by("ARM", ref_group = "ARM A") %>%
+        split_rows_by("FCT") %>%
+        analyze("val", afun = s_test)
+
+    tbl2 <- build_table(lyt2, df)
+
+    rdf1 <- make_row_df(tbl)
+    rdf2 <- make_row_df(tbl2)
+    expect_identical(row_paths(tbl),
+                     row_paths(tbl2)[-c(1,4)])
+
+    expect_identical(make_row_df(tbl, visible_only = FALSE)$path,
+                     make_row_df(tbl2, visible_only = FALSE)$path[-c(2,7)])
+
+    expect_identical(value_at(tbl, c("FCT", "f1", "val", "mn"), c("ARM", "ARM A")),
+                     1)
+    expect_identical(value_at(tbl2, c("FCT", "f1", "val", "mn"), c("ARM", "ARM A")),
+                     1)
+
+})

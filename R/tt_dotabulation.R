@@ -703,7 +703,8 @@ recursive_applysplit = function( df,
                                 cvar = NULL,
                                 baselines = lapply(col_extra_args(cinfo),
                                                    function(x) x$.ref_full),
-                                spl_context = context_df_row(cinfo = cinfo)) {
+                                spl_context = context_df_row(cinfo = cinfo),
+                                no_outer_tbl = FALSE) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(splvec[[1]])
@@ -764,10 +765,14 @@ recursive_applysplit = function( df,
     if(make_lrow && partlabel == "" && !nonroot)
         make_lrow = FALSE
 
-    if(nrow(ctab) == 0L && length(kids) == 1L && !make_lrow) {
+    ## this is only true when called from build_table and the first split
+    ## in (one of the) SplitVector is NOT an AnalyzeMultiVars split.
+    ## in that case we would be "double creating" the structural
+    ## subtable
+    if(no_outer_tbl) {
         ret = kids[[1]]
         indent_mod(ret) = indent_mod(spl)
-     } else if(nrow(ctab) > 0L || length(kids) > 0L) {
+    } else if(nrow(ctab) > 0L || length(kids) > 0L) {
          ## previously we checked if the child had an identical label
          ## but I don't think tahts needed anymore.
          tlabel = partlabel
@@ -945,7 +950,9 @@ build_table = function(lyt, df,
                              cformat = content_format(firstspl),
                              cvar = content_var(firstspl),
                              cextra_args = content_extra_args(firstspl),
-                             spl_context = context_df_row(cinfo = cinfo))
+                             spl_context = context_df_row(cinfo = cinfo),
+                             ## we DO want the 'outer table' if the first one is a multi-analyze
+                             no_outer_tbl = !is(firstspl, "AnalyzeMultiVars"))
     })
     kids = kids[!sapply(kids, is.null)]
     if(length(kids) > 0)
