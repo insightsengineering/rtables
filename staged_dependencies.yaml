@@ -12,6 +12,9 @@ downstream_repos:
   insightsengineering/tern.mmrm:
     repo: insightsengineering/tern.mmrm
     host: https://github.com
+  insightsengineering/tern.rbmi:
+    repo: insightsengineering/tern.rbmi
+    host: https://github.com
   insightsengineering/teal.widgets:
     repo: insightsengineering/teal.widgets
     host: https://github.com
