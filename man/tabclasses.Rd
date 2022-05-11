@@ -24,7 +24,8 @@ ElementaryTable(
   title = "",
   subtitles = character(),
   main_footer = character(),
-  prov_footer = character()
+  prov_footer = character(),
+  hdr_sep = .default_hsep()
 )
 
 TableTree(
@@ -45,7 +46,8 @@ TableTree(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  page_title = NA_character_
+  page_title = NA_character_,
+  hdr_sep = .default_hsep()
 )
 }
 \arguments{
@@ -78,6 +80,11 @@ TableTree(
 \item{main_footer}{character. Main global (non-referential) footer materials.}
 
 \item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
+
+\item{hdr_sep}{character(1). Set of character(s) to be repeated as the separator between
+the header and body of the table when rendered as text. Defaults to a connected horrizontal
+line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
+once per session warning).}
 
 \item{cont}{ElementaryTable. Content table.}
 

@@ -11,6 +11,7 @@ build_table(
   col_counts = NULL,
   col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
   topleft = NULL,
+  hdr_sep = .default_hsep(),
   ...
 )
 }
@@ -30,6 +31,11 @@ will be replaced with the automatically calculated counts.}
 \item{col_total}{integer(1). The total observations across all columns. Defaults to \code{nrow(df)}.}
 
 \item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+
+\item{hdr_sep}{character(1). Set of character(s) to be repeated as the separator between
+the header and body of the table when rendered as text. Defaults to a connected horrizontal
+line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
+once per session warning).}
 
 \item{\dots}{currently ignored.}
 }

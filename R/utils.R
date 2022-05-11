@@ -1,3 +1,22 @@
+#' @importFrom utils localeToCharset
+d_hsep_factory <- function() {
+    warn_sent <- FALSE
+    function() {
+        if(grepl("^UTF", localeToCharset()))
+            "\u2014"
+        else {
+            if(!warn_sent) {
+                warning("Detected non-UTF charset. Falling back to '-' ",
+                        "as default header/body separator. This warning ",
+                        "will only be shown once per R session.")
+                warn_sent <<- TRUE
+            }
+            "-"
+        }
+    }
+}
+
+.default_hsep <- d_hsep_factory()
 
 #' Check if an object is a valid rtable
 #'

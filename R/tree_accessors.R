@@ -923,7 +923,7 @@ setMethod("set_format_recursive", "TableRow",
         obj_format(obj) = format
     lcells = row_cells(obj)
     lvals = lapply(lcells, function(x) {
-        if(!is.null(x) && is.null(obj_format(x)))
+        if(!is.null(x) && (override || is.null(obj_format(x))))
             obj_format(x) = obj_format(obj)
         x
     })
@@ -2479,5 +2479,50 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 
 
 
+#' Access or recursively set header-body separator for tables
+#'
+#' @inheritParams gen_args
+#' @param value character(1). String to use as new header/body separator.
+#'
+#' @return for `header_sep` the string acting as the header separator.
+#' for `header_sep<-`, the `obj`, with the new header separator
+#' applied recursively to it and all its subtables.
+#'
+#' @export
+setGeneric("header_sep", function(obj) standardGeneric("header_sep"))
+
+#' @rdname header_sep
+#' @export
+setMethod("header_sep", "VTableTree",
+          function(obj) obj@header_sep)
+
+#' @rdname header_sep
+#' @export
+setGeneric("header_sep<-", function(obj, value) standardGeneric("header_sep<-"))
+
+
+#' @rdname header_sep
+#' @export
+setMethod("header_sep<-", "VTableTree",
+          function(obj, value) {
+    cont <- content_table(obj)
+    if(NROW(cont) > 0) {
+        header_sep(cont) <- value
+        content_table(obj) <- cont
+    }
+
+    kids <- lapply(tree_children(obj),
+                   `header_sep<-`,
+                   value = value)
+
+    tree_children(obj) <- kids
+    obj@header_sep <- value
+    obj
+})
+
+#' @rdname header_sep
+#' @export
+setMethod("header_sep<-", "TableRow",
+          function(obj, value) obj)
 
 

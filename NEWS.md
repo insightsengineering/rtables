@@ -1,3 +1,8 @@
+## rtables 0.5.0.2
+ * Default "line separator" between header and body now falls back to "-" non-UTF charset locales.
+ * New `hdr_sep` argument to `build_table` which sets the header separator for the constructed table (and subtables thereof)
+ * New `header_sep` and `header_sep<-` accessors for constructed tables, the latter of which is mandatorily recursive.
+
 ## rtables 0.5.0.1
  * `split_rows_by(var, child_labels="hidden")` no longer removes the structural subtable corresponding to levels of `var` (#314)
  

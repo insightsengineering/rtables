@@ -155,3 +155,26 @@ test_that("Accessors for Split objects work", {
                      spl_varlabels(mvarspl2))
 
 })
+
+test_that("header sep setting works", {
+    dflt <- rtables:::.default_hsep()
+
+    hsep_test <- function(tab, exp) {
+        expect_identical(header_sep(tab), exp)
+        expect_identical(header_sep(tab[1:5,]), exp)
+        expect_identical(header_sep(tab[,1:3]), exp)
+        expect_identical(header_sep(tab[1:5, 1:3]), exp)
+        expect_identical(header_sep(tree_children(tab)[[1]]), exp)
+        TRUE
+    }
+    lyt <- make_big_lyt()
+
+    tbl <- build_table(lyt, rawdat)
+    hsep_test(tbl, dflt)
+    tbl2 <- tbl
+    header_sep(tbl2) <- "="
+    hsep_test(tbl2, "=")
+
+
+
+})

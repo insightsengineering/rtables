@@ -50,7 +50,7 @@ NULL
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
-                                             linesep = "\u2014") {
+                                             linesep = header_sep(x)) {
     toString(matrix_form(x, indent_rownames = TRUE),
              widths = widths, col_gap = col_gap,
              linesep = linesep)
