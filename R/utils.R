@@ -2,7 +2,7 @@
 d_hsep_factory <- function() {
     warn_sent <- FALSE
     function() {
-        if(grepl("^UTF", localeToCharset()))
+        if(any(grepl("^UTF", localeToCharset())))
             "\u2014"
         else {
             if(!warn_sent) {
