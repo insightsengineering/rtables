@@ -24,6 +24,7 @@ NULL
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
 #' @param linesep character to create line separator
+#' @param indent_size numeric(1). Number of spaces to use per indent level
 #' @exportMethod toString
 #'
 #' @return a string representation of \code{x} as it appears when printed.
@@ -50,8 +51,10 @@ NULL
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
-                                             linesep = header_sep(x)) {
-    toString(matrix_form(x, indent_rownames = TRUE),
+                                             linesep = header_sep(x),
+                                             indent_size = 2) {
+    toString(matrix_form(x, indent_rownames = TRUE,
+                         indent_size = indent_size),
              widths = widths, col_gap = col_gap,
              linesep = linesep)
 })
@@ -151,7 +154,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
 #'
 #' matrix_form(tbl)
 setMethod("matrix_form", "VTableTree",
-          function(obj, indent_rownames = FALSE) {
+          function(obj, indent_rownames = FALSE,
+                   indent_size = 2) {
 
     stopifnot(is(obj, "VTableTree"))
 
@@ -212,8 +216,10 @@ setMethod("matrix_form", "VTableTree",
 
     nr_header <- nrow(header_content$body)
     if (indent_rownames) {
-        body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent))
-        formats[,1] <- indent_string(formats[, 1], c(rep(0, nr_header), sr$indent))
+        body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent),
+                                   incr = indent_size)
+        formats[,1] <- indent_string(formats[, 1], c(rep(0, nr_header), sr$indent),
+                                     incr = indent_size)
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
