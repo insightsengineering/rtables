@@ -30,3 +30,7 @@ downstream_repos:
   insightsengineering/chevron:
     repo: insightsengineering/chevron
     host: https://github.com
+  insightsengineering/teal.reporter:
+    repo: insightsengineering/teal.reporter
+    host: https://github.com
+
