@@ -34,15 +34,17 @@ NULL
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
 #' @param page_prefix character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table
-#' @param hdr_sep character(1). Set of character(s) to be repeated as the separator between
+#' @param hsep character(1). Set of character(s) to be repeated as the separator between
 #' the header and body of the table when rendered as text. Defaults to a connected horrizontal
 #' line (unicode 2014) in locals that use a UTF charset, and to `-` elsewhere (with a
 #' once per session warning).
+#' @param indent_size numeric(1). Number of spaces to use per indent level. Defaults to 2
+
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
-                     cvar, topleft, page_prefix, hdr_sep,  ...) NULL
+                     cvar, topleft, page_prefix, hsep, indent_size, ...) NULL
 
 
 

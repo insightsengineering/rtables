@@ -5,9 +5,9 @@
 \alias{table_shell_str}
 \title{Table shells}
 \usage{
-table_shell(tt, widths = NULL, col_gap = 3, linesep = "—")
+table_shell(tt, widths = NULL, col_gap = 3, hsep = "—")
 
-table_shell_str(tt, widths = NULL, col_gap = 3, linesep = "—")
+table_shell_str(tt, widths = NULL, col_gap = 3, hsep = "—")
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -16,7 +16,7 @@ table_shell_str(tt, widths = NULL, col_gap = 3, linesep = "—")
 
 \item{col_gap}{gap between columns}
 
-\item{linesep}{character to create line separator}
+\item{hsep}{character to create line separator}
 }
 \value{
 for \code{table_shell_str} the string representing the table shell, for \code{table_shell},

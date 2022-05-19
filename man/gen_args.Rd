@@ -23,7 +23,8 @@ gen_args(
   cvar,
   topleft,
   page_prefix,
-  hdr_sep,
+  hsep,
+  indent_size,
   ...
 )
 }
@@ -66,10 +67,12 @@ should be visible if and only if multiple variables are analyzed at the same lev
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 
-\item{hdr_sep}{character(1). Set of character(s) to be repeated as the separator between
+\item{hsep}{character(1). Set of character(s) to be repeated as the separator between
 the header and body of the table when rendered as text. Defaults to a connected horrizontal
 line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
 once per session warning).}
+
+\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
 
 \item{\dots}{Passed on to methods or tabulation functions.}
 }

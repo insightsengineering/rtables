@@ -19,12 +19,11 @@ NULL
 
 #' Convert an `rtable` object to a string
 #'
-#'
+#' @inheritParams gen_args
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
-#' @param linesep character to create line separator
-#' @param indent_size numeric(1). Number of spaces to use per indent level
+#' @param hsep character to create line separator
 #' @exportMethod toString
 #'
 #' @return a string representation of \code{x} as it appears when printed.
@@ -51,12 +50,12 @@ NULL
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
-                                             linesep = header_sep(x),
+                                             hsep = horizontal_sep(x),
                                              indent_size = 2) {
     toString(matrix_form(x, indent_rownames = TRUE,
                          indent_size = indent_size),
              widths = widths, col_gap = col_gap,
-             linesep = linesep)
+             hsep = hsep)
 })
 
 #' Table shells
@@ -84,13 +83,13 @@ setMethod("toString", "VTableTree", function(x,
 #'
 #' tbl <- build_table(l, iris2)
 #' table_shell(tbl)
-table_shell <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
-    cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, linesep = linesep))
+table_shell <- function(tt, widths = NULL, col_gap =3, hsep = "\u2014") {
+    cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep))
 }
 
 #' @rdname table_shell
 #' @export
-table_shell_str <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
+table_shell_str <- function(tt, widths = NULL, col_gap =3, hsep = "\u2014") {
 
     matform <- matrix_form(tt, indent_rownames = TRUE)
     format_strs <- vapply(as.vector(matform$formats),
@@ -105,7 +104,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
 
     matform$strings <- matrix(format_strs, ncol = ncol(matform$strings),
                               nrow = nrow(matform$strings))
-    toString(matform, widths = widths, col_gap = col_gap, linesep = linesep)
+    toString(matform, widths = widths, col_gap = col_gap, hsep = hsep)
 }
 
 
@@ -154,7 +153,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap =3, linesep = "\u2014") {
 #'
 #' matrix_form(tbl)
 setMethod("matrix_form", "VTableTree",
-          function(obj, indent_rownames = FALSE,
+          function(obj,
+                   indent_rownames = FALSE,
                    indent_size = 2) {
 
     stopifnot(is(obj, "VTableTree"))
@@ -896,7 +896,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @param mat a matrix of strings
 #' @param nheader number of header rows
 #' @param colsep string that separates the columns
-#' @param linesep character to build line separator
+#' @param hsep character to build line separator
 #'
 #' @noRd
 #'
@@ -906,7 +906,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(rtables:::mat_as_string(mat)); cat("\n")
-mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "\u2014") {
+mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = "\u2014") {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 
   rows_formatted <- apply(mat, 1, function(row) {
@@ -916,6 +916,6 @@ mat_as_string <- function(mat, nheader = 1, colsep = "    ", linesep = "\u2014")
   header_rows <- seq_len(nheader)
   nchwidth <- nchar(rows_formatted[1])
   paste(c(rows_formatted[header_rows],
-          substr(strrep(linesep, nchwidth), 1, nchwidth),
+          substr(strrep(hsep, nchwidth), 1, nchwidth),
           rows_formatted[-header_rows]), collapse = "\n")
 }

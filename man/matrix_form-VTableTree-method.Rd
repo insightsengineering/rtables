@@ -4,13 +4,15 @@
 \alias{matrix_form,VTableTree-method}
 \title{Transform rtable to a list of matrices which can be used for outputting}
 \usage{
-\S4method{matrix_form}{VTableTree}(obj, indent_rownames = FALSE)
+\S4method{matrix_form}{VTableTree}(obj, indent_rownames = FALSE, indent_size = 2)
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{indent_rownames}{logical(1), if TRUE the column with the row names in the \code{strings} matrix of has indented row
 names (strings pre-fixed)}
+
+\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
 }
 \value{
 A list with the following elements:

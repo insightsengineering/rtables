@@ -1359,7 +1359,7 @@ setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitl
                         rowspans = "data.frame",
                         labelrow = "LabelRow",
                         page_titles = "character",
-                        header_sep = "character"
+                        horizontal_sep = "character"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
@@ -1443,7 +1443,7 @@ ElementaryTable <- function(kids = list(),
                            subtitles = character(),
                            main_footer = character(),
                            prov_footer = character(),
-                           hdr_sep = .default_hsep()) {
+                           hsep = .default_hsep()) {
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1468,7 +1468,7 @@ ElementaryTable <- function(kids = list(),
               subtitles = subtitles,
               main_footer = main_footer,
               provenance_footer = prov_footer,
-              header_sep = hdr_sep
+              horizontal_sep = hsep
               )
     tab <- set_format_recursive(tab, format, FALSE)
     tab
@@ -1508,7 +1508,7 @@ TableTree <- function(kids = list(),
                      main_footer = character(),
                      prov_footer = character(),
                      page_title = NA_character_,
-                     hdr_sep = .default_hsep()) {
+                     hsep = .default_hsep()) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)
@@ -1541,7 +1541,7 @@ TableTree <- function(kids = list(),
                         subtitles = subtitles,
                         main_footer = main_footer,
                         prov_footer = prov_footer,
-                        hdr_sep = hdr_sep)
+                        hsep = hsep)
     } else {
         tab <- new("TableTree", content = cont,
                   children = kids,
@@ -1557,10 +1557,10 @@ TableTree <- function(kids = list(),
                   main_footer = main_footer,
                   provenance_footer = prov_footer,
                   page_title_prefix = page_title,
-                  header_sep = "-" ) ## this is overridden below to get recursiveness
+                  horizontal_sep = "-" ) ## this is overridden below to get recursiveness
         tab <- set_format_recursive(tab, format, FALSE)
         ## this is recursive
-        header_sep(tab) <- hdr_sep
+        horizontal_sep(tab) <- hsep
         tab
     }
 }

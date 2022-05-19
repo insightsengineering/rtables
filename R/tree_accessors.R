@@ -2484,45 +2484,45 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 #' @inheritParams gen_args
 #' @param value character(1). String to use as new header/body separator.
 #'
-#' @return for `header_sep` the string acting as the header separator.
-#' for `header_sep<-`, the `obj`, with the new header separator
+#' @return for `horizontal_sep` the string acting as the header separator.
+#' for `horizontal_sep<-`, the `obj`, with the new header separator
 #' applied recursively to it and all its subtables.
 #'
 #' @export
-setGeneric("header_sep", function(obj) standardGeneric("header_sep"))
+setGeneric("horizontal_sep", function(obj) standardGeneric("horizontal_sep"))
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep", "VTableTree",
-          function(obj) obj@header_sep)
+setMethod("horizontal_sep", "VTableTree",
+          function(obj) obj@horizontal_sep)
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setGeneric("header_sep<-", function(obj, value) standardGeneric("header_sep<-"))
+setGeneric("horizontal_sep<-", function(obj, value) standardGeneric("horizontal_sep<-"))
 
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep<-", "VTableTree",
+setMethod("horizontal_sep<-", "VTableTree",
           function(obj, value) {
     cont <- content_table(obj)
     if(NROW(cont) > 0) {
-        header_sep(cont) <- value
+        horizontal_sep(cont) <- value
         content_table(obj) <- cont
     }
 
     kids <- lapply(tree_children(obj),
-                   `header_sep<-`,
+                   `horizontal_sep<-`,
                    value = value)
 
     tree_children(obj) <- kids
-    obj@header_sep <- value
+    obj@horizontal_sep <- value
     obj
 })
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep<-", "TableRow",
+setMethod("horizontal_sep<-", "TableRow",
           function(obj, value) obj)
 
 

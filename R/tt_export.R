@@ -126,7 +126,9 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n") {
+export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n",
+                          hsep = .default_hsep(),
+                          indent_size = 2) {
 
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
 
@@ -136,7 +138,10 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
         tbls <- list(tt)
     }
 
-    res <- paste(sapply(tbls, toString, widths = colwidths), collapse = page_break)
+    res <- paste(sapply(tbls, toString,
+                        widths = colwidths,
+                        hsep = hsep,
+                        indent_size = indent_size), collapse = page_break)
 
     if(!is.null(file))
         cat(res, file = file)
@@ -237,6 +242,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
 #' The PDF output is based on the ASCII output created with `toString`
 #'
 #' @inheritParams export_as_txt
+#' @inheritParams tostring
 #' @inheritParams grid::plotViewport
 #' @inheritParams paginate_table
 #' @param file file to write, must have `.pdf` extension
@@ -273,7 +279,10 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
 export_as_pdf <- function(tt,
                           file, width = 11.7, height = 8.3, # passed to pdf()
                           margins = c(4, 4, 4, 4), fontsize = 8,  # grid parameters
-                          paginate = TRUE, lpp = NULL, ... # passed to paginate_table
+                          paginate = TRUE, lpp = NULL,
+                          hsep = "-",
+                          indent_size = 2,
+                          ... # passed to paginate_table
 ) {
     stopifnot(tools::file_ext(file) != ".pdf")
 
@@ -297,7 +306,8 @@ export_as_pdf <- function(tt,
         list(tt)
     }
 
-    stbls <- lapply(lapply(tbls, toString, widths = colwidths, linesep = "-"), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+    stbls <- lapply(lapply(tbls, toString, widths = colwidths, hsep = hsep,
+                           indent_size = indent_size), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
 
     gtbls <- lapply(stbls, function(txt) {
         textGrob(
