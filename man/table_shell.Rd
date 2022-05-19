@@ -5,9 +5,9 @@
 \alias{table_shell_str}
 \title{Table shells}
 \usage{
-table_shell(tt, widths = NULL, col_gap = 3, hsep = "—")
+table_shell(tt, widths = NULL, col_gap = 3, hsep = .default_hsep())
 
-table_shell_str(tt, widths = NULL, col_gap = 3, hsep = "—")
+table_shell_str(tt, widths = NULL, col_gap = 3, hsep = .default_hsep())
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}

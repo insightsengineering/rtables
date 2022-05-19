@@ -86,6 +86,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different children resulting form this split.
+#' @param format_na_str character(1). String which should be displayed when formatted if this cell's value(s) are all NA.
 #' @inheritParams gen_args
 #' @inherit gen_args return
 #' @family conventions
@@ -96,7 +97,8 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
                      indent_mod, show_labels, label_pos, #visible_label,
                      var_labels, cvar,
-                     table_names, topleft, align, page_by, page_prefix) NULL
+                     table_names, topleft, align, page_by, page_prefix,
+                     format_na_str) NULL
 
 
 #' Constructor Arg Conventions

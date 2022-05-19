@@ -354,6 +354,18 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
     expect_identical(list(b=7), rtables:::rawvalues(res2))
 })
 
+
+test_that(".format_na_strs works in make_afun", {
+    s_fun <- function(x, ...) list(stuff = NA)
+
+    afun <- make_afun(s_fun, .stats  = "stuff",
+                      .formats = list(stuff = "xx.x"),
+                      .format_na_strs = list(stuff = "wat"))
+    res <- afun(1:10)
+    expect_identical(format_rcell(res[[1]]),
+                     "wat")
+})
+
 test_that("list_wrap functions work", {
 
     f1 <- list_wrap_x(summary)

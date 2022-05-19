@@ -886,7 +886,9 @@ setMethod("spanned_values<-", "LabelRow",
 #' @rdname lab_name
 #' @export
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
-##setMethod("obj_format", "CellValue", function(obj) obj@format)
+#' @rdname lab_name
+#' @export
+setMethod("obj_format", "CellValue", function(obj) attr(obj, "format"))
 #' @rdname lab_name
 #' @export
 setMethod("obj_format", "Split", function(obj) obj@split_format)
@@ -903,12 +905,31 @@ setMethod("obj_format<-", "Split", function(obj, value) {
     obj@split_format = value
     obj
 })
+#' @rdname lab_name
+#' @export
+setMethod("obj_format<-", "CellValue", function(obj, value) {
+    attr(obj, "format") <- value
+    obj
+})
 
-## setMethod("obj_format<-", "CellValue", function(obj, value) {
-##     obj@format = value
-##     obj
-## })
+#' @rdname lab_name
+#' @export
+setGeneric("obj_na_str", function(obj) standardGeneric("obj_na_str"))
+#' @rdname lab_name
+#' @export
+setGeneric("obj_na_str<-", function(obj, value) standardGeneric("obj_na_str<-"))
 
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str<-", "CellValue", function(obj, value) {
+    attr(obj, "format_na_str") <- value
+    obj
+})
+
+
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str"))
 
 
 #' @rdname int_methods

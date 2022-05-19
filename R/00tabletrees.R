@@ -1734,7 +1734,7 @@ RefFootnote = function(note, index = NA_integer_) {
 ## label: row label to be used for parent row
 ## indent_mod: indent modifier to be used for parent row
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL,
-                      align = NULL)  {
+                      align = NULL, format_na_str = NULL)  {
 
     if (is.null(colspan))
         colspan <- 1L
@@ -1752,6 +1752,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL, indent_mod
     ret <- structure(list(val), format = format, colspan = colspan, label = label,
                      indent_mod = indent_mod, footnotes = footnotes,
                      align = align,
+                     format_na_str = format_na_str,
                      class = "CellValue")
 }
 
@@ -1777,7 +1778,8 @@ RowsVerticalSection <- function(values,
                                labels = NULL,
                                indent_mods = NULL,
                                formats = NULL,
-                               footnotes = NULL) {
+                               footnotes = NULL,
+                               format_na_strs = NULL) {
     stopifnot(is(values, "list"))
 ##    innernms <- value_names(values)
 
@@ -1795,6 +1797,7 @@ RowsVerticalSection <- function(values,
     ##     row_formats = formats)
     structure(values, class = "RowsVerticalSection", row_names = names, row_labels = labels, indent_mods = indent_mods,
               row_formats = formats,
+              row_na_strs = format_na_strs,
               row_footnotes = lapply(footnotes,
                                      ## cause each row needs to accept
                                      ## a *list* of row footnotes

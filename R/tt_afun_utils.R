@@ -13,7 +13,8 @@
 #' @rdname rcell
 #' @inherit CellValue return
 #' @export
-rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL, align = NULL){
+rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL, align = NULL,
+                 format_na_str = NULL){
 
     if(!is.null(align))
         align <- chk_rtables_align(align)
@@ -28,6 +29,8 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
             obj_format(x) <- format
         if(!is.null(footnotes))
             cell_footnotes(x) <- lapply(footnotes, RefFootnote)
+        if(!is.null(format_na_str))
+            obj_na_str(x) <- format_na_str
         ret <- x
     } else {
         if(is.null(label))
@@ -37,7 +40,8 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
         if(is.null(indent_mod))
             indent_mod <- indent_mod(x)
         footnotes <- lapply(footnotes, RefFootnote)
-        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes)# RefFootnote(footnote))
+        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes,
+                         format_na_str = format_na_str)# RefFootnote(footnote))
     }
     if(!is.null(align))
         cell_align(ret) <- chk_rtables_align(align)
@@ -57,10 +61,12 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
 non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
                          label = NULL, indent_mod = NULL,
                          refval = NULL,
-                         align = "center") {
+                         align = "center",
+                         format_na_str = NULL) {
     val <- if(is_ref) refval else x
     rcell(val, format = format, colspan = colspan, label = label,
-          indent_mod = indent_mod, align = align)
+          indent_mod = indent_mod, align = align,
+          format_na_str = format_na_str)
 }
 
 
@@ -78,6 +84,7 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .cell_footnotes list. Referential footnote messages to be associated by name with \emph{cells}
 #' @param .row_footnotes list. Referential footnotes messages to be associated by name with \emph{rows}
 #' @param .aligns character or NULL. Alignments for the cells
+#' @param .format_na_strs character or NULL. NA strings for the cells
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
@@ -107,7 +114,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .indent_mods = NULL,
                     .cell_footnotes = list(NULL),
                     .row_footnotes = list(NULL),
-                    .aligns = NULL) {
+                    .aligns = NULL,
+                    .format_na_strs = NULL) {
     if(is.function(.formats))
         .formats = list(.formats)
 
@@ -126,8 +134,9 @@ in_rows <- function(..., .list = NULL, .names = NULL,
         if(length(.labels) >0 ||
            length(.formats) > 0 ||
            length(.names) > 0 ||
-           length(.indent_mods) > 0)
-            stop("in_rows got 0 rows but length >0 of at leats one of .labels, .formats, .names, .indent_mods. Does your analysis/summary function handle the 0 row df/length 0 x case?")
+           length(.indent_mods) > 0 ||
+           length(.format_na_strs) > 0)
+            stop("in_rows got 0 rows but length >0 of at least one of .labels, .formats, .names, .indent_mods, .format_na_strs. Does your analysis/summary function handle the 0 row df/length 0 x case?")
         l2 <- list()
     } else {
         if(is.null(.formats))
@@ -146,6 +155,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
         l2 <- mapply(rcell, x = l, format = .formats,
                      footnotes = .cell_footnotes %||% list(NULL),
                      align = .aligns,
+                     format_na_str = .format_na_strs %||% list(NULL),
                      SIMPLIFY = FALSE)
     }
     if(is.null(.labels)) {
@@ -169,7 +179,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                                labels = .labels,
                                indent_mods = .indent_mods,
                                formats = .formats,
-                               footnotes = .row_footnotes)
+                               footnotes = .row_footnotes,
+                               format_na_strs = .format_na_strs)
     ## if(!is.null(.names))
     ##     names(l2) <- .names
     ## else
@@ -208,7 +219,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'   overriden by extra args within a split.
 #' @param .null_ref_cells logical(1). Should cells for the reference column be NULL-ed
 #' by the returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this argument occurs after \code{...} so it must be \emph{fully} specified  by name when set.
-#'
+#' @param .format_na_strs ANY. vector/list of na strings to override any defaults applied by \code{fun}.
 #' @return A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
 #'   performed automatically.
 #'
@@ -307,6 +318,7 @@ make_afun <- function(fun,
                       .labels = NULL,
                       .indent_mods = NULL,
                       .ungroup_stats = NULL,
+                      .format_na_strs = NULL,
                       ...,
                       .null_ref_cells = ".in_ref_col" %in% names(formals(fun))) {
 
@@ -322,6 +334,7 @@ make_afun <- function(fun,
     ## force EVERYTHING otherwise calling this within loops is the stuff of nightmares
     force(.stats)
     force(.formats)
+    force(.format_na_strs)
     force(.labels)
     force(.indent_mods)
     force(.ungroup_stats)
@@ -401,12 +414,16 @@ make_afun <- function(fun,
         .labels <- .validate_nms(final_vals, .stats, .labels)
         .formats <- .validate_nms(final_vals, .stats, .formats)
         .indent_mods <- .validate_nms(final_vals, .stats, .indent_mods)
+        .format_na_strs <- .validate_nms(final_vals, .stats, .format_na_strs)
 
         final_labels <- value_labels(final_vals)
         final_labels[names(.labels)] <- .labels
 
         final_formats <- lapply(final_vals, obj_format)
         final_formats[names(.formats)] = .formats
+
+        final_format_na_strs <- lapply(final_vals, obj_na_str)
+        final_format_na_strs[names(.format_na_strs)] = .format_na_strs
 
         if(is(final_vals, "RowsVerticalSection"))
             final_imods <- indent_mod(final_vals)
@@ -430,6 +447,12 @@ make_afun <- function(fun,
                 final_formats <- insert_replace(final_formats,
                                                 nm,
                                                 setNames(rep(final_formats[nm],
+                                                             length.out = length(tmp)),
+                                                         names(tmp))
+                                                )
+                final_format_na_strs <- insert_replace(final_format_na_strs,
+                                                nm,
+                                                setNames(rep(final_format_na_strs[nm],
                                                              length.out = length(tmp)),
                                                          names(tmp))
                                                 )
@@ -457,7 +480,8 @@ make_afun <- function(fun,
         l = final_labels,
 #        im = final_imods,
         SIMPLIFY = FALSE)
-        in_rows(.list = rcells, .indent_mods = final_imods) ##, .labels = .labels)
+        in_rows(.list = rcells, .indent_mods = final_imods,
+                .format_na_strs = final_format_na_strs) ##, .labels = .labels)
     }
     formals(ret) <- formals(fun)
     ret
