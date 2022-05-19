@@ -14,27 +14,27 @@ test_that("toString method works correclty", {
                 .labels = c("Mean (sd)", "Variance", "Min - Max")
             )
         }) %>%
-        build_table(iris)
+        build_table(iris, hsep = "=")
 
     print(tbl)
 
+    expstr_lns <- c("                 setosa      versicolor     virginica ",
+                    "                 (N=50)        (N=50)        (N=50)   ",
+                    "======================================================",
+                    "Sepal.Length                                          ",
+                    "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
+                    "  Variance        0.124         0.266         0.404   ",
+                    "  Min - Max     4.3 - 5.8     4.9 - 7.0     4.9 - 7.9 ",
+                    "Petal.Width                                           ",
+                    "  Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)",
+                    "  Variance        0.011         0.039         0.075   ",
+                    "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n")
+
+    exp_str <- paste(expstr_lns, collapse = "\n")
+
     expect_identical(
         toString(tbl),
-        paste(
-            c("                 setosa      versicolor     virginica ",
-              "                 (N=50)        (N=50)        (N=50)   ",
-              "——————————————————————————————————————————————————————",
-              "Sepal.Length                                          ",
-              "  Mean (sd)    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)",
-              "  Variance        0.124         0.266         0.404   ",
-              "  Min - Max     4.3 - 5.8     4.9 - 7.0     4.9 - 7.9 ",
-              "Petal.Width                                           ",
-              "  Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)",
-              "  Variance        0.011         0.039         0.075   ",
-              "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n"),
-            collapse = "\n"
-        )
-    )
+        exp_str)
 })
 
 test_that("labels correctly used for columns rather than names", {
@@ -191,7 +191,9 @@ test_that("alignment works", {
                     center = rcell("c", align = "center"))
         })
 
-    aligntab <- build_table(lyt, DM)
+    ## set the hsep so it works the same in all locales since thats not what
+    ## we are testing
+    aligntab <- build_table(lyt, DM, hsep = "=")
 
     matform <- matrix_form(aligntab)
     expect_identical(matform$aligns,
@@ -199,7 +201,7 @@ test_that("alignment works", {
 
     str <- toString(aligntab)
     expect_identical(str,
-                     "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n")
+                     gsub("—", horizontal_sep(aligntab), "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"))
 
     lyt2 <-  basic_table() %>%
         analyze("AGE", function(x) {
@@ -207,7 +209,7 @@ test_that("alignment works", {
                     .aligns = c(left = "left", right = "right", center = "center"))
         })
 
-    aligntab2 <- build_table(lyt, DM)
+    aligntab2 <- build_table(lyt, DM, hsep = "=")
     expect_identical(aligntab, aligntab2)
 
 
