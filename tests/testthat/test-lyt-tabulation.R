@@ -963,3 +963,22 @@ test_that("cut functions work", {
 
 
 })
+
+## https://github.com/Roche/rtables/issues/323
+
+test_that("empty factor levels represented correctly when ref group is set", {
+
+    df <- data.frame(
+        val = 1:10,
+        grp = factor(rep("a", 10), levels = c("a", "b"))
+    )
+
+
+    tbl <- basic_table() %>%
+        split_cols_by("grp", ref_group = "a") %>%
+        analyze("val") %>%
+        build_table(df)
+
+    expect_identical(ncol(tbl), 2L)
+
+})

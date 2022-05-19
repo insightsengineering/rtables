@@ -1117,7 +1117,11 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
         vals = sort(unlist(value_names(pinfo$values)))
     } else {
         vec = df[[spl_payload(lyt)]]
-        vals = unique(vec)
+        vals <- if(is.factor(vec))
+                levels(vec)
+            else
+                unique(vec)
+
         if(is.factor(vals))
             vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
     }
