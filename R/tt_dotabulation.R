@@ -892,7 +892,7 @@ build_table = function(lyt, df,
                        col_counts = NULL,
                        col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                        topleft = NULL,
-                       hdr_sep = .default_hsep(),
+                       hsep = .default_hsep(),
                        ...) {
     if(!is(lyt, "PreDataTableLayouts")) {
         stop("lyt must be a PreDataTableLayouts object. Got object of class ", class(lyt))
@@ -986,7 +986,7 @@ build_table = function(lyt, df,
     ## but now just call it so the error gets thrown when I want it to
     unused <- matrix_form(tab)
     tab <- update_ref_indexing(tab)
-    header_sep(tab) <- hdr_sep
+    horizontal_sep(tab) <- hsep
     tab
 }
 
@@ -1117,7 +1117,11 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
         vals = sort(unlist(value_names(pinfo$values)))
     } else {
         vec = df[[spl_payload(lyt)]]
-        vals = unique(vec)
+        vals <- if(is.factor(vec))
+                levels(vec)
+            else
+                unique(vec)
+
         if(is.factor(vals))
             vals = levels(relevel(droplevels(vals), bline)) # this sorts the levels
     }

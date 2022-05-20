@@ -11,6 +11,7 @@ make_afun(
   .labels = NULL,
   .indent_mods = NULL,
   .ungroup_stats = NULL,
+  .format_na_strs = NULL,
   ...,
   .null_ref_cells = ".in_ref_col" \%in\% names(formals(fun))
 )
@@ -27,6 +28,8 @@ make_afun(
 \item{.indent_mods}{integer. Named vector of indent modifiers for the generated rows.}
 
 \item{.ungroup_stats}{character. Vector of names, which must match elements of \code{.stats}}
+
+\item{.format_na_strs}{ANY. vector/list of na strings to override any defaults applied by \code{fun}.}
 
 \item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
 overriden by extra args within a split.}

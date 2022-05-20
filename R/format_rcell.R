@@ -13,7 +13,8 @@
 #' cll <- CellValue(pi, format = "xx.xxx")
 #' format_rcell(cll)
 
-format_rcell <- function(x, format, output = c("ascii", "html"), na_str = "NA") {
+format_rcell <- function(x, format, output = c("ascii", "html"),
+                         na_str = obj_na_str(x) %||% "NA") {
     format <- if(missing(format)) obj_format(x) else format
     format_value(rawvalues(x), format = format, output = output, na_str = na_str)
 }

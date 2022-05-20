@@ -13,7 +13,8 @@ in_rows(
   .indent_mods = NULL,
   .cell_footnotes = list(NULL),
   .row_footnotes = list(NULL),
-  .aligns = NULL
+  .aligns = NULL,
+  .format_na_strs = NULL
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ in_rows(
 \item{.row_footnotes}{list. Referential footnotes messages to be associated by name with \emph{rows}}
 
 \item{.aligns}{character or NULL. Alignments for the cells}
+
+\item{.format_na_strs}{character or NULL. NA strings for the cells}
 }
 \value{
 an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.

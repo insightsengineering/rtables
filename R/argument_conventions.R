@@ -34,15 +34,17 @@ NULL
 #' @param cvar character(1). The variable, if any, which the content function should accept. Defaults to NA.
 #' @param topleft character. Override values for the "top left" material to be displayed during printing.
 #' @param page_prefix character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table
-#' @param hdr_sep character(1). Set of character(s) to be repeated as the separator between
+#' @param hsep character(1). Set of character(s) to be repeated as the separator between
 #' the header and body of the table when rendered as text. Defaults to a connected horrizontal
 #' line (unicode 2014) in locals that use a UTF charset, and to `-` elsewhere (with a
 #' once per session warning).
+#' @param indent_size numeric(1). Number of spaces to use per indent level. Defaults to 2
+
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
-                     cvar, topleft, page_prefix, hdr_sep,  ...) NULL
+                     cvar, topleft, page_prefix, hsep, indent_size, ...) NULL
 
 
 
@@ -84,6 +86,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param show_labels character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different children resulting form this split.
+#' @param format_na_str character(1). String which should be displayed when formatted if this cell's value(s) are all NA.
 #' @inheritParams gen_args
 #' @inherit gen_args return
 #' @family conventions
@@ -94,7 +97,8 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
                      indent_mod, show_labels, label_pos, #visible_label,
                      var_labels, cvar,
-                     table_names, topleft, align, page_by, page_prefix) NULL
+                     table_names, topleft, align, page_by, page_prefix,
+                     format_na_str) NULL
 
 
 #' Constructor Arg Conventions

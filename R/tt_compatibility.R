@@ -213,6 +213,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #' @rdname rtable
 #'
 #' @inheritParams compat_args
+#' @inheritParams gen_args
 #' @param header Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.
 #' @param \dots Rows to place in the table.
 #'
@@ -302,7 +303,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'
 #' tbl2
 #'
-rtable = function(header, ..., format = NULL) {
+rtable = function(header, ..., format = NULL, hsep = .default_hsep()) {
     if(is.character(header))
         header = .char_to_hrows(header) #list(rrowl(NULL, header))
     if(is.list(header)) {
@@ -331,15 +332,16 @@ rtable = function(header, ..., format = NULL) {
     }
 
     TableTree(kids = body, format = format, cinfo = colinfo,
-              labelrow = LabelRow(lev = 0L, label = "", vis = FALSE))
+              labelrow = LabelRow(lev = 0L, label = "", vis = FALSE),
+              hsep = hsep)
 }
 
 #' @rdname rtable
 #' @export
-rtablel = function (header, ..., format = NULL)
+rtablel = function (header, ..., format = NULL, hsep = .default_hsep())
 {
     dots <- list(...)
-    args_list <- c(list(header = header, format = format), unlist(lapply(dots,
+    args_list <- c(list(header = header, format = format, hsep = hsep), unlist(lapply(dots,
         as.list), recursive = FALSE))
     do.call(rtable, args_list)
 }

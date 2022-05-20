@@ -11,7 +11,8 @@ CellValue(
   label = NULL,
   indent_mod = NULL,
   footnotes = NULL,
-  align = NULL
+  align = NULL,
+  format_na_str = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ CellValue(
 \item{footnotes}{list or NULL. Referential footnote messages for the cell.}
 
 \item{align}{character(1). Alignment the value should be rendered with. See \code{\link{rtables_aligns}} for currently supported alignments.}
+
+\item{format_na_str}{character(1). String which should be displayed when formatted if this cell's value(s) are all NA.}
 }
 \value{
 An object representing the value within a single cell within a populated table. The underlying structure

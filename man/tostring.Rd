@@ -5,7 +5,13 @@
 \alias{toString,VTableTree-method}
 \title{Convert an \code{rtable} object to a string}
 \usage{
-\S4method{toString}{VTableTree}(x, widths = NULL, col_gap = 3, linesep = header_sep(x))
+\S4method{toString}{VTableTree}(
+  x,
+  widths = NULL,
+  col_gap = 3,
+  hsep = horizontal_sep(x),
+  indent_size = 2
+)
 }
 \arguments{
 \item{x}{table object}
@@ -14,7 +20,9 @@
 
 \item{col_gap}{gap between columns}
 
-\item{linesep}{character to create line separator}
+\item{hsep}{character to create line separator}
+
+\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
 }
 \value{
 a string representation of \code{x} as it appears when printed.

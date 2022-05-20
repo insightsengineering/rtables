@@ -14,9 +14,15 @@
 \alias{obj_label<-,ValueWrapper-method}
 \alias{obj_label<-,VTableTree-method}
 \alias{obj_format,VTableNodeInfo-method}
+\alias{obj_format,CellValue-method}
 \alias{obj_format,Split-method}
 \alias{obj_format<-,VTableNodeInfo-method}
 \alias{obj_format<-,Split-method}
+\alias{obj_format<-,CellValue-method}
+\alias{obj_na_str}
+\alias{obj_na_str<-}
+\alias{obj_na_str<-,CellValue-method}
+\alias{obj_na_str,ANY-method}
 \title{Label, Name and Format accessor generics
 
 Getters and setters for basic, relatively universal attributes
@@ -48,11 +54,23 @@ of "table-like" objects"}
 
 \S4method{obj_format}{VTableNodeInfo}(obj)
 
+\S4method{obj_format}{CellValue}(obj)
+
 \S4method{obj_format}{Split}(obj)
 
 \S4method{obj_format}{VTableNodeInfo}(obj) <- value
 
 \S4method{obj_format}{Split}(obj) <- value
+
+\S4method{obj_format}{CellValue}(obj) <- value
+
+obj_na_str(obj)
+
+obj_na_str(obj) <- value
+
+\S4method{obj_na_str}{CellValue}(obj) <- value
+
+\S4method{obj_na_str}{ANY}(obj)
 }
 \arguments{
 \item{obj}{ANY. The object.}

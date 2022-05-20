@@ -48,3 +48,19 @@ test_that("table_shell works", {
                      paste0(capture_output(table_shell(tbl2)), "\n"))
 
 })
+
+test_that("rcell format_na_str functionality works", {
+
+    mycell <-
+    expect_identical(format_rcell(rcell(NA_real_,
+                                        format = "xx.xx",
+                                        format_na_str = "hiya")),
+                     "hiya")
+
+    ## default still works
+    expect_identical(format_rcell(rcell(NA_real_, format = "xx.x")),
+                     "NA")
+
+    irs <- in_rows(val1 = NA_real_, val2=NA_integer_, .formats = list(val1 = "xx.x", val2 = "xx.x"),
+                   .format_na_strs = list(val1 = "hiya", val2 = "lowdown"))
+})

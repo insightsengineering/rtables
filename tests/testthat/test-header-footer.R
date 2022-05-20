@@ -9,8 +9,8 @@ test_that("referential footnotes work", {
 
     lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
                    main_footer = "ha HA! Footer!") %>%
-    split_cols_by("ARM") %>%
-    analyze("AGE", afun = analysisfun)
+        split_cols_by("ARM") %>%
+        analyze("AGE", afun = analysisfun)
 
     result <-  build_table(lyt, ex_adsl)
 

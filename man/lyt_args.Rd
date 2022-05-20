@@ -43,7 +43,8 @@ lyt_args(
   topleft,
   align,
   page_by,
-  page_prefix
+  page_prefix,
+  format_na_str
 )
 }
 \arguments{
@@ -125,6 +126,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{page_by}{logical(1). Should pagination be forced between different children resulting form this split.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{format_na_str}{character(1). String which should be displayed when formatted if this cell's value(s) are all NA.}
 }
 \value{
 NULL (this is an argument template dummy function)

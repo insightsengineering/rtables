@@ -4,7 +4,12 @@
 \alias{format_rcell}
 \title{Format rcell}
 \usage{
-format_rcell(x, format, output = c("ascii", "html"), na_str = "NA")
+format_rcell(
+  x,
+  format,
+  output = c("ascii", "html"),
+  na_str = obj_na_str(x) \%||\% "NA"
+)
 }
 \arguments{
 \item{x}{an object of class \code{\link{CellValue}}, or a raw value.}

@@ -886,7 +886,9 @@ setMethod("spanned_values<-", "LabelRow",
 #' @rdname lab_name
 #' @export
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
-##setMethod("obj_format", "CellValue", function(obj) obj@format)
+#' @rdname lab_name
+#' @export
+setMethod("obj_format", "CellValue", function(obj) attr(obj, "format"))
 #' @rdname lab_name
 #' @export
 setMethod("obj_format", "Split", function(obj) obj@split_format)
@@ -903,12 +905,31 @@ setMethod("obj_format<-", "Split", function(obj, value) {
     obj@split_format = value
     obj
 })
+#' @rdname lab_name
+#' @export
+setMethod("obj_format<-", "CellValue", function(obj, value) {
+    attr(obj, "format") <- value
+    obj
+})
 
-## setMethod("obj_format<-", "CellValue", function(obj, value) {
-##     obj@format = value
-##     obj
-## })
+#' @rdname lab_name
+#' @export
+setGeneric("obj_na_str", function(obj) standardGeneric("obj_na_str"))
+#' @rdname lab_name
+#' @export
+setGeneric("obj_na_str<-", function(obj, value) standardGeneric("obj_na_str<-"))
 
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str<-", "CellValue", function(obj, value) {
+    attr(obj, "format_na_str") <- value
+    obj
+})
+
+
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str"))
 
 
 #' @rdname int_methods
@@ -2484,45 +2505,45 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 #' @inheritParams gen_args
 #' @param value character(1). String to use as new header/body separator.
 #'
-#' @return for `header_sep` the string acting as the header separator.
-#' for `header_sep<-`, the `obj`, with the new header separator
+#' @return for `horizontal_sep` the string acting as the header separator.
+#' for `horizontal_sep<-`, the `obj`, with the new header separator
 #' applied recursively to it and all its subtables.
 #'
 #' @export
-setGeneric("header_sep", function(obj) standardGeneric("header_sep"))
+setGeneric("horizontal_sep", function(obj) standardGeneric("horizontal_sep"))
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep", "VTableTree",
-          function(obj) obj@header_sep)
+setMethod("horizontal_sep", "VTableTree",
+          function(obj) obj@horizontal_sep)
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setGeneric("header_sep<-", function(obj, value) standardGeneric("header_sep<-"))
+setGeneric("horizontal_sep<-", function(obj, value) standardGeneric("horizontal_sep<-"))
 
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep<-", "VTableTree",
+setMethod("horizontal_sep<-", "VTableTree",
           function(obj, value) {
     cont <- content_table(obj)
     if(NROW(cont) > 0) {
-        header_sep(cont) <- value
+        horizontal_sep(cont) <- value
         content_table(obj) <- cont
     }
 
     kids <- lapply(tree_children(obj),
-                   `header_sep<-`,
+                   `horizontal_sep<-`,
                    value = value)
 
     tree_children(obj) <- kids
-    obj@header_sep <- value
+    obj@horizontal_sep <- value
     obj
 })
 
-#' @rdname header_sep
+#' @rdname horizontal_sep
 #' @export
-setMethod("header_sep<-", "TableRow",
+setMethod("horizontal_sep<-", "TableRow",
           function(obj, value) obj)
 
 
