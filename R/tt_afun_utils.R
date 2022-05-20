@@ -464,7 +464,7 @@ make_afun <- function(fun,
                                               )
             }
         }
-        rcells <- mapply(function(x, f, l, im) {
+        rcells <- mapply(function(x, f, l, na_str) {
             if(is(x, "CellValue")) {
                 obj_label(x) <- l
                 obj_format(x) <- f
@@ -472,16 +472,17 @@ make_afun <- function(fun,
                 x
             } else if(.null_ref_cells) {
                 non_ref_rcell(x, is_ref = .in_ref_col,
-                              format =f, label = l)#, indent_mod = im)
+                              format =f, label = l,
+                              format_na_str = na_str)#, indent_mod = im)
             } else {
-                rcell(x, format =f, label = l)#, indent_mod = im)
+                rcell(x, format =f, label = l, format_na_str = na_str)#, indent_mod = im)
             }
         }, f = final_formats, x = final_vals,
         l = final_labels,
+        na_str = final_format_na_strs,
 #        im = final_imods,
         SIMPLIFY = FALSE)
-        in_rows(.list = rcells, .indent_mods = final_imods,
-                .format_na_strs = final_format_na_strs) ##, .labels = .labels)
+        in_rows(.list = rcells, .indent_mods = final_imods) ##, .labels = .labels)
     }
     formals(ret) <- formals(fun)
     ret
