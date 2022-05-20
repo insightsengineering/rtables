@@ -157,7 +157,7 @@ test_that("Accessors for Split objects work", {
 })
 
 test_that("header sep setting works", {
-    dflt <- rtables:::.default_hsep()
+    dflt <- default_hsep()
 
     hsep_test <- function(tab, exp) {
         expect_identical(horizontal_sep(tab), exp)

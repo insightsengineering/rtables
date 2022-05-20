@@ -10,7 +10,7 @@ export_as_txt(
   paginate = FALSE,
   ...,
   page_break = "\\\\s\\\\n",
-  hsep = .default_hsep(),
+  hsep = default_hsep(),
   indent_size = 2
 )
 }

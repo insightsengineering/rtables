@@ -127,7 +127,7 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' system2("cat", tf)
 #' }
 export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n",
-                          hsep = .default_hsep(),
+                          hsep = default_hsep(),
                           indent_size = 2) {
 
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))

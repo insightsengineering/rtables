@@ -892,7 +892,7 @@ build_table = function(lyt, df,
                        col_counts = NULL,
                        col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                        topleft = NULL,
-                       hsep = .default_hsep(),
+                       hsep = default_hsep(),
                        ...) {
     if(!is(lyt, "PreDataTableLayouts")) {
         stop("lyt must be a PreDataTableLayouts object. Got object of class ", class(lyt))

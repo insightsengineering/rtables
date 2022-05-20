@@ -1443,7 +1443,7 @@ ElementaryTable <- function(kids = list(),
                            subtitles = character(),
                            main_footer = character(),
                            prov_footer = character(),
-                           hsep = .default_hsep()) {
+                           hsep = default_hsep()) {
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1508,7 +1508,7 @@ TableTree <- function(kids = list(),
                      main_footer = character(),
                      prov_footer = character(),
                      page_title = NA_character_,
-                     hsep = .default_hsep()) {
+                     hsep = default_hsep()) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)

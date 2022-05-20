@@ -25,7 +25,7 @@ ElementaryTable(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  hsep = .default_hsep()
+  hsep = default_hsep()
 )
 
 TableTree(
@@ -47,7 +47,7 @@ TableTree(
   main_footer = character(),
   prov_footer = character(),
   page_title = NA_character_,
-  hsep = .default_hsep()
+  hsep = default_hsep()
 )
 }
 \arguments{

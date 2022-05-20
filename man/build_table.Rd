@@ -11,7 +11,7 @@ build_table(
   col_counts = NULL,
   col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
   topleft = NULL,
-  hsep = .default_hsep(),
+  hsep = default_hsep(),
   ...
 )
 }

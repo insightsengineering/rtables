@@ -83,13 +83,13 @@ setMethod("toString", "VTableTree", function(x,
 #'
 #' tbl <- build_table(l, iris2)
 #' table_shell(tbl)
-table_shell <- function(tt, widths = NULL, col_gap =3, hsep = .default_hsep()) {
+table_shell <- function(tt, widths = NULL, col_gap =3, hsep = default_hsep()) {
     cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep))
 }
 
 #' @rdname table_shell
 #' @export
-table_shell_str <- function(tt, widths = NULL, col_gap =3, hsep = .default_hsep()) {
+table_shell_str <- function(tt, widths = NULL, col_gap =3, hsep = default_hsep()) {
 
     matform <- matrix_form(tt, indent_rownames = TRUE)
     format_strs <- vapply(as.vector(matform$formats),
@@ -906,7 +906,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(rtables:::mat_as_string(mat)); cat("\n")
-mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = .default_hsep()) {
+mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep()) {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 
   rows_formatted <- apply(mat, 1, function(row) {

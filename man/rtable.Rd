@@ -5,9 +5,9 @@
 \alias{rtablel}
 \title{Create a Table}
 \usage{
-rtable(header, ..., format = NULL, hsep = .default_hsep())
+rtable(header, ..., format = NULL, hsep = default_hsep())
 
-rtablel(header, ..., format = NULL, hsep = .default_hsep())
+rtablel(header, ..., format = NULL, hsep = default_hsep())
 }
 \arguments{
 \item{header}{Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.}

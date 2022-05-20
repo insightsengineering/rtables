@@ -1,5 +1,5 @@
 ## eat the one-time warning
-suppressWarnings(rtables:::.default_hsep())
+suppressWarnings(formatters::default_hsep())
 makefakedat = function(n  = 1000) {
     datadf = data.frame(stringsAsFactors = FALSE,
                         ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),

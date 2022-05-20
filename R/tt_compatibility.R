@@ -303,7 +303,7 @@ rheader = function(..., format = "xx", .lst = NULL) {
 #'
 #' tbl2
 #'
-rtable = function(header, ..., format = NULL, hsep = .default_hsep()) {
+rtable = function(header, ..., format = NULL, hsep = default_hsep()) {
     if(is.character(header))
         header = .char_to_hrows(header) #list(rrowl(NULL, header))
     if(is.list(header)) {
@@ -338,7 +338,7 @@ rtable = function(header, ..., format = NULL, hsep = .default_hsep()) {
 
 #' @rdname rtable
 #' @export
-rtablel = function (header, ..., format = NULL, hsep = .default_hsep())
+rtablel = function (header, ..., format = NULL, hsep = default_hsep())
 {
     dots <- list(...)
     args_list <- c(list(header = header, format = format, hsep = hsep), unlist(lapply(dots,
