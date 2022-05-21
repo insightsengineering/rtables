@@ -1,17 +1,10 @@
-## rtables 0.5.0.3
+## rtables 0.5.1
  * empty factor levels are now *not* dropped for column splits when ref_group is set (#323)
- * `linesep` argument to `toString` and related functions related to `hsep`
- * Previously introduced `hdr_sep` argument renamed to `hsep`
- * Previously introduced `header_sep` and `header_sep<-` accessors renamed to `horizontal_sep`
- * Increase versioned dependency on `formatters` to `>=0.2.0.5`
- 
-
-## rtables 0.5.0.2
+ * `linesep` argument to `toString` and related functions renamed to `hsep`
+ * Increase versioned dependency on `formatters` to `>=0.3.0`
  * Default "line separator" between header and body now falls back to "-" non-UTF charset locales.
- * New `hdr_sep` argument to `build_table` which sets the header separator for the constructed table (and subtables thereof)
- * New `header_sep` and `header_sep<-` accessors for constructed tables, the latter of which is mandatorily recursive.
-
-## rtables 0.5.0.1
+ * New `hsep` argument to `build_table` which sets the horizontal separator for the constructed table (and subtables thereof)
+ * New `horizontal_sep` and `horizontal_sep<-` accessors for constructed tables, the latter of which is mandatorily recursive.
  * `split_rows_by(var, child_labels="hidden")` no longer removes the structural subtable corresponding to levels of `var` (#314)
  
 ## rtables 0.5.0
