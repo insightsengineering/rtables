@@ -100,7 +100,7 @@ a_foo <- make_afun(s_foo, b = 4,
 
 a_foo(iris, .N_col = 40)
 a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
-a_foo(iris, .N_col = 40)
+a_foo2(iris, .N_col = 40)
 
 #grouping and further customization
 s_grp <- function(df, .N_col, a = 1, b = 2) {
