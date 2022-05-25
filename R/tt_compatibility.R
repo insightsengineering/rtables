@@ -465,7 +465,7 @@ combine_cinfo = function(..., new_total = NULL) {
     if(is.null(new_total))
         new_total <- sum(newcounts)
     newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
-    newexargs <- unlist(lapply(cinfs, col_extra_args)) %||% vector("list", length(newcounts))
+    newexargs <- unlist(lapply(cinfs, col_extra_args), recursive = FALSE) %||% vector("list", length(newcounts))
     newdisp <- any(vapply(cinfs, disp_ccounts, NA))
     alltls <- lapply(cinfs, top_left)
     newtl <- character()
