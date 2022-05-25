@@ -982,3 +982,25 @@ test_that("empty factor levels represented correctly when ref group is set", {
     expect_identical(ncol(tbl), 2L)
 
 })
+
+
+test_that("error on empty level of splitting variable", {
+    mydf <- data.frame(x = c("hi", "", "lo"), y = c(5, 10, 20),
+                       stringsAsFactors = FALSE)
+
+    mydf2 <- mydf
+    mydf2$x <- factor(mydf2$x)
+
+    lyt1 <- basic_table() %>%
+        split_cols_by("x") %>%
+        analyze("y")
+    expect_error(build_table(lyt1, mydf), "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt1, mydf2), "Got empty string level in splitting variable x")
+
+    lyt2 <- basic_table() %>%
+        split_rows_by("x") %>%
+        analyze("y")
+
+    expect_error(build_table(lyt2, mydf), "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt2, mydf2), "Got empty string level in splitting variable x")
+})

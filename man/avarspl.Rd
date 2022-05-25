@@ -100,6 +100,4 @@ Define a subset tabulation/analysis
 }
 \author{
 Gabriel Becker
-
-Gabriel Becker
 }

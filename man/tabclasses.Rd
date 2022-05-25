@@ -100,6 +100,4 @@ Table Constructors and Classes
 }
 \author{
 Gabriel Becker
-
-Gabriel Becker
 }
