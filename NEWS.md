@@ -1,3 +1,8 @@
+## rtables 0.5.1.1
+ * `col_counts` getter and setter now accept `path` argument.
+ * empty levels of a splitting variable now result in an informative error message (character and factor cases).
+ * fixed bug in handling of column extra arguments that was preventing cbinding tables from working correctly (#324)
+ 
 ## rtables 0.5.1
  * empty factor levels are now *not* dropped for column splits when ref_group is set (#323)
  * `linesep` argument to `toString` and related functions renamed to `hsep`

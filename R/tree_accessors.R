@@ -1447,6 +1447,8 @@ spl_ref_group = function(obj) {
 #' @inheritParams gen_args
 #' @param df data.frame/NULL. Data to use if the column information is being
 #'   generated from a  Pre-Data layout object
+#' @param path character or NULL. `col_counts` getter and setter only.
+#'   Path (in column structure).
 #' @param rtpos TreePos. Root position.
 #'
 #' @return A \code{LayoutColTree} object.
@@ -1684,37 +1686,37 @@ setMethod("col_extra_args", "LayoutColLeaf",
 
 #' @export
 #' @rdname col_accessors
-setGeneric("col_counts", function(obj) standardGeneric("col_counts"))
+setGeneric("col_counts", function(obj, path = NULL) standardGeneric("col_counts"))
 
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts",  "InstantiatedColumnInfo",
-          function(obj) obj@counts)
+          function(obj, path = NULL) obj@counts[.path_to_pos(path, obj, cols = TRUE)])
 
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts", "VTableNodeInfo",
-          function(obj) col_counts(col_info(obj)))
+          function(obj, path = NULL) col_counts(col_info(obj), path = path))
 
 #' @export
 #' @rdname col_accessors
-setGeneric("col_counts<-", function(obj, value) standardGeneric("col_counts<-"))
+setGeneric("col_counts<-", function(obj, path = NULL, value) standardGeneric("col_counts<-"))
 
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts<-",  "InstantiatedColumnInfo",
-          function(obj, value) {
-    obj@counts = value
+          function(obj, path = NULL, value) {
+    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- value
     obj
 })
 
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts<-", "VTableNodeInfo",
-          function(obj, value) {
-    cinfo = col_info(obj)
-    col_counts(cinfo) = value
-    col_info(obj) = cinfo
+          function(obj, path = NULL, value) {
+    cinfo <- col_info(obj)
+    col_counts(cinfo, path = path) <- value
+    col_info(obj) <- cinfo
     obj
 
 })

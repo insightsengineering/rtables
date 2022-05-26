@@ -84,17 +84,17 @@ col_exprs(obj, df = NULL)
 
 \S4method{col_exprs}{InstantiatedColumnInfo}(obj, df = NULL)
 
-col_counts(obj)
+col_counts(obj, path = NULL)
 
-\S4method{col_counts}{InstantiatedColumnInfo}(obj)
+\S4method{col_counts}{InstantiatedColumnInfo}(obj, path = NULL)
 
-\S4method{col_counts}{VTableNodeInfo}(obj)
+\S4method{col_counts}{VTableNodeInfo}(obj, path = NULL)
 
-col_counts(obj) <- value
+col_counts(obj, path = NULL) <- value
 
-\S4method{col_counts}{InstantiatedColumnInfo}(obj) <- value
+\S4method{col_counts}{InstantiatedColumnInfo}(obj, path = NULL) <- value
 
-\S4method{col_counts}{VTableNodeInfo}(obj) <- value
+\S4method{col_counts}{VTableNodeInfo}(obj, path = NULL) <- value
 
 col_total(obj)
 
@@ -119,6 +119,9 @@ col_total(obj) <- value
 generated from a  Pre-Data layout object}
 
 \item{rtpos}{TreePos. Root position.}
+
+\item{path}{character or NULL. \code{col_counts} getter and setter only.
+Path (in column structure).}
 }
 \value{
 A \code{LayoutColTree} object.
