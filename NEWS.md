@@ -1,3 +1,6 @@
+## rtables 0.5.1.2
+ * empty level check for splitting variables temporarily removed. It is very likely to be reinstated in a future release.
+
 ## rtables 0.5.1.1
  * `col_counts` getter and setter now accept `path` argument.
  * empty levels of a splitting variable now result in an informative error message (character and factor cases).
