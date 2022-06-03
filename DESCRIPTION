@@ -19,6 +19,8 @@ Depends: methods, magrittr, formatters (>= 0.3.0), R (>= 2.10)
 Imports:
   stats,
   htmltools,
+  flextable,
+  officer,
   grid
 Suggests:
   dplyr,
@@ -27,9 +29,7 @@ Suggests:
   testthat,
   xml2,
   knitr,
-  rmarkdown,
-  flextable,
-  officer
+  rmarkdown
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
