@@ -298,6 +298,53 @@ test_that("missing vars caught", {
     expect_error(build_table(missavar, rawdat), ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
 })
 
+# https://github.com/Roche/rtables/issues/329
+test_that("error localization works", {
+
+    afun <- function(x, .spl_context) {
+        if(NROW(.spl_context) > 0 &&
+           .spl_context[NROW(.spl_context), "value", drop = TRUE] == "WHITE")
+            stop("error for white statistics")
+
+        in_rows(myrow = 5)
+    }
+
+    lyt <- basic_table() %>%
+        split_rows_by("ARM") %>%
+        split_rows_by("RACE") %>%
+        analyze("BMRKR1", afun = afun)
+
+    expect_error(build_table(lyt, DM),
+                 "Error[^)]*analysis function \\(var[^B]*BMRKR1\\): error for white statistics.*ARM\\[A: Drug X\\]->RACE\\[WHITE\\]")
+
+    cfun <- function(df, labelstr) {
+        if(labelstr == "B: Placebo")
+            stop("placebos are bad")
+        in_rows(val = 5)
+    }
+
+    lyt2 <- basic_table() %>%
+        split_rows_by("ARM") %>%
+        summarize_row_groups(cfun = cfun) %>%
+        split_rows_by("RACE") %>%
+        analyze("BMRKR1", afun = mean)
+
+    expect_error(build_table(lyt2, DM),
+                 "Error in content.*function: placebos are bad.*path: ARM\\[B: Placebo\\]")
+
+    splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+        stop("oopsie daisy")
+    }
+
+    lyt3 <- basic_table() %>%
+        split_rows_by("ARM") %>%
+        summarize_row_groups() %>%
+        split_rows_by("RACE", split_fun = splfun) %>%
+        analyze("BMRKR1", afun = mean)
+
+    expect_error(build_table(lyt3, DM),
+                 "Error.*custom split function: oopsie daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]")
+})
 
 
 test_that("cfun args", {

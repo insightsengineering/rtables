@@ -64,3 +64,8 @@ chk_rtables_align <- function(algn) {
         stop("Unsupported text-alignment: ", algn)
     algn
 }
+
+spl_context_to_disp_path <- function(ctx) {
+    paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
+          collapse = "->")
+}

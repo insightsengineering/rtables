@@ -385,7 +385,7 @@ gen_rowvalues = function(dfpart,
     if(!is.null(parent_cfun)) {
         ##cfunc <- .make_caller(parent_cfun, label)
         cfunc <- lapply(parent_cfun, .make_caller, clabelstr = label)
-        contkids = .make_tablerows(df,
+        contkids <- tryCatch(.make_tablerows(df,
                                    lev = lvl,
                                    func = cfunc,
                                    cinfo = cinfo,
@@ -395,7 +395,13 @@ gen_rowvalues = function(dfpart,
                                                  length.out = ncol(cinfo)),
                                    inclNAs = FALSE,
                                    splextra = extra_args,
-                                   spl_context = spl_context)
+                                   spl_context = spl_context),
+                             error = function(e) e)
+        if(is(contkids, "error")) {
+            stop("Error in content (summary) function: ", contkids$message,
+                 "\n\toccured at path: ",
+                 spl_context_to_disp_path(spl_context))
+        }
     } else {
         contkids = list()
     }
@@ -411,7 +417,7 @@ gen_rowvalues = function(dfpart,
 }
 
 
-.make_analyzed_tab = function(df,
+.make_analyzed_tab <- function(df,
                               spl,
                               cinfo,
                               partlabel = "",
@@ -421,13 +427,13 @@ gen_rowvalues = function(dfpart,
                               spl_context) {
     stopifnot(is(spl, "VAnalyzeSplit"))
     check_validsplit(spl, df)
-    defrlabel = spl@default_rowlabel
-    didlab  = FALSE
+    defrlabel <- spl@default_rowlabel
+    didlab <- FALSE
     if(nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
-        defrlabel = partlabel
-        didlab = TRUE
+        defrlabel <- partlabel
+        didlab <- TRUE
     }
-    kids = .make_tablerows(df,
+    kids <- tryCatch(.make_tablerows(df,
                            func = analysis_fun(spl),
                            defrowlabs = defrlabel, # XXX
                            cinfo = cinfo,
@@ -437,16 +443,23 @@ gen_rowvalues = function(dfpart,
                            splextra = split_exargs(spl),
                            baselines = baselines,
                            inclNAs = avar_inclNAs(spl),
-                           spl_context = spl_context)
-    lab = obj_label(spl)
-    ret = TableTree(kids = kids,
+                           spl_context = spl_context),
+                    error = function(e) e)
+    if(is(kids, "error")) {
+        stop("Error applying analysis function (var - ",
+             spl_payload(spl) %||% "colvars", "): ", kids$message,
+             "\n\toccured at (row) path: ",
+             spl_context_to_disp_path(spl_context))
+    }
+    lab <- obj_label(spl)
+    ret <- TableTree(kids = kids,
               name = obj_name(spl),
               label = lab,
               lev = lvl,
               cinfo = cinfo,
               format = obj_format(spl),
               indent_mod = indent_mod(spl))
-    labelrow_visible(ret) = dolab
+    labelrow_visible(ret) <- dolab
     ret
 }
 

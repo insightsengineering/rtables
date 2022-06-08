@@ -1,3 +1,6 @@
+## rtables 0.5.1.3
+ * Throw informative error messages when custom analysis, content or split functions fail (#329)
+
 ## rtables 0.5.1.2
  * empty level check for splitting variables temporarily removed. It is very likely to be reinstated in a future release.
 

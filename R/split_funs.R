@@ -211,9 +211,16 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, spl_conte
         ## an additional extras element
         if(func_takes(splfun, ".spl_context")) {
             ##stopifnot(is.null(spl_context) || identical(names(spl_context), names(context_df_row())))
-            ret <- splfun(df, spl, vals, labels, trim = trim, .spl_context = spl_context) ## rawvalues(spl_context ))
+            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim, .spl_context = spl_context),
+                            error = function(e) e) ## rawvalues(spl_context ))
         } else {
-            ret <- splfun(df, spl, vals, labels, trim = trim)
+            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim), error = function(e) e)
+        }
+        if(is(ret, "error")) {
+            stop("Error applying custom split function: ", ret$message, "\n\tsplit: ",
+                 class(spl), " (", payloadmsg(spl), ")\n",
+                 "\toccured at path: ",
+                 spl_context_to_disp_path(spl_context), "\n")
         }
     } else {
         ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
