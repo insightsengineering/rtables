@@ -13,5 +13,5 @@ summarize_rows(obj)
 A data.frame summarizing the rows in \code{obj}.
 }
 \description{
-summarize_rows
+\code{summarize_rows} is deprecated in favor of \code{make_row_df}.
 }

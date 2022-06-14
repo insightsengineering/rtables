@@ -168,6 +168,8 @@ fast_rsummry_bind <- function(lst) {
 
 
 #' summarize_rows
+#'
+#' `summarize_rows` is deprecated in favor of `make_row_df`.
 #' @param obj VTableTree.
 #' @return A data.frame summarizing the rows in \code{obj}.
 #' @export
@@ -199,7 +201,6 @@ summarize_rows <- function(obj) {
 #'
 #' tbl <- build_table(l, iris2)
 #'
-#' summarize_rows(tbl)
 #' @rdname int_methods
 setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0) standardGeneric("summarize_rows_inner"))
 #' @rdname int_methods

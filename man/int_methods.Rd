@@ -940,7 +940,6 @@ l <- basic_table() \%>\%
 
 tbl <- build_table(l, iris2)
 
-summarize_rows(tbl)
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
