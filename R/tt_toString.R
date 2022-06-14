@@ -121,7 +121,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap =3, hsep = default_hsep()
 #'
 #' @details
 #'
-#' The strings in the return object are defined as follows: row labels are those determined by \code{summarize_rows} and cell values are determined using \code{get_formatted_cells}. (Column labels are calculated using a non-exported internal funciton.
+#' The strings in the return object are defined as follows: row labels are those determined by \code{make_row_df} and cell values are determined using \code{get_formatted_cells}. (Column labels are calculated using a non-exported internal funciton.
 #'
 #'@return A list with the following elements:
 #' \describe{
@@ -161,7 +161,6 @@ setMethod("matrix_form", "VTableTree",
 
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
-    ##sr <- summarize_rows(obj)
     sr <- make_row_df(obj)
 
     body_content_strings <- if (NROW(sr) == 0) {

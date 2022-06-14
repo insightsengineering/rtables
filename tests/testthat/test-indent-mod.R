@@ -8,7 +8,7 @@ test_that("indent modifiers propogated from analyze calls properly", {
     tab <-  build_table(lyt,iris)
     expect_equal(rtables:::indent_mod(tree_children(tab)[[2]]), 2L)
 
-    expect_equal(summarize_rows(tab)$indent, c(0, 1, 2))
+    expect_equal(make_row_df(tab)$indent, c(0, 1, 2))
 
 
 })

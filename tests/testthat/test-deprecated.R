@@ -3,15 +3,13 @@ context("deprecated functionality")
 
 
 test_that("deprecated things are still there and work kinda", {
-
-
     expect_warning(lyt11 <- split_cols_by(lyt = NULL,"ARM"), "deprecated")
     expect_identical(lyt11, basic_table() %>% split_cols_by("ARM"))
     expect_warning(lyt22 <- split_rows_by(lyt = NULL,"ARM"), "deprecated")
     expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
 })
 
-test_that("deprecated insert_rrow still currently works", {
+test_that("deprecated insert_rrow and summarize_rows still currently work", {
 
 
     tbl <- basic_table() %>%
@@ -20,6 +18,11 @@ test_that("deprecated insert_rrow still currently works", {
         build_table(iris)
 
     expect_warning({res1 <- insert_rrow(tbl, rrow("Hello World"))}, "Deprecated")
+    expect_warning({resdf <- summarize_rows(tbl)}, "Deprecated")
+    row.names(resdf) <- NULL
+    realdf <- make_row_df(tbl)
+    cololaps <- intersect(names(resdf), names(realdf))
+    expect_true(all.equal(resdf[,cololaps], realdf[,cololaps]))
     o <- options(warn = -1)
     mf1 <- matrix_form(res1)
     expect_identical(mf1$strings[2, , drop = TRUE], c("Hello World", "", "", ""))
@@ -55,7 +58,7 @@ test_that("deprecated insert_rrow still currently works", {
 })
 
 
-
+test_that
 
 test_that("split_rows_by_multivar works", {
 

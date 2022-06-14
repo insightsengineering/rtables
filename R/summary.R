@@ -172,6 +172,7 @@ fast_rsummry_bind <- function(lst) {
 #' @return A data.frame summarizing the rows in \code{obj}.
 #' @export
 summarize_rows <- function(obj) {
+    .Deprecated("make_row_df")
     rows <- summarize_rows_inner(obj, 0, 0)
     fast_rsummry_bind(rows)
 }
