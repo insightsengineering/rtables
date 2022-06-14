@@ -1018,15 +1018,14 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
              "  Please convert all column split variables to factors.")
     }
 
-    ## XXX TODO reinstate this check
-    ## if(is.factor(varvec))
-    ##     levs <- levels(varvec)
-    ## else
-    ##     levs <- unique(varvec)
-    ## if(!all(nzchar(levs))) {
-    ##     stop("Got empty string level in splitting variable ", var, "This is not supported.\n",
-    ##          "  If display as an empty level is desired use a value-labeling variable.")
-    ## }
+    if(is.factor(varvec))
+        levs <- levels(varvec)
+    else
+        levs <- unique(varvec)
+    if(!all(nzchar(levs))) {
+        stop("Got empty string level in splitting variable ", var, "This is not supported.\n",
+             "  If display as an empty level is desired use a value-labeling variable.")
+    }
 
     ## handle label var
     lblvar <- spl_label_var(spl)
