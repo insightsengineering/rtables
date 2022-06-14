@@ -816,7 +816,7 @@ recursive_applysplit = function( df,
 
 #' Create a table from a layout and data
 #'
-#' Layouts are used to describe a table pre-data. `build_rable` is used to
+#' Layouts are used to describe a table pre-data. `build_table` is used to
 #' create a table using a layout and a dataset.
 #'
 #'

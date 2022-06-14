@@ -44,7 +44,7 @@ A \code{TableTree} or \code{ElementaryTable} object representing the table creat
 the tabulations declared in \code{lyt} to the data \code{df}.
 }
 \description{
-Layouts are used to describe a table pre-data. \code{build_rable} is used to
+Layouts are used to describe a table pre-data. \code{build_table} is used to
 create a table using a layout and a dataset.
 }
 \details{
