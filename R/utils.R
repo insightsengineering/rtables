@@ -65,7 +65,19 @@ chk_rtables_align <- function(algn) {
     algn
 }
 
+#' Translate spl_context to Path for display in error messages
+#'
+#'
+#' @param ctx data.frame. The `spl_context` data.frame where the error occured
+#'
+#' @return A character string containing a description of the row path corresponding
+#' to the `ctx`
+#' @export
 spl_context_to_disp_path <- function(ctx) {
-    paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
-          collapse = "->")
+    ret <- paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
+                 collapse = "->")
+    if(length(ret) == 0 ||
+       nchar(ret) == 0)
+        ret <- "root"
+    ret
 }
