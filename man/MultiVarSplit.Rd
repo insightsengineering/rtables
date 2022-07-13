@@ -21,7 +21,8 @@ MultiVarSplit(
   cextra_args = list(),
   label_pos = "visible",
   split_fun = NULL,
-  page_prefix = NA_character_
+  page_prefix = NA_character_,
+  section_div = NA_character_
 )
 }
 \arguments{
@@ -59,6 +60,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 A \code{MultiVarSplit} object.

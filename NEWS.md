@@ -1,3 +1,9 @@
+## rtables 0.5.1.5
+ * Support for section dividers (`section_div` argument in `split_rows_by*` function)
+ * Updated versioned dependency on `formatters` to `>=0.3.2.3`
+ * Equivalent split functions with different enclosing environments (e.g., 2 identical calls to `add_combo_levels` #340) no longer block `rbind`ing
+ * Fixed various documentation bugs where description section was being added to header.
+ 
 ## rtables 0.5.1.4
  * empty level check for splitting variables reinstated.
 

@@ -51,7 +51,8 @@ AnalyzeMultiVars(
   indent_mod = 0L,
   child_labels = c("default", "topleft", "visible", "hidden"),
   child_names = var,
-  cvar = ""
+  cvar = "",
+  section_div = NA_character_
 )
 }
 \arguments{
@@ -87,6 +88,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
 
 \item{child_names}{character. Names to be given to the sub splits contained by a compound split (typically a AnalyzeMultiVars split object).}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 An \code{AnalyzeVarSplit} object.

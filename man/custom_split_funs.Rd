@@ -2,14 +2,8 @@
 % Please edit documentation in R/split_funs.R
 \name{custom_split_funs}
 \alias{custom_split_funs}
-\title{Custom Split Functions
-
-Split functions provide the work-horse for \code{rtables}'s generalized
-partitioning. These functions accept a (sub)set of incoming data, a split
-object, and return 'splits' of that data.}
+\title{Custom Split Functions}
 \description{
-Custom Split Functions
-
 Split functions provide the work-horse for \code{rtables}'s generalized
 partitioning. These functions accept a (sub)set of incoming data, a split
 object, and return 'splits' of that data.

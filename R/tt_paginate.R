@@ -232,7 +232,10 @@ setMethod("make_row_df", "VTableTree",
         ret <- c(ret, list(kiddfs))
     }
 
-    do.call(rbind, ret)
+    ret <- do.call(rbind, ret)
+    if(!is.na(trailing_sep(tt)))
+        ret$trailing_sep[nrow(ret)] <- trailing_sep(tt)
+    ret
 })
 
                                         # #' @exportMethod make_row_df

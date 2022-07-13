@@ -2,13 +2,9 @@
 % Please edit documentation in R/colby_constructors.R
 \name{spl_context}
 \alias{spl_context}
-\title{spl_context within analysis and split functions
-
-.spl_context in analysis and split functions}
+\title{.spl_context within analysis and split functions}
 \description{
-spl_context within analysis and split functions
-
-.spl_context in analysis and split functions
+.spl_context within analysis and split functions
 }
 \section{.spl_context Details}{
 

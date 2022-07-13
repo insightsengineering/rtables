@@ -24,7 +24,8 @@ VarLevelSplit(
   cindent_mod = 0L,
   cvar = "",
   cextra_args = list(),
-  page_prefix = NA_character_
+  page_prefix = NA_character_,
+  section_div = NA_character_
 )
 
 VarLevWBaselineSplit(
@@ -78,6 +79,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{cextra_args}{list. Extra arguments to be passed to the content function when tabulating row group summaries.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 
 \item{ref_group}{character. Value of \code{var} to be taken as the ref_group/control to be compared against.}
 

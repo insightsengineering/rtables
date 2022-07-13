@@ -2549,3 +2549,52 @@ setMethod("horizontal_sep<-", "TableRow",
           function(obj, value) obj)
 
 
+
+setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
+
+setMethod("spl_section_div", "Split",
+          function(obj) obj@child_section_div)
+
+
+setGeneric("spl_section_div<-",
+           function(obj, value) standardGeneric("spl_section_div<-"))
+
+setMethod("spl_section_div<-", "Split",
+          function(obj, value) {
+    obj@child_section_div <- value
+    obj
+})
+
+
+
+setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
+
+setMethod("trailing_sep", "VTableTree", function(obj) obj@trailing_section_div)
+
+setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
+
+setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
+    obj@trailing_section_div <- value
+    obj
+})
+
+
+## setGeneric("apply_kids_section_sep",
+##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))
+
+## ## eleemntary tables can only have rows and they can't have
+## ## trailing separators
+## setMethod("apply_kids_section_sep", "ElementaryTable",
+##           function(tbl, sep) tbl)
+## setMethod("apply_kids_section_sep", "TableTree",
+##           function(tbl, sep) {
+##    kds <- lapply(tree_children(tbl),
+##                   function(kid) {
+##         if(is(kid, "VTableTree"))
+##             trailing_sep(kid) <- sep
+##         kid
+##     })
+
+##     tree_children(tbl) <- kds
+##     tbl
+## })

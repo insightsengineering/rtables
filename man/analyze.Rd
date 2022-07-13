@@ -15,7 +15,8 @@ analyze(
   inclNAs = FALSE,
   extra_args = list(),
   show_labels = c("default", "visible", "hidden"),
-  indent_mod = 0L
+  indent_mod = 0L,
+  section_div = NA_character_
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ analyze(
 \item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.

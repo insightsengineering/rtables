@@ -44,7 +44,8 @@ lyt_args(
   align,
   page_by,
   page_prefix,
-  format_na_str
+  format_na_str,
+  section_div
 )
 }
 \arguments{
@@ -128,6 +129,8 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
 
 \item{format_na_str}{character(1). String which should be displayed when formatted if this cell's value(s) are all NA.}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 NULL (this is an argument template dummy function)

@@ -1,4 +1,4 @@
-#' Dispaly an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
+#' Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
 #' browser
 #'
 #' The table will be displayed using the bootstrap styling for tables.

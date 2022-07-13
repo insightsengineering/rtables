@@ -432,7 +432,8 @@ gen_rowvalues = function(dfpart,
                               dolab = TRUE,
                               lvl,
                               baselines,
-                              spl_context) {
+                              spl_context,
+                              section_sep = NA_character_) {
     stopifnot(is(spl, "VAnalyzeSplit"))
     check_validsplit(spl, df)
     defrlabel <- spl@default_rowlabel
@@ -467,7 +468,8 @@ gen_rowvalues = function(dfpart,
               lev = lvl,
               cinfo = cinfo,
               format = obj_format(spl),
-              indent_mod = indent_mod(spl))
+              indent_mod = indent_mod(spl),
+              trailing_sep = section_sep)
     labelrow_visible(ret) <- dolab
     ret
 }
@@ -513,6 +515,20 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
     names(kids) = obj_name(ret)
     kids
 })
+
+.set_kids_sect_sep <- function(lst, spl) {
+    sect_sep <- spl_section_div(spl)
+    if(!is.na(sect_sep)) {
+        lst <- lapply(lst,
+                      function(k) {
+            if(is(k, "VTableTree"))
+                trailing_sep(k) <- sect_sep
+            k
+        })
+    }
+    lst
+}
+
 ## 1 or more AnalyzeSplits
 setMethod(".make_split_kids", "AnalyzeMultiVars",
           function(spl,
@@ -530,7 +546,8 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
                   nsibs = nspl - 1,
                   have_controws = have_controws,
                   make_lrow = make_lrow,
-                  ...))
+                  ...,
+                  section_sep = spl_section_div(spl)))
 
 
 
@@ -560,6 +577,7 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
         }, k = kids, nm = labs, SIMPLIFY = FALSE)
         nms <- labs
     }
+    kids <- .set_kids_sect_sep(kids, spl)
 
     nms[is.na(nms)] = ""
 
@@ -667,6 +685,8 @@ setMethod(".make_split_kids", "Split",
     baselines = newbaselines,
     splval = splvals,
     SIMPLIFY=FALSE))
+
+    inner <- .set_kids_sect_sep(inner, spl)
     ## This is where we need to build the structural tables
     ## even if they are invisible becasue their labels are not
     ## not shown.
@@ -710,6 +730,7 @@ context_df_row <- function(split = character(), value = character(), full_parent
     ret
 }
 
+
 recursive_applysplit = function( df,
                                 lvl = 0L,
                                 splvec,
@@ -726,7 +747,9 @@ recursive_applysplit = function( df,
                                 baselines = lapply(col_extra_args(cinfo),
                                                    function(x) x$.ref_full),
                                 spl_context = context_df_row(cinfo = cinfo),
-                                no_outer_tbl = FALSE) {
+                                no_outer_tbl = FALSE,
+                                parent_sect_split = NA_character_
+                                ) {
     ## pre-existing table was added to the layout
     if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
         return(splvec[[1]])
@@ -767,11 +790,20 @@ recursive_applysplit = function( df,
         ## we pass this everything recursive_applysplit received and
         ## it all gets passed around through ... as needed
         ## to the various methods of .make_split_kids
-        kids = .make_split_kids(spl = spl, df = df, lvl = lvl, splvec = splvec,
-                                name = name, make_lrow = make_lrow, partlabel = partlabel,
-                                cinfo = cinfo, parent_cfun = parent_cfun, cformat = cformat,
-                                cindent_mod = cindent_mod, cextra_args = cextra_args, cvar =cvar,
-                                baselines = baselines, spl_context = spl_context,
+        kids = .make_split_kids(spl = spl,
+                                df = df,
+                                lvl = lvl,
+                                splvec = splvec,
+                                name = name,
+                                make_lrow = make_lrow,
+                                partlabel = partlabel,
+                                cinfo = cinfo,
+                                parent_cfun = parent_cfun,
+                                cformat = cformat,
+                                cindent_mod = cindent_mod,
+                                cextra_args = cextra_args, cvar =cvar,
+                                baselines = baselines,
+                                spl_context = spl_context,
                                 have_controws = nrow(ctab) > 0)
         ## if(make_lrow && indent_mod(spl) != 0 ) {
         ##     kids = lapply(kids, `indent_mod<-`, value = 0L)
@@ -815,7 +847,9 @@ recursive_applysplit = function( df,
          ret = NULL
      }
 
-    ## message(sprintf("indent modifier: %d", indentmod))
+    ## if(!is.null(spl) && !is.na(spl_section_sep(spl)))
+    ##     ret <- apply_kids_section_sep(ret, spl_section_sep(spl))
+    ## ## message(sprintf("indent modifier: %d", indentmod))
     ## if(!is.null(ret))
     ##     indent_mod(ret) = indentmod
     ret

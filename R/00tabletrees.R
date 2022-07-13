@@ -107,7 +107,8 @@ setClass("Split", contains = "VIRTUAL",
              indent_modifier = "integer",
              content_indent_modifier = "integer",
              content_extra_args = "list",
-             page_title_prefix = "character"))
+             page_title_prefix = "character",
+             child_section_div = "character"))
 
 
 setClass("CustomizableSplit", contains = "Split",
@@ -141,7 +142,8 @@ VarLevelSplit <- function(var,
                          cindent_mod = 0L,
                          cvar = "",
                          cextra_args = list(),
-                         page_prefix = NA_character_
+                         page_prefix = NA_character_,
+                         section_div = NA_character_
                          ) {
     child_labels <- match.arg(child_labels)
     if (is.null(labels_var))
@@ -162,7 +164,8 @@ VarLevelSplit <- function(var,
         content_var = cvar,
         split_label_position = label_pos,
         content_extra_args = cextra_args,
-        page_title_prefix = page_prefix
+        page_title_prefix = page_prefix,
+        child_section_div = section_div
         )
 }
 
@@ -211,7 +214,8 @@ AllSplit <- function(split_label = "",
         content_var = cvar,
         split_label_position = "hidden",
         content_extra_args = cextra_args,
-        page_title_prefix = NA_character_)
+        page_title_prefix = NA_character_,
+        child_section_div = NA_character_)
 }
 
 setClass("RootSplit", contains = "AllSplit")
@@ -228,7 +232,8 @@ RootSplit <- function(split_label = "", cfun = NULL, cformat = NULL, cvar = "",
         content_indent_modifier = 0L,
         content_var = cvar,
         split_label_position = "hidden",
-        content_extra_args = cextra_args)
+        content_extra_args = cextra_args,
+        child_section_div = NA_character_)
 }
 
 setClass("ManualSplit", contains = "AllSplit",
@@ -250,7 +255,8 @@ ManualSplit <- function(levels, label, name = "manual",
                        cvar = "",
                        cextra_args = list(),
                        label_pos = "visible",
-                       page_prefix = NA_character_) {
+                       page_prefix = NA_character_,
+                       section_div = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     new("ManualSplit",
         split_label = label,
@@ -262,7 +268,8 @@ ManualSplit <- function(levels, label, name = "manual",
         content_indent_modifier = as.integer(cindent_mod),
         content_var = cvar,
         split_label_position = label_pos,
-        page_title_prefix = page_prefix)
+        page_title_prefix = page_prefix,
+        child_section_div = section_div)
 
 }
 
@@ -320,7 +327,8 @@ MultiVarSplit <- function(vars,
                          cextra_args = list(),
                          label_pos = "visible",
                          split_fun = NULL,
-                         page_prefix = NA_character_) {
+                         page_prefix = NA_character_,
+                         section_div = NA_character_) {
     ## no topleft allowed
     label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels = match.arg(child_labels)
@@ -346,7 +354,8 @@ MultiVarSplit <- function(vars,
         split_label_position = label_pos,
         content_extra_args = cextra_args,
         split_fun = split_fun,
-        page_title_prefix = page_prefix)
+        page_title_prefix = page_prefix,
+        child_section_div = section_div)
 }
 
 
@@ -428,7 +437,8 @@ make_static_cut_split <- function(var,
                              cextra_args = list(),
                              label_pos = "visible",
                              cumulative = FALSE,
-                             page_prefix = NA_character_) {
+                             page_prefix = NA_character_,
+                             section_div = NA_character_) {
     cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
 
     label_pos <- match.arg(label_pos, label_pos_values)
@@ -460,7 +470,8 @@ make_static_cut_split <- function(var,
         content_var = cvar,
         split_label_position = label_pos,
         content_extra_args = cextra_args,
-        page_title_prefix = page_prefix)
+        page_title_prefix = page_prefix,
+        child_section_div = section_div)
 
 }
     ## ret <- VarStaticCutSplit(var = var,
@@ -582,7 +593,8 @@ VarDynCutSplit <- function(var,
                           cvar = "",
                           cextra_args = list(),
                           label_pos = "visible",
-                          page_prefix = NA_character_) {
+                          page_prefix = NA_character_,
+                          section_div = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels = match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
@@ -601,7 +613,8 @@ VarDynCutSplit <- function(var,
         content_var = cvar,
         split_label_position = label_pos,
         content_extra_args = cextra_args,
-        page_title_prefix = page_prefix)
+        page_title_prefix = page_prefix,
+        child_section_div = section_div)
 }
 
 
@@ -663,7 +676,8 @@ AnalyzeVarSplit <- function(var,
         content_indent_modifier = 0L,
         var_label_position = label_pos,
         content_var = cvar,
-        page_title_prefix = NA_character_) ## no content_extra_args
+        page_title_prefix = NA_character_,
+        child_section_div = NA_character_) ## no content_extra_args
 }
 
 #' Define a subset tabulation/analysis
@@ -701,7 +715,8 @@ AnalyzeColVarSplit <- function(afun,
         content_indent_modifier = 0L,
         var_label_position = label_pos,
         content_var = cvar,
-        page_title_prefix = NA_character_) ## no content_extra_args
+        page_title_prefix = NA_character_,
+        child_section_div = NA_character_) ## no content_extra_args
 }
 
 setClass("CompoundSplit", contains = "Split",
@@ -763,7 +778,8 @@ AnalyzeMultiVars <- function(var,
                             indent_mod = 0L,
                             child_labels = c("default", "topleft", "visible", "hidden"),
                             child_names = var,
-                            cvar = ""
+                            cvar = "",
+                            section_div = NA_character_
                             ) {
     ## NB we used to resolve to strict TRUE/FALSE for label visibillity
     ## in this function but that was too greedy for repeated
@@ -838,7 +854,8 @@ AnalyzeMultiVars <- function(var,
                    indent_modifier = 0L,
                    content_indent_modifier = 0L,
                    content_var = cvar,
-                   page_title_prefix = NA_character_)
+                   page_title_prefix = NA_character_,
+                   child_section_div = section_div)
      }
     ret
 }
@@ -971,17 +988,10 @@ VarLevWBaselineSplit <- function(var,
         indent_modifier = 0L,
         content_indent_modifier = 0L,
         content_var = cvar,
-        page_title_prefix = NA_character_) ## so long as this is columnspace only
+        ## so long as this is columnspace only
+        page_title_prefix = NA_character_,
+        child_section_div = NA_character_)
 }
-
-
-
-setClass("CompSubsetVectors",
-         representation(subset1 = "list",
-                        subset2 = "list"),
-         validity = function(object) length(object@subset1) == length(object@subset2))
-
-
 
 
 .chkname <- function(nm) {
@@ -1359,7 +1369,8 @@ setClass("VTableTree", contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitl
                         rowspans = "data.frame",
                         labelrow = "LabelRow",
                         page_titles = "character",
-                        horizontal_sep = "character"
+                        horizontal_sep = "character",
+                        trailing_section_div = "character"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
@@ -1447,7 +1458,8 @@ ElementaryTable <- function(kids = list(),
                            subtitles = character(),
                            main_footer = character(),
                            prov_footer = character(),
-                           hsep = default_hsep()) {
+                           hsep = default_hsep(),
+                           trailing_sep = NA_character_) {
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1472,7 +1484,8 @@ ElementaryTable <- function(kids = list(),
               subtitles = subtitles,
               main_footer = main_footer,
               provenance_footer = prov_footer,
-              horizontal_sep = hsep
+              horizontal_sep = hsep,
+              trailing_section_div = trailing_sep
               )
     tab <- set_format_recursive(tab, format, FALSE)
     tab
@@ -1512,7 +1525,8 @@ TableTree <- function(kids = list(),
                      main_footer = character(),
                      prov_footer = character(),
                      page_title = NA_character_,
-                     hsep = default_hsep()) {
+                     hsep = default_hsep(),
+                     trailing_sep = NA_character_) {
     if (is.null(cinfo)) {
         if (!is.null(cont)) {
             cinfo <- col_info(cont)
@@ -1545,7 +1559,8 @@ TableTree <- function(kids = list(),
                         subtitles = subtitles,
                         main_footer = main_footer,
                         prov_footer = prov_footer,
-                        hsep = hsep)
+                        hsep = hsep,
+                        trailing_sep = trailing_sep)
     } else {
         tab <- new("TableTree", content = cont,
                   children = kids,
@@ -1561,7 +1576,8 @@ TableTree <- function(kids = list(),
                   main_footer = main_footer,
                   provenance_footer = prov_footer,
                   page_title_prefix = page_title,
-                  horizontal_sep = "-" ) ## this is overridden below to get recursiveness
+                  horizontal_sep = "-",
+                  trailing_section_div = trailing_sep) ## this is overridden below to get recursiveness
         tab <- set_format_recursive(tab, format, FALSE)
         ## this is recursive
         horizontal_sep(tab) <- hsep

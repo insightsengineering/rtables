@@ -2,7 +2,7 @@
 % Please edit documentation in R/Viewer.R
 \name{Viewer}
 \alias{Viewer}
-\title{Dispaly an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
+\title{Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
 browser}
 \usage{
 Viewer(x, y = NULL, row.names.bold = FALSE, ...)

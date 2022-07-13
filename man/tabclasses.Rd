@@ -25,7 +25,8 @@ ElementaryTable(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  hsep = default_hsep()
+  hsep = default_hsep(),
+  trailing_sep = NA_character_
 )
 
 TableTree(
@@ -47,7 +48,8 @@ TableTree(
   main_footer = character(),
   prov_footer = character(),
   page_title = NA_character_,
-  hsep = default_hsep()
+  hsep = default_hsep(),
+  trailing_sep = NA_character_
 )
 }
 \arguments{
@@ -85,6 +87,9 @@ TableTree(
 the header and body of the table when rendered as text. Defaults to a connected horrizontal
 line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
 once per session warning).}
+
+\item{trailing_sep}{character(1). String which will be used as a section divider after the printing of the last
+row contained in this (sub)-table, unless that row is also the last table row to be printed overall, or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the \code{section_div} of the split under which this table represents a single facet.}
 
 \item{cont}{ElementaryTable. Content table.}
 

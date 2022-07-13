@@ -23,10 +23,7 @@
 \alias{obj_na_str<-}
 \alias{obj_na_str<-,CellValue-method}
 \alias{obj_na_str,ANY-method}
-\title{Label, Name and Format accessor generics
-
-Getters and setters for basic, relatively universal attributes
-of "table-like" objects"}
+\title{Label, Name and Format accessor generics}
 \usage{
 \S4method{obj_name}{VNodeInfo}(obj)
 
@@ -82,8 +79,6 @@ the name, format or label of \code{obj} for getters, or \code{obj} after modific
 for setters.
 }
 \description{
-Label, Name and Format accessor generics
-
 Getters and setters for basic, relatively universal attributes
 of "table-like" objects"
 }

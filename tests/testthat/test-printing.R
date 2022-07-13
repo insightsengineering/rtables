@@ -265,3 +265,18 @@ test_that("Various Printing things work", {
     sink(NULL)
     expect_false(any(grepl( "new..AnalyzeColVarSplit., analysis_fun =", printoutput)))
 })
+
+
+test_that("section_div works throughout", {
+    lyt <- basic_table() %>%
+        split_rows_by("ARM", section_div = "-") %>%
+        split_rows_by("STRATA1", section_div = " ") %>%
+        analyze("AGE")
+
+    tbl <- build_table(lyt, DM)
+
+    mylns <- strsplit(toString(tbl), "\\n")[[1]]
+    expect_identical(mylns[9],  "                        ")
+    expect_identical(mylns[12], "------------------------")
+    expect_identical(length(mylns), 31L) ## sect div not printed for last one
+})

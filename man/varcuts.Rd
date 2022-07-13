@@ -27,7 +27,8 @@ split_rows_by_cuts(
   split_label = var,
   nested = TRUE,
   cumulative = FALSE,
-  label_pos = "hidden"
+  label_pos = "hidden",
+  section_div = NA_character_
 )
 
 split_cols_by_cutfun(
@@ -62,7 +63,8 @@ split_rows_by_quartiles(
   extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
-  label_pos = "hidden"
+  label_pos = "hidden",
+  section_div = NA_character_
 )
 
 split_rows_by_cutfun(
@@ -77,7 +79,8 @@ split_rows_by_cutfun(
   extra_args = list(),
   cumulative = FALSE,
   indent_mod = 0L,
-  label_pos = "hidden"
+  label_pos = "hidden",
+  section_div = NA_character_
 )
 }
 \arguments{
@@ -97,6 +100,8 @@ split_rows_by_cutfun(
 
 \item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 
 \item{cutfun}{function. Function which accepts the full vector of \code{var} values and returns cut points to be passed to \code{cut}.}
 

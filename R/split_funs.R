@@ -32,7 +32,7 @@ setGeneric(".applysplit_ref_vals",
 #' @rdname custom_split_funs
 #' @title Custom Split Functions
 #'
-#' Split functions provide the work-horse for `rtables`'s generalized
+#' @description Split functions provide the work-horse for `rtables`'s generalized
 #' partitioning. These functions accept a (sub)set of incoming data, a split
 #' object, and return 'splits' of that data.
 #'

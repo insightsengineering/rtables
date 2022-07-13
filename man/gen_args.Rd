@@ -25,6 +25,7 @@ gen_args(
   page_prefix,
   hsep,
   indent_size,
+  section_div,
   ...
 )
 }
@@ -73,6 +74,8 @@ line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere 
 once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 
 \item{\dots}{Passed on to methods or tabulation functions.}
 }

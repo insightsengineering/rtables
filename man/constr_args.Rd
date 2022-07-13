@@ -25,7 +25,9 @@ constr_args(
   prov_footer,
   footnotes,
   page_title,
-  page_prefix
+  page_prefix,
+  section_div,
+  trailing_sep
 )
 }
 \arguments{
@@ -71,6 +73,11 @@ should be visible if and only if multiple variables are analyzed at the same lev
 \item{page_title}{character. Page specific title(s).}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
+
+\item{trailing_sep}{character(1). String which will be used as a section divider after the printing of the last
+row contained in this (sub)-table, unless that row is also the last table row to be printed overall, or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the \code{section_div} of the split under which this table represents a single facet.}
 }
 \value{
 NULL (this is an argument template dummy function)

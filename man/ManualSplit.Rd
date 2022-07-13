@@ -14,7 +14,8 @@ ManualSplit(
   cvar = "",
   cextra_args = list(),
   label_pos = "visible",
-  page_prefix = NA_character_
+  page_prefix = NA_character_,
+  section_div = NA_character_
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ ManualSplit(
 should be visible if and only if multiple variables are analyzed at the same level of nesting.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+
+\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 A \code{ManualSplit} object.

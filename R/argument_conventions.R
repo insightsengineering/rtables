@@ -39,19 +39,19 @@ NULL
 #' line (unicode 2014) in locals that use a UTF charset, and to `-` elsewhere (with a
 #' once per session warning).
 #' @param indent_size numeric(1). Number of spaces to use per indent level. Defaults to 2
-
+#' @param section_div character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or `NA_character_` (the default) for no section divider.
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
-                     cvar, topleft, page_prefix, hsep, indent_size, ...) NULL
+                     cvar, topleft, page_prefix, hsep, indent_size, section_div, ...) NULL
 
 
 
 #' Layouting Function Arg Conventions
 #' @name lyt_args
 #' @rdname lyt_args
-#'
+#' @inheritParams gen_args
 #' @param lyt layout object pre-data used for tabulation
 #' @param var string, variable name
 #' @param vars character vector. Multiple variable names.
@@ -87,7 +87,6 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param table_names character. Names for the tables representing each atomic analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different children resulting form this split.
 #' @param format_na_str character(1). String which should be displayed when formatted if this cell's value(s) are all NA.
-#' @inheritParams gen_args
 #' @inherit gen_args return
 #' @family conventions
 lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
@@ -98,7 +97,7 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
                      indent_mod, show_labels, label_pos, #visible_label,
                      var_labels, cvar,
                      table_names, topleft, align, page_by, page_prefix,
-                     format_na_str) NULL
+                     format_na_str, section_div) NULL
 
 
 #' Constructor Arg Conventions
@@ -123,12 +122,14 @@ lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, sp
 #' @param main_footer character. Main global (non-referential) footer materials.
 #' @param prov_footer character. Provenance-related global footer materials. Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current level
+#' @param trailing_sep character(1). String which will be used as a section divider after the printing of the last
+#' row contained in this (sub)-table, unless that row is also the last table row to be printed overall, or `NA_character_` for none (the default). When generated via layouting, this would correspond to the `section_div` of the split under which this table represents a single facet.
 #' @param page_title character. Page specific title(s).
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals, cspan, label_pos, #visible_label,
                         cindent_mod, cvar, label, cextra_args, child_names,
                         title, subtitles, main_footer, prov_footer,
-                        footnotes, page_title, page_prefix) NULL
+                        footnotes, page_title, page_prefix, section_div, trailing_sep) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args
