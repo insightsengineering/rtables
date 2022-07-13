@@ -127,3 +127,32 @@ test_that("insert_rrow works", {
     ## this is ok cause its a LabelRow not a DataRow
     expect_silent(suppressWarnings(insert_rrow(tbl, rrow("Total xx"), at = 1)))
 })
+
+## regression test for #340
+## ensure split functions that are fully equivalent but
+## have different actual enclosing environments don't
+## cause problems with any of the column info checks
+
+test_that("equivalent split funs withs differrent environments dont' block rbinding", {
+    combodf <- tribble(
+        ~valname, ~label, ~levelcombo, ~exargs,
+        "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
+        "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
+
+    l1 <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+        add_colcounts() %>%
+        analyze("AGE")
+
+    tab1 <- build_table(l1, DM)
+
+    l2 <- basic_table() %>%
+        split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+        add_colcounts() %>%
+        analyze("SEX")
+
+    tab2 <- build_table(l2, DM)
+
+    tab3 <- rbind(tab1, tab2)
+    expect_true(TRUE)
+})
