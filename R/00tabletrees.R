@@ -1390,7 +1390,11 @@ setClass("ElementaryTable", contains = "VTableTree",
                  function(x) {
             if (no_colinfo(x))
                 col_info(x) <- colinfo
-            else if (!identical(colinfo, col_info(x)))
+            ## split functions from function factories (e.g. add_combo_levels)
+            ## have different environments so we can't use identical here
+            ## all.equal requires the **values within the closures** to be the
+            ## same but not the actual enclosing environments.
+            else if (!isTRUE(all.equal(colinfo, col_info(x))))
                 stop("attempted to add child with non-matching, non-empty column info to an existing table")
             x
         })
