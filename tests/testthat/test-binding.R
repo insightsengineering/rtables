@@ -34,6 +34,35 @@ test_that("cbind_rtables works with 3 tables", {
 })
 
 
+## regressions for #341
+test_that("mixing NA and non-NA counts and avars is ok", {
+
+    iris2 <- iris
+    iris2$origin <- sample(c("USA", "CH", "JP"), nrow(iris), replace = TRUE)
+    iris2$manmade <- sample(c("Y", "N"), nrow(iris), replace = TRUE)
+                                        # First case: no LabelRow objects (hidden)
+
+    rtb_t <- basic_table() %>%
+        split_cols_by("manmade") %>%
+        analyze(
+            vars = colnames(iris)[1:3], afun = mean, format = "xx.x",
+            show_labels = "hidden"
+        ) %>%
+        build_table(iris2)
+
+    cinfo <- manual_cols("hiya")
+    mantab_lst <- lapply(1:3, function(i) {
+        TableTree(name = names(tree_children(rtb_t))[i],
+                  label = "",
+                  kids = list(rrow("", i)),
+                  cinfo = cinfo)
+    })
+
+    rtb_t2 <- TableTree(kids = mantab_lst, cinfo = cinfo)
+    expect_warning(res <- cbind_rtables(rtb_t, rtb_t2),
+                   "Mixture of missing and non-missing column counts")
+    expect_identical(dim(res), c(3L, 3L))
+})
 test_that("cell formats not dropped when cbinding", {
 
     tab1 <- rtable(

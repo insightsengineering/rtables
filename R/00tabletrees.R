@@ -1200,9 +1200,11 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
     snas <- sum(is.na(cnts))
     if (length(csubs) != nleaves ||
        length(extras) != nleaves ||
-       length(cnts) != nleaves ||
-       (snas != 0  && snas != nleaves))
-        stop("attempted to create invalid InstatiedColumnInfo object. Please contact the maintainer(s).")
+       length(cnts) != nleaves )
+        stop("Mismatching number of columns indicated by: csubs [", length(csubs), "], ",
+             "treelyt [", nl, "], extras [", length(extras), "] and counts [", cnts, "].")
+    if(snas != 0  && snas != nleaves)
+        warning("Mixture of missing and non-missing column counts when creating column info.")
 
     new("InstantiatedColumnInfo",
         tree_layout = treelyt,

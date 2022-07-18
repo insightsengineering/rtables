@@ -590,14 +590,20 @@ setMethod("recurse_cbindl", c(x ="VTableNodeInfo",
 setMethod("recurse_cbindl", c(x = "TableTree",
                              cinfo = "InstantiatedColumnInfo"),
           function(x, cinfo, .list = NULL) {
-    stopifnot(are(.list, class(x)))
+    stopifnot(are(.list, "VTableTree"))
     ## chk_cbindable(x, y)
     xlst <- c(list(x), .list)
     xcont <- content_table(x)
     lstconts <- lapply(.list, content_table)
-    if(all(c(nrow(xcont) == 0,
-             vapply(lstconts, nrow, 1L) == 0))) {
+    lcontnrows <- vapply(lstconts, NROW, 1L)
+    unqnrcont <- unique(c(NROW(xcont), lcontnrows))
+    if(length(unqnrcont) > 1) {
+        stop("Got differing numbers of content rows [",
+             paste(unqnrcont, collapse = ", "),
+             "]. Unable to cbind these rtables")
+    }
 
+    if(unqnrcont == 0){
         cont = ElementaryTable(cinfo = cinfo)
     } else {
         cont = recurse_cbindl(xcont,
@@ -660,6 +666,7 @@ setMethod("recurse_cbindl", c(x = "ElementaryTable",
     stopifnot(are(.list, class(x)))
 
     avars <- c(obj_avar(x), unlist(lapply(.list, obj_avar), recursive = FALSE))
+    avars <- avars[!is.na(avars)]
 
     if(length(unique(avars))>1)
         stop("Got rows that don't analyze the same variable")
