@@ -538,18 +538,20 @@ do_force_paginate <- function(tt,
 #' @export
 #' @aliases paginate_table
 #' @rdname paginate
+#' @inheritParams formatters::vert_pag_indices
 paginate_table = function(tt, lpp = 15,
+                          cpp = NULL,
                           min_siblings = 2,
                           nosplitin = character(),
                           colwidths = NULL,
                           verbose = FALSE) {
 
+    if(is.null(colwidths)) {
+        colwidths <- propose_column_widths(matrix_form(tt))
+    }
+
     force_pag <- vapply(tree_children(tt), has_force_pag, TRUE)
     if(has_force_pag(tt) || any(force_pag)) {
-        if(is.null(colwidths)) {
-            colwidths <- propose_column_widths(matrix_form(tt))
-        }
-
         spltabs <- do_force_paginate(tt, verbose = verbose)
         spltabs <- unlist(spltabs, recursive = TRUE)
         ret <- lapply(spltabs, paginate_table,
@@ -558,28 +560,42 @@ paginate_table = function(tt, lpp = 15,
                       nosplitin = nosplitin,
                       colwidths = colwidths,
                       verbose = verbose)
-        return(unlist(ret, recursive = TRUE))
+        res <- unlist(ret, recursive = TRUE)
 
-    }
-    inds = pag_tt_indices(tt, lpp = lpp,
-                          min_siblings = min_siblings,
-                          nosplitin = nosplitin,
-                          colwidths = colwidths,
-                          verbose = verbose)
-    lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
+    } else if(!is.null(lpp)) {
+        inds <- pag_tt_indices(tt, lpp = lpp,
+                               min_siblings = min_siblings,
+                               nosplitin = nosplitin,
+                               colwidths = colwidths,
+                               verbose = verbose)
+        res <- lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
                                 keep_titles = TRUE,
                                 reindex_refs = FALSE])
+    } else { ## lpp is NULL
+        res <- list(tt)
+    }
+
+    if(!is.null(cpp)) {
+        inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths, verbose = verbose)
+        res <- lapply(res, function(oneres) lapply(inds, function(ii) oneres[,ii, drop = FALSE]))
+        res <- unlist(res, recursive = FALSE)
+    }
+    res
 }
 
 
 
+#' @title Deprecated - vertically paginate table
+#'
+#' @inheritParams paginate_table
+#' @description this function is deprecated. please use `paginate_table` with a
+#' non-null `cpp` argument instead.
 #' @export
-#' @aliases paginate_table
 #' @inheritParams formatters::vert_pag_indices
-#' @rdname paginate
 vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
-    inds <- vert_pag_indices(tt, cpp = cpp, verbose = verbose)
-
+    .Deprecated("paginate_table(cpp=<>)")
+    inds <- vert_pag_indices(tt, cpp = cpp,
+                             verbose = verbose)
     lapply(inds, function(j) tt[,j, keep_topleft = TRUE,
                                 keep_titles = TRUE,
                                 reindex_refs = FALSE])

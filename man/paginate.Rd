@@ -3,7 +3,6 @@
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
 \alias{paginate_table}
-\alias{vpaginate_table}
 \title{Pagination of a TableTree}
 \usage{
 pag_tt_indices(
@@ -18,13 +17,12 @@ pag_tt_indices(
 paginate_table(
   tt,
   lpp = 15,
+  cpp = NULL,
   min_siblings = 2,
   nosplitin = character(),
   colwidths = NULL,
   verbose = FALSE
 )
-
-vpaginate_table(tt, cpp = 40, verbose = FALSE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
@@ -37,7 +35,7 @@ mid-subtable split to be valid. Defaults to 2.}
 \item{nosplitin}{character. List of names of sub-tables where page-breaks are not allowed, regardless of other
 considerations. Defaults to none.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 

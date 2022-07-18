@@ -45,7 +45,7 @@ when calculating column counts.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
 \item{obj}{ANY. The object for the accessor to access or modify}
 

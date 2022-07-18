@@ -19,7 +19,7 @@ NULL
 #' @param tt TableTree (or related class). A TableTree object representing a populated table.
 #' @param tr TableRow (or related class). A TableRow object representing a single row within a populated table.
 #' @param verbose logical. Should additional information be displayed to the user. Defaults to FALSE.
-#' @param colwidths numeric vector. Column widths for use with vertical pagination. Currently ignored.
+#' @param colwidths numeric vector. Column widths for use with vertical pagination.
 #' @param obj ANY. The object for the accessor to access or modify
 #' @param x An object
 #' @param \dots Passed on to methods or tabulation functions.

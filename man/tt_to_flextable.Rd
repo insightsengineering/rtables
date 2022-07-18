@@ -22,7 +22,7 @@ tt_to_flextable(
 
 \item{...}{Passed on to methods or tabulation functions.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination. Currently ignored.}
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting flextable(s). Defaults to 5.}
 }
