@@ -40,10 +40,33 @@ test_that("inclNAs argument works as expected", {
 })
 
 test_that("head/tail work", {
-  tbl = rtable(c("hi", "lo"),
+  tbl <- rtable(c("hi", "lo"),
                rrow("rn", 5, 5))
   expect_false(is.null(head(tbl)))
   expect_false(is.null(tail(tbl)))
+  tbl_none <- tbl
+  top_left(tbl) <- "hiya"
+  main_title(tbl) <- "title"
+  subtitles(tbl) <- c("subt 1", "subt2")
+  main_footer(tbl) <- "footer"
+  prov_footer(tbl) <- "prov"
+  ## 335
+  .check_em <- function(t, tbl) {
+       expect_identical(top_left(t), top_left(tbl))
+       expect_identical(main_title(t), main_title(tbl))
+       expect_identical(subtitles(t), subtitles(tbl))
+       expect_identical(top_left(t), top_left(tbl))
+       expect_identical(top_left(t), top_left(tbl))
+       expect_identical(top_left(t), top_left(tbl))
+       TRUE
+  }
+  t_h <- head(tbl)
+  .check_em(head(tbl), tbl)
+  .check_em(tail(tbl), tbl)
+  .check_em(head(tbl, keep_topleft = FALSE, keep_titles = FALSE),
+            tbl_none)
+  .check_em(tail(tbl, keep_topleft = FALSE, keep_titles = FALSE),
+            tbl_none)
 })
 
 test_that("sort does not clobber top-level siblings", {

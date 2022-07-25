@@ -926,10 +926,7 @@ subset_by_rownum = function(tt, i, keep_topleft = NA, keep_titles = TRUE, ... ) 
     if(isTRUE(keep_topleft))
         top_left(ret) <- top_left(tt)
     if(isTRUE(keep_titles) || (isTRUE(keep_topleft) && is.na(keep_titles))) {
-        main_title(ret) <- main_title(tt)
-        subtitles(ret) <- subtitles(tt)
-        main_footer(ret) <- main_footer(tt)
-        prov_footer(ret) <- prov_footer(tt)
+        ret <- .copy_titles(ret, tt)
     }
 
     ret
@@ -1284,11 +1281,85 @@ setMethod("value_at", "LabelRow",
 
 }
 
+.copy_titles <- function(new, old) {
+    main_title(new) <- main_title(old)
+    subtitles(new) <- subtitles(old)
+    main_footer(new) <- main_footer(old)
+    prov_footer(new) <- prov_footer(old)
+    new
+}
 
-setMethod("head", "VTableTree",
-          function(x, n = 6, ..., keep_topleft = TRUE) {
-    if(length(n) == 2L)
-        x[n[1], n[2], ..., keep_topleft = keep_topleft]
+
+.h_t_body <- function(x, res,
+                            keep_topleft,
+                            keep_titles,
+                            reindex_refs) {
+
+    if(keep_topleft)
+        top_left(res) <- top_left(x)
     else
-        x[n, , ..., keep_topleft = keep_topleft]
+        top_left(res) <- character()
+    if(keep_titles)
+        res <- .copy_titles(res, x)
+    else
+        ## no titles
+        res <- .copy_titles(res, rtable(" "))
+    if(reindex_refs)
+        res <- update_ref_indexing(res)
+    res
+}
+
+#' Head and tail methods
+#' @inheritParams utils::head
+#' @param keep_topleft logical(1). If `TRUE` (the default),
+#' top_left material for the table will be carried over to the
+#' subset.
+#' @param keep_titles logical(1).  If `TRUE` (the default),
+#' all title and footer material for the table will be carried over to the
+#' subset.
+#' @param reindex_refs logical(1). Defaults to `FALSE`. If `TRUE`,
+#' referential footnotes will be reindexed for the subset.
+#' @docType methods
+#' @export
+#' @rdname head_tail
+setGeneric("head")
+#' @docType methods
+#' @export
+#' @rdname head_tail
+setMethod("head", "VTableTree",
+          function(x, n = 6, ..., keep_topleft = TRUE,
+                   keep_titles = TRUE,
+                   ## FALSE because this is a glance
+                   ## more often than a subset op
+                   reindex_refs = FALSE) {
+    ## default
+    res <- callNextMethod()
+    res <- .h_t_body(x = x, res = res,
+              keep_topleft = keep_topleft,
+              keep_titles = keep_titles,
+              reindex_refs = reindex_refs)
+    res
 })
+
+#' @docType methods
+#' @export
+#' @rdname head_tail
+setGeneric("tail")
+#' @docType methods
+#' @export
+#' @rdname head_tail
+setMethod("tail", "VTableTree",
+          function(x, n = 6, ..., keep_topleft = TRUE,
+                   keep_titles = TRUE,
+                   ## FALSE because this is a glance
+                   ## more often than a subset op
+                   reindex_refs = FALSE) {
+
+    res <- callNextMethod()
+    res <- .h_t_body(x = x, res = res,
+                     keep_topleft = keep_topleft,
+                     keep_titles = keep_titles,
+                     reindex_refs = reindex_refs)
+    res
+})
+
