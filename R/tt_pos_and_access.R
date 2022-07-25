@@ -1283,3 +1283,12 @@ setMethod("value_at", "LabelRow",
         lapply(rows, row_values)
 
 }
+
+
+setMethod("head", "VTableTree",
+          function(x, n = 6, ..., keep_topleft = TRUE) {
+    if(length(n) == 2L)
+        x[n[1], n[2], ..., keep_topleft = keep_topleft]
+    else
+        x[n, , ..., keep_topleft = keep_topleft]
+})
