@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Constructing rtables Manually • rtables</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,47 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/index.html">Articles</a>
+      <a href="../articles/baseline.html">Comparing Against Baselines or Control</a>
+    </li>
+    <li>
+      <a href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
+    </li>
+    <li>
+      <a href="../articles/introduction.html">Introduction to rtables</a>
+    </li>
+    <li>
+      <a href="../articles/manual_table_construction.html">Constructing rtables Manually</a>
+    </li>
+    <li>
+      <a href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/subsetting_tables.html">Subsetting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_concepts.html">Tabulation Concepts</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_dplyr.html">Comparison with dplyr Tabulation</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -55,8 +81,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/roche/rtables">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/roche/rtables/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -70,15 +96,15 @@
 
       
 
-      </header><script src="manual_table_construction_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Constructing rtables Manually</h1>
-                        <h4 class="author">Adrian Waddell</h4>
+                        <h4 data-toc-skip class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2021-11-18</h4>
+            <h4 data-toc-skip class="date">2022-07-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/../rtables_ghpages/vignettes/manual_table_construction.Rmd"><code>../rtables_ghpages/vignettes/manual_table_construction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/manual_table_construction.Rmd" class="external-link"><code>vignettes/manual_table_construction.Rmd</code></a></small>
       <div class="hidden name"><code>manual_table_construction.Rmd</code></div>
 
     </div>
@@ -90,9 +116,9 @@
     white-space: pre;
 }
 </style>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>The main functions currently associated with <code>rtable</code>s are</p>
 <p>Tables in rtables can be constructed via the layout or <code>rtabulate</code> tabulation frameworks or also manually. Currently manual table construction is the only way to define column spans. The main functions for manual table constructions are:</p>
 <ul>
@@ -104,21 +130,21 @@
 <code>rcell</code>: collection of data objects and cell format</li>
 </ul>
 </div>
-<div id="simple-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-example" class="anchor"></a>Simple Example</h2>
+<div class="section level2">
+<h2 id="simple-example">Simple Example<a class="anchor" aria-label="anchor" href="#simple-example"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables" class="external-link">rtables</a></span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rtable.html">rtable</a></span><span class="op">(</span>
-  header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Treatement\nN=100"</span>, <span class="st">"Comparison\nN=300"</span><span class="op">)</span>,
+  header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Treatement\nN=100"</span>, <span class="st">"Comparison\nN=300"</span><span class="op">)</span>,
   format <span class="op">=</span> <span class="st">"xx (xx.xx%)"</span>,
-  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">104</span>, <span class="fl">.2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">.4</span><span class="op">)</span><span class="op">)</span>,
-  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">23</span>, <span class="fl">.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">43</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">104</span>, <span class="fl">.2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">.4</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">23</span>, <span class="fl">.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">43</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"this is a very long section header"</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fl">55.23</span>, <span class="st">"xx.xx"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
-  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"95% CI"</span>, indent <span class="op">=</span> <span class="fl">1</span>, <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">44.8</span>, <span class="fl">67.4</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"(xx.x, xx.x)"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/rrow.html">rrow</a></span><span class="op">(</span><span class="st">"95% CI"</span>, indent <span class="op">=</span> <span class="fl">1</span>, <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">44.8</span>, <span class="fl">67.4</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"(xx.x, xx.x)"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>Before we go into explaining the individual components used to create this table we continue with the html conversion of the <code>rtable</code> object:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -137,15 +163,14 @@
 </tr>
 <tr>
 <td class="text-left">A</td>
-<td class="text-center">104 (20%)</td>
-<td class="text-center">100 (40%)</td>
+<td class="text-center">104 (20.00%)</td>
+<td class="text-center">100 (40.00%)</td>
 </tr>
 <tr>
 <td class="text-left">B</td>
-<td class="text-center">23 (40%)</td>
-<td class="text-center">43 (50%)</td>
+<td class="text-center">23 (40.00%)</td>
+<td class="text-center">43 (50.00%)</td>
 </tr>
-<tr></tr>
 <tr>
 <td class="text-left"></td>
 <td class="text-center"></td>
@@ -154,10 +179,15 @@
 <tr>
 <td class="text-left">this is a very long section header</td>
 <td class="text-center"></td>
+<td class="text-center"></td>
 </tr>
 <tr>
 <td class="text-left">estimate</td>
 <td class="text-center" colspan="2">55.23</td>
+</tr>
+<tr>
+<td class="text-left">95% CI</td>
+<td class="text-center" colspan="2">(44.8, 67.4)</td>
 </tr>
 <caption style="caption-side:top;">
 <div class="rtables-titles-block rtables-container">
@@ -173,10 +203,10 @@
 <p>Next, the <code>[</code> operator lets you access the cell content.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span></code></pre></div>
-<pre><code>    Treatement
-      N=100   
---------------
-A   104 (20%) </code></pre>
+<pre><code>     Treatement 
+       N=100    
+————————————————
+A   104 (20.00%)</code></pre>
 <p>and to format that cell run <code>format_rcell(tbl[1,1])</code>=.</p>
 <p>Note that <code>tbl[6, 1]</code> and <code>tbl[6, 2]</code> display both the same <code>rcell</code> because of the colspan.</p>
 </div>
@@ -193,11 +223,13 @@ A   104 (20%) </code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Gabriel Becker, Adrian Waddell.</p>
+  <p></p>
+<p>Developed by Gabriel Becker, Adrian Waddell.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -205,6 +237,8 @@ A   104 (20%) </code></pre>
 
   
 
+
+  
 
   </body>
 </html>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comparing Against Baselines or Control • rtables</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,47 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/index.html">Articles</a>
+      <a href="../articles/baseline.html">Comparing Against Baselines or Control</a>
+    </li>
+    <li>
+      <a href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
+    </li>
+    <li>
+      <a href="../articles/introduction.html">Introduction to rtables</a>
+    </li>
+    <li>
+      <a href="../articles/manual_table_construction.html">Constructing rtables Manually</a>
+    </li>
+    <li>
+      <a href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/subsetting_tables.html">Subsetting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_concepts.html">Tabulation Concepts</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_dplyr.html">Comparison with dplyr Tabulation</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -55,8 +81,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/roche/rtables">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/roche/rtables/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -70,15 +96,15 @@
 
       
 
-      </header><script src="baseline_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Comparing Against Baselines or Control</h1>
-                        <h4 class="author">Gabriel Becker and Adrian Waddell</h4>
+                        <h4 data-toc-skip class="author">Gabriel Becker and Adrian Waddell</h4>
             
-            <h4 class="date">2021-11-18</h4>
+            <h4 data-toc-skip class="date">2022-07-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/../rtables_ghpages/vignettes/baseline.Rmd"><code>../rtables_ghpages/vignettes/baseline.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/baseline.Rmd" class="external-link"><code>vignettes/baseline.Rmd</code></a></small>
       <div class="hidden name"><code>baseline.Rmd</code></div>
 
     </div>
@@ -94,87 +120,88 @@
     white-space: pre;
 }
 </style>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>Often the data from one column is considered the reference/baseline/comparison group and is compared to the data from the other columns.</p>
 <p>For example, lets calculate the average age:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables" class="external-link">rtables</a></span><span class="op">)</span></code></pre></div>
 <pre><code>Loading required package: magrittr</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+<pre><code>Loading required package: formatters</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></code></pre></div>
 <pre><code>       A: Drug X   B: Placebo   C: Combination
-----------------------------------------------
+——————————————————————————————————————————————
 Mean     34.91       33.02          34.57     </code></pre>
 <p>and then the difference of the average <code>AGE</code> between the arms to the placebo arm:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
-      <span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span>
+      <span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></code></pre></div>
 <pre><code>                         B: Placebo   A: Drug X   C: Combination
-----------------------------------------------------------------
-Difference of Averages       0          1.89           1.55     </code></pre>
+————————————————————————————————————————————————————————————————
+Difference of Averages      0.00        1.89           1.55     </code></pre>
 <p>Note that the column order has changed and the reference group is displayed in the first column.</p>
 <p>In cases where we want cells to be blank in the reference column, (e.g., “B: Placebo”) we use <code>non_ref_rcell</code> instead of <code>rcell</code>, and pass <code>.in_ref_col</code> as the second argument:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span><span class="op">{</span>
-      <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span><span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">non_ref_rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>,
+      <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span><span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">non_ref_rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>,
                                                        is_ref <span class="op">=</span> <span class="va">.in_ref_col</span>,
                                                        format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></code></pre></div>
 <pre><code>                         B: Placebo   A: Drug X   C: Combination
-----------------------------------------------------------------
+————————————————————————————————————————————————————————————————
 Difference of Averages                  1.89           1.55     </code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span><span class="op">{</span>
       <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
-          <span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">non_ref_rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>,
+          <span class="st">"Difference of Averages"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">non_ref_rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span>,
                                                    is_ref <span class="op">=</span> <span class="va">.in_ref_col</span>,
                                                    format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span>,
          <span class="st">"another row"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">non_ref_rcell</a></span><span class="op">(</span><span class="st">"aaa"</span>, <span class="va">.in_ref_col</span><span class="op">)</span>
       <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></code></pre></div>
 <pre><code>                         B: Placebo   A: Drug X   C: Combination
-----------------------------------------------------------------
+————————————————————————————————————————————————————————————————
 Difference of Averages                  1.89           1.55     
 another row                              aaa           aaa      </code></pre>
 <p>You can see which arguments are available for <code>afun</code> in the manual fro <code>analyze</code>.</p>
 </div>
-<div id="row-splitting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#row-splitting" class="anchor"></a>Row Splitting</h2>
+<div class="section level2">
+<h2 id="row-splitting">Row Splitting<a class="anchor" aria-label="anchor" href="#row-splitting"></a>
+</h2>
 <p>When adding row-splitting the reference data might be one represented by the column with or without row splitting. For example:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.ref_full</span>, <span class="va">.in_ref_col</span><span class="op">)</span><span class="op">{</span>
     <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>
       <span class="st">"is reference (.in_ref_col)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="va">.in_ref_col</span><span class="op">)</span>,
-      <span class="st">"ref cell N (.ref_group)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span><span class="op">)</span>,
-      <span class="st">"ref column N (.ref_full)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.ref_full</span><span class="op">)</span><span class="op">)</span>
+      <span class="st">"ref cell N (.ref_group)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span><span class="op">)</span>,
+      <span class="st">"ref column N (.ref_full)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.ref_full</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">DM</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">DM</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>                               B: Placebo   A: Drug X   C: Combination
                                 (N=106)      (N=121)       (N=129)    
-----------------------------------------------------------------------
+——————————————————————————————————————————————————————————————————————
 F                                                                     
   is reference (.in_ref_col)      TRUE        FALSE         FALSE     
   ref cell N (.ref_group)          56          56             56      
@@ -198,11 +225,13 @@ M
 
 
       <footer><div class="copyright">
-  <p>Developed by Gabriel Becker, Adrian Waddell.</p>
+  <p></p>
+<p>Developed by Gabriel Becker, Adrian Waddell.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -210,6 +239,8 @@ M
 
   
 
+
+  
 
   </body>
 </html>

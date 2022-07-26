@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Subsetting Tables • rtables</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,47 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rtables</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/index.html">Articles</a>
+      <a href="../articles/baseline.html">Comparing Against Baselines or Control</a>
+    </li>
+    <li>
+      <a href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
+    </li>
+    <li>
+      <a href="../articles/introduction.html">Introduction to rtables</a>
+    </li>
+    <li>
+      <a href="../articles/manual_table_construction.html">Constructing rtables Manually</a>
+    </li>
+    <li>
+      <a href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/subsetting_tables.html">Subsetting Tables</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_concepts.html">Tabulation Concepts</a>
+    </li>
+    <li>
+      <a href="../articles/tabulation_dplyr.html">Comparison with dplyr Tabulation</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -55,8 +81,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/roche/rtables">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/roche/rtables/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -70,15 +96,15 @@
 
       
 
-      </header><script src="subsetting_tables_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Subsetting Tables</h1>
-                        <h4 class="author">Gabriel Becker and Adrian Waddell</h4>
+                        <h4 data-toc-skip class="author">Gabriel Becker and Adrian Waddell</h4>
             
-            <h4 class="date">2021-11-18</h4>
+            <h4 data-toc-skip class="date">2022-07-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/master/../rtables_ghpages/vignettes/subsetting_tables.Rmd"><code>../rtables_ghpages/vignettes/subsetting_tables.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/subsetting_tables.Rmd" class="external-link"><code>vignettes/subsetting_tables.Rmd</code></a></small>
       <div class="hidden name"><code>subsetting_tables.Rmd</code></div>
 
     </div>
@@ -90,17 +116,18 @@
     white-space: pre;
 }
 </style>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p><code>TableTree</code> objects are based on a tree data structure as the name indicates. The package is written such that the user does not need to walk trees for many basic table manipulations. Walking trees will still be necessary for certain manipulation and will be the subject of a different vignette.</p>
 <p>In this vignette we show some methods to subset tables and to extract cell values.</p>
 <p>We will use the following table for illustrative purposes:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables">rtables</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables" class="external-link">rtables</a></span><span class="op">)</span></code></pre></div>
 <pre><code>Loading required package: magrittr</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
+<pre><code>Loading required package: formatters</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
 <pre><code>
 Attaching package: 'dplyr'</code></pre>
 <pre><code>The following objects are masked from 'package:stats':
@@ -109,19 +136,19 @@ Attaching package: 'dplyr'</code></pre>
 <pre><code>The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"STRATA1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ex_adsl</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"STRATA1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ex_adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">tbl</span></code></pre></div>
 <pre><code>            A: Drug X   B: Placebo   C: Combination
----------------------------------------------------
+———————————————————————————————————————————————————
 F                                                  
   AGE                                              
-    Mean      32.76       34.12           35.2     
+    Mean      32.76       34.12          35.20     
   STRATA1                                          
     A          21           24             18      
     B          25           27             21      
@@ -134,65 +161,65 @@ M
     B          21           17             21      
     C          14           19             19      </code></pre>
 <p>The <code>[</code> accessor function always returns an <code>TableTree</code> object if <code>drop=TRUE</code> is not set. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span></code></pre></div>
 <pre><code>    A: Drug X
--------------
+—————————————
 F            </code></pre>
 <p>is a table with an empty cell because the first row is a label row. We need to access a cell with actual cell data:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span></code></pre></div>
 <pre><code>       A: Drug X
-----------------
+————————————————
 Mean     32.76  </code></pre>
 <p>which is another <code>TableTree</code> and not an <code>rcell</code>. If we wanted the <code>rcell</code> we need to use the <code>drop</code> argument:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></code></pre></div>
 <pre><code>[1] 32.75949</code></pre>
 <p>One can access multiple rows and columns:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></code></pre></div>
 <pre><code>           A: Drug X   B: Placebo
----------------------------------
+—————————————————————————————————
 F                                
   AGE                            
     Mean     32.76       34.12   </code></pre>
 <p>Note that we do not repeat label rows for descending children, e.g.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="op">]</span></code></pre></div>
 <pre><code>          A: Drug X   B: Placebo   C: Combination
--------------------------------------------------
+—————————————————————————————————————————————————
 AGE                                              
-  Mean      32.76       34.12           35.2     
+  Mean      32.76       34.12          35.20     
 STRATA1                                          </code></pre>
 <p>does not show that the first row is derived from <code>AGE</code>. In order to repeat content/label information one should use the pagination feature. Please read the related vignette.</p>
 </div>
-<div id="path-based-cell-value-accessing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#path-based-cell-value-accessing" class="anchor"></a>Path Based Cell Value Accessing:</h2>
+<div class="section level2">
+<h2 id="path-based-cell-value-accessing">Path Based Cell Value Accessing:<a class="anchor" aria-label="anchor" href="#path-based-cell-value-accessing"></a>
+</h2>
 <p>Cell values can also be access via path information. The functions <code>row_paths</code>, <code>col_paths</code>, <code>row_paths_summary</code>, <code>col_paths_summary</code> are helpful to get information on the paths.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"STRATA1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ex_adsl</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"STRATA1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ex_adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">tbl2</span></code></pre></div>
 <pre><code>            A: Drug X      B: Placebo      C: Combination  
             F       M       F       M        F         M   
------------------------------------------------------------
+———————————————————————————————————————————————————————————
 AGE                                                        
-  Mean    32.76   35.57   34.12   37.44    35.2      35.38 
+  Mean    32.76   35.57   34.12   37.44    35.20     35.38 
 STRATA1                                                    
   A        21      16      24      19       18        20   
   B        25      21      27      17       21        21   
   C        33      14      26      19       27        19   </code></pre>
 <p>So the column paths are as follows:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl2</span><span class="op">)</span></code></pre></div>
 <pre><code>label             path                       
----------------------------------------------
+—————————————————————————————————————————————
 A: Drug X         ARM, A: Drug X             
   F               ARM, A: Drug X, SEX, F     
   M               ARM, A: Drug X, SEX, M     
@@ -203,10 +230,10 @@ C: Combination    ARM, C: Combination
   F               ARM, C: Combination, SEX, F
   M               ARM, C: Combination, SEX, M</code></pre>
 <p>and the row paths are as follows:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl2</span><span class="op">)</span></code></pre></div>
 <pre><code>rowname    node_class    path                      
----------------------------------------------------
+———————————————————————————————————————————————————
 AGE        LabelRow      ma_AGE_STRATA1, AGE       
   Mean     DataRow       ma_AGE_STRATA1, AGE, Mean 
 STRATA1    LabelRow      ma_AGE_STRATA1, STRATA1   
@@ -214,20 +241,20 @@ STRATA1    LabelRow      ma_AGE_STRATA1, STRATA1
   B        DataRow       ma_AGE_STRATA1, STRATA1, B
   C        DataRow       ma_AGE_STRATA1, STRATA1, C</code></pre>
 <p>So in order to get the average age for all female patients in arm <code>A: Drug X</code>:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">value_at</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">value_at</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>[1] 32.75949</code></pre>
 <p>You can also request information from non-cell specific paths with the <code>cell_values</code> function:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>$`A: Drug X.F`
 [1] 32.75949
 
 $`A: Drug X.M`
 [1] 35.56863</code></pre>
 <p>Note the return value of <code>cell_values</code> is always a list even if you specify a path to a cell:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>$`A: Drug X.F`
 [1] 32.75949</code></pre>
 <p>Hence, use <code>value_at</code> if you want to access data from a cell, and <code>cell_values</code> if you want to access data from multiple cells.</p>
@@ -245,11 +272,13 @@ $`A: Drug X.M`
 
 
       <footer><div class="copyright">
-  <p>Developed by Gabriel Becker, Adrian Waddell.</p>
+  <p></p>
+<p>Developed by Gabriel Becker, Adrian Waddell.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -257,6 +286,8 @@ $`A: Drug X.M`
 
   
 
+
+  
 
   </body>
 </html>
