@@ -1407,7 +1407,7 @@ setClass("ElementaryTable", contains = "VTableTree",
             ## have different environments so we can't use identical here
             ## all.equal requires the **values within the closures** to be the
             ## same but not the actual enclosing environments.
-            else if (!isTRUE(all.equal(colinfo, col_info(x))))
+            else if (!identical(colinfo, col_info(x), ignore.environment = TRUE)) ##(!isTRUE(all.equal(colinfo, col_info(x))))
                 stop("attempted to add child with non-matching, non-empty column info to an existing table")
             x
         })

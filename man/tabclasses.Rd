@@ -13,8 +13,8 @@ ElementaryTable(
   name = "",
   lev = 1L,
   label = "",
-  labelrow = LabelRow(lev = lev, label = label, vis = !isTRUE(iscontent) &&
-    !is.na(label) && nzchar(label)),
+  labelrow = LabelRow(lev = lev, label = label, vis = !isTRUE(iscontent) && !is.na(label)
+    && nzchar(label)),
   rspans = data.frame(),
   cinfo = NULL,
   iscontent = NA,
@@ -35,8 +35,8 @@ TableTree(
   cont = EmptyElTable,
   lev = 1L,
   label = name,
-  labelrow = LabelRow(lev = lev, label = label, vis = nrow(cont) == 0 && !is.na(label)
-    && nzchar(label)),
+  labelrow = LabelRow(lev = lev, label = label, vis = nrow(cont) == 0 && !is.na(label) &&
+    nzchar(label)),
   rspans = data.frame(),
   iscontent = NA,
   var = NA_character_,
