@@ -606,12 +606,22 @@ setMethod("get_formatted_cells", "TableRow",
                 else
                     format
             })
+            default_na_str <- obj_na_str(obj) %||% "NA"
+            na_str <- vapply(row_cells(obj), function(x) {
+                nastr <- obj_na_str(x)
+                if(is.null(nastr))
+                    default_na_str
+                else
+                    nastr
+            }, "")
 
-            matrix(unlist(Map(function(val, format, spn) {
+            matrix(unlist(Map(function(val, format, spn, na_str) {
                 stopifnot(is(spn, "integer"))
-                val <- if(shell) format else paste(format_rcell(val, format), collapse = ", ")
+                val <- if(shell) format else paste(format_rcell(val, format, na_str = na_str),
+                                                   collapse = ", ")
                 rep(list(val), spn)
-            }, row_values(obj), format, row_cspans(obj))), ncol = ncol(obj))
+            }, val = row_values(obj), format = format, spn = row_cspans(obj), na_str = na_str)),
+            ncol = ncol(obj))
 })
 
 #' @rdname gfc

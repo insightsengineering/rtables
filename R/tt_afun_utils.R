@@ -468,6 +468,7 @@ make_afun <- function(fun,
             if(is(x, "CellValue")) {
                 obj_label(x) <- l
                 obj_format(x) <- f
+                obj_na_str(x) <- na_str
 #                indent_mod(x) <- im
                 x
             } else if(.null_ref_cells) {

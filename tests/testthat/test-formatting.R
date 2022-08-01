@@ -51,7 +51,6 @@ test_that("table_shell works", {
 
 test_that("rcell format_na_str functionality works", {
 
-    mycell <-
     expect_identical(format_rcell(rcell(NA_real_,
                                         format = "xx.xx",
                                         format_na_str = "hiya")),
@@ -63,4 +62,41 @@ test_that("rcell format_na_str functionality works", {
 
     irs <- in_rows(val1 = NA_real_, val2=NA_integer_, .formats = list(val1 = "xx.x", val2 = "xx.x"),
                    .format_na_strs = list(val1 = "hiya", val2 = "lowdown"))
+})
+
+test_that("format_na_str functionality works in get_formatted_cells (ie printing) and make_afun", {
+
+    DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
+    DM2$AGE <- NA
+    DM2$AGE[1] <- 1
+
+    s_summary <- function(x) {
+        stopifnot(is.numeric(x))
+
+        list(
+            n = sum(!is.na(x)),
+            mean = mean(x),
+            min_max = range(x)
+        )
+    }
+
+    a_summary <- make_afun(
+        fun = s_summary,
+        .formats = c(n = "xx", mean = "xx.xx", min_max = "xx.xx - xx.xx"),
+        .labels = c(n = "n", mean = "Mean", min_max = "min - max")
+    )
+
+    a_summary3 <- make_afun(a_summary,
+                            .formats = c(mean = "xx.xxx"),
+                            .format_na_strs = c(mean = "Ridiculous"))
+
+    l <- basic_table() %>% split_cols_by("ARM") %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        summarize_row_groups(label_fstr = "%s (n)") %>%
+        analyze("AGE", afun = a_summary3, format = "xx.xx")
+
+    tbl <- build_table(l, DM2)
+    tbl
+    expect_identical(get_formatted_cells(tbl)[3,1, drop = TRUE],
+                     "Ridiculous")
 })
