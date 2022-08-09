@@ -39,7 +39,9 @@ considerations. Defaults to none.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
 
-\item{cpp}{numeric(1). Number of columns per page}
+\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
+horizontal pagination. \code{NULL} (the default) indicates no horizontal
+pagination should be done.}
 }
 \value{
 for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
