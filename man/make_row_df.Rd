@@ -6,7 +6,7 @@
 \alias{make_row_df,TableRow-method}
 \alias{make_row_df,LabelRow-method}
 \alias{make_col_df}
-\title{Make row and column layout summary data.frames for use during pagination}
+\title{Column Layout Summary}
 \usage{
 \S4method{make_row_df}{VTableTree}(
   tt,
@@ -53,17 +53,18 @@
 make_col_df(tt, visible_only = TRUE)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{ANY. Object representing the table-like object to be summarized.}
 
 \item{colwidths}{numeric. Internal detail do not set manually.}
 
-\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.}
+\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 
 \item{rownum}{numeric(1). Internal detail do not set manually.}
 
 \item{indent}{integer(1). Internal detail do not set manually.}
 
-\item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
+\item{path}{character.  Path  to  the (sub)table  represented  by
+\code{tt}. Defaults to \code{character()}}
 
 \item{incontent}{logical(1). Internal detail do not set manually.}
 
@@ -74,12 +75,6 @@ make_col_df(tt, visible_only = TRUE)
 \item{sibpos}{integer(1). Internal detail do not set manually.}
 
 \item{nsibs}{integer(1). Internal detail do not set manually.}
-
-\item{nrowrefs}{integer(1). Internal detail do not set manually.}
-
-\item{ncellrefs}{integer(1). Internal detail do not set manually.}
-
-\item{nreflines}{integer(1). Internal detail do not set manually.}
 }
 \value{
 a data.frame of row/column-structure information used by the pagination machinery.
@@ -88,9 +83,22 @@ a data.frame of row/column-structure information used by the pagination machiner
 Used for Pagination
 }
 \details{
-When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
+When  \code{visible_only} is  \code{TRUE} (the  default),
+    methods should  return a  data.frame with  exactly one  row per
+    visible  row in  the table-like  object.  This  is useful  when
+    reasoning about  how a table  will print, but does  not reflect
+    the full pathing space of the structure (though the paths which
+    are given will all work as is).
 
-When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+If  supported,  when  \code{visible_only}  is  \code{FALSE},  every
+structural element of the table (in row-space) will be reflected in
+the  returned data.frame,  meaning the  full pathing-space  will be
+represented but some rows in  the layout summary will not represent
+printed rows in the table as it is displayed.
+
+Most arguments beyond \code{tt} and \code{visible_only} are present so that
+`make_row_df` methods can call `make_row_df` recursively and retain information,
+and should not be set during a top-level call
 }
 \note{
 the technically present root tree node is excluded from the summary returne dby

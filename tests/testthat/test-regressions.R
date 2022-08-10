@@ -506,3 +506,22 @@ test_that("child_label = hidden does not affect tree structure/pathing", {
                      1)
 
 })
+
+
+## ensure nested = FALSE not needed after analyze
+
+test_that("nested = FALSE not needed after analyze", {
+
+
+    lyt1 <- basic_table() %>%
+        analyze("AGE") %>%
+        split_rows_by("STRATA1") %>%
+        analyze("AGE")
+
+    lyt2 <- basic_table() %>%
+        analyze("AGE") %>%
+        split_rows_by("STRATA1", nested = FALSE) %>%
+        analyze("AGE")
+
+    expect_identical(lyt1, lyt2)
+})

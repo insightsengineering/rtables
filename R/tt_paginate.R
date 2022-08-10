@@ -96,29 +96,29 @@ pos_to_path <- function(pos) {
 
 
 
-#' Make row and column layout summary data.frames for use during pagination
-#' @inheritParams gen_args
-#' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
-#' @param incontent logical(1). Internal detail do not set manually.
-#' @param repr_ext integer(1). Internal detail do not set manually.
-#' @param repr_inds integer. Internal detail do not set manually.
-#' @param sibpos integer(1). Internal detail do not set manually.
-#' @param nsibs integer(1). Internal detail do not set manually.
-#' @param rownum numeric(1). Internal detail do not set manually.
-#' @param indent integer(1). Internal detail do not set manually.
-#
-#' @param colwidths numeric. Internal detail do not set manually.
-#' @param nrowrefs integer(1). Internal detail do not set manually.
-#' @param ncellrefs integer(1). Internal detail do not set manually.
-#' @param nreflines integer(1). Internal detail do not set manually.
-#'
-#' @details
-#' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
-#'
-#' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
+### ' Make row and column layout summary data.frames for use during pagination
+## #' @inheritParams gen_args
+## #' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
+## #' @param incontent logical(1). Internal detail do not set manually.
+## #' @param repr_ext integer(1). Internal detail do not set manually.
+## #' @param repr_inds integer. Internal detail do not set manually.
+## #' @param sibpos integer(1). Internal detail do not set manually.
+## #' @param nsibs integer(1). Internal detail do not set manually.
+## #' @param rownum numeric(1). Internal detail do not set manually.
+## #' @param indent integer(1). Internal detail do not set manually.
+## #
+## #' @param colwidths numeric. Internal detail do not set manually.
+## #' @param nrowrefs integer(1). Internal detail do not set manually.
+## #' @param ncellrefs integer(1). Internal detail do not set manually.
+## #' @param nreflines integer(1). Internal detail do not set manually.
+## #'
+## #' @details
+## #' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
+## #'
+## #' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
 #' @inherit formatters::make_row_df
 #'
-#' @note the technically present root tree node is excluded from the summary returne dby
+#' @note the technically present root tree node is excluded from the summary returned by
 #' both \code{make_row_df} and \code{make_col_df}, as it is simply the
 #' row/column structure of \code{tt} and thus not useful for pathing or pagination.
 #' @export
