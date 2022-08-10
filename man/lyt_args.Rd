@@ -95,7 +95,7 @@ lyt_args(
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
 
-\item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
+\item{name}{character(1). Name of the split/table/row being created. Defaults to same as the corresponding label, but is not required to be.}
 
 \item{cuts}{numeric. Cuts to use}
 

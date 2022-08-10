@@ -55,7 +55,7 @@ TableTree(
 \arguments{
 \item{kids}{list. List of direct children.}
 
-\item{name}{character(1). Name of the split/table/row being creatted. Defaults to same as the corresponding llabel, but is not required to be.}
+\item{name}{character(1). Name of the split/table/row being created. Defaults to same as the corresponding label, but is not required to be.}
 
 \item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
 
