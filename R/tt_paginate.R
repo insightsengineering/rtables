@@ -580,7 +580,9 @@ paginate_table = function(tt, lpp = 15,
 
     if(!is.null(cpp)) {
         inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths, verbose = verbose)
-        res <- lapply(res, function(oneres) lapply(inds, function(ii) oneres[,ii, drop = FALSE]))
+        res <- lapply(res, function(oneres) lapply(inds, function(ii) oneres[,ii, drop = FALSE,
+                                                                             keep_titles = TRUE,
+                                                                             reindex_refs = FALSE]))
         res <- unlist(res, recursive = FALSE)
     }
     res
