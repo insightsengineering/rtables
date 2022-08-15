@@ -435,29 +435,36 @@ The `.N_col` argument is a special keyword argument which `build_table` passes t
 We now use the `s_events_patients` summary function in a tabulation:
 
 ```{r}
-basic_table() %>% 
+adae_0_lyt <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
-  analyze("USUBJID", s_events_patients) %>%
-  build_table(ADAE2)
+  analyze("USUBJID", s_events_patients)
+
+build_table(adae_0_lyt, ADAE2)
 ```
 
-Note that the column `N`'s are wrong as by default they are set to the number of rows per group (i.e. number of AEs per arm here). This also affects the percentages. For this table we are interested in the number of patients per column/arm which is usually taken from `ADSL` (variable `ADSL2` here):
+Note that the column `N`'s are wrong as by default they are set to the
+number of rows per group (i.e. number of AEs per arm here). This also
+affects the percentages. For this table we are interested in the
+number of patients per column/arm which is usually taken from `ADSL`
+(var `ADSL2` here).
+
+`rtables` handles this by allowing us to override how the column
+counts are computed. We can specify an `alt_counts_df` in
+`build_table`. When we do this, `rtables` calculates the column counts
+by applying the same column faceting to `alt_counts_df` as it does to
+the primary data during tabulation:
+
 
 ```{r}
-N_per_arm <- table(ADSL2$ARM)
-N_per_arm
+build_table(adae_0_lyt, ADAE2, alt_counts_df = ADSL2)
+
 ```
 
-Since this information is not "pre-data" it needs to go to the table creation function `build_table`:
+Alternatively, if the desired column counts are already calculated, they can be 
+specified directly via the `col_counts` argument to `built_table`, though specifying 
+an `alt_counts_df` is the preferred mechanism.
 
-```{r}
-basic_table() %>% 
-  split_cols_by("ARM") %>%
-  add_colcounts() %>%
-  analyze("USUBJID", s_events_patients) %>%
-  build_table(ADAE2, col_counts = N_per_arm)
-```
 
 We next calculate this information per system organ class:
 
@@ -468,7 +475,7 @@ l <- basic_table() %>%
   analyze("USUBJID", s_events_patients) %>%
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients)
-  build_table(l, ADAE2, col_counts = N_per_arm)
+build_table(l, ADAE2, alt_counts_df = ADSL2)
 ```
 
 We now have to the add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze` behavior for a factor is to create the count table per level (using `rtab_inner`):
@@ -480,7 +487,7 @@ tbl1 <- basic_table() %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", indent_mod = -1) %>%
-  build_table(ADAE2, col_counts = N_per_arm)
+  build_table(ADAE2, alt_counts_df = ADSL2)
 
 tbl1
 ```
@@ -515,20 +522,20 @@ basic_table() %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", afun = table_count_once_per_id, show_labels = "hidden", indent_mod = -1) %>%
-  build_table(ADAE2, col_counts = N_per_arm)
+  build_table(ADAE2, alt_counts_df = ADSL2)
 ```
 
-Note that we are missing the overall summary in the first two rows. This can be added with another `analyze` call and then setting `nested` to `FALSE` in the subsequent `summarize_row_groups` call:
+Note that we are missing the overall summary in the first two rows. This can be added with an initial `analyze` call.
 
 ```{r}
 tbl <- basic_table() %>% 
   split_cols_by("ARM") %>%
   add_colcounts() %>%
   analyze("USUBJID", afun = s_events_patients) %>% 
-  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE, indent_mod = 1)  %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1, section_div = "")  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", table_count_once_per_id, show_labels = "hidden", indent_mod = -1) %>%
-  build_table(ADAE2, col_counts = N_per_arm)
+  build_table(ADAE2, alt_counts_df = ADSL2)
 
 tbl
 ```
@@ -579,13 +586,13 @@ basic_table() %>%
           afun = table_count_grade_once_per_id, 
           extra_args = list(grade_levels = 1:5),
           var_labels = "- Any adverse events -", show_labels = "visible") %>%
-  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE, indent_mod = 1) %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
   summarize_row_groups(cfun = table_count_grade_once_per_id, format = "xx", indent_mod = 1) %>%
   split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2)  %>%
   analyze("AETOXGR", 
           afun = table_count_grade_once_per_id, 
           extra_args = list(grade_levels = 1:5), show_labels = "hidden") %>%
-  build_table(ADAE2, col_counts = N_per_arm)
+  build_table(ADAE2, alt_counts_df = ADSL2)
 ```
 
 ## Response Table

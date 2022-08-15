@@ -32,3 +32,5 @@ complexmodel.R
 dt_573_MHT01_npaszty.Rmd
 
 tests/unit_test_results.xml
+
+*.prof

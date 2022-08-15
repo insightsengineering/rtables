@@ -1038,9 +1038,15 @@ build_table = function(lyt, df,
                         prov_footer = prov_footer(lyt))
     }
 
-    ## this is where the top_left check lives right now. refactor later maybe
-    ## but now just call it so the error gets thrown when I want it to
-    unused <- matrix_form(tab)
+
+    ## This seems to be unneeded, not clear what 'top_left' check it refers to
+    ## but both top_left taller than column headers and very long topleft are now
+    ## allowed, so this is just wasted computation.
+
+
+    ## ## this is where the top_left check lives right now. refactor later maybe
+    ## ## but now just call it so the error gets thrown when I want it to
+    ## unused <- matrix_form(tab)
     tab <- update_ref_indexing(tab)
     horizontal_sep(tab) <- hsep
     tab

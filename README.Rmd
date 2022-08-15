@@ -38,7 +38,7 @@ License Version 2.
 * flexible tabulation framework
 * flexible formatting (cell spans, rounding, alignment, etc.)
 * multiple output formats (html, ascii, latex, pdf, xml)
-* flexible pagination
+* flexible pagination in both horizontal and vertical directions
 * distinguish between name and label in the data structure to work with CDISC standards
 * title, footnotes, cell cell/row/column references
 
