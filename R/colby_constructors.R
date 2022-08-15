@@ -49,6 +49,9 @@ setMethod("split_rows", "PreDataRowLayout",
     tmp  = if (pos <= length(lyt)) {
                split_rows(lyt[[pos]], spl, pos, cmpnd_fun)
            } else {
+               if(pos != 1 && has_force_pag(spl))
+                   stop("page_by splits cannot have top-level siblings",
+                        call. = FALSE)
                SplitVector(spl)
            }
     lyt[[pos]] = tmp
@@ -65,6 +68,9 @@ setMethod("split_rows", "SplitVector",
     ##     return(cmpnd_last_rowsplit(lyt, spl, cmpnd_fun))
     ## }
 
+    if(has_force_pag(spl) && length(lyt) > 0 && !has_force_pag(lyt[[length(lyt)]]))
+        stop("page_by splits cannot be nested within non-page_by splits",
+             call. = FALSE)
     tmp = c(unclass(lyt), spl)
     SplitVector(lst = tmp)
 })

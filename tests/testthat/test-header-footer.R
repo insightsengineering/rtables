@@ -20,6 +20,13 @@ test_that("referential footnotes work", {
     expect_identical(rdf[2, "ncellrefs"], 3L)
     expect_identical(rdf[1, "ncellrefs"], 0L)
 
+    rfn_out <- row_footnotes(result)
+    expect_identical(list(row1 = list(rtables:::RefFootnote("row 1 rfn", 1L)),
+                          row2 = list()),
+                     rfn_out)
+    cfn_out <- cell_footnotes(result)
+    expect_identical(cfn_out[2,1][[1]],
+                     list(rtables:::RefFootnote("row 2 cfn", 2L)))
 
     analysisfun2 <- function(x, cutoff,  ...) {
         mn <- mean(x)

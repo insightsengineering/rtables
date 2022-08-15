@@ -106,7 +106,6 @@ NULL
     } else {
         if(is.null(extr))
             extr = rep(list(list()), length(vals))
-        ## strict is FALSE here cause fixupvals might be called repeatedly
         vals = make_splvalue_vec(vals, extr, labels = labels)
     }
     ## we're done with this so take it off
@@ -247,17 +246,6 @@ do_split = function(spl, df, vals = NULL, labels = NULL, trim = FALSE, spl_conte
         vals = .applysplit_rawvals(spl, df)
     extr = .applysplit_extras(spl, df, vals)
 
-    ## in some cases, we don't know the
-    ## values until after we know the extra args, since the values
-    ## themselves are meaningless. If this is the case, fix them
-    ## before generating the data partition
-
-    ## I don't know if the above is still true... ~G
-    if(is.null(vals) && length(extr) > 0) {
-        vals = seq_along(extr)
-        names(vals) = names(extr)
-    }
-
     if(is.null(vals)) {
         return(list(values = list(),
                     datasplit = list(),
@@ -389,8 +377,8 @@ setMethod(".applysplit_rawvals", "ManualSplit",
           function(spl, df) spl@levels)
 
 
-setMethod(".applysplit_rawvals", "NULLSplit",
-          function(spl, df) "")
+## setMethod(".applysplit_rawvals", "NULLSplit",
+##           function(spl, df) "")
 
 setMethod(".applysplit_rawvals", "VAnalyzeSplit",
           function(spl, df) spl_payload(spl))
@@ -438,14 +426,14 @@ setMethod(".applysplit_datapart", "MultiVarSplit",
 setMethod(".applysplit_datapart", "AllSplit",
           function(spl, df, vals) list(df))
 
-## not sure I need this
+## ## not sure I need this
 setMethod(".applysplit_datapart", "ManualSplit",
           function(spl, df, vals) rep(list(df), times = length(vals)))
 
 
 
-setMethod(".applysplit_datapart", "NULLSplit",
-          function(spl, df, vals) list(df[FALSE,]))
+## setMethod(".applysplit_datapart", "NULLSplit",
+##           function(spl, df, vals) list(df[FALSE,]))
 
 
 setMethod(".applysplit_datapart", "VarStaticCutSplit",
@@ -529,12 +517,9 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     varname <- spl_payload(spl)
     vlabelname <- spl_labelvar(spl)
     varvec = df[[varname]]
-    if(is.null(vals)) {
-        vals = if(is.factor(varvec))
-                   levels(varvec)
-               else
-                   unique(varvec)
-    }
+    ## we used to check if vals was NULL but
+    ## this is called after a short-circuit return in .apply_split_inner in that case
+    ## so vals is guaranteed to be non-null here
     if(is.null(labels)) {
         if(varname == vlabelname) {
             labels = vals
@@ -915,6 +900,8 @@ select_all_levels = new("AllLevelsSentinel")
 #' build_table(l3, smallerDM)
 add_combo_levels = function(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL) {
     myfun = function(df, spl, vals = NULL, labels = NULL, ...) {
+        if(is(spl, "MultiVarSplit"))
+            stop("Combining levels of a MultiVarSplit does not make sense.", call. = FALSE) # nocov
         ret = .apply_split_inner(spl, df, vals = vals, labels = labels, trim = trim)
         for(i in 1:nrow(combosdf)) {
             lcombo = combosdf[i, "levelcombo", drop = TRUE][[1]]

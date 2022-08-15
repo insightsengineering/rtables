@@ -6,12 +6,12 @@
 \alias{row_footnotes,RowsVerticalSection-method}
 \alias{row_footnotes<-}
 \alias{row_footnotes<-,TableRow-method}
-\alias{row_footnotes,ElementaryTable-method}
+\alias{row_footnotes,VTableTree-method}
 \alias{cell_footnotes}
 \alias{cell_footnotes,CellValue-method}
 \alias{cell_footnotes,TableRow-method}
 \alias{cell_footnotes,LabelRow-method}
-\alias{cell_footnotes,ElementaryTable-method}
+\alias{cell_footnotes,VTableTree-method}
 \alias{cell_footnotes<-}
 \alias{cell_footnotes<-,CellValue-method}
 \alias{cell_footnotes<-,DataRow-method}
@@ -43,7 +43,7 @@ row_footnotes(obj) <- value
 
 \S4method{row_footnotes}{TableRow}(obj) <- value
 
-\S4method{row_footnotes}{ElementaryTable}(obj)
+\S4method{row_footnotes}{VTableTree}(obj)
 
 cell_footnotes(obj)
 
@@ -53,7 +53,7 @@ cell_footnotes(obj)
 
 \S4method{cell_footnotes}{LabelRow}(obj)
 
-\S4method{cell_footnotes}{ElementaryTable}(obj)
+\S4method{cell_footnotes}{VTableTree}(obj)
 
 cell_footnotes(obj) <- value
 

@@ -648,12 +648,17 @@ setMethod("split_fun<-", "CustomizableSplit", function(obj, value) {
     obj
 })
 
+# nocov start
 ## Only that type of split currently has the slot
 ## this should probably change? for now  define
 ## an accessor that just returns NULL
 #' @rdname int_methods
-setMethod("split_fun<-", "Split", function(obj, value) stop("Attempted to set a custom split function on a non-customizable split. This should not happen, please contact the maintainers."))
-
+setMethod("split_fun<-", "Split",
+          function(obj, value) {
+    stop("Attempted to set a custom split function on a non-customizable split.",
+         "This should not happen, please contact the maintainers.")
+})
+# nocov end
 
 ## Content specification related accessors
 #' @rdname int_methods
@@ -2261,9 +2266,10 @@ setMethod("row_footnotes<-", "TableRow",
     obj
 })
 
+
 #' @export
 #' @rdname ref_fnotes
-setMethod("row_footnotes", "ElementaryTable",
+setMethod("row_footnotes", "VTableTree",
           function(obj) {
     rws <- collect_leaves(obj, TRUE, TRUE)
     cells <- lapply(rws, row_footnotes)
@@ -2297,7 +2303,7 @@ setMethod("cell_footnotes", "LabelRow",
 
 #' @export
 #' @rdname ref_fnotes
-setMethod("cell_footnotes", "ElementaryTable",
+setMethod("cell_footnotes", "VTableTree",
           function(obj) {
     rws <- collect_leaves(obj, TRUE, TRUE)
     cells <- lapply(rws, cell_footnotes)
@@ -2483,6 +2489,7 @@ setMethod("fnotes_at_path<-", c("VTableTree", "NULL"),
 setGeneric("has_force_pag", function(obj) standardGeneric("has_force_pag"))
 
 setMethod("has_force_pag", "TableTree", function(obj) !is.na(ptitle_prefix(obj)))
+setMethod("has_force_pag", "Split", function(obj) !is.na(ptitle_prefix(obj)))
 
 setMethod("has_force_pag", "VTableNodeInfo", function(obj) FALSE)
 

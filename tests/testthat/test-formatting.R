@@ -95,7 +95,7 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
         summarize_row_groups(label_fstr = "%s (n)") %>%
         analyze("AGE", afun = a_summary3, format = "xx.xx")
 
-    tbl <- build_table(l, DM2)
+    tbl <- suppressWarnings(build_table(l, DM2))
     tbl
     expect_identical(get_formatted_cells(tbl)[3,1, drop = TRUE],
                      "Ridiculous")

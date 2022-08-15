@@ -442,18 +442,25 @@ gen_rowvalues = function(dfpart,
         defrlabel <- partlabel
         didlab <- TRUE
     }
+    fixup_warn <- function(w) {
+        warning(w,
+                "\n\toccured at (row) path: ",
+                spl_context_to_disp_path(spl_context),
+                .call = FALSE)
+        invokeRestart("muffleWarning")
+    }
     kids <- tryCatch(.make_tablerows(df,
-                           func = analysis_fun(spl),
-                           defrowlabs = defrlabel, # XXX
-                           cinfo = cinfo,
-                           datcol = spl_payload(spl),
-                           lev = lvl + 1L,
-                           format = obj_format(spl),
-                           splextra = split_exargs(spl),
-                           baselines = baselines,
-                           inclNAs = avar_inclNAs(spl),
-                           spl_context = spl_context),
-                    error = function(e) e)
+                                     func = analysis_fun(spl),
+                                     defrowlabs = defrlabel, # XXX
+                                     cinfo = cinfo,
+                                     datcol = spl_payload(spl),
+                                     lev = lvl + 1L,
+                                     format = obj_format(spl),
+                                     splextra = split_exargs(spl),
+                                            baselines = baselines,
+                                     inclNAs = avar_inclNAs(spl),
+                                     spl_context = spl_context),
+                     error = function(e) e)
     if(is(kids, "error")) {
         stop("Error applying analysis function (var - ",
              spl_payload(spl) %||% "colvars", "): ", kids$message,
@@ -534,9 +541,9 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
           function(spl,
                    have_controws,
                    make_lrow, ## used here
+                   spl_context,
                    ... ## all passed directly down to VAnalyzeSplit method
                    ) {
-
     avspls = spl_payload(spl)
 
     nspl = length(avspls)
@@ -546,8 +553,10 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
                   nsibs = nspl - 1,
                   have_controws = have_controws,
                   make_lrow = make_lrow,
+                  spl_context = spl_context,
                   ...,
                   section_sep = spl_section_div(spl)))
+
 
 
 
@@ -570,7 +579,12 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
     labs <- vapply(kids, obj_label, "")
     if(length(unique(nms))  != length(nms) &&
        length(unique(nms))  != length(nms)) {
-        warning("Non-unique sibling analysis table names. Using Labels instead. Use the table_names argument to analyze to avoid this when analyzing the same variable multiple times.")
+        warning("Non-unique sibling analysis table names. Using Labels instead. ",
+                "Use the table_names argument to analyze to avoid this when analyzing ",
+                "the same variable multiple times.",
+                "\n\toccured at (row) path: ",
+                spl_context_to_disp_path(spl_context),
+                call. = FALSE)
         kids <- mapply(function(k, nm) {
             obj_name(k) <- nm
             k

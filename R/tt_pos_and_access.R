@@ -1083,49 +1083,46 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     x
 })
 
-#' @exportMethod [[
-#' @rdname brackets
+## this is entirely superseded by the (much healthier)
+## [<character>, <character>] codepath
 
-setMethod("[[", c("VTableTree", "list", "ANY"),
-          function(x, i, j, ...) {
+## #' @exportMethod [[
+## #' @rdname brackets
 
-    subtree = x
-    nms = i
-    while(length(nms) > 0 && is(subtree, "VTableTree")) {
-        nm = nms[[1]]
-        nms = nms[-1]
-        ## support the name[2] type pathing
-        ## XXX should we just modify the names
-        ## so the actual name is name[2] instead?
-        stopifnot(is(nm, "character"))
-        nm = strsplit(nm, "[][]")[[1]]
-        if(length(nm) > 1)
-            pos = as.integer(nm[2])
-        else
-            pos = 1L
-        nm = nm[1]
-        kids = tree_children(subtree)
-        chosen = which(sapply(kids, obj_name) == nm)[pos]
-        subtree = kids[[chosen]]
-    }
-    ## we have row selections
-    if(length(nms)) {
-        stop("stop being so clever. row selection in path subsetting not supported yet")
-    }
-    if(!missing(j))
-        subtree = subset_cols(subtree, j)
-    if(is(subtree, "TableRow"))
-        subtree = TableTree(list(subtree), cinfo = col_info(subtree))
-    subtree
+## setMethod("[[", c("VTableTree", "list", "ANY"),
+##           function(x, i, j, ...) {
 
-
-})
-
-extract_colvals = function(tt, j) {
+##     subtree = x
+##     nms = i
+##     while(length(nms) > 0 && is(subtree, "VTableTree")) {
+##         nm = nms[[1]]
+##         nms = nms[-1]
+##         ## support the name[2] type pathing
+##         ## XXX should we just modify the names
+##         ## so the actual name is name[2] instead?
+##         stopifnot(is(nm, "character"))
+##         nm = strsplit(nm, "[][]")[[1]]
+##         if(length(nm) > 1)
+##             pos = as.integer(nm[2])
+##         else
+##             pos = 1L
+##         nm = nm[1]
+##         kids = tree_children(subtree)
+##         chosen = which(sapply(kids, obj_name) == nm)[pos]
+##         subtree = kids[[chosen]]
+##     }
+##     ## we have row selections
+##     if(length(nms)) {
+##         stop("stop being so clever. row selection in path subsetting not supported yet")
+##     }
+##     if(!missing(j))
+##         subtree = subset_cols(subtree, j)
+##     if(is(subtree, "TableRow"))
+##         subtree = TableTree(list(subtree), cinfo = col_info(subtree))
+##     subtree
 
 
-
-}
+## })
 
 #' @importFrom utils compareVersion
 

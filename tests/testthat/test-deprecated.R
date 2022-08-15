@@ -36,7 +36,8 @@ test_that("deprecated insert_rrow and summarize_rows still currently work", {
         split_rows_by("Species") %>%
         analyze("Sepal.Length") %>%
         build_table(iris)
-
+    ## for coverage
+    expect_warning({resdf2 <- summarize_rows(tbl2)}, "Deprecated")
     res3 <- insert_rrow(tbl2, rrow("Hello World"))
     mf3 <- matrix_form(res3)
     expect_identical(mf3$strings[2, , drop = TRUE], c("Hello World", "", "", ""))

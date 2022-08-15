@@ -87,10 +87,16 @@ test_that("multi-header tables work", {
     rrowl(row.name = "row 2", 4:1)
   )
     ## printing it works
-    t1
+   res <- toString(t1)
   expect_equal(nrow(t1), 2)
   expect_equal(ncol(t1), 4)
-  expect_equal(names(t1), c("A", "A", "B", "B"))
+    expect_equal(names(t1), c("A", "A", "B", "B"))
+
+    t2 <- rtable(header = rheader(
+                     rrow(NULL, rcell("A"), rcell("B")),
+                     rrow(NULL, rcell(50L, format = "(N=xx)"), rcell(70L, format = "(N=xx)"))),
+                 rrowl("row 1", 1:2))
+    expect_identical(col_counts(t2), c(50L, 70L))
 
 })
 

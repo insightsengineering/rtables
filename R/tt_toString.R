@@ -255,22 +255,6 @@ setMethod("matrix_form", "VTableTree",
                     main_footer = main_footer(obj),
                     prov_footer = prov_footer(obj)
                     )
-
-    ## ret <- structure(
-    ##     list(
-    ##         strings = body,
-    ##         spans = spans,
-    ##         aligns = aligns,
-    ##         display = display,
-    ##         row_info = sr,
-    ##         line_grouping = 1:nrow(body), # this is done for real in .do_mat_expand now
-    ##         ref_footnotes = ref_fnotes
-    ##     ),
-    ##     nlines_header = nr_header, ## this is done for real in .do_mat_expand nownlines_header,
-    ##     nrow_header = nr_header,
-    ##     class = c("MatrixPrintForm", "list"))
-    ## ## .do_mat_expand(ret)
-    ## mform_handle_newlines(ret, has_topleft = TRUE)
 })
 
 
@@ -316,22 +300,22 @@ format_fnote_note <- function(fn) {
     res
 }
 
-.colref_mat_helper <- function(vals, span) {
-        val <- paste(lapply(vals, format_fnote_ref), collapse = " ")
-        if(length(val) == 0)
-            val <- ""
-        rep(val, times = span)
-}
+## .colref_mat_helper <- function(vals, span) {
+##         val <- paste(lapply(vals, format_fnote_ref), collapse = " ")
+##         if(length(val) == 0)
+##             val <- ""
+##         rep(val, times = span)
+## }
 
-get_colref_matrix <- function(tt) {
-    cdf <- make_col_df(tt, visible_only=FALSE)
-    objs <- cdf$col_fnotes
-    spans <- cdf$total_span
-    vals <- mapply(.colref_mat_helper,
-                   vals = objs,
-                   span = spans)
-    vals
-}
+## get_colref_matrix <- function(tt) {
+##     cdf <- make_col_df(tt, visible_only=FALSE)
+##     objs <- cdf$col_fnotes
+##     spans <- cdf$total_span
+##     vals <- mapply(.colref_mat_helper,
+##                    vals = objs,
+##                    span = spans)
+##     vals
+## }
 
 get_ref_matrix <- function(tt) {
     if(ncol(tt) == 0 || nrow(tt) == 0) {

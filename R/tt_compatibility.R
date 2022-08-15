@@ -16,7 +16,7 @@ rrow = function(row.name = "", ..., format = NULL, indent = 0) {
     if(is.null(row.name))
         row.name = ""
     else if (!is(row.name, "character"))
-        stop() #row.name = as.character(row.name)
+        stop("row.name must be NULL or a character string")
     if(length(vals) == 0L) {
         LabelRow(lev = as.integer(indent),
                  label = row.name,
@@ -92,7 +92,8 @@ hrows_to_colinfo = function(rows) {
     unqvals = lapply(vals, unique)
     formats = lapply(rows, obj_format)
     counts = NULL
-    if( formats[ nr ] == "(N=xx)" ) { ## count row
+    if(formats[ nr ] == "(N=xx)" ||
+         all(sapply(row_cells(rows[[nr]]), obj_format) == "(N=xx)")) { ## count row
         counts = vals[[ nr ]]
         vals = vals[ -nr ]
         cspans = cspans[ -nr ]

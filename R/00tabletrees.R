@@ -169,22 +169,22 @@ VarLevelSplit <- function(var,
         )
 }
 
-## XXX TODO not sure if this class is needed for anything???
-setClass("NULLSplit", contains = "Split")
+## ## XXX TODO not sure if this class is needed for anything???
+## setClass("NULLSplit", contains = "Split")
 
-NULLSplit <- function(...) {
-    ## only(!!) valid instantiation of NULLSplit class
-    new("NULLSplit", payload = character(),
-        split_label = character(),
-        content_fun = NULL,
-        content_format = NULL,
-        split_format = NULL,
-        name  = "",
-        indent_modifier = 0L,
-        content_indent_modifier = 0L,
-        content_var = "",
-        label_pos = FALSE)
-}
+## NULLSplit <- function(...) {
+##     ## only(!!) valid instantiation of NULLSplit class
+##     new("NULLSplit", payload = character(),
+##         split_label = character(),
+##         content_fun = NULL,
+##         content_format = NULL,
+##         split_format = NULL,
+##         name  = "",
+##         indent_modifier = 0L,
+##         content_indent_modifier = 0L,
+##         content_var = "",
+##         label_pos = FALSE)
+## }
 
 setClass("AllSplit", contains = "Split")
 ## ,

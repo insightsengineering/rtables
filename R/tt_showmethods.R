@@ -143,8 +143,8 @@ setMethod("spltype_abbrev", "VarDynCutSplit",
           function(obj) "dcut")
 setMethod("spltype_abbrev", "AllSplit",
           function(obj) "all obs")
-setMethod("spltype_abbrev", "NULLSplit",
-          function(obj) "no obs")
+## setMethod("spltype_abbrev", "NULLSplit",
+##           function(obj) "no obs")
 
 setMethod("spltype_abbrev", "AnalyzeVarSplit",
           function(obj) "** analysis **")

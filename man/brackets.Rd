@@ -21,7 +21,6 @@
 \alias{[,VTableTree,character,character-method}
 \alias{[,VTableTree,missing,numeric-method}
 \alias{[,VTableTree,numeric,numeric-method}
-\alias{[[,VTableTree,list-method}
 \title{retrieve and assign elements of a TableTree}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
@@ -49,8 +48,6 @@
 \S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
-
-\S4method{[[}{VTableTree,list}(x, i, j, ...)
 }
 \arguments{
 \item{x}{TableTree}
