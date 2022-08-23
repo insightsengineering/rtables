@@ -185,3 +185,20 @@ test_that("equivalent split funs withs differrent environments dont' block rbind
     tab3 <- rbind(tab1, tab2)
     expect_true(TRUE)
 })
+
+test_that("cbinding table with counts and with NA counts works", {
+
+    tbl <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by("ARM") %>%
+    analyze("AGE") %>%
+    build_table(DM)
+
+
+    mytab <- rtable(header = "new column", rrow(NULL, 75))
+    expect_warning({res <- cbind_rtables(tbl, mytab)},
+                   "Mixture of missing and non-missing column counts when creating column info")
+
+    mform <- matrix_form(res)
+    expect_identical(mform$strings[2, 4], "(N=129)")
+    expect_identical(mform$strings[2, 5], "")
+})
