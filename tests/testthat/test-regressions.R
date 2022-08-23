@@ -525,3 +525,46 @@ test_that("nested = FALSE not needed after analyze", {
 
     expect_identical(lyt1, lyt2)
 })
+
+
+
+test_that("indent mod preserved when paginating between multi-analyses", {
+    adsl2 <- ex_adsl
+    adsl2$smoker <- factor(NA, levels = c("10 cigarettes", ">10 cigarettes"))
+    adsl2$age_grp <- cut(adsl2$AGE, c(18, 65, 75, 1000), labels = c("18 <= to < 65",
+                                                                    "65 <= to < 75",
+                                                                    "Elderly >= 75"))
+
+    ## make one of the factor levels of SEX variable empty
+    adsl2 <- subset(adsl2, SEX != "UNDIFFERENTIATED")
+
+    ## helper that omits the pct entirely if the count is 0
+    count_pct <- function(x, .N_col, ...) {
+        if( x == 0 ) {
+            rcell(0, format = "xx")
+        } else {
+            rcell(c(x, x/.N_col), format = "xx (xx.x%)")
+        }
+    }
+
+    ## analysis function: table factor then apply above to get our cell values
+    tab_w_pct <- function(x, .N_col, ...) {
+        tab <- as.list(table(x))
+        lapply(tab, count_pct, .N_col = .N_col)
+    }
+
+    lyt3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        summarize_row_groups("USUBJID", label_fstr = "Number of Patients", format = "xx") %>%
+        analyze("SEX", tab_w_pct, var_labels = "Gender", indent_mod = -1) %>%
+        analyze("smoker", tab_w_pct, indent_mod = -1) %>%
+        analyze("age_grp", tab_w_pct, indent_mod = -1)
+
+    tab <- build_table(lyt3, adsl2)
+
+    res <- paginate_table(tab, lpp = 10)
+
+    rdf <- make_row_df(res[[2]])
+    expect_equal(rdf$indent[2], #smoker row
+                 0)
+})
