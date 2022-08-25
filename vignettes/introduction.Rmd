@@ -62,7 +62,7 @@ df <- tibble(
   age = rchisq(n, 30) + 10
 ) %>% mutate(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
-) 
+)
 
 head(df)
 ```
@@ -190,7 +190,7 @@ The relative percentage for average age of female Canadians is calculated as fol
 df_cell <- subset(df, df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female")
 df_col_1 <- subset(df, df$arm == "Arm A" & df$gender == "Female")
 
-c(count = nrow(df_cell), percentage = nrow(df_cell)/nrow(df_col_1))
+c(count = nrow(df_cell), percentage = nrow(df_cell) / nrow(df_col_1))
 ```
 
 so the group percentages per row split sum up to 1 for each column. 

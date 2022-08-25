@@ -12,7 +12,8 @@
 \item{indent_rownames}{logical(1), if TRUE the column with the row names in the \code{strings} matrix of has indented row
 names (strings pre-fixed)}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
+\item{indent_size}{numeric(1). Number of spaces to use per indent level.
+Defaults to 2}
 }
 \value{
 A list with the following elements:

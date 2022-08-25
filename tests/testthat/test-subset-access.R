@@ -279,7 +279,7 @@ test_that("label_at_path works", {
 
     rps <- row_paths(tab)
 
-    labs <- vapply(rps, function(pth) label_at_path(tab, pth), "", USE.NAMES=FALSE)
+    labs <- vapply(rps, function(pth) label_at_path(tab, pth), "", USE.NAMES = FALSE)
     expect_identical(labs, orig_labs)
 
     newthangalangs <- paste(orig_labs, "redux")

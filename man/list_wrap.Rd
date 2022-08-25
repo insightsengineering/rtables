@@ -13,19 +13,22 @@ list_wrap_df(f)
 \item{f}{The function to wrap.}
 }
 \value{
-A function which calls \code{f} and converts the result to a list of \code{CellValue} objects.
+A function which calls \code{f} and converts the result to a list of
+\code{CellValue} objects.
 }
 \description{
 Returns a function that coerces the return values of f to a list
 }
 \details{
-\code{list_wrap_x} generates a wrapper which takes \code{x} as its first argument, while \code{list_wrap_df}
-generates an otherwise identical wrapper function whose first argument is named \code{df}.
+\code{list_wrap_x} generates a wrapper which takes \code{x} as its
+first argument, while \code{list_wrap_df} generates an otherwise identical
+wrapper function whose first argument is named \code{df}.
 
 We provide both because when using the functions as tabulation in
-\code{\link{analyze}}, functions which take \code{df} as their first argument are passed the full subset dataframe,
-while those which accept anything else {notably including \code{x}} are passed only the relevant subset of the
-variable being analyzed.
+\code{\link{analyze}}, functions which take \code{df} as their first
+argument are passed the full subset dataframe, while those which accept
+anything else {notably including \code{x}} are passed only the relevant
+subset of the variable being analyzed.
 }
 \examples{
 

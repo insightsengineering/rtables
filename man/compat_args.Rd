@@ -17,13 +17,17 @@ compat_args(
 )
 }
 \arguments{
-\item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
+\item{.lst}{list. An already-collected list of arguments tot be used instead
+of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
+ignored if this is specified.}
 
-\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x} defined by the combination of \code{col_by} and \code{row_by} and returns corresponding cell value}
+\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x}
+defined by the combination of \code{col_by} and \code{row_by} and returns
+corresponding cell value}
 
-\item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}}
-if a \code{\link{factor}} of length \code{nrow(x)} that defines
-which levels in \code{col_by} define a column.}
+\item{col_by}{(\code{\link{factor}} or \code{\link{data.frame}} if a
+\code{\link{factor}} of length \code{nrow(x)} that defines which levels in
+\code{col_by} define a column.}
 
 \item{row_by}{rows in \code{x} to take per row in the resulting table}
 
@@ -41,7 +45,8 @@ elements are then passed to the named argument \code{FUN} corresponding to
 the element name of the outer list. Hence, the length and order of each
 collection must match the levels in \code{col_by}. See examples.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+\item{label}{character(1). A label (not to be confused with the name) for the
+object/structure.}
 }
 \value{
 NULL (this is an argument template dummy function)

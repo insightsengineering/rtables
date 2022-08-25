@@ -7,7 +7,8 @@
 path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
 \item{path_fun}{function. Function to transform paths into single-string row/column names.}
 

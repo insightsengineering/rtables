@@ -12,7 +12,8 @@ append_topleft(lyt, newlines)
 \item{newlines}{character. The new line(s) to be added to the materials}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further
+layouting functions, and to \code{build_table}.
 }
 \description{
 This function \emph{adds} \code{newlines} to the current

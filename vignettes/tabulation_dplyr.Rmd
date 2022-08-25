@@ -212,7 +212,7 @@ frm_dplyr_c
 
 ```{r echo = FALSE, result="hidden"}
 stopifnot(isTRUE(all.equal(frm_rtables_h, unname(unlist(frm_dplyr_h)))))
-stopifnot(isTRUE(all.equal(frm_rtables_c, unname(unlist(frm_dplyr_c[1,])))))
+stopifnot(isTRUE(all.equal(frm_rtables_c, unname(unlist(frm_dplyr_c[1, ])))))
 ```
 
 Further, the `rtable` syntax has hopefully also become a bit more straightforward to derive the cell values than with `dplyr` for this particular table.

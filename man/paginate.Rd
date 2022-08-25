@@ -25,7 +25,8 @@ paginate_table(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -37,7 +38,8 @@ considerations. Defaults to none.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
+\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
+to \code{FALSE}.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NULL} (the default) indicates no horizontal

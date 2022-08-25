@@ -55,25 +55,36 @@ TableTree(
 \arguments{
 \item{kids}{list. List of direct children.}
 
-\item{name}{character(1). Name of the split/table/row being created. Defaults to same as the corresponding label, but is not required to be.}
+\item{name}{character(1). Name of the split/table/row being created. Defaults
+to same as the corresponding label, but is not required to be.}
 
-\item{lev}{integer. Nesting level (roughly, indentation level in practical terms).}
+\item{lev}{integer. Nesting level (roughly, indentation level in practical
+terms).}
 
-\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+\item{label}{character(1). A label (not to be confused with the name) for the
+object/structure.}
 
-\item{labelrow}{LabelRow. The LabelRow object to assign to this Table. Consructed from \code{label} by default if not specified.}
+\item{labelrow}{LabelRow. The LabelRow object to assign to this Table.
+Consructed from \code{label} by default if not specified.}
 
 \item{rspans}{data.frame. Currently stored but otherwise ignored.}
 
-\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the object being created.}
+\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the
+object being created.}
 
-\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed the content table for another TableTree.}
+\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed
+the content table for another TableTree.}
 
 \item{var}{string, variable name}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the
+structure created by this function(subtable, content table, or row)
+\emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
 \item{title}{character(1). Main title. Ignored for subtables.}
 
@@ -81,15 +92,20 @@ TableTree(
 
 \item{main_footer}{character. Main global (non-referential) footer materials.}
 
-\item{prov_footer}{character. Provenance-related global footer materials. Generally should not be modified by hand.}
+\item{prov_footer}{character. Provenance-related global footer materials.
+Generally should not be modified by hand.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator between
-the header and body of the table when rendered as text. Defaults to a connected horrizontal
-line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
-once per session warning).}
+\item{hsep}{character(1). Set of character(s) to be repeated as the separator
+between the header and body of the table when rendered as text. Defaults to
+a connected horrizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning).}
 
-\item{trailing_sep}{character(1). String which will be used as a section divider after the printing of the last
-row contained in this (sub)-table, unless that row is also the last table row to be printed overall, or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the \code{section_div} of the split under which this table represents a single facet.}
+\item{trailing_sep}{character(1). String which will be used as a section
+divider after the printing of the last row contained in this (sub)-table,
+unless that row is also the last table row to be printed overall, or
+\code{NA_character_} for none (the default). When generated via layouting, this
+would correspond to the \code{section_div} of the split under which this table
+represents a single facet.}
 
 \item{cont}{ElementaryTable. Content table.}
 

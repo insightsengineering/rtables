@@ -19,7 +19,8 @@ export_as_pdf(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
 \item{file}{file to write, must have \code{.pdf} extension}
 
@@ -36,12 +37,13 @@ export_as_pdf(
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator between
-the header and body of the table when rendered as text. Defaults to a connected horrizontal
-line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
-once per session warning).}
+\item{hsep}{character(1). Set of character(s) to be repeated as the separator
+between the header and body of the table when rendered as text. Defaults to
+a connected horrizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning).}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
+\item{indent_size}{numeric(1). Number of spaces to use per indent level.
+Defaults to 2}
 
 \item{...}{arguments passed on to \code{paginate_table}}
 }

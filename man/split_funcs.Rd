@@ -31,13 +31,15 @@ of presence in the data).}
 
 \item{df}{dataset (data.frame or tibble)}
 
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
+\item{spl}{A Split object defining a partitioning or analysis/tabulation of
+the data.}
 
 \item{vals}{ANY. For internal use only.}
 
 \item{labels}{character. Labels to use for the remaining levels instead of the existing ones.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
+\item{trim}{logical(1). Should splits corresponding with 0 observations be
+kept when tabulating.}
 
 \item{neworder}{character. New order or factor levels.}
 

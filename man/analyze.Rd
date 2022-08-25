@@ -24,68 +24,108 @@ analyze(
 
 \item{vars}{character vector. Multiple variable names.}
 
-\item{afun}{function. Analysis function, must take \code{x} or \code{df} as its first parameter. Can optionally take other parameters which will be populated by the tabulation framework. See Details in \code{\link{analyze}}.}
+\item{afun}{function. Analysis function, must take \code{x} or \code{df} as
+its first parameter. Can optionally take other parameters which will be
+populated by the tabulation framework. See Details in
+\code{\link{analyze}}.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
-\item{table_names}{character. Names for the tables representing each atomic analysis. Defaults to \code{var}.}
+\item{table_names}{character. Names for the tables representing each atomic
+analysis. Defaults to \code{var}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
+\item{nested}{boolean. Should this layout instruction be applied within the
+existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
+new top-level element (`FALSE). Ignored if it would nest a split underneath
+analyses, which is not allowed.}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
+\item{inclNAs}{boolean. Should observations with NA in the \code{var}
+variable(s) be included when performing this analysis. Defaults to
+\code{FALSE}}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation
+function. Element position in thte list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the ttabulation function.}
 
-\item{show_labels}{character(1). Should the variable labels for corresponding to the variable(s) in \code{vars} be visible in the resulting table.}
+\item{show_labels}{character(1). Should the variable labels for corresponding
+to the variable(s) in \code{vars} be visible in the resulting table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the
+structure created by this function(subtable, content table, or row)
+\emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
-\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
+\item{section_div}{character(1). String which should be repeated as a section
+divider after each group defined by this split instruciton, or
+\code{NA_character_} (the default) for no section divider.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further
+layouting functions, and to \code{build_table}.
 }
 \description{
-Adding /analyzed variables/ to our table layout defines the primary tabulation to be performed. We do this by adding
-calls to \code{analyze} and/or \code{\link{analyze_colvars}} into our layout pipeline. As with
-adding further splitting, the tabulation will occur at the current/next level of nesting by default.
+Adding /analyzed variables/ to our table layout defines the primary
+tabulation to be performed. We do this by adding calls to \code{analyze}
+and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
+further splitting, the tabulation will occur at the current/next level of
+nesting by default.
 }
 \details{
-When non-NULL \code{format} is used to specify formats for all generated rows, and can be a character vector, a function, or a list of functions. It will be repped out to the number of rows once this is known during the tabulation process, but will be overridden by formats specified within \code{rcell} calls in \code{afun}.
+When non-NULL \code{format} is used to specify formats for all generated
+rows, and can be a character vector, a function, or a list of functions. It
+will be repped out to the number of rows once this is known during the
+tabulation process, but will be overridden by formats specified within
+\code{rcell} calls in \code{afun}.
 
-The analysis function (\code{afun}) should take as its first parameter either \code{x} or \code{df}. Which of these the
-function accepts changes the behavior when tabulation is performed.
+The analysis function (\code{afun}) should take as its first parameter either
+\code{x} or \code{df}. Which of these the function accepts changes the
+behavior when tabulation is performed.
 
 \itemize{
 \item{
-If \code{afun}'s first parameter is x, it will receive the corresponding subset \emph{vector} of data from the
-relevant column (from \code{var} here) of the raw data being used to build the table.
+If \code{afun}'s first parameter is x, it will receive the corresponding
+subset \emph{vector} of data from the relevant column (from \code{var}
+here) of the raw data being used to build the table.
 }
 
 \item{
-If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data.frame} (i.e. all
-columns) of the raw data being tabulated
+If \code{afun}'s first parameter is \code{df}, it will receive the
+corresponding subset \emph{data.frame} (i.e. all columns) of the raw data
+being tabulated
 }
 }
 
-In addition to differentiation on the first argument, the analysis function can optionally accept a number of other
-parameters which, \emph{if and only if} present in the formals will be passed to the function by the tabulation
+In addition to differentiation on the first argument, the analysis function
+can optionally accept a number of other parameters which, \emph{if and only
+if} present in the formals will be passed to the function by the tabulation
 machinery. These are as follows:
 
 \describe{
-\item{.N_col}{column-wise N (column count) for the full column being tabulated within}
-\item{.N_total}{overall N (all observation count, defined as sum of column counts) for the tabulation}
-\item{.N_row}{row-wise N (row group count) for the group of observations being analyzed (ie with no column-based subsetting)}
-\item{.df_row}{ data.frame for observations in the row group being analyzed (ie with no column-based subsetting)}
+\item{.N_col}{column-wise N (column count) for the full column being
+tabulated within}
+\item{.N_total}{overall N (all observation count, defined as sum of column
+counts) for the tabulation}
+\item{.N_row}{row-wise N (row group count) for the group of observations
+being analyzed (ie with no column-based subsetting)}
+\item{.df_row}{ data.frame for observations in the row group being analyzed
+(ie with no column-based subsetting)}
 \item{.var}{variable that is analyzed}
-\item{.ref_group}{data.frame or vector of subset corresponding to the \code{ref_group} column including subsetting
-defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}
-\item{.ref_full}{data.frame or vector of subset corresponding to the \code{ref_group} column without subsetting
-defined by row-splitting. Optional and only required/meaningful if a \code{ref_group} column has been defined}
-\item{.in_ref_col}{boolean indicates if calculation is done for cells withing the reference column}
-\item{.spl_context}{data.frame, each row gives information about a previous/'ancestor' split state. see below}
+\item{.ref_group}{data.frame or vector of subset corresponding to the
+\code{ref_group} column including subsetting defined by row-splitting.
+Optional and only required/meaningful if a \code{ref_group} column has been
+defined}
+\item{.ref_full}{data.frame or vector of subset corresponding to the
+\code{ref_group} column without subsetting defined by row-splitting. Optional
+and only required/meaningful if a \code{ref_group} column has been defined}
+\item{.in_ref_col}{boolean indicates if calculation is done for cells
+withing the reference column}
+\item{.spl_context}{data.frame, each row gives information about a
+previous/'ancestor' split state. see below}
 }
 }
 \note{
@@ -100,29 +140,38 @@ tabulation framework.
 }
 \section{.spl_context Details}{
 
-The \code{.spl_context} \code{data.frame} gives information about the subsets of data corresponding to the
-splits within-which the current \code{analyze} action is nested. Taken together, these correspond to the
-path that the resulting (set of) rows the analysis function is creating, although the information is
-in a slighlyt different form. Each split (which correspond to groups of rows in the resulting table) is
-represented via the following columns:
+The \code{.spl_context} \code{data.frame} gives information about the subsets of data
+corresponding to the splits within-which the current \code{analyze} action is
+nested. Taken together, these correspond to the path that the resulting (set
+of) rows the analysis function is creating, although the information is in a
+slighlyt different form. Each split (which correspond to groups of rows in
+the resulting table) is represented via the following columns:
 \describe{
-\item{split}{The name of the split (often the variable being split in the simple case)}
+\item{split}{The name of the split (often the variable being split in the
+simple case)}
 \item{value}{The string representation of the value at that split}
-\item{full_parent_df}{a dataframe containing the full data (ie across all columns) corresponding to the path
-defined by the combination of \code{split} and \code{value} of this row \emph{and all rows above this row}}
-\item{all_cols_n}{the number of observations  corresponding to this row grouping (union of all columns)}
-\item{\emph{(row-split and analyze contexts only)} <1 column for each column in the table structure}{ These
-list columns (named the same as \code{names(col_exprs(tab))}) contain logical vectors corresponding to the
-subset of this row's \code{full_parent_df} corresponding to that column}
-\item{cur_col_subset}{List column containing logical vectors indicating the subset of that row's \code{full_parent_df} for the column currently being created by the analysis function}
-\item{cur_col_n}{integer column containing the observation counts for that split}
+\item{full_parent_df}{a dataframe containing the full data (ie across all
+columns) corresponding to the path defined by the combination of \code{split}
+and \code{value} of this row \emph{and all rows above this row}}
+\item{all_cols_n}{the number of observations  corresponding to this row
+grouping (union of all columns)}
+\item{\emph{(row-split and analyze contexts only)} <1 column for each
+column in the table structure}{ These list columns (named the same as
+\code{names(col_exprs(tab))}) contain logical vectors corresponding to
+the subset of this row's \code{full_parent_df} corresponding to that column}
+\item{cur_col_subset}{List column containing logical vectors indicating the
+subset of that row's \code{full_parent_df} for the column currently being
+created by the analysis function}
+\item{cur_col_n}{integer column containing the observation counts for that
+split}
 }
 
-\emph{note Within analysis functions that accept \code{.spl_context}, the \code{all_cols_n} and \code{cur_col_n} columns of
-the dataframe will contain the 'true' observation counts corresponding to the row-group and
-row-group x column subsets of the data. These numbers will not, and currently cannot, reflect alternate
-column observation counts provided by the \code{alt_counts_df}, \code{col_counts} or \code{col_total} arguments
-to \code{\link{build_table}}}
+\emph{note Within analysis functions that accept \code{.spl_context}, the
+\code{all_cols_n} and \code{cur_col_n} columns of the dataframe will contain the 'true'
+observation counts corresponding to the row-group and row-group x column
+subsets of the data. These numbers will not, and currently cannot, reflect
+alternate column observation counts provided by the \code{alt_counts_df},
+\code{col_counts} or \code{col_total} arguments to \code{\link{build_table}}}
 }
 
 \examples{

@@ -1,10 +1,10 @@
 #nocov start
-add_analyzed_var = function(lyt, var, label = var, afun,
+add_analyzed_var <- function(lyt, var, label = var, afun,
                             format = NULL,
                             rowlabs = "",
                             nested = FALSE,
                             inclNAs = FALSE) {
-  spl = AnalyzeVarSplit(var, label,
+  spl <- AnalyzeVarSplit(var, label,
                         afun = afun,
                         split_format = format,
                         defrowlab = rowlabs,

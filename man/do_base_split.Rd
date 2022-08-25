@@ -7,7 +7,8 @@
 do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 }
 \arguments{
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
+\item{spl}{A Split object defining a partitioning or analysis/tabulation of
+the data.}
 
 \item{df}{dataset (data.frame or tibble)}
 

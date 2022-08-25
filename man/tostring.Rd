@@ -22,7 +22,8 @@
 
 \item{hsep}{character to create line separator}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
+\item{indent_size}{numeric(1). Number of spaces to use per indent level.
+Defaults to 2}
 }
 \value{
 a string representation of \code{x} as it appears when printed.

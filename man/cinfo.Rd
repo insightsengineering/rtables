@@ -26,13 +26,16 @@ InstantiatedColumnInfo(
 
 \item{cnts}{integer. Counts.}
 
-\item{total_cnt}{integer(1). Total observations represented across all columns.}
+\item{total_cnt}{integer(1). Total observations represented across all
+columns.}
 
-\item{dispcounts}{logical. Should the counts be displayed as header info when the associated table is printed.}
+\item{dispcounts}{logical. Should the counts be displayed as header info when
+the associated table is printed.}
 
 \item{countformat}{string. Format for the counts if thtey are displayed}
 
-\item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+\item{topleft}{character. Override values for the "top left" material to be
+displayed during printing.}
 }
 \value{
 an \code{InstantiateadColumnInfo} object.

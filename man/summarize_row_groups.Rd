@@ -19,30 +19,50 @@ summarize_row_groups(
 
 \item{var}{string, variable name}
 
-\item{label_fstr}{string. An sprintf style format string containing. For non-comparison splits, it can contain  up to one \code{"\%s"} which takes the current split value and generates the row/column label. Comparison-based splits it can contain up to two \code{"\%s"}.}
+\item{label_fstr}{string. An sprintf style format string containing. For
+non-comparison splits, it can contain  up to one \code{"\%s"} which takes
+the current split value and generates the row/column label.
+Comparison-based splits it can contain up to two \code{"\%s"}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content
+rows. Must accept \code{x} or \code{df} as first parameter. Must accept
+\code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the
+structure created by this function(subtable, content table, or row)
+\emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation
+function. Element position in thte list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the ttabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further
+layouting functions, and to \code{build_table}.
 }
 \description{
 Add a content row of summary counts
 }
 \details{
-If \code{format} expects 1 value (i.e. it is specified as a format string and \code{xx} appears  \code{xx} apepars  values (i.e. \code{xx} appears twice in the format string) or is specified as a function,
-then both raw and percent of column total counts are calculated. If \code{format} is a format string where \code{xx} appears
-only one time, only raw counts are used.
+If \code{format} expects 1 value (i.e. it is specified as a format string
+and \code{xx} appears  \code{xx} apepars  values (i.e. \code{xx} appears twice in the
+format string) or is specified as a function, then both raw and percent of
+column total counts are calculated. If \code{format} is a format string where
+\code{xx} appears only one time, only raw counts are used.
 
-\code{cfun} must accept \code{df} as its first argument and will receive the subset \code{data.frame} corresponding
-with the row- and column-splitting for the cell being calculated. Must accept \code{labelstr} as the second
-parameter, which accepts the \code{label} of the level of the parent split currently being summarized. Can additionally take any optional argument supported by analysis functions. (see \code{\link{analyze}}).
+\code{cfun} must accept \code{df} as its first argument and will receive the subset
+\code{data.frame} corresponding with the row- and column-splitting for the cell
+being calculated. Must accept \code{labelstr} as the second parameter, which
+accepts the \code{label} of the level of the parent split currently being
+summarized. Can additionally take any optional argument supported by analysis
+functions. (see \code{\link{analyze}}).
 }
 \examples{
 

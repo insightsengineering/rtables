@@ -14,18 +14,21 @@ format_rcell(
 \arguments{
 \item{x}{an object of class \code{\link{CellValue}}, or a raw value.}
 
-\item{format}{character(1) or function. The format label (string) or formatter function to apply to \code{x}.}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to \code{x}.}
 
 \item{output}{character(1). output type}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{character(1). String that should be displayed when the value of
+\code{x} is missing. Defaults to \code{"NA"}.}
 }
 \value{
 formatted text representing the cell
 }
 \description{
-This is a wrapper around \code{\link[formatters:format_value]{formatters::format_value}}
-for use with \code{CellValue} objects
+This is a wrapper around
+\code{\link[formatters:format_value]{formatters::format_value}} for use with
+\code{CellValue} objects
 }
 \examples{
 cll <- CellValue(pi, format = "xx.xxx")

@@ -200,8 +200,8 @@ In this case, for convenience/simplicity, we use the name of the table element b
 We sort the ethnicities by alphabetical order (in practice undoing our previous sorting by ethnicity above).
 
 ```{r}
-silly_name_scorer = function(tt) {
-    nm = obj_name(tt)
+silly_name_scorer <- function(tt) {
+    nm <- obj_name(tt)
     print(nm)
     nm
 }
@@ -221,13 +221,13 @@ We will sort _**the strata within each ethnicity**_ by the percent difference in
 
 
 ```{r}
-silly_gender_diffcount = function(tt) {
-    ctable = content_table(tt) ## get summary table at this location
-    crow = tree_children(ctable)[[1]] ## get first row in summary table
-    vals = row_values(crow)
+silly_gender_diffcount <- function(tt) {
+    ctable <- content_table(tt) ## get summary table at this location
+    crow <- tree_children(ctable)[[1]] ## get first row in summary table
+    vals <- row_values(crow)
     ## we need to have a better api for specificying location in column space but currently we don't
-    mcount = vals[[6]][1]
-    fcount = vals[[5]][1]
+    mcount <- vals[[6]][1]
+    fcount <- vals[[5]][1]
     (mcount - fcount)/fcount
 }
 

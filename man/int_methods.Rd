@@ -881,19 +881,33 @@ spl_varnames(object) <- value
 
 \item{constructor}{function.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+\item{label}{character(1). A label (not to be confused with the name) for the
+object/structure.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content rows. Must accept \code{x} or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{list/function/NULL. tabulation function(s) for creating content
+rows. Must accept \code{x} or \code{df} as first parameter. Must accept
+\code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
-\item{child_labels}{string. One of \code{"default"}, \code{"visible"}, \code{"hidden"}. What should the display behavior be for the  labels (ie label rows) of the children of this split. Defaults to \code{"default"} which flags the label row as visible only if the child has 0 content rows.}
+\item{child_labels}{string. One of \code{"default"}, \code{"visible"},
+\code{"hidden"}. What should the display behavior be for the  labels (ie
+label rows) of the children of this split. Defaults to \code{"default"}
+which flags the label row as visible only if the child has 0 content rows.}
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the
+structure created by this function(subtable, content table, or row)
+\emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
-\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+\item{cvar}{character(1). The variable, if any, which the content function
+should accept. Defaults to NA.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation
+function. Element position in thte list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the ttabulation function.}
 
 \item{df}{dataset (data.frame or tibble)}
 
@@ -905,7 +919,10 @@ spl_varnames(object) <- value
 
 \item{print_indent}{indent for print}
 
-\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
+\item{nested}{boolean. Should this layout instruction be applied within the
+existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
+new top-level element (`FALSE). Ignored if it would nest a split underneath
+analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
 
@@ -913,7 +930,9 @@ spl_varnames(object) <- value
 
 \item{value}{The new value}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{override}{logical(1).}
 }

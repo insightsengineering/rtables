@@ -32,18 +32,24 @@ gen_args(
 \arguments{
 \item{df}{dataset (data.frame or tibble)}
 
-\item{alt_counts_df}{dataset (data.frame or tibble). Alternative full data the rtables framework will use (\emph{only})
-when calculating column counts.}
+\item{alt_counts_df}{dataset (data.frame or tibble). Alternative full data
+the rtables framework will use (\emph{only}) when calculating column
+counts.}
 
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of the data.}
+\item{spl}{A Split object defining a partitioning or analysis/tabulation of
+the data.}
 
-\item{pos}{numeric.  Which top-level set of nested splits should the new layout feature be added to. Defaults to the current}
+\item{pos}{numeric.  Which top-level set of nested splits should the new
+layout feature be added to. Defaults to the current}
 
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
-\item{tr}{TableRow (or related class). A TableRow object representing a single row within a populated table.}
+\item{tr}{TableRow (or related class). A TableRow object representing a
+single row within a populated table.}
 
-\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults to \code{FALSE}.}
+\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
+to \code{FALSE}.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
@@ -55,27 +61,39 @@ when calculating column counts.}
 
 \item{object}{The object to modify in-place}
 
-\item{path}{character. A vector path for a position within the structure of a tabletree. Each element represents a subsequent choice amongst the children of the previous choice.}
+\item{path}{character. A vector path for a position within the structure of a
+tabletree. Each element represents a subsequent choice amongst the children
+of the previous choice.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+\item{label}{character(1). A label (not to be confused with the name) for the
+object/structure.}
 
-\item{label_pos}{character(1). Location the variable label should be displayed, Accepts  hidden (default for non-analyze row splits), visible, topleft, and - for analyze splits only - default.  For analyze calls, \code{default} indicates that the variable
-should be visible if and only if multiple variables are analyzed at the same level of nesting.}
+\item{label_pos}{character(1). Location the variable label should be
+displayed, Accepts  hidden (default for non-analyze row splits), visible,
+topleft, and - for analyze splits only - default.  For analyze calls,
+\code{default} indicates that the variable should be visible if and only if
+multiple variables are analyzed at the same level of nesting.}
 
-\item{cvar}{character(1). The variable, if any, which the content function should accept. Defaults to NA.}
+\item{cvar}{character(1). The variable, if any, which the content function
+should accept. Defaults to NA.}
 
-\item{topleft}{character. Override values for the "top left" material to be displayed during printing.}
+\item{topleft}{character. Override values for the "top left" material to be
+displayed during printing.}
 
-\item{page_prefix}{character(1). Prefix, to be appended with the split value, when forcing pagination between the children of this split/table}
+\item{page_prefix}{character(1). Prefix, to be appended with the split value,
+when forcing pagination between the children of this split/table}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator between
-the header and body of the table when rendered as text. Defaults to a connected horrizontal
-line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
-once per session warning).}
+\item{hsep}{character(1). Set of character(s) to be repeated as the separator
+between the header and body of the table when rendered as text. Defaults to
+a connected horrizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning).}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level. Defaults to 2}
+\item{indent_size}{numeric(1). Number of spaces to use per indent level.
+Defaults to 2}
 
-\item{section_div}{character(1). String which should be repeated as a section divider after each group defined by this split instruciton, or \code{NA_character_} (the default) for no section divider.}
+\item{section_div}{character(1). String which should be repeated as a section
+divider after each group defined by this split instruciton, or
+\code{NA_character_} (the default) for no section divider.}
 
 \item{\dots}{Passed on to methods or tabulation functions.}
 }

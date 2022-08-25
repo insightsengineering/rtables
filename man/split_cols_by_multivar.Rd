@@ -18,21 +18,30 @@ split_cols_by_multivar(
 
 \item{vars}{character vector. Multiple variable names.}
 
-\item{split_fun}{function/NULL. custom splitting function See \code{\link{custom_split_funs}}}
+\item{split_fun}{function/NULL. custom splitting function See
+\code{\link{custom_split_funs}}}
 
 \item{varlabels}{character vector. Labels for \code{vars}}
 
-\item{varnames}{character vector. Names for \code{vars} which will appear in pathing. When \code{vars} are all unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce uniqueness.}
+\item{varnames}{character vector. Names for \code{vars} which will appear in
+pathing. When \code{vars} are all unique this will be the variable names.
+If not, these will be variable names with suffixes as necessary to enforce
+uniqueness.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
+\item{nested}{boolean. Should this layout instruction be applied within the
+existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
+new top-level element (`FALSE). Ignored if it would nest a split underneath
+analyses, which is not allowed.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further
+layouting functions, and to \code{build_table}.
 }
 \description{
-In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row basis. When we
-need columns to reflect different variables entirely, rather than different levels of a single variable, we use
-\code{split_cols_by_multivar}
+In some cases, the variable to be ultimately analyzed is most naturally
+defined on a column, not a row basis. When we need columns to reflect
+different variables entirely, rather than different levels of a single
+variable, we use \code{split_cols_by_multivar}
 }
 \examples{
 
@@ -47,7 +56,8 @@ colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
 l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
+    split_rows_by("RACE", split_label = "ethnicity",
+                  split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = colfuns)
 

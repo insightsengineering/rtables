@@ -17,20 +17,36 @@ analyze_colvars(
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{afun}{function or list. Function(s) to be used to calculate the values in each column.  the list will be repped out as needed and matched by position with the columns during tabulation.}
+\item{afun}{function or list. Function(s) to be used to calculate the values
+in each column.  the list will be repped out as needed and matched by
+position with the columns during tabulation.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be declared via strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (`FALSE). Ignored if it would nest a split underneath analyses, which is not allowed.}
+\item{nested}{boolean. Should this layout instruction be applied within the
+existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
+new top-level element (`FALSE). Ignored if it would nest a split underneath
+analyses, which is not allowed.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation function. Element position in thte list corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do not match a formal argument of the ttabulation function.}
+\item{extra_args}{list. Extra arguments to be passed to the tabulation
+function. Element position in thte list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the ttabulation function.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the structure created by this function(subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which corresponds to the unmodified default behavior.}
+\item{indent_mod}{numeric. Modifier for the default indent position for the
+structure created by this function(subtable, content table, or row)
+\emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var} variable(s) be included when performing this analysis. Defaults to \code{FALSE}}
+\item{inclNAs}{boolean. Should observations with NA in the \code{var}
+variable(s) be included when performing this analysis. Defaults to
+\code{FALSE}}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further
+layouting functions, and to \code{build_table}.
 }
 \description{
 Generate Rows Analyzing Different Variables Across Columns
@@ -48,7 +64,8 @@ colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
 l <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
+    split_rows_by("RACE", split_label = "ethnicity",
+                  split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = colfuns)
 
@@ -58,8 +75,10 @@ build_table(l, ANL)
 
 
 basic_table() \%>\% split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("Measurement", "Pct Diff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) \%>\%
+    split_cols_by_multivar(c("value", "pctdiff"),
+                           varlabels = c("Measurement", "Pct Diff")) \%>\%
+    split_rows_by("RACE", split_label = "ethnicity",
+                  split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = mean, format = "xx.xx") \%>\%
     build_table(ANL)

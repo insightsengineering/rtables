@@ -12,7 +12,9 @@ rheader(..., format = "xx", .lst = NULL)
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
-\item{.lst}{list. An already-collected list of arguments tot be used instead of the elements of \code{\dots}. Arguments passed via \code{\dots} will be ignored if this is specified.}
+\item{.lst}{list. An already-collected list of arguments tot be used instead
+of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
+ignored if this is specified.}
 }
 \value{
 a \code{InstantiatedColumnInfo} object.

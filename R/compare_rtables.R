@@ -235,7 +235,7 @@ compare_value <- function(x, y, tol) {
 compare_rrows <- function(row1, row2, tol, ncol) {
     if(length(row1) == ncol &&
        length(row2) == ncol) {
-        mapply(compare_value, x = row1, y = row2, tol = tol,USE.NAMES=FALSE)
+        mapply(compare_value, x = row1, y = row2, tol = tol, USE.NAMES = FALSE)
     } else if (length(row1) == 0 &&
                length(row2) == 0)
         rep(".", ncol)

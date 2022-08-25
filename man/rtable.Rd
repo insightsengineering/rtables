@@ -17,10 +17,10 @@ rtablel(header, ..., format = NULL, hsep = default_hsep())
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator between
-the header and body of the table when rendered as text. Defaults to a connected horrizontal
-line (unicode 2014) in locals that use a UTF charset, and to \code{-} elsewhere (with a
-once per session warning).}
+\item{hsep}{character(1). Set of character(s) to be repeated as the separator
+between the header and body of the table when rendered as text. Defaults to
+a connected horrizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning).}
 }
 \value{
 a formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree})

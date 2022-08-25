@@ -1,9 +1,9 @@
 
 
 insert_brs <- function(vec) {
-    if(length(vec) == 1)
+    if(length(vec) == 1) {
         ret <- list(vec)
-    else {
+   } else {
         nout <- length(vec) * 2 - 1
         ret <- vector("list", nout)
         for(i in 1:length(vec)) {
@@ -75,8 +75,8 @@ as_html <- function(x,
   nrh <- attr(mat, "nrow_header")
   nc <- ncol(x) + 1
 
-  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (ncol(x) + 1)),
-                  ncol = ncol(x) + 1)
+  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)),
+                  ncol = nc)
 
   for(i in unique(mat$line_grouping)) {
     rows <- which(mat$line_grouping == i)

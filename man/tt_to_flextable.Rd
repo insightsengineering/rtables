@@ -14,7 +14,8 @@ tt_to_flextable(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated and exported as multiple flextables. Defaults to \code{FALSE}}
 

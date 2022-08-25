@@ -7,11 +7,14 @@
 sf_args(trim, label, first)
 }
 \arguments{
-\item{trim}{logical(1). Should splits corresponding with 0 observations be kept when tabulating.}
+\item{trim}{logical(1). Should splits corresponding with 0 observations be
+kept when tabulating.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the object/structure.}
+\item{label}{character(1). A label (not to be confused with the name) for the
+object/structure.}
 
-\item{first}{logical(1). Should the created split level be placed first in the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
+\item{first}{logical(1). Should the created split level be placed first in
+the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
 }
 \value{
 NULL (this is an argument template dummy function)

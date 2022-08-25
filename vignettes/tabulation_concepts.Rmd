@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Tabulation Concepts}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -27,7 +27,7 @@ knitr::opts_chunk$set(comment = "")
 
 ## Introduction
 
-In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using 
+In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using
 
 For this vignette we will use the following packages:
 
@@ -53,7 +53,8 @@ df <- tibble(
     c2 = add_subgroup(c1),
     r2 = add_subgroup(r1),
     y = as.numeric(2*as.numeric(c1) - 3 * as.numeric(r1))
-  ) %>% select(c1, c2, r1, r2, x, y)
+  ) %>%
+    select(c1, c2, r1, r2, x, y)
 
 df
 ```
@@ -209,7 +210,7 @@ matrix(
     foo(df_UC),
     foo(df_VC),
     foo(df_WC)
-  ), 
+  ),
   byrow = FALSE, ncol = 3
 )
 ```
@@ -224,7 +225,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-or if we would not want to see the `foo` label we would have to use 
+or if we would not want to see the `foo` label we would have to use
 
 ```{r}
 basic_table() %>%
@@ -252,7 +253,7 @@ basic_table() %>%
 
 ### Calculating the Mean
 
-For lets calculate the mean of `df$y` for pattern I. 
+For lets calculate the mean of `df$y` for pattern I.
 
 ```{r}
 foo <- function(df, labelstr) {
@@ -306,11 +307,11 @@ Pattern I is an interesting one as we can add more row structure (with further s
 ```
             A         B         C
 --------------------------------------
-U        
+U
   u1     foo(<>)  foo(<>)  foo(<>)
   u2     foo(<>)  foo(<>)  foo(<>)
   u3     foo(<>)  foo(<>)  foo(<>)
-V 
+V
   v1     foo(<>)  foo(<>)  foo(<>)
   v2     foo(<>)  foo(<>)  foo(<>)
   v3     foo(<>)  foo(<>)  foo(<>)
@@ -323,7 +324,7 @@ W
 where `<>` represents the data that is represented by the cell. So for the cell `U > u1, A` we would have the subset:
 
 ```{r}
-df %>% 
+df %>%
   filter(r1 == "U", r2 == "u1", c1 == "A")
 ```
 
@@ -337,7 +338,7 @@ basic_table() %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = function(df, labelstr) {
     rcell(mean(df$x), format = "xx.xx", label = paste("mean x for", labelstr))
-  }) %>% 
+  }) %>%
   build_table(df)
 ```
 
@@ -366,7 +367,7 @@ Which has the following structure:
 ```
                    A              B              C
 ---------------------------------------------------------
-U        
+U
   u1
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
@@ -376,7 +377,7 @@ U
   u3
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
-V 
+V
   v1
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
@@ -406,7 +407,7 @@ The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows and the othe
 ```
                    A              B              C
 ---------------------------------------------------------
-U        
+U
   u1          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
@@ -416,7 +417,7 @@ U
   u3          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
-V 
+V
   v1          s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
@@ -484,7 +485,7 @@ In pagination content rows and label rows get repeated if a page is split in a d
 ```
                    A              B              C
 ---------------------------------------------------------
-U        
+U
   u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
 ***
@@ -501,18 +502,18 @@ we would get the following two tables:
 ```
                    A              B              C
 ---------------------------------------------------------
-U        
+U
   u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      mean_sd  s_mean_sd(<>)  s_mean_sd(<>)  s_mean_sd(<>)
 ```
 
-and 
+and
 
 
 ```
                    A              B              C
 ---------------------------------------------------------
-U        
+U
   u1 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)
      range    s_range(<>)    s_range(<>)    s_range(<>)
   u2 (n)      s_cfun_2(<>)   s_cfun_2(<>)   s_cfun_2(<>)

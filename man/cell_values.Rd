@@ -28,7 +28,8 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 \S4method{value_at}{LabelRow}(tt, rowpath = NULL, colpath = NULL)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a populated table.}
+\item{tt}{TableTree (or related class). A TableTree object representing a
+populated table.}
 
 \item{rowpath}{character. Path in row-split space to the desired row(s). Can include \code{"@content"}.}
 
