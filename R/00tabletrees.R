@@ -1035,7 +1035,7 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
     snas <- sum(is.na(cnts))
     if (length(csubs) != nleaves ||
        length(extras) != nleaves ||
-       length(cnts) != nleaves )
+       length(cnts) != nleaves)
         stop("Mismatching number of columns indicated by: csubs [",
              length(csubs), "], ",
              "treelyt [", nl, "], extras [", length(extras),

@@ -10,7 +10,9 @@ trim_rows(tt, criteria = all_zero_or_na)
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{criteria}{function. Function which takes a TableRow object and returns \code{TRUE} if that row should be removed. Defaults to \code{\link{all_zero_or_na}}}
+\item{criteria}{function. Function which takes a TableRow object and returns
+\code{TRUE} if that row should be removed. Defaults to
+\code{\link{all_zero_or_na}}}
 }
 \value{
 The table with rows that have only NA or 0 cell values removed
@@ -19,7 +21,11 @@ The table with rows that have only NA or 0 cell values removed
 Trim rows from a populated table without regard for table structure
 }
 \note{
-Visible \code{LabelRow}s are including in this trimming, which can lead to either all label rows being trimmed or label rows remaining when all data rows have been trimmed, depending on what \code{criteria} returns when called on a \code{LabelRow} object. To avoid this, use the structurally-aware \code{\link{prune_table}} machinery instead.
+Visible \code{LabelRow}s are including in this trimming, which can lead
+to either all label rows being trimmed or label rows remaining when all
+data rows have been trimmed, depending on what \code{criteria} returns when
+called on a \code{LabelRow} object. To avoid this, use the
+structurally-aware \code{\link{prune_table}} machinery instead.
 }
 \seealso{
 \code{\link[=prune_table]{prune_table()}}

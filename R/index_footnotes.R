@@ -14,7 +14,7 @@ setGeneric(".idx_helper", function(tr, cur_idx_fun) standardGeneric(".idx_helper
 
 
 setMethod(".idx_helper", "TableRow",
-          function(tr , cur_idx_fun) {
+          function(tr, cur_idx_fun) {
     row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
                                           cur_idx_fun)
 
@@ -101,11 +101,11 @@ update_ref_indexing <- function(tt) {
 
     rdf <- make_row_df(tt)
 
-    rdf <- rdf[rdf$nreflines > 0,]
+    rdf <- rdf[rdf$nreflines > 0, ]
     if(nrow(rdf) == 0)
         return(tt)
 
-    for (i in 1:nrow(rdf)) {
+    for (i in seq_len(nrow(rdf))) {
         path <- rdf$path[[i]]
         tt_at_path(tt, path) <-
             .idx_helper(tt_at_path(tt, path),

@@ -13,7 +13,8 @@ add_overall_level(
 )
 }
 \arguments{
-\item{valname}{character(1). 'Value' to be assigned to the implicit all-observations split level. Defaults to \code{"Overall"}}
+\item{valname}{character(1). 'Value' to be assigned to the implicit
+all-observations split level. Defaults to \code{"Overall"}}
 
 \item{label}{character(1). A label (not to be confused with the name) for the
 object/structure.}
@@ -23,13 +24,15 @@ function. Element position in thte list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the ttabulation function.}
 
-\item{first}{logical(1). Should the implicit level appear first (\code{TRUE}) or last \code{FALSE}. Defaults to \code{TRUE}.}
+\item{first}{logical(1). Should the implicit level appear first (\code{TRUE})
+or last \code{FALSE}. Defaults to \code{TRUE}.}
 
 \item{trim}{logical(1). Should splits corresponding with 0 observations be
 kept when tabulating.}
 }
 \value{
-a closure suitable for use as a splitting function (\code{splfun}) when creating a table layout
+a closure suitable for use as a splitting function (\code{splfun})
+when creating a table layout
 }
 \description{
 Add an virtual 'overall' level to split
@@ -37,7 +40,8 @@ Add an virtual 'overall' level to split
 \examples{
 
 l <- basic_table() \%>\%
-   split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) \%>\%
+   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
+                                                      first = FALSE)) \%>\%
    analyze("AGE")
 
 build_table(l, DM)
@@ -45,7 +49,8 @@ build_table(l, DM)
 
 l <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
-   split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) \%>\%
+   split_rows_by("RACE",
+                 split_fun = add_overall_level("All Ethnicities")) \%>\%
    summarize_row_groups(label_fstr = "\%s (n)") \%>\%
    analyze("AGE")
 

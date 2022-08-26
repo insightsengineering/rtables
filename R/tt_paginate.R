@@ -47,13 +47,13 @@ setMethod("nlines", "VTableTree",
 
 setMethod("nlines", "InstantiatedColumnInfo",
           function(x, colwidths) {
-    lfs = collect_leaves(coltree(x))
-    depths = sapply(lfs, function(l) length(pos_splits(l)))
+    lfs <- collect_leaves(coltree(x))
+    depths <- sapply(lfs, function(l) length(pos_splits(l)))
     max(depths, length(top_left(x))) + divider_height(x)
 
 })
 
-col_dfrow = function(col,
+col_dfrow <- function(col,
                     nm = obj_name(col),
                     lab = obj_label(col),
                     cnum,
@@ -96,33 +96,15 @@ pos_to_path <- function(pos) {
 
 
 
-### ' Make row and column layout summary data.frames for use during pagination
-## #' @inheritParams gen_args
-## #' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}.
-## #' @param incontent logical(1). Internal detail do not set manually.
-## #' @param repr_ext integer(1). Internal detail do not set manually.
-## #' @param repr_inds integer. Internal detail do not set manually.
-## #' @param sibpos integer(1). Internal detail do not set manually.
-## #' @param nsibs integer(1). Internal detail do not set manually.
-## #' @param rownum numeric(1). Internal detail do not set manually.
-## #' @param indent integer(1). Internal detail do not set manually.
-## #
-## #' @param colwidths numeric. Internal detail do not set manually.
-## #' @param nrowrefs integer(1). Internal detail do not set manually.
-## #' @param ncellrefs integer(1). Internal detail do not set manually.
-## #' @param nreflines integer(1). Internal detail do not set manually.
-## #'
-## #' @details
-## #' When \code{visible_only} is \code{TRUE}, the resulting data.frame will have exactly one row per visible row in the table. This is useful when reasoning about how a table will print, but does not reflect the full pathing space of the structure (though the paths which are given will all work as is).
-## #'
-## #' When \code{visible_only} is \code{FALSE}, every structural element of the table (in row-space) will be reflected in the returned data.frame, meaning the full pathing-space will be represented but some rows in the layout summary will not represent printed rows in the table as it is displayed.
 #' @inherit formatters::make_row_df
 #'
-#' @note the technically present root tree node is excluded from the summary returned by
-#' both \code{make_row_df} and \code{make_col_df}, as it is simply the
-#' row/column structure of \code{tt} and thus not useful for pathing or pagination.
+#' @note the technically present root tree node is excluded from the summary
+#'   returned by both \code{make_row_df} and \code{make_col_df}, as it is simply
+#'   the row/column structure of \code{tt} and thus not useful for pathing or
+#'   pagination.
 #' @export
-#' @return a data.frame of row/column-structure information used by the pagination machinery.
+#' @return a data.frame of row/column-structure information used by the
+#'   pagination machinery.
 #' @name make_row_df
 #' @rdname make_row_df
 #' @aliases make_row_df,VTableTree-method
@@ -139,7 +121,8 @@ setMethod("make_row_df", "VTableTree",
                    nsibs = NA_integer_) {
 
     indent <- indent + indent_mod(tt)
-    orig_rownum <- rownum
+    ## retained for debugging info
+    orig_rownum <- rownum # nolint
     if(incontent)
         path <- c(path, "@content")
     else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
@@ -166,9 +149,9 @@ setMethod("make_row_df", "VTableTree",
                                nreflines = 0L)))
     }
     if(labelrow_visible(tt)) {
-        lr = tt_labelrow(tt)
+        lr <- tt_labelrow(tt)
         newdf <- make_row_df(lr,
-                            colwidths= colwidths,
+                            colwidths = colwidths,
                             visible_only = visible_only,
                             rownum = rownum,
                             indent = indent,
@@ -176,12 +159,12 @@ setMethod("make_row_df", "VTableTree",
                             incontent = TRUE,
                             repr_ext = repr_ext,
                             repr_inds = repr_inds)
-        rownum <- max(newdf$abs_rownumber,na.rm = TRUE)
+        rownum <- max(newdf$abs_rownumber, na.rm = TRUE)
 
-        ret  =  c(ret,
+        ret <- c(ret,
                   list(newdf))
-        repr_ext = repr_ext + 1L
-        repr_inds = c(repr_inds, rownum)
+        repr_ext <- repr_ext + 1L
+        repr_inds <- c(repr_inds, rownum)
         indent <- indent + 1L
     }
 
@@ -189,7 +172,7 @@ setMethod("make_row_df", "VTableTree",
     if(NROW(content_table(tt)) > 0) {
         cind <- indent + indent_mod(content_table(tt))
         contdf <-  make_row_df(content_table(tt),
-                              colwidths= colwidths,
+                              colwidths = colwidths,
                               visible_only = visible_only,
                               rownum = rownum,
                               indent = cind,
@@ -216,7 +199,7 @@ setMethod("make_row_df", "VTableTree",
     for(i in seq_along(allkids)) {
         kid <- allkids[[i]]
         kiddfs <- make_row_df(kid,
-                            colwidths= colwidths,
+                            colwidths = colwidths,
                             visible_only = visible_only,
                             rownum = force(rownum),
                             indent = indent, ## + 1,
@@ -228,7 +211,7 @@ setMethod("make_row_df", "VTableTree",
                             sibpos = i)
 
  #       print(kiddfs$abs_rownumber)
-        rownum <- max(rownum + 1L, kiddfs$abs_rownumber, na.rm = TRUE) ##max(kiddfs[[length(kiddfs)]]$abs_rownumber, na.rm = TRUE)
+        rownum <- max(rownum + 1L, kiddfs$abs_rownumber, na.rm = TRUE)
         ret <- c(ret, list(kiddfs))
     }
 
@@ -267,7 +250,7 @@ setMethod("make_row_df", "TableRow",
                     repind = repr_inds,
                     indent = indent,
                     ## these two are unlist calls cause they come in lists even with no footnotes
-                    nrowrefs = length(rrefs) ,
+                    nrowrefs = length(rrefs),
                     ncellrefs = length(unlist(crefs)),
                     nreflines = reflines
                     )
@@ -301,7 +284,7 @@ setMethod("make_row_df", "LabelRow",
                     ncellrefs = 0L,
                     nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_)))
     if(!labelrow_visible(tt))
-        ret <- ret[0,]
+        ret <- ret[0, ]
     ret
 })
 
@@ -355,7 +338,6 @@ setMethod("inner_col_df", "LayoutColTree",
     ret <- vector("list", length(kids))
     for(i in seq_along(kids)) {
         k <- kids[[i]]
-        nleaves <- length(collect_leaves(k))
         newrows <- do.call(rbind,
                            inner_col_df(k,
                                         colnum = colnum,
@@ -363,7 +345,7 @@ setMethod("inner_col_df", "LayoutColTree",
                                         nsibs = length(kids),
                                         visible_only = visible_only))
         colnum <- max(newrows$abs_pos, colnum, na.rm = TRUE) + 1
-        ret[[i]] = newrows
+        ret[[i]] <- newrows
     }
 
     if(!visible_only) {
@@ -451,7 +433,7 @@ setMethod("inner_col_df", "LayoutColTree",
 #' })
 #'
 #'
-pag_tt_indices = function(tt, lpp = 15,
+pag_tt_indices <- function(tt, lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
                            colwidths = NULL,
@@ -469,8 +451,8 @@ pag_tt_indices = function(tt, lpp = 15,
     if(flines > 0)
         flines <- flines + dheight + 1L
     ## row lines per page
-    rlpp = lpp - cinfo_lines - tlines - flines
-    pagdf = make_row_df(tt, colwidths)
+    rlpp <- lpp - cinfo_lines - tlines - flines
+    pagdf <- make_row_df(tt, colwidths)
 
     pag_indices_inner(pagdf, rlpp = rlpp, min_siblings = min_siblings,
                          nosplitin = nosplitin,
@@ -512,7 +494,7 @@ do_force_paginate <- function(tt,
     }
     chunks <- list()
     kinds <- seq_along(force_pag)
-    while(length(kinds) > 0 ) {
+    while(length(kinds) > 0) {
         if(force_pag[kinds[1]]) {
             outertbl <- copy_title_footer(tree_children(tt)[[kinds[1]]],
                                           tt,
@@ -542,7 +524,7 @@ do_force_paginate <- function(tt,
 #' pagination should be done.
 #' @rdname paginate
 #' @inheritParams formatters::vert_pag_indices
-paginate_table = function(tt, lpp = 15,
+paginate_table <- function(tt, lpp = 15,
                           cpp = NULL,
                           min_siblings = 2,
                           nosplitin = character(),
@@ -571,7 +553,7 @@ paginate_table = function(tt, lpp = 15,
                                nosplitin = nosplitin,
                                colwidths = colwidths,
                                verbose = verbose)
-        res <- lapply(inds, function(x) tt[x,,keep_topleft = TRUE,
+        res <- lapply(inds, function(x) tt[x, , keep_topleft = TRUE,
                                 keep_titles = TRUE,
                                 reindex_refs = FALSE])
     } else { ## lpp is NULL
@@ -579,10 +561,15 @@ paginate_table = function(tt, lpp = 15,
     }
 
     if(!is.null(cpp)) {
-        inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths, verbose = verbose)
-        res <- lapply(res, function(oneres) lapply(inds, function(ii) oneres[,ii, drop = FALSE,
-                                                                             keep_titles = TRUE,
-                                                                             reindex_refs = FALSE]))
+        inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths,
+                                  verbose = verbose)
+        res <- lapply(res,
+                      function(oneres) {
+                          lapply(inds,
+                                 function(ii) oneres[, ii, drop = FALSE,
+                                                     keep_titles = TRUE,
+                                                     reindex_refs = FALSE])
+                      })
         res <- unlist(res, recursive = FALSE)
     }
     res
@@ -603,7 +590,7 @@ vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
     .Deprecated("paginate_table(cpp=<>)")
     inds <- vert_pag_indices(tt, cpp = cpp,
                              verbose = verbose)
-    lapply(inds, function(j) tt[,j, keep_topleft = TRUE,
+    lapply(inds, function(j) tt[, j, keep_topleft = TRUE,
                                 keep_titles = TRUE,
                                 reindex_refs = FALSE])
 

@@ -17,39 +17,51 @@ make_afun(
 )
 }
 \arguments{
-\item{fun}{function. The function to be wrapped in a new customized analysis fun. Should return named list.}
+\item{fun}{function. The function to be wrapped in a new customized analysis
+fun. Should return named list.}
 
-\item{.stats}{character. Names of elements to keep from \code{fun}'s full output.}
+\item{.stats}{character. Names of elements to keep from \code{fun}'s full
+output.}
 
-\item{.formats}{ANY. vector/list of formats to override any defaults applied by \code{fun}.}
+\item{.formats}{ANY. vector/list of formats to override any defaults applied
+by \code{fun}.}
 
-\item{.labels}{character. Vector of labels to override defaults returned by \code{fun}}
+\item{.labels}{character. Vector of labels to override defaults returned by
+\code{fun}}
 
-\item{.indent_mods}{integer. Named vector of indent modifiers for the generated rows.}
+\item{.indent_mods}{integer. Named vector of indent modifiers for the
+generated rows.}
 
-\item{.ungroup_stats}{character. Vector of names, which must match elements of \code{.stats}}
+\item{.ungroup_stats}{character. Vector of names, which must match elements
+of \code{.stats}}
 
-\item{.format_na_strs}{ANY. vector/list of na strings to override any defaults applied by \code{fun}.}
+\item{.format_na_strs}{ANY. vector/list of na strings to override any
+defaults applied by \code{fun}.}
 
-\item{...}{dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
-overriden by extra args within a split.}
+\item{...}{dots. Additional arguments to \code{fun} which effectively become
+new defaults. These can still be overriden by extra args within a split.}
 
-\item{.null_ref_cells}{logical(1). Should cells for the reference column be NULL-ed
-by the returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this argument occurs after \code{...} so it must be \emph{fully} specified  by name when set.}
+\item{.null_ref_cells}{logical(1). Should cells for the reference column be
+NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
+\code{fun} accepts \code{.in_ref_col} as a formal argument. Note this
+argument occurs after \code{...} so it must be \emph{fully} specified  by
+name when set.}
 }
 \value{
-A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
-performed automatically.
+A function suitable for use in \code{\link{analyze}} with element
+selection, reformatting, and relabeling performed automatically.
 }
 \description{
 Create custom analysis function wrapping existing function
 }
 \note{
-setting \code{.ungroup_stats} to non-null changes the \emph{structure} of the  value(s) returned by
-\code{fun}, rather than just labeling (\code{.labels}), formatting (\code{.formats}), and selecting amongst
-(\code{.stats}) them. This means that subsequent \code{make_afun} calls to customize the output further
-both can and must operate on the new structure, \emph{NOT} the original structure returned by \code{fun}.
-See the final pair of examples below.
+setting \code{.ungroup_stats} to non-null changes the \emph{structure}
+of the  value(s) returned by \code{fun}, rather than just labeling
+(\code{.labels}), formatting (\code{.formats}), and selecting amongst
+(\code{.stats}) them. This means that subsequent \code{make_afun} calls to
+customize the output further both can and must operate on the new
+structure, \emph{NOT} the original structure returned by \code{fun}. See
+the final pair of examples below.
 }
 \examples{
 
@@ -94,7 +106,8 @@ s_foo(iris, 40)
 
 a_foo <- make_afun(s_foo, b = 4,
  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
- .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value"),
+ .labels = c(nrow_df = "Nrow df",
+             ".N_col" = "n in cols", a = "a value", b = "b value"),
  .indent_mods = c(nrow_df = 2L, a = 1L)
 )
 
@@ -111,12 +124,15 @@ s_grp <- function(df, .N_col, a = 1, b = 2) {
                      b = b)
    )
 }
-a_grp <- make_afun(s_grp, b = 3, .labels = c(nrow_df = "row count", .N_col = "count in column"),
+a_grp <- make_afun(s_grp, b = 3,
+                   .labels = c(nrow_df = "row count",
+                               .N_col = "count in column"),
                    .formats = c(nrow_df = "xx.", .N_col = "xx."),
                    .indent_mod = c(letters = 1L),
                    .ungroup_stats ="letters")
 a_grp(iris, 40)
-a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"), .formats = c(b = "xx."))
+a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"),
+                        .formats = c(b = "xx."))
 a_aftergrp(iris, 40)
 
 s_ref <- function(x, .in_ref_col, .ref_group) {
@@ -125,7 +141,8 @@ s_ref <- function(x, .in_ref_col, .ref_group) {
        )
 }
 
-a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
+a_ref <- make_afun(s_ref,
+                   .labels = c( mean_diff = "Mean Difference from Ref"))
 a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
 

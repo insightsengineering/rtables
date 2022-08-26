@@ -39,7 +39,7 @@ test_that("pruning and trimming work", {
     ## ensure that empty subtables are removed when pruning
 
     expect_identical(prune_table(smallertab),
-                     smallertab[1:4,])
+                     smallertab[1:4, ])
 
 
 
@@ -62,13 +62,13 @@ test_that("pruning and trimming work", {
                      row.names(prune_table(smallertab2)))
 
     expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
-                     smallertab2[1:2,])
+                     smallertab2[1:2, ])
 
     expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
-                     smallertab2[1:2,])
+                     smallertab2[1:2, ])
 
     expect_identical(prune_table(smallertab2, low_obs_pruner(180)),
-                     smallertab2[1:2,])
+                     smallertab2[1:2, ])
 
 
 
@@ -91,7 +91,7 @@ test_that("provided score functions work", {
     expect_true(is.na(cont_n_onecol(1)(smallertab2)))
     expect_true(is.na(cont_n_onecol(1)(smallertab2)))
     scores2 <- sapply(kids, onecol_fun)
-    dmsub<- subset(DM, ARM == "A: Drug X")
+    dmsub <- subset(DM, ARM == "A: Drug X")
     counts2 <- table(dmsub$SEX)
     expect_identical(scores2, setNames(as.numeric(counts2), names(counts2)))
 
@@ -162,7 +162,7 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
 
     ptbl <- prune_table(bigtbl)
     nspl <- split(ex_adsl, ex_adsl$RACE)
-    num <- sum(sapply(nspl, function(df) 2*length(unique(df$COUNTRY))),
+    num <- sum(sapply(nspl, function(df) 2 * length(unique(df$COUNTRY))),
                length(unique(ex_adsl$RACE)))
     expect_equal(nrow(ptbl), num)
 

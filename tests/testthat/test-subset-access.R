@@ -1,12 +1,13 @@
 context("Accessing and subsetting tables")
 
 test_that("cell_values function works as desired", {
-  l <- basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX") %>%
-    split_rows_by("RACE") %>%
-    summarize_row_groups() %>%
-    split_rows_by("STRATA1") %>%
-    analyze("AGE", afun = function(x, .N_col, .N_row) rcell(c(.N_row, .N_col), format = "(xx.x, xx.x)"))
+  l <- basic_table() %>%
+      split_cols_by("ARM") %>%
+      split_cols_by("SEX") %>%
+      split_rows_by("RACE") %>%
+      summarize_row_groups() %>%
+      split_rows_by("STRATA1") %>%
+      analyze("AGE", afun = function(x, .N_col, .N_row) rcell(c(.N_row, .N_col), format = "(xx.x, xx.x)"))
 
   ourdat <- DM
   ourdat$SEX <- droplevels(ourdat$SEX)
@@ -15,49 +16,64 @@ test_that("cell_values function works as desired", {
 
   armsextab <- table(ourdat$SEX, ourdat$ARM)
 
-  armaval = "A: Drug X"
-  cvres1 = cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
-  contcount = nrow(subset(ourdat, RACE == "ASIAN" & ARM == armaval & SEX == "M"))
+  armaval <- "A: Drug X"
+  cvres1 <- cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
+  contcount <- nrow(subset(ourdat, RACE == "ASIAN" & ARM == armaval & SEX == "M"))
   asianstrata <- table(subset(ourdat, RACE == "ASIAN")$STRATA1)
   expect_identical(unname(cvres1),
-                   list(list("A: Drug X.M" = c(contcount, contcount/armsextab["M", armaval])),
-                        list("A: Drug X.M" = c(unname(asianstrata["A"]), armsextab["M", armaval])),
-                        list("A: Drug X.M" = c(unname(asianstrata["B"]), armsextab["M", armaval])),
-                        list("A: Drug X.M" = c(unname(asianstrata["C"]), armsextab["M", armaval]))))
+                   list(list("A: Drug X.M" = c(contcount,
+                                               contcount / armsextab["M", armaval])),
+                        list("A: Drug X.M" = c(unname(asianstrata["A"]),
+                                               armsextab["M", armaval])),
+                        list("A: Drug X.M" = c(unname(asianstrata["B"]),
+                                               armsextab["M", armaval])),
+                        list("A: Drug X.M" = c(unname(asianstrata["C"]),
+                                               armsextab["M", armaval]))))
 
 
 
-  cvres2 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1"), c("ARM", "A: Drug X", "SEX", "M"))
+  cvres2 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1"),
+                        c("ARM", "A: Drug X", "SEX", "M"))
   expect_identical(unname(cvres1[2:4]), unname(cvres2))
- cvres3 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "A: Drug X", "SEX", "M"))
+  cvres3 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
+                        c("ARM", "A: Drug X", "SEX", "M"))
   expect_identical(cvres3, cvres1[[3]])
   ## any arm, male columns from the ASIAN content (ie summary) row
   cvres4 <- cell_values(tbl, c("RACE", "ASIAN", "@content"))
   expect_identical(cvres4[2], cvres1[[1]])
 
- cvres5 <- cell_values(tbl, c("RACE", "ASIAN", "@content"), c("ARM", "*", "SEX", "M"))
-  expect_identical(cvres5, cvres4[seq(2, 6, by=2)])
- ## all columns
- cvres6 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
+  cvres5 <- cell_values(tbl, c("RACE", "ASIAN", "@content"),
+                        c("ARM", "*", "SEX", "M"))
+  expect_identical(cvres5, cvres4[seq(2, 6, by = 2)])
+  ## all columns
+  cvres6 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
 
- ## all columns for the Combination arm
-cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination"))
+  ## all columns for the Combination arm
+  cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"),
+                         c("ARM", "C: Combination"))
 
   expect_identical(cvres6[5:6],
                    cvres7)
 
-  cvres8 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX", "M"))
-  vares8 <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX", "M"))
+  cvres8 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+                        c("ARM", "C: Combination", "SEX", "M"))
+  vares8 <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+                     c("ARM", "C: Combination", "SEX", "M"))
   expect_identical(cvres8[[1]], vares8)
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B"), c("ARM", "C: Combination", "SEX", "M")))
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination", "SEX")))
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"), c("ARM", "C: Combination")))
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B"),
+                        c("ARM", "C: Combination", "SEX", "M")))
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+                        c("ARM", "C: Combination", "SEX")))
+  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+                        c("ARM", "C: Combination")))
 
   allrows <- collect_leaves(tbl, TRUE, TRUE)
   crow <- allrows[[1]]
   lrow <- allrows[[2]]
-  expect_error(cell_values(crow, rowpath = "@content"), "cell_values on TableRow objects must have NULL rowpath")
-  expect_error(cell_values(lrow), "cell_values on LabelRow is not meaningful")
+  expect_error(cell_values(crow, rowpath = "@content"),
+               "cell_values on TableRow objects must have NULL rowpath")
+  expect_error(cell_values(lrow),
+               "cell_values on LabelRow is not meaningful")
 })
 
 
@@ -68,8 +84,8 @@ test_colpaths <- function(tt) {
     res3 <- lapply(cdf$path, function(pth) rtables:::subset_cols(tt, pth))
     res4 <- lapply(cdf2$path, function(pth) rtables:::subset_cols(tt, pth))
     expect_identical(res3, res4[!is.na(cdf2$abs_pos)])
-    expect_identical(res3, lapply(1:ncol(tt),
-                                  function(j) tt[,j]))
+    expect_identical(res3, lapply(seq_len(ncol(tt)),
+                                  function(j) tt[, j]))
     TRUE
 }
 
@@ -77,7 +93,7 @@ test_colpaths <- function(tt) {
 test_rowpaths <- function(tt, visonly = TRUE) {
 
     cdf <- make_row_df(tt, visible_only = visonly)
-    res3 <- lapply(cdf$path, function(pth) cell_values(tt, pth))
+    res3 <- lapply(cdf$path, function(pth) cell_values(tt, pth)) # nolint
     TRUE
 }
 
@@ -89,7 +105,8 @@ test_that("make_row_df, make_col_df give paths which all work", {
         split_cols_by("ARM") %>%
         split_cols_by("SEX", ref_group = "F") %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels="hidden", table_names = "AGE2a") %>%
+        analyze("AGE", refcompmean, show_labels = "hidden",
+                table_names = "AGE2a") %>%
         split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2b")
@@ -98,7 +115,7 @@ test_that("make_row_df, make_col_df give paths which all work", {
     tab <- build_table(lyt, rawdat)
     rdf1a <- make_row_df(tab)
     rdf1b <- make_row_df(tab, visible_only = FALSE)
-    expect_true(all.equal(rdf1a, rdf1b[!is.na(rdf1b$abs_rownumber),],
+    expect_true(all.equal(rdf1a, rdf1b[!is.na(rdf1b$abs_rownumber), ],
                           check.attributes = FALSE), ## rownames ugh
                      "visible portions of row df not identical between
 visible_only and not")
@@ -166,8 +183,8 @@ test_that("Duplicate colvars path correctly", {
                             nrow = 2, byrow = TRUE),
                      matform$strings)
 
-    res = cell_values(tbl, colpath = c( "multivars", "AGE._[[2]]_."))
-    expect_identical(list("AGE._[[2]]_." = mean(DM$AGE, na.rm= TRUE)),
+    res <- cell_values(tbl, colpath = c("multivars", "AGE._[[2]]_."))
+    expect_identical(list("AGE._[[2]]_." = mean(DM$AGE, na.rm = TRUE)),
                      res)
 })
 
@@ -181,12 +198,12 @@ test_that("top_left retention behavior is correct across all scenarios", {
     tbl <- build_table(lyt, DM)
 
     expect_identical(top_left(tbl), tlval)
-    expect_identical(top_left(tbl[,1]), tlval) ## default column-only subsetting is TRUE
-    expect_identical(top_left(tbl[,1,keep_topleft = FALSE]), character())
-    expect_identical(top_left(tbl[,1,keep_topleft = TRUE]), tlval)
-    expect_identical(top_left(tbl[1,]), character()) ## default with any row subsetting is FALSE
-    expect_identical(top_left(tbl[1, ,keep_topleft = FALSE]), character())
-    expect_identical(top_left(tbl[1, ,keep_topleft = TRUE]), tlval)
+    expect_identical(top_left(tbl[, 1]), tlval) ## default column-only subsetting is TRUE
+    expect_identical(top_left(tbl[, 1, keep_topleft = FALSE]), character())
+    expect_identical(top_left(tbl[, 1, keep_topleft = TRUE]), tlval)
+    expect_identical(top_left(tbl[1, ]), character()) ## default with any row subsetting is FALSE
+    expect_identical(top_left(tbl[1, , keep_topleft = FALSE]), character())
+    expect_identical(top_left(tbl[1, , keep_topleft = TRUE]), tlval)
     expect_identical(top_left(tbl[1:2, 1:2]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
@@ -226,9 +243,9 @@ test_that("setters work ok", {
            analyze("AGE", mean)
        tbl4 <- build_table(lyt4, DM)
 
-       tbl4[5:6,] <- list(rrow("new label"), rrow("new mean", 5, 7, 8))
+       tbl4[5:6, ] <- list(rrow("new label"), rrow("new mean", 5, 7, 8))
        mform4 <- matrix_form(tbl4)
-       expect_identical(mform4$strings[6,, drop = TRUE],
+       expect_identical(mform4$strings[6, , drop = TRUE],
                         c("new label", "", "", ""))
        expect_identical(cell_values(tbl4)[["U.AGE.mean"]],
                         list(5, 7, 8))
@@ -279,7 +296,8 @@ test_that("label_at_path works", {
 
     rps <- row_paths(tab)
 
-    labs <- vapply(rps, function(pth) label_at_path(tab, pth), "", USE.NAMES = FALSE)
+    labs <- vapply(rps, function(pth) label_at_path(tab, pth), "",
+                   USE.NAMES = FALSE)
     expect_identical(labs, orig_labs)
 
     newthangalangs <- paste(orig_labs, "redux")
@@ -351,20 +369,20 @@ test_that("bracket methods all work", {
 
     nrtot <- nrow(tbl)
 
-    tbl_a_white <- tbl[1:19,]
-    expect_identical(tbl[rep(c(TRUE, FALSE), c(19, nrtot-19)),],
+    tbl_a_white <- tbl[1:19, ]
+    expect_identical(tbl[rep(c(TRUE, FALSE), c(19, nrtot - 19)), ],
                      tbl_a_white)
     expect_identical(tt_at_path(tbl_a_white, c("STRATA1", "A", "RACE", "WHITE")),
                      tt_at_path(tbl, c("STRATA1", "A", "RACE", "WHITE")))
 
 
-    tbl_sub1 <- tbl[ 1:25, c(1, 4, 6)]
+    tbl_sub1 <- tbl[1:25, c(1, 4, 6)]
 
     expect_identical(tbl_sub1,
                      tbl[rep(c(TRUE, FALSE), c(25, nrtot - 25)),
-                         c(TRUE, FALSE , FALSE, TRUE, FALSE, TRUE)])
+                         c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE)])
 
     expect_identical(tbl[, c(1, 4, 6)],
-                     tbl[, c(TRUE, FALSE , FALSE, TRUE, FALSE, TRUE)])
+                     tbl[, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE)])
 
 })

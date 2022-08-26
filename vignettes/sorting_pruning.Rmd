@@ -71,7 +71,7 @@ trim_rows(rawtable)
 There are currently no special utilities for trimming columns but we can remove the empty columns with fairly straightforward column subsetting:
 
 ```{r}
-coltrimmed <- rawtable[,col_counts(rawtable) > 0]
+coltrimmed <- rawtable[, col_counts(rawtable) > 0]
 head(coltrimmed)
 ```
 
@@ -151,7 +151,7 @@ When sorting within an analysis subtable (e.g., the subtable generated when your
 
 
 ```{r}
-silly_afun = function(x) {
+silly_afun <- function(x) {
     in_rows(a = rcell(2),
             b = rcell(3),
             c = rcell(1))
@@ -159,7 +159,8 @@ silly_afun = function(x) {
 
 
 
-sillytbl <- basic_table() %>% split_rows_by("cyl") %>%
+sillytbl <- basic_table() %>%
+    split_rows_by("cyl") %>%
     analyze("mpg", silly_afun) %>%
     build_table(mtcars)
 sillytbl
@@ -228,7 +229,7 @@ silly_gender_diffcount <- function(tt) {
     ## we need to have a better api for specificying location in column space but currently we don't
     mcount <- vals[[6]][1]
     fcount <- vals[[5]][1]
-    (mcount - fcount)/fcount
+    (mcount - fcount) / fcount
 }
 
 sort_at_path(pruned, c("RACE", "*", "STRATA1"), silly_gender_diffcount)

@@ -6,10 +6,10 @@ insert_brs <- function(vec) {
    } else {
         nout <- length(vec) * 2 - 1
         ret <- vector("list", nout)
-        for(i in 1:length(vec)) {
-            ret[[2*i - 1]] <- vec[i]
-            if(2*i < nout) {
-                ret[[2*i]] <- tags$br()
+        for(i in seq_along(vec)) {
+            ret[[2 * i - 1]] <- vec[i]
+            if(2 * i < nout) {
+                ret[[2 * i]] <- tags$br()
             }
         }
     }
@@ -80,10 +80,10 @@ as_html <- function(x,
 
   for(i in unique(mat$line_grouping)) {
     rows <- which(mat$line_grouping == i)
-    for(j in 1:ncol(mat$strings)) {
-      curstrs <- mat$strings[rows,j]
-      curspans <- mat$spans[rows,j]
-      curaligns <- mat$aligns[rows,j]
+    for(j in seq_len(ncol(mat$strings))) {
+      curstrs <- mat$strings[rows, j]
+      curspans <- mat$spans[rows, j]
+      curaligns <- mat$aligns[rows, j]
 
       curspn <- unique(curspans)
       stopifnot(length(curspn) == 1)
@@ -128,26 +128,36 @@ as_html <- function(x,
     )
   })
 
-    hdrtag <- div_helper( class = "rtables-titles-block",
+    hdrtag <- div_helper(class = "rtables-titles-block",
                          list(div_helper(class = "rtables-main-titles-block",
-                                         lapply(main_title(x), tags$p, class="rtables-main-title")),
+                                         lapply(main_title(x), tags$p,
+                                                class = "rtables-main-title")),
                               div_helper(class = "rtables-subtitles-block",
-                                         lapply(subtitles(x), tags$p, class="rtables-subtitle"))))
+                                         lapply(subtitles(x), tags$p,
+                                                class = "rtables-subtitle"))))
 
 
-    tabletag <- do.call(tags$table, c(rows, list(class = class_table, tags$caption(sprintf("(\\#tag:%s)", link_label), style="caption-side:top;", .noWS = "after-begin", hdrtag))))
+    tabletag <- do.call(tags$table,
+                        c(rows,
+                          list(class = class_table,
+                               tags$caption(sprintf("(\\#tag:%s)", link_label),
+                                            style = "caption-side:top;",
+                                            .noWS = "after-begin", hdrtag))))
 
     rfnotes <- div_helper(class = "rtables-ref-footnotes-block",
-                                    lapply(mat$ref_footnotes, tags$p, class="rtables-referential-footnote"))
+                          lapply(mat$ref_footnotes, tags$p,
+                                 class = "rtables-referential-footnote"))
 
     mftr <- div_helper(class = "rtables-main-footers-block",
-                       lapply(main_footer(x), tags$p, class = "rtables-main-footer"))
+                       lapply(main_footer(x), tags$p,
+                              class = "rtables-main-footer"))
 
     pftr <- div_helper(class = "rtables-prov-footers-block",
-                       lapply(prov_footer(x), tags$p, class="rtables-prov-footer"))
+                       lapply(prov_footer(x), tags$p,
+                              class = "rtables-prov-footer"))
 
-    ## XXX this omits the divs entirely if they are empty. Do we want that or do we want them
-    ## to be there but empty??
+    ## XXX this omits the divs entirely if they are empty. Do we want that or do
+    ## we want them to be there but empty??
     ftrlst <- list(if(length(mat$ref_footnotes) > 0) rfnotes,
                    if(length(main_footer(x)) > 0) mftr,
                    if(length(prov_footer(x)) > 0) pftr)

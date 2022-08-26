@@ -77,7 +77,8 @@ make_col_df(tt, visible_only = TRUE)
 \item{nsibs}{integer(1). Internal detail do not set manually.}
 }
 \value{
-a data.frame of row/column-structure information used by the pagination machinery.
+a data.frame of row/column-structure information used by the
+pagination machinery.
 }
 \description{
 Used for Pagination
@@ -101,7 +102,8 @@ Most arguments beyond \code{tt} and \code{visible_only} are present so that
 and should not be set during a top-level call
 }
 \note{
-the technically present root tree node is excluded from the summary returned by
-both \code{make_row_df} and \code{make_col_df}, as it is simply the
-row/column structure of \code{tt} and thus not useful for pathing or pagination.
+the technically present root tree node is excluded from the summary
+returned by both \code{make_row_df} and \code{make_col_df}, as it is simply
+the row/column structure of \code{tt} and thus not useful for pathing or
+pagination.
 }

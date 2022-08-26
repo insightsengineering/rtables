@@ -98,11 +98,14 @@ fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 \item{value}{The new value}
 
-\item{rowpath}{character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.}
+\item{rowpath}{character or NULL. Path within row structure. \code{NULL}
+indicates the footnote should go on the column rather than cell.}
 
-\item{colpath}{character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell}
+\item{colpath}{character or NULL. Path within column structure. \code{NULL}
+indicates footnote should go on the row rather than cell}
 
-\item{reset_idx}{logical(1). Should the numbering for referential footnotes be immediately recalculated. Defaults to TRUE.}
+\item{reset_idx}{logical(1). Should the numbering for referential footnotes
+be immediately recalculated. Defaults to TRUE.}
 }
 \description{
 Get and set referential footnotes on aspects of a built table

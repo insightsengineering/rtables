@@ -20,10 +20,12 @@ populated table.}
 
 \item{file}{character(1). The path of the file to written to or read from.}
 
-\item{path_fun}{function. Function to transform paths into single-string row/column names.}
+\item{path_fun}{function. Function to transform paths into single-string
+row/column names.}
 
-\item{value_fun}{function. Functiont to transform cell values into cells of the data.frame. Defaults to \code{collapse_values} which
-creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
+\item{value_fun}{function. Functiont to transform cell values into cells of
+the data.frame. Defaults to \code{collapse_values} which creates strings
+where multi-valued cells are collapsed together, separated by \code{|}.}
 }
 \value{
 \code{NULL} silently for \code{export_as_tsv}, a data.frame with

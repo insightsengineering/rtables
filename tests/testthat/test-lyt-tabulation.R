@@ -2,7 +2,8 @@ context("tabulation framework")
 
 
 test_that("summarize_row_groups works with provided funcs", {
-    l1 <- basic_table() %>% split_cols_by("ARM") %>%
+    l1 <- basic_table() %>%
+        split_cols_by("ARM") %>%
         split_rows_by("RACE") %>%
         summarize_row_groups() %>%
         analyze("AGE", mean)
@@ -40,20 +41,22 @@ test_that("complex layout works", {
 
 
 test_that("existing table in layout works", {
-    thing2 = basic_table() %>% split_cols_by("ARM") %>%
-    ## add nested column split on SEX with value labels from gend_label
-    split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+    thing2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        ## add nested column split on SEX with value labels from gend_label
+        split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
                 afun = function(x) list(mean = mean(x),
                                         median = median(x)),
                 format = "xx.xx",
                 table_names = c("AGE1", "AGE2")
-            )
+        )
 
-tab2 = build_table(thing2, rawdat)
+tab2 <- build_table(thing2, rawdat)
 
 
-    thing3 = basic_table() %>% split_cols_by("ARM") %>%
+    thing3 <- basic_table() %>%
+        split_cols_by("ARM") %>%
         ## add nested column split on SEX with value labels from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -64,7 +67,7 @@ tab2 = build_table(thing2, rawdat)
         ## stack an existing table onto the layout and thus the generated table
         add_existing_table(tab2)
 
-    tab3 = build_table(thing3, rawdat)
+    tab3 <- build_table(thing3, rawdat)
     expect_equal(nrow(tab3), 12)
     tab3
 })
@@ -89,7 +92,8 @@ test_that("Nested splits in column space work", {
 
 
 test_that("labelkids parameter works", {
-    yeslabellyt <- basic_table() %>% split_cols_by("ARM") %>%
+    yeslabellyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", child_labels = "visible") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -202,43 +206,46 @@ test_that("labelkids parameter works", {
 
 test_that("ref_group comparisons work", {
 
-    blthing = basic_table() %>% split_cols_by("ARM", ref_group = "ARM1") %>%
+    blthing <- basic_table() %>%
+        split_cols_by("ARM", ref_group = "ARM1") %>%
         analyze("AGE", show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2")
     ## function(x) list(mean = mean(x)))
 
 
-    bltab = build_table(blthing, rawdat)
-    expect_identical(dim(bltab), c(2L,2L))
-    expect_null(bltab[2,1, drop = TRUE])
-    c1 = bltab[1,1, drop = TRUE]
-    c2 = bltab[1,2, drop = TRUE]
-    c3 = bltab[2,2, drop = TRUE]
+    bltab <- build_table(blthing, rawdat)
+    expect_identical(dim(bltab), c(2L, 2L))
+    expect_null(bltab[2, 1, drop = TRUE])
+    c1 <- bltab[1, 1, drop = TRUE]
+    c2 <- bltab[1, 2, drop = TRUE]
+    c3 <- bltab[2, 2, drop = TRUE]
     expect_equivalent(c2 - c1, c3)
 
     lyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by("SEX", ref_group = "F") %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
-        analyze("AGE", refcompmean, show_labels="hidden", table_names = "AGE2a") %>%
-        split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
+        analyze("AGE", refcompmean, show_labels = "hidden",
+                table_names = "AGE2a") %>%
+        split_rows_by("RACE", nested = FALSE,
+                      split_fun = drop_split_levels) %>%
         analyze("AGE", mean, show_labels = "hidden") %>%
         analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2b")
 
-    bltab2 = build_table(lyt, DM)
-    d1 = bltab2[4,1, drop = TRUE]
-    d2 = bltab2[4,2, drop = TRUE]
-    d3 = bltab2[5,2, drop = TRUE]
+    bltab2 <- build_table(lyt, DM)
+    d1 <- bltab2[4, 1, drop = TRUE]
+    d2 <- bltab2[4, 2, drop = TRUE]
+    d3 <- bltab2[5, 2, drop = TRUE]
 
     expect_equivalent(d2 - d1, d3)
-    d4 = bltab2[1,3, drop = TRUE]
-    d5 = bltab2[1,4, drop = TRUE]
-    d6 = bltab2[2,4, drop = TRUE]
+    d4 <- bltab2[1, 3, drop = TRUE]
+    d5 <- bltab2[1, 4, drop = TRUE]
+    d6 <- bltab2[2, 4, drop = TRUE]
     expect_equivalent(d5 - d4, d6)
 
-    d7 = bltab2[4,3, drop = TRUE]
-    d8 = bltab2[4,4, drop = TRUE]
-    d9 = bltab2[5,4, drop = TRUE]
+    d7 <- bltab2[4, 3, drop = TRUE]
+    d8 <- bltab2[4, 4, drop = TRUE]
+    d9 <- bltab2[5, 4, drop = TRUE]
     expect_equivalent(d8 - d7, d9)
 
     ## with combo levels
@@ -257,45 +264,57 @@ test_that("ref_group comparisons work", {
         analyze(c("AGE", "AGE"), afun = list(mean, refcompmean),
                 show_labels = "hidden", table_names = c("AGE1", "AGE2"))
     bltab3 <- build_table(l3, DM)
-    d10 = bltab3[1,1, drop = TRUE]
-    d11 = bltab3[1,2, drop = TRUE]
-    d12 = bltab3[2,2, drop = TRUE]
+    d10 <- bltab3[1, 1, drop = TRUE]
+    d11 <- bltab3[1, 2, drop = TRUE]
+    d12 <- bltab3[2, 2, drop = TRUE]
 
     expect_null(cell_values(bltab3, "AGE2", c("ARM", "A_"))[[1]])
-    expect_identical(d12, d11-d10)
+    expect_identical(d12, d11 - d10)
 })
 
 test_that("missing vars caught", {
-    misscol = basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SX", "Gender") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), format = "xx.xx")
+    misscol <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SX", "Gender") %>%
+        analyze("AGE", "Age Analysis",
+                afun = function(x) list(mean = mean(x),
+                                        median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(misscol, rawdat), "Split variable [[]SX[]] not found in data being tabulated.")
+    expect_error(build_table(misscol, rawdat),
+                 "Split variable [[]SX[]] not found in data being tabulated.")
 
-    missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX", "gend_label") %>%
-    split_rows_by("RACER", "ethn_label") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                           median = median(x)), format = "xx.xx")
+    missrsplit <-  basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", "gend_label") %>%
+        split_rows_by("RACER", "ethn_label") %>%
+        analyze("AGE", "Age Analysis",
+                afun = function(x) list(mean = mean(x),
+                                        median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(missrsplit, rawdat), "Split variable [[]RACER[]] not found in data being tabulated.")
+    expect_error(build_table(missrsplit, rawdat),
+                 "Split variable [[]RACER[]] not found in data being tabulated.")
 
-    missrsplit =  basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX", "gend_label") %>%
-    split_rows_by("RACE", "ethnNA_label") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                           median = median(x)), format = "xx.xx")
+    missrsplit <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", "gend_label") %>%
+        split_rows_by("RACE", "ethnNA_label") %>%
+        analyze("AGE", "Age Analysis",
+                afun = function(x) list(mean = mean(x),
+                                        median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(missrsplit, rawdat), "Value label variable [[]ethnNA_label[]] not found in data being tabulated.")
+    expect_error(build_table(missrsplit, rawdat),
+                 "Value label variable [[]ethnNA_label[]] not found in data being tabulated.")
 
-    missavar =  basic_table() %>% split_cols_by("ARM") %>%
-    split_cols_by("SEX", labels_var = "gend_label") %>%
-    split_rows_by("RACE", labels_var = "ethn_label") %>%
-    analyze("AGGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                    median = median(x)), format = "xx.xx")
+    missavar <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", labels_var = "gend_label") %>%
+        split_rows_by("RACE", labels_var = "ethn_label") %>%
+        analyze("AGGE", "Age Analysis",
+                afun = function(x) list(mean = mean(x),
+                                        median = median(x)), format = "xx.xx")
 
-    expect_error(build_table(missavar, rawdat), ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
+    expect_error(build_table(missavar, rawdat),
+                 ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
 })
 
 # https://github.com/Roche/rtables/issues/329
@@ -313,10 +332,10 @@ test_that("error localization works", {
         split_rows_by("ARM") %>%
         split_rows_by("RACE") %>%
         analyze("BMRKR1", afun = afun)
-
+# nolint start
     expect_error(build_table(lyt, DM),
                  "Error[^)]*analysis function \\(var[^B]*BMRKR1\\): error for white statistics.*ARM\\[A: Drug X\\]->RACE\\[WHITE\\]")
-
+# nolint end
     cfun <- function(df, labelstr) {
         if(labelstr == "B: Placebo")
             stop("placebos are bad")
@@ -341,9 +360,10 @@ test_that("error localization works", {
         summarize_row_groups() %>%
         split_rows_by("RACE", split_fun = splfun) %>%
         analyze("BMRKR1", afun = mean)
-
+# nolint start
     expect_error(build_table(lyt3, DM),
                  "Error.*custom split function: oopsie daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]")
+# nolint end
 })
 
 
@@ -351,7 +371,7 @@ test_that("cfun args", {
     cfun1 <- function(df, labelstr, .N_col, .N_total) {
         stopifnot(is(df, "data.frame"))
         in_rows(
-            rcell(nrow(df) *c(1, 1/.N_col), format = "xx (xx.xx%)"),
+            rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
             .names = labelstr)
     }
     lyt <- basic_table() %>%
@@ -397,9 +417,11 @@ test_that("label_var works as expected", {
     ## create bad label col
     rawdat2 <- rawdat
     rawdat2$gend_label[5] <- "XXXXX"
-
+    ## nolint start
     ## test check for label-value concordance.
-    expect_error(build_table(yeslblslyt, rawdat2), "There does not appear to be a 1-1 correspondence between values in split var \\[SEX\\] and label var \\[gend_label\\]")
+    expect_error(build_table(yeslblslyt, rawdat2),
+                 "There does not appear to be a 1-1 correspondence between values in split var \\[SEX\\] and label var \\[gend_label\\]")
+    ## nolint end
 })
 
 
@@ -433,18 +455,24 @@ test_that(".N_row argument in afun works correctly", {
     rows <- collect_leaves(tab)
     names(rows) <- substr(names(rows), 1, 1)
     ans <- tapply(rawdat$AGE, rawdat$SEX, function(x) rep(length(x), 2))
-    res = vapply(names(rows), function(nm) isTRUE(all.equal(unname(unlist(row_values(rows[[nm]]))), ans[[nm]])), NA)
+    res <- vapply(names(rows), function(nm) isTRUE(all.equal(unname(unlist(row_values(rows[[nm]]))), ans[[nm]])), NA)
     expect_true(all(res))
 })
 
 
 test_that("extra args works", {
-    oldop = options(warn=2)
+    oldop <- options(warn = 2)
     on.exit(options(oldop))
-    colfuns <- list(function(x, add = 0, na.rm = TRUE) rcell(mean(c(NA,x), na.rm = na.rm)+ add, format = "xx.x"),
-                    function(x, cutoff = .5, na.rm = TRUE) rcell(sum(c(NA, x > cutoff), na.rm = na.rm), format = "xx"))
+    colfuns <- list(
+        function(x, add = 0, na.rm = TRUE) {
+            rcell(mean(c(NA, x), na.rm = na.rm) + add, format = "xx.x")
+        },
+        function(x, cutoff = .5, na.rm = TRUE) {
+            rcell(sum(c(NA, x > cutoff), na.rm = na.rm), format = "xx")
+        })
 
-    l <-  basic_table() %>% split_cols_by("ARM") %>%
+    l <-  basic_table() %>%
+        split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
         analyze_colvars(afun = colfuns)
 
@@ -453,7 +481,8 @@ test_that("extra args works", {
     tbl_noex <- build_table(l, rawdat2)
 
     ## one for each different function in colfuns, assigned correctly
-    l2 <-  basic_table() %>% split_cols_by("ARM") %>%
+    l2 <-  basic_table() %>%
+        split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
         analyze_colvars(afun = colfuns, extra_args = list(list(add = 5), list(cutoff = 100)))
 
@@ -463,23 +492,30 @@ test_that("extra args works", {
     vals_noex <- row_values(tree_children(tbl_noex)[[1]])
     vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
 
-    expect_identical(unlist(vals_noex[c(1,3)]) + 5,
-                     unlist(vals_ex[c(1,3)]))
-    truevals <- tapply(rawdat2$PCTDIFF, rawdat2$ARM, function(x) sum(x>100, na.rm= TRUE), simplify = FALSE)
+    expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
+                     unlist(vals_ex[c(1, 3)]))
+    truevals <- tapply(rawdat2$PCTDIFF,
+                       rawdat2$ARM,
+                       function(x) sum(x > 100, na.rm = TRUE),
+                       simplify = FALSE)
     expect_equal(unname(unlist(truevals)),
-                 unname(unlist(vals_ex[c(2,4)])))
+                 unname(unlist(vals_ex[c(2, 4)])))
 
     vals_noex <- row_values(tree_children(tbl_noex)[[1]])
     vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
 
-    expect_identical(unlist(vals_noex[c(1,3)]) + 5,
-                     unlist(vals_ex[c(1,3)]))
-    truevals <- tapply(rawdat2$PCTDIFF, rawdat2$ARM, function(x) sum(x>100, na.rm= TRUE), simplify = FALSE)
+    expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
+                     unlist(vals_ex[c(1, 3)]))
+    truevals <- tapply(rawdat2$PCTDIFF,
+                       rawdat2$ARM,
+                       function(x) sum(x > 100, na.rm = TRUE),
+                       simplify = FALSE)
     expect_equal(unname(unlist(truevals)),
-                 unname(unlist(vals_ex[c(2,4)])))
+                 unname(unlist(vals_ex[c(2, 4)])))
 
     ## single argument passed to all functions
-    l2b <-  basic_table() %>% split_cols_by("ARM") %>%
+    l2b <-  basic_table() %>%
+        split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
         analyze_colvars(afun = colfuns, extra_args = list(na.rm = FALSE))
 
@@ -491,29 +527,30 @@ test_that("extra args works", {
 
     lyt <- basic_table() %>%
       analyze("Sepal.Length", afun = function(x, a) {
-          in_rows(mean_a = rcell(mean(x) + a , format = "xx"))
+          in_rows(mean_a = rcell(mean(x) + a, format = "xx"))
 
-      }, extra_args = list( a = 1))
+      }, extra_args = list(a = 1))
 
 
     tbl <- build_table(lyt, iris)
-    expect_equal(tbl[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1)
+    expect_equal(tbl[1, 1, drop = TRUE], mean(iris$Sepal.Length) + 1)
 
     ## two arguments for a single function
     lyt2 <- basic_table() %>%
         analyze("Sepal.Length", afun = function(x, a, b) {
-          in_rows(mean_a = rcell(mean(x) + a + b , format = "xx"))
+          in_rows(mean_a = rcell(mean(x) + a + b, format = "xx"))
 
-      }, extra_args = list( a = 1, b = 3))
+      }, extra_args = list(a = 1, b = 3))
 
 
     tbl2 <- build_table(lyt2, iris)
-    expect_equal(tbl2[1,1, drop = TRUE], mean(iris$Sepal.Length) + 1 + 3)
+    expect_equal(tbl2[1, 1, drop = TRUE], mean(iris$Sepal.Length) + 1 + 3)
 })
 
 
 test_that("Colcounts work correctly", {
-    lyt1 <- basic_table() %>% add_colcounts() %>%
+    lyt1 <- basic_table() %>%
+        add_colcounts() %>%
         analyze("AGE")
     tbl1 <- build_table(lyt1, DM)
 
@@ -536,7 +573,7 @@ test_that("Colcounts work correctly", {
     expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
 })
 
-first_cont_rowvals = function(tt)
+first_cont_rowvals <- function(tt)
     row_values(
         tree_children(
             content_table(
@@ -599,7 +636,7 @@ test_that("content extra args for summarize_row_groups works", {
 })
 
 test_that(".df_row analysis function argument works", {
-    afun = function(x, labelstr = "", .N_col, .df_row)  {
+    afun <- function(x, labelstr = "", .N_col, .df_row)  {
         rcell(c(nrow(.df_row), .N_col), format = "(xx.x, xx.x)")
     }
 
@@ -609,11 +646,11 @@ test_that(".df_row analysis function argument works", {
         analyze("AGE", afun)
 
     tbl <- build_table(l, rawdat)
-    rws = collect_leaves(tbl, add.labrows = FALSE)
-    nmale = sum(rawdat$SEX == "M")
-    nfemale = sum(rawdat$SEX == "F")
-    narm1 = sum(rawdat$ARM == "ARM1")
-    narm2 = sum(rawdat$ARM == "ARM2")
+    rws <- collect_leaves(tbl, add.labrows = FALSE)
+    nmale <- sum(rawdat$SEX == "M")
+    nfemale <- sum(rawdat$SEX == "F")
+    narm1 <- sum(rawdat$ARM == "ARM1")
+    narm2 <- sum(rawdat$ARM == "ARM2")
 
     expect_identical(unname(lapply(rws, row_values)),
                      list(list(ARM1 = c(nmale, narm1),
@@ -631,7 +668,7 @@ test_that("analyze_colvars inclNAs works", {
     )
 
     l <- basic_table() %>%
-        split_cols_by_multivar( c("a", "b")) %>%
+        split_cols_by_multivar(c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = TRUE)
 
                                         # We expect:
@@ -640,12 +677,12 @@ test_that("analyze_colvars inclNAs works", {
                                         # 2 2
 
                                         # But we get:
-    tab <-build_table(l, test)
+    tab <- build_table(l, test)
     res1 <- cell_values(tab)
     expect_equal(ans, res1)
 
     l2 <- basic_table() %>%
-        split_cols_by_multivar( c("a", "b")) %>%
+        split_cols_by_multivar(c("a", "b")) %>%
         analyze_colvars(afun = length, inclNAs = FALSE)
 
     ans2 <- lapply(test, function(x) sum(!is.na(x)))
@@ -665,10 +702,12 @@ test_that("analyze_colvars works generally", {
         d = 4,
         e = 5
     )
-    l1 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d")) %>%
+    l1 <- basic_table() %>%
+        split_cols_by_multivar(c("a", "b", "c", "d")) %>%
         analyze_colvars(afun = identity)
     tab1 <- build_table(l1, test)
-    l2 <- basic_table() %>% split_cols_by_multivar( c("a", "b", "c", "d", "e")) %>%
+    l2 <- basic_table() %>%
+        split_cols_by_multivar(c("a", "b", "c", "d", "e")) %>%
         analyze_colvars(afun = identity)
     tab2 <- build_table(l2, test)
 
@@ -678,17 +717,17 @@ test_that("analyze_colvars works generally", {
                     function(x, labelstr) 8)
 
     l3 <- basic_table() %>%
-        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
+        split_cols_by_multivar(c("a", "b", "c", "d")) %>%
         summarize_row_groups(cfun = colfuns, format = "xx") %>%
         analyze_colvars(afun = identity)
     tab3 <- build_table(l3, test)
     expect_identical(cell_values(content_table(tab3)),
-                     list(a = 5, b = 6, c=7, d = 8))
+                     list(a = 5, b = 6, c = 7, d = 8))
     expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
                      c(summary = "My Summary Row"))
 
     l4 <- basic_table() %>%
-        split_cols_by_multivar( c("a", "b", "c", "d")) %>%
+        split_cols_by_multivar(c("a", "b", "c", "d")) %>%
         summarize_row_groups() %>%
         analyze_colvars(afun = identity)
     tab4 <- build_table(l4, test)
@@ -726,7 +765,7 @@ test_that("analyze_colvars works generally", {
 
 
 test_that("alt_counts_df works", {
-    minidm <- DM[1,]
+    minidm <- DM[1, ]
 
     lyt <- basic_table() %>%
         split_cols_by("ARM") %>%
@@ -742,7 +781,7 @@ test_that("alt_counts_df works", {
     expect_identical(list("A: Drug X" = c(70, Inf), ##70/0
                           "B: Placebo" = c(56, 56), ## 56/1
                           "C: Combination" = c(61, Inf)), ##61/0
-                     cell_values(tbl[1,]))
+                     cell_values(tbl[1, ]))
 
     ## breaks (with useful message) when given incompatible alt_counts_df
     expect_error(build_table(lyt, DM, iris), "Offending column subset expression")
@@ -783,7 +822,8 @@ test_that("deeply nested and uneven column layouts work", {
 
 test_that("topleft label position works", {
 
-    lyt <- basic_table() %>% split_cols_by("ARM") %>%
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         ## No row splits have been introduced, so this adds
@@ -824,20 +864,22 @@ test_that(".spl_context works in content and analysis functions", {
 
     ageglobmean <- mean(DM$AGE)
     cfun <- function(df, labelstr, .spl_context) {
-        stopifnot( "A: Drug X.M" %in% names(.spl_context))
-            lastrow <- .spl_context[nrow(.spl_context) - 1,]
+        stopifnot("A: Drug X.M" %in% names(.spl_context))
+            lastrow <- .spl_context[nrow(.spl_context) - 1, ]
             in_rows(c(nrow(df), lastrow$cur_col_n),
                     .names = labelstr,
-                    .labels = sprintf("%s (%d)", labelstr, nrow(lastrow$full_parent_df[[1]])),
+                    .labels = sprintf("%s (%d)", labelstr,
+                                      nrow(lastrow$full_parent_df[[1]])),
                     .formats = "xx / xx")
     }
 
     afun <- function(x, .spl_context) {
-        stopifnot( "A: Drug X.M" %in% names(.spl_context))
-        lastrow <- .spl_context[nrow(.spl_context),]
+        stopifnot("A: Drug X.M" %in% names(.spl_context))
+        lastrow <- .spl_context[nrow(.spl_context), ]
         in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
                 .names = "age_analysis",
-                .labels = sprintf("counts (out of %d)", nrow(lastrow$full_parent_df[[1]])),
+                .labels = sprintf("counts (out of %d)",
+                                  nrow(lastrow$full_parent_df[[1]])),
                 .formats = "xx / xx")
     }
 
@@ -855,7 +897,7 @@ test_that(".spl_context works in content and analysis functions", {
 
     strmat <- matrix_form(tab)$strings
 
-    rwcount4 <- as.integer(gsub("[^0-9]", "", strmat[4,1]))
+    rwcount4 <- as.integer(gsub("[^0-9]", "", strmat[4, 1]))
     crowvals <- cell_values(tab, c("COUNTRY", "CHN", "@content"))
     expect_equal(rwcount4,
                  sum(sapply(crowvals,
@@ -891,7 +933,7 @@ test_that("cut functions work", {
                        nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 35))))
 
     mf <- matrix_form(tbl)
-    expect_identical(mf$strings[2,, drop = TRUE],
+    expect_identical(mf$strings[2, , drop = TRUE],
                      c("", rep(ctnames, 3)))
 
     lcm <- basic_table() %>%
@@ -923,7 +965,7 @@ test_that("cut functions work", {
 
     mf2 <- matrix_form(tbl2)
 
-    expect_identical(mf2$strings[c(2, 6, 10), 1,drop = TRUE],
+    expect_identical(mf2$strings[c(2, 6, 10), 1, drop = TRUE],
                      ctnames)
 
 
@@ -960,7 +1002,7 @@ test_that("cut functions work", {
 
     l3b <-  basic_table() %>%
         split_cols_by("ARM") %>%
-        split_cols_by_cuts("AGE", cuts = rtables:::qtile_cuts(ex_adsl$AGE)) %>% ##(quartiles("AGE", split_label = "Age") %>%
+        split_cols_by_cuts("AGE", cuts = rtables:::qtile_cuts(ex_adsl$AGE)) %>%
         analyze("BMRKR2") %>%
         append_topleft("counts")
 
@@ -987,15 +1029,15 @@ test_that("cut functions work", {
         append_topleft("counts")
 
     tbl3c_cm <- build_table(l3c_cm, ex_adsl)
- # split_rows_by_quartiles
- l4 <- basic_table() %>%
-     split_cols_by("ARM") %>%
-     add_colcounts() %>%
-     split_rows_by_quartiles("AGE", split_label = "Age") %>%
-     analyze("BMRKR2") %>%
-     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
+    # split_rows_by_quartiles
+    l4 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        add_colcounts() %>%
+        split_rows_by_quartiles("AGE", split_label = "Age") %>%
+        analyze("BMRKR2") %>%
+        append_topleft(c("Age Quartiles", " Counts BMRKR2"))
 
- tbl4 <- build_table(l4, ex_adsl)
+    tbl4 <- build_table(l4, ex_adsl)
 
 
     cvs4 <- unlist(cell_values(tbl4))
@@ -1057,15 +1099,19 @@ test_that("error on empty level of splitting variable", {
     lyt1 <- basic_table() %>%
         split_cols_by("x") %>%
         analyze("y")
-    expect_error(build_table(lyt1, mydf), "Got empty string level in splitting variable x")
-    expect_error(build_table(lyt1, mydf2), "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt1, mydf),
+                 "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt1, mydf2),
+                 "Got empty string level in splitting variable x")
 
     lyt2 <- basic_table() %>%
         split_rows_by("x") %>%
         analyze("y")
 
-    expect_error(build_table(lyt2, mydf), "Got empty string level in splitting variable x")
-    expect_error(build_table(lyt2, mydf2), "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt2, mydf),
+                 "Got empty string level in splitting variable x")
+    expect_error(build_table(lyt2, mydf2),
+                 "Got empty string level in splitting variable x")
 })
 
 
@@ -1080,7 +1126,8 @@ test_that("error when afun gives differing numbers of rows is informative", {
 
     my_broken_afun <- afunconst()
 
-    lyt <- basic_table() %>% split_cols_by("ARM") %>%
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
         analyze("AGE", my_broken_afun)
 
     expect_error(build_table(lyt, DM), "Number of rows generated by analysis function do not match across all columns.")

@@ -16,7 +16,8 @@ populated table.}
 \item{j}{numeric(1). Number of column to be scored}
 }
 \value{
-A single numeric value indicating score according to the relevant metric for \code{tt}, to be used
+A single numeric value indicating score according to the relevant
+metric for \code{tt}, to be used
 when sorting.
 }
 \description{

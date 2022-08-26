@@ -10,7 +10,9 @@ rtable(header, ..., format = NULL, hsep = default_hsep())
 rtablel(header, ..., format = NULL, hsep = default_hsep())
 }
 \arguments{
-\item{header}{Information defining the header (column strucure) of the table. This can be as row objects (legacy), character vectors or a \code{InstantiatedColumnInfo} object.}
+\item{header}{Information defining the header (column strucure) of the table.
+This can be as row objects (legacy), character vectors or a
+\code{InstantiatedColumnInfo} object.}
 
 \item{\dots}{Rows to place in the table.}
 
@@ -23,7 +25,8 @@ a connected horrizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 }
 \value{
-a formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree})
+a formal table object of the appropriate type (\code{ElementaryTable}
+or \code{TableTree})
 }
 \description{
 Create a Table

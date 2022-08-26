@@ -155,7 +155,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   formatted if this cell's value(s) are all NA.
 #' @inherit gen_args return
 #' @family conventions
-lyt_args <- function( lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
+lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
                      nested, format, cfun, cformat, split_fun, split_name,
                      split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
@@ -252,7 +252,7 @@ compat_args <- function(.lst, FUN, col_by, row_by, row.name, format, indent,
 #'   kept when tabulating.
 #' @param first logical(1). Should the created split level be placed first in
 #'   the levels (\code{TRUE}) or last (\code{FALSE}, the default).
-#'   
+#'
 sf_args <- function(trim, label, first) NULL
 
 # nocov end

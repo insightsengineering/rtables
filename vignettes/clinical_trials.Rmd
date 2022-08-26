@@ -90,13 +90,11 @@ s_summary <- function(x) {
       "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
     )
   } else if (is.factor(x)) {
-
     vs <- as.list(table(x))
     do.call(in_rows, lapply(vs, rcell, format = "xx"))
-
-  } else (
+  } else {
     stop("type not supported")
-  )
+  }
 }
 ```
 
@@ -285,7 +283,7 @@ basic_table() %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
     in_rows(
-      rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
+      rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
       .labels = labelstr
     )
   })  %>%
@@ -302,7 +300,7 @@ basic_table() %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "hidden") %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
     in_rows(
-       rcell(nrow(df) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
+       rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
        .labels = paste0(labelstr, ": count (perc.)")
     )
   })  %>%
@@ -368,7 +366,7 @@ lookup <- tribble(
   "ORTHOSTATIC HYPOTENSION",         "VASCULAR DISORDERS",                              "4"
 )
 
-normalize <- function(x) x/sum(x)
+normalize <- function(x) x / sum(x)
 weightsA <- normalize(c(0.1, dlnorm(seq(0, 5, length.out = 25), meanlog = 3)))
 weightsB <- normalize(c(0.2, dlnorm(seq(0, 5, length.out = 25))))
 
@@ -377,12 +375,12 @@ ADSL2 <- data.frame(
   USUBJID = seq(1, N_pop, by = 1),
   ARM = sample(c("ARM A", "ARM B"), N_pop, TRUE),
   SEX = sample(c("F", "M"), N_pop, TRUE),
-  AGE = 20 + rbinom(N_pop, size=40, prob=0.7)
+  AGE = 20 + rbinom(N_pop, size = 40, prob = 0.7)
 )
 
 l.adae <- mapply(ADSL2$USUBJID, ADSL2$ARM, ADSL2$SEX, ADSL2$AGE, FUN = function(id, arm, sex, age) {
   n_ae <- sample(0:25, 1, prob = if (arm == "ARM A") weightsA else weightsB)
-  i <- sample(1:nrow(lookup), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10))/16)
+  i <- sample(seq_len(nrow(lookup)), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10)) / 16)
   lookup[i, ] %>%
     mutate(
       AESEQ = seq_len(n()),
@@ -411,7 +409,7 @@ We start by defining an events summary function:
 s_events_patients <- function(x, labelstr, .N_col) {
   in_rows(
     "Total number of patients with at least one event" =
-      rcell(length(unique(x)) * c(1, 1/.N_col), format = "xx (xx.xx%)"),
+      rcell(length(unique(x)) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
 
     "Total number of events" = rcell(length(x), format = "xx")
   )
@@ -555,8 +553,11 @@ The adverse events table by ID and by grade shows how many patients had at least
 For this table we do not show the zero count grades. Note that we add the "overall" groups with a custom split function.
 
 ```{r}
-table_count_grade_once_per_id <- function(df, labelstr = "", gradevar = "AETOXGR", idvar = "USUBJID", grade_levels = NULL) {
-
+table_count_grade_once_per_id <- function(df,
+                                          labelstr = "",
+                                          gradevar = "AETOXGR",
+                                          idvar = "USUBJID",
+                                          grade_levels = NULL) {
   id <- df[[idvar]]
   grade <- df[[gradevar]]
 
@@ -614,7 +615,7 @@ ADRS_BESRSPI <- ex_adrs %>%
   )
 
 s_proportion <- function(x, .N_col) {
-   in_rows(.list = lapply(as.list(table(x)), function(xi) rcell(xi * c(1, 1/.N_col), format = "xx.xx (xx.xx%)")))
+   in_rows(.list = lapply(as.list(table(x)), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
 }
 
 basic_table() %>%
@@ -630,7 +631,7 @@ Note that we did set the `ref_group` argument in `split_cols_by` which for the c
 We will now look the implementation of part "2. Unstratified analysis comparison vs. control group." Let's start with the analysis function:
 
 ```{r}
-s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
+s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
 
   if (.in_ref_col) {
     return(in_rows(
@@ -671,7 +672,7 @@ s_unstratified_response_analysis <- function(x, .ref_group, .in_ref_col) {
   )
 }
 
-s_unstratified_response_analysis(
+s_unstrat_resp(
   x = ADRS_BESRSPI %>% filter(ARM == "A: Drug X") %>% pull(is_rsp),
   .ref_group = ADRS_BESRSPI %>% filter(ARM == "B: Placebo") %>% pull(is_rsp),
   .in_ref_col = FALSE
@@ -685,7 +686,8 @@ basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
-  analyze("is_rsp", s_unstratified_response_analysis, show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
+  analyze("is_rsp", s_unstrat_resp, show_labels = "visible",
+          var_labels = "Unstratified Response Analysis") %>%
   build_table(ADRS_BESRSPI)
 ```
 
@@ -711,7 +713,7 @@ basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
-  analyze("is_rsp", s_unstratified_response_analysis,
+  analyze("is_rsp", s_unstrat_resp,
           show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
   split_rows_by(
     var = "AVALC",
@@ -746,7 +748,7 @@ tbl <- basic_table() %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   add_colcounts() %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
-  analyze("is_rsp", s_unstratified_response_analysis,
+  analyze("is_rsp", s_unstrat_resp,
           show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
   split_rows_by(
     var = "AVALC",

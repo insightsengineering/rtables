@@ -24,7 +24,9 @@ rtables. Please use \code{\link{insert_row_at_path}} or
 \code{\link{label_at_path}} instead.
 }
 \note{
-Label rows (ie a row with no data values, only a row.name) can only be inserted at positions which do not already contain a label row when there is a non-trivial nested row structure in \code{tbl}
+Label rows (ie a row with no data values, only a row.name) can only be
+inserted at positions which do not already contain a label row when there
+is a non-trivial nested row structure in \code{tbl}
 }
 \examples{
 o <- options(warn = 0)

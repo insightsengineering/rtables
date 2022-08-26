@@ -68,14 +68,16 @@ collapse_values <- function(colvals) {
 #' Transform TableTree object to Path-Enriched data.frame
 #'
 #' @inheritParams gen_args
-#' @param path_fun function. Function to transform paths into single-string row/column names.
-#' @param value_fun function. Functiont to transform cell values into cells of the data.frame. Defaults to \code{collapse_values} which
-#' creates strings where multi-valued cells are collapsed together, separated by \code{|}.
+#' @param path_fun function. Function to transform paths into single-string
+#'   row/column names.
+#' @param value_fun function. Functiont to transform cell values into cells of
+#'   the data.frame. Defaults to \code{collapse_values} which creates strings
+#'   where multi-valued cells are collapsed together, separated by \code{|}.
 #' @export
-#' @return A data frame of \code{tt}'s cell values (processed by \code{value_fun},
-#' with columns named by the full column
-#' paths (processed by \code{path_fun} and an additional \code{row_path} column
-#' with the row paths (processed by by \code{path_fun}).
+#' @return A data frame of \code{tt}'s cell values (processed by
+#'   \code{value_fun}, with columns named by the full column paths (processed by
+#'   \code{path_fun} and an additional \code{row_path} column with the row paths
+#'   (processed by by \code{path_fun}).
 #' @examples
 #'
 #' lyt <- basic_table() %>%
@@ -92,7 +94,7 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
     cvs <- as.data.frame(lapply(cvs, value_fun))
     row.names(cvs) <- NULL
     colnames(cvs) <- path_fun(cdf$path)
-    preppaths <- path_fun(rdf[rdf$node_class != "LabelRow",]$path)
+    preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
     cbind.data.frame(row_path = preppaths, cvs)
 
 }
@@ -153,9 +155,11 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
 #' Create a FlexTable object representing an rtables TableTree
 #'
 #' @inheritParams gen_args
-#' @param paginate logical(1). Should \code{tt} be paginated and exported as multiple flextables. Defaults to \code{FALSE}
+#' @param paginate logical(1). Should \code{tt} be paginated and exported as
+#'   multiple flextables. Defaults to \code{FALSE}
 #' @inheritParams paginate_table
-#' @param total_width numeric(1). Total width in inches for the resulting flextable(s). Defaults to 5.
+#' @param total_width numeric(1). Total width in inches for the resulting
+#'   flextable(s). Defaults to 5.
 #' @return a flextable object
 #' @export
 #' @examples
@@ -179,7 +183,8 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
                             colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
                             total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
-        stop("this function requires the flextable and officer packages. Please install them if you wish to use it")
+        stop("this function requires the flextable and officer packages. ",
+             "Please install them if you wish to use it")
     }
 
     ## if we're paginating, just call
@@ -187,7 +192,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
         if(is.null(lpp))
             stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
         tabs <- paginate_table(tt, lpp = lpp, ...)
-        return(lapply(tabs, tt_to_flextable, paginate=FALSE, total_width = total_width, colwidths = colwidths))
+        return(lapply(tabs, tt_to_flextable, paginate = FALSE, total_width = total_width, colwidths = colwidths))
     }
 
     final_cwidths <- total_width * colwidths / sum(colwidths)
@@ -207,30 +212,34 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
     flx <- flextable::width(flx, width = final_cwidths)
 
     if(hnum > 1) {
-        for(i in (hnum-1):1) {
-            sel <- spans_to_viscell(matform$spans[i,])
-            flx <- flextable::add_header_row(flx, top=TRUE, values = as.vector(hdr[i,sel]),
-                                  colwidths = as.integer(matform$spans[i,sel]))
+        for(i in (hnum - 1):1) {
+            sel <- spans_to_viscell(matform$spans[i, ])
+            flx <- flextable::add_header_row(flx, top = TRUE,
+                                             values = as.vector(hdr[i, sel]),
+                                  colwidths = as.integer(matform$spans[i, sel]))
         }
 
     }
-    flx <- flextable::align(flx, j = 2:(NCOL(tt) +1), align = "center", part = "header")
-    flx <- flextable::align(flx, j = 2:(NCOL(tt) +1),  align = "center", part = "body")
+    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1), align = "center", part = "header")
+    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1),  align = "center", part = "body")
     for(i in seq_len(NROW(tt))) {
-        flx <- flextable::padding(flx, i = i, j = 1, padding.left = 10*rdf$indent[[i]])
+        flx <- flextable::padding(flx, i = i, j = 1, padding.left = 10 * rdf$indent[[i]])
     }
-    if(length(matform$ref_footnotes) >0) {
+    if(length(matform$ref_footnotes) > 0) {
         flx <- flextable::add_footer_lines(flx, values = matform$ref_footnotes)
     }
 
     if(length(all_titles(tt)) > 0) {
-        flx <- flextable::hline(flx, i = 1L, border = officer::fp_border(), part = "header")
+        flx <- flextable::hline(flx, i = 1L,
+                                border = officer::fp_border(), part = "header")
         ## rev is because add_header_lines(top=TRUE) seems to put them in backwards!!! AAHHHH
-        flx <- flextable::add_header_lines(flx, values = rev(all_titles(tt)), top = TRUE)
+        flx <- flextable::add_header_lines(flx, values = rev(all_titles(tt)),
+                                           top = TRUE)
     }
 
     if(length(all_footers(tt)) > 0) {
-        flx <- flextable::hline(flx, i = length(matform$ref_footnotes), border = officer::fp_border(), part = "footer")
+        flx <- flextable::hline(flx, i = length(matform$ref_footnotes),
+                                border = officer::fp_border(), part = "footer")
         flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
     }
 
@@ -318,8 +327,8 @@ export_as_pdf <- function(tt,
     })
 
     npages <- length(gtbls)
-    exceeds_width = rep(FALSE, npages)
-    exceeds_height = rep(FALSE, npages)
+    exceeds_width <- rep(FALSE, npages)
+    exceeds_height <- rep(FALSE, npages)
 
     for (i in seq_along(gtbls)) {
         g <- gtbls[[i]]

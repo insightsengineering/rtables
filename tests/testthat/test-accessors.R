@@ -171,8 +171,8 @@ test_that("header sep setting works", {
 
     hsep_test <- function(tab, exp) {
         expect_identical(horizontal_sep(tab), exp)
-        expect_identical(horizontal_sep(tab[1:5,]), exp)
-        expect_identical(horizontal_sep(tab[,1:3]), exp)
+        expect_identical(horizontal_sep(tab[1:5, ]), exp)
+        expect_identical(horizontal_sep(tab[, 1:3]), exp)
         expect_identical(horizontal_sep(tab[1:5, 1:3]), exp)
         expect_identical(horizontal_sep(tree_children(tab)[[1]]), exp)
         TRUE

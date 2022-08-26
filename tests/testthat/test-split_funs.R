@@ -183,7 +183,7 @@ test_that("trim_levels_in_group works", {
 
 test_that("Custom functions in mutlivar splits work", {
 
-    uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         ret <- do_base_split(spl, df, vals, labels, trim)
         if(NROW(df) == 0)
             ret <- lapply(ret, function(x) x[1])

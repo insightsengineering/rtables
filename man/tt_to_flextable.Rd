@@ -17,7 +17,8 @@ tt_to_flextable(
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated and exported as multiple flextables. Defaults to \code{FALSE}}
+\item{paginate}{logical(1). Should \code{tt} be paginated and exported as
+multiple flextables. Defaults to \code{FALSE}}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -25,7 +26,8 @@ populated table.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{total_width}{numeric(1). Total width in inches for the resulting flextable(s). Defaults to 5.}
+\item{total_width}{numeric(1). Total width in inches for the resulting
+flextable(s). Defaults to 5.}
 }
 \value{
 a flextable object

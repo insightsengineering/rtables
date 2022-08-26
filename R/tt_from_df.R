@@ -10,9 +10,9 @@ df_to_tt <- function(df) {
     cinfo <- manual_cols(colnms)
     rnames <- rownames(df)
     havern <- !is.null(rnames)
-    kids <- lapply(1:nrow(df), function(i) {
+    kids <- lapply(seq_len(nrow(df)), function(i) {
         rni <- if(havern) rnames[i] else ""
-        do.call(rrow, c(list(row.name = rni), unclass(df[i,])))
+        do.call(rrow, c(list(row.name = rni), unclass(df[i, ])))
     })
     ElementaryTable(kids = kids, cinfo = cinfo)
 }

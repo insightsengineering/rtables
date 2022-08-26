@@ -6,16 +6,23 @@
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
 #' @param x ANY. Cell value
-#' @param label character(1). Label or Null. If non-null, it will be looked at when determining row labels.
+#' @param label character(1). Label or Null. If non-null, it will be looked at
+#'   when determining row labels.
 #' @param colspan integer(1). Columnspan value.
 #' @param footnotes list or NULL. Referential footnote messages for the cell.
-#' @note currently column spanning is only supported for defining header structure.
+#' @note currently column spanning is only supported for defining header
+#'   structure.
 #' @rdname rcell
 #' @inherit CellValue return
 #' @export
-rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL, footnotes = NULL, align = NULL,
-                 format_na_str = NULL){
-
+rcell <- function(x,
+                  format = NULL,
+                  colspan = 1L,
+                  label = NULL,
+                  indent_mod = NULL,
+                  footnotes = NULL,
+                  align = NULL,
+                  format_na_str = NULL) {
     if(!is.null(align))
         align <- chk_rtables_align(align)
     if(is(x, "CellValue")) {
@@ -40,17 +47,23 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
         if(is.null(indent_mod))
             indent_mod <- indent_mod(x)
         footnotes <- lapply(footnotes, RefFootnote)
-        ret <- CellValue(val = x, format = format, colspan = colspan, label = label, indent_mod = indent_mod, footnotes = footnotes,
-                         format_na_str = format_na_str)# RefFootnote(footnote))
+        ret <- CellValue(val = x,
+                         format = format,
+                         colspan = colspan,
+                         label = label,
+                         indent_mod = indent_mod,
+                         footnotes = footnotes,
+                         format_na_str = format_na_str
+        )# RefFootnote(footnote))
     }
     if(!is.null(align))
         cell_align(ret) <- chk_rtables_align(align)
     ret
 }
 
-#' @details \code{non_ref_rcell} provides the common \emph{blank for cells in the reference
-#' column, this value otherwise}, and should be passed the value of \code{.in_ref_col}
-#' when it is used.
+#' @details \code{non_ref_rcell} provides the common \emph{blank for cells in
+#'   the reference column, this value otherwise}, and should be passed the value
+#'   of \code{.in_ref_col} when it is used.
 #'
 #' @param  is_ref logical(1).  Are  we  in  the reference  column  (ie
 #'     .in_ref_col shoul be passed to this argument)
@@ -58,7 +71,7 @@ rcell = function(x, format = NULL, colspan = 1L, label = NULL, indent_mod = NULL
 #' to \code{NULL}
 #' @rdname rcell
 #' @export
-non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
+non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
                          label = NULL, indent_mod = NULL,
                          refval = NULL,
                          align = "center",
@@ -76,18 +89,23 @@ non_ref_rcell = function(x, is_ref, format = NULL, colspan = 1L,
 #'
 #'
 #' @param ... single row defining expressions
-#' @param .list list. list cell content, usually `rcells`, the `.list` is concatenated to `...`
+#' @param .list list. list cell content, usually `rcells`, the `.list` is
+#'   concatenated to `...`
 #' @param .names character or NULL. Names of the returned list/structure.
 #' @param .labels character or NULL. labels for the defined rows
 #' @param .formats character or NULL. Formats for the values
-#' @param .indent_mods integer or NULL. Indent modificatons for the defined rows.
-#' @param .cell_footnotes list. Referential footnote messages to be associated by name with \emph{cells}
-#' @param .row_footnotes list. Referential footnotes messages to be associated by name with \emph{rows}
+#' @param .indent_mods integer or NULL. Indent modificatons for the defined
+#'   rows.
+#' @param .cell_footnotes list. Referential footnote messages to be associated
+#'   by name with \emph{cells}
+#' @param .row_footnotes list. Referential footnotes messages to be associated
+#'   by name with \emph{rows}
 #' @param .aligns character or NULL. Alignments for the cells
 #' @param .format_na_strs character or NULL. NA strings for the cells
 #'
 #' @export
-#' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
+#' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of
+#'   this object should be considered an internal implementation detail.
 #' @seealso `analyze`
 #'
 #' @examples
@@ -117,7 +135,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .aligns = NULL,
                     .format_na_strs = NULL) {
     if(is.function(.formats))
-        .formats = list(.formats)
+        .formats <- list(.formats)
 
     l <- c(list(...), .list)
 
@@ -131,27 +149,31 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
 
     if(length(l) == 0) {
-        if(length(.labels) >0 ||
+        if(length(.labels) > 0 ||
            length(.formats) > 0 ||
            length(.names) > 0 ||
            length(.indent_mods) > 0 ||
            length(.format_na_strs) > 0)
-            stop("in_rows got 0 rows but length >0 of at least one of .labels, .formats, .names, .indent_mods, .format_na_strs. Does your analysis/summary function handle the 0 row df/length 0 x case?")
+            stop("in_rows got 0 rows but length >0 of at least one of ",
+                 ".labels, .formats, .names, .indent_mods, .format_na_strs. ",
+                 "Does your analysis/summary function handle the 0 row ",
+                 "df/length 0 x case?")
         l2 <- list()
     } else {
         if(is.null(.formats))
             .formats <- list(NULL)
         stopifnot(is.list(.cell_footnotes))
         if(length(.cell_footnotes) != length(l)) {
-            .cell_footnotes <- c(.cell_footnotes, setNames(rep(list(character()),
-                                                               length.out = length(setdiff(names(l), names(.cell_footnotes)))),
-                                                           setdiff(names(l), names(.cell_footnotes))))
+            .cell_footnotes <- c(.cell_footnotes,
+                                 setNames(rep(list(character()),
+                                              length.out = length(setdiff(names(l),
+                                                                          names(.cell_footnotes)))),
+                                          setdiff(names(l),
+                                                  names(.cell_footnotes))))
             .cell_footnotes <- .cell_footnotes[names(l)]
         }
         if(is.null(.aligns))
             .aligns <- list(NULL)
-        ##   length(.cell_footnotes) <- length(l) ## this pads with NULL elements, as desired
-
         l2 <- mapply(rcell, x = l, format = .formats,
                      footnotes = .cell_footnotes %||% list(NULL),
                      align = .aligns,
@@ -209,25 +231,37 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
 #' Create custom analysis function wrapping existing function
 #'
-#' @param fun function. The function to be wrapped in a new customized analysis fun. Should return named list.
-#' @param .stats character. Names of elements to keep from \code{fun}'s full output.
-#' @param .formats ANY. vector/list of formats to override any defaults applied by \code{fun}.
-#' @param .labels character. Vector of labels to override defaults returned by \code{fun}
-#' @param .indent_mods integer. Named vector of indent modifiers for the generated rows.
-#' @param .ungroup_stats character. Vector of names, which must match elements of \code{.stats}
-#' @param ... dots. Additional arguments to \code{fun} which effectively become new defaults. These can still be
-#'   overriden by extra args within a split.
-#' @param .null_ref_cells logical(1). Should cells for the reference column be NULL-ed
-#' by the returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this argument occurs after \code{...} so it must be \emph{fully} specified  by name when set.
-#' @param .format_na_strs ANY. vector/list of na strings to override any defaults applied by \code{fun}.
-#' @return A function suitable for use in \code{\link{analyze}} with element selection, reformatting, and relabeling
-#'   performed automatically.
+#' @param fun function. The function to be wrapped in a new customized analysis
+#'   fun. Should return named list.
+#' @param .stats character. Names of elements to keep from \code{fun}'s full
+#'   output.
+#' @param .formats ANY. vector/list of formats to override any defaults applied
+#'   by \code{fun}.
+#' @param .labels character. Vector of labels to override defaults returned by
+#'   \code{fun}
+#' @param .indent_mods integer. Named vector of indent modifiers for the
+#'   generated rows.
+#' @param .ungroup_stats character. Vector of names, which must match elements
+#'   of \code{.stats}
+#' @param ... dots. Additional arguments to \code{fun} which effectively become
+#'   new defaults. These can still be overriden by extra args within a split.
+#' @param .null_ref_cells logical(1). Should cells for the reference column be
+#'   NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
+#'   \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this
+#'   argument occurs after \code{...} so it must be \emph{fully} specified  by
+#'   name when set.
+#' @param .format_na_strs ANY. vector/list of na strings to override any
+#'   defaults applied by \code{fun}.
+#' @return A function suitable for use in \code{\link{analyze}} with element
+#'   selection, reformatting, and relabeling performed automatically.
 #'
-#' @note setting \code{.ungroup_stats} to non-null changes the \emph{structure} of the  value(s) returned by
-#' \code{fun}, rather than just labeling (\code{.labels}), formatting (\code{.formats}), and selecting amongst
-#' (\code{.stats}) them. This means that subsequent \code{make_afun} calls to customize the output further
-#' both can and must operate on the new structure, \emph{NOT} the original structure returned by \code{fun}.
-#' See the final pair of examples below.
+#' @note setting \code{.ungroup_stats} to non-null changes the \emph{structure}
+#'   of the  value(s) returned by \code{fun}, rather than just labeling
+#'   (\code{.labels}), formatting (\code{.formats}), and selecting amongst
+#'   (\code{.stats}) them. This means that subsequent \code{make_afun} calls to
+#'   customize the output further both can and must operate on the new
+#'   structure, \emph{NOT} the original structure returned by \code{fun}. See
+#'   the final pair of examples below.
 #'
 #' @seealso [analyze()]
 #'
@@ -276,7 +310,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'
 #' a_foo <- make_afun(s_foo, b = 4,
 #'  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
-#'  .labels = c(nrow_df = "Nrow df", ".N_col" = "n in cols", a = "a value", b = "b value"),
+#'  .labels = c(nrow_df = "Nrow df",
+#'              ".N_col" = "n in cols", a = "a value", b = "b value"),
 #'  .indent_mods = c(nrow_df = 2L, a = 1L)
 #' )
 #'
@@ -293,12 +328,15 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'                      b = b)
 #'    )
 #' }
-#' a_grp <- make_afun(s_grp, b = 3, .labels = c(nrow_df = "row count", .N_col = "count in column"),
+#' a_grp <- make_afun(s_grp, b = 3,
+#'                    .labels = c(nrow_df = "row count",
+#'                                .N_col = "count in column"),
 #'                    .formats = c(nrow_df = "xx.", .N_col = "xx."),
 #'                    .indent_mod = c(letters = 1L),
 #'                    .ungroup_stats ="letters")
 #' a_grp(iris, 40)
-#' a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"), .formats = c(b = "xx."))
+#' a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"),
+#'                         .formats = c(b = "xx."))
 #' a_aftergrp(iris, 40)
 #'
 #' s_ref <- function(x, .in_ref_col, .ref_group) {
@@ -307,7 +345,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'        )
 #' }
 #'
-#' a_ref <- make_afun(s_ref, .labels = c( mean_diff = "Mean Difference from Ref"))
+#' a_ref <- make_afun(s_ref,
+#'                    .labels = c( mean_diff = "Mean Difference from Ref"))
 #' a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 #' a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
 #'
@@ -322,16 +361,17 @@ make_afun <- function(fun,
                       ...,
                       .null_ref_cells = ".in_ref_col" %in% names(formals(fun))) {
 
-    ## there is a LOT more computing-on-the-language hackery in here that I would
-    ## prefer, but currently this is the way I see to do everything we want to do.
+    ## there is a LOT more computing-on-the-language hackery in here that I
+    ## would prefer, but currently this is the way I see to do everything we
+    ## want to do.
 
     ## too clever by three-quarters (because half wasn't enough)
     ## gross scope hackery
-    fun_args = force(list(...))
+    fun_args <- force(list(...))
     fun_fnames <- names(formals(fun))
-    takes_inrefcol <- ".in_ref_col" %in% fun_fnames
 
-    ## force EVERYTHING otherwise calling this within loops is the stuff of nightmares
+    ## force EVERYTHING otherwise calling this within loops is the stuff of
+    ## nightmares
     force(.stats)
     force(.formats)
     force(.format_na_strs)
@@ -385,7 +425,8 @@ make_afun <- function(fun,
 
         for(var in allvars) {
             ## not missing, ie specified in the direct call, takes precedence
-            if(var %in% fun_fnames && eval(parser_helper(text = paste0("!missing(", var, ")"))))
+            if(var %in% fun_fnames &&
+               eval(parser_helper(text = paste0("!missing(", var, ")"))))
                 sfunargs[[var]] <- get(var)
             ## not specified in the call, but specified in the constructor
             else if(var %in% names(custargs))
@@ -420,10 +461,10 @@ make_afun <- function(fun,
         final_labels[names(.labels)] <- .labels
 
         final_formats <- lapply(final_vals, obj_format)
-        final_formats[names(.formats)] = .formats
+        final_formats[names(.formats)] <- .formats
 
         final_format_na_strs <- lapply(final_vals, obj_na_str)
-        final_format_na_strs[names(.format_na_strs)] = .format_na_strs
+        final_format_na_strs[names(.format_na_strs)] <- .format_na_strs
 
         if(is(final_vals, "RowsVerticalSection"))
             final_imods <- indent_mod(final_vals)
@@ -473,10 +514,10 @@ make_afun <- function(fun,
                 x
             } else if(.null_ref_cells) {
                 non_ref_rcell(x, is_ref = .in_ref_col,
-                              format =f, label = l,
+                              format = f, label = l,
                               format_na_str = na_str)#, indent_mod = im)
             } else {
-                rcell(x, format =f, label = l, format_na_str = na_str)#, indent_mod = im)
+                rcell(x, format = f, label = l, format_na_str = na_str)#, indent_mod = im)
             }
         }, f = final_formats, x = final_vals,
         l = final_labels,
@@ -494,10 +535,10 @@ insert_replace <- function(x, nm, newvals = x[[nm]]) {
     i <-  match(nm, names(x))
     if(is.na(i))
         stop("name not found")
-    bef <- if(i > 1) 1:(i-1) else numeric()
-    aft <- if(i < length(x)) (i+1) : length(x) else numeric()
-    ret = c(x[bef], newvals, x[aft])
-    names(ret) = c(names(x)[bef], names(newvals), names(x)[aft])
+    bef <- if(i > 1) 1:(i - 1) else numeric()
+    aft <- if(i < length(x)) (i + 1) : length(x) else numeric()
+    ret <- c(x[bef], newvals, x[aft])
+    names(ret) <- c(names(x)[bef], names(newvals), names(x)[aft])
     ret
 }
 
@@ -506,4 +547,7 @@ parser_helper <- function(text, envir = parent.frame(2)) {
 }
 
 
-length_w_name <- function(x, .parent_splval) in_rows(length(x), .names = value_labels(.parent_splval))
+length_w_name <- function(x, .parent_splval) {
+    in_rows(length(x),
+            .names = value_labels(.parent_splval))
+}

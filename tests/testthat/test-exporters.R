@@ -25,15 +25,17 @@ test_that("tsv roundtripping for path_enriched_df", {
 
     df <- path_enriched_df(tbl2)
 
-    tmptsv <- tempfile(fileext=".tsv")
+    tmptsv <- tempfile(fileext = ".tsv")
 
     export_as_tsv(tbl2, file = tmptsv)
 
     newdf <- import_from_tsv(tmptsv)
 
     expect_true(all(sapply(newdf, is.list)))
-    expect_equal(unclass(newdf[1,2]), #AsIs "class"
-                 list(as.character(c(16, 16/sum(ex_adsl$ARM == "A: Drug X" & ex_adsl$SEX == "M")))))
+    expect_equal(unclass(newdf[1, 2]), #AsIs "class"
+                 list(as.character(c(16,
+                                     16 / sum(ex_adsl$ARM == "A: Drug X" &
+                                                  ex_adsl$SEX == "M")))))
 })
 
 test_that("export_as_pdf works", {
@@ -41,10 +43,10 @@ test_that("export_as_pdf works", {
     tbl <- tt_to_export()
     tmpf <- tempfile(fileext = ".pdf")
 
-    expect_warning(export_as_pdf(tbl, file = tmpf, width = 1, paginate = FALSE ),
+    expect_warning(export_as_pdf(tbl, file = tmpf, width = 1, paginate = FALSE),
                    "width of page 1 exceeds the available space")
     expect_true(file.exists(tmpf))
-    expect_warning(export_as_pdf(tbl, file = tmpf, height = 1, paginate = FALSE ),
+    expect_warning(export_as_pdf(tbl, file = tmpf, height = 1, paginate = FALSE),
                    "height of page 1 exceeds the available space")
 
     res <- export_as_pdf(tbl, file = tmpf)

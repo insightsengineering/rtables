@@ -12,20 +12,23 @@ the data.}
 
 \item{df}{dataset (data.frame or tibble)}
 
-\item{vals}{ANY. Already calculated/known values of the split. Generally should be left as \code{NULL}.}
+\item{vals}{ANY. Already calculated/known values of the split. Generally
+should be left as \code{NULL}.}
 
-\item{labels}{character. Labels associated with \code{vals}. Should be \code{NULL} when \code{vals} is, whic should almost always be the case.}
+\item{labels}{character. Labels associated with \code{vals}. Should be
+\code{NULL} when \code{vals} is, whic should almost always be the case.}
 
-\item{trim}{logical(1). Should groups corresponding to empty data subsets be removed. Defaults to \code{FALSE}.}
+\item{trim}{logical(1). Should groups corresponding to empty data subsets be
+removed. Defaults to \code{FALSE}.}
 }
 \value{
-the result of the split being applied as if it had no custom split function, see
-\code{\link{custom_split_funs}}
+the result of the split being applied as if it had no custom split
+function, see \code{\link{custom_split_funs}}
 }
 \description{
-This function is intended for use inside custom split functions. It applies the
-current split \emph{as if it had no custom splitting function} so that those
-default splits can be further manipulated.
+This function is intended for use inside custom split functions. It applies
+the current split \emph{as if it had no custom splitting function} so that
+those default splits can be further manipulated.
 }
 \examples{
 

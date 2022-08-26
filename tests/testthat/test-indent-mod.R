@@ -5,7 +5,7 @@ test_that("indent modifiers propogated from analyze calls properly", {
         analyze("Sepal.Width", afun = mean, show_labels = "visible") %>%
         analyze("Sepal.Width", afun = median, show_labels = "hidden", indent_mod = 2L,
                 table_names = "SecondAge")
-    tab <-  build_table(lyt,iris)
+    tab <-  build_table(lyt, iris)
     expect_equal(rtables:::indent_mod(tree_children(tab)[[2]]), 2L)
 
     expect_equal(make_row_df(tab)$indent, c(0, 1, 2))
@@ -98,7 +98,7 @@ test_that("indents are correct in make_row_df", {
                 format = "xx.xx", indent_mod = 0)
     t6 <- build_table(l6, rawdat)
     pgdf6 <- make_row_df(t6)
-    expect_identical(c(0, rep(c( 1, 2, 3, 3, 2, 3, 3), 2)),
+    expect_identical(c(0, rep(c(1, 2, 3, 3, 2, 3, 3), 2)),
                      pgdf6$indent)
 
 
@@ -120,7 +120,7 @@ test_that("indents are correct in make_row_df", {
                 format = "xx.xx", indent_mod = 0)
     t7 <- build_table(l7, rawdat)
     pgdf7 <- make_row_df(t7)
-    expect_identical(c(2, rep(c( 1, 3, 4, 4, 3, 4, 4), 2)),
+    expect_identical(c(2, rep(c(1, 3, 4, 4, 3, 4, 4), 2)),
                      pgdf7$indent)
 })
 
@@ -128,8 +128,8 @@ test_that("getters and setters work", {
 
 
     t0 <-  basic_table() %>%
-        summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
-        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
+        split_rows_by("AEBODSYS", child_labels = "visible") %>%
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
         analyze("AGE") %>%
         build_table(ex_adae)
@@ -176,15 +176,15 @@ test_that("clear_indent_mods works as desired", {
 
 
     lytm <- basic_table() %>%
-        summarize_row_groups("STUDYID",label_fstr = "overall summary", indent_mod = 1L) %>%
-        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label_fstr = "overall summary", indent_mod = 1L) %>%
+        split_rows_by("AEBODSYS", child_labels = "visible") %>%
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
         analyze("AGE", indent_mod = -1L)
     tm <- build_table(lytm, ex_adae)
 
     t0 <-  basic_table() %>%
-        summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
-        split_rows_by("AEBODSYS",  child_labels = "visible") %>%
+        summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
+        split_rows_by("AEBODSYS", child_labels = "visible") %>%
         summarize_row_groups("STUDYID", label = "subgroup summary") %>%
         analyze("AGE") %>%
         build_table(ex_adae)

@@ -24,7 +24,8 @@ simple_analysis(x, ...)
 \item{\dots}{passed on directly}
 }
 \value{
-an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
+an \code{RowsVerticalSection} object (or \code{NULL}). The details of
+this object should be considered an internal implementation detail.
 }
 \description{
 This function is used when \code{\link{analyze}} is invoked

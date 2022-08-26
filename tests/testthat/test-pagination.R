@@ -16,16 +16,19 @@ test_that("Page by splitting works", {
     expect_identical(names(ttlst),
                      levels(DM$SEX))
 
-    expect_error({basic_table(title = "big title")  %>%
-        analyze("AGE") %>%
-        split_rows_by("SEX", page_by = TRUE) %>%
+    expect_error({
+        basic_table(title = "big title")  %>%
+            analyze("AGE") %>%
+            split_rows_by("SEX", page_by = TRUE) %>%
             analyze("AGE")},
         "page_by splits cannot have top-level siblings")
 
-    expect_error({basic_table() %>% split_rows_by("SEX") %>%
-                      split_rows_by("ARM", page_by = TRUE) %>%
-                      analyze("AGE")},
-                 "page_by splits cannot be nested within non-page_by splits")
+    expect_error({
+        basic_table() %>%
+            split_rows_by("SEX") %>%
+            split_rows_by("ARM", page_by = TRUE) %>%
+            analyze("AGE")},
+        "page_by splits cannot be nested within non-page_by splits")
 })
 
 
@@ -41,7 +44,7 @@ test_that("vertical and horizontal pagination work", {
 
     expect_identical(length(res), 3L)
 
-    expect_identical(tt[,1:2, keep_titles = TRUE,
+    expect_identical(tt[, 1:2, keep_titles = TRUE,
                         reindex_refs = FALSE], res[[1]])
 
     res2 <- paginate_table(tt, lpp = 75, cpp = 40)

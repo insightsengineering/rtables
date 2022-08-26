@@ -43,7 +43,7 @@ test_that("rtable design decisions", {
     expect_identical(names(tbl), c("Treatment", "Comparison"))
 
     ## replace once the colspan rows are uncommented
-    expect_equal(dim(tbl) , c(6, 2))
+    expect_equal(dim(tbl), c(6, 2))
 
   expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header", "estimate", "95% CI"))
 

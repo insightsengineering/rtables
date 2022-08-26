@@ -59,8 +59,8 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
     x_tag
   } else {
     htmltools::tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
-      htmltools::tags$div(class= "col-xs-6", x_tag),
-      htmltools::tags$div(class= "col-xs-6", y_tag)
+      htmltools::tags$div(class = "col-xs-6", x_tag),
+      htmltools::tags$div(class = "col-xs-6", y_tag)
     ))
   }
 
@@ -86,13 +86,15 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   }
 
   html_bs <- tags$html(
-    lang="en",
+    lang = "en",
     tags$head(
-      tags$meta(charset="utf-8"),
-      tags$meta("http-equiv"="X-UA-Compatible", content="IE=edge"),
-      tags$meta(name="viewport", content="width=device-width, initial-scale=1"),
+      tags$meta(charset = "utf-8"),
+      tags$meta("http-equiv" = "X-UA-Compatible", content = "IE=edge"),
+      tags$meta(name = "viewport",
+                content = "width=device-width, initial-scale=1"),
       tags$title("rtable"),
-      tags$link(href="css/bootstrap.min.css", rel="stylesheet")
+      tags$link(href = "css/bootstrap.min.css",
+                rel = "stylesheet")
     ),
     tags$body(
       html_output
@@ -113,4 +115,3 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   }
 
 }
-

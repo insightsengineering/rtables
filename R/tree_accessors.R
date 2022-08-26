@@ -17,7 +17,7 @@ NULL
 #' @return the number of rows (nrow), columns (ncol) or both (dim) of the object.
 #' @exportMethod nrow
 setMethod("nrow", "VTableTree",
-          function(x) length(collect_leaves(x, TRUE ,TRUE)))
+          function(x) length(collect_leaves(x, TRUE, TRUE)))
 
 #' @rdname dimensions
 #' @exportMethod nrow
@@ -105,15 +105,15 @@ setGeneric("tree_children<-", function(x, value) standardGeneric("tree_children<
 #' @exportMethod tree_children<-
 #' @rdname tree_children
 setMethod("tree_children<-", c(x = "VTree"),
-          function(x, value){
-    x@children = value
+          function(x, value) {
+    x@children <- value
     x
 })
 #' @exportMethod tree_children<-
 #' @rdname tree_children
 setMethod("tree_children<-", c(x = "VTableTree"),
-          function(x, value){
-    x@children = value
+          function(x, value) {
+    x@children <- value
     x
 })
 
@@ -145,7 +145,7 @@ setGeneric("content_table<-", function(obj, value) standardGeneric("content_tabl
 #' @rdname content_table
 setMethod("content_table<-", c("TableTree", "ElementaryTable"),
           function(obj, value) {
-    obj@content = value
+    obj@content <- value
     obj
 })
 
@@ -170,10 +170,10 @@ setMethod("next_rpos", "PreDataTableLayouts",
 #' @rdname int_methods
 setMethod("next_rpos", "PreDataRowLayout",
           function(obj, nested, for_analyze) {
-    l = length(obj)
+    l <- length(obj)
     if(length(obj[[l]]) > 0L &&
        !.check_if_nest(obj, nested, for_analyze)) {
-        l = l + 1L
+        l <- l + 1L
     }
     l
 })
@@ -217,7 +217,7 @@ setMethod("last_rowsplit", "PreDataRowLayout",
     if(length(obj) == 0)
         NULL
     else
-        last_rowsplit(obj[[ length( obj ) ]])
+        last_rowsplit(obj[[length(obj)]])
 })
 #' @rdname int_methods
 setMethod("last_rowsplit", "PreDataTableLayouts",
@@ -238,7 +238,7 @@ setGeneric("rlayout<-", function(object, value) standardGeneric("rlayout<-"))
 #' @rdname int_methods
 setMethod("rlayout<-", "PreDataTableLayouts",
           function(object, value) {
-    object@row_layout = value
+    object@row_layout <- value
     object
 })
 
@@ -287,60 +287,6 @@ setMethod("pos_splvals", "TreePos",
 setMethod("pos_splvals", "VLayoutNode",
           function(obj) pos_splvals(tree_pos(obj)))
 
-## unreachable code only used in TreePos show method, but that
-## class isn't exported so potentially taking these out fully.
-## #' @rdname int_methods
-## setGeneric("pos_split_labels", function(obj) standardGeneric("pos_split_labels"))
-## #' @rdname int_methods
-## setMethod("pos_split_labels", "TreePos",
-##           function(obj) {
-##     spls = pos_splits(obj)
-##     sapply(spls, function(x) x@split_label)
-## })
-
-## ## setMethod("pos_split_labels", "VNodeInfo",
-## ##            function(obj) pos_split_labels(tree_pos(obj)))
-## #' @rdname int_methods
-## setMethod("pos_split_labels", "VLayoutNode",
-##            function(obj) pos_split_labels(tree_pos(obj)))
-
-## unreachable code...
-
-## #' @rdname int_methods
-## setGeneric("split_texttype", function(obj) standardGeneric("split_texttype"))
-## #' @rdname int_methods
-## setMethod("split_texttype", "VarLevelSplit", function(obj) "varlevels")
-## #' @rdname int_methods
-## setMethod("split_texttype", "MultiVarSplit", function(obj) "multivar")
-## #' @rdname int_methods
-## setMethod("split_texttype", "AllSplit", function(obj) "allobs")
-## #' @rdname int_methods
-## setMethod("split_texttype", "RootSplit", function(obj) "root")
-## #' @rdname int_methods
-## setMethod("split_texttype", "NULLSplit", function(obj) "null")
-## #' @rdname int_methods
-## setMethod("split_texttype", "VarStaticCutSplit", function(obj) "scut")
-## #' @rdname int_methods
-## setMethod("split_texttype", "VarDynCutSplit", function(obj) "dyncut")
-## #' @rdname int_methods
-## setMethod("split_texttype", "ManualSplit", function(obj) "manual")
-## #' @rdname int_methods
-## setMethod("split_texttype", "ANY", function(obj) stop("unknown split type"))
-
-## #' @rdname int_methods
-## setGeneric("pos_spltypes", function(obj) standardGeneric("pos_spltypes"))
-## #' @rdname int_methods
-## setMethod("pos_spltypes", "TreePos",
-##           function(obj) {
-##     spls = pos_splits(obj)
-##     sapply(spls, split_texttype)
-## })
-
-## ## setMethod("pos_spltypes", "VNodeInfo",
-## ##           function(obj) pos_spltypes(tree_pos(obj)))
-## #' @rdname int_methods
-## setMethod("pos_spltypes", "VLayoutNode",
-##           function(obj) pos_spltypes(tree_pos(obj)))
 
 #' @rdname int_methods
 setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels"))
@@ -393,14 +339,14 @@ setMethod("obj_name", "Split",
 #' @exportMethod obj_name<-
 setMethod("obj_name<-", "VNodeInfo",
           function(obj, value) {
-    obj@name = value
+    obj@name <- value
     obj
 })
 #' @rdname lab_name
 #' @exportMethod obj_name<-
 setMethod("obj_name<-", "Split",
           function(obj, value) {
-    obj@name = value
+    obj@name <- value
     obj
 })
 
@@ -436,16 +382,16 @@ setMethod("obj_label<-", "Split",
 #' @rdname lab_name
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "TableRow",
-          function(obj, value){
-    obj@label = value
+          function(obj, value) {
+    obj@label <- value
     obj
 })
 
 #' @rdname lab_name
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "ValueWrapper",
-          function(obj, value){
-    obj@label = value
+          function(obj, value) {
+    obj@label <- value
     obj
 })
 
@@ -454,13 +400,13 @@ setMethod("obj_label<-", "ValueWrapper",
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "VTableTree",
           function(obj, value) {
-    lr = tt_labelrow(obj)
-    obj_label(lr) = value
-    if( !is.na(value) && nzchar(value))
-        labelrow_visible(lr) = TRUE
+    lr <- tt_labelrow(obj)
+    obj_label(lr) <- value
+    if(!is.na(value) && nzchar(value))
+        labelrow_visible(lr) <- TRUE
     else if(is.na(value))
-        labelrow_visible(lr) = FALSE
-    tt_labelrow(obj) = lr
+        labelrow_visible(lr) <- FALSE
+    tt_labelrow(obj) <- lr
     obj
 })
 
@@ -478,7 +424,7 @@ setMethod("tt_labelrow<-", c("VTableTree", "LabelRow"),
           function(obj, value) {
     if(no_colinfo(value))
         col_info(value) <- col_info(obj)
-    obj@labelrow = value
+    obj@labelrow <- value
     obj
 })
 
@@ -502,23 +448,23 @@ setGeneric("labelrow_visible<-", function(obj, value) standardGeneric("labelrow_
 #' @rdname int_methods
 setMethod("labelrow_visible<-", "VTableTree",
           function(obj, value) {
-    lr = tt_labelrow(obj)
-    labelrow_visible(lr) = value
-    tt_labelrow(obj) = lr
+    lr <- tt_labelrow(obj)
+    labelrow_visible(lr) <- value
+    tt_labelrow(obj) <- lr
     obj
 })
 
 #' @rdname int_methods
 setMethod("labelrow_visible<-", "LabelRow",
           function(obj, value) {
-    obj@visible = value
+    obj@visible <- value
     obj
 })
 
 #' @rdname int_methods
 setMethod("labelrow_visible<-", "VAnalyzeSplit",
           function(obj, value) {
-    obj@var_label_position = value
+    obj@var_label_position <- value
     obj
 })
 
@@ -597,7 +543,7 @@ setMethod("content_fun", "Split", function(obj) obj@content_fun)
 setGeneric("content_fun<-", function(object, value) standardGeneric("content_fun<-"))
 #' @rdname int_methods
 setMethod("content_fun<-", "Split", function(object, value) {
-    object@content_fun = value
+    object@content_fun <- value
     object
 })
 
@@ -670,7 +616,7 @@ setMethod("content_extra_args", "Split", function(obj) obj@content_extra_args)
 setGeneric("content_extra_args<-", function(object, value) standardGeneric("content_extra_args<-"))
 #' @rdname int_methods
 setMethod("content_extra_args<-", "Split", function(object, value) {
-    object@content_extra_args = value
+    object@content_extra_args <- value
     object
 })
 
@@ -684,7 +630,7 @@ setMethod("content_var", "Split", function(obj) obj@content_var)
 setGeneric("content_var<-", function(object, value) standardGeneric("content_var<-"))
 #' @rdname int_methods
 setMethod("content_var<-", "Split", function(object, value) {
-    object@content_var = value
+    object@content_var <- value
     object
 })
 
@@ -704,7 +650,7 @@ setGeneric("avar_inclNAs<-", function(obj, value) standardGeneric("avar_inclNAs<
 #' @rdname int_methods
 setMethod("avar_inclNAs<-", "VAnalyzeSplit",
           function(obj, value) {
-    obj@include_NAs = value
+    obj@include_NAs <- value
 })
 
 #' @rdname int_methods
@@ -723,7 +669,7 @@ setGeneric("spl_child_order<-",
 #' @rdname int_methods
 setMethod("spl_child_order<-", "VarLevelSplit",
           function(obj, value) {
-    obj@value_order = value
+    obj@value_order <- value
     obj
 })
 
@@ -805,7 +751,7 @@ setGeneric("row_values<-", function(obj, value) standardGeneric("row_values<-"))
 #' @exportMethod row_values<-
 setMethod("row_values<-", "TableRow",
           function(obj, value) {
-    obj@leaf_value = lapply(value, rcell)
+    obj@leaf_value <- lapply(value, rcell)
     obj
 })
 #' @rdname row_accessors
@@ -834,8 +780,8 @@ setGeneric("spanned_cells", function(obj) standardGeneric("spanned_cells"))
 #' @rdname int_methods
 setMethod("spanned_cells", "TableRow",
           function(obj) {
-    sp = row_cspans(obj)
-    rvals = row_cells(obj)
+    sp <- row_cspans(obj)
+    rvals <- row_cells(obj)
     unlist(mapply(function(v, s) rep(list(v), times = s),
                   v = rvals, s = sp),
            recursive = FALSE)
@@ -851,16 +797,20 @@ setGeneric("spanned_values<-", function(obj, value) standardGeneric("spanned_val
 #' @rdname int_methods
 setMethod("spanned_values<-", "TableRow",
           function(obj, value) {
-    sp = row_cspans(obj)
+    sp <- row_cspans(obj)
     ## this is 3 times too clever!!!
-    valindices = unlist(lapply(sp, function(x) c(TRUE, rep(FALSE, x - 1))))
+    valindices <- unlist(lapply(sp, function(x) c(TRUE, rep(FALSE, x - 1))))
 
     splvec <- cumsum(valindices)
     lapply(split(value, splvec),
            function(v) {
-        if(length(unique(v)) > 1)
-            stop("Got more than one unique value within a span, new spanned values do not appear to match the existing spanning pattern of the row (", paste(sp, collapse = " "), ")")
-    })
+               if(length(unique(v)) > 1) {
+                   stop("Got more than one unique value within a span, ",
+                        "new spanned values do not appear to match the ",
+                        "existing spanning pattern of the row (",
+                        paste(sp, collapse = " "), ")")
+               }
+           })
     rvals <- value[valindices]
 
     ## rvals = lapply(split(value, splvec),
@@ -868,11 +818,11 @@ setMethod("spanned_values<-", "TableRow",
     ##     if(length(v) == 1)
     ##         return(v)
     ##     stopifnot(length(unique(v)) == 1L)
-    ##     rcell(unique(v), colspan= length(v))
+    ##     rcell(unique(v), colspan<- length(v))
     ## })
     ## if(any(splvec > 1))
     ##     rvals <- lapply(rvals, function(x) x[[1]])
-    row_values(obj) = rvals
+    row_values(obj) <- rvals
     obj
 })
 #' @rdname int_methods
@@ -901,13 +851,13 @@ setMethod("obj_format", "Split", function(obj) obj@split_format)
 #' @rdname lab_name
 #' @export
 setMethod("obj_format<-", "VTableNodeInfo", function(obj, value) {
-    obj@format = value
+    obj@format <- value
     obj
 })
 #' @rdname lab_name
 #' @export
 setMethod("obj_format<-", "Split", function(obj, value) {
-    obj@split_format = value
+    obj@split_format <- value
     obj
 })
 #' @rdname lab_name
@@ -946,14 +896,14 @@ setMethod("set_format_recursive", "TableRow",
     if(is.null(format))
         return(obj)
     if(is.null(obj_format(obj)) || override)
-        obj_format(obj) = format
-    lcells = row_cells(obj)
-    lvals = lapply(lcells, function(x) {
+        obj_format(obj) <- format
+    lcells <- row_cells(obj)
+    lvals <- lapply(lcells, function(x) {
         if(!is.null(x) && (override || is.null(obj_format(x))))
-            obj_format(x) = obj_format(obj)
+            obj_format(x) <- obj_format(obj)
         x
     })
-    row_values(obj) = lvals
+    row_values(obj) <- lvals
     obj
 })
 #' @rdname int_methods
@@ -966,13 +916,15 @@ setMethod("set_format_recursive", "VTableTree",
         return(obj)
 
     if(is.null(obj_format(obj)) || override)
-        obj_format(obj) = format
+        obj_format(obj) <- format
 
-    kids = tree_children(obj)
-    kids = lapply(kids, function(x, format2, oride) set_format_recursive(x,
-                                                                      format = format2, override = oride),
-                  format2 = obj_format(obj), oride = override)
-    tree_children(obj) = kids
+    kids <- tree_children(obj)
+    kids <- lapply(kids, function(x, format2, oride) {
+        set_format_recursive(x,
+                             format = format2, override = oride)
+        },
+        format2 = obj_format(obj), oride = override)
+    tree_children(obj) <- kids
     obj
 })
 
@@ -985,7 +937,7 @@ setMethod("content_format", "Split", function(obj) obj@content_format)
 setGeneric("content_format<-", function(obj, value) standardGeneric("content_format<-"))
 #' @rdname int_methods
 setMethod("content_format<-", "Split", function(obj, value) {
-    obj@content_format = value
+    obj@content_format <- value
     obj
 })
 
@@ -1020,7 +972,7 @@ setMethod("value_formats", "TableRow",
           function(obj, default) {
     if(!is.null(obj_format(obj)))
         default <- obj_format(obj)
-    formats = lapply(row_cells(obj), function(x)
+    formats <- lapply(row_cells(obj), function(x)
         value_formats(x) %||% default)
     formats
 })
@@ -1034,10 +986,10 @@ setMethod("value_formats", "VTableTree",
           function(obj, default) {
     if(!is.null(obj_format(obj)))
         default <- obj_format(obj)
-    rws = collect_leaves(obj, TRUE, TRUE)
-    formatrws = lapply(rws, value_formats, default = default)
-    mat = do.call(rbind, formatrws)
-    row.names(mat) = row.names(obj)
+    rws <- collect_leaves(obj, TRUE, TRUE)
+    formatrws <- lapply(rws, value_formats, default = default)
+    mat <- do.call(rbind, formatrws)
+    row.names(mat) <- row.names(obj)
     mat
 })
 
@@ -1065,12 +1017,13 @@ setGeneric("collect_leaves",
 
 setMethod("collect_leaves", "TableTree",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
-    ret = c(
+    ret <- c(
         if(add.labrows && labelrow_visible(tt)) {
             tt_labelrow(tt)
         },
-        if(incl.cont) {tree_children(content_table(tt))},
-
+        if(incl.cont) {
+            tree_children(content_table(tt))
+        },
         lapply(tree_children(tt),
                collect_leaves, incl.cont = incl.cont, add.labrows = add.labrows))
     unlist(ret, recursive = TRUE)
@@ -1081,9 +1034,9 @@ setMethod("collect_leaves", "TableTree",
 
 setMethod("collect_leaves", "ElementaryTable",
           function(tt, incl.cont = TRUE, add.labrows = FALSE) {
-    ret = tree_children(tt)
+    ret <- tree_children(tt)
     if(add.labrows && labelrow_visible(tt)) {
-        ret = c(tt_labelrow(tt), ret)
+        ret <- c(tt_labelrow(tt), ret)
     }
     ret
 })
@@ -1093,7 +1046,7 @@ setMethod("collect_leaves", "ElementaryTable",
 
 setMethod("collect_leaves", "VTree",
           function(tt, incl.cont, add.labrows) {
-    ret = lapply(tree_children(tt),
+    ret <- lapply(tree_children(tt),
                  collect_leaves)
     unlist(ret, recursive = TRUE)
 })
@@ -1136,7 +1089,7 @@ setMethod("row_cspans", "LabelRow",
 setGeneric("row_cspans<-", function(obj, value) standardGeneric("row_cspans<-"))
 #' @rdname int_methods
 setMethod("row_cspans<-", "TableRow", function(obj, value) {
-    obj@colspans = value
+    obj@colspans <- value
     obj
 })
 #' @rdname int_methods
@@ -1149,13 +1102,15 @@ setMethod("row_cspans<-", "LabelRow", function(obj, value) {
 #' @rdname int_methods
 setGeneric("cell_cspan", function(obj) standardGeneric("cell_cspan"))
 #' @rdname int_methods
-setMethod("cell_cspan", "CellValue", function(obj) attr(obj, "colspan")) ##obj@colspan)
+setMethod("cell_cspan", "CellValue",
+          function(obj) attr(obj, "colspan")) ##obj@colspan)
 
 #' @rdname int_methods
-setGeneric("cell_cspan<-", function(obj, value) standardGeneric("cell_cspan<-"))
+setGeneric("cell_cspan<-",
+           function(obj, value) standardGeneric("cell_cspan<-"))
 #' @rdname int_methods
 setMethod("cell_cspan<-", "CellValue", function(obj, value) {
-    ##  obj@colspan = value
+    ##  obj@colspan <- value
     attr(obj, "colspan") <- value
     obj
 })
@@ -1163,16 +1118,18 @@ setMethod("cell_cspan<-", "CellValue", function(obj, value) {
 #' @rdname int_methods
 setGeneric("cell_align", function(obj) standardGeneric("cell_align"))
 #' @rdname int_methods
-setMethod("cell_align", "CellValue", function(obj) attr(obj, "align") %||% "center") ##obj@colspan)
+setMethod("cell_align", "CellValue",
+          function(obj) attr(obj, "align") %||% "center") ##obj@colspan)
 
 #' @rdname int_methods
-setGeneric("cell_align<-", function(obj, value) standardGeneric("cell_align<-"))
+setGeneric("cell_align<-",
+           function(obj, value) standardGeneric("cell_align<-"))
 #' @rdname int_methods
 setMethod("cell_align<-", "CellValue", function(obj, value) {
-    ##  obj@colspan = value
-    if(is.null(value))
+    ##  obj@colspan <- value
+    if(is.null(value)) {
         value <- "center"
-    else {
+    } else {
         value <- tolower(value)
     }
     chk_rtables_align(value)
@@ -1195,14 +1152,14 @@ setGeneric("tt_level<-", function(obj, value) standardGeneric("tt_level<-"))
 ## this will hit everyhing via inheritence
 #' @rdname int_methods
 setMethod("tt_level<-", "VNodeInfo", function(obj, value) {
-    obj@level = as.integer(value)
+    obj@level <- as.integer(value)
     obj
 })
 #' @rdname int_methods
 setMethod("tt_level<-", "VTableTree",
           function(obj, value) {
-    obj@level = as.integer(value)
-    tree_children(obj) = lapply(tree_children(obj),
+    obj@level <- as.integer(value)
+    tree_children(obj) <- lapply(tree_children(obj),
                                 `tt_level<-`, value = as.integer(value) + 1L)
     obj
 })
@@ -1223,7 +1180,8 @@ setMethod("indent_mod", "ANY",
 setMethod("indent_mod", "RowsVerticalSection",
           ##          function(obj) setNames(obj@indent_mods,names(obj)))
           function(obj) {
-    val <- attr(obj, "indent_mods") %||% vapply(obj, indent_mod, 1L) ##rep(0L, length(obj))
+    val <- attr(obj, "indent_mods") %||%
+        vapply(obj, indent_mod, 1L) ##rep(0L, length(obj))
     setNames(val, names(obj))
 })
 
@@ -1237,13 +1195,13 @@ setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
 #' @rdname int_methods
 setMethod("indent_mod<-", "Split",
           function(obj, value) {
-    obj@indent_modifier = as.integer(value)
+    obj@indent_modifier <- as.integer(value)
     obj
 })
 #' @rdname int_methods
 setMethod("indent_mod<-", "VTableNodeInfo",
           function(obj, value) {
-    obj@indent_modifier = as.integer(value)
+    obj@indent_modifier <- as.integer(value)
     obj
 })
 #' @rdname int_methods
@@ -1256,7 +1214,8 @@ setMethod("indent_mod<-", "CellValue",
 setMethod("indent_mod<-", "RowsVerticalSection",
           function(obj, value) {
     if(length(value) != 1 && length(value) != length(obj))
-        stop("When setting indent mods on a RowsVerticalSection the value must have length 1 or the number of rows")
+        stop("When setting indent mods on a RowsVerticalSection the value ",
+             "must have length 1 or the number of rows")
     attr(obj, "indent_mods") <- as.integer(value)
     obj
 
@@ -1267,7 +1226,8 @@ setMethod("indent_mod<-", "RowsVerticalSection",
 
 
 #' @rdname int_methods
-setGeneric("content_indent_mod", function(obj) standardGeneric("content_indent_mod"))
+setGeneric("content_indent_mod",
+           function(obj) standardGeneric("content_indent_mod"))
 #' @rdname int_methods
 setMethod("content_indent_mod", "Split",
           function(obj) obj@content_indent_modifier)
@@ -1276,17 +1236,18 @@ setMethod("content_indent_mod", "VTableNodeInfo",
           function(obj) obj@content_indent_modifier)
 
 #' @rdname int_methods
-setGeneric("content_indent_mod<-", function(obj, value) standardGeneric("content_indent_mod<-"))
+setGeneric("content_indent_mod<-",
+           function(obj, value) standardGeneric("content_indent_mod<-"))
 #' @rdname int_methods
 setMethod("content_indent_mod<-", "Split",
           function(obj, value) {
-    obj@content_indent_modifier = as.integer(value)
+    obj@content_indent_modifier <- as.integer(value)
     obj
 })
 #' @rdname int_methods
 setMethod("content_indent_mod<-", "VTableNodeInfo",
           function(obj, value) {
-    obj@content_indent_modifier = as.integer(value)
+    obj@content_indent_modifier <- as.integer(value)
     obj
 })
 
@@ -1308,24 +1269,30 @@ setMethod("rawvalues", "CellValue", function(obj) obj[[1]])
 setMethod("rawvalues", "TreePos",
           function(obj) rawvalues(pos_splvals(obj)))
 #' @rdname int_methods
-setMethod("rawvalues", "RowsVerticalSection",  function(obj) unlist(obj, recursive = FALSE))
+setMethod("rawvalues", "RowsVerticalSection",
+          function(obj) unlist(obj, recursive = FALSE))
 
 #' @rdname int_methods
 #' @export
 setGeneric("value_names", function(obj) standardGeneric("value_names"))
 #' @rdname int_methods
-setMethod("value_names", "ANY", function(obj) as.character(rawvalues(obj)))
+setMethod("value_names", "ANY",
+          function(obj) as.character(rawvalues(obj)))
 #' @rdname int_methods
 setMethod("value_names", "TreePos",
           function(obj) value_names(pos_splvals(obj)))
 #' @rdname int_methods
-setMethod("value_names", "list", function(obj) lapply(obj, value_names))
+setMethod("value_names", "list",
+          function(obj) lapply(obj, value_names))
 #' @rdname int_methods
-setMethod("value_names", "ValueWrapper",  function(obj) rawvalues(obj))
+setMethod("value_names", "ValueWrapper",
+          function(obj) rawvalues(obj))
 #' @rdname int_methods
-setMethod("value_names", "LevelComboSplitValue",  function(obj) obj@value) ##obj@comboname)
+setMethod("value_names", "LevelComboSplitValue",
+          function(obj) obj@value) ##obj@comboname)
 #' @rdname int_methods
-setMethod("value_names", "RowsVerticalSection",  function(obj) attr(obj, "row_names")) ##obj@row_names)
+setMethod("value_names", "RowsVerticalSection",
+          function(obj) attr(obj, "row_names")) ##obj@row_names)
 
 ## not sure if I need these anywhere
 ## XXX
@@ -1334,25 +1301,29 @@ setGeneric("value_labels", function(obj) standardGeneric("value_labels"))
 #' @rdname int_methods
 setMethod("value_labels", "ANY", function(obj) as.character(obj_label(obj)))
 #' @rdname int_methods
-setMethod("value_labels", "TreePos", function(obj) sapply(pos_splvals(obj), obj_label))
+setMethod("value_labels", "TreePos",
+          function(obj) sapply(pos_splvals(obj), obj_label))
 #' @rdname int_methods
 setMethod("value_labels", "list", function(obj) {
     ret <- lapply(obj, obj_label)
     if(!is.null(names(obj))) {
         inds <- vapply(ret, function(x) length(x) == 0, NA)
-        ret[inds] = names(obj)[inds]
+        ret[inds] <- names(obj)[inds]
     }
     ret
 })
 
 #' @rdname int_methods
-setMethod("value_labels", "RowsVerticalSection", function(obj) setNames(attr(obj, "row_labels"), value_names(obj))) ##obj@row_labels, value_names(obj)))
+setMethod("value_labels",
+          "RowsVerticalSection",
+          function(obj) setNames(attr(obj, "row_labels"), value_names(obj)))
 
 
 #' @rdname int_methods
 setMethod("value_labels", "ValueWrapper",  function(obj) obj_label(obj))
 #' @rdname int_methods
-setMethod("value_labels", "LevelComboSplitValue",  function(obj) obj_label(obj)) ##obj@comboname)
+setMethod("value_labels", "LevelComboSplitValue",
+          function(obj) obj_label(obj))
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
@@ -1363,7 +1334,8 @@ setGeneric("spl_varlabels", function(obj) standardGeneric("spl_varlabels"))
 setMethod("spl_varlabels", "MultiVarSplit", function(obj) obj@var_labels)
 
 #' @rdname int_methods
-setGeneric("spl_varlabels<-", function(object, value) standardGeneric("spl_varlabels<-"))
+setGeneric("spl_varlabels<-",
+           function(object, value) standardGeneric("spl_varlabels<-"))
 #' @rdname int_methods
 setMethod("spl_varlabels<-", "MultiVarSplit", function(object, value) {
     object@var_labels <- value
@@ -1386,7 +1358,8 @@ setMethod("splv_extra", "SplitValue",
           function(obj) obj@extra)
 
 #' @rdname int_methods
-setGeneric("splv_extra<-", function(obj, value) standardGeneric("splv_extra<-"))
+setGeneric("splv_extra<-",
+           function(obj, value) standardGeneric("splv_extra<-"))
 #' @rdname int_methods
 setMethod("splv_extra<-", "SplitValue",
           function(obj, value) {
@@ -1404,48 +1377,25 @@ setMethod("split_exargs", "Split",
           function(obj) obj@extra_args)
 
 #' @rdname int_methods
-setGeneric("split_exargs<-", function(obj, value) standardGeneric("split_exargs<-"))
+setGeneric("split_exargs<-",
+           function(obj, value) standardGeneric("split_exargs<-"))
 #' @rdname int_methods
 setMethod("split_exargs<-", "Split",
-          function(obj, value ) {
+          function(obj, value) {
     obj@extra_args <- value
     obj
 })
 
 
-is_labrow = function(obj) is(obj, "LabelRow")
+is_labrow <- function(obj) is(obj, "LabelRow")
 
-spl_ref_group = function(obj) {
+spl_ref_group <- function(obj) {
     stopifnot(is(obj, "VarLevWBaselineSplit"))
     obj@ref_group_value
 }
 
 ### column info
 
-
-## XXX this is probably not thee right model for column layouts because
-## we don't find ourselves consuming/walking a layout as a tree often
-##
-## #' @rdname int_methods
-## setGeneric("clayout_splits", function(obj) standardGeneric("clayout_splits"))
-## #' @rdname int_methods
-## setMethod("clayout_splits", "LayoutColTree", function(obj) {
-##     ##this is going to descend to the first ("leftmost") leaf
-##     clayout_splits(tree_children(obj)[[1]])
-## })
-## #' @rdname int_methods
-## setMethod("clayout_splits", "LayoutColLeaf", function(obj) {
-##     pos_splits(tree_pos(obj))
-## })
-## #' @rdname int_methods
-## setMethod("clayout_splits", "VTableNodeInfo",
-##           function(obj) clayout_splits(clayout(obj)))
-
-## XXX this seems bad. the class that is returned
-## depends on whether we are pre or post data.
-## should be a different accessor
-##
-## FIXME
 
 #' Column information/structure accessors
 #'
@@ -1489,7 +1439,7 @@ setGeneric("clayout<-", function(object, value) standardGeneric("clayout<-"))
 #' @exportMethod clayout<-
 setMethod("clayout<-", "PreDataTableLayouts",
           function(object, value) {
-    object@col_layout = value
+    object@col_layout <- value
     object
 })
 
@@ -1514,17 +1464,17 @@ setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
 #' @exportMethod col_info<-
 setMethod("col_info<-", "TableRow",
           function(obj, value) {
-    obj@col_info = value
+    obj@col_info <- value
     obj
 })
 
-.set_cinfo_kids = function(obj) {
-    kids = lapply(tree_children(obj),
+.set_cinfo_kids <- function(obj) {
+    kids <- lapply(tree_children(obj),
                   function(x) {
-        col_info(x) = col_info(obj)
+        col_info(x) <- col_info(obj)
         x
     })
-    tree_children(obj) = kids
+    tree_children(obj) <- kids
     obj
 }
 
@@ -1532,7 +1482,7 @@ setMethod("col_info<-", "TableRow",
 #' @exportMethod col_info<-
 setMethod("col_info<-", "ElementaryTable",
           function(obj, value) {
-    obj@col_info = value
+    obj@col_info <- value
     .set_cinfo_kids(obj)
 
 })
@@ -1541,11 +1491,11 @@ setMethod("col_info<-", "ElementaryTable",
 #' @exportMethod col_info<-
 setMethod("col_info<-", "TableTree",
           function(obj, value) {
-    obj@col_info = value
+    obj@col_info <- value
     if(nrow(content_table(obj))) {
-        ct = content_table(obj)
-        col_info(ct) = value
-        content_table(obj) = ct
+        ct <- content_table(obj)
+        col_info(ct) <- value
+        content_table(obj) <- ct
     }
     .set_cinfo_kids(obj)
 })
@@ -1556,7 +1506,8 @@ setMethod("col_info<-", "TableTree",
 
 #' @rdname col_accessors
 #' @export
-setGeneric("coltree", function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree"))
+setGeneric("coltree",
+           function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree"))
 
 
 #' @rdname col_accessors
@@ -1579,15 +1530,20 @@ setMethod("coltree", "PreDataTableLayouts",
 setMethod("coltree", "PreDataColLayout",
           function(obj, df, rtpos) {
     obj <- set_def_child_ord(obj, df)
-    kids = lapply(obj, function(x) splitvec_to_coltree(df = df, splvec = x, pos = rtpos))
+    kids <- lapply(obj,
+                   function(x) {
+                       splitvec_to_coltree(df = df,
+                                           splvec = x,
+                                           pos = rtpos)
+                   })
     if(length(kids) == 1)
-        res = kids[[1]]
+        res <- kids[[1]]
     else
-        res = LayoutColTree(lev = 0L,
+        res <- LayoutColTree(lev = 0L,
                   kids = kids,
                   tpos = rtpos,
                   spl = RootSplit())
-    disp_ccounts(res) = disp_ccounts(obj)
+    disp_ccounts(res) <- disp_ccounts(obj)
     res
 })
 
@@ -1696,7 +1652,8 @@ setGeneric("col_counts", function(obj, path = NULL) standardGeneric("col_counts"
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts",  "InstantiatedColumnInfo",
-          function(obj, path = NULL) obj@counts[.path_to_pos(path, obj, cols = TRUE)])
+          function(obj, path = NULL)
+              obj@counts[.path_to_pos(path, obj, cols = TRUE)])
 
 #' @export
 #' @rdname col_accessors
@@ -1750,7 +1707,7 @@ setGeneric("col_total<-", function(obj, value) standardGeneric("col_total<-"))
 #' @rdname col_accessors
 setMethod("col_total<-",  "InstantiatedColumnInfo",
           function(obj, value) {
-    obj@total_count = value
+    obj@total_count <- value
     obj
 })
 
@@ -1758,9 +1715,9 @@ setMethod("col_total<-",  "InstantiatedColumnInfo",
 #' @rdname col_accessors
 setMethod("col_total<-", "VTableNodeInfo",
           function(obj, value) {
-    cinfo = col_info(obj)
-    col_total(cinfo) = value
-    col_info(obj) = cinfo
+    cinfo <- col_info(obj)
+    col_total(cinfo) <- value
+    col_info(obj) <- cinfo
     obj
 
 })
@@ -1790,35 +1747,35 @@ setGeneric("disp_ccounts<-", function(obj, value) standardGeneric("disp_ccounts<
 #' @rdname int_methods
 setMethod("disp_ccounts<-", "VTableTree",
           function(obj, value) {
-    cinfo = col_info(obj)
-    disp_ccounts(cinfo) = value
-    col_info(obj) = cinfo
+    cinfo <- col_info(obj)
+    disp_ccounts(cinfo) <- value
+    col_info(obj) <- cinfo
     obj
 })
 #' @rdname int_methods
 setMethod("disp_ccounts<-", "InstantiatedColumnInfo",
           function(obj, value) {
-    obj@display_columncounts = value
+    obj@display_columncounts <- value
     obj
 })
 #' @rdname int_methods
 setMethod("disp_ccounts<-", "PreDataColLayout",
           function(obj, value) {
-    obj@display_columncounts = value
+    obj@display_columncounts <- value
     obj
 })
 #' @rdname int_methods
 setMethod("disp_ccounts<-", "LayoutColTree",
           function(obj, value) {
-    obj@display_columncounts = value
+    obj@display_columncounts <- value
     obj
 })
 #' @rdname int_methods
 setMethod("disp_ccounts<-", "PreDataTableLayouts",
           function(obj, value) {
-    clyt = clayout(obj)
-    disp_ccounts(clyt) = value
-    clayout(obj) = clyt
+    clyt <- clayout(obj)
+    disp_ccounts(clyt) <- value
+    clayout(obj) <- clyt
     obj
 })
 
@@ -1844,37 +1801,38 @@ setMethod("colcount_format", "PreDataTableLayouts",
 
 #' @rdname int_methods
 #' @export
-setGeneric("colcount_format<-", function(obj,value) standardGeneric("colcount_format<-"))
+setGeneric("colcount_format<-",
+           function(obj, value) standardGeneric("colcount_format<-"))
 #' @export
 #' @rdname int_methods
 setMethod("colcount_format<-", "InstantiatedColumnInfo",
           function(obj, value) {
-    obj@columncount_format = value
+    obj@columncount_format <- value
     obj
 })
 #' @rdname int_methods
 #' @export
 setMethod("colcount_format<-", "VTableNodeInfo",
           function(obj, value) {
-    cinfo = col_info(obj)
-    colcount_format(cinfo) = value
-    col_info(obj) = cinfo
+    cinfo <- col_info(obj)
+    colcount_format(cinfo) <- value
+    col_info(obj) <- cinfo
     obj
 })
 #' @rdname int_methods
 #' @export
 setMethod("colcount_format<-", "PreDataColLayout",
           function(obj, value) {
-    obj@columncount_format = value
+    obj@columncount_format <- value
     obj
 })
 #' @rdname int_methods
 #' @export
 setMethod("colcount_format<-", "PreDataTableLayouts",
           function(obj, value) {
-    clyt = clayout(obj)
-    colcount_format(clyt) = value
-    clayout(obj) = clyt
+    clyt <- clayout(obj)
+    colcount_format(clyt) <- value
+    clayout(obj) <- clyt
     obj
 })
 
@@ -1964,9 +1922,9 @@ setMethod("as.vector", "ElementaryTable", function(x, mode) {
 setMethod("as.vector", "VTableTree", function(x, mode) {
     stopifnot(nrow(x) == 1L)
     if(nrow(content_table(x)) == 1L)
-        tab = content_table(x)
+        tab <- content_table(x)
     else
-        tab = x
+        tab <- x
     as.vector(tree_children(tab)[[1]], mode = mode)
 })
 
@@ -2334,7 +2292,7 @@ setMethod("cell_footnotes<-", "CellValue",
         cell
     },
     cell = row_cells(obj),
-    fns = value, SIMPLIFY=FALSE)
+    fns = value, SIMPLIFY = FALSE)
     obj
 }
 
@@ -2451,19 +2409,31 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 
 
 
-#' @param rowpath character or NULL. Path within row structure. \code{NULL} indicates the footnote should go on the column rather than cell.
-#' @param colpath character or NULL. Path within column structure. \code{NULL} indicates footnote should go on the row rather than cell
-#' @param reset_idx logical(1). Should the numbering for referential footnotes be immediately recalculated. Defaults to TRUE.
+#' @param rowpath character or NULL. Path within row structure. \code{NULL}
+#'   indicates the footnote should go on the column rather than cell.
+#' @param colpath character or NULL. Path within column structure. \code{NULL}
+#'   indicates footnote should go on the row rather than cell
+#' @param reset_idx logical(1). Should the numbering for referential footnotes
+#'   be immediately recalculated. Defaults to TRUE.
 #' @export
 #' @rdname ref_fnotes
-setGeneric("fnotes_at_path<-", function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) standardGeneric("fnotes_at_path<-"))
+setGeneric("fnotes_at_path<-", function(obj,
+                                        rowpath = NULL,
+                                        colpath = NULL,
+                                        reset_idx = TRUE,
+                                        value)
+    standardGeneric("fnotes_at_path<-"))
 
 ## non-null rowpath, null or non-null colpath
 #' @export
 #' @rdname ref_fnotes
 setMethod("fnotes_at_path<-", c("VTableTree", "character"),
-          function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) {
-    rw <- tt_at_path(obj, rowpath)
+          function(obj,
+                   rowpath = NULL,
+                   colpath = NULL,
+                   reset_idx = TRUE,
+                   value) {
+              rw <- tt_at_path(obj, rowpath)
     .fnote_set_inner(rw, colpath) <- value
     tt_at_path(obj, rowpath) <- rw
     if(reset_idx)

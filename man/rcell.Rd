@@ -36,7 +36,8 @@ then the \code{format} is applied}
 
 \item{colspan}{integer(1). Columnspan value.}
 
-\item{label}{character(1). Label or Null. If non-null, it will be looked at when determining row labels.}
+\item{label}{character(1). Label or Null. If non-null, it will be looked at
+when determining row labels.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
@@ -68,10 +69,11 @@ Construct a cell value and associate formatting, labeling,
 indenting, and column spanning information with it.
 }
 \details{
-\code{non_ref_rcell} provides the common \emph{blank for cells in the reference
-column, this value otherwise}, and should be passed the value of \code{.in_ref_col}
-when it is used.
+\code{non_ref_rcell} provides the common \emph{blank for cells in
+the reference column, this value otherwise}, and should be passed the value
+of \code{.in_ref_col} when it is used.
 }
 \note{
-currently column spanning is only supported for defining header structure.
+currently column spanning is only supported for defining header
+structure.
 }

@@ -10,16 +10,18 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{path_fun}{function. Function to transform paths into single-string row/column names.}
+\item{path_fun}{function. Function to transform paths into single-string
+row/column names.}
 
-\item{value_fun}{function. Functiont to transform cell values into cells of the data.frame. Defaults to \code{collapse_values} which
-creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
+\item{value_fun}{function. Functiont to transform cell values into cells of
+the data.frame. Defaults to \code{collapse_values} which creates strings
+where multi-valued cells are collapsed together, separated by \code{|}.}
 }
 \value{
-A data frame of \code{tt}'s cell values (processed by \code{value_fun},
-with columns named by the full column
-paths (processed by \code{path_fun} and an additional \code{row_path} column
-with the row paths (processed by by \code{path_fun}).
+A data frame of \code{tt}'s cell values (processed by
+\code{value_fun}, with columns named by the full column paths (processed by
+\code{path_fun} and an additional \code{row_path} column with the row paths
+(processed by by \code{path_fun}).
 }
 \description{
 Transform TableTree object to Path-Enriched data.frame

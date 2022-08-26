@@ -386,7 +386,8 @@ gen_rowvalues <- function(dfpart,
                                       paste(formalnms, "=",
                                             formalnms, collapse = ", "),
                                       ", labelstr = clabelstr, ...)}")))
-    formals(caller) <- c(formals(parent_cfun)[-labelstrpos], alist("..."=))
+    formals(caller) <- c(formals(parent_cfun)[-labelstrpos],
+                         alist("..." =)) # nolint
     caller
 
 }
@@ -763,7 +764,7 @@ context_df_row <- function(split = character(),
 }
 
 
-recursive_applysplit <- function( df,
+recursive_applysplit <- function(df,
                                 lvl = 0L,
                                 splvec,
                                 name,
@@ -1029,7 +1030,9 @@ build_table <- function(lyt, df,
         firstspl <- splvec[[1]]
         nm <- obj_name(firstspl)
         ## XXX unused, probably shouldn't be?
-        lab <- obj_label(firstspl)
+        ## this seems to be covered by grabbing the partlabel
+        ## TODO confirm this
+        ## lab <- obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,
                               splvec = splvec,

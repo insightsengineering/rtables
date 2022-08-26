@@ -52,7 +52,7 @@ df <- tibble(
   mutate(
     c2 = add_subgroup(c1),
     r2 = add_subgroup(r1),
-    y = as.numeric(2*as.numeric(c1) - 3 * as.numeric(r1))
+    y = as.numeric(2 * as.numeric(c1) - 3 * as.numeric(r1))
   ) %>%
     select(c1, c2, r1, r2, x, y)
 

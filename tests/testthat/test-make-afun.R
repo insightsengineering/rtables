@@ -68,7 +68,7 @@ test_that("make_afun works for x arg", {
     expect_equal(lapply(asres3, obj_format),
                  list(n = "xx",
                       mean_sd = "(xx.xxx, xx.xxx)",
-                      min_max= "xx.xx - xx.xx"))
+                      min_max = "xx.xx - xx.xx"))
 })
 
 
@@ -130,7 +130,7 @@ test_that("ungrouping .ungroup_stats works", {
         list(single1 = 5,
              single2 = 10,
              grouped1 = list(g1 = 11, g2 = 15, g3 = with_label(17, "sneaky label")),
-             grouped2 = list(g4 = c(2,3), g5 = c(6, 10)))
+             grouped2 = list(g4 = c(2, 3), g5 = c(6, 10)))
     }
     afun4 <- make_afun(sfun4,
                        .labels = c(single1 = "first single val",
@@ -142,7 +142,7 @@ test_that("ungrouping .ungroup_stats works", {
     expect_identical(names(ares4),
                      c("single1", "single2", "g1", "g2", "g3", "g4", "g5"))
     expect_identical(value_labels(ares4),
-                     c(single1 ="first single val",
+                     c(single1 = "first single val",
                           single2 = "second single val",
                           g1 = "g1",
                           g2 = "g2",
@@ -171,7 +171,8 @@ test_that("make_afun .indent_mods argument works", {
     expect_identical(get_imods(imodres2), #vapply(imodres2, rtables:::indent_mod, 1L),
                      c(nrow_df = 2L, .N_col = 1L, a = 1L, b = 2L))
 
-    tbl <- basic_table() %>% analyze("Sepal.Length", a_imod) %>%
+    tbl <- basic_table() %>%
+        analyze("Sepal.Length", a_imod) %>%
         build_table(iris)
     rows <- tree_children(tbl)
     expect_identical(vapply(rows, rtables:::indent_mod, 1L),
@@ -341,8 +342,8 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
     }
 
     af <- make_afun(f, .stats = "b")
-    res1 <- af(5, a = 6, b= 7)
-    expect_identical(list(b=7), rtables:::rawvalues(res1))
+    res1 <- af(5, a = 6, b = 7)
+    expect_identical(list(b = 7), rtables:::rawvalues(res1))
 
 
     f2 <- function(df, a, ...) {
@@ -351,7 +352,7 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
 
     af2 <- make_afun(f2, .stats = "b")
     res2 <- af2(iris, a = 5, b = 7)
-    expect_identical(list(b=7), rtables:::rawvalues(res2))
+    expect_identical(list(b = 7), rtables:::rawvalues(res2))
 })
 
 

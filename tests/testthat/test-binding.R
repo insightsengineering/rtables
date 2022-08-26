@@ -2,7 +2,7 @@
 
 test_that("cbind_rtables works", {
 
-    x <- rtable(c("A", "B"), rrow("row 1", 1,2), rrow("row 2", 3, 4))
+    x <- rtable(c("A", "B"), rrow("row 1", 1, 2), rrow("row 2", 3, 4))
 
     y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
 
@@ -125,9 +125,9 @@ test_that("c/rbind and top-left behave", {
     tab2 <- tab
     top_left(tab2) <- "oh no!"
     mat_form <- matrix_form(tab)
-    expect_identical(mat_form$strings[1,1], top_left(tab))
+    expect_identical(mat_form$strings[1, 1], top_left(tab))
     mat_form2 <- matrix_form(tab2)
-    expect_identical(mat_form2$strings[1,1], top_left(tab2))
+    expect_identical(mat_form2$strings[1, 1], top_left(tab2))
     ## might be redundant in light of chk_cbindable_many unit tests above
     ## but its not hurting anything so just leave it
     expect_error(cbind_rtables(tab, tab2))
@@ -139,9 +139,9 @@ test_that("c/rbind and top-left behave", {
     expect_identical(tt_at_path(rbind(tab), c("rbind_root", obj_name(tab))),
                      tab)
 
-    mform <- matrix_form(cbind_rtables(tab[0,], tab[0,]))
-    expect_identical(mform$strings[1,, drop= TRUE],
-                     c("",rep("all obs", 2)))
+    mform <- matrix_form(cbind_rtables(tab[0, ], tab[0, ]))
+    expect_identical(mform$strings[1, , drop = TRUE],
+                     c("", rep("all obs", 2)))
 })
 
 ## NB: insert_rrow is now deprecated.

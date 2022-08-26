@@ -7,10 +7,11 @@
 trim_levels_to_map(map = NULL)
 }
 \arguments{
-\item{map}{data.frame. A data.frame defining allowed combinations of variables. Any
-combination at the level of this split not present in the map will be removed from the
-data, both for the variable being split and those present in the data but not associated
-with this split or any parents of it.}
+\item{map}{data.frame. A data.frame defining allowed combinations of
+variables. Any combination at the level of this split not present in the
+map will be removed from the data, both for the variable being split and
+those present in the data but not associated with this split or any parents
+of it.}
 }
 \value{
 a fun
@@ -22,16 +23,17 @@ combinations of two or more variables which are split by
 (along the same axis) within a layout.
 }
 \details{
-When splitting occurs, the map is subset to the values of all previously
-performed splits. The levels of the variable being split are then pruned to only
-those still present within this subset of the map representing the current hierarchical
-splitting context.
+When splitting occurs, the map is subset to the values of all
+previously performed splits. The levels of the variable being split are
+then pruned to only those still present within this subset of the map
+representing the current hierarchical splitting context.
 
-Splitting is then performed via the \code{\link{keep_split_levels}} split function.
+Splitting is then performed via the \code{\link{keep_split_levels}} split
+function.
 
-Each resulting element of the partition is then further trimmed by pruning values of
-any remaining variables specified in the map to those values allowed under the combination
-of the previous and current split.
+Each resulting element of the partition is then further trimmed by pruning
+values of any remaining variables specified in the map to those values
+allowed under the combination of the previous and current split.
 }
 \examples{
  map <- data.frame(

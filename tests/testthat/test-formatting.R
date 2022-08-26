@@ -14,8 +14,10 @@ test_that("sprintf_format works correctly", {
 
     matform <- matrix_form(tbl)
 
-    expect_identical(matform$strings[2,],
-                     c("mean", "hi there 3.4280", myfun(2.77), myfun(mean(subset(iris, Species == "virginica")$Sepal.Width))))
+    expect_identical(matform$strings[2, ],
+                     c("mean", "hi there 3.4280",
+                       myfun(2.77),
+                       myfun(mean(subset(iris, Species == "virginica")$Sepal.Width))))
 })
 
 
@@ -23,7 +25,11 @@ test_that("sprintf_format works correctly", {
 test_that("table_shell works", {
 
     tbl <- rtable(c("A", "B"),
-                  rrow("Hiya", rcell(c(2, .2), format = "xx (xx.x%)"), rcell(c(.1, .2)), format = "xx.x - xx.x"),
+                  rrow("Hiya",
+                       rcell(c(2, .2),
+                             format = "xx (xx.x%)"),
+                       rcell(c(.1, .2)),
+                       format = "xx.x - xx.x"),
                   rrow("bye", 5.2345, 17.2),
                   format = "xx.xx")
 
@@ -36,7 +42,11 @@ test_that("table_shell works", {
                      paste0(capture_output(table_shell(tbl)), "\n"))
 
     tbl2 <-  rtable(c("A", "B"),
-                  rrow("Hiya", rcell(c(2, .2), format = function(x,...) paste0(x)), rcell(c(.1, .2)), format = "xx.x - xx.x"),
+                  rrow("Hiya",
+                       rcell(c(2, .2),
+                             format = function(x, ...) paste0(x)),
+                       rcell(c(.1, .2)),
+                       format = "xx.x - xx.x"),
                   rrow("bye", 5.2345, 17.2),
                   format = "xx.xx")
 
@@ -60,7 +70,8 @@ test_that("rcell format_na_str functionality works", {
     expect_identical(format_rcell(rcell(NA_real_, format = "xx.x")),
                      "NA")
 
-    irs <- in_rows(val1 = NA_real_, val2=NA_integer_, .formats = list(val1 = "xx.x", val2 = "xx.x"),
+    irs <- in_rows(val1 = NA_real_, val2 = NA_integer_,
+                   .formats = list(val1 = "xx.x", val2 = "xx.x"),
                    .format_na_strs = list(val1 = "hiya", val2 = "lowdown"))
 })
 
@@ -90,13 +101,14 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
                             .formats = c(mean = "xx.xxx"),
                             .format_na_strs = c(mean = "Ridiculous"))
 
-    l <- basic_table() %>% split_cols_by("ARM") %>%
+    l <- basic_table() %>%
+        split_cols_by("ARM") %>%
         split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
         summarize_row_groups(label_fstr = "%s (n)") %>%
         analyze("AGE", afun = a_summary3, format = "xx.xx")
 
     tbl <- suppressWarnings(build_table(l, DM2))
     tbl
-    expect_identical(get_formatted_cells(tbl)[3,1, drop = TRUE],
+    expect_identical(get_formatted_cells(tbl)[3, 1, drop = TRUE],
                      "Ridiculous")
 })

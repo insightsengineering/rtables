@@ -19,9 +19,12 @@ compare_rtables(
 
 \item{tol}{numerical tolorance}
 
-\item{comp.attr}{boolean. Compare format of cells. Other attributes are silently ignored.}
+\item{comp.attr}{boolean. Compare format of cells. Other attributes are
+silently ignored.}
 
-\item{structure}{boolean. Should structure (in the form of column and row paths to cells) be compared. Currently defaults to \code{FALSE}, but this is subject to change in future versions.}
+\item{structure}{boolean. Should structure (in the form of column and row
+paths to cells) be compared. Currently defaults to \code{FALSE}, but this is
+subject to change in future versions.}
 }
 \value{
 a matrix of class \code{"rtables_diff"} representing the differences
@@ -35,8 +38,8 @@ columnar structure mismatch, \code{R} indicates row-structure mismatch, and
 \code{S} indicates mismatch in both row and column structure.
 }
 \note{
-In its current form \code{compare_rtables} does not take structure into account,
-only row and cell position.
+In its current form \code{compare_rtables} does not take structure into
+account, only row and cell position.
 }
 \examples{
 

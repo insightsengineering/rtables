@@ -46,7 +46,7 @@ test_that("labels correctly used for columns rather than names", {
     tbl <- build_table(lyt, rawdat)
 
     matform <- matrix_form(tbl)
-    expect_identical(matform$strings[1:2,],
+    expect_identical(matform$strings[1:2, ],
                      matrix(c("", rep(c("ARM1", "ARM2"), times = c(2, 2)),
                               "", rep(c("Male", "Female"), times = 2)),
                             byrow = TRUE, nrow = 2, dimnames = NULL))
@@ -56,13 +56,14 @@ test_that("labels correctly used for columns rather than names", {
                             byrow = TRUE,
                             nrow = 3,
                             dimnames = list(NULL, c("", paste(rep(c("ARM1", "ARM2"),
-                                                                      times = c(2,2)),
+                                                                      times = c(2, 2)),
                                                               rep(c("M", "F"),
                                                                   times = 2),
                                                               sep = ".")))))
 
     ## multivarsplit varlabels work correctly
-    tbl2 <- basic_table() %>% split_cols_by("ARM") %>%
+    tbl2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
         split_cols_by_multivar(c("VALUE", "PCTDIFF"), varlabels = c("Measurement", "Pct Diff")) %>%
         split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
         summarize_row_groups() %>%
@@ -71,7 +72,7 @@ test_that("labels correctly used for columns rather than names", {
 
     matform2 <- matrix_form(tbl2)
 
-    expect_identical(matform2$strings[1:2,],
+    expect_identical(matform2$strings[1:2, ],
                      matrix(c("", rep(c("ARM1", "ARM2"), times = c(2, 2)),
                        "", rep(c("Measurement", "Pct Diff"), times = 2)),
                        byrow = TRUE, nrow = 2))
@@ -81,11 +82,11 @@ test_that("labels correctly used for columns rather than names", {
     lyt3 <- basic_table() %>%
         split_cols_by_multivar(c("AGE", "AGE", "SEX", "AGE"),
                                varlabels = vlabs) %>%
-        analyze_colvars(list(mean, median, function(x,...) max(table(x)), sd))
+        analyze_colvars(list(mean, median, function(x, ...) max(table(x)), sd))
 
     tbl3 <- build_table(lyt3, rawdat)
     matform3 <- matrix_form(tbl3)
-    expect_identical(matform3$strings[1,],
+    expect_identical(matform3$strings[1, ],
                      c("", vlabs))
 
 })
@@ -101,7 +102,7 @@ test_that("nested identical labels work ok", {
         analyze("x") %>%
         build_table(df)
     mat <- matrix_form(t2)
-    expect_identical(mat$strings[,1], c("", "<Missing>", "<Missing>"))
+    expect_identical(mat$strings[, 1], c("", "<Missing>", "<Missing>"))
 })
 
 
@@ -126,9 +127,10 @@ test_that("newline in column names and possibly cell values work", {
                             nrow = 3, byrow = TRUE))
     ## Test top_left preservation
     rawdat2 <- rawdat
-    rawdat2$arm_label <- ifelse(rawdat2$ARM=="ARM1", "Arm\n 1 ", "Arm\n 2 ")
+    rawdat2$arm_label <- ifelse(rawdat2$ARM == "ARM1", "Arm\n 1 ", "Arm\n 2 ")
 
-    lyt2 <- basic_table() %>% split_cols_by("ARM", labels_var = "arm_label") %>%
+    lyt2 <- basic_table() %>%
+        split_cols_by("ARM", labels_var = "arm_label") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
         add_colcounts() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
@@ -165,13 +167,13 @@ test_that("newline in column names and possibly cell values work", {
         })
     tbl3 <- build_table(lyt3, DM)
     matform3 <- matrix_form(tbl3)
-    expect_identical(matform3$strings[,1, drop = TRUE],
+    expect_identical(matform3$strings[, 1, drop = TRUE],
                      c("",
                        "F", "my_row_label", "",
                        "M", "my_row_label", "",
                        "U", "my_row_label",
                        "UNDIFFERENTIATED", "my_row_label"))
-    expect_identical(matform3$strings[,2, drop = TRUE],
+    expect_identical(matform3$strings[, 2, drop = TRUE],
                      c("A: Drug X",
                        "", "33.71", "",
                        "", "36.55", "  ^  ",
@@ -201,7 +203,8 @@ test_that("alignment works", {
 
     str <- toString(aligntab)
     expect_identical(str,
-                     gsub("—", horizontal_sep(aligntab), "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"))
+                     gsub("—", horizontal_sep(aligntab),
+                          "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"))
 
     lyt2 <-  basic_table() %>%
         analyze("AGE", function(x) {
@@ -263,7 +266,7 @@ test_that("Various Printing things work", {
     show(ctr)
     print(collect_leaves(tab)[[2]])
     sink(NULL)
-    expect_false(any(grepl( "new..AnalyzeColVarSplit., analysis_fun =", printoutput)))
+    expect_false(any(grepl("new..AnalyzeColVarSplit., analysis_fun =", printoutput)))
 })
 
 

@@ -54,7 +54,7 @@ df <- tibble(
   age = rchisq(n, 30) + 10
 ) %>% mutate(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
-) 
+)
 
 basic_table() %>%
   split_cols_by("arm") %>%
@@ -128,26 +128,24 @@ We first focus on the count and percentage information for handedness within eac
 
 
 ```{r}
-df %>% 
+c_h_df <- df %>%
   group_by(arm, gender, country, handed) %>%
     summarize(mean = mean(age), c_h_count = n()) %>%
     ## we need the sum below to *not* be by country, so that we're dividing by the column counts
     ungroup(country) %>%
   # now the `handed` grouping has been removed, therefore we can calculate percent now:
-    mutate(n_col = sum(c_h_count), c_h_percent = c_h_count / n_col) ->
-    c_h_df
+    mutate(n_col = sum(c_h_count), c_h_percent = c_h_count / n_col)
 c_h_df
 ```
 
 which has 16 rows (cells) like the `average_age` data frame defined above. Next, we will derive the group information for countries:
 
 ```{r}
-df %>% 
+c_df <- df %>%
   group_by(arm, gender, country) %>%
     summarize(c_count = n()) %>%
   # now the `handed` grouping has been removed, therefore we can calculate percent now:
-    mutate(n_col = sum(c_count), c_percent = c_count / n_col) ->
-    c_df
+    mutate(n_col = sum(c_count), c_percent = c_count / n_col)
 c_df
 ```
 
@@ -169,7 +167,7 @@ self-contained set of computations.
 The `rtables` call in contrast is:
 
 ```{r}
-basic_table() %>%
+tbl <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   add_colcounts() %>%
@@ -178,8 +176,7 @@ basic_table() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, format = "xx.x") %>%
-  build_table(df) ->
-  tbl
+  build_table(df)
 tbl
 ```
 

@@ -20,7 +20,8 @@ in_rows(
 \arguments{
 \item{...}{single row defining expressions}
 
-\item{.list}{list. list cell content, usually \code{rcells}, the \code{.list} is concatenated to \code{...}}
+\item{.list}{list. list cell content, usually \code{rcells}, the \code{.list} is
+concatenated to \code{...}}
 
 \item{.names}{character or NULL. Names of the returned list/structure.}
 
@@ -28,18 +29,22 @@ in_rows(
 
 \item{.formats}{character or NULL. Formats for the values}
 
-\item{.indent_mods}{integer or NULL. Indent modificatons for the defined rows.}
+\item{.indent_mods}{integer or NULL. Indent modificatons for the defined
+rows.}
 
-\item{.cell_footnotes}{list. Referential footnote messages to be associated by name with \emph{cells}}
+\item{.cell_footnotes}{list. Referential footnote messages to be associated
+by name with \emph{cells}}
 
-\item{.row_footnotes}{list. Referential footnotes messages to be associated by name with \emph{rows}}
+\item{.row_footnotes}{list. Referential footnotes messages to be associated
+by name with \emph{rows}}
 
 \item{.aligns}{character or NULL. Alignments for the cells}
 
 \item{.format_na_strs}{character or NULL. NA strings for the cells}
 }
 \value{
-an \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an internal implementation detail.
+an \code{RowsVerticalSection} object (or \code{NULL}). The details of
+this object should be considered an internal implementation detail.
 }
 \description{
 define the cells that get placed into multiple rows in \code{afun}

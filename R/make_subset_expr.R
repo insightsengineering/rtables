@@ -5,7 +5,7 @@
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
-    v = unlist(rawvalues(val))
+    v <- unlist(rawvalues(val))
     ## XXX if we're including all levels should even missing be included?
     if(is(v, "AllLevelsSentinel"))
         as.expression(bquote((!is.na(.(a))), list(a = as.name(spl_payload(spl)))))
@@ -41,9 +41,9 @@ setMethod("make_subset_expr", "AnalyzeColVarSplit",
 
 setMethod("make_subset_expr", "VarStaticCutSplit",
           function(spl, val) {
-    v = rawvalues(val)
+    v <- rawvalues(val)
     ##    as.expression(bquote(which(cut(.(a), breaks=.(brk), labels = .(labels),
-    as.expression(bquote(cut(.(a), breaks=.(brk), labels = .(labels),
+    as.expression(bquote(cut(.(a), breaks = .(brk), labels = .(labels),
                                    include.lowest = TRUE) == .(b),
                   list(a = as.name(spl_payload(spl)),
                        b = v,
@@ -54,9 +54,9 @@ setMethod("make_subset_expr", "VarStaticCutSplit",
 ## NB this assumes spl_cutlabels(spl) is in order!!!!!!
 setMethod("make_subset_expr", "CumulativeCutSplit",
           function(spl, val) {
-    v = rawvalues(val)
+    v <- rawvalues(val)
     ## as.expression(bquote(which(as.integer(cut(.(a), breaks=.(brk),
-    as.expression(bquote(as.integer(cut(.(a), breaks=.(brk),
+    as.expression(bquote(as.integer(cut(.(a), breaks = .(brk),
                                               labels = .(labels),
                                               include.lowest = TRUE)) <=
                                as.integer(factor(.(b), levels = .(labels))),
@@ -94,13 +94,13 @@ setMethod("make_subset_expr", "expression",
 
 setMethod("make_subset_expr", "character",
           function(spl, val) {
-    newspl = VarLevelSplit(spl, spl)
+    newspl <- VarLevelSplit(spl, spl)
     make_subset_expr(newspl, val)
 })
 
-.combine_subset_exprs = function(ex1, ex2) {
+.combine_subset_exprs <- function(ex1, ex2) {
     if(is.null(ex1) || identical(ex1, expression(TRUE))) {
-        if( is.expression(ex2) && !identical(ex2, expression(TRUE)))
+        if(is.expression(ex2) && !identical(ex2, expression(TRUE)))
             return(ex2)
         else
             return(expression(TRUE))
@@ -110,41 +110,42 @@ setMethod("make_subset_expr", "character",
 }
 
 
-make_pos_subset = function(spls = pos_splits(pos),
+make_pos_subset <- function(spls = pos_splits(pos),
                            svals = pos_splvals(pos),
                            pos) {
-    expr = NULL
+    expr <- NULL
     for(i in seq_along(spls)) {
-        newexpr = make_subset_expr(spls[[i]], svals[[i]])
-        expr = .combine_subset_exprs(expr, newexpr)
+        newexpr <- make_subset_expr(spls[[i]], svals[[i]])
+        expr <- .combine_subset_exprs(expr, newexpr)
     }
     expr
 }
 
 
-get_pos_extra = function(svals = pos_splvals(pos),
+get_pos_extra <- function(svals = pos_splvals(pos),
                          pos) {
-    ret = list()
+    ret <- list()
     for(i in seq_along(svals)) {
-        extrs = splv_extra(svals[[i]])
+        extrs <- splv_extra(svals[[i]])
         if(any(names(ret) %in% names(extrs)))
             stop("same extra argument specified at multiple levels of nesting. Not currently supported")
-        ret = c(ret, extrs)
+        ret <- c(ret, extrs)
     }
     ret
 }
 
-get_col_extras = function(ctree) {
-    leaves = collect_leaves(ctree)
+get_col_extras <- function(ctree) {
+    leaves <- collect_leaves(ctree)
     lapply(leaves,
            function(x) get_pos_extra(pos = tree_pos(x)))
 }
 
-setGeneric("make_col_subsets",function(lyt, df) standardGeneric("make_col_subsets"))
+setGeneric("make_col_subsets",
+           function(lyt, df) standardGeneric("make_col_subsets"))
 
 setMethod("make_col_subsets", "LayoutColTree",
           function(lyt, df) {
-    leaves = collect_leaves(lyt)
+    leaves <- collect_leaves(lyt)
     lapply(leaves, make_col_subsets)
 })
 
@@ -155,24 +156,24 @@ setMethod("make_col_subsets", "LayoutColLeaf",
 
 
 
-create_colinfo = function(lyt, df, rtpos = TreePos(),
+create_colinfo <- function(lyt, df, rtpos = TreePos(),
                           counts = NULL,
                           alt_counts_df = NULL,
                           total = NULL,
                           topleft = NULL) {
     ## this will work whether clayout is pre or post
     ## data
-    clayout = clayout(lyt)
+    clayout <- clayout(lyt)
     if(is.null(topleft))
-        topleft = top_left(lyt)
-    ctree = coltree(clayout, df = df, rtpos = rtpos)
+        topleft <- top_left(lyt)
+    ctree <- coltree(clayout, df = df, rtpos = rtpos)
 
-    cexprs = make_col_subsets(ctree, df)
+    cexprs <- make_col_subsets(ctree, df)
     ## XXX experimental!!!!
     ## env = as.environment(df)
     ## parent.env(env) = .GlobalEnv
     ## cexprs = lapply(cexprs, function(e) compiler::compile(e[[1]], env = env))
-    colextras = col_extra_args(ctree)
+    colextras <- col_extra_args(ctree)
 
     ## calculate the counts based on the df
     ## This presumes that it is called on the WHOLE dataset,
@@ -193,26 +194,30 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
         alt_counts_df <- df
     calcpos <- is.na(counts)
 
-    calccounts = sapply(cexprs, function(ex) {
-            if(identical(ex, expression(TRUE)))
+    calccounts <- sapply(cexprs, function(ex) {
+            if(identical(ex, expression(TRUE))) {
                 nrow(alt_counts_df)
-            else if (identical(ex, expression(FALSE)))
+            } else if (identical(ex, expression(FALSE))) {
                 0
-            else {
-                vec = try(eval(ex, envir = alt_counts_df), silent = TRUE)
+            } else {
+                vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
                 if(is(vec, "try-error"))
-                    stop(sprintf("alt_counts_df (or df) appears incompatible with column-split structure. Offending column subset expression: %s\nOriginal error message: %s", deparse(ex[[1]]),
+                    stop(sprintf(paste("alt_counts_df (or df) appears",
+                                       "incompatible with column-split",
+                                       "structure. Offending column subset",
+                                       "expression: %s\nOriginal error",
+                                       "message: %s"), deparse(ex[[1]]),
                                  conditionMessage(attr(vec, "condition"))))
                 if(is(vec, "numeric"))
                     length(vec) ## sum(is.na(.)) ????
                 else if(is(vec, "logical"))
-                    sum(vec, na.rm= TRUE)
+                    sum(vec, na.rm = TRUE)
             }
     })
     counts[calcpos] <- calccounts[calcpos]
     if(is.null(total))
         total <- sum(counts)
-    format =  colcount_format(lyt)
+    format <-  colcount_format(lyt)
     InstantiatedColumnInfo(treelyt = ctree,
                            csubs = cexprs,
                            extras = colextras,
@@ -223,4 +228,3 @@ create_colinfo = function(lyt, df, rtpos = TreePos(),
                            topleft = topleft)
 
 }
-

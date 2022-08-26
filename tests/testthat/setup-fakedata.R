@@ -1,47 +1,51 @@
 ## eat the one-time warning
 suppressWarnings(formatters::default_hsep())
-makefakedat = function(n  = 1000) {
-    datadf = data.frame(stringsAsFactors = FALSE,
+makefakedat <- function(n  = 1000) {
+    datadf <- data.frame(stringsAsFactors = FALSE,
                         ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),
                         SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
                         FACTOR2 = c("A", sample(c("A", "B", "C"), n - 1, replace = TRUE)),
                         RACE = c("WHITE", sample(c("WHITE", "BLACK"), n - 1, replace = TRUE)),
                         AGE = runif(n, 40, 70),
-                        VAR3 = c("level1", sample(c("level1", "level2"), n -1,
+                        VAR3 = c("level1", sample(c("level1", "level2"), n - 1,
                                                   replace = TRUE)))
 
-    datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
-    datadf$fac2_label = paste("Level", datadf$FACTOR2)
-    datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
+    datadf$ethn_label <- c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
+    datadf$fac2_label <- paste("Level", datadf$FACTOR2)
+    datadf$gend_label <- c(M = "Male", F = "Female")[datadf$SEX]
     datadf
 }
 
 
 
-makefakedat2 =  function(n  = 1000) {
-    if(n%%4 != 0) {
+makefakedat2 <- function(n = 1000) {
+    if(n %% 4 != 0) {
         stop("n not multiple of 4")
     }
 
-    many2s = rep(2, n/2)
-    datadf = data.frame(stringsAsFactors = FALSE,
-                        ARM = rep(c("ARM1", "ARM2"), times = rep(n/2, 2)),
-                        SEX = rep(sample(c("M", "F"), n/2, replace = TRUE),
+    many2s <- rep(2, n / 2)
+    datadf <- data.frame(stringsAsFactors = FALSE,
+                        ARM = rep(c("ARM1", "ARM2"), times = rep(n / 2, 2)),
+                        SEX = rep(sample(c("M", "F"), n / 2, replace = TRUE),
                                   many2s),
-                        RACE = rep(sample(c("WHITE", "BLACK"), n/2, replace = TRUE),
+                        RACE = rep(sample(c("WHITE", "BLACK"), n / 2, replace = TRUE),
                                    times = many2s),
-                        PATID = rep(seq(1, n/2), many2s),
+                        PATID = rep(seq(1, n / 2), many2s),
                         VISIT = rep(c("BASELINE", "FOLLOWUP"))
                         )
-    datadf$ethn_label = c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
-    datadf$gend_label = c(M="Male", F="Female")[datadf$SEX]
-    mu = 5 + (as.integer(factor(datadf$RACE)) + as.integer(factor(datadf$ARM)) + as.integer(factor(datadf$SEX)))/2
-    datadf$VALUE =  ifelse(datadf$VISIT == "BASELINE",
+    datadf$ethn_label <- c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
+    datadf$gend_label <- c(M = "Male", F = "Female")[datadf$SEX]
+    mu <- 5 + (as.integer(factor(datadf$RACE)) +
+                   as.integer(factor(datadf$ARM)) +
+                   as.integer(factor(datadf$SEX))) / 2
+    datadf$VALUE <-  ifelse(datadf$VISIT == "BASELINE",
                            5,
                            5 + rnorm(n, mu, 4))
-    datadf$PCTDIFF = NA_real_
-    seconds = seq(2, n, by =2)
-    datadf$PCTDIFF[seq(2, n, by=2)] = 100*(datadf$VALUE[seconds] - datadf$VALUE[seconds-1]) / datadf$VALUE[seconds - 1]
+    datadf$PCTDIFF <- NA_real_
+    seconds <- seq(2, n, by = 2)
+    datadf$PCTDIFF[seq(2, n, by = 2)] <- 100 * (datadf$VALUE[seconds] -
+                                                  datadf$VALUE[seconds - 1]) /
+        datadf$VALUE[seconds - 1]
 
     datadf
 }
@@ -50,11 +54,11 @@ rawdat <- makefakedat()
 rawdat2 <- makefakedat2()
 
 ## used in multiple test files
-refcompmean = function(x, .ref_group, .in_ref_col, ...) {
+refcompmean <- function(x, .ref_group, .in_ref_col, ...) {
     if(.in_ref_col)
         val <- rcell(NULL)
     else
-        val <- rcell(mean(x, ...) - mean(.ref_group,...), format = "xx.xx")
+        val <- rcell(mean(x, ...) - mean(.ref_group, ...), format = "xx.xx")
 
     in_rows(
         "Diff from reference - mean" = val
@@ -71,7 +75,8 @@ complx_lyt_rnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "medi
 
 
 make_big_lyt <- function() {
-        lyt <- basic_table() %>% split_cols_by("ARM") %>%
+        lyt <- basic_table() %>%
+            split_cols_by("ARM") %>%
             ## add nested column split on SEX with value lables from gend_label
             split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
             ## No row splits have been introduced, so this adds
@@ -95,13 +100,19 @@ make_big_lyt <- function() {
             ## Add analysis/data rows by analyzing AGE variable
             ## Note afun is a function that returns 2 values in a named list
             ## this will create 2 data rows
-            analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-                                                                   median = median(x)),
+            analyze("AGE", "Age Analysis",
+                    afun = function(x) list(mean = mean(x),
+                                            median = median(x)),
                     format = "xx.xx") %>%
             ## adding more analysis vars "compounds them", placing them at the same
             ## level of nesting as all previous analysis blocks, rather than
             ## attempting to further nest them
-            analyze("AGE", "Age Analysis redux", afun = range, format = "xx.x - xx.x", table_names = "AgeRedux") %>%
+            analyze("AGE",
+                "Age Analysis redux",
+                afun = range,
+                format = "xx.x - xx.x",
+                table_names = "AgeRedux"
+            ) %>%
 
             ## Note nested=TRUE, this creates a NEW subtable directly under the
             ## root split

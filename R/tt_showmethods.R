@@ -1,23 +1,23 @@
 
 treestruct <- function(obj, ind = 0L) {
-    nc = ncol(obj)
+    nc <- ncol(obj)
     cat(rep(" ", times = ind),
         sprintf("[%s] %s", class(obj), obj_name(obj)),
         sep = "")
-    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0 ){
-        crows = nrow(content_table(obj))
-        ccols = if(crows == 0) 0 else nc
+    if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0) {
+        crows <- nrow(content_table(obj))
+        ccols <- if(crows == 0) 0 else nc
         cat(sprintf(" [cont: %d x %d]",
                       crows, ccols))
     }
     if(is(obj, "VTableTree") && length(tree_children(obj))) {
-        kids = tree_children(obj)
+        kids <- tree_children(obj)
         if(are(kids, "TableRow")) {
-            cat(sprintf( " (%d x %d)\n",
+            cat(sprintf(" (%d x %d)\n",
                         length(kids), nc))
         } else {
             cat("\n")
-            lapply(kids, treestruct, ind = ind+1)
+            lapply(kids, treestruct, ind = ind + 1)
         }
     }
     invisible(NULL)
@@ -27,7 +27,8 @@ treestruct <- function(obj, ind = 0L) {
 
 
 
-setGeneric("ploads_to_str", function(x, collapse = ":") standardGeneric("ploads_to_str"))
+setGeneric("ploads_to_str",
+           function(x, collapse = ":") standardGeneric("ploads_to_str"))
 
 setMethod("ploads_to_str", "Split",
           function(x, collapse = ":") {
@@ -86,30 +87,30 @@ setMethod("payloadmsg", "ANY",
     "XXX"
 })
 
-spldesc = function(spl, value = "") {
-    value = rawvalues(value)
-    payloadmsg = payloadmsg(spl)
-    format = "%s (%s)"
+spldesc <- function(spl, value = "") {
+    value <- rawvalues(value)
+    payloadmsg <- payloadmsg(spl)
+    format <- "%s (%s)"
     sprintf(format,
             value,
             payloadmsg)
 }
 
 
-layoutmsg = function(obj) {
+layoutmsg <- function(obj) {
     ## if(!is(obj, "VLayoutNode"))
     ##     stop("how did a non layoutnode object get in docatlayout??")
 
-    pos = tree_pos(obj)
-    spllst = pos_splits(pos)
-    spvallst = pos_splvals(pos)
-    if(istree <- is(obj, "LayoutAxisTree")) {
-        kids = tree_children(obj)
+    pos <- tree_pos(obj)
+    spllst <- pos_splits(pos)
+    spvallst <- pos_splvals(pos)
+    if(is(obj, "LayoutAxisTree")) {
+        kids <- tree_children(obj)
         return(unlist(lapply(kids, layoutmsg)))
 
     }
 
-    msg = paste(collapse = " -> ",
+    msg <- paste(collapse = " -> ",
                 mapply(spldesc,
                        spl = spllst,
                        value = spvallst))
@@ -118,7 +119,7 @@ layoutmsg = function(obj) {
 
 setMethod("show", "LayoutAxisTree",
           function(object) {
-    msg = layoutmsg(object)
+    msg <- layoutmsg(object)
     cat(msg, "\n")
     invisible(object)
 })
@@ -150,7 +151,11 @@ setMethod("spltype_abbrev", "AnalyzeVarSplit",
           function(obj) "** analysis **")
 
 setMethod("spltype_abbrev", "CompoundSplit",
-          function(obj) paste("compound", paste(sapply(spl_payload(obj), spltype_abbrev), collapse = " ")))
+          function(obj) paste("compound",
+                              paste(sapply(spl_payload(obj),
+                                           spltype_abbrev), collapse = " ")
+                              )
+          )
 
 setMethod("spltype_abbrev", "AnalyzeMultiVars",
           function(obj) "** multivar analysis **")
@@ -160,19 +165,19 @@ setMethod("spltype_abbrev", "AnalyzeColVarSplit",
 
 
 
-docat_splitvec = function(object, indent = 0) {
+docat_splitvec <- function(object, indent = 0) {
     if(indent > 0)
         cat(rep(" ", times = indent), sep = "")
     if(length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
-        tab = object[[1]]
-        msg = sprintf("A Pre-Existing Table [%d x %d]",
+        tab <- object[[1]]
+        msg <- sprintf("A Pre-Existing Table [%d x %d]",
                       nrow(tab), ncol(tab))
     } else {
 
-        plds = ploads_to_str(object) ##lapply(object, spl_payload))
+        plds <- ploads_to_str(object) ##lapply(object, spl_payload))
 
-        tabbrev = sapply(object, spltype_abbrev)
-        msg = paste(collapse = " -> ",
+        tabbrev <- sapply(object, spltype_abbrev)
+        msg <- paste(collapse = " -> ",
                     paste0(plds, " (", tabbrev, ")"))
     }
     cat(msg, "\n")
@@ -188,7 +193,7 @@ setMethod("show", "SplitVector",
 })
 
 
-docat_predataxis = function(object, indent = 0) {
+docat_predataxis <- function(object, indent = 0) {
     lapply(object, docat_splitvec)
 }
 
@@ -219,25 +224,9 @@ setMethod("show", "PreDataTableLayouts",
     invisible(object)
 })
 
-## this class and its constructor and accessors (For slots of this
-## class on larger objects) are all non-exported, unreachable code
-## setMethod("show", "TreePos",
-##           function(object) {
-##     chars = mapply(function(label, val)
-##         {
-##             paste0(label, " [", val, "]")
-##         }, label = pos_split_labels(object),
-##         val = pos_splval_labels(object))
-
-##     msg = paste(chars, collapse = " -> ")
-##     cat("An object of class ", class(object), "\n\n", msg)
-##     invisible(object)
-## })
-
-
 setMethod("show", "InstantiatedColumnInfo",
           function(object) {
-    layoutmsg = layoutmsg( coltree(object))
+    layoutmsg <- layoutmsg(coltree(object))
     cat("An InstantiatedColumnInfo object",
         "Columns:",
         layoutmsg,

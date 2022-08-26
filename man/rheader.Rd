@@ -7,7 +7,9 @@
 rheader(..., format = "xx", .lst = NULL)
 }
 \arguments{
-\item{\dots}{row specifications (either as character vectors or the output from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}}, etc.}
+\item{\dots}{row specifications (either as character vectors or the output
+from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}},
+etc.}
 
 \item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
 then the \code{format} is applied}
