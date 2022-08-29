@@ -351,7 +351,7 @@ This time we won't use the `ADAE` dataset from `random.cdisc.data` but rather ge
 ```{r}
 set.seed(1)
 
-lookup <- tribble(
+lookup <- tibble::tribble(
   ~AEDECOD,                          ~AEBODSYS,                                         ~AETOXGR,
   "HEADACHE",                        "NERVOUS SYSTEM DISORDERS",                        "5",
   "BACK PAIN",                       "MUSCULOSKELETAL AND CONNECTIVE TISSUE DISORDERS", "2",
