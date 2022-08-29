@@ -590,29 +590,11 @@ setMethod("get_formatted_cells", "ElementaryTable",
 #' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj, shell = FALSE) {
-            default_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
-            format <- lapply(row_cells(obj), function(x) {
-                format <- obj_format(x)
-                if (is.null(format))
-                    default_format
-                else
-                    format
-            })
-            default_na_str <- obj_na_str(obj) %||% "NA"
-            na_str <- vapply(row_cells(obj), function(x) {
-                nastr <- obj_na_str(x)
-                if(is.null(nastr))
-                    default_na_str
-                else
-                    nastr
-            }, "")
-
-            matrix(unlist(Map(function(val, format, spn, na_str) {
+            matrix(unlist(Map(function(val, spn) {
                 stopifnot(is(spn, "integer"))
-                val <- if(shell) format else paste(format_rcell(val, format, na_str = na_str),
-                                                   collapse = ", ")
+                val <- paste(format_rcell(val, shell = shell), collapse = ", ")
                 rep(list(val), spn)
-            }, val = row_values(obj), format = format, spn = row_cspans(obj), na_str = na_str)),
+            }, val = row_cells(obj), spn = row_cspans(obj))),
             ncol = ncol(obj))
 })
 
