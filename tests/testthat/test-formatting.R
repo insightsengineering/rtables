@@ -1,5 +1,5 @@
+library(dplyr)
 context("value formatting")
-
 
 test_that("sprintf_format works correctly", {
 
@@ -129,18 +129,18 @@ test_that("Test matrix obtained from get_formatted_cells as is into ASCII format
 
   # Expected data-set is built with dplyr
   tibl <- iris %>%
-    group_by(Species) %>%
+    dplyr::group_by(Species) %>%
     summarise(
       m_sep = mean(Sepal.Length),
       m_pet = mean(Petal.Width)
     ) %>%
-    select(-Species)
+    dplyr::select(-Species)
 
   # Get it into an ASCII-like format
   expected <- tibl %>%
     mutate_all(as.character) %>%
     mutate(a = "", b = "") %>%
-    select(a, m_sep, b, m_pet) %>%
+    dplyr::select(a, m_sep, b, m_pet) %>%
     t() %>%
     as.matrix()
 
@@ -207,7 +207,6 @@ test_that("Test matrix obtained from get_formatted_cells with only specific na v
 
   # Custom summary function to add specific formats for na values to be reflected
   s_summary <- function(x) {
-    stopifnot(is.numeric(x))
     list(
       mean = mean(x)
     )
