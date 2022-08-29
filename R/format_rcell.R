@@ -1,4 +1,4 @@
-#'Format rcell
+#' Format rcell
 #'
 #' This is a wrapper around
 #' \code{\link[formatters:format_value]{formatters::format_value}} for use with
@@ -17,20 +17,23 @@
 #' @examples
 #' cll <- CellValue(pi, format = "xx.xxx")
 #' format_rcell(cll)
-
-format_rcell <- function(x, format, 
+#'
+format_rcell <- function(x, format,
                          output = c("ascii", "html"),
-                         na_str = obj_na_str(x) %||% "NA", 
+                         na_str = obj_na_str(x) %||% "NA",
                          shell = FALSE) {
-    
-    # Check for format
-    format <- if (missing(format)) obj_format(x) else format
-    if (shell) format <- if (is.null(format)) "xx" else format
-    
-    # Main call to external function
-    if (shell) return(format)
-    format_value(rawvalues(x), 
-                 format = format, 
-                 output = output,
-                 na_str = na_str)
+
+  # Check for format
+  format <- if (missing(format)) obj_format(x) else format
+  if (shell) format <- if (is.null(format)) "xx" else format
+
+  # Main call to external function
+  if (shell) {
+    return(format)
+  }
+  format_value(rawvalues(x),
+    format = format,
+    output = output,
+    na_str = na_str
+  )
 }
