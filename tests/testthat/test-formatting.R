@@ -112,3 +112,130 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
     expect_identical(get_formatted_cells(tbl)[3, 1, drop = TRUE],
                      "Ridiculous")
 })
+
+test_that("Test matrix obtained from get_formatted_cells as is into ASCII format", {
+    
+    # Table builder with rtables
+    tbl <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze(c("Sepal.Length", "Petal.Width"), 
+                afun = mean, 
+                format = NULL) %>% # NULL will be picked by format_rcell
+        build_table(iris)
+    
+    # Get the ASCII table
+    result <- get_formatted_cells(tbl) # Main function
+    
+    # Expected data-set is built with dplyr
+    tibl <- iris %>% group_by(Species) %>% 
+        summarise(m_sep = mean(Sepal.Length), 
+                  m_pet = mean(Petal.Width)) %>% 
+        select(-Species)
+    
+    # Get it into an ASCII-like format
+    expected <- tibl %>% 
+        mutate_all(as.character) %>% 
+        mutate(a = "", b = "") %>% 
+        select(a, m_sep, b, m_pet) %>% 
+        t() %>% 
+        as.matrix()
+    
+    dimnames(expected) <- NULL # fixing attributes
+    
+    # Check that preserve the format "as is"
+    expect_identical(result, expected)
+})
+
+test_that("Test format matrix obtained from get_formatted_cells with only NULL format", {
+    
+    # Table builder with rtables
+    tbl <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze(c("Sepal.Length", "Petal.Width"), 
+                afun = mean, 
+                format = NULL) %>% 
+        build_table(iris)
+    
+    # Get the ASCII table
+    result <- get_formatted_cells(tbl, shell = TRUE) # Main function
+    
+    # Creating moking data
+    col_std <- c("-", "xx", "-", "xx")
+    expected <- cbind(col_std, col_std, col_std)
+    
+    dimnames(expected) <- NULL # fixing attributes
+    
+    # Check that preserve the format "as is"
+    expect_identical(result, expected)
+})
+
+test_that("Test matrix obtained from get_formatted_cells with only specific format", {
+    
+    # Table builder with rtables
+    tbl <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze(c("Sepal.Length", "Petal.Width"), 
+                afun = mean, 
+                format = "xx.xxx") %>% 
+        build_table(iris)
+    
+    # Get the ASCII table
+    result <- get_formatted_cells(tbl, shell = TRUE) # Main function
+    
+    # Creating moking data
+    col_std <- c("-", "xx.xxx", "-", "xx.xxx")
+    expected <- cbind(col_std, col_std, col_std)
+    
+    dimnames(expected) <- NULL # fixing attributes
+    
+    # Check that preserve the specific
+    expect_identical(result, expected)
+})
+
+test_that("Test matrix obtained from get_formatted_cells with only specific na values", {
+    
+    # Introducing NAs
+    iris2 <- iris
+    iris2$Sepal.Length[sample(1:nrow(iris2), size = 10)] <- NA 
+    iris2$Petal.Width[sample(1:nrow(iris2), size = 10)] <- NA 
+    
+    # Custom summary function to add specific formats for na values to be reflected
+    s_summary <- function(x) {
+        stopifnot(is.numeric(x))
+        list(
+            mean = mean(x)
+        )
+    }
+    
+    afun <- make_afun(
+        fun = s_summary,
+        .formats = c(mean = "xx.xx"),
+        .labels = c(mean = "Mean")
+    )
+    
+    afun_isridiculous <- make_afun(afun,
+                            .formats = c(mean = "xx.x"),
+                            .format_na_strs = c(mean = "Ridiculous"))
+    
+    # Table builder with rtables
+    tbl <- basic_table() %>%
+        split_cols_by("Species") %>%
+        analyze(c("Sepal.Length", "Petal.Width"), 
+                afun = afun_isridiculous,
+                inclNAs = TRUE,
+                format = "xx.xxx"
+                ) %>% 
+        build_table(iris2)
+    
+    # Get the ASCII table
+    result <- get_formatted_cells(tbl) # Main function
+    
+    # Creating moking data
+    col_std <- c("", "Ridiculous", "", "Ridiculous")
+    expected <- cbind(col_std, col_std, col_std)
+    
+    dimnames(expected) <- NULL # fixing attributes
+    
+    # Check that preserve the format "as is"
+    expect_identical(result, expected)
+})
