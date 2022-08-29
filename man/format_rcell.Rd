@@ -8,7 +8,8 @@ format_rcell(
   x,
   format,
   output = c("ascii", "html"),
-  na_str = obj_na_str(x) \%||\% "NA"
+  na_str = obj_na_str(x) \%||\% "NA",
+  shell = FALSE
 )
 }
 \arguments{
@@ -17,10 +18,13 @@ format_rcell(
 \item{format}{character(1) or function. The format label (string) or
 formatter function to apply to \code{x}.}
 
-\item{output}{character(1). output type}
+\item{output}{character(1). Output type.}
 
 \item{na_str}{character(1). String that should be displayed when the value of
 \code{x} is missing. Defaults to \code{"NA"}.}
+
+\item{shell}{logical(1). Should the formats themselves be returned instead of the
+values with formats applied. Defaults to \code{FALSE}.}
 }
 \value{
 formatted text representing the cell
@@ -33,4 +37,5 @@ This is a wrapper around
 \examples{
 cll <- CellValue(pi, format = "xx.xxx")
 format_rcell(cll)
+
 }
