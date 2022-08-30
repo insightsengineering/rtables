@@ -590,9 +590,10 @@ setMethod("get_formatted_cells", "ElementaryTable",
 #' @rdname gfc
 setMethod("get_formatted_cells", "TableRow",
           function(obj, shell = FALSE) {
-            parent_row <- list()
-            parent_row[["format"]] <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
-            parent_row[["na_str"]] <- obj_na_str(obj) %||% "NA"
+
+            # Parent row format and na_str
+            pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
+            pr_row_na_str <- obj_na_str(obj) %||% "NA"
 
             matrix(unlist(Map(function(val, spn) {
                 stopifnot(is(spn, "integer"))
@@ -605,10 +606,15 @@ setMethod("get_formatted_cells", "TableRow",
                     }
                     val <- format
                 } else {
-                    val <- paste(format_rcell(val, parent_row = parent_row), collapse = ", ")
+                    val <- paste(format_rcell(val, 
+                                              pr_row_format = pr_row_format,
+                                              pr_row_na_str = pr_row_na_str), 
+                                 collapse = ", ")
                 }
+
                 rep(list(val), spn)
-            }, val = row_cells(obj), spn = row_cspans(obj), parent_row = parent_row)),
+            }, val = row_cells(obj), spn = row_cspans(obj),
+            pr_row_format = pr_row_format, pr_row_na_str = pr_row_na_str)),
             ncol = ncol(obj))
 })
 

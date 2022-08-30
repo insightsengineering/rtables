@@ -10,29 +10,33 @@
 #' @param output character(1). Output type.
 #' @param na_str character(1). String that should be displayed when the value of
 #'   \code{x} is missing. Defaults to \code{"NA"}.
-#' @param parent_row list of default format and \code{"NA"} string coming from.
-#' the general row.
+#' @param pr_row_format list of default format coming from the general row.
+#' @param pr_row_na_str list of default \code{"NA"} string coming from the general row.
 #'
 #' @return formatted text representing the cell
 #'
 #' @examples
 #' cll <- CellValue(pi, format = "xx.xxx")
 #' format_rcell(cll)
+#' 
+#' cll <- CellValue(NA, format = "xx.xxx")
+#' format_rcell(cll, pr_row_na_str = "This is NA")
 #'
 #' @export
 format_rcell <- function(x, format,
                          output = c("ascii", "html"),
                          na_str = obj_na_str(x) %||% "NA",
-                         parent_row = NULL) {
+                         pr_row_format = NULL,
+                         pr_row_na_str = NULL) {
 
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
-  if (is.null(format) && !is.null(parent_row[["format"]])) {
-      format <- parent_row[["format"]]
+  if (is.null(format) && !is.null(pr_row_format)) {
+      format <- pr_row_format
   }
   # Check for na_str from parent
-  if (is.null(obj_na_str(x)) && !is.null(parent_row[["na_str"]])) {
-      na_str <- parent_row[["na_str"]]
+  if (is.null(obj_na_str(x)) && !is.null(pr_row_na_str)) {
+      na_str <- pr_row_na_str
   }
 
   # Main call to external function

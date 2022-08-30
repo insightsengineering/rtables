@@ -9,7 +9,8 @@ format_rcell(
   format,
   output = c("ascii", "html"),
   na_str = obj_na_str(x) \%||\% "NA",
-  parent_row = NULL
+  pr_row_format = NULL,
+  pr_row_na_str = NULL
 )
 }
 \arguments{
@@ -23,8 +24,9 @@ formatter function to apply to \code{x}.}
 \item{na_str}{character(1). String that should be displayed when the value of
 \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{parent_row}{list of default format and \code{"NA"} string coming from
-the general row.}
+\item{pr_row_format}{list of default format coming from the general row.}
+
+\item{pr_row_na_str}{list of default \code{"NA"} string coming from the general row.}
 }
 \value{
 formatted text representing the cell
@@ -37,5 +39,8 @@ This is a wrapper around
 \examples{
 cll <- CellValue(pi, format = "xx.xxx")
 format_rcell(cll)
+
+cll <- CellValue(NA, format = "xx.xxx")
+format_rcell(cll, pr_row_na_str = "This is NA")
 
 }
