@@ -601,8 +601,8 @@ setMethod("get_formatted_cells", "TableRow",
                 # Case it is shell
                 if (shell) {
                     format <- obj_format(val)
-                    if(is.null(format) && !is.null(parent_row[["format"]])) {
-                        format <- parent_row[["format"]]
+                    if(is.null(format) && !is.null(pr_row_format)) {
+                        format <- pr_row_format
                     }
                     val <- format
                 } else {
@@ -613,8 +613,7 @@ setMethod("get_formatted_cells", "TableRow",
                 }
 
                 rep(list(val), spn)
-            }, val = row_cells(obj), spn = row_cspans(obj),
-            pr_row_format = pr_row_format, pr_row_na_str = pr_row_na_str)),
+            }, val = row_cells(obj), spn = row_cspans(obj))),
             ncol = ncol(obj))
 })
 
