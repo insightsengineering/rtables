@@ -83,8 +83,8 @@ test_colpaths <- function(tt) {
     cdf2 <- make_col_df(tt, visible_only = FALSE)
     res3 <- lapply(cdf$path, function(pth) rtables:::subset_cols(tt, pth))
     res4 <- lapply(cdf2$path, function(pth) rtables:::subset_cols(tt, pth))
-    expect_identical(res3, res4[!is.na(cdf2$abs_pos)])
-    expect_identical(res3, lapply(seq_len(ncol(tt)),
+    testthat::expect_identical(res3, res4[!is.na(cdf2$abs_pos)])
+    testthat::expect_identical(res3, lapply(seq_len(ncol(tt)),
                                   function(j) tt[, j]))
     TRUE
 }

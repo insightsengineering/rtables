@@ -1,5 +1,5 @@
 #' Format rcell
-#' 
+#'
 #' This is a wrapper around
 #' \code{\link[formatters:format_value]{formatters::format_value}} for use with
 #' \code{CellValue} objects
@@ -10,7 +10,7 @@
 #' @param output character(1). Output type.
 #' @param na_str character(1). String that should be displayed when the value of
 #'   \code{x} is missing. Defaults to \code{"NA"}.
-#' @param parent_row list of default format and \code{"NA"} string coming from 
+#' @param parent_row list of default format and \code{"NA"} string coming from.
 #' the general row.
 #'
 #' @return formatted text representing the cell
@@ -34,7 +34,7 @@ format_rcell <- function(x, format,
   if (is.null(obj_na_str(x)) && !is.null(parent_row[["na_str"]])) {
       na_str <- parent_row[["na_str"]]
   }
-  
+
   # Main call to external function
   format_value(rawvalues(x),
     format = format,

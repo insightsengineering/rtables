@@ -568,7 +568,7 @@ setMethod("get_formatted_cells", "TableTree",
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell)
 
     ct <- get_formatted_cells(content_table(obj), shell = shell)
-    
+
     els <- lapply(tree_children(obj), get_formatted_cells, shell = shell)
 
     ## TODO fix ncol problem for rrow()
@@ -588,19 +588,20 @@ setMethod("get_formatted_cells", "ElementaryTable",
 })
 
 #' @rdname gfc
-setMethod("get_formatted_cells", "TableRow", function(obj, shell = FALSE) {
+setMethod("get_formatted_cells", "TableRow",
+          function(obj, shell = FALSE) {
             parent_row <- list()
             parent_row[["format"]] <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
             parent_row[["na_str"]] <- obj_na_str(obj) %||% "NA"
-              
+
             matrix(unlist(Map(function(val, spn) {
                 stopifnot(is(spn, "integer"))
-                
-                # Case it is shell 
+
+                # Case it is shell
                 if (shell) {
                     format <- obj_format(val)
                     if(is.null(format) && !is.null(parent_row[["format"]])) {
-                        format <- parent_row[["format"]] 
+                        format <- parent_row[["format"]]
                     }
                     val <- format
                 } else {
