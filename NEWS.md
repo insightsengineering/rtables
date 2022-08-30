@@ -1,5 +1,7 @@
 ## rtables 0.5.2.1
  * dev version increment
+ * Enhancement of `get_formatted_cells` to check for `CellValues` formats and `NA`
+   inside `format_rcell`. 
 
 ## rtables 0.5.2
  * `paginate_table` now accepts `cpp` and will perform vertical pagination when it is non-null
