@@ -40,7 +40,12 @@ This is a wrapper around
 cll <- CellValue(pi, format = "xx.xxx")
 format_rcell(cll)
 
-cll <- CellValue(NA, format = "xx.xxx")
+# Cell values precedes the row values
+cll <- CellValue(pi, format = "xx.xxx")
+format_rcell(cll, pr_row_format = "xx.x")
+
+# Similarly for NA values 
+cll <- CellValue(NA, format = "xx.xxx", format_na_str = "This is THE NA")
 format_rcell(cll, pr_row_na_str = "This is NA")
 
 }
