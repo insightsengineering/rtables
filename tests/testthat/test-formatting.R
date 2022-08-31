@@ -1,4 +1,3 @@
-library(dplyr)
 context("value formatting")
 
 test_that("sprintf_format works correctly", {
