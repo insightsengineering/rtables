@@ -113,134 +113,65 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
 })
 
 test_that("Test matrix obtained from get_formatted_cells as is into ASCII format", {
+    # Helper function
+    deci_format <- function(x, dig) {
+        format(round(x, digits = dig), nsmall = dig)
+    }
+    
+    # Test data
+    DM2 <- DM %>% 
+        filter(ARM != levels(DM$ARM)[3]) %>% 
+        mutate(ARM = as.factor(as.character(ARM)))
+    DM2$AGE[1] <- NA # Adding one NA
+    
+    # Manually building the table
+    weird_afun <- function(x, ...) {
+        in_rows(cell_fmt = rcell(mean(x, na.rm = TRUE), format = "xx.x"),
+                no_cell_fmt = rcell(median(x, na.rm = TRUE)),
+                cell_na_str = rcell(NA, format = "xx.x"),
+                cell_na_str_no_cell_fmt = rcell(NA),
+                cell_fmt_range = rcell(range(x, na.rm = TRUE), format = "xx.x - xx.x"),
+                cell_na_str_range = rcell(c(NA, 2), format = "xx.x - xx.x", format_na_str = "bah")
+                # cell_na_str_no_cell_fmt_range = rcell(range(x))
+                )
+    }
+    
+    # Main builder
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        analyze("AGE", weird_afun, format = "xx.xx") %>%
+        build_table(DM2)
+    
+    # Get the ASCII table
+    result <- get_formatted_cells(tbl) # Main function
+    
+    # Expected data-set is built with dplyr
+    expected <- DM2 %>% 
+        dplyr::group_by(ARM) %>%
+        summarise(
+          m_age = deci_format(mean(AGE, na.rm = TRUE), dig = 1),
+          me_age = deci_format(median(AGE, na.rm = TRUE), dig = 2),
+          m_range = paste(deci_format(range(AGE, na.rm = TRUE), dig = 1), collapse = " - ")
+        ) %>% 
+        mutate(b = "NA", c = "NA", d = "bah - 2.0") %>% 
+        select(m_age, me_age, b, c, m_range, d) %>% 
+        mutate_all(as.character) %>%
+        t() %>%
+        as.matrix()
+    dimnames(expected) <- NULL # Fixing attributes
+    
+    # Check if it preserves the format and na_str replacements
+    expect_identical(result, expected)
 
-  # Table builder with rtables
-  tbl <- basic_table() %>%
-    split_cols_by("Species") %>%
-    analyze(c("Sepal.Length", "Petal.Width"),
-      afun = mean,
-      format = NULL
-    ) %>% # NULL will be picked by format_rcell
-    build_table(iris)
-
-  # Get the ASCII table
-  result <- get_formatted_cells(tbl) # Main function
-
-  # Expected data-set is built with dplyr
-  tibl <- iris %>%
-    dplyr::group_by(Species) %>%
-    summarise(
-      m_sep = mean(Sepal.Length),
-      m_pet = mean(Petal.Width)
-    ) %>%
-    dplyr::select(-Species)
-
-  # Get it into an ASCII-like format
-  expected <- tibl %>%
-    mutate_all(as.character) %>%
-    mutate(a = "", b = "") %>%
-    dplyr::select(a, m_sep, b, m_pet) %>%
-    t() %>%
-    as.matrix()
-
-  dimnames(expected) <- NULL # fixing attributes
-
-  # Check that preserve the format "as is"
-  expect_identical(result, expected)
+    # Get the ASCII table of formats (shell)
+    result <- get_formatted_cells(tbl, shell = TRUE) # Main function
+    
+    # Expected ASCII table (manual insertion)
+    one_col <- c("xx.x", "xx.xx", "xx.x", "xx.xx", "xx.x - xx.x", "xx.x - xx.x")
+    expected <- cbind(one_col, one_col)
+    dimnames(expected) <- NULL # Fixing attributes
+    
+    # Check if it preserves the shell format
+    expect_identical(result, expected)
 })
 
-test_that("Test format matrix obtained from get_formatted_cells with only NULL format", {
-
-  # Table builder with rtables
-  tbl <- basic_table() %>%
-    split_cols_by("Species") %>%
-    analyze(c("Sepal.Length", "Petal.Width"),
-      afun = mean,
-      format = NULL
-    ) %>%
-    build_table(iris)
-
-  # Get the ASCII table
-  result <- get_formatted_cells(tbl, shell = TRUE) # Main function
-
-  # Creating moking data
-  col_std <- c("-", "xx", "-", "xx")
-  expected <- cbind(col_std, col_std, col_std)
-
-  dimnames(expected) <- NULL # fixing attributes
-
-  # Check that preserve the format "as is"
-  expect_identical(result, expected)
-})
-
-test_that("Test matrix obtained from get_formatted_cells with only specific format", {
-
-  # Table builder with rtables
-  tbl <- basic_table() %>%
-    split_cols_by("Species") %>%
-    analyze(c("Sepal.Length", "Petal.Width"),
-      afun = mean,
-      format = "xx.xxx"
-    ) %>%
-    build_table(iris)
-
-  # Get the ASCII table
-  result <- get_formatted_cells(tbl, shell = TRUE) # Main function
-
-  # Creating moking data
-  col_std <- c("-", "xx.xxx", "-", "xx.xxx")
-  expected <- cbind(col_std, col_std, col_std)
-
-  dimnames(expected) <- NULL # fixing attributes
-
-  # Check that preserve the specific
-  expect_identical(result, expected)
-})
-
-test_that("Test matrix obtained from get_formatted_cells with only specific na values", {
-
-  # Introducing NAs
-  iris2 <- iris
-  iris2$Sepal.Length[sample(seq_len(nrow(iris2)), size = 10)] <- NA
-  iris2$Petal.Width[sample(seq_len(nrow(iris2)), size = 10)] <- NA
-
-  # Custom summary function to add specific formats for na values to be reflected
-  s_summary <- function(x) {
-    list(
-      mean = mean(x)
-    )
-  }
-
-  afun <- make_afun(
-    fun = s_summary,
-    .formats = c(mean = "xx.xx"),
-    .labels = c(mean = "Mean")
-  )
-
-  afun_isridiculous <- make_afun(afun,
-    .formats = c(mean = "xx.x"),
-    .format_na_strs = c(mean = "Ridiculous")
-  )
-
-  # Table builder with rtables
-  tbl <- basic_table() %>%
-    split_cols_by("Species") %>%
-    analyze(c("Sepal.Length", "Petal.Width"),
-      afun = afun_isridiculous,
-      inclNAs = TRUE,
-      format = "xx.xxx"
-    ) %>%
-    build_table(iris2)
-
-  # Get the ASCII table
-  result <- get_formatted_cells(tbl) # Main function
-
-  # Creating moking data
-  col_std <- c("", "Ridiculous", "", "Ridiculous")
-  expected <- cbind(col_std, col_std, col_std)
-
-  dimnames(expected) <- NULL # fixing attributes
-
-  # Check that preserve the format "as is"
-  expect_identical(result, expected)
-})
