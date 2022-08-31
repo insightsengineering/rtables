@@ -10,7 +10,8 @@ format_rcell(
   output = c("ascii", "html"),
   na_str = obj_na_str(x) \%||\% "NA",
   pr_row_format = NULL,
-  pr_row_na_str = NULL
+  pr_row_na_str = NULL,
+  shell = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ formatter function to apply to \code{x}.}
 \item{pr_row_format}{list of default format coming from the general row.}
 
 \item{pr_row_na_str}{list of default \code{"NA"} string coming from the general row.}
+
+\item{shell}{logical(1). Should the formats themselves be returned instead of the
+values with formats applied. Defaults to \code{FALSE}.}
 }
 \value{
 formatted text representing the cell
