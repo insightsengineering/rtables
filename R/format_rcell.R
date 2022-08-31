@@ -12,6 +12,8 @@
 #'   \code{x} is missing. Defaults to \code{"NA"}.
 #' @param pr_row_format list of default format coming from the general row.
 #' @param pr_row_na_str list of default \code{"NA"} string coming from the general row.
+#' @param shell logical(1). Should the formats themselves be returned instead of the
+#' values with formats applied. Defaults to \code{FALSE}.
 #'
 #' @return formatted text representing the cell
 #'
@@ -32,7 +34,8 @@ format_rcell <- function(x, format,
                          output = c("ascii", "html"),
                          na_str = obj_na_str(x) %||% "NA",
                          pr_row_format = NULL,
-                         pr_row_na_str = NULL) {
+                         pr_row_na_str = NULL,
+                         shell = FALSE) {
 
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
@@ -44,7 +47,10 @@ format_rcell <- function(x, format,
       na_str <- pr_row_na_str
   }
 
-  # Main call to external function
+  # Main call to external function or shell
+  if (shell) {
+      return(format)
+  }
   format_value(rawvalues(x),
     format = format,
     output = output,

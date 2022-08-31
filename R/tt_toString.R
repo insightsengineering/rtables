@@ -598,21 +598,15 @@ setMethod("get_formatted_cells", "TableRow",
             matrix(unlist(Map(function(val, spn) {
                 stopifnot(is(spn, "integer"))
 
-                # Case it is shell
-                if (shell) {
-                    format <- obj_format(val)
-                    if(is.null(format) && !is.null(pr_row_format)) {
-                        format <- pr_row_format
-                    }
-                    val <- format
-                } else {
-                    val <- paste(format_rcell(val, 
-                                              pr_row_format = pr_row_format,
-                                              pr_row_na_str = pr_row_na_str), 
-                                 collapse = ", ")
+                out <- format_rcell(val,
+                                    pr_row_format = pr_row_format,
+                                    pr_row_na_str = pr_row_na_str,
+                                    shell = shell)
+                if (!is.function(out) && is.character(out)) {
+                    out <- paste(out, collapse = ", ")
                 }
 
-                rep(list(val), spn)
+                rep(list(out), spn)
             }, val = row_cells(obj), spn = row_cspans(obj))),
             ncol = ncol(obj))
 })
