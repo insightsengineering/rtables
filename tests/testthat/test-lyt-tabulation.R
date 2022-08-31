@@ -249,7 +249,7 @@ test_that("ref_group comparisons work", {
     expect_equivalent(d8 - d7, d9)
 
     ## with combo levels
-    combodf <- tibble::tribble(
+    combodf <- tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
         "A_", "Arm 1", c("A: Drug X"), list(),
         "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
