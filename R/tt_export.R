@@ -1,4 +1,5 @@
-
+#' @importFrom tools file_ext
+NULL
 ### XXX is the stuff in this file correct or should we be exporting *formatted* values to
 ### meet the needs of consumers of this? Do we ened to support both?
 
@@ -243,6 +244,8 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
         flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
     }
 
+    flx <- flextable::font(flx, fontname = "courier")
+
     flextable::set_table_properties(flx, layout = "autofit")
 }
 
@@ -293,7 +296,7 @@ export_as_pdf <- function(tt,
                           indent_size = 2,
                           ... # passed to paginate_table
 ) {
-    stopifnot(tools::file_ext(file) != ".pdf")
+    stopifnot(file_ext(file) != ".pdf")
 
     gp_plot <- gpar(fontsize = fontsize, fontfamily = "mono")
 

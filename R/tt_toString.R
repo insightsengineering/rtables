@@ -829,7 +829,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @examples
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
-#' cat(rtables:::mat_as_string(mat)); cat("\n")
+#' cat(mat_as_string(mat)); cat("\n")
 mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep()) {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 

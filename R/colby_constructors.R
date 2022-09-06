@@ -916,6 +916,7 @@ analyze <- function(lyt,
                    var_labels = vars,
                    table_names = vars,
                    format = NULL,
+##                   format_na_str = NULL,
                    nested = TRUE,
                    ## can't name this na_rmsymbol conflict with possible afuns!!
                    inclNAs = FALSE,

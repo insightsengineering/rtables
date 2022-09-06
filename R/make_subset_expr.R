@@ -169,10 +169,6 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     ctree <- coltree(clayout, df = df, rtpos = rtpos)
 
     cexprs <- make_col_subsets(ctree, df)
-    ## XXX experimental!!!!
-    ## env = as.environment(df)
-    ## parent.env(env) = .GlobalEnv
-    ## cexprs = lapply(cexprs, function(e) compiler::compile(e[[1]], env = env))
     colextras <- col_extra_args(ctree)
 
     ## calculate the counts based on the df
