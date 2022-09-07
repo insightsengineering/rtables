@@ -23,3 +23,4 @@ This function is deprecated and should not be used.
 this function is deprecated. please use \code{paginate_table} with a
 non-null \code{cpp} argument instead.
 }
+\keyword{internal}
