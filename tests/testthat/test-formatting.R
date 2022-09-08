@@ -113,11 +113,6 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
 })
 
 test_that("Test matrix obtained from get_formatted_cells as is into ASCII format", {
-    # Helper function
-    deci_format <- function(x, dig) {
-        format(round(x, digits = dig), nsmall = dig)
-    }
-    
     # Test data
     DM2 <- DM %>% 
         filter(ARM != levels(DM$ARM)[3]) %>% 
@@ -149,9 +144,9 @@ test_that("Test matrix obtained from get_formatted_cells as is into ASCII format
     expected <- DM2 %>% 
         dplyr::group_by(ARM) %>%
         summarise(
-          m_age = deci_format(mean(AGE, na.rm = TRUE), dig = 1),
-          me_age = deci_format(median(AGE, na.rm = TRUE), dig = 2),
-          m_range = paste(deci_format(range(AGE, na.rm = TRUE), dig = 1), collapse = " - ")
+          m_age = format_value(mean(AGE, na.rm = TRUE), format = "xx.x"),
+          me_age = format_value(median(AGE, na.rm = TRUE), format = "xx.xx"),
+          m_range = paste(sapply(range(AGE, na.rm = TRUE), format_value, format = "xx.x"), collapse = " - ")
         ) %>% 
         mutate(b = "NA", c = "NA", d = "bah - 2.0") %>% 
         select(m_age, me_age, b, c, m_range, d) %>% 
