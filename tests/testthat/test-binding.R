@@ -163,7 +163,7 @@ test_that("insert_rrow works", {
 ## cause problems with any of the column info checks
 
 test_that("equivalent split funs withs differrent environments dont' block rbinding", {
-    combodf <- tribble(
+    combodf <- tibble::tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
         "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
         "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())

@@ -1,3 +1,6 @@
+#' @importFrom utils  browseURL
+NULL
+
 #' Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
 #' browser
 #'
@@ -58,9 +61,9 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   html_output <- if (is.null(y)) {
     x_tag
   } else {
-    htmltools::tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
-      htmltools::tags$div(class = "col-xs-6", x_tag),
-      htmltools::tags$div(class = "col-xs-6", y_tag)
+    tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
+    tags$div(class = "col-xs-6", x_tag),
+    tags$div(class = "col-xs-6", y_tag)
     ))
   }
 
@@ -111,7 +114,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   if (!is.null(viewer)) {
     viewer(htmlFile)
   } else {
-    utils::browseURL(htmlFile)
+    browseURL(htmlFile)
   }
 
 }

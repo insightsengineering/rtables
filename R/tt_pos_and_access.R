@@ -111,7 +111,6 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
     ctree
 }
 
-
 #' Insert Row at Path
 #'
 #' Insert a row into an existing table directly before or directly after an existing
@@ -1229,3 +1228,18 @@ setMethod("tail", "VTableTree",
                      reindex_refs = reindex_refs)
     res
 })
+
+
+#' @rdname brackets
+#' @name bracket_subsetting
+#' @export
+#' @usage
+#' x[i, j, ...]
+base::`[`
+
+#' @rdname brackets
+#' @export
+#' @usage
+#' x[i, j, ...] <- value
+base::`[<-`
+

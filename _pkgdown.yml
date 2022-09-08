@@ -62,6 +62,7 @@ reference:
     - make_afun
     - list_wrap_x
     - spl_context
+    - spl_context_to_disp_path
     
   - title: Split Functions
     contents:
@@ -92,6 +93,7 @@ reference:
     - row_paths_summary
     - table_structure
     - summarize_rows
+    - table_shell
 
   - title: Layout Structure Information
     contents:
@@ -104,8 +106,9 @@ reference:
     - rbind
     - cbind_rtables
     - as.vector,TableRow-method
-    - "[<-,VTableTree,ANY,ANY,list-method"
+    - bracket_subsetting
     - clear_indent_mods
+    - head
 
     
   - title: Sorting and Pruning
@@ -165,7 +168,8 @@ reference:
     - no_colinfo
     - clayout
     - length,CellValue-method
-    - names,VTableNodeInfo-method 
+    - names,VTableNodeInfo-method
+    - horizontal_sep
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors

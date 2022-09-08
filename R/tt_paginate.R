@@ -586,6 +586,7 @@ paginate_table <- function(tt, lpp = 15,
 #' non-null `cpp` argument instead.
 #' @export
 #' @inheritParams formatters::vert_pag_indices
+#' @keywords internal
 vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
     .Deprecated("paginate_table(cpp=<>)")
     inds <- vert_pag_indices(tt, cpp = cpp,
