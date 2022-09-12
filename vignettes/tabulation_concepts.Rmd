@@ -95,7 +95,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-of if we wanted the `x` variable instead of the data frame:
+or if we wanted the `x` variable instead of the data frame:
 
 ```
                      A         B         C
@@ -235,7 +235,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-but now the row labels disapered. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
+but now the row labels disappeared. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
 
 
 ```{r}
