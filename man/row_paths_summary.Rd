@@ -5,9 +5,9 @@
 \alias{col_paths_summary}
 \title{Print Row/Col Paths Summary}
 \usage{
-row_paths_summary(x)
+row_paths_summary(x, verbose = FALSE)
 
-col_paths_summary(x)
+col_paths_summary(x, verbose = FALSE)
 }
 \arguments{
 \item{x}{an rtable object}

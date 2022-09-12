@@ -16,7 +16,7 @@ test_that("toString method works correclty", {
         }) %>%
         build_table(iris, hsep = "=")
 
-    print(tbl)
+    invisible(capture.output(print(tbl)))
 
     expstr_lns <- c("                 setosa      versicolor     virginica ",
                     "                 (N=50)        (N=50)        (N=50)   ",

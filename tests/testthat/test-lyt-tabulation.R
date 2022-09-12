@@ -379,8 +379,8 @@ test_that("cfun args", {
         split_rows_by("SEX") %>%
         summarize_row_groups(cfun = cfun1)
 
-    tbl <- build_table(lyt, rawdat)
-    expect_identical(print(tbl), tbl)
+    tbl <- build_table(lyt, rawdat)    
+    expect_identical(capture.output(print(tbl)), capture.output(tbl))
 })
 
 ## regression test for automatically not-nesting
