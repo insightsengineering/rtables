@@ -1,5 +1,5 @@
 ## rtables 0.5.2.1
- * dev version increment
+ * dev version increment 
 
 ## rtables 0.5.2
  * `paginate_table` now accepts `cpp` and will perform vertical pagination when it is non-null

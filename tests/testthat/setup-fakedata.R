@@ -1,3 +1,10 @@
+## Loading relevant libraries for tests
+library(testthat)
+library(xml2)
+library(tibble)
+library(rtables)
+library(dplyr)
+
 ## eat the one-time warning
 suppressWarnings(formatters::default_hsep())
 makefakedat <- function(n  = 1000) {

@@ -87,7 +87,7 @@ test_that("trim_levels_to_map split function works", {
                                            "HIGH",
                        "IMMUNOLOGY", "IGA", "HIGH"))
 
-    map2 <- tibble::tribble(
+    map2 <- tribble(
         ~ARM, ~RACE,
         "A: Drug X", "ASIAN",
         "A: Drug X", "WHITE",
