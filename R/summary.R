@@ -5,8 +5,6 @@
 #' @title Return List with Table Row/Col Paths
 #'
 #' @param x an rtable object
-#' @param verbose (`logical`) \cr Defaults to `FALSE` and determine wether the
-#'   summary should be printed to console. 
 #'
 #' @export
 #' @return a list of paths to each row/column within \code{x}
@@ -40,6 +38,8 @@ col_paths <- function(x) {
 #' Print Row/Col Paths Summary
 #'
 #' @param x an rtable object
+#' @param verbose (`logical`) \cr Defaults to `TRUE` and determine whether the
+#'   summary should be printed to console. 
 #'
 #' @export
 #' @return A data.frame summarizing the row- or column-structure of \code{x}.
@@ -73,7 +73,7 @@ col_paths <- function(x) {
 #'    rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
 #' )
 #' col_paths_summary(tbl3)
-row_paths_summary <- function(x, verbose = FALSE) {
+row_paths_summary <- function(x, verbose = TRUE) {
   stopifnot(is_rtable(x))
   stopifnot(is.logical(verbose))
 
@@ -107,7 +107,7 @@ row_paths_summary <- function(x, verbose = FALSE) {
 
 #' @rdname row_paths_summary
 #' @export
-col_paths_summary <- function(x, verbose = FALSE) {
+col_paths_summary <- function(x, verbose = TRUE) {
   stopifnot(is_rtable(x))
   stopifnot(is.logical(verbose))
 

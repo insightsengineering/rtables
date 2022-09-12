@@ -11,9 +11,6 @@ col_paths(x)
 }
 \arguments{
 \item{x}{an rtable object}
-
-\item{verbose}{(\code{logical}) \cr Defaults to \code{FALSE} and determine wether the
-summary should be printed to console.}
 }
 \value{
 a list of paths to each row/column within \code{x}
