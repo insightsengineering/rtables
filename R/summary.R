@@ -38,8 +38,6 @@ col_paths <- function(x) {
 #' Print Row/Col Paths Summary
 #'
 #' @param x an rtable object
-#' @param verbose (`logical`) \cr Defaults to `TRUE` and determine whether the
-#'   summary should be printed to console. 
 #'
 #' @export
 #' @return A data.frame summarizing the row- or column-structure of \code{x}.
@@ -73,9 +71,8 @@ col_paths <- function(x) {
 #'    rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
 #' )
 #' col_paths_summary(tbl3)
-row_paths_summary <- function(x, verbose = TRUE) {
+row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
-  stopifnot(is.logical(verbose))
 
   if (nrow(x) == 0)
     return("rowname     node_class       path\n---------------------\n")
@@ -96,10 +93,8 @@ row_paths_summary <- function(x, verbose = TRUE) {
 
   txt <- mat_as_string(mat)
   
-  if (verbose) {
-    cat(txt)
-    cat("\n")
-  }
+  cat(txt)
+  cat("\n")
 
   invisible(pagdf[, c("label", "indent", "node_class", "path")])
 }
@@ -107,9 +102,8 @@ row_paths_summary <- function(x, verbose = TRUE) {
 
 #' @rdname row_paths_summary
 #' @export
-col_paths_summary <- function(x, verbose = TRUE) {
+col_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
-  stopifnot(is.logical(verbose))
 
   pagdf <- make_col_df(x, visible_only = FALSE)
   row.names(pagdf) <- NULL
@@ -126,10 +120,8 @@ col_paths_summary <- function(x, verbose = TRUE) {
 
   txt <- mat_as_string(mat)
   
-  if (verbose) {
-    cat(txt)
-    cat("\n")
-  }
+  cat(txt)
+  cat("\n")
 
   invisible(pagdf[, c("label", "path")])
 }

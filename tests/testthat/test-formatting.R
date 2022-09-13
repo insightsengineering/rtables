@@ -38,7 +38,7 @@ test_that("table_shell works", {
                   rrow("Hiya", "xx (xx.x%)", "xx.x - xx.x"),
                   rrow("bye", "xx.xx", "xx.xx"))
 
-    expect_identical(toString(tblsh),
+    expect_identical(toString(tblsh), 
                      paste0(capture_output(table_shell(tbl)), "\n"))
 
     tbl2 <-  rtable(c("A", "B"),

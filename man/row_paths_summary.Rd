@@ -5,15 +5,12 @@
 \alias{col_paths_summary}
 \title{Print Row/Col Paths Summary}
 \usage{
-row_paths_summary(x, verbose = TRUE)
+row_paths_summary(x)
 
-col_paths_summary(x, verbose = TRUE)
+col_paths_summary(x)
 }
 \arguments{
 \item{x}{an rtable object}
-
-\item{verbose}{(\code{logical}) \cr Defaults to \code{TRUE} and determine whether the
-summary should be printed to console.}
 }
 \value{
 A data.frame summarizing the row- or column-structure of \code{x}.

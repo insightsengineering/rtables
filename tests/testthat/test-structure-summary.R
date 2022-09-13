@@ -6,7 +6,7 @@ test_that("path summaries", {
 
     tbl <- build_table(lyt, rawdat)
 
-    invisible(capture.output(cpathsum <- col_paths_summary(tbl, verbose = TRUE)))
+    capture.output(cpathsum <- col_paths_summary(tbl))
 
     arm1tmp <- c("ARM", "ARM1")
     arm2tmp <- c("ARM", "ARM2")
@@ -25,7 +25,7 @@ test_that("path summaries", {
     ## cpval doesn't contain the non-leaf paths
     expect_identical(cpval, cpathsum$path[-c(1, 4)])
 
-    invisible(capture.output(rpathsum <- row_paths_summary(tbl, verbose = TRUE)))
+    capture.output(rpathsum <- row_paths_summary(tbl))
     
     ## defined in setup-fakedata.R
     expect_identical(complx_lyt_rnames,
