@@ -149,7 +149,7 @@ visible_only and not")
 
 
 
-    combodf <- tibble::tribble(
+    combodf <- tribble(
                            ~valname, ~label, ~levelcombo, ~exargs,
                            "A_", "Arm 1", c("A: Drug X"), list(),
                            "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
