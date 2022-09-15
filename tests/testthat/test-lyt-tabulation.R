@@ -13,7 +13,6 @@ test_that("summarize_row_groups works with provided funcs", {
 
     expect(TRUE, "succeeded")
 
-
 })
 
 
@@ -33,7 +32,6 @@ test_that("complex layout works", {
     lyt2 <- lyt %>% append_topleft(tlvals)
     tab2 <- build_table(lyt2, rawdat)
     expect_identical(top_left(tab2), tlvals)
-
 })
 
 
@@ -379,8 +377,9 @@ test_that("cfun args", {
         split_rows_by("SEX") %>%
         summarize_row_groups(cfun = cfun1)
 
-    tbl <- build_table(lyt, rawdat)
-    expect_identical(print(tbl), tbl)
+    tbl <- build_table(lyt, rawdat)    
+    capture.output({prout <- print(tbl)})
+    expect_identical(prout, tbl)
 })
 
 ## regression test for automatically not-nesting
