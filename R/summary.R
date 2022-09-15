@@ -94,7 +94,6 @@ row_paths_summary <- function(x) {
   )
 
   txt <- mat_as_string(mat)
-  
   cat(txt)
   cat("\n")
 
@@ -121,7 +120,6 @@ col_paths_summary <- function(x) {
   )
 
   txt <- mat_as_string(mat)
-  
   cat(txt)
   cat("\n")
 
