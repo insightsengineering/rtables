@@ -524,12 +524,42 @@ do_force_paginate <- function(tt,
 #' pagination should be done.
 #' @rdname paginate
 #' @inheritParams formatters::vert_pag_indices
-paginate_table <- function(tt, lpp = 15,
-                          cpp = NULL,
-                          min_siblings = 2,
-                          nosplitin = character(),
-                          colwidths = NULL,
-                          verbose = FALSE) {
+#' @inheritParams formatters::page_lcpp
+paginate_table <- function(tt,
+                           page_type = "letter",
+                           font_family = "Courier",
+                           font_size = 12,
+                           lineheight = 1,
+                           pg_width = NULL,
+                           pg_height = NULL,
+                           margins = c(top = .5, bottom = .5, left = .75, right = .75),
+                           lpp,
+                           cpp,
+                           min_siblings = 2,
+                           nosplitin = character(),
+                           colwidths = NULL,
+                           verbose = FALSE) {
+
+    if(missing(lpp) && missing(cpp) &&
+        !is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height))) {
+        pg_lcpp <- page_lcpp(page_type = page_type,
+                             font_family = font_family,
+                             font_size = font_size,
+                             lineheight = lineheight,
+                             pg_width = pg_width,
+                             pg_height = pg_height,
+                             margins = margins)
+
+        if(missing(lpp))
+            lpp <- pg_lcpp$lpp
+        if(missing(cpp))
+            cpp <- pg_lcpp$cpp
+    } else {
+        if(missing(cpp))
+            cpp <- NULL
+        if(missing(lpp))
+            lpp <- 70
+    }
 
     if(is.null(colwidths)) {
         colwidths <- propose_column_widths(matrix_form(tt))

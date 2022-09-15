@@ -16,8 +16,15 @@ pag_tt_indices(
 
 paginate_table(
   tt,
-  lpp = 15,
-  cpp = NULL,
+  page_type = "letter",
+  font_family = "Courier",
+  font_size = 12,
+  lineheight = 1,
+  pg_width = NULL,
+  pg_height = NULL,
+  margins = c(top = 0.5, bottom = 0.5, left = 0.75, right = 0.75),
+  lpp,
+  cpp,
   min_siblings = 2,
   nosplitin = character(),
   colwidths = NULL,
@@ -40,6 +47,27 @@ considerations. Defaults to none.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
 to \code{FALSE}.}
+
+\item{page_type}{character(1).   Name   of  a  page  type.   See
+`page_types`.   Ignored when  `pg_width` and  `pg_height`
+are set directly.}
+
+\item{font_family}{character(1). Name of a font family. An error
+will be thrown if the family named is not monospaced. Defaults
+to Courier.}
+
+\item{font_size}{numeric(1). Fontsize, defaults to 12.}
+
+\item{lineheight}{numeric(1). Lineheight, defaults to 1.}
+
+\item{pg_width}{numeric(1). Page width in inches.}
+
+\item{pg_height}{numeric(1). Page height in inches.}
+
+\item{margins}{numeric(4). Named numeric vector containing `'top'`,
+`'bottom'`, `'left'`, and `'right'` margins in inches. Defaults
+to `.5` inches for both vertical margins and `.75` for both
+horizontal margins.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NULL} (the default) indicates no horizontal

@@ -1,5 +1,8 @@
-## rtables 0.5.2.1
- * dev version increment 
+
+## rtables 0.5.2.2
+ * `paginate_table` now takes page dimension and font information and uses `formatters::page_lcpp` to
+   calculate `lpp` and `cpp` automatically when those are provided.
+ * Increase versioned dependency on `formatters` to `>= 0.3.3.2` for `page_lcpp`
 
 ## rtables 0.5.2
  * `paginate_table` now accepts `cpp` and will perform vertical pagination when it is non-null
