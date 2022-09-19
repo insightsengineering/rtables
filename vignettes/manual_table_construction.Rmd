@@ -13,7 +13,7 @@ editor_options:
 
 
 ```{r, echo=FALSE}
-knitr::opts_chunk$set(comment = "")
+knitr::opts_chunk$set(comment = "#")
 ```
 
 ```{css, echo=FALSE}
