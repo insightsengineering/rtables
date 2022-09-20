@@ -23,9 +23,7 @@ knitr::opts_chunk$set(
 
 The `rtables` R package was designed to create and display complex tables with R. The cells in an `rtable` may contain
 any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
-`rtables` can be outputted in `ascii` and `html`.
-
-Note: we have completely refactored the `rtables` package which is officially released on CRAN in December 2020. With this significant change please familiarize yourself with the new framework by reading the package vignettes.
+`rtables` can be outputted in `ascii` `html`, and `pdf`, as well powerpoint (via conversion to `flextable` objects). `rtf` support is in development and will be in a future release.
 
 `rtables` is developed and copy written by `F. Hoffmann-La Roche` and it is released open source under Apache
 License Version 2. 
@@ -42,8 +40,7 @@ License Version 2.
 * distinguish between name and label in the data structure to work with CDISC standards
 * title, footnotes, cell cell/row/column references
 
-Note that the current state of `rtables` does not fulfill all of those requirements, however, `rtables` is still under
-active development and we are working on adding the missing features.
+`rtables` currently covers virtually all of these requirements, and is in still under activel development.
 
 
 ## Installation
@@ -54,7 +51,7 @@ active development and we are working on adding the missing features.
 install.packages("rtables")
 ```
 
-or you can install the latest stable version directly from GitHub with:
+or you can install the latest development version directly from GitHub with:
 
 ```r
 devtool::install_github("Roche/rtables")
@@ -66,13 +63,6 @@ user!2020 and JSM2020 run the following command in `R`:
 ```{r, eval = FALSE}
 devtools::install_github("roche/rtables", ref="v0.3.3")
 ```
-
-To install the latest development version of the new test version of `rtables` run
-
-```{r, eval = FALSE}
-devtools::install_github("roche/rtables", ref = "gabe_tabletree_work")
-```
-
 
 ## Usage
 
@@ -136,6 +126,11 @@ We would like to thank everyone who has made `rtables` a better project by provi
 Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
+
+### R Adoption Series
+
+* [R Adoption Series presentation 2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
+* Slides: https://github.com/gmbecker/rtables_radoption_webinar (index.html)
 
 ### New (Current) Layouting and Tabulation Framework (v.0.3+)
 
