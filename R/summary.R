@@ -233,7 +233,7 @@ summarize_rows <- function(obj) {
 #'           format = "xx.xx")
 #'
 #' tbl <- build_table(l, iris2)
-#'
+
 #' @rdname int_methods
 setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0)
     standardGeneric("summarize_rows_inner"))
@@ -434,6 +434,17 @@ is_empty_labelrow <- function(x) {
 is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
+
+#' @rdname int_methods
+setGeneric("str", function(x,...) standardGeneric("str"))
+
+#' @rdname int_methods
+setMethod("str", "TableTree", 
+          function(x){
+              if(class(x)== "TableTree" | class(x)== "Elementary Table"){
+                  warning("str() is not ideal for determining rtable structure. Please consider table_structure()")
+              }
+              utils::str(x)})
 
 #' @rdname int_methods
 #' @inheritParams table_structure_inner
