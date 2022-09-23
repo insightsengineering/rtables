@@ -881,26 +881,61 @@ setMethod("obj_na_str<-", "CellValue", function(obj, value) {
     obj
 })
 
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str<-", "VTableNodeInfo", function(obj, value) {
+    obj@na_str <- value
+    obj
+})
+
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str<-", "Split", function(obj, value) {
+    obj@split_na_str <- value
+    obj
+})
+
+
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
+
 
 #' @rdname lab_name
 #' @export
 setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str"))
 
+#' @rdname lab_name
+#' @export
+setMethod("obj_na_str", "Split", function(obj) obj@split_na_str)
+
+.no_na_str <- function(x) {
+    if(!is.character(x))
+        x <- obj_na_str(x)
+    length(x) == 0 || all(is.na(x))
+}
 
 #' @rdname int_methods
-setGeneric("set_format_recursive", function(obj, format, override = FALSE) standardGeneric("set_format_recursive"))
+setGeneric("set_format_recursive", function(obj, format, na_str, override = FALSE) standardGeneric("set_format_recursive"))
 #' @rdname int_methods
 #' @param override logical(1).
 setMethod("set_format_recursive", "TableRow",
-          function(obj, format, override = FALSE) {
-    if(is.null(format))
+          function(obj, format, na_str, override = FALSE) {
+    if(is.null(format) && .no_na_str(na_str))
         return(obj)
-    if(is.null(obj_format(obj)) || override)
+
+    if((is.null(obj_format(obj)) && !is.null(format)) || override)
         obj_format(obj) <- format
+    if((.no_na_str(obj) && !.no_na_str(na_str)) || override)
+        obj_na_str(obj) <- na_str
     lcells <- row_cells(obj)
     lvals <- lapply(lcells, function(x) {
-        if(!is.null(x) && (override || is.null(obj_format(x))))
+        if(!is.null(x) && (override || is.null(obj_format(x)))) {
             obj_format(x) <- obj_format(obj)
+        }
+        if(!is.null(x) && (override || .no_na_str(x))) {
+            obj_na_str(x) <- obj_na_str(obj)
+        }
         x
     })
     row_values(obj) <- lvals
@@ -910,20 +945,22 @@ setMethod("set_format_recursive", "TableRow",
 setMethod("set_format_recursive", "LabelRow",
           function(obj, format, override = FALSE) obj)
 setMethod("set_format_recursive", "VTableTree",
-          function(obj, format, override = FALSE) {
+          function(obj, format, na_str, override = FALSE) {
     force(format)
-    if(is.null(format))
+    if(is.null(format) && .no_na_str(na_str))
         return(obj)
 
-    if(is.null(obj_format(obj)) || override)
+    if((is.null(obj_format(obj)) && !is.null(format)) || override)
         obj_format(obj) <- format
+    if((.no_na_str(obj) && !.no_na_str(na_str)) || override)
+        obj_na_str(obj) <- na_str
 
     kids <- tree_children(obj)
-    kids <- lapply(kids, function(x, format2, oride) {
+    kids <- lapply(kids, function(x, format2, na_str2,  oride) {
         set_format_recursive(x,
-                             format = format2, override = oride)
+                             format = format2, na_str = na_str2, override = oride)
         },
-        format2 = obj_format(obj), oride = override)
+        format2 = obj_format(obj), na_str2  = obj_na_str(obj), oride = override)
     tree_children(obj) <- kids
     obj
 })
@@ -938,6 +975,20 @@ setGeneric("content_format<-", function(obj, value) standardGeneric("content_for
 #' @rdname int_methods
 setMethod("content_format<-", "Split", function(obj, value) {
     obj@content_format <- value
+    obj
+})
+
+
+#' @rdname int_methods
+setGeneric("content_na_str", function(obj) standardGeneric("content_na_str"))
+#' @rdname int_methods
+setMethod("content_na_str", "Split", function(obj) obj@content_na_str)
+
+#' @rdname int_methods
+setGeneric("content_na_str<-", function(obj, value) standardGeneric("content_na_str<-"))
+#' @rdname int_methods
+setMethod("content_na_str<-", "Split", function(obj, value) {
+    obj@content_na_str <- value
     obj
 })
 

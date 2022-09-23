@@ -35,8 +35,8 @@ this undertaking are listed below:
   CDISC standards
 - title, footnotes, cell cell/row/column references
 
-`rtables` currently covers virtually all of these requirements, and is
-in still under activel development.
+`rtables` currently covers virtually all of these requirements, and
+further advances remain under active development.
 
 ## Installation
 
@@ -54,13 +54,9 @@ with:
 devtool::install_github("Roche/rtables")
 ```
 
-To install a frozen pre-release version of `rtables` based on the new
-Layouting and Tabulation API as presented at user!2020 and JSM2020 run
-the following command in `R`:
-
-``` r
-devtools::install_github("roche/rtables", ref="v0.3.3")
-```
+Packaged releases (both those on CRAN and those between official CRAN
+releases) can be found in the [releases
+list](https://github.com/Roche/rtables/releases)
 
 ## Usage
 
@@ -70,11 +66,7 @@ creation of a more complex table.
 ``` r
 library(rtables)
 #> Loading required package: magrittr
-#> 
-#> Attaching package: 'magrittr'
-#> The following objects are masked from 'package:testthat':
-#> 
-#>     equals, is_less_than, not
+#> Loading required package: formatters
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -113,6 +105,14 @@ build_table(lyt, ex_adsl)
 ``` r
 library(rtables)
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 
 ## for simplicity grab non-sparse subset
 ADSL = ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
@@ -184,12 +184,3 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 - [useR!2020 Presentation (on v0.3.1.1) July
   2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
-
-### v0.1.0 and previous
-
-- [Presentation on v0.1.0 April
-  2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
-
-- [baselR November
-  2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing),
-  this presentation was written for version `v0.0.1`

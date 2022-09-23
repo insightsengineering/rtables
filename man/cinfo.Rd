@@ -14,6 +14,7 @@ InstantiatedColumnInfo(
   total_cnt = NA_integer_,
   dispcounts = FALSE,
   countformat = "(N=xx)",
+  count_na_str = "",
   topleft = character()
 )
 }
@@ -29,10 +30,13 @@ InstantiatedColumnInfo(
 \item{total_cnt}{integer(1). Total observations represented across all
 columns.}
 
-\item{dispcounts}{logical. Should the counts be displayed as header info when
+\item{dispcounts}{logical(1). Should the counts be displayed as header info when
 the associated table is printed.}
 
-\item{countformat}{string. Format for the counts if thtey are displayed}
+\item{countformat}{character(1). Format for the counts if thtey are displayed}
+
+\item{count_na_str}{character. NA string to be used when formatting counts. Defaults
+to \code{""}.}
 
 \item{topleft}{character. Override values for the "top left" material to be
 displayed during printing.}

@@ -1,3 +1,8 @@
+## rtables 0.5.2.3
+ * layouting instructions now accept na_str argument, which specifies na string with the same
+   inheritance rules as formats
+ * (pre-data) Split and (post tabulation) Table/row S4 classes now carry around na_str information
+ * Increase versioned dependency on `formatters` to `>= 0.3.3.3` for support of na_strs with `NA_character_` values
 
 ## rtables 0.5.2.2
  * `paginate_table` now takes page dimension and font information and uses `formatters::page_lcpp` to

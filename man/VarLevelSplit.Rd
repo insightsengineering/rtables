@@ -13,8 +13,10 @@ VarLevelSplit(
   labels_var = NULL,
   cfun = NULL,
   cformat = NULL,
+  cna_str = NA_character_,
   split_fun = NULL,
   split_format = NULL,
+  split_na_str = NA_character_,
   valorder = NULL,
   split_name = var,
   child_labels = c("default", "visible", "hidden"),
@@ -37,8 +39,10 @@ VarLevWBaselineSplit(
   label_fstr = "\%s - \%s",
   cfun = NULL,
   cformat = NULL,
+  cna_str = NA_character_,
   cvar = "",
   split_format = NULL,
+  split_na_str = NA_character_,
   valorder = NULL,
   split_name = var,
   extra_args = list()
@@ -61,11 +65,16 @@ arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 
+\item{cna_str}{character. NA string for use with \code{cformat} for content
+table.}
+
 \item{split_fun}{function/NULL. custom splitting function See
 \code{\link{custom_split_funs}}}
 
 \item{split_format}{FormatSpec. Default format associated with the split
 being created.}
+
+\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
 
 \item{valorder}{character vector. Order that the split children should appear
 in resulting table.}

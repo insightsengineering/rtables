@@ -13,10 +13,12 @@ lyt_args(
   varlabels,
   varnames,
   split_format,
+  split_na_str,
   nested,
   format,
   cfun,
   cformat,
+  cna_str,
   split_fun,
   split_name,
   split_label,
@@ -45,7 +47,8 @@ lyt_args(
   page_by,
   page_prefix,
   format_na_str,
-  section_div
+  section_div,
+  na_str
 )
 }
 \arguments{
@@ -71,6 +74,8 @@ uniqueness.}
 \item{split_format}{FormatSpec. Default format associated with the split
 being created.}
 
+\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
+
 \item{nested}{boolean. Should this layout instruction be applied within the
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
 new top-level element (`FALSE). Ignored if it would nest a split underneath
@@ -86,6 +91,9 @@ rows. Must accept \code{x} or \code{df} as first parameter. Must accept
 arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
+
+\item{cna_str}{character. NA string for use with \code{cformat} for content
+table.}
 
 \item{split_fun}{function/NULL. custom splitting function See
 \code{\link{custom_split_funs}}}
@@ -188,6 +196,8 @@ formatted if this cell's value(s) are all NA.}
 \item{section_div}{character(1). String which should be repeated as a section
 divider after each group defined by this split instruciton, or
 \code{NA_character_} (the default) for no section divider.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 }
 \value{
 NULL (this is an argument template dummy function)

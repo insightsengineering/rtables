@@ -27,7 +27,9 @@ constr_args(
   page_title,
   page_prefix,
   section_div,
-  trailing_sep
+  trailing_sep,
+  split_na_str,
+  cna_str
 )
 }
 \arguments{
@@ -99,6 +101,11 @@ unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this
 would correspond to the \code{section_div} of the split under which this table
 represents a single facet.}
+
+\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
+
+\item{cna_str}{character. NA string for use with \code{cformat} for content
+table.}
 }
 \value{
 NULL (this is an argument template dummy function)

@@ -26,6 +26,7 @@ gen_args(
   hsep,
   indent_size,
   section_div,
+  na_str,
   ...
 )
 }
@@ -94,6 +95,8 @@ Defaults to 2}
 \item{section_div}{character(1). String which should be repeated as a section
 divider after each group defined by this split instruciton, or
 \code{NA_character_} (the default) for no section divider.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{\dots}{Passed on to methods or tabulation functions.}
 }

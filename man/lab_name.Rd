@@ -22,7 +22,11 @@
 \alias{obj_na_str}
 \alias{obj_na_str<-}
 \alias{obj_na_str<-,CellValue-method}
+\alias{obj_na_str<-,VTableNodeInfo-method}
+\alias{obj_na_str<-,Split-method}
+\alias{obj_na_str,VTableNodeInfo-method}
 \alias{obj_na_str,ANY-method}
+\alias{obj_na_str,Split-method}
 \title{Label, Name and Format accessor generics}
 \usage{
 \S4method{obj_name}{VNodeInfo}(obj)
@@ -67,7 +71,15 @@ obj_na_str(obj) <- value
 
 \S4method{obj_na_str}{CellValue}(obj) <- value
 
+\S4method{obj_na_str}{VTableNodeInfo}(obj) <- value
+
+\S4method{obj_na_str}{Split}(obj) <- value
+
+\S4method{obj_na_str}{VTableNodeInfo}(obj)
+
 \S4method{obj_na_str}{ANY}(obj)
+
+\S4method{obj_na_str}{Split}(obj)
 }
 \arguments{
 \item{obj}{ANY. The object.}

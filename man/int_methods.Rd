@@ -162,6 +162,10 @@
 \alias{content_format,Split-method}
 \alias{content_format<-}
 \alias{content_format<-,Split-method}
+\alias{content_na_str}
+\alias{content_na_str,Split-method}
+\alias{content_na_str<-}
+\alias{content_na_str<-,Split-method}
 \alias{row_cspans}
 \alias{row_cspans,TableRow-method}
 \alias{row_cspans,LabelRow-method}
@@ -321,6 +325,7 @@ split_cols(lyt = NULL, spl, pos)
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
+  cna_str = "-",
   indent_mod = 0L,
   cvar = "",
   extra_args = list()
@@ -332,6 +337,7 @@ split_cols(lyt = NULL, spl, pos)
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
+  cna_str = "-",
   indent_mod = 0L,
   cvar = "",
   extra_args = list()
@@ -343,6 +349,7 @@ split_cols(lyt = NULL, spl, pos)
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
+  cna_str = "-",
   indent_mod = 0L,
   cvar = "",
   extra_args = list()
@@ -354,6 +361,7 @@ split_cols(lyt = NULL, spl, pos)
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
+  cna_str = "-",
   indent_mod = 0L,
   cvar = "",
   extra_args = list()
@@ -365,6 +373,7 @@ split_cols(lyt = NULL, spl, pos)
   cfun,
   child_labels = c("default", "visible", "hidden"),
   cformat = NULL,
+  cna_str = "-",
   indent_mod = 0L,
   cvar = "",
   extra_args = list()
@@ -626,9 +635,9 @@ spanned_values(obj) <- value
 
 \S4method{spanned_values}{LabelRow}(obj) <- value
 
-set_format_recursive(obj, format, override = FALSE)
+set_format_recursive(obj, format, na_str, override = FALSE)
 
-\S4method{set_format_recursive}{TableRow}(obj, format, override = FALSE)
+\S4method{set_format_recursive}{TableRow}(obj, format, na_str, override = FALSE)
 
 \S4method{set_format_recursive}{LabelRow}(obj, format, override = FALSE)
 
@@ -639,6 +648,14 @@ content_format(obj)
 content_format(obj) <- value
 
 \S4method{content_format}{Split}(obj) <- value
+
+content_na_str(obj)
+
+\S4method{content_na_str}{Split}(obj)
+
+content_na_str(obj) <- value
+
+\S4method{content_na_str}{Split}(obj) <- value
 
 row_cspans(obj)
 
@@ -896,6 +913,9 @@ which flags the label row as visible only if the child has 0 content rows.}
 
 \item{cformat}{format spec. Format for content rows}
 
+\item{cna_str}{character. NA string for use with \code{cformat} for content
+table.}
+
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
@@ -933,6 +953,8 @@ analyses, which is not allowed.}
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{override}{logical(1).}
 }

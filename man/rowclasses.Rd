@@ -29,6 +29,7 @@ LabelRow(
   cinfo = EmptyColInfo,
   var = NA_character_,
   format = NULL,
+  na_str = NA_character_,
   klass,
   indent_mod = 0L,
   footnotes = list()
@@ -67,6 +68,8 @@ corresponds to the unmodified default behavior.}
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{klass}{Internal detail.}
 
