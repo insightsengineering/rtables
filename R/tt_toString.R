@@ -87,6 +87,8 @@ table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep()) {
     cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep))
 }
 
+## XXX consider moving to formatters, its really just a function
+## of the MatrixPrintForm
 #' @rdname table_shell
 #' @export
 table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep()) {
@@ -102,8 +104,12 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
             stop("Don't know how to make a shell with formats of class: ", class(x))
     }, "")
 
-    matform$strings <- matrix(format_strs, ncol = ncol(matform$strings),
-                              nrow = nrow(matform$strings))
+    format_strs_mat <- matrix(format_strs, ncol = ncol(matform$strings))
+    format_strs_mat[,1] <- matform$strings[,1]
+    nlh <- mf_nlheader(matform)
+    format_strs_mat[seq_len(nlh),] <- matform$strings[seq_len(nlh),]
+
+    matform$strings <- format_strs_mat
     toString(matform, widths = widths, col_gap = col_gap, hsep = hsep)
 }
 
@@ -179,7 +185,7 @@ setMethod("matrix_form", "VTableTree",
     formats_strings <- if (NROW(sr) == 0) {
                            character()
                        } else {
-                           cbind(as.character(sr$label), get_formatted_cells(obj, shell = TRUE))
+                           cbind("", get_formatted_cells(obj, shell = TRUE))
                        }
 
   tsptmp <- lapply(collect_leaves(obj, TRUE, TRUE), function(rr) {
@@ -201,12 +207,22 @@ setMethod("matrix_form", "VTableTree",
                           }
 
     body <- rbind(header_content$body, body_content_strings)
+
+    hdr_fmt_blank <- matrix("", nrow = nrow(header_content$body),
+                            ncol = ncol(header_content$body))
     if(disp_ccounts(obj)) {
-        formats <- rbind(head(header_content$body, -1), c("", rep(colcount_format(obj), ncol(obj))),
-                         formats_strings)
-    } else {
-        formats <- rbind(header_content$body, formats_strings)
+        hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
+    ## if(disp_ccounts(obj)) {
+    ##     formats <- rbind(matrix("", nrow = nrow(header_content$body) - 1L,
+    ##                             ncol = ncol(header_content$body)),
+
+    ##                      formats_strings)
+    ## } else {
+    ##     formats <- rbind(header_content$body, formats_strings)
+    ## }
+    formats <- rbind(hdr_fmt_blank, formats_strings)
+
   spans <- rbind(header_content$span, body_spans)
   row.names(spans) <- NULL
 
@@ -595,19 +611,19 @@ setMethod("get_formatted_cells", "TableRow",
             pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
             pr_row_na_str <- obj_na_str(obj) %||% "NA"
 
-            matrix(unlist(Map(function(val, spn) {
+            matrix(unlist(Map(function(val, spn, shelli) {
                 stopifnot(is(spn, "integer"))
 
                 out <- format_rcell(val,
                                     pr_row_format = pr_row_format,
                                     pr_row_na_str = pr_row_na_str,
-                                    shell = shell)
+                                    shell = shelli)
                 if (!is.function(out) && is.character(out)) {
                     out <- paste(out, collapse = ", ")
                 }
 
                 rep(list(out), spn)
-            }, val = row_cells(obj), spn = row_cspans(obj))),
+            }, val = row_cells(obj), spn = row_cspans(obj), shelli = shell)),
             ncol = ncol(obj))
 })
 

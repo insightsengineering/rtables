@@ -199,7 +199,8 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
     final_cwidths <- total_width * colwidths / sum(colwidths)
     matform <- matrix_form(tt, indent_rownames = TRUE)
 
-    hnum <- attr(matform, "nrow_header")
+    ## this was nrow_header before but that seems wrong!
+    hnum <- mf_nlheader(matform) ## attr(matform, "nrow_header")
 
     content <- as.data.frame(matform$strings[-(1:hnum), , drop = FALSE])
 

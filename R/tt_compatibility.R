@@ -24,7 +24,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0) {
                  vis = TRUE)
     } else {
         csps <- as.integer(sapply(vals, function(x) {
-            attr(x, "colspan") %||% 1L
+            attr(x, "colspan", exact = TRUE) %||% 1L
         }))
         ## we have to leave the formats on the cells and NOT the row unless we were
         ## already told to do so, because row formats get clobbered  when cbinding

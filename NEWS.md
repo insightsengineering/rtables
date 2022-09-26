@@ -1,3 +1,8 @@
+
+## rtables 0.5.2.4
+ * Use `exact=TRUE` in all calls to `attr` within access functions
+ * Increase versioned dependency on `formatters` to `>0.3.3.4`
+ 
 ## rtables 0.5.2.3
  * layouting instructions now accept na_str argument, which specifies na string with the same
    inheritance rules as formats

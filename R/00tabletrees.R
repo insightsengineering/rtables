@@ -1728,10 +1728,10 @@ print.RowsVerticalSection <- function(x, ...) {
     cat("RowsVerticalSection (in_rows) object print method:\n-------------------",
         "---------\n", sep = "")
     print(data.frame(
-    row_name = attr(x, "row_names"),
+    row_name = attr(x, "row_names", exact = TRUE),
     formatted_cell = vapply(x, format_rcell, character(1)),
     indent_mod = indent_mod(x), ##vapply(x, indent_mod, numeric(1)),
-    row_label = attr(x, "row_labels"),
+    row_label = attr(x, "row_labels", exact = TRUE),
     stringsAsFactors = FALSE,
     row.names = NULL
   ), row.names = TRUE)

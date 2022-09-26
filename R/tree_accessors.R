@@ -843,7 +843,7 @@ setMethod("spanned_values<-", "LabelRow",
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
 #' @rdname lab_name
 #' @export
-setMethod("obj_format", "CellValue", function(obj) attr(obj, "format"))
+setMethod("obj_format", "CellValue", function(obj) attr(obj, "format", exact = TRUE))
 #' @rdname lab_name
 #' @export
 setMethod("obj_format", "Split", function(obj) obj@split_format)
@@ -903,7 +903,7 @@ setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 
 #' @rdname lab_name
 #' @export
-setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str"))
+setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str", exact = TRUE))
 
 #' @rdname lab_name
 #' @export
@@ -1015,7 +1015,7 @@ setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGen
 #' @rdname value_formats
 setMethod("value_formats", "ANY",
           function(obj, default) {
-    attr(obj, "format") %||% default
+    obj_format(obj) %||% default
 })
 
 #' @rdname value_formats
@@ -1154,7 +1154,7 @@ setMethod("row_cspans<-", "LabelRow", function(obj, value) {
 setGeneric("cell_cspan", function(obj) standardGeneric("cell_cspan"))
 #' @rdname int_methods
 setMethod("cell_cspan", "CellValue",
-          function(obj) attr(obj, "colspan")) ##obj@colspan)
+          function(obj) attr(obj, "colspan", exact = TRUE)) ##obj@colspan)
 
 #' @rdname int_methods
 setGeneric("cell_cspan<-",
@@ -1170,7 +1170,7 @@ setMethod("cell_cspan<-", "CellValue", function(obj, value) {
 setGeneric("cell_align", function(obj) standardGeneric("cell_align"))
 #' @rdname int_methods
 setMethod("cell_align", "CellValue",
-          function(obj) attr(obj, "align") %||% "center") ##obj@colspan)
+          function(obj) attr(obj, "align", exact = TRUE) %||% "center") ##obj@colspan)
 
 #' @rdname int_methods
 setGeneric("cell_align<-",
@@ -1226,12 +1226,12 @@ setMethod("indent_mod", "VTableNodeInfo",
           function(obj) obj@indent_modifier)
 #' @rdname int_methods
 setMethod("indent_mod", "ANY",
-          function(obj) attr(obj, "indent_mod") %||% 0L)
+          function(obj) attr(obj, "indent_mod", exact = TRUE) %||% 0L)
 #' @rdname int_methods
 setMethod("indent_mod", "RowsVerticalSection",
           ##          function(obj) setNames(obj@indent_mods,names(obj)))
           function(obj) {
-    val <- attr(obj, "indent_mods") %||%
+    val <- attr(obj, "indent_mods", exact = TRUE) %||%
         vapply(obj, indent_mod, 1L) ##rep(0L, length(obj))
     setNames(val, names(obj))
 })
@@ -1343,7 +1343,7 @@ setMethod("value_names", "LevelComboSplitValue",
           function(obj) obj@value) ##obj@comboname)
 #' @rdname int_methods
 setMethod("value_names", "RowsVerticalSection",
-          function(obj) attr(obj, "row_names")) ##obj@row_names)
+          function(obj) attr(obj, "row_names", exact = TRUE)) ##obj@row_names)
 
 ## not sure if I need these anywhere
 ## XXX
@@ -1367,7 +1367,7 @@ setMethod("value_labels", "list", function(obj) {
 #' @rdname int_methods
 setMethod("value_labels",
           "RowsVerticalSection",
-          function(obj) setNames(attr(obj, "row_labels"), value_names(obj)))
+          function(obj) setNames(attr(obj, "row_labels", exact = TRUE), value_names(obj)))
 
 
 #' @rdname int_methods
@@ -2262,7 +2262,7 @@ setMethod("row_footnotes", "TableRow",
 #' @export
 #' @rdname ref_fnotes
 setMethod("row_footnotes", "RowsVerticalSection",
-          function(obj) attr(obj, "row_footnotes") %||% list())
+          function(obj) attr(obj, "row_footnotes", exact = TRUE) %||% list())
 
 #' @export
 #' @rdname ref_fnotes
@@ -2291,7 +2291,7 @@ setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
 #' @export
 #' @rdname ref_fnotes
 setMethod("cell_footnotes", "CellValue",
-          function(obj) attr(obj, "footnotes") %||% list())
+          function(obj) attr(obj, "footnotes", exact = TRUE) %||% list())
 #' @export
 #' @rdname ref_fnotes
 setMethod("cell_footnotes", "TableRow",
