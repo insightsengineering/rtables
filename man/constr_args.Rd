@@ -29,7 +29,8 @@ constr_args(
   section_div,
   trailing_sep,
   split_na_str,
-  cna_str
+  cna_str,
+  inset
 )
 }
 \arguments{
@@ -106,6 +107,10 @@ represents a single facet.}
 
 \item{cna_str}{character. NA string for use with \code{cformat} for content
 table.}
+
+\item{inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 }
 \value{
 NULL (this is an argument template dummy function)

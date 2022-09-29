@@ -1,4 +1,10 @@
 
+## rtables 0.5.2.5
+ * `basic_table` now accepts `inset` argument for declaring table inset
+ * Table and Layout object classes now have a `table_inset` slot, with accessor functions.
+ * `matrix_form` method for `VTableTree` sets `table_inset` value
+ * Increase versioned dependency on `formatters` to `>0.3.3.5` for `table_inset` support
+
 ## rtables 0.5.2.4
  * Use `exact=TRUE` in all calls to `attr` within access functions
  * Increase versioned dependency on `formatters` to `>0.3.3.4`

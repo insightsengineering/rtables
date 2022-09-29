@@ -1694,11 +1694,13 @@ basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
-                        show_colcounts = FALSE) {
+                        show_colcounts = FALSE,
+                        inset = 0L) {
     ret <- PreDataTableLayouts(title = title,
                         subtitles = subtitles,
                         main_footer = main_footer,
-                        prov_footer = prov_footer)
+                        prov_footer = prov_footer,
+                        table_inset = as.integer(inset))
     if(show_colcounts)
         ret <- add_colcounts(ret)
     ret

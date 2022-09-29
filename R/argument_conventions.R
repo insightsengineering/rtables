@@ -59,11 +59,15 @@ NULL
 #' @param section_div character(1). String which should be repeated as a section
 #'   divider after each group defined by this split instruciton, or
 #'   `NA_character_` (the default) for no section divider.
+#' @param inset numeric(1). Number of spaces to inset the table header, table
+#' body, referential footnotes, and main_footer, as compared to alignment
+#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
-                     cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, ...) NULL
+                     cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
+                     ...) NULL
 
 
 
@@ -215,7 +219,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
                         trailing_sep, split_na_str,
-                        cna_str) NULL
+                        cna_str, inset) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args

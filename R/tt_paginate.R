@@ -561,6 +561,8 @@ paginate_table <- function(tt,
             lpp <- 70
     }
 
+    if(!is.null(cpp))
+        cpp <- cpp - table_inset(tt)
     if(is.null(colwidths)) {
         colwidths <- propose_column_widths(matrix_form(tt))
     }

@@ -27,7 +27,8 @@ ElementaryTable(
   main_footer = character(),
   prov_footer = character(),
   hsep = default_hsep(),
-  trailing_sep = NA_character_
+  trailing_sep = NA_character_,
+  inset = 0L
 )
 
 TableTree(
@@ -51,7 +52,8 @@ TableTree(
   prov_footer = character(),
   page_title = NA_character_,
   hsep = default_hsep(),
-  trailing_sep = NA_character_
+  trailing_sep = NA_character_,
+  inset = 0L
 )
 }
 \arguments{
@@ -110,6 +112,10 @@ unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this
 would correspond to the \code{section_div} of the split under which this table
 represents a single facet.}
+
+\item{inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{cont}{ElementaryTable. Content table.}
 

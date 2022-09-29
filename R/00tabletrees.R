@@ -1252,7 +1252,8 @@ setClass("VTableTree",
                         labelrow = "LabelRow",
                         page_titles = "character",
                         horizontal_sep = "character",
-                        trailing_section_div = "character"
+                        trailing_section_div = "character",
+                        table_inset = "integer"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
@@ -1345,7 +1346,8 @@ ElementaryTable <- function(kids = list(),
                            main_footer = character(),
                            prov_footer = character(),
                            hsep = default_hsep(),
-                           trailing_sep = NA_character_) {
+                           trailing_sep = NA_character_,
+                           inset = 0L) {
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1368,6 +1370,7 @@ ElementaryTable <- function(kids = list(),
               ## set_format_recursive anyway
               format = NULL,
               na_str = NA_character_,
+              table_inset = 0L,
               indent_modifier = as.integer(indent_mod),
               main_title = title,
               subtitles = subtitles,
@@ -1377,6 +1380,7 @@ ElementaryTable <- function(kids = list(),
               trailing_section_div = trailing_sep
               )
     tab <- set_format_recursive(tab, format, na_str, FALSE)
+    table_inset(tab) <- as.integer(inset)
     tab
 }
 
@@ -1429,7 +1433,8 @@ TableTree <- function(kids = list(),
                      prov_footer = character(),
                      page_title = NA_character_,
                      hsep = default_hsep(),
-                     trailing_sep = NA_character_) {
+                     trailing_sep = NA_character_,
+                     inset = 0L) {
 
     cinfo <- .calc_cinfo(cinfo, cont, kids)
 
@@ -1458,7 +1463,8 @@ TableTree <- function(kids = list(),
                         main_footer = main_footer,
                         prov_footer = prov_footer,
                         hsep = hsep,
-                        trailing_sep = trailing_sep)
+                        trailing_sep = trailing_sep,
+                        inset = inset)
     } else {
         tab <- new("TableTree", content = cont,
                    children = kids,
@@ -1469,6 +1475,7 @@ TableTree <- function(kids = list(),
                    col_info = cinfo,
                    format = NULL,
                    na_str = na_str,
+                   table_inset = 0L,
                    indent_modifier = as.integer(indent_mod),
                    main_title = title,
                    subtitles = subtitles,
@@ -1478,8 +1485,11 @@ TableTree <- function(kids = list(),
                    horizontal_sep = "-",
                    trailing_section_div = trailing_sep) ## this is overridden below to get recursiveness
         tab <- set_format_recursive(tab, format, na_str, FALSE)
-        ## this is recursive
+
+        ## these is recursive
+        ## XXX combine thse probably
         horizontal_sep(tab) <- hsep
+        table_inset(tab) <- as.integer(inset)
         tab
     }
 }
@@ -1579,7 +1589,8 @@ PreDataRowLayout <- function(x = SplitVector(),
 setClass("PreDataTableLayouts", contains = "VTitleFooter",
          representation(row_layout = "PreDataRowLayout",
                         col_layout = "PreDataColLayout",
-                        top_left = "character"))
+                        top_left = "character",
+                        table_inset = "integer"))
 
 PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                clayout = PreDataColLayout(),
@@ -1587,7 +1598,8 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                title = "",
                                subtitles = character(),
                                main_footer = character(),
-                               prov_footer = character()) {
+                               prov_footer = character(),
+                               table_inset = 0L) {
     new("PreDataTableLayouts",
         row_layout = rlayout,
         col_layout = clayout,
@@ -1595,7 +1607,8 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
         main_title = title,
         subtitles = subtitles,
         main_footer = main_footer,
-        provenance_footer = prov_footer)
+        provenance_footer = prov_footer,
+        table_inset = table_inset)
 }
 
 

@@ -2594,6 +2594,72 @@ setMethod("spl_section_div<-", "Split",
 })
 
 
+#' @inherit formatters::table_inset
+#'
+#' @rdname table_inset
+#' @export
+setMethod("table_inset", "VTableTree",
+          function(obj) obj@table_inset)
+
+
+
+#' @rdname table_inset
+#' @export
+setMethod("table_inset<-", "VTableTree",
+          function(obj, value) {
+    cont <- content_table(obj)
+    if(NROW(cont) > 0) {
+        table_inset(cont) <- value
+        content_table(obj) <- cont
+    }
+
+    kids <- lapply(tree_children(obj),
+                   `table_inset<-`,
+                   value = value)
+
+    tree_children(obj) <- kids
+    obj@table_inset <- value
+    obj
+})
+
+#' @rdname table_inset
+#' @export
+setMethod("table_inset", "PreDataTableLayouts",
+          function(obj) obj@table_inset)
+
+
+
+#' @rdname table_inset
+#' @export
+setMethod("table_inset<-", "PreDataTableLayouts",
+          function(obj, value) {
+    obj@table_inset <- value
+    obj
+})
+
+#' @rdname table_inset
+#' @export
+setMethod("table_inset<-", "TableRow",
+          function(obj, value) obj)
+
+
+
+setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
+
+setMethod("spl_section_div", "Split",
+          function(obj) obj@child_section_div)
+
+
+setGeneric("spl_section_div<-",
+           function(obj, value) standardGeneric("spl_section_div<-"))
+
+setMethod("spl_section_div<-", "Split",
+          function(obj, value) {
+    obj@child_section_div <- value
+    obj
+})
+
+
 
 setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
 

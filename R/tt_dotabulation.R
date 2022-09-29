@@ -1096,6 +1096,8 @@ build_table <- function(lyt, df,
     ## unused <- matrix_form(tab)
     tab <- update_ref_indexing(tab)
     horizontal_sep(tab) <- hsep
+    if(table_inset(lyt) > 0)
+        table_inset(tab) <- table_inset(lyt)
     tab
 }
 
