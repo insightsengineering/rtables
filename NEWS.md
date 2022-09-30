@@ -1,3 +1,7 @@
+## rtables 0.5.2.6
+ * `toString` method for `VTableTree` now accepts `tf_wrap` and `max_width`
+ * `export_as_txt` and `export_as_pdf` now accept `cpp`, as well as `tf_wrap` and `max_width` and
+    default to `tf_wrap` being on and `max_width = cpp` when `cpp` is non-NULL.
 
 ## rtables 0.5.2.5
  * `basic_table` now accepts `inset` argument for declaring table inset

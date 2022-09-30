@@ -103,6 +103,8 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' Export as plain text with page break symbol
 #'
 #' @inheritParams gen_args
+#' @inheritParams tostring
+#' @inheritParams paginate_table
 #' @param file character(1). File to write.
 #' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
 #' @param \dots Passed directly to \code{\link{paginate_table}}
@@ -129,14 +131,17 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "\\s\\n",
+export_as_txt <- function(tt, file = NULL, paginate = FALSE, cpp = NULL,
+                          ..., page_break = "\\s\\n",
                           hsep = default_hsep(),
-                          indent_size = 2) {
+                          indent_size = 2,
+                          tf_wrap = !is.null(cpp),
+                          max_width = cpp) {
 
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
 
     if(paginate) {
-        tbls <- paginate_table(tt, ...)
+        tbls <- paginate_table(tt, cpp = cpp, ...)
     } else {
         tbls <- list(tt)
     }
@@ -144,7 +149,9 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, ..., page_break = "
     res <- paste(sapply(tbls, toString,
                         widths = colwidths,
                         hsep = hsep,
-                        indent_size = indent_size), collapse = page_break)
+                        indent_size = indent_size,
+                        tf_wrap = tf_wrap,
+                        max_width = max_width), collapse = page_break)
 
     if(!is.null(file))
         cat(res, file = file)
@@ -293,8 +300,11 @@ export_as_pdf <- function(tt,
                           file, width = 11.7, height = 8.3, # passed to pdf()
                           margins = c(4, 4, 4, 4), fontsize = 8,  # grid parameters
                           paginate = TRUE, lpp = NULL,
+                          cpp = NULL,
                           hsep = "-",
                           indent_size = 2,
+                          tf_wrap = !is.null(cpp),
+                          max_width = cpp,
                           ... # passed to paginate_table
 ) {
     stopifnot(file_ext(file) != ".pdf")
@@ -314,13 +324,14 @@ export_as_pdf <- function(tt,
                              (cur_gpar$cex * cur_gpar$lineheight))
         }
 
-        paginate_table(tt, lpp = lpp, ...)
+        paginate_table(tt, lpp = lpp, cpp = cpp, ...)
     } else {
         list(tt)
     }
 
     stbls <- lapply(lapply(tbls, toString, widths = colwidths, hsep = hsep,
-                           indent_size = indent_size), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+                           indent_size = indent_size, tf_wrap = tf_wrap,
+                           max_width = max_width), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
 
     gtbls <- lapply(stbls, function(txt) {
         textGrob(

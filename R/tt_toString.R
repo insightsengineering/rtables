@@ -20,6 +20,7 @@ NULL
 #' Convert an `rtable` object to a string
 #'
 #' @inheritParams gen_args
+#' @inheritParams formatters::toString
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns
@@ -51,11 +52,15 @@ setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
                                              hsep = horizontal_sep(x),
-                                             indent_size = 2) {
+                                             indent_size = 2,
+                                             tf_wrap = FALSE,
+                                             max_width = NULL) {
     toString(matrix_form(x, indent_rownames = TRUE,
                          indent_size = indent_size),
              widths = widths, col_gap = col_gap,
-             hsep = hsep)
+             hsep = hsep,
+             tf_wrap = tf_wrap,
+             max_width = max_width)
 })
 
 #' Table shells
@@ -83,15 +88,18 @@ setMethod("toString", "VTableTree", function(x,
 #'
 #' tbl <- build_table(l, iris2)
 #' table_shell(tbl)
-table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep()) {
-    cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep))
+table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
+                        tf_wrap = FALSE, max_width = NULL) {
+    cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep,
+                        tf_wrap = tf_wrap, max_width = max_width))
 }
 
 ## XXX consider moving to formatters, its really just a function
 ## of the MatrixPrintForm
 #' @rdname table_shell
 #' @export
-table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep()) {
+table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
+                            tf_wrap = FALSE, max_width = NULL) {
 
     matform <- matrix_form(tt, indent_rownames = TRUE)
     format_strs <- vapply(as.vector(matform$formats),
@@ -110,7 +118,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
     format_strs_mat[seq_len(nlh),] <- matform$strings[seq_len(nlh),]
 
     matform$strings <- format_strs_mat
-    toString(matform, widths = widths, col_gap = col_gap, hsep = hsep)
+    toString(matform, widths = widths, col_gap = col_gap, hsep = hsep,
+             tf_wrap = tf_wrap, max_width = max_width)
 }
 
 

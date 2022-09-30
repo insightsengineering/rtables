@@ -8,10 +8,13 @@ export_as_txt(
   tt,
   file = NULL,
   paginate = FALSE,
+  cpp = NULL,
   ...,
   page_break = "\\\\s\\\\n",
   hsep = default_hsep(),
-  indent_size = 2
+  indent_size = 2,
+  tf_wrap = !is.null(cpp),
+  max_width = cpp
 )
 }
 \arguments{
@@ -21,6 +24,10 @@ populated table.}
 \item{file}{character(1). File to write.}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
+
+\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
+horizontal pagination. \code{NULL} (the default) indicates no horizontal
+pagination should be done.}
 
 \item{\dots}{Passed directly to \code{\link{paginate_table}}}
 
@@ -33,6 +40,16 @@ charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 }
 \value{
 \code{file} (this function is called for the side effect of writing the file.

@@ -13,8 +13,11 @@ export_as_pdf(
   fontsize = 8,
   paginate = TRUE,
   lpp = NULL,
+  cpp = NULL,
   hsep = "-",
   indent_size = 2,
+  tf_wrap = !is.null(cpp),
+  max_width = cpp,
   ...
 )
 }
@@ -37,6 +40,10 @@ populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
+\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
+horizontal pagination. \code{NULL} (the default) indicates no horizontal
+pagination should be done.}
+
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horrizontal line (unicode 2014) in locals that use a UTF
@@ -44,6 +51,16 @@ charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 
 \item{...}{arguments passed on to \code{paginate_table}}
 }
