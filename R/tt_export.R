@@ -266,14 +266,29 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
 #' @inheritParams grid::plotViewport
 #' @inheritParams paginate_table
 #' @param file file to write, must have `.pdf` extension
-#' @param width the width and height of the graphics region in inches
-#' @param height the width and height of the graphics region in inches
-#' @param fontsize the size of text (in points)
+#' @param   width  Deprecated,  please  use   `pg_width`  or  specify
+#'     `page_type`.  The width of  the graphics  region in inches
+#' @param  height  Deprecated,  please  use  `pg_height`  or  specify
+#'     `page_type`. The height of  the graphics  region in
+#'     inches
+#' @param  fontsize Deprecated,  please use  `font_size`. the  size of
+#'     text (in points)
+#' @param margins numeric(4). The number of lines/characters of margin on the
+#'     bottom, left, top, and right sides of the page.
 #' @param ... arguments passed on to `paginate_table`
 #'
 #' @importFrom grDevices pdf
 #' @importFrom grid textGrob grid.newpage gpar pushViewport plotViewport unit grid.draw
 #'   convertWidth convertHeight grobHeight grobWidth
+#'
+#' @details By default, pagination is performed, with default
+#' `cpp` and `lpp` defined by specified page dimensions and margins.
+#' User-specified `lpp` and `cpp` values override this, and should
+#' be used with caution.
+#'
+#' Title and footer materials are also word-wrapped by default
+#' (unlike when printed to the terminal), with `cpp`, as
+#' defined above, as the default `max_width`.
 #'
 #' @seealso `export_as_txt`
 #'
@@ -291,43 +306,68 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
 #'
 #' \dontrun{
 #' tf <- tempfile(fileext = ".pdf")
-#' export_as_pdf(tbl, file = tf, height = 4)
+#' export_as_pdf(tbl, file = tf, pg_height = 4)
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
 #'
 export_as_pdf <- function(tt,
-                          file, width = 11.7, height = 8.3, # passed to pdf()
-                          margins = c(4, 4, 4, 4), fontsize = 8,  # grid parameters
-                          paginate = TRUE, lpp = NULL,
+                          file,
+                          page_type = "letter",
+                          landscape = FALSE,
+                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
+                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
+                          width = NULL,
+                          height = NULL, # passed to pdf()
+                          margins = c(4, 4, 4, 4),
+                          font_family = "Courier",
+                          fontsize = 8,  # grid parameters
+                          font_size = fontsize,
+                          paginate = TRUE,
+                          lpp = NULL,
                           cpp = NULL,
                           hsep = "-",
                           indent_size = 2,
-                          tf_wrap = !is.null(cpp),
-                          max_width = cpp,
+                          tf_wrap = TRUE,
+                          max_width = NULL,
                           ... # passed to paginate_table
 ) {
     stopifnot(file_ext(file) != ".pdf")
 
-    gp_plot <- gpar(fontsize = fontsize, fontfamily = "mono")
+    gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
-    pdf(file = file, width = width, height = height)
+    ## soft deprecation. To become hard deprecation.
+    if(!is.null(height))
+        pg_height <- height
+
+    if(!is.null(width))
+        pg_width <- width
+
+    if(missing(font_size) && !missing(fontsize))
+        font_size <- fontsize
+
+    pdf(file = file, width = pg_width, height = pg_height)
     grid.newpage()
     pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
-    tbls <- if (paginate) {
-
-        if (is.null(lpp)) {
-            cur_gpar <-  get.gpar()
-            lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                             (cur_gpar$cex * cur_gpar$lineheight))
-        }
-
-        paginate_table(tt, lpp = lpp, cpp = cpp, ...)
-    } else {
-        list(tt)
+    cur_gpar <-  get.gpar()
+    if (is.null(lpp)) {
+        lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
+                     (cur_gpar$cex * cur_gpar$lineheight))
     }
+    if(is.null(cpp)) {
+        cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
+                     font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
+    }
+    if(is.null(max_width))
+        max_width <- cpp
+
+    tbls <- if (paginate) {
+                paginate_table(tt, lpp = lpp, cpp = cpp, ...)
+            } else {
+                list(tt)
+            }
 
     stbls <- lapply(lapply(tbls, toString, widths = colwidths, hsep = hsep,
                            indent_size = indent_size, tf_wrap = tf_wrap,

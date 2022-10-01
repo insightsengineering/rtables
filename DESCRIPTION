@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2022-09-30
-Version: 0.5.2.6
+Version: 0.5.2.7
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -15,7 +15,7 @@ Description: Reporting tables often have structure that goes beyond simple recta
   or grouping of data in row and column dimensions, cells containing multiple values,
   and the concept of contextual summary computations. A convenient pipe-able interface is provided
   for declaring table layouts and the corresponding computations, and then applying them to data.
-Depends: methods, magrittr, formatters (>= 0.3.3.7), R (>= 2.10)
+Depends: methods, magrittr, formatters (>= 0.3.3.8), R (>= 2.10)
 Imports:
   stats,
   htmltools,

@@ -530,6 +530,7 @@ paginate_table <- function(tt,
                            font_family = "Courier",
                            font_size = 12,
                            lineheight = 1,
+                           landscape = FALSE,
                            pg_width = NULL,
                            pg_height = NULL,
                            margins = c(top = .5, bottom = .5, left = .75, right = .75),
@@ -548,7 +549,8 @@ paginate_table <- function(tt,
                              lineheight = lineheight,
                              pg_width = pg_width,
                              pg_height = pg_height,
-                             margins = margins)
+                             margins = margins,
+                             landscape = landscape)
 
         if(missing(lpp))
             lpp <- pg_lcpp$lpp

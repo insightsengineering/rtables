@@ -43,10 +43,10 @@ test_that("export_as_pdf works", {
     tbl <- tt_to_export()
     tmpf <- tempfile(fileext = ".pdf")
 
-    expect_warning(export_as_pdf(tbl, file = tmpf, width = 1, paginate = FALSE),
+    expect_warning(export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
                    "width of page 1 exceeds the available space")
     expect_true(file.exists(tmpf))
-    expect_warning(export_as_pdf(tbl, file = tmpf, height = 1, paginate = FALSE),
+    expect_warning(export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
                    "height of page 1 exceeds the available space")
 
     res <- export_as_pdf(tbl, file = tmpf)

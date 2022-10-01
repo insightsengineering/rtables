@@ -20,6 +20,7 @@ paginate_table(
   font_family = "Courier",
   font_size = 12,
   lineheight = 1,
+  landscape = FALSE,
   pg_width = NULL,
   pg_height = NULL,
   margins = c(top = 0.5, bottom = 0.5, left = 0.75, right = 0.75),
@@ -59,6 +60,10 @@ to Courier.}
 \item{font_size}{numeric(1). Fontsize, defaults to 12.}
 
 \item{lineheight}{numeric(1). Lineheight, defaults to 1.}
+
+\item{landscape}{logical(1). Should the  dimensions of `page_type`
+be inverted  for landscape?  Defaults to  `FALSE`, ignored when
+`pg_width` and `pg_height` are set directly.}
 
 \item{pg_width}{numeric(1). Page width in inches.}
 

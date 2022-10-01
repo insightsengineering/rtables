@@ -1,3 +1,8 @@
+## rtables 0.5.2.7
+ * `export_as_pdf` now accepts standard page/font size parameters
+ * original paramters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 
+   will be fully deprecated and then removed in the future.
+
 ## rtables 0.5.2.6
  * `toString` method for `VTableTree` now accepts `tf_wrap` and `max_width`
  * `export_as_txt` and `export_as_pdf` now accept `cpp`, as well as `tf_wrap` and `max_width` and
