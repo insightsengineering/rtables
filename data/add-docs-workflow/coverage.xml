@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.922007460155985" branch-rate="0" lines-covered="5438" lines-valid="5898" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-10-05 13:17:34">
+<coverage line-rate="0.922007460155985" branch-rate="0" lines-covered="5438" lines-valid="5898" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-10-05 13:35:11">
   <sources/>
   <packages>
     <package name="rtables" line-rate="0.922007460155985" branch-rate="0" complexity="0">
