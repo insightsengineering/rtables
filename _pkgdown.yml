@@ -53,6 +53,7 @@ reference:
     - split_cols_by_cuts 
     - add_overall_col
     - add_existing_table
+    - table_inset
 
   - title: Tabulation Utility Functions
     desc: Functions that are useful to be used with the `analyze*` functions.
@@ -141,7 +142,8 @@ reference:
     - as_html
     - starts_with("export_as")
     - tt_to_flextable
-    - toString,VTableTree-method 
+    - toString
+    - VTableTree-method 
     - get_formatted_cells
     - path_enriched_df
 
