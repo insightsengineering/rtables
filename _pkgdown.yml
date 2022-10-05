@@ -3,9 +3,9 @@ home:
   strip_header: true
 
 template:
-  params:
-    bootswatch: cerulean
-    
+  bootstrap: 5
+  bootswatch: cerulean
+
 navbar:
   type: default
   right:
