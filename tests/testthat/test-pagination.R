@@ -98,3 +98,25 @@ test_that("vertical and horizontal pagination work", {
 
 })
 
+test_that("inset and pagination work together", {
+    
+    tt <- tt_to_export()
+    main_title(tt) <- "main title"
+    subtitles(tt) <- c("sub", "-------", "titles")
+    main_footer(tt) <- "main footer"
+    prov_footer(tt) <- "prov footer"
+    table_inset(tt) <- 5
+    
+    res <- paginate_table(tt, lpp = NULL, cpp = 40)
+    
+    expect_identical(length(res), 3L)
+    
+    expect_identical(tt[, 1:2, keep_titles = TRUE,
+                        reindex_refs = FALSE], res[[1]])
+    
+    expect_identical(main_title(tt),
+                     main_title(res[[1]]))
+    expect_identical(subtitles(tt), subtitles(res[[2]]))
+    expect_identical(main_footer(tt), main_footer(res[[3]]))
+    expect_identical(prov_footer(tt), prov_footer(res[[1]]))
+})
