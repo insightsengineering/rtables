@@ -283,3 +283,53 @@ test_that("section_div works throughout", {
     expect_identical(mylns[12], "------------------------")
     expect_identical(length(mylns), 31L) ## sect div not printed for last one
 })
+
+
+
+test_that("Inset works for table, ref_footnotes, and main footer", {
+    general_inset <- 3
+    
+    lyt <- basic_table(
+        title = paste0("Very ", paste0(rep("very", 10), collapse = " "), " long title"),
+        subtitles = paste0("Very ", paste0(rep("very", 15), collapse = " "), " long subtitle"), 
+        main_footer = paste0("Very ", paste0(rep("very", 6), collapse = " "), " long footer"), 
+        prov_footer = paste0("Very ", paste0(rep("very", 15), collapse = " "), " prov footer"), 
+        show_colcounts = T, 
+        inset = 2)  %>%
+        split_rows_by("SEX", page_by = TRUE) %>%
+        analyze("AGE")
+    
+    # Building the table and trimming NAs
+    tt <- build_table(lyt, DM)
+    tt <- trim_rows(tt)
+    
+    # Adding references 
+    # row_paths(tt)
+    # row_paths_summary(tt)
+    fnotes_at_path(tt, rowpath = c("SEX",  "F",    "AGE",  "Mean")) <- "Not the best but very long one, probably longer than possible."
+    fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Why trimming does not take it out?"
+    
+    # Test also assign function
+    table_inset(tt) <- general_inset
+    
+    # Recreating the printed form as a vector
+    cat_tt <- toString(matrix_form(tt))
+    vec_tt <- strsplit(cat_tt, "\n")[[1]]
+    
+    # Taking out empty lines
+    vec_tt <- vec_tt[vec_tt != ""]
+    
+    # Divide string vector in interested sectors 
+    sep_index <- which(grepl("-", vec_tt)) - 1
+    log_v <- seq_along(vec_tt) %in% c(1:sep_index[1], length(vec_tt))
+    no_inset_part <- vec_tt[log_v]
+    inset_part <- vec_tt[!log_v]
+    
+    # Check indentation
+    no_ins_v <- sapply(no_inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
+    ins_v <- sapply(inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
+    result <- lapply(list(no_ins_v, ins_v), function(x) any(lengths(regmatches(x, gregexpr(" ", x))) == general_inset))
+    
+    expect_false(result[[1]]) # No inset
+    expect_true(result[[2]]) # Inset
+})
