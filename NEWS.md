@@ -1,3 +1,7 @@
+## rtables 0.5.2.9
+ * wordwrapping title/footer materials no longer fails in the presence of `""` values.
+ * versioned dependency on `formatters` increase to `>0.3.3.11`
+
 ## rtables 0.5.2.8
  * `paginate_table` now accepts `tf_wrap` and `max_width` and respects title/footer word wrapping when present
  * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
