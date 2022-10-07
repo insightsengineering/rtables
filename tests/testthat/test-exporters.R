@@ -55,6 +55,37 @@ test_that("export_as_pdf works", {
 
 })
 
+test_that("exporting pdfs gives the correct values", {
+    if (check_pdf) {
+        lyt <- basic_table(title = " ") %>%
+            split_rows_by("SEX", page_by = TRUE) %>%
+            analyze("AGE")
+        
+        # Building the table
+        tbl <- build_table(lyt, DM)
+        
+        tmpf <- tempfile(fileext = ".pdf")
+        res <- export_as_pdf(tbl, file = tmpf)
+        res_pdf <- pdf_text(tmpf)
+        
+        # Pagination is present as vector in pdf_text. Doing the same with tbl
+        expected <- sapply(paginate_table(tbl), function(x) toString(x), USE.NAMES = FALSE)
+        names(expected) <- NULL
+        # cat(res_pdf[1])
+        # cat(expected[1])
+        # expect_identical(res_pdf, expected)
+        ## TODO understand how to compare exactly these outputs
+    }
+})
+
+test_that("exporting pdf does the inset", {
+    tbl <- tt_to_export()
+    table_inset(tbl) <- 100
+    tmpf <- tempfile(fileext = ".pdf")
+    
+    expect_error(export_as_pdf(tbl, file = tmpf))
+})
+
 
 test_that("flextable export works", {
 
