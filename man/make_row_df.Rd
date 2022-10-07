@@ -19,7 +19,8 @@
   repr_ext = 0L,
   repr_inds = integer(),
   sibpos = NA_integer_,
-  nsibs = NA_integer_
+  nsibs = NA_integer_,
+  max_width = NULL
 )
 
 \S4method{make_row_df}{TableRow}(
@@ -33,7 +34,8 @@
   repr_ext = 0L,
   repr_inds = integer(),
   sibpos = NA_integer_,
-  nsibs = NA_integer_
+  nsibs = NA_integer_,
+  max_width = NULL
 )
 
 \S4method{make_row_df}{LabelRow}(
@@ -47,7 +49,8 @@
   repr_ext = 0L,
   repr_inds = integer(),
   sibpos = NA_integer_,
-  nsibs = NA_integer_
+  nsibs = NA_integer_,
+  max_width = NULL
 )
 
 make_col_df(tt, visible_only = TRUE)
@@ -75,6 +78,9 @@ make_col_df(tt, visible_only = TRUE)
 \item{sibpos}{integer(1). Internal detail do not set manually.}
 
 \item{nsibs}{integer(1). Internal detail do not set manually.}
+
+\item{max_width}{numeric(1) or NULL. Maximum width for title/footer
+materials.}
 }
 \value{
 a data.frame of row/column-structure information used by the

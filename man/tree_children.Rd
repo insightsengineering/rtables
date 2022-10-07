@@ -4,7 +4,7 @@
 \alias{tree_children}
 \alias{tree_children,VTree-method}
 \alias{tree_children,VTableTree-method}
-\alias{tree_children,VLeaf-method}
+\alias{tree_children,ANY-method}
 \alias{tree_children<-}
 \alias{tree_children<-,VTree-method}
 \alias{tree_children<-,VTableTree-method}
@@ -16,7 +16,7 @@ tree_children(x)
 
 \S4method{tree_children}{VTableTree}(x)
 
-\S4method{tree_children}{VLeaf}(x)
+\S4method{tree_children}{ANY}(x)
 
 tree_children(x) <- value
 

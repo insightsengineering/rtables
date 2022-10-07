@@ -62,11 +62,15 @@ NULL
 #' @param inset numeric(1). Number of spaces to inset the table header, table
 #' body, referential footnotes, and main_footer, as compared to alignment
 #' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
+#' @param table_inset numeric(1). Number of spaces to inset the table header, table
+#' body, referential footnotes, and main_footer, as compared to alignment
+#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
 #' @return NULL (this is an argument template dummy function)
 #' @rdname gen_args
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
+                     table_inset,
                      ...) NULL
 
 
@@ -219,7 +223,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
                         trailing_sep, split_na_str,
-                        cna_str, inset) NULL
+                        cna_str, inset, table_inset) NULL
 
 #' Compatability Arg Conventions
 #' @name compat_args
@@ -246,9 +250,11 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #'   elements are then passed to the named argument \code{FUN} corresponding to
 #'   the element name of the outer list. Hence, the length and order of each
 #'   collection must match the levels in \code{col_by}. See examples.
+#' @param inset integer(1). The table inset for the row or table being
+#'   constructed. See \code{\link[formatters]{table_inset}}.
 #' @rdname compat_args
 compat_args <- function(.lst, FUN, col_by, row_by, row.name, format, indent,
-                        col_wise_args, label) NULL
+                        col_wise_args, label, inset) NULL
 
 
 

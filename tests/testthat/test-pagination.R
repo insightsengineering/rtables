@@ -64,4 +64,37 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(main_footer(tt), main_footer(res[[3]]))
     expect_identical(prov_footer(tt), prov_footer(res[[1]]))
 
+
+
+    lyt2 <- basic_table() %>%
+        analyze("mpg",
+                function(x) in_rows(.list = setNames(as.list(x), as.character(seq_along(x)))))
+
+    tt2 <- build_table(lyt2, cbind(mtcars, mtcars))
+
+    main_title(tt2) <- paste(strrep("a", 25),
+                             strrep("A", 25))
+
+    subtitles(tt2) <- c(paste(strrep("a", 25),
+                              strrep("A", 25)),
+                        "sub titles")
+
+    main_footer(tt2) <- paste(strrep("a", 25),
+                             strrep("A", 25))
+
+    prov_footer(tt2) <- paste(strrep("a", 25),
+                             strrep("A", 25))
+
+    res3a <- paginate_table(tt2, lpp = 29,
+                            cpp = 40, tf_wrap = TRUE, verbose = TRUE)
+    res3b <- paginate_table(tt2, lpp = 25,
+                            cpp = 40, tf_wrap = FALSE, verbose = TRUE)
+    expect_true(all(mapply(function(a, b) identical(dim(a), dim(b)),
+                           a = res3a, b = res3b)))
+
+    res3c <- paginate_table(tt2, lpp = 29, cpp = 40, tf_wrap = FALSE, verbose = TRUE)
+    expect_equal(nrow(res3a[[1]]),
+                 nrow(res3c[[1]]) - 4)
+
 })
+

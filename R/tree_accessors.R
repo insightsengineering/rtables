@@ -94,9 +94,13 @@ setMethod("tree_children", c(x = "VTree"),
 #' @rdname tree_children
 setMethod("tree_children", c(x = "VTableTree"),
           function(x) x@children)
+
+## this includes VLeaf but also allows for general methods
+## needed for table_inset being carried around by rows and
+## such.
 #' @exportMethod tree_children
 #' @rdname tree_children
- setMethod("tree_children", c(x = "VLeaf"),
+setMethod("tree_children", c(x = "ANY"), ##"VLeaf"),
           function(x) list())
 
 #' @export
@@ -2598,35 +2602,43 @@ setMethod("spl_section_div<-", "Split",
 #'
 #' @rdname table_inset
 #' @export
-setMethod("table_inset", "VTableTree",
+setMethod("table_inset", "VTableNodeInfo", ##VTableTree",
           function(obj) obj@table_inset)
 
-
-
-#' @rdname table_inset
-#' @export
-setMethod("table_inset<-", "VTableTree",
-          function(obj, value) {
-    cont <- content_table(obj)
-    if(NROW(cont) > 0) {
-        table_inset(cont) <- value
-        content_table(obj) <- cont
-    }
-
-    kids <- lapply(tree_children(obj),
-                   `table_inset<-`,
-                   value = value)
-
-    tree_children(obj) <- kids
-    obj@table_inset <- value
-    obj
-})
 
 #' @rdname table_inset
 #' @export
 setMethod("table_inset", "PreDataTableLayouts",
           function(obj) obj@table_inset)
 
+## #' @rdname table_inset
+## #' @export
+## setMethod("table_inset", "InstantiatedColumnInfo",
+##           function(obj) obj@table_inset)
+
+
+#' @rdname table_inset
+#' @export
+setMethod("table_inset<-", "VTableNodeInfo", ##"VTableTree",
+          function(obj, value) {
+    if(!is.integer(value))
+        value <- as.integer(value)
+    cont <- content_table(obj)
+    if(NROW(cont) > 0) {
+        table_inset(cont) <- value
+        content_table(obj) <- cont
+    }
+
+    if(length(tree_children(obj)) > 0) {
+
+        kids <- lapply(tree_children(obj),
+                       `table_inset<-`,
+                       value = value)
+        tree_children(obj) <- kids
+    }
+    obj@table_inset <- value
+    obj
+})
 
 
 #' @rdname table_inset
@@ -2637,10 +2649,23 @@ setMethod("table_inset<-", "PreDataTableLayouts",
     obj
 })
 
+## covered now by VTableNodeInfo method
+
+## #' @rdname table_inset
+## #' @export
+## setMethod("table_inset<-", "TableRow",
+##           function(obj, value) {
+##     obj@table_inset <- value
+##     obj
+## })
+
 #' @rdname table_inset
 #' @export
-setMethod("table_inset<-", "TableRow",
-          function(obj, value) obj)
+setMethod("table_inset<-", "InstantiatedColumnInfo",
+          function(obj, value) {
+    obj@table_inset <- value
+    obj
+})
 
 
 

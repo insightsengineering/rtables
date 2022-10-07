@@ -1,3 +1,8 @@
+## rtables 0.5.2.8
+ * `paginate_table` now accepts `tf_wrap` and `max_width` and respects title/footer word wrapping when present
+ * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
+ * versioned dependency on `formatters` increased to `>0.3.3.10`
+
 ## rtables 0.5.2.7
  * `export_as_pdf` now accepts standard page/font size parameters
  * original paramters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 

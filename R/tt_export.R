@@ -141,7 +141,7 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, cpp = NULL,
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
 
     if(paginate) {
-        tbls <- paginate_table(tt, cpp = cpp, ...)
+        tbls <- paginate_table(tt, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
     } else {
         tbls <- list(tt)
     }
@@ -187,8 +187,12 @@ export_as_txt <- function(tt, file = NULL, paginate = FALSE, cpp = NULL,
 #' ft <- tt_to_flextable(tbl)
 #' ft
 
-tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
+tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
+                            cpp = NULL,
+                            ...,
                             colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
+                            tf_wrap = !is.null(cpp),
+                            max_width = cpp,
                             total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
         stop("this function requires the flextable and officer packages. ",
@@ -199,7 +203,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL, ...,
     if(paginate) {
         if(is.null(lpp))
             stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
-        tabs <- paginate_table(tt, lpp = lpp, ...)
+        tabs <- paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
         return(lapply(tabs, tt_to_flextable, paginate = FALSE, total_width = total_width, colwidths = colwidths))
     }
 
@@ -360,11 +364,11 @@ export_as_pdf <- function(tt,
         cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
                      font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
     }
-    if(is.null(max_width))
+    if(tf_wrap && is.null(max_width))
         max_width <- cpp
 
     tbls <- if (paginate) {
-                paginate_table(tt, lpp = lpp, cpp = cpp, ...)
+                paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
             } else {
                 list(tt)
             }

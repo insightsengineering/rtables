@@ -377,7 +377,7 @@ test_that("cfun args", {
         split_rows_by("SEX") %>%
         summarize_row_groups(cfun = cfun1)
 
-    tbl <- build_table(lyt, rawdat)    
+    tbl <- build_table(lyt, rawdat)
     capture.output({prout <- print(tbl)})
     expect_identical(prout, tbl)
 })
