@@ -1,0 +1,161 @@
+---
+title: "Titles, Footers, and Referential Footnotes"
+author: "Gabriel Becker and Adrian Waddell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Titles, Footers, and Referential Footnotes}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+
+# Titles and Non-Referential Footer Materials
+
+An `rtables` table can be annotated with three types of header (title)
+information, as well as three types of footer information.
+
+Header information comes in two forms that are specified directly
+(main title and subtitles), as well as one that is populated automatically
+as necessary (page title).
+
+Similarly, footer materials come with two directly specified components:
+main footer and provenance footer, in addition to one that is computed
+when necessary: referential footnotes.
+
+`basic_table` accepts the values for each element that can be set directly:
+
+```{r}
+library(rtables)
+library(dplyr)
+lyt <- basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE", mean, format = "xx.x")
+
+tbl <- build_table(lyt, DM)
+cat(export_as_txt(tbl, paginate = TRUE, page_break = "\n\n\n"))
+```
+                   
+
+
+# Referential Footnotes
+
+Referential footnotes are footnotes associated with a particular
+component of a table: a column, a row, or a cell. They can be added
+during tabulation via analysis functions, but they can also be added
+post-hoc once a table is created.
+
+They are rendered as a number within curly braces within the 
+table body, row, or column labels, followed by a message associated
+with that number printed below the table during rendering.
+
+## Adding Cell- and Analysis-row Referential Footnotes At Tabulation Time
+
+```{r}
+
+
+afun <- function(df, .var, .spl_context) {
+    val <- .spl_context$value[NROW(.spl_context)]
+    rw_fnotes <-  if(val == "C") list("This is strata level C for these patients") else list()
+    cl_fnotes <- if(val == "B" && df[1, "ARM", drop = TRUE] == "C: Combination")
+                     list("these Strata B patients got the drug combination") else list()
+    
+    in_rows(mean = mean(df[[.var]]),
+            .row_footnotes = rw_fnotes,
+            .cell_footnotes = cl_fnotes,
+            .formats = c(mean = "xx.x"))
+}
+
+lyt <- basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE", afun, format = "xx.x")
+
+tbl <- build_table(lyt, DM)
+cat(export_as_txt(tbl, paginate = TRUE, page_break = "\n\n\n"))
+
+```
+
+We note that typically the type of footnote added within the analysis function would be dependent
+on the computations done to calculate the cell value(s), e.g., a model not converging. We simply
+use context information as an illustrative proxy for that.
+
+The procedure for adding footnotes to content (summary row) rows or cells
+is identical to the above, when done within a content function.
+
+## Annotating an Existing Table with Referential Footnotes
+
+In addition to inserting referential footnotes at tabulation time within
+our analysis functions, we cal also annotate our tables with them
+post-hoc.
+
+This is also the only way to add footnotes to **column** labels,
+as those cannot be controlled within an analysis or content
+function.
+
+```{r}
+
+tbl2 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+    split_cols_by("SEX", split_fun = drop_split_levels) %>%
+    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    summarize_row_groups() %>%
+    analyze(c("AGE", "STRATA1")) %>%
+    build_table(ex_adsl %>% filter(SEX %in% c("M", "F") &
+                                   RACE %in% (levels(RACE)[1:3])))
+
+tbl2
+```
+
+
+We do this with the `fnotes_at_path<-` function which accepts a row
+path, a column path, and a value for *the full set of footnotes for
+the defined locations (`NULL` or a `character` vector).
+
+A non-`NULL` row path with a `NULL` column path specifies the footnote(s)
+should be attached to the row, while `NULL` row path with non-`NULL`
+column path indicates they go with the column. Both being non-null
+indicates a cell (and must resolve to an individual cell).
+
+```{r}
+
+fnotes_at_path(tbl2, c("RACE", "ASIAN")) <- c("hi", "there")
+tbl2
+```
+
+```{r}
+
+fnotes_at_path(tbl2, rowpath = NULL, c("ARM", "B: Placebo")) <- c("this is a placebo")
+tbl2
+```
+
+Note to step into the content table row we must add that to the path, even though we didn't
+need it to put a footnote on the full row.
+
+```{r}
+fnotes_at_path(tbl2, rowpath = c("RACE", "ASIAN", "@content", "ASIAN"),  c("ARM", "B: Placebo", "SEX", "F")) <- "These asian women got placebo treatments"
+tbl2
+```
+

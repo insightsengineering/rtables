@@ -25,6 +25,7 @@ articles:
     - sorting_pruning
     - tabulation_dplyr
     - manual_table_construction
+    - title_footer
 
 reference:
 

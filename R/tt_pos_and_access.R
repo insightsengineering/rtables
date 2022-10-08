@@ -377,9 +377,17 @@ setMethod("[<-", c("VTableTree", value = "list"),
 
 
     nr <- nrow(x)
-    i <- .j_to_posj(i, nr)
+    if(missing(i))
+        i <- seq_len(NROW(x))
+    else if(is(i, "character"))
+        i <- .path_to_pos(i, x)
+    else
+        i <- .j_to_posj(i, nr)
+
     if(missing(j)) {
         j <- seq_along(col_exprs(col_info(x)))
+    } else if(is(j, "character")) {
+        j <- .path_to_pos(j, x, cols = TRUE)
     } else {
         j <- .j_to_posj(j, ncol(x))
     }
@@ -465,7 +473,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
 #' @rdname brackets
 setMethod("[<-", c("VTableTree", value = "CellValue"),
           function(x, i, j, ...,  value) {
-    x[i = i, j = j, ...] <- unclass(value)
+    x[i = i, j = j, ...] <- list(value)
     x
 })
 
