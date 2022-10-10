@@ -319,8 +319,11 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   vec_tt <- vec_tt[vec_tt != ""]
 
   # Divide string vector in interested sectors
+  print(vec_tt)
   sep_index <- which(grepl("--", vec_tt)) - 1
-  log_v <- seq_along(vec_tt) %in% c(1:sep_index[1], length(vec_tt))
+  print("+-=_=_=_=-==_=-_==++++")
+  print(sep_index)
+  log_v <- seq_along(vec_tt) %in% c(seq_len(sep_index[1]), length(vec_tt))
   no_inset_part <- vec_tt[log_v]
   inset_part <- vec_tt[!log_v]
 
@@ -328,8 +331,7 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   no_ins_v <- sapply(no_inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
   ins_v <- sapply(inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
   result <- lapply(list(no_ins_v, ins_v), function(x) all(lengths(regmatches(x, gregexpr(" ", x))) == general_inset))
-  print(no_ins_v)
-  print(ins_v)
+  
   expect_false(result[[1]]) # No inset
   expect_true(result[[2]]) # Inset
   expect_true(all(vec_tt[sep_index + 1] == "   ------------------------------"))
