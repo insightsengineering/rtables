@@ -312,17 +312,14 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   table_inset(tt) <- general_inset
 
   # Recreating the printed form as a vector
-  cat_tt <- toString(matrix_form(tt))
+  cat_tt <- toString(matrix_form(tt), hsep = "=")
   vec_tt <- strsplit(cat_tt, "\n")[[1]]
 
   # Taking out empty lines
   vec_tt <- vec_tt[vec_tt != ""]
 
   # Divide string vector in interested sectors
-  print(vec_tt)
-  sep_index <- which(grepl("--", vec_tt)) - 1
-  print("+-=_=_=_=-==_=-_==++++")
-  print(sep_index)
+  sep_index <- which(grepl("==", vec_tt)) - 1
   log_v <- seq_along(vec_tt) %in% c(seq_len(sep_index[1]), length(vec_tt))
   no_inset_part <- vec_tt[log_v]
   inset_part <- vec_tt[!log_v]
@@ -334,5 +331,5 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   
   expect_false(result[[1]]) # No inset
   expect_true(result[[2]]) # Inset
-  expect_true(all(vec_tt[sep_index + 1] == "   ------------------------------"))
+  expect_true(all(vec_tt[sep_index + 1] == "   =============================="))
 })
