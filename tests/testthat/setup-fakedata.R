@@ -5,6 +5,10 @@ library(tibble)
 library(rtables)
 library(dplyr)
 
+# # Load and flag for pdftools to check for it
+# check_pdf <- require(pdftools)
+
+
 ## eat the one-time warning
 suppressWarnings(formatters::default_hsep())
 makefakedat <- function(n  = 1000) {
