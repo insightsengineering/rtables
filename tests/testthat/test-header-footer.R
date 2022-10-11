@@ -119,4 +119,11 @@ test_that("post-processing addition of referential footnotes works", {
     expect_identical(unname(mform2$ref_footnotes),
                      "{1} - fnote on label row")
 
+    ## test that tf_wrap and pagination work in the presence of ref fnotes
+
+    pag_nowrap <- paginate_table(tb1, lpp = 20)
+    pag_wrap <- paginate_table(tb1, lpp = 20, max_width = 20, tf_wrap = TRUE)
+
+    expect_equal(nrow(pag_nowrap[[1]]), 8)
+    expect_equal(nrow(pag_wrap[[1]]), 4)
 })

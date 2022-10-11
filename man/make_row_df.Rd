@@ -53,7 +53,7 @@
   max_width = NULL
 )
 
-make_col_df(tt, visible_only = TRUE)
+make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 }
 \arguments{
 \item{tt}{ANY. Object representing the table-like object to be summarized.}

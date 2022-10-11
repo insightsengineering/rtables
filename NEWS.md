@@ -1,3 +1,12 @@
+## rtables 0.5.2.10
+ * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
+ * `[<-` `CellValue` method now preserves CellValue attributes (e.g., format)
+ * More detailed subsetting and modification vignette
+ * `nlines` methods now accept both `colwidths` and `max_width`
+ * `max_width` is now used during pagination to determine lines taken up by referential footnotes
+ * `make_col_df` now accepts `colwidths` argument, and can be called directly on `InstantiatedColumnInfo` objects
+ * versioned dependency on `formatters` increase to `>0.3.3.12`
+
 ## rtables 0.5.2.9
  * wordwrapping title/footer materials no longer fails in the presence of `""` values.
  * versioned dependency on `formatters` increase to `>0.3.3.11`

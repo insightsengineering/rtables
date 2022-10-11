@@ -351,6 +351,7 @@ export_as_pdf <- function(tt,
         font_size <- fontsize
 
     pdf(file = file, width = pg_width, height = pg_height)
+    on.exit(dev.off())
     grid.newpage()
     pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
@@ -410,7 +411,5 @@ export_as_pdf <- function(tt,
 
         grid.draw(g)
     }
-    dev.off()
-
-    list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp)
+     list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp)
 }
