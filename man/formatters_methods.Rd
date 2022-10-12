@@ -169,8 +169,8 @@
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{max_width}{numeric(1) or NULL. Maximum width for title/footer
-materials.}
+\item{max_width}{numeric(1). Width strings should be wrapped to
+when determining how many lines they require.}
 
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
