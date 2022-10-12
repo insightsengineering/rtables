@@ -8,8 +8,6 @@
 #'
 #' @param x an rtable object
 #'
-#' @export
-#' @return a list of paths to each row/column within \code{x}
 #' @examples
 #' tbl <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -22,7 +20,13 @@
 #' col_paths(tbl)
 #'
 #' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
-#'
+#' 
+#' @return a list of paths to each row/column within \code{x}
+#' 
+#' @seealso [cell_values()], [fnotes_at_path()], 
+#'   [row_paths_summary()], [col_paths_summary()]
+#' 
+#' @export
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
   make_row_df(x, visible_only = TRUE)$path
