@@ -1144,3 +1144,10 @@ test_that("warning when same name siblings", {
     expect_identical(row_paths(tbl)[[3]][2],
                      "AGE2")
 })
+
+test_that("error when inset < 0 or non-number", {
+    expect_error(basic_table(inset = -1),
+                 "invalid table_inset value")
+    expect_error(expect_warning(basic_table(inset = "haha")),
+                 "invalid table_inset value")
+})

@@ -2623,6 +2623,8 @@ setMethod("table_inset<-", "VTableNodeInfo", ##"VTableTree",
           function(obj, value) {
     if(!is.integer(value))
         value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
     cont <- content_table(obj)
     if(NROW(cont) > 0) {
         table_inset(cont) <- value
@@ -2645,13 +2647,18 @@ setMethod("table_inset<-", "VTableNodeInfo", ##"VTableTree",
 #' @export
 setMethod("table_inset<-", "PreDataTableLayouts",
           function(obj, value) {
+    if(!is.integer(value))
+        value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
+
     obj@table_inset <- value
     obj
 })
 
 ## covered now by VTableNodeInfo method
 
-## #' @rdname table_inset
+## #' @rdname formatter_methods
 ## #' @export
 ## setMethod("table_inset<-", "TableRow",
 ##           function(obj, value) {
@@ -2663,6 +2670,10 @@ setMethod("table_inset<-", "PreDataTableLayouts",
 #' @export
 setMethod("table_inset<-", "InstantiatedColumnInfo",
           function(obj, value) {
+    if(!is.integer(value))
+        value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
     obj@table_inset <- value
     obj
 })
