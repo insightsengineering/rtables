@@ -95,6 +95,8 @@ reference:
     - table_structure
     - summarize_rows
     - table_shell
+    - formatters::make_row_df
+    - make_col_df
 
   - title: Layout Structure Information
     contents:
@@ -106,7 +108,7 @@ reference:
     - top_left
     - rbind
     - cbind_rtables
-    - as.vector,TableRow-method
+    - asvec
     - bracket_subsetting
     - clear_indent_mods
     - head
@@ -131,7 +133,6 @@ reference:
     - rheader
     - rtablel
     - rrowl
-    - insert_rrow
     - indent
     - df_to_tt
     
@@ -142,7 +143,7 @@ reference:
     - as_html
     - starts_with("export_as")
     - tt_to_flextable
-    - toString,VTableTree-method 
+    - tostring
     - get_formatted_cells
     - path_enriched_df
 
@@ -158,7 +159,8 @@ reference:
     desc: Pagination related functionality
     contents:
     - paginate_table
-    - make_row_df
+    - formatters::make_row_df
+    - make_col_df
 
   - title: TableTree Framework Accessor Functions
     contents:
@@ -168,8 +170,6 @@ reference:
     - obj_avar
     - no_colinfo
     - clayout
-    - length,CellValue-method
-    - names,VTableNodeInfo-method
     - horizontal_sep
 
   - title: TableTree Framework Constructors and S4 Classes
@@ -194,16 +194,12 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: formatters Interface Methods
-    desc: Methods for generics defined in formatters
-    contents:
-    - obj_name,VNodeInfo-method
-    - matrix_form,VTableTree-method
-    - main_title,VTitleFooter-method
-    
-
-
-  - title: Internal Methods
+  - title: internal
     desc: Internal documented methods
     contents:
     - internal_methods
+    - formatters_methods
+    - matrix_form,VTableTree-method
+    - length,CellValue-method
+    - names,VTableNodeInfo-method
+    - insert_rrow

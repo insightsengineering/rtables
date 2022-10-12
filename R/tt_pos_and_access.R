@@ -248,7 +248,8 @@ label_at_path <- function(tt, path) {
 #' @rdname ttap
 setGeneric("tt_at_path", function(tt, path, ...) standardGeneric("tt_at_path"))
 #' @export
-#' @rdname ttap
+#' @inheritParams tt_at_path
+#' @rdname int_methods
 setMethod("tt_at_path", "VTableTree",
            function(tt, path, ...) {
     stopifnot(is(path, "character"),
@@ -281,7 +282,7 @@ setMethod("tt_at_path", "VTableTree",
 setGeneric("tt_at_path<-",
            function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -291,7 +292,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
 ## this one removes the child at path from the parents list of children,
 ## becuase thats how lists behave.
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -300,7 +301,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
 
 
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
           function(tt, path, ..., value) {
     stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))

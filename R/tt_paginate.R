@@ -15,7 +15,11 @@
 
 
 
-
+#' @exportMethod nlines
+#' @inheritParams formatters::nlines
+#' @name formatters_methods
+#' @rdname formatters_methods
+#' @aliases nlines,TableRow-method
 setMethod("nlines", "TableRow",
           function(x, colwidths, max_width) {
     fns <- sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width))) +
@@ -27,6 +31,8 @@ setMethod("nlines", "TableRow",
     rowext + fns
 })
 
+#' @export
+#' @rdname formatters_methods
 setMethod("nlines", "LabelRow",
           function(x, colwidths, max_width) {
     if(labelrow_visible(x))
@@ -36,18 +42,16 @@ setMethod("nlines", "LabelRow",
         0L
 })
 
+#' @export
+#' @rdname formatters_methods
 setMethod("nlines", "RefFootnote",
           function(x, colwidths, max_width ) {
     nlines(format_fnote_note(x), colwidths = colwidths, max_width = max_width)
 })
 
 
-setMethod("nlines", "VTableTree",
-          function(x, colwidths) {
-    stop("the nlines VTableTree method is completely wrong")
-    length(collect_leaves(x, TRUE, TRUE))
-})
-
+#' @export
+#' @rdname formatters_methods
 setMethod("nlines", "InstantiatedColumnInfo",
           function(x, colwidths, max_width) {
     lfs <- collect_leaves(coltree(x))
@@ -113,16 +117,17 @@ pos_to_path <- function(pos) {
 
 #' @inherit formatters::make_row_df
 #'
-#' @note the technically present root tree node is excluded from the summary
-#'   returned by both \code{make_row_df} and \code{make_col_df}, as it is simply
-#'   the row/column structure of \code{tt} and thus not useful for pathing or
-#'   pagination.
-#' @export
-#' @return a data.frame of row/column-structure information used by the
-#'   pagination machinery.
-#' @name make_row_df
-#' @rdname make_row_df
-#' @aliases make_row_df,VTableTree-method
+# #' @note the technically present root tree node is excluded from the summary
+# #'   returned by both \code{make_row_df} and \code{make_col_df}, as it is simply
+# #'   the row/column structure of \code{tt} and thus not useful for pathing or
+# #'   pagination.
+# #' @export
+# #' @return a data.frame of row/column-structure information used by the
+# #'   pagination machinery.
+# #' @name make_row_df
+# #' @rdname make_row_df
+                                        # #' @aliases make_row_df,VTableTree-method
+#' @rdname formatters_methods
 #' @exportMethod make_row_df
 setMethod("make_row_df", "VTableTree",
           function(tt, colwidths = NULL, visible_only = TRUE,
@@ -243,7 +248,7 @@ setMethod("make_row_df", "VTableTree",
                                         # #' @exportMethod make_row_df
 #' @inherit formatters::make_row_df
 #' @export
-#' @rdname make_row_df
+#' @rdname formatters_methods
 setMethod("make_row_df", "TableRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
@@ -280,7 +285,7 @@ setMethod("make_row_df", "TableRow",
 
 # #' @exportMethod make_row_df
 #' @export
-#' @rdname make_row_df
+#' @rdname formatters_methods
 setMethod("make_row_df", "LabelRow",
           function(tt, colwidths = NULL, visible_only = TRUE,
                    rownum = 0,
@@ -324,9 +329,11 @@ setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
 
 #' Column Layout Summary
 #'
+#' Generate a structural summary of the columns of an
+#' rtables table and return it as a data.frame.
+#'
 #' Used for Pagination
-#' @inheritParams make_row_df
-#' @rdname make_row_df
+#' @inheritParams formatters::make_row_df
 #' @export
 make_col_df <- function(tt,
                         colwidths = NULL,
