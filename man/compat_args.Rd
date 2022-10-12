@@ -13,7 +13,8 @@ compat_args(
   format,
   indent,
   col_wise_args,
-  label
+  label,
+  inset
 )
 }
 \arguments{
@@ -47,6 +48,9 @@ collection must match the levels in \code{col_by}. See examples.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the
 object/structure.}
+
+\item{inset}{integer(1). The table inset for the row or table being
+constructed. See \code{\link[formatters]{table_inset}}.}
 }
 \value{
 NULL (this is an argument template dummy function)

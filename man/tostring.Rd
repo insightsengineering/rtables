@@ -41,7 +41,15 @@ completely if `tf_wrap` is `FALSE`.}
 a string representation of \code{x} as it appears when printed.
 }
 \description{
-Convert an \code{rtable} object to a string
+Transform a complex object into a string representation ready
+to be printed or written to a plain-text file
+}
+\details{
+Manual insertion of newlines is not supported when `tf_wrap` is on
+and will result in a warning and undefined wrapping behavior. Passing
+vectors of already split strings remains supported, however in this
+case each string is word-wrapped separately with the behavior
+described above.
 }
 \examples{
 library(dplyr)

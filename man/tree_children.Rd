@@ -2,27 +2,12 @@
 % Please edit documentation in R/tree_accessors.R
 \name{tree_children}
 \alias{tree_children}
-\alias{tree_children,VTree-method}
-\alias{tree_children,VTableTree-method}
-\alias{tree_children,VLeaf-method}
 \alias{tree_children<-}
-\alias{tree_children<-,VTree-method}
-\alias{tree_children<-,VTableTree-method}
 \title{Retrieve or set the direct children of a Tree-style object}
 \usage{
 tree_children(x)
 
-\S4method{tree_children}{VTree}(x)
-
-\S4method{tree_children}{VTableTree}(x)
-
-\S4method{tree_children}{VLeaf}(x)
-
 tree_children(x) <- value
-
-\S4method{tree_children}{VTree}(x) <- value
-
-\S4method{tree_children}{VTableTree}(x) <- value
 }
 \arguments{
 \item{x}{An object with a Tree structure}

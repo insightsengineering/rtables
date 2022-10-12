@@ -17,7 +17,8 @@ LabelRow(
   name = label,
   vis = !is.na(label) && nzchar(label),
   cinfo = EmptyColInfo,
-  indent_mod = 0L
+  indent_mod = 0L,
+  table_inset = 0L
 )
 
 .tablerow(
@@ -32,7 +33,8 @@ LabelRow(
   na_str = NA_character_,
   klass,
   indent_mod = 0L,
-  footnotes = list()
+  footnotes = list(),
+  table_inset = 0L
 )
 
 DataRow(...)
@@ -58,6 +60,10 @@ object being created.}
 structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
+
+\item{table_inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{vals}{list. cell values for the row}
 

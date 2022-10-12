@@ -377,7 +377,7 @@ test_that("cfun args", {
         split_rows_by("SEX") %>%
         summarize_row_groups(cfun = cfun1)
 
-    tbl <- build_table(lyt, rawdat)    
+    tbl <- build_table(lyt, rawdat)
     capture.output({prout <- print(tbl)})
     expect_identical(prout, tbl)
 })
@@ -1143,4 +1143,11 @@ test_that("warning when same name siblings", {
 
     expect_identical(row_paths(tbl)[[3]][2],
                      "AGE2")
+})
+
+test_that("error when inset < 0 or non-number", {
+    expect_error(basic_table(inset = -1),
+                 "invalid table_inset value")
+    expect_error(expect_warning(basic_table(inset = "haha")),
+                 "invalid table_inset value")
 })

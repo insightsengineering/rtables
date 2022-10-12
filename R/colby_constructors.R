@@ -1696,6 +1696,9 @@ basic_table <- function(title = "",
                         prov_footer = character(),
                         show_colcounts = FALSE,
                         inset = 0L) {
+    inset <- as.integer(inset)
+    if(is.na(inset) || inset < 0L)
+        stop("Got invalid table_inset value, must be an integer > 0")
     ret <- PreDataTableLayouts(title = title,
                         subtitles = subtitles,
                         main_footer = main_footer,

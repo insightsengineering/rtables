@@ -1,3 +1,21 @@
+## rtables 0.5.2.10
+ * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
+ * `[<-` `CellValue` method now preserves CellValue attributes (e.g., format)
+ * More detailed subsetting and modification vignette
+ * `nlines` methods now accept both `colwidths` and `max_width`
+ * `max_width` is now used during pagination to determine lines taken up by referential footnotes
+ * `make_col_df` now accepts `colwidths` argument, and can be called directly on `InstantiatedColumnInfo` objects
+ * versioned dependency on `formatters` increase to `>0.3.3.12`
+
+## rtables 0.5.2.9
+ * wordwrapping title/footer materials no longer fails in the presence of `""` values.
+ * versioned dependency on `formatters` increase to `>0.3.3.11`
+
+## rtables 0.5.2.8
+ * `paginate_table` now accepts `tf_wrap` and `max_width` and respects title/footer word wrapping when present
+ * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
+ * versioned dependency on `formatters` increased to `>0.3.3.10`
+
 ## rtables 0.5.2.7
  * `export_as_pdf` now accepts standard page/font size parameters
  * original paramters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 

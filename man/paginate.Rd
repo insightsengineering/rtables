@@ -11,6 +11,7 @@ pag_tt_indices(
   min_siblings = 2,
   nosplitin = character(),
   colwidths = NULL,
+  max_width = NULL,
   verbose = FALSE
 )
 
@@ -29,6 +30,8 @@ paginate_table(
   min_siblings = 2,
   nosplitin = character(),
   colwidths = NULL,
+  tf_wrap = FALSE,
+  max_width = NULL,
   verbose = FALSE
 )
 }
@@ -45,6 +48,13 @@ mid-subtable split to be valid. Defaults to 2.}
 considerations. Defaults to none.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
 to \code{FALSE}.}
@@ -77,6 +87,9 @@ horizontal margins.}
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NULL} (the default) indicates no horizontal
 pagination should be done.}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
 }
 \value{
 for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},

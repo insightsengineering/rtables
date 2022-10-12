@@ -11,7 +11,7 @@
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
 #' rrow("")
 #'
-rrow <- function(row.name = "", ..., format = NULL, indent = 0) {
+rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
     vals <- list(...)
     if(is.null(row.name))
         row.name <- ""
@@ -21,7 +21,8 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0) {
         LabelRow(lev = as.integer(indent),
                  label = row.name,
                  name = row.name,
-                 vis = TRUE)
+                 vis = TRUE,
+                 table_inset = 0L)
     } else {
         csps <- as.integer(sapply(vals, function(x) {
             attr(x, "colspan", exact = TRUE) %||% 1L
@@ -35,7 +36,8 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0) {
         DataRow(val = vals, lev = as.integer(indent), label = row.name,
                 name = row.name, ## XXX TODO
                 cspan = csps,
-                format = format)
+                format = format,
+                table_inset = as.integer(inset))
     }
 }
 
@@ -63,10 +65,10 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0) {
 #'
 #' rrowl(row.name = "row 1", c(1, 2), c(3,4))
 #' rrow(row.name = "row 2", c(1, 2), c(3,4))
-rrowl <- function(row.name, ..., format = NULL, indent = 0)  {
+rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L)  {
     dots <- list(...)
     args_list <- c(list(row.name = row.name, format = format,
-        indent = indent), val = unlist(lapply(dots, as.list), recursive = FALSE))
+        indent = indent, inset = inset), val = unlist(lapply(dots, as.list), recursive = FALSE))
     do.call(rrow, args_list)
 }
 
@@ -309,7 +311,8 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'
 #' tbl2
 #'
-rtable <- function(header, ..., format = NULL, hsep = default_hsep()) {
+rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
+                   inset = 0L) {
     if(is.character(header))
         header <- .char_to_hrows(header) #list(rrowl(NULL, header))
     if(is.list(header)) {
@@ -339,14 +342,14 @@ rtable <- function(header, ..., format = NULL, hsep = default_hsep()) {
 
     TableTree(kids = body, format = format, cinfo = colinfo,
               labelrow = LabelRow(lev = 0L, label = "", vis = FALSE),
-              hsep = hsep)
+              hsep = hsep, inset = inset)
 }
 
 #' @rdname rtable
 #' @export
-rtablel <- function(header, ..., format = NULL, hsep = default_hsep()) {
+rtablel <- function(header, ..., format = NULL, hsep = default_hsep(), inset = 0L) {
     dots <- list(...)
-    args_list <- c(list(header = header, format = format, hsep = hsep), unlist(lapply(dots,
+    args_list <- c(list(header = header, format = format, hsep = hsep, inset = inset), unlist(lapply(dots,
         as.list), recursive = FALSE))
     do.call(rtable, args_list)
 }
@@ -440,7 +443,8 @@ setMethod("rbind", "VTableNodeInfo",
 })
 
 #' @exportMethod rbind2
-#' @rdname rbind
+#' @param y Second element to be rbound via `rbind2`
+#' @rdname int_methods
 setMethod("rbind2", c("VTableNodeInfo", "missing"),
           function(x, y) {
     TableTree(kids = list(x), cinfo = col_info(x), name = "rbind_root", label = "")

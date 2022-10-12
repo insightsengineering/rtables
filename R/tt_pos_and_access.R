@@ -248,7 +248,8 @@ label_at_path <- function(tt, path) {
 #' @rdname ttap
 setGeneric("tt_at_path", function(tt, path, ...) standardGeneric("tt_at_path"))
 #' @export
-#' @rdname ttap
+#' @inheritParams tt_at_path
+#' @rdname int_methods
 setMethod("tt_at_path", "VTableTree",
            function(tt, path, ...) {
     stopifnot(is(path, "character"),
@@ -281,7 +282,7 @@ setMethod("tt_at_path", "VTableTree",
 setGeneric("tt_at_path<-",
            function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -291,7 +292,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
 ## this one removes the child at path from the parents list of children,
 ## becuase thats how lists behave.
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -300,7 +301,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
 
 
 #' @export
-#' @rdname ttap
+#' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
           function(tt, path, ..., value) {
     stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))
@@ -377,9 +378,17 @@ setMethod("[<-", c("VTableTree", value = "list"),
 
 
     nr <- nrow(x)
-    i <- .j_to_posj(i, nr)
+    if(missing(i))
+        i <- seq_len(NROW(x))
+    else if(is(i, "character"))
+        i <- .path_to_pos(i, x)
+    else
+        i <- .j_to_posj(i, nr)
+
     if(missing(j)) {
         j <- seq_along(col_exprs(col_info(x)))
+    } else if(is(j, "character")) {
+        j <- .path_to_pos(j, x, cols = TRUE)
     } else {
         j <- .j_to_posj(j, ncol(x))
     }
@@ -465,7 +474,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
 #' @rdname brackets
 setMethod("[<-", c("VTableTree", value = "CellValue"),
           function(x, i, j, ...,  value) {
-    x[i = i, j = j, ...] <- unclass(value)
+    x[i = i, j = j, ...] <- list(value)
     x
 })
 

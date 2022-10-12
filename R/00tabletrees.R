@@ -1113,7 +1113,8 @@ setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
              col_info = "InstantiatedColumnInfo",
              format = "FormatSpec",
              na_str = "character",
-             indent_modifier = "integer"))
+             indent_modifier = "integer",
+             table_inset = "integer"))
 
 setClass("TableRow", contains = c("VIRTUAL", "VLeaf", "VTableNodeInfo"),
          representation(leaf_value = "ANY",
@@ -1139,7 +1140,8 @@ LabelRow <- function(lev = 1L,
                     name = label,
                     vis = !is.na(label) && nzchar(label),
                     cinfo = EmptyColInfo,
-                    indent_mod = 0L) {
+                    indent_mod = 0L,
+                    table_inset = 0L) {
     new("LabelRow",
         leaf_value = list(),
         level = lev,
@@ -1150,7 +1152,8 @@ LabelRow <- function(lev = 1L,
         name = .chkname(name),
         col_info = cinfo,
         visible = vis,
-        indent_modifier = as.integer(indent_mod))
+        indent_modifier = as.integer(indent_mod),
+        table_inset = as.integer(table_inset))
 }
 
 #' Row constructors and Classes
@@ -1198,7 +1201,8 @@ setClass("LabelRow", contains = "TableRow",
                     na_str = NA_character_,
                     klass,
                     indent_mod = 0L,
-                    footnotes = list()) {
+                    footnotes = list(),
+                    table_inset = 0L) {
     if ((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
        !missing(label))
         name <- label
@@ -1224,7 +1228,8 @@ setClass("LabelRow", contains = "TableRow",
              format = NULL,
              na_str = NA_character_,
              indent_modifier = indent_mod,
-             row_footnotes = footnotes
+             row_footnotes = footnotes,
+             table_inset = table_inset
              )
     rw <- set_format_recursive(rw, format, na_str, FALSE)
     rw
@@ -1252,8 +1257,7 @@ setClass("VTableTree",
                         labelrow = "LabelRow",
                         page_titles = "character",
                         horizontal_sep = "character",
-                        trailing_section_div = "character",
-                        table_inset = "integer"
+                        trailing_section_div = "character"
                         ))
 
 setClassUnion("IntegerOrNull", c("integer", "NULL"))

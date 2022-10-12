@@ -30,7 +30,8 @@ constr_args(
   trailing_sep,
   split_na_str,
   cna_str,
-  inset
+  inset,
+  table_inset
 )
 }
 \arguments{
@@ -109,6 +110,10 @@ represents a single facet.}
 table.}
 
 \item{inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
+\item{table_inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 }
