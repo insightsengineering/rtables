@@ -4,9 +4,10 @@ Date: 2022-09-30
 Version: 0.5.2.10
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
+  person("Adrian", "Waddell", email = "adrian.waddell@gene.com", role = "aut"),
   person("Daniel", "Sabanés Bové", email = "daniel.sabanes_bove@roche.com", role = "ctb"),
-  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "ctb")
+  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "ctb"),
+  person("Davide", "Garolini", email = "davide.garolini@roche.com", role = "ctb")
   )
 Description: Reporting tables often have structure that goes beyond simple rectangular
   data. The 'rtables' package provides a framework for declaring complex multi-level tabulations
