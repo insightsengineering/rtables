@@ -106,7 +106,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of
 #'   this object should be considered an internal implementation detail.
-#' @seealso `analyze`
+#' @seealso [analyze()]
 #'
 #' @examples
 #' in_rows(1, 2, 3, .names = c("a", "b", "c"))

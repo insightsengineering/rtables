@@ -136,7 +136,7 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #'                           rrow("new row redux", 888),
 #'                           after = TRUE)
 #' tab2
-#' @seealso DataRow rrow
+#' @seealso [DataRow()] [rrow()]
 
 setGeneric("insert_row_at_path", signature = c("tt", "value"),
            function(tt, path, value, after = FALSE) {

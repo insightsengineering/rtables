@@ -114,7 +114,7 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #'
 #' @export
 #'
-#' @seealso `export_as_pdf`
+#' @seealso [export_as_pdf()]
 #'
 #' @examples
 #'
@@ -294,7 +294,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
 #' (unlike when printed to the terminal), with `cpp`, as
 #' defined above, as the default `max_width`.
 #'
-#' @seealso `export_as_txt`
+#' @seealso [export_as_txt()]
 #'
 #'
 #' @importFrom grid textGrob get.gpar
