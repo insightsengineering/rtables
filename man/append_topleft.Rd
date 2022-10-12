@@ -52,5 +52,5 @@ DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
 build_table(lyt, DM2)
 }
 \seealso{
-top_left
+\code{\link[=top_left]{top_left()}}
 }

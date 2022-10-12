@@ -46,5 +46,5 @@ tab2 <- insert_row_at_path(tab2, c("COUNTRY", "CHN", "AGE", "Mean"),
 tab2
 }
 \seealso{
-DataRow rrow
+\code{\link[=DataRow]{DataRow()}} \code{\link[=rrow]{rrow()}}
 }

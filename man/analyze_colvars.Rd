@@ -85,7 +85,7 @@ basic_table() \%>\% split_cols_by("ARM") \%>\%
 
 }
 \seealso{
-\code{\link{split_cols_by_multivar}}
+\code{\link[=split_cols_by_multivar]{split_cols_by_multivar()}}
 }
 \author{
 Gabriel Becker

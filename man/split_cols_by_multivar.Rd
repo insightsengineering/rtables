@@ -67,7 +67,7 @@ build_table(l, ANL)
 
 }
 \seealso{
-\code{\link{analyze_colvars}}
+\code{\link[=analyze_colvars]{analyze_colvars()}}
 }
 \author{
 Gabriel Becker

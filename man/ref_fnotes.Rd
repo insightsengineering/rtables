@@ -110,3 +110,26 @@ be immediately recalculated. Defaults to TRUE.}
 \description{
 Get and set referential footnotes on aspects of a built table
 }
+\examples{
+# How to add referencial footnotes after having created a table
+tbl <- basic_table() \%>\%
+    split_rows_by("SEX", page_by = TRUE) \%>\%
+    analyze("AGE") \%>\% 
+    build_table(DM)
+tbl <- trim_rows(tbl)
+# Check the row and col structure to add precise references
+# row_paths(tbl)
+# col_paths(t)
+# row_paths_summary(tbl)
+# col_paths_summary(tbl)
+
+# Add the citation numbers on the table and relative references in the footnotes
+fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Famous paper 1"
+fnotes_at_path(tbl, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Unfamous paper 2"
+# tbl
+
+}
+\seealso{
+\code{\link[=row_paths]{row_paths()}}, \code{\link[=col_paths]{col_paths()}},
+\code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
+}
