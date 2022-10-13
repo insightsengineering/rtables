@@ -3,9 +3,9 @@ home:
   strip_header: true
 
 template:
-  params:
-    bootswatch: cerulean
-    
+  bootstrap: 5
+  bootswatch: cerulean
+
 navbar:
   type: default
   right:
@@ -54,6 +54,7 @@ reference:
     - split_cols_by_cuts 
     - add_overall_col
     - add_existing_table
+    - formatters::table_inset
 
   - title: Tabulation Utility Functions
     desc: Functions that are useful to be used with the `analyze*` functions.
@@ -171,6 +172,10 @@ reference:
     - no_colinfo
     - clayout
     - horizontal_sep
+    - formatters::table_inset
+    - formatters::main_title
+    - top_left
+    - formatters::obj_name
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors
