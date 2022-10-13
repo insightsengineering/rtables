@@ -172,6 +172,10 @@ reference:
     - no_colinfo
     - clayout
     - horizontal_sep
+    - formatters::table_inset
+    - formatters::main_title
+    - top_left
+    - formatters::obj_name
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors
