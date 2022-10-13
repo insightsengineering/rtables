@@ -33,6 +33,6 @@ cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
 
 }
 \seealso{
-\code{\link[=cell_values]{cell_values()}}, \code{\link[=fnotes_at_path]{fnotes_at_path()}},
+\code{\link[=cell_values]{cell_values()}}, \code{\link{fnotes_at_path<-}},
 \code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
 }

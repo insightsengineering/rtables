@@ -23,7 +23,7 @@
 #' 
 #' @return a list of paths to each row/column within \code{x}
 #' 
-#' @seealso [cell_values()], [fnotes_at_path()], 
+#' @seealso [cell_values()], [`fnotes_at_path<-`], 
 #'   [row_paths_summary()], [col_paths_summary()]
 #' 
 #' @export
