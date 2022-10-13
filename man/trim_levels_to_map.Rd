@@ -50,5 +50,5 @@ allowed under the combination of the previous and current split.
    tbl1 <- build_table(lyt, ex_adlb)
 }
 \seealso{
-trim_levels_in_group
+\code{\link[=trim_levels_in_group]{trim_levels_in_group()}}
 }

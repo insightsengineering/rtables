@@ -2483,6 +2483,28 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 #'   indicates footnote should go on the row rather than cell
 #' @param reset_idx logical(1). Should the numbering for referential footnotes
 #'   be immediately recalculated. Defaults to TRUE.
+#' 
+#' @examples
+#' # How to add referencial footnotes after having created a table
+#' tbl <- basic_table() %>%
+#'     split_rows_by("SEX", page_by = TRUE) %>%
+#'     analyze("AGE") %>% 
+#'     build_table(DM)
+#' tbl <- trim_rows(tbl)
+#' # Check the row and col structure to add precise references
+#' # row_paths(tbl)
+#' # col_paths(t)
+#' # row_paths_summary(tbl)
+#' # col_paths_summary(tbl)
+#' 
+#' # Add the citation numbers on the table and relative references in the footnotes
+#' fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Famous paper 1"
+#' fnotes_at_path(tbl, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Unfamous paper 2"
+#' # tbl
+#' 
+#' @seealso [row_paths()], [col_paths()], 
+#'   [row_paths_summary()], [col_paths_summary()]
+#'
 #' @export
 #' @rdname ref_fnotes
 setGeneric("fnotes_at_path<-", function(obj,

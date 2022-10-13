@@ -986,7 +986,7 @@ add_combo_levels <- function(combosdf,
 #'   of it.
 #' @return a fun
 #'
-#' @seealso trim_levels_in_group
+#' @seealso [trim_levels_in_group()]
 #' @export
 #' @examples
 #'  map <- data.frame(

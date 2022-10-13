@@ -454,7 +454,7 @@ split_rows_by <- function(lyt,
 #'
 #' @author Gabriel Becker
 #'
-#' @seealso \code{\link{analyze_colvars}}
+#' @seealso [analyze_colvars()]
 #' @inherit split_cols_by return
 #' @examples
 #'
@@ -1010,7 +1010,7 @@ get_acolvar_vars <- function(lyt) {
 #'
 #' @inherit split_cols_by return
 #'
-#' @seealso \code{\link{split_cols_by_multivar}}
+#' @seealso [split_cols_by_multivar()]
 #'
 #' @author Gabriel Becker
 #'
@@ -1102,7 +1102,7 @@ analyze_colvars <- function(lyt, afun,
 #'
 #' @export
 #'
-#' @seealso \code{\link{add_overall_level}}
+#' @seealso [add_overall_level()]
 #'
 #' @examples
 #' l <- basic_table() %>%
@@ -1735,7 +1735,7 @@ basic_table <- function(title = "",
 #' its behavior are subject to change in future versions.
 #'
 #' @export
-#' @seealso top_left
+#' @seealso [top_left()]
 #'
 #' @examples
 #' library(dplyr)

@@ -74,5 +74,5 @@ system2("cat", tf)
 }
 }
 \seealso{
-\code{export_as_pdf}
+\code{\link[=export_as_pdf]{export_as_pdf()}}
 }
