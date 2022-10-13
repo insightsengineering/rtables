@@ -19,11 +19,11 @@ articles:
     contents:
     - introduction
     - clinical_trials
+    - subsetting_tables
+    - tabulation_dplyr
     - tabulation_concepts
     - baseline
-    - subsetting_tables
     - sorting_pruning
-    - tabulation_dplyr
     - manual_table_construction
     - title_footer
 
