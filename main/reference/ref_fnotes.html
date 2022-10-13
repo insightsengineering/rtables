@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -106,7 +100,33 @@ indicates footnote should go on the row rather than cell</p></dd>
 be immediately recalculated. Defaults to TRUE.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="make_col_row_df.html">row_paths()</a></code>, <code><a href="make_col_row_df.html">col_paths()</a></code>,
+<code><a href="row_paths_summary.html">row_paths_summary()</a></code>, <code><a href="row_paths_summary.html">col_paths_summary()</a></code></p></div>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># How to add referencial footnotes after having created a table</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, page_by <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span></span>
+<span class="r-in"><span>    <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Check the row and col structure to add precise references</span></span></span>
+<span class="r-in"><span><span class="co"># row_paths(tbl)</span></span></span>
+<span class="r-in"><span><span class="co"># col_paths(t)</span></span></span>
+<span class="r-in"><span><span class="co"># row_paths_summary(tbl)</span></span></span>
+<span class="r-in"><span><span class="co"># col_paths_summary(tbl)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add the citation numbers on the table and relative references in the footnotes</span></span></span>
+<span class="r-in"><span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="st">"F"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Famous paper 1"</span></span></span>
+<span class="r-in"><span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="st">"UNDIFFERENTIATED"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Unfamous paper 2"</span></span></span>
+<span class="r-in"><span><span class="co"># tbl</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
