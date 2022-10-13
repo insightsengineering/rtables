@@ -1,4 +1,4 @@
-## rtables 0.5.2.10
+## rtables 0.5.3
  * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
  * `[<-` `CellValue` method now preserves CellValue attributes (e.g., format)
  * More detailed subsetting and modification vignette
@@ -6,43 +6,27 @@
  * `max_width` is now used during pagination to determine lines taken up by referential footnotes
  * `make_col_df` now accepts `colwidths` argument, and can be called directly on `InstantiatedColumnInfo` objects
  * versioned dependency on `formatters` increase to `>0.3.3.12`
-
-## rtables 0.5.2.9
  * wordwrapping title/footer materials no longer fails in the presence of `""` values.
  * versioned dependency on `formatters` increase to `>0.3.3.11`
-
-## rtables 0.5.2.8
  * `paginate_table` now accepts `tf_wrap` and `max_width` and respects title/footer word wrapping when present
  * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
  * versioned dependency on `formatters` increased to `>0.3.3.10`
-
-## rtables 0.5.2.7
  * `export_as_pdf` now accepts standard page/font size parameters
  * original paramters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 
    will be fully deprecated and then removed in the future.
-
-## rtables 0.5.2.6
  * `toString` method for `VTableTree` now accepts `tf_wrap` and `max_width`
  * `export_as_txt` and `export_as_pdf` now accept `cpp`, as well as `tf_wrap` and `max_width` and
     default to `tf_wrap` being on and `max_width = cpp` when `cpp` is non-NULL.
-
-## rtables 0.5.2.5
  * `basic_table` now accepts `inset` argument for declaring table inset
  * Table and Layout object classes now have a `table_inset` slot, with accessor functions.
  * `matrix_form` method for `VTableTree` sets `table_inset` value
  * Increase versioned dependency on `formatters` to `>0.3.3.5` for `table_inset` support
-
-## rtables 0.5.2.4
  * Use `exact=TRUE` in all calls to `attr` within access functions
  * Increase versioned dependency on `formatters` to `>0.3.3.4`
- 
-## rtables 0.5.2.3
  * layouting instructions now accept na_str argument, which specifies na string with the same
    inheritance rules as formats
  * (pre-data) Split and (post tabulation) Table/row S4 classes now carry around na_str information
  * Increase versioned dependency on `formatters` to `>= 0.3.3.3` for support of na_strs with `NA_character_` values
-
-## rtables 0.5.2.2
  * `paginate_table` now takes page dimension and font information and uses `formatters::page_lcpp` to
    calculate `lpp` and `cpp` automatically when those are provided.
  * Increase versioned dependency on `formatters` to `>= 0.3.3.2` for `page_lcpp`
