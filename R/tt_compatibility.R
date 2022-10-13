@@ -443,7 +443,8 @@ setMethod("rbind", "VTableNodeInfo",
 })
 
 #' @exportMethod rbind2
-#' @rdname rbind
+#' @param y Second element to be rbound via `rbind2`
+#' @rdname int_methods
 setMethod("rbind2", c("VTableNodeInfo", "missing"),
           function(x, y) {
     TableTree(kids = list(x), cinfo = col_info(x), name = "rbind_root", label = "")

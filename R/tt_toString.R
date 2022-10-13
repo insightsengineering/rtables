@@ -20,7 +20,7 @@ NULL
 #' Convert an `rtable` object to a string
 #'
 #' @inheritParams gen_args
-#' @inheritParams formatters::toString
+#' @inherit formatters::toString
 #' @param x table object
 #' @param widths widths of row.name and columns columns
 #' @param col_gap gap between columns

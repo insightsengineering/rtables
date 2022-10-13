@@ -19,7 +19,7 @@ NULL
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE, TRUE)))
 
-#' @rdname dimensions
+#' @rdname int_methods
 #' @exportMethod nrow
 setMethod("nrow", "TableRow",
           function(x) 1L)
@@ -49,7 +49,7 @@ setMethod("ncol", "VTableNodeInfo",
     ncol(col_info(x))
 })
 
-#' @rdname dimensions
+#' @rdname int_methods
 #' @exportMethod ncol
 setMethod("ncol", "TableRow",
           function(x) {
@@ -59,14 +59,14 @@ setMethod("ncol", "TableRow",
         length(spanned_values(x))
 })
 
-#' @rdname dimensions
+#' @rdname int_methods
 #' @exportMethod ncol
 setMethod("ncol", "LabelRow",
           function(x) {
     ncol(col_info(x))
 })
 
-#' @rdname dimensions
+#' @rdname int_methods
 #' @exportMethod ncol
 setMethod("ncol", "InstantiatedColumnInfo",
           function(x) {
@@ -87,11 +87,11 @@ setMethod("dim", "VTableNodeInfo",
 #' @rdname tree_children
 setGeneric("tree_children", function(x) standardGeneric("tree_children"))
 #' @exportMethod tree_children
-#' @rdname tree_children
+#' @rdname int_methods
 setMethod("tree_children", c(x = "VTree"),
           function(x) x@children)
 #' @exportMethod tree_children
-#' @rdname tree_children
+#' @rdname int_methods
 setMethod("tree_children", c(x = "VTableTree"),
           function(x) x@children)
 
@@ -99,7 +99,7 @@ setMethod("tree_children", c(x = "VTableTree"),
 ## needed for table_inset being carried around by rows and
 ## such.
 #' @exportMethod tree_children
-#' @rdname tree_children
+#' @rdname int_methods
 setMethod("tree_children", c(x = "ANY"), ##"VLeaf"),
           function(x) list())
 
@@ -107,14 +107,14 @@ setMethod("tree_children", c(x = "ANY"), ##"VLeaf"),
 #' @rdname tree_children
 setGeneric("tree_children<-", function(x, value) standardGeneric("tree_children<-"))
 #' @exportMethod tree_children<-
-#' @rdname tree_children
+#' @rdname int_methods
 setMethod("tree_children<-", c(x = "VTree"),
           function(x, value) {
     x@children <- value
     x
 })
 #' @exportMethod tree_children<-
-#' @rdname tree_children
+#' @rdname int_methods
 setMethod("tree_children<-", c(x = "VTableTree"),
           function(x, value) {
     x@children <- value
@@ -133,11 +133,11 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 #' @rdname content_table
 setGeneric("content_table", function(obj) standardGeneric("content_table"))
 #' @exportMethod content_table
-#' @rdname content_table
+#' @rdname int_methods
 setMethod("content_table", "TableTree",
           function(obj) obj@content)
 #' @exportMethod content_table
-#' @rdname content_table
+#' @rdname int_methods
 setMethod("content_table", "ANY",
           function(obj) NULL)
 
@@ -146,7 +146,7 @@ setMethod("content_table", "ANY",
 #' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
 #' @exportMethod "content_table<-"
-#' @rdname content_table
+#' @rdname int_methods
 setMethod("content_table<-", c("TableTree", "ElementaryTable"),
           function(obj, value) {
     obj@content <- value
@@ -329,24 +329,32 @@ setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
 setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
-#' @inherit formatters::lab_name
-#' @rdname lab_name
+                                        # #' @inherit formatters::formatter_methods
+#' Methods for generics in the formatters package
+#'
+#' See the `formatters` documentation for descriptions of these generics.
+#' @inheritParams gen_args
+#'
+#' @return for getters, the current value of the component being accessed
+#' on `obj`, for setters, a modified copy of `obj` with the new value.
+#'
+#' @rdname formatters_methods
 #' @exportMethod obj_name
 setMethod("obj_name", "VNodeInfo",
           function(obj) obj@name)
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_name
 setMethod("obj_name", "Split",
           function(obj) obj@name)
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_name<-
 setMethod("obj_name<-", "VNodeInfo",
           function(obj, value) {
     obj@name <- value
     obj
 })
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_name<-
 setMethod("obj_name<-", "Split",
           function(obj, value) {
@@ -356,26 +364,26 @@ setMethod("obj_name<-", "Split",
 
 
 ### Label related things
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label
 setMethod("obj_label", "Split", function(obj) obj@split_label)
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label
 setMethod("obj_label", "TableRow", function(obj) obj@label)
 ## XXX Do we want a convenience for VTableTree that
 ## grabs the label from the LabelRow or will
 ## that just muddy the waters?
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label
 setMethod("obj_label", "VTableTree",
           function(obj) obj_label(tt_labelrow(obj)))
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label
 setMethod("obj_label", "ValueWrapper", function(obj) obj@label)
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "Split",
           function(obj, value) {
@@ -383,7 +391,7 @@ setMethod("obj_label<-", "Split",
     obj
 })
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "TableRow",
           function(obj, value) {
@@ -391,7 +399,7 @@ setMethod("obj_label<-", "TableRow",
     obj
 })
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "ValueWrapper",
           function(obj, value) {
@@ -400,7 +408,7 @@ setMethod("obj_label<-", "ValueWrapper",
 })
 
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @exportMethod obj_label<-
 setMethod("obj_label<-", "VTableTree",
           function(obj, value) {
@@ -842,57 +850,57 @@ setMethod("spanned_values<-", "LabelRow",
 ### Format manipulation
 ### obj_format<- is not recursive
 ## TODO export these?
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format", "VTableNodeInfo", function(obj) obj@format)
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format", "CellValue", function(obj) attr(obj, "format", exact = TRUE))
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format", "Split", function(obj) obj@split_format)
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format<-", "VTableNodeInfo", function(obj, value) {
     obj@format <- value
     obj
 })
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format<-", "Split", function(obj, value) {
     obj@split_format <- value
     obj
 })
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_format<-", "CellValue", function(obj, value) {
     attr(obj, "format") <- value
     obj
 })
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setGeneric("obj_na_str", function(obj) standardGeneric("obj_na_str"))
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setGeneric("obj_na_str<-", function(obj, value) standardGeneric("obj_na_str<-"))
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setMethod("obj_na_str<-", "CellValue", function(obj, value) {
     attr(obj, "format_na_str") <- value
     obj
 })
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setMethod("obj_na_str<-", "VTableNodeInfo", function(obj, value) {
     obj@na_str <- value
     obj
 })
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setMethod("obj_na_str<-", "Split", function(obj, value) {
     obj@split_na_str <- value
@@ -900,16 +908,16 @@ setMethod("obj_na_str<-", "Split", function(obj, value) {
 })
 
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 
 
-#' @rdname lab_name
+#' @rdname int_methods
 #' @export
 setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str", exact = TRUE))
 
-#' @rdname lab_name
+#' @rdname formatters_methods
 #' @export
 setMethod("obj_na_str", "Split", function(obj) obj@split_na_str)
 
@@ -1061,13 +1069,14 @@ setMethod("value_formats", "VTableTree",
 #' @param incl.cont logical. Include rows from content tables within the tree. Defaults to \code{TRUE}
 #' @param add.labrows logical. Include label rows. Defaults to \code{FALSE}
 #' @return A list of \code{TableRow} objects for all rows in the table
-#' @rdname collect_leaves
+#' @name collect_leaves
 #' @export
 setGeneric("collect_leaves",
            function(tt, incl.cont = TRUE, add.labrows = FALSE)
     standardGeneric("collect_leaves"), signature = "tt")
 
-#' @rdname collect_leaves
+#' @rdname int_methods
+#' @inheritParams collect_leaves
 #' @exportMethod collect_leaves
 
 setMethod("collect_leaves", "TableTree",
@@ -1084,7 +1093,7 @@ setMethod("collect_leaves", "TableTree",
     unlist(ret, recursive = TRUE)
 })
 
-#' @rdname collect_leaves
+#' @rdname int_methods
 #' @exportMethod collect_leaves
 
 setMethod("collect_leaves", "ElementaryTable",
@@ -1096,7 +1105,7 @@ setMethod("collect_leaves", "ElementaryTable",
     ret
 })
 
-#' @rdname collect_leaves
+#' @rdname int_methods
 #' @exportMethod collect_leaves
 
 setMethod("collect_leaves", "VTree",
@@ -1106,14 +1115,14 @@ setMethod("collect_leaves", "VTree",
     unlist(ret, recursive = TRUE)
 })
 
-#' @rdname collect_leaves
+#' @rdname int_methods
 #' @exportMethod collect_leaves
 setMethod("collect_leaves", "VLeaf",
           function(tt, incl.cont, add.labrows) {
     list(tt)
 })
 
-#' @rdname collect_leaves
+#' @rdname int_methods
 #' @exportMethod collect_leaves
 setMethod("collect_leaves", "NULL",
           function(tt, incl.cont, add.labrows) {
@@ -1121,7 +1130,7 @@ setMethod("collect_leaves", "NULL",
 })
 
 
-#' @rdname collect_leaves
+#' @rdname int_methods
 #' @exportMethod collect_leaves
 setMethod("collect_leaves", "ANY",
           function(tt, incl.cont, add.labrows)
@@ -1956,24 +1965,17 @@ setMethod("row.names", "VTableTree",
 
 #' convert to a vector
 #'
+#' Convert an `rtables` framework object into a vector, if possible.
+#' This is unlikely to be useful in realistic scenarios.
+#'
 #' @note  This only works for a table with a single row or a row object.
 #'
-#' @rdname asvec
+#' @name asvec
 #' @param x ANY. The object to be converted to a vector
 #' @param mode character(1). Passed on to \code{\link[base]{as.vector}}
 #' @return a vector of the chosen mode (or an error is raised if more than one row was present).
 #' @exportMethod as.vector
-#'
-setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
-#'@rdname asvec
-#' @exportMethod as.vector
-setMethod("as.vector", "ElementaryTable", function(x, mode) {
-    stopifnot(nrow(x) == 1L)
-    as.vector(tree_children(x)[[1]], mode = mode)
-})
-
-#'@rdname asvec
-#' @exportMethod as.vector
+#' @aliases as.vector,VTableTree-method
 setMethod("as.vector", "VTableTree", function(x, mode) {
     stopifnot(nrow(x) == 1L)
     if(nrow(content_table(x)) == 1L)
@@ -1983,6 +1985,16 @@ setMethod("as.vector", "VTableTree", function(x, mode) {
     as.vector(tree_children(tab)[[1]], mode = mode)
 })
 
+#' @exportMethod as.vector
+#' @inheritParams asvec
+#' @rdname int_methods
+setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
+#' @rdname int_methods
+#' @exportMethod as.vector
+setMethod("as.vector", "ElementaryTable", function(x, mode) {
+    stopifnot(nrow(x) == 1L)
+    as.vector(tree_children(x)[[1]], mode = mode)
+})
 
 ## cuts
 #' @rdname int_methods
@@ -2173,19 +2185,20 @@ setMethod("vars_in_layout", "ManualSplit",
 
 
 ## Titles and footers
-##' Titles and Footers
-##'
-##' Get or set the titles and footers on an object
-##'
-##' @inheritParams gen_args
-##'
-##' @rdname title_footer
-##' @export
-##' @export
+# ##' Titles and Footers
+# ##'
+# ##' Get or set the titles and footers on an object
+# ##'
+# ##' @inheritParams gen_args
+# ##'
+# ##' @rdname title_footer
+# ##' @export
+#' @rdname formatters_methods
+#' @export
 setMethod("main_title", "VTitleFooter",
           function(obj) obj@main_title)
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("main_title<-", "VTitleFooter",
           function(obj, value) {
@@ -2195,13 +2208,13 @@ setMethod("main_title<-", "VTitleFooter",
           })
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles", "VTitleFooter",
           function(obj) obj@subtitles)
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles<-", "VTitleFooter",
           function(obj, value) {
@@ -2210,13 +2223,13 @@ setMethod("subtitles<-", "VTitleFooter",
           })
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("main_footer", "VTitleFooter",
           function(obj) obj@main_footer)
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("main_footer<-", "VTitleFooter",
           function(obj, value) {
@@ -2226,13 +2239,13 @@ setMethod("main_footer<-", "VTitleFooter",
 
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("prov_footer", "VTitleFooter",
           function(obj) obj@provenance_footer)
 
 
-##' @rdname title_footer
+##' @rdname formatters_methods
 ##' @export
 setMethod("prov_footer<-", "VTitleFooter",
           function(obj, value) {
@@ -2260,11 +2273,11 @@ make_ref_value <-  function(value) {
 
 setGeneric("row_footnotes", function(obj) standardGeneric("row_footnotes"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("row_footnotes", "TableRow",
           function(obj) obj@row_footnotes)
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("row_footnotes", "RowsVerticalSection",
           function(obj) attr(obj, "row_footnotes", exact = TRUE) %||% list())
 
@@ -2272,7 +2285,7 @@ setMethod("row_footnotes", "RowsVerticalSection",
 #' @rdname ref_fnotes
 setGeneric("row_footnotes<-", function(obj, value) standardGeneric("row_footnotes<-"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("row_footnotes<-", "TableRow",
           function(obj, value) {
     obj@row_footnotes <- make_ref_value(value)
@@ -2281,7 +2294,7 @@ setMethod("row_footnotes<-", "TableRow",
 
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("row_footnotes", "VTableTree",
           function(obj) {
     rws <- collect_leaves(obj, TRUE, TRUE)
@@ -2293,11 +2306,11 @@ setMethod("row_footnotes", "VTableTree",
 #' @rdname ref_fnotes
 setGeneric("cell_footnotes", function(obj) standardGeneric("cell_footnotes"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes", "CellValue",
           function(obj) attr(obj, "footnotes", exact = TRUE) %||% list())
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes", "TableRow",
           function(obj) {
     ret <- lapply(row_cells(obj), cell_footnotes)
@@ -2308,14 +2321,14 @@ setMethod("cell_footnotes", "TableRow",
 })
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes", "LabelRow",
           function(obj) {
     rep(list(list()), ncol(obj))
 })
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes", "VTableTree",
           function(obj) {
     rws <- collect_leaves(obj, TRUE, TRUE)
@@ -2328,7 +2341,7 @@ setMethod("cell_footnotes", "VTableTree",
 #' @rdname ref_fnotes
 setGeneric("cell_footnotes<-", function(obj, value) standardGeneric("cell_footnotes<-"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes<-", "CellValue",
           function(obj, value) {
     attr(obj, "footnotes") <- make_ref_value(value)
@@ -2352,12 +2365,12 @@ setMethod("cell_footnotes<-", "CellValue",
 }
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes<-", "DataRow",
           definition = .cfn_set_helper)
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("cell_footnotes<-", "ContentRow",
           definition = .cfn_set_helper)
 
@@ -2365,24 +2378,24 @@ setMethod("cell_footnotes<-", "ContentRow",
 #' @rdname ref_fnotes
 setGeneric("col_fnotes_here", function(obj) standardGeneric("col_fnotes_here"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("col_fnotes_here", c("LayoutColTree"), function(obj) obj@col_footnotes)
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("col_fnotes_here", c("LayoutColLeaf"), function(obj) obj@col_footnotes)
 
 #' @export
 #' @rdname ref_fnotes
 setGeneric("col_fnotes_here<-", function(obj, value) standardGeneric("col_fnotes_here<-"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("col_fnotes_here<-", "LayoutColTree", function(obj, value) {
     obj@col_footnotes <- make_ref_value(value)
     obj
 })
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
     obj@col_footnotes <- make_ref_value(value)
     obj
@@ -2393,7 +2406,7 @@ setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
 #' @rdname ref_fnotes
 setGeneric("ref_index", function(obj) standardGeneric("ref_index"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("ref_index", "RefFootnote",
           function(obj) obj@index)
 
@@ -2401,7 +2414,7 @@ setMethod("ref_index", "RefFootnote",
 #' @rdname ref_fnotes
 setGeneric("ref_index<-", function(obj, value) standardGeneric("ref_index<-"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("ref_index<-", "RefFootnote",
           function(obj, value) {
     obj@index <- value
@@ -2415,7 +2428,7 @@ setMethod("ref_index<-", "RefFootnote",
 #' @rdname ref_fnotes
 setGeneric("ref_msg", function(obj) standardGeneric("ref_msg"))
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("ref_msg", "RefFootnote",
           function(obj) obj@value)
 
@@ -2502,8 +2515,9 @@ setGeneric("fnotes_at_path<-", function(obj,
     standardGeneric("fnotes_at_path<-"))
 
 ## non-null rowpath, null or non-null colpath
+#' @inheritParams fnotes_at_path<-
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("fnotes_at_path<-", c("VTableTree", "character"),
           function(obj,
                    rowpath = NULL,
@@ -2519,7 +2533,7 @@ setMethod("fnotes_at_path<-", c("VTableTree", "character"),
 })
 
 #' @export
-#' @rdname ref_fnotes
+#' @rdname int_methods
 setMethod("fnotes_at_path<-", c("VTableTree", "NULL"),
           function(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE, value) {
     cinfo <- col_info(obj)
@@ -2620,31 +2634,31 @@ setMethod("spl_section_div<-", "Split",
 })
 
 
-#' @inherit formatters::table_inset
-#'
-#' @rdname table_inset
+#' @rdname formatters_methods
 #' @export
 setMethod("table_inset", "VTableNodeInfo", ##VTableTree",
           function(obj) obj@table_inset)
 
 
-#' @rdname table_inset
+#' @rdname formatters_methods
 #' @export
 setMethod("table_inset", "PreDataTableLayouts",
           function(obj) obj@table_inset)
 
-## #' @rdname table_inset
+## #' @rdname formatters_methods
 ## #' @export
 ## setMethod("table_inset", "InstantiatedColumnInfo",
 ##           function(obj) obj@table_inset)
 
 
-#' @rdname table_inset
+#' @rdname formatters_methods
 #' @export
 setMethod("table_inset<-", "VTableNodeInfo", ##"VTableTree",
           function(obj, value) {
     if(!is.integer(value))
         value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
     cont <- content_table(obj)
     if(NROW(cont) > 0) {
         table_inset(cont) <- value
@@ -2663,17 +2677,22 @@ setMethod("table_inset<-", "VTableNodeInfo", ##"VTableTree",
 })
 
 
-#' @rdname table_inset
+#' @rdname formatters_methods
 #' @export
 setMethod("table_inset<-", "PreDataTableLayouts",
           function(obj, value) {
+    if(!is.integer(value))
+        value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
+
     obj@table_inset <- value
     obj
 })
 
 ## covered now by VTableNodeInfo method
 
-## #' @rdname table_inset
+## #' @rdname formatters_methods
 ## #' @export
 ## setMethod("table_inset<-", "TableRow",
 ##           function(obj, value) {
@@ -2681,10 +2700,14 @@ setMethod("table_inset<-", "PreDataTableLayouts",
 ##     obj
 ## })
 
-#' @rdname table_inset
+#' @rdname formatters_methods
 #' @export
 setMethod("table_inset<-", "InstantiatedColumnInfo",
           function(obj, value) {
+    if(!is.integer(value))
+        value <- as.integer(value)
+    if(is.na(value) || value < 0)
+        stop("Got invalid table_inset value, must be an integer > 0")
     obj@table_inset <- value
     obj
 })
@@ -2718,7 +2741,6 @@ setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
     obj@trailing_section_div <- value
     obj
 })
-
 
 ## setGeneric("apply_kids_section_sep",
 ##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))
