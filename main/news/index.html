@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -54,7 +48,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.10" id="rtables-05210">rtables 0.5.2.10<a class="anchor" aria-label="anchor" href="#rtables-05210"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.5.3" id="rtables-053">rtables 0.5.3<a class="anchor" aria-label="anchor" href="#rtables-053"></a></h2>
 <ul><li>
 <code>[&lt;-</code> now treats character <code>i</code> and <code>j</code> values as paths, the same as <code>[</code> always has.</li>
 <li>
@@ -69,59 +63,35 @@
 <code>make_col_df</code> now accepts <code>colwidths</code> argument, and can be called directly on <code>InstantiatedColumnInfo</code> objects</li>
 <li>versioned dependency on <code>formatters</code> increase to <code>&gt;0.3.3.12</code>
 </li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.9" id="rtables-0529">rtables 0.5.2.9<a class="anchor" aria-label="anchor" href="#rtables-0529"></a></h2>
-<ul><li>wordwrapping title/footer materials no longer fails in the presence of <code>""</code> values.</li>
+<li>wordwrapping title/footer materials no longer fails in the presence of <code>""</code> values.</li>
 <li>versioned dependency on <code>formatters</code> increase to <code>&gt;0.3.3.11</code>
 </li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.8" id="rtables-0528">rtables 0.5.2.8<a class="anchor" aria-label="anchor" href="#rtables-0528"></a></h2>
-<ul><li>
+<li>
 <code>paginate_table</code> now accepts <code>tf_wrap</code> and <code>max_width</code> and respects title/footer word wrapping when present</li>
 <li>export functions now accepts <code>tf_wrap</code> and <code>max_width</code> and use them in both pagination (when turned on) <em>and</em> <code>toString</code> when used (pdf, txt exporters).</li>
 <li>versioned dependency on <code>formatters</code> increased to <code>&gt;0.3.3.10</code>
 </li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.7" id="rtables-0527">rtables 0.5.2.7<a class="anchor" aria-label="anchor" href="#rtables-0527"></a></h2>
-<ul><li>
+<li>
 <code>export_as_pdf</code> now accepts standard page/font size parameters</li>
 <li>original paramters (<code>width</code>, <code>height</code>, <code>fontsize</code> are soft deprecated (no warning) and will be fully deprecated and then removed in the future.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.6" id="rtables-0526">rtables 0.5.2.6<a class="anchor" aria-label="anchor" href="#rtables-0526"></a></h2>
-<ul><li>
+<li>
 <code>toString</code> method for <code>VTableTree</code> now accepts <code>tf_wrap</code> and <code>max_width</code>
 </li>
 <li>
 <code>export_as_txt</code> and <code>export_as_pdf</code> now accept <code>cpp</code>, as well as <code>tf_wrap</code> and <code>max_width</code> and default to <code>tf_wrap</code> being on and <code>max_width = cpp</code> when <code>cpp</code> is non-NULL.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.5" id="rtables-0525">rtables 0.5.2.5<a class="anchor" aria-label="anchor" href="#rtables-0525"></a></h2>
-<ul><li>
+<li>
 <code>basic_table</code> now accepts <code>inset</code> argument for declaring table inset</li>
 <li>Table and Layout object classes now have a <code>table_inset</code> slot, with accessor functions.</li>
 <li>
 <code>matrix_form</code> method for <code>VTableTree</code> sets <code>table_inset</code> value</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;0.3.3.5</code> for <code>table_inset</code> support</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.4" id="rtables-0524">rtables 0.5.2.4<a class="anchor" aria-label="anchor" href="#rtables-0524"></a></h2>
-<ul><li>Use <code>exact=TRUE</code> in all calls to <code>attr</code> within access functions</li>
+<li>Use <code>exact=TRUE</code> in all calls to <code>attr</code> within access functions</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;0.3.3.4</code>
 </li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.3" id="rtables-0523">rtables 0.5.2.3<a class="anchor" aria-label="anchor" href="#rtables-0523"></a></h2>
-<ul><li>layouting instructions now accept na_str argument, which specifies na string with the same inheritance rules as formats</li>
+<li>layouting instructions now accept na_str argument, which specifies na string with the same inheritance rules as formats</li>
 <li>(pre-data) Split and (post tabulation) Table/row S4 classes now carry around na_str information</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;= 0.3.3.3</code> for support of na_strs with <code>NA_character_</code> values</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.2.2" id="rtables-0522">rtables 0.5.2.2<a class="anchor" aria-label="anchor" href="#rtables-0522"></a></h2>
-<ul><li>
+<li>
 <code>paginate_table</code> now takes page dimension and font information and uses <code><a href="https://rdrr.io/pkg/formatters/man/page_lcpp.html" class="external-link">formatters::page_lcpp</a></code> to calculate <code>lpp</code> and <code>cpp</code> automatically when those are provided.</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;= 0.3.3.2</code> for <code>page_lcpp</code>
 </li>
