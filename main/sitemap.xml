@@ -1,369 +1,369 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://roche.github.io/rtables/main/404.html</loc>
   </url>
   <url>
-    <loc>/ISSUE_TEMPLATE.html</loc>
+    <loc>https://roche.github.io/rtables/main/ISSUE_TEMPLATE.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://roche.github.io/rtables/main/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/baseline.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/baseline.html</loc>
   </url>
   <url>
-    <loc>/articles/clinical_trials.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/clinical_trials.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/introduction.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/introduction.html</loc>
   </url>
   <url>
-    <loc>/articles/manual_table_construction.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/manual_table_construction.html</loc>
   </url>
   <url>
-    <loc>/articles/sorting_pruning.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/sorting_pruning.html</loc>
   </url>
   <url>
-    <loc>/articles/subsetting_tables.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/subsetting_tables.html</loc>
   </url>
   <url>
-    <loc>/articles/tabulation_concepts.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/tabulation_concepts.html</loc>
   </url>
   <url>
-    <loc>/articles/tabulation_dplyr.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/tabulation_dplyr.html</loc>
   </url>
   <url>
-    <loc>/articles/title_footer.html</loc>
+    <loc>https://roche.github.io/rtables/main/articles/title_footer.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://roche.github.io/rtables/main/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://roche.github.io/rtables/main/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://roche.github.io/rtables/main/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/CellValue.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/CellValue.html</loc>
   </url>
   <url>
-    <loc>/reference/EmptyColInfo.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/EmptyColInfo.html</loc>
   </url>
   <url>
-    <loc>/reference/ManualSplit.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/ManualSplit.html</loc>
   </url>
   <url>
-    <loc>/reference/MultiVarSplit.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/MultiVarSplit.html</loc>
   </url>
   <url>
-    <loc>/reference/VarLevelSplit.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/VarLevelSplit.html</loc>
   </url>
   <url>
-    <loc>/reference/Viewer.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/Viewer.html</loc>
   </url>
   <url>
-    <loc>/reference/add_colcounts.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/add_colcounts.html</loc>
   </url>
   <url>
-    <loc>/reference/add_combo_levels.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/add_combo_levels.html</loc>
   </url>
   <url>
-    <loc>/reference/add_existing_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/add_existing_table.html</loc>
   </url>
   <url>
-    <loc>/reference/add_overall_col.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/add_overall_col.html</loc>
   </url>
   <url>
-    <loc>/reference/add_overall_level.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/add_overall_level.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/analyze.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_colvars.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/analyze_colvars.html</loc>
   </url>
   <url>
-    <loc>/reference/append_topleft.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/append_topleft.html</loc>
   </url>
   <url>
-    <loc>/reference/as_html.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/as_html.html</loc>
   </url>
   <url>
-    <loc>/reference/asvec.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/asvec.html</loc>
   </url>
   <url>
-    <loc>/reference/avarspl.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/avarspl.html</loc>
   </url>
   <url>
-    <loc>/reference/basic_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/basic_table.html</loc>
   </url>
   <url>
-    <loc>/reference/brackets.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/brackets.html</loc>
   </url>
   <url>
-    <loc>/reference/build_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/build_table.html</loc>
   </url>
   <url>
-    <loc>/reference/cbind_rtables.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/cbind_rtables.html</loc>
   </url>
   <url>
-    <loc>/reference/cell_values.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/cell_values.html</loc>
   </url>
   <url>
-    <loc>/reference/cinfo.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/cinfo.html</loc>
   </url>
   <url>
-    <loc>/reference/clear_imods.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/clear_imods.html</loc>
   </url>
   <url>
-    <loc>/reference/col_accessors.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/col_accessors.html</loc>
   </url>
   <url>
-    <loc>/reference/collect_leaves.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/collect_leaves.html</loc>
   </url>
   <url>
-    <loc>/reference/compare_rtables.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/compare_rtables.html</loc>
   </url>
   <url>
-    <loc>/reference/compat_args.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/compat_args.html</loc>
   </url>
   <url>
-    <loc>/reference/constr_args.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/constr_args.html</loc>
   </url>
   <url>
-    <loc>/reference/content_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/content_table.html</loc>
   </url>
   <url>
-    <loc>/reference/custom_split_funs.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/custom_split_funs.html</loc>
   </url>
   <url>
-    <loc>/reference/cutsplits.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/cutsplits.html</loc>
   </url>
   <url>
-    <loc>/reference/df_to_tt.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/df_to_tt.html</loc>
   </url>
   <url>
-    <loc>/reference/dimensions.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/dimensions.html</loc>
   </url>
   <url>
-    <loc>/reference/do_base_split.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/do_base_split.html</loc>
   </url>
   <url>
-    <loc>/reference/export_as_pdf.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/export_as_pdf.html</loc>
   </url>
   <url>
-    <loc>/reference/export_as_txt.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/export_as_txt.html</loc>
   </url>
   <url>
-    <loc>/reference/format_rcell.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/format_rcell.html</loc>
   </url>
   <url>
-    <loc>/reference/formatters_methods.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/formatters_methods.html</loc>
   </url>
   <url>
-    <loc>/reference/gen_args.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/gen_args.html</loc>
   </url>
   <url>
-    <loc>/reference/gfc.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/gfc.html</loc>
   </url>
   <url>
-    <loc>/reference/head_tail.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/head_tail.html</loc>
   </url>
   <url>
-    <loc>/reference/horizontal_sep.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/horizontal_sep.html</loc>
   </url>
   <url>
-    <loc>/reference/in_rows.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/in_rows.html</loc>
   </url>
   <url>
-    <loc>/reference/indent.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/indent.html</loc>
   </url>
   <url>
-    <loc>/reference/indent_string.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/indent_string.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/insert_row_at_path.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/insert_row_at_path.html</loc>
   </url>
   <url>
-    <loc>/reference/insert_rrow.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/insert_rrow.html</loc>
   </url>
   <url>
-    <loc>/reference/int_methods.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/int_methods.html</loc>
   </url>
   <url>
-    <loc>/reference/is_rtable.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/is_rtable.html</loc>
   </url>
   <url>
-    <loc>/reference/label_at_path.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/label_at_path.html</loc>
   </url>
   <url>
-    <loc>/reference/length-CellValue-method.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/length-CellValue-method.html</loc>
   </url>
   <url>
-    <loc>/reference/list_wrap.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/list_wrap.html</loc>
   </url>
   <url>
-    <loc>/reference/lyt_args.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/lyt_args.html</loc>
   </url>
   <url>
-    <loc>/reference/make_afun.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/make_afun.html</loc>
   </url>
   <url>
-    <loc>/reference/make_col_df.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/make_col_df.html</loc>
   </url>
   <url>
-    <loc>/reference/make_col_row_df.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/make_col_row_df.html</loc>
   </url>
   <url>
-    <loc>/reference/manual_cols.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/manual_cols.html</loc>
   </url>
   <url>
-    <loc>/reference/matrix_form-VTableTree-method.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/matrix_form-VTableTree-method.html</loc>
   </url>
   <url>
-    <loc>/reference/names.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/names.html</loc>
   </url>
   <url>
-    <loc>/reference/no_info.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/no_info.html</loc>
   </url>
   <url>
-    <loc>/reference/paginate.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/paginate.html</loc>
   </url>
   <url>
-    <loc>/reference/path_enriched_df.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/path_enriched_df.html</loc>
   </url>
   <url>
-    <loc>/reference/prune_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/prune_table.html</loc>
   </url>
   <url>
-    <loc>/reference/rbind.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rbind.html</loc>
   </url>
   <url>
-    <loc>/reference/rcell.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rcell.html</loc>
   </url>
   <url>
-    <loc>/reference/ref_fnotes.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/ref_fnotes.html</loc>
   </url>
   <url>
-    <loc>/reference/rheader.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rheader.html</loc>
   </url>
   <url>
-    <loc>/reference/row_accessors.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/row_accessors.html</loc>
   </url>
   <url>
-    <loc>/reference/row_paths_summary.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/row_paths_summary.html</loc>
   </url>
   <url>
-    <loc>/reference/rowclasses.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rowclasses.html</loc>
   </url>
   <url>
-    <loc>/reference/rrow.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rrow.html</loc>
   </url>
   <url>
-    <loc>/reference/rrowl.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rrowl.html</loc>
   </url>
   <url>
-    <loc>/reference/rtable.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rtable.html</loc>
   </url>
   <url>
-    <loc>/reference/rtables_aligns.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rtables_aligns.html</loc>
   </url>
   <url>
-    <loc>/reference/rtinner.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/rtinner.html</loc>
   </url>
   <url>
-    <loc>/reference/score_funs.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/score_funs.html</loc>
   </url>
   <url>
-    <loc>/reference/sf_args.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/sf_args.html</loc>
   </url>
   <url>
-    <loc>/reference/sort_at_path.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/sort_at_path.html</loc>
   </url>
   <url>
-    <loc>/reference/spl_context.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/spl_context.html</loc>
   </url>
   <url>
-    <loc>/reference/spl_context_to_disp_path.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/spl_context_to_disp_path.html</loc>
   </url>
   <url>
-    <loc>/reference/split_cols_by.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/split_cols_by.html</loc>
   </url>
   <url>
-    <loc>/reference/split_cols_by_multivar.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/split_cols_by_multivar.html</loc>
   </url>
   <url>
-    <loc>/reference/split_funcs.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/split_funcs.html</loc>
   </url>
   <url>
-    <loc>/reference/split_rows_by.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/split_rows_by.html</loc>
   </url>
   <url>
-    <loc>/reference/summarize_row_groups.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/summarize_row_groups.html</loc>
   </url>
   <url>
-    <loc>/reference/summarize_rows.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/summarize_rows.html</loc>
   </url>
   <url>
-    <loc>/reference/tabclasses.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/tabclasses.html</loc>
   </url>
   <url>
-    <loc>/reference/table_shell.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/table_shell.html</loc>
   </url>
   <url>
-    <loc>/reference/table_structure.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/table_structure.html</loc>
   </url>
   <url>
-    <loc>/reference/top_left.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/top_left.html</loc>
   </url>
   <url>
-    <loc>/reference/tostring.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/tostring.html</loc>
   </url>
   <url>
-    <loc>/reference/tree_children.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/tree_children.html</loc>
   </url>
   <url>
-    <loc>/reference/trim_levels_to_map.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/trim_levels_to_map.html</loc>
   </url>
   <url>
-    <loc>/reference/trim_prune_funs.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/trim_prune_funs.html</loc>
   </url>
   <url>
-    <loc>/reference/trim_rows.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/trim_rows.html</loc>
   </url>
   <url>
-    <loc>/reference/trim_zero_rows.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/trim_zero_rows.html</loc>
   </url>
   <url>
-    <loc>/reference/tsv_io.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/tsv_io.html</loc>
   </url>
   <url>
-    <loc>/reference/tt_to_flextable.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/tt_to_flextable.html</loc>
   </url>
   <url>
-    <loc>/reference/ttap.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/ttap.html</loc>
   </url>
   <url>
-    <loc>/reference/update_ref_indexing.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/update_ref_indexing.html</loc>
   </url>
   <url>
-    <loc>/reference/value_formats.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/value_formats.html</loc>
   </url>
   <url>
-    <loc>/reference/varcuts.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/varcuts.html</loc>
   </url>
   <url>
-    <loc>/reference/vil.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/vil.html</loc>
   </url>
   <url>
-    <loc>/reference/vpaginate_table.html</loc>
+    <loc>https://roche.github.io/rtables/main/reference/vpaginate_table.html</loc>
   </url>
 </urlset>
