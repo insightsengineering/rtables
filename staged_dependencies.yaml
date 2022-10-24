@@ -33,4 +33,6 @@ downstream_repos:
   insightsengineering/teal.reporter:
     repo: insightsengineering/teal.reporter
     host: https://github.com
-
+  insightsengineering/tern.gee:
+    repo: insightsengineering/tern.gee
+    host: https://github.com
