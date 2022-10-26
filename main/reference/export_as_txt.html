@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -63,8 +57,15 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">export_as_txt</span><span class="op">(</span></span>
 <span>  <span class="va">tt</span>,</span>
 <span>  file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  page_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  landscape <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pg_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/page_types.html" class="external-link">page_dim</a></span><span class="op">(</span><span class="va">page_type</span><span class="op">)</span><span class="op">[</span><span class="kw">if</span> <span class="op">(</span><span class="va">landscape</span><span class="op">)</span> <span class="fl">2</span> <span class="kw">else</span> <span class="fl">1</span><span class="op">]</span>,</span>
+<span>  pg_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/page_types.html" class="external-link">page_dim</a></span><span class="op">(</span><span class="va">page_type</span><span class="op">)</span><span class="op">[</span><span class="kw">if</span> <span class="op">(</span><span class="va">landscape</span><span class="op">)</span> <span class="fl">1</span> <span class="kw">else</span> <span class="fl">2</span><span class="op">]</span>,</span>
+<span>  font_family <span class="op">=</span> <span class="st">"Courier"</span>,</span>
+<span>  font_size <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  paginate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cpp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lpp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  page_break <span class="op">=</span> <span class="st">"\\s\\n"</span>,</span>
 <span>  hsep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/default_hsep.html" class="external-link">default_hsep</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -85,6 +86,36 @@ populated table.</p></dd>
 <dd><p>character(1). File to write.</p></dd>
 
 
+<dt>page_type</dt>
+<dd><p>character(1).   Name   of  a  page  type.   See
+`page_types`.   Ignored when  `pg_width` and  `pg_height`
+are set directly.</p></dd>
+
+
+<dt>landscape</dt>
+<dd><p>logical(1). Should the  dimensions of `page_type`
+be inverted  for landscape?  Defaults to  `FALSE`, ignored when
+`pg_width` and `pg_height` are set directly.</p></dd>
+
+
+<dt>pg_width</dt>
+<dd><p>numeric(1). Page width in inches.</p></dd>
+
+
+<dt>pg_height</dt>
+<dd><p>numeric(1). Page height in inches.</p></dd>
+
+
+<dt>font_family</dt>
+<dd><p>character(1). Name of a font family. An error
+will be thrown if the family named is not monospaced. Defaults
+to Courier.</p></dd>
+
+
+<dt>font_size</dt>
+<dd><p>numeric(1). Fontsize, defaults to 12.</p></dd>
+
+
 <dt>paginate</dt>
 <dd><p>logical(1). Should <code>tt</code> be paginated before writing the file.</p></dd>
 
@@ -93,6 +124,10 @@ populated table.</p></dd>
 <dd><p>numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. <code>NULL</code> (the default) indicates no horizontal
 pagination should be done.</p></dd>
+
+
+<dt>lpp</dt>
+<dd><p>numeric. Maximum lines per page including (re)printed header and context rows</p></dd>
 
 
 <dt>...</dt>
@@ -158,17 +193,12 @@ completely if `tf_wrap` is `FALSE`.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   LOW         50           45             40      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   MEDIUM      37           56             42      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   HIGH        47           33             50      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> \s\n           A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> COUNTRY                                           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   CHN         74           81             64      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   USA         10           13             17      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   BRA         13           7              10      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   PAK         12           9              10      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   NGA          8           7              11      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> \s\n           A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COUNTRY                                           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   RUS          5           8              6       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   JPN          5           4              9       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   GBR          4           3              2       </span>
