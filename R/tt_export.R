@@ -544,4 +544,3 @@ export_as_rtf <- function(tt,
     else
         restxt
 }
-n
