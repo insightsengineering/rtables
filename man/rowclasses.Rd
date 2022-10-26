@@ -75,7 +75,8 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{klass}{Internal detail.}
 

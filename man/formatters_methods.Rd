@@ -175,7 +175,8 @@ when determining how many lines they require.}
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
+\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary.
+Defaults to \code{TRUE}. May not be supported by all methods.}
 
 \item{rownum}{numeric(1). Internal detail do not set manually.}
 

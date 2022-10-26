@@ -11,7 +11,8 @@ make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 
 \item{colwidths}{numeric. Internal detail do not set manually.}
 
-\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
+\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary.
+Defaults to \code{TRUE}. May not be supported by all methods.}
 }
 \description{
 Generate a structural summary of the columns of an

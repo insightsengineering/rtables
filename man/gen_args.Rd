@@ -98,7 +98,8 @@ Defaults to 2}
 divider after each group defined by this split instruciton, or
 \code{NA_character_} (the default) for no section divider.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment

@@ -110,7 +110,8 @@ to \code{FALSE}}
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{label_pos}{character(1). Location the variable label should be
 displayed, Accepts  hidden (default for non-analyze row splits), visible,
