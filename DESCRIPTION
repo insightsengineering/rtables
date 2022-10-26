@@ -20,7 +20,8 @@ Depends: methods, magrittr, formatters (>= 0.3.3.12), R (>= 2.10)
 Imports:
   stats,
   htmltools,
-  grid
+  grid,
+  r2rtf
 Suggests:
   dplyr,
   tibble,
