@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Date: 2022-10-13
-Version: 0.5.3
+Version: 0.5.3.1
 Authors@R: c(
   person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@gene.com", role = "aut"),
