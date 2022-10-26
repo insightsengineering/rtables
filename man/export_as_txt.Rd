@@ -7,6 +7,7 @@
 export_as_txt(
   tt,
   file = NULL,
+  page_type = NULL,
   paginate = FALSE,
   cpp = NULL,
   ...,
@@ -22,6 +23,10 @@ export_as_txt(
 populated table.}
 
 \item{file}{character(1). File to write.}
+
+\item{page_type}{character(1).   Name   of  a  page  type.   See
+`page_types`.   Ignored when  `pg_width` and  `pg_height`
+are set directly.}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
 
