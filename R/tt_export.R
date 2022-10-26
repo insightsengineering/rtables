@@ -169,7 +169,7 @@ export_as_txt <- function(tt, file = NULL,
     if(paginate) {
         gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
-        pdf(file = file, width = pg_width, height = pg_height)
+        pdf(file = tempfile(), width = pg_width, height = pg_height)
         on.exit(dev.off())
         grid.newpage()
         pushViewport(plotViewport(margins = c(0, 0, 0, 0), gp = gp_plot))
@@ -194,7 +194,7 @@ export_as_txt <- function(tt, file = NULL,
         if(tf_wrap && is.null(max_width))
             max_width <- cpp
 
-        tbls <- paginate_table(tt, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
+        tbls <- paginate_table(tt, cpp = cpp, lpp = lpp, tf_wrap = tf_wrap, max_width = max_width, ...)
     } else {
         tbls <- list(tt)
     }
