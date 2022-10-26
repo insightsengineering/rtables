@@ -1,3 +1,6 @@
+## rtables 0.5.3.1
+ * placeholder
+ 
 ## rtables 0.5.3
  * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
  * `[<-` `CellValue` method now preserves CellValue attributes (e.g., format)
