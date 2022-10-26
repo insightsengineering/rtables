@@ -151,14 +151,8 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' }
 export_as_txt <- function(tt, file = NULL,
                           page_type = NULL,
-                          landscape = FALSE,
-                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
-                          font_family = "Courier",
-                          font_size = 8,  # grid parameters
                           paginate = FALSE,
                           cpp = NULL,
-                          lpp = NULL,
                           ..., page_break = "\\s\\n",
                           hsep = default_hsep(),
                           indent_size = 2,
@@ -167,33 +161,6 @@ export_as_txt <- function(tt, file = NULL,
 
     colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
     if(paginate) {
-        gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
-
-        pdf(file = file, width = pg_width, height = pg_height)
-        on.exit(dev.off())
-        grid.newpage()
-        pushViewport(plotViewport(margins = c(0, 0, 0, 0), gp = gp_plot))
-
-        colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
-        cur_gpar <-  get.gpar()
-        if(is.null(page_type) && is.null(pg_width) && is.null(pg_height) &&
-           (is.null(cpp) || is.null(lpp))) {
-            page_type <- "letter"
-            pg_width <- page_dim(page_type)[if(landscape) 2 else 1]
-            pg_height <- page_dim(page_type)[if(landscape) 1 else 2]
-        }
-
-        if (is.null(lpp)) {
-            lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                         (cur_gpar$cex * cur_gpar$lineheight))
-        }
-        if(is.null(cpp)) {
-            cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-                         font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
-        }
-        if(tf_wrap && is.null(max_width))
-            max_width <- cpp
-
         tbls <- paginate_table(tt, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
     } else {
         tbls <- list(tt)
