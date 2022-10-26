@@ -7,15 +7,8 @@
 export_as_txt(
   tt,
   file = NULL,
-  page_type = NULL,
-  landscape = FALSE,
-  pg_width = page_dim(page_type)[if (landscape) 2 else 1],
-  pg_height = page_dim(page_type)[if (landscape) 1 else 2],
-  font_family = "Courier",
-  font_size = 8,
   paginate = FALSE,
   cpp = NULL,
-  lpp = NULL,
   ...,
   page_break = "\\\\s\\\\n",
   hsep = default_hsep(),
@@ -30,31 +23,11 @@ populated table.}
 
 \item{file}{character(1). File to write.}
 
-\item{page_type}{character(1).   Name   of  a  page  type.   See
-`page_types`.   Ignored when  `pg_width` and  `pg_height`
-are set directly.}
-
-\item{landscape}{logical(1). Should the  dimensions of `page_type`
-be inverted  for landscape?  Defaults to  `FALSE`, ignored when
-`pg_width` and `pg_height` are set directly.}
-
-\item{pg_width}{numeric(1). Page width in inches.}
-
-\item{pg_height}{numeric(1). Page height in inches.}
-
-\item{font_family}{character(1). Name of a font family. An error
-will be thrown if the family named is not monospaced. Defaults
-to Courier.}
-
-\item{font_size}{numeric(1). Fontsize, defaults to 12.}
-
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NULL} (the default) indicates no horizontal
 pagination should be done.}
-
-\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
 \item{\dots}{Passed directly to \code{\link{paginate_table}}}
 
