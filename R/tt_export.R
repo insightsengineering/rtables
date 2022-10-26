@@ -165,10 +165,8 @@ export_as_txt <- function(tt, file = NULL,
                           tf_wrap = !is.null(cpp),
                           max_width = cpp) {
 
+    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
     if(paginate) {
-        colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
-
-
         gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
         pdf(file = file, width = pg_width, height = pg_height)
@@ -532,7 +530,7 @@ export_as_rtf <- function(tt,
                            lineheight = 1.25,
                            ...)
 
-    rtftxts <- lapply(tbls, function(tbl) rtf_encode(mpf_to_rtf(tbl, colwidths = colwidths,
+    rtftxts <- lapply(tbls, function(tbl) r2rtf::rtf_encode(mpf_to_rtf(tbl, colwidths = colwidths,
                                                                 page_type = page_type,
                                                                 pg_width = pg_width,
                                                                 pg_height = pg_height,
@@ -546,3 +544,4 @@ export_as_rtf <- function(tt,
     else
         restxt
 }
+n
