@@ -51,9 +51,31 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
-#' Currently supported cell value alignments
-#' @export
+#' @description Currently supported cell value alignments. These values 
+#'   may be used to set single cell alignment (`align` in [rcell()]) or row-wise 
+#'   alignment (`.aligns` in [in_rows()]).
+#' 
 #' @return a vector of alignments currently supported.
+#' 
+#' @examples 
+#' # Right alignment of single cell
+#' basic_table() %>%
+#'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) %>%
+#'   build_table(iris)
+#' # Set multiple alignments using character vectors
+#' basic_table() %>%
+#'   analyze("Species", function(x) {
+#'     in_rows(
+#'       left = rcell("l"),
+#'       right = rcell("r"),
+#'       .aligns = c("left", "right")
+#'     )
+#'   }) %>%
+#'   build_table(iris)
+#' 
+#' @seealso [in_rows()], [rcell()]
+#' 
+#' @export
 rtables_aligns <- function() {
     c("left", "right", "center")
 }

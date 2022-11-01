@@ -189,13 +189,14 @@ lyt <- basic_table() %>%
 build_table(lyt, DM)
 ```
 
-Example that uses `.aligns` argument to set all the rows (`in_rows`) to a single alignment format:
+Example that uses `.aligns` argument to set alignment of all or each rows (see `NB`):
 ```{r}
 lyt2 <- basic_table() %>%
     analyze("AGE", function(x) {
         in_rows(left = rcell("l"),
                 right = rcell("r"),
-                center = rcell("c"), .aligns = "right")
+                center = rcell("c"), 
+                .aligns = c("right")) # NB: .aligns = c("right", "left", "center") 
     })
 
 build_table(lyt2, DM)
