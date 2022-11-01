@@ -42,6 +42,8 @@
 \alias{summarize_rows_inner,TableRow-method}
 \alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
+\alias{str}
+\alias{str,TableTree-method}
 \alias{table_structure_inner,TableTree-method}
 \alias{table_structure_inner,ElementaryTable-method}
 \alias{table_structure_inner,TableRow-method}
@@ -459,6 +461,10 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 \S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+str(x, ...)
+
+\S4method{str}{TableTree}(x)
 
 \S4method{table_structure_inner}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
@@ -1163,7 +1169,6 @@ l <- basic_table() \%>\%
           format = "xx.xx")
 
 tbl <- build_table(l, iris2)
-
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
