@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{rtables_aligns}
 \alias{rtables_aligns}
-\title{Currently supported cell value alignments}
+\title{Alignment utils}
 \usage{
 rtables_aligns()
 }
@@ -10,5 +10,27 @@ rtables_aligns()
 a vector of alignments currently supported.
 }
 \description{
-Currently supported cell value alignments
+Currently supported cell value alignments. These values
+may be used to set single cell alignment (\code{align} in \code{\link[=rcell]{rcell()}}) or row-wise
+alignment (\code{.aligns} in \code{\link[=in_rows]{in_rows()}}).
+}
+\examples{
+# Right alignment of single cell
+basic_table() \%>\%
+  analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) \%>\%
+  build_table(iris)
+# Set multiple alignments using character vectors
+basic_table() \%>\%
+  analyze("Species", function(x) {
+    in_rows(
+      left = rcell("l"),
+      right = rcell("r"),
+      .aligns = c("left", "right")
+    )
+  }) \%>\%
+  build_table(iris)
+
+}
+\seealso{
+\code{\link[=in_rows]{in_rows()}}, \code{\link[=rcell]{rcell()}}
 }

@@ -51,6 +51,8 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
+#' @title Alignment utils
+#'
 #' @description Currently supported cell value alignments. These values 
 #'   may be used to set single cell alignment (`align` in [rcell()]) or row-wise 
 #'   alignment (`.aligns` in [in_rows()]).

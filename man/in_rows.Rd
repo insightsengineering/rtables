@@ -38,7 +38,9 @@ by name with \emph{cells}}
 \item{.row_footnotes}{list. Referential footnotes messages to be associated
 by name with \emph{rows}}
 
-\item{.aligns}{character or NULL. Alignments for the cells}
+\item{.aligns}{character or NULL. Alignments for the cells. Standard for \code{NULL}
+is \code{"center"}. See \code{\link{rtables_aligns}} for currently supported
+alignments.}
 
 \item{.format_na_strs}{character or NULL. NA strings for the cells}
 }
