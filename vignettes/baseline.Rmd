@@ -59,8 +59,8 @@ basic_table() %>%
 
 Note that the column order has changed and the reference group is displayed in the first column.
 
-In cases where we want cells to be blank in the reference column, (e.g., "B: Placebo") we use `non_ref_rcell` instead
-of `rcell`, and pass `.in_ref_col` as the second argument:
+In cases where we want cells to be blank in the reference column, (e.g., "B: Placebo") we use `non_ref_rcell()` instead
+of `rcell()`, and pass `.in_ref_col` as the second argument:
 
 ```{r}
 basic_table() %>%
@@ -86,7 +86,7 @@ basic_table() %>%
 
 ```
 
-You can see which arguments are available for `afun` in the manual fro `analyze`.
+You can see which arguments are available for `afun` in the manual fro `analyze()`.
 
 ## Row Splitting
 

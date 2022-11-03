@@ -33,7 +33,7 @@ In this vignette we create a
 
 using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
 
-Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package were created using `random.cdisc.data` another R package that we intend to release as open source soon.
+Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package were created using [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) another R package that we intend to release as open source soon.
 
 The packages used in this vignette are:
 
@@ -47,7 +47,7 @@ library(dplyr)
 
 Demographic tables summarize the variables content for different population subsets (encoded in the columns).
 
-One feature of `analyze` that we have not introduced in the previous vignette is that the analysis function `afun` can specify multiple rows with the `in_rows` function:
+One feature of `analyze()` that we have not introduced in the previous vignette is that the analysis function `afun` can specify multiple rows with the `in_rows()` function:
 
 ```{r}
 ADSL <- ex_adsl  # Example ADSL dataset
@@ -63,7 +63,7 @@ basic_table() %>%
   build_table(ADSL)
 ```
 
-Multiple variables can be analyzed in one `analyze` call:
+Multiple variables can be analyzed in one `analyze()` call:
 
 ```{r}
 basic_table() %>%
@@ -121,7 +121,7 @@ tbl <- build_table(lyt, ADSL)
 tbl
 ```
 
-Note that `analyze` can also be called multiple times in sequence:
+Note that `analyze()` can also be called multiple times in sequence:
 
 ```{r}
 tbl2 <- basic_table() %>%
@@ -143,7 +143,7 @@ identical(tbl, tbl2)
 stopifnot(identical(tbl, tbl2))
 ```
 
-In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which outside of clinical trials is commonly referred to as `N`). Column `N`s are added using the `add_colcounts` function:
+In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which outside of clinical trials is commonly referred to as `N`). Column `N`s are added using the `add_colcounts()` function:
 
 ```{r}
 basic_table() %>%
@@ -192,7 +192,7 @@ basic_table() %>%
   build_table(ADSL_M_F)
 ```
 
-Note that the `UNDIFFERENTIATED` and `U` levels still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function do. If empty levels should be dropped then `rtables` needs to know that at splitting time via the `split_fun` argument in `split_rows_by`. There are a number of predefined functions. For this example `drop_split_levels` is required to drop the empty levels at splitting time. Splitting is a big topic and will be eventually addressed in a specific package vignette.
+Note that the `UNDIFFERENTIATED` and `U` levels still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function do. If empty levels should be dropped then `rtables` needs to know that at splitting time via the `split_fun` argument in `split_rows_by()`. There are a number of predefined functions. For this example `drop_split_levels()` is required to drop the empty levels at splitting time. Splitting is a big topic and will be eventually addressed in a specific package vignette.
 
 
 ```{r}
@@ -223,7 +223,7 @@ basic_table() %>%
   build_table(ADSL_M_F_l)
 ```
 
-For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE`  in `analyze` call:
+For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE`  in `analyze()` call:
 
 ```{r}
 basic_table() %>%
@@ -256,7 +256,7 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
 ```
 
-Here it is not easy to see how many females and males there are in each arm as `n` represents the number of non-missing data elements in the variables. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups`, for example:
+Here it is not easy to see how many females and males there are in each arm as `n` represents the number of non-missing data elements in the variables. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups()`, for example:
 
 ```{r}
 basic_table() %>%
@@ -272,7 +272,7 @@ basic_table() %>%
 There are a couple of things to note here.
 
 * Group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination.
-* Conceptually the content rows summarize the patient population which is analyzed and hence is often the count & group percentages (default behavior of `summarize_row_groups`).
+* Conceptually the content rows summarize the patient population which is analyzed and hence is often the count & group percentages (default behavior of `summarize_row_groups()`).
 
 We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
 
@@ -292,7 +292,7 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
 ```
 
-Note that `cfun` differs from `afun` (which is used in `analyze`)  in that `cfun` does not operate on variables but rather on `data.frame`s or `tibble`s which are passed via the `df` argument (`afun` can optionally request `df` too). Further, `cfun` gives the default group label (factor level from splitting) as an argument to `labelstr` and hence it could be modified:
+Note that `cfun` differs from `afun` (which is used in `analyze()`)  in that `cfun` does not operate on variables but rather on `data.frame`s or `tibble`s which are passed via the `df` argument (`afun` can optionally request `df` too). Further, `cfun` gives the default group label (factor level from splitting) as an argument to `labelstr` and hence it could be modified:
 
 ```{r}
 basic_table() %>%
@@ -428,7 +428,7 @@ we would get the following summary:
 s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
 ```
 
-The `.N_col` argument is a special keyword argument which `build_table` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze` refer to the documentation with `?analyze`.
+The `.N_col` argument is a special keyword argument which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()` refer to the documentation with `?analyze`.
 
 We now use the `s_events_patients` summary function in a tabulation:
 
@@ -449,7 +449,7 @@ number of patients per column/arm which is usually taken from `ADSL`
 
 `rtables` handles this by allowing us to override how the column
 counts are computed. We can specify an `alt_counts_df` in
-`build_table`. When we do this, `rtables` calculates the column counts
+`build_table()`. When we do this, `rtables` calculates the column counts
 by applying the same column faceting to `alt_counts_df` as it does to
 the primary data during tabulation:
 
@@ -460,7 +460,7 @@ build_table(adae_0_lyt, ADAE2, alt_counts_df = ADSL2)
 ```
 
 Alternatively, if the desired column counts are already calculated, they can be
-specified directly via the `col_counts` argument to `built_table`, though specifying
+specified directly via the `col_counts` argument to `build_table()`, though specifying
 an `alt_counts_df` is the preferred mechanism.
 
 
@@ -476,7 +476,7 @@ l <- basic_table() %>%
 build_table(l, ADAE2, alt_counts_df = ADSL2)
 ```
 
-We now have to the add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze` behavior for a factor is to create the count table per level (using `rtab_inner`):
+We now have to the add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze()` behavior for a factor is to create the count table per level (using `rtab_inner`):
 
 ```{r}
 tbl1 <- basic_table() %>%
@@ -523,7 +523,7 @@ basic_table() %>%
   build_table(ADAE2, alt_counts_df = ADSL2)
 ```
 
-Note that we are missing the overall summary in the first two rows. This can be added with an initial `analyze` call.
+Note that we are missing the overall summary in the first two rows. This can be added with an initial `analyze()` call.
 
 ```{r}
 tbl <- basic_table() %>%
@@ -538,7 +538,7 @@ tbl <- basic_table() %>%
 tbl
 ```
 
-Finally, if we wanted to prune the 0 counts row we can do that with the `trim_rows` function:
+Finally, if we wanted to prune the 0 counts row we can do that with the `trim_rows()` function:
 
 ```{r}
 trim_rows(tbl)
@@ -626,7 +626,7 @@ basic_table() %>%
 ```
 
 
-Note that we did set the `ref_group` argument in `split_cols_by` which for the current table had no effect as we only use the cell data for the responder and non-responder counting. The `ref_group` argument is needed for the part 2. and 3. of the table.
+Note that we did set the `ref_group` argument in `split_cols_by()` which for the current table had no effect as we only use the cell data for the responder and non-responder counting. The `ref_group` argument is needed for the part 2. and 3. of the table.
 
 We will now look the implementation of part "2. Unstratified analysis comparison vs. control group." Let's start with the analysis function:
 
