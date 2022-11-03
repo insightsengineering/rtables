@@ -47,7 +47,8 @@ repos:
           data/.*|
           )$
     -   id: lintr
-    -   id: readme-rmd-rendered
+        args: [--warn_only]
+        erbose: true
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
