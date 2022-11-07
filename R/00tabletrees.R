@@ -494,7 +494,7 @@ setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
 
 ## do we want this to be a CustomizableSplit instead of
 ## taking cut_fun?
-## cut_funct must take avector and no other arguments
+## cut_funct must take a vector and no other arguments
 ## and return a named vector of cut points
 #' @rdname cutsplits
 #' @exportClass VarDynCutSplit
