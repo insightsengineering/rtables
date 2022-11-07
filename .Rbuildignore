@@ -23,3 +23,6 @@
 ^staged_dependencies\.yaml$
 ^temp$
 ~$
+^rtables\.Rcheck$
+^rtables.*\.tar\.gz$
+^rtables.*\.tgz$

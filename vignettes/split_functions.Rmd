@@ -1,0 +1,25 @@
+---
+title: "Split functions"
+author: "Stefan Thoma"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Split functions}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+see https://www.youtube.com/watch?v=1i6vOId2h4A at 24:30
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+

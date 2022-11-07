@@ -36,3 +36,7 @@ tests/unit_test_results.xml
 *.prof
 /doc/
 /Meta/
+rtables.Rcheck/
+rtables*.tar.gz
+rtables*.tgz
+inst/doc
