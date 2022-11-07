@@ -522,7 +522,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' @inheritParams lyt_args
 #' @param cuts numeric. Cuts to use
-#' @param cutlabels character (or NULL). Labels for the cutst
+#' @param cutlabels character (or NULL). Labels for the cuts
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults
 #'   to \code{FALSE}
 #' @param cutfun function. Function which accepts the full vector of \code{var}
