@@ -13,6 +13,8 @@ editor_options:
 see https://www.youtube.com/watch?v=1i6vOId2h4A at 24:30
 
 
+
+
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
 ```
@@ -23,3 +25,87 @@ knitr::opts_chunk$set(comment = "#")
 }
 ```
 
+## Introduction
+
+In this vignette we will go over the split functionality of `rtables`. 
+
+
+
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+library(rlang) # for the as_character function
+```
+
+Here is data used in the `introduction` vignette:
+
+```{r}
+n <- 400
+
+set.seed(1)
+
+df <- tibble(
+  arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
+  country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
+  gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
+  handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
+  age = rchisq(n, 30) + 10
+) %>% mutate(
+  weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
+)
+```
+
+We can now create a simple table displaying mean weight of male and female patients in each arm: 
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_rows_by("gender") %>%
+  analyze("weight", afun = mean, 
+          format = "xx.x", 
+          show_labels = "visible") # show_labels adds the variable on
+                                   # which mean values were computed 
+
+build_table(l, df)
+
+
+
+```
+
+## Getting Started
+We can use the cutting functions to split the table based on thresholds of continuous variables. 
+These thresholds can be statically defined in the `..._by_cuts()` functions, or can be based on cutting functions referenced within the `..._by_cutfun()` functions.
+
+
+```{r}
+summary(df)
+
+```
+
+### Static cuts
+If we would like to further split the patients into age brackets of 20ties, 30ties, 40ties, etc. we can define our static cut points and use the `split_orws_by_`
+```{r}
+l <- basic_table() %>%
+  split_cols_by("arm") %>%
+#  split_rows_by("gender") %>%
+    split_rows_by_cuts("age", 
+                       split_label = "Age",
+                       cuts = c(3:5*10),
+                       cut_labels = as_character(c(3:5*10))
+                       ) %>% 
+  analyze("weight", afun = mean, 
+          format = "xx.x")
+```
+
+
+### Cut functions
+
+## Summary
+
+In this vignette learned that:
+
+* many tables are quite easily created with `dplyr` and `data.frame` or `tibble` as data structure
+  * `dplyr` keeps simple things simple
+* if tables have group summaries then repeating of information is required
+* `rtables` streamlines the construction of complex tables
+
+We recommend that you continue reading the `clinical_trials` vignette where we create a number of more advanced tables using layouts.
