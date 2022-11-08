@@ -72,7 +72,7 @@ as_html <- function(x,
 
   mat <- matrix_form(x)
 
-  nrh <- attr(mat, "nrow_header")
+  nrh <- mf_nrheader(mat)
   nc <- ncol(x) + 1
 
   cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)),
@@ -87,7 +87,7 @@ as_html <- function(x,
 
       curspn <- unique(curspans)
       stopifnot(length(curspn) == 1)
-      inhdr <- i <= attr(mat, "nrow_header")
+      inhdr <- i <= nrh
       tagfun <- if(inhdr) tags$th else tags$td
       algn <- unique(curaligns)
       stopifnot(length(algn) == 1)

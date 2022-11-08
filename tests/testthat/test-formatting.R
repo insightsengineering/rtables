@@ -112,60 +112,60 @@ test_that("format_na_str functionality works in get_formatted_cells (ie printing
                      "Ridiculous")
 })
 
-test_that("Test matrix obtained from get_formatted_cells as is into ASCII format", {
+test_that("format and na_str inheritance", {
     # Test data
-    DM2 <- DM %>% 
-        filter(ARM != levels(DM$ARM)[3]) %>% 
+    DM2 <- DM %>%
+        filter(ARM != levels(DM$ARM)[3]) %>%
         mutate(ARM = as.factor(as.character(ARM)))
     DM2$AGE[1] <- NA # Adding one NA
-    
+
     # Manually building the table
     weird_afun <- function(x, ...) {
         in_rows(cell_fmt = rcell(mean(x, na.rm = TRUE), format = "xx.x"),
                 no_cell_fmt = rcell(median(x, na.rm = TRUE)),
-                cell_na_str = rcell(NA, format = "xx.x"),
-                cell_na_str_no_cell_fmt = rcell(NA),
+                no_cell_na_str = rcell(NA, format = "xx.x"),
+                cell_na_str_no_cell_fmt = rcell(NA, format_na_str = "what"),
                 cell_fmt_range = rcell(range(x, na.rm = TRUE), format = "xx.x - xx.x"),
-                cell_na_str_range = rcell(c(NA, 2), format = "xx.x - xx.x", format_na_str = "bah")
-                # cell_na_str_no_cell_fmt_range = rcell(range(x))
+                cell_na_str_range = rcell(c(NA, 2), format = "xx.x - xx.x", format_na_str = "bah"),
+                no_cell_na_str_no_cell_fmt_range = rcell(c(NA, 2), format = "xx.x - xx.x")
                 )
     }
-    
+
     # Main builder
     tbl <- basic_table() %>%
         split_cols_by("ARM") %>%
-        analyze("AGE", weird_afun, format = "xx.xx") %>%
+        analyze("AGE", weird_afun, format = "xx.xx", na_str = "lol") %>%
         build_table(DM2)
-    
+
     # Get the ASCII table
     result <- get_formatted_cells(tbl) # Main function
-    
+
     # Expected data-set is built with dplyr
-    expected <- DM2 %>% 
+    expected <- DM2 %>%
         dplyr::group_by(ARM) %>%
         summarise(
           m_age = format_value(mean(AGE, na.rm = TRUE), format = "xx.x"),
           me_age = format_value(median(AGE, na.rm = TRUE), format = "xx.xx"),
           m_range = paste(sapply(range(AGE, na.rm = TRUE), format_value, format = "xx.x"), collapse = " - ")
-        ) %>% 
-        mutate(b = "NA", c = "NA", d = "bah - 2.0") %>% 
-        select(m_age, me_age, b, c, m_range, d) %>% 
+        ) %>%
+        mutate(b = "lol", c = "what", d = "bah - 2.0", e = "lol - 2.0") %>%
+        select(m_age, me_age, b, c, m_range, d, e) %>%
         mutate_all(as.character) %>%
         t() %>%
         as.matrix()
     dimnames(expected) <- NULL # Fixing attributes
-    
+
     # Check if it preserves the format and na_str replacements
     expect_identical(result, expected)
 
     # Get the ASCII table of formats (shell)
     result <- get_formatted_cells(tbl, shell = TRUE) # Main function
-    
+
     # Expected ASCII table (manual insertion)
-    one_col <- c("xx.x", "xx.xx", "xx.x", "xx.xx", "xx.x - xx.x", "xx.x - xx.x")
+    one_col <- c("xx.x", "xx.xx", "xx.x", "xx.xx", "xx.x - xx.x", "xx.x - xx.x", "xx.x - xx.x")
     expected <- cbind(one_col, one_col)
     dimnames(expected) <- NULL # Fixing attributes
-    
+
     # Check if it preserves the shell format
     expect_identical(result, expected)
 })

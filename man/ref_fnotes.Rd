@@ -2,96 +2,36 @@
 % Please edit documentation in R/tree_accessors.R
 \name{row_footnotes}
 \alias{row_footnotes}
-\alias{row_footnotes,TableRow-method}
-\alias{row_footnotes,RowsVerticalSection-method}
 \alias{row_footnotes<-}
-\alias{row_footnotes<-,TableRow-method}
-\alias{row_footnotes,VTableTree-method}
 \alias{cell_footnotes}
-\alias{cell_footnotes,CellValue-method}
-\alias{cell_footnotes,TableRow-method}
-\alias{cell_footnotes,LabelRow-method}
-\alias{cell_footnotes,VTableTree-method}
 \alias{cell_footnotes<-}
-\alias{cell_footnotes<-,CellValue-method}
-\alias{cell_footnotes<-,DataRow-method}
-\alias{cell_footnotes<-,ContentRow-method}
 \alias{col_fnotes_here}
-\alias{col_fnotes_here,LayoutColTree-method}
-\alias{col_fnotes_here,LayoutColLeaf-method}
 \alias{col_fnotes_here<-}
-\alias{col_fnotes_here<-,LayoutColTree-method}
-\alias{col_fnotes_here<-,LayoutColLeaf-method}
 \alias{ref_index}
-\alias{ref_index,RefFootnote-method}
 \alias{ref_index<-}
-\alias{ref_index<-,RefFootnote-method}
 \alias{ref_msg}
-\alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-}
-\alias{fnotes_at_path<-,VTableTree,character-method}
-\alias{fnotes_at_path<-,VTableTree,NULL-method}
 \title{Referential Footnote Accessors}
 \usage{
 row_footnotes(obj)
 
-\S4method{row_footnotes}{TableRow}(obj)
-
-\S4method{row_footnotes}{RowsVerticalSection}(obj)
-
 row_footnotes(obj) <- value
-
-\S4method{row_footnotes}{TableRow}(obj) <- value
-
-\S4method{row_footnotes}{VTableTree}(obj)
 
 cell_footnotes(obj)
 
-\S4method{cell_footnotes}{CellValue}(obj)
-
-\S4method{cell_footnotes}{TableRow}(obj)
-
-\S4method{cell_footnotes}{LabelRow}(obj)
-
-\S4method{cell_footnotes}{VTableTree}(obj)
-
 cell_footnotes(obj) <- value
-
-\S4method{cell_footnotes}{CellValue}(obj) <- value
-
-\S4method{cell_footnotes}{DataRow}(obj) <- value
-
-\S4method{cell_footnotes}{ContentRow}(obj) <- value
 
 col_fnotes_here(obj)
 
-\S4method{col_fnotes_here}{LayoutColTree}(obj)
-
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj)
-
 col_fnotes_here(obj) <- value
-
-\S4method{col_fnotes_here}{LayoutColTree}(obj) <- value
-
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj) <- value
 
 ref_index(obj)
 
-\S4method{ref_index}{RefFootnote}(obj)
-
 ref_index(obj) <- value
-
-\S4method{ref_index}{RefFootnote}(obj) <- value
 
 ref_msg(obj)
 
-\S4method{ref_msg}{RefFootnote}(obj)
-
 fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
-
-\S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
-
-\S4method{fnotes_at_path}{VTableTree,`NULL`}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}
@@ -109,4 +49,27 @@ be immediately recalculated. Defaults to TRUE.}
 }
 \description{
 Get and set referential footnotes on aspects of a built table
+}
+\examples{
+# How to add referencial footnotes after having created a table
+tbl <- basic_table() \%>\%
+    split_rows_by("SEX", page_by = TRUE) \%>\%
+    analyze("AGE") \%>\% 
+    build_table(DM)
+tbl <- trim_rows(tbl)
+# Check the row and col structure to add precise references
+# row_paths(tbl)
+# col_paths(t)
+# row_paths_summary(tbl)
+# col_paths_summary(tbl)
+
+# Add the citation numbers on the table and relative references in the footnotes
+fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Famous paper 1"
+fnotes_at_path(tbl, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Unfamous paper 2"
+# tbl
+
+}
+\seealso{
+\code{\link[=row_paths]{row_paths()}}, \code{\link[=col_paths]{col_paths()}},
+\code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
 }

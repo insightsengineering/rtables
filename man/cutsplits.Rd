@@ -16,7 +16,9 @@ make_static_cut_split(
   cutlabels = NULL,
   cfun = NULL,
   cformat = NULL,
+  cna_str = NA_character_,
   split_format = NULL,
+  split_na_str = NA_character_,
   split_name = var,
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
@@ -37,7 +39,9 @@ VarDynCutSplit(
   cutlabelfun = function(x) NULL,
   cfun = NULL,
   cformat = NULL,
+  cna_str = NA_character_,
   split_format = NULL,
+  split_na_str = NA_character_,
   split_name = var,
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
@@ -69,8 +73,13 @@ arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 
+\item{cna_str}{character. NA string for use with \code{cformat} for content
+table.}
+
 \item{split_format}{FormatSpec. Default format associated with the split
 being created.}
+
+\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
 
 \item{split_name}{string. Name associiated with this split (for pathing, etc)}
 

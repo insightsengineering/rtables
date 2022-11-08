@@ -5,9 +5,23 @@
 \alias{table_shell_str}
 \title{Table shells}
 \usage{
-table_shell(tt, widths = NULL, col_gap = 3, hsep = default_hsep())
+table_shell(
+  tt,
+  widths = NULL,
+  col_gap = 3,
+  hsep = default_hsep(),
+  tf_wrap = FALSE,
+  max_width = NULL
+)
 
-table_shell_str(tt, widths = NULL, col_gap = 3, hsep = default_hsep())
+table_shell_str(
+  tt,
+  widths = NULL,
+  col_gap = 3,
+  hsep = default_hsep(),
+  tf_wrap = FALSE,
+  max_width = NULL
+)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a
@@ -18,6 +32,16 @@ populated table.}
 \item{col_gap}{gap between columns}
 
 \item{hsep}{character to create line separator}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 }
 \value{
 for \code{table_shell_str} the string representing the table shell, for \code{table_shell},

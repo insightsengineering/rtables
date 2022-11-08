@@ -11,6 +11,7 @@ split_rows_by(
   split_label = var,
   split_fun = NULL,
   format = NULL,
+  na_str = NA_character_,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
   label_pos = "hidden",
@@ -38,6 +39,9 @@ child (which are based on the data and type of split during tabulation).}
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a

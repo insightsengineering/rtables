@@ -9,7 +9,8 @@ basic_table(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  show_colcounts = FALSE
+  show_colcounts = FALSE,
+  inset = 0L
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ Generally should not be modified by hand.}
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
 resulting table
 when this layout is applied to data}
+
+\item{inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further

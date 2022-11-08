@@ -7,14 +7,23 @@
 export_as_pdf(
   tt,
   file,
-  width = 11.7,
-  height = 8.3,
+  page_type = "letter",
+  landscape = FALSE,
+  pg_width = page_dim(page_type)[if (landscape) 2 else 1],
+  pg_height = page_dim(page_type)[if (landscape) 1 else 2],
+  width = NULL,
+  height = NULL,
   margins = c(4, 4, 4, 4),
+  font_family = "Courier",
   fontsize = 8,
+  font_size = fontsize,
   paginate = TRUE,
   lpp = NULL,
+  cpp = NULL,
   hsep = "-",
   indent_size = 2,
+  tf_wrap = TRUE,
+  max_width = NULL,
   ...
 )
 }
@@ -24,18 +33,44 @@ populated table.}
 
 \item{file}{file to write, must have \code{.pdf} extension}
 
-\item{width}{the width and height of the graphics region in inches}
+\item{page_type}{character(1).   Name   of  a  page  type.   See
+`page_types`.   Ignored when  `pg_width` and  `pg_height`
+are set directly.}
 
-\item{height}{the width and height of the graphics region in inches}
+\item{landscape}{logical(1). Should the  dimensions of `page_type`
+be inverted  for landscape?  Defaults to  `FALSE`, ignored when
+`pg_width` and `pg_height` are set directly.}
 
-\item{margins}{ A numeric vector interpreted in the same way
-    as \code{par(mar)} in base graphics. }
+\item{pg_width}{numeric(1). Page width in inches.}
 
-\item{fontsize}{the size of text (in points)}
+\item{pg_height}{numeric(1). Page height in inches.}
+
+\item{width}{Deprecated,  please  use   \code{pg_width}  or  specify
+\code{page_type}.  The width of  the graphics  region in inches}
+
+\item{height}{Deprecated,  please  use  \code{pg_height}  or  specify
+\code{page_type}. The height of  the graphics  region in
+inches}
+
+\item{margins}{numeric(4). The number of lines/characters of margin on the
+bottom, left, top, and right sides of the page.}
+
+\item{font_family}{character(1). Name of a font family. An error
+will be thrown if the family named is not monospaced. Defaults
+to Courier.}
+
+\item{fontsize}{Deprecated,  please use  \code{font_size}. the  size of
+text (in points)}
+
+\item{font_size}{numeric(1). Fontsize, defaults to 12.}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+
+\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
+horizontal pagination. \code{NULL} (the default) indicates no horizontal
+pagination should be done.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
@@ -45,10 +80,30 @@ charset, and to \code{-} elsewhere (with a once per session warning).}
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
 
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
+
 \item{...}{arguments passed on to \code{paginate_table}}
 }
 \description{
 The PDF output is based on the ASCII output created with \code{toString}
+}
+\details{
+By default, pagination is performed, with default
+\code{cpp} and \code{lpp} defined by specified page dimensions and margins.
+User-specified \code{lpp} and \code{cpp} values override this, and should
+be used with caution.
+
+Title and footer materials are also word-wrapped by default
+(unlike when printed to the terminal), with \code{cpp}, as
+defined above, as the default \code{max_width}.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -59,12 +114,12 @@ tbl <- build_table(lyt, ex_adsl)
 
 \dontrun{
 tf <- tempfile(fileext = ".pdf")
-export_as_pdf(tbl, file = tf, height = 4)
+export_as_pdf(tbl, file = tf, pg_height = 4)
 tf <- tempfile(fileext = ".pdf")
 export_as_pdf(tbl, file = tf, lpp = 8)
 }
 
 }
 \seealso{
-\code{export_as_txt}
+\code{\link[=export_as_txt]{export_as_txt()}}
 }

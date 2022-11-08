@@ -69,5 +69,5 @@ basic_table() \%>\%
 
 }
 \seealso{
-\code{analyze}
+\code{\link[=analyze]{analyze()}}
 }

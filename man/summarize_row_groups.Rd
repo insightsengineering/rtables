@@ -9,6 +9,7 @@ summarize_row_groups(
   var = "",
   label_fstr = "\%s",
   format = "xx (xx.x\%)",
+  na_str = "-",
   cfun = NULL,
   indent_mod = 0L,
   extra_args = list()
@@ -27,6 +28,9 @@ Comparison-based splits it can contain up to two \code{"\%s"}.}
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{cfun}{list/function/NULL. tabulation function(s) for creating content
 rows. Must accept \code{x} or \code{df} as first parameter. Must accept

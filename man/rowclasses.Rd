@@ -17,7 +17,8 @@ LabelRow(
   name = label,
   vis = !is.na(label) && nzchar(label),
   cinfo = EmptyColInfo,
-  indent_mod = 0L
+  indent_mod = 0L,
+  table_inset = 0L
 )
 
 .tablerow(
@@ -29,9 +30,11 @@ LabelRow(
   cinfo = EmptyColInfo,
   var = NA_character_,
   format = NULL,
+  na_str = NA_character_,
   klass,
   indent_mod = 0L,
-  footnotes = list()
+  footnotes = list(),
+  table_inset = 0L
 )
 
 DataRow(...)
@@ -58,6 +61,10 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
+\item{table_inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
 \item{vals}{list. cell values for the row}
 
 \item{cspan}{integer. Column span. \code{1} indicates no spanning.}
@@ -67,6 +74,9 @@ corresponds to the unmodified default behavior.}
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{klass}{Internal detail.}
 

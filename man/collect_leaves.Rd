@@ -2,27 +2,9 @@
 % Please edit documentation in R/tree_accessors.R
 \name{collect_leaves}
 \alias{collect_leaves}
-\alias{collect_leaves,TableTree-method}
-\alias{collect_leaves,ElementaryTable-method}
-\alias{collect_leaves,VTree-method}
-\alias{collect_leaves,VLeaf-method}
-\alias{collect_leaves,NULL-method}
-\alias{collect_leaves,ANY-method}
 \title{Collect leaves of a table tree}
 \usage{
 collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{TableTree}(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{ElementaryTable}(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{VTree}(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{VLeaf}(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{`NULL`}(tt, incl.cont = TRUE, add.labrows = FALSE)
-
-\S4method{collect_leaves}{ANY}(tt, incl.cont = TRUE, add.labrows = FALSE)
 }
 \arguments{
 \item{tt}{TableTree (or related class). A TableTree object representing a

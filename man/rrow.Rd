@@ -4,7 +4,7 @@
 \alias{rrow}
 \title{row}
 \usage{
-rrow(row.name = "", ..., format = NULL, indent = 0)
+rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 }
 \arguments{
 \item{row.name}{if \code{NULL} then the \code{FUN} argument is deparsed and
@@ -16,6 +16,9 @@ used as \code{row.name} of the \code{\link{rrow}}}
 then the \code{format} is applied}
 
 \item{indent}{deprecated.}
+
+\item{inset}{integer(1). The table inset for the row or table being
+constructed. See \code{\link[formatters]{table_inset}}.}
 }
 \value{
 A row object of the context-appropriate type (label or data)

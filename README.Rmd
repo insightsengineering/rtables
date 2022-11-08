@@ -40,7 +40,7 @@ License Version 2.
 * distinguish between name and label in the data structure to work with CDISC standards
 * title, footnotes, cell cell/row/column references
 
-`rtables` currently covers virtually all of these requirements, and is in still under activel development.
+`rtables` currently covers virtually all of these requirements, and further advances remain under active development.
 
 
 ## Installation
@@ -57,12 +57,8 @@ or you can install the latest development version directly from GitHub with:
 devtool::install_github("Roche/rtables")
 ```
 
-To install a frozen pre-release version of `rtables` based on the new Layouting and Tabulation API as presented at
-user!2020 and JSM2020 run the following command in `R`:
-
-```{r, eval = FALSE}
-devtools::install_github("roche/rtables", ref="v0.3.3")
-```
+Packaged releases (both those on CRAN and those between official CRAN releases) can be
+found in the [releases list](https://github.com/Roche/rtables/releases)
 
 ## Usage
 
@@ -98,10 +94,10 @@ library(rtables)
 library(dplyr)
 
 ## for simplicity grab non-sparse subset
-ADSL = ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
+ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
 
-biomarker_ave = function(x, ...) {
-     val = if(length(x) > 0) round(mean(x), 2) else "no data"
+biomarker_ave <- function(x, ...) {
+     val <- if(length(x) > 0) round(mean(x), 2) else "no data"
      in_rows(
         "Biomarker 1 (mean)" = rcell(val)
      )
@@ -127,6 +123,9 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Pasz
 
 ## Presentations
 
+### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables 
+* [Slides](https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48)
+
 ### R Adoption Series
 
 * [R Adoption Series presentation 2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
@@ -135,11 +134,3 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Pasz
 ### New (Current) Layouting and Tabulation Framework (v.0.3+)
 
 * [useR!2020 Presentation (on v0.3.1.1) July 2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
-
-### v0.1.0 and previous
-
-* [Presentation on v0.1.0 April 2018](https://docs.google.com/presentation/d/1bpdBDp4PZdZ4hCsfaPkAuHDVnJmtp7WBIZ19oKMDq0M/edit?usp=sharing)
-
-* [baselR November
-2017](https://docs.google.com/presentation/d/1V28AVo9aVNfw2FTuRgQyM4BJKalVQMFD8lKUD2KlzKI/edit?usp=sharing),
-this presentation was written for version `v0.0.1`

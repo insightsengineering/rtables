@@ -20,13 +20,15 @@ ElementaryTable(
   iscontent = NA,
   var = NA_character_,
   format = NULL,
+  na_str = NA_character_,
   indent_mod = 0L,
   title = "",
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
   hsep = default_hsep(),
-  trailing_sep = NA_character_
+  trailing_sep = NA_character_,
+  inset = 0L
 )
 
 TableTree(
@@ -42,6 +44,7 @@ TableTree(
   var = NA_character_,
   cinfo = NULL,
   format = NULL,
+  na_str = NA_character_,
   indent_mod = 0L,
   title = "",
   subtitles = character(),
@@ -49,7 +52,8 @@ TableTree(
   prov_footer = character(),
   page_title = NA_character_,
   hsep = default_hsep(),
-  trailing_sep = NA_character_
+  trailing_sep = NA_character_,
+  inset = 0L
 )
 }
 \arguments{
@@ -81,6 +85,9 @@ the content table for another TableTree.}
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
+
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
@@ -106,6 +113,10 @@ unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this
 would correspond to the \code{section_div} of the split under which this table
 represents a single facet.}
+
+\item{inset}{numeric(1). Number of spaces to inset the table header, table
+body, referential footnotes, and main_footer, as compared to alignment
+of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{cont}{ElementaryTable. Content table.}
 

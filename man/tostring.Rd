@@ -10,7 +10,9 @@
   widths = NULL,
   col_gap = 3,
   hsep = horizontal_sep(x),
-  indent_size = 2
+  indent_size = 2,
+  tf_wrap = FALSE,
+  max_width = NULL
 )
 }
 \arguments{
@@ -24,12 +26,30 @@
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 }
 \value{
 a string representation of \code{x} as it appears when printed.
 }
 \description{
-Convert an \code{rtable} object to a string
+Transform a complex object into a string representation ready
+to be printed or written to a plain-text file
+}
+\details{
+Manual insertion of newlines is not supported when `tf_wrap` is on
+and will result in a warning and undefined wrapping behavior. Passing
+vectors of already split strings remains supported, however in this
+case each string is word-wrapped separately with the behavior
+described above.
 }
 \examples{
 library(dplyr)

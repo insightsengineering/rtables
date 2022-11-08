@@ -14,6 +14,7 @@ AnalyzeVarSplit(
   cfun = NULL,
   cformat = NULL,
   split_format = NULL,
+  split_na_str = NA_character_,
   inclNAs = FALSE,
   split_name = var,
   extra_args = list(),
@@ -28,6 +29,7 @@ AnalyzeColVarSplit(
   cfun = NULL,
   cformat = NULL,
   split_format = NULL,
+  split_na_str = NA_character_,
   inclNAs = FALSE,
   split_name = "",
   extra_args = list(),
@@ -44,6 +46,7 @@ AnalyzeMultiVars(
   cfun = NULL,
   cformat = NULL,
   split_format = NULL,
+  split_na_str = NA_character_,
   inclNAs = FALSE,
   .payload = NULL,
   split_name = NULL,
@@ -79,6 +82,8 @@ arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{split_format}{FormatSpec. Default format associated with the split
 being created.}
+
+\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
 
 \item{inclNAs}{boolean. Should observations with NA in the \code{var}
 variable(s) be included when performing this analysis. Defaults to

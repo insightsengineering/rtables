@@ -7,11 +7,21 @@
 export_as_txt(
   tt,
   file = NULL,
+  page_type = NULL,
+  landscape = FALSE,
+  pg_width = page_dim(page_type)[if (landscape) 2 else 1],
+  pg_height = page_dim(page_type)[if (landscape) 1 else 2],
+  font_family = "Courier",
+  font_size = 8,
   paginate = FALSE,
+  cpp = NULL,
+  lpp = NULL,
   ...,
   page_break = "\\\\s\\\\n",
   hsep = default_hsep(),
-  indent_size = 2
+  indent_size = 2,
+  tf_wrap = !is.null(cpp),
+  max_width = cpp
 )
 }
 \arguments{
@@ -20,7 +30,31 @@ populated table.}
 
 \item{file}{character(1). File to write.}
 
+\item{page_type}{character(1).   Name   of  a  page  type.   See
+`page_types`.   Ignored when  `pg_width` and  `pg_height`
+are set directly.}
+
+\item{landscape}{logical(1). Should the  dimensions of `page_type`
+be inverted  for landscape?  Defaults to  `FALSE`, ignored when
+`pg_width` and `pg_height` are set directly.}
+
+\item{pg_width}{numeric(1). Page width in inches.}
+
+\item{pg_height}{numeric(1). Page height in inches.}
+
+\item{font_family}{character(1). Name of a font family. An error
+will be thrown if the family named is not monospaced. Defaults
+to Courier.}
+
+\item{font_size}{numeric(1). Fontsize, defaults to 12.}
+
 \item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
+
+\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
+horizontal pagination. \code{NULL} (the default) indicates no horizontal
+pagination should be done.}
+
+\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
 \item{\dots}{Passed directly to \code{\link{paginate_table}}}
 
@@ -33,6 +67,16 @@ charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
+
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
+
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (`getOption("width")`). If set to `"auto"`,
+the width of the table (plus any table inset) is used. Ignored
+completely if `tf_wrap` is `FALSE`.}
 }
 \value{
 \code{file} (this function is called for the side effect of writing the file.
@@ -57,5 +101,5 @@ system2("cat", tf)
 }
 }
 \seealso{
-\code{export_as_pdf}
+\code{\link[=export_as_pdf]{export_as_pdf()}}
 }

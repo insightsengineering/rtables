@@ -25,6 +25,8 @@ split_rows_by_cuts(
   cuts,
   cutlabels = NULL,
   split_label = var,
+  format = NULL,
+  na_str = NA_character_,
   nested = TRUE,
   cumulative = FALSE,
   label_pos = "hidden",
@@ -37,7 +39,6 @@ split_cols_by_cutfun(
   cutfun = qtile_cuts,
   cutlabelfun = function(x) NULL,
   split_label = var,
-  format = NULL,
   nested = TRUE,
   extra_args = list(),
   cumulative = FALSE
@@ -47,7 +48,6 @@ split_cols_by_quartiles(
   lyt,
   var,
   split_label = var,
-  format = NULL,
   nested = TRUE,
   extra_args = list(),
   cumulative = FALSE
@@ -58,6 +58,7 @@ split_rows_by_quartiles(
   var,
   split_label = var,
   format = NULL,
+  na_str = NA_character_,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
@@ -74,6 +75,7 @@ split_rows_by_cutfun(
   cutlabelfun = function(x) NULL,
   split_label = var,
   format = NULL,
+  na_str = NA_character_,
   nested = TRUE,
   child_labels = c("default", "visible", "hidden"),
   extra_args = list(),
@@ -104,6 +106,13 @@ analyses, which is not allowed.}
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults
 to \code{FALSE}}
 
+\item{format}{FormatSpec. Format associated with this split. Formats can be
+declared via strings (\code{"xx.x"}) or function. In cases such as
+\code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
+
 \item{label_pos}{character(1). Location the variable label should be
 displayed, Accepts  hidden (default for non-analyze row splits), visible,
 topleft, and - for analyze splits only - default.  For analyze calls,
@@ -119,10 +128,6 @@ values and returns cut points to be passed to \code{cut}.}
 
 \item{cutlabelfun}{function. Function which returns either labels for the
 cuts or NULL when passed the return value of \code{cutfun}}
-
-\item{format}{FormatSpec. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
 function. Element position in thte list corresponds to the children of this

@@ -2,21 +2,12 @@
 % Please edit documentation in R/tree_accessors.R
 \name{content_table}
 \alias{content_table}
-\alias{content_table,TableTree-method}
-\alias{content_table,ANY-method}
 \alias{content_table<-}
-\alias{content_table<-,TableTree,ElementaryTable-method}
 \title{Retrieve or set Content Table from a TableTree}
 \usage{
 content_table(obj)
 
-\S4method{content_table}{TableTree}(obj)
-
-\S4method{content_table}{ANY}(obj)
-
 content_table(obj) <- value
-
-\S4method{content_table}{TableTree,ElementaryTable}(obj) <- value
 }
 \arguments{
 \item{obj}{TableTree. The TableTree}

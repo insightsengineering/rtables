@@ -35,5 +35,5 @@ build_table(l, DM)
 
 }
 \seealso{
-\code{\link{add_overall_level}}
+\code{\link[=add_overall_level]{add_overall_level()}}
 }
