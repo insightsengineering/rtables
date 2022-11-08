@@ -29,12 +29,6 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -219,6 +213,9 @@ R CMD check. End users should pay no attention to this documentation.</p>
 <span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for VTableTree</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for TableTree</span></span>
 <span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
@@ -1107,6 +1104,10 @@ not match a formal argument of the ttabulation function.</p></dd>
 <dd><p>indent for print</p></dd>
 
 
+<dt>object</dt>
+<dd><p>The object to modify in-place</p></dd>
+
+
 <dt>value</dt>
 <dd><p>The new value</p></dd>
 
@@ -1120,10 +1121,6 @@ analyses, which is not allowed.</p></dd>
 
 <dt>for_analyze</dt>
 <dd><p>logical(1).</p></dd>
-
-
-<dt>object</dt>
-<dd><p>The object to modify in-place</p></dd>
 
 
 <dt>format</dt>
@@ -1207,7 +1204,6 @@ of the previous choice.</p></dd>
 <span class="r-in"><span>          format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">iris2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1L</span></span></span>
