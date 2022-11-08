@@ -22,7 +22,7 @@ NULL
 #' @inheritParams gen_args
 #' @inherit formatters::toString
 #' @param x table object
-#' @param widths widths of row.name and columns columns
+#' @param widths widths of row.name and columns
 #' @param col_gap gap between columns
 #' @param hsep character to create line separator
 #' @exportMethod toString
