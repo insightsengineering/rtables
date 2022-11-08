@@ -439,16 +439,17 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 
-#' @rdname int_methods
-setGeneric("str", function(x,...) standardGeneric("str"))
+#' @export
+setGeneric("str", function(object)
+    standardGeneric("str"))
 
 #' @rdname int_methods
-setMethod("str", "TableTree", 
-          function(x){
-              if(class(x)== "TableTree" | class(x)== "Elementary Table"){
-                  warning("str() is not ideal for determining rtable structure. Please consider table_structure()")
-              }
-              utils::str(x)})
+#' @export
+setMethod("str", "VTableTree",
+          function(object,...){
+              utils::str(object)
+              warning("str() is not ideal for determining rtable structure. Please consider table_structure()")
+              })
 
 #' @rdname int_methods
 #' @inheritParams table_structure_inner
