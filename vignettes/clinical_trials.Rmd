@@ -292,7 +292,7 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
 ```
 
-Note that `cfun` differs from `afun` (which is used in `analyze`) in that `cfun` does not operate on variables but rather on `data.frame`s or `tibble`s which are passed via the `df` argument (`afun` can optionally request `df` too). Further, `cfun` gives the default group label (factor level from splitting) as an argument to `labelstr` and hence it could be modified:
+Note that `cfun` differs from `afun` (which is used in `analyze`) in that `cfun` can operate on either variables, passed via the `x` argument, or `data.frame`s or `tibble`s, which are passed via the `df` argument (`afun` can optionally request `df` too). Further, `cfun` gives the default group label (factor level from splitting) as an argument to `labelstr` and hence it could be modified:
 
 ```{r}
 basic_table() %>%
