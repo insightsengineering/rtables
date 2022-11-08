@@ -60,10 +60,14 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #' @return a vector of alignments currently supported.
 #' 
 #' @examples 
+#' # See the alignments available in rtables
+#' rtables_aligns()
+#' 
 #' # Right alignment of single cell
 #' basic_table() %>%
 #'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) %>%
 #'   build_table(iris)
+#'   
 #' # Set multiple alignments using character vectors
 #' basic_table() %>%
 #'   analyze("Species", function(x) {
