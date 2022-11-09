@@ -10,7 +10,7 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
-see https://www.youtube.com/watch?v=1i6vOId2h4A at 24:30
+<!-- see https://www.youtube.com/watch?v=1i6vOId2h4A at 24:30 -->
 
 
 
@@ -78,34 +78,176 @@ These thresholds can be statically defined in the `..._by_cuts()` functions, or 
 
 ```{r}
 summary(df)
-
 ```
 
 ### Static cuts
-If we would like to further split the patients into age brackets of 20ties, 30ties, 40ties, etc. we can define our static cut points and use the `split_orws_by_`
+If we would like to further split the patients into age brackets of: below 30 (`<=30`), between 30 and 40 (including exactly 40; `30ties`), between 40 and 50 (including exactly 50; `40ties`), between 50 and 60 (including exactly 60; `50ties`), and above 60 (`60+`). 
+We define our splitting points in the argument `cuts`. 
+The specified cuts need to be unique and sorted.
+Note that each segment is defined by two cuts, so the segment `<=30` is defined by the first two splitting points `0` and `30`. 
+To define $n$ segments we will thus need $n+1$ splits.
+
+
 ```{r}
 l <- basic_table() %>%
-  split_cols_by("arm") %>%
-#  split_rows_by("gender") %>%
-    split_rows_by_cuts("age", 
-                       split_label = "Age",
-                       cuts = c(3:5*10),
-                       cut_labels = as_character(c(3:5*10))
-                       ) %>% 
-  analyze("weight", afun = mean, 
-          format = "xx.x")
+    split_cols_by("arm") %>%
+    split_rows_by("gender") %>% 
+    split_rows_by_cuts(var = "age", cuts = c(0, 30, 40, 50, 60, 1000),
+                       cutlabels = c("<=30", "30ties", "40ties", "50ties", "60+")) %>% 
+    analyze("weight", afun = mean,
+            format = "xx.x",
+            show_labels = "visible")
+
+
+build_table(l, df)
+```
+
+
+If we want patients who are exactly 40 years old to be in the `40ties` category we simply adjust our splitting points by subtracting a very small value, e.g.: 
+`cuts = c(0, 30, 40, 50, 60, 1000) - 1e-8`
+Note also we either need labeled cuts, or need to supply `cutlabels`.
+
+In the following example we define `cutpoints` outside of the table setup directly with labels. 
+Note here that the label for the lowest value is not used. 
+
+
+```{r}
+cutpoints <- c("0" = 0,
+               "<30" = 30,
+               "30ties" =  40,
+               "40ties" = 50,
+               "50ties" = 60,
+               "60+" = 1000)
+
+
+l <- basic_table() %>%
+    split_cols_by("arm") %>%
+    split_rows_by("gender") %>% 
+    split_rows_by_cuts(var = "age", cuts = cutpoints - 1e-8) %>% 
+    analyze("weight", afun = mean,
+            format = "xx.x",
+            show_labels = "visible")
+
+
+build_table(l, df)
 ```
 
 
 ### Cut functions
 
+Instead of manually specifying certain cut points we can use functions to define our cuts. 
+
+
+
+In this simple example we want to perform a median split for age: 
+
+```{r}
+l <- basic_table() %>%
+    split_cols_by("arm") %>%
+    split_rows_by("gender") %>% 
+    split_rows_by_cutfun(var = "age", cutfun = function(x) quantile(x, c(0, .5, 1))) %>% 
+    analyze("weight", afun = mean,
+            format = "xx.x",
+            show_labels = "visible")
+
+
+build_table(l, df)
+```
+
+
+
+As above, we the splitting function needs to return start- and endpoint of each segment we want to include. 
+Again, the function either needs to return labeled cuts or we need to define a separate function which labels the splits. 
+The quantile function returns: 
+```{r}
+quantile(df$age, probs = c(0, .5, 1))
+```
+
+Which is a vector with labels. 
+Importantly, the function runs on the unsegmented variable, not on the subset associated with previous splits. 
+
+We can define a custom function which returns a labeled vector with cuts. 
+Let's say we would like to get three segments for younger, middle aged, and older patients, where *younger* is defined as $age < mean(age) - 1 *sd(age)$: 
+
+```{r}
+ymo_cut <- function(age){
+    mean <- mean(age)
+    sd <- sd(age)
+    cuts <- c(0, "younger" = mean - sd, "middle aged" = mean + sd, "older" = max(age))
+    cuts
+}
+
+l <- basic_table() %>%
+    split_cols_by("arm") %>%
+    split_rows_by("gender") %>% 
+    split_rows_by_cutfun(var = "age", cutfun = ymo_cut) %>% 
+    analyze("weight", afun = mean,
+            format = "xx.x",
+            show_labels = "visible")
+
+
+build_table(l, df)
+```
+
+Of course, we might want to include the thresholds as labels.
+The label-function argument for `cutlabelfun` takes the output of `cutfun` function as an input, not the original vector.
+We could define a label-function as follows: 
+```{r}
+
+ymo_label <- function(cuts){
+    cuts <- round(cuts, 2)
+    c(paste("<", cuts[2], sep = " "), paste(cuts[2], "< age <", 
+                                            cuts[3], sep = " "), paste(">", cuts[3], sep = " "))
+}
+
+
+ymo_label(ymo_cut(df$age))
+
+l <- basic_table() %>%
+    split_cols_by("arm") %>%
+    split_rows_by("gender") %>% 
+    split_rows_by_cutfun(var = "age", cutfun = ymo_cut, cutlabelfun = ymo_label) %>% 
+    analyze("weight", afun = mean,
+            format = "xx.x",
+            show_labels = "visible")
+
+
+build_table(l, df)
+```
+
+Note that the cut function returns a numeric vector of length `n` and the label function returns a vector of length `n-1`.
+
+
+
 ## Summary
 
-In this vignette learned that:
+In this vignette you learned:
 
-* many tables are quite easily created with `dplyr` and `data.frame` or `tibble` as data structure
-  * `dplyr` keeps simple things simple
-* if tables have group summaries then repeating of information is required
-* `rtables` streamlines the construction of complex tables
+* How to set static cut points with labeled and unlabeled vectors
+* How to create custom cut functions. 
 
-We recommend that you continue reading the `clinical_trials` vignette where we create a number of more advanced tables using layouts.
+
+
+
+
+
+
+```{r}
+
+# split_cols_by_cuts
+l <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by_cuts("AGE", split_label = "Age",
+                       cuts = c(0, 25, 35, 1000),
+                       cutlabels = c("young", "medium", "old")) %>%
+    analyze(c("BMRKR2", "STRATA2")) %>%
+    append_topleft("counts")
+
+build_table(l, ex_adsl)
+```
+
+
+
+
+
+
