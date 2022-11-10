@@ -124,32 +124,6 @@ test_that("inset and pagination work together", {
   expect_identical(prov_footer(tt), prov_footer(res[[1]]))
 })
 
-test_that("Pagination works with wrapped titles/footers", {
-    tt <- tt_to_export()
-    main_title(tt) <- "main\ntitle"
-    subtitles(tt) <- c("sub", "-------", "titles")
-    main_footer(tt) <- "main\nfooter"
-    prov_footer(tt) <- "prov\nfooter"
-
-    res <- paginate_table(tt, lpp = 40)
-    len_tfh <- 22
-
-    expect_identical(length(res), 6L)
-
-    expect_identical(tt[1:len_tfh,
-                        keep_titles = TRUE,
-                        reindex_refs = FALSE
-    ], res[[1]])
-
-    expect_identical(
-        main_title(tt),
-        main_title(res[[1]])
-    )
-    expect_identical(subtitles(tt), subtitles(res[[2]]))
-    expect_identical(main_footer(tt), main_footer(res[[3]]))
-    expect_identical(prov_footer(tt), prov_footer(res[[1]]))
-})
-
 test_that("Pagination works with section dividers", {
     lyt <- basic_table(title = "big title")  %>%
         split_rows_by("SEX", section_div = "~") %>%
@@ -182,7 +156,7 @@ test_that("Pagination works with section dividers", {
 })
 
 test_that("Pagination works with non-default min_siblings", {
-    lyt <- basic_table()  %>%
+    lyt <- basic_table() %>%
         analyze("RACE")
 
     tt <- build_table(lyt, DM)
