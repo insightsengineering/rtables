@@ -171,7 +171,7 @@ mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
 
 ### Adding Group Information
 
-When adding row splits we get by default label rows for each split level, for example `CAN` and `USA` in the table above. Besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful when defining a row splitting to display information about each row group. In `rtables` this is referred to as content information, i.e. `mean` on row 2 is a descendant of `CAN` (visible via the indenting, though the table has an underlying tree structure that is not of importance for this vignette). In order to add content information and turn the `CAN` label row into a content row the `summarize_row_groups()` function is required. By default, the count (`nrows`) and percentage of data relative to the column associated data is calculated:
+When adding row splits we get by default label rows for each split level, for example `CAN` and `USA` in the table above. Besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful when defining a row splitting to display information about each row group. In `rtables` this is referred to as content information, i.e. `mean()` on row 2 is a descendant of `CAN` (visible via the indenting, though the table has an underlying tree structure that is not of importance for this vignette). In order to add content information and turn the `CAN` label row into a content row the `summarize_row_groups()` function is required. By default, the count (`nrows()`) and percentage of data relative to the column associated data is calculated:
 
 ```{r}
 l <- basic_table() %>%

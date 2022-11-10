@@ -24,7 +24,7 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Introduction
 
-`TableTree()` objects are based on a tree data structure as the name indicates. The package is written such that the user
+`TableTree` objects are based on a tree data structure as the name indicates. The package is written such that the user
 does not need to walk trees for many basic table manipulations. Walking trees will still be necessary for certain
 manipulation and will be the subject of a different vignette.
 
@@ -64,7 +64,7 @@ The `[` and `[<-` acessor functions operate largerly the same as their `data.fra
   - Note in general the result of such an ordering is unlikely to be structurally valid
 - `character` indices are treated as paths, not vectors of names in both `[` and `[<-`
 
-The `[` accessor function always returns an `TableTree()` object if `drop=TRUE` is not set. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
+The `[` accessor function always returns an `TableTree` object if `drop=TRUE` is not set. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:
 
 ```{r}
 tbl[1, 1]
