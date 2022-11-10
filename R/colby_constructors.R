@@ -1320,12 +1320,12 @@ setMethod(".add_row_summary", "Split",
 #'   column total counts are calculated. If `format` is a format string where
 #'   `xx` appears only one time, only raw counts are used.
 #'
-#' `cfun` must accept `df` as its first argument and will receive the subset
-#' `data.frame` corresponding with the row- and column-splitting for the cell
-#' being calculated. Must accept `labelstr` as the second parameter, which
-#' accepts the `label` of the level of the parent split currently being
-#' summarized. Can additionally take any optional argument supported by analysis
-#' functions. (see \code{\link{analyze}}).
+#' `cfun` must accept `x` or `df` as its first argument. For the `df` argument 
+#' `cfun` will receive the subset `data.frame` corresponding with the row- 
+#' and column-splitting for the cell being calculated. Must accept `labelstr` as 
+#' the second parameter, which accepts the `label` of the level of the parent 
+#' split currently being summarized. Can additionally take any optional argument 
+#' supported by analysis functions. (see \code{\link{analyze}}).
 #'
 #' @export
 #'

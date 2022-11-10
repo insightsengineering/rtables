@@ -61,12 +61,12 @@ format string) or is specified as a function, then both raw and percent of
 column total counts are calculated. If \code{format} is a format string where
 \code{xx} appears only one time, only raw counts are used.
 
-\code{cfun} must accept \code{df} as its first argument and will receive the subset
-\code{data.frame} corresponding with the row- and column-splitting for the cell
-being calculated. Must accept \code{labelstr} as the second parameter, which
-accepts the \code{label} of the level of the parent split currently being
-summarized. Can additionally take any optional argument supported by analysis
-functions. (see \code{\link{analyze}}).
+\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument
+\code{cfun} will receive the subset \code{data.frame} corresponding with the row-
+and column-splitting for the cell being calculated. Must accept \code{labelstr} as
+the second parameter, which accepts the \code{label} of the level of the parent
+split currently being summarized. Can additionally take any optional argument
+supported by analysis functions. (see \code{\link{analyze}}).
 }
 \examples{
 
