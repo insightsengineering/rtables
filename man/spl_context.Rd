@@ -12,7 +12,7 @@ The \code{.spl_context} \code{data.frame} gives information about the subsets of
 corresponding to the splits within-which the current \code{analyze} action is
 nested. Taken together, these correspond to the path that the resulting (set
 of) rows the analysis function is creating, although the information is in a
-slighlyt different form. Each split (which correspond to groups of rows in
+slightly different form. Each split (which correspond to groups of rows in
 the resulting table) is represented via the following columns:
 \describe{
 \item{split}{The name of the split (often the variable being split in the
