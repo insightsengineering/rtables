@@ -73,7 +73,7 @@ A \code{PreDataTableLayouts} object suitable for passing to further
 layouting functions, and to \code{build_table}.
 }
 \description{
-Adding /analyzed variables/ to our table layout defines the primary
+Adding \emph{analyzed variables} to our table layout defines the primary
 tabulation to be performed. We do this by adding calls to \code{analyze}
 and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
 further splitting, the tabulation will occur at the current/next level of

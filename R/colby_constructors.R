@@ -816,7 +816,7 @@ NULL
 
 #' Generate Rows Analyzing Variables Across Columns
 #'
-#' Adding /analyzed variables/ to our table layout defines the primary
+#' Adding *analyzed variables* to our table layout defines the primary
 #' tabulation to be performed. We do this by adding calls to \code{analyze}
 #' and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
 #' further splitting, the tabulation will occur at the current/next level of
