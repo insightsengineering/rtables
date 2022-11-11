@@ -24,6 +24,7 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Customizing Appearance
 
+In this vignette, we want to describe the various ways we can modify and customize the appearance of `rtables`.
 
 ### Rows and cell values alignments
 
