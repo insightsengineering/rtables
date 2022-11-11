@@ -26,6 +26,11 @@ knitr::opts_chunk$set(comment = "#")
 
 In this vignette, we want to describe the various ways we can modify and customize the appearance of `rtables`.
 
+Loading the package:
+```{r, message=FALSE}
+library(rtables)
+```
+
 ### Rows and cell values alignments
 
 It is possible to align the content by assigning `"left"`, `"center"` (default), and `"right"` to `.aligns` and `align` arguments in `in_rows()` and `rcell()`, respectively.
