@@ -121,7 +121,7 @@ pruned4
 
 Sorting an rtable is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables( children) will both be reordered themselves and potentially have their own children reordered as well.
 
-This is done by giving a *score function* which accepts a subtree or TableRow and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function.
+This is done by giving a *score function* which accepts a subtree or `TableRow` and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function.
 
 Another difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within branch of the path.
 
@@ -138,7 +138,7 @@ ethsort <- sort_at_path(pruned, path = c("RACE"), scorefun = cont_n_allcols, dec
 ethsort
 ```
 
-Within each ethnicity separately, sort the strata by number of females in arm c (ie column position `5`)
+Within each ethnicity separately, sort the strata by number of females in arm c (i.e. column position `5`)
 
 ```{r}
 sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
@@ -176,7 +176,7 @@ sort_at_path(sillytbl, c("cyl", "*", "mpg"), scorefun)
 
 # Writing Custom Pruning Criteria and Scoring Functions
 
-Pruning criteria and scoring functions map TableTree or TableRow objects to a boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects in more than usual.
+Pruning criteria and scoring functions map `TableTree` or `TableRow` objects to a boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects in more than usual.
 
 ## Useful Functions and Accessors
 
@@ -186,7 +186,7 @@ Pruning criteria and scoring functions map TableTree or TableRow objects to a bo
 
 `row_values` Retrieves a `TableRow` object's values in the form of a list of length `ncol(tt)`
 
-`vapply(row_values(tt), '[[', i=1, numeric(1))` will retrieve the first element from each cell provided `tt` is a TableRow (and the first element is a numeric value).
+`vapply(row_values(tt), '[[', i=1, numeric(1))` will retrieve the first element from each cell provided `tt` is a `TableRow` (and the first element is a numeric value).
 
 `obj_name` Retrieves the name of an object. Note this can differ from the label that is displayed (if any is) when printing. This will match the element in the path.
 
@@ -215,7 +215,7 @@ sort_at_path(ethsort, "RACE", silly_name_scorer)
 
 ### Sort by the Percent Difference in counts between genders in Arm C
 
-We need the F and M percents, only for Arm C (ie columns 5 and 6), differenced.
+We need the F and M percents, only for Arm C (i.e. columns 5 and 6), differenced.
 
 
 We will sort _**the strata within each ethnicity**_ by the percent difference in counts between males and females in arm C. This is not statistically meaningful at all, and is fact a terrible idea because it reorders the strata seemingly (but not) at random within each race, but illustrates the various things we need to do inside custom sorting functions. 

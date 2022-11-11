@@ -163,7 +163,7 @@ l <- basic_table() %>%
 build_table(l, df)
 ```
 
-In this table the data used to derive the first data cell (average of age of female canadians in Arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`. This cell value can also be calculated manually:
+In this table the data used to derive the first data cell (average of age of female Canadians in Arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`. This cell value can also be calculated manually:
 
 ```{r}
 mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
