@@ -55,7 +55,7 @@ rawtable
 
 Trimming represents a convenience wrapper around simple, direct subsetting of the rows of a `TableTree`.
 
-We use the `trim_rows()` function and pass it our table and a critera function. All rows where the criteria function returns `TRUE` will be removed, all others will be retained. 
+We use the `trim_rows()` function and pass it our table and a criteria function. All rows where the criteria function returns `TRUE` will be removed, all others will be retained. 
 
 **NOTE**: each row is kept or removed completely independently, with no awareness of the surrounding structure. This means, for example, that a subtree could have all its analysis rows removed and not be removed itself. For structure-aware filtering of a table, we will use *pruning* described in the next section.
 
@@ -82,7 +82,7 @@ Pruning is similar in outcome to trimming, but more powerful and more complex, a
 
 Pruning is applied recursively, in that at each structural unit (subtable, row) it both applies the pruning function at that level and to all it's children (up to a user-specifiable maximum depth).
 
-The default pruning funciton, for example, determines if a subtree is empty by
+The default pruning function, for example, determines if a subtree is empty by
 
 a. Removing all children which contain a single content row which contains all zeros or all `NA`s
 b. Removing rows which contain either all zeros or all `NA`s
@@ -119,7 +119,7 @@ pruned4
 
 ## Sorting
 
-Sorting an rtable is done **at a path** and recursively, meaning a sort opreation will occur at a particular location within the table, and the subtables( children) will both be reordered themselves and potentially have their own children reordered as well.
+Sorting an rtable is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables( children) will both be reordered themselves and potentially have their own children reordered as well.
 
 This is done by giving a *score function* which accepts a subtree or TableRow and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function.
 
@@ -131,7 +131,7 @@ sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_all
 ```
 
 
-Sort the ethnicities by observations, increasing
+Sort the ethnicity by observations, increasing
 
 ```{r}
 ethsort <- sort_at_path(pruned, path = c("RACE"), scorefun = cont_n_allcols, decreasing = FALSE)
