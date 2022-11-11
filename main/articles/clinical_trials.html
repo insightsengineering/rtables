@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2022-11-10</h4>
+            <h4 data-toc-skip class="date">2022-11-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/clinical_trials.Rmd" class="external-link"><code>vignettes/clinical_trials.Rmd</code></a></small>
       <div class="d-none name"><code>clinical_trials.Rmd</code></div>
@@ -106,9 +100,9 @@ structure and relations that are commonly found when analyzing clinical
 trials data.</p>
 <p>Note that all the data is created using random number generators. All
 <code>ex_*</code> data which is currently attached to the
-<code>rtables</code> package were created using
-<code>random.cdisc.data</code> another R package that we intend to
-release as open source soon.</p>
+<code>rtables</code> package is provided by the <a href="https://insightsengineering.github.io/formatters/" class="external-link"><code>formatters</code></a>
+package and was created using the <a href="https://insightsengineering.github.io/random.cdisc.data/" class="external-link"><code>random.cdisc.data</code></a>
+R package.</p>
 <p>The packages used in this vignette are:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables" class="external-link">rtables</a></span><span class="op">)</span></span>
@@ -245,7 +239,7 @@ sequence:</p>
 <span><span class="co">#   M                       51              55               60      </span></span>
 <span><span class="co">#   U                        3               2               4       </span></span>
 <span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
-<p>which leads to the identical table as <code>tbl</code>:</p>
+<p>which leads to the table identical to <code>tbl</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="va">tbl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [1] TRUE</span></span></code></pre>
@@ -274,7 +268,7 @@ which outside of clinical trials is commonly referred to as
 <span><span class="co">#   U                        3               2               4      </span></span>
 <span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
 <div class="section level3">
-<h3 id="variations-on-the-demographic-table">Variations on the demographic table<a class="anchor" aria-label="anchor" href="#variations-on-the-demographic-table"></a>
+<h3 id="variations-on-the-demographic-table">Variations on the Demographic Table<a class="anchor" aria-label="anchor" href="#variations-on-the-demographic-table"></a>
 </h3>
 <p>We will now show a couple of variations of the demographic table that
 we developed above. These variations are in structure and not in
@@ -353,7 +347,7 @@ encoded in the row space:</p>
 <span><span class="co">#     MEDIUM               0               0               0       </span></span>
 <span><span class="co">#     HIGH                 0               0               0</span></span></code></pre>
 <p>We will now subset <code>ADSL</code> to include only males and
-females in the analysis in order to reduces the number of rows in the
+females in the analysis in order to reduce the number of rows in the
 table:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADSL_M_F</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></span>
@@ -448,7 +442,7 @@ addressed in a specific package vignette.</p>
 <span><span class="co">#     MEDIUM           15              18               23      </span></span>
 <span><span class="co">#     HIGH             15              14               26</span></span></code></pre>
 <p>In the table above the labels <code>M</code> and <code>F</code> are
-not very descriptive. You can add the full label as follows:</p>
+not very descriptive. You can add the full labels as follows:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADSL_M_F_l</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lbl_sex <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
@@ -489,7 +483,8 @@ not very descriptive. You can add the full label as follows:</p>
 <span><span class="co">#     HIGH             15              14               26</span></span></code></pre>
 <p>For the next table variation we only stratify by gender for the
 <code>AGE</code> analysis. To do this the <code>nested</code> argument
-has to be set to <code>FALSE</code> in <code>analyze</code> call:</p>
+has to be set to <code>FALSE</code> in the <code>analyze</code>
+call:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -587,7 +582,7 @@ example:</p>
 <span><span class="co">#   LOW              47              44               37      </span></span>
 <span><span class="co">#   MEDIUM           36              56               40      </span></span>
 <span><span class="co">#   HIGH             47              32               49</span></span></code></pre>
-<p>There are a couple of things to note here.</p>
+<p>There are a couple of things to note here:</p>
 <ul>
 <li>Group summaries produce “content” rows. Visually it’s impossible to
 distinguish data rows from content rows. Their difference is justified
@@ -595,7 +590,7 @@ distinguish data rows from content rows. Their difference is justified
 the content rows are by default repeated if a group gets divided via
 pagination.</li>
 <li>Conceptually the content rows summarize the patient population which
-is analyzed and hence is often the count &amp; group percentages
+is analyzed and hence are often the count &amp; group percentages
 (default behavior of <code>summarize_row_groups</code>).</li>
 </ul>
 <p>We can recreate this default behavior (count percentage) by defining
@@ -631,14 +626,14 @@ same table as above:</p>
 <span><span class="co"># BEP01FL                                                     </span></span>
 <span><span class="co">#   Y                67              63               65      </span></span>
 <span><span class="co">#   N                63              69               61</span></span></code></pre>
-<p>Note that <code>cfun</code> differs from <code>afun</code> (which is
-used in <code>analyze</code>) in that <code>cfun</code> does not operate
-on variables but rather on <code>data.frame</code>s or
-<code>tibble</code>s which are passed via the <code>df</code> argument
-(<code>afun</code> can optionally request <code>df</code> too). Further,
-<code>cfun</code> gives the default group label (factor level from
-splitting) as an argument to <code>labelstr</code> and hence it could be
-modified:</p>
+<p>Note that <code>cfun</code>, like <code>afun</code> (which is used in
+<code>analyze</code>), can operate on either variables, passed via the
+<code>x</code> argument, or <code>data.frame</code>s or
+<code>tibble</code>s, which are passed via the <code>df</code> argument
+(<code>afun</code> can optionally request <code>df</code> too). Unlike
+<code>afun</code>, <code>cfun</code> must accept <code>labelstr</code>
+as the second argument which gives the default group label (factor level
+from splitting) and hence it could be modified:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -682,8 +677,8 @@ data</li>
 </ul>
 </li>
 <li>referencing variable names happens via strings (no non-standard
-evaluation (NSE) is needed, though this is arguably either feature or a
-short coming)</li>
+evaluation (NSE) is needed, though this is arguably either a feature or
+a shortcoming)</li>
 <li>layouts can be reused</li>
 </ul>
 <p>Here is an example that demonstrates the reusability of layouts:</p>
@@ -739,8 +734,8 @@ short coming)</li>
 <h2 id="adverse-events">Adverse Events<a class="anchor" aria-label="anchor" href="#adverse-events"></a>
 </h2>
 <p>There are a number of different adverse event tables. We will now
-present two tables that show adverse events by id and then by grade and
-by id.</p>
+present two tables that show adverse events by ID and then by grade and
+by ID.</p>
 <p>This time we won’t use the <code>ADAE</code> dataset from
 <code>random.cdisc.data</code> but rather generate a dataset on the fly
 (see <a href="https://github.com/waddella/phuse2016_adverse_events" class="external-link">Adrian’s
@@ -840,11 +835,11 @@ by id.</p>
 <span><span class="co">#                                          row_label</span></span>
 <span><span class="co"># 1 Total number of patients with at least one event</span></span>
 <span><span class="co"># 2                           Total number of events</span></span></code></pre>
-<p>The <code>.N_col</code> argument is a special keyword argument which
-<code>build_table</code> passes the population size for each respective
-column. For a list of keyword arguments for the functions passed to
-<code>afun</code> in <code>analyze</code> refer to the documentation
-with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
+<p>The <code>.N_col</code> argument is a special keyword argument by
+which <code>build_table</code> passes the population size for each
+respective column. For a list of keyword arguments for the functions
+passed to <code>afun</code> in <code>analyze</code> refer to the
+documentation with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
 <p>We now use the <code>s_events_patients</code> summary function in a
 tabulation:</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
@@ -859,11 +854,11 @@ tabulation:</p>
 <span><span class="co"># —————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event   114 (5.53%)   150 (14.18%)</span></span>
 <span><span class="co"># Total number of events                                2060           1058</span></span></code></pre>
-<p>Note that the column <code>N</code>’s are wrong as by default they
-are set to the number of rows per group (i.e. number of AEs per arm
-here). This also affects the percentages. For this table we are
-interested in the number of patients per column/arm which is usually
-taken from <code>ADSL</code> (var <code>ADSL2</code> here).</p>
+<p>Note that the column <code>N</code>s are wrong as by default they are
+set to the number of rows per group (i.e. number of AEs per arm here).
+This also affects the percentages. For this table we are interested in
+the number of patients per column/arm which is usually taken from
+<code>ADSL</code> (var <code>ADSL2</code> here).</p>
 <p><code>rtables</code> handles this by allowing us to override how the
 column counts are computed. We can specify an <code>alt_counts_df</code>
 in <code>build_table</code>. When we do this, <code>rtables</code>
@@ -879,7 +874,7 @@ tabulation:</p>
 <span><span class="co"># Total number of events                                 2060           1058</span></span></code></pre>
 <p>Alternatively, if the desired column counts are already calculated,
 they can be specified directly via the <code>col_counts</code> argument
-to <code>built_table</code>, though specifying an
+to <code>build_table</code>, though specifying an
 <code>alt_counts_df</code> is the preferred mechanism.</p>
 <p>We next calculate this information per system organ class:</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
@@ -907,7 +902,7 @@ to <code>built_table</code>, though specifying an
 <span><span class="co"># VASCULAR DISORDERS                                                              </span></span>
 <span><span class="co">#   Total number of patients with at least one event   93 (63.70%)    75 (48.70%) </span></span>
 <span><span class="co">#   Total number of events                                 240            122</span></span></code></pre>
-<p>We now have to the add a count table of <code>AEDECOD</code> for each
+<p>We now have to add a count table of <code>AEDECOD</code> for each
 <code>AEBODSYS</code>. The default <code>analyze</code> behavior for a
 factor is to create the count table per level (using
 <code>rtab_inner</code>):</p>
@@ -984,9 +979,9 @@ factor is to create the count table per level (using
 changes if the tree structure of the table does not result in the
 desired indentation by default.</p>
 <p>This table so far is however not the usual adverse event table as it
-counts the total number of events and not the number of subjects one or
-more events for a particular term. To get the correct table we need to
-write a custom analysis function:</p>
+counts the total number of events and not the number of subjects for one
+or more events for a particular term. To get the correct table we need
+to write a custom analysis function:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_count_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">termvar</span> <span class="op">=</span> <span class="st">"AEDECOD"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
@@ -1173,7 +1168,7 @@ This can be added with an initial <code>analyze</code> call.</p>
 <span><span class="co">#     NAUSEA (INTERMITTENT)                                   0              0      </span></span>
 <span><span class="co">#     ORTHOSTATIC HYPOTENSION                                 49             44     </span></span>
 <span><span class="co">#     WEAKNESS                                                0              0</span></span></code></pre>
-<p>Finally, if we wanted to prune the 0 counts row we can do that with
+<p>Finally, if we wanted to prune the 0 count rows we can do that with
 the <code>trim_rows</code> function:</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
@@ -1208,8 +1203,8 @@ the <code>trim_rows</code> function:</p>
 <span><span class="co">#     Total number of events                                 240            122     </span></span>
 <span><span class="co">#     HYPOTENSION                                             44             31     </span></span>
 <span><span class="co">#     ORTHOSTATIC HYPOTENSION                                 49             44</span></span></code></pre>
-<p>Pruning is a larger topic with a separate <code>rtables</code>
-package vignette.</p>
+<p>Pruning is a larger topic with a <a href="https://roche.github.io/rtables/articles/sorting_pruning.html" class="external-link">separate
+<code>rtables</code> package vignette</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="adverse-events-by-id-and-by-grade">Adverse Events By ID and By Grade<a class="anchor" aria-label="anchor" href="#adverse-events-by-id-and-by-grade"></a>
@@ -1651,11 +1646,11 @@ parts:</p>
 <span><span class="co"># Non-Responders   20.00 (14.93%)    44.00 (32.84%)    12.00 (9.09%)</span></span></code></pre>
 <p>Note that we did set the <code>ref_group</code> argument in
 <code>split_cols_by</code> which for the current table had no effect as
-we only use the cell data for the responder and non-responder counting.
-The <code>ref_group</code> argument is needed for the part 2. and 3. of
+we only use the cell data for the responder and non-responder counts.
+The <code>ref_group</code> argument is needed for the part 2 and 3 of
 the table.</p>
-<p>We will now look the implementation of part “2. Unstratified analysis
-comparison vs. control group.” Let’s start with the analysis
+<p>We will now look the implementation of part 2: unstratified analysis
+comparison vs. control group. Let’s start with the analysis
 function:</p>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s_unstrat_resp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1735,9 +1730,9 @@ function:</p>
 <span><span class="co">#   95% CI (Wald, with correction)                        (-27.89, -7.93)       (-1.94, 13.61)  </span></span>
 <span><span class="co">#   p-value (Chi-Squared Test)                                 0.0006               0.1436      </span></span>
 <span><span class="co">#   Odds Ratio (95% CI)                                  0.36 (0.20 - 0.65)   1.75 (0.82 - 3.75)</span></span></code></pre>
-<p>Next we will add part 3. the “multinomial response table”. To do so,
-we are adding a row-split by response level, and then doing the same
-thing as we did for the binary response table above.</p>
+<p>Next we will add part 3: the multinomial response table. To do so, we
+are adding a row-split by response level, and then doing the same thing
+as we did for the binary response table above.</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s_prop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
@@ -1787,8 +1782,8 @@ thing as we did for the binary response table above.</p>
 <span><span class="co">#   95% CI (Wald, with correction)     (19.58, 35.20)      (18.92, 34.41)       (11.38, 24.99)  </span></span>
 <span><span class="co"># SD                                     20 (14.9%)          44 (32.8%)           12 (9.1%)     </span></span>
 <span><span class="co">#   95% CI (Wald, with correction)      (9.36, 22.11)      (24.97, 41.47)       (4.79, 15.34)</span></span></code></pre>
-<p>In case the we wanted to rename the levels of <code>AVALC</code> and
-remove the CI for <code>NE</code> we could do that as follows:</p>
+<p>In the case that we wanted to rename the levels of <code>AVALC</code>
+and remove the CI for <code>NE</code> we could do that as follows:</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rsp_label</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">rsp_full_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>

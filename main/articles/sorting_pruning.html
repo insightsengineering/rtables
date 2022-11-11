@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2022-11-10</h4>
+            <h4 data-toc-skip class="date">2022-11-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/sorting_pruning.Rmd" class="external-link"><code>vignettes/sorting_pruning.Rmd</code></a></small>
       <div class="d-none name"><code>sorting_pruning.Rmd</code></div>
@@ -199,19 +193,19 @@ other filtering contain 0 rows</li>
 </h4>
 <p>Trimming represents a convenience wrapper around simple, direct
 subsetting of the rows of a <code>TableTree</code>.</p>
-<p>We use the <code><a href="../reference/trim_rows.html">trim_rows()</a></code> function and pass it our table
-and a critera function. All rows where the criteria function returns
-<code>TRUE</code> will be removed, all others will be retained.</p>
-<p><strong>NOTE</strong>: each row is kept or removed completely
+<p>We use the <code><a href="../reference/trim_rows.html">trim_rows()</a></code> function with our table and a
+criteria function. All rows where the criteria function returns
+<code>TRUE</code> will be removed, and all others will be retained.</p>
+<p><strong>NOTE</strong>: Each row is kept or removed completely
 independently, with no awareness of the surrounding structure. This
 means, for example, that a subtree could have all its analysis rows
 removed and not be removed itself. For structure-aware filtering of a
 table, we will use <em>pruning</em> described in the next section.</p>
 <p>A <em>trimming function</em> accepts a <code>TableRow</code> object
 and returns <code>TRUE</code> if the row should be removed.</p>
-<p>The default trimming function removes rows that have no values in
-them that have all <code>NA</code> values or all <code>0</code> values
-(but not if there is a mix)</p>
+<p>The default trimming function removes rows in which all columns have
+no values in them, i.e. that have all <code>NA</code> values or all
+<code>0</code> values:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">rawtable</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
@@ -269,7 +263,7 @@ subsetting:</p>
 <p>Pruning is similar in outcome to trimming, but more powerful and more
 complex, as it takes structure into account.</p>
 <p>Pruning is applied recursively, in that at each structural unit
-(subtable, row) it both applies the pruning function at that level and
+(subtable, row) it applies the pruning function both at that level and
 to all it’s children (up to a user-specifiable maximum depth).</p>
 <p>The default pruning funciton, for example, determines if a subtree is
 empty by</p>
@@ -309,7 +303,7 @@ contains all zeros or all <code>NA</code>s</li>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
 <p>We can also use the <code>low_obs_pruner</code> pruning function
 constructor to create a pruning function which removes subtrees with
-content summaries whose first entries for each column sum or average to
+content summaries whose first entries for each column sum or average are
 below a specified number. (In the default summaries the first entry per
 column is the count).</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -360,7 +354,7 @@ setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
 <p>We can also see that pruning to a lower number of observations, say,
 to a total of <code>16</code>, with no <code>stop_depth</code> removes
 some but not all of the strata from our third race
-(<code>WHITE</code>)</p>
+(<code>WHITE</code>).</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">16</span>, <span class="st">"sum"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pruned4</span></span></code></pre></div>
@@ -389,8 +383,8 @@ some but not all of the strata from our third race
 <h3 id="sorting">Sorting<a class="anchor" aria-label="anchor" href="#sorting"></a>
 </h3>
 <p>Sorting an rtable is done <strong>at a path</strong> and recursively,
-meaning a sort opreation will occur at a particular location within the
-table, and the subtables( children) will both be reordered themselves
+meaning a sort operation will occur at a particular location within the
+table, and the subtables (children) will both be reordered themselves
 and potentially have their own children reordered as well.</p>
 <p>This is done by giving a <em>score function</em> which accepts a
 subtree or TableRow and returns a single numeric value. Within the
@@ -399,7 +393,8 @@ value of the score function.</p>
 <p>Another difference between pruning and sorting is that sorting occurs
 at particular places in the table, as defined by a path. The path can
 contain “*” to indicate that at that portion of the structure sorting
-should occur <strong>separately</strong> within branch of the path.</p>
+should occur <strong>separately</strong> within the branch of the
+path.</p>
 <p>Sort the strata by observation counts within just the
 <code>ASIAN</code> subtable:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -428,7 +423,7 @@ should occur <strong>separately</strong> within branch of the path.</p>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<p>Sort the ethnicities by observations, increasing</p>
+<p>Sort the ethnicities by observations in increasing order:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ethsort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">ethsort</span></span></code></pre></div>
@@ -457,7 +452,7 @@ should occur <strong>separately</strong> within branch of the path.</p>
 <span><span class="co">#   C                         13 (18.6%)   15 (29.4%)   10 (17.9%)   9 (18.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre>
 <p>Within each ethnicity separately, sort the strata by number of
-females in arm c (ie column position <code>5</code>)</p>
+females in arm C (i.e. column position <code>5</code>):</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="fu"><a href="../reference/score_funs.html">cont_n_onecol</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -492,7 +487,7 @@ generated when your analysis function generates more than one row per
 group of data), the name of that subtable (generally the name of the
 variable being analyzed) must appear in the path, <em><strong>even if
 the variable label is not displayed when the table is
-printed</strong></em></p>
+printed</strong></em>.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_afun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
@@ -524,7 +519,7 @@ printed</strong></em></p>
 <span><span class="co">#   b      3   </span></span>
 <span><span class="co">#   c      1</span></span></code></pre>
 <p>The path required to sort the rows inside our “analysis” of
-<code>mpg</code>, then is <code>c("cyl", "*", "mpg")</code>:</p>
+<code>mpg</code> is then <code>c("cyl", "*", "mpg")</code>:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scorefun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/row_accessors.html">row_values</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">sillytbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"*"</span>, <span class="st">"mpg"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
@@ -548,27 +543,27 @@ printed</strong></em></p>
 <h2 id="writing-custom-pruning-criteria-and-scoring-functions">Writing Custom Pruning Criteria and Scoring Functions<a class="anchor" aria-label="anchor" href="#writing-custom-pruning-criteria-and-scoring-functions"></a>
 </h2>
 <p>Pruning criteria and scoring functions map TableTree or TableRow
-objects to a boolean value (for pruning criteria) or a sortable scalar
+objects to a Boolean value (for pruning criteria) or a sortable scalar
 value (scoring functions). To do this we currently need to interact with
-the structure of the objects in more than usual.</p>
+the structure of the objects more than usual.</p>
 <div class="section level3">
 <h3 id="useful-functions-and-accessors">Useful Functions and Accessors<a class="anchor" aria-label="anchor" href="#useful-functions-and-accessors"></a>
 </h3>
-<p><code>content_table</code> Retrieves a <code>TableTree</code>
+<p><code>content_table</code> - Retrieves a <code>TableTree</code>
 object’s content table (which contains its summary rows).</p>
-<p><code>tree_children</code> Retrieves a <code>TableTree</code>
+<p><code>tree_children</code> - Retrieves a <code>TableTree</code>
 object’s children (either subtables, rows or possibly a mix thereof,
 though that should not happen in practice)</p>
-<p><code>row_values</code> Retrieves a <code>TableRow</code> object’s
+<p><code>row_values</code> - Retrieves a <code>TableRow</code> object’s
 values in the form of a list of length <code>ncol(tt)</code></p>
-<p><code>vapply(row_values(tt), '[[', i=1, numeric(1))</code> will
+<p><code>vapply(row_values(tt), '[[', i=1, numeric(1))</code> - Will
 retrieve the first element from each cell provided <code>tt</code> is a
 TableRow (and the first element is a numeric value).</p>
-<p><code>obj_name</code> Retrieves the name of an object. Note this can
-differ from the label that is displayed (if any is) when printing. This
-will match the element in the path.</p>
-<p><code>obj_label</code> Retrieves the display label of an object. Note
-this can differ from the name that appears in the path.</p>
+<p><code>obj_name</code> - Retrieves the name of an object. Note this
+can differ from the label that is displayed (if any is) when printing.
+This will match the element in the path.</p>
+<p><code>obj_label</code> - Retrieves the display label of an object.
+Note this can differ from the name that appears in the path.</p>
 </div>
 <div class="section level3">
 <h3 id="example-custom-scoring-functions">Example Custom Scoring Functions<a class="anchor" aria-label="anchor" href="#example-custom-scoring-functions"></a>
@@ -618,19 +613,19 @@ our previous sorting by ethnicity above).</p>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
 <p><strong>NOTE</strong> generally this would be more appropriately done
 using the reorder_split_levels function within the layout rather than as
-a sort postprocessing step, but other character scorers may or may not
-not map as easily to layouting directives.</p>
+a sort post-processing step, but other character scorers may or may not
+map as easily to layouting directives.</p>
 </div>
 <div class="section level4">
-<h4 id="sort-by-the-percent-difference-in-counts-between-genders-in-arm-c">Sort by the Percent Difference in counts between genders in Arm
+<h4 id="sort-by-the-percent-difference-in-counts-between-genders-in-arm-c">Sort by the Percent Difference in Counts Between Genders in Arm
 C<a class="anchor" aria-label="anchor" href="#sort-by-the-percent-difference-in-counts-between-genders-in-arm-c"></a>
 </h4>
-<p>We need the F and M percents, only for Arm C (ie columns 5 and 6),
+<p>We need the F and M percents, only for arm C (i.e. columns 5 and 6),
 differenced.</p>
 <p>We will sort <em><strong>the strata within each
 ethnicity</strong></em> by the percent difference in counts between
 males and females in arm C. This is not statistically meaningful at all,
-and is fact a terrible idea because it reorders the strata seemingly
+and is in fact a terrible idea because it reorders the strata seemingly
 (but not) at random within each race, but illustrates the various things
 we need to do inside custom sorting functions.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
@@ -638,7 +633,7 @@ we need to do inside custom sorting functions.</p>
 <span>    <span class="va">ctable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_table.html">content_table</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="co">## get summary table at this location</span></span>
 <span>    <span class="va">crow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">ctable</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="co">## get first row in summary table</span></span>
 <span>    <span class="va">vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/row_accessors.html">row_values</a></span><span class="op">(</span><span class="va">crow</span><span class="op">)</span></span>
-<span>    <span class="co">## we need to have a better api for specificying location in column space but currently we don't</span></span>
+<span>    <span class="co">## we need to have a better api for specifying location in column space but currently we don't</span></span>
 <span>    <span class="va">mcount</span> <span class="op">&lt;-</span> <span class="va">vals</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>    <span class="va">fcount</span> <span class="op">&lt;-</span> <span class="va">vals</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>    <span class="op">(</span><span class="va">mcount</span> <span class="op">-</span> <span class="va">fcount</span><span class="op">)</span> <span class="op">/</span> <span class="va">fcount</span></span>
