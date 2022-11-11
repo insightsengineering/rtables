@@ -46,14 +46,14 @@ build_table(lyt, DM)
 ```
 
 ```{r}
-# In in_rows, we use .aligns. This can either set the general value or the 
+# In in_rows, we use .aligns. This can either set the general value or the
 #   single values (see NB).
 lyt2 <- basic_table() %>%
     analyze("AGE", function(x) {
         in_rows(left = rcell("l"),
                 right = rcell("r"),
-                center = rcell("c"), 
-                .aligns = c("right")) # NB: .aligns = c("right", "left", "center") 
+                center = rcell("c"),
+                .aligns = c("right")) # NB: .aligns = c("right", "left", "center")
     })
 
 build_table(lyt2, DM)
@@ -65,12 +65,18 @@ These concepts can be well applied to any clinical table as shown in the followi
 basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
-  analyze(c("AGE"), function(x) {
-    in_rows(
-      "mean" = rcell(mean(x), align = "right"),
-      "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
-    )
+  analyze(c("AGE", "STRATA1"), function(x) {
+    if (is.numeric(x)) {
+      in_rows(
+        "mean" = rcell(mean(x)),
+        "sd" = rcell(sd(x)),
+        .formats = c("xx.x"), .aligns = "left"
+      )
+    } else if (is.factor(x)) {
+      rcell(length(unique(x)), align = "right")
+    } else {
+      stop("Unsupported type")
+    }
   }, show_labels = "visible", na_str = "NE") %>%
   build_table(ex_adsl)
-
 ```

@@ -101,7 +101,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .row_footnotes list. Referential footnotes messages to be associated
 #'   by name with \emph{rows}
 #' @param .aligns character or NULL. Alignments for the cells. Standard for `NULL`
-#'   is `"center"`. See \code{\link{rtables_aligns}} for currently supported 
+#'   is `"center"`. See \code{\link{rtables_aligns}} for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
 #'
