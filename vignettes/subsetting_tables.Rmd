@@ -168,36 +168,3 @@ Note the return value of `cell_values` is always a list even if you specify a pa
 ```{r}
 cell_values(tbl2, c("RACE", "ASIAN", "AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 ```
-
-## Rows and cell values alignments
-
-It is possible to align the content of both rows (`in_rows`) and cell values (`rcell`) by assigning `"left"`, `"center"` (default), and `"right"` to `.aligns` and `align` arguments, respectively.
-
-Please consider using `?in_rows` and `?rcell` for further clarifications on the two arguments. Also, to see all available alignment options, run the following:
-```{r}
-rtables_aligns()
-```
-Example that uses different `align` arguments for each `rcell`:
-```{r}
-lyt <- basic_table() %>%
-    analyze("AGE", function(x) {
-        in_rows(left = rcell("l", align = "left"),
-                right = rcell("r", align = "right"),
-                center = rcell("c", align = "center"))
-    })
-
-build_table(lyt, DM)
-```
-
-Example that uses `.aligns` argument to set alignment of all or each rows (see `NB`):
-```{r}
-lyt2 <- basic_table() %>%
-    analyze("AGE", function(x) {
-        in_rows(left = rcell("l"),
-                right = rcell("r"),
-                center = rcell("c"), 
-                .aligns = c("right")) # NB: .aligns = c("right", "left", "center") 
-    })
-
-build_table(lyt2, DM)
-```

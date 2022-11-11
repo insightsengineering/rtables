@@ -1,0 +1,76 @@
+---
+title: "Customizing Appearance"
+author: "Davide Garolini and Gabriel Becker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customizing Appearance}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+## Customizing Appearance
+
+
+### Rows and cell values alignments
+
+It is possible to align the content by assigning `"left"`, `"center"` (default), and `"right"` to `.aligns` and `align` arguments in `in_rows()` and `rcell()`, respectively.
+
+Please consider using `?in_rows` and `?rcell` for further clarifications on the two arguments, and use `rtables_aligns()` to see all available alignment options.
+
+In the following we show two simplified examples that use `align` and `.aligns`, respectively.
+
+```{r}
+# In rcell we use align.
+lyt <- basic_table() %>%
+    analyze("AGE", function(x) {
+        in_rows(left = rcell("l", align = "left"),
+                right = rcell("r", align = "right"),
+                center = rcell("c", align = "center"))
+    })
+
+build_table(lyt, DM)
+```
+
+```{r}
+# In in_rows, we use .aligns. This can either set the general value or the 
+#   single values (see NB).
+lyt2 <- basic_table() %>%
+    analyze("AGE", function(x) {
+        in_rows(left = rcell("l"),
+                right = rcell("r"),
+                center = rcell("c"), 
+                .aligns = c("right")) # NB: .aligns = c("right", "left", "center") 
+    })
+
+build_table(lyt2, DM)
+```
+
+These concepts can be well applied to any clinical table as shown in the following, more complex, example.
+
+```{r}
+basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(c("AGE"), function(x) {
+    in_rows(
+      "mean" = rcell(mean(x), align = "right"),
+      "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
+    )
+  }, show_labels = "visible", na_str = "NE") %>%
+  build_table(ex_adsl)
+
+```
