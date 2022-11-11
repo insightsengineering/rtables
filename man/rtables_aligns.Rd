@@ -11,19 +11,19 @@ a vector of alignments currently supported.
 }
 \description{
 Currently supported cell value alignments. These values
-may be used to set single cell alignment (\code{align} in \code{\link[=rcell]{rcell()}}) or row-wise
-alignment (\code{.aligns} in \code{\link[=in_rows]{in_rows()}}).
+may be used to set content alignment (\code{align} in \code{\link[=rcell]{rcell()}} or \code{.aligns}
+in \code{\link[=in_rows]{in_rows()}}).
 }
 \examples{
 # See the alignments available in rtables
 rtables_aligns()
 
-# Right alignment of single cell
+# Right alignment with align in rcell()
 basic_table() \%>\%
   analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) \%>\%
   build_table(iris)
-  
-# Set multiple alignments using character vectors
+
+# Set multiple alignments using character vectors with .aligns in in_rows()
 basic_table() \%>\%
   analyze("Species", function(x) {
     in_rows(
@@ -33,6 +33,18 @@ basic_table() \%>\%
     )
   }) \%>\%
   build_table(iris)
+
+# Clinical data example:
+basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
+  analyze(c("AGE"), function(x) {
+    in_rows(
+      "mean" = rcell(mean(x), align = "right"),
+      "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
+    )
+  }, show_labels = "visible", na_str = "NE") \%>\%
+  build_table(ex_adsl)
 
 }
 \seealso{

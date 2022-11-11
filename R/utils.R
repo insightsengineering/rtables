@@ -53,22 +53,22 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 
 #' @title Alignment utils
 #'
-#' @description Currently supported cell value alignments. These values 
-#'   may be used to set single cell alignment (`align` in [rcell()]) or row-wise 
-#'   alignment (`.aligns` in [in_rows()]).
-#' 
+#' @description Currently supported cell value alignments. These values
+#'   may be used to set content alignment (`align` in [rcell()] or `.aligns`
+#'   in [in_rows()]).
+#'
 #' @return a vector of alignments currently supported.
-#' 
-#' @examples 
+#'
+#' @examples
 #' # See the alignments available in rtables
 #' rtables_aligns()
-#' 
-#' # Right alignment of single cell
+#'
+#' # Right alignment with align in rcell()
 #' basic_table() %>%
 #'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) %>%
 #'   build_table(iris)
-#'   
-#' # Set multiple alignments using character vectors
+#'
+#' # Set multiple alignments using character vectors with .aligns in in_rows()
 #' basic_table() %>%
 #'   analyze("Species", function(x) {
 #'     in_rows(
@@ -78,14 +78,25 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #'     )
 #'   }) %>%
 #'   build_table(iris)
-#' 
+#'
+#' # Clinical data example:
+#' basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
+#'   analyze(c("AGE"), function(x) {
+#'     in_rows(
+#'       "mean" = rcell(mean(x), align = "right"),
+#'       "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
+#'     )
+#'   }, show_labels = "visible", na_str = "NE") %>%
+#'   build_table(ex_adsl)
+#'
 #' @seealso [in_rows()], [rcell()]
-#' 
+#'
 #' @export
 rtables_aligns <- function() {
-    c("left", "right", "center")
+  c("left", "right", "center")
 }
-
 
 chk_rtables_align <- function(algn) {
     if(any(is.na(algn) | !(algn %in% rtables_aligns())))
