@@ -27,7 +27,7 @@ table_shell_str(
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{widths}{widths of row.name and columns columns}
+\item{widths}{widths of row.name and columns}
 
 \item{col_gap}{gap between columns}
 

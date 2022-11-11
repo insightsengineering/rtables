@@ -33,7 +33,7 @@ In this vignette we create a
 
 using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
 
-Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package were created using [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) another R package that we intend to release as open source soon.
+Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
 
 The packages used in this vignette are:
 
@@ -133,7 +133,7 @@ tbl2 <- basic_table() %>%
 tbl2
 ```
 
-which leads to the identical table as `tbl`:
+which leads to the table identical to `tbl`:
 
 ```{r}
 identical(tbl, tbl2)
@@ -153,7 +153,7 @@ basic_table() %>%
   build_table(ADSL)
 ```
 
-### Variations on the demographic table
+### Variations on the Demographic Table
 
 We will now show a couple of variations of the demographic table that we developed above. These variations are in structure and not in analysis, hence they don't require a modification to the `s_summary` function.
 
@@ -179,7 +179,7 @@ basic_table() %>%
   build_table(ADSL)
 ```
 
-We will now subset `ADSL` to include only males and females in the analysis in order to reduces the number of rows in the table:
+We will now subset `ADSL` to include only males and females in the analysis in order to reduce the number of rows in the table:
 
 ```{r, warning=FALSE}
 ADSL_M_F <- filter(ADSL, SEX %in% c("M", "F"))
@@ -204,7 +204,7 @@ basic_table() %>%
   build_table(ADSL_M_F)
 ```
 
-In the table above the labels `M` and `F` are not very descriptive. You can add the full label as follows:
+In the table above the labels `M` and `F` are not very descriptive. You can add the full labels as follows:
 
 ```{r}
 ADSL_M_F_l <- ADSL_M_F %>%
@@ -223,7 +223,7 @@ basic_table() %>%
   build_table(ADSL_M_F_l)
 ```
 
-For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE`  in `analyze()` call:
+For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE` in `analyze()` call:
 
 ```{r}
 basic_table() %>%
@@ -269,10 +269,10 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
 ```
 
-There are a couple of things to note here.
+There are a couple of things to note here:
 
 * Group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination.
-* Conceptually the content rows summarize the patient population which is analyzed and hence is often the count & group percentages (default behavior of `summarize_row_groups()`).
+* Conceptually the content rows summarize the patient population which is analyzed and hence are often the count & group percentages (default behavior of `summarize_row_groups()`).
 
 We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
 
@@ -292,7 +292,7 @@ basic_table() %>%
   build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
 ```
 
-Note that `cfun` differs from `afun` (which is used in `analyze()`)  in that `cfun` does not operate on variables but rather on `data.frame`s or `tibble`s which are passed via the `df` argument (`afun` can optionally request `df` too). Further, `cfun` gives the default group label (factor level from splitting) as an argument to `labelstr` and hence it could be modified:
+Note that `cfun`, like `afun` (which is used in `analyze()`), can operate on either variables, passed via the `x` argument, or `data.frame`s or `tibble`s, which are passed via the `df` argument (`afun` can optionally request `df` too). Unlike `afun`, `cfun` must accept `labelstr` as the second argument which gives the default group label (factor level from splitting) and hence it could be modified:
 
 ```{r}
 basic_table() %>%
@@ -315,7 +315,7 @@ Layouts have a couple of advantages over tabulating the tables directly:
 
 * the creation of layouts requires the analyst to describe the problem in an abstract way
    - i.e. they separate the analyses description from the actual data
-* referencing variable names happens via strings (no non-standard evaluation (NSE) is needed, though this is arguably either feature or a short coming)
+* referencing variable names happens via strings (no non-standard evaluation (NSE) is needed, though this is arguably either a feature or a shortcoming)
 * layouts can be reused
 
 Here is an example that demonstrates the reusability of layouts:
@@ -344,7 +344,7 @@ build_table(lyt, ADSL %>% filter(AGE > 18))
 
 ## Adverse Events
 
-There are a number of different adverse event tables. We will now present two tables that show adverse events by id and then by grade and by id.
+There are a number of different adverse event tables. We will now present two tables that show adverse events by ID and then by grade and by ID.
 
 This time we won't use the `ADAE` dataset from `random.cdisc.data` but rather generate a dataset on the fly (see [Adrian's 2016 Phuse paper](https://github.com/waddella/phuse2016_adverse_events)):
 
@@ -428,7 +428,7 @@ we would get the following summary:
 s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
 ```
 
-The `.N_col` argument is a special keyword argument which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()` refer to the documentation with `?analyze`.
+The `.N_col` argument is a special keyword argument by which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()` refer to the documentation with `?analyze`.
 
 We now use the `s_events_patients` summary function in a tabulation:
 
@@ -441,7 +441,7 @@ adae_0_lyt <- basic_table() %>%
 build_table(adae_0_lyt, ADAE2)
 ```
 
-Note that the column `N`'s are wrong as by default they are set to the
+Note that the column `N`s are wrong as by default they are set to the
 number of rows per group (i.e. number of AEs per arm here). This also
 affects the percentages. For this table we are interested in the
 number of patients per column/arm which is usually taken from `ADSL`
@@ -476,7 +476,7 @@ l <- basic_table() %>%
 build_table(l, ADAE2, alt_counts_df = ADSL2)
 ```
 
-We now have to the add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze()` behavior for a factor is to create the count table per level (using `rtab_inner`):
+We now have to add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze()` behavior for a factor is to create the count table per level (using `rtab_inner`):
 
 ```{r}
 tbl1 <- basic_table() %>%
@@ -492,7 +492,7 @@ tbl1
 
 The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation by default.
 
-This table so far is however not the usual adverse event table as it counts the total number of events and not the number of subjects one or more events for a particular term. To get the correct table we need to write a custom analysis function:
+This table so far is however not the usual adverse event table as it counts the total number of events and not the number of subjects for one or more events for a particular term. To get the correct table we need to write a custom analysis function:
 
 ```{r}
 table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID") {
@@ -538,13 +538,13 @@ tbl <- basic_table() %>%
 tbl
 ```
 
-Finally, if we wanted to prune the 0 counts row we can do that with the `trim_rows()` function:
+Finally, if we wanted to prune the 0 count rows we can do that with the `trim_rows()` function:
 
 ```{r}
 trim_rows(tbl)
 ```
 
-Pruning is a larger topic with a separate `rtables` package vignette.
+Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/articles/sorting_pruning.html).
 
 ### Adverse Events By ID and By Grade
 
@@ -601,8 +601,8 @@ basic_table() %>%
 The response table that we will create here is composed of 3 parts:
 
 1. Binary response table
-1. Unstratified analysis comparison vs. control group
-1. Multinomial response table
+2. Unstratified analysis comparison vs. control group
+3. Multinomial response table
 
 Let's start with the first part which is fairly simple to derive:
 
@@ -626,9 +626,9 @@ basic_table() %>%
 ```
 
 
-Note that we did set the `ref_group` argument in `split_cols_by()` which for the current table had no effect as we only use the cell data for the responder and non-responder counting. The `ref_group` argument is needed for the part 2. and 3. of the table.
+Note that we did set the `ref_group` argument in `split_cols_by()` which for the current table had no effect as we only use the cell data for the responder and non-responder counts. The `ref_group` argument is needed for the part 2 and 3 of the table.
 
-We will now look the implementation of part "2. Unstratified analysis comparison vs. control group." Let's start with the analysis function:
+We will now look the implementation of part 2: unstratified analysis comparison vs. control group. Let's start with the analysis function:
 
 ```{r}
 s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
@@ -691,7 +691,7 @@ basic_table() %>%
   build_table(ADRS_BESRSPI)
 ```
 
-Next we will add part 3. the "multinomial response table". To do so, we are adding a row-split by response level, and then doing the same thing as we did for the binary response table above.
+Next we will add part 3: the multinomial response table. To do so, we are adding a row-split by response level, and then doing the same thing as we did for the binary response table above.
 
 ```{r}
 s_prop <- function(df, .N_col) {
@@ -725,7 +725,7 @@ basic_table() %>%
   build_table(ADRS_BESRSPI)
 ```
 
-In case the we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
+In the case that we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
 
 ```{r}
 rsp_label <- function(x) {

@@ -83,7 +83,7 @@ setMethod("payloadmsg", "AllSplit",
 
 setMethod("payloadmsg", "ANY",
           function(spl) {
-    warning("don't nkow how to make payload print message for Split of class", class(spl))
+    warning("don't know how to make payload print message for Split of class", class(spl))
     "XXX"
 })
 

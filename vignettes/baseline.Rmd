@@ -44,7 +44,7 @@ basic_table() %>%
   build_table(DM)
 ```
 
-and then the difference of the average `AGE` between the arms to the placebo arm:
+and then the difference of the average `AGE` between the placebo arm and the other arms:
 
 ```{r}
 basic_table() %>%
@@ -90,7 +90,7 @@ You can see which arguments are available for `afun` in the manual fro `analyze(
 
 ## Row Splitting
 
-When adding row-splitting the reference data might be one represented by the column with or without row splitting. For example:
+When adding row-splitting the reference data may be represented by the column with or without row splitting. For example:
 
 ```{r}
 basic_table() %>%

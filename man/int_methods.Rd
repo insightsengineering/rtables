@@ -42,6 +42,7 @@
 \alias{summarize_rows_inner,TableRow-method}
 \alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
+\alias{str,VTableTree-method}
 \alias{table_structure_inner,TableTree-method}
 \alias{table_structure_inner,ElementaryTable-method}
 \alias{table_structure_inner,TableRow-method}
@@ -459,6 +460,8 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 \S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+\S4method{str}{VTableTree}(object, ...)
 
 \S4method{table_structure_inner}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
@@ -1096,6 +1099,8 @@ not match a formal argument of the ttabulation function.}
 
 \item{print_indent}{indent for print}
 
+\item{object}{The object to modify in-place}
+
 \item{value}{The new value}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
@@ -1104,8 +1109,6 @@ new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
-
-\item{object}{The object to modify in-place}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
@@ -1163,7 +1166,6 @@ l <- basic_table() \%>\%
           format = "xx.xx")
 
 tbl <- build_table(l, iris2)
-
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl

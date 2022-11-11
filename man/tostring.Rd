@@ -18,7 +18,7 @@
 \arguments{
 \item{x}{table object}
 
-\item{widths}{widths of row.name and columns columns}
+\item{widths}{widths of row.name and columns}
 
 \item{col_gap}{gap between columns}
 
