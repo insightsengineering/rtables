@@ -36,7 +36,7 @@ Similarly, footer materials come with two directly specified components:
 main footer and provenance footer, in addition to one that is computed
 when necessary: referential footnotes.
 
-`basic_table` accepts the values for each element that can be set directly:
+`basic_table()` accepts the values for each element that can be set directly:
 
 ```{r}
 library(rtables)

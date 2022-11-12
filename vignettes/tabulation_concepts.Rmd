@@ -62,7 +62,7 @@ df
 
 ## Building A Table Row By Row
 
-Let's look at a table that has 3 columns and 3 rows. Each row represents a different analysis (functions `foo`, `bar`, `zoo` that return an `rcell` object):
+Let's look at a table that has 3 columns and 3 rows. Each row represents a different analysis (functions `foo`, `bar`, `zoo` that return an `rcell()` object):
 
 ```
                      A         B         C
@@ -80,7 +80,7 @@ df_B <- df %>% filter(c1 == "B")
 df_C <- df %>% filter(c1 == "C")
 ```
 
-Let's do this on the concrete data with `analyze`:
+Let's do this on the concrete data with `analyze()`:
 
 ```{r}
 foo <- prod
@@ -113,7 +113,7 @@ x_B <- df_B$x
 x_C <- df_C$x
 ```
 
-The function passed to `afun` is evaluated using argument matching, if `afun` has an argument `x` the analysis variable specified in `vars` in `analyze` is passed to the function and if `afun` has an argument `df` then set subset of the dataset is passed to `afun`. So,
+The function passed to `afun` is evaluated using argument matching, if `afun` has an argument `x` the analysis variable specified in `vars` in `analyze()` is passed to the function and if `afun` has an argument `df` then set subset of the dataset is passed to `afun`. So,
 
 ```{r}
 basic_table() %>%
@@ -124,7 +124,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-Note that it is also possible that a function returns multiple rows with `in_rows`
+Note that it is also possible that a function returns multiple rows with `in_rows()`
 
 ```{r}
 basic_table() %>%
@@ -267,7 +267,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-Note that `foo` has the variable information hard encoded in the function body. Let's try some alternatives returning to `analyze`:
+Note that `foo` has the variable information hard encoded in the function body. Let's try some alternatives returning to `analyze()`:
 
 
 ```{r}
@@ -278,7 +278,7 @@ basic_table() %>%
   build_table(df)
 ```
 
-note that the subset of the `y` variable is passed as `x` argument to `mean`. We could also get the `data.frame` instead of the variable:
+note that the subset of the `y` variable is passed as `x` argument to `mean()`. We could also get the `data.frame` instead of the variable:
 
 ```{r}
 basic_table() %>%
@@ -439,7 +439,7 @@ W
      range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
-where `s_cfun_2` is the content function and either returns one row via `rcell` or multiple rows via `in_rows`. The data represented by `<>` for the content rows is same data as for it's descendant, i.e. for the `U > u1, A` content row cell it is `df %>% filter(r1 == "U", r2 == "u1", c1 == "A")`. Note that content functions `cfun` operate only on data frames and not on vectors/variables so they must take the `df` argument. Further, a `cfun` must also have the `labelstr` argument which is the split level. This way, the `cfun` can define its own row name. In order to get the table above we can use the layout framework as follows:
+where `s_cfun_2` is the content function and either returns one row via `rcell()` or multiple rows via `in_rows()`. The data represented by `<>` for the content rows is same data as for it's descendant, i.e. for the `U > u1, A` content row cell it is `df %>% filter(r1 == "U", r2 == "u1", c1 == "A")`. Note that content functions `cfun` operate only on data frames and not on vectors/variables so they must take the `df` argument. Further, a `cfun` must also have the `labelstr` argument which is the split level. This way, the `cfun` can define its own row name. In order to get the table above we can use the layout framework as follows:
 
 ```{r}
 s_mean_sd <- function(x) {

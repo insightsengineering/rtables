@@ -94,7 +94,7 @@ pruned <- prune_table(coltrimmed)
 pruned
 ```
 
-We can also use the `low_obs_pruner` pruning function constructor to create a pruning function which removes subtrees with content summaries whose first entries for each column sum or average are below a specified number. (In the default summaries the first entry per column is the count).
+We can also use the `low_obs_pruner()` pruning function constructor to create a pruning function which removes subtrees with content summaries whose first entries for each column sum or average are below a specified number. (In the default summaries the first entry per column is the count).
 
 ```{r}
 pruned2 <- prune_table(coltrimmed, low_obs_pruner(10, "mean"))
@@ -179,17 +179,17 @@ Pruning criteria and scoring functions map TableTree or TableRow objects to a Bo
 
 ## Useful Functions and Accessors
 
-`content_table` - Retrieves a `TableTree` object's content table (which contains its summary rows).
+`content_table()` - Retrieves a `TableTree` object's content table (which contains its summary rows).
 
-`tree_children` - Retrieves a `TableTree` object's children (either subtables, rows or possibly a mix thereof, though that should not happen in practice)
+`tree_children()` - Retrieves a `TableTree` object's children (either subtables, rows or possibly a mix thereof, though that should not happen in practice)
 
-`row_values` - Retrieves a `TableRow` object's values in the form of a list of length `ncol(tt)`
+`row_values()` - Retrieves a `TableRow` object's values in the form of a list of length `ncol(tt)`
 
 `vapply(row_values(tt), '[[', i=1, numeric(1))` - Will retrieve the first element from each cell provided `tt` is a TableRow (and the first element is a numeric value).
 
-`obj_name` - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is) when printing. This will match the element in the path.
+`obj_name()` - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is) when printing. This will match the element in the path.
 
-`obj_label` - Retrieves the display label of an object. Note this can differ from the name that appears in the path.
+`obj_label()` - Retrieves the display label of an object. Note this can differ from the name that appears in the path.
 
 ## Example Custom Scoring Functions
 

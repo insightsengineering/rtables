@@ -29,7 +29,7 @@ In this vignette we would like to discuss the similarities and differences betwe
 
 Much of the `rtables` framework focuses on tabulation/summarizing of data and then the visualization of the table. In this vignette we focus on summarizing data using `dplyr` and contrast it to `rtables`. We won't pay attention to the table visualizaion/markup and just derive the cell content.
 
-Using `dplyr` to summarize data and `gt` to visualize the table is a good way if the tabulation is of a certain nature or complexity. However, there are tables such as the table created in the `introduction` vignette that take some effort to create with `dplyr`. Part of the effort is due to fact that when using dplyr the table data is stored in `data.frame`s or `tibble`s which is not the most natural way to represent a table as we will show in this vignette.
+Using `dplyr` to summarize data and `gt` to visualize the table is a good way if the tabulation is of a certain nature or complexity. However, there are tables such as the table created in the [`introduction`](https://roche.github.io/rtables/articles/introduction.html) vignette that take some effort to create with `dplyr`. Part of the effort is due to fact that when using dplyr the table data is stored in `data.frame`s or `tibble`s which is not the most natural way to represent a table as we will show in this vignette.
 
 If you know a more elegant way of deriving the table content with `dplyr` please let us know and we will update the vignette.
 
@@ -39,7 +39,7 @@ library(rtables)
 library(dplyr)
 ```
 
-Here is table and data used in the `introduction` vignette:
+Here is table and data used in the [`introduction`](https://roche.github.io/rtables/articles/introduction.html) vignette:
 
 ```{r}
 n <- 400
@@ -71,7 +71,7 @@ basic_table() %>%
 
 ## Getting Started
 
-We will start by deriving the first data cell on row 3 (note, row 1 and 2 have content cells, see the `introduction` vignette). Cell 3,1 contains the mean age for left handed & female Canadians in "Arm A":
+We will start by deriving the first data cell on row 3 (note, row 1 and 2 have content cells, see the [`introduction`](https://roche.github.io/rtables/articles/introduction.html) vignette). Cell 3,1 contains the mean age for left handed & female Canadians in "Arm A":
 
 
 ```{r}
@@ -149,7 +149,7 @@ c_df <- df %>%
 c_df
 ```
 
-Finally, we `left_join` the two levels of summary to get a data.frame containing the full
+Finally, we `left_join()` the two levels of summary to get a data.frame containing the full
 set of values which make up the body of our table (note, however, they are not in the same order):
 
 ```{r}
@@ -157,10 +157,10 @@ full_dplyr <- left_join(c_h_df, c_df) %>% ungroup
 ```
 
 Alternatively, we could calculate only the counts in `c_h_df`, and use
-`mutate` after the `left_join` to divide the counts by the `n_col`
+`mutate()` after the `left_join()` to divide the counts by the `n_col`
 values which are more naturally calculated within `c_df`. This would
 simplify `c_h_df`'s creation somewhat by not requiring the explicit
-`ungroup`, but it prevents each level of summarization from being a
+`ungroup()`, but it prevents each level of summarization from being a
 self-contained set of computations.
 
 
@@ -224,4 +224,4 @@ In this vignette learned that:
 * if tables have group summaries then repeating of information is required
 * `rtables` streamlines the construction of complex tables
 
-We recommend that you continue reading the `clinical_trials` vignette where we create a number of more advanced tables using layouts.
+We recommend that you continue reading the [`clinical_trials`](https://roche.github.io/rtables/articles/clinical_trials.html) vignette where we create a number of more advanced tables using layouts.
