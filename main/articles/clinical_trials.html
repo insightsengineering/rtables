@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2022-11-11</h4>
+            <h4 data-toc-skip class="date">2022-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/clinical_trials.Rmd" class="external-link"><code>vignettes/clinical_trials.Rmd</code></a></small>
       <div class="d-none name"><code>clinical_trials.Rmd</code></div>
@@ -120,9 +114,9 @@ R package.</p>
 </h2>
 <p>Demographic tables summarize the variables content for different
 population subsets (encoded in the columns).</p>
-<p>One feature of <code>analyze</code> that we have not introduced in
+<p>One feature of <code><a href="../reference/analyze.html">analyze()</a></code> that we have not introduced in
 the previous vignette is that the analysis function <code>afun</code>
-can specify multiple rows with the <code>in_rows</code> function:</p>
+can specify multiple rows with the <code><a href="../reference/in_rows.html">in_rows()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span>  <span class="co"># Example ADSL dataset</span></span>
 <span></span>
@@ -139,7 +133,7 @@ can specify multiple rows with the <code>in_rows</code> function:</p>
 <span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
 <span><span class="co"># Range       21.00 - 50.00   21.00 - 62.00   20.00 - 69.00</span></span></code></pre>
-<p>Multiple variables can be analyzed in one <code>analyze</code>
+<p>Multiple variables can be analyzed in one <code><a href="../reference/analyze.html">analyze()</a></code>
 call:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -223,7 +217,7 @@ table:</p>
 <span><span class="co">#   M                       51              55               60      </span></span>
 <span><span class="co">#   U                        3               2               4       </span></span>
 <span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
-<p>Note that <code>analyze</code> can also be called multiple times in
+<p>Note that <code><a href="../reference/analyze.html">analyze()</a></code> can also be called multiple times in
 sequence:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -253,7 +247,7 @@ sequence:</p>
 often referred to as <code>N</code> (rather than the overall population
 which outside of clinical trials is commonly referred to as
 <code>N</code>). Column <code>N</code>s are added using the
-<code>add_colcounts</code> function:</p>
+<code><a href="../reference/add_colcounts.html">add_colcounts()</a></code> function:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARMCD"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -412,9 +406,9 @@ still show up in the table. This is because tabulation respects the
 factor levels and level order, exactly as the <code>split</code> and
 <code>table</code> function do. If empty levels should be dropped then
 <code>rtables</code> needs to know that at splitting time via the
-<code>split_fun</code> argument in <code>split_rows_by</code>. There are
-a number of predefined functions. For this example
-<code>drop_split_levels</code> is required to drop the empty levels at
+<code>split_fun</code> argument in <code><a href="../reference/split_rows_by.html">split_rows_by()</a></code>. There
+are a number of predefined functions. For this example
+<code><a href="../reference/split_funcs.html">drop_split_levels()</a></code> is required to drop the empty levels at
 splitting time. Splitting is a big topic and will be eventually
 addressed in a specific package vignette.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -489,8 +483,7 @@ not very descriptive. You can add the full labels as follows:</p>
 <span><span class="co">#     HIGH             15              14               26</span></span></code></pre>
 <p>For the next table variation we only stratify by gender for the
 <code>AGE</code> analysis. To do this the <code>nested</code> argument
-has to be set to <code>FALSE</code> in the <code>analyze</code>
-call:</p>
+has to be set to <code>FALSE</code> in <code><a href="../reference/analyze.html">analyze()</a></code> call:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -560,8 +553,8 @@ missing data to the <code>AGE</code> variable:</p>
 <p>Here it is not easy to see how many females and males there are in
 each arm as <code>n</code> represents the number of non-missing data
 elements in the variables. Groups within rows that are defined by
-splitting can be summarized with <code>summarize_row_groups</code>, for
-example:</p>
+splitting can be summarized with <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code>,
+for example:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -597,7 +590,7 @@ the content rows are by default repeated if a group gets divided via
 pagination.</li>
 <li>Conceptually the content rows summarize the patient population which
 is analyzed and hence are often the count &amp; group percentages
-(default behavior of <code>summarize_row_groups</code>).</li>
+(default behavior of <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code>).</li>
 </ul>
 <p>We can recreate this default behavior (count percentage) by defining
 a <code>cfun</code> for illustrative purposes here as it results in the
@@ -633,7 +626,7 @@ same table as above:</p>
 <span><span class="co">#   Y                67              63               65      </span></span>
 <span><span class="co">#   N                63              69               61</span></span></code></pre>
 <p>Note that <code>cfun</code>, like <code>afun</code> (which is used in
-<code>analyze</code>), can operate on either variables, passed via the
+<code><a href="../reference/analyze.html">analyze()</a></code>), can operate on either variables, passed via the
 <code>x</code> argument, or <code>data.frame</code>s or
 <code>tibble</code>s, which are passed via the <code>df</code> argument
 (<code>afun</code> can optionally request <code>df</code> too). Unlike
@@ -842,9 +835,9 @@ by ID.</p>
 <span><span class="co"># 1 Total number of patients with at least one event</span></span>
 <span><span class="co"># 2                           Total number of events</span></span></code></pre>
 <p>The <code>.N_col</code> argument is a special keyword argument by
-which <code>build_table</code> passes the population size for each
+which <code><a href="../reference/build_table.html">build_table()</a></code> passes the population size for each
 respective column. For a list of keyword arguments for the functions
-passed to <code>afun</code> in <code>analyze</code> refer to the
+passed to <code>afun</code> in <code><a href="../reference/analyze.html">analyze()</a></code> refer to the
 documentation with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
 <p>We now use the <code>s_events_patients</code> summary function in a
 tabulation:</p>
@@ -867,7 +860,7 @@ the number of patients per column/arm which is usually taken from
 <code>ADSL</code> (var <code>ADSL2</code> here).</p>
 <p><code>rtables</code> handles this by allowing us to override how the
 column counts are computed. We can specify an <code>alt_counts_df</code>
-in <code>build_table</code>. When we do this, <code>rtables</code>
+in <code><a href="../reference/build_table.html">build_table()</a></code>. When we do this, <code>rtables</code>
 calculates the column counts by applying the same column faceting to
 <code>alt_counts_df</code> as it does to the primary data during
 tabulation:</p>
@@ -880,7 +873,7 @@ tabulation:</p>
 <span><span class="co"># Total number of events                                 2060           1058</span></span></code></pre>
 <p>Alternatively, if the desired column counts are already calculated,
 they can be specified directly via the <code>col_counts</code> argument
-to <code>build_table</code>, though specifying an
+to <code><a href="../reference/build_table.html">build_table()</a></code>, though specifying an
 <code>alt_counts_df</code> is the preferred mechanism.</p>
 <p>We next calculate this information per system organ class:</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
@@ -909,7 +902,7 @@ to <code>build_table</code>, though specifying an
 <span><span class="co">#   Total number of patients with at least one event   93 (63.70%)    75 (48.70%) </span></span>
 <span><span class="co">#   Total number of events                                 240            122</span></span></code></pre>
 <p>We now have to add a count table of <code>AEDECOD</code> for each
-<code>AEBODSYS</code>. The default <code>analyze</code> behavior for a
+<code>AEBODSYS</code>. The default <code><a href="../reference/analyze.html">analyze()</a></code> behavior for a
 factor is to create the count table per level (using
 <code>rtab_inner</code>):</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
@@ -1098,7 +1091,7 @@ to write a custom analysis function:</p>
 <span><span class="co">#     ORTHOSTATIC HYPOTENSION                                 49             44     </span></span>
 <span><span class="co">#     WEAKNESS                                                0              0</span></span></code></pre>
 <p>Note that we are missing the overall summary in the first two rows.
-This can be added with an initial <code>analyze</code> call.</p>
+This can be added with an initial <code><a href="../reference/analyze.html">analyze()</a></code> call.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1175,7 +1168,7 @@ This can be added with an initial <code>analyze</code> call.</p>
 <span><span class="co">#     ORTHOSTATIC HYPOTENSION                                 49             44     </span></span>
 <span><span class="co">#     WEAKNESS                                                0              0</span></span></code></pre>
 <p>Finally, if we wanted to prune the 0 count rows we can do that with
-the <code>trim_rows</code> function:</p>
+the <code><a href="../reference/trim_rows.html">trim_rows()</a></code> function:</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
@@ -1651,8 +1644,8 @@ parts:</p>
 <span><span class="co"># Responders       114.00 (85.07%)   90.00 (67.16%)   120.00 (90.91%)</span></span>
 <span><span class="co"># Non-Responders   20.00 (14.93%)    44.00 (32.84%)    12.00 (9.09%)</span></span></code></pre>
 <p>Note that we did set the <code>ref_group</code> argument in
-<code>split_cols_by</code> which for the current table had no effect as
-we only use the cell data for the responder and non-responder counts.
+<code><a href="../reference/split_cols_by.html">split_cols_by()</a></code> which for the current table had no effect
+as we only use the cell data for the responder and non-responder counts.
 The <code>ref_group</code> argument is needed for the part 2 and 3 of
 the table.</p>
 <p>We will now look the implementation of part 2: unstratified analysis

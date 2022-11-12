@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2022-11-11</h4>
+            <h4 data-toc-skip class="date">2022-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/sorting_pruning.Rmd" class="external-link"><code>vignettes/sorting_pruning.Rmd</code></a></small>
       <div class="d-none name"><code>sorting_pruning.Rmd</code></div>
@@ -307,7 +301,7 @@ contains all zeros or all <code>NA</code>s</li>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<p>We can also use the <code>low_obs_pruner</code> pruning function
+<p>We can also use the <code><a href="../reference/trim_prune_funs.html">low_obs_pruner()</a></code> pruning function
 constructor to create a pruning function which removes subtrees with
 content summaries whose first entries for each column sum or average are
 below a specified number. (In the default summaries the first entry per
@@ -555,20 +549,21 @@ the structure of the objects more than usual.</p>
 <div class="section level3">
 <h3 id="useful-functions-and-accessors">Useful Functions and Accessors<a class="anchor" aria-label="anchor" href="#useful-functions-and-accessors"></a>
 </h3>
-<p><code>content_table</code> - Retrieves a <code>TableTree</code>
+<p><code><a href="../reference/content_table.html">content_table()</a></code> - Retrieves a <code>TableTree</code>
 object’s content table (which contains its summary rows).</p>
-<p><code>tree_children</code> - Retrieves a <code>TableTree</code>
+<p><code><a href="../reference/tree_children.html">tree_children()</a></code> - Retrieves a <code>TableTree</code>
 object’s children (either subtables, rows or possibly a mix thereof,
 though that should not happen in practice)</p>
-<p><code>row_values</code> - Retrieves a <code>TableRow</code> object’s
-values in the form of a list of length <code>ncol(tt)</code></p>
+<p><code><a href="../reference/row_accessors.html">row_values()</a></code> - Retrieves a <code>TableRow</code>
+object’s values in the form of a list of length
+<code>ncol(tt)</code></p>
 <p><code>vapply(row_values(tt), '[[', i=1, numeric(1))</code> - Will
 retrieve the first element from each cell provided <code>tt</code> is a
 TableRow (and the first element is a numeric value).</p>
-<p><code>obj_name</code> - Retrieves the name of an object. Note this
+<p><code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this
 can differ from the label that is displayed (if any is) when printing.
 This will match the element in the path.</p>
-<p><code>obj_label</code> - Retrieves the display label of an object.
+<p><code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_label()</a></code> - Retrieves the display label of an object.
 Note this can differ from the name that appears in the path.</p>
 </div>
 <div class="section level3">

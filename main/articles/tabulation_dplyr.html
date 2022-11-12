@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2022-11-11</h4>
+            <h4 data-toc-skip class="date">2022-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/tabulation_dplyr.Rmd" class="external-link"><code>vignettes/tabulation_dplyr.Rmd</code></a></small>
       <div class="d-none name"><code>tabulation_dplyr.Rmd</code></div>
@@ -104,18 +98,19 @@ table visualizaion/markup and just derive the cell content.</p>
 <p>Using <code>dplyr</code> to summarize data and <code>gt</code> to
 visualize the table is a good way if the tabulation is of a certain
 nature or complexity. However, there are tables such as the table
-created in the <code>introduction</code> vignette that take some effort
-to create with <code>dplyr</code>. Part of the effort is due to fact
-that when using dplyr the table data is stored in
-<code>data.frame</code>s or <code>tibble</code>s which is not the most
-natural way to represent a table as we will show in this vignette.</p>
+created in the <a href="https://roche.github.io/rtables/articles/introduction.html" class="external-link"><code>introduction</code></a>
+vignette that take some effort to create with <code>dplyr</code>. Part
+of the effort is due to fact that when using dplyr the table data is
+stored in <code>data.frame</code>s or <code>tibble</code>s which is not
+the most natural way to represent a table as we will show in this
+vignette.</p>
 <p>If you know a more elegant way of deriving the table content with
 <code>dplyr</code> please let us know and we will update the
 vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/roche/rtables" class="external-link">rtables</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<p>Here is table and data used in the <code>introduction</code>
+<p>Here is table and data used in the <a href="https://roche.github.io/rtables/articles/introduction.html" class="external-link"><code>introduction</code></a>
 vignette:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">400</span></span>
@@ -161,9 +156,9 @@ vignette:</p>
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
 <p>We will start by deriving the first data cell on row 3 (note, row 1
-and 2 have content cells, see the <code>introduction</code> vignette).
-Cell 3,1 contains the mean age for left handed &amp; female Canadians in
-“Arm A”:</p>
+and 2 have content cells, see the <a href="https://roche.github.io/rtables/articles/introduction.html" class="external-link"><code>introduction</code></a>
+vignette). Cell 3,1 contains the mean age for left handed &amp; female
+Canadians in “Arm A”:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">handed</span> <span class="op">==</span> <span class="st">"Left"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [1] 38.86979</span></span></code></pre>
@@ -320,19 +315,20 @@ countries:</p>
 <span><span class="co"># <span style="color: #BCBCBC;">6</span> Arm B Female USA          46    92     0.5  </span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">7</span> Arm B Male   CAN          62   107     0.579</span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">8</span> Arm B Male   USA          45   107     0.421</span></span></code></pre>
-<p>Finally, we <code>left_join</code> the two levels of summary to get a
-data.frame containing the full set of values which make up the body of
+<p>Finally, we <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code> the two levels of summary to get
+a data.frame containing the full set of values which make up the body of
 our table (note, however, they are not in the same order):</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">full_dplyr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">c_h_df</span>, <span class="va">c_df</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">ungroup</span></span></code></pre></div>
 <pre><code><span><span class="co"># Joining, by = c("arm", "gender", "country", "n_col")</span></span></code></pre>
 <p>Alternatively, we could calculate only the counts in
-<code>c_h_df</code>, and use <code>mutate</code> after the
-<code>left_join</code> to divide the counts by the <code>n_col</code>
+<code>c_h_df</code>, and use <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> after the
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code> to divide the counts by the <code>n_col</code>
 values which are more naturally calculated within <code>c_df</code>.
 This would simplify <code>c_h_df</code>’s creation somewhat by not
-requiring the explicit <code>ungroup</code>, but it prevents each level
-of summarization from being a self-contained set of computations.</p>
+requiring the explicit <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code>, but it prevents each
+level of summarization from being a self-contained set of
+computations.</p>
 <p>The <code>rtables</code> call in contrast is:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -416,9 +412,9 @@ required</li>
 <code>rtables</code> streamlines the construction of complex
 tables</li>
 </ul>
-<p>We recommend that you continue reading the
-<code>clinical_trials</code> vignette where we create a number of more
-advanced tables using layouts.</p>
+<p>We recommend that you continue reading the <a href="https://roche.github.io/rtables/articles/clinical_trials.html" class="external-link"><code>clinical_trials</code></a>
+vignette where we create a number of more advanced tables using
+layouts.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
