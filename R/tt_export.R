@@ -119,7 +119,7 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 }
 
 .need_pag <- function(page_type, pg_width, pg_height, cpp, lpp) {
-    !(is.null(page_type) && is.null(page_width) && is.null(pg_height) && is.null(cpp) && is.null(lpp))
+    !(is.null(page_type) && is.null(pg_width) && is.null(pg_height) && is.null(cpp) && is.null(lpp))
 
 }
 #' Export as plain text with page break symbol
@@ -307,11 +307,13 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
         flx <- flextable::add_footer_lines(flx, values = matform$ref_footnotes)
     }
 
-    if(length(all_titles(tt)) > 0) {
+    if(length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
+        real_titles <- all_titles(tt)
+        real_titles <- real_titles[nzchar(real_titles)]
         flx <- flextable::hline(flx, i = 1L,
                                 border = officer::fp_border(), part = "header")
         ## rev is because add_header_lines(top=TRUE) seems to put them in backwards!!! AAHHHH
-        flx <- flextable::add_header_lines(flx, values = rev(all_titles(tt)),
+        flx <- flextable::add_header_lines(flx, values = rev(real_titles),
                                            top = TRUE)
     }
 
