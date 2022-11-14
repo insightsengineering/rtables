@@ -170,3 +170,26 @@ test_that("Pagination works with non-default min_siblings", {
         "Unable to find any valid pagination between 1 and 1"
     )
 })
+
+test_that("Pagination works with wrapped titles/footers", {
+    lyt <- basic_table() %>%
+        split_cols_by("SEX") %>%
+        analyze("RACE")
+    
+    tt <- build_table(lyt, DM)
+    
+    main_title(tt) <- "title with a\nnewline"
+    main_footer(tt) <- "wrapped footer with\nnewline"
+    
+    res <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
+    expect_identical(main_title(res[[1]]), main_title(res[[2]]))
+    expect_identical(main_title(res[[1]]), main_title(tt))
+    expect_identical(main_footer(res[[1]]), main_footer(res[[2]]))
+    expect_identical(main_footer(res[[1]]), main_footer(tt))
+    
+    main_title(tt) <- "this is a long long table title that should be wrapped to a new line"
+    main_footer(tt) <- "this is an extra long table main footer and should also be wrapped"
+    
+    expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
+})
+
