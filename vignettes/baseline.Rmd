@@ -93,9 +93,8 @@ You can see which arguments are available for `afun` in the manual fro `analyze`
 When adding row-splitting the reference data might be one represented by the column with or without row splitting. For example:
 
 ```{r}
-basic_table() %>%
+basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels) %>%
   analyze("AGE", afun = function(x, .ref_group, .ref_full, .in_ref_col) {
     in_rows(

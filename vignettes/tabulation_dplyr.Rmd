@@ -56,10 +56,9 @@ df <- tibble(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
 )
 
-basic_table() %>%
+basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
@@ -167,10 +166,9 @@ self-contained set of computations.
 The `rtables` call in contrast is:
 
 ```{r}
-tbl <- basic_table() %>%
+tbl <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%

@@ -75,10 +75,9 @@ Note that we use factors variables so that the level order is represented in the
 The aim of this vignette is to build the following table step by step:
 
 ```{r, echo=FALSE}
-basic_table() %>%
+basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%

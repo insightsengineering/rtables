@@ -114,10 +114,9 @@ biomarker_ave <- function(x, ...) {
      )
 }
 
-basic_table() %>%
+basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_cols_by("BMRKR2") %>%
-  add_colcounts() %>%
   split_rows_by("RACE", split_fun = trim_levels_in_group("SEX")) %>%
   split_rows_by("SEX") %>%
   summarize_row_groups() %>%
