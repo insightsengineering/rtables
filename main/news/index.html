@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -54,8 +48,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.3.1" id="rtables-0531">rtables 0.5.3.1<a class="anchor" aria-label="anchor" href="#rtables-0531"></a></h2>
-<ul><li>placeholder</li>
+<h2 class="pkg-version" data-toc-text="0.5.3.2" id="rtables-0532">rtables 0.5.3.2<a class="anchor" aria-label="anchor" href="#rtables-0532"></a></h2>
+<ul><li>
+<code>paginate_table</code> now accepts <code>colwidths</code> and paginates assuming column label and cell values are wrapped to those widths.</li>
+<li>
+<code>make_row_df</code> now accepts <code>colwidths</code> and calculates row extents assuing cell values are wrapped to those widths</li>
+<li>
+<code>nlines</code> <code>TableRow</code> method now uses provided <code>colwidths</code> to assume cell-value wrapping</li>
+<li>
+<code>export_to_txt</code> now automatically paginates when any form of page dimension is provided (previously the default was unconditionally not paginating).</li>
+<li>depend on <code>formatters</code> <code>&gt;=0.3.4.5</code> for cell-value wrapping</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.3" id="rtables-053">rtables 0.5.3<a class="anchor" aria-label="anchor" href="#rtables-053"></a></h2>

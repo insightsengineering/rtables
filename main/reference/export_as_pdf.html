@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -80,6 +74,7 @@
 <span>  indent_size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  tf_wrap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  max_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colwidths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/propose_column_widths.html" class="external-link">propose_column_widths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span><span class="va">tt</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -147,7 +142,7 @@ text (in points)</p></dd>
 
 
 <dt>paginate</dt>
-<dd><p>logical(1). Should <code>tt</code> be paginated before writing the file.</p></dd>
+<dd><p>logical(1). Should <code>tt</code> be paginated before writing the file. Defaults to <code>TRUE</code> if any sort of page dimension is specified.</p></dd>
 
 
 <dt>lpp</dt>
@@ -184,6 +179,10 @@ word-wrapped to. If NULL, it is  set to the current print width
 of the  session (`getOption("width")`). If set to `"auto"`,
 the width of the table (plus any table inset) is used. Ignored
 completely if `tf_wrap` is `FALSE`.</p></dd>
+
+
+<dt>colwidths</dt>
+<dd><p>numeric vector. Column widths for use with vertical pagination.</p></dd>
 
 
 <dt>...</dt>

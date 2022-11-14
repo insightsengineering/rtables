@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -69,15 +63,16 @@
 <span>  pg_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/page_types.html" class="external-link">page_dim</a></span><span class="op">(</span><span class="va">page_type</span><span class="op">)</span><span class="op">[</span><span class="kw">if</span> <span class="op">(</span><span class="va">landscape</span><span class="op">)</span> <span class="fl">1</span> <span class="kw">else</span> <span class="fl">2</span><span class="op">]</span>,</span>
 <span>  font_family <span class="op">=</span> <span class="st">"Courier"</span>,</span>
 <span>  font_size <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  paginate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  paginate <span class="op">=</span> <span class="fu">.need_pag</span><span class="op">(</span><span class="va">page_type</span>, <span class="va">pg_width</span>, <span class="va">pg_height</span>, <span class="va">lpp</span>, <span class="va">cpp</span><span class="op">)</span>,</span>
 <span>  cpp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lpp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  page_break <span class="op">=</span> <span class="st">"\\s\\n"</span>,</span>
 <span>  hsep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/default_hsep.html" class="external-link">default_hsep</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  indent_size <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  tf_wrap <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cpp</span><span class="op">)</span>,</span>
-<span>  max_width <span class="op">=</span> <span class="va">cpp</span></span>
+<span>  tf_wrap <span class="op">=</span> <span class="va">paginate</span>,</span>
+<span>  max_width <span class="op">=</span> <span class="va">cpp</span>,</span>
+<span>  colwidths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/propose_column_widths.html" class="external-link">propose_column_widths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span><span class="va">tt</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -123,7 +118,7 @@ to Courier.</p></dd>
 
 
 <dt>paginate</dt>
-<dd><p>logical(1). Should <code>tt</code> be paginated before writing the file.</p></dd>
+<dd><p>logical(1). Should <code>tt</code> be paginated before writing the file. Defaults to <code>TRUE</code> if any sort of page dimension is specified.</p></dd>
 
 
 <dt>cpp</dt>
@@ -169,12 +164,22 @@ of the  session (`getOption("width")`). If set to `"auto"`,
 the width of the table (plus any table inset) is used. Ignored
 completely if `tf_wrap` is `FALSE`.</p></dd>
 
+
+<dt>colwidths</dt>
+<dd><p>numeric vector. Column widths for use with vertical pagination.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
 <p><code>file</code> (this function is called for the side effect of writing the file.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>When specified, <code>font_size</code> is used <em>only</em> to determine pagination based
+on page dimensions. The written file is populated in raw ASCII text, which
+does not have the concept of font size.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
