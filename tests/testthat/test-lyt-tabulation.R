@@ -252,13 +252,12 @@ test_that("ref_group comparisons work", {
         "A_", "Arm 1", c("A: Drug X"), list(),
         "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
 
-    l3 <- basic_table() %>%
+    l3 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(
             "ARM",
             split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C")),
             ref_group = "A_"
         ) %>%
-        add_colcounts() %>%
         analyze(c("AGE", "AGE"), afun = list(mean, refcompmean),
                 show_labels = "hidden", table_names = c("AGE1", "AGE2"))
     bltab3 <- build_table(l3, DM)
@@ -385,9 +384,8 @@ test_that("cfun args", {
 ## regression test for automatically not-nesting
 ## when a non-analyze comes after an analyze
 test_that("split under analyze", {
-    dontnest <- basic_table() %>%
+    dontnest <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(var = "ARM") %>%
-        add_colcounts() %>%
         analyze("AGE") %>%
         split_rows_by("VAR3") %>%
         analyze("AGE") %>%
@@ -397,17 +395,15 @@ test_that("split under analyze", {
 
 
 test_that("label_var works as expected", {
-    yeslblslyt <- basic_table() %>%
+    yeslblslyt <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(var = "ARM") %>%
-        add_colcounts() %>%
         split_rows_by("SEX", labels_var = "gend_label") %>%
         analyze("AGE")
     yeslbls <- build_table(yeslblslyt, rawdat)
     expect_identical(row.names(yeslbls)[1], "Male")
 
-    nolbls <- basic_table() %>%
+    nolbls <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(var = "ARM") %>%
-        add_colcounts() %>%
         split_rows_by("SEX") %>%
         analyze("AGE") %>%
         build_table(rawdat)
@@ -548,8 +544,7 @@ test_that("extra args works", {
 
 
 test_that("Colcounts work correctly", {
-    lyt1 <- basic_table() %>%
-        add_colcounts() %>%
+    lyt1 <- basic_table(show_colcounts = TRUE) %>%
         analyze("AGE")
     tbl1 <- build_table(lyt1, DM)
 
@@ -766,9 +761,8 @@ test_that("analyze_colvars works generally", {
 test_that("alt_counts_df works", {
     minidm <- DM[1, ]
 
-    lyt <- basic_table() %>%
+    lyt <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
-        add_colcounts() %>%
         split_rows_by("SEX") %>%
         summarize_row_groups() %>%
         analyze("AGE")
@@ -789,24 +783,22 @@ test_that("alt_counts_df works", {
 
 
 test_that("deeply nested and uneven column layouts work", {
-    lyt <- basic_table() %>%
+    lyt <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(var = "ARM") %>%
         split_cols_by("STRATA1") %>%
         split_cols_by("STRATA2") %>%
         add_overall_col("All Patients") %>%
-        add_colcounts() %>%
         analyze("AGE")
     tbl <- build_table(lyt, ex_adsl)
     ## printing machinery works
     str <- toString(tbl)
     expect_identical(ncol(tbl), 19L)
 
-    lyt2 <- basic_table() %>%
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
         split_cols_by("STRATA1") %>%
         split_cols_by("STRATA2", nested = FALSE) %>%
         add_overall_col("All Patients") %>%
-        add_colcounts() %>%
         analyze("AGE")
     tbl2 <- build_table(lyt2, ex_adsl)
 
@@ -821,7 +813,7 @@ test_that("deeply nested and uneven column layouts work", {
 
 test_that("topleft label position works", {
 
-    lyt <- basic_table() %>%
+    lyt <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
         ## add nested column split on SEX with value lables from gend_label
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
@@ -829,7 +821,6 @@ test_that("topleft label position works", {
         ## a root split and puts summary content on it labelled Overall (N)
         ## add_colby_total(label = "All") %>%
         ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
-        add_colcounts() %>%
         ## add a new subtable that splits on RACE, value labels from ethn_label
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
         summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -1029,9 +1020,8 @@ test_that("cut functions work", {
 
     tbl3c_cm <- build_table(l3c_cm, ex_adsl)
     # split_rows_by_quartiles
-    l4 <- basic_table() %>%
+    l4 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
-        add_colcounts() %>%
         split_rows_by_quartiles("AGE", split_label = "Age") %>%
         analyze("BMRKR2") %>%
         append_topleft(c("Age Quartiles", " Counts BMRKR2"))
@@ -1048,9 +1038,8 @@ test_that("cut functions work", {
     expect_identical(valslst3,
                      valslst4[names(valslst3)])
 
-    l4cm <- basic_table() %>%
+    l4cm <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
-        add_colcounts() %>%
         split_rows_by_quartiles("AGE", split_label = "Age", cumulative = TRUE) %>%
         analyze("BMRKR2") %>%
         append_topleft(c("Age Cumulative Quartiles", " Counts BMRKR2"))

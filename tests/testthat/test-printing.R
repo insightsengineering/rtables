@@ -2,9 +2,8 @@ context("Printing tables")
 
 test_that("toString method works correclty", {
 
-    tbl <- basic_table() %>%
+    tbl <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("Species") %>%
-        add_colcounts() %>%
         analyze(c("Sepal.Length", "Petal.Width"), function(x) {
             in_rows(
                 mean_sd = c(mean(x), sd(x)),
@@ -129,10 +128,9 @@ test_that("newline in column names and possibly cell values work", {
     rawdat2 <- rawdat
     rawdat2$arm_label <- ifelse(rawdat2$ARM == "ARM1", "Arm\n 1 ", "Arm\n 2 ")
 
-    lyt2 <- basic_table() %>%
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", labels_var = "arm_label") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        add_colcounts() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
         split_rows_by("FACTOR2", "Factor2",
                       split_fun = remove_split_levels("C"),

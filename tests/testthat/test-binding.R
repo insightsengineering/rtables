@@ -168,16 +168,14 @@ test_that("equivalent split funs withs differrent environments dont' block rbind
         "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
         "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 
-    l1 <- basic_table() %>%
+    l1 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-        add_colcounts() %>%
         analyze("AGE")
 
     tab1 <- build_table(l1, DM)
 
-    l2 <- basic_table() %>%
+    l2 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-        add_colcounts() %>%
         analyze("SEX")
 
     tab2 <- build_table(l2, DM)

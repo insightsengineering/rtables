@@ -337,9 +337,8 @@ test_that("column labeling works correctly when value label var is a factor", {
 ## pathing regression tests
 test_that("pathing works", {
     ## issue https://github.com/Roche/rtables/issues/172
-    result_overall <- basic_table() %>%
+    result_overall <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
-        add_colcounts() %>%
         add_overall_col("overall") %>%
         analyze(c("AGE", "SEX")) %>%
         build_table(ex_adsl)
