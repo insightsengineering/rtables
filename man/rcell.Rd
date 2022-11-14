@@ -46,8 +46,9 @@ corresponds to the unmodified default behavior.}
 
 \item{footnotes}{list or NULL. Referential footnote messages for the cell.}
 
-\item{align}{character(1). Alignment the value should be rendered with. See
-\code{\link{rtables_aligns}} for currently supported alignments.}
+\item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+for currently supported alignments.}
 
 \item{format_na_str}{character(1). String which should be displayed when
 formatted if this cell's value(s) are all NA.}

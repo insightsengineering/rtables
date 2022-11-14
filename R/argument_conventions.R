@@ -103,8 +103,9 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param format FormatSpec. Format associated with this split. Formats can be
 #'   declared via strings (\code{"xx.x"}) or function. In cases such as
 #'   \code{analyze} calls, they can character vectors or lists of functions.
-#' @param align character(1). Alignment the value should be rendered with. See
-#'   \code{\link{rtables_aligns}} for currently supported alignments.
+#' @param align character(1) or `NULL`. Alignment the value should be rendered with.
+#'   It defaults to `"center"` if `NULL` is used. See \code{\link{rtables_aligns}} 
+#'   for currently supported alignments.
 #' @param cfun list/function/NULL. tabulation function(s) for creating content
 #'   rows. Must accept \code{x} or \code{df} as first parameter. Must accept
 #'   \code{labelstr} as the second argument. Can optionally accept all optional
