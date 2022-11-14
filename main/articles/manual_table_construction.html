@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -96,7 +90,7 @@ Waddell</h4>
 </h2>
 <p>The main functions currently associated with <code>rtable</code>s
 are</p>
-<p>Tables in rtables can be constructed via the layout or
+<p>Tables in <code>rtables</code> can be constructed via the layout or
 <code>rtabulate</code> tabulation frameworks or also manually. Currently
 manual table construction is the only way to define column spans. The
 main functions for manual table constructions are:</p>
@@ -194,7 +188,8 @@ content.</p>
 <span><span class="co"># A   104 (20.00%)</span></span></code></pre>
 <p>and to format that cell run <code>format_rcell(tbl[1,1])</code>=.</p>
 <p>Note that <code>tbl[6, 1]</code> and <code>tbl[6, 2]</code> display
-both the same <code>rcell</code> because of the colspan.</p>
+both the same <code>rcell</code> because of the
+<code>colspan</code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

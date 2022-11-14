@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -317,7 +311,7 @@ row space):</p>
 <span><span class="co"># USA                                   </span></span>
 <span><span class="co">#   mean    39.2    39.7    38.9    39.6</span></span></code></pre>
 <p>In this table the data used to derive the first data cell (average of
-age of female canadians in Arm A) is where
+age of female Canadians in Arm A) is where
 <code>df$country == "CAN" &amp; df$arm == "Arm A" &amp; df$gender == "Female"</code>.
 This cell value can also be calculated manually:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -424,7 +418,7 @@ within each country:</p>
 <div class="section level2">
 <h2 id="introspecting-rtables-table-objects">Introspecting <code>rtables</code> Table Objects<a class="anchor" aria-label="anchor" href="#introspecting-rtables-table-objects"></a>
 </h2>
-<p>Once we have createad a table, we can inspect its structure using a
+<p>Once we have created a table, we can inspect its structure using a
 number of functions.</p>
 <p>The <code><a href="../reference/table_structure.html">table_structure()</a></code> function prints a summary of a
 table’s row structure at one of two levels of detail. By default, it
@@ -579,7 +573,7 @@ visible rows:</p>
 <span><span class="co"># 27 Right         Right             9 country,....      ContentRow</span></span>
 <span><span class="co"># 28                 age            NA country,.... ElementaryTable</span></span>
 <span><span class="co"># 29  mean          mean            10 country,....         DataRow</span></span></code></pre>
-<p><code><a href="../reference/make_col_df.html">make_col_df()</a></code> similary accepts
+<p><code><a href="../reference/make_col_df.html">make_col_df()</a></code> similarly accepts
 <code>visible_only</code>, though here the meaining is slightly
 different, indicating whether only <em>leaf</em> columns should be
 summarized (<code>TRUE</code>, the default) or whether higher level

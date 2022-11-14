@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -271,7 +265,7 @@ complex, as it takes structure into account.</p>
 <p>Pruning is applied recursively, in that at each structural unit
 (subtable, row) it applies the pruning function both at that level and
 to all it’s children (up to a user-specifiable maximum depth).</p>
-<p>The default pruning funciton, for example, determines if a subtree is
+<p>The default pruning function, for example, determines if a subtree is
 empty by</p>
 <ol style="list-style-type: lower-alpha">
 <li>Removing all children which contain a single content row which
@@ -393,9 +387,9 @@ meaning a sort operation will occur at a particular location within the
 table, and the subtables (children) will both be reordered themselves
 and potentially have their own children reordered as well.</p>
 <p>This is done by giving a <em>score function</em> which accepts a
-subtree or TableRow and returns a single numeric value. Within the
-context currently being sorted, the subtrees are then reordered by the
-value of the score function.</p>
+subtree or <code>TableRow</code> and returns a single numeric value.
+Within the context currently being sorted, the subtrees are then
+reordered by the value of the score function.</p>
 <p>Another difference between pruning and sorting is that sorting occurs
 at particular places in the table, as defined by a path. The path can
 contain “*” to indicate that at that portion of the structure sorting
@@ -429,7 +423,7 @@ path.</p>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<p>Sort the ethnicities by observations in increasing order:</p>
+<p>Sort the ethnicity by observations in increasing order:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ethsort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">ethsort</span></span></code></pre></div>
@@ -565,7 +559,7 @@ object’s values in the form of a list of length
 <code>ncol(tt)</code></p>
 <p><code>vapply(row_values(tt), '[[', i=1, numeric(1))</code> - Will
 retrieve the first element from each cell provided <code>tt</code> is a
-TableRow (and the first element is a numeric value).</p>
+<code>TableRow</code> (and the first element is a numeric value).</p>
 <p><code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this
 can differ from the label that is displayed (if any is) when printing.
 This will match the element in the path.</p>
@@ -627,7 +621,7 @@ map as easily to layouting directives.</p>
 <h4 id="sort-by-the-percent-difference-in-counts-between-genders-in-arm-c">Sort by the Percent Difference in Counts Between Genders in Arm
 C<a class="anchor" aria-label="anchor" href="#sort-by-the-percent-difference-in-counts-between-genders-in-arm-c"></a>
 </h4>
-<p>We need the F and M percents, only for arm C (i.e. columns 5 and 6),
+<p>We need the F and M percents, only for Arm C (i.e. columns 5 and 6),
 differenced.</p>
 <p>We will sort <em><strong>the strata within each
 ethnicity</strong></em> by the percent difference in counts between
