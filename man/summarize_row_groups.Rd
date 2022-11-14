@@ -96,9 +96,9 @@ sfun <- function(x, labelstr, trim) {
     )
 }
 
-l2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+l2 <- basic_table(show_colcounts = TRUE) \%>\% 
+    split_cols_by("ARM") \%>\%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
-    add_colcounts() \%>\%
     summarize_row_groups("AGE", cfun = sfun,
                          extra_args = list(trim = .2)) \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%

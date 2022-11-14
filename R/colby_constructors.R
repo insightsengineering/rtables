@@ -580,9 +580,8 @@ split_rows_by_multivar <- function(lyt,
 #' build_table(l, ex_adsl)
 #'
 #' # split_rows_by_quartiles
-#' l <- basic_table() %>%
+#' l <- basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM") %>%
-#'     add_colcounts() %>%
 #'     split_rows_by_quartiles("AGE", split_label = "Age") %>%
 #'     analyze("BMRKR2") %>%
 #'     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
@@ -1359,9 +1358,9 @@ setMethod(".add_row_summary", "Split",
 #'     )
 #' }
 #'
-#' l2 <- basic_table() %>% split_cols_by("ARM") %>%
+#' l2 <- basic_table(show_colcounts = TRUE) %>% 
+#'     split_cols_by("ARM") %>%
 #'     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
-#'     add_colcounts() %>%
 #'     summarize_row_groups("AGE", cfun = sfun,
 #'                          extra_args = list(trim = .2)) %>%
 #'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") %>%

@@ -96,8 +96,8 @@ l <- basic_table() \%>\%
 
 build_table(l, iris)
 
-# an example more relevant for clinical trials
-l <- basic_table() \%>\%
+# an example more relevant for clinical trials with column counts
+l <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM") \%>\%
     analyze("AGE", afun = function(x) {
       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median",
@@ -107,12 +107,6 @@ l <- basic_table() \%>\%
 build_table(l, DM)
 
 build_table(l, subset(DM, AGE > 40))
-
-# with column counts
-l2 <- l \%>\%
-  add_colcounts()
-build_table(l2, DM)
-
 
 # with column counts calculated based on different data
 miniDM <- DM[sample(1:NROW(DM), 100),]

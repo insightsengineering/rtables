@@ -198,9 +198,8 @@ l <- basic_table() \%>\%
 build_table(l, ex_adsl)
 
 # split_rows_by_quartiles
-l <- basic_table() \%>\%
+l <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM") \%>\%
-    add_colcounts() \%>\%
     split_rows_by_quartiles("AGE", split_label = "Age") \%>\%
     analyze("BMRKR2") \%>\%
     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
