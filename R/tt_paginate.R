@@ -25,9 +25,13 @@ setMethod("nlines", "TableRow",
     fns <- sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width))) +
         sum(unlist(lapply(cell_footnotes(x), nlines, max_width = max_width)))
     fcells <- get_formatted_cells(x)
-    rowext <- max(vapply(strsplit(c(obj_label(x), fcells), "\n", fixed = TRUE),
-                         length,
-                         1L))
+    ## rowext <- max(vapply(strsplit(c(obj_label(x), fcells), "\n", fixed = TRUE),
+    ##                      length,
+    ##                      1L))
+    rowext <- max(unlist(mapply(function(s, w) {
+        nlines(strsplit(s, "\n", fixed = TRUE), max_width = w)
+    }, s = c(obj_label(x), fcells), w = (colwidths %||% max_width) %||% 1000L, SIMPLIFY = FALSE)))
+
     rowext + fns
 })
 

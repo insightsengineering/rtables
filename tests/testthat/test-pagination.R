@@ -47,7 +47,7 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(tt[, 1:2, keep_titles = TRUE,
                         reindex_refs = FALSE], res[[1]])
 
-    res2 <- paginate_table(tt, lpp = 75, cpp = 40)
+    res2 <- paginate_table(tt, lpp = 75, cpp = 45)
     expect_identical(length(res2), 6L)
     expect_identical(res2[[1]], tt[1:63, 1:2, keep_titles = TRUE,
                                    reindex_refs = FALSE])
@@ -63,6 +63,11 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(subtitles(tt), subtitles(res[[2]]))
     expect_identical(main_footer(tt), main_footer(res[[3]]))
     expect_identical(prov_footer(tt), prov_footer(res[[1]]))
+
+    res2b <- paginate_table(tt, lpp = 75, cpp = 45, colwidths = c(12, rep(7, times = 6)))
+    ## XXX TODO do careful analuysis to ensure this is actually right.
+    expect_identical(nrow(res2b[[1]]), 59L)
+    expect_identical(vapply(res2b, ncol, 1L), rep(3L, 4))
 
 
 
@@ -122,4 +127,13 @@ test_that("inset and pagination work together", {
   expect_identical(subtitles(tt), subtitles(res[[2]]))
   expect_identical(main_footer(tt), main_footer(res[[3]]))
   expect_identical(prov_footer(tt), prov_footer(res[[1]]))
+})
+
+test_that("cell wrapping works in pagination", {
+
+    tt <- tt_to_export()
+
+
+
+
 })

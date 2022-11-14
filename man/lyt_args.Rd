@@ -181,8 +181,9 @@ analysis. Defaults to \code{var}.}
 \item{topleft}{character. Override values for the "top left" material to be
 displayed during printing.}
 
-\item{align}{character(1). Alignment the value should be rendered with. See
-\code{\link{rtables_aligns}} for currently supported alignments.}
+\item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+for currently supported alignments.}
 
 \item{page_by}{logical(1). Should pagination be forced between different
 children resulting form this split.}

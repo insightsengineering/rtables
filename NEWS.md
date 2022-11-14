@@ -1,5 +1,12 @@
-## rtables 0.5.3.1
- * placeholder
+## rtables 0.5.3.2
+ * `paginate_table` now accepts `colwidths` and paginates assuming column label and
+   cell values are wrapped to those widths.
+ * `make_row_df` now accepts `colwidths` and calculates row extents assuing cell values
+   are wrapped to those widths
+ * `nlines` `TableRow` method now uses provided `colwidths` to assume cell-value wrapping
+ * `export_to_txt` now automatically paginates when any form of page dimension is provided
+   (previously the default was unconditionally not paginating).
+ * depend on `formatters` `>=0.3.4.5` for cell-value wrapping
  
 ## rtables 0.5.3
  * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
