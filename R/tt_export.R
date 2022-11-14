@@ -118,17 +118,24 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
     ret
 }
 
+.need_pag <- function(page_type, pg_width, pg_height, cpp, lpp) {
+    !(is.null(page_type) && is.null(page_width) && is.null(pg_height) && is.null(cpp) && is.null(lpp))
+
+}
 #' Export as plain text with page break symbol
 #'
 #' @inheritParams gen_args
 #' @inheritParams tostring
 #' @inheritParams paginate_table
 #' @param file character(1). File to write.
-#' @param paginate logical(1). Should \code{tt} be paginated before writing the file.
+#' @param paginate logical(1). Should \code{tt} be paginated before writing the file. Defaults to `TRUE` if any sort of page dimension is specified.
 #' @param \dots Passed directly to \code{\link{paginate_table}}
 #' @param page_break character(1). Page break symbol (defaults to outputting \code{"\\s"}).
 #' @return \code{file} (this function is called for the side effect of writing the file.
 #'
+#' @note When specified, `font_size` is used *only* to determine pagination based
+#' on page dimensions. The written file is populated in raw ASCII text, which
+#' does not have the concept of font size.
 #'
 #' @export
 #'
@@ -156,16 +163,18 @@ export_as_txt <- function(tt, file = NULL,
                           pg_height = page_dim(page_type)[if(landscape) 1 else 2],
                           font_family = "Courier",
                           font_size = 8,  # grid parameters
-                          paginate = FALSE,
+                          paginate = .need_pag(page_type, pg_width, pg_height, lpp, cpp),
                           cpp = NULL,
                           lpp = NULL,
                           ..., page_break = "\\s\\n",
                           hsep = default_hsep(),
                           indent_size = 2,
-                          tf_wrap = !is.null(cpp),
-                          max_width = cpp) {
-
-    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
+                          tf_wrap = paginate,
+                          max_width = cpp,
+                          colwidths = propose_column_widths(matrix_form(tt, TRUE))) {
+    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
+             ncol(tt) + 1, "], got length ", length(colwidths))
     if(paginate) {
         gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
@@ -174,7 +183,6 @@ export_as_txt <- function(tt, file = NULL,
         grid.newpage()
         pushViewport(plotViewport(margins = c(0, 0, 0, 0), gp = gp_plot))
 
-        colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
         cur_gpar <-  get.gpar()
         if(is.null(page_type) && is.null(pg_width) && is.null(pg_height) &&
            (is.null(cpp) || is.null(lpp))) {
@@ -391,9 +399,13 @@ export_as_pdf <- function(tt,
                           indent_size = 2,
                           tf_wrap = TRUE,
                           max_width = NULL,
+                          colwidths = propose_column_widths(matrix_form(tt, TRUE)),
                           ... # passed to paginate_table
 ) {
     stopifnot(file_ext(file) != ".pdf")
+    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
+             ncol(tt) + 1, "], got length ", length(colwidths))
 
     gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
@@ -412,7 +424,6 @@ export_as_pdf <- function(tt,
     grid.newpage()
     pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
-    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
     cur_gpar <-  get.gpar()
     if (is.null(lpp)) {
         lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
@@ -426,7 +437,7 @@ export_as_pdf <- function(tt,
         max_width <- cpp
 
     tbls <- if (paginate) {
-                paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
+                paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, colwidths = colwidths, ...)
             } else {
                 list(tt)
             }
@@ -467,7 +478,7 @@ export_as_pdf <- function(tt,
 
         grid.draw(g)
     }
-     list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp)
+     list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp, cpp = cpp)
 }
 
 .margin_lines_to_in <- function(margins, font_size, font_family) {
@@ -492,7 +503,7 @@ export_as_pdf <- function(tt,
 #'
 #' \itemize{
 #' \item{the table is paginated to the page size (Verticay and horizontally)}
-#' \item{Each separate page is converted to aMatrixPrintForm and from there to RTF-encoded text}
+#' \item{Each separate page is converted to a MatrixPrintForm and from there to RTF-encoded text}
 #' \item{Separate rtfs text chunks are combined and written out as a single RTF file}
 #' }
 #'
@@ -505,7 +516,7 @@ export_as_pdf <- function(tt,
 
 export_as_rtf <- function(tt,
                       file = NULL,
-                      colwidths = propose_column_widths(tt),
+                      colwidths = propose_column_widths(matrix_form(tt, TRUE)),
                       page_type = "letter",
                       pg_width = page_dim(page_type)[if(landscape) 2 else 1],
                       pg_height = page_dim(page_type)[if(landscape) 1 else 2],
@@ -518,6 +529,9 @@ export_as_rtf <- function(tt,
         stop("RTF export requires the r2rtf package, please install it.")
     if(is.null(names(margins)))
         names(margins) <- c("bottom", "left", "top", "right")
+    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
+             ncol(tt) + 1, "], got length ", length(colwidths))
 
     margins_in <- .margin_lines_to_in(margins, font_size, font_family)
     true_width <- pg_width - sum(margins_in[c("left", "right")])
@@ -528,6 +542,7 @@ export_as_rtf <- function(tt,
                            pg_height = true_height,
                            margins = c(bottom = 0, left = 0, top = 0, right = 0),
                            lineheight = 1.25,
+                           colwidths = colwidths,
                            ...)
 
     rtftxts <- lapply(tbls, function(tbl) r2rtf::rtf_encode(mpf_to_rtf(tbl, colwidths = colwidths,

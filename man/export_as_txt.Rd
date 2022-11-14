@@ -13,15 +13,16 @@ export_as_txt(
   pg_height = page_dim(page_type)[if (landscape) 1 else 2],
   font_family = "Courier",
   font_size = 8,
-  paginate = FALSE,
+  paginate = .need_pag(page_type, pg_width, pg_height, lpp, cpp),
   cpp = NULL,
   lpp = NULL,
   ...,
   page_break = "\\\\s\\\\n",
   hsep = default_hsep(),
   indent_size = 2,
-  tf_wrap = !is.null(cpp),
-  max_width = cpp
+  tf_wrap = paginate,
+  max_width = cpp,
+  colwidths = propose_column_widths(matrix_form(tt, TRUE))
 )
 }
 \arguments{
@@ -48,7 +49,7 @@ to Courier.}
 
 \item{font_size}{numeric(1). Fontsize, defaults to 12.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
+\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file. Defaults to \code{TRUE} if any sort of page dimension is specified.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NULL} (the default) indicates no horizontal
@@ -77,12 +78,19 @@ word-wrapped to. If NULL, it is  set to the current print width
 of the  session (`getOption("width")`). If set to `"auto"`,
 the width of the table (plus any table inset) is used. Ignored
 completely if `tf_wrap` is `FALSE`.}
+
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 }
 \value{
 \code{file} (this function is called for the side effect of writing the file.
 }
 \description{
 Export as plain text with page break symbol
+}
+\note{
+When specified, \code{font_size} is used \emph{only} to determine pagination based
+on page dimensions. The written file is populated in raw ASCII text, which
+does not have the concept of font size.
 }
 \examples{
 

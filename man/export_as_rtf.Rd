@@ -7,7 +7,7 @@
 export_as_rtf(
   tt,
   file = NULL,
-  colwidths = propose_column_widths(tt),
+  colwidths = propose_column_widths(matrix_form(tt, TRUE)),
   page_type = "letter",
   pg_width = page_dim(page_type)[if (landscape) 2 else 1],
   pg_height = page_dim(page_type)[if (landscape) 1 else 2],
@@ -57,7 +57,7 @@ RTF export occurs by via the following steps
 
 \itemize{
 \item{the table is paginated to the page size (Verticay and horizontally)}
-\item{Each separate page is converted to aMatrixPrintForm and from there to RTF-encoded text}
+\item{Each separate page is converted to a MatrixPrintForm and from there to RTF-encoded text}
 \item{Separate rtfs text chunks are combined and written out as a single RTF file}
 }
 
