@@ -24,6 +24,7 @@ export_as_pdf(
   indent_size = 2,
   tf_wrap = TRUE,
   max_width = NULL,
+  colwidths = propose_column_widths(matrix_form(tt, TRUE)),
   ...
 )
 }
@@ -64,7 +65,7 @@ text (in points)}
 
 \item{font_size}{numeric(1). Fontsize, defaults to 12.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file.}
+\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file. Defaults to \code{TRUE} if any sort of page dimension is specified.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -89,6 +90,8 @@ word-wrapped to. If NULL, it is  set to the current print width
 of the  session (`getOption("width")`). If set to `"auto"`,
 the width of the table (plus any table inset) is used. Ignored
 completely if `tf_wrap` is `FALSE`.}
+
+\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
 \item{...}{arguments passed on to \code{paginate_table}}
 }
