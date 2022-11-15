@@ -2120,7 +2120,7 @@ vil_collapse <- function(x) {
 #' }
 #'
 #' @note This function will not detect dependencies implicit in
-#' analysis or summary functions which accept \code{df} and then
+#' analysis or summary functions which accept \code{x} or \code{df} and then
 #' rely on the existence of particular variables not being split on/
 #' analyzed.
 #'
