@@ -33,7 +33,7 @@ In this vignette we create a
 
 using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
 
-Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
+Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the publically available [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
 
 The packages used in this vignette are:
 
@@ -335,7 +335,7 @@ build_table(lyt, ADSL %>% filter(AGE > 18))
 
 There are a number of different adverse event tables. We will now present two tables that show adverse events by ID and then by grade and by ID.
 
-This time we won't use the `ADAE` dataset from `random.cdisc.data` but rather generate a dataset on the fly (see [Adrian's 2016 Phuse paper](https://github.com/waddella/phuse2016_adverse_events)):
+This time we won't use the `ADAE` dataset from [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) but rather generate a dataset on the fly (see [Adrian's 2016 Phuse paper](https://github.com/waddella/phuse2016_adverse_events)):
 
 ```{r}
 set.seed(1)
