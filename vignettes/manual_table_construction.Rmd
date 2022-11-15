@@ -26,11 +26,11 @@ knitr::opts_chunk$set(comment = "#")
 
 The main functions currently associated with `rtable`s are
 
-Tables in rtables can be constructed via the layout or `rtabulate` tabulation frameworks or also manually. Currently manual table construction is the only way to define column spans. The main functions for manual table constructions are:
+Tables in `rtables` can be constructed via the layout or `rtabulate` tabulation frameworks or also manually. Currently manual table construction is the only way to define column spans. The main functions for manual table constructions are:
 
-* `rtable`: collection of `rrow` objects, column header and default format
-* `rrow`: collection of `rcell` objects and default format
-* `rcell`: collection of data objects and cell format
+* `rtable()`: collection of `rrow()` objects, column header and default format
+* `rrow()`: collection of `rcell()` objects and default format
+* `rcell()`: collection of data objects and cell format
 
 ## Simple Example
 
@@ -53,7 +53,7 @@ tbl <- rtable(
 
 
 Before we go into explaining the individual components used to create this table
-we continue with the html conversion of the `rtable` object:
+we continue with the html conversion of the `rtable()` object:
 
 
 ```{r}
@@ -69,7 +69,7 @@ tbl[1, 1]
 and to format that cell run `format_rcell(tbl[1,1])`=`r #format_rcell(tbl[1,1])`.
 
 Note that `tbl[6, 1]` and `tbl[6, 2]` display both the same `rcell` because of
-the colspan.
+the `colspan`.
 
 
 
