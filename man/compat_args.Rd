@@ -2,7 +2,7 @@
 % Please edit documentation in R/argument_conventions.R
 \name{compat_args}
 \alias{compat_args}
-\title{Compatability Arg Conventions}
+\title{Compatibility Arg Conventions}
 \usage{
 compat_args(
   .lst,
@@ -22,7 +22,7 @@ compat_args(
 of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 ignored if this is specified.}
 
-\item{FUN}{function. Tabulation fucntion. Will be passed subsets of \code{x}
+\item{FUN}{function. Tabulation function. Will be passed subsets of \code{x}
 defined by the combination of \code{col_by} and \code{row_by} and returns
 corresponding cell value}
 
@@ -56,7 +56,7 @@ constructed. See \code{\link[formatters]{table_inset}}.}
 NULL (this is an argument template dummy function)
 }
 \description{
-Compatability Arg Conventions
+Compatibility Arg Conventions
 }
 \seealso{
 Other conventions: 

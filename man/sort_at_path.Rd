@@ -44,7 +44,7 @@ Sort substructure of a TableTree at a particular Path in the Tree.
 }
 \details{
 The \code{path} here can include \code{"*"} as a step, which means
-taht each child at that step will be \emph{separately} sorted based on
+that each child at that step will be \emph{separately} sorted based on
 \code{scorefun} and the remaining \code{path} entries. This can occur
 multiple times in a path.
 }

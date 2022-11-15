@@ -1,7 +1,7 @@
 ## rtables 0.5.3.2
  * `paginate_table` now accepts `colwidths` and paginates assuming column label and
    cell values are wrapped to those widths.
- * `make_row_df` now accepts `colwidths` and calculates row extents assuing cell values
+ * `make_row_df` now accepts `colwidths` and calculates row extents assuming cell values
    are wrapped to those widths
  * `nlines` `TableRow` method now uses provided `colwidths` to assume cell-value wrapping
  * `export_to_txt` now automatically paginates when any form of page dimension is provided
@@ -22,7 +22,7 @@
  * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
  * versioned dependency on `formatters` increased to `>0.3.3.10`
  * `export_as_pdf` now accepts standard page/font size parameters
- * original paramters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 
+ * original parameters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 
    will be fully deprecated and then removed in the future.
  * `toString` method for `VTableTree` now accepts `tf_wrap` and `max_width`
  * `export_as_txt` and `export_as_pdf` now accept `cpp`, as well as `tf_wrap` and `max_width` and
@@ -107,7 +107,7 @@
  * support for adding footnotes to existing table via `fnotes_at_path<-` function
  * `trim_levels_in_group` now trims empty levels of outer (split) variable by default
  * `value_at` and `cell_values` now work for tablerow objects
- * Fixed `as_html` bug in multvar split columns case 
+ * Fixed `as_html` bug in multivar split columns case 
  * Fixed pagination off-by-one error
 
 
@@ -162,12 +162,12 @@ tables in the context of clinical trials.
 
 ## rtables 0.3.2.17.9045
 
-* Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits
+* Tabulation machinery no longer removes NAs mandatorily in some cases, including multivar column splits
 * `analyze_colvars`'s `inclNAs` argument now respected.
 
 ## rtables 0.3.2.17.9044
 
-* Fix indent modifier propogation during tabulation
+* Fix indent modifier propagation during tabulation
 * Fix indent calculation in `make_pagdf`
 * Add significant testing to ensure `make_pagdf` indent calculation remains correct
 
@@ -178,7 +178,7 @@ tables in the context of clinical trials.
 ## rtables 0.3.2.17.9042
 
 * Fix naming/pathing for columns in multivar case (split itself now has default name "multivars")
-* Fix labelling bug when same variable appears multiple times in MultiVarSplit with different associated levels
+* Fix labeling bug when same variable appears multiple times in MultiVarSplit with different associated levels
 
 
 ## rtables 0.3.2.17.9041
@@ -192,7 +192,7 @@ tables in the context of clinical trials.
 
 ## rtables 0.3.2.17.9039
 
-* Fix bug in display of column information when column structure is not symetric, as with recursive cbinds.
+* Fix bug in display of column information when column structure is not symmetric, as with recursive cbinds.
 
 ## rtables 0.3.2.17.9036
 
@@ -210,7 +210,7 @@ tables in the context of clinical trials.
 ## rtables 0.3.2.17.9034
 
 * Fix internal `value_formats` accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)
-* `rrow` constructor no longer interpretes cell formats a row format when they are the same across all cells. Fixes bug in  "correct way" code discussed in #112
+* `rrow` constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in  "correct way" code discussed in #112
 
 ## rtables 0.3.2.17.9033
 
@@ -222,7 +222,7 @@ tables in the context of clinical trials.
 
 ## rtables 0.3.2.17.9029
 
-* Fix issue underlying spurious length-missmatch warning in some cases when using `analyze_colvars`
+* Fix issue underlying spurious length-mismatch warning in some cases when using `analyze_colvars`
 
 ## rtables 0.3.2.17.9028
 

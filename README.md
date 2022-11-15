@@ -151,7 +151,7 @@ basic_table(show_colcounts = TRUE) %>%
 #>     Biomarker 1 (mean)         3.94       no data     no data        3.77       no data      no data     no data      no data      no data
 ```
 
-# Acknowledgements
+# Acknowledgments
 
 We would like to thank everyone who has made `rtables` a better project
 by providing feedback and improving examples & vignettes. The following

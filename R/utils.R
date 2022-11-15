@@ -107,7 +107,7 @@ chk_rtables_align <- function(algn) {
 #' Translate spl_context to Path for display in error messages
 #'
 #'
-#' @param ctx data.frame. The `spl_context` data.frame where the error occured
+#' @param ctx data.frame. The `spl_context` data.frame where the error occurred
 #'
 #' @return A character string containing a description of the row path corresponding
 #' to the `ctx`

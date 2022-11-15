@@ -114,7 +114,7 @@ basic_table(show_colcounts = TRUE) %>%
 ```
 
 
-# Acknowledgements
+# Acknowledgments
 
 We would like to thank everyone who has made `rtables` a better project by providing feedback and improving examples & vignettes. The following list of contributors is alphabetical:
 

@@ -46,7 +46,7 @@ for \code{cell_values}, a \emph{list} (regardless of the type of
 value the cells hold). if \code{rowpath} defines a path to a single row,
 \code{cell_values} returns the list of cell values for that row, otherwise
 a list of such lists, one for each row captured underneath \code{rowpath}.
-This occurs after subsetting to \code{colpath} has occured.
+This occurs after subsetting to \code{colpath} has occurred.
 
 For \code{value_at} the "unwrapped" value of a single cell, or an error, if
 the combination of \code{rowpath} and \code{colpath} do not define the
@@ -57,7 +57,7 @@ Retrieve cell values by row and column path
 }
 \note{
 \code{cell_values} will return a single cell's value wrapped in a list.
-Use \code{value_at} to recieve the "bare" cell value.
+Use \code{value_at} to receive the "bare" cell value.
 }
 \examples{
  l <- basic_table() \%>\% split_cols_by("ARM") \%>\%

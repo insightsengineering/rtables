@@ -2053,7 +2053,7 @@ setMethod("spl_varnames<-", "MultiVarSplit",
 #' @inheritParams gen_args
 #' @description A TableTree object can have \emph{top left material} which is a sequence
 #' of strings which are printed in the area of the table between the column header display
-#' and the label of the first row.  These functions acccess and modify that material.
+#' and the label of the first row.  These functions access and modify that material.
 #'
 #' @return A character vector representing the top-left material of \code{obj} (or
 #' \code{obj} after modification, in the case of the setter).
@@ -2470,7 +2470,7 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
           fnotes_at_path(ctbl, pth, colpath) <- value
           content_table(ttrp) <- ctbl
       } else {
-          stop("an error occured. this shouldn't happen. please contact the maintainer") # nocov
+          stop("an error occurred. this shouldn't happen. please contact the maintainer") # nocov
       }
       ttrp
 })

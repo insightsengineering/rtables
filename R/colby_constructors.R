@@ -350,7 +350,7 @@ setMethod(".tl_indent_inner", "SplitVector",
 #' If \code{var} is a factor with empty unobserved levels and
 #' \code{labels_var} is specified, it must also be a factor
 #' with the same number of levels as \code{var}. Currently the
-#' error that occurs when this is not hte case is not very informative,
+#' error that occurs when this is not the case is not very informative,
 #' but that will change in the future.
 #'
 #' @export
@@ -522,7 +522,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' @inheritParams lyt_args
 #' @param cuts numeric. Cuts to use
-#' @param cutlabels character (or NULL). Labels for the cutst
+#' @param cutlabels character (or NULL). Labels for the cuts
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults
 #'   to \code{FALSE}
 #' @param cutfun function. Function which accepts the full vector of \code{var}
@@ -532,7 +532,7 @@ split_rows_by_multivar <- function(lyt,
 #' @details For dynamic cuts, the cut is transformed into a static cut by
 #' \code{\link{build_table}} \emph{based on the full dataset}, before
 #' proceeding. Thus even when nested within another split in column/row space,
-#' the resulting split will reflect the overall vaalues (e.g., quartiles) in the
+#' the resulting split will reflect the overall values (e.g., quartiles) in the
 #' dataset, NOT the values for subset  it is nested under.
 #'
 #' @export
@@ -1314,7 +1314,7 @@ setMethod(".add_row_summary", "Split",
 #' @inherit split_cols_by return
 #'
 #' @details If `format` expects 1 value (i.e. it is specified as a format string
-#'   and `xx` appears  `xx` apepars  values (i.e. `xx` appears twice in the
+#'   and `xx` appears for two values (i.e. `xx` appears twice in the
 #'   format string) or is specified as a function, then both raw and percent of
 #'   column total counts are calculated. If `format` is a format string where
 #'   `xx` appears only one time, only raw counts are used.
@@ -1566,7 +1566,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 ## Manual column construction in a simple (seeming
 ## to the user) way.
 #' Manual column declaration
-#' @param \dots One or more vectors of levels to appear in the column splace. If
+#' @param \dots One or more vectors of levels to appear in the column space. If
 #'   more than one set of levels is given, the values of the second are nested
 #'   within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via
@@ -1720,7 +1720,7 @@ basic_table <- function(title = "",
 #' the column labels when the resulting tables are printed).
 #'
 #' Top-left material strings are stored and then displayed \emph{exactly as is},
-#' no structure or indenting is applied to them either wheyn they are added
+#' no structure or indenting is applied to them either when they are added
 #' or when they are displayed.
 #' @inheritParams lyt_args
 #'
@@ -1728,7 +1728,7 @@ basic_table <- function(title = "",
 #'
 #' @param newlines character. The new line(s) to be added to the materials
 #' @note Currently, where in the construction of the layout this is called
-#' makes no difference, as it is indepenedent of the actual splitting keywords.
+#' makes no difference, as it is independent of the actual splitting keywords.
 #' This may change in the future.
 #' @note This function is experimental, its name and the details of
 #' its behavior are subject to change in future versions.

@@ -20,9 +20,9 @@ all-observations split level. Defaults to \code{"Overall"}}
 object/structure.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE})
 or last \code{FALSE}. Defaults to \code{TRUE}.}

@@ -180,7 +180,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #' @param vals ANY. Already calculated/known values of the split. Generally
 #'   should be left as \code{NULL}.
 #' @param labels character. Labels associated with \code{vals}. Should be
-#'   \code{NULL} when \code{vals} is, whic should almost always be the case.
+#'   \code{NULL} when \code{vals} is, which should almost always be the case.
 #' @param trim logical(1). Should groups corresponding to empty data subsets be
 #'   removed. Defaults to \code{FALSE}.
 #'
@@ -959,7 +959,7 @@ add_combo_levels <- function(combosdf,
 
 #' Trim Levels to map
 #'
-#' This split function constructor creatse a split function which trims
+#' This split function constructor creates a split function which trims
 #' levels of a variable to reflect restrictions on the possible
 #' combinations of two or more variables which are split by
 #' (along the same axis) within a layout.

@@ -43,9 +43,9 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further
@@ -56,7 +56,7 @@ Add a content row of summary counts
 }
 \details{
 If \code{format} expects 1 value (i.e. it is specified as a format string
-and \code{xx} appears  \code{xx} apepars  values (i.e. \code{xx} appears twice in the
+and \code{xx} appears for two values (i.e. \code{xx} appears twice in the
 format string) or is specified as a function, then both raw and percent of
 column total counts are calculated. If \code{format} is a format string where
 \code{xx} appears only one time, only raw counts are used.

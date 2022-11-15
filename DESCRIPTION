@@ -34,6 +34,7 @@ Suggests:
   r2rtf
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1

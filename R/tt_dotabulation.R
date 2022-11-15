@@ -923,7 +923,7 @@ recursive_applysplit <- function(df,
 #'   e.g., `length()` or `nrow()` are not called within tabulation functions,
 #'   because those will NOT give the overridden counts. Writing/using tabulation
 #'   functions which accept \code{.N_col} and \code{.N_total} or do not rely on
-#'   column counts at all (even implicitly) is the only way to ensure overriden
+#'   column counts at all (even implicitly) is the only way to ensure overridden
 #'   counts are fully respected.
 #'
 #' @export

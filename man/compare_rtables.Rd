@@ -17,7 +17,7 @@ compare_rtables(
 
 \item{expected}{rtable expected}
 
-\item{tol}{numerical tolorance}
+\item{tol}{numerical tolerance}
 
 \item{comp.attr}{boolean. Compare format of cells. Other attributes are
 silently ignored.}

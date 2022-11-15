@@ -47,7 +47,7 @@ tbl
 
 ## Traditional Subsetting and modification with `[`
 
-The `[` and `[<-` acessor functions operate largerly the same as their `data.frame` cousins:
+The `[` and `[<-` accessor functions operate largely the same as their `data.frame` cousins:
 
  - `[` and `[<-` both treat Tables as rectangular objects (rather than trees)
    - In particular this means label rows are treated as rows with empty cell values, rather than rows without cells
@@ -151,7 +151,7 @@ To get a semantically meaningful subset of our table, then, we can use `[` (or `
 tbl2[c("RACE", "ASIAN"), c("ARM", "C: Combination")]
 ```
 
-We cal also retrieve individual cell-values via the `value_at()` convenience function, which takes a pair of row and column paths which resolve together to an individual cell, e.g. average age for asian femal patients in arm A:
+We can also retrieve individual cell-values via the `value_at()` convenience function, which takes a pair of row and column paths which resolve together to an individual cell, e.g. average age for Asian female patients in arm A:
 
 ```{r}
 value_at(tbl2, c("RACE", "ASIAN", "AGE",  "Mean"), c("ARM", "A: Drug X", "SEX", "F"))

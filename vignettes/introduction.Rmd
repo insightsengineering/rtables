@@ -263,7 +263,7 @@ including those that aren't represented directly by any visible rows:
 make_row_df(tbl, visible_only = FALSE)[,c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
-`make_col_df()` similarly accepts `visible_only`, though here the meaining is slightly different, indicating
+`make_col_df()` similarly accepts `visible_only`, though here the meaning is slightly different, indicating
 whether only *leaf* columns should be summarized (`TRUE`, the default) or whether higher level groups of columns,
 analogous to subtables in row space, should be summarized as well.
 

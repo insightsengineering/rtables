@@ -29,7 +29,7 @@ concatenated to \code{...}}
 
 \item{.formats}{character or NULL. Formats for the values}
 
-\item{.indent_mods}{integer or NULL. Indent modificatons for the defined
+\item{.indent_mods}{integer or NULL. Indent modifications for the defined
 rows.}
 
 \item{.cell_footnotes}{list. Referential footnote messages to be associated

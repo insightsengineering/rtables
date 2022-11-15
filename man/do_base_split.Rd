@@ -16,7 +16,7 @@ the data.}
 should be left as \code{NULL}.}
 
 \item{labels}{character. Labels associated with \code{vals}. Should be
-\code{NULL} when \code{vals} is, whic should almost always be the case.}
+\code{NULL} when \code{vals} is, which should almost always be the case.}
 
 \item{trim}{logical(1). Should groups corresponding to empty data subsets be
 removed. Defaults to \code{FALSE}.}

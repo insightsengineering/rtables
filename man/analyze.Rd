@@ -52,9 +52,9 @@ variable(s) be included when performing this analysis. Defaults to
 \code{FALSE}}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{show_labels}{character(1). Should the variable labels for corresponding
 to the variable(s) in \code{vars} be visible in the resulting table.}
@@ -65,7 +65,7 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 }
 \value{

@@ -17,7 +17,7 @@ of it.}
 a fun
 }
 \description{
-This split function constructor creatse a split function which trims
+This split function constructor creates a split function which trims
 levels of a variable to reflect restrictions on the possible
 combinations of two or more variables which are split by
 (along the same axis) within a layout.

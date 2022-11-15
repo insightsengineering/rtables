@@ -139,7 +139,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' The strings in the return object are defined as follows: row labels are those
 #' determined by \code{make_row_df} and cell values are determined using
 #' \code{get_formatted_cells}. (Column labels are calculated using a
-#' non-exported internal funciton.
+#' non-exported internal function.
 #'
 #'@return A list with the following elements:
 #' \describe{

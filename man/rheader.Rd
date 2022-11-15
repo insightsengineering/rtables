@@ -39,9 +39,9 @@ h2
 
 }
 \seealso{
-Other compatability: 
+Other compatibility: 
 \code{\link{rrowl}()},
 \code{\link{rrow}()},
 \code{\link{rtable}()}
 }
-\concept{compatability}
+\concept{compatibility}

@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @return A row object of the context-appropriate type (label or data)
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
@@ -49,7 +49,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 #'
 #' @inherit rrow return
 #' @export
-#' @family compatability
+#' @family compatibility
 #' @examples
 #' rrowl("a", c(1,2,3), format = "xx")
 #' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
@@ -168,7 +168,7 @@ hrows_to_colinfo <- function(rows) {
 #'
 #' @export
 #' @return a \code{InstantiatedColumnInfo} object.
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' h1 <- rheader(c("A", "B", "C"))
@@ -219,7 +219,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'
 #' @inheritParams compat_args
 #' @inheritParams gen_args
-#' @param header Information defining the header (column strucure) of the table.
+#' @param header Information defining the header (column structure) of the table.
 #'   This can be as row objects (legacy), character vectors or a
 #'   \code{InstantiatedColumnInfo} object.
 #' @param \dots Rows to place in the table.
@@ -228,7 +228,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' @export
 #' @return a formal table object of the appropriate type (\code{ElementaryTable}
 #'   or \code{TableTree})
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' rtable(

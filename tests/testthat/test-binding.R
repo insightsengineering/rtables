@@ -95,7 +95,7 @@ test_that("chk_cbindable_many works", {
     expect_true(chk_cbindable_many(list(tab1, tab1, tab1)))
     tab2 <- tab1
     top_left(tab2) <- "hiii"
-    ## topleft missmatch ok if mix of empty and single non-empty value
+    ## topleft mismatch ok if mix of empty and single non-empty value
     expect_true(chk_cbindable_many(list(tab1, tab2, tab1, tab2)))
     tab3 <- tab1
     top_left(tab3) <- "oops"

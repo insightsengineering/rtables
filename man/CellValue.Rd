@@ -45,7 +45,7 @@ formatted if this cell's value(s) are all NA.}
 \value{
 An object representing the value within a single cell within a
 populated table. The underlying structure of this object is an
-implementation detail and sholud not be relied upon beyond calling
+implementation detail and should not be relied upon beyond calling
 accessors for the class.
 }
 \description{

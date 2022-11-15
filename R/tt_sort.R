@@ -66,7 +66,7 @@ cont_n_onecol <- function(j) {
 #' @return A TableTree with the same structure as \code{tt} with the exception
 #'   that the requested sorting has been done at \code{path}
 #' @details The \code{path} here can include \code{"*"} as a step, which means
-#' taht each child at that step will be \emph{separately} sorted based on
+#' that each child at that step will be \emph{separately} sorted based on
 #' \code{scorefun} and the remaining \code{path} entries. This can occur
 #' multiple times in a path.
 #'

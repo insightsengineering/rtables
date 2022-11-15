@@ -742,7 +742,7 @@ test_that("analyze_colvars works generally", {
     toString(tab5)
     rws5 <- collect_leaves(tab5, TRUE, TRUE)
     expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
-           "Multiple content fucntions didn't recycle properly in nested context")
+           "Multiple content functions didn't recycle properly in nested context")
     expect_identical(unname(cell_values(tab5)[[1]]),
                      rep(list("first fun", "second fun"), length.out = ncol(tab5)))
 
@@ -769,7 +769,7 @@ test_that("alt_counts_df works", {
 
     tbl <- build_table(lyt, DM, minidm)
 
-    ## this inherently checks both taht the correct counts (0, 1, 0) are
+    ## this inherently checks both that the correct counts (0, 1, 0) are
     ## retrieved and that they propogate to the summary functions
     expect_identical(list("A: Drug X" = c(70, Inf), ##70/0
                           "B: Placebo" = c(56, 56), ## 56/1
