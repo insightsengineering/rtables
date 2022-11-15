@@ -305,8 +305,10 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   # Adding references
   # row_paths(tt)
   # row_paths_summary(tt)
-  fnotes_at_path(tt, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Not the best but very long one, probably longer than possible."
-  fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Why trimming does not take it out?"
+  txt1 <- "Not the best but very long one, probably longer than possible."
+  txt2 <- "Why trimming does not take it out?"
+  fnotes_at_path(tt, rowpath = c("SEX", "F", "AGE", "Mean")) <- txt1
+  fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- txt2
 
   # Test also assign function
   table_inset(tt) <- general_inset
@@ -353,16 +355,16 @@ test_that("Cell and column label wrapping works in printing", {
     expected <- c("            Incredib",
                   "            ly long ",
                   "             column ",
-                  "            name to ", 
+                  "            name to ",
                   "               be   ")
     # expect_identical(splitted_res[1:5], expected)
 
     # String replacement of NAs wider than expected works with cell wrapping
-    expected <- c("Mean         A very ", 
-                  "              long  ", 
+    expected <- c("Mean         A very ",
+                  "              long  ",
                   "            content ",
                   "            to_be_wr",
-                  "            apped_an", 
+                  "            apped_an",
                   "            d_splitt",
                   "               ed   ")
     expect_identical(splitted_res[8:14], expected)
@@ -373,20 +375,20 @@ test_that("Cell and column label wrapping works in printing", {
     # Works for row names too
     result <- toString(matrix_form(tt_for_wrap[6, 1], TRUE), widths = c(10, 8), col_gap = 2)
     splitted_res2 <- strsplit(result, "\n")[[1]]
-    expected <- c("BLACK OR            ", 
-                  "AFRICAN             ", 
+    expected <- c("BLACK OR            ",
+                  "AFRICAN             ",
                   "AMERICAN            ")
     expect_identical(splitted_res2[8:10], expected)
 
     # Test if it works with numeric values
-    tt_simple <- basic_table() %>% 
-        analyze("AGE", format = "xx.xxxx") %>% 
+    tt_simple <- basic_table() %>%
+        analyze("AGE", format = "xx.xxxx") %>%
         build_table(ex_adsl)
     result <- toString(matrix_form(tt_simple), widths = c(2, 3), col_gap = 1)
     sre3 <- strsplit(result, "\n")[[1]]
     expected <- c("   all", "——————", "   obs", "Me 34.", "an 88 ")
     expect_identical(sre3, expected)
-    
+
     # See if general table has the right amount of \n
     result <- toString(matrix_form(tt_for_wrap, TRUE), widths = clw)
     expect_identical(.count_str_for_tests(result, "\n"), 25L)
