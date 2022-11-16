@@ -52,29 +52,33 @@ One feature of `analyze()` that we have not introduced in the previous vignette 
 ```{r}
 ADSL <- ex_adsl  # Example ADSL dataset
 
-basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
       "Range" = rcell(range(x), format = "xx.xx - xx.xx")
     )
-  }) %>%
-  build_table(ADSL)
+  })
+
+tbl <- build_table(lyt, ADSL)
+tbl
 ```
 
 Multiple variables can be analyzed in one `analyze()` call:
 
 ```{r}
-basic_table() %>%
+lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = c("AGE", "BMRKR1"), afun = function(x) {
     in_rows(
       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
       "Range" = rcell(range(x), format = "xx.xx - xx.xx")
     )
-  }) %>%
-  build_table(ADSL)
+  })
+
+tbl2 <- build_table(lyt2, ADSL)
+tbl2
 ```
 
 Hence, if `afun` can process different data vector types (i.e. variables selected from the data) then we are fairly close to a standard demographic table. Here is a function that either creates a count table or some number summary if the argument `x` is a factor or numeric, respectively:
@@ -113,43 +117,45 @@ s_summary(ADSL$SEX)
 We can now create a commonly used variant of the demographic table:
 
 ```{r}
-lyt <- basic_table() %>%
+summary_lyt <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   analyze(c("AGE", "SEX"), afun = s_summary)
 
-tbl <- build_table(lyt, ADSL)
-tbl
+summary_tbl <- build_table(summary_lyt, ADSL)
+summary_tbl
 ```
 
 Note that `analyze()` can also be called multiple times in sequence:
 
 ```{r}
-tbl2 <- basic_table() %>%
+summary_lyt2 <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   analyze("AGE", s_summary) %>%
-  analyze("SEX", s_summary) %>%
-  build_table(ADSL)
+  analyze("SEX", s_summary)
 
-tbl2
+summary_tbl2 <- build_table(summary_lyt2, ADSL)
+summary_tbl2
 ```
 
-which leads to the table identical to `tbl`:
+which leads to the table identical to `summary_tbl`:
 
 ```{r}
-identical(tbl, tbl2)
+identical(summary_tbl, summary_tbl2)
 ```
 
 ```{r, echo=FALSE}
-stopifnot(identical(tbl, tbl2))
+stopifnot(identical(summary_tbl, summary_tbl2))
 ```
 
 In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which outside of clinical trials is commonly referred to as `N`). Column `N`s are added by setting the `show_colcounts` argument in `basic_table()` to `TRUE`:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+summary_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARMCD") %>%
-  analyze(c("AGE", "SEX"), s_summary) %>%
-  build_table(ADSL)
+  analyze(c("AGE", "SEX"), s_summary)
+
+summary_tbl3 <- build_table(summary_lyt3, ADSL)
+summary_tbl3
 ```
 
 ### Variations on the Demographic Table
@@ -160,20 +166,24 @@ We will now show a couple of variations of the demographic table that we develop
 We will start with a standard table analyzing the variables `AGE` and `BMRKR2` variables:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
-  analyze(c("AGE", "BMRKR2"), s_summary) %>%
-  build_table(ADSL)
+  analyze(c("AGE", "BMRKR2"), s_summary)
+
+tbl <- build_table(lyt, ADSL)
+tbl
 ```
 
 Assume we would like to have this analysis carried out per gender encoded in the row space:
 
 ```{r, warning=FALSE}
-basic_table(show_colcounts = TRUE) %>%
+lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX") %>%
-  analyze(c("AGE", "BMRKR2"), s_summary) %>%
-  build_table(ADSL)
+  analyze(c("AGE", "BMRKR2"), s_summary)
+
+tbl <- build_table(lyt, ADSL)
+tbl
 ```
 
 We will now subset `ADSL` to include only males and females in the analysis in order to reduce the number of rows in the table:
@@ -181,22 +191,26 @@ We will now subset `ADSL` to include only males and females in the analysis in o
 ```{r, warning=FALSE}
 ADSL_M_F <- filter(ADSL, SEX %in% c("M", "F"))
 
-basic_table(show_colcounts = TRUE) %>%
+lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX") %>%
-  analyze(c("AGE", "BMRKR2"), s_summary) %>%
-  build_table(ADSL_M_F)
+  analyze(c("AGE", "BMRKR2"), s_summary)
+
+tbl2 <- build_table(lyt2, ADSL_M_F)
+tbl2
 ```
 
 Note that the `UNDIFFERENTIATED` and `U` levels still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function do. If empty levels should be dropped then `rtables` needs to know that at splitting time via the `split_fun` argument in `split_rows_by()`. There are a number of predefined functions. For this example `drop_split_levels()` is required to drop the empty levels at splitting time. Splitting is a big topic and will be eventually addressed in a specific package vignette.
 
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
-  analyze(c("AGE", "BMRKR2"), s_summary) %>%
-  build_table(ADSL_M_F)
+  analyze(c("AGE", "BMRKR2"), s_summary)
+
+tbl3 <- build_table(lyt3, ADSL_M_F)
+tbl3
 ```
 
 In the table above the labels `M` and `F` are not very descriptive. You can add the full labels as follows:
@@ -210,22 +224,26 @@ ADSL_M_F_l <- ADSL_M_F %>%
     SEX == "UNDIFFERENTIATED" ~ "Undifferentiated"
   ))
 
-basic_table(show_colcounts = TRUE) %>%
+lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
-  analyze(c("AGE", "BMRKR2"), s_summary) %>%
-  build_table(ADSL_M_F_l)
+  analyze(c("AGE", "BMRKR2"), s_summary)
+
+tbl4 <- build_table(lyt4, ADSL_M_F_l)
+tbl4
 ```
 
 For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE` in `analyze()` call:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+lyt5 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary, show_labels = "visible") %>%
-  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible") %>%
-  build_table(ADSL_M_F_l)
+  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
+
+tbl5 <- build_table(lyt5, ADSL_M_F_l)
+tbl5
 ```
 
 Once we split the rows into groups (`Male` and `Female` here) one might want to summarize groups: usually by showing count and column percentages. This is especially important if we have missing data. For example if we create the above table but add missing data to the `AGE` variable:
@@ -240,24 +258,28 @@ set.seed(1)
 ADSL_NA <- ADSL_M_F_l %>%
   mutate(AGE = insert_NAs(AGE))
 
-basic_table(show_colcounts = TRUE) %>%
+lyt6 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible") %>%
-  build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
+  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
+
+tbl6 <- build_table(lyt6, filter(ADSL_NA, SEX %in% c("M", "F")))
+tbl6
 ```
 
 Here it is not easy to see how many females and males there are in each arm as `n` represents the number of non-missing data elements in the variables. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups()`, for example:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+lyt7 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
   summarize_row_groups()  %>%
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", afun = s_summary, nested = FALSE,  show_labels = "visible") %>%
-  build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
+  analyze("BMRKR2", afun = s_summary, nested = FALSE,  show_labels = "visible")
+
+tbl7 <- build_table(lyt7, filter(ADSL_NA, SEX %in% c("M", "F")))
+tbl7
 ```
 
 There are a couple of things to note here:
@@ -268,7 +290,7 @@ There are a couple of things to note here:
 We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+lyt8 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
@@ -278,14 +300,16 @@ basic_table(show_colcounts = TRUE) %>%
     )
   })  %>%
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", afun = s_summary, nested = FALSE,  show_labels = "visible") %>%
-  build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
+  analyze("BEP01FL", afun = s_summary, nested = FALSE,  show_labels = "visible")
+
+tbl8 <- build_table(lyt8, filter(ADSL_NA, SEX %in% c("M", "F")))
+tbl8
 ```
 
 Note that `cfun`, like `afun` (which is used in `analyze()`), can operate on either variables, passed via the `x` argument, or `data.frame`s or `tibble`s, which are passed via the `df` argument (`afun` can optionally request `df` too). Unlike `afun`, `cfun` must accept `labelstr` as the second argument which gives the default group label (factor level from splitting) and hence it could be modified:
 
 ```{r}
-basic_table() %>%
+lyt9 <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "hidden") %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
@@ -295,8 +319,10 @@ basic_table() %>%
     )
   })  %>%
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", s_summary, nested = FALSE, show_labels = "visible") %>%
-  build_table(filter(ADSL_NA, SEX %in% c("M", "F")))
+  analyze("BEP01FL", s_summary, nested = FALSE, show_labels = "visible")
+
+tbl9 <- build_table(lyt9, filter(ADSL_NA, SEX %in% c("M", "F")))
+tbl9
 ```
 
 ### Using Layouts
@@ -311,23 +337,25 @@ Layouts have a couple of advantages over tabulating the tables directly:
 Here is an example that demonstrates the reusability of layouts:
 
 ```{r}
-lyt <- basic_table(show_colcounts = TRUE) %>%
+adsl_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze(c("AGE", "SEX"), afun = s_summary)
 
-lyt
+adsl_lyt
 ```
 
 We can now build a table for `ADSL`
 
 ```{r}
-build_table(lyt, ADSL)
+adsl_tbl <- build_table(adsl_lyt, ADSL)
+adsl_tbl
 ```
 
 or for all patients that are older than 18:
 
 ```{r}
-build_table(lyt, ADSL %>% filter(AGE > 18))
+adsl_f_tbl <- build_table(lyt, ADSL %>% filter(AGE > 18))
+adsl_f_tbl
 ```
 
 
@@ -422,11 +450,12 @@ The `.N_col` argument is a special keyword argument by which `build_table()` pas
 We now use the `s_events_patients` summary function in a tabulation:
 
 ```{r}
-adae_0_lyt <- basic_table(show_colcounts = TRUE) %>%
+adae_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", s_events_patients)
 
-build_table(adae_0_lyt, ADAE2)
+adae_tbl <- build_table(adae_lyt, ADAE2)
+adae_tbl
 ```
 
 Note that the column `N`s are wrong as by default they are set to the
@@ -443,8 +472,8 @@ the primary data during tabulation:
 
 
 ```{r}
-build_table(adae_0_lyt, ADAE2, alt_counts_df = ADSL2)
-
+adae_adsl_tbl <- build_table(adae_lyt, ADAE2, alt_counts_df = ADSL2)
+adae_adsl_tbl
 ```
 
 Alternatively, if the desired column counts are already calculated, they can be
@@ -455,25 +484,27 @@ an `alt_counts_df` is the preferred mechanism.
 We next calculate this information per system organ class:
 
 ```{r}
-l <- basic_table(show_colcounts = TRUE) %>%
+adae_soc_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", s_events_patients) %>%
   split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients)
-build_table(l, ADAE2, alt_counts_df = ADSL2)
+
+adae_soc_tbl <- build_table(adae_soc_lyt, ADAE2, alt_counts_df = ADSL2)
+adae_soc_tbl
 ```
 
 We now have to add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze()` behavior for a factor is to create the count table per level (using `rtab_inner`):
 
 ```{r}
-tbl1 <- basic_table(show_colcounts = TRUE) %>%
+adae_soc_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("AEDECOD", indent_mod = -1) %>%
-  build_table(ADAE2, alt_counts_df = ADSL2)
+  analyze("AEDECOD", indent_mod = -1)
 
-tbl1
+adae_soc_tbl2 <- build_table(adae_soc_lyt2, ADAE2, alt_counts_df = ADSL2)
+adae_soc_tbl2
 ```
 
 The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation by default.
@@ -500,32 +531,34 @@ table_count_once_per_id(ADAE2)
 So the desired AE table is:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+adae_soc_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("AEDECOD", afun = table_count_once_per_id, show_labels = "hidden", indent_mod = -1) %>%
-  build_table(ADAE2, alt_counts_df = ADSL2)
+  analyze("AEDECOD", afun = table_count_once_per_id, show_labels = "hidden", indent_mod = -1)
+
+adae_soc_tbl3 <- build_table(adae_soc_lyt3, ADAE2, alt_counts_df = ADSL2)
+adae_soc_tbl3
 ```
 
 Note that we are missing the overall summary in the first two rows. This can be added with an initial `analyze()` call.
 
 ```{r}
-tbl <- basic_table(show_colcounts = TRUE) %>%
+adae_soc_lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", afun = s_events_patients) %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1, section_div = "")  %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
-  analyze("AEDECOD", table_count_once_per_id, show_labels = "hidden", indent_mod = -1) %>%
-  build_table(ADAE2, alt_counts_df = ADSL2)
+  analyze("AEDECOD", table_count_once_per_id, show_labels = "hidden", indent_mod = -1)
 
-tbl
+adae_soc_tbl4 <- build_table(adae_soc_lyt4, ADAE2, alt_counts_df = ADSL2)
+adae_soc_tbl4
 ```
 
 Finally, if we wanted to prune the 0 count rows we can do that with the `trim_rows()` function:
 
 ```{r}
-trim_rows(tbl)
+trim_rows(adae_soc_tbl4)
 ```
 
 Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/articles/sorting_pruning.html).
@@ -564,7 +597,7 @@ table_count_grade_once_per_id(ex_adae, grade_levels = 1:5)
 All of the layouting concepts needed to create this table have already been introduced so far:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+adae_grade_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("AETOXGR",
           afun = table_count_grade_once_per_id,
@@ -575,8 +608,10 @@ basic_table(show_colcounts = TRUE) %>%
   split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2)  %>%
   analyze("AETOXGR",
           afun = table_count_grade_once_per_id,
-          extra_args = list(grade_levels = 1:5), show_labels = "hidden") %>%
-  build_table(ADAE2, alt_counts_df = ADSL2)
+          extra_args = list(grade_levels = 1:5), show_labels = "hidden")
+
+adae_grade_tbl <- build_table(adae_grade_lyt, ADAE2, alt_counts_df = ADSL2)
+adae_grade_tbl
 ```
 
 ## Response Table
@@ -601,10 +636,12 @@ s_proportion <- function(x, .N_col) {
    in_rows(.list = lapply(as.list(table(x)), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
 }
 
-basic_table(show_colcounts = TRUE) %>%
+rsp_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
-  analyze("rsp", s_proportion, show_labels = "hidden") %>%
-  build_table(ADRS_BESRSPI)
+  analyze("rsp", s_proportion, show_labels = "hidden")
+
+rsp_tbl <- build_table(rsp_lyt, ADRS_BESRSPI)
+rsp_tbl
 ```
 
 
@@ -664,12 +701,14 @@ s_unstrat_resp(
 Hence we can now add the next vignette to the table:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+rsp_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp, show_labels = "visible",
-          var_labels = "Unstratified Response Analysis") %>%
-  build_table(ADRS_BESRSPI)
+          var_labels = "Unstratified Response Analysis")
+
+rsp_tbl2 <- build_table(rsp_lyt2, ADRS_BESRSPI)
+rsp_tbl2
 ```
 
 Next we will add part 3: the multinomial response table. To do so, we are adding a row-split by response level, and then doing the same thing as we did for the binary response table above.
@@ -690,7 +729,7 @@ s_prop(
 We can now create the final response table with all three parts:
 
 ```{r}
-basic_table(show_colcounts = TRUE) %>%
+rsp_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp,
@@ -701,8 +740,10 @@ basic_table(show_colcounts = TRUE) %>%
     nested = FALSE
   ) %>%
   summarize_row_groups() %>%
-  analyze("AVALC", afun = s_prop) %>%
-  build_table(ADRS_BESRSPI)
+  analyze("AVALC", afun = s_prop)
+
+rsp_tbl3 <- build_table(rsp_lyt3, ADRS_BESRSPI)
+rsp_tbl3
 ```
 
 In the case that we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
@@ -724,7 +765,7 @@ rsp_label <- function(x) {
 }
 
 
-tbl <- basic_table(show_colcounts = TRUE) %>%
+rsp_lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp,
@@ -740,10 +781,10 @@ tbl <- basic_table(show_colcounts = TRUE) %>%
   analyze("AVALC", afun = s_prop) %>%
   analyze("AVALC", afun = function(x, .N_col) {
     in_rows(rcell(sum(x == "NE") * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)"), .labels = rsp_label("NE"))
-  }, nested = FALSE) %>%
-  build_table(ADRS_BESRSPI)
+  }, nested = FALSE)
 
-tbl
+rsp_tbl4 <- build_table(rsp_lyt4, ADRS_BESRSPI)
+rsp_tbl4
 ```
 
 Note that the table is missing the rows gaps to make it more readable. The row spacing feature is on the `rtables` roadmap and will be implemented in future.

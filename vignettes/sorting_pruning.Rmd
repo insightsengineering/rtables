@@ -37,16 +37,17 @@ library(dplyr)
 
 
 ```{r}
-rawtable <- basic_table() %>%
+raw_lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by("SEX") %>%
     split_rows_by("RACE") %>%
     summarize_row_groups() %>%
     split_rows_by("STRATA1") %>%
     summarize_row_groups() %>%
-    analyze("AGE") %>%
-    build_table(DM)
-rawtable
+    analyze("AGE")
+
+raw_tbl <- build_table(raw_lyt, DM)
+raw_tbl
 ```
 
 ## Trimming
@@ -159,11 +160,12 @@ silly_afun <- function(x) {
 
 
 
-sillytbl <- basic_table() %>%
+silly_lyt <- basic_table() %>%
     split_rows_by("cyl") %>%
-    analyze("mpg", silly_afun) %>%
-    build_table(mtcars)
-sillytbl
+    analyze("mpg", silly_afun)
+
+silly_tbl <- build_table(silly_lyt, mtcars)
+silly_tbl
 ```
 
 The path required to sort the rows inside our "analysis" of `mpg` is then `c("cyl", "*", "mpg")`:
