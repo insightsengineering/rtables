@@ -195,7 +195,29 @@ test_that("Pagination works with wrapped titles/footers", {
     main_title(tt) <- "this is a long long table title that should be wrapped to a new line"
     main_footer(tt) <- "this is an extra long table main footer and should also be wrapped"
     
-    expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
+    res2 <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
+    expect_equal(length(res2), 2)
+    nrow_res2 <- 16 + 2
+    
+    res2_str1 <- toString(res2[[1]], tf_wrap = TRUE, max_width = 60)
+    res2_str1_spl <- strsplit(res2_str1, split = "\n")[[1]]
+
+    expect_equal(nrow_res2, length(res2_str1_spl))
+    expect_true(all(nchar(res2_str1_spl)) <= 60)
+    expect_equal(nchar(res2_str1_spl[1]), 59)
+    expect_equal(nchar(res2_str1_spl[2]), 8)
+    expect_equal(nchar(res2_str1_spl[nrow_res2 - 1]), 58)
+    expect_equal(nchar(res2_str1_spl[nrow_res2]), 7)
+    
+    res2_str2 <- toString(res2[[2]], tf_wrap = TRUE, max_width = 60)
+    res2_str2_spl <- strsplit(res2_str2, split = "\n")[[1]]
+    
+    expect_equal(nrow_res2, length(res2_str2_spl))
+    expect_true(all(nchar(res2_str2_spl)) <= 60)
+    expect_equal(nchar(res2_str2_spl[1]), 59)
+    expect_equal(nchar(res2_str2_spl[2]), 8)
+    expect_equal(nchar(res2_str2_spl[nrow_res2 - 1]), 58)
+    expect_equal(nchar(res2_str2_spl[nrow_res2]), 7)
 })
 
 test_that("cell wrapping works in pagination", {
