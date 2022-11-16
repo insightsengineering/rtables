@@ -207,8 +207,8 @@ export_as_txt <- function(tt, file = NULL,
         tbls <- list(tt)
     }
 
-    res <- paste(mapply(function(tb, cw, ...) {
-        toString(tb, widths = cw, ...)
+    res <- paste(mapply(function(tb, ...) {
+        toString(tb, widths = colwidths[c(1, .figure_out_colinds(tb, tt))], ...)
     },
     MoreArgs = list( hsep = hsep,
                     indent_size = indent_size,
@@ -328,6 +328,16 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     flextable::set_table_properties(flx, layout = "autofit")
 }
 
+.tab_to_colpath_set <- function(tt) {
+    vapply(collect_leaves(coltree(tt)),
+           function(y) paste(pos_to_path(tree_pos(y)), collapse = " "),
+           "")
+}
+.figure_out_colinds <- function(subtab, fulltab) {
+    match(.tab_to_colpath_set(subtab),
+          .tab_to_colpath_set(fulltab))
+}
+
 #' Export as PDF
 #'
 #' The PDF output is based on the ASCII output created with `toString`
@@ -443,10 +453,12 @@ export_as_pdf <- function(tt,
             } else {
                 list(tt)
             }
-    stbls <- lapply(lapply(tbls, toString, widths = colwidths, hsep = hsep,
-                           indent_size = indent_size, tf_wrap = tf_wrap,
-                           max_width = max_width), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
-
+    stbls <- lapply(lapply(tbls,
+                           function(tbl_i) {
+        toString(tbl_i, widths = colwidths[c(1, .figure_out_colinds(tbl_i, tt))], hsep = hsep,
+                 indent_size = indent_size, tf_wrap = tf_wrap,
+                 max_width = max_width)
+    }), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
     gtbls <- lapply(stbls, function(txt) {
         textGrob(
             label = txt,
@@ -547,12 +559,13 @@ export_as_rtf <- function(tt,
                            colwidths = colwidths,
                            ...)
 
-    rtftxts <- lapply(tbls, function(tbl) r2rtf::rtf_encode(mpf_to_rtf(tbl, colwidths = colwidths,
-                                                                page_type = page_type,
-                                                                pg_width = pg_width,
-                                                                pg_height = pg_height,
-                                                                font_size = font_size,
-                                                                margins = c(top = 0, left = 0, bottom = 0, right = 0))))
+    rtftxts <- lapply(tbls, function(tbl) r2rtf::rtf_encode(mpf_to_rtf(tbl,
+                                                                       colwidths = colwidths[c(1, .figure_out_colinds(tbl, tt))],
+                                                                       page_type = page_type,
+                                                                       pg_width = pg_width,
+                                                                       pg_height = pg_height,
+                                                                       font_size = font_size,
+                                                                       margins = c(top = 0, left = 0, bottom = 0, right = 0))))
     restxt <- paste(rtftxts[[1]]$start,
                     paste(sapply(rtftxts, function(x) x$body), collapse = "\n{\\pard\\fs2\\par}\\page{\\pard\\fs2\\par}\n"),
                     rtftxts[[1]]$end)
