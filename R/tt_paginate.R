@@ -58,13 +58,21 @@ setMethod("nlines", "RefFootnote",
 #' @rdname formatters_methods
 setMethod("nlines", "InstantiatedColumnInfo",
           function(x, colwidths, max_width) {
-    lfs <- collect_leaves(coltree(x))
-    depths <- sapply(lfs, function(l) length(pos_splits(l)))
+    h_rows <- .do_tbl_h_piece2(x)
+    tl <- top_left(x) %||% rep("", length(h_rows))
+    main_nls <- vapply(seq_along(h_rows),
+                       function(i) max(nlines(h_rows[[i]], colwidths = colwidths),
+                                       nlines(tl[i], colwidths = colwidths[1])),
+                       1L)
+
+    ## lfs <- collect_leaves(coltree(x))
+    ## depths <- sapply(lfs, function(l) length(pos_splits(l)))
 
     coldf <- make_col_df(x, colwidths = colwidths)
     have_fnotes <- length(unlist(coldf$col_fnotes)) > 0
-    ret <- max(depths, length(top_left(x))) +
-        divider_height(x)
+    ## ret <- max(depths, length(top_left(x))) +
+    ##     divider_height(x)
+    ret <- sum(main_nls, divider_height(x))
     if(have_fnotes) {
         ret <- sum(ret,
                    vapply(unlist(coldf$col_fnotes),
