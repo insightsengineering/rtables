@@ -351,13 +351,13 @@ test_that("Cell and column label wrapping works in printing", {
     expect_identical(.count_str_for_tests(splitted_res[1], " ", TRUE), 8L)
 
     # Separator is at the right place and colnames are wrapped
-    # expect_identical(splitted_res[7], "————————————————————")
+    expect_identical(splitted_res[7], "————————————————————")
     expected <- c("            Incredib",
                   "            ly long ",
                   "             column ",
                   "            name to ",
                   "               be   ")
-    # expect_identical(splitted_res[1:5], expected)
+    expect_identical(splitted_res[1:5], expected)
 
     # String replacement of NAs wider than expected works with cell wrapping
     expected <- c("Mean         A very ",
@@ -386,7 +386,7 @@ test_that("Cell and column label wrapping works in printing", {
         build_table(ex_adsl)
     result <- toString(matrix_form(tt_simple), widths = c(2, 3), col_gap = 1)
     sre3 <- strsplit(result, "\n")[[1]]
-    expected <- c("   all", "——————", "   obs", "Me 34.", "an 88 ")
+    expected <- c("   all", "   obs", "——————", "Me 34.", "an 88 ")
     expect_identical(sre3, expected)
 
     # See if general table has the right amount of \n
