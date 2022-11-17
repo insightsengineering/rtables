@@ -146,8 +146,12 @@ test_that("newline in column names and possibly cell values work", {
     matform2 <- matrix_form(tbl2)
     expect_identical(dim(matform2$strings),
                      c(18L, 5L))
-    expect_identical(attr(matform2, "nlines_header"),
-                     4L)
+    # expect_identical(attr(matform2, "nlines_header"),
+    #                  4L)
+    expect_identical(attr(matform2, "nrow_header"),
+                     3L)
+    expect_identical(attr(matform2, "ncols"),
+                     4)
     expect_identical(matform2$strings[1:4, 1, drop = TRUE],
                      c("Ethnicity", "  Factor2", "", ""))
 
