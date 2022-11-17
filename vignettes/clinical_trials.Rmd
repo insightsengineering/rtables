@@ -33,7 +33,7 @@ In this vignette we create a
 
 using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
 
-Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the publically available [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
+Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the publicly available [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
 
 The packages used in this vignette are:
 
