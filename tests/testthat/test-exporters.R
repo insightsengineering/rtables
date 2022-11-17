@@ -31,7 +31,7 @@ test_that("export_as_txt works with wrapping", {
                   tf_wrap = TRUE, 
                   max_width = 20, cpp = 80)
     txtlns <- readLines(tmptxtf)
-    expect_identical(grep("\\\\s\\\\n", txtlns), c(22L, 42L, 61L, 83L, 104L))
+    expect_identical(grep("\\\\s\\\\n", txtlns), c(30L, 58L))
     
     expect_warning(export_as_txt(tt_for_wrap, 
                                  file = tmptxtf, 
