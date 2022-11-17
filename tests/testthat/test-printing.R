@@ -349,10 +349,10 @@ test_that("Cell and column label wrapping works in printing", {
     splitted_res <- strsplit(result, "\n")[[1]]
 
     # First column (rownames) has widths 10 and there is colgap 2
-    expect_identical(.count_str_for_tests(splitted_res[1], " "), 10L + 2L)
+    expect_identical(.count_chr_from_str(splitted_res[1], " "), 10L + 2L)
 
     # First column label is 8 char
-    expect_identical(.count_str_for_tests(splitted_res[1], " ", TRUE), 8L)
+    expect_identical(.count_chr_from_str(splitted_res[1], " ", TRUE), 8L)
 
     # Separator is at the right place and colnames are wrapped
     expect_identical(splitted_res[7], "————————————————————")
@@ -395,5 +395,5 @@ test_that("Cell and column label wrapping works in printing", {
 
     # See if general table has the right amount of \n
     result <- toString(matrix_form(tt_for_wrap, TRUE), widths = clw)
-    expect_identical(.count_str_for_tests(result, "\n"), 25L)
+    expect_identical(.count_chr_from_str(result, "\n"), 25L)
 })

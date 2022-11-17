@@ -174,11 +174,11 @@ tt_to_test_wrapping <- function() {
 
 tt_for_wrap <- tt_to_test_wrapping()
 
-# Helper function in R base to count how many times a pattern appears in a string
-.count_str_for_tests <- function(str_test, pat, negate = FALSE) {
+# Helper function in R base to count how many times a character appears in a string
+.count_chr_from_str <- function(str, chr, negate = FALSE) {
     if (negate) {
-        nchar(gsub(pat, "", str_test, fixed = TRUE))
+        nchar(gsub(chr, "", str, fixed = TRUE))
     } else {
-        nchar(str_test) - nchar(gsub(pat, "", str_test, fixed = TRUE))
+        nchar(str) - nchar(gsub(chr, "", str, fixed = TRUE))
     }
 }

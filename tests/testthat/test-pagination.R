@@ -142,17 +142,17 @@ test_that("cell and column wrapping works in pagination", {
 
     # The table should have 18 lines and 10 rows when it is not cell wrapped
     expect_identical(nrow(pg_tbl_no_clw[[1]]) + nrow(tt_for_wrap), 20L)
-    expect_identical(.count_str_for_tests(res1, "\n") + .count_str_for_tests(res2, "\n"), 36L)
+    expect_identical(.count_chr_from_str(res1, "\n") + .count_chr_from_str(res2, "\n"), 36L)
 
     # With column (+ 2 lines), cell (+ 2*2 lines), and row names wrapping (+1 line) gets to 25
     result <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 25L)
     result_str <- toString(result[[1]], widths = clw)
-    expect_identical(.count_str_for_tests(result_str, "\n"), 25L)
+    expect_identical(.count_chr_from_str(result_str, "\n"), 25L)
 
     ## Testing if the split happens with the right number of lines w/ pagination
 
     # Taking header and footer size (should be 10L with wrapping)
-    tot_lines_w <- .count_str_for_tests(result_str, "\n") # 25L
+    tot_lines_w <- .count_chr_from_str(result_str, "\n") # 25L
     nr_res_w <- nrow(tt_for_wrap) + 5L # Cell (+ 2*2 l) and row values wrapping (+1 l)
     non_content_lines <- tot_lines_w - nr_res_w
     expect_identical(non_content_lines, 10L) # headers and footers with wrapping (+2 l)
@@ -168,8 +168,8 @@ test_that("cell and column wrapping works in pagination", {
         non_content_lines +
         2L + # Wrap of cell value
         1L # Wrapping of rowname
-    expect_identical(exp_n_lines1, .count_str_for_tests(resw1, "\n"))
-    expect_identical(exp_n_lines2, .count_str_for_tests(resw2, "\n"))
+    expect_identical(exp_n_lines1, .count_chr_from_str(resw1, "\n"))
+    expect_identical(exp_n_lines2, .count_chr_from_str(resw2, "\n"))
 
     # Checking if the global number of lines is correctly split into pages
     paginated_lines <- exp_n_lines1 +
