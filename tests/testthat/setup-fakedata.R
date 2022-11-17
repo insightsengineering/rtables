@@ -174,7 +174,8 @@ tt_to_test_wrapping <- function() {
 
 tt_for_wrap <- tt_to_test_wrapping()
 
-# Helper function in R base to count how many times a character appears in a string
+# Helper function in R base to count how many times a character appears in a string.
+# W: this works only for counting single characters from a single string of txt
 .count_chr_from_str <- function(str, chr, negate = FALSE) {
     if (negate) {
         nchar(gsub(chr, "", str, fixed = TRUE))
