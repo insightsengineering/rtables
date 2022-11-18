@@ -65,7 +65,7 @@ A *trimming function* accepts a `TableRow` object and returns `TRUE` if the row 
 The default trimming function removes rows in which all columns have no values in them, i.e. that have all `NA` values or all `0` values:
 
 ```{r}
-trim_rows(rawtable)
+trim_rows(raw_tbl)
 ```
 
 ### Trimming Columns
@@ -73,7 +73,7 @@ trim_rows(rawtable)
 There are currently no special utilities for trimming columns but we can remove the empty columns with fairly straightforward column subsetting:
 
 ```{r}
-coltrimmed <- rawtable[, col_counts(rawtable) > 0]
+coltrimmed <- raw_tbl[, col_counts(raw_tbl) > 0]
 head(coltrimmed)
 ```
 
@@ -172,7 +172,7 @@ The path required to sort the rows inside our "analysis" of `mpg` is then `c("cy
 
 ```{r}
 scorefun <- function(tt) { mean(unlist(row_values(tt)))}
-sort_at_path(sillytbl, c("cyl", "*", "mpg"), scorefun)
+sort_at_path(silly_tbl, c("cyl", "*", "mpg"), scorefun)
 ```
 
 # Writing Custom Pruning Criteria and Scoring Functions
