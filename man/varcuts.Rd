@@ -163,7 +163,7 @@ dataset, NOT the values for subset  it is nested under.
 library(dplyr)
 
 # split_cols_by_cuts
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_cuts("AGE", split_label = "Age",
                        cuts = c(0, 25, 35, 1000),
@@ -171,11 +171,11 @@ l <- basic_table() \%>\%
     analyze(c("BMRKR2", "STRATA2")) \%>\%
     append_topleft("counts")
 
-build_table(l, ex_adsl)
-
+tbl <- build_table(lyt, ex_adsl)
+tbl
 
 # split_rows_by_cuts
-l <- basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by_cuts("AGE", split_label = "Age",
                   cuts = c(0, 25, 35, 1000),
@@ -184,28 +184,29 @@ l <- basic_table() \%>\%
     append_topleft("counts")
 
 
-build_table(l, ex_adsl)
-
+tbl2 <- build_table(lyt2, ex_adsl)
+tbl2
 
 # split_cols_by_quartiles
 
-l <- basic_table() \%>\%
+lyt3 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_quartiles("AGE", split_label = "Age") \%>\%
     analyze(c("BMRKR2", "STRATA2")) \%>\%
     append_topleft("counts")
 
-build_table(l, ex_adsl)
+tbl3 <- build_table(lyt3, ex_adsl)
+tbl3
 
 # split_rows_by_quartiles
-l <- basic_table(show_colcounts = TRUE) \%>\%
+lyt4 <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by_quartiles("AGE", split_label = "Age") \%>\%
     analyze("BMRKR2") \%>\%
     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
 
-build_table(l, ex_adsl)
-
+tbl4 <- build_table(lyt4, ex_adsl)
+tbl4
 
 }
 \author{

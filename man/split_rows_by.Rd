@@ -135,22 +135,23 @@ their outputs.
 
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-
-basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by("RACE") \%>\%
-    analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
-    build_table(DM)
+    analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+    
+tbl2 <- build_table(lyt2, DM)
+tbl2
 
-
-l <- basic_table() \%>\%
+lyt3 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by("SEX") \%>\%
     summarize_row_groups(label_fstr = "Overall (N)") \%>\%
@@ -159,7 +160,7 @@ l <- basic_table() \%>\%
     summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
     analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
-l
+lyt3
 
 library(dplyr)
 DM2 <- DM \%>\%
@@ -181,7 +182,8 @@ DM2 <- DM \%>\%
         )[RACE]
     )
 
-build_table(l, DM2)
+tbl3 <- build_table(lyt3, DM2)
+tbl3
 
 }
 \author{

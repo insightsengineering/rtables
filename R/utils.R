@@ -64,23 +64,27 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #' rtables_aligns()
 #'
 #' # Right alignment with align in rcell()
-#' basic_table() %>%
-#'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right"))) %>%
-#'   build_table(iris)
+#' lyt <- basic_table() %>%
+#'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right")))
+#' 
+#' tbl <- build_table(lyt, iris)
+#' tbl
 #'
 #' # Set multiple alignments using character vectors with .aligns in in_rows()
-#' basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'   analyze("Species", function(x) {
 #'     in_rows(
 #'       left = rcell("l"),
 #'       right = rcell("r"),
 #'       .aligns = c("left", "right")
 #'     )
-#'   }) %>%
-#'   build_table(iris)
+#'   })
+#' 
+#' tbl2 <- build_table(lyt2, iris)
+#' tbl2
 #'
 #' # Clinical data example:
-#' basic_table() %>%
+#' lyt3 <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
 #'   analyze(c("AGE"), function(x) {
@@ -88,8 +92,10 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #'       "mean" = rcell(mean(x), align = "right"),
 #'       "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
 #'     )
-#'   }, show_labels = "visible", na_str = "NE") %>%
-#'   build_table(ex_adsl)
+#'   }, show_labels = "visible", na_str = "NE")
+#' 
+#' tbl3 <- build_table(lyt3, ex_adsl)
+#' tbl3
 #'
 #' @seealso [in_rows()], [rcell()]
 #'

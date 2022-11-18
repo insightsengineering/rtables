@@ -32,10 +32,11 @@ setMethod("nrow", "TableRow",
 #' @param x `TableTree` or `ElementaryTable` object
 #'
 #' @examples
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   analyze(c("SEX", "AGE")) %>%
-#'   build_table(ex_adsl)
+#'   analyze(c("SEX", "AGE"))
+#'   
+#' tbl <- build_table(lyt, ex_adsl)
 #'
 #' dim(tbl)
 #' nrow(tbl)
@@ -2486,10 +2487,11 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 #' 
 #' @examples
 #' # How to add referencial footnotes after having created a table
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_rows_by("SEX", page_by = TRUE) %>%
-#'     analyze("AGE") %>% 
-#'     build_table(DM)
+#'     analyze("AGE")
+#' 
+#' tbl <- build_table(lyt, DM)
 #' tbl <- trim_rows(tbl)
 #' # Check the row and col structure to add precise references
 #' # row_paths(tbl)

@@ -39,6 +39,8 @@ its behavior are subject to change in future versions.
 \examples{
 library(dplyr)
 
+DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
+
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
@@ -47,9 +49,9 @@ lyt <- basic_table() \%>\%
   analyze("AGE") \%>\%
   append_topleft("  Age")
 
-DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
+tbl <- build_table(lyt, DM2)
+tbl
 
-build_table(lyt, DM2)
 }
 \seealso{
 \code{\link[=top_left]{top_left()}}

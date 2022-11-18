@@ -36,18 +36,18 @@ values of any remaining variables specified in the map to those values
 allowed under the combination of the previous and current split.
 }
 \examples{
- map <- data.frame(
-       LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
-       PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
-       ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
-       stringsAsFactors = FALSE
-   )
+map <- data.frame(
+    LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
+    PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
+    ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
+    stringsAsFactors = FALSE
+)
 
-   lyt <- basic_table() \%>\%
-       split_rows_by("LBCAT") \%>\%
-       split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) \%>\%
-       analyze("ANRIND")
-   tbl1 <- build_table(lyt, ex_adlb)
+lyt <- basic_table() \%>\%
+    split_rows_by("LBCAT") \%>\%
+    split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) \%>\%
+    analyze("ANRIND")
+tbl <- build_table(lyt, ex_adlb)
 }
 \seealso{
 \code{\link[=trim_levels_in_group]{trim_levels_in_group()}}

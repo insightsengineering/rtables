@@ -59,15 +59,17 @@ in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
 in_rows(.list = list(a = 1, b = 2, c = 3))
 in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
 
-basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze("AGE", afun = function(x) {
     in_rows(
        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
     )
-  }) \%>\%
-  build_table(ex_adsl)
+  })
+
+tbl <- build_table(lyt, ex_adsl)
+tbl
 
 }
 \seealso{

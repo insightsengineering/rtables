@@ -127,15 +127,16 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
 #'   analyze("AGE")
 #'
-#' tab <- build_table(lyt, DM)
+#' tbl <- build_table(lyt, DM)
 #'
-#' tab2 <- insert_row_at_path(tab, c("COUNTRY", "CHN", "AGE", "Mean"),
+#' tbl2 <- insert_row_at_path(tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
 #'                           rrow("new row", 555))
-#' tab2
-#' tab2 <- insert_row_at_path(tab2, c("COUNTRY", "CHN", "AGE", "Mean"),
+#' tbl2
+#' 
+#' tbl3 <- insert_row_at_path(tbl2, c("COUNTRY", "CHN", "AGE", "Mean"),
 #'                           rrow("new row redux", 888),
 #'                           after = TRUE)
-#' tab2
+#' tbl3
 #' @seealso [DataRow()] [rrow()]
 
 setGeneric("insert_row_at_path", signature = c("tt", "value"),
@@ -216,12 +217,12 @@ setMethod("insert_row_at_path", c("VTableTree", "ANY"),
 #'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
 #'   analyze("AGE")
 #'
-#' tab <- build_table(lyt, DM)
+#' tbl <- build_table(lyt, DM)
 #'
-#' label_at_path(tab, c("COUNTRY", "CHN"))
+#' label_at_path(tbl, c("COUNTRY", "CHN"))
 #'
-#' label_at_path(tab, c("COUNTRY", "USA")) <- "United States"
-#' tab
+#' label_at_path(tbl, c("COUNTRY", "USA")) <- "United States"
+#' tbl
 #' @export
 label_at_path <- function(tt, path) {
     obj_label(tt_at_path(tt, path))
@@ -343,12 +344,11 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' @exportMethod [<-
 #'
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    analyze(c("SEX", "AGE"))
 #'
-#' tbl <- build_table(l, DM)
-#'
+#' tbl <- build_table(lyt, DM)
 #' tbl
 #'
 #' tbl[1, ]
@@ -1030,15 +1030,16 @@ setMethod("head", "VTableTree",
 #' @export
 #'
 #' @examples
-#'  l <- basic_table() %>% split_cols_by("ARM") %>%
-#'    split_cols_by("SEX") %>%
-#'    split_rows_by("RACE") %>%
-#'    summarize_row_groups() %>%
-#'    split_rows_by("STRATA1") %>%
-#'    analyze("AGE")
+#' lyt <- basic_table() %>% 
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   split_rows_by("RACE") %>%
+#'   summarize_row_groups() %>%
+#'   split_rows_by("STRATA1") %>%
+#'   analyze("AGE")
 #'
 #' library(dplyr) ## for mutate
-#' tbl <- build_table(l, DM %>%
+#' tbl <- build_table(lyt, DM %>%
 #'     mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 #'
 #' row_paths_summary(tbl)

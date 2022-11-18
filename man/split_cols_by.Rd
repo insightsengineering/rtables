@@ -112,52 +112,56 @@ lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2"))
 
-build_table(lyt, ex_adsl)
+tbl <- build_table(lyt, ex_adsl)
+tbl
 
 # Let's look at the splits in more detail
 
-l <- basic_table() \%>\% split_cols_by("ARM")
-l
+lyt1 <- basic_table() \%>\% split_cols_by("ARM")
+lyt1
 
 # add an analysis (summary)
-l2 <- l \%>\%
+lyt2 <- lyt1 \%>\%
     analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary) ,
             format = "xx.xx")
-l2
+lyt2
 
-build_table(l2, DM)
+tbl2 <- build_table(lyt2, DM)
+tbl2
 
 # By default sequentially adding layouts results in nesting
 library(dplyr)
 DM_MF <- DM \%>\% filter(SEX \%in\% c("M", "F")) \%>\%
   mutate(SEX = droplevels(SEX))
 
-l3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt3 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
   split_cols_by("SEX") \%>\%
   analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary),
           format = "xx.xx")
-l3
+lyt3
 
- build_table(l3, DM_MF)
+tbl3 <- build_table(lyt3, DM_MF)
+tbl3
 
 # nested=TRUE vs not
-l4 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt4 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
  split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
  analyze("AGE")
+lyt4
 
-l4
-build_table(l4, DM)
+tbl4 <- build_table(lyt4, DM)
+tbl4
 
-l5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt5 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
  split_rows_by("SEX", split_fun= drop_split_levels) \%>\%
  analyze("AGE") \%>\%
  split_rows_by("RACE", nested=FALSE, split_fun = drop_split_levels) \%>\%
  analyze("AGE")
+lyt5
 
-l5
-build_table(l5, DM)
-
+tbl5 <- build_table(lyt5, DM)
+tbl5
 
 }
 \author{

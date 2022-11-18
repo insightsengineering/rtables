@@ -43,10 +43,10 @@ Every layout must start with a basic table.
 lyt <- basic_table() \%>\%
   analyze("AGE", afun = mean)
 
-build_table(lyt, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-
-lyt <- basic_table(title = "Title of table",
+lyt2 <- basic_table(title = "Title of table",
                    subtitles = c("a number", "of subtitles"),
                    main_footer = "test footer",
                    prov_footer = paste("test.R program, executed at",
@@ -54,6 +54,7 @@ lyt <- basic_table(title = "Title of table",
   split_cols_by("ARM") \%>\%
   analyze("AGE", mean)
 
-build_table(lyt, DM)
+tbl2 <- build_table(lyt2, DM)
+tbl2
 
 }

@@ -32,7 +32,7 @@ those default splits can be further manipulated.
 }
 \examples{
 
-uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     ret <- do_base_split(spl, df, vals, labels, trim)
     if(NROW(df) == 0)
         ret <- lapply(ret, function(x) x[1])
@@ -48,5 +48,6 @@ lyt <- basic_table() \%>\%
                          AESEQ = max,
                          BMRKR1 = mean))
 
-build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+tbl
 }

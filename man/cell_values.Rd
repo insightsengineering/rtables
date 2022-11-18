@@ -60,15 +60,16 @@ Retrieve cell values by row and column path
 Use \code{value_at} to receive the "bare" cell value.
 }
 \examples{
- l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-   split_cols_by("SEX") \%>\%
-   split_rows_by("RACE") \%>\%
-   summarize_row_groups() \%>\%
-   split_rows_by("STRATA1") \%>\%
-   analyze("AGE")
+lyt <- basic_table() \%>\% 
+  split_cols_by("ARM") \%>\%
+  split_cols_by("SEX") \%>\%
+  split_rows_by("RACE") \%>\%
+  summarize_row_groups() \%>\%
+  split_rows_by("STRATA1") \%>\%
+  analyze("AGE")
 
 library(dplyr) ## for mutate
-tbl <- build_table(l, DM \%>\%
+tbl <- build_table(lyt, DM \%>\%
     mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 
 row_paths_summary(tbl)

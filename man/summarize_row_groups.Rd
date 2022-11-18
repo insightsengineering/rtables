@@ -72,14 +72,13 @@ supported by analysis functions. (see \code{\link{analyze}}).
 
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
 
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt <- basic_table() \%>\% split_cols_by("ARM") \%>\%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
     summarize_row_groups(label_fstr = "\%s (n)") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-l
+lyt
 
-tbl <- build_table(l, DM2)
-
+tbl <- build_table(lyt, DM2)
 tbl
 
 row_paths_summary(tbl) # summary count is a content table
@@ -96,7 +95,7 @@ sfun <- function(x, labelstr, trim) {
     )
 }
 
-l2 <- basic_table(show_colcounts = TRUE) \%>\% 
+lyt2 <- basic_table(show_colcounts = TRUE) \%>\% 
     split_cols_by("ARM") \%>\%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
     summarize_row_groups("AGE", cfun = sfun,
@@ -104,7 +103,7 @@ l2 <- basic_table(show_colcounts = TRUE) \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%
     append_topleft(c("Country", "  Age"))
 
-tbl2 <- build_table(l2, DM2)
+tbl2 <- build_table(lyt2, DM2)
 tbl2
 
 }

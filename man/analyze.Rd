@@ -180,14 +180,15 @@ alternate column observation counts provided by the \code{alt_counts_df},
 
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-l
-build_table(l, DM)
+lyt
 
+tbl <- build_table(lyt, DM)
+tbl
 
-l <- basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     analyze(head(names(iris), -1), afun = function(x) {
         list(
@@ -195,8 +196,10 @@ l <- basic_table() \%>\%
             "range" = rcell(diff(range(x)), format = "xx.xx")
         )
     })
-l
-build_table(l, iris)
+lyt2
+
+tbl2 <- build_table(lyt2, iris)
+tbl2
 
 }
 \author{

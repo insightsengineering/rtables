@@ -49,15 +49,15 @@ iris2 <- iris \%>\%
   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) \%>\%
   ungroup()
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"),
           afun = list_wrap_x(summary) , format = "xx.xx")
 
-l
+lyt
 
-tbl <- build_table(l, iris2)
+tbl <- build_table(lyt, iris2)
 
 matrix_form(tbl)
 }
