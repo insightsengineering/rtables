@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rtables
+# rtables <a href='https://github.com/Roche/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
 [![Build Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
 

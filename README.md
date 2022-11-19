@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rtables
+# rtables <a href='https://github.com/Roche/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
 [![Build
 Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
@@ -65,6 +65,8 @@ creation of a more complex table.
 
 ``` r
 library(rtables)
+#> Loading required package: magrittr
+#> Loading required package: formatters
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -103,6 +105,14 @@ build_table(lyt, ex_adsl)
 ``` r
 library(rtables)
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 
 ## for simplicity grab non-sparse subset
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
