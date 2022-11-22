@@ -18,6 +18,31 @@ test_that("export_as_txt works with and without pagination", {
                      export_as_txt(tbl, file = NULL, paginate = FALSE))
 })
 
+test_that("export_as_txt works with wrapping", {
+    clw <- c(5, 7, 6, 6) + 12
+    lpp_tmp <- 18
+    
+    tmptxtf <- tempfile()
+    export_as_txt(tt_for_wrap, 
+                  file = tmptxtf, 
+                  paginate = TRUE, 
+                  lpp = 150, 
+                  colwidths = clw, 
+                  tf_wrap = TRUE, 
+                  max_width = 20, cpp = 80)
+    txtlns <- readLines(tmptxtf)
+    expect_identical(grep("\\\\s\\\\n", txtlns), c(30L, 58L))
+    
+    expect_warning(export_as_txt(tt_for_wrap, 
+                                 file = tmptxtf, 
+                                 paginate = TRUE, 
+                                 lpp = lpp_tmp, 
+                                 colwidths = clw, 
+                                 tf_wrap = FALSE, 
+                                 max_width = 20))
+    txtlns <- readLines(tmptxtf)
+    expect_identical(grep("\\\\s\\\\n", txtlns), c(26L, 50L))
+})
 
 test_that("tsv roundtripping for path_enriched_df", {
 

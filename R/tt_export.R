@@ -210,7 +210,7 @@ export_as_txt <- function(tt, file = NULL,
     res <- paste(mapply(function(tb, cw, ...) {
         toString(tb, widths = cw, ...)
     },
-    MoreArgs = list( hsep = hsep,
+    MoreArgs = list(hsep = hsep,
                     indent_size = indent_size,
                     tf_wrap = tf_wrap,
                     max_width = max_width),
