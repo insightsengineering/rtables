@@ -51,7 +51,7 @@ or you can install the latest development version directly from GitHub
 with:
 
 ``` r
-devtool::install_github("Roche/rtables")
+devtools::install_github("Roche/rtables")
 ```
 
 Packaged releases (both those on CRAN and those between official CRAN
