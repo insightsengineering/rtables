@@ -65,8 +65,6 @@ creation of a more complex table.
 
 ``` r
 library(rtables)
-#> Loading required package: magrittr
-#> Loading required package: formatters
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -105,14 +103,6 @@ build_table(lyt, ex_adsl)
 ``` r
 library(rtables)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 
 ## for simplicity grab non-sparse subset
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
