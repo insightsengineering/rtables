@@ -151,3 +151,34 @@ export_fact <- function() {
 }
 
 tt_to_export <- export_fact()
+
+# Creating data-set with wide content to test wrapping
+tt_to_test_wrapping <- function() {
+    trimmed_data <- ex_adsl %>% 
+        filter(SEX %in% c("M", "F")) %>% 
+        filter(RACE %in% levels(RACE)[1:2]) 
+    
+    levels(trimmed_data$ARM)[1] <- "Incredibly long column name to be wrapped"
+    levels(trimmed_data$ARM)[2] <- "This_should_be_somewhere_split"
+    
+    basic_table(title = "Enough long title to be probably wider than expected",
+                main_footer = "Also this seems quite wider than expected initially.") %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE", split_fun = drop_split_levels) %>%
+        analyze(c("AGE", "EOSDY"), 
+                na_str = "A very long content to_be_wrapped_and_splitted",
+                inclNAs = TRUE) %>%
+        build_table(trimmed_data)
+}
+
+tt_for_wrap <- tt_to_test_wrapping()
+
+# Helper function in R base to count how many times a character appears in a string.
+# W: this works only for counting single characters from a single string of txt
+.count_chr_from_str <- function(str, chr, negate = FALSE) {
+    if (negate) {
+        nchar(gsub(chr, "", str, fixed = TRUE))
+    } else {
+        nchar(str) - nchar(gsub(chr, "", str, fixed = TRUE))
+    }
+}

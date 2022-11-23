@@ -31,8 +31,8 @@ trim_zero_rows <- function(tbl) {
 cont_n_allcols <- function(tt) {
     ctab <- content_table(tt)
     if(NROW(ctab) == 0)
-        return(NA)
-
+        stop("cont_n_allcols score function used at subtable [",
+             obj_name(tt), "] that has no content table.")
     sum(sapply(row_values(tree_children(ctab)[[1]]),
                function(cv) cv[1]))
 }
@@ -44,7 +44,8 @@ cont_n_onecol <- function(j) {
     function(tt) {
         ctab <- content_table(tt)
         if(NROW(ctab) == 0)
-            return(NA)
+            stop("cont_n_allcols score function used at subtable [",
+                 obj_name(tt), "] that has no content table.")
         row_values(tree_children(ctab)[[1]])[[j]][1]
     }
 }
@@ -63,6 +64,7 @@ cont_n_onecol <- function(j) {
 #'   with \code{NA} scores. Defaults to \code{"omit"}, which removes them, other
 #'   allowed values are \code{"last"}  and \code{"first"} which indicate where
 #'   they should be placed in the order.
+#' @param .prev_path character. Internal detail, do not set manually.
 #' @return A TableTree with the same structure as \code{tt} with the exception
 #'   that the requested sorting has been done at \code{path}
 #' @details The \code{path} here can include \code{"*"} as a step, which means
@@ -76,7 +78,8 @@ sort_at_path <- function(tt,
                          path,
                          scorefun,
                          decreasing = NA,
-                         na.pos = c("omit", "last", "first")) {
+                         na.pos = c("omit", "last", "first"),
+                         .prev_path = character()) {
     if(NROW(tt) == 0)
         return(tt)
 
@@ -87,17 +90,25 @@ sort_at_path <- function(tt,
     curpath <- path
     subtree <- tt
     backpath <- c()
+    count <- 0
     while(length(curpath) > 0) {
         curname <- curpath[1]
         ## we sort each child separately based on the score function
         ## and the remaining path
         if(curname == "*") {
-            newkids <- lapply(tree_children(subtree),
-                             sort_at_path,
+            oldkids <- tree_children(subtree)
+            oldnames <- vapply(oldkids, obj_name, "")
+            newkids <- lapply(seq_along(oldkids),
+                              function(i) {
+                sort_at_path(oldkids[[i]],
                              path = curpath[-1],
                              scorefun = scorefun,
                              decreasing = decreasing,
-                             na.pos = na.pos)
+                             na.pos = na.pos,
+                             ## its ok to modify the "path" here because its only ever used for
+                             ## informative error reporting.
+                             .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
+                })
             newtab <- subtree
             tree_children(newtab) <- newkids
             if(length(backpath) > 0) {
@@ -110,14 +121,27 @@ sort_at_path <- function(tt,
         subtree <- tree_children(subtree)[[curname]]
         backpath <- c(backpath, curpath[1])
         curpath <- curpath[-1]
+        count <- count + 1
     }
+    real_backpath <- path[seq_len(count)]
 
     na.pos <- match.arg(na.pos)
 ##    subtree <- tt_at_path(tt, path)
     kids <- tree_children(subtree)
     ## relax this to allow character "scores"
     ## scores <- vapply(kids, scorefun, NA_real_)
-    scores <- sapply(kids, scorefun)
+    scores <- lapply(kids, function(x) tryCatch(scorefun(x), error = function(e) e))
+    errs <- which(vapply(scores, is, class2 = "error", TRUE))
+    if(length(errs) > 0) {
+        stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",
+             "First error: ", scores[[errs[1]]]$message,
+             "\n\toccurred at path: ",
+             paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
+             call. = FALSE)
+
+    } else {
+        scores <- unlist(scores)
+    }
     if(!is.null(dim(scores)) ||
        length(scores) != length(kids))
         stop("Score function does not appear to have return exactly one ",

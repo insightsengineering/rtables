@@ -1,3 +1,8 @@
+## rtables 0.5.3.3
+ * `cont_n_allcols` and `cont_n_onecol` score functions now throw errors when they are applied to subtables that
+   have no content table, instead of the previously returned `NA`
+ * `sort_at_path` now emits an informative error message when score functions fail.
+
 ## rtables 0.5.3.2
  * `paginate_table` now accepts `colwidths` and paginates assuming column label and
    cell values are wrapped to those widths.
