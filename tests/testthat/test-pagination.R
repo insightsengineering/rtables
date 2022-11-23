@@ -247,7 +247,8 @@ test_that("Pagination works with wrapped titles/footers", {
     
     res2 <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
     expect_equal(length(res2), 2)
-    nrow_res2 <- 16 + 2
+    mf_res2 <- matrix_form(res2[[1]])
+    nrow_res2 <- nrow(mf_strings(mf_res2)) + 5 + 4 # 5 lines tbl seps/ws + 4 lines title/footer
     
     res2_str1 <- toString(res2[[1]], tf_wrap = TRUE, max_width = 60)
     res2_str1_spl <- strsplit(res2_str1, split = "\n")[[1]]
