@@ -364,7 +364,8 @@ test_that("error localization works", {
 })
 
 
-test_that("cfun works with first arg df", {
+test_that("cfun args", {
+    # first arg df
     cfun1 <- function(df, labelstr, .N_col, .N_total) {
         stopifnot(is(df, "data.frame"))
         in_rows(
@@ -379,9 +380,8 @@ test_that("cfun works with first arg df", {
     tbl <- build_table(lyt, rawdat)
     capture.output({prout <- print(tbl)})
     expect_identical(prout, tbl)
-})
 
-test_that("cfun works with first arg x", {
+    # first arg x
     cfun2 <- function(x, labelstr) {
         in_rows(
             c(mean(x, trim = 0.2), 0.2),
@@ -390,7 +390,6 @@ test_that("cfun works with first arg x", {
                               labelstr)
         )
     }
-    
     lyt <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_rows_by("SEX") %>%
