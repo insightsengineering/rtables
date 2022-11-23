@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -121,16 +115,17 @@ other filtering contain 0 rows</li>
 <h3 id="a-table-in-need-of-attention">A Table In Need of Attention<a class="anchor" aria-label="anchor" href="#a-table-in-need-of-attention"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rawtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">raw_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span>
-<span><span class="va">rawtable</span></span></code></pre></div>
+<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">raw_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">raw_lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="va">raw_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -213,7 +208,7 @@ and returns <code>TRUE</code> if the row should be removed.</p>
 no values in them, i.e. that have all <code>NA</code> values or all
 <code>0</code> values:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">rawtable</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -246,7 +241,7 @@ no values in them, i.e. that have all <code>NA</code> values or all
 can remove the empty columns with fairly straightforward column
 subsetting:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">coltrimmed</span> <span class="op">&lt;-</span> <span class="va">rawtable</span><span class="op">[</span>, <span class="fu"><a href="../reference/col_accessors.html">col_counts</a></span><span class="op">(</span><span class="va">rawtable</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">coltrimmed</span> <span class="op">&lt;-</span> <span class="va">raw_tbl</span><span class="op">[</span>, <span class="fu"><a href="../reference/col_accessors.html">col_counts</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co"># Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',</span></span>
 <span><span class="co">#  target signature 'TableTree#missing#logical'.</span></span>
 <span><span class="co">#  "VTableTree#ANY#logical" would also be valid</span></span></code></pre>
@@ -503,13 +498,14 @@ printed</strong></em>.</p>
 <span></span>
 <span></span>
 <span></span>
-<span><span class="va">sillytbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">silly_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"cyl"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="va">silly_afun</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="va">silly_afun</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">silly_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">silly_lyt</span>, <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Split var [cyl] was not character or factor. Converting to factor</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sillytbl</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">silly_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#       all obs</span></span>
 <span><span class="co"># —————————————</span></span>
 <span><span class="co"># 6            </span></span>
@@ -528,7 +524,7 @@ printed</strong></em>.</p>
 <code>mpg</code> is then <code>c("cyl", "*", "mpg")</code>:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scorefun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/row_accessors.html">row_values</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span>
-<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">sillytbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"*"</span>, <span class="st">"mpg"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">silly_tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"*"</span>, <span class="st">"mpg"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#       all obs</span></span>
 <span><span class="co"># —————————————</span></span>
 <span><span class="co"># 6            </span></span>

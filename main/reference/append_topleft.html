@@ -29,12 +29,6 @@ set of "top-left materials".'><!-- mathjax --><script src="https://cdnjs.cloudfl
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -89,13 +83,13 @@ layouting functions, and to <code>build_table</code>.</p>
 materials declared in the layout (the content displayed to the left of
 the column labels when the resulting tables are printed).</p>
 <p>Top-left material strings are stored and then displayed <em>exactly as is</em>,
-no structure or indenting is applied to them either wheyn they are added
+no structure or indenting is applied to them either when they are added
 or when they are displayed.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Currently, where in the construction of the layout this is called
-makes no difference, as it is indepenedent of the actual splitting keywords.
+makes no difference, as it is independent of the actual splitting keywords.
 This may change in the future.</p>
 <p>This function is experimental, its name and the details of
 its behavior are subject to change in future versions.</p>
@@ -109,6 +103,8 @@ its behavior are subject to change in future versions.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">DM2</span> <span class="op">&lt;-</span> <span class="va">DM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>RACE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span>, SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">SEX</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -117,9 +113,8 @@ its behavior are subject to change in future versions.</p>
 <span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">append_topleft</span><span class="op">(</span><span class="st">"  Age"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">DM2</span> <span class="op">&lt;-</span> <span class="va">DM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>RACE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span>, SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">SEX</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Ethnicity                     A: Drug X      B: Placebo      C: Combination  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Age                         F       M       F       M        F         M   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————————————————————————————————————————————————————</span>
@@ -129,6 +124,7 @@ its behavior are subject to change in future versions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                      33.17   37.40   30.58   32.83    33.85     34.14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                                                                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                      35.88   44.00   38.57   35.29    36.50     34.00 </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

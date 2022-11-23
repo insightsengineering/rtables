@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -66,7 +60,7 @@
 <ul><li>
 <code>paginate_table</code> now accepts <code>colwidths</code> and paginates assuming column label and cell values are wrapped to those widths.</li>
 <li>
-<code>make_row_df</code> now accepts <code>colwidths</code> and calculates row extents assuing cell values are wrapped to those widths</li>
+<code>make_row_df</code> now accepts <code>colwidths</code> and calculates row extents assuming cell values are wrapped to those widths</li>
 <li>
 <code>nlines</code> <code>TableRow</code> method now uses provided <code>colwidths</code> to assume cell-value wrapping</li>
 <li>
@@ -99,7 +93,7 @@
 </li>
 <li>
 <code>export_as_pdf</code> now accepts standard page/font size parameters</li>
-<li>original paramters (<code>width</code>, <code>height</code>, <code>fontsize</code> are soft deprecated (no warning) and will be fully deprecated and then removed in the future.</li>
+<li>original parameters (<code>width</code>, <code>height</code>, <code>fontsize</code> are soft deprecated (no warning) and will be fully deprecated and then removed in the future.</li>
 <li>
 <code>toString</code> method for <code>VTableTree</code> now accepts <code>tf_wrap</code> and <code>max_width</code>
 </li>
@@ -219,7 +213,7 @@
 <code>trim_levels_in_group</code> now trims empty levels of outer (split) variable by default</li>
 <li>
 <code>value_at</code> and <code>cell_values</code> now work for tablerow objects</li>
-<li>Fixed <code>as_html</code> bug in multvar split columns case</li>
+<li>Fixed <code>as_html</code> bug in multivar split columns case</li>
 <li>Fixed pagination off-by-one error</li>
 </ul></div>
     <div class="section level2">
@@ -271,13 +265,13 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9045" id="rtables-032179045">rtables 0.3.2.17.9045<a class="anchor" aria-label="anchor" href="#rtables-032179045"></a></h2>
-<ul><li>Tabulation machinery no longer removes NAs mandatorily in some cases, including mutlivar column splits</li>
+<ul><li>Tabulation machinery no longer removes NAs mandatorily in some cases, including multivar column splits</li>
 <li>
 <code>analyze_colvars</code>’s <code>inclNAs</code> argument now respected.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9044" id="rtables-032179044">rtables 0.3.2.17.9044<a class="anchor" aria-label="anchor" href="#rtables-032179044"></a></h2>
-<ul><li>Fix indent modifier propogation during tabulation</li>
+<ul><li>Fix indent modifier propagation during tabulation</li>
 <li>Fix indent calculation in <code>make_pagdf</code>
 </li>
 <li>Add significant testing to ensure <code>make_pagdf</code> indent calculation remains correct</li>
@@ -289,7 +283,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9042" id="rtables-032179042">rtables 0.3.2.17.9042<a class="anchor" aria-label="anchor" href="#rtables-032179042"></a></h2>
 <ul><li>Fix naming/pathing for columns in multivar case (split itself now has default name “multivars”)</li>
-<li>Fix labelling bug when same variable appears multiple times in MultiVarSplit with different associated levels</li>
+<li>Fix labeling bug when same variable appears multiple times in MultiVarSplit with different associated levels</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9041" id="rtables-032179041">rtables 0.3.2.17.9041<a class="anchor" aria-label="anchor" href="#rtables-032179041"></a></h2>
@@ -303,7 +297,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9039" id="rtables-032179039">rtables 0.3.2.17.9039<a class="anchor" aria-label="anchor" href="#rtables-032179039"></a></h2>
-<ul><li>Fix bug in display of column information when column structure is not symetric, as with recursive cbinds.</li>
+<ul><li>Fix bug in display of column information when column structure is not symmetric, as with recursive cbinds.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9036" id="rtables-032179036">rtables 0.3.2.17.9036<a class="anchor" aria-label="anchor" href="#rtables-032179036"></a></h2>
@@ -323,7 +317,7 @@
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9034" id="rtables-032179034">rtables 0.3.2.17.9034<a class="anchor" aria-label="anchor" href="#rtables-032179034"></a></h2>
 <ul><li>Fix internal <code>value_formats</code> accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)</li>
 <li>
-<code>rrow</code> constructor no longer interpretes cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/roche/rtables/issues/112" class="external-link">#112</a></li>
+<code>rrow</code> constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/roche/rtables/issues/112" class="external-link">#112</a></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9033" id="rtables-032179033">rtables 0.3.2.17.9033<a class="anchor" aria-label="anchor" href="#rtables-032179033"></a></h2>
@@ -335,7 +329,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9029" id="rtables-032179029">rtables 0.3.2.17.9029<a class="anchor" aria-label="anchor" href="#rtables-032179029"></a></h2>
-<ul><li>Fix issue underlying spurious length-missmatch warning in some cases when using <code>analyze_colvars</code>
+<ul><li>Fix issue underlying spurious length-mismatch warning in some cases when using <code>analyze_colvars</code>
 </li>
 </ul></div>
     <div class="section level2">

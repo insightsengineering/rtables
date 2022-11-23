@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -187,7 +181,7 @@ table.</p></dd>
 
 
 <dt>split_name</dt>
-<dd><p>string. Name associiated with this split (for pathing, etc)</p></dd>
+<dd><p>string. Name associated with this split (for pathing, etc)</p></dd>
 
 
 <dt>split_label</dt>
@@ -222,7 +216,7 @@ ref_group/control to be compared against.</p></dd>
 <dt>compfun</dt>
 <dd><p>function/string. The comparison function which accepts the
 analysis function outputs for two different partitions and returns a single
-value. Defaults to subraction. If a string, taken as the name of a
+value. Defaults to subtraction. If a string, taken as the name of a
 function.</p></dd>
 
 
@@ -242,9 +236,9 @@ which flags the label row as visible only if the child has 0 content rows.</p></
 
 <dt>extra_args</dt>
 <dd><p>list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.</p></dd>
+not match a formal argument of the tabulation function.</p></dd>
 
 
 <dt>name</dt>
@@ -338,7 +332,7 @@ formatted if this cell's value(s) are all NA.</p></dd>
 
 <dt>section_div</dt>
 <dd><p>character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 <code>NA_character_</code> (the default) for no section divider.</p></dd>
 
 

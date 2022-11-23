@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -115,13 +109,13 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu">basic_table</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            all obs     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mean   34.2219101123596</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu">basic_table</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Title of table"</span>,</span></span>
+<span class="r-in"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu">basic_table</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Title of table"</span>,</span></span>
 <span class="r-in"><span>                   subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a number"</span>, <span class="st">"of subtitles"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   main_footer <span class="op">=</span> <span class="st">"test footer"</span>,</span></span>
 <span class="r-in"><span>                   prov_footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"test.R program, executed at"</span>,</span></span>
@@ -129,7 +123,8 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Title of table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a number</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> of subtitles</span>
@@ -142,7 +137,7 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> test footer</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test.R program, executed at 2022-11-23 00:07:50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> test.R program, executed at 2022-11-23 19:20:45</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

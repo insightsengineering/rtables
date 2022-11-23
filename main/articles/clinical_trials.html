@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -107,7 +101,7 @@ trials data.</p>
 <p>Note that all the data is created using random number generators. All
 <code>ex_*</code> data which is currently attached to the
 <code>rtables</code> package is provided by the <a href="https://insightsengineering.github.io/formatters/" class="external-link"><code>formatters</code></a>
-package and was created using the <a href="https://insightsengineering.github.io/random.cdisc.data/" class="external-link"><code>random.cdisc.data</code></a>
+package and was created using the publicly available <a href="https://insightsengineering.github.io/random.cdisc.data/" class="external-link"><code>random.cdisc.data</code></a>
 R package.</p>
 <p>The packages used in this vignette are:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -126,15 +120,17 @@ can specify multiple rows with the <code><a href="../reference/in_rows.html">in_
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span>  <span class="co"># Example ADSL dataset</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span>vars <span class="op">=</span> <span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>      <span class="st">"Mean (sd)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx)"</span><span class="op">)</span>,</span>
 <span>      <span class="st">"Range"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx - xx.xx"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#               A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
@@ -142,15 +138,17 @@ can specify multiple rows with the <code><a href="../reference/in_rows.html">in_
 <p>Multiple variables can be analyzed in one <code><a href="../reference/analyze.html">analyze()</a></code>
 call:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span>vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>      <span class="st">"Mean (sd)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx)"</span><span class="op">)</span>,</span>
 <span>      <span class="st">"Range"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx - xx.xx"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                         </span></span>
@@ -205,12 +203,12 @@ formatting instructions for <code>rtables</code>. We can use
 <p>We can now create a commonly used variant of the demographic
 table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">summary_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="va">s_summary</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
+<span><span class="va">summary_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">summary_lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">summary_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                                </span></span>
@@ -226,13 +224,13 @@ table:</p>
 <p>Note that <code><a href="../reference/analyze.html">analyze()</a></code> can also be called multiple times in
 sequence:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">summary_lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="va">s_summary</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl2</span></span></code></pre></div>
+<span><span class="va">summary_tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">summary_lyt2</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">summary_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                                </span></span>
@@ -245,21 +243,23 @@ sequence:</p>
 <span><span class="co">#   M                       51              55               60      </span></span>
 <span><span class="co">#   U                        3               2               4       </span></span>
 <span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
-<p>which leads to the table identical to <code>tbl</code>:</p>
+<p>which leads to the table identical to <code>summary_tbl</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="va">tbl2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">summary_tbl</span>, <span class="va">summary_tbl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [1] TRUE</span></span></code></pre>
 <p>In clinical trials analyses the number of patients per column is
 often referred to as <code>N</code> (rather than the overall population
 which outside of clinical trials is commonly referred to as
-<code>N</code>). Column <code>N</code>s are added using the
-<code><a href="../reference/add_colcounts.html">add_colcounts()</a></code> function:</p>
+<code>N</code>). Column <code>N</code>s are added by setting the
+<code>show_colcounts</code> argument in <code><a href="../reference/basic_table.html">basic_table()</a></code> to
+<code>TRUE</code>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">summary_lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARMCD"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">summary_tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">summary_lyt3</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">summary_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                          ARM A           ARM B           ARM C    </span></span>
 <span><span class="co">#                         (N=134)         (N=134)         (N=132)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————</span></span>
@@ -283,11 +283,12 @@ analysis, hence they don’t require a modification to the
 <p>We will start with a standard table analyzing the variables
 <code>AGE</code> and <code>BMRKR2</code> variables:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=134)         (N=134)         (N=132)    </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
@@ -303,12 +304,13 @@ analysis, hence they don’t require a modification to the
 <p>Assume we would like to have this analysis carried out per gender
 encoded in the row space:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                       (N=134)         (N=134)         (N=132)    </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
@@ -358,12 +360,13 @@ table:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADSL_M_F</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">ADSL_M_F</span><span class="op">)</span></span>
+<span><span class="va">tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                       (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
@@ -418,12 +421,13 @@ are a number of predefined functions. For this example
 splitting time. Splitting is a big topic and will be eventually
 addressed in a specific package vignette.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">ADSL_M_F</span><span class="op">)</span></span>
+<span><span class="va">tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
@@ -458,12 +462,13 @@ not very descriptive. You can add the full labels as follows:</p>
 <span>    <span class="va">SEX</span> <span class="op">==</span> <span class="st">"UNDIFFERENTIATED"</span> <span class="op">~</span> <span class="st">"Undifferentiated"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">lyt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"BMRKR2"</span><span class="op">)</span>, <span class="va">s_summary</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt4</span>, <span class="va">ADSL_M_F_l</span><span class="op">)</span></span>
+<span><span class="va">tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
@@ -491,13 +496,14 @@ not very descriptive. You can add the full labels as follows:</p>
 <code>AGE</code> analysis. To do this the <code>nested</code> argument
 has to be set to <code>FALSE</code> in <code><a href="../reference/analyze.html">analyze()</a></code> call:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADSL_M_F_l</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt5</span>, <span class="va">ADSL_M_F_l</span><span class="op">)</span></span>
+<span><span class="va">tbl5</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
@@ -532,13 +538,14 @@ missing data to the <code>AGE</code> variable:</p>
 <span><span class="va">ADSL_NA</span> <span class="op">&lt;-</span> <span class="va">ADSL_M_F_l</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AGE <span class="op">=</span> <span class="fu">insert_NAs</span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">lyt6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt6</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tbl6</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
@@ -562,14 +569,15 @@ elements in the variables. Groups within rows that are defined by
 splitting can be summarized with <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code>,
 for example:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BMRKR2"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt7</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tbl7</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
@@ -602,9 +610,8 @@ is analyzed and hence are often the count &amp; group percentages
 a <code>cfun</code> for illustrative purposes here as it results in the
 same table as above:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
@@ -613,8 +620,10 @@ same table as above:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, afun <span class="op">=</span> <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>,  show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt8</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tbl8</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
@@ -640,7 +649,7 @@ same table as above:</p>
 as the second argument which gives the default group label (factor level
 from splitting) and hence it could be modified:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, labels_var <span class="op">=</span> <span class="st">"lbl_sex"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -650,8 +659,10 @@ from splitting) and hence it could be modified:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">s_summary</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"BEP01FL"</span>, <span class="va">s_summary</span>, nested <span class="op">=</span> <span class="cn">FALSE</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt9</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tbl9</span></span></code></pre></div>
 <pre><code><span><span class="co">#                           A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female: count (perc.)    79 (60.77%)     77 (58.33%)     66 (52.38%)  </span></span>
@@ -688,12 +699,11 @@ a shortcoming)</li>
 </ul>
 <p>Here is an example that demonstrates the reusability of layouts:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">adsl_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"SEX"</span><span class="op">)</span>, afun <span class="op">=</span> <span class="va">s_summary</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lyt</span></span></code></pre></div>
+<span><span class="va">adsl_lyt</span></span></code></pre></div>
 <pre><code><span><span class="co"># A Pre-data Table Layout</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># Column-Split Structure:</span></span>
@@ -703,7 +713,8 @@ a shortcoming)</li>
 <span><span class="co"># AGE:SEX (** multivar analysis **)</span></span></code></pre>
 <p>We can now build a table for <code>ADSL</code></p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">adsl_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adsl_lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
+<span><span class="va">adsl_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                         (N=134)         (N=134)         (N=132)    </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
@@ -719,20 +730,54 @@ a shortcoming)</li>
 <span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
 <p>or for all patients that are older than 18:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co">#                         (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># AGE                                                                </span></span>
-<span><span class="co">#   n                       134             134             132      </span></span>
-<span><span class="co">#   Mean (sd)          33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
-<span><span class="co">#   IQR                    11.00           10.00           10.00     </span></span>
-<span><span class="co">#   min - max          21.00 - 50.00   21.00 - 62.00   20.00 - 69.00 </span></span>
-<span><span class="co"># SEX                                                                </span></span>
-<span><span class="co">#   F                       79              77               66      </span></span>
-<span><span class="co">#   M                       51              55               60      </span></span>
-<span><span class="co">#   U                        3               2               4       </span></span>
-<span><span class="co">#   UNDIFFERENTIATED         1               0               2</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">adsl_f_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co"># Warning in min(x): no non-missing arguments to min; returning Inf</span></span></code></pre>
+<pre><code><span><span class="co"># Warning in max(x): no non-missing arguments to max; returning -Inf</span></span></code></pre>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adsl_f_tbl</span></span></code></pre></div>
+<pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
+<span><span class="co">#                       (N=134)         (N=134)         (N=132)    </span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># F                                                                </span></span>
+<span><span class="co">#   AGE                                                            </span></span>
+<span><span class="co">#     n                   79              77               66      </span></span>
+<span><span class="co">#     Mean (sd)      32.76 (6.09)    34.12 (7.06)     35.20 (7.43) </span></span>
+<span><span class="co">#     IQR                9.00            8.00             6.75     </span></span>
+<span><span class="co">#     min - max      21.00 - 47.00   23.00 - 58.00   21.00 - 64.00 </span></span>
+<span><span class="co">#   BMRKR2                                                         </span></span>
+<span><span class="co">#     LOW                 26              21               26      </span></span>
+<span><span class="co">#     MEDIUM              21              38               17      </span></span>
+<span><span class="co">#     HIGH                32              18               23      </span></span>
+<span><span class="co"># M                                                                </span></span>
+<span><span class="co">#   AGE                                                            </span></span>
+<span><span class="co">#     n                   51              55               60      </span></span>
+<span><span class="co">#     Mean (sd)      35.57 (7.08)    37.44 (8.69)     35.38 (8.24) </span></span>
+<span><span class="co">#     IQR                11.00           9.00            11.00     </span></span>
+<span><span class="co">#     min - max      23.00 - 50.00   21.00 - 62.00   20.00 - 69.00 </span></span>
+<span><span class="co">#   BMRKR2                                                         </span></span>
+<span><span class="co">#     LOW                 21              23               11      </span></span>
+<span><span class="co">#     MEDIUM              15              18               23      </span></span>
+<span><span class="co">#     HIGH                15              14               26      </span></span>
+<span><span class="co"># U                                                                </span></span>
+<span><span class="co">#   AGE                                                            </span></span>
+<span><span class="co">#     n                    3               2               4       </span></span>
+<span><span class="co">#     Mean (sd)      31.67 (3.21)    31.00 (5.66)     35.25 (3.10) </span></span>
+<span><span class="co">#     IQR                3.00            4.00             3.25     </span></span>
+<span><span class="co">#     min - max      28.00 - 34.00   27.00 - 35.00   31.00 - 38.00 </span></span>
+<span><span class="co">#   BMRKR2                                                         </span></span>
+<span><span class="co">#     LOW                  2               1               1       </span></span>
+<span><span class="co">#     MEDIUM               1               0               2       </span></span>
+<span><span class="co">#     HIGH                 0               1               1       </span></span>
+<span><span class="co"># UNDIFFERENTIATED                                                 </span></span>
+<span><span class="co">#   AGE                                                            </span></span>
+<span><span class="co">#     n                    1               0               2       </span></span>
+<span><span class="co">#     Mean (sd)       28.00 (NA)          NA          45.00 (1.41) </span></span>
+<span><span class="co">#     IQR                0.00             NA              1.00     </span></span>
+<span><span class="co">#     min - max      28.00 - 28.00    Inf - -Inf     44.00 - 46.00 </span></span>
+<span><span class="co">#   BMRKR2                                                         </span></span>
+<span><span class="co">#     LOW                  1               0               2       </span></span>
+<span><span class="co">#     MEDIUM               0               0               0       </span></span>
+<span><span class="co">#     HIGH                 0               0               0</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -741,11 +786,10 @@ a shortcoming)</li>
 <p>There are a number of different adverse event tables. We will now
 present two tables that show adverse events by ID and then by grade and
 by ID.</p>
-<p>This time we won’t use the <code>ADAE</code> dataset from
-<code>random.cdisc.data</code> but rather generate a dataset on the fly
-(see <a href="https://github.com/waddella/phuse2016_adverse_events" class="external-link">Adrian’s
+<p>This time we won’t use the <code>ADAE</code> dataset from <a href="https://insightsengineering.github.io/random.cdisc.data/" class="external-link"><code>random.cdisc.data</code></a>
+but rather generate a dataset on the fly (see <a href="https://github.com/waddella/phuse2016_adverse_events" class="external-link">Adrian’s
 2016 Phuse paper</a>):</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lookup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -814,7 +858,7 @@ by ID.</p>
 <h3 id="adverse-events-by-id">Adverse Events By ID<a class="anchor" aria-label="anchor" href="#adverse-events-by-id"></a>
 </h3>
 <p>We start by defining an events summary function:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s_events_patients</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">labelstr</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Total number of patients with at least one event"</span> <span class="op">=</span></span>
@@ -830,7 +874,7 @@ by ID.</p>
 <li>three patients have no AEs</li>
 </ul>
 <p>we would get the following summary:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">s_events_patients</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id 1"</span>, <span class="st">"id 1"</span>, <span class="st">"id 2"</span><span class="op">)</span>, .N_col <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># RowsVerticalSection (in_rows) object print method:</span></span>
 <span><span class="co"># ----------------------------</span></span>
@@ -847,13 +891,13 @@ passed to <code>afun</code> in <code><a href="../reference/analyze.html">analyze
 documentation with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
 <p>We now use the <code>s_events_patients</code> summary function in a
 tabulation:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">adae_0_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_0_lyt</span>, <span class="va">ADAE2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">adae_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_lyt</span>, <span class="va">ADAE2</span><span class="op">)</span></span>
+<span><span class="va">adae_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                       ARM A         ARM B    </span></span>
 <span><span class="co">#                                                     (N=2060)       (N=1058)  </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————————————————</span></span>
@@ -870,8 +914,9 @@ in <code><a href="../reference/build_table.html">build_table()</a></code>. When 
 calculates the column counts by applying the same column faceting to
 <code>alt_counts_df</code> as it does to the primary data during
 tabulation:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_0_lyt</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_adsl_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_lyt</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_adsl_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                       ARM A          ARM B    </span></span>
 <span><span class="co">#                                                      (N=146)        (N=154)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————</span></span>
@@ -882,14 +927,15 @@ they can be specified directly via the <code>col_counts</code> argument
 to <code><a href="../reference/build_table.html">build_table()</a></code>, though specifying an
 <code>alt_counts_df</code> is the preferred mechanism.</p>
 <p>We next calculate this information per system organ class:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_soc_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span></code></pre></div>
+<span></span>
+<span><span class="va">adae_soc_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_soc_lyt</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_soc_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                         ARM A          ARM B    </span></span>
 <span><span class="co">#                                                        (N=146)        (N=154)   </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -911,16 +957,15 @@ to <code><a href="../reference/build_table.html">build_table()</a></code>, thoug
 <code>AEBODSYS</code>. The default <code><a href="../reference/analyze.html">analyze()</a></code> behavior for a
 factor is to create the count table per level (using
 <code>rtab_inner</code>):</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_soc_lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl1</span></span></code></pre></div>
+<span><span class="va">adae_soc_tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_soc_lyt2</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_soc_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -987,7 +1032,7 @@ desired indentation by default.</p>
 counts the total number of events and not the number of subjects for one
 or more events for a particular term. To get the correct table we need
 to write a custom analysis function:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_count_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">termvar</span> <span class="op">=</span> <span class="st">"AEDECOD"</span>, <span class="va">idvar</span> <span class="op">=</span> <span class="st">"USUBJID"</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="va">termvar</span><span class="op">]</span><span class="op">]</span></span>
@@ -1029,14 +1074,15 @@ to write a custom analysis function:</p>
 <span><span class="co"># 10       ORTHOSTATIC HYPOTENSION</span></span>
 <span><span class="co"># 11                      WEAKNESS</span></span></code></pre>
 <p>So the desired AE table is:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_soc_lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, afun <span class="op">=</span> <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, afun <span class="op">=</span> <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">adae_soc_tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_soc_lyt3</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_soc_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -1098,17 +1144,16 @@ to write a custom analysis function:</p>
 <span><span class="co">#     WEAKNESS                                                0              0</span></span></code></pre>
 <p>Note that we are missing the overall summary in the first two rows.
 This can be added with an initial <code><a href="../reference/analyze.html">analyze()</a></code> call.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_soc_lyt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, afun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEBODSYS"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="fl">1</span>, section_div <span class="op">=</span> <span class="st">""</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, cfun <span class="op">=</span> <span class="va">s_events_patients</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, <span class="va">table_count_once_per_id</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
+<span><span class="va">adae_soc_tbl4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_soc_lyt4</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_soc_tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -1175,8 +1220,8 @@ This can be added with an initial <code><a href="../reference/analyze.html">anal
 <span><span class="co">#     WEAKNESS                                                0              0</span></span></code></pre>
 <p>Finally, if we wanted to prune the 0 count rows we can do that with
 the <code><a href="../reference/trim_rows.html">trim_rows()</a></code> function:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">adae_soc_tbl4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -1219,7 +1264,7 @@ had at least one adverse event per grade for different subsets of the
 data (e.g. defined by system organ class).</p>
 <p>For this table we do not show the zero count grades. Note that we add
 the “overall” groups with a custom split function.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_count_grade_once_per_id</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>,</span>
 <span>                                          <span class="va">labelstr</span> <span class="op">=</span> <span class="st">""</span>,</span>
 <span>                                          <span class="va">gradevar</span> <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span>
@@ -1253,10 +1298,9 @@ the “overall” groups with a custom split function.</p>
 <span><span class="co"># 6             5             65          0             5</span></span></code></pre>
 <p>All of the layouting concepts needed to create this table have
 already been introduced so far:</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adae_grade_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AETOXGR"</span>,</span>
 <span>          afun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>,</span>
 <span>          extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>
@@ -1266,8 +1310,10 @@ already been introduced so far:</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"AEDECOD"</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span>, indent_mod <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AETOXGR"</span>,</span>
 <span>          afun <span class="op">=</span> <span class="va">table_count_grade_once_per_id</span>,</span>
-<span>          extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span></code></pre></div>
+<span>          extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>grade_levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">adae_grade_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">adae_grade_lyt</span>, <span class="va">ADAE2</span>, alt_counts_df <span class="op">=</span> <span class="va">ADSL2</span><span class="op">)</span></span>
+<span><span class="va">adae_grade_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                      ARM A     ARM B </span></span>
 <span><span class="co">#                                                     (N=146)   (N=154)</span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————————</span></span>
@@ -1627,7 +1673,7 @@ parts:</p>
 <li>Multinomial response table</li>
 </ol>
 <p>Let’s start with the first part which is fairly simple to derive:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ADRS_BESRSPI</span> <span class="op">&lt;-</span> <span class="va">ex_adrs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"BESRSPI"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -1639,11 +1685,12 @@ parts:</p>
 <span>   <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">xi</span><span class="op">)</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="va">xi</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span> <span class="op">/</span> <span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx%)"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">rsp_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rsp_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">rsp_lyt</span>, <span class="va">ADRS_BESRSPI</span><span class="op">)</span></span>
+<span><span class="va">rsp_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                       ARM A            ARM B             ARM C     </span></span>
 <span><span class="co">#                      (N=134)          (N=134)           (N=132)    </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
@@ -1657,7 +1704,7 @@ the table.</p>
 <p>We will now look the implementation of part 2: unstratified analysis
 comparison vs. control group. Let’s start with the analysis
 function:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s_unstrat_resp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.ref_group</span>, <span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">.in_ref_col</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1717,14 +1764,15 @@ function:</p>
 <span><span class="co"># 3       p-value (Chi-Squared Test)</span></span>
 <span><span class="co"># 4              Odds Ratio (95% CI)</span></span></code></pre>
 <p>Hence we can now add the next vignette to the table:</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rsp_lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstrat_resp</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span>,</span>
-<span>          var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></span></code></pre></div>
+<span>          var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rsp_tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">rsp_lyt2</span>, <span class="va">ADRS_BESRSPI</span><span class="op">)</span></span>
+<span><span class="va">rsp_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -1738,7 +1786,7 @@ function:</p>
 <p>Next we will add part 3: the multinomial response table. To do so, we
 are adding a row-split by response level, and then doing the same thing
 as we did for the binary response table above.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s_prop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>    <span class="st">"95% CI (Wald, with correction)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="va">.N_col</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span> <span class="op">*</span> <span class="fl">100</span>, format <span class="op">=</span> <span class="st">"(xx.xx, xx.xx)"</span><span class="op">)</span></span>
@@ -1756,10 +1804,9 @@ as we did for the binary response table above.</p>
 <span><span class="co">#                        row_label</span></span>
 <span><span class="co"># 1 95% CI (Wald, with correction)</span></span></code></pre>
 <p>We can now create the final response table with all three parts:</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rsp_lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstrat_resp</span>,</span>
 <span>          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1769,8 +1816,10 @@ as we did for the binary response table above.</p>
 <span>    nested <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rsp_tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">rsp_lyt3</span>, <span class="va">ADRS_BESRSPI</span><span class="op">)</span></span>
+<span><span class="va">rsp_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -1789,7 +1838,7 @@ as we did for the binary response table above.</p>
 <span><span class="co">#   95% CI (Wald, with correction)      (9.36, 22.11)      (24.97, 41.47)       (4.79, 15.34)</span></span></code></pre>
 <p>In the case that we wanted to rename the levels of <code>AVALC</code>
 and remove the CI for <code>NE</code> we could do that as follows:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rsp_label</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">rsp_full_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    CR          <span class="op">=</span> <span class="st">"Complete Response (CR)"</span>,</span>
@@ -1806,9 +1855,8 @@ and remove the CI for <code>NE</code> we could do that as follows:</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span></span>
-<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">rsp_lyt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, ref_group <span class="op">=</span> <span class="st">"ARM A"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"rsp"</span>, <span class="va">s_proportion</span>, show_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"is_rsp"</span>, <span class="va">s_unstrat_resp</span>,</span>
 <span>          show_labels <span class="op">=</span> <span class="st">"visible"</span>, var_labels <span class="op">=</span> <span class="st">"Unstratified Response Analysis"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1823,10 +1871,10 @@ and remove the CI for <code>NE</code> we could do that as follows:</p>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="va">s_prop</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AVALC"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.N_col</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span><span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="st">"NE"</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span> <span class="op">/</span> <span class="va">.N_col</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx (xx.xx%)"</span><span class="op">)</span>, .labels <span class="op">=</span> <span class="fu">rsp_label</span><span class="op">(</span><span class="st">"NE"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">ADRS_BESRSPI</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
+<span><span class="va">rsp_tbl4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">rsp_lyt4</span>, <span class="va">ADRS_BESRSPI</span><span class="op">)</span></span>
+<span><span class="va">rsp_tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
