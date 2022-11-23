@@ -863,7 +863,7 @@ recursive_applysplit <- function(df,
         indent_mod(ret) <- indent_mod(spl)
     } else if(nrow(ctab) > 0L || length(kids) > 0L) {
          ## previously we checked if the child had an identical label
-         ## but I don't think tahts needed anymore.
+         ## but I don't think thats needed anymore.
          tlabel <- partlabel
 
          ret <- TableTree(cont = ctab,

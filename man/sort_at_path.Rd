@@ -9,7 +9,8 @@ sort_at_path(
   path,
   scorefun,
   decreasing = NA,
-  na.pos = c("omit", "last", "first")
+  na.pos = c("omit", "last", "first"),
+  .prev_path = character()
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ and \code{FALSE} if they are characters.}
 with \code{NA} scores. Defaults to \code{"omit"}, which removes them, other
 allowed values are \code{"last"}  and \code{"first"} which indicate where
 they should be placed in the order.}
+
+\item{.prev_path}{character. Internal detail, do not set manually.}
 }
 \value{
 A TableTree with the same structure as \code{tt} with the exception
@@ -44,7 +47,7 @@ Sort substructure of a TableTree at a particular Path in the Tree.
 }
 \details{
 The \code{path} here can include \code{"*"} as a step, which means
-taht each child at that step will be \emph{separately} sorted based on
+that each child at that step will be \emph{separately} sorted based on
 \code{scorefun} and the remaining \code{path} entries. This can occur
 multiple times in a path.
 }

@@ -384,7 +384,7 @@ test_that("Cell and column label wrapping works in printing", {
     tt_simple <- basic_table() %>%
         analyze("AGE", format = "xx.xxxx") %>%
         build_table(ex_adsl)
-    result <- toString(matrix_form(tt_simple), widths = c(2, 3), col_gap = 1)
+    result <- toString(matrix_form(tt_simple, TRUE), widths = c(2, 3), col_gap = 1)
     sre3 <- strsplit(result, "\n")[[1]]
     expected <- c("   all", "   obs", "——————", "Me 34.", "an 88 ")
     expect_identical(sre3, expected)

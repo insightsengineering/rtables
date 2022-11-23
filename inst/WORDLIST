@@ -3,6 +3,7 @@ adrian
 afun
 afuns
 aMatrixPrintForm
+amongst
 assuing
 aut
 bove
@@ -116,6 +117,7 @@ subtables
 symetric
 tablerow
 TableTree
+tabletree
 tabletrees
 Tadeusz
 testthat
@@ -130,6 +132,9 @@ unicode
 useR
 Verticay
 VignetteBuilder
+VTableNodeInfo
+VTableRow
+VTableTree
 Waddell
 waddell
 wordwrapping
