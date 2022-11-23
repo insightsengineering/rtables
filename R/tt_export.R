@@ -207,16 +207,17 @@ export_as_txt <- function(tt, file = NULL,
         tbls <- list(tt)
     }
 
-    res <- paste(mapply(function(tb, ...) {
-        toString(tb, widths = colwidths[c(1, .figure_out_colinds(tb, tt))], ...)
+    res <- paste(mapply(function(tb, cwidths, ...) {
+        toString(tb, widths = cwidths[c(1, .figure_out_colinds(tb, tt))], ...)
     },
     MoreArgs = list(hsep = hsep,
                     indent_size = indent_size,
                     tf_wrap = tf_wrap,
-                    max_width = max_width),
+                    max_width = max_width,
+                    cwidths = colwidths),
     SIMPLIFY = FALSE,
-    tb = tbls, cw = .split_colwidths(tbls, ncol(tt), colwidths = colwidths)
-    ), collapse = page_break)
+    tb = tbls),
+    collapse = page_break)
 
     if(!is.null(file))
         cat(res, file = file)
