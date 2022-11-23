@@ -43,9 +43,9 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further
@@ -56,30 +56,29 @@ Add a content row of summary counts
 }
 \details{
 If \code{format} expects 1 value (i.e. it is specified as a format string
-and \code{xx} appears  \code{xx} apepars  values (i.e. \code{xx} appears twice in the
+and \code{xx} appears for two values (i.e. \code{xx} appears twice in the
 format string) or is specified as a function, then both raw and percent of
 column total counts are calculated. If \code{format} is a format string where
 \code{xx} appears only one time, only raw counts are used.
 
-\code{cfun} must accept \code{df} as its first argument and will receive the subset
-\code{data.frame} corresponding with the row- and column-splitting for the cell
-being calculated. Must accept \code{labelstr} as the second parameter, which
-accepts the \code{label} of the level of the parent split currently being
-summarized. Can additionally take any optional argument supported by analysis
-functions. (see \code{\link{analyze}}).
+\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument
+\code{cfun} will receive the subset \code{data.frame} corresponding with the row-
+and column-splitting for the cell being calculated. Must accept \code{labelstr} as
+the second parameter, which accepts the \code{label} of the level of the parent
+split currently being summarized. Can additionally take any optional argument
+supported by analysis functions. (see \code{\link{analyze}}).
 }
 \examples{
 
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
 
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt <- basic_table() \%>\% split_cols_by("ARM") \%>\%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
     summarize_row_groups(label_fstr = "\%s (n)") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-l
+lyt
 
-tbl <- build_table(l, DM2)
-
+tbl <- build_table(lyt, DM2)
 tbl
 
 row_paths_summary(tbl) # summary count is a content table
@@ -96,15 +95,15 @@ sfun <- function(x, labelstr, trim) {
     )
 }
 
-l2 <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt2 <- basic_table(show_colcounts = TRUE) \%>\% 
+    split_cols_by("ARM") \%>\%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
-    add_colcounts() \%>\%
     summarize_row_groups("AGE", cfun = sfun,
                          extra_args = list(trim = .2)) \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%
     append_topleft(c("Country", "  Age"))
 
-tbl2 <- build_table(l2, DM2)
+tbl2 <- build_table(lyt2, DM2)
 tbl2
 
 }

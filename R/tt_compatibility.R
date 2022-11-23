@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @return A row object of the context-appropriate type (label or data)
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' rrow("ABC", c(1,2), c(3,2), format = "xx (xx.%)")
@@ -49,7 +49,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 #'
 #' @inherit rrow return
 #' @export
-#' @family compatability
+#' @family compatibility
 #' @examples
 #' rrowl("a", c(1,2,3), format = "xx")
 #' rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
@@ -168,7 +168,7 @@ hrows_to_colinfo <- function(rows) {
 #'
 #' @export
 #' @return a \code{InstantiatedColumnInfo} object.
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' h1 <- rheader(c("A", "B", "C"))
@@ -219,7 +219,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'
 #' @inheritParams compat_args
 #' @inheritParams gen_args
-#' @param header Information defining the header (column strucure) of the table.
+#' @param header Information defining the header (column structure) of the table.
 #'   This can be as row objects (legacy), character vectors or a
 #'   \code{InstantiatedColumnInfo} object.
 #' @param \dots Rows to place in the table.
@@ -228,7 +228,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' @export
 #' @return a formal table object of the appropriate type (\code{ElementaryTable}
 #'   or \code{TableTree})
-#' @family compatability
+#' @family compatibility
 #' @examples
 #'
 #' rtable(
@@ -815,19 +815,21 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #'   is a non-trivial nested row structure in \code{tbl}
 #' @examples
 #' o <- options(warn = 0)
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("Species") %>%
-#'     analyze("Sepal.Length") %>%
-#'     build_table(iris)
+#'     analyze("Sepal.Length")
+#'     
+#' tbl <- build_table(lyt, iris)
 #'
 #' insert_rrow(tbl, rrow("Hello World"))
 #' insert_rrow(tbl, rrow("Hello World"), at = 2)
 #'
-#' tbl2 <- basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'     split_cols_by("Species") %>%
 #'     split_rows_by("Species") %>%
-#'     analyze("Sepal.Length") %>%
-#'     build_table(iris)
+#'     analyze("Sepal.Length")
+#'     
+#' tbl2 <- build_table(lyt2, iris)
 #'
 #' insert_rrow(tbl2, rrow("Hello World"))
 #' insert_rrow(tbl2, rrow("Hello World"), at = 2)

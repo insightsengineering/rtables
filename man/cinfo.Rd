@@ -33,7 +33,7 @@ columns.}
 \item{dispcounts}{logical(1). Should the counts be displayed as header info when
 the associated table is printed.}
 
-\item{countformat}{character(1). Format for the counts if thtey are displayed}
+\item{countformat}{character(1). Format for the counts if they are displayed}
 
 \item{count_na_str}{character. NA string to be used when formatting counts. Defaults
 to \code{""}.}

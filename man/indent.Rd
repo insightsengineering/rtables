@@ -20,7 +20,7 @@ Change indentation of all rrows in an rtable
 }
 \examples{
 is_setosa <- iris$Species == "setosa"
-mtbl <- rtable(
+m_tbl <- rtable(
   header = rheader(
     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
     rrow(NULL, "mean", "median", "mean", "median")
@@ -38,7 +38,7 @@ mtbl <- rtable(
     format = "xx.xx"
   )
 )
-indent(mtbl)
-indent(mtbl, 2)
+indent(m_tbl)
+indent(m_tbl, 2)
 
 }

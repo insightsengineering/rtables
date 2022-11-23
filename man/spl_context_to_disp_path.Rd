@@ -7,7 +7,7 @@
 spl_context_to_disp_path(ctx)
 }
 \arguments{
-\item{ctx}{data.frame. The \code{spl_context} data.frame where the error occured}
+\item{ctx}{data.frame. The \code{spl_context} data.frame where the error occurred}
 }
 \value{
 A character string containing a description of the row path corresponding

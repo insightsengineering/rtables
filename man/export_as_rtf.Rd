@@ -56,7 +56,7 @@ Experimental export to the RTF format.
 RTF export occurs by via the following steps
 
 \itemize{
-\item{the table is paginated to the page size (Verticay and horizontally)}
+\item{the table is paginated to the page size (Vertically and horizontally)}
 \item{Each separate page is converted to a MatrixPrintForm and from there to RTF-encoded text}
 \item{Separate rtfs text chunks are combined and written out as a single RTF file}
 }

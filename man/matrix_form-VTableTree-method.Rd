@@ -39,7 +39,7 @@ map the rtable to an in between state with the formatted cells in a matrix form.
 The strings in the return object are defined as follows: row labels are those
 determined by \code{make_row_df} and cell values are determined using
 \code{get_formatted_cells}. (Column labels are calculated using a
-non-exported internal funciton.
+non-exported internal function.
 }
 \examples{
 library(dplyr)
@@ -49,15 +49,15 @@ iris2 <- iris \%>\%
   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) \%>\%
   ungroup()
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"),
           afun = list_wrap_x(summary) , format = "xx.xx")
 
-l
+lyt
 
-tbl <- build_table(l, iris2)
+tbl <- build_table(lyt, iris2)
 
 matrix_form(tbl)
 }

@@ -86,7 +86,7 @@ complx_lyt_rnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "medi
 
 
 make_big_lyt <- function() {
-        lyt <- basic_table() %>%
+        lyt <- basic_table(show_colcounts = TRUE) %>%
             split_cols_by("ARM") %>%
             ## add nested column split on SEX with value lables from gend_label
             split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
@@ -94,7 +94,6 @@ make_big_lyt <- function() {
             ## a root split and puts summary content on it labelled Overall (N)
             ## add_colby_total(label = "All") %>%
             ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
-            add_colcounts() %>%
             ## add a new subtable that splits on RACE, value labels from ethn_label
             split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "hidden") %>%
             summarize_row_groups("RACE", label_fstr = "%s (n)") %>%

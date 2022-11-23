@@ -37,7 +37,7 @@ displayed during printing.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
-a connected horrizontal line (unicode 2014) in locals that use a UTF
+a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{\dots}{currently ignored.}
@@ -66,12 +66,12 @@ When overriding the column counts or totals care must be taken that,
 e.g., \code{length()} or \code{nrow()} are not called within tabulation functions,
 because those will NOT give the overridden counts. Writing/using tabulation
 functions which accept \code{.N_col} and \code{.N_total} or do not rely on
-column counts at all (even implicitly) is the only way to ensure overriden
+column counts at all (even implicitly) is the only way to ensure overridden
 counts are fully respected.
 }
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze("Sepal.Length", afun = function(x) {
   list(
@@ -80,12 +80,13 @@ l <- basic_table() \%>\%
   )
 })
 
-l
+lyt
 
-build_table(l, iris)
+tbl <- build_table(lyt, iris)
+tbl
 
 # analyze multiple variables
-l <- basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
   list(
@@ -94,31 +95,30 @@ l <- basic_table() \%>\%
   )
 })
 
-build_table(l, iris)
+tbl2 <- build_table(lyt2, iris)
+tbl2
 
-# an example more relevant for clinical trials
-l <- basic_table() \%>\%
+# an example more relevant for clinical trials with column counts
+lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM") \%>\%
     analyze("AGE", afun = function(x) {
       setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median",
                                       "upper-hinge", "maximum"))
     })
 
-build_table(l, DM)
+tbl3 <- build_table(lyt3, DM)
+tbl3
 
-build_table(l, subset(DM, AGE > 40))
-
-# with column counts
-l2 <- l \%>\%
-  add_colcounts()
-build_table(l2, DM)
-
+tbl4 <- build_table(lyt3, subset(DM, AGE > 40))
+tbl4
 
 # with column counts calculated based on different data
 miniDM <- DM[sample(1:NROW(DM), 100),]
-build_table(l2, DM, alt_counts_df = miniDM)
+tbl5 <- build_table(lyt3, DM, alt_counts_df = miniDM)
+tbl5
 
-build_table(l, DM, col_counts = 1:3)
+tbl6 <- build_table(lyt3, DM, col_counts = 1:3)
+tbl6
 }
 \author{
 Gabriel Becker

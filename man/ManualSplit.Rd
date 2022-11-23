@@ -29,9 +29,9 @@ object/structure.}
 to same as the corresponding label, but is not required to be.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
@@ -57,7 +57,7 @@ multiple variables are analyzed at the same level of nesting.}
 when forcing pagination between the children of this split/table}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 }
 \value{

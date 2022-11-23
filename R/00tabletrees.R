@@ -1051,7 +1051,7 @@ setClass("InstantiatedColumnInfo",
 #'   columns.
 #' @param dispcounts logical(1). Should the counts be displayed as header info when
 #'   the associated table is printed.
-#' @param countformat character(1). Format for the counts if thtey are displayed
+#' @param countformat character(1). Format for the counts if they are displayed
 #' @param count_na_str character. NA string to be used when formatting counts. Defaults
 #'   to `""`.
 #' @return an \code{InstantiateadColumnInfo} object.
@@ -1654,7 +1654,7 @@ RefFootnote <- function(note, index = NA_integer_) {
 #'   formatter or returned when extracted
 #' @return An object representing the value within a single cell within a
 #'   populated table. The underlying structure of this object is an
-#'   implementation detail and sholud not be relied upon beyond calling
+#'   implementation detail and should not be relied upon beyond calling
 #'   accessors for the class.
 #' @export
 

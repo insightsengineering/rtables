@@ -31,9 +31,9 @@ new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
@@ -61,27 +61,29 @@ ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
                 function(x) rcell(sum(x > .5), format = "xx"))
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff")) \%>\%
     split_rows_by("RACE", split_label = "ethnicity",
                   split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = colfuns)
+lyt
 
-l
+tbl <- build_table(lyt, ANL)
+tbl
 
-build_table(l, ANL)
-
-
-basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt2 <- basic_table() \%>\% 
+    split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff"),
                            varlabels = c("Measurement", "Pct Diff")) \%>\%
     split_rows_by("RACE", split_label = "ethnicity",
                   split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
-    analyze_colvars(afun = mean, format = "xx.xx") \%>\%
-    build_table(ANL)
+    analyze_colvars(afun = mean, format = "xx.xx")
+    
+tbl2 <- build_table(lyt2, ANL)
+tbl2
 
 }
 \seealso{

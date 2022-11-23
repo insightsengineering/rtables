@@ -25,12 +25,12 @@ materials declared in the layout (the content displayed to the left of
 the column labels when the resulting tables are printed).
 
 Top-left material strings are stored and then displayed \emph{exactly as is},
-no structure or indenting is applied to them either wheyn they are added
+no structure or indenting is applied to them either when they are added
 or when they are displayed.
 }
 \note{
 Currently, where in the construction of the layout this is called
-makes no difference, as it is indepenedent of the actual splitting keywords.
+makes no difference, as it is independent of the actual splitting keywords.
 This may change in the future.
 
 This function is experimental, its name and the details of
@@ -38,6 +38,8 @@ its behavior are subject to change in future versions.
 }
 \examples{
 library(dplyr)
+
+DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
 
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
@@ -47,9 +49,9 @@ lyt <- basic_table() \%>\%
   analyze("AGE") \%>\%
   append_topleft("  Age")
 
-DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
+tbl <- build_table(lyt, DM2)
+tbl
 
-build_table(lyt, DM2)
 }
 \seealso{
 \code{\link[=top_left]{top_left()}}

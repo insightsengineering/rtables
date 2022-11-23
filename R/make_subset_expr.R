@@ -173,7 +173,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
 
     ## calculate the counts based on the df
     ## This presumes that it is called on the WHOLE dataset,
-    ## NOT after any splitting has occured. Otherwise
+    ## NOT after any splitting has occurred. Otherwise
     ## the counts will obviously be wrong.
     if(is.null(counts)) {
         counts <- rep(NA_integer_, length(cexprs))

@@ -54,7 +54,7 @@ for currently supported alignments.}
 formatted if this cell's value(s) are all NA.}
 
 \item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
-.in_ref_col shoul be passed to this argument)}
+.in_ref_col should be passed to this argument)}
 
 \item{refval}{ANY. Value to use when in the reference column. Defaults
 to \code{NULL}}
@@ -62,7 +62,7 @@ to \code{NULL}}
 \value{
 An object representing the value within a single cell within a
 populated table. The underlying structure of this object is an
-implementation detail and sholud not be relied upon beyond calling
+implementation detail and should not be relied upon beyond calling
 accessors for the class.
 }
 \description{

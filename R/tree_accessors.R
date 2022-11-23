@@ -32,10 +32,11 @@ setMethod("nrow", "TableRow",
 #' @param x `TableTree` or `ElementaryTable` object
 #'
 #' @examples
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   analyze(c("SEX", "AGE")) %>%
-#'   build_table(ex_adsl)
+#'   analyze(c("SEX", "AGE"))
+#'   
+#' tbl <- build_table(lyt, ex_adsl)
 #'
 #' dim(tbl)
 #' nrow(tbl)
@@ -2053,7 +2054,7 @@ setMethod("spl_varnames<-", "MultiVarSplit",
 #' @inheritParams gen_args
 #' @description A TableTree object can have \emph{top left material} which is a sequence
 #' of strings which are printed in the area of the table between the column header display
-#' and the label of the first row.  These functions acccess and modify that material.
+#' and the label of the first row.  These functions access and modify that material.
 #'
 #' @return A character vector representing the top-left material of \code{obj} (or
 #' \code{obj} after modification, in the case of the setter).
@@ -2120,7 +2121,7 @@ vil_collapse <- function(x) {
 #' }
 #'
 #' @note This function will not detect dependencies implicit in
-#' analysis or summary functions which accept \code{df} and then
+#' analysis or summary functions which accept \code{x} or \code{df} and then
 #' rely on the existence of particular variables not being split on/
 #' analyzed.
 #'
@@ -2470,7 +2471,7 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
           fnotes_at_path(ctbl, pth, colpath) <- value
           content_table(ttrp) <- ctbl
       } else {
-          stop("an error occured. this shouldn't happen. please contact the maintainer") # nocov
+          stop("an error occurred. this shouldn't happen. please contact the maintainer") # nocov
       }
       ttrp
 })
@@ -2486,10 +2487,11 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 #' 
 #' @examples
 #' # How to add referencial footnotes after having created a table
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_rows_by("SEX", page_by = TRUE) %>%
-#'     analyze("AGE") %>% 
-#'     build_table(DM)
+#'     analyze("AGE")
+#' 
+#' tbl <- build_table(lyt, DM)
 #' tbl <- trim_rows(tbl)
 #' # Check the row and col structure to add precise references
 #' # row_paths(tbl)

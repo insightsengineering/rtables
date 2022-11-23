@@ -69,7 +69,7 @@ terms).}
 object/structure.}
 
 \item{labelrow}{LabelRow. The LabelRow object to assign to this Table.
-Consructed from \code{label} by default if not specified.}
+Constructed from \code{label} by default if not specified.}
 
 \item{rspans}{data.frame. Currently stored but otherwise ignored.}
 
@@ -104,7 +104,7 @@ Generally should not be modified by hand.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
-a connected horrizontal line (unicode 2014) in locals that use a UTF
+a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{trailing_sep}{character(1). String which will be used as a section
