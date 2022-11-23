@@ -187,7 +187,7 @@ tbl
 A character value can be specified as a section divider which succeed every group defined by a split instruction. Below, a "+" is repeated and used as a section divider.
 
 ```{r}
-l <- basic_table()%>%
+lyt <- basic_table()%>%
     split_cols_by("Species")%>%
     analyze(head(names(iris), -1), afun = function(x) {
         list(
@@ -196,20 +196,50 @@ l <- basic_table()%>%
         )
     }, section_div = "+")
 
-build_table(l, iris)
+build_table(lyt, iris)
 ```
 
 ### Indent Modifier
 
+Tables by default do not have an indent at the split level. A custom indent value can be supplied with the `indent_mod` argument within a split function. 
+
 ```{r}
+basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3) %>%
+    split_rows_by("STRATA1", indent_mod = 5) %>%
+    analyze("AGE", mean, format = "xx.x")%>%
+    build_table(DM)
 
 ```
 
-
-
 ### Variable Label Visibility
 
-```{r}
+With split instructions, label visibility of the split groups can be modified. `visible`, `hidden` and `topleft`.For analyze calls, \code{default} indicates that the variable should be visible if and only if
+multiple variables are analyzed at the same level of nesting.
 
+```{r}
+basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3, child_labels = "hidden") %>%
+    split_rows_by("STRATA1", child_labels ="visible" ) %>%
+    analyze("AGE", mean, format = "xx.x")%>%
+    build_table(DM)
+
+basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, label_pos = "hidden") %>%
+    split_rows_by("STRATA1", label_pos = "hidden") %>%
+    analyze("AGE", mean, format = "xx.x")%>%
+    build_table(DM)
 ```
 
