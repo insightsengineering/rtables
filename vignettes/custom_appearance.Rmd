@@ -1,6 +1,6 @@
 ---
 title: "Customizing Appearance"
-author: "Davide Garolini and Gabriel Becker"
+author: "Davide Garolini, Abinaya Yogasekaram, and Gabriel Becker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Customizing Appearance
 
-In this vignette, we want to describe the various ways we can modify and customize the appearance of `rtables`.
+In this vignette, we describe the various ways we can modify and customize the appearance of `rtables`.
 
 Loading the package:
 ```{r, message=FALSE}
@@ -86,3 +86,88 @@ basic_table() %>%
   }, show_labels = "visible", na_str = "NE") %>%
   build_table(ex_adsl)
 ```
+
+### Top-left Materials
+
+### Table Inset
+Table title, table body, referential footnotes and and main footers can be inset from the left alignment of the titles and provenance footer materials.
+
+Below is a simplified example:
+
+```{r}
+lyt <- basic_table() %>%
+    analyze("AGE")
+
+# without inset
+tbl <- build_table(lyt, DM)
+tbl
+
+# with inset of 3 characters
+table_inset(tbl) <- 3
+tbl
+
+```
+
+Below is an example with a table produced for clinical data. Compare the inset of the table and main footer.
+
+```{r}
+lyt <- basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE", mean, format = "xx.x")
+
+# without inset
+tbl <- build_table(lyt, DM)
+tbl
+
+
+# with inset
+table_inset(tbl) <- 5
+tbl
+```
+
+
+### Horizontal Separation
+A character value can be specified to modify the horizontal separation between column headers and the table. Below, we replace the default line with "=".
+```{bash}
+tbl <- basic_table() %>%
+        split_cols_by("Species") %>%
+        add_colcounts() %>%
+        analyze(c("Sepal.Length", "Petal.Width"), function(x) {
+            in_rows(
+                mean_sd = c(mean(x), sd(x)),
+                var = var(x),
+                min_max = range(x),
+                .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.x - xx.x"),
+                .labels = c("Mean (sd)", "Variance", "Min - Max")
+            )
+        }) %>%
+        build_table(iris, hsep = "=")
+tbl
+```
+
+### Section Dividers
+
+A character value can be specified as a section divider which succeed every group defined by a split instruction. Below, a "+" is repeated and used as a section divider.
+
+```{r}
+l <- basic_table()%>%
+    split_cols_by("Species")%>%
+    analyze(head(names(iris), -1), afun = function(x) {
+        list(
+            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+            "range" = rcell(diff(range(x)), format = "xx.xx")
+        )
+    }, section_div = "+")
+
+build_table(l, iris)
+```
+
+### Indent Modifier
+
+
+### Variable Label Visibility
