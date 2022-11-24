@@ -218,8 +218,11 @@ basic_table(title = "Study XXXXXXXX",
 
 ### Variable Label Visibility
 
-With split instructions, label visibility of the split groups can be modified. `visible`, `hidden` and `topleft`.For analyze calls, \code{default} indicates that the variable should be visible if and only if
+With split instructions, label visibility of the groups can be modified. `visible`, `hidden` and `topleft`.For analyze calls, \code{default} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.
+
+Location of the variable label can be modified to be `visible`, `hidden` or present on the `topleft` for analyze level splits.
+
 
 ```{r}
 basic_table(title = "Study XXXXXXXX",
