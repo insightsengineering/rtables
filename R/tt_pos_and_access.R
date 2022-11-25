@@ -505,9 +505,7 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     if(is.null(newcinfo)) {
         cinfo <- col_info(tt)
         newcinfo <- subset_cols(cinfo, j, 
-                                keep_topleft = keep_topleft, 
-                                keep_fnotes = keep_fnotes, 
-                                keep_titles = keep_titles, ...)
+                                keep_topleft = keep_topleft, ...)
     }
     ## topleft taken care of in creation of newcinfo
     kids <- tree_children(tt)
