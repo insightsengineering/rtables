@@ -479,6 +479,37 @@ setMethod("[<-", c("VTableTree", value = "CellValue"),
 })
 
 
+# Helper function to copy or not header, footer, and topleft information
+.copy_titles_footers_topleft <- function(new, old, 
+                                         keep_titles, keep_fnotes, keep_topleft) {
+    
+    # titles
+    if(isTRUE(keep_titles)) {
+        main_title(new) <- main_title(old)
+        subtitles(new) <- subtitles(old)
+        
+    } else {
+        main_title(new) <- ""
+        subtitles(new) <- character()
+    }
+    
+    # fnotes
+    if (isTRUE(keep_fnotes)) {
+        main_footer(new) <- main_footer(old)
+        prov_footer(new) <- prov_footer(old)
+    } else {
+        main_footer(new) <- character()
+        prov_footer(new) <- character()
+    }
+    
+    # topleft
+    if (isTRUE(keep_topleft))
+        top_left(new) <- top_left(old)
+    else
+        top_left(new) <- character()
+    
+    new
+}
 
 ## this is going to be hard :( :( :(
 
@@ -491,7 +522,7 @@ setGeneric("subset_cols",
            function(tt,
                     j,
                     newcinfo = NULL,
-                    keep_topleft = FALSE,
+                    keep_topleft = TRUE,
                     keep_titles = FALSE,
                     keep_fnotes = FALSE,
                     ...) {
@@ -549,37 +580,6 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     tt2
 })
 
-# Helper function to copy or not header, footer, and topleft information
-.copy_titles_footers_topleft <- function(new, old, 
-                                         keep_titles, keep_fnotes, keep_topleft) {
-    
-    # titles
-    if(isTRUE(keep_titles)) {
-        main_title(new) <- main_title(old)
-        subtitles(new) <- subtitles(old)
-        
-    } else {
-        main_title(new) <- ""
-        subtitles(new) <- character()
-    }
-    
-    # fnotes
-    if (isTRUE(keep_fnotes)) {
-        main_footer(new) <- main_footer(old)
-        prov_footer(new) <- prov_footer(old)
-    } else {
-        main_footer(new) <- character()
-        prov_footer(new) <- character()
-    }
-    
-    # topleft
-    if (isTRUE(keep_topleft))
-        top_left(new) <- top_left(old)
-    else
-        top_left(new) <- character()
-    
-    new
-}
 
 ## small utility to transform any negative
 ## indices into positive ones, given j
@@ -961,7 +961,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
-    keep_topleft <- list(...)[["keep_topleft"]] %||% FALSE
+    keep_topleft <- list(...)[["keep_topleft"]]
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     keep_fnotes <- list(...)[["keep_fnotes"]] %||% FALSE
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
@@ -973,12 +973,15 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     j <- .j_to_posj(j, nc)
 
     ##  if(!missing(i) && length(i) < nr) {
-    if(length(i) < nr) ## already populated by .j_to_posj
+    if(length(i) < nr) {## already populated by .j_to_posj
+        if (is.null(keep_topleft)) keep_topleft <- FALSE
         x <- subset_by_rownum(x, i,
                               keep_topleft = keep_topleft,
                               keep_titles = keep_titles,
                               keep_fnotes = keep_fnotes, ...)
-    
+    } else if (is.null(keep_topleft)) {
+        keep_topleft <- TRUE
+    }
     ##  if(!missing(j) && length(j) < nc)
     if(length(j) < nc)
         x <- subset_cols(x, j,
