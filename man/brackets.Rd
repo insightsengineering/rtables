@@ -26,7 +26,7 @@
 \alias{[}
 \alias{reexports}
 \alias{[<-}
-\title{retrieve and assign elements of a TableTree}
+\title{Retrieve and assign elements of a \code{TableTree}}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
 
@@ -67,12 +67,13 @@ x[i, j, ...] <- value
 
 \item{\dots}{Includes
 \describe{
-\item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the 'top-left'
-material for the table be retained after subsetting. Defaults to \code{NA},
-which retains the material if all rows are included (ie subsetting was by
+\item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the \code{topleft}
+material for the table be retained after subsetting. Defaults to \code{FALSE},
+which retains the material if all rows are included (i.e. subsetting was by
 column), and drops it otherwise.}
-\item{\emph{keep_titles}}{logical(1) Should title and non-referential footer
-information be retained. Defaults to \code{FALSE}}
+\item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}}
+\item{\emph{keep_fnotes}}{logical(1) Should non-referential footer
+information be retained. Defaults to \code{keep_titles} (which defaults to \code{TRUE})}
 \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 re-indexed as if the resulting subset is the entire table. Defaults to
 \code{TRUE}}
@@ -89,20 +90,33 @@ a \code{TableTree} (or \code{ElementaryTable}) object, unless a
 single cell was selected with \code{drop=TRUE}, in which case the (possibly
 multi-valued) fully stripped raw value of the selected cell.
 }
+\details{
+the standard subsetting drops the information about title, subtitle,
+main footer, provenance footer, and \code{topleft}. If only a column is selected and
+all rows are kept, the \code{topleft} information remains as default. Any referential
+footnote is kept whenever the subset table contains the referenced element.
+}
 \examples{
-lyt <- basic_table() \%>\%
+lyt <- basic_table(title = "Title", 
+                   subtitles = c("Sub", "titles"), 
+                   prov_footer = "prov footer", 
+                   main_footer = "main footer") \%>\%
    split_cols_by("ARM") \%>\%
    analyze(c("SEX", "AGE"))
 
 tbl <- build_table(lyt, DM)
+top_left(tbl) <- "Info"
 tbl
 
+# As default header, footer, and topleft information is dropped
 tbl[1, ]
 tbl[1:2, 2]
 
 tbl[2, 1]
 tbl[2, 1, drop = TRUE]
 
+# If all rows are selected, topleft is kept by default
+tbl[, 2]
 tbl[, 1]
 
 tbl[-2, ]
@@ -112,6 +126,13 @@ tbl[2, 1] <- rcell(999)
 tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 tbl[3, ] <- list(-111, -222, -333)
 tbl
+
+# We can keep some information from the original table if we need
+tbl[1, 2, keep_titles = TRUE]
+tbl[1, 2, keep_fnotes = TRUE, keep_titles = FALSE]
+tbl[1, 2, keep_fnotes = TRUE]
+tbl[1, 2, keep_topleft = TRUE]
+
 }
 \keyword{internal}
 \description{

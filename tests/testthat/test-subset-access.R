@@ -187,15 +187,29 @@ test_that("Duplicate colvars path correctly", {
                      res)
 })
 
-test_that("top_left retention behavior is correct across all scenarios", {
+test_that("top_left, title, footers retention behaviors are correct across all scenarios", {
+    # topleft
     tlval <- "hi"
-    lyt <- basic_table() %>%
+    
+    # title
+    ti <- "ti"
+    sti <- "sti"
+    
+    # footers
+    mf <- "mf"
+    pf <- "pf"
+    rf <- "rf"
+    
+    lyt <- basic_table(title = ti, subtitles = sti, 
+                       main_footer = mf, prov_footer = pf) %>%
         split_cols_by("ARM") %>%
         append_topleft(tlval) %>%
         split_rows_by("SEX") %>%
         analyze("AGE", mean)
     tbl <- build_table(lyt, DM)
-
+    fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "mean")) <- rf
+    
+    # topleft
     expect_identical(top_left(tbl), tlval)
     expect_identical(top_left(tbl[, 1]), tlval) ## default column-only subsetting is TRUE
     expect_identical(top_left(tbl[, 1, keep_topleft = FALSE]), character())
@@ -206,6 +220,21 @@ test_that("top_left retention behavior is correct across all scenarios", {
     expect_identical(top_left(tbl[1:2, 1:2]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
+    
+    # error for multiple elemented selected for dropping
+    expect_error(tbl[1:2, 1, drop = TRUE])
+    
+    # referential footnotes
+    expect_identical(mf_rfnotes(matrix_form(tbl[2, 1])), 
+                     c("F.AGE.mean" = paste0("{1} - ", rf)))
+    expect_identical(mf_rfnotes(matrix_form(tbl[1, 1])), character())
+    
+    # titles and footers
+    expect_identical(main_title(tbl[1, 1]), "")
+    expect_identical(main_title(tbl[1, 1, keep_titles = TRUE]), ti)
+    expect_identical(subtitles(tbl[1, 1, keep_titles = TRUE]), sti)
+    expect_identical(main_footer(tbl[1, 1, keep_fnotes = TRUE]), mf)
+    expect_identical(prov_footer(tbl[1, 1, keep_fnotes = TRUE]), pf)
 })
 
 test_that("setters work ok", {
