@@ -42,11 +42,13 @@ In the following we show two simplified examples that use `align` and `.aligns`,
 ```{r}
 # In rcell we use align.
 lyt <- basic_table() %>%
-    analyze("AGE", function(x) {
-        in_rows(left = rcell("l", align = "left"),
-                right = rcell("r", align = "right"),
-                center = rcell("c", align = "center"))
-    })
+  analyze("AGE", function(x) {
+    in_rows(
+      left = rcell("l", align = "left"),
+      right = rcell("r", align = "right"),
+      center = rcell("c", align = "center")
+    )
+  })
 
 build_table(lyt, DM)
 ```
@@ -55,12 +57,14 @@ build_table(lyt, DM)
 # In in_rows, we use .aligns. This can either set the general value or the
 #   single values (see NB).
 lyt2 <- basic_table() %>%
-    analyze("AGE", function(x) {
-        in_rows(left = rcell("l"),
-                right = rcell("r"),
-                center = rcell("c"),
-                .aligns = c("right")) # NB: .aligns = c("right", "left", "center")
-    })
+  analyze("AGE", function(x) {
+    in_rows(
+      left = rcell("l"),
+      right = rcell("r"),
+      center = rcell("c"),
+      .aligns = c("right")
+    ) # NB: .aligns = c("right", "left", "center")
+  })
 
 build_table(lyt2, DM)
 ```
@@ -89,8 +93,7 @@ basic_table() %>%
 
 ### Top-left Materials
 
-An rtables object can have \emph{top left material} which is a sequence of strings which are printed in the area of the table between the column header display
-and the label of the first row.  This material can be modified with functions below.
+The sequence of sequence of strings printed in the area between the column header display and the first row label (\emph{top left material}) can be modified using the `top_left()` function.
 
 ```{r}
 lyt <- basic_table() %>%
@@ -128,7 +131,7 @@ Below is a simplified example:
 
 ```{r}
 lyt <- basic_table() %>%
-    analyze("AGE")
+  analyze("AGE")
 
 # without inset
 tbl <- build_table(lyt, DM)
@@ -137,20 +140,21 @@ tbl
 # with inset of 3 characters
 table_inset(tbl) <- 3
 tbl
-
 ```
 
 Below is an example with a table produced for clinical data. Compare the inset of the table and main footer.
 
 ```{r}
-lyt <- basic_table(title = "Study XXXXXXXX",
-                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
-                   main_footer = "Analysis was done using cool methods that are correct",
-                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
-    split_rows_by("STRATA1") %>%
-    analyze("AGE", mean, format = "xx.x")
+lyt <- basic_table(
+  title = "Study XXXXXXXX",
+  subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+  main_footer = "Analysis was done using cool methods that are correct",
+  prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a"
+) %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+  split_rows_by("STRATA1") %>%
+  analyze("AGE", mean, format = "xx.x")
 
 # without inset
 tbl <- build_table(lyt, DM)
@@ -187,14 +191,14 @@ tbl
 A character value can be specified as a section divider which succeed every group defined by a split instruction. Below, a "+" is repeated and used as a section divider.
 
 ```{r}
-lyt <- basic_table()%>%
-    split_cols_by("Species")%>%
-    analyze(head(names(iris), -1), afun = function(x) {
-        list(
-            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-            "range" = rcell(diff(range(x)), format = "xx.xx")
-        )
-    }, section_div = "+")
+lyt <- basic_table() %>%
+  split_cols_by("Species") %>%
+  analyze(head(names(iris), -1), afun = function(x) {
+    list(
+      "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = rcell(diff(range(x)), format = "xx.xx")
+    )
+  }, section_div = "+")
 
 build_table(lyt, iris)
 ```
@@ -204,16 +208,17 @@ build_table(lyt, iris)
 Tables by default do not have an indent at the split level. A custom indent value can be supplied with the `indent_mod` argument within a split function. 
 
 ```{r}
-basic_table(title = "Study XXXXXXXX",
-                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
-                   main_footer = "Analysis was done using cool methods that are correct",
-                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3) %>%
-    split_rows_by("STRATA1", indent_mod = 5) %>%
-    analyze("AGE", mean, format = "xx.x")%>%
-    build_table(DM)
-
+basic_table(
+  title = "Study XXXXXXXX",
+  subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+  main_footer = "Analysis was done using cool methods that are correct",
+  prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a"
+) %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3) %>%
+  split_rows_by("STRATA1", indent_mod = 5) %>%
+  analyze("AGE", mean, format = "xx.x") %>%
+  build_table(DM)
 ```
 
 ### Variable Label Visibility
@@ -225,24 +230,27 @@ Location of the variable label can be modified to be `visible`, `hidden` or pres
 
 
 ```{r}
-basic_table(title = "Study XXXXXXXX",
-                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
-                   main_footer = "Analysis was done using cool methods that are correct",
-                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3, child_labels = "hidden") %>%
-    split_rows_by("STRATA1", child_labels ="visible" ) %>%
-    analyze("AGE", mean, format = "xx.x")%>%
-    build_table(DM)
+basic_table(
+  title = "Study XXXXXXXX",
+  subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+  main_footer = "Analysis was done using cool methods that are correct",
+  prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a"
+) %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, indent_mod = 3, child_labels = "hidden") %>%
+  split_rows_by("STRATA1", child_labels = "visible") %>%
+  analyze("AGE", mean, format = "xx.x") %>%
+  build_table(DM)
 
-basic_table(title = "Study XXXXXXXX",
-                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
-                   main_footer = "Analysis was done using cool methods that are correct",
-                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, label_pos = "hidden") %>%
-    split_rows_by("STRATA1", label_pos = "hidden") %>%
-    analyze("AGE", mean, format = "xx.x")%>%
-    build_table(DM)
+basic_table(
+  title = "Study XXXXXXXX",
+  subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+  main_footer = "Analysis was done using cool methods that are correct",
+  prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a"
+) %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels, label_pos = "hidden") %>%
+  split_rows_by("STRATA1", label_pos = "hidden") %>%
+  analyze("AGE", mean, format = "xx.x") %>%
+  build_table(DM)
 ```
-
