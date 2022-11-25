@@ -131,16 +131,6 @@ test_that("summarize_row_groups at top level works", {
     expect_equal(dim(tbl), c(1, 1))
 })
 
-
-test_that("add_colcounts works as first call", {
-    tbl <- basic_table() %>%
-        add_colcounts() %>%
-        analyze("AGE") %>%
-        build_table(DM)
-
-    expect_equal(tbl[1, 1, drop = TRUE], mean(DM$AGE))
-})
-
 test_that("CellValue on something with object labels", {
     expect_identical(obj_label(CellValue(with_label(5, "hi"))),
                      "hi")
@@ -337,9 +327,8 @@ test_that("column labeling works correctly when value label var is a factor", {
 ## pathing regression tests
 test_that("pathing works", {
     ## issue https://github.com/Roche/rtables/issues/172
-    result_overall <- basic_table() %>%
+    result_overall <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
-        add_colcounts() %>%
         add_overall_col("overall") %>%
         analyze(c("AGE", "SEX")) %>%
         build_table(ex_adsl)

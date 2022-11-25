@@ -81,7 +81,7 @@ being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
 
-\item{split_name}{string. Name associiated with this split (for pathing, etc)}
+\item{split_name}{string. Name associated with this split (for pathing, etc)}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
 \code{"hidden"}. What should the display behavior be for the  labels (ie
@@ -89,9 +89,9 @@ label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
@@ -120,7 +120,7 @@ to \code{FALSE}}
 when forcing pagination between the children of this split/table}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
 \item{cutfun}{function. Function which accepts the \emph{full vector} of

@@ -52,12 +52,12 @@ NULL
 #'   when forcing pagination between the children of this split/table
 #' @param hsep character(1). Set of character(s) to be repeated as the separator
 #'   between the header and body of the table when rendered as text. Defaults to
-#'   a connected horrizontal line (unicode 2014) in locals that use a UTF
+#'   a connected horizontal line (unicode 2014) in locals that use a UTF
 #'   charset, and to `-` elsewhere (with a once per session warning).
 #' @param indent_size numeric(1). Number of spaces to use per indent level.
 #'   Defaults to 2
 #' @param section_div character(1). String which should be repeated as a section
-#'   divider after each group defined by this split instruciton, or
+#'   divider after each group defined by this split instruction, or
 #'   `NA_character_` (the default) for no section divider.
 #' @param inset numeric(1). Number of spaces to inset the table header, table
 #' body, referential footnotes, and main_footer, as compared to alignment
@@ -115,7 +115,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   table.
 #' @param split_fun function/NULL. custom splitting function See
 #'   \code{\link{custom_split_funs}}
-#' @param split_name string. Name associiated with this split (for pathing, etc)
+#' @param split_name string. Name associated with this split (for pathing, etc)
 #' @param afun function. Analysis function, must take \code{x} or \code{df} as
 #'   its first parameter. Can optionally take other parameters which will be
 #'   populated by the tabulation framework. See Details in
@@ -129,7 +129,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   ref_group/control to be compared against.
 #' @param compfun function/string. The comparison function which accepts the
 #'   analysis function outputs for two different partitions and returns a single
-#'   value. Defaults to subraction. If a string, taken as the name of a
+#'   value. Defaults to subtraction. If a string, taken as the name of a
 #'   function.
 #' @param label_fstr string. An sprintf style format string containing. For
 #'   non-comparison splits, it can contain  up to one \code{"\%s"} which takes
@@ -140,9 +140,9 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   label rows) of the children of this split. Defaults to \code{"default"}
 #'   which flags the label row as visible only if the child has 0 content rows.
 #' @param extra_args list. Extra arguments to be passed to the tabulation
-#'   function. Element position in thte list corresponds to the children of this
+#'   function. Element position in the list corresponds to the children of this
 #'   split. Named elements in the child-specific lists are ignored if they do
-#'   not match a formal argument of the ttabulation function.
+#'   not match a formal argument of the tabulation function.
 #' @param name character(1). Name of the split/table/row being created. Defaults
 #'   to same as the corresponding label, but is not required to be.
 #' @param cuts numeric. Cuts to use
@@ -195,7 +195,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #' @param cinfo InstantiatedColumnInfo (or NULL). Column structure for the
 #'   object being created.
 #' @param labelrow LabelRow. The LabelRow object to assign to this Table.
-#'   Consructed from \code{label} by default if not specified.
+#'   Constructed from \code{label} by default if not specified.
 #' @param vals list. cell values for the row
 #' @param cspan integer. Column span. \code{1} indicates no spanning.
 #' @param cindent_mod numeric(1). The indent modifier for the content tables
@@ -226,7 +226,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         trailing_sep, split_na_str,
                         cna_str, inset, table_inset) NULL
 
-#' Compatability Arg Conventions
+#' Compatibility Arg Conventions
 #' @name compat_args
 #' @family conventions
 #' @inherit gen_args return
@@ -234,7 +234,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #' @param .lst list. An already-collected list of arguments tot be used instead
 #'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 #'   ignored if this is specified.
-#' @param FUN function. Tabulation fucntion. Will be passed subsets of \code{x}
+#' @param FUN function. Tabulation function. Will be passed subsets of \code{x}
 #'   defined by the combination of \code{col_by} and \code{row_by} and returns
 #'   corresponding cell value
 #' @param col_by (\code{\link{factor}} or \code{\link{data.frame}} if a

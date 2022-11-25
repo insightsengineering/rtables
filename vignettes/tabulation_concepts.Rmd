@@ -87,12 +87,14 @@ foo <- prod
 bar <- sum
 zoo <- mean
 
-basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("c1") %>%
   analyze("x", function(df) foo(df$x), var_labels = "foo label", format = "xx.xx") %>%
   analyze("x", function(df) bar(df$x), var_labels = "bar label", format = "xx.xx") %>%
-  analyze("x", function(df) zoo(df$x), var_labels = "zoo label", format = "xx.xx") %>%
-  build_table(df)
+  analyze("x", function(df) zoo(df$x), var_labels = "zoo label", format = "xx.xx")
+
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 or if we wanted the `x` variable instead of the data frame:
@@ -116,18 +118,20 @@ x_C <- df_C$x
 The function passed to `afun` is evaluated using argument matching, if `afun` has an argument `x` the analysis variable specified in `vars` in `analyze()` is passed to the function and if `afun` has an argument `df` then set subset of the dataset is passed to `afun`. So,
 
 ```{r}
-basic_table() %>%
+lyt2 <- basic_table() %>%
   split_cols_by("c1") %>%
   analyze("x", foo, var_labels = "foo label", format = "xx.xx") %>%
   analyze("x", bar, var_labels = "bar label", format = "xx.xx") %>%
-  analyze("x", zoo, var_labels = "zoo label", format = "xx.xx") %>%
-  build_table(df)
+  analyze("x", zoo, var_labels = "zoo label", format = "xx.xx")
+
+tbl2 <- build_table(lyt2, df)
+tbl2
 ```
 
 Note that it is also possible that a function returns multiple rows with `in_rows()`
 
 ```{r}
-basic_table() %>%
+lyt3 <- basic_table() %>%
   split_cols_by("c1") %>%
   analyze("x", function(x) {
     in_rows(
@@ -140,8 +144,10 @@ basic_table() %>%
       "more rows 1" =  rcell(median(x), format = "xx.x"),
       "even more rows 1" = rcell(IQR(x), format = "xx.xx")
     )
-  }, var_labels = "bar label", format = "xx.xx") %>%
-  build_table(df)
+  }, var_labels = "bar label", format = "xx.xx")
+
+tbl3 <- build_table(lyt3, df)
+tbl3
 ```
 
 which is how we recommend to specify the row names explicitly.
@@ -218,21 +224,25 @@ matrix(
 In `rtables` this type of tabulation is done with `layouts`
 
 ```{r}
-basic_table() %>%
+lyt4 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  analyze("x", foo) %>%
-  build_table(df)
+  analyze("x", foo)
+
+tbl4 <- build_table(lyt4, df)
+tbl4
 ```
 
 or if we would not want to see the `foo` label we would have to use
 
 ```{r}
-basic_table() %>%
+lyt5 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  summarize_row_groups(cfun = foo, format = "xx") %>%
-  build_table(df)
+  summarize_row_groups(cfun = foo, format = "xx")
+
+tbl5 <- build_table(lyt5, df)
+tbl5
 ```
 
 but now the row labels disappeared. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
@@ -243,11 +253,13 @@ foo <- function(df, labelstr) {
   rcell(paste(dim(df), collapse = " x "), format = "xx", label = labelstr)
 }
 
-basic_table() %>%
+lyt6 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  summarize_row_groups(cfun = foo) %>%
-  build_table(df)
+  summarize_row_groups(cfun = foo)
+
+tbl6 <- build_table(lyt6, df)
+tbl6
 ```
 
 
@@ -260,42 +272,50 @@ foo <- function(df, labelstr) {
   rcell(mean(df$y), label = labelstr, format = "xx.xx")
 }
 
-basic_table() %>%
+lyt7 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  summarize_row_groups(cfun = foo) %>%
-  build_table(df)
+  summarize_row_groups(cfun = foo) 
+
+tbl7 <- build_table(lyt7, df)
+tbl7
 ```
 
 Note that `foo` has the variable information hard encoded in the function body. Let's try some alternatives returning to `analyze()`:
 
 
 ```{r}
-basic_table() %>%
+lyt8 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  analyze("y", afun = mean) %>%
-  build_table(df)
+  analyze("y", afun = mean)
+
+tbl8 <- build_table(lyt8, df)
+tbl8
 ```
 
 note that the subset of the `y` variable is passed as `x` argument to `mean()`. We could also get the `data.frame` instead of the variable:
 
 ```{r}
-basic_table() %>%
+lyt9 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  analyze("y", afun = function(df) mean(df$y)) %>%
-  build_table(df)
+  analyze("y", afun = function(df) mean(df$y))
+
+tbl9 <- build_table(lyt9, df)
+tbl9
 ```
 
 which is in contrast to:
 
 ```{r}
-basic_table() %>%
+lyt10 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  analyze("y", afun = function(x) mean(x)) %>%
-  build_table(df)
+  analyze("y", afun = function(x) mean(x)) 
+
+tbl10 <- build_table(lyt10, df)
+tbl10
 ```
 
 where the function receives the subset of `y`.
@@ -332,14 +352,16 @@ and so on. We can get this table as follows:
 
 
 ```{r}
-basic_table() %>%
+lyt11 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = function(df, labelstr) {
     rcell(mean(df$x), format = "xx.xx", label = paste("mean x for", labelstr))
-  }) %>%
-  build_table(df)
+  })
+
+tbl11 <- build_table(lyt11, df)
+tbl11
 ```
 
 or, if we wanted to calculate two summaries per row split:
@@ -353,13 +375,15 @@ s_range <- function(x) {
   in_rows("range" = rcell(range(x), format = "xx.xx - xx.xx"))
 }
 
-basic_table() %>%
+lyt12 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
   analyze("x", s_mean_sd, show_labels = "hidden") %>%
-  analyze("x", s_range, show_labels = "hidden") %>%
-  build_table(df)
+  analyze("x", s_range, show_labels = "hidden")
+
+tbl12 <- build_table(lyt12, df)
+tbl12
 ```
 
 Which has the following structure:
@@ -455,28 +479,32 @@ s_cfun_2 <- function(df, labelstr) {
 }
 
 
-basic_table() %>%
+lyt13 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
   analyze("x", s_mean_sd, show_labels = "hidden") %>%
-  analyze("x", s_range, show_labels = "hidden") %>%
-  build_table(df)
+  analyze("x", s_range, show_labels = "hidden")
+
+tbl13 <- build_table(lyt13, df)
+tbl13
 ```
 
 In the same manner, if we wanted content rows for `r1` split we can do it at as follows:
 
 ```{r}
-basic_table() %>%
+lyt14 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
   split_rows_by("r2") %>%
   summarize_row_groups(cfun = s_cfun_2) %>%
   analyze("x", s_mean_sd, show_labels = "hidden") %>%
-  analyze("x", s_range, show_labels = "hidden") %>%
-  build_table(df)
+  analyze("x", s_range, show_labels = "hidden")
+
+tbl14 <- build_table(lyt14, df)
+tbl14
 ```
 
 In pagination content rows and label rows get repeated if a page is split in a descendant of a content row. So for example, if we were to split the following table at `***` then :

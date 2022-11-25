@@ -39,7 +39,7 @@ of \code{.stats}}
 defaults applied by \code{fun}.}
 
 \item{...}{dots. Additional arguments to \code{fun} which effectively become
-new defaults. These can still be overriden by extra args within a split.}
+new defaults. These can still be overridden by extra args within a split.}
 
 \item{.null_ref_cells}{logical(1). Should cells for the reference column be
 NULL-ed by the returned analysis function. Defaults to \code{TRUE} if

@@ -81,15 +81,12 @@ test_that("provided score functions work", {
         summarize_row_groups() %>%
         analyze("AGE") %>%
         build_table(DM)
-    expect_true(is.na(cont_n_allcols(smallertab2)))
     kids <- tree_children(smallertab2)
     scores <- sapply(kids, cont_n_allcols)
     counts <- table(DM$SEX)
     expect_identical(scores, setNames(as.numeric(counts), names(counts)))
 
     onecol_fun <- cont_n_onecol(1)
-    expect_true(is.na(cont_n_onecol(1)(smallertab2)))
-    expect_true(is.na(cont_n_onecol(1)(smallertab2)))
     scores2 <- sapply(kids, onecol_fun)
     dmsub <- subset(DM, ARM == "A: Drug X")
     counts2 <- table(dmsub$SEX)
@@ -168,4 +165,93 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
 
     tr_tbl <- trim_rows(bigtbl)
     expect_true(nrow(tr_tbl) > num)
+})
+
+
+
+test_that("provided score functions throw informative errors when invalid and * in paths work", {
+
+    grade_groups_dict <- list(
+        "Any Grade" = c("1", "2", "3", "4", "5"),
+        "Grade 1-2" = c("1", "2"),
+        "1" = "1",
+        "2"= "2",
+        "Grade 3-4" = c("3", "4"),
+        "3"= "3",
+        "4"= "4",
+        "Grade 5" = c("5")
+    )
+
+
+    basic_grade_count <- function(df, .var, .N_col, grade_groups = grade_groups_dict, id = "USUBJID", labelstr = "") {
+        fvec <- unclass(df)[[.var]]
+        newvals <- as.numeric(levels(fvec)[fvec])
+        df$grade_num <- newvals
+        form <- as.formula(sprintf("grade_num ~ %s",  id))
+        aggrdf <- stats::aggregate(form, data = df, FUN = max)
+
+        in_rows(.list = lapply(grade_groups, function(x) {
+                    subdf <- aggrdf[aggrdf$grade_num %in% x, ]
+                    cnt <- length(unique(unclass(subdf)[[id]]))
+                    c(cnt, cnt / .N_col)
+                }),
+                .names = names(grade_groups),
+                .formats = "xx (xx.x%)")
+    }
+
+
+    real_scorefun <- function(tt) {
+        row <- cell_values(tt, rowpath = c("AETOXGR", "Any Grade"))
+        sum(unlist(row))
+    }
+
+
+    lyt_raw <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by(var = "ACTARM", split_fun = add_overall_level("total", first = FALSE)) %>%
+    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) %>%
+    split_rows_by("AEBODSYS",
+                  indent_mod = -1,
+                  split_fun = drop_split_levels,
+                  label_pos = "topleft",
+                  split_label = "aebod sys label",
+                  child_labels = "visible") %>%
+    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) %>%
+    split_rows_by("AEDECOD",
+                  indent_mod = -1,
+                  split_fun = drop_split_levels,
+                  label_pos = "topleft",
+                  split_label = "aedecod label") %>%
+    analyze("AETOXGR",
+            basic_grade_count,
+            extra_args = list(grade_groups = grade_groups_dict),
+            indent_mod = -1)
+    raw_tbl <- build_table(lyt_raw, ex_adae)
+
+    expect_silent({
+        stbl <- sort_at_path(raw_tbl,
+                             path = c("AEBODSYS", "*", "AEDECOD"),
+                             scorefun = real_scorefun, # cont_n_allcols,
+                             decreasing = TRUE
+                             )
+    })
+
+    ## spot check that things were reordered as we expect
+    expect_identical(row_paths(raw_tbl)[63:71], ## "cl B.2" ->  "dcd B.2.1.2.1" old position
+                     row_paths(stbl)[72:80]) ## "cl B.2" -> "dcd B.2.1.2.1" new position
+    expect_error({
+        sort_at_path(raw_tbl,
+                     path = c("AEBODSYS", "*", "AEDECOD"),
+                     scorefun = cont_n_allcols,
+                     decreasing = TRUE
+                     )
+    }, "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1", fixed = TRUE)
+    expect_error({
+        sort_at_path(raw_tbl,
+                     path = c("AEBODSYS", "*", "AEDECOD"),
+                     scorefun = cont_n_onecol(1),
+                     decreasing = TRUE
+                     )
+    }, "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1", fixed = TRUE)
+
+
 })

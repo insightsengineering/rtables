@@ -11,7 +11,7 @@
 #' @return \code{x} with its indent modifier incremented by \code{by}.
 #' @examples
 #' is_setosa <- iris$Species == "setosa"
-#' mtbl <- rtable(
+#' m_tbl <- rtable(
 #'   header = rheader(
 #'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
 #'     rrow(NULL, "mean", "median", "mean", "median")
@@ -29,8 +29,8 @@
 #'     format = "xx.xx"
 #'   )
 #' )
-#' indent(mtbl)
-#' indent(mtbl, 2)
+#' indent(m_tbl)
+#' indent(m_tbl, 2)
 #'
 indent <- function(x, by = 1) {
     if(nrow(x) == 0 || by == 0)
@@ -44,14 +44,15 @@ indent <- function(x, by = 1) {
 #' @inheritParams gen_args
 #' @return The same class as \code{tt}, with all indent mods set to zero.
 #' @examples
-#' t1 <- basic_table() %>%
+#' lyt1 <- basic_table() %>%
 #'  summarize_row_groups("STUDYID",label_fstr = "overall summary") %>%
 #'  split_rows_by("AEBODSYS",  child_labels = "visible") %>%
 #'  summarize_row_groups("STUDYID", label = "subgroup summary") %>%
-#'  analyze("AGE", indent_mod = -1L) %>%
-#'  build_table(ex_adae)
-#' t1
-#' clear_indent_mods(t1)
+#'  analyze("AGE", indent_mod = -1L)
+#'  
+#' tbl1 <- build_table(lyt1, ex_adae)
+#' tbl1
+#' clear_indent_mods(tbl1)
 #' @export
 #' @rdname clear_imods
 setGeneric("clear_indent_mods", function(tt) standardGeneric("clear_indent_mods"))

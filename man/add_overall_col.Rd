@@ -24,14 +24,14 @@ See \code{\link{add_overall_level}} for the recommended
 way to add overall columns more generally within existing splits.
 }
 \examples{
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    add_overall_col("All Patients") \%>\%
    analyze("AGE")
+lyt
 
-l
-
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
 }
 \seealso{

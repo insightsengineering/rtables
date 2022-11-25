@@ -56,16 +56,17 @@ df <- tibble(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
 )
 
-basic_table() %>%
+lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, format = "xx.x") %>%
-  build_table(df)
+  analyze("age", afun = mean, format = "xx.x")
+
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 
@@ -108,13 +109,15 @@ average_age
 In `rtable` syntax we need the following code to get to the same content:
 
 ```{r}
-basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
   split_rows_by("handed") %>%
-  analyze("age", afun = mean, format = "xx.x") %>%
-  build_table(df)
+  analyze("age", afun = mean, format = "xx.x")
+
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 As mentioned in the introduction to this vignette, please ignore the difference in arranging and formatting the data: it's possible to condense the `rtable` more and it is possible to make the `tibble` look more like the reference table using the `gt` R package. 
@@ -167,16 +170,16 @@ self-contained set of computations.
 The `rtables` call in contrast is:
 
 ```{r}
-tbl <- basic_table() %>%
+lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, format = "xx.x") %>%
-  build_table(df)
+  analyze("age", afun = mean, format = "xx.x")
+
+tbl <- build_table(lyt, df)
 tbl
 ```
 

@@ -71,7 +71,7 @@ children resulting form this split.}
 when forcing pagination between the children of this split/table}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 }
 \value{
@@ -85,7 +85,7 @@ Add Rows according to levels of a variable
 If \code{var} is a factor with empty unobserved levels and
 \code{labels_var} is specified, it must also be a factor
 with the same number of levels as \code{var}. Currently the
-error that occurs when this is not hte case is not very informative,
+error that occurs when this is not the case is not very informative,
 but that will change in the future.
 }
 \section{Custom Splitting Function Details}{
@@ -135,22 +135,23 @@ their outputs.
 
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-
-basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by("RACE") \%>\%
-    analyze("AGE", mean, var_labels = "Age", format = "xx.xx") \%>\%
-    build_table(DM)
+    analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+    
+tbl2 <- build_table(lyt2, DM)
+tbl2
 
-
-l <- basic_table() \%>\%
+lyt3 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by("SEX") \%>\%
     summarize_row_groups(label_fstr = "Overall (N)") \%>\%
@@ -159,7 +160,7 @@ l <- basic_table() \%>\%
     summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
     analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
-l
+lyt3
 
 library(dplyr)
 DM2 <- DM \%>\%
@@ -181,7 +182,8 @@ DM2 <- DM \%>\%
         )[RACE]
     )
 
-build_table(l, DM2)
+tbl3 <- build_table(lyt3, DM2)
+tbl3
 
 }
 \author{

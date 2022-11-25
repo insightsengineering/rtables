@@ -180,7 +180,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #' @param vals ANY. Already calculated/known values of the split. Generally
 #'   should be left as \code{NULL}.
 #' @param labels character. Labels associated with \code{vals}. Should be
-#'   \code{NULL} when \code{vals} is, whic should almost always be the case.
+#'   \code{NULL} when \code{vals} is, which should almost always be the case.
 #' @param trim logical(1). Should groups corresponding to empty data subsets be
 #'   removed. Defaults to \code{FALSE}.
 #'
@@ -190,7 +190,7 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #' @export
 #' @examples
 #'
-#' uneven_splfun <-function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+#' uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
 #'     ret <- do_base_split(spl, df, vals, labels, trim)
 #'     if(NROW(df) == 0)
 #'         ret <- lapply(ret, function(x) x[1])
@@ -206,7 +206,8 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #'                          AESEQ = max,
 #'                          BMRKR1 = mean))
 #'
-#' build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+#' tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
+#' tbl
 do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
     spl2 <- spl
     split_fun(spl2) <- NULL
@@ -605,14 +606,15 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 #' @export
 #' @inherit add_overall_level return
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("COUNTRY",
 #'                 split_fun = remove_split_levels(c("USA", "CAN",
 #'                                                   "CHE", "BRA"))) %>%
 #'   analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
 remove_split_levels <- function(excl) {
     stopifnot(is.character(excl))
@@ -637,13 +639,14 @@ remove_split_levels <- function(excl) {
 #' @export
 #'
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("COUNTRY",
 #'                 split_fun = keep_split_levels(c("USA", "CAN", "BRA"))) %>%
 #'   analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 keep_split_levels <- function(only, reorder = TRUE) {
     function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
         var <- spl_payload(spl)
@@ -665,12 +668,13 @@ keep_split_levels <- function(only, reorder = TRUE) {
 #' @export
 #'
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
 #'   analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 drop_split_levels <- function(df,
                               spl,
                               vals = NULL,
@@ -688,12 +692,13 @@ drop_split_levels <- function(df,
 #' @export
 #'
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) %>%
 #'   analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 drop_and_remove_levels <- function(excl) {
   stopifnot(is.character(excl))
   function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
@@ -825,24 +830,24 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #'
 #' @examples
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'    split_cols_by("ARM", split_fun = add_overall_level("All Patients",
 #'                                                       first = FALSE)) %>%
 #'    analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
-#'
-#' l <- basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    split_rows_by("RACE",
 #'                  split_fun = add_overall_level("All Ethnicities")) %>%
 #'    summarize_row_groups(label_fstr = "%s (n)") %>%
 #'    analyze("AGE")
+#' lyt2
 #'
-#' l
-#'
-#' build_table(l, DM)
+#' tbl2 <- build_table(lyt2, DM)
+#' tbl2
 #'
 add_overall_level <- function(valname = "Overall",
                               label = valname,
@@ -885,41 +890,40 @@ select_all_levels <- new("AllLevelsSentinel")
 #'     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
 #'     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'     add_colcounts() %>%
 #'     analyze("AGE")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
-#' la <- basic_table() %>%
+#' lyt1 <- basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM",
 #'                   split_fun = add_combo_levels(combodf,
 #'                                                keep_levels = c("A_B",
 #'                                                                "A_C"))) %>%
-#'     add_colcounts() %>%
 #'     analyze("AGE")
 #'
-#' build_table(la, DM)
+#' tbl1 <- build_table(lyt1, DM)
+#' tbl1
 #'
 #' smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
 #'                         grepl("^(A|B)", ARM)))
-#' l2 <- basic_table() %>%
+#' lyt2 <- basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) %>%
 #'     split_cols_by("SEX",
 #'                   split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
-#'     add_colcounts() %>%
 #'     analyze("AGE")
 #'
-#' l3 <-  basic_table() %>%
+#' lyt3 <-  basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'     add_colcounts() %>%
 #'     split_rows_by("SEX",
 #'                   split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
 #'     summarize_row_groups() %>%
 #'     analyze("AGE")
 #'
-#' build_table(l3, smallerDM)
+#' tbl3 <- build_table(lyt3, smallerDM)
+#' tbl3
 add_combo_levels <- function(combosdf,
                              trim = FALSE,
                              first = FALSE,
@@ -963,7 +967,7 @@ add_combo_levels <- function(combosdf,
 
 #' Trim Levels to map
 #'
-#' This split function constructor creatse a split function which trims
+#' This split function constructor creates a split function which trims
 #' levels of a variable to reflect restrictions on the possible
 #' combinations of two or more variables which are split by
 #' (along the same axis) within a layout.
@@ -989,18 +993,18 @@ add_combo_levels <- function(combosdf,
 #' @seealso [trim_levels_in_group()]
 #' @export
 #' @examples
-#'  map <- data.frame(
-#'        LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
-#'        PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
-#'        ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
-#'        stringsAsFactors = FALSE
-#'    )
+#' map <- data.frame(
+#'     LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
+#'     PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
+#'     ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
+#'     stringsAsFactors = FALSE
+#' )
 #'
-#'    lyt <- basic_table() %>%
-#'        split_rows_by("LBCAT") %>%
-#'        split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
-#'        analyze("ANRIND")
-#'    tbl1 <- build_table(lyt, ex_adlb)
+#' lyt <- basic_table() %>%
+#'     split_rows_by("LBCAT") %>%
+#'     split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+#'     analyze("ANRIND")
+#' tbl <- build_table(lyt, ex_adlb)
 trim_levels_to_map <- function(map = NULL) {
 
     if (is.null(map) || any(sapply(map, class) != "character"))

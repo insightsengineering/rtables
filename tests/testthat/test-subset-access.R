@@ -154,11 +154,10 @@ visible_only and not")
                            "A_", "Arm 1", c("A: Drug X"), list(),
                            "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
 
-    l2 <- basic_table() %>%
+    l2 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by(
             "ARM",
             split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C"))) %>%
-        add_colcounts() %>%
         analyze(c("AGE", "AGE"), afun = list(mean, range),
                 show_labels = "hidden", table_names = c("AGE mean", "AGE range"))
 

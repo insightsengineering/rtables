@@ -33,9 +33,9 @@ rrow("")
 
 }
 \seealso{
-Other compatability: 
+Other compatibility: 
 \code{\link{rheader}()},
 \code{\link{rrowl}()},
 \code{\link{rtable}()}
 }
-\concept{compatability}
+\concept{compatibility}
