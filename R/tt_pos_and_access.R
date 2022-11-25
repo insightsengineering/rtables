@@ -491,18 +491,23 @@ setGeneric("subset_cols",
            function(tt,
                     j,
                     newcinfo = NULL,
-                    keep_topleft = TRUE,
-                    keep_titles = TRUE,
+                    keep_topleft = FALSE,
+                    keep_titles = FALSE,
+                    keep_fnotes = FALSE,
                     ...) {
                standardGeneric("subset_cols")
            })
 
 setMethod("subset_cols", c("TableTree", "numeric"),
-          function(tt, j, newcinfo = NULL, keep_topleft, keep_titles, ...) {
+          function(tt, j, newcinfo = NULL, 
+                   keep_topleft, keep_titles, keep_fnotes, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo <- col_info(tt)
-        newcinfo <- subset_cols(cinfo, j, keep_topleft = keep_topleft, ...)
+        newcinfo <- subset_cols(cinfo, j, 
+                                keep_topleft = keep_topleft, 
+                                keep_fnotes = keep_fnotes, 
+                                keep_titles = keep_titles, ...)
     }
     ## topleft taken care of in creation of newcinfo
     kids <- tree_children(tt)
@@ -515,50 +520,68 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo,  ...)
 
-    if(isTRUE(keep_titles)) {
-        main_title(tt2) <- main_title(tt)
-        subtitles(tt2) <- subtitles(tt)
-        main_footer(tt2) <- main_footer(tt)
-        prov_footer(tt2) <- prov_footer(tt)
-
-    } else {
-        main_title(tt2) <- ""
-        subtitles(tt2) <- character()
-    }
-    ## if(keep_topleft)
-    ##     top_left(tt2) <- top_left(tt)
-    ## else
-    ##     top_left(tt2) <- character()
+    tt2 <- .copy_titles_footers_topleft(tt2, tt, 
+                                        keep_titles, 
+                                        keep_fnotes, 
+                                        keep_topleft)
     tt2
 })
 
 setMethod("subset_cols", c("ElementaryTable", "numeric"),
-          function(tt, j, newcinfo = NULL, keep_topleft, keep_titles, ...) {
+          function(tt, j, newcinfo = NULL, 
+                   keep_topleft, keep_titles, keep_fnotes, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo <- col_info(tt)
         newcinfo <- subset_cols(cinfo, j, keep_topleft = keep_topleft,
-                               keep_titles = keep_titles, ...)
+                               keep_titles = keep_titles, 
+                               keep_fnotes = keep_fnotes, ...)
     }
     ## topleft handled in creation of newcinfo
     kids <- tree_children(tt)
-    newkids <- lapply(kids, subset_cols, j = j, newcinfo = newcinfo,  ...)
+    newkids <- lapply(kids, subset_cols, j = j, newcinfo = newcinfo, ...)
     tt2 <- tt
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
-    if(keep_titles) {
-        main_title(tt2) <- main_title(tt)
-        subtitles(tt2) <- subtitles(tt)
-        main_footer(tt2) <- main_footer(tt)
-        prov_footer(tt2) <- prov_footer(tt)
-
-    }
-    ## if(keep_topleft)
-    ##     top_left(tt2) <- top_left(tt)
+    tt2 <- .copy_titles_footers_topleft(tt2, tt, 
+                                        keep_titles, 
+                                        keep_fnotes, 
+                                        keep_topleft)
     tt2
 })
 
+# Helper function to copy or not header, footer, and topleft information
+.copy_titles_footers_topleft <- function(new, old, 
+                                         keep_titles, keep_fnotes, keep_topleft) {
+    
+    # titles
+    if(isTRUE(keep_titles)) {
+        main_title(new) <- main_title(old)
+        subtitles(new) <- subtitles(old)
+        
+    } else {
+        main_title(new) <- ""
+        subtitles(new) <- character()
+    }
+    
+    # fnotes
+    if (isTRUE(keep_fnotes)) {
+        main_footer(new) <- main_footer(old)
+        prov_footer(new) <- prov_footer(old)
+    } else {
+        main_footer(new) <- character()
+        prov_footer(new) <- character()
+    }
+    
+    # topleft
+    if (isTRUE(keep_topleft))
+        top_left(new) <- top_left(old)
+    else
+        top_left(new) <- character()
+    
+    new
+}
 
 ## small utility to transform any negative
 ## indices into positive ones, given j
@@ -748,9 +771,9 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 ## label rows ARE included in the count
 subset_by_rownum <- function(tt,
                              i,
-                             keep_topleft = NA,
-                             keep_titles = TRUE,
-                             ...) {
+                             keep_topleft = FALSE,
+                             keep_titles = FALSE,
+                             keep_fnotes = FALSE, ...) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter <- 0
     nr <- nrow(tt)
@@ -782,7 +805,8 @@ subset_by_rownum <- function(tt,
             ctab <- content_table(x)
 
             content_table(x) <- prune_rowsbynum(ctab, i,
-                                                valifnone = ElementaryTable(cinfo = col_info(ctab), iscontent = TRUE))
+                                                valifnone = ElementaryTable(cinfo = col_info(ctab), 
+                                                                            iscontent = TRUE))
         }
         kids <- tree_children(x)
         if(counter > maxi) { #already done
@@ -819,11 +843,11 @@ subset_by_rownum <- function(tt,
         ## }
     }
     ret <- prune_rowsbynum(tt, i)
-    if(isTRUE(keep_topleft))
-        top_left(ret) <- top_left(tt)
-    if(isTRUE(keep_titles) || (isTRUE(keep_topleft) && is.na(keep_titles))) {
-        ret <- .copy_titles(ret, tt)
-    }
+    
+    ret <- .copy_titles_footers_topleft(ret, tt, 
+                                        keep_titles, 
+                                        keep_fnotes, 
+                                        keep_topleft)
 
     ret
 }
@@ -939,42 +963,44 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
-    keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not presesnt
+    keep_topleft <- list(...)[["keep_topleft"]] %||% FALSE
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
+    keep_fnotes <- list(...)[["keep_fnotes"]] %||% FALSE
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
-    if(is.null(keep_topleft))
-        keep_topleft <- NA
-
+    
+    # browser()
     nr <- nrow(x)
     nc <- ncol(x)
     i <- .j_to_posj(i, nr)
     j <- .j_to_posj(j, nc)
 
     ##  if(!missing(i) && length(i) < nr) {
-    if(length(i) < nr) { ## already populated by .j_to_posj
-        keep_topleft <- isTRUE(keep_topleft)
+    if(length(i) < nr) ## already populated by .j_to_posj
         x <- subset_by_rownum(x, i,
                               keep_topleft = keep_topleft,
-                              keep_titles = keep_titles)
-    } else {
-        keep_topleft <- !identical(FALSE, keep_topleft)
-    }
+                              keep_titles = keep_titles,
+                              keep_fnotes = keep_fnotes, ...)
+    
     ##  if(!missing(j) && length(j) < nc)
     if(length(j) < nc)
         x <- subset_cols(x, j,
                          keep_topleft = keep_topleft,
-                         keep_titles = keep_titles)
+                         keep_titles = keep_titles,
+                         keep_fnotes = keep_fnotes, ...)
 
-    if(length(j) == 1L &&
-       length(i) == 1L &&
-       drop) {
+    # Dropping everything
+    if (drop) {
+        if (not(length(j) == 1L && 
+               length(i) == 1L)) {
+            stop("When you need to retrieve single values using drop, use single indexes")    
+        }
         rw <- collect_leaves(x, TRUE, TRUE)[[1]]
         if(is(rw, "LabelRow"))
             x <- NULL
         else
             x <- row_values(rw)[[1]]
-    }
-    if(!drop) {
+    # Not dropping
+    } else {
         if(!keep_topleft)
             top_left(x) <- character()
         if(reindex_refs)
@@ -1155,14 +1181,6 @@ setMethod("value_at", "LabelRow",
     } else {
         lapply(rows, row_values)
     }
-}
-
-.copy_titles <- function(new, old) {
-    main_title(new) <- main_title(old)
-    subtitles(new) <- subtitles(old)
-    main_footer(new) <- main_footer(old)
-    prov_footer(new) <- prov_footer(old)
-    new
 }
 
 
