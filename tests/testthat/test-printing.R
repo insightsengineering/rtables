@@ -298,16 +298,18 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
 
   # Building the table and trimming NAs
   tt <- build_table(lyt, DM)
-  tt <- trim_rows(tt)
+  tt <- prune_table(tt)
+  # tt <- trim_rows(tt)
 
   # Adding references
   # row_paths(tt)
   # row_paths_summary(tt)
+  # col_paths(tt)
+  # col_paths_summary(tt)
   txt1 <- "Not the best but very long one, probably longer than possible."
   txt2 <- "Why trimming does not take it out?"
   fnotes_at_path(tt, rowpath = c("SEX", "F", "AGE", "Mean")) <- txt1
-  fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- txt2
-
+  fnotes_at_path(tt, rowpath = c("SEX", "M", "AGE", "Mean"), colpath = c("all obs", "all obs")) <- txt2
   # Test also assign function
   table_inset(tt) <- general_inset
 
@@ -331,7 +333,7 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
 
   expect_false(result[[1]]) # No inset
   expect_true(result[[2]]) # Inset
-  expect_true(all(vec_tt[sep_index + 1] == "   =============================="))
+  expect_true(all(vec_tt[sep_index + 1] == "   ===================="))
 })
 
 test_that("Cell and column label wrapping works in printing", {
@@ -339,7 +341,7 @@ test_that("Cell and column label wrapping works in printing", {
     clw <- c(5, 7, 6, 6) + 12
 
     # Checking in detail if Cell values did wrap correctly
-    result <- toString(matrix_form(tt_for_wrap[10, 1], TRUE), widths = c(10, 8), col_gap = 2)
+    result <- toString(matrix_form(tt_for_wrap[10, 1, keep_fnotes = TRUE], TRUE), widths = c(10, 8), col_gap = 2)
     splitted_res <- strsplit(result, "\n")[[1]]
 
     # First column (rownames) has widths 10 and there is colgap 2
