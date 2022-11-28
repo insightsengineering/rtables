@@ -60,8 +60,8 @@ The `[` and `[<-` accessor functions operate largely the same as their `data.fra
 
 **Known Differences from `[.data.frame`**
 
-- absolute position cannot currently be used to reorder columns or rows
-  - Note in general the result of such an ordering is unlikely to be structurally valid
+- absolute position cannot currently be used to reorder columns or rows. Note in general the result of such an ordering is unlikely to be structurally valid. To change the order of 
+values, please read [sorting and pruning](https://roche.github.io/rtables/main/articles/sorting_pruning.html) vignette or relevant function (`sort_at_path()`).
 - `character` indices are treated as paths, not vectors of names in both `[` and `[<-`
 
 The `[` accessor function always returns an `TableTree` object if `drop=TRUE` is not set. The first argument are the row indices and the second argument the column indices. Alternatively logical subsetting can be used. The indices are based on visible rows and not on the tree structure. So:

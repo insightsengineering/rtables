@@ -327,7 +327,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #'   \code{FALSE}
 #' @param \dots Includes
 #' \describe{
-#' \item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the `topleft`
+#' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `topleft`
 #' material for the table be retained after subsetting. Defaults to `FALSE`,
 #' which retains the material if all rows are included (i.e. subsetting was by
 #' column), and drops it otherwise.}
@@ -336,7 +336,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' information be retained. Defaults to \code{keep_titles} (which defaults to `TRUE`)}
 #' \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 #' re-indexed as if the resulting subset is the entire table. Defaults to
-#' \code{TRUE}}
+#' \code{TRUE}.}
 #' }
 #' @param value Replacement value (list, `TableRow`, or `TableTree`)
 #' 
@@ -350,7 +350,11 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' footnote is kept whenever the subset table contains the referenced element. 
 #' Please note that subsetting always preserve the original order, even if provided
 #' indexes do not preserve it. If sorting is needed, please consider 
-#' using `sort_at_path()`.
+#' using `sort_at_path()`. Also note that `character` indices are treated as paths,
+#' not vectors of names in both `[` and `[<-`.
+#' 
+#' @seealso Regarding sorting: `sort_at_path()` and how to understand path 
+#' structure: `summarize_row_groups()`, and `summarize_col_groups()`.
 #'
 #' @examples
 #' lyt <- basic_table(title = "Title", 

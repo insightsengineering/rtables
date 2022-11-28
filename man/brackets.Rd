@@ -67,7 +67,7 @@ x[i, j, ...] <- value
 
 \item{\dots}{Includes
 \describe{
-\item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the \code{topleft}
+\item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the \code{topleft}
 material for the table be retained after subsetting. Defaults to \code{FALSE},
 which retains the material if all rows are included (i.e. subsetting was by
 column), and drops it otherwise.}
@@ -76,7 +76,7 @@ column), and drops it otherwise.}
 information be retained. Defaults to \code{keep_titles} (which defaults to \code{TRUE})}
 \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 re-indexed as if the resulting subset is the entire table. Defaults to
-\code{TRUE}}
+\code{TRUE}.}
 }}
 
 \item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
@@ -97,7 +97,8 @@ all rows are kept, the \code{topleft} information remains as default. Any refere
 footnote is kept whenever the subset table contains the referenced element.
 Please note that subsetting always preserve the original order, even if provided
 indexes do not preserve it. If sorting is needed, please consider
-using \code{sort_at_path()}.
+using \code{sort_at_path()}. Also note that \code{character} indices are treated as paths,
+not vectors of names in both \code{[} and \verb{[<-}.
 }
 \examples{
 lyt <- basic_table(title = "Title", 
@@ -146,6 +147,10 @@ tbl[4,1]
 # Note that order can not be changed with subsetting
 tbl[c(4,3,1), c(3,1)] # It preserves order and wanted selection
 
+}
+\seealso{
+Regarding sorting: \code{sort_at_path()} and how to understand path
+structure: \code{summarize_row_groups()}, and \code{summarize_col_groups()}.
 }
 \keyword{internal}
 \description{
