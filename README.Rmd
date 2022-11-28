@@ -54,8 +54,11 @@ install.packages("rtables")
 or you can install the latest development version directly from GitHub with:
 
 ```r
-devtool::install_github("Roche/rtables")
+remotes::install_github("insightsengineering/formatters")
+remotes::install_github("Roche/rtables")
 ```
+
+Note you might need to set your `GITHUB_PAT` environment variable in order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN releases) can be
 found in the [releases list](https://github.com/Roche/rtables/releases)
