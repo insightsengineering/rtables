@@ -56,10 +56,8 @@ The `[` and `[<-` accessor functions operate largely the same as their `data.fra
    - negative numeric positions are supported, though like `[.data.frame` they cannot be mixed with positive ones
  - `[` always returns the same class as the object being subset unless `drop = TRUE`
  - `[ , drop = TRUE` returns the raw (possibly multi-element) value associated with the cell.
- 
 
 **Known Differences from `[.data.frame`**
-
 - absolute position cannot currently be used to reorder columns or rows. Note in general the result of such an ordering is unlikely to be structurally valid. To change the order of 
 values, please read [sorting and pruning](https://roche.github.io/rtables/main/articles/sorting_pruning.html) vignette or relevant function (`sort_at_path()`).
 - `character` indices are treated as paths, not vectors of names in both `[` and `[<-`
@@ -104,7 +102,57 @@ Character indices are interpreted as paths (see below), NOT elements to be match
 tbl[,c("ARM", "A: Drug X")]
 ```
 
+### Dealing with titles, foot notes, and top left information
+As standard no additional information is kept after subsetting. Here, we show with a more
+complete table how it is still possible to keep the (possibly) relevant information.
 
+```{r}
+top_left(tbl) <- "SEX"
+main_title(tbl) <- "Table 1"
+subtitles(tbl) <- c("Authors:", " - Abcd Zabcd", " - Cde Zbcd")
+
+main_footer(tbl) <- "Please regard this table as an example of smart subsetting"
+prov_footer(tbl) <- "Do remember where you read this though"
+
+fnotes_at_path(tbl, rowpath = c("M", "AGE", "Mean"), colpath = c("ARM", "A: Drug X")) <- "Very important mean"
+```
+
+Normal subsetting loses all the information showed above.
+```{r}
+tbl[3, 3]
+```
+
+If all the rows are kept, top left information is also kept. This can be also
+imposed by adding `keep_topleft = TRUE` to the subsetting as follows:
+
+```{r}
+tbl[, 2:3]
+tbl[1:3, 3, keep_topleft = TRUE]
+```
+
+If the referenced entry is present in the subsetting, also the referential footnote
+will appear. Please consider reading relevant vignette about [referential footnotes](https://roche.github.io/rtables/main/articles/title_footer.html#referential-footnotes).
+
+```{r}
+tbl[10, 1]
+col_paths_summary(tbl) # Use these to find the right path to value or label
+row_paths_summary(tbl) #
+
+# To select column value, use `NULL` for `rowpath`
+fnotes_at_path(tbl, rowpath = NULL, colpath = c("ARM", "A: Drug X")) <- "Interesting"
+tbl[3, 1]
+```
+
+Similarly to what we have used to keep top left information, we can specify to 
+keep more information from the original table. As a standard the foot notes are 
+always present if the titles are kept. 
+```{r}
+tbl[1:3, 2:3, keep_titles = TRUE]
+tbl[1:3, 2:3, keep_titles = FALSE, keep_fnotes = TRUE]
+
+# Referential footnotes are not influenced by `keep_fnotes = FALSE`
+tbl[1:3, keep_titles = TRUE, keep_fnotes = FALSE]
+```
 
 ## Path Based Cell Value Accessing:
 Tables can be subset or modified in a structurally aware manner via *pathing*. 
