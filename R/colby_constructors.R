@@ -236,52 +236,56 @@ setMethod("split_cols", "ANY",
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2"))
 #'
-#' build_table(lyt, ex_adsl)
+#' tbl <- build_table(lyt, ex_adsl)
+#' tbl
 #'
 #' # Let's look at the splits in more detail
 #'
-#' l <- basic_table() %>% split_cols_by("ARM")
-#' l
+#' lyt1 <- basic_table() %>% split_cols_by("ARM")
+#' lyt1
 #'
 #' # add an analysis (summary)
-#' l2 <- l %>%
+#' lyt2 <- lyt1 %>%
 #'     analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary) ,
 #'             format = "xx.xx")
-#' l2
+#' lyt2
 #'
-#' build_table(l2, DM)
+#' tbl2 <- build_table(lyt2, DM)
+#' tbl2
 #'
 #' # By default sequentially adding layouts results in nesting
 #' library(dplyr)
 #' DM_MF <- DM %>% filter(SEX %in% c("M", "F")) %>%
 #'   mutate(SEX = droplevels(SEX))
 #'
-#' l3 <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt3 <- basic_table() %>% split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
 #'   analyze(c("AGE", "COUNTRY"), afun = list_wrap_x(summary),
 #'           format = "xx.xx")
-#' l3
+#' lyt3
 #'
-#'  build_table(l3, DM_MF)
+#' tbl3 <- build_table(lyt3, DM_MF)
+#' tbl3
 #'
 #' # nested=TRUE vs not
-#' l4 <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt4 <- basic_table() %>% split_cols_by("ARM") %>%
 #'  split_rows_by("SEX", split_fun = drop_split_levels) %>%
 #'  split_rows_by("RACE", split_fun = drop_split_levels) %>%
 #'  analyze("AGE")
+#' lyt4
+#' 
+#' tbl4 <- build_table(lyt4, DM)
+#' tbl4
 #'
-#' l4
-#' build_table(l4, DM)
-#'
-#' l5 <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt5 <- basic_table() %>% split_cols_by("ARM") %>%
 #'  split_rows_by("SEX", split_fun= drop_split_levels) %>%
 #'  analyze("AGE") %>%
 #'  split_rows_by("RACE", nested=FALSE, split_fun = drop_split_levels) %>%
 #'  analyze("AGE")
-#'
-#' l5
-#' build_table(l5, DM)
-#'
+#' lyt5
+#' 
+#' tbl5 <- build_table(lyt5, DM)
+#' tbl5
 #'
 split_cols_by <- function(lyt,
                          var,
@@ -350,7 +354,7 @@ setMethod(".tl_indent_inner", "SplitVector",
 #' If \code{var} is a factor with empty unobserved levels and
 #' \code{labels_var} is specified, it must also be a factor
 #' with the same number of levels as \code{var}. Currently the
-#' error that occurs when this is not hte case is not very informative,
+#' error that occurs when this is not the case is not very informative,
 #' but that will change in the future.
 #'
 #' @export
@@ -358,22 +362,23 @@ setMethod(".tl_indent_inner", "SplitVector",
 #' @inherit split_cols_by return
 #' @examples
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_rows_by("RACE", split_fun = drop_split_levels) %>%
 #'     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
-#'
-#' basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_rows_by("RACE") %>%
-#'     analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
-#'     build_table(DM)
+#'     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+#'     
+#' tbl2 <- build_table(lyt2, DM)
+#' tbl2
 #'
-#'
-#' l <- basic_table() %>%
+#' lyt3 <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_cols_by("SEX") %>%
 #'     summarize_row_groups(label_fstr = "Overall (N)") %>%
@@ -382,7 +387,7 @@ setMethod(".tl_indent_inner", "SplitVector",
 #'     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
 #'     analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 #'
-#' l
+#' lyt3
 #'
 #' library(dplyr)
 #' DM2 <- DM %>%
@@ -404,7 +409,8 @@ setMethod(".tl_indent_inner", "SplitVector",
 #'         )[RACE]
 #'     )
 #'
-#' build_table(l, DM2)
+#' tbl3 <- build_table(lyt3, DM2)
+#' tbl3
 #'
 split_rows_by <- function(lyt,
                          var,
@@ -466,17 +472,17 @@ split_rows_by <- function(lyt,
 #' colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
 #'                 function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff")) %>%
 #'     split_rows_by("RACE", split_label = "ethnicity",
 #'                   split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = colfuns)
+#' lyt
 #'
-#' l
-#'
-#' build_table(l, ANL)
+#' tbl <- build_table(lyt, ANL)
+#' tbl
 #'
 split_cols_by_multivar <- function(lyt,
                                   vars,
@@ -522,7 +528,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' @inheritParams lyt_args
 #' @param cuts numeric. Cuts to use
-#' @param cutlabels character (or NULL). Labels for the cutst
+#' @param cutlabels character (or NULL). Labels for the cuts
 #' @param cumulative logical. Should the cuts be treated as cumulative. Defaults
 #'   to \code{FALSE}
 #' @param cutfun function. Function which accepts the full vector of \code{var}
@@ -532,7 +538,7 @@ split_rows_by_multivar <- function(lyt,
 #' @details For dynamic cuts, the cut is transformed into a static cut by
 #' \code{\link{build_table}} \emph{based on the full dataset}, before
 #' proceeding. Thus even when nested within another split in column/row space,
-#' the resulting split will reflect the overall vaalues (e.g., quartiles) in the
+#' the resulting split will reflect the overall values (e.g., quartiles) in the
 #' dataset, NOT the values for subset  it is nested under.
 #'
 #' @export
@@ -545,7 +551,7 @@ split_rows_by_multivar <- function(lyt,
 #' library(dplyr)
 #'
 #' # split_cols_by_cuts
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_cols_by_cuts("AGE", split_label = "Age",
 #'                        cuts = c(0, 25, 35, 1000),
@@ -553,11 +559,11 @@ split_rows_by_multivar <- function(lyt,
 #'     analyze(c("BMRKR2", "STRATA2")) %>%
 #'     append_topleft("counts")
 #'
-#' build_table(l, ex_adsl)
-#'
+#' tbl <- build_table(lyt, ex_adsl)
+#' tbl
 #'
 #' # split_rows_by_cuts
-#' l <- basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_rows_by_cuts("AGE", split_label = "Age",
 #'                   cuts = c(0, 25, 35, 1000),
@@ -566,29 +572,29 @@ split_rows_by_multivar <- function(lyt,
 #'     append_topleft("counts")
 #'
 #'
-#' build_table(l, ex_adsl)
-#'
+#' tbl2 <- build_table(lyt2, ex_adsl)
+#' tbl2
 #'
 #' # split_cols_by_quartiles
 #'
-#' l <- basic_table() %>%
+#' lyt3 <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_cols_by_quartiles("AGE", split_label = "Age") %>%
 #'     analyze(c("BMRKR2", "STRATA2")) %>%
 #'     append_topleft("counts")
 #'
-#' build_table(l, ex_adsl)
+#' tbl3 <- build_table(lyt3, ex_adsl)
+#' tbl3
 #'
 #' # split_rows_by_quartiles
-#' l <- basic_table() %>%
+#' lyt4 <- basic_table(show_colcounts = TRUE) %>%
 #'     split_cols_by("ARM") %>%
-#'     add_colcounts() %>%
 #'     split_rows_by_quartiles("AGE", split_label = "Age") %>%
 #'     analyze("BMRKR2") %>%
 #'     append_topleft(c("Age Quartiles", " Counts BMRKR2"))
 #'
-#' build_table(l, ex_adsl)
-#'
+#' tbl4 <- build_table(lyt4, ex_adsl)
+#' tbl4
 #'
 split_cols_by_cuts <- function(lyt, var, cuts,
                               cutlabels = NULL,
@@ -816,7 +822,7 @@ NULL
 
 #' Generate Rows Analyzing Variables Across Columns
 #'
-#' Adding /analyzed variables/ to our table layout defines the primary
+#' Adding *analyzed variables* to our table layout defines the primary
 #' tabulation to be performed. We do this by adding calls to \code{analyze}
 #' and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
 #' further splitting, the tabulation will occur at the current/next level of
@@ -900,14 +906,15 @@ NULL
 #'
 #' @examples
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-#' l
-#' build_table(l, DM)
+#' lyt
+#' 
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
-#'
-#' l <- basic_table() %>%
+#' lyt2 <- basic_table() %>%
 #'     split_cols_by("Species") %>%
 #'     analyze(head(names(iris), -1), afun = function(x) {
 #'         list(
@@ -915,8 +922,10 @@ NULL
 #'             "range" = rcell(diff(range(x)), format = "xx.xx")
 #'         )
 #'     })
-#' l
-#' build_table(l, iris)
+#' lyt2
+#' 
+#' tbl2 <- build_table(lyt2, iris)
+#' tbl2
 #'
 analyze <- function(lyt,
                    vars,
@@ -1024,27 +1033,29 @@ get_acolvar_vars <- function(lyt) {
 #' colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
 #'                 function(x) rcell(sum(x > .5), format = "xx"))
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff")) %>%
 #'     split_rows_by("RACE", split_label = "ethnicity",
 #'                   split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
 #'     analyze_colvars(afun = colfuns)
+#' lyt
 #'
-#' l
+#' tbl <- build_table(lyt, ANL)
+#' tbl
 #'
-#' build_table(l, ANL)
-#'
-#'
-#' basic_table() %>% split_cols_by("ARM") %>%
+#' lyt2 <- basic_table() %>% 
+#'     split_cols_by("ARM") %>%
 #'     split_cols_by_multivar(c("value", "pctdiff"),
 #'                            varlabels = c("Measurement", "Pct Diff")) %>%
 #'     split_rows_by("RACE", split_label = "ethnicity",
 #'                   split_fun = drop_split_levels) %>%
 #'     summarize_row_groups() %>%
-#'     analyze_colvars(afun = mean, format = "xx.xx") %>%
-#'     build_table(ANL)
+#'     analyze_colvars(afun = mean, format = "xx.xx")
+#'     
+#' tbl2 <- build_table(lyt2, ANL)
+#' tbl2
 #'
 analyze_colvars <- function(lyt, afun,
                            format = NULL,
@@ -1105,14 +1116,14 @@ analyze_colvars <- function(lyt, afun,
 #' @seealso [add_overall_level()]
 #'
 #' @examples
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
 #'    add_overall_col("All Patients") %>%
 #'    analyze("AGE")
+#' lyt
 #'
-#' l
-#'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
 add_overall_col <- function(lyt, label) {
     spl <- AllSplit(label)
@@ -1315,17 +1326,17 @@ setMethod(".add_row_summary", "Split",
 #' @inherit split_cols_by return
 #'
 #' @details If `format` expects 1 value (i.e. it is specified as a format string
-#'   and `xx` appears  `xx` apepars  values (i.e. `xx` appears twice in the
+#'   and `xx` appears for two values (i.e. `xx` appears twice in the
 #'   format string) or is specified as a function, then both raw and percent of
 #'   column total counts are calculated. If `format` is a format string where
 #'   `xx` appears only one time, only raw counts are used.
 #'
-#' `cfun` must accept `df` as its first argument and will receive the subset
-#' `data.frame` corresponding with the row- and column-splitting for the cell
-#' being calculated. Must accept `labelstr` as the second parameter, which
-#' accepts the `label` of the level of the parent split currently being
-#' summarized. Can additionally take any optional argument supported by analysis
-#' functions. (see \code{\link{analyze}}).
+#' `cfun` must accept `x` or `df` as its first argument. For the `df` argument 
+#' `cfun` will receive the subset `data.frame` corresponding with the row- 
+#' and column-splitting for the cell being calculated. Must accept `labelstr` as 
+#' the second parameter, which accepts the `label` of the level of the parent 
+#' split currently being summarized. Can additionally take any optional argument 
+#' supported by analysis functions. (see \code{\link{analyze}}).
 #'
 #' @export
 #'
@@ -1335,14 +1346,13 @@ setMethod(".add_row_summary", "Split",
 #'
 #' DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
 #'
-#' l <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt <- basic_table() %>% split_cols_by("ARM") %>%
 #'     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
 #'     summarize_row_groups(label_fstr = "%s (n)") %>%
 #'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-#' l
+#' lyt
 #'
-#' tbl <- build_table(l, DM2)
-#'
+#' tbl <- build_table(lyt, DM2)
 #' tbl
 #'
 #' row_paths_summary(tbl) # summary count is a content table
@@ -1359,15 +1369,15 @@ setMethod(".add_row_summary", "Split",
 #'     )
 #' }
 #'
-#' l2 <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt2 <- basic_table(show_colcounts = TRUE) %>% 
+#'     split_cols_by("ARM") %>%
 #'     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
-#'     add_colcounts() %>%
 #'     summarize_row_groups("AGE", cfun = sfun,
 #'                          extra_args = list(trim = .2)) %>%
 #'     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") %>%
 #'     append_topleft(c("Country", "  Age"))
 #'
-#' tbl2 <- build_table(l2, DM2)
+#' tbl2 <- build_table(lyt2, DM2)
 #' tbl2
 #'
 summarize_row_groups <- function(lyt,
@@ -1418,13 +1428,14 @@ summarize_row_groups <- function(lyt,
 #' @author Gabriel Becker
 #'
 #' @examples
-#' l <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt <- basic_table() %>% split_cols_by("ARM") %>%
 #'     add_colcounts() %>%
 #'     split_rows_by("RACE", split_fun = drop_split_levels) %>%
 #'     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
-#' l
+#' lyt
 #'
-#' build_table(l, DM)
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
 add_colcounts <- function(lyt, format = "(N=xx)") {
     if(is.null(lyt))
@@ -1446,23 +1457,23 @@ add_colcounts <- function(lyt, format = "(N=xx)") {
 #' @author Gabriel Becker
 #'
 #' @examples
-#' tbl1 <- basic_table() %>%
+#' lyt1 <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
-#'    analyze("AGE", afun = mean, format = "xx.xx") %>%
-#'    build_table(DM)
-#'
+#'    analyze("AGE", afun = mean, format = "xx.xx")
+#' 
+#' tbl1 <- build_table(lyt1, DM)
 #' tbl1
 #'
-#' tbl2 <- basic_table() %>% split_cols_by("ARM") %>%
+#' lyt2 <- basic_table() %>% split_cols_by("ARM") %>%
 #'    analyze("AGE", afun = sd, format = "xx.xx") %>%
-#'    add_existing_table(tbl1) %>%
-#'    build_table(DM)
-#'
+#'    add_existing_table(tbl1)
+#' 
+#' tbl2 <- build_table(lyt2, DM)
 #' tbl2
 #'
 #' table_structure(tbl2)
-#'
 #' row_paths_summary(tbl2)
+#' 
 add_existing_table <- function(lyt, tt, indent_mod = 0) {
     indent_mod(tt) <- indent_mod
     lyt <- split_rows(lyt,
@@ -1567,7 +1578,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 ## Manual column construction in a simple (seeming
 ## to the user) way.
 #' Manual column declaration
-#' @param \dots One or more vectors of levels to appear in the column splace. If
+#' @param \dots One or more vectors of levels to appear in the column space. If
 #'   more than one set of levels is given, the values of the second are nested
 #'   within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via
@@ -1580,17 +1591,16 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #'
 #' @examples
 #' # simple one level column space
-#' rows = lapply(1:5, function(i) {
+#' rows <- lapply(1:5, function(i) {
 #'    DataRow(rep(i, times  = 3))})
-#' tab = TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
-#' tab
+#' tbl <- TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
+#' tbl
 #'
 #' # manually declared nesting
-#' tab2 = TableTree(kids = list(DataRow(as.list(1:4))),
+#' tbl2 <- TableTree(kids = list(DataRow(as.list(1:4))),
 #'                  cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
 #'                                      Gender = c("M", "F")))
-#'
-#' tab2
+#' tbl2
 #'
 manual_cols <- function(..., .lst = list(...)) {
     if(is.null(names(.lst)))
@@ -1677,10 +1687,10 @@ list_wrap_df <- function(f) {
 #' lyt <- basic_table() %>%
 #'   analyze("AGE", afun = mean)
 #'
-#' build_table(lyt, DM)
-#'
-#'
-#' lyt <- basic_table(title = "Title of table",
+#' tbl <- build_table(lyt, DM)
+#' tbl
+#' 
+#' lyt2 <- basic_table(title = "Title of table",
 #'                    subtitles = c("a number", "of subtitles"),
 #'                    main_footer = "test footer",
 #'                    prov_footer = paste("test.R program, executed at",
@@ -1688,7 +1698,8 @@ list_wrap_df <- function(f) {
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", mean)
 #'
-#' build_table(lyt, DM)
+#' tbl2 <- build_table(lyt2, DM)
+#' tbl2
 #'
 basic_table <- function(title = "",
                         subtitles = character(),
@@ -1721,7 +1732,7 @@ basic_table <- function(title = "",
 #' the column labels when the resulting tables are printed).
 #'
 #' Top-left material strings are stored and then displayed \emph{exactly as is},
-#' no structure or indenting is applied to them either wheyn they are added
+#' no structure or indenting is applied to them either when they are added
 #' or when they are displayed.
 #' @inheritParams lyt_args
 #'
@@ -1729,7 +1740,7 @@ basic_table <- function(title = "",
 #'
 #' @param newlines character. The new line(s) to be added to the materials
 #' @note Currently, where in the construction of the layout this is called
-#' makes no difference, as it is indepenedent of the actual splitting keywords.
+#' makes no difference, as it is independent of the actual splitting keywords.
 #' This may change in the future.
 #' @note This function is experimental, its name and the details of
 #' its behavior are subject to change in future versions.
@@ -1739,6 +1750,8 @@ basic_table <- function(title = "",
 #'
 #' @examples
 #' library(dplyr)
+#' 
+#' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
 #'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -1748,9 +1761,9 @@ basic_table <- function(title = "",
 #'   analyze("AGE") %>%
 #'   append_topleft("  Age")
 #'
-#' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
-#'
-#' build_table(lyt, DM2)
+#' tbl <- build_table(lyt, DM2)
+#' tbl
+#' 
 append_topleft <- function(lyt, newlines) {
     stopifnot(is(lyt, "PreDataTableLayouts"),
               is(newlines, "character"))

@@ -73,3 +73,17 @@ test_that("split_rows_by_multivar works", {
     tbl <- build_table(lyt, DM2)
     expect_true(TRUE)
 })
+
+
+test_that("add_colcounts works", {
+    tbl1 <- basic_table() %>%
+        add_colcounts() %>%
+        analyze("AGE") %>%
+        build_table(DM)
+    
+    tbl2 <- basic_table(show_colcounts = TRUE) %>%
+        analyze("AGE") %>%
+        build_table(DM)
+    
+    expect_true(identical(tbl1, tbl2))
+})

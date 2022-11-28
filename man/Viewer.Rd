@@ -30,16 +30,17 @@ sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 
 df <- cbind(iris, sl5 = sl5)
 
-tbl <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
    split_cols_by("sl5") \%>\%
-   analyze("Sepal.Length") \%>\%
-   build_table(df)
+   analyze("Sepal.Length")
+
+tbl <- build_table(lyt, df)
 
 Viewer(tbl)
 Viewer(tbl, tbl)
 
 
-tbl2 <-htmltools::tags$div(
+tbl2 <- htmltools::tags$div(
   class = "table-responsive",
   as_html(tbl, class_table = "table")
 )

@@ -75,16 +75,17 @@ Note that we use factors variables so that the level order is represented in the
 The aim of this vignette is to build the following table step by step:
 
 ```{r, echo=FALSE}
-basic_table() %>%
+lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
-  add_colcounts() %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, format = "xx.x") %>%
-  build_table(df)
+  analyze("age", afun = mean, format = "xx.x")
+
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 ## Starting Simple
@@ -92,21 +93,22 @@ basic_table() %>%
 In `rtables` a basic table is defined to have 0 rows and one column representing all data. Analyzing a variable is one way of adding a row:
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   analyze("age", mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 
 ### Layout Instructions
 
-In the code above we first described the table and assigned that description to a variable `l`. We then built the table using the actual data with `build_table()`. The description of a table is called a table layout. `basic_table()` is the start of every table layout and contains the information that we have one column representing all data. The `analyze()` instruction adds to the layout that the `age` variable should be analyzed with the `mean()` analysis function and the result should be rounded to `1` decimal place.
+In the code above we first described the table and assigned that description to a variable `lyt`. We then built the table using the actual data with `build_table()`. The description of a table is called a table layout. `basic_table()` is the start of every table layout and contains the information that we have one column representing all data. The `analyze()` instruction adds to the layout that the `age` variable should be analyzed with the `mean()` analysis function and the result should be rounded to `1` decimal place.
 
 Hence, a layout is "pre-data", that is, it's a description of how to build a table once we get data. We can look at the layout isolated: 
 
 ```{r}
-l
+lyt
 ```
 
 The general layouting instructions are summarized below:
@@ -127,11 +129,12 @@ We will now add more structure to the columns by adding a column split based on 
 
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   analyze("age", afun = mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 The resulting table has one column per factor level of `arm`. So the data represented by the first column is `df[df$arm == "ARM A", ]`. Hence, the `split_cols_by()` partitions the data among the columns by default. 
@@ -139,12 +142,13 @@ The resulting table has one column per factor level of `arm`. So the data repres
 Column splitting can be done in a recursive/nested manner by adding sequential `split_cols_by()` layout instruction. It's also possible to add a non-nested split. Here we splitting each arm further by the gender:
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   analyze("age", afun = mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 The first column represents the data in `df` where `df$arm == "A" & df$gender == "Female"` and the second column the data in `df` where `df$arm == "A" & df$gender == "Male"`, and so on.
@@ -154,13 +158,14 @@ The first column represents the data in `df` where `df$arm == "A" & df$gender ==
 So far, we have created layouts with analysis and column splitting instructions, i.e. `analyze()` and `split_cols_by()`, respectively. This resulted with a table with multiple columns and one data row. We will add more row structure by stratifying the mean analysis by country (i.e. adding a split in the row space):
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
   analyze("age", afun = mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 In this table the data used to derive the first data cell (average of age of female Canadians in Arm A) is  where `df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"`. This cell value can also be calculated manually:
@@ -174,14 +179,15 @@ mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
 When adding row splits we get by default label rows for each split level, for example `CAN` and `USA` in the table above. Besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful when defining a row splitting to display information about each row group. In `rtables` this is referred to as content information, i.e. `mean()` on row 2 is a descendant of `CAN` (visible via the indenting, though the table has an underlying tree structure that is not of importance for this vignette). In order to add content information and turn the `CAN` label row into a content row the `summarize_row_groups()` function is required. By default, the count (`nrows()`) and percentage of data relative to the column associated data is calculated:
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 The relative percentage for average age of female Canadians is calculated as follows:
@@ -198,7 +204,7 @@ so the group percentages per row split sum up to 1 for each column.
 We can further split the row space by dividing each country by handedness:
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
@@ -206,13 +212,14 @@ l <- basic_table() %>%
   split_rows_by("handed") %>%
   analyze("age", afun = mean, format = "xx.x")
 
-build_table(l, df)
+tbl <- build_table(lyt, df)
+tbl
 ```
 
 Next, we further add a count and percentage summary for handedness within each country:
 
 ```{r}
-l <- basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country") %>%
@@ -221,7 +228,7 @@ l <- basic_table() %>%
   summarize_row_groups() %>%
   analyze("age", afun = mean, format = "xx.x")
 
-tbl <- build_table(l, df)
+tbl <- build_table(lyt, df)
 tbl
 ```
 
@@ -264,7 +271,7 @@ including those that aren't represented directly by any visible rows:
 make_row_df(tbl, visible_only = FALSE)[,c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
-`make_col_df()` similarly accepts `visible_only`, though here the meaining is slightly different, indicating
+`make_col_df()` similarly accepts `visible_only`, though here the meaning is slightly different, indicating
 whether only *leaf* columns should be summarized (`TRUE`, the default) or whether higher level groups of columns,
 analogous to subtables in row space, should be summarized as well.
 

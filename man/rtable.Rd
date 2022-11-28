@@ -10,7 +10,7 @@ rtable(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 }
 \arguments{
-\item{header}{Information defining the header (column strucure) of the table.
+\item{header}{Information defining the header (column structure) of the table.
 This can be as row objects (legacy), character vectors or a
 \code{InstantiatedColumnInfo} object.}
 
@@ -21,7 +21,7 @@ then the \code{format} is applied}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
-a connected horrizontal line (unicode 2014) in locals that use a UTF
+a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{inset}{integer(1). The table inset for the row or table being
@@ -118,9 +118,9 @@ tbl2
 
 }
 \seealso{
-Other compatability: 
+Other compatibility: 
 \code{\link{rheader}()},
 \code{\link{rrowl}()},
 \code{\link{rrow}()}
 }
-\concept{compatability}
+\concept{compatibility}

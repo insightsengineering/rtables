@@ -23,12 +23,13 @@ The same class as \code{tt}, with all indent mods set to zero.
 Clear All Indent Mods from a Table
 }
 \examples{
-t1 <- basic_table() \%>\%
+lyt1 <- basic_table() \%>\%
  summarize_row_groups("STUDYID",label_fstr = "overall summary") \%>\%
  split_rows_by("AEBODSYS",  child_labels = "visible") \%>\%
  summarize_row_groups("STUDYID", label = "subgroup summary") \%>\%
- analyze("AGE", indent_mod = -1L) \%>\%
- build_table(ex_adae)
-t1
-clear_indent_mods(t1)
+ analyze("AGE", indent_mod = -1L)
+ 
+tbl1 <- build_table(lyt1, ex_adae)
+tbl1
+clear_indent_mods(tbl1)
 }

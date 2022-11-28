@@ -29,13 +29,14 @@ case use the \code{col_count} argument in \code{build_table} to control the coun
 displayed in the table header.
 }
 \examples{
-l <- basic_table() \%>\% split_cols_by("ARM") \%>\%
+lyt <- basic_table() \%>\% split_cols_by("ARM") \%>\%
     add_colcounts() \%>\%
     split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
     analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
-l
+lyt
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
 }
 \author{

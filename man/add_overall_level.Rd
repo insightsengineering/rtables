@@ -20,9 +20,9 @@ all-observations split level. Defaults to \code{"Overall"}}
 object/structure.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE})
 or last \code{FALSE}. Defaults to \code{TRUE}.}
@@ -39,23 +39,23 @@ Add an virtual 'overall' level to split
 }
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
    split_cols_by("ARM", split_fun = add_overall_level("All Patients",
                                                       first = FALSE)) \%>\%
    analyze("AGE")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-
-l <- basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    split_rows_by("RACE",
                  split_fun = add_overall_level("All Ethnicities")) \%>\%
    summarize_row_groups(label_fstr = "\%s (n)") \%>\%
    analyze("AGE")
+lyt2
 
-l
-
-build_table(l, DM)
+tbl2 <- build_table(lyt2, DM)
+tbl2
 
 }

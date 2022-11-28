@@ -22,10 +22,11 @@ the number of rows (nrow), columns (ncol) or both (dim) of the object.
 Table Dimensions
 }
 \examples{
-tbl <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
-  analyze(c("SEX", "AGE")) \%>\%
-  build_table(ex_adsl)
+  analyze(c("SEX", "AGE"))
+  
+tbl <- build_table(lyt, ex_adsl)
 
 dim(tbl)
 nrow(tbl)

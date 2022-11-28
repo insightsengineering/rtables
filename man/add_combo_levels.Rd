@@ -46,40 +46,39 @@ combodf <- tribble(
     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
 
-l <- basic_table() \%>\%
+lyt <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-    add_colcounts() \%>\%
     analyze("AGE")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-la <- basic_table() \%>\%
+lyt1 <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM",
                   split_fun = add_combo_levels(combodf,
                                                keep_levels = c("A_B",
                                                                "A_C"))) \%>\%
-    add_colcounts() \%>\%
     analyze("AGE")
 
-build_table(la, DM)
+tbl1 <- build_table(lyt1, DM)
+tbl1
 
 smallerDM <- droplevels(subset(DM, SEX \%in\% c("M", "F") &
                         grepl("^(A|B)", ARM)))
-l2 <- basic_table() \%>\%
+lyt2 <- basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) \%>\%
     split_cols_by("SEX",
                   split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
-    add_colcounts() \%>\%
     analyze("AGE")
 
-l3 <-  basic_table() \%>\%
+lyt3 <-  basic_table(show_colcounts = TRUE) \%>\%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-    add_colcounts() \%>\%
     split_rows_by("SEX",
                   split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
     summarize_row_groups() \%>\%
     analyze("AGE")
 
-build_table(l3, smallerDM)
+tbl3 <- build_table(lyt3, smallerDM)
+tbl3
 }
 \keyword{datasets}

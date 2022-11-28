@@ -38,23 +38,27 @@ For example, lets calculate the average age:
 ```{r}
 library(rtables)
 
-basic_table() %>%
+lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
-  analyze("AGE") %>%
-  build_table(DM)
+  analyze("AGE")
+
+tbl <- build_table(lyt, DM)
+tbl
 ```
 
 and then the difference of the average `AGE` between the placebo arm and the other arms:
 
 ```{r}
-basic_table() %>%
+lyt2 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group) {
     in_rows(
       "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
     )
-  }) %>%
-  build_table(DM)
+  })
+
+tbl2 <- build_table(lyt2, DM)
+tbl2
 ```
 
 Note that the column order has changed and the reference group is displayed in the first column.
@@ -63,16 +67,18 @@ In cases where we want cells to be blank in the reference column, (e.g., "B: Pla
 of `rcell()`, and pass `.in_ref_col` as the second argument:
 
 ```{r}
-basic_table() %>%
+lyt3 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col) {
       in_rows("Difference of Averages" = non_ref_rcell(mean(x) - mean(.ref_group),
                                                        is_ref = .in_ref_col,
                                                        format = "xx.xx"))
-  }) %>%
-  build_table(DM)
+  })
 
-basic_table() %>%
+tbl3 <- build_table(lyt3, DM)
+tbl3
+
+lyt4 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group, .in_ref_col) {
       in_rows(
@@ -81,21 +87,21 @@ basic_table() %>%
                                                    format = "xx.xx"),
          "another row" = non_ref_rcell("aaa", .in_ref_col)
       )
-  }) %>%
-  build_table(DM)
+  })
 
+tbl4 <- build_table(lyt4, DM)
+tbl4
 ```
 
-You can see which arguments are available for `afun` in the manual fro `analyze()`.
+You can see which arguments are available for `afun` in the manual for `analyze()`.
 
 ## Row Splitting
 
 When adding row-splitting the reference data may be represented by the column with or without row splitting. For example:
 
 ```{r}
-basic_table() %>%
+lyt5 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  add_colcounts() %>%
   split_rows_by("SEX", split_fun = drop_split_levels) %>%
   analyze("AGE", afun = function(x, .ref_group, .ref_full, .in_ref_col) {
     in_rows(
@@ -103,8 +109,10 @@ basic_table() %>%
       "ref cell N (.ref_group)" = rcell(length(.ref_group)),
       "ref column N (.ref_full)" = rcell(length(.ref_full))
     )
-  }) %>%
-  build_table(subset(DM, SEX %in% c("M", "F")))
+  })
+
+tbl5 <- build_table(lyt5, subset(DM, SEX %in% c("M", "F")))
+tbl5
 ```
 
 so the data assigned to `.ref_full` is the full data of the reference column where the data assigned to `.ref_group` respects the subsetting defined by row-splitting and hence is from the same subset as the argument `x` or `df` to `afun`.

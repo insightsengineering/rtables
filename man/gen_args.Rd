@@ -88,14 +88,14 @@ when forcing pagination between the children of this split/table}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
-a connected horrizontal line (unicode 2014) in locals that use a UTF
+a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
 \item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.

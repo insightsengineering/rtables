@@ -39,5 +39,5 @@ A character vector representing the top-left material of \code{obj} (or
 \description{
 A TableTree object can have \emph{top left material} which is a sequence
 of strings which are printed in the area of the table between the column header display
-and the label of the first row.  These functions acccess and modify that material.
+and the label of the first row.  These functions access and modify that material.
 }

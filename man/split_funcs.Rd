@@ -111,32 +111,36 @@ their outputs.
 }
 
 \examples{
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("COUNTRY",
                 split_fun = remove_split_levels(c("USA", "CAN",
                                                   "CHE", "BRA"))) \%>\%
   analyze("AGE")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("COUNTRY",
                 split_fun = keep_split_levels(c("USA", "CAN", "BRA"))) \%>\%
   analyze("AGE")
 
-build_table(l, DM)
-l <- basic_table() \%>\%
+tbl <- build_table(lyt, DM)
+tbl
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
   analyze("AGE")
 
-build_table(l, DM)
-l <- basic_table() \%>\%
+tbl <- build_table(lyt, DM)
+tbl
+lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) \%>\%
   analyze("AGE")
 
-build_table(l, DM)
+tbl <- build_table(lyt, DM)
+tbl
 }

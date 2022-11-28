@@ -49,7 +49,7 @@ the content table for another TableTree.}
 object being created.}
 
 \item{labelrow}{LabelRow. The LabelRow object to assign to this Table.
-Consructed from \code{label} by default if not specified.}
+Constructed from \code{label} by default if not specified.}
 
 \item{vals}{list. cell values for the row}
 
@@ -94,7 +94,7 @@ level}
 when forcing pagination between the children of this split/table}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
 \item{trailing_sep}{character(1). String which will be used as a section
