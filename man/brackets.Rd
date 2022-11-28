@@ -95,6 +95,9 @@ the standard subsetting drops the information about title, subtitle,
 main footer, provenance footer, and \code{topleft}. If only a column is selected and
 all rows are kept, the \code{topleft} information remains as default. Any referential
 footnote is kept whenever the subset table contains the referenced element.
+Please note that subsetting always preserve the original order, even if provided
+indexes do not preserve it. If sorting is needed, please consider
+using \code{sort_at_path()}.
 }
 \examples{
 lyt <- basic_table(title = "Title", 
@@ -102,7 +105,8 @@ lyt <- basic_table(title = "Title",
                    prov_footer = "prov footer", 
                    main_footer = "main footer") \%>\%
    split_cols_by("ARM") \%>\%
-   analyze(c("SEX", "AGE"))
+   split_rows_by("SEX") \%>\%
+   analyze(c("AGE"))
 
 tbl <- build_table(lyt, DM)
 top_left(tbl) <- "Info"
@@ -112,6 +116,7 @@ tbl
 tbl[1, ]
 tbl[1:2, 2]
 
+# If drop = TRUE, the content values are directly retrieved
 tbl[2, 1]
 tbl[2, 1, drop = TRUE]
 
@@ -124,14 +129,22 @@ tbl[, -1]
 
 tbl[2, 1] <- rcell(999)
 tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
-tbl[3, ] <- list(-111, -222, -333)
+tbl[6, ] <- list(-111, -222, -333)
 tbl
 
 # We can keep some information from the original table if we need
 tbl[1, 2, keep_titles = TRUE]
 tbl[1, 2, keep_fnotes = TRUE, keep_titles = FALSE]
+tbl[1, 2, keep_fnotes = FALSE, keep_titles = TRUE]
 tbl[1, 2, keep_fnotes = TRUE]
 tbl[1, 2, keep_topleft = TRUE]
+
+# Keeps the referential footnotes when subset contains them
+fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "Mean")) <- "important"
+tbl[4,1]
+
+# Note that order can not be changed with subsetting
+tbl[c(4,3,1), c(3,1)] # It preserves order and wanted selection
 
 }
 \keyword{internal}

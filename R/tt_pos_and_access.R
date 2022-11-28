@@ -343,12 +343,14 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' @return a \code{TableTree} (or \code{ElementaryTable}) object, unless a
 #'   single cell was selected with \code{drop=TRUE}, in which case the (possibly
 #'   multi-valued) fully stripped raw value of the selected cell.
-#' @exportMethod [<-
 #' 
 #' @details the standard subsetting drops the information about title, subtitle,
 #' main footer, provenance footer, and `topleft`. If only a column is selected and
 #' all rows are kept, the `topleft` information remains as default. Any referential
-#' footnote is kept whenever the subset table contains the referenced element.
+#' footnote is kept whenever the subset table contains the referenced element. 
+#' Please note that subsetting always preserve the original order, even if provided
+#' indexes do not preserve it. If sorting is needed, please consider 
+#' using `sort_at_path()`.
 #'
 #' @examples
 #' lyt <- basic_table(title = "Title", 
@@ -366,7 +368,8 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' # As default header, footer, and topleft information is dropped
 #' tbl[1, ]
 #' tbl[1:2, 2]
-#'
+#' 
+#' # If drop = TRUE, the content values are directly retrieved
 #' tbl[2, 1]
 #' tbl[2, 1, drop = TRUE]
 #' 
@@ -385,13 +388,16 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' # We can keep some information from the original table if we need
 #' tbl[1, 2, keep_titles = TRUE]
 #' tbl[1, 2, keep_fnotes = TRUE, keep_titles = FALSE]
+#' tbl[1, 2, keep_fnotes = FALSE, keep_titles = TRUE]
 #' tbl[1, 2, keep_fnotes = TRUE]
 #' tbl[1, 2, keep_topleft = TRUE]
 #' 
 #' # Keeps the referential footnotes when subset contains them
 #' fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "Mean")) <- "important"
-#' 
 #' tbl[4,1]
+#'
+#' # Note that order can not be changed with subsetting
+#' tbl[c(4,3,1), c(3,1)] # It preserves order and wanted selection
 #' 
 #' @aliases [,VTableTree,logical,logical,ANY-method
 #' [,VTableTree,logical,ANY,ANY-method
@@ -400,6 +406,8 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' [,VTableTree,ANY,missing,ANY-method
 #' [,VTableTree,ANY,character,ANY-method
 #' [,VTableTree,character,ANY,ANY-method
+#' 
+#' @exportMethod [<-
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
@@ -552,8 +560,8 @@ setGeneric("subset_cols",
                     j,
                     newcinfo = NULL,
                     keep_topleft = TRUE,
-                    keep_titles = FALSE,
-                    keep_fnotes = keep_titles,
+                    keep_titles = TRUE,
+                    keep_fnotes = TRUE,
                     ...) {
                standardGeneric("subset_cols")
            })
@@ -799,8 +807,10 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
 subset_by_rownum <- function(tt,
                              i,
                              keep_topleft = FALSE,
-                             keep_titles = FALSE,
-                             keep_fnotes = FALSE, ...) {
+                             keep_titles = TRUE,
+                             keep_fnotes = NULL, 
+                             ...) {
+    if (is.null(keep_fnotes)) keep_fnotes <- keep_titles
     stopifnot(is(tt, "VTableNodeInfo"))
     counter <- 0
     nr <- nrow(tt)
@@ -992,7 +1002,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     ## own the generic declaration
     keep_topleft <- list(...)[["keep_topleft"]]
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
-    keep_fnotes <- list(...)[["keep_fnotes"]] %||% FALSE
+    keep_fnotes <- list(...)[["keep_fnotes"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
     
     # browser()
@@ -1254,10 +1264,12 @@ setGeneric("head")
 setMethod("head", "VTableTree",
           function(x, n = 6, ..., keep_topleft = TRUE,
                    keep_titles = TRUE,
-                   keep_fnotes = keep_titles,
+                   keep_fnotes = NULL,
                    ## FALSE because this is a glance
                    ## more often than a subset op
                    reindex_refs = FALSE) {
+              
+    if (is.null(keep_fnotes)) keep_fnotes <- keep_titles
     ## default
     res <- callNextMethod()
     res <- .h_t_body(x = x, res = res,
@@ -1278,11 +1290,11 @@ setGeneric("tail")
 setMethod("tail", "VTableTree",
           function(x, n = 6, ..., keep_topleft = TRUE,
                    keep_titles = TRUE,
-                   keep_fnotes = keep_titles,
+                   keep_fnotes = NULL,
                    ## FALSE because this is a glance
                    ## more often than a subset op
                    reindex_refs = FALSE) {
-
+    if (is.null(keep_fnotes)) keep_fnotes <- keep_titles
     res <- callNextMethod()
     res <- .h_t_body(x = x, res = res,
                      keep_topleft = keep_topleft,

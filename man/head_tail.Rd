@@ -16,7 +16,7 @@ head(x, ...)
   ...,
   keep_topleft = TRUE,
   keep_titles = TRUE,
-  keep_fnotes = keep_titles,
+  keep_fnotes = NULL,
   reindex_refs = FALSE
 )
 
@@ -28,7 +28,7 @@ tail(x, ...)
   ...,
   keep_topleft = TRUE,
   keep_titles = TRUE,
-  keep_fnotes = keep_titles,
+  keep_fnotes = NULL,
   reindex_refs = FALSE
 )
 }
