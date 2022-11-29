@@ -90,12 +90,11 @@ single cell was selected with \code{drop=TRUE}, in which case the (possibly
 multi-valued) fully stripped raw value of the selected cell.
 }
 \examples{
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
    split_cols_by("ARM") \%>\%
    analyze(c("SEX", "AGE"))
 
-tbl <- build_table(l, DM)
-
+tbl <- build_table(lyt, DM)
 tbl
 
 tbl[1, ]

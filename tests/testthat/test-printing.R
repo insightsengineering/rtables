@@ -2,9 +2,8 @@ context("Printing tables")
 
 test_that("toString method works correclty", {
 
-    tbl <- basic_table() %>%
+    tbl <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("Species") %>%
-        add_colcounts() %>%
         analyze(c("Sepal.Length", "Petal.Width"), function(x) {
             in_rows(
                 mean_sd = c(mean(x), sd(x)),
@@ -129,10 +128,9 @@ test_that("newline in column names and possibly cell values work", {
     rawdat2 <- rawdat
     rawdat2$arm_label <- ifelse(rawdat2$ARM == "ARM1", "Arm\n 1 ", "Arm\n 2 ")
 
-    lyt2 <- basic_table() %>%
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", labels_var = "arm_label") %>%
         split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-        add_colcounts() %>%
         split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
         split_rows_by("FACTOR2", "Factor2",
                       split_fun = remove_split_levels("C"),
@@ -146,7 +144,7 @@ test_that("newline in column names and possibly cell values work", {
     matform2 <- matrix_form(tbl2)
     expect_identical(dim(matform2$strings),
                      c(18L, 5L))
-    expect_identical(attr(matform2, "nlines_header"),
+    expect_identical(mf_nlheader(matform2),
                      4L)
     expect_identical(matform2$strings[1:4, 1, drop = TRUE],
                      c("Ethnicity", "  Factor2", "", ""))
@@ -292,7 +290,7 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
     subtitles = paste0("Very ", paste0(rep("very", 15), collapse = " "), " long subtitle"),
     main_footer = paste0("Very ", paste0(rep("very", 6), collapse = " "), " long footer"),
     prov_footer = paste0("Very ", paste0(rep("very", 15), collapse = " "), " prov footer"),
-    show_colcounts = T,
+    show_colcounts = TRUE,
     inset = 2
   ) %>%
     split_rows_by("SEX", page_by = TRUE) %>%
@@ -305,8 +303,10 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   # Adding references
   # row_paths(tt)
   # row_paths_summary(tt)
-  fnotes_at_path(tt, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Not the best but very long one, probably longer than possible."
-  fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Why trimming does not take it out?"
+  txt1 <- "Not the best but very long one, probably longer than possible."
+  txt2 <- "Why trimming does not take it out?"
+  fnotes_at_path(tt, rowpath = c("SEX", "F", "AGE", "Mean")) <- txt1
+  fnotes_at_path(tt, rowpath = c("SEX", "UNDIFFERENTIATED")) <- txt2
 
   # Test also assign function
   table_inset(tt) <- general_inset
@@ -328,8 +328,66 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   no_ins_v <- sapply(no_inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
   ins_v <- sapply(inset_part, function(x) substr(x, 1, general_inset), USE.NAMES = FALSE)
   result <- lapply(list(no_ins_v, ins_v), function(x) all(lengths(regmatches(x, gregexpr(" ", x))) == general_inset))
-  
+
   expect_false(result[[1]]) # No inset
   expect_true(result[[2]]) # Inset
   expect_true(all(vec_tt[sep_index + 1] == "   =============================="))
+})
+
+test_that("Cell and column label wrapping works in printing", {
+    # Set colwidths vector
+    clw <- c(5, 7, 6, 6) + 12
+
+    # Checking in detail if Cell values did wrap correctly
+    result <- toString(matrix_form(tt_for_wrap[10, 1], TRUE), widths = c(10, 8), col_gap = 2)
+    splitted_res <- strsplit(result, "\n")[[1]]
+
+    # First column (rownames) has widths 10 and there is colgap 2
+    expect_identical(.count_chr_from_str(splitted_res[1], " "), 10L + 2L)
+
+    # First column label is 8 char
+    expect_identical(.count_chr_from_str(splitted_res[1], " ", TRUE), 8L)
+
+    # Separator is at the right place and colnames are wrapped
+    expect_identical(splitted_res[7], "————————————————————")
+    expected <- c("            Incredib",
+                  "            ly long ",
+                  "             column ",
+                  "            name to ",
+                  "               be   ")
+    expect_identical(splitted_res[1:5], expected)
+
+    # String replacement of NAs wider than expected works with cell wrapping
+    expected <- c("Mean         A very ",
+                  "              long  ",
+                  "            content ",
+                  "            to_be_wr",
+                  "            apped_an",
+                  "            d_splitt",
+                  "               ed   ")
+    expect_identical(splitted_res[8:14], expected)
+
+    # Testing if footers are not affected by this
+    expect_identical(splitted_res[17], main_footer(tt_for_wrap))
+
+    # Works for row names too
+    result <- toString(matrix_form(tt_for_wrap[6, 1], TRUE), widths = c(10, 8), col_gap = 2)
+    splitted_res2 <- strsplit(result, "\n")[[1]]
+    expected <- c("BLACK OR            ",
+                  "AFRICAN             ",
+                  "AMERICAN            ")
+    expect_identical(splitted_res2[8:10], expected)
+
+    # Test if it works with numeric values
+    tt_simple <- basic_table() %>%
+        analyze("AGE", format = "xx.xxxx") %>%
+        build_table(ex_adsl)
+    result <- toString(matrix_form(tt_simple, TRUE), widths = c(2, 3), col_gap = 1)
+    sre3 <- strsplit(result, "\n")[[1]]
+    expected <- c("   all", "   obs", "——————", "Me 34.", "an 88 ")
+    expect_identical(sre3, expected)
+
+    # See if general table has the right amount of \n
+    result <- toString(matrix_form(tt_for_wrap, TRUE), widths = clw)
+    expect_identical(.count_chr_from_str(result, "\n"), 25L)
 })

@@ -66,7 +66,7 @@ rcell <- function(x,
 #'   of \code{.in_ref_col} when it is used.
 #'
 #' @param  is_ref logical(1).  Are  we  in  the reference  column  (ie
-#'     .in_ref_col shoul be passed to this argument)
+#'     .in_ref_col should be passed to this argument)
 #' @param refval ANY. Value to use when in the reference column. Defaults
 #' to \code{NULL}
 #' @rdname rcell
@@ -94,7 +94,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .names character or NULL. Names of the returned list/structure.
 #' @param .labels character or NULL. labels for the defined rows
 #' @param .formats character or NULL. Formats for the values
-#' @param .indent_mods integer or NULL. Indent modificatons for the defined
+#' @param .indent_mods integer or NULL. Indent modifications for the defined
 #'   rows.
 #' @param .cell_footnotes list. Referential footnote messages to be associated
 #'   by name with \emph{cells}
@@ -118,15 +118,17 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' in_rows(.list = list(a = 1, b = 2, c = 3))
 #' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
 #'
-#' basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", afun = function(x) {
 #'     in_rows(
 #'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
 #'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
 #'     )
-#'   }) %>%
-#'   build_table(ex_adsl)
+#'   })
+#' 
+#' tbl <- build_table(lyt, ex_adsl)
+#' tbl
 #'
 in_rows <- function(..., .list = NULL, .names = NULL,
                     .labels = NULL,
@@ -246,7 +248,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #' @param .ungroup_stats character. Vector of names, which must match elements
 #'   of \code{.stats}
 #' @param ... dots. Additional arguments to \code{fun} which effectively become
-#'   new defaults. These can still be overriden by extra args within a split.
+#'   new defaults. These can still be overridden by extra args within a split.
 #' @param .null_ref_cells logical(1). Should cells for the reference column be
 #'   NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
 #'   \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this

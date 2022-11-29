@@ -32,8 +32,8 @@ populated table.}
 \code{TRUE} if that row should be removed. Defaults to
 \code{\link{all_zero_or_na}}}
 
-\item{min}{numeric(1). (lob_obs_pruner only). Miminum aggregate count value.
-Subtables whose combined/average count are below this threshhold will be
+\item{min}{numeric(1). (lob_obs_pruner only). Minimum aggregate count value.
+Subtables whose combined/average count are below this threshold will be
 pruned}
 
 \item{type}{character(1). How count values should be aggregated. Must be

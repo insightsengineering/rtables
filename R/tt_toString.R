@@ -37,12 +37,12 @@ NULL
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #'
-#' tbl <- build_table(l, iris2)
+#' tbl <- build_table(lyt, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
 #' @rdname tostring
@@ -81,12 +81,12 @@ setMethod("toString", "VTableTree", function(x,
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
 #'
-#' tbl <- build_table(l, iris2)
+#' tbl <- build_table(lyt, iris2)
 #' table_shell(tbl)
 table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
                         tf_wrap = FALSE, max_width = NULL) {
@@ -139,7 +139,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' The strings in the return object are defined as follows: row labels are those
 #' determined by \code{make_row_df} and cell values are determined using
 #' \code{get_formatted_cells}. (Column labels are calculated using a
-#' non-exported internal funciton.
+#' non-exported internal function.
 #'
 #'@return A list with the following elements:
 #' \describe{
@@ -163,15 +163,15 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"),
 #'           afun = list_wrap_x(summary) , format = "xx.xx")
 #'
-#' l
+#' lyt
 #'
-#' tbl <- build_table(l, iris2)
+#' tbl <- build_table(lyt, iris2)
 #'
 #' matrix_form(tbl)
 setMethod("matrix_form", "VTableTree",

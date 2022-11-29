@@ -23,7 +23,7 @@ populated table.}
 \item{path_fun}{function. Function to transform paths into single-string
 row/column names.}
 
-\item{value_fun}{function. Functiont to transform cell values into cells of
+\item{value_fun}{function. Function to transform cell values into cells of
 the data.frame. Defaults to \code{collapse_values} which creates strings
 where multi-valued cells are collapsed together, separated by \code{|}.}
 }

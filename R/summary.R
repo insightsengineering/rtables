@@ -9,11 +9,11 @@
 #' @param x an rtable object
 #'
 #' @examples
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   analyze(c("SEX", "AGE")) %>%
-#'   build_table(ex_adsl)
-#'
+#'   analyze(c("SEX", "AGE"))
+#'   
+#' tbl <- build_table(lyt, ex_adsl)
 #' tbl
 #'
 #' row_paths(tbl)
@@ -53,22 +53,21 @@ col_paths <- function(x) {
 #'
 #' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
 #'
-#' tbl <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_cols_by("SEX", split_fun = drop_split_levels) %>%
-#'   analyze(c("AGE", "BMRKR2")) %>%
-#'   build_table(ex_adsl_MF)
-#'
+#'   analyze(c("AGE", "BMRKR2"))
+#'   
+#' tbl <- build_table(lyt, ex_adsl_MF)
 #' tbl
 #'
 #' df <- row_paths_summary(tbl)
-#'
 #' df
 #'
 #' col_paths_summary(tbl)
 #'
 #' # manually constructed table
-#' tbl3 <- rtable(
+#' tbl2 <- rtable(
 #'    rheader(
 #'      rrow("row 1", rcell("a", colspan = 2),
 #'      rcell("b", colspan = 2)
@@ -76,7 +75,7 @@ col_paths <- function(x) {
 #'    rrow("h2", "a", "b", "c", "d")),
 #'    rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
 #' )
-#' col_paths_summary(tbl3)
+#' col_paths_summary(tbl2)
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
@@ -230,13 +229,13 @@ summarize_rows <- function(obj) {
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
 #'           format = "xx.xx")
 #'
-#' tbl <- build_table(l, iris2)
+#' tbl <- build_table(lyt, iris2)
 
 #' @rdname int_methods
 setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0)
@@ -374,13 +373,13 @@ setMethod("summarize_rows_inner", "LabelRow",
 #'   mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
 #'   ungroup()
 #'
-#' l <- basic_table() %>%
+#' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
 #'           format = "xx.xx")
 #'
-#' tbl <- build_table(l, iris2)
+#' tbl <- build_table(lyt, iris2)
 #' tbl
 #'
 #' row_paths(tbl)

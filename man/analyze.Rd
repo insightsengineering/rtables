@@ -52,9 +52,9 @@ variable(s) be included when performing this analysis. Defaults to
 \code{FALSE}}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in thte list corresponds to the children of this
+function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the ttabulation function.}
+not match a formal argument of the tabulation function.}
 
 \item{show_labels}{character(1). Should the variable labels for corresponding
 to the variable(s) in \code{vars} be visible in the resulting table.}
@@ -65,7 +65,7 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruciton, or
+divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 }
 \value{
@@ -73,7 +73,7 @@ A \code{PreDataTableLayouts} object suitable for passing to further
 layouting functions, and to \code{build_table}.
 }
 \description{
-Adding /analyzed variables/ to our table layout defines the primary
+Adding \emph{analyzed variables} to our table layout defines the primary
 tabulation to be performed. We do this by adding calls to \code{analyze}
 and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
 further splitting, the tabulation will occur at the current/next level of
@@ -180,14 +180,15 @@ alternate column observation counts provided by the \code{alt_counts_df},
 
 \examples{
 
-l <- basic_table() \%>\%
+lyt <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
-l
-build_table(l, DM)
+lyt
 
+tbl <- build_table(lyt, DM)
+tbl
 
-l <- basic_table() \%>\%
+lyt2 <- basic_table() \%>\%
     split_cols_by("Species") \%>\%
     analyze(head(names(iris), -1), afun = function(x) {
         list(
@@ -195,8 +196,10 @@ l <- basic_table() \%>\%
             "range" = rcell(diff(range(x)), format = "xx.xx")
         )
     })
-l
-build_table(l, iris)
+lyt2
+
+tbl2 <- build_table(lyt2, iris)
+tbl2
 
 }
 \author{

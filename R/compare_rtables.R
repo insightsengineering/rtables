@@ -8,7 +8,7 @@
 #'
 #'@param object rtable to test
 #'@param expected rtable expected
-#'@param tol numerical tolorance
+#'@param tol numerical tolerance
 #'@param comp.attr boolean. Compare format of cells. Other attributes are
 #'  silently ignored.
 #'@param structure boolean. Should structure (in the form of column and row

@@ -110,8 +110,8 @@ prune_zeros_only <- function(tt) {
     length(kids) == 0
 }
 
-#' @param min numeric(1). (lob_obs_pruner only). Miminum aggregate count value.
-#'   Subtables whose combined/average count are below this threshhold will be
+#' @param min numeric(1). (lob_obs_pruner only). Minimum aggregate count value.
+#'   Subtables whose combined/average count are below this threshold will be
 #'   pruned
 #' @param type character(1). How count values should be aggregated. Must be
 #'   \code{"sum"} (the default) or \code{"mean"}

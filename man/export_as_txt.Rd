@@ -63,7 +63,7 @@ pagination should be done.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
-a connected horrizontal line (unicode 2014) in locals that use a UTF
+a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
