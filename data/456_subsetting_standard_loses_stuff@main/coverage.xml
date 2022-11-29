@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0.913529508466217" branch-rate="0" lines-covered="5557" lines-valid="6083" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-11-29 17:00:12">
+<coverage line-rate="0.913529508466217" branch-rate="0" lines-covered="5557" lines-valid="6083" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2022-11-29 17:41:28">
   <sources/>
   <packages>
     <package name="rtables" line-rate="0.913529508466217" branch-rate="0" complexity="0">
@@ -18806,15 +18806,15 @@
               <lines>
                 <line number="524" hits="1882" branch="false"/>
                 <line number="527" hits="1882" branch="false"/>
-                <line number="528" hits="1734" branch="false"/>
-                <line number="529" hits="1734" branch="false"/>
-                <line number="532" hits="148" branch="false"/>
-                <line number="533" hits="148" branch="false"/>
+                <line number="528" hits="1739" branch="false"/>
+                <line number="529" hits="1739" branch="false"/>
+                <line number="532" hits="143" branch="false"/>
+                <line number="533" hits="143" branch="false"/>
                 <line number="537" hits="1882" branch="false"/>
-                <line number="538" hits="1740" branch="false"/>
-                <line number="539" hits="1740" branch="false"/>
-                <line number="541" hits="142" branch="false"/>
-                <line number="542" hits="142" branch="false"/>
+                <line number="538" hits="1745" branch="false"/>
+                <line number="539" hits="1745" branch="false"/>
+                <line number="541" hits="137" branch="false"/>
+                <line number="542" hits="137" branch="false"/>
                 <line number="546" hits="1882" branch="false"/>
                 <line number="547" hits="1760" branch="false"/>
                 <line number="549" hits="122" branch="false"/>
@@ -19664,15 +19664,15 @@
             <line number="516" hits="1" branch="false"/>
             <line number="524" hits="1882" branch="false"/>
             <line number="527" hits="1882" branch="false"/>
-            <line number="528" hits="1734" branch="false"/>
-            <line number="529" hits="1734" branch="false"/>
-            <line number="532" hits="148" branch="false"/>
-            <line number="533" hits="148" branch="false"/>
+            <line number="528" hits="1739" branch="false"/>
+            <line number="529" hits="1739" branch="false"/>
+            <line number="532" hits="143" branch="false"/>
+            <line number="533" hits="143" branch="false"/>
             <line number="537" hits="1882" branch="false"/>
-            <line number="538" hits="1740" branch="false"/>
-            <line number="539" hits="1740" branch="false"/>
-            <line number="541" hits="142" branch="false"/>
-            <line number="542" hits="142" branch="false"/>
+            <line number="538" hits="1745" branch="false"/>
+            <line number="539" hits="1745" branch="false"/>
+            <line number="541" hits="137" branch="false"/>
+            <line number="542" hits="137" branch="false"/>
             <line number="546" hits="1882" branch="false"/>
             <line number="547" hits="1760" branch="false"/>
             <line number="549" hits="122" branch="false"/>
