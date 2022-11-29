@@ -51,7 +51,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
     rows <- collect_leaves(tt, TRUE, TRUE)
     torm <- vapply(rows, criteria,
                   NA, USE.NAMES = FALSE)
-    tt[!torm, , keep_topleft = TRUE]
+    tt[!torm, , keep_topleft = TRUE, keep_titles = TRUE, keep_fnotes = TRUE]
 }
 
 #' @rdname trim_prune_funs
