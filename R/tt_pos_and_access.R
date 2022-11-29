@@ -327,13 +327,12 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #'   \code{FALSE}
 #' @param \dots Includes
 #' \describe{
-#' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `topleft`
-#' material for the table be retained after subsetting. Defaults to `FALSE`,
-#' which retains the material if all rows are included (i.e. subsetting was by
-#' column), and drops it otherwise.}
-#' \item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}}
+#' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `top-left`
+#' material for the table be retained after subsetting. Defaults to `TRUE` if 
+#' all rows are included (i.e. subsetting was by column), and drops it otherwise.}
+#' \item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
 #' \item{\emph{keep_fnotes}}{logical(1) Should non-referential footer
-#' information be retained. Defaults to \code{keep_titles} (which defaults to `TRUE`)}
+#' information be retained. Defaults to \code{keep_titles}.}
 #' \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 #' re-indexed as if the resulting subset is the entire table. Defaults to
 #' \code{TRUE}.}
