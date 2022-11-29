@@ -169,7 +169,7 @@ tbl
 
 ### Horizontal Separation
 A character value can be specified to modify the horizontal separation between column headers and the table. Below, we replace the default line with "=".
-```{bash}
+```{r}
 tbl <- basic_table() %>%
         split_cols_by("Species") %>%
         add_colcounts() %>%
