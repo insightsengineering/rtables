@@ -32,7 +32,70 @@ test_that("Page by splitting works", {
 })
 
 
+
 test_that("vertical and horizontal pagination work", {
+
+    spoof_df <- data.frame(arm = factor(c("a", "b","c", "d", "e", "f")),
+                           var1 = 6)
+    simple_lyt <- basic_table() %>%
+        split_cols_by("arm") %>%
+        analyze("var1", function(x, ...) {
+            in_rows(.list = replicate(30, list(1234)),
+                    .names = paste0("mynameis", 1:30))
+        })
+
+    simple_tbl <- build_table(simple_lyt, spoof_df)
+
+    ## rownames take up 10 char, repeated across horiz pag
+    ## colheader takes up 2, repeated across vert pag
+    ## all columns take up 7 (4 for content + 3 for cols sep)
+
+    ## should be one col per page, ie 6 pages
+    hpag1 <- paginate_table(simple_tbl, lpp = 80, cpp = 17)
+    expect_equal(rep(1, 6),
+                 sapply(hpag1, ncol))
+
+    ## 16 is too small to fit any columns (After col divider)
+    ## onto a page with the row names, so this is an error
+    expect_error(paginate_table(simple_tbl, lpp = 80, cpp = 16))
+
+    ## 23 is just barely still only enough to fit 1 col per page
+    hpag2 <- paginate_table(simple_tbl, lpp = 80, cpp = 23)
+    expect_identical(hpag1, hpag2)
+
+    hpag3 <- paginate_table(simple_tbl, lpp = 80, cpp = 24)
+    expect_equal(rep(2, 3),
+                 sapply(hpag3, ncol))
+
+    ## preceding siblings <2
+    expect_error(paginate_table(simple_tbl, lpp = 3, cpp = 120))
+
+    vpag1 <- paginate_table(simple_tbl, lpp = 3, cpp = 120, min_siblings = 0)
+    expect_equal(rep(1, 30),
+                 sapply(vpag1, nrow))
+
+    ## no lines for rows after header column
+    expect_error(paginate_table(simple_tbl, lpp = 2, cpp = 120, min_siblings = 0))
+
+    ## first lpp that allows the default min_siblings = 2 to succeed,
+    ## 3 rows per page, 10 pages
+    vpag2 <- paginate_table(simple_tbl, lpp = 5, cpp = 120)
+    expect_equal(rep(3, 10),
+                 sapply(vpag2, nrow))
+
+    ## uneven pages, 8, 8, 8, 6 rows
+    vpag3 <- paginate_table(simple_tbl, lpp = 10, cpp = 120)
+    expect_equal(c(8, 8, 8, 6),
+                 sapply(vpag3, nrow))
+
+    ## combined pagination
+
+    cpag1 <- paginate_table(simple_tbl, lpp = 5, cpp = 17)
+    expect_equal(replicate(60, list(c(3, 1))),
+                 lapply(cpag1, dim))
+    ## ordering: horizontal pagination first then vertical in resulting list
+    expect_equal(sapply(cpag1, names),
+                 rep(c("a", "b", "c", "d", "e","f"), 10))
 
     tt <- tt_to_export()
     main_title(tt) <- "main title"
@@ -47,7 +110,7 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(tt[, 1:2, keep_titles = TRUE,
                         reindex_refs = FALSE], res[[1]])
 
-    res2 <- paginate_table(tt, lpp = 75, cpp = 45)
+    res2 <- paginate_table(tt, lpp = 75, cpp = 45, verbose = TRUE)
     expect_identical(length(res2), 6L)
     expect_identical(res2[[1]], tt[1:63, 1:2, keep_titles = TRUE,
                                    reindex_refs = FALSE])
@@ -91,13 +154,13 @@ test_that("vertical and horizontal pagination work", {
                              strrep("A", 25))
 
     res3a <- paginate_table(tt2, lpp = 29,
-                            cpp = 40, tf_wrap = TRUE, verbose = TRUE)
+                            cpp = 40, tf_wrap = TRUE)
     res3b <- paginate_table(tt2, lpp = 25,
-                            cpp = 40, tf_wrap = FALSE, verbose = TRUE)
+                            cpp = 40, tf_wrap = FALSE)
     expect_true(all(mapply(function(a, b) identical(dim(a), dim(b)),
                            a = res3a, b = res3b)))
 
-    res3c <- paginate_table(tt2, lpp = 29, cpp = 40, tf_wrap = FALSE, verbose = TRUE)
+    res3c <- paginate_table(tt2, lpp = 29, cpp = 40, tf_wrap = FALSE)
     expect_equal(nrow(res3a[[1]]),
                  nrow(res3c[[1]]) - 4)
 
@@ -111,7 +174,7 @@ test_that("inset and pagination work together", {
   prov_footer(tt) <- "prov footer"
   table_inset(tt) <- 5
 
-  res <- paginate_table(tt, lpp = NULL, cpp = 40)
+  res <- paginate_table(tt, lpp = NULL, cpp = 45, verbose = TRUE)
 
   expect_identical(length(res), 3L)
 
@@ -133,6 +196,27 @@ test_that("cell and column wrapping works in pagination", {
     # Set colwidths vector
     clw <- c(5, 7, 6, 6) + 12
     lpp_tmp <- 18
+    ## header mats: 5 [ 1 (title) + 2 (newline + div) + 1 (col labels) + 1 (div)]
+    ## footer mats: 3 [ 1 (footer) + 2 (newline + div)
+    ## adj rlpp: 10
+    ## all rows fit on one page
+    res1 <- pag_tt_indices(tt_for_wrap, lpp = lpp_tmp)
+    expect_equal(length(res1), 1L)
+    ## header mats: 7 [ 1 (title) + 2 (newline + div) + 3 (col labels) + 1 (div)]
+    ## footer mats: 3 [ 1 (footer) + 2 (newline + div)
+    ## adj rlpp: 8
+    ## can't break after on BLACK OR AFRICAN AMERICAN row (label)
+    ## 2 pages, one after full asian block, one after full BOAA block
+    res2 <- pag_tt_indices(tt_for_wrap, lpp = lpp_tmp, colwidths = clw)
+    expect_identical(res2,
+                     list(1:5, 6:10))
+    expect_identical(nlines(col_info(tt_for_wrap), colwidths = clw),
+                     nlines(col_info(tt_for_wrap)) + 2L) ## 2 new lines from wrapping
+
+    pdf <- make_row_df(tt_for_wrap, colwidths = clw)
+    expect_identical(pdf$self_extent,
+                     c(1L, 1L, 1L, 1L, 3L,
+                       2L, 1L, 1L, 1L, 3L)) ## the 2 is row label wrap, 3s are cell wraps
 
     # propose_column_widths(matrix_form(tt_for_wrap, TRUE))
     pg_tbl_w_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, colwidths = clw)
@@ -144,8 +228,17 @@ test_that("cell and column wrapping works in pagination", {
     expect_identical(nrow(pg_tbl_no_clw[[1]]) + nrow(tt_for_wrap), 20L)
     expect_identical(.count_chr_from_str(res1, "\n") + .count_chr_from_str(res2, "\n"), 36L)
 
-    # With column (+ 2 lines), cell (+ 2*2 lines), and row names wrapping (+1 line) gets to 25
+
+    ## entire table takes exactly 25 lines when content is wrapped
     result <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 25L)
+    expect_identical(result[[1]], tt_for_wrap)
+
+    ## paginating at 24 walks up
+    ##  10 row too long with wrap -> 9 label row -> 8 ok
+    ## paginates after row 8 (BOAA -> AGE-> Mean)
+    result2 <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 24L)
+    expect_identical(sapply(result2, nrow),
+                     c(8L, 3L))
     result_str <- toString(result[[1]], widths = clw)
     expect_identical(.count_chr_from_str(result_str, "\n"), 25L)
 
@@ -158,13 +251,13 @@ test_that("cell and column wrapping works in pagination", {
     expect_identical(non_content_lines, 10L) # headers and footers with wrapping (+2 l)
 
     # Checking if the pages have the right amount of pages
-    resw1 <- toString(pg_tbl_w_clw[[1]], widths = clw)
-    resw2 <- toString(pg_tbl_w_clw[[2]], widths = clw) # context repetition is +2 lines
-    exp_n_lines1 <- nrow(pg_tbl_w_clw[[1]]) +
+    resw1 <- toString(result2[[1]], widths = clw)
+    resw2 <- toString(result2[[2]], widths = clw) # context repetition is +2 lines
+    exp_n_lines1 <- nrow(result2[[1]]) +
         non_content_lines +
         2L + # Wrap of cell value
         1L # Wrap of rowname
-    exp_n_lines2 <- nrow(pg_tbl_w_clw[[2]]) +
+    exp_n_lines2 <- nrow(result2[[2]]) +
         non_content_lines +
         2L + # Wrap of cell value
         1L # Wrapping of rowname
@@ -219,7 +312,7 @@ test_that("Pagination works with non-default min_siblings", {
     ttlst <- expect_silent(paginate_table(tt, lpp = 3, min_siblings = 0))
     expect_identical(length(ttlst), nlevels(DM$RACE))
     expect_identical(tt[1], ttlst[[1]])
-    
+
     expect_error(
         paginate_table(tt, lpp = 3, min_siblings = 1),
         "Unable to find any valid pagination between 1 and 1"
@@ -230,26 +323,26 @@ test_that("Pagination works with wrapped titles/footers", {
     lyt <- basic_table() %>%
         split_cols_by("SEX") %>%
         analyze("RACE")
-    
+
     tt <- build_table(lyt, DM)
-    
+
     main_title(tt) <- "title with a\nnewline"
     main_footer(tt) <- "wrapped footer with\nnewline"
-    
+
     res <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
     expect_identical(main_title(res[[1]]), main_title(res[[2]]))
     expect_identical(main_title(res[[1]]), main_title(tt))
     expect_identical(main_footer(res[[1]]), main_footer(res[[2]]))
     expect_identical(main_footer(res[[1]]), main_footer(tt))
-    
+
     main_title(tt) <- "this is a long long table title that should be wrapped to a new line"
     main_footer(tt) <- "this is an extra long table main footer and should also be wrapped"
-    
+
     res2 <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
     expect_equal(length(res2), 2)
     mf_res2 <- matrix_form(res2[[1]])
     nrow_res2 <- nrow(mf_strings(mf_res2)) + 5 + 4 # 5 lines tbl seps/ws + 4 lines title/footer
-    
+
     res2_str1 <- toString(res2[[1]], tf_wrap = TRUE, max_width = 60)
     res2_str1_spl <- strsplit(res2_str1, split = "\n")[[1]]
 
@@ -259,10 +352,10 @@ test_that("Pagination works with wrapped titles/footers", {
     expect_equal(nchar(res2_str1_spl[2]), 8)
     expect_equal(nchar(res2_str1_spl[nrow_res2 - 1]), 58)
     expect_equal(nchar(res2_str1_spl[nrow_res2]), 7)
-    
+
     res2_str2 <- toString(res2[[2]], tf_wrap = TRUE, max_width = 60)
     res2_str2_spl <- strsplit(res2_str2, split = "\n")[[1]]
-    
+
     expect_equal(nrow_res2, length(res2_str2_spl))
     expect_true(all(nchar(res2_str2_spl)) <= 60)
     expect_equal(nchar(res2_str2_spl[1]), 59)

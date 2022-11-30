@@ -9,7 +9,7 @@ test_that("export_as_txt works with and without pagination", {
     tbl <- build_table(lyt, ex_adsl)
 
     tmptxtf <- tempfile()
-    export_as_txt(tbl, file = tmptxtf, paginate = TRUE, lpp = 8)
+    export_as_txt(tbl, file = tmptxtf, paginate = TRUE, lpp = 8, verbose = TRUE)
     txtlns <- readLines(tmptxtf)
     expect_identical(grep("\\\\s\\\\n", txtlns),
                      c(9L, 17L))
@@ -21,27 +21,93 @@ test_that("export_as_txt works with and without pagination", {
 test_that("export_as_txt works with wrapping", {
     clw <- c(5, 7, 6, 6) + 12
     lpp_tmp <- 18
-    
-    tmptxtf <- tempfile()
-    export_as_txt(tt_for_wrap, 
-                  file = tmptxtf, 
-                  paginate = TRUE, 
-                  lpp = 150, 
-                  colwidths = clw, 
-                  tf_wrap = TRUE, 
+
+    ## no vert pagination because lpp is so big
+    tmptxtf1 <- tempfile()
+    export_as_txt(tt_for_wrap,
+                  file = tmptxtf1,
+                  paginate = TRUE,
+                  lpp = 150,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
+                  max_width = 20, cpp = 80, verbose = TRUE)
+    txtlns1 <- readLines(tmptxtf1)
+    pagepos1 <- grep("\\\\s\\\\n", txtlns1)
+    expect_identical(pagepos1, 30L) ##c(30L, 58L))
+
+    ## explicitly no vertical pagination (lpp = NULL)
+    tmptxtf1b <- tempfile()
+    export_as_txt(tt_for_wrap,
+                  file = tmptxtf1b,
+                  paginate = TRUE,
+                  lpp = NULL,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
                   max_width = 20, cpp = 80)
-    txtlns <- readLines(tmptxtf)
-    expect_identical(grep("\\\\s\\\\n", txtlns), c(30L, 58L))
-    
-    expect_warning(export_as_txt(tt_for_wrap, 
-                                 file = tmptxtf, 
-                                 paginate = TRUE, 
-                                 lpp = lpp_tmp, 
-                                 colwidths = clw, 
-                                 tf_wrap = FALSE, 
-                                 max_width = 20))
-    txtlns <- readLines(tmptxtf)
-    expect_identical(grep("\\\\s\\\\n", txtlns), c(26L, 50L))
+
+    txtlns1b <- readLines(tmptxtf1b)
+    expect_identical(txtlns1, txtlns1b)
+
+
+
+
+    ## no horiz pagination, tf_wrap FALSE
+
+    tmptxtf2 <- tempfile()
+    expect_warning(export_as_txt(tt_for_wrap,
+                                 file = tmptxtf2,
+                                 paginate = TRUE,
+                                 lpp = lpp_tmp,
+                                 colwidths = clw,
+                                 tf_wrap = FALSE,
+                                 max_width = 20, verbose = TRUE))
+    txtlns2 <- readLines(tmptxtf2)
+    pagepos2 <- grep("\\\\s\\\\n", txtlns2)
+    expect_identical(pagepos2, 18L) ##c(26L, 50L))
+
+    tmptxtf2b <- tempfile()
+    expect_error(export_as_txt(tt_for_wrap,
+                  file = tmptxtf2b,
+                  paginate = TRUE,
+                  lpp = lpp_tmp,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
+                  max_width = 20, verbose = TRUE))
+    export_as_txt(tt_for_wrap,
+                  file = tmptxtf2b,
+                  paginate = TRUE,
+                  lpp = lpp_tmp,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
+                  max_width = 40, verbose = TRUE)
+    txtlns2b <- readLines(tmptxtf2b)
+    pagepos2b <- grep("\\\\s\\\\n", txtlns2b)
+    expect_identical(pagepos2b, c(16L, 33L, 49L)) ## 16 because we dont' get our first pick of pagination spots anymore
+
+    ## both vertical and horizontal pagination #458
+    tmptxtf3 <- tempfile()
+    ## this fails, no valid pagination after both heade rand footer
+    ## are wrapped to 20
+    expect_error(export_as_txt(tt_for_wrap,
+                  file = tmptxtf3,
+                  paginate = TRUE,
+                  lpp = lpp_tmp,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
+                  max_width = 20,
+                  cpp = 80))
+    export_as_txt(tt_for_wrap,
+                  file = tmptxtf3,
+                  paginate = TRUE,
+                  lpp = lpp_tmp,
+                  colwidths = clw,
+                  tf_wrap = TRUE,
+                  max_width = 40,
+                  cpp = 80, verbose = TRUE)
+
+    txtlns3 <- readLines(tmptxtf3)
+    pagepos3 <- grep("\\\\s\\\\n", txtlns3)
+    expect_identical(pagepos3[1], pagepos2b[1])
 })
 
 test_that("tsv roundtripping for path_enriched_df", {
