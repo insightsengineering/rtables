@@ -51,8 +51,12 @@ or you can install the latest development version directly from GitHub
 with:
 
 ``` r
-devtools::install_github("Roche/rtables")
+remotes::install_github("insightsengineering/formatters")
+remotes::install_github("Roche/rtables")
 ```
+
+Note you might need to set your `GITHUB_PAT` environment variable in
+order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN
 releases) can be found in the [releases
@@ -65,6 +69,8 @@ creation of a more complex table.
 
 ``` r
 library(rtables)
+#> Loading required package: magrittr
+#> Loading required package: formatters
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -103,6 +109,14 @@ build_table(lyt, ex_adsl)
 ``` r
 library(rtables)
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 
 ## for simplicity grab non-sparse subset
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
