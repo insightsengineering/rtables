@@ -202,13 +202,16 @@ export_as_txt <- function(tt, file = NULL,
         if(tf_wrap && is.null(max_width))
             max_width <- cpp
 
-        tbls <- paginate_table(tt, cpp = cpp, lpp = lpp, tf_wrap = tf_wrap, max_width = max_width, ...)
+        tbls <- paginate_table(tt, cpp = cpp, lpp = lpp, tf_wrap = tf_wrap, max_width = max_width,
+                               colwidths = colwidths, ...)
     } else {
         tbls <- list(tt)
     }
 
     res <- paste(mapply(function(tb, cwidths, ...) {
-        toString(tb, widths = cwidths[c(1, .figure_out_colinds(tb, tt))], ...)
+        ## 1 and +1 are because cwidths includes rowlabel 'column'
+        cinds <- c(1, .figure_out_colinds(tb, tt) + 1L)
+        toString(tb, widths = cwidths[cinds], ...)
     },
     MoreArgs = list(hsep = hsep,
                     indent_size = indent_size,
@@ -440,11 +443,11 @@ export_as_pdf <- function(tt,
     cur_gpar <-  get.gpar()
     if (is.null(lpp)) {
         lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                     (cur_gpar$cex * cur_gpar$lineheight))
+                     (cur_gpar$cex * cur_gpar$lineheight)) - sum(margins[c(1, 3)]) # bottom, top
     }
     if(is.null(cpp)) {
         cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-                     font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
+                     font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi) - sum(margins[c(2, 4)]) # left, right
     }
     if(tf_wrap && is.null(max_width))
         max_width <- cpp
@@ -456,7 +459,8 @@ export_as_pdf <- function(tt,
             }
     stbls <- lapply(lapply(tbls,
                            function(tbl_i) {
-        toString(tbl_i, widths = colwidths[c(1, .figure_out_colinds(tbl_i, tt))], hsep = hsep,
+        cinds <- c(1, .figure_out_colinds(tbl_i, tt) + 1L)
+        toString(tbl_i, widths = colwidths[cinds], hsep = hsep,
                  indent_size = indent_size, tf_wrap = tf_wrap,
                  max_width = max_width)
     }), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
