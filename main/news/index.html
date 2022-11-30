@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -53,6 +47,16 @@
       <small>Source: <a href="https://github.com/roche/rtables/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.3.4" id="rtables-0534">rtables 0.5.3.4<a class="anchor" aria-label="anchor" href="#rtables-0534"></a></h2>
+<ul><li>
+<code>export_as_pdf</code> now correctly takes <code>margins</code> into account when calculating <code>lpp</code> and <code>cpp</code> from page size.</li>
+<li>exporters now pass down non-default <code>colwidths</code> values correctly</li>
+<li>
+<code>nlines</code> <code>TableRow</code> method (used for both rows and column label extent in paginaton) now correctly handles column spanning</li>
+<li>pagination with <code>verbose = TRUE</code> now includes original and adjusted lines-per page information</li>
+<li>depends on <code>formatters</code> <code>&gt;=0.3.4.9</code> for a number of pagination machinery fixes and improvements</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.3.3" id="rtables-0533">rtables 0.5.3.3<a class="anchor" aria-label="anchor" href="#rtables-0533"></a></h2>
 <ul><li>
