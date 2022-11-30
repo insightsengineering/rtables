@@ -148,10 +148,10 @@ keep more information from the original table. As a standard the foot notes are
 always present if the titles are kept. 
 ```{r}
 tbl[1:3, 2:3, keep_titles = TRUE]
-tbl[1:3, 2:3, keep_titles = FALSE, keep_fnotes = TRUE]
+tbl[1:3, 2:3, keep_titles = FALSE, keep_footers = TRUE]
 
-# Referential footnotes are not influenced by `keep_fnotes = FALSE`
-tbl[1:3, keep_titles = TRUE, keep_fnotes = FALSE]
+# Referential footnotes are not influenced by `keep_footers = FALSE`
+tbl[1:3, keep_titles = TRUE, keep_footers = FALSE]
 ```
 
 ## Path Based Cell Value Accessing:

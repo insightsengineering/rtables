@@ -233,8 +233,8 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     expect_identical(main_title(tbl[1, 1]), "")
     expect_identical(main_title(tbl[1, 1, keep_titles = TRUE]), ti)
     expect_identical(subtitles(tbl[1, 1, keep_titles = TRUE]), sti)
-    expect_identical(main_footer(tbl[1, 1, keep_fnotes = TRUE]), mf)
-    expect_identical(prov_footer(tbl[1, 1, keep_fnotes = TRUE]), pf)
+    expect_identical(main_footer(tbl[1, 1, keep_footers = TRUE]), mf)
+    expect_identical(prov_footer(tbl[1, 1, keep_footers = TRUE]), pf)
 })
 
 test_that("setters work ok", {

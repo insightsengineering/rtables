@@ -341,7 +341,7 @@ test_that("Cell and column label wrapping works in printing", {
     clw <- c(5, 7, 6, 6) + 12
 
     # Checking in detail if Cell values did wrap correctly
-    result <- toString(matrix_form(tt_for_wrap[10, 1, keep_fnotes = TRUE], TRUE), widths = c(10, 8), col_gap = 2)
+    result <- toString(matrix_form(tt_for_wrap[10, 1, keep_footers = TRUE], TRUE), widths = c(10, 8), col_gap = 2)
     splitted_res <- strsplit(result, "\n")[[1]]
 
     # First column (rownames) has widths 10 and there is colgap 2
