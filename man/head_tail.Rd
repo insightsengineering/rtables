@@ -16,7 +16,7 @@ head(x, ...)
   ...,
   keep_topleft = TRUE,
   keep_titles = TRUE,
-  keep_fnotes = NULL,
+  keep_footers = keep_titles,
   reindex_refs = FALSE
 )
 
@@ -28,7 +28,7 @@ tail(x, ...)
   ...,
   keep_topleft = TRUE,
   keep_titles = TRUE,
-  keep_fnotes = NULL,
+  keep_footers = keep_titles,
   reindex_refs = FALSE
 )
 }
@@ -55,7 +55,7 @@ subset.}
 all title material for the table will be carried over to the
 subset.}
 
-\item{keep_fnotes}{logical(1). If \code{TRUE}, all footer material for the table
+\item{keep_footers}{logical(1). If \code{TRUE}, all footer material for the table
 will be carried over to the subset. It defaults to \code{keep_titles}.}
 
 \item{reindex_refs}{logical(1). Defaults to \code{FALSE}. If \code{TRUE},

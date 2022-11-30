@@ -71,7 +71,7 @@ x[i, j, ...] <- value
 material for the table be retained after subsetting. Defaults to \code{TRUE} if
 all rows are included (i.e. subsetting was by column), and drops it otherwise.}
 \item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
-\item{\emph{keep_fnotes}}{logical(1) Should non-referential footer
+\item{\emph{keep_footers}}{logical(1) Should non-referential footer
 information be retained. Defaults to \code{keep_titles}.}
 \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 re-indexed as if the resulting subset is the entire table. Defaults to
@@ -90,11 +90,14 @@ single cell was selected with \code{drop=TRUE}, in which case the (possibly
 multi-valued) fully stripped raw value of the selected cell.
 }
 \details{
-the standard subsetting drops the information about title, subtitle,
-main footer, provenance footer, and \code{topleft}. If only a column is selected and
-all rows are kept, the \code{topleft} information remains as default. Any referential
-footnote is kept whenever the subset table contains the referenced element.
-Please note that subsetting always preserve the original order, even if provided
+by default, subsetting drops the information about title, subtitle,
+main footer, provenance footer, and \code{topleft}. If only a column is selected
+and all rows are kept, the \code{topleft} information remains as default. Any
+referential footnote is kept whenever the subset table contains the
+referenced element.
+}
+\note{
+subsetting always preserve the original order, even if provided
 indexes do not preserve it. If sorting is needed, please consider
 using \code{sort_at_path()}. Also note that \code{character} indices are treated as paths,
 not vectors of names in both \code{[} and \verb{[<-}.
@@ -134,17 +137,26 @@ tbl
 
 # We can keep some information from the original table if we need
 tbl[1, 2, keep_titles = TRUE]
-tbl[1, 2, keep_fnotes = TRUE, keep_titles = FALSE]
-tbl[1, 2, keep_fnotes = FALSE, keep_titles = TRUE]
-tbl[1, 2, keep_fnotes = TRUE]
+tbl[1, 2, keep_footers = TRUE, keep_titles = FALSE]
+tbl[1, 2, keep_footers = FALSE, keep_titles = TRUE]
+tbl[1, 2, keep_footers = TRUE]
 tbl[1, 2, keep_topleft = TRUE]
 
 # Keeps the referential footnotes when subset contains them
 fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "Mean")) <- "important"
-tbl[4,1]
+tbl[4, 1]
+tbl[2, 1] # None present
+
+# We can reindex referential footnotes, so that the new table does not depend
+#  on the original one
+fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "important"
+tbl[4, 1] # {1} because it has been indexed again
+tbl[4, 1, reindex_refs = FALSE] # {2} -> not reindexed
+table_structure(tbl)
+
 
 # Note that order can not be changed with subsetting
-tbl[c(4,3,1), c(3,1)] # It preserves order and wanted selection
+tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
 
 }
 \seealso{

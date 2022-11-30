@@ -575,7 +575,7 @@ setGeneric("subset_cols",
                     newcinfo = NULL,
                     keep_topleft = TRUE,
                     keep_titles = TRUE,
-                    keep_footers = TRUE,
+                    keep_footers = keep_titles,
                     ...) {
                standardGeneric("subset_cols")
            })
@@ -822,9 +822,8 @@ subset_by_rownum <- function(tt,
                              i,
                              keep_topleft = FALSE,
                              keep_titles = TRUE,
-                             keep_footers = NULL, 
+                             keep_footers = keep_titles, 
                              ...) {
-    if (is.null(keep_footers)) keep_footers <- keep_titles
     stopifnot(is(tt, "VTableNodeInfo"))
     counter <- 0
     nr <- nrow(tt)
@@ -1014,7 +1013,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
-    keep_topleft <- list(...)[["keep_topleft"]]
+    keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not present
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     keep_footers <- list(...)[["keep_footers"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
@@ -1278,12 +1277,11 @@ setGeneric("head")
 setMethod("head", "VTableTree",
           function(x, n = 6, ..., keep_topleft = TRUE,
                    keep_titles = TRUE,
-                   keep_footers = NULL,
+                   keep_footers = keep_titles,
                    ## FALSE because this is a glance
                    ## more often than a subset op
                    reindex_refs = FALSE) {
               
-    if (is.null(keep_footers)) keep_footers <- keep_titles
     ## default
     res <- callNextMethod()
     res <- .h_t_body(x = x, res = res,
@@ -1304,11 +1302,10 @@ setGeneric("tail")
 setMethod("tail", "VTableTree",
           function(x, n = 6, ..., keep_topleft = TRUE,
                    keep_titles = TRUE,
-                   keep_footers = NULL,
+                   keep_footers = keep_titles,
                    ## FALSE because this is a glance
                    ## more often than a subset op
                    reindex_refs = FALSE) {
-    if (is.null(keep_footers)) keep_footers <- keep_titles
     res <- callNextMethod()
     res <- .h_t_body(x = x, res = res,
                      keep_topleft = keep_topleft,

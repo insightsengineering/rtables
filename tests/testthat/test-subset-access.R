@@ -208,6 +208,7 @@ test_that("top_left, title, footers retention behaviors are correct across all s
         analyze("AGE", mean)
     tbl <- build_table(lyt, DM)
     fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "mean")) <- rf
+    fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "mean")) <- rf
     
     # topleft
     expect_identical(top_left(tbl), tlval)
@@ -221,16 +222,23 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
     
-    # error for multiple elemented selected for dropping
-    expect_error(tbl[1:2, 1, drop = TRUE])
+    # drop = TRUE works (to test for more elements)
+    expect_identical(tbl[1, 1, drop = TRUE], NULL)
+    expect_equal(tbl[2, 1, drop = TRUE], 33.71, tolerance = 0.01)
     
     # referential footnotes
     expect_identical(mf_rfnotes(matrix_form(tbl[2, 1])), 
                      c("F.AGE.mean" = paste0("{1} - ", rf)))
+    expect_identical(mf_rfnotes(matrix_form(tbl[4, 1])), 
+                     c("M.AGE.mean" = paste0("{1} - ", rf)))
+    expect_identical(mf_rfnotes(matrix_form(tbl[4, 1, reindex_refs = FALSE])), 
+                     c("M.AGE.mean" = paste0("{2} - ", rf)))
     expect_identical(mf_rfnotes(matrix_form(tbl[1, 1])), character())
     
     # titles and footers
     expect_identical(main_title(tbl[1, 1]), "")
+    expect_identical(main_title(tbl[1, 1, keep_titles = FALSE]), "")
+    expect_identical(main_footer(tbl[1, 1, keep_titles = FALSE]), character())
     expect_identical(main_title(tbl[1, 1, keep_titles = TRUE]), ti)
     expect_identical(subtitles(tbl[1, 1, keep_titles = TRUE]), sti)
     expect_identical(main_footer(tbl[1, 1, keep_footers = TRUE]), mf)
