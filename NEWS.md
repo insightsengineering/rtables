@@ -1,3 +1,10 @@
+## rtables 0.5.3.4
+ * `export_as_pdf` now correctly takes `margins` into account when calculating `lpp` and `cpp` from page size.
+ * exporters now pass down non-default `colwidths` values correctly
+ * `nlines` `TableRow` method (used for both rows and column label extent in paginaton) now correctly handles column spanning
+ * pagination with `verbose = TRUE` now includes original and adjusted lines-per page information
+ * depends on `formatters` `>=0.3.4.9` for a number of pagination machinery fixes and improvements
+  
 ## rtables 0.5.3.3
  * `cont_n_allcols` and `cont_n_onecol` score functions now throw errors when they are applied to subtables that
    have no content table, instead of the previously returned `NA`
