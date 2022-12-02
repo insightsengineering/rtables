@@ -149,11 +149,10 @@ tbl[2, 1] # None present
 
 # We can reindex referential footnotes, so that the new table does not depend
 #  on the original one
-fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "important"
-tbl[4, 1] # {1} because it has been indexed again
-tbl[4, 1, reindex_refs = FALSE] # {2} -> not reindexed
-table_structure(tbl)
-
+fnotes_at_path(tbl, rowpath = c("SEX", "U", "AGE", "Mean")) <- "important"
+tbl[, 1] # both present
+tbl[5:6, 1] # {1} because it has been indexed again
+tbl[5:6, 1, reindex_refs = FALSE] # {2} -> not reindexed
 
 # Note that order can not be changed with subsetting
 tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
