@@ -370,21 +370,33 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' top_left(tbl) <- "Info"
 #' tbl
 #' 
-#' # As default header, footer, and topleft information is dropped
+#' # As default header, footer, and topleft information is lost
 #' tbl[1, ]
 #' tbl[1:2, 2]
+#' 
+#' # Also boolean filters can work
+#' tbl[, c(FALSE, TRUE, FALSE)]
 #' 
 #' # If drop = TRUE, the content values are directly retrieved
 #' tbl[2, 1]
 #' tbl[2, 1, drop = TRUE]
 #' 
+#' # Drop works also if vectors are selected, but not matrices
+#' tbl[, 1, drop = TRUE]
+#' tbl[2, , drop = TRUE]
+#' tbl[2, 1:2, drop = TRUE] # Also partial selection is allowed
+#' tbl[1, , drop = TRUE] # NULL because it is a label row
+#' tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
+#' 
 #' # If all rows are selected, topleft is kept by default
 #' tbl[, 2]
 #' tbl[, 1]
-#'
+#' 
+#' # It is possible to deselect values
 #' tbl[-2, ]
 #' tbl[, -1]
 #'
+#' # Values can be reassigned
 #' tbl[2, 1] <- rcell(999)
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[6, ] <- list(-111, -222, -333)
@@ -1043,16 +1055,13 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
                          keep_footers = keep_footers)
 
     # Dropping everything
-    if (drop) {
-        if (!(length(j) == 1L && 
-               length(i) == 1L)) {
-            stop("When you need to retrieve single values using drop, use single indexes")    
-        }
-        rw <- collect_leaves(x, TRUE, TRUE)[[1]]
-        if(is(rw, "LabelRow"))
-            x <- NULL
-        else
-            x <- row_values(rw)[[1]]
+    if (drop && any(length(j) == 1L,
+                    length(i) == 1L)) {
+        rw <- collect_leaves(x, TRUE, TRUE)
+
+        x <- sapply(rw, row_values)
+        x <- unlist(x, use.names = FALSE)
+
     # Not dropping
     } else {
         if(!keep_topleft)

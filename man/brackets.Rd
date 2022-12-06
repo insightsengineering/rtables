@@ -115,21 +115,33 @@ tbl <- build_table(lyt, DM)
 top_left(tbl) <- "Info"
 tbl
 
-# As default header, footer, and topleft information is dropped
+# As default header, footer, and topleft information is lost
 tbl[1, ]
 tbl[1:2, 2]
+
+# Also boolean filters can work
+tbl[, c(FALSE, TRUE, FALSE)]
 
 # If drop = TRUE, the content values are directly retrieved
 tbl[2, 1]
 tbl[2, 1, drop = TRUE]
 
+# Drop works also if vectors are selected, but not matrices
+tbl[, 1, drop = TRUE]
+tbl[2, , drop = TRUE]
+tbl[2, 1:2, drop = TRUE] # Also partial selection is allowed
+tbl[1, , drop = TRUE] # NULL because it is a label row
+tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
+
 # If all rows are selected, topleft is kept by default
 tbl[, 2]
 tbl[, 1]
 
+# It is possible to deselect values
 tbl[-2, ]
 tbl[, -1]
 
+# Values can be reassigned
 tbl[2, 1] <- rcell(999)
 tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 tbl[6, ] <- list(-111, -222, -333)
