@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rtables
+# rtables <a href='https://github.com/Roche/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
 [![Build
 Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
