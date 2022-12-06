@@ -11,10 +11,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-"
-)
+  )
+suppressPackageStartupMessages(library(rtables))
+suppressPackageStartupMessages(library(dplyr))
 ```
 
-# rtables
+# rtables <a href='https://github.com/Roche/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
 [![Build Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
 
