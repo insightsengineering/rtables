@@ -222,9 +222,13 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = FALSE]), character())
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
     
-    # drop = TRUE works (to test for more elements)
+    # drop = TRUE works
     expect_identical(tbl[1, 1, drop = TRUE], NULL)
     expect_equal(tbl[2, 1, drop = TRUE], 33.71, tolerance = 0.01)
+    expect_equal(tbl[2, 1:2, drop = TRUE], c(33.71, 33.83), tolerance = 0.01)
+    expect_equal(tbl[1:4, 1, drop = TRUE], c(33.71, 36.54), tolerance = 0.01)
+    expect_equal(tbl[, 1, drop = TRUE], c(33.71, 36.54, NA, NA), tolerance = 0.01)
+    expect_equal(tbl[6, , drop = TRUE], c(NA, NA, NA), tolerance = 0.01)
     
     # referential footnotes
     expect_identical(mf_rfnotes(matrix_form(tbl[2, 1])), 
