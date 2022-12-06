@@ -809,11 +809,14 @@ library(survival)
 adtte <- ex_adaette %>%
     dplyr::filter(PARAMCD == "AETTE2", SAFFL == "Y")
 
+# Add censoring to data for example
+adtte[adtte$AVAL > 1.0, ] <- adtte[adtte$AVAL > 1.0, ] %>% mutate(AVAL = 1.0, CNSR = 1)
+
 adtte2 <- adtte %>%
     mutate(CNSDTDSC = ifelse(CNSDTDSC == "", "__none__", CNSDTDSC))
 ```
 
-The `adtte` dataset will be used in preparing the models while the `adtte2` dataset handles missing values in the "Censor Date Description" column and will be used to produce the final table.
+The `adtte` dataset will be used in preparing the models while the `adtte2` dataset handles missing values in the "Censor Date Description" column and will be used to produce the final table. We add censoring into the data for example purposes.
 
 Next we create a basic analysis function, `a_count_subjs` which prints the overall unique subject counts and percentages within the data.
 
@@ -891,6 +894,8 @@ a_tte <- function(df, .var,  kp_table) {
 }
 ```
 
+Additionally, the `a_tte` function creates a referential footnote within the table to indicate where censoring occurred in the data.
+
 Now we are able to use these four analysis functions to build our time to event analysis table.
 
 ```{r}
@@ -913,7 +918,7 @@ tbl_tte <- build_table(lyt, adtte2)
 
 We set the `show_colcounts` argument of `basic_table()` to `TRUE` to first print the total subject counts for each column. Next we use `split_cols_by()` to split the table into three columns corresponding to the three different levels of `ARM`, and specify that the first arm, `"A: Drug X"` should act as the reference group to be compared against - this reference group is used for the Cox P-H analysis. Then we call `analyze()` sequentially using each of the four custom analysis functions as argument `afun` and specifying additional arguments where necessary. Then we use `build_table()` to construct our `rtable` using the `adtte2` dataset.
 
-Finally, we annotate the table using the `fnotes_at_path()` function to specify that product-limit estimates are used to calculate the statistics listed under the "Time to first adverse event" heading within the table.
+Finally, we annotate the table using the `fnotes_at_path()` function to specify that product-limit estimates are used to calculate the statistics listed under the "Time to first adverse event" heading within the table. The referential footnote created earlier in the time-to-event analysis function (`a_tte`) is also displayed.
 
 ```{r}
 fnotes_at_path(tbl_tte, c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")) <- "Product-limit (Kaplan-Meier) estimates."
