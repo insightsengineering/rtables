@@ -66,7 +66,7 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #' # Right alignment with align in rcell()
 #' lyt <- basic_table() %>%
 #'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right")))
-#' 
+#'
 #' tbl <- build_table(lyt, iris)
 #' tbl
 #'
@@ -79,7 +79,7 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #'       .aligns = c("left", "right")
 #'     )
 #'   })
-#' 
+#'
 #' tbl2 <- build_table(lyt2, iris)
 #' tbl2
 #'
@@ -93,7 +93,7 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #'       "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
 #'     )
 #'   }, show_labels = "visible", na_str = "NE")
-#' 
+#'
 #' tbl3 <- build_table(lyt3, ex_adsl)
 #' tbl3
 #'
@@ -119,6 +119,8 @@ chk_rtables_align <- function(algn) {
 #' to the `ctx`
 #' @export
 spl_context_to_disp_path <- function(ctx) {
+    if(ctx$split[1] == "root" && ctx$value[1] == "root")
+        ctx <- ctx[-1, ]
     ret <- paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
                  collapse = "->")
     if(length(ret) == 0 ||

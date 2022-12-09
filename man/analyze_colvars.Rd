@@ -73,7 +73,7 @@ lyt
 tbl <- build_table(lyt, ANL)
 tbl
 
-lyt2 <- basic_table() \%>\% 
+lyt2 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_cols_by_multivar(c("value", "pctdiff"),
                            varlabels = c("Measurement", "Pct Diff")) \%>\%
@@ -81,7 +81,7 @@ lyt2 <- basic_table() \%>\%
                   split_fun = drop_split_levels) \%>\%
     summarize_row_groups() \%>\%
     analyze_colvars(afun = mean, format = "xx.xx")
-    
+
 tbl2 <- build_table(lyt2, ANL)
 tbl2
 

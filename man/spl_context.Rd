@@ -13,7 +13,8 @@ corresponding to the splits within-which the current \code{analyze} action is
 nested. Taken together, these correspond to the path that the resulting (set
 of) rows the analysis function is creating, although the information is in a
 slightly different form. Each split (which correspond to groups of rows in
-the resulting table) is represented via the following columns:
+the resulting table), as well as the initial 'root' "split", is represented
+via the following columns:
 \describe{
 \item{split}{The name of the split (often the variable being split in the
 simple case)}

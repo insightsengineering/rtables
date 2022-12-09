@@ -147,7 +147,7 @@ lyt2 <- basic_table() \%>\%
     split_cols_by("ARM") \%>\%
     split_rows_by("RACE") \%>\%
     analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
-    
+
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
