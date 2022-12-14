@@ -562,7 +562,7 @@ Finally, if we wanted to prune the 0 count rows we can do that with the `trim_ro
 trim_rows(adae_soc_tbl4)
 ```
 
-Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/articles/sorting_pruning.html).
+Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/main/articles/sorting_pruning.html).
 
 ### Adverse Events By ID and By Grade
 
