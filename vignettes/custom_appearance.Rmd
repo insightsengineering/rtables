@@ -332,23 +332,21 @@ lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
   split_rows_by("STRATA1") %>%
-  analyze("AGE", mean, show_labels = "visible")
+  analyze("AGE", mean, show_labels = "default")
 
 build_table(lyt, DM) 
 ```
-
+When set to default, the label `AGE` is not repeated since there is only one variable being analyzed at the same level of nesting. Override this by setting the `show_labels` argument as "visible". 
 
 ```{r}
 lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
   split_rows_by("STRATA1") %>%
-  analyze("AGE", mean, show_labels = "hidden")
+  analyze("AGE", mean, show_labels = "visible")
 
 build_table(lyt2, DM) 
 ```
-
-note that the levels associated with the variable "SEX" no longer appear. 
 
 Below is an example using the `label_pos` argument for modifying label visibility:
 
