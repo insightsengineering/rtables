@@ -30,6 +30,7 @@ In this vignette we create a
 * demographic table
 * adverse event table
 * response table
+* time-to-event analysis table
 
 using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
 
@@ -561,7 +562,7 @@ Finally, if we wanted to prune the 0 count rows we can do that with the `trim_ro
 trim_rows(adae_soc_tbl4)
 ```
 
-Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/articles/sorting_pruning.html).
+Pruning is a larger topic with a [separate `rtables` package vignette](https://roche.github.io/rtables/main/articles/sorting_pruning.html).
 
 ### Adverse Events By ID and By Grade
 
@@ -788,3 +789,139 @@ rsp_tbl4
 ```
 
 Note that the table is missing the rows gaps to make it more readable. The row spacing feature is on the `rtables` roadmap and will be implemented in future.
+
+## Time to Event Analysis Table
+
+The time to event analysis table that will be constructed consists of four parts:
+
+1. Overall subject counts
+2. Censored subjects summary
+3. Cox proportional-hazards analysis
+4. Time-to-event analysis
+
+The table is constructed by sequential use of the `analyze()` function, with four custom analysis functions corresponding to each of the four parts listed above. In addition the table includes referential footnotes relevant to the table contents. The table will be faceted column-wise by arm.
+
+First we will start by loading the necessary packages and preparing the data to be used in the construction of this table.
+
+```{r}
+library(survival)
+
+adtte <- ex_adaette %>%
+    dplyr::filter(PARAMCD == "AETTE2", SAFFL == "Y")
+
+# Add censoring to data for example
+adtte[adtte$AVAL > 1.0, ] <- adtte[adtte$AVAL > 1.0, ] %>% mutate(AVAL = 1.0, CNSR = 1)
+
+adtte2 <- adtte %>%
+    mutate(CNSDTDSC = ifelse(CNSDTDSC == "", "__none__", CNSDTDSC))
+```
+
+The `adtte` dataset will be used in preparing the models while the `adtte2` dataset handles missing values in the "Censor Date Description" column and will be used to produce the final table. We add censoring into the data for example purposes.
+
+Next we create a basic analysis function, `a_count_subjs` which prints the overall unique subject counts and percentages within the data.
+
+```{r}
+a_count_subjs <- function(x, .N_col) {
+    in_rows("Subjects with Adverse Events n (%)" = rcell(length(unique(x)) * c(1, 1 / .N_col),
+                                                         format = "xx (xx.xx%)"))
+}
+```
+
+Then an analysis function is created to generate the counts of censored subjects for each level of a factor variable in the dataset. In this case the `cnsr_counter` function will be applied with the `CNSDTDSC` variable which contains a censor date description for each censored subject.
+
+```{r}
+cnsr_counter <- function(df, .var, .N_col) {
+    x <- df[!duplicated(df$USUBJID), .var]
+    x <- x[x != "__none__"]
+    lapply(table(x), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx (xx.xx%)"))
+}
+```
+
+This function generates counts and fractions of unique subjects corresponding to each factor level, excluding missing values (uncensored patients).
+
+A Cox proportional-hazards (Cox P-H) analysis is generated next with a third custom analysis function, `a_cph`. Prior to creating the analysis function, the Cox P-H model is fit to our data using the `coxph()` and `Surv()` functions from the `survival` package. Then this model is used as input to the `a_cph` analysis function which returns hazard ratios, 95% confidence intervals, and p-values comparing against the reference group - in this case the leftmost column.
+
+```{r}
+cph <- coxph(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1, ties = "exact", data = adtte)
+
+a_cph <- function(df, .var, .in_ref_col, .ref_full, full_cox_fit) {
+    if (.in_ref_col) {
+        ret <- replicate(3, list(rcell(NULL)))
+    } else {
+        curtrt <- df[[.var]][1]
+        coefs <- coef(full_cox_fit)
+        sel_pos <- grep(curtrt, names(coefs), fixed = TRUE)
+        hrval <- exp(coefs[sel_pos])
+        sdf <- survdiff(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1,
+                        data = rbind(df, .ref_full))
+        pval <- (1 - pchisq(sdf$chisq, length(sdf$n) - 1)) / 2
+        ci_val <- exp(unlist(confint(full_cox_fit)[sel_pos, ]))
+        ret <- list(rcell(hrval, format = "xx.x"),
+                    rcell(ci_val, format = "(xx.x, xx.x)"),
+                    rcell(pval, format = "x.xxxx | (<0.0001)"))
+    }
+    in_rows(.list = ret, .names = c("Hazard ratio",
+                                    "95% confidence interval",
+                                    "p-value (one-sided stratified log rank)"))
+}
+```
+
+The fourth and final analysis function, `a_tte`, generates a time to first adverse event table with three rows corresponding to Median, 95% Confidence Interval, and Min Max respectively. First a survival table is constructed from the summary table of a survival model using the `survfit()` and `Surv()` functions from the `survival` package. This table is then given as input to `a_tte` which produces the table of time to first adverse event consisting of the previously mentioned summary statistics.
+
+```{r}
+surv_tbl <- as.data.frame(summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM,
+                                          data = adtte, conf.type = "log-log"))$table) %>%
+    dplyr::mutate(ACTARM = factor(gsub("ACTARM=", "", row.names(.)),
+                                  levels = levels(adtte$ACTARM)),
+                  ind = FALSE)
+
+a_tte <- function(df, .var,  kp_table) {
+    ind <- grep(df[[.var]][1], row.names(kp_table), fixed = TRUE)
+    minmax <- range(df[["AVAL"]])
+    mm_val_str <- format_value(minmax, format = "xx.x, xx.x")
+    rowfn <- list()
+    if (all(df$CNSR[df$AVAL == minmax[2]])) {
+        mm_val_str <- paste0(mm_val_str, "*")
+        rowfn <- "* indicates censoring"
+    }
+    in_rows(Median = kp_table[ind, "median", drop = TRUE],
+            "95% confidence interval" = unlist(kp_table[ind, c("0.95LCL", "0.95UCL")]),
+            "Min Max" = mm_val_str,
+            .formats = c("xx.xx",
+                         "xx.xx - xx.xx",
+                         "xx"),
+            .row_footnotes = list(NULL, NULL, rowfn))
+}
+```
+
+Additionally, the `a_tte` function creates a referential footnote within the table to indicate where censoring occurred in the data.
+
+Now we are able to use these four analysis functions to build our time to event analysis table.
+
+```{r}
+lyt <- basic_table(show_colcounts = TRUE) %>%
+    ## Column faceting
+    split_cols_by("ARM", ref_group = "A: Drug X") %>%
+    ## Overall count
+    analyze("USUBJID", a_count_subjs, show_labels = "hidden") %>%
+    ## Censored subjects summary
+    analyze("CNSDTDSC", cnsr_counter, var_labels = "Censored Subjects", show_labels = "visible") %>%
+    ## Cox P-H analysis
+    analyze("ARM", a_cph, extra_args = list(full_cox_fit = cph), show_labels = "hidden") %>%
+    ## Time-to-event analysis
+    analyze("ARM", a_tte, var_labels = "Time to first adverse event", show_labels = "visible",
+            extra_args = list(kp_table = surv_tbl),
+            table_names = "kapmeier")
+
+tbl_tte <- build_table(lyt, adtte2)
+```
+
+We set the `show_colcounts` argument of `basic_table()` to `TRUE` to first print the total subject counts for each column. Next we use `split_cols_by()` to split the table into three columns corresponding to the three different levels of `ARM`, and specify that the first arm, `"A: Drug X"` should act as the reference group to be compared against - this reference group is used for the Cox P-H analysis. Then we call `analyze()` sequentially using each of the four custom analysis functions as argument `afun` and specifying additional arguments where necessary. Then we use `build_table()` to construct our `rtable` using the `adtte2` dataset.
+
+Finally, we annotate the table using the `fnotes_at_path()` function to specify that product-limit estimates are used to calculate the statistics listed under the "Time to first adverse event" heading within the table. The referential footnote created earlier in the time-to-event analysis function (`a_tte`) is also displayed.
+
+```{r}
+fnotes_at_path(tbl_tte, c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")) <- "Product-limit (Kaplan-Meier) estimates."
+
+tbl_tte
+```
