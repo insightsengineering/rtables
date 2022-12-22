@@ -80,9 +80,10 @@ re-indexed as if the resulting subset is the entire table. Defaults to
 
 \item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
 
-\item{drop}{logical(1). Should the value in the cell be returned if only one
-cell is selected by the combination of \code{i} and \code{j}. Defaults to
-\code{FALSE}}
+\item{drop}{logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of \code{i} and \code{j}. It is possible
+to return a vector of values in the case there are no label rows and if each
+cell has only one value. Defaults to \code{FALSE}.}
 }
 \value{
 a \code{TableTree} (or \code{ElementaryTable}) object, unless a

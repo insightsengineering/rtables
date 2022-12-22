@@ -322,9 +322,10 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' @param x TableTree
 #' @param i index
 #' @param j index
-#' @param drop logical(1). Should the value in the cell be returned if only one
-#'   cell is selected by the combination of \code{i} and \code{j}. Defaults to
-#'   \code{FALSE}
+#' @param drop logical(1). Should the value in the cell be returned if one
+#'   cell is selected by the combination of \code{i} and \code{j}. It is possible
+#'   to return a vector of values in the case there are no label rows and if each
+#'   cell has only one value. Defaults to \code{FALSE}.
 #' @param \dots Includes
 #' \describe{
 #' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `top-left`
