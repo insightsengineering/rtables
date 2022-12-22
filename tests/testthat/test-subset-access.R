@@ -225,11 +225,7 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     # drop = TRUE works
     expect_identical(tbl[1, 1, drop = TRUE], NULL)
     expect_equal(tbl[2, 1, drop = TRUE], 33.71, tolerance = 0.01)
-    expect_equal(tbl[2, 1:2, drop = TRUE], c(33.71, 33.83), tolerance = 0.01)
-    expect_equal(tbl[1:4, 1, drop = TRUE], c(33.71, 36.54), tolerance = 0.01)
-    expect_equal(tbl[, 1, drop = TRUE], c(33.71, 36.54, NA, NA), tolerance = 0.01)
-    expect_equal(tbl[4, , drop = TRUE], c(36.54, 32.10, 34.27), tolerance = 0.01)
-    
+
     # referential footnotes
     expect_identical(mf_rfnotes(matrix_form(tbl[2, 1])), 
                      c("F.AGE.mean" = paste0("{1} - ", rf)))
@@ -247,6 +243,31 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     expect_identical(subtitles(tbl[1, 1, keep_titles = TRUE]), sti)
     expect_identical(main_footer(tbl[1, 1, keep_footers = TRUE]), mf)
     expect_identical(prov_footer(tbl[1, 1, keep_footers = TRUE]), pf)
+    
+    # Further testing drop = TRUE
+    tbl1 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        analyze("AGE", function(x) list("m (sd)" = c(mean(x), sd(x)))) %>% 
+        build_table(DM)
+    tbl2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", child_labels = "hidden") %>%
+        analyze("AGE", mean) %>% 
+        build_table(DM)
+    # row with only numbers
+    expect_equal(tbl[4, , drop = TRUE], c(36.54, 32.10, 34.27), tolerance = 0.01)
+    # warnings for label row
+    expect_warning(tbl[, 1, drop = TRUE])
+    expect_warning(tbl[3, , drop = TRUE])
+    # warnings for more than one values
+    expect_warning(tbl1[4, , drop = TRUE])
+    expect_warning(tbl1[2, 1:2, drop = TRUE])
+    # still works if they are only single numbers
+    expect_equal(tbl2[1:4, 1, drop = TRUE], c(33.71, 36.54, NA, NA), tolerance = 0.01)
+    expect_equal(tbl2[1, , drop = TRUE], c(33.71, 33.84, 34.9), tolerance = 0.01)
+    expect_equal(tbl2[2, 2:3, drop = TRUE], c(32.1, 34.28), tolerance = 0.01)
+    
 })
 
 test_that("setters work ok", {

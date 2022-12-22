@@ -1055,15 +1055,31 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
                          keep_footers = keep_footers)
 
     # Dropping everything
+    no_drop <- TRUE
     if (drop && any(length(j) == 1L,
                     length(i) == 1L)) {
+        
         rw <- collect_leaves(x, TRUE, TRUE)
-
-        x <- sapply(rw, row_values)
-        x <- unlist(x, use.names = FALSE)
-
+        rw_is_lab <- sapply(rw, is_labrow)
+        x_tmp <- sapply(rw, row_values)
+        rw_has_more_values <- sapply(x_tmp[!rw_is_lab], function(y) 
+            length(unlist(y, use.names = FALSE)) > 1) # can be list()
+        is_one_val <- length(j) == 1L && length(i) == 1L
+        
+        if (any(rw_is_lab) && !is_one_val) {
+            warning("Trying to drop a part of a table that has more than one label row.", 
+                    " This is not supported and the returned table will keep the table structure.")
+        } else if (any(rw_has_more_values) && !is_one_val){
+            warning("Trying to drop a part of a table that has more than one values per cell.", 
+                    " This is not supported and the returned table will keep the table structure.")
+        } else {
+            x <- unlist(x_tmp, use.names = FALSE)
+            no_drop <- FALSE
+        }
+    } 
+    
     # Not dropping
-    } else {
+    if (no_drop) {
         if(!keep_topleft)
             top_left(x) <- character()
         if(reindex_refs)
