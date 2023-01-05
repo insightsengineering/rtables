@@ -1030,7 +1030,6 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     keep_footers <- list(...)[["keep_footers"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
     
-    # browser()
     nr <- nrow(x)
     nc <- ncol(x)
     i <- .j_to_posj(i, nr)
@@ -1047,7 +1046,6 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
         keep_topleft <- TRUE
     }
     
-    # browser()
     ##  if(!missing(j) && length(j) < nc)
     if(length(j) < nc)
         x <- subset_cols(x, j,

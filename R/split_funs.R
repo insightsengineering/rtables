@@ -1048,7 +1048,6 @@ trim_levels_to_map <- function(map = NULL) {
                                      reorder = TRUE)
         ret <- ksl_fun(df, spl, vals, labels, trim = trim)
 
-  ##      browser()
         if(length(ret$datasplit) == 0) {
             msg <- paste(sprintf("%s[%s]", .spl_context$split, .spl_context$value),
                          collapse = "->")
