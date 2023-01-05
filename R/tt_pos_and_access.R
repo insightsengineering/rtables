@@ -539,41 +539,6 @@ setMethod("[<-", c("VTableTree", value = "CellValue"),
     x
 })
 
-
-# Helper function to copy or not header, footer, and topleft information
-.copy_titles_footers_topleft <- function(new, old, 
-                                         keep_titles, keep_footers, keep_topleft) {
-    ## Please note that the standard adopted come from an empty table
-    empt_tbl <- rtable(" ")
-    
-    # titles
-    if(isTRUE(keep_titles)) {
-        main_title(new) <- main_title(old)
-        subtitles(new) <- subtitles(old)
-        
-    } else {
-        main_title(new) <-  main_title(empt_tbl)
-        subtitles(new) <- subtitles(empt_tbl)
-    }
-    
-    # fnotes
-    if (isTRUE(keep_footers)) {
-        main_footer(new) <- main_footer(old)
-        prov_footer(new) <- prov_footer(old)
-    } else {
-        main_footer(new) <- main_footer(empt_tbl)
-        prov_footer(new) <- prov_footer(empt_tbl)
-    }
-    
-    # topleft
-    if (isTRUE(keep_topleft))
-        top_left(new) <- top_left(old)
-    else
-        top_left(new) <- top_left(empt_tbl)
-    
-    new
-}
-
 ## this is going to be hard :( :( :(
 
 ### selecting/removing columns
@@ -612,7 +577,7 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo,  ...)
 
-    tt2 <- .copy_titles_footers_topleft(tt2, tt, 
+    tt2 <- .h_copy_titles_footers_topleft(tt2, tt, 
                                         keep_titles, 
                                         keep_footers, 
                                         keep_topleft)
@@ -636,7 +601,7 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
-    tt2 <- .copy_titles_footers_topleft(tt2, tt, 
+    tt2 <- .h_copy_titles_footers_topleft(tt2, tt, 
                                         keep_titles, 
                                         keep_footers, 
                                         keep_topleft)
@@ -906,7 +871,7 @@ subset_by_rownum <- function(tt,
     }
     ret <- prune_rowsbynum(tt, i)
     
-    ret <- .copy_titles_footers_topleft(ret, tt, 
+    ret <- .h_copy_titles_footers_topleft(ret, tt, 
                                         keep_titles, 
                                         keep_footers, 
                                         keep_topleft)
@@ -1261,21 +1226,46 @@ setMethod("value_at", "LabelRow",
     }
 }
 
-
-.h_t_body <- function(x, res,
-                            keep_topleft,
-                            keep_titles,
-                            keep_footers,
-                            reindex_refs) {
-
-    res <- .copy_titles_footers_topleft(res, x, 
-                                        keep_titles, 
-                                        keep_footers, 
-                                        keep_topleft)
+# Helper function to copy or not header, footer, and topleft information
+.h_copy_titles_footers_topleft <- function(new, 
+                                           old, 
+                                           keep_titles, 
+                                           keep_footers, 
+                                           keep_topleft,
+                                           reindex_refs = FALSE) {
+    ## Please note that the standard adopted come from an empty table
+    empt_tbl <- rtable(" ")
     
+    # titles
+    if(isTRUE(keep_titles)) {
+        main_title(new) <- main_title(old)
+        subtitles(new) <- subtitles(old)
+        
+    } else {
+        main_title(new) <-  main_title(empt_tbl)
+        subtitles(new) <- subtitles(empt_tbl)
+    }
+    
+    # fnotes
+    if (isTRUE(keep_footers)) {
+        main_footer(new) <- main_footer(old)
+        prov_footer(new) <- prov_footer(old)
+    } else {
+        main_footer(new) <- main_footer(empt_tbl)
+        prov_footer(new) <- prov_footer(empt_tbl)
+    }
+    
+    # topleft
+    if (isTRUE(keep_topleft))
+        top_left(new) <- top_left(old)
+    else
+        top_left(new) <- top_left(empt_tbl)
+    
+    # reindex references
     if(reindex_refs)
-        res <- update_ref_indexing(res)
-    res
+        new <- update_ref_indexing(new)
+    
+    new
 }
 
 #' Head and tail methods
@@ -1307,7 +1297,7 @@ setMethod("head", "VTableTree",
               
     ## default
     res <- callNextMethod()
-    res <- .h_t_body(x = x, res = res,
+    res <- .h_copy_titles_footers_topleft(old = x, new = res,
               keep_topleft = keep_topleft,
               keep_titles = keep_titles,
               keep_footers = keep_footers,
@@ -1330,7 +1320,7 @@ setMethod("tail", "VTableTree",
                    ## more often than a subset op
                    reindex_refs = FALSE) {
     res <- callNextMethod()
-    res <- .h_t_body(x = x, res = res,
+    res <- .h_copy_titles_footers_topleft(old = x, new = res,
                      keep_topleft = keep_topleft,
                      keep_titles = keep_titles,
                      keep_footers = keep_footers,
