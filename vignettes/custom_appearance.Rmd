@@ -29,6 +29,7 @@ Loading the package:
 
 ```{r, message=FALSE}
 library(rtables)
+library(dplyr)
 ```
 
 ### Rows and cell values alignments
