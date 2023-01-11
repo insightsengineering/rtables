@@ -27,16 +27,16 @@ populated table.}
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
 \item{page_type}{character(1).   Name   of  a  page  type.   See
-`page_types`.   Ignored when  `pg_width` and  `pg_height`
+\code{page_types}.   Ignored when  \code{pg_width} and  \code{pg_height}
 are set directly.}
 
 \item{pg_width}{numeric(1). Page width in inches.}
 
 \item{pg_height}{numeric(1). Page height in inches.}
 
-\item{landscape}{logical(1). Should the  dimensions of `page_type`
-be inverted  for landscape?  Defaults to  `FALSE`, ignored when
-`pg_width` and `pg_height` are set directly.}
+\item{landscape}{logical(1). Should the  dimensions of \code{page_type}
+be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
+\code{pg_width} and \code{pg_height} are set directly.}
 
 \item{margins}{ A numeric vector interpreted in the same way
     as \code{par(mar)} in base graphics. }
