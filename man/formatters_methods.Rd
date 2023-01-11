@@ -205,11 +205,11 @@ See the \code{formatters} documentation for descriptions of these generics.
 }
 \details{
 When  \code{visible_only} is  \code{TRUE} (the  default),
-    methods should  return a  data.frame with  exactly one  row per
-    visible  row in  the table-like  object.  This  is useful  when
-    reasoning about  how a table  will print, but does  not reflect
-    the full pathing space of the structure (though the paths which
-    are given will all work as is).
+methods should  return a  data.frame with  exactly one  row per
+visible  row in  the table-like  object.  This  is useful  when
+reasoning about  how a table  will print, but does  not reflect
+the full pathing space of the structure (though the paths which
+are given will all work as is).
 
 If  supported,  when  \code{visible_only}  is  \code{FALSE},  every
 structural element of the table (in row-space) will be reflected in
@@ -218,7 +218,7 @@ represented but some rows in  the layout summary will not represent
 printed rows in the table as it is displayed.
 
 Most arguments beyond \code{tt} and \code{visible_only} are present so that
-`make_row_df` methods can call `make_row_df` recursively and retain information,
+\code{make_row_df} methods can call \code{make_row_df} recursively and retain information,
 and should not be set during a top-level call
 }
 \note{
