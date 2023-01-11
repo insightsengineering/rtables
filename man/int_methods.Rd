@@ -169,13 +169,10 @@
 \alias{spanned_values<-}
 \alias{spanned_values<-,TableRow-method}
 \alias{spanned_values<-,LabelRow-method}
-\alias{obj_na_str}
-\alias{obj_na_str<-}
 \alias{obj_na_str<-,CellValue-method}
 \alias{obj_na_str<-,VTableNodeInfo-method}
 \alias{obj_na_str<-,Split-method}
 \alias{obj_na_str,VTableNodeInfo-method}
-\alias{obj_na_str,ANY-method}
 \alias{set_format_recursive}
 \alias{set_format_recursive,TableRow-method}
 \alias{set_format_recursive,LabelRow-method}
@@ -715,10 +712,6 @@ spanned_values(obj) <- value
 
 \S4method{spanned_values}{LabelRow}(obj) <- value
 
-obj_na_str(obj)
-
-obj_na_str(obj) <- value
-
 \S4method{obj_na_str}{CellValue}(obj) <- value
 
 \S4method{obj_na_str}{VTableNodeInfo}(obj) <- value
@@ -726,8 +719,6 @@ obj_na_str(obj) <- value
 \S4method{obj_na_str}{Split}(obj) <- value
 
 \S4method{obj_na_str}{VTableNodeInfo}(obj)
-
-\S4method{obj_na_str}{ANY}(obj)
 
 set_format_recursive(obj, format, na_str, override = FALSE)
 

@@ -482,9 +482,47 @@ setMethod("inner_col_df", "LayoutColTree",
 #' Pagination of a TableTree
 #'
 #'
-#' @note This is our first take on pagination. We will refine pagination in subsequent releases. Currently only
-#'   pagination in the row space work. Pagination in the column space will be added in the future.
+#' Paginate  an  `rtables` table  in  the  vertical and/or  horizontal
+#' direction, as required for the specified page size.
 #'
+#' @details
+#'
+#' `rtables` pagination is context aware,  meaning that label rows and
+#' row-group summaries  (content rows)  are repeated  after (vertical)
+#' pagination, as  appropriate. This allows the  reader to immediately
+#' understand where they are in the table after turning to a new page,
+#' but does  also mean that a  rendered, paginated table will  take up
+#' more  lines of  text than  rendering the  table without  pagination
+#' would.
+#'
+#' Pagination also takes into account word-wrapping of title, footer,
+#' column-label, and formatted cell value content.
+#'
+#' Vertical pagination information (pagination data.frame) is created
+#' using (`make_row_df`)
+#'
+#' Horizontal  pagination  is  performed   by  creating  a  pagination
+#' dataframe for  the columns,  and then  applying the  same algorithm
+#' used for vertical pagination to it.
+#'
+#' If physical page size and font information are specified, these are
+#' used  to  derive  lines-per-page  (`lpp`)  and  characters-per-page
+#' (`cpp`) values.
+#'
+#' The full multi-direction pagination algorithm then is as follows:
+#'
+#' 0. Adjust `lpp` and `cpp` to account for rendered elements that are not rows (columns)
+#'   - titles/footers/column labels, and horizontal dividers in the vertical pagination case
+#'   - row-labels, table_inset, and top-left materials in the horizontal case
+#' 1. Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
+#' 2. Perform vertical pagination separately on each table generated in (1)
+#' 3. Perform horizontal pagination **on the entire table** and apply the results to each table page generated in (1)-(2)
+#' 4. Return a list of subtables representing full bi-directional pagination
+#'
+#' Pagination in both directions is done using the *Core Pagination Algorithm*
+#' implemented in the `formatters` package:
+#'
+#' @inheritSection formatters::pagination_algo Pagination Algorithm
 #'
 #' @inheritParams gen_args
 #' @inheritParams paginate_table
@@ -532,11 +570,10 @@ setMethod("inner_col_df", "LayoutColTree",
 #'
 #' row_paths_summary(tbl)
 #'
-#' tbls <- paginate_table(tbl)
+#' tbls <- paginate_table(tbl, lpp = 15)
 #' mf <- matrix_form(tbl, indent_rownames = TRUE)
 #' w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 #'
-#' tmp <- lapply(tbls, print, widths = w_tbls)
 #'
 #' tmp <- lapply(tbls, function(tbli) {
 #'   cat(toString(tbli, widths = w_tbls))

@@ -35,7 +35,7 @@ setMethod("nrow", "TableRow",
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("SEX", "AGE"))
-#'   
+#'
 #' tbl <- build_table(lyt, ex_adsl)
 #'
 #' dim(tbl)
@@ -882,13 +882,6 @@ setMethod("obj_format<-", "CellValue", function(obj, value) {
 
 #' @rdname int_methods
 #' @export
-setGeneric("obj_na_str", function(obj) standardGeneric("obj_na_str"))
-#' @rdname int_methods
-#' @export
-setGeneric("obj_na_str<-", function(obj, value) standardGeneric("obj_na_str<-"))
-
-#' @rdname int_methods
-#' @export
 setMethod("obj_na_str<-", "CellValue", function(obj, value) {
     attr(obj, "format_na_str") <- value
     obj
@@ -914,9 +907,6 @@ setMethod("obj_na_str<-", "Split", function(obj, value) {
 setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 
 
-#' @rdname int_methods
-#' @export
-setMethod("obj_na_str", "ANY", function(obj) attr(obj, "format_na_str", exact = TRUE))
 
 #' @rdname formatters_methods
 #' @export
@@ -2484,13 +2474,13 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 #'   indicates footnote should go on the row rather than cell
 #' @param reset_idx logical(1). Should the numbering for referential footnotes
 #'   be immediately recalculated. Defaults to TRUE.
-#' 
+#'
 #' @examples
 #' # How to add referencial footnotes after having created a table
 #' lyt <- basic_table() %>%
 #'     split_rows_by("SEX", page_by = TRUE) %>%
 #'     analyze("AGE")
-#' 
+#'
 #' tbl <- build_table(lyt, DM)
 #' tbl <- trim_rows(tbl)
 #' # Check the row and col structure to add precise references
@@ -2498,13 +2488,13 @@ setMethod(".fnote_set_inner<-", c("VTableTree", "ANY"),
 #' # col_paths(t)
 #' # row_paths_summary(tbl)
 #' # col_paths_summary(tbl)
-#' 
+#'
 #' # Add the citation numbers on the table and relative references in the footnotes
 #' fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "Mean")) <- "Famous paper 1"
 #' fnotes_at_path(tbl, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Unfamous paper 2"
 #' # tbl
-#' 
-#' @seealso [row_paths()], [col_paths()], 
+#'
+#' @seealso [row_paths()], [col_paths()],
 #'   [row_paths_summary()], [col_paths_summary()]
 #'
 #' @export

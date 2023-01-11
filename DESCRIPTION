@@ -16,7 +16,7 @@ Description: Reporting tables often have structure that goes beyond simple recta
   or grouping of data in row and column dimensions, cells containing multiple values,
   and the concept of contextual summary computations. A convenient pipe-able interface is provided
   for declaring table layouts and the corresponding computations, and then applying them to data.
-Depends: methods, magrittr, formatters (>= 0.3.4.9), R (>= 2.10)
+Depends: methods, magrittr, formatters (>= 0.3.4.14), R (>= 2.10)
 Imports:
   stats,
   htmltools,
@@ -31,7 +31,8 @@ Suggests:
   rmarkdown,
   flextable,
   officer,
-  r2rtf
+  r2rtf,
+  survival
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 Language: en-US
