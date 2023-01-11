@@ -422,7 +422,7 @@ For example, `wide_tbl` has four columns (1 row label column and 3 content colum
 ```{r}
 result_wrap_cells <- toString(matrix_form(wide_tbl, indent_rownames = TRUE),
                               widths = c(10, 8, 8, 8))
-matrix_wrap_cells <- matrix(strsplit(result, "\n")[[1]], ncol = 1)
+matrix_wrap_cells <- matrix(strsplit(result_wrap_cells, "\n")[[1]], ncol = 1)
 matrix_wrap_cells
 ```
 
@@ -437,6 +437,6 @@ result_wrap_cells_tf <- toString(matrix_form(wide_tbl, indent_rownames = TRUE),
                                  widths = c(10, 8, 8, 8),
                                  tf_wrap = TRUE,
                                  max_width = 43)
-matrix_wrap_cells_tf <- matrix(strsplit(result, "\n")[[1]], ncol = 1)
+matrix_wrap_cells_tf <- matrix(strsplit(result_wrap_cells_tf, "\n")[[1]], ncol = 1)
 matrix_wrap_cells_tf
 ```
