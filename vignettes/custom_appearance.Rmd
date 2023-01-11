@@ -382,3 +382,60 @@ basic_table(
   analyze("AGE", mean, format = "xx.x") %>%
   build_table(DM)
 ```
+
+### Cell, Label, and Annotation Wrapping
+
+The width of an `rtable` object can be customized by setting custom widths for cell contents, row labels, and titles/footers.
+
+This is demonstrated using the sample data and table below. In this section we aim to reduce the width of this table which has very wide contents in several cells, labels, and titles/footnotes.
+
+```{r}
+trimmed_data <- ex_adsl %>%
+    filter(SEX %in% c("M", "F")) %>%
+    filter(RACE %in% levels(RACE)[1:2])
+
+levels(trimmed_data$ARM)[1] <- "Incredibly long column name to be wrapped"
+levels(trimmed_data$ARM)[2] <- "This_column_name_should_be_split_somewhere"
+
+wide_tbl <- basic_table(
+    title = "Title that is too long and also needs to be wrapped to a smaller width",
+    subtitles = "Subtitle that is also long and also needs to be wrapped to a smaller width",
+    main_footer = "Footnote that is wider than expected for this table.",
+    prov_footer = "Provenance footer material that is also wider than expected for this table.") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    analyze(c("AGE", "EOSDY"),
+            na_str = "Very long cell contents to_be_wrapped_and_splitted",
+            inclNAs = TRUE) %>%
+    build_table(trimmed_data)
+
+wide_tbl
+```
+
+#### Cell & Label Wrapping
+
+The width of this table can be customized by wrapping column widths. This is done by first converting the `rtable` object to matrix form using the `formatters::matrix_form()` function, preserving indentation, and then setting custom width values via the `widths` argument of the `toString()` function. The length of the vector passed to the `widths` argument must be equal to the total number of columns in the table, including the row labels column, with each value of the vector corresponding to the maximum width (in characters) allowed in each column, from left to right.
+
+For example, `wide_tbl` has four columns (1 row label column and 3 content columns) which we will set the widths of below. We set the width of the row label column to 10 characters and the widths of each of the 3 content columns to 8 characters. Any words longer than the specified width are broken and continued on the following line. By default there are 3 spaces separating each of the columns but this can be customized via the `col_gap` argument to `toString()` if further width customization is desired.
+
+```{r}
+result_wrap_cells <- toString(matrix_form(wide_tbl, indent_rownames = TRUE),
+                              widths = c(10, 8, 8, 8))
+matrix_wrap_cells <- matrix(strsplit(result, "\n")[[1]], ncol = 1)
+matrix_wrap_cells
+```
+
+In the resulting output we can see that the table has been correctly wrapped to a total width of 43 characters, but that the titles and footnotes remain wider than the table.
+
+#### Title & Footnote Wrapping
+
+In addition to wrapping column widths, titles and footnotes can be wrapped by setting `tf_wrap = TRUE` in `toString()` and setting the `max_width` argument of `toString()` to the maximum width (in characters) allowed for titles/footnotes. In the following table, we set `max_width = 43` so that the table and all of its annotations have a maximum width of 43 characters.
+
+```{r}
+result_wrap_cells_tf <- toString(matrix_form(wide_tbl, indent_rownames = TRUE),
+                                 widths = c(10, 8, 8, 8),
+                                 tf_wrap = TRUE,
+                                 max_width = 43)
+matrix_wrap_cells_tf <- matrix(strsplit(result, "\n")[[1]], ncol = 1)
+matrix_wrap_cells_tf
+```
