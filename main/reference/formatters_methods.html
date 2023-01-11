@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -115,7 +109,7 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_format</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
 <span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu"><a href="int_methods.html">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for VTitleFooter</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/title_footer.html" class="external-link">main_title</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
@@ -294,18 +288,18 @@ on <code>obj</code>, for setters, a modified copy of <code>obj</code> with the n
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>When  <code>visible_only</code> is  <code>TRUE</code> (the  default),
-    methods should  return a  data.frame with  exactly one  row per
-    visible  row in  the table-like  object.  This  is useful  when
-    reasoning about  how a table  will print, but does  not reflect
-    the full pathing space of the structure (though the paths which
-    are given will all work as is).</p>
+methods should  return a  data.frame with  exactly one  row per
+visible  row in  the table-like  object.  This  is useful  when
+reasoning about  how a table  will print, but does  not reflect
+the full pathing space of the structure (though the paths which
+are given will all work as is).</p>
 <p>If  supported,  when  <code>visible_only</code>  is  <code>FALSE</code>,  every
 structural element of the table (in row-space) will be reflected in
 the  returned data.frame,  meaning the  full pathing-space  will be
 represented but some rows in  the layout summary will not represent
 printed rows in the table as it is displayed.</p>
 <p>Most arguments beyond <code>tt</code> and <code>visible_only</code> are present so that
-`make_row_df` methods can call `make_row_df` recursively and retain information,
+<code>make_row_df</code> methods can call <code>make_row_df</code> recursively and retain information,
 and should not be set during a top-level call</p>
     </div>
     <div class="section level2">

@@ -29,12 +29,6 @@ to be printed or written to a plain-text file"><!-- mathjax --><script src="http
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -107,9 +101,9 @@ and footnotes be wrapped?</p></dd>
 <dd><p>integer(1), character(1) or NULL. Width that title
 and   footer   (including   footnotes)  materials   should   be
 word-wrapped to. If NULL, it is  set to the current print width
-of the  session (`getOption("width")`). If set to `"auto"`,
+of the  session (<code>getOption("width")</code>). If set to <code>"auto"</code>,
 the width of the table (plus any table inset) is used. Ignored
-completely if `tf_wrap` is `FALSE`.</p></dd>
+completely if <code>tf_wrap</code> is <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,7 +114,7 @@ completely if `tf_wrap` is `FALSE`.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Manual insertion of newlines is not supported when `tf_wrap` is on
+    <p>Manual insertion of newlines is not supported when <code>tf_wrap</code> is on
 and will result in a warning and undefined wrapping behavior. Passing
 vectors of already split strings remains supported, however in this
 case each string is word-wrapped separately with the behavior
