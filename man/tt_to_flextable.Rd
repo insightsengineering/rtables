@@ -39,9 +39,9 @@ and footnotes be wrapped?}
 \item{max_width}{integer(1), character(1) or NULL. Width that title
 and   footer   (including   footnotes)  materials   should   be
 word-wrapped to. If NULL, it is  set to the current print width
-of the  session (`getOption("width")`). If set to `"auto"`,
+of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
-completely if `tf_wrap` is `FALSE`.}
+completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
 flextable(s). Defaults to 5.}

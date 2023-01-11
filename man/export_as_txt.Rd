@@ -32,12 +32,12 @@ populated table.}
 \item{file}{character(1). File to write.}
 
 \item{page_type}{character(1).   Name   of  a  page  type.   See
-`page_types`.   Ignored when  `pg_width` and  `pg_height`
+\code{page_types}.   Ignored when  \code{pg_width} and  \code{pg_height}
 are set directly.}
 
-\item{landscape}{logical(1). Should the  dimensions of `page_type`
-be inverted  for landscape?  Defaults to  `FALSE`, ignored when
-`pg_width` and `pg_height` are set directly.}
+\item{landscape}{logical(1). Should the  dimensions of \code{page_type}
+be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
+\code{pg_width} and \code{pg_height} are set directly.}
 
 \item{pg_width}{numeric(1). Page width in inches.}
 
@@ -75,9 +75,9 @@ and footnotes be wrapped?}
 \item{max_width}{integer(1), character(1) or NULL. Width that title
 and   footer   (including   footnotes)  materials   should   be
 word-wrapped to. If NULL, it is  set to the current print width
-of the  session (`getOption("width")`). If set to `"auto"`,
+of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
-completely if `tf_wrap` is `FALSE`.}
+completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 }
