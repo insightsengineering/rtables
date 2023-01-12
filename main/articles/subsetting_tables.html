@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-01-11</h4>
+            <h4 data-toc-skip class="date">2023-01-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/subsetting_tables.Rmd" class="external-link"><code>vignettes/subsetting_tables.Rmd</code></a></small>
       <div class="d-none name"><code>subsetting_tables.Rmd</code></div>
@@ -173,20 +167,14 @@ subset unless <code>drop = TRUE</code>
 <code>[ , drop = TRUE</code> returns the raw (possibly
 multi-element) value associated with the cell.</li>
 </ul>
-<p><strong>Known Differences from <code>[.data.frame</code></strong></p>
-<ul>
-<li>absolute position cannot currently be used to reorder columns or
-rows
-<ul>
-<li>Note in general the result of such an ordering is unlikely to be
-structurally valid</li>
-</ul>
-</li>
-<li>
-<code>character</code> indices are treated as paths, not vectors of
-names in both <code>[</code> and <code>[&lt;-</code>
-</li>
-</ul>
+<p><strong>Known Differences from <code>[.data.frame</code></strong> -
+absolute position cannot currently be used to reorder columns or rows.
+Note in general the result of such an ordering is unlikely to be
+structurally valid. To change the order of values, please read <a href="https://roche.github.io/rtables/main/articles/sorting_pruning.html">sorting
+and pruning</a> vignette or relevant function
+(<code><a href="../reference/sort_at_path.html">sort_at_path()</a></code>). - <code>character</code> indices are
+treated as paths, not vectors of names in both <code>[</code> and
+<code>[&lt;-</code></p>
 <p>The <code>[</code> accessor function always returns an
 <code>TableTree</code> object if <code>drop=TRUE</code> is not set. The
 first argument are the row indices and the second argument the column
@@ -251,6 +239,204 @@ to be matched against <code>names(tbl)</code>:</p>
 <span><span class="co">#     A          16    </span></span>
 <span><span class="co">#     B          21    </span></span>
 <span><span class="co">#     C          14</span></span></code></pre>
+<div class="section level3">
+<h3 id="dealing-with-titles-foot-notes-and-top-left-information">Dealing with titles, foot notes, and top left information<a class="anchor" aria-label="anchor" href="#dealing-with-titles-foot-notes-and-top-left-information"></a>
+</h3>
+<p>As standard no additional information is kept after subsetting. Here,
+we show with a more complete table how it is still possible to keep the
+(possibly) relevant information.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/top_left.html">top_left</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"SEX"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/title_footer.html" class="external-link">main_title</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Table 1"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/title_footer.html" class="external-link">subtitles</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Authors:"</span>, <span class="st">" - Abcd Zabcd"</span>, <span class="st">" - Cde Zbcd"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/title_footer.html" class="external-link">main_footer</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Please regard this table as an example of smart subsetting"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/title_footer.html" class="external-link">prov_footer</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Do remember where you read this though"</span></span>
+<span></span>
+<span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span>, </span>
+<span>               colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Very important mean"</span></span></code></pre></div>
+<p>Normal subsetting loses all the information showed above.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#        C: Combination</span></span>
+<span><span class="co"># —————————————————————</span></span>
+<span><span class="co"># Mean       35.20</span></span></code></pre>
+<p>If all the rows are kept, top left information is also kept. This can
+be also imposed by adding <code>keep_topleft = TRUE</code> to the
+subsetting as follows:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co"># SEX         B: Placebo   C: Combination</span></span>
+<span><span class="co"># ———————————————————————————————————————</span></span>
+<span><span class="co"># F                                      </span></span>
+<span><span class="co">#   AGE                                  </span></span>
+<span><span class="co">#     Mean      34.12          35.20     </span></span>
+<span><span class="co">#   STRATA1                              </span></span>
+<span><span class="co">#     A           24             18      </span></span>
+<span><span class="co">#     B           27             21      </span></span>
+<span><span class="co">#     C           26             27      </span></span>
+<span><span class="co"># M                                      </span></span>
+<span><span class="co">#   AGE                                  </span></span>
+<span><span class="co">#     Mean      37.44          35.38     </span></span>
+<span><span class="co">#   STRATA1                              </span></span>
+<span><span class="co">#     A           19             20      </span></span>
+<span><span class="co">#     B           17             21      </span></span>
+<span><span class="co">#     C           19             19</span></span></code></pre>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">3</span>, keep_topleft <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co"># SEX        C: Combination</span></span>
+<span><span class="co"># —————————————————————————</span></span>
+<span><span class="co"># F                        </span></span>
+<span><span class="co">#   AGE                    </span></span>
+<span><span class="co">#     Mean       35.20</span></span></code></pre>
+<p>If the referenced entry is present in the subsetting, also the
+referential footnote will appear. Please consider reading relevant
+vignette about <a href="https://roche.github.io/rtables/main/articles/title_footer.html#referential-footnotes">referential
+footnotes</a>. In case of subsetting, the referential footnotes are by
+default indexed again, as if the produced table is a new one.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#        A: Drug X</span></span>
+<span><span class="co"># ————————————————</span></span>
+<span><span class="co"># Mean   35.57 {1}</span></span>
+<span><span class="co"># ————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># {1} - Very important mean</span></span>
+<span><span class="co"># ————————————————</span></span></code></pre>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="co"># Use these to find the right path to value or label</span></span></code></pre></div>
+<pre><code><span><span class="co"># label             path               </span></span>
+<span><span class="co"># —————————————————————————————————————</span></span>
+<span><span class="co"># A: Drug X         ARM, A: Drug X     </span></span>
+<span><span class="co"># B: Placebo        ARM, B: Placebo    </span></span>
+<span><span class="co"># C: Combination    ARM, C: Combination</span></span></code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="co">#</span></span></code></pre></div>
+<pre><code><span><span class="co"># rowname      node_class    path              </span></span>
+<span><span class="co"># —————————————————————————————————————————————</span></span>
+<span><span class="co"># F            LabelRow      SEX, F            </span></span>
+<span><span class="co">#   AGE        LabelRow      SEX, F, AGE       </span></span>
+<span><span class="co">#     Mean     DataRow       SEX, F, AGE, Mean </span></span>
+<span><span class="co">#   STRATA1    LabelRow      SEX, F, STRATA1   </span></span>
+<span><span class="co">#     A        DataRow       SEX, F, STRATA1, A</span></span>
+<span><span class="co">#     B        DataRow       SEX, F, STRATA1, B</span></span>
+<span><span class="co">#     C        DataRow       SEX, F, STRATA1, C</span></span>
+<span><span class="co"># M            LabelRow      SEX, M            </span></span>
+<span><span class="co">#   AGE        LabelRow      SEX, M, AGE       </span></span>
+<span><span class="co">#     Mean     DataRow       SEX, M, AGE, Mean </span></span>
+<span><span class="co">#   STRATA1    LabelRow      SEX, M, STRATA1   </span></span>
+<span><span class="co">#     A        DataRow       SEX, M, STRATA1, A</span></span>
+<span><span class="co">#     B        DataRow       SEX, M, STRATA1, B</span></span>
+<span><span class="co">#     C        DataRow       SEX, M, STRATA1, C</span></span></code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># To select column value, use `NULL` for `rowpath`</span></span>
+<span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="cn">NULL</span>, colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Interesting"</span></span>
+<span><span class="va">tbl</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#        A: Drug X {1}</span></span>
+<span><span class="co"># ————————————————————</span></span>
+<span><span class="co"># Mean       32.76    </span></span>
+<span><span class="co"># ————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># {1} - Interesting</span></span>
+<span><span class="co"># ————————————————————</span></span></code></pre>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># reindexing of {2} as {1}</span></span>
+<span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span>, </span>
+<span>               colpath <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"THIS mean"</span></span>
+<span><span class="va">tbl</span> <span class="co"># {1}, {2}, and {3} are present</span></span></code></pre></div>
+<pre><code><span><span class="co"># Table 1</span></span>
+<span><span class="co"># Authors:</span></span>
+<span><span class="co">#  - Abcd Zabcd</span></span>
+<span><span class="co">#  - Cde Zbcd</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># SEX            A: Drug X {1}   B: Placebo   C: Combination</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># F                                                         </span></span>
+<span><span class="co">#   AGE                                                     </span></span>
+<span><span class="co">#     Mean           32.76         34.12          35.20     </span></span>
+<span><span class="co">#   STRATA1                                                 </span></span>
+<span><span class="co">#     A               21             24             18      </span></span>
+<span><span class="co">#     B               25             27             21      </span></span>
+<span><span class="co">#     C               33             26             27      </span></span>
+<span><span class="co"># M                                                         </span></span>
+<span><span class="co">#   AGE                                                     </span></span>
+<span><span class="co">#     Mean {2}     35.57 {3}       37.44          35.38     </span></span>
+<span><span class="co">#   STRATA1                                                 </span></span>
+<span><span class="co">#     A               16             19             20      </span></span>
+<span><span class="co">#     B               21             17             21      </span></span>
+<span><span class="co">#     C               14             19             19      </span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># {1} - Interesting</span></span>
+<span><span class="co"># {2} - THIS mean</span></span>
+<span><span class="co"># {3} - Very important mean</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Please regard this table as an example of smart subsetting</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Do remember where you read this though</span></span></code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">10</span>, <span class="fl">2</span><span class="op">]</span> <span class="co"># only {1} which was previously {2}</span></span></code></pre></div>
+<pre><code><span><span class="co">#            B: Placebo</span></span>
+<span><span class="co"># —————————————————————</span></span>
+<span><span class="co"># Mean {1}     37.44   </span></span>
+<span><span class="co"># —————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># {1} - THIS mean</span></span>
+<span><span class="co"># —————————————————————</span></span></code></pre>
+<p>Similarly to what we have used to keep top left information, we can
+specify to keep more information from the original table. As a standard
+the foot notes are always present if the titles are kept.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, keep_titles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co"># Table 1</span></span>
+<span><span class="co"># Authors:</span></span>
+<span><span class="co">#  - Abcd Zabcd</span></span>
+<span><span class="co">#  - Cde Zbcd</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co">#            B: Placebo   C: Combination</span></span>
+<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co"># F                                     </span></span>
+<span><span class="co">#   AGE                                 </span></span>
+<span><span class="co">#     Mean     34.12          35.20     </span></span>
+<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Please regard this table as an example of smart subsetting</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Do remember where you read this though</span></span></code></pre>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, keep_titles <span class="op">=</span> <span class="cn">FALSE</span>, keep_footers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#            B: Placebo   C: Combination</span></span>
+<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co"># F                                     </span></span>
+<span><span class="co">#   AGE                                 </span></span>
+<span><span class="co">#     Mean     34.12          35.20     </span></span>
+<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Please regard this table as an example of smart subsetting</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Do remember where you read this though</span></span></code></pre>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Referential footnotes are not influenced by `keep_footers = FALSE`</span></span>
+<span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, keep_titles <span class="op">=</span> <span class="cn">TRUE</span>, keep_footers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co"># Table 1</span></span>
+<span><span class="co"># Authors:</span></span>
+<span><span class="co">#  - Abcd Zabcd</span></span>
+<span><span class="co">#  - Cde Zbcd</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
+<span><span class="co">#            A: Drug X {1}   B: Placebo   C: Combination</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
+<span><span class="co"># F                                                     </span></span>
+<span><span class="co">#   AGE                                                 </span></span>
+<span><span class="co">#     Mean       32.76         34.12          35.20     </span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># {1} - Interesting</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————</span></span></code></pre>
+</div>
 </div>
 <div class="section level2">
 <h2 id="path-based-cell-value-accessing">Path Based Cell Value Accessing:<a class="anchor" aria-label="anchor" href="#path-based-cell-value-accessing"></a>
@@ -267,7 +453,7 @@ steps into a position’s content (or row group summary) table.</p>
 <code><a href="../reference/row_paths_summary.html">row_paths_summary()</a></code>, and <code><a href="../reference/row_paths_summary.html">col_paths_summary()</a></code>,
 functions, or as a portion of the more general
 <code><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df()</a></code> function output.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -303,7 +489,7 @@ functions, or as a portion of the more general
 <span><span class="co">#     B                           5            4            8            4            5            2     </span></span>
 <span><span class="co">#     C                           7            2            6            1            3            3</span></span></code></pre>
 <p>So the column paths are as follows:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># label             path                       </span></span>
 <span><span class="co"># —————————————————————————————————————————————</span></span>
@@ -317,7 +503,7 @@ functions, or as a portion of the more general
 <span><span class="co">#   F               ARM, C: Combination, SEX, F</span></span>
 <span><span class="co">#   M               ARM, C: Combination, SEX, M</span></span></code></pre>
 <p>and the row paths are as follows:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname                      node_class    path                                                                </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -344,7 +530,7 @@ functions, or as a portion of the more general
 <span><span class="co">#     C                        DataRow       RACE, WHITE, STRATA1, C</span></span></code></pre>
 <p>To get a semantically meaningful subset of our table, then, we can
 use <code>[</code> (or <code><a href="../reference/ttap.html">tt_at_path()</a></code> which underlies it)</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"C: Combination"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 C: Combination     </span></span>
 <span><span class="co">#                 F            M     </span></span>
@@ -360,12 +546,12 @@ use <code>[</code> (or <code><a href="../reference/ttap.html">tt_at_path()</a></
 <code><a href="../reference/cell_values.html">value_at()</a></code> convenience function, which takes a pair of row
 and column paths which resolve together to an individual cell,
 e.g. average age for Asian female patients in arm A:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cell_values.html">value_at</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [1] 31.21951</span></span></code></pre>
 <p>You can also request information from non-cell specific paths with
 the <code><a href="../reference/cell_values.html">cell_values()</a></code> function:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># $`A: Drug X.F`</span></span>
 <span><span class="co"># [1] 31.21951</span></span>
@@ -374,7 +560,7 @@ the <code><a href="../reference/cell_values.html">cell_values()</a></code> funct
 <span><span class="co"># [1] 34.6</span></span></code></pre>
 <p>Note the return value of <code><a href="../reference/cell_values.html">cell_values()</a></code> is always a list
 even if you specify a path to a cell:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tbl2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"AGE"</span>,  <span class="st">"Mean"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># $`A: Drug X.F`</span></span>
 <span><span class="co"># [1] 31.21951</span></span></code></pre>

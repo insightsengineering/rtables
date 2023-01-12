@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -69,6 +63,7 @@
 <span>  <span class="va">...</span>,</span>
 <span>  keep_topleft <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  keep_titles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  keep_footers <span class="op">=</span> <span class="va">keep_titles</span>,</span>
 <span>  reindex_refs <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -81,6 +76,7 @@
 <span>  <span class="va">...</span>,</span>
 <span>  keep_topleft <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  keep_titles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  keep_footers <span class="op">=</span> <span class="va">keep_titles</span>,</span>
 <span>  reindex_refs <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -115,8 +111,13 @@ subset.</p></dd>
 
 <dt>keep_titles</dt>
 <dd><p>logical(1).  If <code>TRUE</code> (the default),
-all title and footer material for the table will be carried over to the
+all title material for the table will be carried over to the
 subset.</p></dd>
+
+
+<dt>keep_footers</dt>
+<dd><p>logical(1). If <code>TRUE</code>, all footer material for the table
+will be carried over to the subset. It defaults to <code>keep_titles</code>.</p></dd>
 
 
 <dt>reindex_refs</dt>

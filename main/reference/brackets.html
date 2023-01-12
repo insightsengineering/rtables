@@ -6,7 +6,7 @@ below to see their documentation.
 [, [&amp;lt;-
 
 
-"><title>retrieve and assign elements of a TableTree — [&lt;-,VTableTree,ANY,ANY,list-method • rtables</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="retrieve and assign elements of a TableTree — [&lt;-,VTableTree,ANY,ANY,list-method"><meta property="og:description" content="These objects are imported from other packages. Follow the links
+"><title>Retrieve and assign elements of a TableTree — [&lt;-,VTableTree,ANY,ANY,list-method • rtables</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Retrieve and assign elements of a TableTree — [&lt;-,VTableTree,ANY,ANY,list-method"><meta property="og:description" content="These objects are imported from other packages. Follow the links
 below to see their documentation.
 
   base
@@ -41,12 +41,6 @@ below to see their documentation.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -63,7 +57,7 @@ below to see their documentation.
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>retrieve and assign elements of a TableTree</h1>
+      <img src="" class="logo" alt=""><h1>Retrieve and assign elements of a <code>TableTree</code></h1>
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/R/tt_pos_and_access.R" class="external-link"><code>R/tt_pos_and_access.R</code></a></small>
       <div class="d-none name"><code>brackets.Rd</code></div>
     </div>
@@ -139,19 +133,21 @@ x[i, j, ...] &lt;- value</code></pre></div>
 
 <dt>...</dt>
 <dd><p>Includes</p><dl><dt><em>keep_topleft</em></dt>
-<dd><p>logical(1) (<code>[</code> only) Should the 'top-left'
-material for the table be retained after subsetting. Defaults to <code>NA</code>,
-which retains the material if all rows are included (ie subsetting was by
-column), and drops it otherwise.</p></dd>
+<dd><p>logical(1) (<code>[</code> only) Should the <code>top-left</code>
+material for the table be retained after subsetting. Defaults to <code>TRUE</code> if
+all rows are included (i.e. subsetting was by column), and drops it otherwise.</p></dd>
 
 <dt><em>keep_titles</em></dt>
-<dd><p>logical(1) Should title and non-referential footer
-information be retained. Defaults to <code>FALSE</code></p></dd>
+<dd><p>logical(1) Should title information be retained. Defaults to <code>FALSE</code>.</p></dd>
+
+<dt><em>keep_footers</em></dt>
+<dd><p>logical(1) Should non-referential footer
+information be retained. Defaults to <code>keep_titles</code>.</p></dd>
 
 <dt><em>reindex_refs</em></dt>
 <dd><p>logical(1). Should referential footnotes be
 re-indexed as if the resulting subset is the entire table. Defaults to
-<code>TRUE</code></p></dd>
+<code>TRUE</code>.</p></dd>
 
 
 </dl></dd>
@@ -162,9 +158,10 @@ re-indexed as if the resulting subset is the entire table. Defaults to
 
 
 <dt>drop</dt>
-<dd><p>logical(1). Should the value in the cell be returned if only one
-cell is selected by the combination of <code>i</code> and <code>j</code>. Defaults to
-<code>FALSE</code></p></dd>
+<dd><p>logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of <code>i</code> and <code>j</code>. It is not possible
+to return a vector of values. To do so please consider using <code><a href="cell_values.html">cell_values()</a></code>.
+Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -175,86 +172,319 @@ cell is selected by the combination of <code>i</code> and <code>j</code>. Defaul
 single cell was selected with <code>drop=TRUE</code>, in which case the (possibly
 multi-valued) fully stripped raw value of the selected cell.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>by default, subsetting drops the information about title, subtitle,
+main footer, provenance footer, and <code>topleft</code>. If only a column is selected
+and all rows are kept, the <code>topleft</code> information remains as default. Any
+referential footnote is kept whenever the subset table contains the
+referenced element.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>subsetting always preserve the original order, even if provided
+indexes do not preserve it. If sorting is needed, please consider
+using <code><a href="sort_at_path.html">sort_at_path()</a></code>. Also note that <code>character</code> indices are treated as paths,
+not vectors of names in both <code>[</code> and <code>[&lt;-</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Regarding sorting: <code><a href="sort_at_path.html">sort_at_path()</a></code> and how to understand path
+structure: <code><a href="summarize_row_groups.html">summarize_row_groups()</a></code>, and <code>summarize_col_groups()</code>.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Title"</span>, </span></span>
+<span class="r-in"><span>                   subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sub"</span>, <span class="st">"titles"</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>                   prov_footer <span class="op">=</span> <span class="st">"prov footer"</span>, </span></span>
+<span class="r-in"><span>                   main_footer <span class="op">=</span> <span class="st">"main footer"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="st">"AGE"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="top_left.html">top_left</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Info"</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   F                     70           56             61      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   M                     51           50             68      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   U                      0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AGE                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Title</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sub</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> titles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               A: Drug X   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.71       33.84          34.89     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               36.55       32.10          34.28     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA           NA             NA      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA           NA             NA      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> main footer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prov footer</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># As default header, footer, and topleft information is lost</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A: Drug X   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                          </span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       B: Placebo</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   F       56    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean     33.84   </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Also boolean filters can work</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: method with signature ‘VTableTree#missing#ANY’ chosen for function ‘[’,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  target signature ‘TableTree#missing#logical’.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  "VTableTree#ANY#logical" would also be valid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.84   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               32.10   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA    </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If drop = TRUE, the content values are directly retrieved</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     A: Drug X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F      70    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean     33.71  </span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 33.71429</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Drop works also if vectors are selected, but not matrices</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Trying to drop more than one subsetted value. We support this only with accessor function `cell_values()`. No drop will be done at this time.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.71  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               36.55  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA    </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, , drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Trying to drop more than one subsetted value. We support this only with accessor function `cell_values()`. No drop will be done at this time.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        A: Drug X   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean     33.71       33.84          34.89     </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span> <span class="co"># NULL because it is a label row</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The value selected with drop = TRUE belongs to a label row. NULL will be returned</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span> <span class="co"># vectors can be returned only with cell_values()</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Trying to drop more than one subsetted value. We support this only with accessor function `cell_values()`. No drop will be done at this time.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        A: Drug X   B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean     33.71       33.84   </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span> <span class="co"># no dropping because it is a matrix</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Trying to drop more than one subsetted value. We support this only with accessor function `cell_values()`. No drop will be done at this time.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          A: Drug X   B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean     33.71       33.84   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If all rows are selected, topleft is kept by default</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.84   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               32.10   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA    </span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      A: Drug X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   F                     70    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   M                     51    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   U                      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   UNDIFFERENTIATED       0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AGE                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 34.91  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.71  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               36.55  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA    </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># It is possible to deselect values</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="op">-</span><span class="fl">2</span>, <span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   M                     51           50             68      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   U                      0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AGE                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    A: Drug X   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               36.55       32.10          34.28     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA           NA             NA      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA           NA             NA      </span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   F                      56             61      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   M                      50             68      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   U                      0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   UNDIFFERENTIATED       0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AGE                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 33.02          34.57     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               33.84          34.89     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               32.10          34.28     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA             NA      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 NA             NA      </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Values can be reassigned</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="rcell.html">rcell</a></span><span class="op">(</span><span class="fl">999</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="rrow.html">rrow</a></span><span class="op">(</span><span class="st">"FFF"</span>, <span class="fl">888</span>, <span class="fl">666</span>, <span class="fl">777</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">-</span><span class="fl">111</span>, <span class="op">-</span><span class="fl">222</span>, <span class="op">-</span><span class="fl">333</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">6</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">-</span><span class="fl">111</span>, <span class="op">-</span><span class="fl">222</span>, <span class="op">-</span><span class="fl">333</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————————————————————————————————————</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEX                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   FFF                   888         666            777      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   M                    -111         -222           -333     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   U                      0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   UNDIFFERENTIATED       0           0              0       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AGE                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                 34.91       33.02          34.57     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Title</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sub</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> titles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               A: Drug X   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   FFF                 888         666            777      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               36.55       32.10          34.28     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean               -111         -222           -333     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA           NA             NA      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> main footer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prov footer</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># We can keep some information from the original table if we need</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span>, keep_titles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Title</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sub</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> titles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> main footer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prov footer</span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span>, keep_footers <span class="op">=</span> <span class="cn">TRUE</span>, keep_titles <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> main footer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prov footer</span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span>, keep_footers <span class="op">=</span> <span class="cn">FALSE</span>, keep_titles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Title</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sub</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> titles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F             </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span>, keep_footers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> main footer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> prov footer</span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span>, keep_topleft <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info   B: Placebo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Keeps the referential footnotes when subset contains them</span></span></span>
+<span class="r-in"><span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="st">"M"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"important"</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean {1}     36.55  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {1} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span> <span class="co"># None present</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FFF      888   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># We can reindex referential footnotes, so that the new table does not depend</span></span></span>
+<span class="r-in"><span><span class="co">#  on the original one</span></span></span>
+<span class="r-in"><span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl</span>, rowpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SEX"</span>, <span class="st">"U"</span>, <span class="st">"AGE"</span>, <span class="st">"Mean"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"important"</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="co"># both present</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Info               A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   FFF                 888   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean {1}           36.55  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean {2}           -111   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> UNDIFFERENTIATED            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean                NA    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {1} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {2} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">]</span> <span class="co"># {1} because it has been indexed again</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean {1}     -111   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {1} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span>, reindex_refs <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span> <span class="co"># {2} -&gt; not reindexed</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              A: Drug X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> U                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean {2}     -111   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {2} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Note that order can not be changed with subsetting</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span> <span class="co"># It preserves order and wanted selection</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              A: Drug X   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> M                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Mean {1}     34.28         36.55     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {1} - important</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
