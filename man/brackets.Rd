@@ -26,7 +26,7 @@
 \alias{[}
 \alias{reexports}
 \alias{[<-}
-\title{retrieve and assign elements of a TableTree}
+\title{Retrieve and assign elements of a \code{TableTree}}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
 
@@ -67,51 +67,113 @@ x[i, j, ...] <- value
 
 \item{\dots}{Includes
 \describe{
-\item{\emph{keep_topleft}}{ logical(1) (\code{[} only) Should the 'top-left'
-material for the table be retained after subsetting. Defaults to \code{NA},
-which retains the material if all rows are included (ie subsetting was by
-column), and drops it otherwise.}
-\item{\emph{keep_titles}}{logical(1) Should title and non-referential footer
-information be retained. Defaults to \code{FALSE}}
+\item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the \code{top-left}
+material for the table be retained after subsetting. Defaults to \code{TRUE} if
+all rows are included (i.e. subsetting was by column), and drops it otherwise.}
+\item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
+\item{\emph{keep_footers}}{logical(1) Should non-referential footer
+information be retained. Defaults to \code{keep_titles}.}
 \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
 re-indexed as if the resulting subset is the entire table. Defaults to
-\code{TRUE}}
+\code{TRUE}.}
 }}
 
 \item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
 
-\item{drop}{logical(1). Should the value in the cell be returned if only one
-cell is selected by the combination of \code{i} and \code{j}. Defaults to
-\code{FALSE}}
+\item{drop}{logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of \code{i} and \code{j}. It is not possible
+to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
+Defaults to \code{FALSE}.}
 }
 \value{
 a \code{TableTree} (or \code{ElementaryTable}) object, unless a
 single cell was selected with \code{drop=TRUE}, in which case the (possibly
 multi-valued) fully stripped raw value of the selected cell.
 }
+\details{
+by default, subsetting drops the information about title, subtitle,
+main footer, provenance footer, and \code{topleft}. If only a column is selected
+and all rows are kept, the \code{topleft} information remains as default. Any
+referential footnote is kept whenever the subset table contains the
+referenced element.
+}
+\note{
+subsetting always preserve the original order, even if provided
+indexes do not preserve it. If sorting is needed, please consider
+using \code{sort_at_path()}. Also note that \code{character} indices are treated as paths,
+not vectors of names in both \code{[} and \verb{[<-}.
+}
 \examples{
-lyt <- basic_table() \%>\%
+lyt <- basic_table(title = "Title", 
+                   subtitles = c("Sub", "titles"), 
+                   prov_footer = "prov footer", 
+                   main_footer = "main footer") \%>\%
    split_cols_by("ARM") \%>\%
-   analyze(c("SEX", "AGE"))
+   split_rows_by("SEX") \%>\%
+   analyze(c("AGE"))
 
 tbl <- build_table(lyt, DM)
+top_left(tbl) <- "Info"
 tbl
 
+# As default header, footer, and topleft information is lost
 tbl[1, ]
 tbl[1:2, 2]
 
+# Also boolean filters can work
+tbl[, c(FALSE, TRUE, FALSE)]
+
+# If drop = TRUE, the content values are directly retrieved
 tbl[2, 1]
 tbl[2, 1, drop = TRUE]
 
+# Drop works also if vectors are selected, but not matrices
+tbl[, 1, drop = TRUE]
+tbl[2, , drop = TRUE]
+tbl[1, 1, drop = TRUE] # NULL because it is a label row
+tbl[2, 1:2, drop = TRUE] # vectors can be returned only with cell_values()
+tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
+
+# If all rows are selected, topleft is kept by default
+tbl[, 2]
 tbl[, 1]
 
+# It is possible to deselect values
 tbl[-2, ]
 tbl[, -1]
 
+# Values can be reassigned
 tbl[2, 1] <- rcell(999)
 tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
-tbl[3, ] <- list(-111, -222, -333)
+tbl[6, ] <- list(-111, -222, -333)
 tbl
+
+# We can keep some information from the original table if we need
+tbl[1, 2, keep_titles = TRUE]
+tbl[1, 2, keep_footers = TRUE, keep_titles = FALSE]
+tbl[1, 2, keep_footers = FALSE, keep_titles = TRUE]
+tbl[1, 2, keep_footers = TRUE]
+tbl[1, 2, keep_topleft = TRUE]
+
+# Keeps the referential footnotes when subset contains them
+fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "Mean")) <- "important"
+tbl[4, 1]
+tbl[2, 1] # None present
+
+# We can reindex referential footnotes, so that the new table does not depend
+#  on the original one
+fnotes_at_path(tbl, rowpath = c("SEX", "U", "AGE", "Mean")) <- "important"
+tbl[, 1] # both present
+tbl[5:6, 1] # {1} because it has been indexed again
+tbl[5:6, 1, reindex_refs = FALSE] # {2} -> not reindexed
+
+# Note that order can not be changed with subsetting
+tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
+
+}
+\seealso{
+Regarding sorting: \code{sort_at_path()} and how to understand path
+structure: \code{summarize_row_groups()}, and \code{summarize_col_groups()}.
 }
 \keyword{internal}
 \description{
