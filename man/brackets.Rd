@@ -81,9 +81,9 @@ re-indexed as if the resulting subset is the entire table. Defaults to
 \item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
 
 \item{drop}{logical(1). Should the value in the cell be returned if one
-cell is selected by the combination of \code{i} and \code{j}. It is possible
-to return a vector of values in the case there are no label rows and if each
-cell has only one value. Defaults to \code{FALSE}.}
+cell is selected by the combination of \code{i} and \code{j}. It is not possible
+to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
+Defaults to \code{FALSE}.}
 }
 \value{
 a \code{TableTree} (or \code{ElementaryTable}) object, unless a
@@ -130,8 +130,8 @@ tbl[2, 1, drop = TRUE]
 # Drop works also if vectors are selected, but not matrices
 tbl[, 1, drop = TRUE]
 tbl[2, , drop = TRUE]
-tbl[2, 1:2, drop = TRUE] # Also partial selection is allowed
-tbl[1, , drop = TRUE] # NULL because it is a label row
+tbl[1, 1, drop = TRUE] # NULL because it is a label row
+tbl[2, 1:2, drop = TRUE] # vectors can be returned only with cell_values()
 tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
 
 # If all rows are selected, topleft is kept by default

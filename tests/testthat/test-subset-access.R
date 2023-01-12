@@ -223,7 +223,8 @@ test_that("top_left, title, footers retention behaviors are correct across all s
     expect_identical(top_left(tbl[1:2, 1:2, keep_topleft = TRUE]), tlval)
     
     # drop = TRUE works
-    expect_identical(tbl[1, 1, drop = TRUE], NULL)
+    expect_identical(suppressWarnings(tbl[1, 1, drop = TRUE]), NULL)
+    expect_warning(tbl[1, 1, drop = TRUE])
     expect_equal(tbl[2, 1, drop = TRUE], 33.71, tolerance = 0.01)
 
     # referential footnotes
@@ -255,19 +256,14 @@ test_that("top_left, title, footers retention behaviors are correct across all s
         split_rows_by("SEX", child_labels = "hidden") %>%
         analyze("AGE", mean) %>% 
         build_table(DM)
-    # row with only numbers
-    expect_equal(tbl[4, , drop = TRUE], c(36.54, 32.10, 34.27), tolerance = 0.01)
+    # row with only numbers -> warning
+    expect_warning(tbl[4, , drop = TRUE])
     # warnings for label row
     expect_warning(tbl[, 1, drop = TRUE])
     expect_warning(tbl[3, , drop = TRUE])
     # warnings for more than one values
     expect_warning(tbl1[4, , drop = TRUE])
     expect_warning(tbl1[2, 1:2, drop = TRUE])
-    # still works if they are only single numbers
-    expect_equal(tbl2[1:4, 1, drop = TRUE], c(33.71, 36.54, NA, NA), tolerance = 0.01)
-    expect_equal(tbl2[1, , drop = TRUE], c(33.71, 33.84, 34.9), tolerance = 0.01)
-    expect_equal(tbl2[2, 2:3, drop = TRUE], c(32.1, 34.28), tolerance = 0.01)
-    
 })
 
 test_that("setters work ok", {
