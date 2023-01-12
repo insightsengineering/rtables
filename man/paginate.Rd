@@ -52,15 +52,15 @@ considerations. Defaults to none.}
 \item{max_width}{integer(1), character(1) or NULL. Width that title
 and   footer   (including   footnotes)  materials   should   be
 word-wrapped to. If NULL, it is  set to the current print width
-of the  session (`getOption("width")`). If set to `"auto"`,
+of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
-completely if `tf_wrap` is `FALSE`.}
+completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
 to \code{FALSE}.}
 
 \item{page_type}{character(1).   Name   of  a  page  type.   See
-`page_types`.   Ignored when  `pg_width` and  `pg_height`
+\code{page_types}.   Ignored when  \code{pg_width} and  \code{pg_height}
 are set directly.}
 
 \item{font_family}{character(1). Name of a font family. An error
@@ -71,17 +71,17 @@ to Courier.}
 
 \item{lineheight}{numeric(1). Lineheight, defaults to 1.}
 
-\item{landscape}{logical(1). Should the  dimensions of `page_type`
-be inverted  for landscape?  Defaults to  `FALSE`, ignored when
-`pg_width` and `pg_height` are set directly.}
+\item{landscape}{logical(1). Should the  dimensions of \code{page_type}
+be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
+\code{pg_width} and \code{pg_height} are set directly.}
 
 \item{pg_width}{numeric(1). Page width in inches.}
 
 \item{pg_height}{numeric(1). Page height in inches.}
 
-\item{margins}{numeric(4). Named numeric vector containing `'top'`,
-`'bottom'`, `'left'`, and `'right'` margins in inches. Defaults
-to `.5` inches for both vertical margins and `.75` for both
+\item{margins}{numeric(4). Named numeric vector containing \code{'top'},
+\code{'bottom'}, \code{'left'}, and \code{'right'} margins in inches. Defaults
+to \code{.5} inches for both vertical margins and \code{.75} for both
 horizontal margins.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
@@ -96,12 +96,106 @@ for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}
 The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
 }
 \description{
-Pagination of a TableTree
+Paginate  an  \code{rtables} table  in  the  vertical and/or  horizontal
+direction, as required for the specified page size.
 }
-\note{
-This is our first take on pagination. We will refine pagination in subsequent releases. Currently only
-pagination in the row space work. Pagination in the column space will be added in the future.
+\details{
+\code{rtables} pagination is context aware,  meaning that label rows and
+row-group summaries  (content rows)  are repeated  after (vertical)
+pagination, as  appropriate. This allows the  reader to immediately
+understand where they are in the table after turning to a new page,
+but does  also mean that a  rendered, paginated table will  take up
+more  lines of  text than  rendering the  table without  pagination
+would.
+
+Pagination also takes into account word-wrapping of title, footer,
+column-label, and formatted cell value content.
+
+Vertical pagination information (pagination data.frame) is created
+using (\code{make_row_df})
+
+Horizontal  pagination  is  performed   by  creating  a  pagination
+dataframe for  the columns,  and then  applying the  same algorithm
+used for vertical pagination to it.
+
+If physical page size and font information are specified, these are
+used  to  derive  lines-per-page  (\code{lpp})  and  characters-per-page
+(\code{cpp}) values.
+
+The full multi-direction pagination algorithm then is as follows:
+\enumerate{
+\item Adjust \code{lpp} and \code{cpp} to account for rendered elements that are not rows (columns)
 }
+\itemize{
+\item titles/footers/column labels, and horizontal dividers in the vertical pagination case
+\item row-labels, table_inset, and top-left materials in the horizontal case
+}
+\enumerate{
+\item Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
+\item Perform vertical pagination separately on each table generated in (1)
+\item Perform horizontal pagination \strong{on the entire table} and apply the results to each table page generated in (1)-(2)
+\item Return a list of subtables representing full bi-directional pagination
+}
+
+Pagination in both directions is done using the \emph{Core Pagination Algorithm}
+implemented in the \code{formatters} package:
+}
+\section{Pagination Algorithm}{
+
+
+
+Pagination  is performed independently in  the vertical  and horizontal
+directions based solely on a \emph{pagination data.frame}, which includes the
+following information for each row/column:
+\itemize{
+\item number of  lines/characters rendering the row  will take \strong{after
+word-wrapping} (\code{self_extent})
+\item the indices (\code{reprint_inds})  and number of lines (\code{par_extent})
+of the rows which act as \strong{context} for the row
+\item the row's number of siblings and position within its siblings
+}
+
+Given \code{lpp}  (\code{cpp}) already  adjusted for rendered  elements which
+are  not rows/columns  and a  dataframe of  pagination information,
+pagination is  performed via  the following  algorithm, and  with a
+\code{start = 1}:
+
+Core Pagination Algorithm:
+\enumerate{
+\item Initial guess for pagination point is \code{start + lpp} (\code{start + cpp})
+\item While the guess is not a valid pagination position, and \code{guess > start}, decrement guess and repeat
+}
+\itemize{
+\item an error is thrown if all possible pagination positions between
+\code{start} and \code{start + lpp} (\code{start + cpp}) would ever be \verb{< start}
+after decrementing
+}
+\enumerate{
+\item Retain pagination index
+\item if pagination  point was less than  \code{NROW(tt)} (\code{ncol(tt)}), set
+\code{start} to \code{pos + 1}, and repeat steps (1) - (4).
+}
+
+Validating pagination position:
+
+Given an (already adjusted) \code{lpp} or \code{cpp} value, a pagination is invalid if:
+\itemize{
+\item The rows/columns on the page would take  more than (adjusted) \code{lpp} lines/\code{cpp}
+characters to render \strong{including}
+\itemize{
+\item word-wrapping
+\item (vertical only) context repetition
+}
+\item (vertical only) footnote messages  and or section divider lines
+take up too many lines after rendering rows
+\item (vertical only) row is a label or content (row-group summary) row
+\item (vertical only)  row at the pagination point  has siblings, and
+it has less than \code{min_siblings} preceding or following siblings
+\item pagination would occur within a sub-table listed in \code{nosplitin}
+}
+
+}
+
 \examples{
 
 s_summary <- function(x) {
@@ -135,11 +229,10 @@ nrow(tbl)
 
 row_paths_summary(tbl)
 
-tbls <- paginate_table(tbl)
+tbls <- paginate_table(tbl, lpp = 15)
 mf <- matrix_form(tbl, indent_rownames = TRUE)
 w_tbls <- propose_column_widths(mf) # so that we have the same column widths
 
-tmp <- lapply(tbls, print, widths = w_tbls)
 
 tmp <- lapply(tbls, function(tbli) {
   cat(toString(tbli, widths = w_tbls))
