@@ -323,9 +323,9 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' @param i index
 #' @param j index
 #' @param drop logical(1). Should the value in the cell be returned if one
-#'   cell is selected by the combination of \code{i} and \code{j}. It is possible
-#'   to return a vector of values in the case there are no label rows and if each
-#'   cell has only one value. Defaults to \code{FALSE}.
+#'   cell is selected by the combination of \code{i} and \code{j}. It is not possible
+#'   to return a vector of values. To do so please consider using [cell_values()].
+#'   Defaults to \code{FALSE}.
 #' @param \dots Includes
 #' \describe{
 #' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `top-left`
@@ -385,8 +385,8 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' # Drop works also if vectors are selected, but not matrices
 #' tbl[, 1, drop = TRUE]
 #' tbl[2, , drop = TRUE]
-#' tbl[2, 1:2, drop = TRUE] # Also partial selection is allowed
-#' tbl[1, , drop = TRUE] # NULL because it is a label row
+#' tbl[1, 1, drop = TRUE] # NULL because it is a label row
+#' tbl[2, 1:2, drop = TRUE] # vectors can be returned only with cell_values()
 #' tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
 #' 
 #' # If all rows are selected, topleft is kept by default
@@ -990,7 +990,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
-    keep_topleft <- list(...)[["keep_topleft"]] ## returns NULL if not present
+    keep_topleft <- list(...)[["keep_topleft"]] %||% NA
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     keep_footers <- list(...)[["keep_footers"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
@@ -1002,12 +1002,12 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
 
     ##  if(!missing(i) && length(i) < nr) {
     if(length(i) < nr) {## already populated by .j_to_posj
-        if (is.null(keep_topleft)) keep_topleft <- FALSE
+        keep_topleft <- isTRUE(keep_topleft)
         x <- subset_by_rownum(x, i,
                               keep_topleft = keep_topleft,
                               keep_titles = keep_titles,
                               keep_footers = keep_footers)
-    } else if (is.null(keep_topleft)) {
+    } else if (is.na(keep_topleft)) {
         keep_topleft <- TRUE
     }
     
@@ -1019,31 +1019,24 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
                          keep_footers = keep_footers)
 
     # Dropping everything
-    no_drop <- TRUE
-    if (drop && any(length(j) == 1L,
-                    length(i) == 1L)) {
-        
-        rw <- collect_leaves(x, TRUE, TRUE)
-        rw_is_lab <- sapply(rw, is_labrow)
-        x_tmp <- sapply(rw, row_values)
-        rw_has_more_values <- sapply(x_tmp[!rw_is_lab], function(y) 
-            length(unlist(y, use.names = FALSE)) > 1) # can be list()
-        is_one_val <- length(j) == 1L && length(i) == 1L
-        
-        if (any(rw_is_lab) && !is_one_val) {
-            warning("Trying to drop a part of a table that has more than one label row.", 
-                    " This is not supported and the returned table will keep the table structure.")
-        } else if (any(rw_has_more_values) && !is_one_val){
-            warning("Trying to drop a part of a table that has more than one values per cell.", 
-                    " This is not supported and the returned table will keep the table structure.")
+    if (drop) {
+        if (length(j) == 1L && length(i) == 1L) {
+            rw <- collect_leaves(x, TRUE, TRUE)[[1]]
+            if (is(rw, "LabelRow")) {
+                warning("The value selected with drop = TRUE belongs ",
+                        "to a label row. NULL will be returned")
+                x <- NULL
+            } else {
+                x <- row_values(rw)[[1]]
+            }
         } else {
-            x <- unlist(x_tmp, use.names = FALSE)
-            no_drop <- FALSE
+            warning("Trying to drop more than one subsetted value. ",
+                    "We support this only with accessor function `cell_values()`. ",
+                    "No drop will be done at this time.")
+            drop <- FALSE
         }
-    } 
-    
-    # Not dropping
-    if (no_drop) {
+    }
+    if(!drop) {
         if(!keep_topleft)
             top_left(x) <- character()
         if(reindex_refs)
