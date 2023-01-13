@@ -1052,7 +1052,7 @@ build_table <- function(lyt, df,
                              cna_str = content_na_str(firstspl),
                              cvar = content_var(firstspl),
                              cextra_args = content_extra_args(firstspl),
-                             spl_context = context_df_row(cinfo = cinfo),
+                             spl_context = context_df_row(split = "root", value = "root", full_parent_df = list(df), cinfo = cinfo),
                              ## we DO want the 'outer table' if the first
                              ## one is a multi-analyze
                              no_outer_tbl = !is(firstspl, "AnalyzeMultiVars"))

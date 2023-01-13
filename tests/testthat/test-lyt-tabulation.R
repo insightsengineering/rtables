@@ -394,7 +394,7 @@ test_that("cfun args", {
         split_cols_by("ARM") %>%
         split_rows_by("SEX") %>%
         summarize_row_groups("AGE", cfun = cfun2)
-    
+
     tbl <- build_table(lyt, rawdat)
     capture.output({prout <- print(tbl)})
     expect_identical(prout, tbl)
@@ -884,6 +884,8 @@ test_that(".spl_context works in content and analysis functions", {
 
     afun <- function(x, .spl_context) {
         stopifnot("A: Drug X.M" %in% names(.spl_context))
+        ## this will break if the root 'split' row isn't there
+        stopifnot(nrow(.spl_context$full_parent_df[[1]]) == nrow(DM))
         lastrow <- .spl_context[nrow(.spl_context), ]
         in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
                 .names = "age_analysis",
