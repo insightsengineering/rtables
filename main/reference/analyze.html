@@ -35,12 +35,6 @@ nesting by default."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -251,7 +245,8 @@ corresponding to the splits within-which the current <code>analyze</code> action
 nested. Taken together, these correspond to the path that the resulting (set
 of) rows the analysis function is creating, although the information is in a
 slightly different form. Each split (which correspond to groups of rows in
-the resulting table) is represented via the following columns:</p><dl><dt>split</dt>
+the resulting table), as well as the initial 'root' "split", is represented
+via the following columns:</p><dl><dt>split</dt>
 <dd><p>The name of the split (often the variable being split in the
 simple case)</p></dd>
 
