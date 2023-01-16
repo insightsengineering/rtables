@@ -1319,6 +1319,24 @@ setMethod(".add_row_summary", "Split",
     list(fun)
 }
 
+#' Analysis function to count levels of a factor with percentage of the column total
+#'
+#' @param x factor. Vector of data, provided by rtables pagination machinery
+#' @param .N_col integer(1). Total count for the column, provided by rtables pagination machinery
+#'
+#' @return A RowsVerticalSection object with counts (and percents) for each level of the factor
+#' @export
+#' @examples
+#'
+#' counts_wpcts(DM$SEX, 400)
+counts_wpcts<- function(x, .N_col) {
+    if(!is.factor(x))
+        stop("using the 'counts_wpcts' analysis function requires factor data ",
+             "to guarantee equal numbers of rows across all collumns, got class ",
+             class(x), ".")
+    ret <- table(x)
+    in_rows(.list = lapply(ret, function(y) rcell(y * c(1, 1/.N_col), format = "xx (xx.x%)")))
+}
 
 #' Add a content row of summary counts
 #'

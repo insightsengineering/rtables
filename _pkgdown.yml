@@ -65,6 +65,7 @@ reference:
     - list_wrap_x
     - spl_context
     - spl_context_to_disp_path
+    - counts_wpcts
     
   - title: Split Functions
     contents:
