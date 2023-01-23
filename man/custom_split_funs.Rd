@@ -59,33 +59,34 @@ their outputs.
 # or not. var2 leverages the .spl_context variable to select only one splitting value.
 
 picky_splitter <- function(var, var2 = NULL) {
-
-# Main layout function
-function(df, spl, vals, labels, trim, .spl_context) {
+  # Main layout function
+  function(df, spl, vals, labels, trim, .spl_context) {
     orig_vals <- vals
-    
+
     # This activates only if tere is a preceding split with value == var2
     do_it <- FALSE
     if (nrow(.spl_context) > 0 && !is.null(var2)) {
-        if (length(.spl_context$value) == 1 &&
-            .spl_context$value == var2) do_it <- TRUE
+      if (length(.spl_context$value) == 1 &&
+        .spl_context$value == var2) {
+        do_it <- TRUE
+      }
     }
-    
+
     # Check for number of levels if all are selected
     if (is.null(vals)) {
-        vec <- df[[var]]
-        vals <- if(is.factor(vec)) levels(vec) else unique(vec)
-        if (do_it) vals <- vals[1]
+      vec <- df[[var]]
+      vals <- if (is.factor(vec)) levels(vec) else unique(vec)
+      if (do_it) vals <- vals[1]
     }
-    
+
     # Do a split with or without All obs
     if (length(vals) == 1) {
-        do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
+      do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
     } else {
-        fnc_tmp <- add_overall_level("Overall", label = "All Obs", first = FALSE)
-        fnc_tmp(df = df, spl = spl, vals = orig_vals, trim = trim)
+      fnc_tmp <- add_overall_level("Overall", label = "All Obs", first = FALSE)
+      fnc_tmp(df = df, spl = spl, vals = orig_vals, trim = trim)
     }
-}
+  }
 }
 
 # Data sub-set
@@ -93,18 +94,18 @@ d1 <- subset(ex_adsl, ARM == "A: Drug X")
 d1$ARM <- factor(d1$ARM)
 
 # First table uses the number of values in the ARM column to add the overall col or not
-lyt <- basic_table() \%>\% 
-    split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
-    split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2")) \%>\%
-    analyze("AGE", show_labels = "visible")
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
+  split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2")) \%>\%
+  analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
 tbl
 
 # Second table uses the var2 to select only the first value from the second split function
-lyt <- basic_table() \%>\% 
-    split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
-    split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2", "A: Drug X")) \%>\%
-    analyze("AGE", show_labels = "visible")
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
+  split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2", "A: Drug X")) \%>\%
+  analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
 tbl
 
