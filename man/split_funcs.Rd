@@ -69,7 +69,7 @@ Split functions
 
 
 User-defined custom split functions can perform any type of computation on
-the incoming data provided that they meed the contract for generating
+the incoming data provided that they meet the contract for generating
 'splits' of the incoming data 'based on' the split object.
 
 Split functions are functions that accept:
@@ -100,13 +100,13 @@ elements:
 actual observations from \code{df}.}
 \item{labels}{a character vector giving a string label for each value listed
 in the \code{values} element above}
-\item{(Optional) extras}{If present, extra arguments to be passed to summary
+\item{(Optional) extras}{If present, extra arguments are to be passed to summary
 and analysis functions whenever they are executed on the corresponding
 element of \code{datasplit} or a subset thereof}
 }
 
 One way to generate custom splitting functions is to wrap existing split
-functions and modify either the incoming data before they are called, or
+functions and modify either the incoming data before they are called or
 their outputs.
 }
 
