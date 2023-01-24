@@ -90,20 +90,26 @@ picky_splitter <- function(var, var2 = NULL) {
 }
 
 # Data sub-set
-d1 <- subset(ex_adsl, ARM == "A: Drug X")
-d1$ARM <- factor(d1$ARM)
+d1 <- ex_adsl 
+d1$ARM_A <- "A: Drug X"
+d1$ARM_B <- d1$ARM
 
-# First table uses the number of values in the ARM column to add the overall col or not
+# The next two tables use the number of values in the ARM column to add the overall col or not
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
-  split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2")) \%>\%
+  split_cols_by("ARM", split_fun = picky_splitter("ARM_B")) \%>\%
   analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
 tbl
 
-# Second table uses the var2 to select only the first value from the second split function
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM")) \%>\%
+  split_cols_by("ARM", split_fun = picky_splitter("ARM_A")) \%>\%
+  analyze("AGE", show_labels = "visible")
+tbl <- build_table(lyt, d1)
+tbl
+
+# This table uses the var2 to select only the first value from the second split function
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM", split_fun = picky_splitter("ARM_A")) \%>\%
   split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2", "A: Drug X")) \%>\%
   analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
