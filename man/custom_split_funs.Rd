@@ -56,27 +56,20 @@ their outputs.
 \examples{
 # Example of a picky split function. The number of values in the column variable
 # var decrees if we are going to print also the column with all observation
-# or not. var2 leverages the .spl_context variable to select only one splitting value.
+# or not.
 
-picky_splitter <- function(var, var2 = NULL) {
+picky_splitter <- function(var) {
   # Main layout function
-  function(df, spl, vals, labels, trim, .spl_context) {
+  function(df, spl, vals, labels, trim) {
     orig_vals <- vals
 
     # This activates only if tere is a preceding split with value == var2
     do_it <- FALSE
-    if (nrow(.spl_context) > 0 && !is.null(var2)) {
-      if (length(.spl_context$value) == 1 &&
-        .spl_context$value == var2) {
-        do_it <- TRUE
-      }
-    }
 
     # Check for number of levels if all are selected
     if (is.null(vals)) {
       vec <- df[[var]]
-      vals <- if (is.factor(vec)) levels(vec) else unique(vec)
-      if (do_it) vals <- vals[1]
+      vals <- unique(vec)
     }
 
     # Do a split with or without All obs
@@ -90,27 +83,14 @@ picky_splitter <- function(var, var2 = NULL) {
 }
 
 # Data sub-set
-d1 <- ex_adsl 
-d1$ARM_A <- "A: Drug X"
-d1$ARM_B <- d1$ARM
+d1 <- subset(ex_adsl, ARM == "A: Drug X" | (ARM == "B: Placebo" & SEX == "F"))
+d1 <- subset(d1, SEX \%in\% c("M", "F"))
+d1$SEX <- factor(d1$SEX)
 
-# The next two tables use the number of values in the ARM column to add the overall col or not
+# This table uses the number of values in the SEX column to add the overall col or not
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM_B")) \%>\%
-  analyze("AGE", show_labels = "visible")
-tbl <- build_table(lyt, d1)
-tbl
-
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM_A")) \%>\%
-  analyze("AGE", show_labels = "visible")
-tbl <- build_table(lyt, d1)
-tbl
-
-# This table uses the var2 to select only the first value from the second split function
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM_A")) \%>\%
-  split_cols_by("BMRKR2", split_fun = picky_splitter("BMRKR2", "A: Drug X")) \%>\%
+  split_cols_by("ARM", split_fun = drop_split_levels) \%>\%
+  split_cols_by("SEX", split_fun = picky_splitter("SEX")) \%>\%
   analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
 tbl
