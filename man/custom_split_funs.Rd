@@ -12,7 +12,7 @@ data, a split object, and return 'splits' of that data.
 
 
 User-defined custom split functions can perform any type of computation on
-the incoming data provided that they meed the contract for generating
+the incoming data provided that they meet the contract for generating
 'splits' of the incoming data 'based on' the split object.
 
 Split functions are functions that accept:
@@ -43,13 +43,53 @@ elements:
 actual observations from \code{df}.}
 \item{labels}{a character vector giving a string label for each value listed
 in the \code{values} element above}
-\item{(Optional) extras}{If present, extra arguments to be passed to summary
+\item{(Optional) extras}{If present, extra arguments are to be passed to summary
 and analysis functions whenever they are executed on the corresponding
 element of \code{datasplit} or a subset thereof}
 }
 
 One way to generate custom splitting functions is to wrap existing split
-functions and modify either the incoming data before they are called, or
+functions and modify either the incoming data before they are called or
 their outputs.
 }
 
+\examples{
+# Example of a picky split function. The number of values in the column variable
+# var decrees if we are going to print also the column with all observation
+# or not.
+
+picky_splitter <- function(var) {
+  # Main layout function
+  function(df, spl, vals, labels, trim) {
+    orig_vals <- vals
+
+    # Check for number of levels if all are selected
+    if (is.null(vals)) {
+      vec <- df[[var]]
+      vals <- unique(vec)
+    }
+
+    # Do a split with or without All obs
+    if (length(vals) == 1) {
+      do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
+    } else {
+      fnc_tmp <- add_overall_level("Overall", label = "All Obs", first = FALSE)
+      fnc_tmp(df = df, spl = spl, vals = orig_vals, trim = trim)
+    }
+  }
+}
+
+# Data sub-set
+d1 <- subset(ex_adsl, ARM == "A: Drug X" | (ARM == "B: Placebo" & SEX == "F"))
+d1 <- subset(d1, SEX \%in\% c("M", "F"))
+d1$SEX <- factor(d1$SEX)
+
+# This table uses the number of values in the SEX column to add the overall col or not
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM", split_fun = drop_split_levels) \%>\%
+  split_cols_by("SEX", split_fun = picky_splitter("SEX")) \%>\%
+  analyze("AGE", show_labels = "visible")
+tbl <- build_table(lyt, d1)
+tbl
+
+}
