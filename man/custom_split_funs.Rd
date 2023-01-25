@@ -63,9 +63,6 @@ picky_splitter <- function(var) {
   function(df, spl, vals, labels, trim) {
     orig_vals <- vals
 
-    # This activates only if tere is a preceding split with value == var2
-    do_it <- FALSE
-
     # Check for number of levels if all are selected
     if (is.null(vals)) {
       vec <- df[[var]]
