@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -145,7 +139,7 @@ layouting functions, and to <code>build_table</code>.</p>
 
 
 <p>User-defined custom split functions can perform any type of computation on
-the incoming data provided that they meed the contract for generating
+the incoming data provided that they meet the contract for generating
 'splits' of the incoming data 'based on' the split object.</p>
 <p>Split functions are functions that accept:</p><dl><dt>df</dt>
 <dd><p>data.frame of incoming data to be split</p></dd>
@@ -189,13 +183,13 @@ actual observations from <code>df</code>.</p></dd>
 in the <code>values</code> element above</p></dd>
 
 <dt>(Optional) extras</dt>
-<dd><p>If present, extra arguments to be passed to summary
+<dd><p>If present, extra arguments are to be passed to summary
 and analysis functions whenever they are executed on the corresponding
 element of <code>datasplit</code> or a subset thereof</p></dd>
 
 
 </dl><p>One way to generate custom splitting functions is to wrap existing split
-functions and modify either the incoming data before they are called, or
+functions and modify either the incoming data before they are called or
 their outputs.</p>
     </div>
     <div class="section level2">
