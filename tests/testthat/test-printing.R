@@ -396,8 +396,6 @@ test_that("Cell and column label wrapping works in printing", {
 
 
 test_that("row label indentation is kept even if there are newline characters", {
-    library(dplyr)
-    library(rtables)
     ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
         filter(ARM == "A: Drug X")
     ANL$ARM <- factor(ANL$ARM)
