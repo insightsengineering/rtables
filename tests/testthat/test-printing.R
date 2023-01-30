@@ -314,7 +314,7 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
   table_inset(tt) <- general_inset
 
   # Recreating the printed form as a vector
-  cat_tt <- toString(matrix_form(tt), hsep = "=")
+  cat_tt <- toString(matrix_form(tt, TRUE), hsep = "=")
   vec_tt <- strsplit(cat_tt, "\n")[[1]]
 
   # Taking out empty lines
@@ -333,7 +333,7 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
 
   expect_false(result[[1]]) # No inset
   expect_true(result[[2]]) # Inset
-  expect_true(all(vec_tt[sep_index + 1] == "   ===================="))
+  expect_true(all(vec_tt[sep_index + 1] == "   ======================"))
 })
 
 test_that("Cell and column label wrapping works in printing", {
@@ -397,6 +397,7 @@ test_that("Cell and column label wrapping works in printing", {
 
 test_that("row label indentation is kept even if there are newline characters", {
     library(dplyr)
+    library(rtables)
     ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
         filter(ARM == "A: Drug X")
     ANL$ARM <- factor(ANL$ARM)
@@ -416,7 +417,7 @@ test_that("row label indentation is kept even if there are newline characters", 
         build_table(ANL)
     table_inset(tbl_a) <- 2
     
-    mf_a <- matrix_form(tbl_a, T)
+    mf_a <- matrix_form(tbl_a, TRUE)
     res_a <- toString(mf_a, widths = c(30, 12, 12))
     res_a <- strsplit(res_a, "\n")[[1]]
     
