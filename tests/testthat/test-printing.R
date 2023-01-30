@@ -393,3 +393,46 @@ test_that("Cell and column label wrapping works in printing", {
     result <- toString(matrix_form(tt_for_wrap, TRUE), widths = clw)
     expect_identical(.count_chr_from_str(result, "\n"), 25L)
 })
+
+
+test_that("row label indentation is kept even if there are newline characters", {
+    library(dplyr)
+    ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
+        filter(ARM == "A: Drug X")
+    ANL$ARM <- factor(ANL$ARM)
+    
+    ## toy example where we take the mean of the first variable and the
+    ## count of >.5 for the second.
+    colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
+                    function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
+    
+    tbl_a <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) %>%
+        split_rows_by("RACE", split_label = "ethnicity",
+                      split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        analyze_colvars(afun = colfuns) %>%
+        build_table(ANL)
+    table_inset(tbl_a) <- 2
+    
+    mf_a <- matrix_form(tbl_a, T)
+    res_a <- toString(mf_a, widths = c(30, 12, 12))
+    res_a <- strsplit(res_a, "\n")[[1]]
+    
+    tbl_b <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
+        split_rows_by("RACE", split_label = "ethnicity",
+                      split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        analyze_colvars(afun = colfuns) %>%
+        build_table(ANL)
+    table_inset(tbl_b) <- 2
+    mf_b <- matrix_form(tbl_b, TRUE)
+    res_b <- toString(mf_b, widths = c(30, 12, 12))
+    res_b <- strsplit(res_b, "\n")[[1]]
+    
+    # Taking out the splitted col names, lets check it is the same none-the-less
+    expect_identical(res_a[-2], res_b[-c(2, 3)])
+})
