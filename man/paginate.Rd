@@ -67,9 +67,9 @@ are set directly.}
 will be thrown if the family named is not monospaced. Defaults
 to Courier.}
 
-\item{font_size}{numeric(1). Fontsize, defaults to 12.}
+\item{font_size}{numeric(1). Font size, defaults to 12.}
 
-\item{lineheight}{numeric(1). Lineheight, defaults to 1.}
+\item{lineheight}{numeric(1). Line height, defaults to 1.}
 
 \item{landscape}{logical(1). Should the  dimensions of \code{page_type}
 be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
