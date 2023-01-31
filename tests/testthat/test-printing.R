@@ -456,17 +456,3 @@ test_that("row label indentation is kept even if there are newline characters", 
     # Taking out the splitted col names, lets check it is the same none-the-less
     expect_identical(res_a[-10], res_b[-c(10, 11, 28:34)])
 })
-
-## toy example where we take the mean of the first variable and the
-## count of >.5 for the second.
-colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
-                function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
-
-basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
-    split_rows_by("RACE", split_label = "ethnicity",
-                  split_fun = drop_split_levels) %>%
-    summarize_row_groups() %>%
-    analyze_colvars(afun = colfuns) %>%
-    build_table(ANL)
