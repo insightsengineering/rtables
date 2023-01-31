@@ -131,6 +131,10 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in
 #'   the `strings` matrix of has indented row names (strings pre-fixed)
+#' @param expand_newlines logical(1). Should the matrix form generated
+#'     expand  rows  whose  values   contain  newlines  into  multiple
+#'     'physical'  rows  (as  they  will  appear  when  rendered  into
+#'     ASCII). Defaults to \code{TRUE}
 #'
 #' @export
 #'

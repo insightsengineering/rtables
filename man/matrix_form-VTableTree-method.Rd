@@ -17,6 +17,11 @@
 \item{indent_rownames}{logical(1), if TRUE the column with the row names in
 the \code{strings} matrix of has indented row names (strings pre-fixed)}
 
+\item{expand_newlines}{logical(1). Should the matrix form generated
+expand  rows  whose  values   contain  newlines  into  multiple
+'physical'  rows  (as  they  will  appear  when  rendered  into
+ASCII). Defaults to \code{TRUE}}
+
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}
 }
