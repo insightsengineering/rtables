@@ -1,0 +1,163 @@
+---
+title: "Formats Precedence and NA Handling"
+author: "Wojciech Wójciak and Gabriel Becker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formats Precedence NA Handling}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+  white-space: pre;
+}
+```
+
+## Formats precedence
+
+A user of `rtables` package can specify the format in which the numbers in the reporting tables are printed. Formatting functionally is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) R package and available formats can be listed with `formatters::list_valid_format_labels()` function.
+The format can be specified by the user in a few different places. It may happen that for a single table layout, the format is specified in more than one place. In such a case, the final format that will be applied, depends on formats precedence rules used in `rtables`. In this vignette, we describe basic rules of `rtables` formats precedence.
+
+The packages used in this vignette are:
+
+```{r, message=FALSE}
+library(rtables)
+```
+
+The examples shown in this vignette are based on the example `ADSL` dataset, i.e. a demographic table that summarizes the variables content for different population subsets (encoded in the columns).
+
+```{r}
+ADSL <- ex_adsl
+```
+
+Note that all `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the publicly available [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
+
+### Basic formats precedence and inheritance rules
+
+The format in which numbers are printed can be specified by the user in a few different places. In the context of the precedence, it is important at which level of the split hierarchy these formats are specified.  . In general, there are two such levels: the cell level, row level or so called parent table level. 
+
+TODO cell <- parent_table <- parent_table ... <- parent_table
+
+### No format explicitly specified.
+
+Below is a simple layout that does not explicitly set any specific format for the output of the analysis function used in this example. In such a case, the format from function `base::as.character()` will be used.
+
+```{r}
+lyt0 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = mean)
+
+build_table(lyt0, ADSL)
+```
+
+### Cell format
+
+The format of the cell can be explicitly specified through `rcell()` or `in_rows()` functions. The former is essentially a collection of data objects while the latter is a collection of `rcell()` objects. In the context of inheritance, this is the most specific place where the format can be specified by the user.
+
+```{r}
+lyt1 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    rcell(mean(x), format = "xx.xx", label = "Mean")
+  })
+
+build_table(lyt1, ADSL)
+
+lyt1a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x)),
+      .formats = "xx.xx"
+    )
+  })
+
+build_table(lyt1a, ADSL)
+```
+
+If the format is specified in both of these places at the same time, the one specified through `in_rows()`, has a higher precedence. Technically, in this case, the format defined in `rcell()` will simply be overwritten by the one defined in `in_rows()`.
+
+```{r}
+lyt2 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x), format = "xx.xxx"),
+      .formats = "xx.xx"
+    )
+  })
+
+build_table(lyt2, ADSL)
+```
+
+### Parent table format and inheritance.
+
+In addition to the cell level, the format can be specified at the parent table level(s). Then, if no format has been set by the user for a cell, the format from the nearest parent split table will be inherited.
+
+```{r}
+lyt3 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", mean, format = "xx.x")
+
+build_table(lyt3, ADSL)
+```
+
+If the cell format was specified too, then the parent table format is ignored for this cell, since the cell format is treated as the most specific.
+
+```{r}
+lyt4 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      rcell(mean(x), format = "xx.xx", label = "Mean")
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt4, ADSL)
+
+lyt4a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x)),
+        "SD" = rcell(sd(x)),
+        .formats = "xx.xx"
+      )
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt4a, ADSL)
+```
+
+In the following, slightly more complicated example, we can observe partial inheritance. That is, only `SD` cell inherits the parent table's format, while the `Mean` cell does not.
+
+```{r}
+lyt5 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x), format = "xx.xx"),
+        "SD" = rcell(sd(x))
+      )
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt5, ADSL)
+```
+
+### NA handling
+
+TODO
