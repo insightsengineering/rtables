@@ -402,36 +402,71 @@ test_that("row label indentation is kept even if there are newline characters", 
     
     ## toy example where we take the mean of the first variable and the
     ## count of >.5 for the second.
-    colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
+    colfuns <- list(function(x) in_rows(" " = mean(x), .formats = "xx.x"), # Empty labels are introduced
                     function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
     
     tbl_a <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) %>%
-        split_rows_by("RACE", split_label = "ethnicity",
-                      split_fun = drop_split_levels) %>%
-        summarize_row_groups() %>%
-        analyze_colvars(afun = colfuns) %>%
+        split_rows_by("RACE", split_label = "Ethnicity",
+                      split_fun = drop_split_levels,
+                      label_pos = "topleft") %>%
+        summarize_row_groups(indent_mod = 2) %>%
+        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft", 
+                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>% 
+        analyze_colvars(afun = colfuns, indent_mod = 4) %>%
         build_table(ANL)
-    table_inset(tbl_a) <- 2
     
-    mf_a <- matrix_form(tbl_a, TRUE)
+    # Decorating
+    table_inset(tbl_a) <- 2
+    main_title(tbl_a) <- "Summary of \nTime and \nTreatment"
+    subtitles(tbl_a) <- paste("Number: ", 1:3)
+    main_footer(tbl_a) <- "NE: Not Estimable"
+    
+    # Matrix form and toString
+    mf_a <- matrix_form(tbl_a, TRUE, FALSE)
     res_a <- toString(mf_a, widths = c(30, 12, 12))
+    # 2 is the indentation of summarize_row_groups
+    # 1 is the standard indentation
+    # 1 + 1 + 4 is the standard nesting indentation (twice) + 4 manual indentation (indentation_mod)
+    man_ind <- c(2, 1, 1 + 1 + 4) 
+    expect_equal(mf_rinfo(mf_a)$indent[1:3], table_inset(tbl_a) + man_ind)
     res_a <- strsplit(res_a, "\n")[[1]]
     
     tbl_b <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
-        split_rows_by("RACE", split_label = "ethnicity",
-                      split_fun = drop_split_levels) %>%
-        summarize_row_groups() %>%
-        analyze_colvars(afun = colfuns) %>%
+        split_rows_by("RACE", split_label = "Ethnicity",
+                      label_pos = "topleft") %>%
+        summarize_row_groups(indent_mod = 2) %>%
+        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft", 
+                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>% 
+        analyze_colvars(afun = colfuns, indent_mod = 4) %>%
         build_table(ANL)
+    
+    # Decorating
     table_inset(tbl_b) <- 2
-    mf_b <- matrix_form(tbl_b, TRUE)
+    main_title(tbl_b) <- "Summary of \nTime and \nTreatment"
+    subtitles(tbl_b) <- paste("Number: ", 1:3)
+    main_footer(tbl_b) <- "NE: Not Estimable"
+    mf_b <- matrix_form(tbl_b, indent_rownames = TRUE, expand_newlines = TRUE)
     res_b <- toString(mf_b, widths = c(30, 12, 12))
     res_b <- strsplit(res_b, "\n")[[1]]
     
     # Taking out the splitted col names, lets check it is the same none-the-less
-    expect_identical(res_a[-2], res_b[-c(2, 3)])
+    expect_identical(res_a[-10], res_b[-c(10, 11, 28:34)])
 })
+
+## toy example where we take the mean of the first variable and the
+## count of >.5 for the second.
+colfuns <- list(function(x) in_rows(mean = mean(x), .formats = "xx.x"),
+                function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
+
+basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
+    split_rows_by("RACE", split_label = "ethnicity",
+                  split_fun = drop_split_levels) %>%
+    summarize_row_groups() %>%
+    analyze_colvars(afun = colfuns) %>%
+    build_table(ANL)

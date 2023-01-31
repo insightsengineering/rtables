@@ -4,7 +4,12 @@
 \alias{matrix_form,VTableTree-method}
 \title{Transform rtable to a list of matrices which can be used for outputting}
 \usage{
-\S4method{matrix_form}{VTableTree}(obj, indent_rownames = FALSE, indent_size = 2)
+\S4method{matrix_form}{VTableTree}(
+  obj,
+  indent_rownames = FALSE,
+  expand_newlines = TRUE,
+  indent_size = 2
+)
 }
 \arguments{
 \item{obj}{ANY. The object for the accessor to access or modify}

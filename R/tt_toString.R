@@ -177,8 +177,9 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 setMethod("matrix_form", "VTableTree",
           function(obj,
                    indent_rownames = FALSE,
+                   expand_newlines = TRUE,
                    indent_size = 2) {
-
+    
     stopifnot(is(obj, "VTableTree"))
 
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -279,7 +280,7 @@ setMethod("matrix_form", "VTableTree",
                     ref_fnotes = ref_fnotes,
                     nlines_header = nr_header, ## this is fixed internally
                     nrow_header = nr_header,
-                    expand_newlines = TRUE, ## incase the default ever changes
+                    expand_newlines = expand_newlines,
                     has_rowlabs = TRUE,
                     has_topleft = TRUE,
                     main_title = main_title(obj),
