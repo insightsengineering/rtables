@@ -126,6 +126,9 @@ We would like to thank everyone who has made `rtables` a better project by provi
 Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
+### Advanced rtables Training
+* Part 1 [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
+* Part 2 - Forthcoming
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables 
 * [Slides](https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48)
