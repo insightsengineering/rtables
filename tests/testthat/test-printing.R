@@ -436,16 +436,29 @@ test_that("row label indentation is kept even if there are newline characters", 
     res_a <- strsplit(res_a, "\n")[[1]]
     
     # Checking indentation size propagation
-    # ind_tbl_v1 <- strsplit(toString(matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = 3)), "\n")[[1]]
-    # ind_tbl_v2 <- strsplit(toString(matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE), indent_size = 3), "\n")[[1]]
-    # cat(ind_tbl_v1)
-    # cat(ind_tbl_v2)
+    ind_s1 <- 3
+    ind_s2 <- 2
+    mf3_v1 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s1)
+    mf3_v2 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s2)
+    # local_edition(3)
+    which_to_rm <- which(names(mf3_v1) %in% c("strings", "formats", "indent_size"))
+    expect_equal(mf3_v1[-which_to_rm], mf3_v2[-which_to_rm]) # These should be the only differences
+    str_v1 <- strsplit(mf3_v1$strings[3, 1], "ASIAN")[[1]]
+    str_v2 <- strsplit(mf3_v2$strings[3, 1], "ASIAN")[[1]]
+    expect_equal(nchar(str_v1), (2 + 2) * ind_s1) # (inset + indent of summ group) * indent_size
+    expect_equal(nchar(str_v2), (2 + 2) * ind_s2) # (inset + indent of summ group) * indent_size
+    expect_equal(nchar(str_v1), nchar(str_v2) + 4)
+    ind_tbl_v1 <- strsplit(toString(mf3_v1), "\n")[[1]]
+    ind_tbl_v2 <- strsplit(toString(mf3_v2, indent_size = 3), "\n")[[1]]
     # nchar(ind_tbl_v1)
     # nchar(ind_tbl_v2)
-    # local_edition(3)
-    # ind_tbl_v1[!ind_tbl_v1 == ind_tbl_v2]
-    # ind_tbl_v2[!ind_tbl_v1 == ind_tbl_v2]
-    # expect_equal(ind_tbl_v1, ind_tbl_v2)
+    # ind_tbl_v1[8]
+    # ind_tbl_v2[8]
+    # ind_tbl_v1[9]
+    # ind_tbl_v2[9]
+    # ind_tbl_v1[10]
+    # ind_tbl_v2[10]
+    # expect_equal(ind_tbl_v1, ind_tbl_v2) # This is wrong still
     
     tbl_b <- basic_table() %>%
         split_cols_by("ARM") %>%
