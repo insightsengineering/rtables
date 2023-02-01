@@ -41,7 +41,7 @@ be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
 \item{margins}{ A numeric vector interpreted in the same way
     as \code{par(mar)} in base graphics. }
 
-\item{font_size}{numeric(1). Fontsize, defaults to 12.}
+\item{font_size}{numeric(1). Font size, defaults to 12.}
 
 \item{font_family}{character(1). Name of a font family. An error
 will be thrown if the family named is not monospaced. Defaults
