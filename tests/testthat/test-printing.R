@@ -425,13 +425,27 @@ test_that("row label indentation is kept even if there are newline characters", 
     
     # Matrix form and toString
     mf_a <- matrix_form(tbl_a, TRUE, FALSE)
-    res_a <- toString(mf_a, widths = c(30, 12, 12))
+    expect_error(res_a <- toString(mf_a, widths = c(15, 12, 12), indent_size = 2), 
+                 regexp = "Inserted width\\(s\\) for column\\(s\\) 1 is\\(are\\) not wide enough for the desired indentation.")
+    res_a <- toString(mf_a, widths = c(16, 12, 12))
     # 2 is the indentation of summarize_row_groups
     # 1 is the standard indentation
     # 1 + 1 + 4 is the standard nesting indentation (twice) + 4 manual indentation (indentation_mod)
     man_ind <- c(2, 1, 1 + 1 + 4) 
     expect_equal(mf_rinfo(mf_a)$indent[1:3], table_inset(tbl_a) + man_ind)
     res_a <- strsplit(res_a, "\n")[[1]]
+    
+    # Checking indentation size propagation
+    # ind_tbl_v1 <- strsplit(toString(matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = 3)), "\n")[[1]]
+    # ind_tbl_v2 <- strsplit(toString(matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE), indent_size = 3), "\n")[[1]]
+    # cat(ind_tbl_v1)
+    # cat(ind_tbl_v2)
+    # nchar(ind_tbl_v1)
+    # nchar(ind_tbl_v2)
+    # local_edition(3)
+    # ind_tbl_v1[!ind_tbl_v1 == ind_tbl_v2]
+    # ind_tbl_v2[!ind_tbl_v1 == ind_tbl_v2]
+    # expect_equal(ind_tbl_v1, ind_tbl_v2)
     
     tbl_b <- basic_table() %>%
         split_cols_by("ARM") %>%
@@ -450,9 +464,13 @@ test_that("row label indentation is kept even if there are newline characters", 
     subtitles(tbl_b) <- paste("Number: ", 1:3)
     main_footer(tbl_b) <- "NE: Not Estimable"
     mf_b <- matrix_form(tbl_b, indent_rownames = TRUE, expand_newlines = TRUE)
-    res_b <- toString(mf_b, widths = c(30, 12, 12))
+    res_b <- toString(mf_b, widths = c(16, 12, 12))
     res_b <- strsplit(res_b, "\n")[[1]]
     
-    # Taking out the splitted col names, lets check it is the same none-the-less
-    expect_identical(res_a[-10], res_b[-c(10, 11, 28:34)])
+    # Taking out the splitted col names and the trailing 0s lets check it is the same none-the-less
+    res_a <- res_a[-10]
+    res_b <- res_b[-c(10, 11)]
+    expect_identical(res_a[1:10], res_b[1:10]) # First part
+    expect_identical(res_a[10:27], res_b[10:27]) # Center part
+    expect_identical(res_a[seq(28, length(res_a))], res_b[seq(41, length(res_b))]) # Final part
 })

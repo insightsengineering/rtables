@@ -292,7 +292,8 @@ setMethod("matrix_form", "VTableTree",
                     page_titles = page_titles(obj),
                     main_footer = main_footer(obj),
                     prov_footer = prov_footer(obj),
-                    table_inset = table_inset(obj)
+                    table_inset = table_inset(obj),
+                    indent_size = indent_size
                     )
 })
 
