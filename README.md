@@ -69,8 +69,6 @@ creation of a more complex table.
 
 ``` r
 library(rtables)
-#> Loading required package: magrittr
-#> Loading required package: formatters
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -109,14 +107,6 @@ build_table(lyt, ex_adsl)
 ``` r
 library(rtables)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 
 ## for simplicity grab non-sparse subset
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
@@ -175,6 +165,12 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski,
 Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
+
+### Advanced rtables Training
+
+- Part 1
+  [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
+- Part 2 - Forthcoming
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
