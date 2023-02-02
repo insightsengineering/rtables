@@ -425,7 +425,7 @@ test_that("row label indentation is kept even if there are newline characters", 
     
     # Matrix form and toString
     mf_a <- matrix_form(tbl_a, TRUE, FALSE)
-    expect_error(res_a <- toString(mf_a, widths = c(15, 12, 12), indent_size = 2), 
+    expect_error(res_a <- toString(mf_a, widths = c(15, 12, 12)), 
                  regexp = "Inserted width\\(s\\) for column\\(s\\) 1 is\\(are\\) not wide enough for the desired indentation.")
     res_a <- toString(mf_a, widths = c(16, 12, 12))
     # 2 is the indentation of summarize_row_groups
@@ -440,25 +440,19 @@ test_that("row label indentation is kept even if there are newline characters", 
     ind_s2 <- 2
     mf3_v1 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s1)
     mf3_v2 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s2)
-    # local_edition(3)
     which_to_rm <- which(names(mf3_v1) %in% c("strings", "formats", "indent_size"))
     expect_equal(mf3_v1[-which_to_rm], mf3_v2[-which_to_rm]) # These should be the only differences
+    
     str_v1 <- strsplit(mf3_v1$strings[3, 1], "ASIAN")[[1]]
     str_v2 <- strsplit(mf3_v2$strings[3, 1], "ASIAN")[[1]]
     expect_equal(nchar(str_v1), (2 + 2) * ind_s1) # (inset + indent of summ group) * indent_size
     expect_equal(nchar(str_v2), (2 + 2) * ind_s2) # (inset + indent of summ group) * indent_size
-    expect_equal(nchar(str_v1), nchar(str_v2) + 4)
+    expect_equal(nchar(str_v1), nchar(str_v2) + 4) # This should be the diff in indentation
+    
+    # Number of characters (so indentation) are the same when indent_size is used in mf() or toString()
     ind_tbl_v1 <- strsplit(toString(mf3_v1), "\n")[[1]]
-    ind_tbl_v2 <- strsplit(toString(mf3_v2, indent_size = 3), "\n")[[1]]
-    # nchar(ind_tbl_v1)
-    # nchar(ind_tbl_v2)
-    # ind_tbl_v1[8]
-    # ind_tbl_v2[8]
-    # ind_tbl_v1[9]
-    # ind_tbl_v2[9]
-    # ind_tbl_v1[10]
-    # ind_tbl_v2[10]
-    # expect_equal(ind_tbl_v1, ind_tbl_v2) # This is wrong still
+    ind_tbl_v2 <- strsplit(toString(tbl_a, indent_size = 3), "\n")[[1]]
+    expect_equal(ind_tbl_v1, ind_tbl_v2)
     
     tbl_b <- basic_table() %>%
         split_cols_by("ARM") %>%
