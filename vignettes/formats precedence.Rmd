@@ -209,8 +209,7 @@ lyt7a <- basic_table() %>%
   split_rows_by("SEX") %>%
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
-      "Mean" = rcell(mean(x)),
-      .formats = "xx.xx",
+      "Mean" = rcell(mean(x), format = "xx.xx"),
       .format_na_strs = "<MISSING>"
     )
   })
