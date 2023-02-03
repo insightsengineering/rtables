@@ -131,6 +131,10 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in
 #'   the `strings` matrix of has indented row names (strings pre-fixed)
+#' @param expand_newlines logical(1). Should the matrix form generated
+#'     expand  rows  whose  values   contain  newlines  into  multiple
+#'     'physical'  rows  (as  they  will  appear  when  rendered  into
+#'     ASCII). Defaults to \code{TRUE}
 #'
 #' @export
 #'
@@ -177,8 +181,9 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 setMethod("matrix_form", "VTableTree",
           function(obj,
                    indent_rownames = FALSE,
+                   expand_newlines = TRUE,
                    indent_size = 2) {
-
+    
     stopifnot(is(obj, "VTableTree"))
 
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -279,7 +284,7 @@ setMethod("matrix_form", "VTableTree",
                     ref_fnotes = ref_fnotes,
                     nlines_header = nr_header, ## this is fixed internally
                     nrow_header = nr_header,
-                    expand_newlines = TRUE, ## incase the default ever changes
+                    expand_newlines = expand_newlines,
                     has_rowlabs = TRUE,
                     has_topleft = TRUE,
                     main_title = main_title(obj),
@@ -287,7 +292,8 @@ setMethod("matrix_form", "VTableTree",
                     page_titles = page_titles(obj),
                     main_footer = main_footer(obj),
                     prov_footer = prov_footer(obj),
-                    table_inset = table_inset(obj)
+                    table_inset = table_inset(obj),
+                    indent_size = indent_size
                     )
 })
 
