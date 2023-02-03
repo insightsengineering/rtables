@@ -29,12 +29,6 @@ map the rtable to an in between state with the formatted cells in a matrix form.
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -64,7 +58,12 @@ map the rtable to an in between state with the formatted cells in a matrix form.
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span><span class="va">obj</span>, indent_rownames <span class="op">=</span> <span class="cn">FALSE</span>, indent_size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span></span>
+<span>  <span class="va">obj</span>,</span>
+<span>  indent_rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  expand_newlines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  indent_size <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,6 +75,13 @@ map the rtable to an in between state with the formatted cells in a matrix form.
 <dt>indent_rownames</dt>
 <dd><p>logical(1), if TRUE the column with the row names in
 the <code>strings</code> matrix of has indented row names (strings pre-fixed)</p></dd>
+
+
+<dt>expand_newlines</dt>
+<dd><p>logical(1). Should the matrix form generated
+expand  rows  whose  values   contain  newlines  into  multiple
+'physical'  rows  (as  they  will  appear  when  rendered  into
+ASCII). Defaults to <code>TRUE</code></p></dd>
 
 
 <dt>indent_size</dt>
@@ -350,6 +356,9 @@ non-exported internal function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $has_topleft</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $indent_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"nrow_header")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
