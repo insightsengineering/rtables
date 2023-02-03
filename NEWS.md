@@ -4,6 +4,7 @@
  * `nlines` `TableRow` method (used for both rows and column label extent in paginaton) now correctly handles column spanning
  * pagination with `verbose = TRUE` now includes original and adjusted lines-per page information
  * depends on `formatters` `>=0.3.4.9` for a number of pagination machinery fixes and improvements
+ * Exporters `export_as_txt`, `tt_to_flextable`, `export_as_pdf`, and `export_as_rtf` migrated to the `formatters` package. `tt_to_flextable` renamed to `export_as_flextable`.
   
 ## rtables 0.5.3.3
  * `cont_n_allcols` and `cont_n_onecol` score functions now throw errors when they are applied to subtables that
