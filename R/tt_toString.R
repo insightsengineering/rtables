@@ -539,6 +539,17 @@ get_formatted_fnotes <- function(tt) {
     if (disp_ccounts(cinfo)) {
         counts <- col_counts(cinfo)
         cformat <- colcount_format(cinfo)
+
+        # allow 2d column count formats (count (%) only)
+        cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == cformat))))
+        if (cfmt_dim == "2d") {
+            if (grepl("%", cformat)) {
+                counts <- lapply(counts, function(x) c(x, 1))
+            } else {
+                stop("This 2d format is not supported for column counts. Please choose a 1d format or a 2d format that includes a % value.")
+            }
+        } else if (cfmt_dim == "3d") {stop("3d formats are not supported for column counts.")}
+        
         body <- rbind(body, vapply(counts, format_rcell,
                                    character(1),
                                    format = cformat,
