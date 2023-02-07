@@ -10,6 +10,7 @@ basic_table(
   main_footer = character(),
   prov_footer = character(),
   show_colcounts = FALSE,
+  colcount_format = "(N=xx)",
   inset = 0L
 )
 }
@@ -24,8 +25,11 @@ basic_table(
 Generally should not be modified by hand.}
 
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
-resulting table
-when this layout is applied to data}
+resulting table when this layout is applied to data}
+
+\item{colcount_format}{character(1). Format for use when displaying the
+column counts. Must be 1d, or 2d where one component is a percent. See
+details.}
 
 \item{inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
@@ -37,6 +41,23 @@ layouting functions, and to \code{build_table}.
 }
 \description{
 Every layout must start with a basic table.
+}
+\details{
+\code{colcount_format} is ignored if \code{show_colcounts} is \code{FALSE} (the default).
+When \code{show_colcounts} is \code{TRUE}, and \code{colcount_format} is 2-dimensional with
+a percent component, the value component for the percent is always populated
+with \code{1} (ie 100\%). 1d formats are used to render the counts exactly as they
+normally would be, while 2d formats which don't include a percent, and all 3d
+formats result in an error. Formats in the form of functions are not supported for
+colcount format. See \code{\link[formatters]{list_valid_format_labels}} for
+the list of valid format labels to select from.
+}
+\note{
+Because percent components in \code{colcount_format} are \emph{always}
+populated with the value 1, we can get arguably strange results, such as
+that individual arm columns and a combined "all patients" column all
+list "100\%" as their percentage, even though the individual arm columns
+represent strict subsets of the all patients column.
 }
 \examples{
 
@@ -56,5 +77,9 @@ lyt2 <- basic_table(title = "Title of table",
 
 tbl2 <- build_table(lyt2, DM)
 tbl2
+
+lyt3 <- basic_table(show_colcounts = TRUE,
+                    colcount_format = "xx. (xx.\%)") \%>\%
+  split_cols_by("ARM")
 
 }

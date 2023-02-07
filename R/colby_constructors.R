@@ -1724,10 +1724,29 @@ list_wrap_df <- function(f) {
 #' @export
 #' @inheritParams constr_args
 #' @param show_colcounts logical(1). Should column counts be displayed in the
-#'   resulting table
-#' when this layout is applied to data
+#'   resulting table when this layout is applied to data
+#' @param colcount_format character(1). Format for use when displaying the
+#' column counts. Must be 1d, or 2d where one component is a percent. See
+#' details.
+#'
+#' @details
+#'
+#' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default).
+#' When `show_colcounts` is `TRUE`, and `colcount_format` is 2-dimensional with
+#' a percent component, the value component for the percent is always populated
+#' with `1` (ie 100%). 1d formats are used to render the counts exactly as they
+#' normally would be, while 2d formats which don't include a percent, and all 3d
+#' formats result in an error. Formats in the form of functions are not supported for
+#' colcount format. See \code{\link[formatters]{list_valid_format_labels}} for
+#' the list of valid format labels to select from.
 #'
 #' @inherit split_cols_by return
+#'
+#' @note Because percent components in `colcount_format` are *always*
+#' populated with the value 1, we can get arguably strange results, such as
+#' that individual arm columns and a combined "all patients" column all
+#' list "100%" as their percentage, even though the individual arm columns
+#' represent strict subsets of the all patients column.
 #'
 #' @examples
 #'
@@ -1748,11 +1767,16 @@ list_wrap_df <- function(f) {
 #' tbl2 <- build_table(lyt2, DM)
 #' tbl2
 #'
+#' lyt3 <- basic_table(show_colcounts = TRUE,
+#'                     colcount_format = "xx. (xx.%)") %>%
+#'   split_cols_by("ARM")
+#'
 basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
                         show_colcounts = FALSE,
+                        colcount_format = "(N=xx)",
                         inset = 0L) {
     inset <- as.integer(inset)
     if(is.na(inset) || inset < 0L)
@@ -1763,7 +1787,7 @@ basic_table <- function(title = "",
                         prov_footer = prov_footer,
                         table_inset = as.integer(inset))
     if(show_colcounts)
-        ret <- add_colcounts(ret)
+        ret <- add_colcounts(ret, format = colcount_format)
     ret
 }
 
