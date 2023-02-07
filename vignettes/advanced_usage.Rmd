@@ -23,6 +23,56 @@ Initialization
 library(rtables)
 ```
 
+## Control splitting with provided function (limited customization)
+
+rtables provides an array of functions to control the splitting logic without creating an entirely new split functions. By default `split_*_by` facets data based on categorical variable.
+
+```{r}
+d1 <- subset(ex_adsl, AGE < 25)
+d1$AGE <- as.factor(d1$AGE)
+lyt1 <- basic_table() %>%
+    split_cols_by("AGE") %>%
+    analyze("SEX")
+
+build_table(lyt1, d1)
+```
+
+For continuous variables, the `split_*_by_cutfun` can be leveraged to create categories and the corresponding faceting, when the break points are dependent from the data.
+
+```{r}
+sd_cutfun <- function(x) {
+    cutpoints <- c(
+        min(x),
+        mean(x) - sd(x),
+        mean(x) + sd(x),
+        max(x)
+    )
+    
+    names(cutpoints) <- c("", "Low", "Medium", "High")
+    cutpoints
+}
+
+lyt1 <- basic_table() %>%
+    split_cols_by_cutfun("AGE", cutfun = sd_cutfun) %>%
+    analyze("SEX")
+
+build_table(lyt1, ex_adsl)
+```
+
+Alternatively, `split_*_by_cuts` can be used when breakpoints are predefined and `split_*_by_quartiles` when the data should be faceted by quantile.
+
+```{r}
+lyt1 <- basic_table() %>%
+    split_cols_by_cuts(
+        "AGE",
+        cuts = c(0, 30, 60, 100),
+        cutlabels = c("0-30 y.o.", "30-60 y.o.", "60-100 y.o.")) %>%
+    analyze("SEX")
+
+build_table(lyt1, ex_adsl)
+```
+
+
 ## Custom Split Functions
 
 ### Adding an Overall Column Only When The Split Would Already Define 2+ Facets

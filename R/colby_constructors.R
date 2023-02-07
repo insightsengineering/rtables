@@ -595,6 +595,34 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' tbl4 <- build_table(lyt4, ex_adsl)
 #' tbl4
+#' 
+#' # split_cols_by_cutfun
+#' cutfun <- function(x) {
+#'   cutpoints <- c(
+#'     min(x),
+#'     mean(x),
+#'     max(x)
+#'   )
+#'
+#'   names(cutpoints) <- c("", "Younger", "Older")
+#'   cutpoints
+#' }
+#'
+#' lyt5 <- basic_table() %>%
+#'   split_cols_by_cutfun("AGE", cutfun = cutfun) %>%
+#'   analyze("SEX")
+#'
+#' tbl5 <- build_table(lyt5, ex_adsl)
+#' tbl5
+#' 
+#' # split_rows_by_cutfun
+#' lyt6 <- basic_table() %>%
+#'   split_cols_by("SEX") %>%
+#'   split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
+#'   analyze("BMRKR2")
+#'
+#' tbl6 <- build_table(lyt6, ex_adsl)
+#' tbl6
 #'
 split_cols_by_cuts <- function(lyt, var, cuts,
                               cutlabels = NULL,
