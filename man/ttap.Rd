@@ -24,3 +24,31 @@ of the previous choice.}
 \description{
 Get or set table elements at specified path
 }
+\examples{
+# Accessing sub table.
+lyt <- basic_table() \%>\%
+   split_cols_by("ARM") \%>\%
+   split_rows_by("SEX") \%>\%
+   split_rows_by("BMRKR2") \%>\%
+   analyze("AGE")
+
+tbl <- build_table(lyt, ex_adsl)
+sub_tbl <- tt_at_path(tbl, path = c("SEX", "F", "BMRKR2"))
+
+# Removing sub table.
+tbl2 <- tbl
+tt_at_path(tbl2, path = c("SEX", "F")) <- NULL
+tbl2
+
+# Setting sub table.
+lyt3 <- basic_table() \%>\%
+   split_cols_by("ARM") \%>\%
+   split_rows_by("SEX") \%>\%
+   analyze("BMRKR2")
+
+tbl3 <- build_table(lyt3, ex_adsl)
+
+tt_at_path(tbl3, path = c("SEX", "F", "BMRKR2")) <- sub_tbl
+tbl3
+
+}
