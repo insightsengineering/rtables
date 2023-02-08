@@ -245,7 +245,7 @@ test_that("make_split_fun works", {
     lyt <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = mysplitfun) %>%
         analyze("AGE")
-    tbl <-  build_table(subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
+    tbl <-  build_table(lyt, subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
 
     ccounts <- col_counts(tbl)
     expect_equal(ncol(tbl), 3L)

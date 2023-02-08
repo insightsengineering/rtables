@@ -9,9 +9,9 @@ make_split_fun(pre = list(), core_split = NULL, post = list())
 \arguments{
 \item{pre}{list. Zero or more functions which operate on the incoming data and return a new data frame that should split via \code{core_split}. They will be called on the data in the order they appear in the list}
 
-\item{post}{list. Zero or more functions which should be called on the list output by splitting}
+\item{core_split}{function or NULL. If not NULL, a function which accepts the same arguments do_base_split does, and returns the same type of named list. Custom functions which override this behavior cannot be used in column splits.}
 
-\item{core_split.}{function or NULL. If not NULL, a function which accepts the same arguments do_base_split does, and returns the same type of named list. Custom functions which override this behavior cannot be used in column splits.}
+\item{post}{list. Zero or more functions which should be called on the list output by splitting}
 }
 \value{
 A function for use as a custom split function

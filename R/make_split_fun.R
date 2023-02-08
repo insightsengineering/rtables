@@ -80,7 +80,7 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' Create a Custom Splitting Function
 #'
 #' @param pre list. Zero or more functions which operate on the incoming data and return a new data frame that should split via `core_split`. They will be called on the data in the order they appear in the list
-#' @param core_split. function or NULL. If not NULL, a function which accepts the same arguments do_base_split does, and returns the same type of named list. Custom functions which override this behavior cannot be used in column splits.
+#' @param core_split function or NULL. If not NULL, a function which accepts the same arguments do_base_split does, and returns the same type of named list. Custom functions which override this behavior cannot be used in column splits.
 #' @param post list. Zero or more functions which should be called on the list output by splitting
 #'
 #' @details
@@ -164,8 +164,6 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #'       analyze("AGE")
 #' silly_table <- build_table(lyt_silly, DM)
 #' silly_table
-
-
 make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
     function(df,
              spl,
