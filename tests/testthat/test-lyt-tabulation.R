@@ -584,6 +584,13 @@ test_that("Colcounts work correctly", {
                      c(500L, as.integer(table(DM$ARM))[2:3]))
     expect_error(build_table(lyt2, DMchar, col_counts = c(500L, NA, NA)))
     expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
+
+    tbl4 <- basic_table(show_colcounts = TRUE,
+                        colcount_format = "xx (xx%)") %>%
+        split_cols_by("ARM") %>%
+        build_table(DM)
+    mf_tbl4_colcounts <- matrix_form(tbl4)$strings[2,]
+    expect_identical(mf_tbl4_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
 })
 
 first_cont_rowvals <- function(tt)

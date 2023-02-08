@@ -87,3 +87,26 @@ test_that("add_colcounts works", {
     
     expect_true(identical(tbl1, tbl2))
 })
+
+test_that("add_colcounts format argument works", {
+    # 2d count (%) format works
+    tbl1 <- basic_table() %>%
+        add_colcounts(format = "xx (xx%)") %>%
+        split_cols_by("ARM") %>%
+        build_table(DM)
+    mf_tbl1_colcounts <- matrix_form(tbl1)$strings[2,]
+    expect_identical(mf_tbl1_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
+    
+    # correct error message for 2d format without %
+    lyt <- basic_table() %>%
+        add_colcounts(format = "xx (xx)") %>%
+        split_cols_by("ARM")
+    expect_error(matrix_form(build_table(lyt, DM)),
+                 "This 2d format is not supported for column counts. Please choose a 1d format or a 2d format that includes a % value.")
+    
+    # correct error message for 3d colcount format
+    lyt <- basic_table() %>%
+        add_colcounts(format = "xx.x (xx.x - xx.x)") %>%
+        split_cols_by("ARM")
+    expect_error(matrix_form(build_table(lyt, DM)), "3d formats are not supported for column counts.")
+})
