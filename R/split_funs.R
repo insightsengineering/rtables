@@ -109,7 +109,7 @@ setGeneric(".applysplit_ref_vals",
 #' d1 <- subset(ex_adsl, ARM == "A: Drug X" | (ARM == "B: Placebo" & SEX == "F"))
 #' d1 <- subset(d1, SEX %in% c("M", "F"))
 #' d1$SEX <- factor(d1$SEX)
-#' 
+#'
 #' # This table uses the number of values in the SEX column to add the overall col or not
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM", split_fun = drop_split_levels) %>%
@@ -119,6 +119,7 @@ setGeneric(".applysplit_ref_vals",
 #' tbl
 #'
 NULL
+
 
 ## do various cleaning, and naming, plus
 ## ensure partinfo$values contains SplitValue objects only
@@ -981,7 +982,7 @@ add_combo_levels <- function(combosdf,
                 subdf <- df
             else if (is(spl, "VarLevelSplit")) {
                  subdf <- df[df[[spld]] %in% lcombo, ]
-            } else {
+            } else { ## this covers non-var splits, e.g. Cut-based splits
                 stopifnot(all(lcombo %in% c(ret$labels, ret$vals)))
                 subdf <- do.call(rbind,
                                  ret$datasplit[names(ret$datasplit) %in% lcombo |

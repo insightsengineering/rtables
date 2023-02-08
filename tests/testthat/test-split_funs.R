@@ -235,3 +235,84 @@ test_that("add_overall_level works", {
     expect_identical(c(nrow(DM), 1),
                      cell_values(tab2)[[1]][[1]])
 })
+
+
+test_that("make_split_fun works", {
+
+    mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
+                                 post = list(add_overall_facet("ALL", "All Arms")))
+
+    lyt <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = mysplitfun) %>%
+        analyze("AGE")
+    tbl <-  build_table(subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
+
+    ccounts <- col_counts(tbl)
+    expect_equal(ncol(tbl), 3L)
+    expect_equal(ccounts[3], sum(DM$ARM %in% c("B: Placebo", "C: Combination")))
+
+    lyt2a <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = trim_levels_in_group("SEX", drop_outlevs = TRUE)) %>%
+        split_cols_by("SEX") %>%
+        analyze("AGE")
+
+    adslsub <- subset(ex_adsl, (ARM == "A: Drug X" & SEX == "F") |
+                            (ARM == "B: Placebo" & SEX == "M"))
+    tbl2a <- build_table(lyt2a, adslsub)
+
+    mysplitfun2 <- make_split_fun(pre = list(drop_facet_levels),
+                                 post = list(trim_levels_in_facets("SEX")))
+
+    lyt2b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = mysplitfun2) %>%
+        split_cols_by("SEX") %>%
+        analyze("AGE")
+
+    tbl2b <- build_table(lyt2b, adslsub)
+
+    expect_identical(cell_values(tbl2a), cell_values(tbl2b))
+    expect_identical(row_paths(tbl2a), row_paths(tbl2b))
+    expect_identical(col_paths(tbl2a), col_paths(tbl2b))
+    expect_identical(matrix_form(tbl2a, TRUE),
+                     matrix_form(tbl2b, TRUE))
+
+    broken_on_purpose <- make_split_fun(pre = list(function(df, ...) stop("oopsie")))
+
+    lyt3 <- basic_table() %>%
+        split_cols_by("ARM", split_fun = broken_on_purpose) %>%
+        analyze("ARM")
+
+    expect_error(build_table(lyt3, DM), "Error applying custom split function: oopsie")
+
+    ## overriding core core split functionality
+    very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
+        make_split_result(c("stupid", "silly"), datasplit = list(df[1:10,], df[11:30,]), labels = c("first 10", "second 20"))
+    }
+
+    nonsense_splfun <-  make_split_fun(core_split = very_stupid_core,
+                                                        post = list(add_combo_facet("dumb", label = "thirty patients",
+                                                                                    levels = c("stupid", "silly"))))
+    lyt4a <- basic_table() %>%
+        split_cols_by("ARM", split_fun = nonsense_splfun) %>%
+        analyze("AGE")
+
+    ## not supported in column space, currently
+    expect_error(build_table(lyt4a, DM), "override core splitting")
+
+    lyt4b <- basic_table() %>%
+        split_rows_by("ARM", split_fun = nonsense_splfun) %>%
+        summarize_row_groups() %>%
+        analyze("AGE")
+
+    tbl4b <- build_table(lyt4b, DM)
+
+    pths <- row_paths(tbl4b)
+    ## check the counts, which checks whether our artificial
+    ## facets were created correctly
+    expect_equal(10,
+                 cell_values(tbl4b, pths[[1]])[[1]][[1]])
+    expect_equal(20,
+                 cell_values(tbl4b, pths[[3]])[[1]][[1]])
+    expect_equal(30,
+                 cell_values(tbl4b, pths[[5]])[[1]][[1]])
+})
