@@ -319,7 +319,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
 })
 
 ## this one removes the child at path from the parents list of children,
-## because that's how lists behave.
+## because that is how lists behave.
 #' @export
 #' @rdname int_methods
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
