@@ -289,7 +289,7 @@ setMethod("tt_at_path", "VTableTree",
 #'    split_rows_by("BMRKR2") %>%
 #'    analyze("AGE")
 #'
-#' tbl <- build_table(lyt, ex_adsl)
+#' tbl <- build_table(lyt, ex_adsl) %>% prune_table()
 #' sub_tbl <- tt_at_path(tbl, path = c("SEX", "F", "BMRKR2"))
 #'
 #' # Removing sub table.
@@ -303,7 +303,7 @@ setMethod("tt_at_path", "VTableTree",
 #'    split_rows_by("SEX") %>%
 #'    analyze("BMRKR2")
 #'
-#' tbl3 <- build_table(lyt3, ex_adsl)
+#' tbl3 <- build_table(lyt3, ex_adsl) %>% prune_table()
 #'
 #' tt_at_path(tbl3, path = c("SEX", "F", "BMRKR2")) <- sub_tbl
 #' tbl3
