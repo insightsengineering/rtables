@@ -73,7 +73,7 @@ the order they  appear in the list passed to  the relevant argument
 }
 \examples{
 mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
-                              post = list(add_overall_facet("ALL", "All Arms")))
+                             post = list(add_overall_facet("ALL", "All Arms")))
 
 basic_table(show_colcounts = TRUE) \%>\%
    split_cols_by("ARM", split_fun = mysplitfun) \%>\%
