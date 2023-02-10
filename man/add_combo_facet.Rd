@@ -3,7 +3,7 @@
 \name{add_combo_facet}
 \alias{add_combo_facet}
 \alias{add_overall_facet}
-\title{Add a combination facet (during postprocessing stage in a custom split fun)}
+\title{Add a combination facet in postprocessing}
 \usage{
 add_combo_facet(name, label = name, levels, extra = list())
 
@@ -14,17 +14,17 @@ add_overall_facet(name, label, extra = list())
 
 \item{label}{character(1). Label for the resulting facet.}
 
-\item{levels}{character. Vector of levels to  combine within the resulting facet}
+\item{levels}{character. Vector of levels to  combine within the resulting facet.}
 
 \item{extra}{list. Extra arguments to be passed to analysis functions applied
 within the resulting facet.}
 }
 \value{
 a function which can be used within the \code{post} argument in
-\code{make_split_fun}
+\code{make_split_fun}.
 }
 \description{
-Add a combination facet (during postprocessing stage in a custom split fun)
+Add a combination facet during postprocessing stage in a custom split fun.
 }
 \details{
 For \code{add_combo_facet}, the data associated with the resulting

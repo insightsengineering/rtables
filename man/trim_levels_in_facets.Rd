@@ -8,7 +8,7 @@ trim_levels_in_facets(innervar)
 }
 \arguments{
 \item{innervar}{character. The variable(s) to trim (remove
-unobserved levels) independently within each facet}
+unobserved levels) independently within each facet.}
 }
 \value{
 a function suitable for use in the \code{pre}

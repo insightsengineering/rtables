@@ -79,9 +79,13 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 
 #' Create a Custom Splitting Function
 #'
-#' @param pre list. Zero or more functions which operate on the incoming data and return a new data frame that should split via `core_split`. They will be called on the data in the order they appear in the list
-#' @param core_split function or NULL. If not NULL, a function which accepts the same arguments do_base_split does, and returns the same type of named list. Custom functions which override this behavior cannot be used in column splits.
-#' @param post list. Zero or more functions which should be called on the list output by splitting
+#' @param pre list. Zero or more functions which operate on the incoming data and 
+#' return a new data frame that should split via `core_split`. They will be called 
+#' on the data in the order they appear in the list.
+#' @param core_split function or NULL. If not NULL, a function which accepts the 
+#' same arguments do_base_split does, and returns the same type of named list. 
+#' Custom functions which override this behavior cannot be used in column splits.
+#' @param post list. Zero or more functions which should be called on the list output by splitting.
 #'
 #' @details
 #'
@@ -131,12 +135,12 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' the order they  appear in the list passed to  the relevant argument
 #' (`pre` and `post`, respectively).
 #'
-#' @return A function for use as a custom split function
+#' @return A function for use as a custom split function.
 #' @export
 #' @family make_custom_split
 #' @examples
 #' mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
-#'                               post = list(add_overall_facet("ALL", "All Arms")))
+#'                              post = list(add_overall_facet("ALL", "All Arms")))
 #'
 #' basic_table(show_colcounts = TRUE) %>%
 #'    split_cols_by("ARM", split_fun = mysplitfun) %>%
@@ -207,11 +211,13 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
     }
 }
 
-#' Add a combination facet (during postprocessing stage in a custom split fun)
+#' Add a combination facet in postprocessing
+#' 
+#' @description Add a combination facet during postprocessing stage in a custom split fun.
 #'
 #' @param name character(1). Name for the resulting facet (for use in pathing, etc).
 #' @param label character(1). Label for the resulting facet.
-#' @param levels character. Vector of levels to  combine within the resulting facet
+#' @param levels character. Vector of levels to  combine within the resulting facet.
 #' @param extra list. Extra arguments to be passed to analysis functions applied
 #' within the resulting facet.
 #'
@@ -221,7 +227,7 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 #' are overlapping, data that appears in both will be duplicated.
 #'
 #' @return a function which can be used within the `post` argument in
-#' `make_split_fun`
+#' `make_split_fun`.
 #'
 #' @seealso \code{\link{make_split_fun}}
 #' 
@@ -255,7 +261,7 @@ add_overall_facet <- function(name, label, extra = list()) {
 
 #' Trim Levels of Another Variable From Each Facet (Postprocessing split step)
 #' @param innervar character. The variable(s) to trim (remove
-#' unobserved levels) independently within each facet
+#' unobserved levels) independently within each facet.
 #'
 #' @return a function suitable for use in the `pre`
 #'     (list) argument of `make_split_fun`
