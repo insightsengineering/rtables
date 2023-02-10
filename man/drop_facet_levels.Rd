@@ -11,7 +11,7 @@ drop_facet_levels(df, spl, ...)
 
 \item{spl}{Split.}
 
-\item{...}{dots.}
+\item{...}{dots. This is used internally to pass parameters.}
 }
 \description{
 This function is intended for use as a preprocessing

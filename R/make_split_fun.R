@@ -224,7 +224,8 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 #' `make_split_fun`
 #'
 #' @seealso \code{\link{make_split_fun}}
-#'
+#' 
+#' @examples
 #' mysplfun <- make_split_fun(post = list(add_combo_facet("A_B", label = "Arms A+B",
 #'                                                        levels = c("A: Drug X", "B: Placebo")),
 #'                                        add_overall_facet("ALL", label = "All Arms")))
@@ -281,7 +282,7 @@ trim_levels_in_facets <- function(innervar) {
 #'
 #' @param df data.frame. The incoming data corresponding with the parent facet
 #' @param spl Split.
-#' @param ... dots.
+#' @param ... dots. This is used internally to pass parameters.
 #' @export
 #' @seealso make_split_fun
 #' @family make_custom_split

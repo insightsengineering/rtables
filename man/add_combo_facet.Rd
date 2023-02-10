@@ -32,18 +32,20 @@ facet will be the data associated with the facets for each level in
 \code{levels}, rbound together. In particular, this means that if those levels
 are overlapping, data that appears in both will be duplicated.
 }
-\seealso{
-\code{\link{make_split_fun}}
-
+\examples{
 mysplfun <- make_split_fun(post = list(add_combo_facet("A_B", label = "Arms A+B",
-levels = c("A: Drug X", "B: Placebo")),
-add_overall_facet("ALL", label = "All Arms")))
+                                                       levels = c("A: Drug X", "B: Placebo")),
+                                       add_overall_facet("ALL", label = "All Arms")))
 
 lyt <- basic_table(show_colcounts = TRUE) \%>\%
-split_cols_by("ARM", split_fun = mysplfun) \%>\%
-analyze("AGE")
+    split_cols_by("ARM", split_fun = mysplfun) \%>\%
+    analyze("AGE")
 
 tbl <- build_table(lyt, DM)
+
+}
+\seealso{
+\code{\link{make_split_fun}}
 
 Other make_custom_split: 
 \code{\link{drop_facet_levels}()},
