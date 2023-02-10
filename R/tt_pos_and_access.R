@@ -281,6 +281,8 @@ setMethod("tt_at_path", "VTableTree",
 #' @export
 #' @rdname ttap
 #' 
+#' @note Setting `NULL` at a defined path removes the corresponding sub table.
+#' 
 #' @examples 
 #' # Accessing sub table.
 #' lyt <- basic_table() %>%

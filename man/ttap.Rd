@@ -24,6 +24,9 @@ of the previous choice.}
 \description{
 Get or set table elements at specified path
 }
+\note{
+Setting \code{NULL} at a defined path removes the corresponding sub table.
+}
 \examples{
 # Accessing sub table.
 lyt <- basic_table() \%>\%
