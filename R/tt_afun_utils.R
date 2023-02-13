@@ -8,7 +8,7 @@
 #' @param x ANY. Cell value.
 #' @param format character(1) or function. The format label (string) or 
 #'   formatter function to apply to `x`. See 
-#'   \code{\link{formatters::list_valid_format_labels}} for currently supported 
+#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
 #'   format labels.
 #' @param label character(1). Label or `NULL`. If non-null, it will be looked at
 #'   when determining row labels.
