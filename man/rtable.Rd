@@ -16,8 +16,10 @@ This can be as row objects (legacy), character vectors or a
 
 \item{\dots}{Rows to place in the table.}
 
-\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
-then the \code{format} is applied}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via \code{...}. See
+\code{\link[formatters]{list_valid_format_labels}} for currently supported
+format labels.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to

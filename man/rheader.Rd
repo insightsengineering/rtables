@@ -11,10 +11,12 @@ rheader(..., format = "xx", .lst = NULL)
 from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}},
 etc.}
 
-\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
-then the \code{format} is applied}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via \code{...}. See
+\code{\link[formatters]{list_valid_format_labels}} for currently supported
+format labels.}
 
-\item{.lst}{list. An already-collected list of arguments tot be used instead
+\item{.lst}{list. An already-collected list of arguments to be used instead
 of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 ignored if this is specified.}
 }
