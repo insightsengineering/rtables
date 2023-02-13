@@ -32,7 +32,7 @@ non_ref_rcell(
 \item{x}{ANY. Cell value.}
 
 \item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
+formatter function to apply to \code{x}. See
 \code{\link[formatters]{list_valid_format_labels}} for currently supported
 format labels.}
 
