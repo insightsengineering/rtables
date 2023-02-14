@@ -11,7 +11,7 @@ test_that("export_as_txt works with and without pagination", {
     tmptxtf <- tempfile()
     export_as_txt(tbl, file = tmptxtf, paginate = TRUE, lpp = 8, verbose = TRUE)
     txtlns <- readLines(tmptxtf)
-    expect_identical(grep("\\\\s\\\\n", txtlns),
+    expect_identical(grep("\\\\f", txtlns),
                      c(9L, 17L))
 
     expect_identical(toString(tbl),
@@ -32,7 +32,7 @@ test_that("export_as_txt works with wrapping", {
                   tf_wrap = TRUE,
                   max_width = 20, cpp = 80, verbose = TRUE)
     txtlns1 <- readLines(tmptxtf1)
-    pagepos1 <- grep("\\\\s\\\\n", txtlns1)
+    pagepos1 <- grep("\\\\f", txtlns1)
     expect_identical(pagepos1, 30L) ##c(30L, 58L))
 
     ## explicitly no vertical pagination (lpp = NULL)
@@ -62,7 +62,7 @@ test_that("export_as_txt works with wrapping", {
                                  tf_wrap = FALSE,
                                  max_width = 20, verbose = TRUE))
     txtlns2 <- readLines(tmptxtf2)
-    pagepos2 <- grep("\\\\s\\\\n", txtlns2)
+    pagepos2 <- grep("\\\\f", txtlns2)
     expect_identical(pagepos2, 18L) ##c(26L, 50L))
 
     tmptxtf2b <- tempfile()
@@ -81,7 +81,7 @@ test_that("export_as_txt works with wrapping", {
                   tf_wrap = TRUE,
                   max_width = 40, verbose = TRUE)
     txtlns2b <- readLines(tmptxtf2b)
-    pagepos2b <- grep("\\\\s\\\\n", txtlns2b)
+    pagepos2b <- grep("\\\\f", txtlns2b)
     expect_identical(pagepos2b, c(16L, 33L, 49L)) ## 16 because we dont' get our first pick of pagination spots anymore
 
     ## both vertical and horizontal pagination #458
@@ -106,7 +106,7 @@ test_that("export_as_txt works with wrapping", {
                   cpp = 80, verbose = TRUE)
 
     txtlns3 <- readLines(tmptxtf3)
-    pagepos3 <- grep("\\\\s\\\\n", txtlns3)
+    pagepos3 <- grep("\\\\f", txtlns3)
     expect_identical(pagepos3[1], pagepos2b[1])
 })
 
