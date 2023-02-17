@@ -164,6 +164,14 @@ reference:
     - formatters::make_row_df
     - make_col_df
 
+  - title: Custom Split Functions
+    contents:
+    - make_split_fun
+    - drop_facet_levels
+    - trim_levels_in_facets
+    - add_combo_facet
+    - make_split_result
+
   - title: TableTree Framework Accessor Functions
     contents:
     - content_table
