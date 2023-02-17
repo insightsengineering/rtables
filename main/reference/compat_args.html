@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -60,64 +54,31 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compat_args</span><span class="op">(</span></span>
-<span>  <span class="va">.lst</span>,</span>
-<span>  <span class="va">FUN</span>,</span>
-<span>  <span class="va">col_by</span>,</span>
-<span>  <span class="va">row_by</span>,</span>
-<span>  <span class="va">row.name</span>,</span>
-<span>  <span class="va">format</span>,</span>
-<span>  <span class="va">indent</span>,</span>
-<span>  <span class="va">col_wise_args</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">inset</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compat_args</span><span class="op">(</span><span class="va">.lst</span>, <span class="va">row.name</span>, <span class="va">format</span>, <span class="va">indent</span>, <span class="va">label</span>, <span class="va">inset</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>.lst</dt>
-<dd><p>list. An already-collected list of arguments tot be used instead
+<dd><p>list. An already-collected list of arguments to be used instead
 of the elements of <code>...</code>. Arguments passed via <code>...</code> will be
 ignored if this is specified.</p></dd>
 
 
-<dt>FUN</dt>
-<dd><p>function. Tabulation function. Will be passed subsets of <code>x</code>
-defined by the combination of <code>col_by</code> and <code>row_by</code> and returns
-corresponding cell value</p></dd>
-
-
-<dt>col_by</dt>
-<dd><p>(<code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></code> or <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> if a
-<code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></code> of length <code>nrow(x)</code> that defines which levels in
-<code>col_by</code> define a column.</p></dd>
-
-
-<dt>row_by</dt>
-<dd><p>rows in <code>x</code> to take per row in the resulting table</p></dd>
-
-
 <dt>row.name</dt>
-<dd><p>if <code>NULL</code> then the <code>FUN</code> argument is deparsed and
-used as <code>row.name</code> of the <code><a href="rrow.html">rrow</a></code></p></dd>
+<dd><p>if <code>NULL</code> then an empty string is used as
+<code>row.name</code> of the <code><a href="rrow.html">rrow</a></code>.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>if <code>FUN</code> does not return a formatted <code><a href="rcell.html">rcell</a></code>
-then the <code>format</code> is applied</p></dd>
+<dd><p>character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via <code>...</code>. See
+<code><a href="https://rdrr.io/pkg/formatters/man/list_valid_format_labels.html" class="external-link">list_valid_format_labels</a></code> for currently supported
+format labels.</p></dd>
 
 
 <dt>indent</dt>
 <dd><p>deprecated.</p></dd>
-
-
-<dt>col_wise_args</dt>
-<dd><p>a named list containing collections (e.g. vectors or
-lists) with data elements for each column of the resulting table. The data
-elements are then passed to the named argument <code>FUN</code> corresponding to
-the element name of the outer list. Hence, the length and order of each
-collection must match the levels in <code>col_by</code>. See examples.</p></dd>
 
 
 <dt>label</dt>

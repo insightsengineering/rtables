@@ -29,12 +29,6 @@ indenting, and column spanning information with it."><!-- mathjax --><script src
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -90,20 +84,22 @@ indenting, and column spanning information with it.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>ANY. Cell value</p></dd>
+<dd><p>ANY. Cell value.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>if <code>FUN</code> does not return a formatted <code>rcell</code>
-then the <code>format</code> is applied</p></dd>
+<dd><p>character(1) or function. The format label (string) or
+formatter function to apply to <code>x</code>. See
+<code><a href="https://rdrr.io/pkg/formatters/man/list_valid_format_labels.html" class="external-link">list_valid_format_labels</a></code> for currently supported
+format labels.</p></dd>
 
 
 <dt>colspan</dt>
-<dd><p>integer(1). Columnspan value.</p></dd>
+<dd><p>integer(1). Column span value.</p></dd>
 
 
 <dt>label</dt>
-<dd><p>character(1). Label or Null. If non-null, it will be looked at
+<dd><p>character(1). Label or <code>NULL</code>. If non-null, it will be looked at
 when determining row labels.</p></dd>
 
 
@@ -115,7 +111,7 @@ corresponds to the unmodified default behavior.</p></dd>
 
 
 <dt>footnotes</dt>
-<dd><p>list or NULL. Referential footnote messages for the cell.</p></dd>
+<dd><p>list or <code>NULL</code>. Referential footnote messages for the cell.</p></dd>
 
 
 <dt>align</dt>
@@ -156,7 +152,7 @@ of <code>.in_ref_col</code> when it is used.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>currently column spanning is only supported for defining header
+    <p>Currently column spanning is only supported for defining header
 structure.</p>
     </div>
 

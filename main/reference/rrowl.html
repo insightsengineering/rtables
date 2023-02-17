@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -66,8 +60,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>row.name</dt>
-<dd><p>if <code>NULL</code> then the <code>FUN</code> argument is deparsed and
-used as <code>row.name</code> of the <code><a href="rrow.html">rrow</a></code></p></dd>
+<dd><p>if <code>NULL</code> then an empty string is used as
+<code>row.name</code> of the <code><a href="rrow.html">rrow</a></code>.</p></dd>
 
 
 <dt>...</dt>
@@ -75,8 +69,10 @@ used as <code>row.name</code> of the <code><a href="rrow.html">rrow</a></code></
 
 
 <dt>format</dt>
-<dd><p>if <code>FUN</code> does not return a formatted <code><a href="rcell.html">rcell</a></code>
-then the <code>format</code> is applied</p></dd>
+<dd><p>character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via <code>...</code>. See
+<code><a href="https://rdrr.io/pkg/formatters/man/list_valid_format_labels.html" class="external-link">list_valid_format_labels</a></code> for currently supported
+format labels.</p></dd>
 
 
 <dt>indent</dt>
