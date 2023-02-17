@@ -231,31 +231,20 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #' @family conventions
 #' @inherit gen_args return
 #' @inheritParams gen_args
-#' @param .lst list. An already-collected list of arguments tot be used instead
+#' @param .lst list. An already-collected list of arguments to be used instead
 #'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 #'   ignored if this is specified.
-#' @param FUN function. Tabulation function. Will be passed subsets of \code{x}
-#'   defined by the combination of \code{col_by} and \code{row_by} and returns
-#'   corresponding cell value
-#' @param col_by (\code{\link{factor}} or \code{\link{data.frame}} if a
-#'   \code{\link{factor}} of length \code{nrow(x)} that defines which levels in
-#'   \code{col_by} define a column.
-#' @param row_by rows in \code{x} to take per row in the resulting table
-#' @param row.name if \code{NULL} then the \code{FUN} argument is deparsed and
-#'   used as \code{row.name} of the \code{\link{rrow}}
-#' @param format if \code{FUN} does not return a formatted \code{\link{rcell}}
-#'   then the \code{format} is applied
+#' @param row.name if \code{NULL} then an empty string is used as 
+#'   \code{row.name} of the \code{\link{rrow}}.
+#' @param format character(1) or function. The format label (string) or 
+#'   formatter function to apply to the cell values passed via `...`. See 
+#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#'   format labels.
 #' @param indent deprecated.
-#' @param col_wise_args a named list containing collections (e.g. vectors or
-#'   lists) with data elements for each column of the resulting table. The data
-#'   elements are then passed to the named argument \code{FUN} corresponding to
-#'   the element name of the outer list. Hence, the length and order of each
-#'   collection must match the levels in \code{col_by}. See examples.
 #' @param inset integer(1). The table inset for the row or table being
 #'   constructed. See \code{\link[formatters]{table_inset}}.
 #' @rdname compat_args
-compat_args <- function(.lst, FUN, col_by, row_by, row.name, format, indent,
-                        col_wise_args, label, inset) NULL
+compat_args <- function(.lst, row.name, format, indent, label, inset) NULL
 
 
 
