@@ -76,6 +76,9 @@
     <loc>https://roche.github.io/rtables/main/reference/add_colcounts.html</loc>
   </url>
   <url>
+    <loc>https://roche.github.io/rtables/main/reference/add_combo_facet.html</loc>
+  </url>
+  <url>
     <loc>https://roche.github.io/rtables/main/reference/add_combo_levels.html</loc>
   </url>
   <url>
@@ -163,6 +166,9 @@
     <loc>https://roche.github.io/rtables/main/reference/do_base_split.html</loc>
   </url>
   <url>
+    <loc>https://roche.github.io/rtables/main/reference/drop_facet_levels.html</loc>
+  </url>
+  <url>
     <loc>https://roche.github.io/rtables/main/reference/export_as_pdf.html</loc>
   </url>
   <url>
@@ -233,6 +239,12 @@
   </url>
   <url>
     <loc>https://roche.github.io/rtables/main/reference/make_col_row_df.html</loc>
+  </url>
+  <url>
+    <loc>https://roche.github.io/rtables/main/reference/make_split_fun.html</loc>
+  </url>
+  <url>
+    <loc>https://roche.github.io/rtables/main/reference/make_split_result.html</loc>
   </url>
   <url>
     <loc>https://roche.github.io/rtables/main/reference/manual_cols.html</loc>
@@ -341,6 +353,9 @@
   </url>
   <url>
     <loc>https://roche.github.io/rtables/main/reference/tree_children.html</loc>
+  </url>
+  <url>
+    <loc>https://roche.github.io/rtables/main/reference/trim_levels_in_facets.html</loc>
   </url>
   <url>
     <loc>https://roche.github.io/rtables/main/reference/trim_levels_to_map.html</loc>

@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -601,6 +595,44 @@ browser</dd>
           <code><a href="make_col_df.html">make_col_df()</a></code> 
         </dt>
         <dd>Column Layout Summary</dd>
+      </dl></div><div class="section level2">
+      <h2 id="custom-split-functions">Custom Split Functions<a class="anchor" aria-label="anchor" href="#custom-split-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="make_split_fun.html">make_split_fun()</a></code> 
+        </dt>
+        <dd>Create a Custom Splitting Function</dd>
+      </dl><dl><dt>
+          
+          <code><a href="drop_facet_levels.html">drop_facet_levels()</a></code> 
+        </dt>
+        <dd>Preprocessing Functions for use in make_split_fun</dd>
+      </dl><dl><dt>
+          
+          <code><a href="trim_levels_in_facets.html">trim_levels_in_facets()</a></code> 
+        </dt>
+        <dd>Trim Levels of Another Variable From Each Facet (Postprocessing split step)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_combo_facet.html">add_combo_facet()</a></code> <code><a href="add_combo_facet.html">add_overall_facet()</a></code> 
+        </dt>
+        <dd>Add a combination facet in postprocessing</dd>
+      </dl><dl><dt>
+          
+          <code><a href="make_split_result.html">make_split_result()</a></code> <code><a href="make_split_result.html">add_to_split_result()</a></code> 
+        </dt>
+        <dd>Construct split result object
+These functions can be used to create or add to a split result in functions which
+implement core splitting or post-processing within a custom split function.</dd>
       </dl></div><div class="section level2">
       <h2 id="tabletree-framework-accessor-functions">TableTree Framework Accessor Functions<a class="anchor" aria-label="anchor" href="#tabletree-framework-accessor-functions"></a></h2>
       
