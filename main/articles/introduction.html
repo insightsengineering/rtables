@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://Roche.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-02-17</h4>
+            <h4 data-toc-skip class="date">2023-02-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/roche/rtables/blob/HEAD/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
@@ -327,6 +321,52 @@ This cell value can also be calculated manually:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [1] 38.22447</span></span></code></pre>
+<p>Row structure can also be used to group the table into titled groups
+of pages during rendering. We do this via ‘page by splits’, which are
+declared via <code>page_by = TRUE</code> within a call to
+<code>split_rows_by</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span>, page_by <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  </span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">df</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_as_txt.html">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, page_type <span class="op">=</span> <span class="st">"letter"</span>,</span>
+<span>                  page_break <span class="op">=</span> <span class="st">"\n\n~~~~~~ Page Break ~~~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co"># </span></span>
+<span><span class="co"># country: CAN</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co">#                Arm A           Arm B    </span></span>
+<span><span class="co">#            Female   Male   Female   Male</span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># Left                                    </span></span>
+<span><span class="co">#   mean      38.9    40.4    40.3    37.7</span></span>
+<span><span class="co"># Right                                   </span></span>
+<span><span class="co">#   mean      36.6    40.2    40.2    40.6</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ~~~~~~ Page Break ~~~~~~</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># country: USA</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co">#                Arm A           Arm B    </span></span>
+<span><span class="co">#            Female   Male   Female   Male</span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># Left                                    </span></span>
+<span><span class="co">#   mean      40.4    39.7    39.2    40.1</span></span>
+<span><span class="co"># Right                                   </span></span>
+<span><span class="co">#   mean      36.9    39.8    38.5    39.0</span></span></code></pre>
+<p>We go into more detail on page-by splits and how to control the
+page-group specific titles in the Title and footer vignette.</p>
+<p>Note that if you print or render a table without pagination, the
+page_by splits are currently rendered as normal row splits. This may
+change in future releases.</p>
 </div>
 <div class="section level3">
 <h3 id="adding-group-information">Adding Group Information<a class="anchor" aria-label="anchor" href="#adding-group-information"></a>
@@ -344,7 +384,7 @@ content information and turn the <code>CAN</code> label row into a
 content row the <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code> function is
 required. By default, the count (<code>nrows()</code>) and percentage of
 data relative to the column associated data is calculated:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -363,7 +403,7 @@ data relative to the column associated data is calculated:</p>
 <span><span class="co">#   mean      39.2         39.7         38.9         39.6</span></span></code></pre>
 <p>The relative percentage for average age of female Canadians is
 calculated as follows:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span></span>
 <span><span class="va">df_col_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span> <span class="op">&amp;</span> <span class="va">df</span><span class="op">$</span><span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span></span>
 <span></span>
@@ -374,7 +414,7 @@ calculated as follows:</p>
 column.</p>
 <p>We can further split the row space by dividing each country by
 handedness:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -400,7 +440,7 @@ handedness:</p>
 <span><span class="co">#     mean      36.9         39.8         38.5         39.0</span></span></code></pre>
 <p>Next, we further add a count and percentage summary for handedness
 within each country:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -435,7 +475,7 @@ number of functions.</p>
 <p>The <code><a href="../reference/table_structure.html">table_structure()</a></code> function prints a summary of a
 table’s row structure at one of two levels of detail. By default, it
 summarizes the structure at the subtable level.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [TableTree] country</span></span>
 <span><span class="co">#  [TableTree] CAN [cont: 1 x 4]</span></span>
@@ -454,7 +494,7 @@ summarizes the structure at the subtable level.</p>
 however, it provides a more detailed row-level summary, which acts as a
 useful alternative to how we might normally use the <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code>
 function to interrogate compound nested lists.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span>, detail <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># TableTree: [country] (country)</span></span>
 <span><span class="co">#   labelrow: [country] (country) - &lt;not visible&gt;</span></span>
@@ -535,7 +575,7 @@ the table’s structure. Most useful for introspection purposes are the
 <code>label</code>, <code>name</code>, <code>abs_rownumber</code>,
 <code>path</code> and <code>node_class</code> columns (the remainder of
 information in the returned data.frame is used for pagination)</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label  name abs_rownumber         path node_class</span></span>
 <span><span class="co"># 1    CAN   CAN             1 country,.... ContentRow</span></span>
@@ -553,7 +593,7 @@ but setting <code>visible_only</code> to <code>FALSE</code> gives us a
 structural summary of the table, including the full hierarchy of
 subtables, including those that aren’t represented directly by any
 visible rows:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label          name abs_rownumber         path      node_class</span></span>
 <span><span class="co"># 1              country            NA      country       TableTree</span></span>
@@ -591,7 +631,7 @@ different, indicating whether only <em>leaf</em> columns should be
 summarized (<code>TRUE</code>, the default) or whether higher level
 groups of columns, analogous to subtables in row space, should be
 summarized as well.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_df.html">make_col_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#     name  label abs_pos         path pos_in_siblings n_siblings leaf_indices</span></span>
 <span><span class="co"># 1 Female Female       1 arm, Arm....               1          2            1</span></span>
@@ -603,7 +643,7 @@ summarized as well.</p>
 <span><span class="co"># 2          1                       0</span></span>
 <span><span class="co"># 3          1                       0</span></span>
 <span><span class="co"># 4          1                       0</span></span></code></pre>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_df.html">make_col_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#     name  label abs_pos         path pos_in_siblings n_siblings leaf_indices</span></span>
 <span><span class="co"># 1  Arm A  Arm A      NA   arm, Arm A               1          2         1, 2</span></span>
@@ -625,7 +665,7 @@ summarized as well.</p>
 <code>node_class</code> and <code>path</code> information (in the row
 case), or the <code>label</code> and <code>path</code> information (in
 the column case), indented to illustrate table structure:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname     node_class    path                                        </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————</span></span>
@@ -639,7 +679,7 @@ the column case), indented to illustrate table structure:</p>
 <span><span class="co">#     mean    DataRow       country, USA, handed, Left, age, mean       </span></span>
 <span><span class="co">#   Right     ContentRow    country, USA, handed, Right, @content, Right</span></span>
 <span><span class="co">#     mean    DataRow       country, USA, handed, Right, age, mean</span></span></code></pre>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># label       path                      </span></span>
 <span><span class="co"># ——————————————————————————————————————</span></span>
