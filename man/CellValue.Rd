@@ -23,7 +23,7 @@ formatter or returned when extracted}
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{colspan}{integer(1). Columnspan value.}
+\item{colspan}{integer(1). Column span value.}
 
 \item{label}{character(1). A label (not to be confused with the name) for the
 object/structure.}
@@ -33,7 +33,7 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{footnotes}{list or NULL. Referential footnote messages for the cell.}
+\item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
 It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}

@@ -29,14 +29,16 @@ non_ref_rcell(
 )
 }
 \arguments{
-\item{x}{ANY. Cell value}
+\item{x}{ANY. Cell value.}
 
-\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
-then the \code{format} is applied}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to \code{x}. See
+\code{\link[formatters]{list_valid_format_labels}} for currently supported
+format labels.}
 
-\item{colspan}{integer(1). Columnspan value.}
+\item{colspan}{integer(1). Column span value.}
 
-\item{label}{character(1). Label or Null. If non-null, it will be looked at
+\item{label}{character(1). Label or \code{NULL}. If non-null, it will be looked at
 when determining row labels.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
@@ -44,7 +46,7 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{footnotes}{list or NULL. Referential footnote messages for the cell.}
+\item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
 It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
@@ -75,6 +77,6 @@ the reference column, this value otherwise}, and should be passed the value
 of \code{.in_ref_col} when it is used.
 }
 \note{
-currently column spanning is only supported for defining header
+Currently column spanning is only supported for defining header
 structure.
 }

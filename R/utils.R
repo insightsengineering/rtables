@@ -119,6 +119,10 @@ chk_rtables_align <- function(algn) {
 #' to the `ctx`
 #' @export
 spl_context_to_disp_path <- function(ctx) {
+    ## this can happen in the first split in column space, but
+    ## should never happen in row space
+    if(length(ctx$split) == 0)
+        return("root")
     if(ctx$split[1] == "root" && ctx$value[1] == "root")
         ctx <- ctx[-1, ]
     ret <- paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),

@@ -49,8 +49,10 @@ desc
 df
 dimensioned
 disp
+DM
 dotabulation
 dplyr
+eachother
 ElementaryTable
 ethnicities
 exargs
@@ -106,6 +108,7 @@ mordig
 multivar
 multivars
 MultiVarSplit
+mysplfun
 na
 navbar
 ncol
@@ -117,6 +120,8 @@ Paszty
 pathing
 Phuse
 pos
+Postprocessing
+postprocessing
 powerpoint
 Pre
 pre
