@@ -174,6 +174,27 @@ In this table the data used to derive the first data cell (average of age of fem
 mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
 ```
 
+Row structure can also be used to group the table into titled groups of pages during rendering. We do this via 'page by splits', which are declared via `page_by = TRUE` within a call to `split_rows_by`:
+
+```{r}
+lyt <- basic_table() %>%
+  split_cols_by("arm") %>%
+  split_cols_by("gender") %>%
+  split_rows_by("country", page_by = TRUE) %>%
+  split_rows_by("handed") %>%  
+  analyze("age", afun = mean, format = "xx.x")
+
+tbl <- build_table(lyt, df)
+cat(export_as_txt(tbl, page_type = "letter",
+                  page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
+```
+
+We go into more detail on page-by splits and how to control the page-group specific titles in the
+Title and footer vignette.
+
+Note that if you print or render a table without pagination, the page_by splits are currently
+rendered as normal row splits. This may change in future releases.
+
 ### Adding Group Information
 
 When adding row splits we get by default label rows for each split level, for example `CAN` and `USA` in the table above. Besides the column space subsetting, we have now further subsetted the data for each cell. It is often useful when defining a row splitting to display information about each row group. In `rtables` this is referred to as content information, i.e. `mean()` on row 2 is a descendant of `CAN` (visible via the indenting, though the table has an underlying tree structure that is not of importance for this vignette). In order to add content information and turn the `CAN` label row into a content row the `summarize_row_groups()` function is required. By default, the count (`nrows()`) and percentage of data relative to the column associated data is calculated:
@@ -231,6 +252,7 @@ lyt <- basic_table() %>%
 tbl <- build_table(lyt, df)
 tbl
 ```
+
 
 ## Introspecting `rtables` Table Objects
 
@@ -313,6 +335,3 @@ In this vignette you have learned:
 * tables are a form of visualization of data
 
 The other vignettes in the `rtables` package will provide more detailed information about the `rtables` package. We recommend that you continue with the [`tabulation_dplyr`](https://roche.github.io/rtables/main/articles/tabulation_dplyr.html) vignette which compares the information derived by the table in this vignette using `dplyr`.
-
-
-
