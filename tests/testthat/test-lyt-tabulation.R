@@ -1173,5 +1173,5 @@ test_that("error when ref_group value not a level of var when using split_cols_b
     lyt <- basic_table() %>%
         split_cols_by("ARM", ref_group = "test_level")
     expect_error({tbl <- build_table(lyt, DM)},
-                 '"test_level" was not present in the levels of ARM in the data.')
+                 'Reference group "test_level" was not present in the levels of ARM in the data.')
 })
