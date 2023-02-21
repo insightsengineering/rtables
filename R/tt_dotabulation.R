@@ -1251,9 +1251,8 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
         }
     }
     if (!bline %in% vals) {
-        stop(paste(
-            "The ref_group value specified for split_cols_by was not present in the levels of", 
-            spl_payload(lyt), "in the data."
+        stop(paste0(
+            '"', bline, '"', ' was not present in the levels of ', spl_payload(lyt), ' in the data.'
         ))
     }
     pos <- match(bline, vals)

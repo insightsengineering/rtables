@@ -1171,7 +1171,7 @@ test_that("error when inset < 0 or non-number", {
 
 test_that("error when ref_group value not a level of var when using split_cols_by", {
     lyt <- basic_table() %>%
-        split_cols_by("ARM", ref_group = "test")
+        split_cols_by("ARM", ref_group = "test_level")
     expect_error({tbl <- build_table(lyt, DM)},
-                 "The ref_group value specified for split_cols_by was not present in the levels of ARM in the data.")
+                 '"test_level" was not present in the levels of ARM in the data.')
 })
