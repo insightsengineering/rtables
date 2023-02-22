@@ -326,7 +326,7 @@ test_that("column labeling works correctly when value label var is a factor", {
 
 ## pathing regression tests
 test_that("pathing works", {
-    ## issue https://github.com/Roche/rtables/issues/172
+    ## issue https://github.com/insightsengineering/rtables/issues/172
     result_overall <- basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM") %>%
         add_overall_col("overall") %>%
@@ -336,7 +336,7 @@ test_that("pathing works", {
     va <- value_at(result_overall, c("AGE", "Mean"), c("ARM", "C: Combination"))
     expect_identical(va, result_overall[2, 3, drop = TRUE])
 
-    ## issue https://github.com/Roche/rtables/issues/178
+    ## issue https://github.com/insightsengineering/rtables/issues/178
     t2 <- basic_table() %>%
         split_cols_by("ARMCD") %>%
         split_rows_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
@@ -353,7 +353,7 @@ test_that("pathing works", {
                      lapply(split(ex_adsl$AGE, ex_adsl$ARMCD), mean))
 })
 
-## issue https://github.com/Roche/rtables/issues/175
+## issue https://github.com/insightsengineering/rtables/issues/175
 test_that("pagination works on tables with only 1 row", {
     tt <- rtable(header = " ", rrow("", "NUll report"))
     expect_identical(nrow(tt), 1L)
@@ -372,7 +372,7 @@ test_that("in_rows doesn't clobber cell format when only 1 row", {
 })
 
 
-## newlabels works in reorder_split_levels (https://github.com/Roche/rtables/issues/191)
+## newlabels works in reorder_split_levels (https://github.com/insightsengineering/rtables/issues/191)
 
 test_that("newlabels works in reorder_split_levels", {
 
@@ -394,7 +394,7 @@ test_that("newlabels works in reorder_split_levels", {
 
 
 
-## https://github.com/Roche/rtables/issues/198
+## https://github.com/insightsengineering/rtables/issues/198
 test_that("no extraneous footnote attribute", {
 
     r1 <- in_rows(
@@ -415,7 +415,7 @@ test_that("no extraneous footnote attribute", {
 })
 
 
-## https://github.com/Roche/rtables/issues/200
+## https://github.com/insightsengineering/rtables/issues/200
 # nolint start
 test_that("no max is -Inf warnings from make_row_df when content rows exist in places that don't have any child rows in the subsequent split", {
 # nolint end
@@ -440,7 +440,7 @@ test_that("no max is -Inf warnings from make_row_df when content rows exist in p
 
 })
 
-## discovered while preparing response for https://github.com/Roche/rtables/issues/307
+## discovered while preparing response for https://github.com/insightsengineering/rtables/issues/307
 test_that("specifying function format with no cfun in summarize_row_groups works", {
 
     formfun <- function(x, output) if(x[1] == 0) "0" else format_value(x, "xx (xx.x%)", output = output)
@@ -458,7 +458,7 @@ test_that("specifying function format with no cfun in summarize_row_groups works
     expect_identical(mat$strings[4, 2, drop = TRUE], "0")
 })
 
-## https://github.com/Roche/rtables/issues/314
+## https://github.com/insightsengineering/rtables/issues/314
 test_that("child_label = hidden does not affect tree structure/pathing", {
 
     df <- expand.grid(

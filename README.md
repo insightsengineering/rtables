@@ -1,10 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rtables <a href='https://github.com/Roche/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
+# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
 [![Build
-Status](https://travis-ci.org/Roche/rtables.svg?branch=master)](https://travis-ci.org/Roche/rtables/)
+Status](https://travis-ci.org/insightsengineering/rtables.svg?branch=master)](https://travis-ci.org/insightsengineering/rtables/)
 
 ## Reporting tables with R
 
@@ -52,7 +52,7 @@ with:
 
 ``` r
 remotes::install_github("insightsengineering/formatters")
-remotes::install_github("Roche/rtables")
+remotes::install_github("insightsengineering/rtables")
 ```
 
 Note you might need to set your `GITHUB_PAT` environment variable in
@@ -60,7 +60,7 @@ order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN
 releases) can be found in the [releases
-list](https://github.com/Roche/rtables/releases)
+list](https://github.com/insightsengineering/rtables/releases)
 
 ## Usage
 

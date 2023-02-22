@@ -1,5 +1,5 @@
 current_repo:
-  repo: Roche/rtables
+  repo: insightsengineering/rtables
   host: https://github.com
 upstream_repos:
   insightsengineering/formatters:
