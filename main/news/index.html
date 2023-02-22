@@ -37,7 +37,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/roche/rtables">
+  <a class="external-link nav-link" href="https://github.com/insightsengineering/rtables">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -50,7 +50,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/roche/rtables/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -146,7 +146,7 @@
 <ul><li>Support for section dividers (<code>section_div</code> argument in <code>split_rows_by*</code> function)</li>
 <li>Updated versioned dependency on <code>formatters</code> to <code>&gt;=0.3.2.3</code>
 </li>
-<li>Equivalent split functions with different enclosing environments (e.g., 2 identical calls to <code>add_combo_levels</code> <a href="https://github.com/roche/rtables/issues/340" class="external-link">#340</a>) no longer block <code>rbind</code>ing</li>
+<li>Equivalent split functions with different enclosing environments (e.g., 2 identical calls to <code>add_combo_levels</code> <a href="https://github.com/insightsengineering/rtables/issues/340" class="external-link">#340</a>) no longer block <code>rbind</code>ing</li>
 <li>Fixed various documentation bugs where description section was being added to header.</li>
 </ul></div>
     <div class="section level2">
@@ -155,7 +155,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1.3" id="rtables-0513">rtables 0.5.1.3<a class="anchor" aria-label="anchor" href="#rtables-0513"></a></h2>
-<ul><li>Throw informative error messages when custom analysis, content or split functions fail (<a href="https://github.com/roche/rtables/issues/329" class="external-link">#329</a>)</li>
+<ul><li>Throw informative error messages when custom analysis, content or split functions fail (<a href="https://github.com/insightsengineering/rtables/issues/329" class="external-link">#329</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1.2" id="rtables-0512">rtables 0.5.1.2<a class="anchor" aria-label="anchor" href="#rtables-0512"></a></h2>
@@ -166,11 +166,11 @@
 <ul><li>
 <code>col_counts</code> getter and setter now accept <code>path</code> argument.</li>
 <li>empty levels of a splitting variable now result in an informative error message (character and factor cases).</li>
-<li>fixed bug in handling of column extra arguments that was preventing cbinding tables from working correctly (<a href="https://github.com/roche/rtables/issues/324" class="external-link">#324</a>)</li>
+<li>fixed bug in handling of column extra arguments that was preventing cbinding tables from working correctly (<a href="https://github.com/insightsengineering/rtables/issues/324" class="external-link">#324</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="rtables-051">rtables 0.5.1<a class="anchor" aria-label="anchor" href="#rtables-051"></a></h2><p class="text-muted">CRAN release: 2022-05-21</p>
-<ul><li>empty factor levels are now <em>not</em> dropped for column splits when ref_group is set (<a href="https://github.com/roche/rtables/issues/323" class="external-link">#323</a>)</li>
+<ul><li>empty factor levels are now <em>not</em> dropped for column splits when ref_group is set (<a href="https://github.com/insightsengineering/rtables/issues/323" class="external-link">#323</a>)</li>
 <li>
 <code>linesep</code> argument to <code>toString</code> and related functions renamed to <code>hsep</code>
 </li>
@@ -180,7 +180,7 @@
 <li>New <code>hsep</code> argument to <code>build_table</code> which sets the horizontal separator for the constructed table (and subtables thereof)</li>
 <li>New <code>horizontal_sep</code> and <code>horizontal_sep&lt;-</code> accessors for constructed tables, the latter of which is mandatorily recursive.</li>
 <li>
-<code>split_rows_by(var, child_labels="hidden")</code> no longer removes the structural subtable corresponding to levels of <code>var</code> (<a href="https://github.com/roche/rtables/issues/314" class="external-link">#314</a>)</li>
+<code>split_rows_by(var, child_labels="hidden")</code> no longer removes the structural subtable corresponding to levels of <code>var</code> (<a href="https://github.com/insightsengineering/rtables/issues/314" class="external-link">#314</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="rtables-050">rtables 0.5.0<a class="anchor" aria-label="anchor" href="#rtables-050"></a></h2><p class="text-muted">CRAN release: 2022-04-01</p>
@@ -191,8 +191,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1.0004" id="rtables-0410004">rtables 0.4.1.0004<a class="anchor" aria-label="anchor" href="#rtables-0410004"></a></h2>
-<ul><li>Fix bug when function format combined with NULL cfun caused error (<a href="https://github.com/roche/rtables/issues/307" class="external-link">#307</a>)</li>
-<li>Fix bug in <code>path_enriched_df</code> (which powers tsv export), related to (<a href="https://github.com/roche/rtables/issues/308" class="external-link">#308</a>)</li>
+<ul><li>Fix bug when function format combined with NULL cfun caused error (<a href="https://github.com/insightsengineering/rtables/issues/307" class="external-link">#307</a>)</li>
+<li>Fix bug in <code>path_enriched_df</code> (which powers tsv export), related to (<a href="https://github.com/insightsengineering/rtables/issues/308" class="external-link">#308</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1.0002" id="rtables-0410002">rtables 0.4.1.0002<a class="anchor" aria-label="anchor" href="#rtables-0410002"></a></h2>
@@ -222,7 +222,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.8.9001" id="rtables-0389001">rtables 0.3.8.9001<a class="anchor" aria-label="anchor" href="#rtables-0389001"></a></h2>
-<ul><li>new <code>trim_levels_to_map</code> split function based on wwojtek’s work in <a href="https://github.com/roche/rtables/issues/203" class="external-link">#203</a></li>
+<ul><li>new <code>trim_levels_to_map</code> split function based on wwojtek’s work in <a href="https://github.com/insightsengineering/rtables/issues/203" class="external-link">#203</a></li>
 <li>support for column referential footnotes</li>
 <li>support for adding footnotes to existing table via <code>fnotes_at_path&lt;-</code> function</li>
 <li>
@@ -241,17 +241,17 @@
 <li>
 <code>as_html</code> refactored to support newlines while respecting table structure</li>
 <li>self_extent column of df returned by <code>make_row_df</code> now reflects extent <em>in lines</em>, thus will return larger values if the row-label or any cell values contain newlines.</li>
-<li>Fix bug where tables output using <code>as_html</code> (or viewed in <code>Viewer</code>) were missing the table class attribute (<a href="https://github.com/roche/rtables/issues/194" class="external-link">#194</a>)</li>
-<li>inserting a DataRow with incorrect number of columns is now an error (<a href="https://github.com/roche/rtables/issues/199" class="external-link">#199</a>)</li>
+<li>Fix bug where tables output using <code>as_html</code> (or viewed in <code>Viewer</code>) were missing the table class attribute (<a href="https://github.com/insightsengineering/rtables/issues/194" class="external-link">#194</a>)</li>
+<li>inserting a DataRow with incorrect number of columns is now an error (<a href="https://github.com/insightsengineering/rtables/issues/199" class="external-link">#199</a>)</li>
 <li>Referential footer machinery now works in colspan case.</li>
-<li>Fix extraneous footnote attribute bug (<a href="https://github.com/roche/rtables/issues/198" class="external-link">#198</a>)</li>
-<li>Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (<a href="https://github.com/roche/rtables/issues/200" class="external-link">#200</a>)</li>
+<li>Fix extraneous footnote attribute bug (<a href="https://github.com/insightsengineering/rtables/issues/198" class="external-link">#198</a>)</li>
+<li>Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (<a href="https://github.com/insightsengineering/rtables/issues/200" class="external-link">#200</a>)</li>
 <li>Resync NEWS.md file</li>
 <li>Introduce titles and footnotes</li>
 <li>Support automatic population of top-left</li>
 <li>Introduce referential footnote support for cells and row labels</li>
 <li>Added <code>vars_in_layout</code> to list (explicitly named only) variables used in a layout</li>
-<li>Fix column label ordering bug when value label variable is a factor (<a href="https://github.com/roche/rtables/issues/173" class="external-link">#173</a>)</li>
+<li>Fix column label ordering bug when value label variable is a factor (<a href="https://github.com/insightsengineering/rtables/issues/173" class="external-link">#173</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.7" id="rtables-037">rtables 0.3.7<a class="anchor" aria-label="anchor" href="#rtables-037"></a></h2>
@@ -333,7 +333,7 @@
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9034" id="rtables-032179034">rtables 0.3.2.17.9034<a class="anchor" aria-label="anchor" href="#rtables-032179034"></a></h2>
 <ul><li>Fix internal <code>value_formats</code> accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)</li>
 <li>
-<code>rrow</code> constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/roche/rtables/issues/112" class="external-link">#112</a></li>
+<code>rrow</code> constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/insightsengineering/rtables/issues/112" class="external-link">#112</a></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9033" id="rtables-032179033">rtables 0.3.2.17.9033<a class="anchor" aria-label="anchor" href="#rtables-032179033"></a></h2>
