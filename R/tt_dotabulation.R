@@ -65,7 +65,7 @@ gen_onerv <- function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
     spl_context$cur_col_subset <- col_parent_inds
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
-    ## workaround for https://github.com/Roche/rtables/issues/159
+    ## workaround for https://github.com/insightsengineering/rtables/issues/159
     if(NROW(dfpart) > 0) {
         inds <- eval(csub, envir = dfpart)
         dat <- dfpart[inds, , drop = FALSE]

@@ -1,5 +1,5 @@
 current_repo:
-  repo: Roche/rtables
+  repo: insightsengineering/rtables
   host: https://github.com
 upstream_repos:
   insightsengineering/formatters:
@@ -38,4 +38,7 @@ downstream_repos:
     host: https://github.com
   insightsengineering/tern.gee:
     repo: insightsengineering/tern.gee
+    host: https://github.com
+  insightsengineering/scda.test:
+    repo: insightsengineering/scda.test
     host: https://github.com

@@ -314,7 +314,7 @@ test_that("missing vars caught", {
                  ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
 })
 
-# https://github.com/Roche/rtables/issues/329
+# https://github.com/insightsengineering/rtables/issues/329
 test_that("error localization works", {
 
     afun <- function(x, .spl_context) {
@@ -1086,7 +1086,7 @@ test_that("cut functions work", {
 
 })
 
-## https://github.com/Roche/rtables/issues/323
+## https://github.com/insightsengineering/rtables/issues/323
 
 test_that("empty factor levels represented correctly when ref group is set", {
 

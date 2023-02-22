@@ -1,4 +1,4 @@
-url: https://roche.github.io/rtables
+url: https://insightsengineering.github.io/rtables
 
 template:
   bootstrap: 5
@@ -8,7 +8,7 @@ navbar:
   type: default
   right:
     - icon: fa-github fa-lg
-      href: https://github.com/roche/rtables
+      href: https://github.com/insightsengineering/rtables
 
 
 articles:
