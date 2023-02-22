@@ -39,3 +39,6 @@ downstream_repos:
   insightsengineering/tern.gee:
     repo: insightsengineering/tern.gee
     host: https://github.com
+  insightsengineering/scda.test:
+    repo: insightsengineering/scda.test
+    host: https://github.com
