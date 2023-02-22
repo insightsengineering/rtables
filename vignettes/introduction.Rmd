@@ -334,4 +334,4 @@ In this vignette you have learned:
 * tables can be described pre-data using layouts
 * tables are a form of visualization of data
 
-The other vignettes in the `rtables` package will provide more detailed information about the `rtables` package. We recommend that you continue with the [`tabulation_dplyr`](https://roche.github.io/rtables/main/articles/tabulation_dplyr.html) vignette which compares the information derived by the table in this vignette using `dplyr`.
+The other vignettes in the `rtables` package will provide more detailed information about the `rtables` package. We recommend that you continue with the [`tabulation_dplyr`](https://insightsengineering.github.io/rtables/main/articles/tabulation_dplyr.html) vignette which compares the information derived by the table in this vignette using `dplyr`.
