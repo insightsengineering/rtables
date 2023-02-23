@@ -83,6 +83,7 @@ setClass("LevelComboSplitValue",
          contains = "SplitValue",
          representation(combolevels = "character"))
 
+## wrapped in user-facing `add_combo_facet`
 LevelComboSplitValue <- function(val, extr, combolevels, label = val) {
     new("LevelComboSplitValue",
         value = val,

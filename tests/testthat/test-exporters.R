@@ -228,7 +228,7 @@ test_that("as_html smoke test", {
 })
 
 
-## https://github.com/Roche/rtables/issues/308
+## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
 
     my_table <- basic_table() %>%

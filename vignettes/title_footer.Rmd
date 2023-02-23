@@ -12,8 +12,11 @@ editor_options:
 ---
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, output="hide"}
 knitr::opts_chunk$set(comment = "#")
+suppressPackageStartupMessages(library(rtables))
+suppressPackageStartupMessages(library(dplyr))
+
 ```
 
 ```{css, echo=FALSE}
@@ -30,13 +33,14 @@ information, as well as three types of footer information.
 
 Header information comes in two forms that are specified directly
 (main title and subtitles), as well as one that is populated automatically
-as necessary (page title).
+as necessary (page title, which we will see in the next section).
 
 Similarly, footer materials come with two directly specified components:
 main footer and provenance footer, in addition to one that is computed
 when necessary: referential footnotes.
 
-`basic_table()` accepts the values for each element that can be set directly:
+`basic_table()` accepts the values for each static title and footer element
+during layout construction: 
 
 ```{r}
 library(rtables)
@@ -46,15 +50,58 @@ lyt <- basic_table(title = "Study XXXXXXXX",
                    main_footer = "Analysis was done using cool methods that are correct",
                    prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
     split_cols_by("ARM") %>%
-    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>%
     split_rows_by("STRATA1") %>%
     analyze("AGE", mean, format = "xx.x")
 
 tbl <- build_table(lyt, DM)
 cat(export_as_txt(tbl, paginate = TRUE, page_break = "\n\n\n"))
 ```
-                   
 
+# Page-by splitting
+
+We often want to split tables based on the values of one or more variables (e.g., lab measurement)
+and then paginate *separately within each of those table subsections*. In `rtables` we do this via
+*page by* row splits.
+
+Row splits can be declared page by splits by setting `page_by = TRUE` in the `split_rows_by*()`
+call, as below.
+
+When page by splits are present, page titles are generated automatically by appending the split value
+(typically a factor level, though it need not be), to the `page_prefix`, separated by a `:`. By
+default, `page_prefix` is name of the variable being split.
+
+```{r}
+lyt2 <- basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE", mean, format = "xx.x")
+
+tbl2 <- build_table(lyt2, DM)
+cat(export_as_txt(tbl2, paginate = TRUE, page_break = "\n\n~~~~ Page Break ~~~~\n\n"))
+```
+
+Page by row splits can be nested, but only within other page_by splits, they cannot
+be nested within traditional row splits. In this case, a page title for each page by split
+will be present on every resulting page, as seen below:
+
+```{r}
+lyt3 <- basic_table(title = "Study XXXXXXXX",
+                   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
+                   main_footer = "Analysis was done using cool methods that are correct",
+                   prov_footer = "file: /path/to/stuff/that/lives/there HASH:1ac41b242a") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", page_by = TRUE, page_prefix = "Patient Subset - Gender", split_fun = drop_split_levels) %>%
+    split_rows_by("STRATA1", page_by = TRUE, page_prefix = "Stratification - Strata") %>%
+    analyze("AGE", mean, format = "xx.x")
+
+tbl3 <- build_table(lyt3, DM)
+cat(export_as_txt(tbl3, paginate = TRUE, page_break = "\n\n~~~~ Page Break ~~~~\n\n"))
+```
 
 # Referential Footnotes
 
@@ -116,16 +163,31 @@ as those cannot be controlled within an analysis or content
 function.
 
 ```{r}
+## from ?tolower example slightly modified
+.simpleCap <- function(x) {
+    if(length(x) > 1)
+        return(sapply(x, .simpleCap))
+    s <- strsplit(tolower(x), " ")[[1]]
+    paste(toupper(substring(s, 1, 1)), substring(s, 2),
+          sep = "", collapse = " ")
+}
 
+adsl2 <- ex_adsl %>%
+    filter(SEX %in% c("M", "F") &
+           RACE %in% (levels(RACE)[1:3])) %>%
+    ## we trim the level names here solely due to space considerations
+    mutate(ethnicity = .simpleCap(gsub("(.*)OR.*", "\\1", RACE)),
+           RACE = factor(RACE))
+ 
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
     split_cols_by("SEX", split_fun = drop_split_levels) %>%
-    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    split_rows_by("RACE", labels_var = "ethnicity",
+                  split_fun = drop_split_levels) %>%
     summarize_row_groups() %>%
     analyze(c("AGE", "STRATA1"))
 
-tbl2 <- build_table(lyt2, ex_adsl %>% filter(SEX %in% c("M", "F") &
-                                             RACE %in% (levels(RACE)[1:3])))
+tbl2 <- build_table(lyt2, adsl2)
 tbl2
 ```
 
@@ -154,8 +216,16 @@ tbl2
 Note to step into the content table row we must add that to the path, even though we didn't
 need it to put a footnote on the full row.
 
+Currently, content row by default are named with the *label* rather than *name*, of the 
+corresponding facet. This is reflected in the output of, e.g., `row_paths_summary`
+
 ```{r}
-fnotes_at_path(tbl2, rowpath = c("RACE", "ASIAN", "@content", "ASIAN"),  c("ARM", "B: Placebo", "SEX", "F")) <- "These asian women got placebo treatments"
-tbl2
+row_paths_summary(tbl2)
 ```
 
+So we can add our footnotes to the cell like so:
+
+```{r}
+fnotes_at_path(tbl2, rowpath = c("RACE", "ASIAN", "@content", "Asian"),  c("ARM", "B: Placebo", "SEX", "F")) <- "These asian women got placebo treatments"
+tbl2
+```

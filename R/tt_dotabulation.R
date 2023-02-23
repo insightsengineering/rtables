@@ -65,7 +65,7 @@ gen_onerv <- function(csub, col, count, cextr, dfpart, func, totcount, splextra,
 
     spl_context$cur_col_subset <- col_parent_inds
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
-    ## workaround for https://github.com/Roche/rtables/issues/159
+    ## workaround for https://github.com/insightsengineering/rtables/issues/159
     if(NROW(dfpart) > 0) {
         inds <- eval(csub, envir = dfpart)
         dat <- dfpart[inds, , drop = FALSE]
@@ -1250,8 +1250,11 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
             vals <- levels(relevel(droplevels(vals), bline))
         }
     }
-
-    stopifnot(bline %in% vals)
+    if (!bline %in% vals) {
+        stop(paste0(
+            'Reference group "', bline, '"', ' was not present in the levels of ', spl_payload(lyt), ' in the data.'
+        ))
+    }
     pos <- match(bline, vals)
     ## same order except ref_group always first
     vals <- c(bline, vals[-pos])

@@ -5,12 +5,16 @@
 #'
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
-#' @param x ANY. Cell value
-#' @param label character(1). Label or Null. If non-null, it will be looked at
+#' @param x ANY. Cell value.
+#' @param format character(1) or function. The format label (string) or 
+#'   formatter function to apply to `x`. See 
+#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#'   format labels.
+#' @param label character(1). Label or `NULL`. If non-null, it will be looked at
 #'   when determining row labels.
-#' @param colspan integer(1). Columnspan value.
-#' @param footnotes list or NULL. Referential footnote messages for the cell.
-#' @note currently column spanning is only supported for defining header
+#' @param colspan integer(1). Column span value.
+#' @param footnotes list or `NULL`. Referential footnote messages for the cell.
+#' @note Currently column spanning is only supported for defining header
 #'   structure.
 #' @rdname rcell
 #' @inherit CellValue return

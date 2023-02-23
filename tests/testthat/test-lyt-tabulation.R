@@ -314,7 +314,7 @@ test_that("missing vars caught", {
                  ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
 })
 
-# https://github.com/Roche/rtables/issues/329
+# https://github.com/insightsengineering/rtables/issues/329
 test_that("error localization works", {
 
     afun <- function(x, .spl_context) {
@@ -1086,7 +1086,7 @@ test_that("cut functions work", {
 
 })
 
-## https://github.com/Roche/rtables/issues/323
+## https://github.com/insightsengineering/rtables/issues/323
 
 test_that("empty factor levels represented correctly when ref group is set", {
 
@@ -1167,4 +1167,11 @@ test_that("error when inset < 0 or non-number", {
                  "invalid table_inset value")
     expect_error(expect_warning(basic_table(inset = "haha")),
                  "invalid table_inset value")
+})
+
+test_that("error when ref_group value not a level of var when using split_cols_by", {
+    lyt <- basic_table() %>%
+        split_cols_by("ARM", ref_group = "test_level")
+    expect_error({tbl <- build_table(lyt, DM)},
+                 'Reference group "test_level" was not present in the levels of ARM in the data.')
 })

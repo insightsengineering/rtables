@@ -1,4 +1,4 @@
-url: https://roche.github.io/rtables
+url: https://insightsengineering.github.io/rtables
 
 template:
   bootstrap: 5
@@ -8,7 +8,7 @@ navbar:
   type: default
   right:
     - icon: fa-github fa-lg
-      href: https://github.com/roche/rtables
+      href: https://github.com/insightsengineering/rtables
 
 
 articles:
@@ -26,6 +26,7 @@ articles:
     - title_footer
     - custom_appearance
     - advanced_usage
+    - formats_precedence
 
 reference:
 
@@ -163,6 +164,14 @@ reference:
     - paginate_table
     - formatters::make_row_df
     - make_col_df
+
+  - title: Custom Split Functions
+    contents:
+    - make_split_fun
+    - drop_facet_levels
+    - trim_levels_in_facets
+    - add_combo_facet
+    - make_split_result
 
   - title: TableTree Framework Accessor Functions
     contents:

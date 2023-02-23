@@ -7,13 +7,15 @@
 rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 }
 \arguments{
-\item{row.name}{if \code{NULL} then the \code{FUN} argument is deparsed and
-used as \code{row.name} of the \code{\link{rrow}}}
+\item{row.name}{if \code{NULL} then an empty string is used as
+\code{row.name} of the \code{\link{rrow}}.}
 
 \item{\dots}{cell values}
 
-\item{format}{if \code{FUN} does not return a formatted \code{\link{rcell}}
-then the \code{format} is applied}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via \code{...}. See
+\code{\link[formatters]{list_valid_format_labels}} for currently supported
+format labels.}
 
 \item{indent}{deprecated.}
 

@@ -1,0 +1,395 @@
+---
+title: "Formats Precedence and NA Handling"
+author: "Wojciech Wójciak and Gabriel Becker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formats Precedence NA Handling}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+  white-space: pre;
+}
+```
+
+## Formats Precedence
+
+A user of `rtables` package can specify the format in which the
+numbers in the reporting tables are printed. Formatting functionally
+is provided by the
+[`formatters`](https://insightsengineering.github.io/formatters/) R
+package and available formats can be listed with
+`formatters::list_valid_format_labels()` function.  The format can be
+specified by the user in a few different places. It may happen that
+for a single table layout, the format is specified in more than one
+place. In such a case, the final format that will be applied depends
+on formats precedence rules defined by `rtables`. In this vignette, we
+describe the basic rules of `rtables` formats precedence.
+
+The packages used in this vignette are:
+
+```{r, message=FALSE}
+library(rtables)
+```
+
+The examples shown in this vignette are based on the example `ADSL`
+dataset, i.e. a demographic table that summarizes the variables
+content for different population subsets (encoded in the columns).
+
+```{r}
+ADSL <- ex_adsl
+```
+
+Note that all `ex_*` data which is currently attached to the `rtables`
+package is provided by the
+[`formatters`](https://insightsengineering.github.io/formatters/)
+package and was created using the publicly available
+[`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/)
+R package.
+
+### Formats precedence and inheritance rules
+
+The format in which numbers are printed can be specified by the user
+in a few different places. In the context of the precedence, it is
+important at which level of the split hierarchy formats are
+specified. In general, there are two such levels: the **cell** level
+or the so-called **parent table** level. The concept of the cell and
+the parent table results from the way in which `rtables` package
+stores resulting tables. It models the resulting tables as
+hierarchical, tree-like objects with the cells (as leaves) containing
+multiple values. Particularly noteworthy in this context is the fact
+that the actual table splitting occurs in a row-dominant way (even if
+the column split is present in the layout). `rtables` provides
+user-end function `table_structure()` that prints the structure of a
+given table object. For a quick illustration, consider the following
+example.
+
+```{r}
+lyt <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", afun = mean)
+
+adsl_analyzed <- build_table(lyt, ADSL)
+adsl_analyzed
+table_structure(adsl_analyzed)
+```
+
+For this reporting table, there are 4 sub-tables under `SEX`
+table. These are: `F`, `M`, `U`, and `UNDIFFERENTIATED`. Each of these
+sub-tables has one sub-table `AGE`. So, e.g. for the top sub-table
+`AGE`, its nearest parent table is `F`.
+
+The concept of hierarchical, tree-like representation of resulting
+tables, translates directly to formats precedence and inheritance
+rules. As a general principle, the format being finally applied for
+the cell is the one that is the most specific, that is, the one which
+is the closest to that cell in a given path in the tree. Hence, the
+precedence-inheritance chain looks like below.
+
+```
+cell <- parent_table <- parent_table <- ... <- parent_table
+```
+
+In such a chain, the most outer `parent_table` is the least specific
+place to specify the format, while the `cell` is the most specific
+one. In case the format is specified by the user in more than one
+place, the one which is more specific will be applied for the cell. If
+no specific format has been selected by the user for the split, then
+the default format will be applied. The default format is "xx" and it
+yields the same formatting as `as.character()` function. In the
+following sections of this vignette, we will illustrate the format
+precedence rules with a few examples.
+
+### Standard format
+
+Below is a simple layout that does not explicitly set any specific
+format for the output of the analysis function used in this
+example. In such a case, the default format will be used.
+
+```{r}
+lyt0 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = mean)
+
+build_table(lyt0, ADSL)
+```
+
+### Cell format
+
+The format of the cell can be explicitly specified through `rcell()`
+or `in_rows()` functions. The former is essentially a collection of
+data objects while the latter is a collection of `rcell()` objects. As
+already mentioned, this is the most specific place where the format
+can be specified by the user.
+
+```{r}
+lyt1 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    rcell(mean(x), format = "xx.xx", label = "Mean")
+  })
+
+build_table(lyt1, ADSL)
+
+lyt1a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x)),
+      .formats = "xx.xx"
+    )
+  })
+
+build_table(lyt1a, ADSL)
+```
+
+If the format is specified in both of these places at the same time,
+the one specified through `in_rows()`, has higher
+precedence. Technically, in this case, the format defined in `rcell()`
+will simply be overwritten by the one defined in `in_rows()`. This is
+because the format specified in `in_rows()` is applied to the cells
+not the rows (overriding the previously specified cell specific
+values), which means that the precedence rules described above are
+still in place.
+
+```{r}
+lyt2 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x), format = "xx.xxx"),
+      .formats = "xx.xx"
+    )
+  })
+
+build_table(lyt2, ADSL)
+```
+
+### Parent table format and inheritance
+
+In addition to the cell level, the format can be specified at the
+parent table level. Then, if no format has been set by the user for a
+cell, the most specific format for that cell is the one defined at the
+nearest parent split table (if any).
+
+```{r}
+lyt3 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(vars = "AGE", mean, format = "xx.x")
+
+build_table(lyt3, ADSL)
+```
+
+If the cell format was specified too, then the parent table format is
+ignored for this cell, since the cell format is treated as more
+specific.
+
+```{r}
+lyt4 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      rcell(mean(x), format = "xx.xx", label = "Mean")
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt4, ADSL)
+
+lyt4a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x)),
+        "SD" = rcell(sd(x)),
+        .formats = "xx.xx"
+      )
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt4a, ADSL)
+```
+
+In the following, slightly more complicated example, we can observe
+partial inheritance. That is, only `SD` cell inherits the parent
+table's format, while the `Mean` cell does not.
+
+```{r}
+lyt5 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x), format = "xx.xx"),
+        "SD" = rcell(sd(x))
+      )
+    },
+    format = "xx.x"
+  )
+
+build_table(lyt5, ADSL)
+```
+
+## `NA` Handling
+
+Consider the following layout and the resulting table created:
+
+```{r}
+lyt6 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", afun = mean, format = "xx.xx")
+
+build_table(lyt6, ADSL)
+```
+
+In the output, the cell corresponding to `UNDIFFERENTIATED` level of
+`SEX` and `B: Placebo drug` level of `ARM` categorical variables is
+displayed as `NA`. This happened because there were no non-`NA` values
+under this facet to compute the mean. `rtables` allows the user to
+specify a string to display when cell values are `NA`. Similar to
+formats for numbers, the user can specify a string to replace `NA`
+with the parameter `format_na_str` or `.format_na_str`. This can be
+specified at the **cell** or **parent table** level. The `NA` string
+precedence and inheritance rules are the same as those for number
+formats precedence, described in the previous section of this
+vignette. We will illustrate them with a few examples.
+
+### Replacing `NA` values at the cell level
+
+At the cell level, it is possible to replace `NA` values with a custom
+string by means of the `format_na_str` parameter in `rcell()` or
+`.format_na_str` parameter in `in_rows()`.
+
+```{r}
+lyt7 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    rcell(mean(x), format = "xx.xx", label = "Mean", format_na_str = "<missing>")
+  })
+
+build_table(lyt7, ADSL)
+
+lyt7a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x), format = "xx.xx"),
+      .format_na_strs = "<MISSING>"
+    )
+  })
+
+build_table(lyt7a, ADSL)
+```
+
+If the `NA` string is specified in both of these places at the same
+time, the one specified with `in_rows()`, has higher
+precedence. Technically, in this case, the `NA` replacement string
+defined in `rcell()` will simply be overwritten by the one defined in
+`in_rows()`. This is because the `NA` string specified in `in_rows()`
+is applied to the cells not the rows (overriding the previously
+specified cell specific values), which means that the precedence rules
+described above are still in place.
+
+```{r}
+lyt8 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", afun = function(x) {
+    in_rows(
+      "Mean" = rcell(mean(x), format = "xx.xx", format_na_str = "<missing>"),
+      .format_na_strs = "<MISSING>"
+    )
+  })
+
+build_table(lyt8, ADSL)
+```
+
+### Parent table replacement of `NA` values and inheritance principles
+
+In addition to the cell level, the string replacement for `NA` values
+can be specified at the parent table level. Then, if no replacement
+string has been specified by the user for a cell, the most specific
+`NA` string for that cell is the one defined at the nearest parent
+split table (if any).
+
+```{r}
+lyt9 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(vars = "AGE", mean, format = "xx.xx", na_str = "not available")
+
+build_table(lyt9, ADSL)
+```
+
+If the replacement string for `NA` values was specified also at the
+cell level, then the one set at the parent table level is ignored for
+this cell, as the cell level settings are treated as the most
+specific.
+
+```{r}
+lyt10 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      rcell(mean(x), format = "xx.xx", label = "Mean", format_na_str = "<missing>")
+    },
+    na_str = "not available"
+  )
+
+build_table(lyt10, ADSL)
+
+lyt10a <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x)),
+        "SD" = rcell(sd(x)),
+        .formats = "xx.xx",
+        .format_na_strs = "<missing>"
+      )
+    },
+    na_str = "not available"
+  )
+
+build_table(lyt10a, ADSL)
+```
+
+In the following, slightly more complicated example, we can observe
+partial inheritance. That is, only `SD` cell inherits the parent
+table's `NA` string, while the `Mean` cell does not.
+
+```{r}
+lyt11 <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  split_rows_by("SEX") %>%
+  analyze(
+    vars = "AGE", afun = function(x) {
+      in_rows(
+        "Mean" = rcell(mean(x), format_na_str = "<missing>"),
+        "SD" = rcell(sd(x))
+      )
+    },
+    format = "xx.xx",
+    na_str = "not available"
+  )
+
+build_table(lyt11, ADSL)
+```
