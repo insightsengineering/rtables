@@ -18,8 +18,27 @@ suppressPackageStartupMessages(library(dplyr))
 
 # rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
-[![Build Status](https://travis-ci.org/insightsengineering/rtables.svg?branch=master)](https://travis-ci.org/insightsengineering/rtables/)
 
+<!-- start badges -->
+[![Check 🛠](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml)
+[![Docs 📚](https://github.com/insightsengineering/rtables/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/rtables/)
+[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml)
+
+![GitHub forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)
+![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/rtables)
+![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/rtables)
+![GitHub last commit](https://img.shields.io/github/last-commit/insightsengineering/rtables)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/insightsengineering/rtables)
+![GitHub repo size](https://img.shields.io/github/repo-size/insightsengineering/rtables)
+![GitHub language count](https://img.shields.io/github/languages/count/insightsengineering/rtables)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/rtables?color=red\&label=open%20issues)](https://github.com/insightsengineering/rtables/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+
+[![CRAN Version](https://www.r-pkg.org/badges/version/rtables)](https://cran.r-project.org/web/packages/rtables/)
+[![Current Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple\&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
+<!-- end badges -->
 
 ## Reporting tables with R
 
@@ -70,7 +89,7 @@ found in the [releases list](https://github.com/insightsengineering/rtables/rele
 We first begin with a demographic table alike example and then show the creation of a more complex table.
 
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -86,7 +105,7 @@ lyt <- basic_table() %>%
     } else if (is.factor(x) || is.character(x)) {
       in_rows(.list = list_wrap_x(table)(x))
     } else {
-      stop("type not supproted")
+      stop("type not supported")
     }
   })
 
@@ -94,7 +113,7 @@ build_table(lyt, ex_adsl)
 ```
 
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 library(dplyr)
 

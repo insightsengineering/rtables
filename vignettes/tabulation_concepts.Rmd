@@ -27,17 +27,15 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Introduction
 
-In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using
+In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using other table packages. For this vignette we will use the following packages:
 
-For this vignette we will use the following packages:
-
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(tibble)
 library(rtables)
 ```
 
-The data we use is the following one created with random number generators:
+The data we use is the following, created with random number generators:
 
 ```{r}
 add_subgroup <- function(x) paste0(tolower(x), sample(1:3, length(x), TRUE))
@@ -107,7 +105,7 @@ bar_label        bar(x_A)  bar(x_B)  bar(x_C)
 zoo_label        zoo(x_A)  zoo(x_B)  zoo(x_C)
 ```
 
-where
+where:
 
 ```{r}
 x_A <- df_A$x
@@ -115,7 +113,7 @@ x_B <- df_B$x
 x_C <- df_C$x
 ```
 
-The function passed to `afun` is evaluated using argument matching, if `afun` has an argument `x` the analysis variable specified in `vars` in `analyze()` is passed to the function and if `afun` has an argument `df` then set subset of the dataset is passed to `afun`. So,
+The function passed to `afun` is evaluated using argument matching. If `afun` has an argument `x` the analysis variable specified in `vars` in `analyze()` is passed to the function, and if `afun` has an argument `df` then a subset of the dataset is passed to `afun`:
 
 ```{r}
 lyt2 <- basic_table() %>%
@@ -128,7 +126,7 @@ tbl2 <- build_table(lyt2, df)
 tbl2
 ```
 
-Note that it is also possible that a function returns multiple rows with `in_rows()`
+Note that it is also possible that a function returns multiple rows with `in_rows()`:
 
 ```{r}
 lyt3 <- basic_table() %>%
@@ -150,7 +148,7 @@ tbl3 <- build_table(lyt3, df)
 tbl3
 ```
 
-which is how we recommend to specify the row names explicitly.
+This is how we recommend you specify the row names explicitly.
 
 ## Tabulation With Row Structure
 
@@ -221,7 +219,7 @@ matrix(
 )
 ```
 
-In `rtables` this type of tabulation is done with `layouts`
+In `rtables` this type of tabulation is done with `layouts`:
 
 ```{r}
 lyt4 <- basic_table() %>%
@@ -233,7 +231,7 @@ tbl4 <- build_table(lyt4, df)
 tbl4
 ```
 
-or if we would not want to see the `foo` label we would have to use
+or if we would not want to see the `foo` label we would have to use:
 
 ```{r}
 lyt5 <- basic_table() %>%
@@ -245,7 +243,7 @@ tbl5 <- build_table(lyt5, df)
 tbl5
 ```
 
-but now the row labels disappeared. This is because `cfun` needs to define it's row label. So let's redefine `foo`:
+but now the row labels have disappeared. This is because `cfun` needs to define its row label. So let's redefine `foo`:
 
 
 ```{r}
@@ -265,7 +263,7 @@ tbl6
 
 ### Calculating the Mean
 
-For lets calculate the mean of `df$y` for pattern I.
+Now let's calculate the mean of `df$y` for pattern I:
 
 ```{r}
 foo <- function(df, labelstr) {
@@ -281,7 +279,7 @@ tbl7 <- build_table(lyt7, df)
 tbl7
 ```
 
-Note that `foo` has the variable information hard encoded in the function body. Let's try some alternatives returning to `analyze()`:
+Note that `foo` has the variable information hard-encoded in the function body. Let's try some alternatives returning to `analyze()`:
 
 
 ```{r}
@@ -294,7 +292,7 @@ tbl8 <- build_table(lyt8, df)
 tbl8
 ```
 
-note that the subset of the `y` variable is passed as `x` argument to `mean()`. We could also get the `data.frame` instead of the variable:
+Note that the subset of the `y` variable is passed as the `x` argument to `mean()`. We could also get the `data.frame` instead of the variable:
 
 ```{r}
 lyt9 <- basic_table() %>%
@@ -424,7 +422,7 @@ W
 ```
 
 
-The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows and the other rows (with `mean_sd` and `range` are data rows). Currently we do not have content rows in the table. Content rows summarize the data defined by their splitting (i.e. `V > v1, B`). So if we wanted to add content row at the `r2` split level then we would get:
+The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows and the other rows (with `mean_sd` and `range`) are data rows. Currently we do not have content rows in the table. Content rows summarize the data defined by their splitting (i.e. `V > v1, B`). So if we wanted to add content rows at the `r2` split level then we would get:
 
 
 
@@ -478,7 +476,6 @@ s_cfun_2 <- function(df, labelstr) {
   rcell(nrow(df), format = "xx", label = paste(labelstr, "(n)"))
 }
 
-
 lyt13 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -491,7 +488,7 @@ tbl13 <- build_table(lyt13, df)
 tbl13
 ```
 
-In the same manner, if we wanted content rows for `r1` split we can do it at as follows:
+In the same manner, if we want content rows for the `r1` split we can do it at as follows:
 
 ```{r}
 lyt14 <- basic_table() %>%
@@ -507,7 +504,7 @@ tbl14 <- build_table(lyt14, df)
 tbl14
 ```
 
-In pagination content rows and label rows get repeated if a page is split in a descendant of a content row. So for example, if we were to split the following table at `***` then :
+In pagination, content rows and label rows get repeated if a page is split in a descendant of a content row. So, for example, if we were to split the following table at `***`:
 
 
 ```
@@ -523,7 +520,7 @@ U
      range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
-we would get the following two tables:
+Then we would get the following two tables:
 
 
 
