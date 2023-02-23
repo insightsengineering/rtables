@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -95,32 +89,21 @@ and Adrian Waddell</h4>
 <h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h3>
 <p>Often we want to filter or reorder subsections of a table in ways
-that take into account the table structure. For example</p>
+that take into account the table structure. For example:</p>
 <ul>
-<li>sorting subtables corresponding to factor levels so that most
+<li>Sorting subtables corresponding to factor levels so that most
 commonly observed levels occur first in the table</li>
 <li>Removing subtables which represent 0 observations or which after
 other filtering contain 0 rows</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/rtables" class="external-link">rtables</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># Loading required package: magrittr</span></span></code></pre>
-<pre><code><span><span class="co"># Loading required package: formatters</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># </span></span>
-<span><span class="co"># Attaching package: 'dplyr'</span></span></code></pre>
-<pre><code><span><span class="co"># The following objects are masked from 'package:stats':</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co">#     filter, lag</span></span></code></pre>
-<pre><code><span><span class="co"># The following objects are masked from 'package:base':</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co">#     intersect, setdiff, setequal, union</span></span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/rtables" class="external-link">rtables</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="a-table-in-need-of-attention">A Table In Need of Attention<a class="anchor" aria-label="anchor" href="#a-table-in-need-of-attention"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">raw_lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -196,7 +179,7 @@ other filtering contain 0 rows</li>
 <h3 id="trimming">Trimming<a class="anchor" aria-label="anchor" href="#trimming"></a>
 </h3>
 <div class="section level4">
-<h4 id="rows">Rows<a class="anchor" aria-label="anchor" href="#rows"></a>
+<h4 id="trimming-rows">Trimming Rows<a class="anchor" aria-label="anchor" href="#trimming-rows"></a>
 </h4>
 <p>Trimming represents a convenience wrapper around simple, direct
 subsetting of the rows of a <code>TableTree</code>.</p>
@@ -213,7 +196,7 @@ and returns <code>TRUE</code> if the row should be removed.</p>
 <p>The default trimming function removes rows in which all columns have
 no values in them, i.e. that have all <code>NA</code> values or all
 <code>0</code> values:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
@@ -245,13 +228,13 @@ no values in them, i.e. that have all <code>NA</code> values or all
 </h4>
 <p>There are currently no special utilities for trimming columns but we
 can remove the empty columns with fairly straightforward column
-subsetting:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+subsetting using the <code><a href="../reference/col_accessors.html">col_counts()</a></code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coltrimmed</span> <span class="op">&lt;-</span> <span class="va">raw_tbl</span><span class="op">[</span>, <span class="fu"><a href="../reference/col_accessors.html">col_counts</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co"># Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',</span></span>
 <span><span class="co">#  target signature 'TableTree#missing#logical'.</span></span>
 <span><span class="co">#  "VTableTree#ANY#logical" would also be valid</span></span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">coltrimmed</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                F            M            F            M            F            M     </span></span>
@@ -273,7 +256,7 @@ complex, as it takes structure into account.</p>
 (subtable, row) it applies the pruning function both at that level and
 to all it’s children (up to a user-specifiable maximum depth).</p>
 <p>The default pruning function, for example, determines if a subtree is
-empty by</p>
+empty by:</p>
 <ol style="list-style-type: lower-alpha">
 <li>Removing all children which contain a single content row which
 contains all zeros or all <code>NA</code>s</li>
@@ -281,7 +264,7 @@ contains all zeros or all <code>NA</code>s</li>
 <code>NA</code>s</li>
 <li>Removing the full subtree if no unpruned children remain</li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span><span class="op">)</span></span>
 <span><span class="va">pruned</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -313,7 +296,7 @@ constructor to create a pruning function which removes subtrees with
 content summaries whose first entries for each column sum or average are
 below a specified number. (In the default summaries the first entry per
 column is the count).</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pruned2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -331,7 +314,7 @@ column is the count).</p>
 <code>BLACK OR AFRICAN AMERICAN</code> subtree encompassed enough
 observations, the strata within it did not. We can take care of this by
 setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"sum"</span><span class="op">)</span>, stop_depth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">pruned3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -362,7 +345,7 @@ setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
 to a total of <code>16</code>, with no <code>stop_depth</code> removes
 some but not all of the strata from our third race
 (<code>WHITE</code>).</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">16</span>, <span class="st">"sum"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pruned4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -404,7 +387,7 @@ should occur <strong>separately</strong> within the branch of the
 path.</p>
 <p>Sort the strata by observation counts within just the
 <code>ASIAN</code> subtable:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
@@ -431,7 +414,7 @@ path.</p>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
 <p>Sort the ethnicity by observations in increasing order:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ethsort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">ethsort</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
@@ -460,7 +443,7 @@ path.</p>
 <span><span class="co">#     Mean                      36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre>
 <p>Within each ethnicity separately, sort the strata by number of
 females in arm C (i.e. column position <code>5</code>):</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="fu"><a href="../reference/score_funs.html">cont_n_onecol</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
@@ -495,7 +478,7 @@ group of data), the name of that subtable (generally the name of the
 variable being analyzed) must appear in the path, <em><strong>even if
 the variable label is not displayed when the table is
 printed</strong></em>.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_afun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>            b <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,</span>
@@ -510,7 +493,7 @@ printed</strong></em>.</p>
 <span></span>
 <span><span class="va">silly_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">silly_lyt</span>, <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Split var [cyl] was not character or factor. Converting to factor</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#       all obs</span></span>
 <span><span class="co"># —————————————</span></span>
@@ -528,7 +511,7 @@ printed</strong></em>.</p>
 <span><span class="co">#   c      1</span></span></code></pre>
 <p>The path required to sort the rows inside our “analysis” of
 <code>mpg</code> is then <code>c("cyl", "*", "mpg")</code>:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scorefun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/row_accessors.html">row_values</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">silly_tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"*"</span>, <span class="st">"mpg"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#       all obs</span></span>
@@ -550,10 +533,10 @@ printed</strong></em>.</p>
 <div class="section level2">
 <h2 id="writing-custom-pruning-criteria-and-scoring-functions">Writing Custom Pruning Criteria and Scoring Functions<a class="anchor" aria-label="anchor" href="#writing-custom-pruning-criteria-and-scoring-functions"></a>
 </h2>
-<p>Pruning criteria and scoring functions map TableTree or TableRow
-objects to a Boolean value (for pruning criteria) or a sortable scalar
-value (scoring functions). To do this we currently need to interact with
-the structure of the objects more than usual.</p>
+<p>Pruning criteria and scoring functions map <code>TableTree</code> or
+<code>TableRow</code> objects to a Boolean value (for pruning criteria)
+or a sortable scalar value (scoring functions). To do this we currently
+need to interact with the structure of the objects more than usual.</p>
 <div class="section level3">
 <h3 id="useful-functions-and-accessors">Useful Functions and Accessors<a class="anchor" aria-label="anchor" href="#useful-functions-and-accessors"></a>
 </h3>
@@ -585,7 +568,7 @@ table element but any logic which returns a single string could be used
 here.</p>
 <p>We sort the ethnicities by alphabetical order (in practice undoing
 our previous sorting by ethnicity above).</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_name_scorer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nm</span><span class="op">)</span></span>
@@ -620,10 +603,10 @@ our previous sorting by ethnicity above).</p>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<p><strong>NOTE</strong> generally this would be more appropriately done
-using the reorder_split_levels function within the layout rather than as
-a sort post-processing step, but other character scorers may or may not
-map as easily to layouting directives.</p>
+<p><strong>NOTE</strong>: Generally this would be more appropriately
+done using the <code><a href="../reference/split_funcs.html">reorder_split_levels()</a></code> function within the
+layout rather than as a sort post-processing step, but other character
+scorers may or may not map as easily to layouting directives.</p>
 </div>
 <div class="section level4">
 <h4 id="sort-by-the-percent-difference-in-counts-between-genders-in-arm-c">Sort by the Percent Difference in Counts Between Genders in Arm
@@ -637,7 +620,7 @@ males and females in arm C. This is not statistically meaningful at all,
 and is in fact a terrible idea because it reorders the strata seemingly
 (but not) at random within each race, but illustrates the various things
 we need to do inside custom sorting functions.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_gender_diffcount</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ctable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/content_table.html">content_table</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="co">## get summary table at this location</span></span>
 <span>    <span class="va">crow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">ctable</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="co">## get first row in summary table</span></span>
