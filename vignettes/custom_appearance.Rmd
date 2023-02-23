@@ -23,7 +23,8 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Customizing Appearance
 
-In this vignette, we describe the various ways we can modify and customize the appearance of `rtables`.
+In this vignette, we describe the various ways we can modify and
+customize the appearance of `rtables`.
 
 Loading the package:
 
@@ -34,11 +35,16 @@ library(dplyr)
 
 ### Rows and cell values alignments
 
-It is possible to align the content by assigning `"left"`, `"center"` (default), and `"right"` to `.aligns` and `align` arguments in `in_rows()` and `rcell()`, respectively.
+It is possible to align the content by assigning `"left"`, `"center"`
+(default), and `"right"` to `.aligns` and `align` arguments in
+`in_rows()` and `rcell()`, respectively.
 
-Please consider using `?in_rows` and `?rcell` for further clarifications on the two arguments, and use `rtables_aligns()` to see all available alignment options.
+Please consider using `?in_rows` and `?rcell` for further
+clarifications on the two arguments, and use `rtables_aligns()` to see
+all available alignment options.
 
-In the following we show two simplified examples that use `align` and `.aligns`, respectively.
+In the following we show two simplified examples that use `align` and
+`.aligns`, respectively.
 
 ```{r}
 # In rcell we use align.
@@ -72,7 +78,8 @@ tbl2 <- build_table(lyt2, DM)
 tbl2
 ```
 
-These concepts can be well applied to any clinical table as shown in the following, more complex, example.
+These concepts can be well applied to any clinical table as shown in
+the following, more complex, example.
 
 ```{r}
 lyt3 <- basic_table() %>%
@@ -98,7 +105,13 @@ tbl3
 
 ### Top-left Materials
 
-The sequence of strings printed in the area between the column header display and the first row label \emph{top left material} can be modified during pre-processing using label position argument in row splits `split_rows_by`, with the `append_topleft` function,  and during post-processing using the `top_left()` function. Note: Indenting is automatically added \emph{only in the case of} `label_pos = "topleft"`.
+The sequence of strings printed in the area between the column header
+display and the first row label \emph{top left material} can be
+modified during pre-processing using label position argument in row
+splits `split_rows_by`, with the `append_topleft` function, and during
+post-processing using the `top_left()` function. Note: Indenting is
+automatically added \emph{only in the case of} `label_pos =
+"topleft"`.
 
 Within the layout initializer:
 
@@ -112,7 +125,8 @@ lyt <- basic_table() %>%
 build_table(lyt, DM)
 ```
 
-Specify label position using the `split_rows` function. Notice the position of `STRATA1` and `SEX`.
+Specify label position using the `split_rows` function. Notice the
+position of `STRATA1` and `SEX`.
 
 ```{r}
 lyt <- basic_table() %>%
@@ -153,7 +167,11 @@ lyt
 
 ### Table Inset
 
-Table title, table body, referential footnotes and and main footers can be inset from the left alignment of the titles and provenance footer materials. This can be modified within the layout initializer `basic_table()` using the `inset` argument or during post-processing with `table_inset()`.
+Table title, table body, referential footnotes and and main footers
+can be inset from the left alignment of the titles and provenance
+footer materials. This can be modified within the layout initializer
+`basic_table()` using the `inset` argument or during post-processing
+with `table_inset()`.
 
 Using the layout initializer:
 
@@ -183,7 +201,8 @@ tbl
 ```
 
 
-Below is an example with a table produced for clinical data. Compare the inset of the table and main footer between the two tables.
+Below is an example with a table produced for clinical data. Compare
+the inset of the table and main footer between the two tables.
 
 Without inset -
 ```{r}
@@ -204,7 +223,12 @@ result
 ```
 
 With inset - 
-Notice, the inset does not apply to any title materials (main title, subtitles, page titles), or provenance footer materials. Inset settings is applied to top-left materials, referential footnotes main footer materials and any horizontal dividers.
+
+Notice, the inset does not apply to any title materials
+(main title, subtitles, page titles), or provenance footer
+materials. Inset settings is applied to top-left materials,
+referential footnotes main footer materials and any horizontal
+dividers.
 
 ```{r}
 table_inset(result) <- 5
@@ -213,11 +237,16 @@ result
 
 ### Horizontal Separation
 
-A character value can be specified to modify the horizontal separation between column headers and the table. Horizontal separation applies when:\
-1) separating title + subtitles from the column labels + topleft materials,\
-2) column labels + top left material from row labels + cells,\
-3) row labels + cells from footer content, and\
-4) Referential footnotes from main + provenance content \emph{only if} there would be something on both sides of the divider.\
+A character value can be specified to modify the horizontal separation
+between column headers and the table. Horizontal separation applies
+when:
+
+1. separating title + subtitles from the column labels + topleft
+   materials,
+2. column labels + top left material from row labels + cells,
+3. row labels + cells from footer content, and
+4. Referential footnotes from main + provenance content \emph{only if}
+   there would be something on both sides of the divider.
 
 Below, we replace the default line with "=".
 
@@ -241,7 +270,9 @@ tbl
 
 ### Section Dividers
 
-A character value can be specified as a section divider which succeed every group defined by a split instruction. Note, a trailing divider at the end of the table is never printed.
+A character value can be specified as a section divider which succeed
+every group defined by a split instruction. Note, a trailing divider
+at the end of the table is never printed.
 
 Below, a "+" is repeated and used as a section divider.
 
@@ -273,7 +304,9 @@ lyt <- basic_table() %>%
 build_table(lyt, iris)
 ```
 
-Separation characters can be specified for different row splits. However, only one will be printed if they "pile up" next to each other. 
+Separation characters can be specified for different row
+splits. However, only one will be printed if they "pile up" next to
+each other.
 
 ```{r}
 lyt <- basic_table() %>%
@@ -287,7 +320,10 @@ build_table(lyt, DM)
 
 ### Indent Modifier
 
-Tables by default have indenting at each level of splitting. A custom indent value can be supplied with the `indent_mod` argument within a split function to modify this default. Compare the indenting of the tables below:
+Tables by default have indenting at each level of splitting. A custom
+indent value can be supplied with the `indent_mod` argument within a
+split function to modify this default. Compare the indenting of the
+tables below:
 
 Default Indent -
 
@@ -322,9 +358,18 @@ basic_table(
 
 ### Variable Label Visibility
 
-With split instructions, visibility of the label for the variable being split can be modified to `visible`, `hidden` and `topleft` with the `show_labels` argument, `label_pos` argument, and `child_labels` argument where applicable. Note: this is NOT the name of the levels contained in the variable. For analyze calls, \code{default} indicates that the variable should be visible only if multiple variables are analyzed at the same level of nesting.
+With split instructions, visibility of the label for the variable
+being split can be modified to `visible`, `hidden` and `topleft` with
+the `show_labels` argument, `label_pos` argument, and `child_labels`
+argument where applicable. Note: this is NOT the name of the levels
+contained in the variable. For analyze calls, \code{default} indicates
+that the variable should be visible only if multiple variables are
+analyzed at the same level of nesting.
 
-Visibility of labels for the groups generated by a split can also be modified using the `child_label` argument with a split call. The `child_label` argument can force labels to be visible in addition to content rows but we cannot hide or move the content rows.
+Visibility of labels for the groups generated by a split can also be
+modified using the `child_label` argument with a split call. The
+`child_label` argument can force labels to be visible in addition to
+content rows but we cannot hide or move the content rows.
 
 Notice the placement of the "AGE" label in this example:
 
@@ -337,7 +382,11 @@ lyt <- basic_table(show_colcounts = TRUE) %>%
 
 build_table(lyt, DM) 
 ```
-When set to default, the label `AGE` is not repeated since there is only one variable being analyzed at the same level of nesting. Override this by setting the `show_labels` argument as "visible". 
+
+When set to default, the label `AGE` is not repeated since there is
+only one variable being analyzed at the same level of
+nesting. Override this by setting the `show_labels` argument as
+"visible".
 
 ```{r}
 lyt2 <- basic_table(show_colcounts = TRUE) %>%
@@ -349,9 +398,12 @@ lyt2 <- basic_table(show_colcounts = TRUE) %>%
 build_table(lyt2, DM) 
 ```
 
-Below is an example using the `label_pos` argument for modifying label visibility:
+Below is an example using the `label_pos` argument for modifying label
+visibility:
 
-Label order will mirror the order of `split_rows_by` calls. If the labels of any subgroups should be hidden, the `label_pos` arugment should be set to hidden. 
+Label order will mirror the order of `split_rows_by` calls. If the
+labels of any subgroups should be hidden, the `label_pos` arugment
+should be set to hidden.
 
 "SEX" label position is hidden - 
 ```{r}
@@ -386,9 +438,13 @@ basic_table(
 
 ### Cell, Label, and Annotation Wrapping
 
-An `rtable` can be rendered with a customized width by setting custom rendering widths for cell contents, row labels, and titles/footers.
+An `rtable` can be rendered with a customized width by setting custom
+rendering widths for cell contents, row labels, and titles/footers.
 
-This is demonstrated using the sample data and table below. In this section we aim to render this table with a reduced width since the table has very wide contents in several cells, labels, and titles/footers.
+This is demonstrated using the sample data and table below. In this
+section we aim to render this table with a reduced width since the
+table has very wide contents in several cells, labels, and
+titles/footers.
 
 ```{r}
 trimmed_data <- ex_adsl %>%
@@ -413,15 +469,39 @@ wide_tbl <- basic_table(
 wide_tbl
 ```
 
-In the following sections we will use the `toString()` function to render the table in string form. This resulting string representation is ready to be printed or written to a plain text file, but we will use the `strsplit()` function in combination with the `matrix()` function to preview the rendered wrapped table in matrix form within this vignette.
+In the following sections we will use the `toString()` function to
+render the table in string form. This resulting string representation
+is ready to be printed or written to a plain text file, but we will
+use the `strsplit()` function in combination with the `matrix()`
+function to preview the rendered wrapped table in matrix form within
+this vignette.
 
 #### Cell & Label Wrapping
 
-The width of a rendered table can be customized by wrapping column widths. This is done by setting custom width values via the `widths` argument of the `toString()` function. The length of the vector passed to the `widths` argument must be equal to the total number of columns in the table, including the row labels column, with each value of the vector corresponding to the maximum width (in characters) allowed in each column, from left to right.
+The width of a rendered table can be customized by wrapping column
+widths. This is done by setting custom width values via the `widths`
+argument of the `toString()` function. The length of the vector passed
+to the `widths` argument must be equal to the total number of columns
+in the table, including the row labels column, with each value of the
+vector corresponding to the maximum width (in characters) allowed in
+each column, from left to right.
 
-Similarly, wrapping can be applied when exporting a table via one of the four `export_as_*` functions and when implementing pagination via the `paginate_table()` function from the `rtables` package. In these cases, the rendered column widths are set using the `colwidths` argument which takes input in the same format as the `widths` argument of `toString()`.
+Similarly, wrapping can be applied when exporting a table via one of
+the four `export_as_*` functions and when implementing pagination via
+the `paginate_table()` function from the `rtables` package. In these
+cases, the rendered column widths are set using the `colwidths`
+argument which takes input in the same format as the `widths` argument
+of `toString()`.
 
-For example, `wide_tbl` has four columns (1 row label column and 3 content columns) which we will set the widths of below to use in the rendered table. We set the width of the row label column to 10 characters and the widths of each of the 3 content columns to 8 characters. Any words longer than the specified width are broken and continued on the following line. By default there are 3 spaces separating each of the columns in the rendered table but this can be customized via the `col_gap` argument to `toString()` if further width customization is desired.
+For example, `wide_tbl` has four columns (1 row label column and 3
+content columns) which we will set the widths of below to use in the
+rendered table. We set the width of the row label column to 10
+characters and the widths of each of the 3 content columns to 8
+characters. Any words longer than the specified width are broken and
+continued on the following line. By default there are 3 spaces
+separating each of the columns in the rendered table but this can be
+customized via the `col_gap` argument to `toString()` if further width
+customization is desired.
 
 ```{r}
 result_wrap_cells <- toString(wide_tbl, widths = c(10, 8, 8, 8))
@@ -429,11 +509,20 @@ matrix_wrap_cells <- matrix(strsplit(result_wrap_cells, "\n")[[1]], ncol = 1)
 matrix_wrap_cells
 ```
 
-In the resulting output we can see that the table has been correctly rendered using wrapping with a total width of 43 characters, but that the titles and footers remain wider than the rendered table.
+In the resulting output we can see that the table has been correctly
+rendered using wrapping with a total width of 43 characters, but that
+the titles and footers remain wider than the rendered table.
 
 #### Title & Footer Wrapping
 
-In addition to wrapping column widths, titles and footers can be wrapped by setting `tf_wrap = TRUE` in `toString()` and setting the `max_width` argument of `toString()` to the maximum width (in characters) allowed for titles/footers. The four `export_as_*` functions and `paginate_table()` can also wrap titles/footers by setting the same two arguments. In the following code, we set `max_width = 43` so that the rendered table and all of its annotations have a maximum width of 43 characters.
+In addition to wrapping column widths, titles and footers can be
+wrapped by setting `tf_wrap = TRUE` in `toString()` and setting the
+`max_width` argument of `toString()` to the maximum width (in
+characters) allowed for titles/footers. The four `export_as_*`
+functions and `paginate_table()` can also wrap titles/footers by
+setting the same two arguments. In the following code, we set
+`max_width = 43` so that the rendered table and all of its annotations
+have a maximum width of 43 characters.
 
 ```{r}
 result_wrap_cells_tf <- toString(wide_tbl,
