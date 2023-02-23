@@ -35,6 +35,7 @@ Often the data from one column is considered the reference/baseline/comparison g
 
 For example, lets calculate the average age:
 
+
 ```{r, message=FALSE}
 library(rtables)
 
