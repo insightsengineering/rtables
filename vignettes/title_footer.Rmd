@@ -155,7 +155,7 @@ is identical to the above, when done within a content function.
 ## Annotating an Existing Table with Referential Footnotes
 
 In addition to inserting referential footnotes at tabulation time within
-our analysis functions, we cal also annotate our tables with them
+our analysis functions, we can also annotate our tables with them
 post-hoc.
 
 This is also the only way to add footnotes to **column** labels,
@@ -193,12 +193,12 @@ tbl2
 
 
 We do this with the `fnotes_at_path<-` function which accepts a row
-path, a column path, and a value for *the full set of footnotes for
+path, a column path, and a value for the full set of footnotes for
 the defined locations (`NULL` or a `character` vector).
 
 A non-`NULL` row path with a `NULL` column path specifies the footnote(s)
 should be attached to the row, while `NULL` row path with non-`NULL`
-column path indicates they go with the column. Both being non-null
+column path indicates they go with the column. Both being non-`NULL`
 indicates a cell (and must resolve to an individual cell).
 
 ```{r}
@@ -213,11 +213,11 @@ fnotes_at_path(tbl2, rowpath = NULL, c("ARM", "B: Placebo")) <- c("this is a pla
 tbl2
 ```
 
-Note to step into the content table row we must add that to the path, even though we didn't
+Note to step into a content row we must add that to the path, even though we didn't
 need it to put a footnote on the full row.
 
-Currently, content row by default are named with the *label* rather than *name*, of the 
-corresponding facet. This is reflected in the output of, e.g., `row_paths_summary`
+Currently, content rows by default are named with the *label* rather than *name* of the 
+corresponding facet. This is reflected in the output of, e.g., `row_paths_summary`.
 
 ```{r}
 row_paths_summary(tbl2)
