@@ -20,12 +20,37 @@ The table with rows that have only NA or 0 cell values removed
 \description{
 Trim rows from a populated table without regard for table structure
 }
+\details{
+This function will be deprecated in the future in favor of the more
+elegant and versatile \code{\link[=prune_table]{prune_table()}} function which can perform the
+same function as \code{trim_rows()} but is more powerful as it takes table
+structure into account.
+}
 \note{
 Visible \code{LabelRow}s are including in this trimming, which can lead
 to either all label rows being trimmed or label rows remaining when all
 data rows have been trimmed, depending on what \code{criteria} returns when
 called on a \code{LabelRow} object. To avoid this, use the
 structurally-aware \code{\link{prune_table}} machinery instead.
+}
+\examples{
+adsl <- ex_adsl
+levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
+
+tbl_to_trim <- basic_table() \%>\%
+    analyze("BMRKR1") \%>\%
+    split_cols_by("ARM") \%>\% 
+    split_rows_by("SEX") \%>\% 
+    summarize_row_groups() \%>\%
+    split_rows_by("STRATA1") \%>\%
+    summarize_row_groups() \%>\%
+    analyze("AGE") \%>\%
+    build_table(adsl)
+
+tbl_to_trim \%>\% trim_rows()
+
+tbl_to_trim \%>\% trim_rows(all_zero)
+
 }
 \seealso{
 \code{\link[=prune_table]{prune_table()}}
