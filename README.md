@@ -1,19 +1,4 @@
----
-output: github_document
-editor_options: 
-  chunk_output_type: console
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-```
-## Warning: package 'rtables' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'formatters' was built under R version 4.2.2
-```
 
 # rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
