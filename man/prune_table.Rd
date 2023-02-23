@@ -31,6 +31,23 @@ A TableTree pruned via recursive application of \code{prune_func}.
 \description{
 Recursively prune a TableTree
 }
+\examples{
+adsl <- ex_adsl
+levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
+
+tbl_to_prune <- basic_table() \%>\%
+    split_cols_by("ARM") \%>\% 
+    split_rows_by("SEX") \%>\% 
+    summarize_row_groups() \%>\%
+    split_rows_by("STRATA1") \%>\%
+    summarize_row_groups() \%>\%
+    analyze("AGE") \%>\%
+    build_table(adsl)
+
+tbl_to_prune \%>\% prune_table()
+
+}
 \seealso{
-\code{\link[=prune_empty_level]{prune_empty_level()}}
+\code{\link[=prune_empty_level]{prune_empty_level()}} for details on this and several other basic
+pruning functions included in the \code{rtables} package.
 }
