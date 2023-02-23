@@ -32,7 +32,7 @@ In this vignette we show some methods to subset tables and to extract cell value
 
 We will use the following table for illustrative purposes:
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 library(dplyr)
 
@@ -94,7 +94,7 @@ Note that we do not repeat label rows for descending children, e.g.
 tbl[2:4, ]
 ```
 
-does not show that the first row is derived from `AGE`. In order to repeat content/label information one should use the pagination feature. Please read the related vignette.
+does not show that the first row is derived from `AGE`. In order to repeat content/label information, one should use the pagination feature. Please read the related vignette.
 
 Character indices are interpreted as paths (see below), NOT elements to be matched against `names(tbl)`:
 
@@ -152,7 +152,7 @@ tbl # {1}, {2}, and {3} are present
 tbl[10, 2] # only {1} which was previously {2}
 ```
 
-Similarly to what we have used to keep top left information, we can specify to 
+Similar to what we have used to keep top left information, we can specify to 
 keep more information from the original table. As a standard the foot notes are 
 always present if the titles are kept. 
 ```{r}

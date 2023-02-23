@@ -1,10 +1,10 @@
 ---
-title: "Comparison with `dplyr` Tabulation"
+title: "Comparison with dplyr Tabulation"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Comparison with `dplyr` Tabulation}
+  %\VignetteIndexEntry{Comparison with dplyr Tabulation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -25,9 +25,9 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Introduction
 
-In this vignette we would like to discuss the similarities and differences between `dplyr` and `rtable`.
+In this vignette, we would like to discuss the similarities and differences between `dplyr` and `rtable`.
 
-Much of the `rtables` framework focuses on tabulation/summarizing of data and then the visualization of the table. In this vignette we focus on summarizing data using `dplyr` and contrast it to `rtables`. We won't pay attention to the table visualization/markup and just derive the cell content.
+Much of the `rtables` framework focuses on tabulation/summarizing of data and then the visualization of the table. In this vignette, we focus on summarizing data using `dplyr` and contrast it to `rtables`. We won't pay attention to the table visualization/markup and just derive the cell content.
 
 Using `dplyr` to summarize data and `gt` to visualize the table is a good way if the tabulation is of a certain nature or complexity. However, there are tables such as the table created in the [`introduction`](https://insightsengineering.github.io/rtables/main/articles/introduction.html) vignette that take some effort to create with `dplyr`. Part of the effort is due to fact that when using `dplyr` the table data is stored in `data.frame`s or `tibble`s which is not the most natural way to represent a table as we will show in this vignette.
 
@@ -39,7 +39,7 @@ library(rtables)
 library(dplyr)
 ```
 
-Here is table and data used in the [`introduction`](https://insightsengineering.github.io/rtables/main/articles/introduction.html) vignette:
+Here is the table and data used in the [`introduction`](https://insightsengineering.github.io/rtables/main/articles/introduction.html) vignette:
 
 ```{r}
 n <- 400
@@ -106,7 +106,7 @@ average_age <- df %>%
 average_age
 ```
 
-In `rtable` syntax we need the following code to get to the same content:
+In `rtable` syntax, we need the following code to get to the same content:
 
 ```{r}
 lyt <- basic_table() %>%
