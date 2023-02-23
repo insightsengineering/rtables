@@ -1,10 +1,10 @@
 ---
-title: "Formats Precedence and NA Handling"
+title: "Format Precedence and NA Handling"
 author: "Wojciech Wójciak and Gabriel Becker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Formats Precedence NA Handling}
+  %\VignetteIndexEntry{Format Precedence and NA Handling}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -23,29 +23,24 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Formats Precedence
 
-A user of `rtables` package can specify the format in which the
-numbers in the reporting tables are printed. Formatting functionally
+Users of the `rtables` package can specify the format in which the
+numbers in the reporting tables are printed. Formatting functionality
 is provided by the
 [`formatters`](https://insightsengineering.github.io/formatters/) R
-package and available formats can be listed with
-`formatters::list_valid_format_labels()` function.  The format can be
-specified by the user in a few different places. It may happen that
+package. See `formatters::list_valid_format_labels()` for a list of 
+all available formats. The format can be
+specified by the user in a few different places. It may happen that,
 for a single table layout, the format is specified in more than one
 place. In such a case, the final format that will be applied depends
-on formats precedence rules defined by `rtables`. In this vignette, we
-describe the basic rules of `rtables` formats precedence.
+on format precedence rules defined by `rtables`. In this vignette, we
+describe the basic rules of `rtables` format precedence.
 
-The packages used in this vignette are:
+The examples shown in this vignette utilize the example ADSL
+dataset, a demographic table that summarizes the variables
+content for different population subsets (encoded in the columns).
 
 ```{r, message=FALSE}
 library(rtables)
-```
-
-The examples shown in this vignette are based on the example `ADSL`
-dataset, i.e. a demographic table that summarizes the variables
-content for different population subsets (encoded in the columns).
-
-```{r}
 ADSL <- ex_adsl
 ```
 
@@ -56,22 +51,23 @@ package and was created using the publicly available
 [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/)
 R package.
 
-### Formats precedence and inheritance rules
+### Format Precedence and Inheritance Rules
 
 The format in which numbers are printed can be specified by the user
-in a few different places. In the context of the precedence, it is
-important at which level of the split hierarchy formats are
-specified. In general, there are two such levels: the **cell** level
-or the so-called **parent table** level. The concept of the cell and
-the parent table results from the way in which `rtables` package
+in a few different places. In the context of precedence, it is
+important which level of the split hierarchy formats are specified 
+at. In general, there are two such levels: the **cell** level
+and the so-called **parent table** level. The concept of the cell and
+the parent table results from the way in which the `rtables` package
 stores resulting tables. It models the resulting tables as
 hierarchical, tree-like objects with the cells (as leaves) containing
 multiple values. Particularly noteworthy in this context is the fact
-that the actual table splitting occurs in a row-dominant way (even if
-the column split is present in the layout). `rtables` provides
+that the actual table splitting occurs in a row-dominant way (even if 
+column splitting is present in the layout). `rtables` provides
 user-end function `table_structure()` that prints the structure of a
-given table object. For a quick illustration, consider the following
-example.
+given table object. 
+
+For a simple illustration, consider the following example:
 
 ```{r}
 lyt <- basic_table() %>%
@@ -84,37 +80,37 @@ adsl_analyzed
 table_structure(adsl_analyzed)
 ```
 
-For this reporting table, there are 4 sub-tables under `SEX`
-table. These are: `F`, `M`, `U`, and `UNDIFFERENTIATED`. Each of these
-sub-tables has one sub-table `AGE`. So, e.g. for the top sub-table
-`AGE`, its nearest parent table is `F`.
+In this table, there are 4 sub-tables under the `SEX` table. 
+These are: `F`, `M`, `U`, and `UNDIFFERENTIATED`. Each of these
+sub-tables has one sub-table `AGE`. For example, for the first 
+`AGE` sub-table, its parent table is `F`.
 
-The concept of hierarchical, tree-like representation of resulting
-tables, translates directly to formats precedence and inheritance
+The concept of hierarchical, tree-like representations of resulting
+tables translates directly to format precedence and inheritance
 rules. As a general principle, the format being finally applied for
 the cell is the one that is the most specific, that is, the one which
-is the closest to that cell in a given path in the tree. Hence, the
-precedence-inheritance chain looks like below.
+is the closest to the cell in a given path in the tree. Hence, the
+precedence-inheritance chain looks like the following:
 
 ```
-cell <- parent_table <- parent_table <- ... <- parent_table
+parent_table -> parent_table -> ... -> parent_table -> cell
 ```
 
-In such a chain, the most outer `parent_table` is the least specific
+In such a chain, the outermost `parent_table` is the least specific
 place to specify the format, while the `cell` is the most specific
-one. In case the format is specified by the user in more than one
-place, the one which is more specific will be applied for the cell. If
-no specific format has been selected by the user for the split, then
-the default format will be applied. The default format is "xx" and it
-yields the same formatting as `as.character()` function. In the
+one. In cases where the format is specified by the user in more than 
+one place, the one which is most specific will be applied in the cell.
+If no specific format has been selected by the user for the split, then
+the default format will be applied. The default format is `"xx"` and it
+yields the same formatting as the `as.character()` function. In the
 following sections of this vignette, we will illustrate the format
 precedence rules with a few examples.
 
-### Standard format
+### Standard Format
 
-Below is a simple layout that does not explicitly set any specific
-format for the output of the analysis function used in this
-example. In such a case, the default format will be used.
+Below is a simple layout that does not explicitly set a format for the 
+output of the analysis function. In such a case, the default format 
+is applied.
 
 ```{r}
 lyt0 <- basic_table() %>%
@@ -124,12 +120,12 @@ lyt0 <- basic_table() %>%
 build_table(lyt0, ADSL)
 ```
 
-### Cell format
+### Cell Format
 
-The format of the cell can be explicitly specified through `rcell()`
+The format of a cell can be explicitly specified via the `rcell()`
 or `in_rows()` functions. The former is essentially a collection of
 data objects while the latter is a collection of `rcell()` objects. As
-already mentioned, this is the most specific place where the format
+previously mentioned, this is the most specific place where the format
 can be specified by the user.
 
 ```{r}
@@ -154,12 +150,12 @@ build_table(lyt1a, ADSL)
 ```
 
 If the format is specified in both of these places at the same time,
-the one specified through `in_rows()`, has higher
-precedence. Technically, in this case, the format defined in `rcell()`
-will simply be overwritten by the one defined in `in_rows()`. This is
+the one specified via `in_rows()` takes highest precedence. 
+Technically, in this case, the format defined in `rcell()` will simply 
+be overwritten by the one defined in `in_rows()`. This is
 because the format specified in `in_rows()` is applied to the cells
-not the rows (overriding the previously specified cell specific
-values), which means that the precedence rules described above are
+not the rows (overriding the previously specified cell-specific
+values), which indicates that the precedence rules described above are
 still in place.
 
 ```{r}
@@ -175,12 +171,12 @@ lyt2 <- basic_table() %>%
 build_table(lyt2, ADSL)
 ```
 
-### Parent table format and inheritance
+### Parent Table Format and Inheritance
 
 In addition to the cell level, the format can be specified at the
-parent table level. Then, if no format has been set by the user for a
-cell, the most specific format for that cell is the one defined at the
-nearest parent split table (if any).
+parent table level. If no format has been set by the user for a cell, 
+the most specific format for that cell is the one defined at its
+innermost parent table split (if any).
 
 ```{r}
 lyt3 <- basic_table() %>%
@@ -190,9 +186,9 @@ lyt3 <- basic_table() %>%
 build_table(lyt3, ADSL)
 ```
 
-If the cell format was specified too, then the parent table format is
-ignored for this cell, since the cell format is treated as more
-specific.
+If the cell format is also specified for a cell, then the parent table 
+format is ignored for this cell since the cell format is more specific
+and therefore takes precedence.
 
 ```{r}
 lyt4 <- basic_table() %>%
@@ -222,9 +218,9 @@ lyt4a <- basic_table() %>%
 build_table(lyt4a, ADSL)
 ```
 
-In the following, slightly more complicated example, we can observe
-partial inheritance. That is, only `SD` cell inherits the parent
-table's format, while the `Mean` cell does not.
+In the following, slightly more complicated, example, we can observe
+partial inheritance. That is, only `SD` cells inherit the parent
+table's format while the `Mean` cells do not.
 
 ```{r}
 lyt5 <- basic_table() %>%
@@ -255,19 +251,19 @@ lyt6 <- basic_table() %>%
 build_table(lyt6, ADSL)
 ```
 
-In the output, the cell corresponding to `UNDIFFERENTIATED` level of
-`SEX` and `B: Placebo drug` level of `ARM` categorical variables is
-displayed as `NA`. This happened because there were no non-`NA` values
-under this facet to compute the mean. `rtables` allows the user to
+In the output the cell corresponding to the `UNDIFFERENTIATED` level 
+of `SEX` and the `B: Placebo` level of `ARM` is displayed as `NA`. 
+This occurs because there were no non-`NA` values under this facet 
+that could be used to compute the mean. `rtables` allows the user to
 specify a string to display when cell values are `NA`. Similar to
 formats for numbers, the user can specify a string to replace `NA`
 with the parameter `format_na_str` or `.format_na_str`. This can be
-specified at the **cell** or **parent table** level. The `NA` string
+specified at the cell or parent table level. `NA` string
 precedence and inheritance rules are the same as those for number
-formats precedence, described in the previous section of this
-vignette. We will illustrate them with a few examples.
+format precedence, described in the previous section of this
+vignette. We will illustrate this with a few examples.
 
-### Replacing `NA` values at the cell level
+### Replacing `NA` Values at the Cell Level
 
 At the cell level, it is possible to replace `NA` values with a custom
 string by means of the `format_na_str` parameter in `rcell()` or
@@ -297,11 +293,11 @@ build_table(lyt7a, ADSL)
 ```
 
 If the `NA` string is specified in both of these places at the same
-time, the one specified with `in_rows()`, has higher
-precedence. Technically, in this case, the `NA` replacement string
+time, the one specified with `in_rows()` takes precedence. 
+Technically, in this case the `NA` replacement string
 defined in `rcell()` will simply be overwritten by the one defined in
 `in_rows()`. This is because the `NA` string specified in `in_rows()`
-is applied to the cells not the rows (overriding the previously
+is applied to the cells, not the rows (overriding the previously
 specified cell specific values), which means that the precedence rules
 described above are still in place.
 
@@ -319,13 +315,13 @@ lyt8 <- basic_table() %>%
 build_table(lyt8, ADSL)
 ```
 
-### Parent table replacement of `NA` values and inheritance principles
+### Parent Table Replacement of `NA` Values and Inheritance Principles
 
 In addition to the cell level, the string replacement for `NA` values
-can be specified at the parent table level. Then, if no replacement
+can be specified at the parent table level. If no replacement
 string has been specified by the user for a cell, the most specific
-`NA` string for that cell is the one defined at the nearest parent
-split table (if any).
+`NA` string for that cell is the one defined at its innermost parent
+table split (if any).
 
 ```{r}
 lyt9 <- basic_table() %>%
@@ -336,10 +332,10 @@ lyt9 <- basic_table() %>%
 build_table(lyt9, ADSL)
 ```
 
-If the replacement string for `NA` values was specified also at the
+If an `NA` value replacement string was also specified at the
 cell level, then the one set at the parent table level is ignored for
-this cell, as the cell level settings are treated as the most
-specific.
+this cell as the cell level format is more specific and therefore 
+takes precedence.
 
 ```{r}
 lyt10 <- basic_table() %>%
@@ -373,8 +369,8 @@ build_table(lyt10a, ADSL)
 ```
 
 In the following, slightly more complicated example, we can observe
-partial inheritance. That is, only `SD` cell inherits the parent
-table's `NA` string, while the `Mean` cell does not.
+partial inheritance of NA strings. That is, only `SD` cells inherit 
+the parent table's `NA` string, while the `Mean` cells do not.
 
 ```{r}
 lyt11 <- basic_table() %>%
