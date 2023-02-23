@@ -35,7 +35,7 @@ Often the data from one column is considered the reference/baseline/comparison g
 
 For example, lets calculate the average age:
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -115,6 +115,6 @@ tbl5 <- build_table(lyt5, subset(DM, SEX %in% c("M", "F")))
 tbl5
 ```
 
-so the data assigned to `.ref_full` is the full data of the reference column where the data assigned to `.ref_group` respects the subsetting defined by row-splitting and hence is from the same subset as the argument `x` or `df` to `afun`.
+The data assigned to `.ref_full` is the full data of the reference column whereas the data assigned to `.ref_group` respects the subsetting defined by row-splitting and hence is from the same subset as the argument `x` or `df` to `afun`.
 
 
