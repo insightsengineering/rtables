@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -164,12 +158,12 @@ gender, handedness, age, and weight.</p>
 <span><span class="co"># <span style="color: #BCBCBC;">4</span> Arm A USA     Male   Right   34.6   169.</span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">5</span> Arm B USA     Female Right   43.0   160.</span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">6</span> Arm A USA     Female Right   43.2   126.</span></span></code></pre>
-<p>Note that we use factors variables so that the level order is
+<p>Note that we use factor variables so that the level order is
 represented in the row or column order when we tabulate the information
 of <code>df</code> below.</p>
 </div>
 <div class="section level2">
-<h2 id="building-an-table">Building an Table<a class="anchor" aria-label="anchor" href="#building-an-table"></a>
+<h2 id="building-a-table">Building a Table<a class="anchor" aria-label="anchor" href="#building-a-table"></a>
 </h2>
 <p>The aim of this vignette is to build the following table step by
 step:</p>
@@ -210,7 +204,7 @@ adding a row:</p>
 description to a variable <code>lyt</code>. We then built the table
 using the actual data with <code><a href="../reference/build_table.html">build_table()</a></code>. The description
 of a table is called a table layout. <code><a href="../reference/basic_table.html">basic_table()</a></code> is the
-start of every table layout and contains the information that we have
+start of every table layout and contains the information that we have in
 one column representing all data. The <code><a href="../reference/analyze.html">analyze()</a></code> instruction
 adds to the layout that the <code>age</code> variable should be analyzed
 with the <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> analysis function and the result should be
@@ -251,7 +245,7 @@ zero rows and one column</li>
 <code><a href="../reference/analyze_colvars.html">analyze_colvars()</a></code>
 </li>
 </ul>
-<p>using those functions it is possible to create a wide variety of
+<p>Using those functions, it is possible to create a wide variety of
 tables as we will show in this document.</p>
 </div>
 <div class="section level3">
@@ -377,7 +371,7 @@ change in future releases.</p>
 <div class="section level3">
 <h3 id="adding-group-information">Adding Group Information<a class="anchor" aria-label="anchor" href="#adding-group-information"></a>
 </h3>
-<p>When adding row splits we get by default label rows for each split
+<p>When adding row splits, we get by default label rows for each split
 level, for example <code>CAN</code> and <code>USA</code> in the table
 above. Besides the column space subsetting, we have now further
 subsetted the data for each cell. It is often useful when defining a row
@@ -387,7 +381,7 @@ i.e. <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mea
 (visible via the indenting, though the table has an underlying tree
 structure that is not of importance for this vignette). In order to add
 content information and turn the <code>CAN</code> label row into a
-content row the <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code> function is
+content row, the <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code> function is
 required. By default, the count (<code>nrows()</code>) and percentage of
 data relative to the column associated data is calculated:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">

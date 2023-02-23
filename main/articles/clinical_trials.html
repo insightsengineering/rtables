@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -185,7 +179,7 @@ factor or numeric, respectively:</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"type not supported"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Note we use <code>rcell</code>s to wrap the results in order to add
+<p>Note we use <code>rcell</code> to wrap the results in order to add
 formatting instructions for <code>rtables</code>. We can use
 <code>s_summary</code> outside the context of tabulation:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -533,7 +527,7 @@ has to be set to <code>FALSE</code> in <code><a href="../reference/analyze.html"
 <p>Once we split the rows into groups (<code>Male</code> and
 <code>Female</code> here) one might want to summarize groups: usually by
 showing count and column percentages. This is especially important if we
-have missing data. For example if we create the above table but add
+have missing data. For example, if we create the above table but add
 missing data to the <code>AGE</code> variable:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">insert_NAs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -604,7 +598,7 @@ for example:</p>
 <span><span class="co">#   HIGH             47              32               49</span></span></code></pre>
 <p>There are a couple of things to note here:</p>
 <ul>
-<li>Group summaries produce “content” rows. Visually it’s impossible to
+<li>Group summaries produce “content” rows. Visually, it’s impossible to
 distinguish data rows from content rows. Their difference is justified
 (and it’s an important design decision) because when we paginate tables
 the content rows are by default repeated if a group gets divided via
@@ -894,7 +888,7 @@ but rather generate a dataset on the fly (see <a href="https://github.com/waddel
 <p>The <code>.N_col</code> argument is a special keyword argument by
 which <code><a href="../reference/build_table.html">build_table()</a></code> passes the population size for each
 respective column. For a list of keyword arguments for the functions
-passed to <code>afun</code> in <code><a href="../reference/analyze.html">analyze()</a></code> refer to the
+passed to <code>afun</code> in <code><a href="../reference/analyze.html">analyze()</a></code>, refer to the
 documentation with <code><a href="../reference/analyze.html">?analyze</a></code>.</p>
 <p>We now use the <code>s_events_patients</code> summary function in a
 tabulation:</p>
