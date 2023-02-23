@@ -103,7 +103,7 @@ s_summary <- function(x) {
 }
 ```
 
-Note we use `rcell`s to wrap the results in order to add formatting instructions for `rtables`. We can use `s_summary` outside the context of tabulation:
+Note we use `rcell` to wrap the results in order to add formatting instructions for `rtables`. We can use `s_summary` outside the context of tabulation:
 
 ```{r}
 s_summary(ADSL$AGE)
@@ -247,7 +247,7 @@ tbl5 <- build_table(lyt5, ADSL_M_F_l)
 tbl5
 ```
 
-Once we split the rows into groups (`Male` and `Female` here) one might want to summarize groups: usually by showing count and column percentages. This is especially important if we have missing data. For example if we create the above table but add missing data to the `AGE` variable:
+Once we split the rows into groups (`Male` and `Female` here) one might want to summarize groups: usually by showing count and column percentages. This is especially important if we have missing data. For example, if we create the above table but add missing data to the `AGE` variable:
 
 ```{r}
 insert_NAs <- function(x) {
@@ -285,7 +285,7 @@ tbl7
 
 There are a couple of things to note here:
 
-* Group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination.
+* Group summaries produce "content" rows. Visually, it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination.
 * Conceptually the content rows summarize the patient population which is analyzed and hence are often the count & group percentages (default behavior of `summarize_row_groups()`).
 
 We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
@@ -446,7 +446,7 @@ we would get the following summary:
 s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
 ```
 
-The `.N_col` argument is a special keyword argument by which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()` refer to the documentation with `?analyze`.
+The `.N_col` argument is a special keyword argument by which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()`, refer to the documentation with `?analyze`.
 
 We now use the `s_events_patients` summary function in a tabulation:
 
