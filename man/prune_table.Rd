@@ -35,7 +35,7 @@ Recursively prune a TableTree
 adsl <- ex_adsl
 levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 
-tbl_full <- basic_table() \%>\%
+tbl_to_prune <- basic_table() \%>\%
     split_cols_by("ARM") \%>\% 
     split_rows_by("SEX") \%>\% 
     summarize_row_groups() \%>\%
@@ -44,7 +44,7 @@ tbl_full <- basic_table() \%>\%
     analyze("AGE") \%>\%
     build_table(adsl)
 
-tbl_full \%>\% prune_table()
+tbl_to_prune \%>\% prune_table()
 
 }
 \seealso{

@@ -19,13 +19,11 @@
 #' @examples
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
-#' adsl$AGE[adsl$ARMCD %in% c("ARM A", "ARM C") & adsl$SEX == "UNDIFFERENTIATED"] <- 0
+#' adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
 #' adsl$BMRKR1 <- 0
-#' adsl$EOSDY <- 0
 #' 
-#' tbl_full <- basic_table() %>%
+#' tbl_to_prune <- basic_table() %>%
 #'     analyze("BMRKR1") %>%
-#'     analyze("EOSDY") %>%
 #'     split_cols_by("ARM") %>% 
 #'     split_rows_by("SEX") %>% 
 #'     summarize_row_groups() %>%
@@ -34,7 +32,7 @@
 #'     analyze("AGE") %>%
 #'     build_table(adsl)
 #' 
-#' tbl_full %>% prune_table(all_zero_or_na)
+#' tbl_to_prune %>% prune_table(all_zero_or_na)
 #'    
 all_zero_or_na <- function(tr) {
     if(!is(tr, "TableRow") || is(tr, "LabelRow"))
@@ -51,7 +49,7 @@ all_zero_or_na <- function(tr) {
 #' @export
 #' 
 #' @examples
-#' tbl_full %>% prune_table(all_zero)
+#' tbl_to_prune %>% prune_table(all_zero)
 #' 
 all_zero <- function(tr) {
     if(!is(tr, "TableRow") || is(tr, "LabelRow"))
@@ -71,18 +69,17 @@ all_zero <- function(tr) {
 #'   called on a \code{LabelRow} object. To avoid this, use the
 #'   structurally-aware \code{\link{prune_table}} machinery instead.
 #' @details This function will be deprecated in the future in favor of the more
-#'   elegant and comprehensive [prune_table()] function, which can accomplish the 
-#'   same result as `trim_rows()` but is more versatile and powerful as it takes 
-#'   table structure into account.
+#'   elegant and versatile [prune_table()] function which can perform the 
+#'   same function as `trim_rows()` but is more powerful as it takes table 
+#'   structure into account.
 #' @export
 #' @seealso [prune_table()]
 #' 
 #' @examples
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
-#' adsl$BMRKR1 <- 0
 #' 
-#' tbl_full <- basic_table() %>%
+#' tbl_to_trim <- basic_table() %>%
 #'     analyze("BMRKR1") %>%
 #'     split_cols_by("ARM") %>% 
 #'     split_rows_by("SEX") %>% 
@@ -92,9 +89,9 @@ all_zero <- function(tr) {
 #'     analyze("AGE") %>%
 #'     build_table(adsl)
 #' 
-#' tbl_full %>% trim_rows()
+#' tbl_to_trim %>% trim_rows()
 #' 
-#' tbl_full %>% trim_rows(all_zero)
+#' tbl_to_trim %>% trim_rows(all_zero)
 #' 
 trim_rows <- function(tt, criteria = all_zero_or_na) {
     rows <- collect_leaves(tt, TRUE, TRUE)
@@ -120,7 +117,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 #' @export
 #' 
 #' @examples
-#' tbl_full %>% prune_table(content_all_zeros_nas)
+#' tbl_to_prune %>% prune_table(content_all_zeros_nas)
 #' 
 content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
     ## this will be NULL if
@@ -144,7 +141,7 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
 #' @rdname trim_prune_funs
 #' 
 #' @examples 
-#' tbl_full %>% prune_table(prune_empty_level)
+#' tbl_to_prune %>% prune_table(prune_empty_level)
 #' 
 prune_empty_level <- function(tt) {
     if(is(tt, "TableRow"))
@@ -163,7 +160,7 @@ prune_empty_level <- function(tt) {
 #' @export
 #' 
 #' @examples 
-#' tbl_full %>% prune_table(prune_zeros_only)
+#' tbl_to_prune %>% prune_table(prune_zeros_only)
 #' 
 prune_zeros_only <- function(tt) {
     if(is(tt, "TableRow"))
@@ -192,7 +189,7 @@ prune_zeros_only <- function(tt) {
 #' 
 #' @examples 
 #' min_prune <- low_obs_pruner(70, "sum")
-#' tbl_full %>% prune_table(min_prune)
+#' tbl_to_prune %>% prune_table(min_prune)
 #' 
 low_obs_pruner <- function(min, type = c("sum", "mean")) {
     type <- match.arg(type)
@@ -232,7 +229,7 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 #' 
-#' tbl_full <- basic_table() %>%
+#' tbl_to_prune <- basic_table() %>%
 #'     split_cols_by("ARM") %>% 
 #'     split_rows_by("SEX") %>% 
 #'     summarize_row_groups() %>%
@@ -241,7 +238,7 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #'     analyze("AGE") %>%
 #'     build_table(adsl)
 #' 
-#' tbl_full %>% prune_table()
+#' tbl_to_prune %>% prune_table()
 #'
 prune_table <- function(tt,
                         prune_func = prune_empty_level,

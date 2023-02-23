@@ -22,9 +22,9 @@ Trim rows from a populated table without regard for table structure
 }
 \details{
 This function will be deprecated in the future in favor of the more
-elegant and comprehensive \code{\link[=prune_table]{prune_table()}} function, which can accomplish the
-same result as \code{trim_rows()} but is more versatile and powerful as it takes
-table structure into account.
+elegant and versatile \code{\link[=prune_table]{prune_table()}} function which can perform the
+same function as \code{trim_rows()} but is more powerful as it takes table
+structure into account.
 }
 \note{
 Visible \code{LabelRow}s are including in this trimming, which can lead
@@ -36,9 +36,8 @@ structurally-aware \code{\link{prune_table}} machinery instead.
 \examples{
 adsl <- ex_adsl
 levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
-adsl$BMRKR1 <- 0
 
-tbl_full <- basic_table() \%>\%
+tbl_to_trim <- basic_table() \%>\%
     analyze("BMRKR1") \%>\%
     split_cols_by("ARM") \%>\% 
     split_rows_by("SEX") \%>\% 
@@ -48,9 +47,9 @@ tbl_full <- basic_table() \%>\%
     analyze("AGE") \%>\%
     build_table(adsl)
 
-tbl_full \%>\% trim_rows()
+tbl_to_trim \%>\% trim_rows()
 
-tbl_full \%>\% trim_rows(all_zero)
+tbl_to_trim \%>\% trim_rows(all_zero)
 
 }
 \seealso{
