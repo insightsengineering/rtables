@@ -22,12 +22,12 @@ knitr::opts_chunk$set(comment = "#")
 ```
 ## Introduction
 
-Often we want to filter or reorder subsections of a table in ways that take into account the table structure. For example
+Often we want to filter or reorder subsections of a table in ways that take into account the table structure. For example:
 
-- sorting subtables corresponding to factor levels so that most commonly observed levels occur first in the table
+- Sorting subtables corresponding to factor levels so that most commonly observed levels occur first in the table
 - Removing subtables which represent 0 observations or which after other filtering contain 0 rows
 
-```{r, messages=FALSE}
+```{r, message=FALSE}
 library(rtables)
 library(dplyr)
 ```
@@ -52,7 +52,7 @@ raw_tbl
 
 ## Trimming
 
-### Rows
+### Trimming Rows
 
 Trimming represents a convenience wrapper around simple, direct subsetting of the rows of a `TableTree`.
 
@@ -70,7 +70,7 @@ trim_rows(raw_tbl)
 
 ### Trimming Columns
 
-There are currently no special utilities for trimming columns but we can remove the empty columns with fairly straightforward column subsetting:
+There are currently no special utilities for trimming columns but we can remove the empty columns with fairly straightforward column subsetting using the `col_counts()` function:
 
 ```{r}
 coltrimmed <- raw_tbl[, col_counts(raw_tbl) > 0]
@@ -84,7 +84,7 @@ Pruning is similar in outcome to trimming, but more powerful and more complex, a
 
 Pruning is applied recursively, in that at each structural unit (subtable, row) it applies the pruning function both at that level and to all it's children (up to a user-specifiable maximum depth).
 
-The default pruning function, for example, determines if a subtree is empty by
+The default pruning function, for example, determines if a subtree is empty by:
 
 a. Removing all children which contain a single content row which contains all zeros or all `NA`s
 b. Removing rows which contain either all zeros or all `NA`s
@@ -177,7 +177,7 @@ sort_at_path(silly_tbl, c("cyl", "*", "mpg"), scorefun)
 
 # Writing Custom Pruning Criteria and Scoring Functions
 
-Pruning criteria and scoring functions map TableTree or TableRow objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual.
+Pruning criteria and scoring functions map `TableTree` or `TableRow` objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual.
 
 ## Useful Functions and Accessors
 
@@ -211,7 +211,7 @@ silly_name_scorer <- function(tt) {
 sort_at_path(ethsort, "RACE", silly_name_scorer)
 ```
 
-**NOTE** generally this would be more appropriately done using the reorder_split_levels function within the layout rather than as a sort post-processing step, but other character scorers may or may not map as easily to layouting directives.
+**NOTE**: Generally this would be more appropriately done using the `reorder_split_levels()` function within the layout rather than as a sort post-processing step, but other character scorers may or may not map as easily to layouting directives.
 
 
 ### Sort by the Percent Difference in Counts Between Genders in Arm C
