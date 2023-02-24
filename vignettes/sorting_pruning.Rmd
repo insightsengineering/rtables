@@ -34,13 +34,13 @@ library(rtables)
 library(dplyr)
 
 raw_lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX") %>%
-    split_rows_by("RACE") %>%
-    summarize_row_groups() %>%
-    split_rows_by("STRATA1") %>%
-    summarize_row_groups() %>%
-    analyze("AGE")
+  split_cols_by("ARM") %>%
+  split_cols_by("SEX") %>%
+  split_rows_by("RACE") %>%
+  summarize_row_groups() %>%
+  split_rows_by("STRATA1") %>%
+  summarize_row_groups() %>%
+  analyze("AGE")
 
 raw_tbl <- build_table(raw_lyt, DM)
 raw_tbl
@@ -70,8 +70,8 @@ There are currently no special utilities for trimming columns but we can remove 
 
 ```{r}
 coltrimmed <- raw_tbl[, col_counts(raw_tbl) > 0]
-h_coltrimmed <- head(coltrimmed, n = 14) %>% 
-    print()
+h_coltrimmed <- head(coltrimmed, n = 14) %>%
+  print()
 ```
 
 Now, it is interesting to see how this table is structured:
@@ -156,7 +156,7 @@ Therefore, a fundamental difference between pruning and sorting is that sorting 
 For example, we can sort the strata values (`ContentRow`) by observation counts within just the `ASIAN` subtable:
 
 ```{r}
-sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols) 
+sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols)
 # B and C are swapped as the global count (sum of all column counts) of strata C is higher than the one of strata B
 ```
 
@@ -192,7 +192,6 @@ Within each ethnicity separately, sort the strata by number of females in arm C 
 
 ```{r}
 sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
-
 ```
 
 ### Sorting Within an Analysis Subtable
@@ -202,25 +201,27 @@ When sorting within an analysis subtable (e.g., the subtable generated when your
 To show the differences between sorting an analysis subtable (`DataRow`), and a content subtable (`ContentRow`), we modify and prune (as before) a similar raw table as before:
 ```{r}
 more_analysis_fnc <- function(x) {
-    in_rows("median" = median(x),
-            "mean" = mean(x), 
-            .formats = "xx.x")
+  in_rows(
+    "median" = median(x),
+    "mean" = mean(x),
+    .formats = "xx.x"
+  )
 }
 
 raw_lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by(
-        "RACE", 
-        split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
-    ) %>%
-    summarize_row_groups() %>%
-    split_rows_by("STRATA1") %>%
-    summarize_row_groups() %>%
-    analyze("AGE", afun = more_analysis_fnc)
+  split_cols_by("ARM") %>%
+  split_rows_by(
+    "RACE",
+    split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
+  ) %>%
+  summarize_row_groups() %>%
+  split_rows_by("STRATA1") %>%
+  summarize_row_groups() %>%
+  analyze("AGE", afun = more_analysis_fnc)
 
-tbl <- build_table(raw_lyt, DM) %>% 
-    prune_table() %>% 
-    print()
+tbl <- build_table(raw_lyt, DM) %>%
+  prune_table() %>%
+  print()
 ```
 
 What should we do now if we want to sort each median and mean in each of the strata variables? We need to write a custom score function as the ready-made ones at the moment work only with content nodes (`content_table()` access function for `cont_n_allcols()` and `cont_n_onecol()`, of which we will talk in a moment). But before that we need to think what are we ordering, i.e. we need to specify the right path. We suggest to look at the structure first with `table_structure()` or `row_paths_summary()`.
@@ -235,9 +236,9 @@ Now, we have found a way to select relevant paths that we want to sort. We want 
 
 ```{r}
 scorefun <- function(tt) {
-    # Here we could use browser()
-    sum(unlist(row_values(tt)))
-    }
+  # Here we could use browser()
+  sum(unlist(row_values(tt)))
+}
 sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
 ```
 
@@ -271,10 +272,10 @@ We see that a similar function to `cont_n_allcols()` is wrapped by one that allo
 
 ```{r}
 scorefun_onecol <- function(col) {
-    function(tt) {
-        # Here we could use browser()
-        unlist(row_values(tt)[col], use.names = FALSE) # Modified to lose the list names
-    }
+  function(tt) {
+    # Here we could use browser()
+    unlist(row_values(tt)[col], use.names = FALSE) # Modified to lose the list names
+  }
 }
 names(tbl) # This can help us selecting the first column
 sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun_onecol(col = "A: Drug X"))
@@ -285,19 +286,20 @@ sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun_onecol(col = "
 ```{r}
 # Simpler table
 tbl <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", 
-                  split_fun = drop_and_remove_levels(c("U", "UNDIFFERENTIATED"))) %>%
-    analyze("AGE", afun = more_analysis_fnc) %>% 
-    build_table(DM) %>% 
-    prune_table() %>% 
-    print()
+  split_cols_by("ARM") %>%
+  split_cols_by("SEX",
+    split_fun = drop_and_remove_levels(c("U", "UNDIFFERENTIATED"))
+  ) %>%
+  analyze("AGE", afun = more_analysis_fnc) %>%
+  build_table(DM) %>%
+  prune_table() %>%
+  print()
 
 scorefun_onecol <- function(col_ind) {
-    function(tt) {
-        # Here we could use browser()
-        unlist(row_values(tt)[col_ind], use.names = FALSE) # Modified to lose the list names
-    }
+  function(tt) {
+    # Here we could use browser()
+    unlist(row_values(tt)[col_ind], use.names = FALSE) # Modified to lose the list names
+  }
 }
 names(tbl) # This shows why nested columns can not yet be selected on name basis
 table_structure(tbl) # Simpler structure
@@ -334,9 +336,9 @@ We sort the ethnicity by alphabetical order (in practice undoing our previous so
 
 ```{r}
 silly_name_scorer <- function(tt) {
-    nm <- obj_name(tt)
-    print(nm)
-    nm
+  nm <- obj_name(tt)
+  print(nm)
+  nm
 }
 
 sort_at_path(ethsort, "RACE", silly_name_scorer) # Now, it is sorted again in alphabetically!
@@ -353,14 +355,14 @@ We will sort _**the strata within each ethnicity**_ by the percent difference in
 
 ```{r}
 silly_gender_diffcount <- function(tt) {
-    browser()
-    ctable <- content_table(tt) ## get summary table at this location
-    crow <- tree_children(ctable)[[1]] ## get first row in summary table
-    vals <- row_values(crow)
-    ## we need to have a better api for specifying location in column space but currently we do not
-    mcount <- vals[[6]][1]
-    fcount <- vals[[5]][1]
-    (mcount - fcount) / fcount
+  browser()
+  ctable <- content_table(tt) ## get summary table at this location
+  crow <- tree_children(ctable)[[1]] ## get first row in summary table
+  vals <- row_values(crow)
+  ## we need to have a better api for specifying location in column space but currently we do not
+  mcount <- vals[[6]][1]
+  fcount <- vals[[5]][1]
+  (mcount - fcount) / fcount
 }
 
 sort_at_path(pruned, c("RACE", "*", "STRATA1"), silly_gender_diffcount)
