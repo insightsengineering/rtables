@@ -280,9 +280,35 @@ names(tbl) # This can help us selecting the first column
 sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun_onecol(col = "A: Drug X"))
 ```
 
+**Disclaimer**: At the moment the API does not support selecting by name nested columns and the above function should be using indices instead in that case as follows. Here, we will attempt to sort `pruned` by females in the B arm.
+
+```{r}
+# Simpler table
+tbl <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("SEX", 
+                  split_fun = drop_and_remove_levels(c("U", "UNDIFFERENTIATED"))) %>%
+    analyze("AGE", afun = more_analysis_fnc) %>% 
+    build_table(DM) %>% 
+    prune_table() %>% 
+    print()
+
+scorefun_onecol <- function(col_ind) {
+    function(tt) {
+        # Here we could use browser()
+        unlist(row_values(tt)[col_ind], use.names = FALSE) # Modified to lose the list names
+    }
+}
+names(tbl) # This shows why nested columns can not yet be selected on name basis
+table_structure(tbl) # Simpler structure
+sort_at_path(tbl, c("AGE"), scorefun_onecol(col = 3))
+```
+
+Building custom functions can be used for scoring as we just described, but also for pruning as we will see next.
+
 # Writing Custom Pruning Criteria and Scoring Functions
 
-Pruning criteria and scoring functions map `TableTree` or `TableRow` objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual.
+Pruning criteria and scoring functions map `TableTree` or `TableRow` objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual. Indeed, we showed already how sorting can be very complicated if the concept of tree-like structure and pathing is not well understood. It is important though to have in mind the following functions that can be used in each pruning or sorting function to retrieve the relevant information from the table.
 
 ## Useful Functions and Accessors
 
@@ -313,11 +339,10 @@ silly_name_scorer <- function(tt) {
     nm
 }
 
-sort_at_path(ethsort, "RACE", silly_name_scorer)
+sort_at_path(ethsort, "RACE", silly_name_scorer) # Now, it is sorted again in alphabetically!
 ```
 
 **NOTE**: Generally this would be more appropriately done using the `reorder_split_levels()` function within the layout rather than as a sort post-processing step, but other character scorers may or may not map as easily to layouting directives.
-
 
 ### Sort by the Percent Difference in Counts Between Genders in Arm C
 
@@ -328,10 +353,11 @@ We will sort _**the strata within each ethnicity**_ by the percent difference in
 
 ```{r}
 silly_gender_diffcount <- function(tt) {
+    browser()
     ctable <- content_table(tt) ## get summary table at this location
     crow <- tree_children(ctable)[[1]] ## get first row in summary table
     vals <- row_values(crow)
-    ## we need to have a better api for specifying location in column space but currently we don't
+    ## we need to have a better api for specifying location in column space but currently we do not
     mcount <- vals[[6]][1]
     fcount <- vals[[5]][1]
     (mcount - fcount) / fcount
