@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini, Abinaya Yogasekaram, and Gabriel Becker</h4>
             
-            <h4 data-toc-skip class="date">2023-02-23</h4>
+            <h4 data-toc-skip class="date">2023-02-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/custom_appearance.Rmd" class="external-link"><code>vignettes/custom_appearance.Rmd</code></a></small>
       <div class="d-none name"><code>custom_appearance.Rmd</code></div>
@@ -389,10 +383,11 @@ the inset of the table and main footer between the two tables.</p>
 <span><span class="co"># ha HA! Footer!</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># provenaaaaance</span></span></code></pre>
-<p>With inset - Notice, the inset does not apply to any title materials
-(main title, subtitles, page titles), or provenance footer materials.
-Inset settings is applied to top-left materials, referential footnotes
-main footer materials and any horizontal dividers.</p>
+<p>With inset -</p>
+<p>Notice, the inset does not apply to any title materials (main title,
+subtitles, page titles), or provenance footer materials. Inset settings
+is applied to top-left materials, referential footnotes main footer
+materials and any horizontal dividers.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/table_inset.html" class="external-link">table_inset</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">result</span></span></code></pre></div>
@@ -421,13 +416,15 @@ main footer materials and any horizontal dividers.</p>
 </h3>
 <p>A character value can be specified to modify the horizontal
 separation between column headers and the table. Horizontal separation
-applies when:<br>
-1) separating title + subtitles from the column labels + topleft
-materials,<br>
-2) column labels + top left material from row labels + cells,<br>
-3) row labels + cells from footer content, and<br>
-4) Referential footnotes from main + provenance content there would be
-something on both sides of the divider.<br></p>
+applies when:</p>
+<ol style="list-style-type: decimal">
+<li>separating title + subtitles from the column labels + topleft
+materials,</li>
+<li>column labels + top left material from row labels + cells,</li>
+<li>row labels + cells from footer content, and</li>
+<li>Referential footnotes from main + provenance content there would be
+something on both sides of the divider.</li>
+</ol>
 <p>Below, we replace the default line with “=”.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
