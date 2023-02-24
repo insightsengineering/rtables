@@ -89,7 +89,7 @@ found in the [releases list](https://github.com/insightsengineering/rtables/rele
 We first begin with a demographic table alike example and then show the creation of a more complex table.
 
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -105,7 +105,7 @@ lyt <- basic_table() %>%
     } else if (is.factor(x) || is.character(x)) {
       in_rows(.list = list_wrap_x(table)(x))
     } else {
-      stop("type not supproted")
+      stop("type not supported")
     }
   })
 
@@ -113,7 +113,7 @@ build_table(lyt, ex_adsl)
 ```
 
 
-```{r}
+```{r, message=FALSE}
 library(rtables)
 library(dplyr)
 
