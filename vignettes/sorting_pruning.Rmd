@@ -80,7 +80,7 @@ Now, it is interesting to see how this table is structured:
 table_structure(h_coltrimmed)
 ```
 
-For a deeper understanding of the fundamental structures in `rtables`, we suggest to take a look at slides 69-76 of this 
+For a deeper understanding of the fundamental structures in `rtables`, we suggest taking a look at slides 69-76 of this 
 [Slide deck](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing).
 
 In brief, it is important to notice how `[TableTree] RACE` is the root of the table that is split (with `split_rows_by("RACE") %>%`) in 
@@ -89,7 +89,7 @@ with `summarize_row_groups() %>%`, which creates for every split a "content" lin
 Finally, after another split and summarize, the `analyze("AGE")` produces the leaf level, i.e. `[ElementaryTable] AGE (1 x 6)`.
 
 The row structure is very important for pruning, but above all for sorting where "content" (`ContentRow`) and "value" (`DataRow`)
-are scored differently (see dedicated section).
+use different access functions and they should be treated differently.
 
 Another interesting function that can be used to understand the connection between row names and their representational path
 is the following:
@@ -140,18 +140,18 @@ pruned4
 
 ## Sorting
 
-Here, understanding pathing is very important. Indeed, sorting an `rtable` is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well. Sorting can be done with `sort_at_path()` function, and it has been designed to need a specific path 
+Here, understanding pathing is very important. Indeed, sorting a `rtable` is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well. Sorting can be done with `sort_at_path()` function, and it has been designed to need a specific path 
 and scoring function.
 
 A *score function* accepts a subtree or `TableRow` and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function. Importantly, "content" (`ContentRow`) and "values" (`DataRow`) need to
-be treated differently in the scoring function as they are retrieved also differently. For example, the internally defined `cont_n_allcols()` will work with calling content value of a specific subtable (retrieved _always_ *one level* under `path`) with the access function `content_table()`. Note that this function would fail if the initial node in the subtable is NOT a content node (`ContentRow`, produced by `summarize_row_groups()`). If we call `cont_n_allcols` without parenthesis we can see its construction and how values are retrieved.
+be treated differently in the scoring function as they are retrieved also differently. For example, the internally defined `cont_n_allcols()` will work with calling the content value of a specific subtable (retrieved _always_ *one level* under `path`) with the access function `content_table()`. Note that this function would fail if the initial node in the subtable is NOT a content node (`ContentRow`, produced by `summarize_row_groups()`). If we call `cont_n_allcols` without parenthesis we can see its construction and how values are retrieved.
 
 ```{r}
 ?cont_n_allcols # documentation: which scoring function is it?
 cont_n_allcols
 ```
 
-Therefore, a fundamental difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within the branch of the path. The wildcard "*" can, indeed, be used as such, selecting _any_ value/content at that level of the table tree.
+Therefore, a fundamental difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure, sorting should occur **separately** within the branch of the path. The wildcard "*" can, indeed, be used as such, selecting _any_ value/content at that level of the table tree.
 
 For example, we can sort the strata values (`ContentRow`) by observation counts within just the `ASIAN` subtable:
 
@@ -224,7 +224,7 @@ tbl <- build_table(raw_lyt, DM) %>%
   print()
 ```
 
-What should we do now if we want to sort each median and mean in each of the strata variables? We need to write a custom score function as the ready-made ones at the moment work only with content nodes (`content_table()` access function for `cont_n_allcols()` and `cont_n_onecol()`, of which we will talk in a moment). But before that we need to think what are we ordering, i.e. we need to specify the right path. We suggest to look at the structure first with `table_structure()` or `row_paths_summary()`.
+What should we do now if we want to sort each median and mean in each of the strata variables? We need to write a custom score function as the ready-made ones at the moment work only with content nodes (`content_table()` access function for `cont_n_allcols()` and `cont_n_onecol()`, of which we will talk in a moment). But before that, we need to think about what are we ordering, i.e. we need to specify the right path. We suggest looking at the structure first with `table_structure()` or `row_paths_summary()`.
 
 ```{r}
 table_structure(tbl) # Direct inspection into the tree-like structure of rtables
@@ -232,7 +232,7 @@ table_structure(tbl) # Direct inspection into the tree-like structure of rtables
 
 We see that to order all of the `AGE` nodes we need to get there with something like this: `RACE, ASIAN, STRATA1, A, AGE` and no more as the next level is what we need to sort. But we see now that this path would sort only the first group. We need wildcards: `RACE, *, STRATA1, *, AGE`.
 
-Now, we have found a way to select relevant paths that we want to sort. We want to construct a scoring function that works on median and mean and sort them. To do so, we may want to enter our scoring function with `browser()` to see what is fed to it and try to retrieve the single value that is to be return to do the sorting. We allow the user to experiment with this, while here we show a possible solution that considers summing all the column values that are retrieved with `row_values(tt)` from the subtable that is fed to the function itself. Note that any score function should be defined as having a subtable `tt` as unique input parameter and a single numeric value as output.
+Now, we have found a way to select relevant paths that we want to sort. We want to construct a scoring function that works on the median and mean and sort them. To do so, we may want to enter our scoring function with `browser()` to see what is fed to it and try to retrieve the single value that is to be returned to do the sorting. We allow the user to experiment with this, while here we show a possible solution that considers summing all the column values that are retrieved with `row_values(tt)` from the subtable that is fed to the function itself. Note that any score function should be defined as having a subtable `tt` as a unique input parameter and a single numeric value as output.
 
 ```{r}
 scorefun <- function(tt) {
@@ -263,7 +263,7 @@ Browse[1]> sum(unlist(row_values(tt))) ### Final value we want to give back to s
 [1] 99
 ```
 
-We can see how powerful and pragmatic it might be to change the sorting principles from within the custom scoring function. We show this by selecting a specific column to sort. Looking at the pre-defined function `cont_n_onecol()` gives us an insight on how to proceed.
+We can see how powerful and pragmatic it might be to change the sorting principles from within the custom scoring function. We show this by selecting a specific column to sort. Looking at the pre-defined function `cont_n_onecol()` gives us an insight into how to proceed.
 
 ```{r}
 cont_n_onecol
@@ -355,7 +355,6 @@ We will sort _**the strata within each ethnicity**_ by the percent difference in
 
 ```{r}
 silly_gender_diffcount <- function(tt) {
-  browser()
   ctable <- content_table(tt) ## get summary table at this location
   crow <- tree_children(ctable)[[1]] ## get first row in summary table
   vals <- row_values(crow)
