@@ -22,21 +22,19 @@ knitr::opts_chunk$set(comment = "#")
 ```
 ## Introduction
 
-Often we want to filter or reorder subsections of a table in ways that take into account the table structure. For example
+Often we want to filter or reorder subsections of a table (subtables) in ways that take into account the table structure. For example:
 
-- sorting subtables corresponding to factor levels so that most commonly observed levels occur first in the table
-- Removing subtables which represent 0 observations or which after other filtering contain 0 rows
-
-```{r, messages=FALSE}
-library(rtables)
-library(dplyr)
-```
+- sorting subtables corresponding to factor levels so that most commonly observed levels occur first in the table.
+- removing subtables which represent 0 observations or which after other filtering contain 0 rows.
 
 
 ## A Table In Need of Attention
 
 
-```{r}
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+
 raw_lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by("SEX") %>%
@@ -56,7 +54,7 @@ raw_tbl
 
 Trimming represents a convenience wrapper around simple, direct subsetting of the rows of a `TableTree`.
 
-We use the `trim_rows()` function with our table and a criteria function. All rows where the criteria function returns `TRUE` will be removed, and all others will be retained. 
+We use the `trim_rows()` function with our table and a criteria function. All rows where the criteria function returns `TRUE` will be removed, and all others will be retained.
 
 **NOTE**: Each row is kept or removed completely independently, with no awareness of the surrounding structure. This means, for example, that a subtree could have all its analysis rows removed and not be removed itself. For structure-aware filtering of a table, we will use *pruning* described in the next section.
 
@@ -74,9 +72,33 @@ There are currently no special utilities for trimming columns but we can remove 
 
 ```{r}
 coltrimmed <- raw_tbl[, col_counts(raw_tbl) > 0]
-head(coltrimmed)
+h_coltrimmed <- head(coltrimmed, n = 14) %>% 
+    print()
 ```
 
+Now, it is interesting to see how this table is structured:
+
+```{r}
+table_structure(h_coltrimmed)
+```
+
+For a deeper understanding of the fundamental structures in `rtables`, we suggest to take a look at slides 69-76 of this 
+[Slide deck](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing).
+
+In brief, it is important to notice how `[TableTree] RACE` is the root of the table that is split (with `split_rows_by("RACE") %>%`) in 
+`[TableTree] ASIAN [cont: 1 x 6]` and `[TableTree] BLACK OR AFRICAN AMERICAN [cont: 1 x 6]`. These are then "described" 
+with `summarize_row_groups() %>%`, which creates for every split a "content" line where there should have been a so-called `LabelRow`.
+Finally, after another split and summarize, the `analyze("AGE")` produces the leaf level, i.e. `[ElementaryTable] AGE (1 x 6)`.
+
+The row structure is very important for pruning, but above all for sorting where "content" (`ContentRow`) and "value" (`DataRow`)
+are scored differently (see dedicated section).
+
+Another interesting function that can be used to understand the connection between row names and their representational path
+is the following:
+
+```{r}
+row_paths_summary(h_coltrimmed)
+```
 
 ## Pruning
 
@@ -104,7 +126,6 @@ pruned2
 
 Note that because the pruning is being applied recursively, only the `ASIAN` subtree remains because even though the full `BLACK OR AFRICAN AMERICAN` subtree encompassed enough observations, the strata within it did not. We can take care of this by setting the `stop_depth` for pruning to `1`.
 
-
 ```{r}
 pruned3 <- prune_table(coltrimmed, low_obs_pruner(10, "sum"), stop_depth = 1)
 pruned3
@@ -121,9 +142,11 @@ pruned4
 
 ## Sorting
 
-Sorting an rtable is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well.
+Here, understanding pathing is very important. Indeed, sorting an `rtable` is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well. Sorting can be done with `sort_at_path` function, and it has been designed to need a specific path 
+and scoring function.
 
-This is done by giving a *score function* which accepts a subtree or `TableRow` and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function.
+A *score function* accepts a subtree or `TableRow` and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function. Importantly, "content" (`ContentRow`) and "values" (`DataRow`) need to
+be threated differently in the scoring function as they are retrieved also differently. For example, the internally defined `cont_n_allcols` will work with calling content value
 
 Another difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within the branch of the path.
 
@@ -177,7 +200,7 @@ sort_at_path(silly_tbl, c("cyl", "*", "mpg"), scorefun)
 
 # Writing Custom Pruning Criteria and Scoring Functions
 
-Pruning criteria and scoring functions map TableTree or TableRow objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual.
+Pruning criteria and scoring functions map `TableTree` or `TableRow` objects to a Boolean value (for pruning criteria) or a sortable scalar value (scoring functions). To do this we currently need to interact with the structure of the objects more than usual.
 
 ## Useful Functions and Accessors
 
@@ -199,7 +222,7 @@ Pruning criteria and scoring functions map TableTree or TableRow objects to a Bo
 
 In this case, for convenience/simplicity, we use the name of the table element but any logic which returns a single string could be used here.
 
-We sort the ethnicities by alphabetical order (in practice undoing our previous sorting by ethnicity above).
+We sort the ethnicity by alphabetical order (in practice undoing our previous sorting by ethnicity above).
 
 ```{r}
 silly_name_scorer <- function(tt) {
