@@ -27,7 +27,10 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Introduction
 
-In this vignette we will introduce some theory behind using layouts for table creation. Much of the theory also holds true when using other table packages. For this vignette we will use the following packages:
+In this vignette we will introduce some theory behind using layouts
+for table creation. Much of the theory also holds true when using
+other table packages. For this vignette we will use the following
+packages:
 
 ```{r, message=FALSE}
 library(dplyr)
@@ -60,7 +63,9 @@ df
 
 ## Building A Table Row By Row
 
-Let's look at a table that has 3 columns and 3 rows. Each row represents a different analysis (functions `foo`, `bar`, `zoo` that return an `rcell()` object):
+Let's look at a table that has 3 columns and 3 rows. Each row
+represents a different analysis (functions `foo`, `bar`, `zoo` that
+return an `rcell()` object):
 
 ```
                      A         B         C
@@ -70,7 +75,8 @@ bar_label        bar(df_A)  bar(df_B)  bar(df_C)
 zoo_label        zoo(df_A)  zoo(df_B)  zoo(df_C)
 ```
 
-The data passed to the analysis functions are a subset defined by the respective column and:
+The data passed to the analysis functions are a subset defined by the
+respective column and:
 
 ```{r}
 df_A <- df %>% filter(c1 == "A")
@@ -113,7 +119,10 @@ x_B <- df_B$x
 x_C <- df_C$x
 ```
 
-The function passed to `afun` is evaluated using argument matching. If `afun` has an argument `x` the analysis variable specified in `vars` in `analyze()` is passed to the function, and if `afun` has an argument `df` then a subset of the dataset is passed to `afun`:
+The function passed to `afun` is evaluated using argument matching. If
+`afun` has an argument `x` the analysis variable specified in `vars`
+in `analyze()` is passed to the function, and if `afun` has an
+argument `df` then a subset of the dataset is passed to `afun`:
 
 ```{r}
 lyt2 <- basic_table() %>%
@@ -126,7 +135,8 @@ tbl2 <- build_table(lyt2, df)
 tbl2
 ```
 
-Note that it is also possible that a function returns multiple rows with `in_rows()`:
+Note that it is also possible that a function returns multiple rows
+with `in_rows()`:
 
 ```{r}
 lyt3 <- basic_table() %>%
@@ -176,7 +186,9 @@ df_VC <- df %>% filter(r1 == "V", c1 == "C")
 df_WC <- df %>% filter(r1 == "W", c1 == "C")
 ```
 
-further note that `df_*` are of the same class as `df`, i.e. `tibble`s. Hence `foo` aggregates the subset of our data to a cell value.
+further note that `df_*` are of the same class as `df`,
+i.e. `tibble`s. Hence `foo` aggregates the subset of our data to a
+cell value.
 
 Given a function `foo` (ignore the `...` for now):
 
@@ -243,7 +255,8 @@ tbl5 <- build_table(lyt5, df)
 tbl5
 ```
 
-but now the row labels have disappeared. This is because `cfun` needs to define its row label. So let's redefine `foo`:
+but now the row labels have disappeared. This is because `cfun` needs
+to define its row label. So let's redefine `foo`:
 
 
 ```{r}
@@ -279,7 +292,8 @@ tbl7 <- build_table(lyt7, df)
 tbl7
 ```
 
-Note that `foo` has the variable information hard-encoded in the function body. Let's try some alternatives returning to `analyze()`:
+Note that `foo` has the variable information hard-encoded in the
+function body. Let's try some alternatives returning to `analyze()`:
 
 
 ```{r}
@@ -292,7 +306,9 @@ tbl8 <- build_table(lyt8, df)
 tbl8
 ```
 
-Note that the subset of the `y` variable is passed as the `x` argument to `mean()`. We could also get the `data.frame` instead of the variable:
+Note that the subset of the `y` variable is passed as the `x` argument
+to `mean()`. We could also get the `data.frame` instead of the
+variable:
 
 ```{r}
 lyt9 <- basic_table() %>%
@@ -320,7 +336,8 @@ where the function receives the subset of `y`.
 
 ### Group Summaries
 
-Pattern I is an interesting one as we can add more row structure (with further splits). Consider the following table:
+Pattern I is an interesting one as we can add more row structure (with
+further splits). Consider the following table:
 
 ```
             A         B         C
@@ -339,7 +356,8 @@ W
   w3     foo(<>)  foo(<>)  foo(<>)
 ```
 
-where `<>` represents the data that is represented by the cell. So for the cell `U > u1, A` we would have the subset:
+where `<>` represents the data that is represented by the cell. So for
+the cell `U > u1, A` we would have the subset:
 
 ```{r}
 df %>%
@@ -422,7 +440,12 @@ W
 ```
 
 
-The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows and the other rows (with `mean_sd` and `range`) are data rows. Currently we do not have content rows in the table. Content rows summarize the data defined by their splitting (i.e. `V > v1, B`). So if we wanted to add content rows at the `r2` split level then we would get:
+The rows `U`, `u1`, `u2`, ..., `W`, `w1`, `w2`, `w3` are label rows
+and the other rows (with `mean_sd` and `range`) are data
+rows. Currently we do not have content rows in the table. Content rows
+summarize the data defined by their splitting (i.e. `V > v1, B`). So
+if we wanted to add content rows at the `r2` split level then we would
+get:
 
 
 
@@ -461,7 +484,16 @@ W
      range    s_range(<>)    s_range(<>)    s_range(<>)
 ```
 
-where `s_cfun_2` is the content function and either returns one row via `rcell()` or multiple rows via `in_rows()`. The data represented by `<>` for the content rows is same data as for it's descendant, i.e. for the `U > u1, A` content row cell it is `df %>% filter(r1 == "U", r2 == "u1", c1 == "A")`. Note that content functions `cfun` operate only on data frames and not on vectors/variables so they must take the `df` argument. Further, a `cfun` must also have the `labelstr` argument which is the split level. This way, the `cfun` can define its own row name. In order to get the table above we can use the layout framework as follows:
+where `s_cfun_2` is the content function and either returns one row
+via `rcell()` or multiple rows via `in_rows()`. The data represented
+by `<>` for the content rows is same data as for it's descendant,
+i.e. for the `U > u1, A` content row cell it is `df %>% filter(r1 ==
+"U", r2 == "u1", c1 == "A")`. Note that content functions `cfun`
+operate only on data frames and not on vectors/variables so they must
+take the `df` argument. Further, a `cfun` must also have the
+`labelstr` argument which is the split level. This way, the `cfun` can
+define its own row name. In order to get the table above we can use
+the layout framework as follows:
 
 ```{r}
 s_mean_sd <- function(x) {
@@ -488,7 +520,8 @@ tbl13 <- build_table(lyt13, df)
 tbl13
 ```
 
-In the same manner, if we want content rows for the `r1` split we can do it at as follows:
+In the same manner, if we want content rows for the `r1` split we can
+do it at as follows:
 
 ```{r}
 lyt14 <- basic_table() %>%
@@ -504,7 +537,9 @@ tbl14 <- build_table(lyt14, df)
 tbl14
 ```
 
-In pagination, content rows and label rows get repeated if a page is split in a descendant of a content row. So, for example, if we were to split the following table at `***`:
+In pagination, content rows and label rows get repeated if a page is
+split in a descendant of a content row. So, for example, if we were to
+split the following table at `***`:
 
 
 ```
