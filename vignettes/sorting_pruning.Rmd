@@ -142,20 +142,48 @@ pruned4
 
 ## Sorting
 
-Here, understanding pathing is very important. Indeed, sorting an `rtable` is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well. Sorting can be done with `sort_at_path` function, and it has been designed to need a specific path 
+Here, understanding pathing is very important. Indeed, sorting an `rtable` is done **at a path** and recursively, meaning a sort operation will occur at a particular location within the table, and the subtables (children) will both be reordered themselves and potentially have their own children reordered as well. Sorting can be done with `sort_at_path()` function, and it has been designed to need a specific path 
 and scoring function.
 
 A *score function* accepts a subtree or `TableRow` and returns a single numeric value. Within the context currently being sorted, the subtrees are then reordered by the value of the score function. Importantly, "content" (`ContentRow`) and "values" (`DataRow`) need to
-be threated differently in the scoring function as they are retrieved also differently. For example, the internally defined `cont_n_allcols` will work with calling content value
+be treated differently in the scoring function as they are retrieved also differently. For example, the internally defined `cont_n_allcols()` will work with calling content value of a specific subtable (retrieved _always_ *one level* under `path`) with the access function `content_table()`. Note that this function would fail if the initial node in the subtable is NOT a content node (`ContentRow`, produced by `summarize_row_groups()`). If we call `cont_n_allcols` without parenthesis we can see its construction and how values are retrieved.
 
-Another difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within the branch of the path.
-
-Sort the strata by observation counts within just the `ASIAN` subtable:
 ```{r}
-sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols)
+?cont_n_allcols # documentation: which scoring function is it?
+cont_n_allcols
 ```
 
-Sort the ethnicity by observations in increasing order:
+Therefore, a fundamental difference between pruning and sorting is that sorting occurs at particular places in the table, as defined by a path. The path can contain "*" to indicate that at that portion of the structure sorting should occur **separately** within the branch of the path. The wildcard "*" can, indeed, be used as such, selecting _any_ value/content at that level of the table tree.
+
+For example, we can sort the strata values (`ContentRow`) by observation counts within just the `ASIAN` subtable:
+
+```{r}
+sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols) 
+# B and C are swapped as the global count (sum of all column counts) of strata C is higher than the one of strata B
+```
+
+or all the `RACE` subtables with the wildcard "*":
+
+```{r}
+sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), scorefun = cont_n_allcols)
+# All subtables, i.e. ASIAN, BLACK..., and WHITE, are reordered separately
+```
+
+It is possible to understand better pathing with `table_structure()` that highlights the tree-like structure and the node names:
+
+```{r}
+table_structure(pruned)
+```
+
+or with `row_paths_summary`:
+
+```{r}
+row_paths_summary(pruned)
+```
+
+Note that the latter may be misleading as content rows are labeled under `path` as, for example, `ASIAN, @content, ASIAN`. Indeed, the path `RACE, ASIAN, STRATA1, A, @content, A` should be specified with `RACE, ASIAN, STRATA1` as we did before because `sort_at_path()` supposes that the next node is the one to be sorted (so no need of wildcard "*" for A, B, C), and `A, @content, A` is to be meant as a unique node element specifying that this was a `LabelRow` that became a `ContentRow` by using `summarize_row_groups()`.
+
+Similarly, we can directly sort the ethnicity by observations in increasing order:
 
 ```{r}
 ethsort <- sort_at_path(pruned, path = c("RACE"), scorefun = cont_n_allcols, decreasing = FALSE)
@@ -173,29 +201,85 @@ sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
 
 When sorting within an analysis subtable (e.g., the subtable generated when your analysis function generates more than one row per group of data), the name of that subtable (generally the name of the variable being analyzed) must appear in the path, _**even if the variable label is not displayed when the table is printed**_.
 
-
+To show the differences between sorting an analysis subtable (`DataRow`), and a content subtable (`ContentRow`), we modify and prune (as before) a similar raw table as before:
 ```{r}
-silly_afun <- function(x) {
-    in_rows(a = rcell(2),
-            b = rcell(3),
-            c = rcell(1))
+more_analysis_fnc <- function(x) {
+    in_rows("median" = median(x),
+            "mean" = mean(x), 
+            .formats = "xx.x")
 }
 
+raw_lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by(
+        "RACE", 
+        split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
+    ) %>%
+    summarize_row_groups() %>%
+    split_rows_by("STRATA1") %>%
+    summarize_row_groups() %>%
+    analyze("AGE", afun = more_analysis_fnc)
 
-
-silly_lyt <- basic_table() %>%
-    split_rows_by("cyl") %>%
-    analyze("mpg", silly_afun)
-
-silly_tbl <- build_table(silly_lyt, mtcars)
-silly_tbl
+tbl <- build_table(raw_lyt, DM) %>% 
+    prune_table() %>% 
+    print()
 ```
 
-The path required to sort the rows inside our "analysis" of `mpg` is then `c("cyl", "*", "mpg")`:
+What should we do now if we want to sort each median and mean in each of the strata variables? We need to write a custom score function as the ready-made ones at the moment work only with content nodes (`content_table()` access function for `cont_n_allcols()` and `cont_n_onecol()`, of which we will talk in a moment). But before that we need to think what are we ordering, i.e. we need to specify the right path. We suggest to look at the structure first with `table_structure()` or `row_paths_summary()`.
 
 ```{r}
-scorefun <- function(tt) { mean(unlist(row_values(tt)))}
-sort_at_path(silly_tbl, c("cyl", "*", "mpg"), scorefun)
+table_structure(tbl) # Direct inspection into the tree-like structure of rtables
+```
+
+We see that to order all of the `AGE` nodes we need to get there with something like this: `RACE, ASIAN, STRATA1, A, AGE` and no more as the next level is what we need to sort. But we see now that this path would sort only the first group. We need wildcards: `RACE, *, STRATA1, *, AGE`.
+
+Now, we have found a way to select relevant paths that we want to sort. We want to construct a scoring function that works on median and mean and sort them. To do so, we may want to enter our scoring function with `browser()` to see what is fed to it and try to retrieve the single value that is to be return to do the sorting. We allow the user to experiment with this, while here we show a possible solution that considers summing all the column values that are retrieved with `row_values(tt)` from the subtable that is fed to the function itself. Note that any score function should be defined as having a subtable `tt` as unique input parameter and a single numeric value as output.
+
+```{r}
+scorefun <- function(tt) {
+    # Here we could use browser()
+    sum(unlist(row_values(tt)))
+    }
+sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
+```
+
+To help the user visualize what is happening in the score function we show here an example of its exploration from the debugging:
+
+```
+> sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
+Called from: scorefun(x)
+Browse[1]> tt ### THIS IS THE LEAF LEVEL -> DataRow ###
+[DataRow indent_mod 0]: median   30.0   33.0   36.0
+Browse[1]> row_values(tt) ### Extraction of values -> It will be a named list! ###
+$`A: Drug X`
+[1] 30
+
+$`B: Placebo`
+[1] 33
+
+$`C: Combination`
+[1] 36
+
+Browse[1]> sum(unlist(row_values(tt))) ### Final value we want to give back to sort_at_path ###
+[1] 99
+```
+
+We can see how powerful and pragmatic it might be to change the sorting principles from within the custom scoring function. We show this by selecting a specific column to sort. Looking at the pre-defined function `cont_n_onecol()` gives us an insight on how to proceed.
+
+```{r}
+cont_n_onecol
+```
+We see that a similar function to `cont_n_allcols()` is wrapped by one that allows a parameter `j` to be used to select a specific column. We will do the same here for selecting which column we want to sort.
+
+```{r}
+scorefun_onecol <- function(col) {
+    function(tt) {
+        # Here we could use browser()
+        unlist(row_values(tt)[col], use.names = FALSE) # Modified to lose the list names
+    }
+}
+names(tbl) # This can help us selecting the first column
+sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun_onecol(col = "A: Drug X"))
 ```
 
 # Writing Custom Pruning Criteria and Scoring Functions
