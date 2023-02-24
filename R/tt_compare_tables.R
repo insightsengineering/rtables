@@ -15,6 +15,25 @@
 #'   (\code{TRUE}) or pruned (\code{FALSE}) during pruning.
 #' @seealso [prune_table()], [trim_rows()]
 #' @export
+#' 
+#' @examples
+#' adsl <- ex_adsl
+#' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
+#' adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
+#' adsl$BMRKR1 <- 0
+#' 
+#' tbl_to_prune <- basic_table() %>%
+#'     analyze("BMRKR1") %>%
+#'     split_cols_by("ARM") %>% 
+#'     split_rows_by("SEX") %>% 
+#'     summarize_row_groups() %>%
+#'     split_rows_by("STRATA1") %>%
+#'     summarize_row_groups() %>%
+#'     analyze("AGE") %>%
+#'     build_table(adsl)
+#' 
+#' tbl_to_prune %>% prune_table(all_zero_or_na)
+#'    
 all_zero_or_na <- function(tr) {
     if(!is(tr, "TableRow") || is(tr, "LabelRow"))
         return(FALSE)
@@ -28,6 +47,10 @@ all_zero_or_na <- function(tr) {
 #'   contains only (non-missing) zero values.
 #'
 #' @export
+#' 
+#' @examples
+#' tbl_to_prune %>% prune_table(all_zero)
+#' 
 all_zero <- function(tr) {
     if(!is(tr, "TableRow") || is(tr, "LabelRow"))
         return(FALSE)
@@ -45,8 +68,31 @@ all_zero <- function(tr) {
 #'   data rows have been trimmed, depending on what \code{criteria} returns when
 #'   called on a \code{LabelRow} object. To avoid this, use the
 #'   structurally-aware \code{\link{prune_table}} machinery instead.
+#' @details This function will be deprecated in the future in favor of the more
+#'   elegant and versatile [prune_table()] function which can perform the 
+#'   same function as `trim_rows()` but is more powerful as it takes table 
+#'   structure into account.
 #' @export
 #' @seealso [prune_table()]
+#' 
+#' @examples
+#' adsl <- ex_adsl
+#' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
+#' 
+#' tbl_to_trim <- basic_table() %>%
+#'     analyze("BMRKR1") %>%
+#'     split_cols_by("ARM") %>% 
+#'     split_rows_by("SEX") %>% 
+#'     summarize_row_groups() %>%
+#'     split_rows_by("STRATA1") %>%
+#'     summarize_row_groups() %>%
+#'     analyze("AGE") %>%
+#'     build_table(adsl)
+#' 
+#' tbl_to_trim %>% trim_rows()
+#' 
+#' tbl_to_trim %>% trim_rows(all_zero)
+#' 
 trim_rows <- function(tt, criteria = all_zero_or_na) {
     rows <- collect_leaves(tt, TRUE, TRUE)
     torm <- vapply(rows, criteria,
@@ -63,12 +109,16 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 #' @details \code{content_all_zeros_nas} Prunes a subtable if a) it has a
 #'   content table with exactly one row in it, and b) \code{all_zero_or_na}
 #'   returns \code{TRUE} for that single content row. In practice, when the
-#'   default summary/content function was used, this represents pruning any
+#'   default summary/content function is used, this represents pruning any
 #'   subtable which corresponds to an empty set of the input data (e.g., because
 #'   a factor variable was used in \code{\link{split_rows_by}} but not all
 #'   levels were present in the data).
 #'
 #' @export
+#' 
+#' @examples
+#' tbl_to_prune %>% prune_table(content_all_zeros_nas)
+#' 
 content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
     ## this will be NULL if
     ## tt is something that doesn't have a content table
@@ -84,11 +134,15 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
 
 #' @details \code{prune_empty_level} combines \code{all_zero_or_na} behavior for
 #'   \code{TableRow} objects, \code{content_all_zeros_nas} on
-#'   \code{content_table(tt)} for \code{TableTree} objects, and an addition
+#'   \code{content_table(tt)} for \code{TableTree} objects, and an additional
 #'   check that returns \code{TRUE} if the \code{tt} has no children.
 #'
 #' @export
 #' @rdname trim_prune_funs
+#' 
+#' @examples 
+#' tbl_to_prune %>% prune_table(prune_empty_level)
+#' 
 prune_empty_level <- function(tt) {
     if(is(tt, "TableRow"))
         return(all_zero_or_na(tt))
@@ -99,11 +153,15 @@ prune_empty_level <- function(tt) {
     length(kids) == 0
 }
 
-#' @details \code{prune_zeros_only} behaves as \code{prune_empty_levels} does,
+#' @details \code{prune_zeros_only} behaves as \code{prune_empty_level} does,
 #'   except that like \code{all_zero} it prunes only in the case of all
 #'   non-missing zero values.
 #' @rdname trim_prune_funs
 #' @export
+#' 
+#' @examples 
+#' tbl_to_prune %>% prune_table(prune_zeros_only)
+#' 
 prune_zeros_only <- function(tt) {
     if(is(tt, "TableRow"))
         return(all_zero(tt))
@@ -114,20 +172,25 @@ prune_zeros_only <- function(tt) {
     length(kids) == 0
 }
 
-#' @param min numeric(1). (lob_obs_pruner only). Minimum aggregate count value.
+#' @param min numeric(1). (`low_obs_pruner` only). Minimum aggregate count value.
 #'   Subtables whose combined/average count are below this threshold will be
 #'   pruned
 #' @param type character(1). How count values should be aggregated. Must be
 #'   \code{"sum"} (the default) or \code{"mean"}
 #'
-#' @details \code{lob_obs_pruner} is a \emph{constructor function} which, when
+#' @details \code{low_obs_pruner} is a \emph{constructor function} which, when
 #'   called, returns a pruning criteria function which will prune on content
-#'   rows by comparing sum or mean (dictated by \code{type})of the count count
+#'   rows by comparing sum or mean (dictated by \code{type}) of the count 
 #'   portions of the cell values (defined as the first value per cell regardless
 #'   of how many values per cell there are) against \code{min}.
 #'
 #' @rdname trim_prune_funs
 #' @export
+#' 
+#' @examples 
+#' min_prune <- low_obs_pruner(70, "sum")
+#' tbl_to_prune %>% prune_table(min_prune)
+#' 
 low_obs_pruner <- function(min, type = c("sum", "mean")) {
     type <- match.arg(type)
     function(tt) {
@@ -159,7 +222,23 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #'
 #' @export
 #'
-#' @seealso [prune_empty_level()]
+#' @seealso [prune_empty_level()] for details on this and several other basic 
+#'   pruning functions included in the `rtables` package.
+#'   
+#' @examples 
+#' adsl <- ex_adsl
+#' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
+#' 
+#' tbl_to_prune <- basic_table() %>%
+#'     split_cols_by("ARM") %>% 
+#'     split_rows_by("SEX") %>% 
+#'     summarize_row_groups() %>%
+#'     split_rows_by("STRATA1") %>%
+#'     summarize_row_groups() %>%
+#'     analyze("AGE") %>%
+#'     build_table(adsl)
+#' 
+#' tbl_to_prune %>% prune_table()
 #'
 prune_table <- function(tt,
                         prune_func = prune_empty_level,

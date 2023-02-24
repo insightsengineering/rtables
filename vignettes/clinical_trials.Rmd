@@ -32,9 +32,17 @@ In this vignette we create a
 * response table
 * time-to-event analysis table
 
-using the `rtables` layout facility. That is, we demonstrate how the layout based tabulation framework can specify the structure and relations that are commonly found when analyzing clinical trials data.
+using the `rtables` layout facility. That is, we demonstrate how the
+layout based tabulation framework can specify the structure and
+relations that are commonly found when analyzing clinical trials data.
 
-Note that all the data is created using random number generators. All `ex_*` data which is currently attached to the `rtables` package is provided by the [`formatters`](https://insightsengineering.github.io/formatters/) package and was created using the publicly available [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) R package.
+Note that all the data is created using random number generators. All
+`ex_*` data which is currently attached to the `rtables` package is
+provided by the
+[`formatters`](https://insightsengineering.github.io/formatters/)
+package and was created using the publicly available
+[`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/)
+R package.
 
 The packages used in this vignette are:
 
@@ -46,9 +54,12 @@ library(dplyr)
 
 ## Demographic Table
 
-Demographic tables summarize the variables content for different population subsets (encoded in the columns).
+Demographic tables summarize the variables content for different
+population subsets (encoded in the columns).
 
-One feature of `analyze()` that we have not introduced in the previous vignette is that the analysis function `afun` can specify multiple rows with the `in_rows()` function:
+One feature of `analyze()` that we have not introduced in the previous
+vignette is that the analysis function `afun` can specify multiple
+rows with the `in_rows()` function:
 
 ```{r}
 ADSL <- ex_adsl  # Example ADSL dataset
@@ -82,7 +93,11 @@ tbl2 <- build_table(lyt2, ADSL)
 tbl2
 ```
 
-Hence, if `afun` can process different data vector types (i.e. variables selected from the data) then we are fairly close to a standard demographic table. Here is a function that either creates a count table or some number summary if the argument `x` is a factor or numeric, respectively:
+Hence, if `afun` can process different data vector types
+(i.e. variables selected from the data) then we are fairly close to a
+standard demographic table. Here is a function that either creates a
+count table or some number summary if the argument `x` is a factor or
+numeric, respectively:
 
 
 ```{r}
@@ -103,7 +118,9 @@ s_summary <- function(x) {
 }
 ```
 
-Note we use `rcell`s to wrap the results in order to add formatting instructions for `rtables`. We can use `s_summary` outside the context of tabulation:
+Note we use `rcell` to wrap the results in order to add formatting
+instructions for `rtables`. We can use `s_summary` outside the context
+of tabulation:
 
 ```{r}
 s_summary(ADSL$AGE)
@@ -148,7 +165,11 @@ identical(summary_tbl, summary_tbl2)
 stopifnot(identical(summary_tbl, summary_tbl2))
 ```
 
-In clinical trials analyses the number of patients per column is often referred to as `N` (rather than the overall population which outside of clinical trials is commonly referred to as `N`). Column `N`s are added by setting the `show_colcounts` argument in `basic_table()` to `TRUE`:
+In clinical trials analyses the number of patients per column is often
+referred to as `N` (rather than the overall population which outside
+of clinical trials is commonly referred to as `N`). Column `N`s are
+added by setting the `show_colcounts` argument in `basic_table()` to
+`TRUE`:
 
 ```{r}
 summary_lyt3 <- basic_table(show_colcounts = TRUE) %>%
@@ -161,10 +182,14 @@ summary_tbl3
 
 ### Variations on the Demographic Table
 
-We will now show a couple of variations of the demographic table that we developed above. These variations are in structure and not in analysis, hence they don't require a modification to the `s_summary` function.
+We will now show a couple of variations of the demographic table that
+we developed above. These variations are in structure and not in
+analysis, hence they don't require a modification to the `s_summary`
+function.
 
 
-We will start with a standard table analyzing the variables `AGE` and `BMRKR2` variables:
+We will start with a standard table analyzing the variables `AGE` and
+`BMRKR2` variables:
 
 ```{r}
 lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -175,7 +200,8 @@ tbl <- build_table(lyt, ADSL)
 tbl
 ```
 
-Assume we would like to have this analysis carried out per gender encoded in the row space:
+Assume we would like to have this analysis carried out per gender
+encoded in the row space:
 
 ```{r, warning=FALSE}
 lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -187,7 +213,8 @@ tbl <- build_table(lyt, ADSL)
 tbl
 ```
 
-We will now subset `ADSL` to include only males and females in the analysis in order to reduce the number of rows in the table:
+We will now subset `ADSL` to include only males and females in the
+analysis in order to reduce the number of rows in the table:
 
 ```{r, warning=FALSE}
 ADSL_M_F <- filter(ADSL, SEX %in% c("M", "F"))
@@ -201,7 +228,15 @@ tbl2 <- build_table(lyt2, ADSL_M_F)
 tbl2
 ```
 
-Note that the `UNDIFFERENTIATED` and `U` levels still show up in the table. This is because tabulation respects the factor levels and level order, exactly as the `split` and `table` function do. If empty levels should be dropped then `rtables` needs to know that at splitting time via the `split_fun` argument in `split_rows_by()`. There are a number of predefined functions. For this example `drop_split_levels()` is required to drop the empty levels at splitting time. Splitting is a big topic and will be eventually addressed in a specific package vignette.
+Note that the `UNDIFFERENTIATED` and `U` levels still show up in the
+table. This is because tabulation respects the factor levels and level
+order, exactly as the `split` and `table` function do. If empty levels
+should be dropped then `rtables` needs to know that at splitting time
+via the `split_fun` argument in `split_rows_by()`. There are a number
+of predefined functions. For this example `drop_split_levels()` is
+required to drop the empty levels at splitting time. Splitting is a
+big topic and will be eventually addressed in a specific package
+vignette.
 
 
 ```{r}
@@ -214,7 +249,8 @@ tbl3 <- build_table(lyt3, ADSL_M_F)
 tbl3
 ```
 
-In the table above the labels `M` and `F` are not very descriptive. You can add the full labels as follows:
+In the table above the labels `M` and `F` are not very
+descriptive. You can add the full labels as follows:
 
 ```{r}
 ADSL_M_F_l <- ADSL_M_F %>%
@@ -234,7 +270,9 @@ tbl4 <- build_table(lyt4, ADSL_M_F_l)
 tbl4
 ```
 
-For the next table variation we only stratify by gender for the `AGE` analysis. To do this the `nested` argument has to be set to `FALSE` in `analyze()` call:
+For the next table variation we only stratify by gender for the `AGE`
+analysis. To do this the `nested` argument has to be set to `FALSE` in
+`analyze()` call:
 
 ```{r}
 lyt5 <- basic_table(show_colcounts = TRUE) %>%
@@ -247,7 +285,11 @@ tbl5 <- build_table(lyt5, ADSL_M_F_l)
 tbl5
 ```
 
-Once we split the rows into groups (`Male` and `Female` here) one might want to summarize groups: usually by showing count and column percentages. This is especially important if we have missing data. For example if we create the above table but add missing data to the `AGE` variable:
+Once we split the rows into groups (`Male` and `Female` here) one
+might want to summarize groups: usually by showing count and column
+percentages. This is especially important if we have missing data. For
+example, if we create the above table but add missing data to the
+`AGE` variable:
 
 ```{r}
 insert_NAs <- function(x) {
@@ -261,7 +303,8 @@ ADSL_NA <- ADSL_M_F_l %>%
 
 lyt6 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
-  split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
+  split_rows_by("SEX", labels_var = "lbl_sex",
+                split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary) %>%
   analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
 
@@ -269,7 +312,10 @@ tbl6 <- build_table(lyt6, filter(ADSL_NA, SEX %in% c("M", "F")))
 tbl6
 ```
 
-Here it is not easy to see how many females and males there are in each arm as `n` represents the number of non-missing data elements in the variables. Groups within rows that are defined by splitting can be summarized with `summarize_row_groups()`, for example:
+Here it is not easy to see how many females and males there are in
+each arm as `n` represents the number of non-missing data elements in
+the variables. Groups within rows that are defined by splitting can be
+summarized with `summarize_row_groups()`, for example:
 
 ```{r}
 lyt7 <- basic_table(show_colcounts = TRUE) %>%
@@ -285,10 +331,18 @@ tbl7
 
 There are a couple of things to note here:
 
-* Group summaries produce "content" rows. Visually it's impossible to distinguish data rows from content rows. Their difference is justified (and it's an important design decision) because when we paginate tables the content rows are by default repeated if a group gets divided via pagination.
-* Conceptually the content rows summarize the patient population which is analyzed and hence are often the count & group percentages (default behavior of `summarize_row_groups()`).
+* Group summaries produce "content" rows. Visually, it's impossible to
+  distinguish data rows from content rows. Their difference is
+  justified (and it's an important design decision) because when we
+  paginate tables the content rows are by default repeated if a group
+  gets divided via pagination.
+* Conceptually the content rows summarize the patient population which
+  is analyzed and hence are often the count & group percentages
+  (default behavior of `summarize_row_groups()`).
 
-We can recreate this default behavior (count percentage) by defining a `cfun` for illustrative purposes here as it results in the same table as above:
+We can recreate this default behavior (count percentage) by defining a
+`cfun` for illustrative purposes here as it results in the same table
+as above:
 
 ```{r}
 lyt8 <- basic_table(show_colcounts = TRUE) %>%
@@ -307,7 +361,12 @@ tbl8 <- build_table(lyt8, filter(ADSL_NA, SEX %in% c("M", "F")))
 tbl8
 ```
 
-Note that `cfun`, like `afun` (which is used in `analyze()`), can operate on either variables, passed via the `x` argument, or `data.frame`s or `tibble`s, which are passed via the `df` argument (`afun` can optionally request `df` too). Unlike `afun`, `cfun` must accept `labelstr` as the second argument which gives the default group label (factor level from splitting) and hence it could be modified:
+Note that `cfun`, like `afun` (which is used in `analyze()`), can
+operate on either variables, passed via the `x` argument, or
+`data.frame`s or `tibble`s, which are passed via the `df` argument
+(`afun` can optionally request `df` too). Unlike `afun`, `cfun` must
+accept `labelstr` as the second argument which gives the default group
+label (factor level from splitting) and hence it could be modified:
 
 ```{r}
 lyt9 <- basic_table() %>%
@@ -328,11 +387,15 @@ tbl9
 
 ### Using Layouts
 
-Layouts have a couple of advantages over tabulating the tables directly:
+Layouts have a couple of advantages over tabulating the tables
+directly:
 
-* the creation of layouts requires the analyst to describe the problem in an abstract way
+* the creation of layouts requires the analyst to describe the problem
+  in an abstract way
    - i.e. they separate the analyses description from the actual data
-* referencing variable names happens via strings (no non-standard evaluation (NSE) is needed, though this is arguably either a feature or a shortcoming)
+* referencing variable names happens via strings (no non-standard
+  evaluation (NSE) is needed, though this is arguably either a feature
+  or a shortcoming)
 * layouts can be reused
 
 Here is an example that demonstrates the reusability of layouts:
@@ -362,9 +425,14 @@ adsl_f_tbl
 
 ## Adverse Events
 
-There are a number of different adverse event tables. We will now present two tables that show adverse events by ID and then by grade and by ID.
+There are a number of different adverse event tables. We will now
+present two tables that show adverse events by ID and then by grade
+and by ID.
 
-This time we won't use the `ADAE` dataset from [`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/) but rather generate a dataset on the fly (see [Adrian's 2016 Phuse paper](https://github.com/waddella/phuse2016_adverse_events)):
+This time we won't use the `ADAE` dataset from
+[`random.cdisc.data`](https://insightsengineering.github.io/random.cdisc.data/)
+but rather generate a dataset on the fly (see [Adrian's 2016 Phuse
+paper](https://github.com/waddella/phuse2016_adverse_events)):
 
 ```{r}
 set.seed(1)
@@ -396,7 +464,11 @@ ADSL2 <- data.frame(
   AGE = 20 + rbinom(N_pop, size = 40, prob = 0.7)
 )
 
-l.adae <- mapply(ADSL2$USUBJID, ADSL2$ARM, ADSL2$SEX, ADSL2$AGE, FUN = function(id, arm, sex, age) {
+l.adae <- mapply(ADSL2$USUBJID,
+                 ADSL2$ARM,
+                 ADSL2$SEX,
+                 ADSL2$AGE,
+                 FUN = function(id, arm, sex, age) {
   n_ae <- sample(0:25, 1, prob = if (arm == "ARM A") weightsA else weightsB)
   i <- sample(seq_len(nrow(lookup)), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10)) / 16)
   lookup[i, ] %>%
@@ -446,7 +518,10 @@ we would get the following summary:
 s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
 ```
 
-The `.N_col` argument is a special keyword argument by which `build_table()` passes the population size for each respective column. For a list of keyword arguments for the functions passed to `afun` in `analyze()` refer to the documentation with `?analyze`.
+The `.N_col` argument is a special keyword argument by which
+`build_table()` passes the population size for each respective
+column. For a list of keyword arguments for the functions passed to
+`afun` in `analyze()`, refer to the documentation with `?analyze`.
 
 We now use the `s_events_patients` summary function in a tabulation:
 
@@ -477,9 +552,10 @@ adae_adsl_tbl <- build_table(adae_lyt, ADAE2, alt_counts_df = ADSL2)
 adae_adsl_tbl
 ```
 
-Alternatively, if the desired column counts are already calculated, they can be
-specified directly via the `col_counts` argument to `build_table()`, though specifying
-an `alt_counts_df` is the preferred mechanism.
+Alternatively, if the desired column counts are already calculated,
+they can be specified directly via the `col_counts` argument to
+`build_table()`, though specifying an `alt_counts_df` is the preferred
+mechanism.
 
 
 We next calculate this information per system organ class:
@@ -495,7 +571,9 @@ adae_soc_tbl <- build_table(adae_soc_lyt, ADAE2, alt_counts_df = ADSL2)
 adae_soc_tbl
 ```
 
-We now have to add a count table of `AEDECOD` for each `AEBODSYS`. The default `analyze()` behavior for a factor is to create the count table per level (using `rtab_inner`):
+We now have to add a count table of `AEDECOD` for each `AEBODSYS`. The
+default `analyze()` behavior for a factor is to create the count table
+per level (using `rtab_inner`):
 
 ```{r}
 adae_soc_lyt2 <- basic_table(show_colcounts = TRUE) %>%
@@ -508,9 +586,14 @@ adae_soc_tbl2 <- build_table(adae_soc_lyt2, ADAE2, alt_counts_df = ADSL2)
 adae_soc_tbl2
 ```
 
-The `indent_mod` argument enables relative indenting changes if the tree structure of the table does not result in the desired indentation by default.
+The `indent_mod` argument enables relative indenting changes if the
+tree structure of the table does not result in the desired indentation
+by default.
 
-This table so far is however not the usual adverse event table as it counts the total number of events and not the number of subjects for one or more events for a particular term. To get the correct table we need to write a custom analysis function:
+This table so far is however not the usual adverse event table as it
+counts the total number of events and not the number of subjects for
+one or more events for a particular term. To get the correct table we
+need to write a custom analysis function:
 
 ```{r}
 table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID") {
@@ -542,7 +625,8 @@ adae_soc_tbl3 <- build_table(adae_soc_lyt3, ADAE2, alt_counts_df = ADSL2)
 adae_soc_tbl3
 ```
 
-Note that we are missing the overall summary in the first two rows. This can be added with an initial `analyze()` call.
+Note that we are missing the overall summary in the first two
+rows. This can be added with an initial `analyze()` call.
 
 ```{r}
 adae_soc_lyt4 <- basic_table(show_colcounts = TRUE) %>%
@@ -562,13 +646,17 @@ Finally, if we wanted to prune the 0 count rows we can do that with the `trim_ro
 trim_rows(adae_soc_tbl4)
 ```
 
-Pruning is a larger topic with a [separate `rtables` package vignette](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html).
+Pruning is a larger topic with a [separate `rtables` package
+vignette](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html).
 
 ### Adverse Events By ID and By Grade
 
-The adverse events table by ID and by grade shows how many patients had at least one adverse event per grade for different subsets of the data (e.g. defined by system organ class).
+The adverse events table by ID and by grade shows how many patients
+had at least one adverse event per grade for different subsets of the
+data (e.g. defined by system organ class).
 
-For this table we do not show the zero count grades. Note that we add the "overall" groups with a custom split function.
+For this table we do not show the zero count grades. Note that we add
+the "overall" groups with a custom split function.
 
 ```{r}
 table_count_grade_once_per_id <- function(df,
@@ -595,7 +683,8 @@ table_count_grade_once_per_id <- function(df,
 table_count_grade_once_per_id(ex_adae, grade_levels = 1:5)
 ```
 
-All of the layouting concepts needed to create this table have already been introduced so far:
+All of the layouting concepts needed to create this table have already
+been introduced so far:
 
 ```{r}
 adae_grade_lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -629,12 +718,14 @@ Let's start with the first part which is fairly simple to derive:
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
   mutate(
-    rsp = factor(AVALC %in% c("CR", "PR"), levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
-    is_rsp = (rsp == "Responders")
+      rsp = factor(AVALC %in% c("CR", "PR"),
+                   levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
+      is_rsp = (rsp == "Responders")
   )
 
 s_proportion <- function(x, .N_col) {
-   in_rows(.list = lapply(as.list(table(x)), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
+  in_rows(.list = lapply(as.list(table(x)),
+                         function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
 }
 
 rsp_lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -646,9 +737,13 @@ rsp_tbl
 ```
 
 
-Note that we did set the `ref_group` argument in `split_cols_by()` which for the current table had no effect as we only use the cell data for the responder and non-responder counts. The `ref_group` argument is needed for the part 2 and 3 of the table.
+Note that we did set the `ref_group` argument in `split_cols_by()`
+which for the current table had no effect as we only use the cell data
+for the responder and non-responder counts. The `ref_group` argument
+is needed for the part 2 and 3 of the table.
 
-We will now look the implementation of part 2: unstratified analysis comparison vs. control group. Let's start with the analysis function:
+We will now look the implementation of part 2: unstratified analysis
+comparison vs. control group. Let's start with the analysis function:
 
 ```{r}
 s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
@@ -712,7 +807,9 @@ rsp_tbl2 <- build_table(rsp_lyt2, ADRS_BESRSPI)
 rsp_tbl2
 ```
 
-Next we will add part 3: the multinomial response table. To do so, we are adding a row-split by response level, and then doing the same thing as we did for the binary response table above.
+Next we will add part 3: the multinomial response table. To do so, we
+are adding a row-split by response level, and then doing the same
+thing as we did for the binary response table above.
 
 ```{r}
 s_prop <- function(df, .N_col) {
@@ -747,7 +844,8 @@ rsp_tbl3 <- build_table(rsp_lyt3, ADRS_BESRSPI)
 rsp_tbl3
 ```
 
-In the case that we wanted to rename the levels of `AVALC` and remove the CI for `NE` we could do that as follows:
+In the case that we wanted to rename the levels of `AVALC` and remove
+the CI for `NE` we could do that as follows:
 
 ```{r}
 rsp_label <- function(x) {
@@ -788,20 +886,28 @@ rsp_tbl4 <- build_table(rsp_lyt4, ADRS_BESRSPI)
 rsp_tbl4
 ```
 
-Note that the table is missing the rows gaps to make it more readable. The row spacing feature is on the `rtables` roadmap and will be implemented in future.
+Note that the table is missing the rows gaps to make it more
+readable. The row spacing feature is on the `rtables` roadmap and will
+be implemented in future.
 
 ## Time to Event Analysis Table
 
-The time to event analysis table that will be constructed consists of four parts:
+The time to event analysis table that will be constructed consists of
+four parts:
 
 1. Overall subject counts
 2. Censored subjects summary
 3. Cox proportional-hazards analysis
 4. Time-to-event analysis
 
-The table is constructed by sequential use of the `analyze()` function, with four custom analysis functions corresponding to each of the four parts listed above. In addition the table includes referential footnotes relevant to the table contents. The table will be faceted column-wise by arm.
+The table is constructed by sequential use of the `analyze()`
+function, with four custom analysis functions corresponding to each of
+the four parts listed above. In addition the table includes
+referential footnotes relevant to the table contents. The table will
+be faceted column-wise by arm.
 
-First we will start by loading the necessary packages and preparing the data to be used in the construction of this table.
+First we will start by loading the necessary packages and preparing
+the data to be used in the construction of this table.
 
 ```{r}
 library(survival)
@@ -816,9 +922,13 @@ adtte2 <- adtte %>%
     mutate(CNSDTDSC = ifelse(CNSDTDSC == "", "__none__", CNSDTDSC))
 ```
 
-The `adtte` dataset will be used in preparing the models while the `adtte2` dataset handles missing values in the "Censor Date Description" column and will be used to produce the final table. We add censoring into the data for example purposes.
+The `adtte` dataset will be used in preparing the models while the
+`adtte2` dataset handles missing values in the "Censor Date
+Description" column and will be used to produce the final table. We
+add censoring into the data for example purposes.
 
-Next we create a basic analysis function, `a_count_subjs` which prints the overall unique subject counts and percentages within the data.
+Next we create a basic analysis function, `a_count_subjs` which prints
+the overall unique subject counts and percentages within the data.
 
 ```{r}
 a_count_subjs <- function(x, .N_col) {
@@ -827,7 +937,11 @@ a_count_subjs <- function(x, .N_col) {
 }
 ```
 
-Then an analysis function is created to generate the counts of censored subjects for each level of a factor variable in the dataset. In this case the `cnsr_counter` function will be applied with the `CNSDTDSC` variable which contains a censor date description for each censored subject.
+Then an analysis function is created to generate the counts of
+censored subjects for each level of a factor variable in the
+dataset. In this case the `cnsr_counter` function will be applied with
+the `CNSDTDSC` variable which contains a censor date description for
+each censored subject.
 
 ```{r}
 cnsr_counter <- function(df, .var, .N_col) {
@@ -837,9 +951,18 @@ cnsr_counter <- function(df, .var, .N_col) {
 }
 ```
 
-This function generates counts and fractions of unique subjects corresponding to each factor level, excluding missing values (uncensored patients).
+This function generates counts and fractions of unique subjects
+corresponding to each factor level, excluding missing values
+(uncensored patients).
 
-A Cox proportional-hazards (Cox P-H) analysis is generated next with a third custom analysis function, `a_cph`. Prior to creating the analysis function, the Cox P-H model is fit to our data using the `coxph()` and `Surv()` functions from the `survival` package. Then this model is used as input to the `a_cph` analysis function which returns hazard ratios, 95% confidence intervals, and p-values comparing against the reference group - in this case the leftmost column.
+A Cox proportional-hazards (Cox P-H) analysis is generated next with a
+third custom analysis function, `a_cph`. Prior to creating the
+analysis function, the Cox P-H model is fit to our data using the
+`coxph()` and `Surv()` functions from the `survival` package. Then
+this model is used as input to the `a_cph` analysis function which
+returns hazard ratios, 95% confidence intervals, and p-values
+comparing against the reference group - in this case the leftmost
+column.
 
 ```{r}
 cph <- coxph(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1, ties = "exact", data = adtte)
@@ -866,7 +989,14 @@ a_cph <- function(df, .var, .in_ref_col, .ref_full, full_cox_fit) {
 }
 ```
 
-The fourth and final analysis function, `a_tte`, generates a time to first adverse event table with three rows corresponding to Median, 95% Confidence Interval, and Min Max respectively. First a survival table is constructed from the summary table of a survival model using the `survfit()` and `Surv()` functions from the `survival` package. This table is then given as input to `a_tte` which produces the table of time to first adverse event consisting of the previously mentioned summary statistics.
+The fourth and final analysis function, `a_tte`, generates a time to
+first adverse event table with three rows corresponding to Median, 95%
+Confidence Interval, and Min Max respectively. First a survival table
+is constructed from the summary table of a survival model using the
+`survfit()` and `Surv()` functions from the `survival` package. This
+table is then given as input to `a_tte` which produces the table of
+time to first adverse event consisting of the previously mentioned
+summary statistics.
 
 ```{r}
 surv_tbl <- as.data.frame(summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM,
@@ -894,9 +1024,11 @@ a_tte <- function(df, .var,  kp_table) {
 }
 ```
 
-Additionally, the `a_tte` function creates a referential footnote within the table to indicate where censoring occurred in the data.
+Additionally, the `a_tte` function creates a referential footnote
+within the table to indicate where censoring occurred in the data.
 
-Now we are able to use these four analysis functions to build our time to event analysis table.
+Now we are able to use these four analysis functions to build our time
+to event analysis table.
 
 ```{r}
 lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -916,12 +1048,27 @@ lyt <- basic_table(show_colcounts = TRUE) %>%
 tbl_tte <- build_table(lyt, adtte2)
 ```
 
-We set the `show_colcounts` argument of `basic_table()` to `TRUE` to first print the total subject counts for each column. Next we use `split_cols_by()` to split the table into three columns corresponding to the three different levels of `ARM`, and specify that the first arm, `"A: Drug X"` should act as the reference group to be compared against - this reference group is used for the Cox P-H analysis. Then we call `analyze()` sequentially using each of the four custom analysis functions as argument `afun` and specifying additional arguments where necessary. Then we use `build_table()` to construct our `rtable` using the `adtte2` dataset.
+We set the `show_colcounts` argument of `basic_table()` to `TRUE` to
+first print the total subject counts for each column. Next we use
+`split_cols_by()` to split the table into three columns corresponding
+to the three different levels of `ARM`, and specify that the first
+arm, `"A: Drug X"` should act as the reference group to be compared
+against - this reference group is used for the Cox P-H analysis. Then
+we call `analyze()` sequentially using each of the four custom
+analysis functions as argument `afun` and specifying additional
+arguments where necessary. Then we use `build_table()` to construct
+our `rtable` using the `adtte2` dataset.
 
-Finally, we annotate the table using the `fnotes_at_path()` function to specify that product-limit estimates are used to calculate the statistics listed under the "Time to first adverse event" heading within the table. The referential footnote created earlier in the time-to-event analysis function (`a_tte`) is also displayed.
+Finally, we annotate the table using the `fnotes_at_path()` function
+to specify that product-limit estimates are used to calculate the
+statistics listed under the "Time to first adverse event" heading
+within the table. The referential footnote created earlier in the
+time-to-event analysis function (`a_tte`) is also displayed.
 
 ```{r}
-fnotes_at_path(tbl_tte, c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")) <- "Product-limit (Kaplan-Meier) estimates."
+fnotes_at_path(tbl_tte,
+               c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")
+               ) <- "Product-limit (Kaplan-Meier) estimates."
 
 tbl_tte
 ```
