@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -138,8 +132,10 @@ the order they  appear in the list passed to  the relevant argument
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mysplitfun</span> <span class="op">&lt;-</span> <span class="fu">make_split_fun</span><span class="op">(</span>pre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">drop_facet_levels</span><span class="op">)</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mysplitfun</span> <span class="op">&lt;-</span> <span class="fu">make_split_fun</span><span class="op">(</span>pre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">drop_facet_levels</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                             post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="add_combo_facet.html">add_overall_facet</a></span><span class="op">(</span><span class="st">"ALL"</span>, <span class="st">"All Arms"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="va">mysplitfun</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -149,6 +145,27 @@ the order they  appear in the list passed to  the relevant argument
 <span class="r-out co"><span class="r-pr">#&gt;</span>         (N=106)        (N=129)       (N=235) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mean     33.02          34.57         33.87  </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## post (and pre) arguments can take multiple functions, here</span></span></span>
+<span class="r-in"><span><span class="co">## we add an overall facet and the reorder the facets</span></span></span>
+<span class="r-in"><span><span class="va">reorder_facets</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">splret</span>, <span class="va">spl</span>, <span class="va">fulldf</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">ord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">splret</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="make_split_result.html">make_split_result</a></span><span class="op">(</span><span class="va">splret</span><span class="op">$</span><span class="va">values</span><span class="op">[</span><span class="va">ord</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                      <span class="va">splret</span><span class="op">$</span><span class="va">datasplit</span><span class="op">[</span><span class="va">ord</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                      <span class="va">splret</span><span class="op">$</span><span class="va">labels</span><span class="op">[</span><span class="va">ord</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mysplitfun2</span> <span class="op">&lt;-</span>  <span class="fu">make_split_fun</span><span class="op">(</span>pre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">drop_facet_levels</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="add_combo_facet.html">add_overall_facet</a></span><span class="op">(</span><span class="st">"ALL"</span>, <span class="st">"All Arms"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                         <span class="va">reorder_facets</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="va">mysplitfun2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">DM</span>, <span class="va">ARM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B: Placebo"</span>, <span class="st">"C: Combination"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        All Arms   B: Placebo   C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        (N=235)     (N=106)        (N=129)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————————————————————</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean    33.87       33.02          34.57     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">very_stupid_core</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span>, <span class="va">vals</span>, <span class="va">labels</span>, <span class="va">.spl_context</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="make_split_result.html">make_split_result</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stupid"</span>, <span class="st">"silly"</span><span class="op">)</span>,</span></span>
