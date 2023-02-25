@@ -72,11 +72,30 @@ the order they  appear in the list passed to  the relevant argument
 (\code{pre} and \code{post}, respectively).
 }
 \examples{
+
 mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
                              post = list(add_overall_facet("ALL", "All Arms")))
 
+
 basic_table(show_colcounts = TRUE) \%>\%
    split_cols_by("ARM", split_fun = mysplitfun) \%>\%
+   analyze("AGE") \%>\%
+   build_table(subset(DM, ARM \%in\% c("B: Placebo", "C: Combination")))
+
+## post (and pre) arguments can take multiple functions, here
+## we add an overall facet and the reorder the facets
+reorder_facets <- function(splret, spl, fulldf, ...) {
+  ord <- order(names(splret$values))
+  make_split_result(splret$values[ord],
+                      splret$datasplit[ord],
+                      splret$labels[ord])
+}
+
+mysplitfun2 <-  make_split_fun(pre = list(drop_facet_levels),
+                             post = list(add_overall_facet("ALL", "All Arms"),
+                                         reorder_facets))
+basic_table(show_colcounts = TRUE) \%>\%
+   split_cols_by("ARM", split_fun = mysplitfun2) \%>\%
    analyze("AGE") \%>\%
    build_table(subset(DM, ARM \%in\% c("B: Placebo", "C: Combination")))
 
