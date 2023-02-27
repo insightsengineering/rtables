@@ -1,6 +1,6 @@
 ---
 title: "Pruning and Sorting Tables"
-author: "Gabriel Becker and Adrian Waddell"
+author: "Gabriel Becker, Adrian Waddell and Davide Garolini"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
