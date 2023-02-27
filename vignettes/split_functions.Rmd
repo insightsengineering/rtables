@@ -388,7 +388,7 @@ Next we write a custom core-splitting function which divides the
 observations into 4 groups: the first 100, observations 101-500,
 observations 501-900, and the last hundred. We could claim this was to
 test for structural bias in the first and last observations, but
-really its simply to illustrate overriding the core splitting
+really its to simply illustrate overriding the core splitting
 machinery and has no meaningful statistical purpose.
 
 ```{r}
