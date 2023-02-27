@@ -379,6 +379,10 @@ build_table(lyt6, vehic_data)
 
 ### Overriding the Core Split Function
 
+**Currently, overriding core split behavior is only supported in
+functions used for row splits.**
+
+
 Next we write a custom core-splitting function which divides the
 obersvations into 4 groups, the first 100, observations 101-500,
 observations 501-900, and the last hundred. We could claim this was to
@@ -401,15 +405,43 @@ silly_core_split <- function(spl, df, vals, labels, .spl_context) {
 }
 ```
 
+We can use this to construct a splitting function. This can be combined
+with pre- and post-processing functions, as each of the stages is
+performed independently, but in this case we wont, because our core
+splitting behavior is such that pre or post processing don't make much
+sense.
 
-## Design of pre and post-processing functions for use in `make_split_fun`
+
+```{r}
+even_sillier_splfun <- make_split_fun(core_split = silly_core_split)
+
+lyt7 <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by("color") %>%
+    split_rows_by("vehicle_class",
+                  split_fun = even_sillier_splfun) %>%
+    split_rows_by("vehicle_type") %>%
+    analyze("cost")
+
+build_table(lyt7, vehic_data)
+```
+
+### Design of pre and post-processing functions for use in `make_split_fun`
 
 
 Pre-processing and post-processing functions in the custom-splitting
 context are best thought (and implemented as) independent, atomic
-building blocks for the desired overall behavior. For example, if we
-want to both rearrange the order of a variables levels, and also wish
-to remove specific unwanted levels, this would be easy to implement in
-a single function. If we implement them separately, however, we can
-use each behavioral component again, including in cases where the
-other aspect of the behavior is not desired.
+building blocks for the desired overall behavior. This allows them to
+be reused in a flexible mix-and-match way.
+
+`rtables` provides a number of behavior components implemented as
+either functions or function factories:
+
+- Pre-processing "behavior blocks"
+  - `drop_facet_levels` - drop unobserved levels in the variable being
+    split
+  
+- Post-processing "behavior blocks"
+  - `trim_levels_in_facets` - provides `trim_levels_in_group` behavior
+  - `add_overall_facet` - add a combination facet for the full data
+  - `add_combo_facet` - add a single combination facet (can be used
+    more than once in a single `make_split_fun` call
