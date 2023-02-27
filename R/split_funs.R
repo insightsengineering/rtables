@@ -648,8 +648,8 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 NULL
 
 #' @rdname split_funcs 
-#' 
 #' @export
+#' 
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
