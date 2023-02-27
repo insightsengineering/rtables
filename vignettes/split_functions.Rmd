@@ -280,7 +280,7 @@ for each of these steps independently when defining custom splitting
 behavior via the `pre`, `core_split`, and `post` arguemnts, which
 dictate the above steps, respectively.
 
-The `pre` arugment accepts zero or more preprocessing functions, which
+The `pre` argument accepts zero or more preprocessing functions, which
 must accept: `df`, `spl`, `vals`, `labels`, and can optionally accept
 `.spl_context`.  They then manipulate `df` (the incoming data for the
 split) and return a modified data.frame.  This modified data.frame
@@ -298,7 +298,7 @@ based on observed counts, etc.
 Here we will implement an arbitrary, custom split function where we
 specify both pre- and post-processing instructions. It is unusual for
 users to need to override the core splitting logic - and, in fact, is
-only suppported in row-space currently - so we leave this off of our
+only supported in row-space currently - so we leave this off of our
 example here but will provide another narrow example of that usage
 below.
 
@@ -306,7 +306,7 @@ below.
 
 First we define two aspects of 'preprocessing step' behavior:
 1. a function which reverses the order of the levels of a variable
-   (while retaining which level is associated with which obersvation),
+   (while retaining which level is associated with which observation),
    and
 2. a function factory which creates a function which removes a level
    and the data associated with it.
@@ -384,10 +384,10 @@ functions used for row splits.**
 
 
 Next we write a custom core-splitting function which divides the
-obersvations into 4 groups, the first 100, observations 101-500,
+observations into 4 groups, the first 100, observations 101-500,
 observations 501-900, and the last hundred. We could claim this was to
 test for structural bias in the first and last observations, but
-really its simply to illustrate overriding the core splitting
+really its to simply illustrate overriding the core splitting
 machinery and has no meaningful statistical purpose.
 
 ```{r}
@@ -407,7 +407,7 @@ silly_core_split <- function(spl, df, vals, labels, .spl_context) {
 
 We can use this to construct a splitting function. This can be combined
 with pre- and post-processing functions, as each of the stages is
-performed independently, but in this case we wont, because our core
+performed independently, but in this case we won't, because our core
 splitting behavior is such that pre or post processing don't make much
 sense.
 
