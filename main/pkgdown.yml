@@ -10,11 +10,12 @@ articles:
   introduction: introduction.html
   manual_table_construction: manual_table_construction.html
   sorting_pruning: sorting_pruning.html
+  split_functions: split_functions.html
   subsetting_tables: subsetting_tables.html
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2023-02-25T23:27Z
+last_built: 2023-02-27T04:53Z
 urls:
   reference: https://insightsengineering.github.io/rtables/main/reference
   article: https://insightsengineering.github.io/rtables/main/articles

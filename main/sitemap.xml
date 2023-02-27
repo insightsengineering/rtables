@@ -37,6 +37,9 @@
     <loc>https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/main/articles/split_functions.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/main/articles/subsetting_tables.html</loc>
   </url>
   <url>
@@ -320,6 +323,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/spl_context_to_disp_path.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/spl_variable.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/split_cols_by.html</loc>
