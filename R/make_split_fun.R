@@ -1,3 +1,36 @@
+#' Variable Associated With a Split
+#'
+#' This function  is intended  for use  when writing  custom splitting
+#' logic.  In  cases where  the  split  is  associated with  a  single
+#' variable, the  name of that variable  will be returned. At  time of
+#' writing     this    includes     splits    generated     via    the
+#' \code{\link{split_rows_by}}, \code{\link{split_cols_by}},
+#' \code{\link{split_rows_by_cuts}}, \code{\link{split_cols_by_cuts}},
+#' \code{\link{split_rows_by_cutfun}}, and
+#' \code{\link{split_cols_by_cutfun}} layout directives.
+#' @param spl Split. The split object
+#'
+#' @return for splits with a single variable associated with them, the split, for others, an error is raised.
+#' @export
+#' @seealso \code{\link{make_split_fun}}
+setGeneric("spl_variable", function(spl) standardGeneric("spl_variable"))
+#' @rdname spl_variable
+#' @export
+setMethod("spl_variable", "VarLevelSplit", function(spl) spl_payload(spl))
+#' @rdname spl_variable
+#' @export
+setMethod("spl_variable", "VarDynCutSplit", function(spl) spl_payload(spl))
+#' @rdname spl_variable
+#' @export
+setMethod("spl_variable", "VarStaticCutSplit", function(spl) spl_payload(spl))
+#' @rdname spl_variable
+#' @export
+setMethod("spl_variable", "Split",
+          function(spl) stop("Split class ",
+                             class(spl),
+                             " not associated with a single variable.")
+          )
+
 in_col_split <- function(spl_ctx) {
     identical(names(spl_ctx),
               names(context_df_row( cinfo = NULL)))

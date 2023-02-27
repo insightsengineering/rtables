@@ -179,27 +179,8 @@ VarLevelSplit <- function(var,
         )
 }
 
-## ## XXX TODO not sure if this class is needed for anything???
-## setClass("NULLSplit", contains = "Split")
-
-## NULLSplit <- function(...) {
-##     ## only(!!) valid instantiation of NULLSplit class
-##     new("NULLSplit", payload = character(),
-##         split_label = character(),
-##         content_fun = NULL,
-##         content_format = NULL,
-##         split_format = NULL,
-##         name  = "",
-##         indent_modifier = 0L,
-##         content_indent_modifier = 0L,
-##         content_var = "",
-##         label_pos = FALSE)
-## }
 
 setClass("AllSplit", contains = "Split")
-## ,
-##          validity = function(object) length(object@payload) == 0
-##          )
 
 AllSplit <- function(split_label = "",
                     cfun = NULL,
@@ -466,21 +447,6 @@ make_static_cut_split <- function(var,
         child_section_div = section_div)
 
 }
-    ## ret <- VarStaticCutSplit(var = var,
-    ##                          split_label = split_label,
-    ##                          cuts = cuts,
-    ##                          cutlabels = cutlabels,
-    ##                          cfun = cfun,
-    ##                          cformat = cformat,
-    ##                          split_format = split_format,
-    ##                          split_name = split_name,
-    ##                          child_labels = match.arg(child_labels),
-    ##                          extra_args = extra_args,
-    ##                          indent_mod = indent_mod,
-    ##                          cindent_mod = cindent_mod,
-    ##                          cvar = cvar,
-    ##                          cextra_args = cextra_args,
-    ##                          label_pos = label_pos)
 
 
 
