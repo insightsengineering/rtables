@@ -643,9 +643,13 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 #' @param excl character. Levels to be excluded (they will not be reflected in
 #'   the resulting table structure regardless of presence in the data).
 #'
-#' @rdname split_funcs
-#' @export
+#' @name split_funcs
 #' @inherit add_overall_level return
+NULL
+
+#' @rdname split_funcs 
+#' @export
+#' 
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
