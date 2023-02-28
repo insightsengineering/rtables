@@ -1,3 +1,15 @@
+## rtables 0.5.3.5
+ * added `make_split_fun` function for creation of custom split functions
+ * `basic_table` now accepts `colcount_format`
+ * 2d formats are now allowed for column counts provided one element is a percent, which will be automatically set to 100%
+ * `spl_context` now includes root row in row-split contexts.
+ * versioned dependency on `formatters` increased to `>=0.3.4.21`
+ * Added vignette on format precedence
+ * Added vignette on split functions
+ * Significant overhaul of sorting vignette
+ * Significant additions to custom appearance vignette
+ * extended and clarified documentation
+ 
 ## rtables 0.5.3.4
  * `export_as_pdf` now correctly takes `margins` into account when calculating `lpp` and `cpp` from page size.
  * exporters now pass down non-default `colwidths` values correctly
