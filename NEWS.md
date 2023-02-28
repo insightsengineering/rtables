@@ -3,7 +3,7 @@
  * `basic_table` now accepts `colcount_format`
  * 2d formats are now allowed for column counts provided one element is a percent, which will be automatically set to 100%
  * `spl_context` now includes root row in row-split contexts.
- * versioned dependency on `formatters` increased to `>=0.3.4.21`
+ * Versioned dependency on `formatters` increased to `>=0.3.4.21`
  * Added vignette on format precedence
  * Added vignette on split functions
  * Significant overhaul of sorting vignette
