@@ -283,7 +283,7 @@ must accept: `df`, `spl`, `vals`, `labels`, and can optionally accept
 `.spl_context`.  They then manipulate `df` (the incoming data for the
 split) and return a modified data.frame. This modified data.frame
 *must* contain all columns present in the incoming data.frame, but can
-add columns if necessary. Though we note that these new columns _cannot
+add columns if necessary. Although, we note that these new columns _cannot
 be used in the layout as split or analysis variables_, because they
 will not be present when validity checking is done.
 
@@ -296,13 +296,13 @@ based on observed counts, etc.
 Here we will implement an arbitrary, custom split function where we
 specify both pre- and post-processing instructions. It is unusual for
 users to need to override the core splitting logic - and, in fact, is
-only supported in row-space currently - so we leave this off of our
+only supported in row space currently - so we leave this off of our
 example here but will provide another narrow example of that usage
 below.
 
 ### An Illustrative Example of A Custom Split Function
 
-First we define two aspects of 'preprocessing step' behavior:
+First, we define two aspects of 'pre-processing step' behavior:
 
 1. A function which reverses the order of the levels of a variable
    (while retaining which level is associated with which observation),
