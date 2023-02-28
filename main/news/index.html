@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -53,6 +47,23 @@
       <small>Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.3.5" id="rtables-0535">rtables 0.5.3.5<a class="anchor" aria-label="anchor" href="#rtables-0535"></a></h2>
+<ul><li>added <code>make_split_fun</code> function for creation of custom split functions</li>
+<li>
+<code>basic_table</code> now accepts <code>colcount_format</code>
+</li>
+<li>2d formats are now allowed for column counts provided one element is a percent, which will be automatically set to 100%</li>
+<li>
+<code>spl_context</code> now includes root row in row-split contexts.</li>
+<li>Versioned dependency on <code>formatters</code> increased to <code>&gt;=0.3.4.21</code>
+</li>
+<li>Added vignette on format precedence</li>
+<li>Added vignette on split functions</li>
+<li>Significant overhaul of sorting vignette</li>
+<li>Significant additions to custom appearance vignette</li>
+<li>extended and clarified documentation</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.3.4" id="rtables-0534">rtables 0.5.3.4<a class="anchor" aria-label="anchor" href="#rtables-0534"></a></h2>
 <ul><li>
