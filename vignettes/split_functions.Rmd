@@ -278,16 +278,16 @@ for each of these steps independently when defining custom splitting
 behavior via the `pre`, `core_split`, and `post` arguments, which
 dictate the above steps, respectively.
 
-The `pre` argument accepts zero or more preprocessing functions, which
+The `pre` argument accepts zero or more pre-processing functions, which
 must accept: `df`, `spl`, `vals`, `labels`, and can optionally accept
 `.spl_context`.  They then manipulate `df` (the incoming data for the
 split) and return a modified data.frame. This modified data.frame
 *must* contain all columns present in the incoming data.frame, but can
-add columns if necessary (though we note that these new columns cannot
-be used in the layout as split or analysis variables, because they
-will not be present when validity checking is done).
+add columns if necessary. Though we note that these new columns _cannot
+be used in the layout as split or analysis variables_, because they
+will not be present when validity checking is done.
 
-The preprocessing component is useful for things such as manipulating
+The pre-processing component is useful for things such as manipulating
 factor levels, e.g., to trim unobserved ones or to reorder levels
 based on observed counts, etc.
 
