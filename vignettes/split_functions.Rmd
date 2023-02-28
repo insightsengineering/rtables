@@ -406,8 +406,8 @@ silly_core_split <- function(spl, df, vals, labels, .spl_context) {
 
 We can use this to construct a splitting function. This can be combined
 with pre- and post-processing functions, as each of the stages is
-performed independently, but in this case we won't, because our core
-splitting behavior is such that pre- or post-processing don't make much
+performed independently, but in this case, we won't, because our core
+splitting behavior is such that pre- or post-processing do not make much
 sense.
 
 
@@ -432,7 +432,7 @@ context are best thought of as (and implemented as) independent, atomic
 building blocks for the desired overall behavior. This allows them to
 be reused in a flexible mix-and-match way.
 
-`rtables` provides a number of behavior components implemented as
+`rtables` provides several behavior components implemented as
 either functions or function factories:
 
 - Pre-processing "behavior blocks"
