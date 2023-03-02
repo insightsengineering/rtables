@@ -4,8 +4,6 @@ repos:
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.3.2.9007
     hooks: 
-    -   id: style-files
-        args: [--style_pkg=styler, --style_fun=tidyverse_style]    
     -   id: roxygenize
         # roxygen requires loading pkg -> add dependencies from DESCRIPTION
         additional_dependencies:
@@ -48,7 +46,6 @@ repos:
           \.github/workflows/.*|
           data/.*|
           )$
-    -   id: lintr
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement

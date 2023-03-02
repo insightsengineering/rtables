@@ -142,6 +142,8 @@ rbound
 rcell
 rcells
 reindexed
+Repo
+repo
 repped
 responder
 Resync
@@ -171,6 +173,7 @@ sha
 showmethods
 sortable
 spl
+SplitValue
 SplitVector
 spotcheck
 sprintf
