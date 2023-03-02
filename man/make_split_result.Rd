@@ -3,22 +3,24 @@
 \name{make_split_result}
 \alias{make_split_result}
 \alias{add_to_split_result}
-\title{Construct split result object
-These functions can be used to create or add to a split result in functions which
-implement core splitting or post-processing within a custom split function.}
+\title{Construct split result object}
 \usage{
 make_split_result(values, datasplit, labels, extras = NULL)
 
 add_to_split_result(splres, values, datasplit, labels, extras = NULL)
 }
 \arguments{
-\item{values}{character or list\if{html}{\out{<SplitValue>}}. The values associated with each facet}
+\item{values}{character  or list(SplitValue). The values associated
+with each facet}
 
-\item{datasplit}{list<data.frame>. The facet data for each facet generated in the split}
+\item{datasplit}{list(data.frame). The  facet data for  each facet
+generated in the split}
 
 \item{labels}{character. The labels associated with each facet}
 
-\item{extras}{NULL or list. Extra values associated with each of the facets which will be passed to analysis functions applied within the facet.}
+\item{extras}{NULL or list.  Extra values associated with  each of
+the facets which  will be passed to  analysis functions applied
+within the facet.}
 
 \item{splres}{list. A list representing the result of splitting.}
 }
@@ -28,9 +30,9 @@ with elements  \code{values}, \code{datasplit},  and \code{labels},  which are
 the same length and correspond to eachother elementwise.
 }
 \description{
-Construct split result object
-These functions can be used to create or add to a split result in functions which
-implement core splitting or post-processing within a custom split function.
+These functions can be  used to create or add to  a split result in
+functions which implement core  splitting or post-processing within
+a custom split function.
 }
 \details{
 These functions does various housekeeping to ensure that the split result
@@ -38,9 +40,14 @@ list is as the rtables internals expect it, most of which are not
 relevant to end users.
 }
 \examples{
-splres <- make_split_result(values = c("hi", "lo"), datasplit = list(hi = mtcars, lo = mtcars[1:10,]), labels = c("more data", "less data"))
+splres <- make_split_result(values = c("hi", "lo"),
+    datasplit = list(hi = mtcars, lo = mtcars[1:10,]),
+    labels = c("more data", "less data"))
 
-splres2 <- add_to_split_result(splres, values = "med", datasplit = list(med = mtcars[1:20,]), labels = "kinda some data")
+splres2 <- add_to_split_result(splres,
+    values = "med",
+    datasplit = list(med = mtcars[1:20,]),
+    labels = "kinda some data")
 }
 \seealso{
 Other make_custom_split: 

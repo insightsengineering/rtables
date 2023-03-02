@@ -1,80 +1,108 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
 
-
 <!-- start badges -->
-[![Check 🛠](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml)
-[![Docs 📚](https://github.com/insightsengineering/rtables/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/rtables/)
-[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml)
 
-![GitHub forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)
-![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
+[![Check
+🛠](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml)
+[![Docs
+📚](https://github.com/insightsengineering/rtables/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/rtables/)
+[![Code Coverage
+📔](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/rtables)
-![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/rtables)
-![GitHub last commit](https://img.shields.io/github/last-commit/insightsengineering/rtables)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/insightsengineering/rtables)
-![GitHub repo size](https://img.shields.io/github/repo-size/insightsengineering/rtables)
-![GitHub language count](https://img.shields.io/github/languages/count/insightsengineering/rtables)
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/rtables?color=red\&label=open%20issues)](https://github.com/insightsengineering/rtables/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+![GitHub
+forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)
+![GitHub Repo
+stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
 
-[![CRAN Version](https://www.r-pkg.org/badges/version/rtables)](https://cran.r-project.org/web/packages/rtables/)
-[![Current Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple\&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
+![GitHub commit
+activity](https://img.shields.io/github/commit-activity/m/insightsengineering/rtables)
+![GitHub
+contributors](https://img.shields.io/github/contributors/insightsengineering/rtables)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/insightsengineering/rtables)
+![GitHub pull
+requests](https://img.shields.io/github/issues-pr/insightsengineering/rtables)
+![GitHub repo
+size](https://img.shields.io/github/repo-size/insightsengineering/rtables)
+![GitHub language
+count](https://img.shields.io/github/languages/count/insightsengineering/rtables)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Open
+Issues](https://img.shields.io/github/issues-raw/insightsengineering/rtables?color=red&label=open%20issues)](https://github.com/insightsengineering/rtables/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+
+[![CRAN
+Version](https://CRAN.R-project.org/package=rtables)](https://CRAN.R-project.org/package=rtables)
+[![Current
+Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
 <!-- end badges -->
 
 ## Reporting tables with R
 
-The `rtables` R package was designed to create and display complex tables with R. The cells in an `rtable` may contain
-any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
-`rtables` can be outputted in `ascii` `html`, and `pdf`, as well powerpoint (via conversion to `flextable` objects). `rtf` support is in development and will be in a future release.
+The `rtables` R package was designed to create and display complex
+tables with R. The cells in an `rtable` may contain any high-dimensional
+data structure which can then be displayed with cell-specific formatting
+instructions. Currently, `rtables` can be outputted in `ascii` `html`,
+and `pdf`, as well powerpoint (via conversion to `flextable` objects).
+`rtf` support is in development and will be in a future release.
 
-`rtables` is developed and copy written by `F. Hoffmann-La Roche` and it is released open source under Apache
-License Version 2. 
+`rtables` is developed and copy written by `F. Hoffmann-La Roche` and it
+is released open source under Apache License Version 2.
 
-`rtables` development is driven by the need to create regulatory ready tables for health authority review. Some of the key requirements for this undertaking are listed below:
+`rtables` development is driven by the need to create regulatory ready
+tables for health authority review. Some of the key requirements for
+this undertaking are listed below:
 
-* cell values and their visualization separate (i.e. no string based tables)
-  - values need to be programmatically accessible in their non-rounded state for cross-checking
-* multiple values displayed within a cell
-* flexible tabulation framework
-* flexible formatting (cell spans, rounding, alignment, etc.)
-* multiple output formats (html, ascii, latex, pdf, xml)
-* flexible pagination in both horizontal and vertical directions
-* distinguish between name and label in the data structure to work with CDISC standards
-* title, footnotes, cell cell/row/column references
+- cell values and their visualization separate (i.e. no string based
+  tables)
+  - values need to be programmatically accessible in their non-rounded
+    state for cross-checking
+- multiple values displayed within a cell
+- flexible tabulation framework
+- flexible formatting (cell spans, rounding, alignment, etc.)
+- multiple output formats (html, ascii, latex, pdf, xml)
+- flexible pagination in both horizontal and vertical directions
+- distinguish between name and label in the data structure to work with
+  CDISC standards
+- title, footnotes, cell cell/row/column references
 
-`rtables` currently covers virtually all of these requirements, and further advances remain under active development.
-
+`rtables` currently covers virtually all of these requirements, and
+further advances remain under active development.
 
 ## Installation
 
-`rtables` is now available on CRAN and you can install the latest released version with:
+`rtables` is now available on CRAN and you can install the latest
+released version with:
 
-```r
+``` r
 install.packages("rtables")
 ```
 
-or you can install the latest development version directly from GitHub with:
+or you can install the latest development version directly from GitHub
+with:
 
-```r
+``` r
 remotes::install_github("insightsengineering/formatters")
 remotes::install_github("insightsengineering/rtables")
 ```
 
-Note you might need to set your `GITHUB_PAT` environment variable in order to be able to install from GitHub.
+Note you might need to set your `GITHUB_PAT` environment variable in
+order to be able to install from GitHub.
 
-Packaged releases (both those on CRAN and those between official CRAN releases) can be
-found in the [releases list](https://github.com/insightsengineering/rtables/releases)
+Packaged releases (both those on CRAN and those between official CRAN
+releases) can be found in the [releases
+list](https://github.com/insightsengineering/rtables/releases)
 
 ## Usage
 
-We first begin with a demographic table alike example and then show the creation of a more complex table.
+We first begin with a demographic table alike example and then show the
+creation of a more complex table.
 
-
-
-```r
+``` r
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -90,7 +118,7 @@ lyt <- basic_table() %>%
     } else if (is.factor(x) || is.character(x)) {
       in_rows(.list = list_wrap_x(table)(x))
     } else {
-      stop("type not supproted")
+      stop("type not supported")
     }
   })
 
@@ -111,9 +139,7 @@ build_table(lyt, ex_adsl)
 #>   HIGH             47              33               50
 ```
 
-
-
-```r
+``` r
 library(rtables)
 library(dplyr)
 
@@ -164,26 +190,35 @@ basic_table(show_colcounts = TRUE) %>%
 #>     Biomarker 1 (mean)         3.94       no data     no data        3.77       no data      no data     no data      no data      no data
 ```
 
-
 # Acknowledgments
 
-We would like to thank everyone who has made `rtables` a better project by providing feedback and improving examples & vignettes. The following list of contributors is alphabetical:
+We would like to thank everyone who has made `rtables` a better project
+by providing feedback and improving examples & vignettes. The following
+list of contributors is alphabetical:
 
-Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
+Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski,
+Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
-### Advanced rtables Training
-* Part 1 [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
-* Part 2 - Forthcoming
 
-### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables 
-* [Slides](https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48)
+### Advanced rtables Training
+
+- Part 1
+  [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
+- Part 2 - Forthcoming
+
+### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
+
+- [Slides](https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48)
 
 ### R Adoption Series
 
-* [R Adoption Series presentation 2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
-* Slides: https://github.com/gmbecker/rtables_radoption_webinar (index.html)
+- [R Adoption Series presentation
+  2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
+- Slides: <https://github.com/gmbecker/rtables_radoption_webinar>
+  (index.html)
 
 ### New (Current) Layouting and Tabulation Framework (v.0.3+)
 
-* [useR!2020 Presentation (on v0.3.1.1) July 2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+- [useR!2020 Presentation (on v0.3.1.1) July
+  2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)

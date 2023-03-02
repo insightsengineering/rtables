@@ -1,28 +1,20 @@
-## rtables 0.5.3.5
+## rtables 0.6.0
  * added `make_split_fun` function for creation of custom split functions
  * `basic_table` now accepts `colcount_format`
  * 2d formats are now allowed for column counts provided one element is a percent, which will be automatically set to 100%
  * `spl_context` now includes root row in row-split contexts.
- * Versioned dependency on `formatters` increased to `>=0.3.4.21`
  * Added vignette on format precedence
  * Added vignette on split functions
+ * Added custom appearance vignette
  * Significant overhaul of sorting vignette
- * Significant additions to custom appearance vignette
  * extended and clarified documentation
- 
-## rtables 0.5.3.4
  * `export_as_pdf` now correctly takes `margins` into account when calculating `lpp` and `cpp` from page size.
  * exporters now pass down non-default `colwidths` values correctly
  * `nlines` `TableRow` method (used for both rows and column label extent in paginaton) now correctly handles column spanning
  * pagination with `verbose = TRUE` now includes original and adjusted lines-per page information
- * depends on `formatters` `>=0.3.4.9` for a number of pagination machinery fixes and improvements
-  
-## rtables 0.5.3.3
  * `cont_n_allcols` and `cont_n_onecol` score functions now throw errors when they are applied to subtables that
    have no content table, instead of the previously returned `NA`
  * `sort_at_path` now emits an informative error message when score functions fail.
-
-## rtables 0.5.3.2
  * `paginate_table` now accepts `colwidths` and paginates assuming column label and
    cell values are wrapped to those widths.
  * `make_row_df` now accepts `colwidths` and calculates row extents assuming cell values
@@ -30,7 +22,7 @@
  * `nlines` `TableRow` method now uses provided `colwidths` to assume cell-value wrapping
  * `export_to_txt` now automatically paginates when any form of page dimension is provided
    (previously the default was unconditionally not paginating).
- * depend on `formatters` `>=0.3.4.5` for cell-value wrapping
+ * Versioned dependency on `formatters` increased to `>=0.4.0`
  
 ## rtables 0.5.3
  * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
