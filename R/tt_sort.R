@@ -8,14 +8,14 @@
 #'
 #' @export
 trim_zero_rows <- function(tbl) {
-    stopifnot(is(tbl, "VTableTree"))
-    
-    rows <- collect_leaves(tbl, TRUE, TRUE)
-    torm <- vapply(rows, function(x) {
-        identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
-    }, NA, USE.NAMES = FALSE)
-    tbl[!torm, , keep_topleft = TRUE]
-    
+  stopifnot(is(tbl, "VTableTree"))
+
+  rows <- collect_leaves(tbl, TRUE, TRUE)
+  torm <- vapply(rows, function(x) {
+   identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
+  }, NA, USE.NAMES = FALSE)
+  tbl[!torm, , keep_topleft = TRUE]
+  
 }
 
 
@@ -183,15 +183,15 @@ sort_at_path <- function(tt,
             oldnames <- vapply(oldkids, obj_name, "")
             newkids <- lapply(seq_along(oldkids),
                               function(i) {
-                                  sort_at_path(oldkids[[i]],
-                                               path = curpath[-1],
-                                               scorefun = scorefun,
-                                               decreasing = decreasing,
-                                               na.pos = na.pos,
-                                               ## its ok to modify the "path" here because its only ever used for
-                                               ## informative error reporting.
-                                               .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
-                              })
+                sort_at_path(oldkids[[i]],
+                             path = curpath[-1],
+                             scorefun = scorefun,
+                             decreasing = decreasing,
+                             na.pos = na.pos,
+                             ## its ok to modify the "path" here because its only ever used for
+                             ## informative error reporting.
+                             .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
+                                })
             newtab <- subtree
             tree_children(newtab) <- newkids
             if(length(backpath) > 0) {
