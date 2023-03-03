@@ -13,13 +13,17 @@ cont_n_onecol(j)
 \item{tt}{TableTree (or related class). A TableTree object representing a
 populated table.}
 
-\item{j}{numeric(1). Number of column to be scored}
+\item{j}{numeric(1). Number of column used for scoring.}
 }
 \value{
 A single numeric value indicating score according to the relevant
-metric for \code{tt}, to be used
-when sorting.
+metric for \code{tt}, to be used when sorting.
 }
 \description{
 Score functions for sorting TableTrees
+}
+\seealso{
+For examples and details please read main documentation
+\code{\link[=sort_at_path]{sort_at_path()}} and relevant vignette ((\link{Sorting and Pruning}
+(https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
 }

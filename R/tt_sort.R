@@ -7,7 +7,6 @@
 #' @return an rtable object
 #'
 #' @export
-#'
 trim_zero_rows <- function(tbl) {
     stopifnot(is(tbl, "VTableTree"))
     
@@ -22,11 +21,13 @@ trim_zero_rows <- function(tbl) {
 
 
 #' Score functions for sorting TableTrees
+#' 
 #' @rdname score_funs
+#' 
 #' @inheritParams gen_args
 #' @return A single numeric value indicating score according to the relevant
-#'   metric for \code{tt}, to be used
-#' when sorting.
+#'   metric for \code{tt}, to be used when sorting.
+#' 
 #' @export
 cont_n_allcols <- function(tt) {
     ctab <- content_table(tt)
@@ -38,7 +39,13 @@ cont_n_allcols <- function(tt) {
 }
 
 #' @rdname score_funs
-#' @param j numeric(1). Number of column to be scored
+#' 
+#' @param j numeric(1). Number of column used for scoring.
+#' 
+#' @seealso For examples and details please read main documentation 
+#'   [sort_at_path()] and relevant vignette (([Sorting and Pruning]
+#'   (https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
+#' 
 #' @export
 cont_n_onecol <- function(j) {
     function(tt) {
