@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -54,7 +48,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.3.5" id="rtables-0535">rtables 0.5.3.5<a class="anchor" aria-label="anchor" href="#rtables-0535"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.0.1" id="rtables-0601">rtables 0.6.0.1<a class="anchor" aria-label="anchor" href="#rtables-0601"></a></h2>
+<ul><li>bumped devel version</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="rtables-060">rtables 0.6.0<a class="anchor" aria-label="anchor" href="#rtables-060"></a></h2><p class="text-muted">CRAN release: 2023-03-02</p>
 <ul><li>added <code>make_split_fun</code> function for creation of custom split functions</li>
 <li>
 <code>basic_table</code> now accepts <code>colcount_format</code>
@@ -62,35 +60,23 @@
 <li>2d formats are now allowed for column counts provided one element is a percent, which will be automatically set to 100%</li>
 <li>
 <code>spl_context</code> now includes root row in row-split contexts.</li>
-<li>Versioned dependency on <code>formatters</code> increased to <code>&gt;=0.3.4.21</code>
-</li>
 <li>Added vignette on format precedence</li>
 <li>Added vignette on split functions</li>
+<li>Added custom appearance vignette</li>
 <li>Significant overhaul of sorting vignette</li>
-<li>Significant additions to custom appearance vignette</li>
 <li>extended and clarified documentation</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.3.4" id="rtables-0534">rtables 0.5.3.4<a class="anchor" aria-label="anchor" href="#rtables-0534"></a></h2>
-<ul><li>
+<li>
 <code>export_as_pdf</code> now correctly takes <code>margins</code> into account when calculating <code>lpp</code> and <code>cpp</code> from page size.</li>
 <li>exporters now pass down non-default <code>colwidths</code> values correctly</li>
 <li>
 <code>nlines</code> <code>TableRow</code> method (used for both rows and column label extent in paginaton) now correctly handles column spanning</li>
 <li>pagination with <code>verbose = TRUE</code> now includes original and adjusted lines-per page information</li>
-<li>depends on <code>formatters</code> <code>&gt;=0.3.4.9</code> for a number of pagination machinery fixes and improvements</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.3.3" id="rtables-0533">rtables 0.5.3.3<a class="anchor" aria-label="anchor" href="#rtables-0533"></a></h2>
-<ul><li>
+<li>
 <code>cont_n_allcols</code> and <code>cont_n_onecol</code> score functions now throw errors when they are applied to subtables that have no content table, instead of the previously returned <code>NA</code>
 </li>
 <li>
 <code>sort_at_path</code> now emits an informative error message when score functions fail.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.3.2" id="rtables-0532">rtables 0.5.3.2<a class="anchor" aria-label="anchor" href="#rtables-0532"></a></h2>
-<ul><li>
+<li>
 <code>paginate_table</code> now accepts <code>colwidths</code> and paginates assuming column label and cell values are wrapped to those widths.</li>
 <li>
 <code>make_row_df</code> now accepts <code>colwidths</code> and calculates row extents assuming cell values are wrapped to those widths</li>
@@ -98,7 +84,8 @@
 <code>nlines</code> <code>TableRow</code> method now uses provided <code>colwidths</code> to assume cell-value wrapping</li>
 <li>
 <code>export_to_txt</code> now automatically paginates when any form of page dimension is provided (previously the default was unconditionally not paginating).</li>
-<li>depend on <code>formatters</code> <code>&gt;=0.3.4.5</code> for cell-value wrapping</li>
+<li>Versioned dependency on <code>formatters</code> increased to <code>&gt;=0.4.0</code>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.3" id="rtables-053">rtables 0.5.3<a class="anchor" aria-label="anchor" href="#rtables-053"></a></h2>
