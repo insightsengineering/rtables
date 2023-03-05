@@ -12,10 +12,10 @@ trim_zero_rows <- function(tbl) {
 
   rows <- collect_leaves(tbl, TRUE, TRUE)
   torm <- vapply(rows, function(x) {
-   identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
+    identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
   }, NA, USE.NAMES = FALSE)
   tbl[!torm, , keep_topleft = TRUE]
-  
+
 }
 
 
@@ -43,8 +43,8 @@ cont_n_allcols <- function(tt) {
 #' @param j numeric(1). Number of column used for scoring.
 #' 
 #' @seealso For examples and details please read main documentation 
-#'   [sort_at_path()] and relevant vignette (([Sorting and Pruning]
-#'   (https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
+#'   [sort_at_path()] and relevant vignette 
+#'   (([Sorting and Pruning](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
 #' 
 #' @export
 cont_n_onecol <- function(j) {
@@ -96,7 +96,7 @@ cont_n_onecol <- function(j) {
 #'   [summarize_row_groups()], while the second one is commonly produced by 
 #'   calling one of the various [analyze()] instances.
 #'   
-#' @seealso Built-in score functions are [cont_n_allcols()] and [cont_n_onecol()].
+#'   Built-in score functions are [cont_n_allcols()] and [cont_n_onecol()].
 #'   They are both working with content rows (coming from [summarize_row_groups()])
 #'   while a custom score function needs to be used on `DataRow`s. Here, some 
 #'   useful decriptor and accessor functions (coming from related vignette):
@@ -111,6 +111,8 @@ cont_n_onecol <- function(j) {
 #'    - [tree_children()] - Retrieves a `TableTree` object's direct children
 #'      (either subtables, rows or possibly a mix thereof, though that
 #'      should not happen in practice).
+#'   
+#' @seealso [cont_n_allcols()] and [cont_n_onecol()]
 #' 
 #' @examples 
 #' # Creating a table to sort

@@ -24,6 +24,6 @@ Score functions for sorting TableTrees
 }
 \seealso{
 For examples and details please read main documentation
-\code{\link[=sort_at_path]{sort_at_path()}} and relevant vignette ((\link{Sorting and Pruning}
-(https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
+\code{\link[=sort_at_path]{sort_at_path()}} and relevant vignette
+((\href{https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html}{Sorting and Pruning}))
 }

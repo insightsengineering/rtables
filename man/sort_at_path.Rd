@@ -62,6 +62,24 @@ difference between "content" rows and "data" rows. The first one analyzes
 and describes the split variable generally and is generated with
 \code{\link[=summarize_row_groups]{summarize_row_groups()}}, while the second one is commonly produced by
 calling one of the various \code{\link[=analyze]{analyze()}} instances.
+
+Built-in score functions are \code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}.
+They are both working with content rows (coming from \code{\link[=summarize_row_groups]{summarize_row_groups()}})
+while a custom score function needs to be used on \code{DataRow}s. Here, some
+useful decriptor and accessor functions (coming from related vignette):
+\itemize{
+\item \code{\link[=cell_values]{cell_values()}} - Retrieves a named list of a \code{TableRow} or
+\code{TableTree} object's values.
+\item \code{\link[=obj_name]{obj_name()}} - Retrieves the name of an object. Note this can differ
+from the label that is displayed (if any is) when printing.
+\item \code{\link[=obj_label]{obj_label()}} - Retrieves the display label of an object. Note this
+can differ from the name that appears in the path.
+\item \code{\link[=content_table]{content_table()}} - Retrieves a \code{TableTree} object's content table
+(which contains its summary rows).
+\item \code{\link[=tree_children]{tree_children()}} - Retrieves a \code{TableTree} object's direct children
+(either subtables, rows or possibly a mix thereof, though that
+should not happen in practice).
+}
 }
 \examples{
 # Creating a table to sort
@@ -109,21 +127,5 @@ sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
 
 }
 \seealso{
-Built-in score functions are \code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}.
-They are both working with content rows (coming from \code{\link[=summarize_row_groups]{summarize_row_groups()}})
-while a custom score function needs to be used on \code{DataRow}s. Here, some
-useful decriptor and accessor functions (coming from related vignette):
-\itemize{
-\item \code{\link[=cell_values]{cell_values()}} - Retrieves a named list of a \code{TableRow} or
-\code{TableTree} object's values.
-\item \code{\link[=obj_name]{obj_name()}} - Retrieves the name of an object. Note this can differ
-from the label that is displayed (if any is) when printing.
-\item \code{\link[=obj_label]{obj_label()}} - Retrieves the display label of an object. Note this
-can differ from the name that appears in the path.
-\item \code{\link[=content_table]{content_table()}} - Retrieves a \code{TableTree} object's content table
-(which contains its summary rows).
-\item \code{\link[=tree_children]{tree_children()}} - Retrieves a \code{TableTree} object's direct children
-(either subtables, rows or possibly a mix thereof, though that
-should not happen in practice).
-}
+\code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}
 }
