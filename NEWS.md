@@ -1,3 +1,6 @@
+## rtables 0.6.0.1
+ * bumped devel version
+
 ## rtables 0.6.0
  * added `make_split_fun` function for creation of custom split functions
  * `basic_table` now accepts `colcount_format`
