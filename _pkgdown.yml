@@ -52,6 +52,7 @@ reference:
     - split_rows_by
     - summarize_row_groups
     - split_cols_by_multivar
+    - split_rows_by_multivar
     - analyze_colvars
     - split_cols_by_cuts 
     - add_overall_col
