@@ -489,55 +489,60 @@ split_cols_by_multivar <- function(lyt,
                                   split_fun = NULL,
                                   varlabels = vars,
                                   varnames = NULL,
-                                  nested = TRUE) {
+                                  nested = TRUE,
+                                  extra_args = list()) {
     spl <- MultiVarSplit(vars = vars, split_label = "",
                          varlabels = varlabels,
                          varnames = varnames,
-                         split_fun = split_fun)
+                         split_fun = split_fun,
+                         extra_args = extra_args)
     pos <- next_cpos(lyt, nested)
     split_cols(lyt, spl, pos)
 }
 
 #' Associate Multiple Variables with Rows
-#' 
-#' When we need rows to reflect different variables rather than different 
+#'
+#' When we need rows to reflect different variables rather than different
 #' levels of a single variable, we use `split_rows_by_multivar`.
-#' 
+#'
 #' @inheritParams lyt_args
 #' @inherit split_rows_by return
-#' 
-#' @seealso [split_rows_by()] for typical row splitting, and 
+#'
+#' @seealso [split_rows_by()] for typical row splitting, and
 #' [split_cols_by_multivar()] to perform the same type of split on a column basis.
 #' @export
-#' 
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_rows_by_multivar(c("SEX", "STRATA1")) %>%
 #'     summarize_row_groups() %>%
 #'     analyze(c("AGE", "SEX"))
-#'     
+#'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 split_rows_by_multivar <- function(lyt,
                                    vars,
                                    split_fun = NULL,
+                                   split_label = "",
                                    varlabels = vars,
                                    format = NULL,
                                    na_str = NA_character_,
                                    nested = TRUE,
                                    child_labels = c("default", "visible", "hidden"),
                                    indent_mod = 0L,
-                                   section_div = NA_character_) {
+                                   section_div = NA_character_,
+                                   extra_args = list()) {
     child_labels <- match.arg(child_labels)
-    spl <- MultiVarSplit(vars = vars, split_label = "", varlabels,
+    spl <- MultiVarSplit(vars = vars, split_label = split_label, varlabels,
                          split_format = format,
                          split_na_str = na_str,
                          child_labels = child_labels,
                          indent_mod = indent_mod,
                          split_fun = split_fun,
-                         section_div = section_div)
+                         section_div = section_div,
+                         extra_args = extra_args)
     pos <- next_rpos(lyt, nested)
     split_rows(lyt, spl, pos)
 }
@@ -616,7 +621,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' tbl4 <- build_table(lyt4, ex_adsl)
 #' tbl4
-#' 
+#'
 #' # split_cols_by_cutfun
 #' cutfun <- function(x) {
 #'   cutpoints <- c(
@@ -635,7 +640,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' tbl5 <- build_table(lyt5, ex_adsl)
 #' tbl5
-#' 
+#'
 #' # split_rows_by_cutfun
 #' lyt6 <- basic_table() %>%
 #'   split_cols_by("SEX") %>%
