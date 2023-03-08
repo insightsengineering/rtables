@@ -40,7 +40,7 @@ they should be placed in the order.}
 }
 \value{
 A \code{TableTree} with the same structure as \code{tt} with the exception
-that the requested sorting has been done at \code{path}
+that the requested sorting has been done at \code{path}.
 }
 \description{
 Main sorting function to order the substructure of a \code{TableTree}
@@ -48,7 +48,7 @@ at a particular Path in the table tree.
 }
 \details{
 The \code{path} here can include the "wildcard" \code{"*"} as a step,
-which translates roughly as \emph{any} node/branching element and means
+which translates roughly to \emph{any} node/branching element and means
 that each child at that step will be \emph{separately} sorted based on
 \code{scorefun} and the remaining \code{path} entries. This can occur
 multiple times in a path.

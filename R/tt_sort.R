@@ -167,9 +167,11 @@ sort_at_path <- function(tt,
                          .prev_path = character()) {
     if(NROW(tt) == 0)
         return(tt)
+
     ## XXX hacky fix this!!!
     if(identical(obj_name(tt), path[1]))
         path <- path[-1]
+
     curpath <- path
     subtree <- tt
     backpath <- c()
@@ -207,6 +209,7 @@ sort_at_path <- function(tt,
         count <- count + 1
     }
     real_backpath <- path[seq_len(count)]
+
     na.pos <- match.arg(na.pos)
 ##    subtree <- tt_at_path(tt, path)
     kids <- tree_children(subtree)
@@ -220,6 +223,7 @@ sort_at_path <- function(tt,
              "\n\toccurred at path: ",
              paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
              call. = FALSE)
+
     } else {
         scores <- unlist(scores)
     }
@@ -234,6 +238,7 @@ sort_at_path <- function(tt,
     if(anyNA(scores) && na.pos == "omit") { #we did na last here
         newkids <- head(newkids, -1 * sum(is.na(scores)))
     }
+
     newtree <- subtree
     tree_children(newtree) <- newkids
     tt_at_path(tt, path) <- newtree
