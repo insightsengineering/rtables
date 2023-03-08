@@ -78,10 +78,10 @@ cont_n_onecol <- function(j) {
 #' @param .prev_path character. Internal detail, do not set manually.
 #' 
 #' @return A `TableTree` with the same structure as \code{tt} with the exception
-#'   that the requested sorting has been done at \code{path}
+#'   that the requested sorting has been done at \code{path}.
 #'   
 #' @details The \code{path} here can include the "wildcard" \code{"*"} as a step, 
-#'   which translates roughly as *any* node/branching element and means
+#'   which translates roughly to *any* node/branching element and means
 #'   that each child at that step will be \emph{separately} sorted based on
 #'   \code{scorefun} and the remaining \code{path} entries. This can occur
 #'   multiple times in a path. 
@@ -167,11 +167,9 @@ sort_at_path <- function(tt,
                          .prev_path = character()) {
     if(NROW(tt) == 0)
         return(tt)
-    
     ## XXX hacky fix this!!!
     if(identical(obj_name(tt), path[1]))
         path <- path[-1]
-    
     curpath <- path
     subtree <- tt
     backpath <- c()
@@ -193,7 +191,7 @@ sort_at_path <- function(tt,
                              ## its ok to modify the "path" here because its only ever used for
                              ## informative error reporting.
                              .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
-                                })
+                })
             newtab <- subtree
             tree_children(newtab) <- newkids
             if(length(backpath) > 0) {
@@ -209,9 +207,8 @@ sort_at_path <- function(tt,
         count <- count + 1
     }
     real_backpath <- path[seq_len(count)]
-    
     na.pos <- match.arg(na.pos)
-    ##    subtree <- tt_at_path(tt, path)
+##    subtree <- tt_at_path(tt, path)
     kids <- tree_children(subtree)
     ## relax this to allow character "scores"
     ## scores <- vapply(kids, scorefun, NA_real_)
@@ -223,7 +220,6 @@ sort_at_path <- function(tt,
              "\n\toccurred at path: ",
              paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
              call. = FALSE)
-        
     } else {
         scores <- unlist(scores)
     }
@@ -238,7 +234,6 @@ sort_at_path <- function(tt,
     if(anyNA(scores) && na.pos == "omit") { #we did na last here
         newkids <- head(newkids, -1 * sum(is.na(scores)))
     }
-    
     newtree <- subtree
     tree_children(newtree) <- newkids
     tt_at_path(tt, path) <- newtree
