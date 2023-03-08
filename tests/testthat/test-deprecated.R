@@ -58,23 +58,6 @@ test_that("deprecated insert_rrow and summarize_rows still currently work", {
     options(o)
 })
 
-
-test_that
-
-test_that("split_rows_by_multivar works", {
-
-    DM2 <- DM
-    inds <- sample(seq_len(nrow(DM)), floor(.25 * nrow(DM)))
-    DM2$STRATA1[inds] <- NA
-    lyt <- basic_table() %>%
-        rtables:::split_rows_by_multivar(c("RACE", "STRATA1")) %>%
-        summarize_row_groups()
-
-    tbl <- build_table(lyt, DM2)
-    expect_true(TRUE)
-})
-
-
 test_that("add_colcounts works", {
     tbl1 <- basic_table() %>%
         add_colcounts() %>%
