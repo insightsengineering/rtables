@@ -33,12 +33,6 @@ variable, we use split_cols_by_multivar"><!-- mathjax --><script src="https://cd
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -75,7 +69,8 @@ variable, we use <code>split_cols_by_multivar</code></p>
 <span>  split_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  varlabels <span class="op">=</span> <span class="va">vars</span>,</span>
 <span>  varnames <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nested <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  nested <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -110,6 +105,13 @@ uniqueness.</p></dd>
 existing layout structure <em>if possible</em> (<code>TRUE</code>, the default) or as a
 new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.</p></dd>
+
+
+<dt>extra_args</dt>
+<dd><p>list. Extra arguments to be passed to the tabulation
+function. Element position in the list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the tabulation function.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -162,11 +164,11 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               value       pctdiff       value       pctdiff       value       pctdiff  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)   79 (65.3%)   68 (64.2%)   68 (64.2%)   84 (65.1%)   84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.0           40          0.1           34          -0.1          36    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.1          44          -0.0          40          0.2           40    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)   28 (23.1%)   24 (22.6%)   24 (22.6%)   27 (20.9%)   27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.0          13          0.1           11          0.2           18    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.1          12          -0.3          13          0.0           11    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)   14 (11.6%)   14 (13.2%)   14 (13.2%)   18 (14.0%)   18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.4          8           0.1           8           0.2           11    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.0          8           0.0           8           0.2           9     </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
