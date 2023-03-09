@@ -1271,7 +1271,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
 
 
     if(lvl == length(splvec) + 1L) {
-        ## XXX this should be a LayoutColTree I Think.
+        ## XXX this should be a LayoutColree I Think.
         nm <- unlist(tail(value_names(pos), 1)) %||% ""
         LayoutColLeaf(lev = lvl - 1L,
                       label = label,

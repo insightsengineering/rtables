@@ -10,7 +10,8 @@ split_cols_by_multivar(
   split_fun = NULL,
   varlabels = vars,
   varnames = NULL,
-  nested = TRUE
+  nested = TRUE,
+  extra_args = list()
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ uniqueness.}
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
 new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
+
+\item{extra_args}{list. Extra arguments to be passed to the tabulation
+function. Element position in the list corresponds to the children of this
+split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the tabulation function.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further
