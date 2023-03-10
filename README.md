@@ -36,7 +36,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 Issues](https://img.shields.io/github/issues-raw/insightsengineering/rtables?color=red&label=open%20issues)](https://github.com/insightsengineering/rtables/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 
 [![CRAN
-Version](https://CRAN.R-project.org/package=rtables)](https://CRAN.R-project.org/package=rtables)
+Version](https://www.r-pkg.org/badges/version/rtables)](https://CRAN.R-project.org/package=rtables)
 [![Current
 Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
 <!-- end badges -->
