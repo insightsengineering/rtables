@@ -1,25 +1,3 @@
-
-
-#' Trim Zero Rows
-#'
-#' @param tbl table object
-#'
-#' @return an rtable object
-#'
-#' @export
-trim_zero_rows <- function(tbl) {
-  stopifnot(is(tbl, "VTableTree"))
-
-  rows <- collect_leaves(tbl, TRUE, TRUE)
-  torm <- vapply(rows, function(x) {
-    identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
-  }, NA, USE.NAMES = FALSE)
-  tbl[!torm, , keep_topleft = TRUE]
-
-}
-
-
-
 #' Score functions for sorting TableTrees
 #' 
 #' @rdname score_funs
