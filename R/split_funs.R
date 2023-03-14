@@ -79,8 +79,8 @@ setGeneric(".applysplit_ref_vals",
 #' functions and modify either the incoming data before they are called or
 #' their outputs.
 #'
-#' @seealso [make_split_fun()] for a simplified interface for creating custom split 
-#' functions, and [split_funcs] for a variety of pre-defined split functions.
+#' @seealso [make_split_fun()] for the API for creating custom split functions, 
+#' and [split_funcs] for a variety of pre-defined split functions.
 #'
 #' @examples
 #' # Example of a picky split function. The number of values in the column variable
