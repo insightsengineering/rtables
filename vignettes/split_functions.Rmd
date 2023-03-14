@@ -291,6 +291,10 @@ The pre-processing component is useful for things such as manipulating
 factor levels, e.g., to trim unobserved ones or to reorder levels
 based on observed counts, etc.
 
+For further details on the structure of custom split functions, and an 
+example of a custom split function that does not implement `make_split_fun()`, 
+see `?custom_split_funs`.
+
 ## An Example Custom Split Function
 
 Here we will implement an arbitrary, custom split function where we

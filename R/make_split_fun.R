@@ -186,6 +186,8 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' @return A function for use as a custom split function.
 #' @export
 #' @family make_custom_split
+#' @seealso [custom_split_funs] for further details on the 
+#' structure of custom split functions.
 #' @examples
 #'
 #' mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
