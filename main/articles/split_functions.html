@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Becker</h4>
             
-            <h4 data-toc-skip class="date">2023-03-16</h4>
+            <h4 data-toc-skip class="date">2023-03-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/split_functions.Rmd" class="external-link"><code>vignettes/split_functions.Rmd</code></a></small>
       <div class="d-none name"><code>split_functions.Rmd</code></div>
@@ -464,6 +458,9 @@ checking is done.</p>
 <p>The pre-processing component is useful for things such as
 manipulating factor levels, e.g., to trim unobserved ones or to reorder
 levels based on observed counts, etc.</p>
+<p>For a more detailed discussion on what custom split functions do, and
+an example of a custom split function not implemented via
+<code><a href="../reference/make_split_fun.html">make_split_fun()</a></code>, see <code><a href="../reference/custom_split_funs.html">?custom_split_funs</a></code>.</p>
 <div class="section level3">
 <h3 id="an-example-custom-split-function">An Example Custom Split Function<a class="anchor" aria-label="anchor" href="#an-example-custom-split-function"></a>
 </h3>
