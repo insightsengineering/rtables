@@ -126,6 +126,9 @@ silly_table <- build_table(lyt_silly, DM)
 silly_table
 }
 \seealso{
+\link{custom_split_funs} for a more detailed discussion on what
+custom split functions do.
+
 Other make_custom_split: 
 \code{\link{add_combo_facet}()},
 \code{\link{drop_facet_levels}()},
