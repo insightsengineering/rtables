@@ -255,3 +255,22 @@ test_that("provided score functions throw informative errors when invalid and * 
 
 
 })
+
+test_that("paths come out correct when sorting with '*'", {
+    tbl <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE") %>%
+        summarize_row_groups() %>%
+        analyze("STRATA1") %>%
+        build_table(DM)
+    
+    scorefun <- function(tt) sum(unlist(row_values(tt)))
+    
+    tbl <- sort_at_path(tbl, c("RACE", "*", "STRATA1"), scorefun)
+    
+    res <- cell_values(tbl,
+                       c("RACE", "BLACK OR AFRICAN AMERICAN", "STRATA1", "C"),
+                       c("ARM", "A: Drug X"))
+    expect_equal(res,
+                 list("A: Drug X" = 12))
+})
