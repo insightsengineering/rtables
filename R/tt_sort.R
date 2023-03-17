@@ -194,6 +194,7 @@ sort_at_path <- function(tt,
                              ## informative error reporting.
                              .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
                 })
+            names(newkids) <- oldnames
             newtab <- subtree
             tree_children(newtab) <- newkids
             if(length(backpath) > 0) {
