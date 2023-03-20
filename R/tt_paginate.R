@@ -799,25 +799,3 @@ paginate_table <- function(tt,
     }
     res
 }
-
-
-
-#' @title Deprecated - vertically paginate table
-#'
-#' @description This function is deprecated and should not be used.
-#'
-#' @inheritParams paginate_table
-#' @description this function is deprecated. please use `paginate_table` with a
-#' non-null `cpp` argument instead.
-#' @export
-#' @inheritParams formatters::vert_pag_indices
-#' @keywords internal
-vpaginate_table <- function(tt, cpp = 40, verbose = FALSE) {
-    .Deprecated("paginate_table(cpp=<>)")
-    inds <- vert_pag_indices(tt, cpp = cpp,
-                             verbose = verbose)
-    lapply(inds, function(j) tt[, j, keep_topleft = TRUE,
-                                keep_titles = TRUE,
-                                reindex_refs = FALSE])
-
-}

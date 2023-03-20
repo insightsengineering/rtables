@@ -93,3 +93,7 @@ tbl <- build_table(lyt, d1)
 tbl
 
 }
+\seealso{
+\code{\link[=make_split_fun]{make_split_fun()}} for the API for creating custom split functions,
+and \link{split_funcs} for a variety of pre-defined split functions.
+}
