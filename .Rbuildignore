@@ -14,6 +14,7 @@
 ^\.Rproj\.user$
 ^\.drone\.yml$
 ^\.github$
+^\.gitlab-ci\.yml$
 ^\.pre-commit-config\.yaml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
