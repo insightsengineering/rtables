@@ -1175,3 +1175,22 @@ test_that("error when ref_group value not a level of var when using split_cols_b
     expect_error({tbl <- build_table(lyt, DM)},
                  'Reference group "test_level" was not present in the levels of ARM in the data.')
 })
+
+test_that("counts_wpcts works as expected", {
+    rows_res <- counts_wpcts(DM$SEX, 400)
+    rows_exp <- in_rows(
+        .list = list(
+            F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"), 
+            M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"), 
+            U = rcell(c(0, 0), format = "xx (xx.x%)"), 
+            UNDIFFERENTIATED = rcell(c(0, 0), format = "xx (xx.x%)"))
+    )
+    expect_identical(rows_res, rows_exp)
+})
+
+test_that("counts_wpcts returns error correctly", {
+    expect_error(
+        counts_wpcts(DM$AGE, 400),
+        "using the 'counts_wpcts' analysis function requires factor data to guarantee equal numbers"
+    )
+})
