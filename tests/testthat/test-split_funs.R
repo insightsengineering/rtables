@@ -342,3 +342,34 @@ test_that("make_split_fun works", {
     expect_equal(30,
                  cell_values(tbl4b, pths[[5]])[[1]][[1]])
 })
+
+test_that("spl_variable works", {
+    
+    rem_lev_facet <- function(torem) {
+        function(df, spl, vals, labels, ...) {
+            var <- spl_variable(spl)
+            expect_identical(var, "ARM")
+            vec <- df[[var]]
+            bad <- vec == torem
+            df <- df[!bad,]
+            levs <- if(is.character(vec)) unique(vec) else levels(vec)
+            df[[var]] <- factor(as.character(vec[!bad]), levels = setdiff(levs, torem))
+            df
+        }
+    }
+    
+    mysplitfun <- make_split_fun(pre = list(rem_lev_facet("A: Drug X")))
+    
+    lyt <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = mysplitfun) %>%
+        analyze("AGE")
+    tbl <- expect_silent(build_table(lyt, DM))
+    expect_equal(ncol(tbl), 2L)
+    
+    lyt <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by_multivar(c("ARM", "SEX"), split_fun = mysplitfun) %>%
+        analyze("AGE")
+    
+    expect_error(build_table(lyt, DM),
+                 "Split class MultiVarSplit not associated with a single variable")
+})
