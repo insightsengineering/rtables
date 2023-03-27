@@ -238,3 +238,15 @@ test_that("path_enriched_df works for tables with a column that has all length 1
     mydf <- path_enriched_df(my_table)
     expect_identical(dim(mydf), c(3L, 2L))
 })
+
+test_that("export_as_rtf works", {
+    
+    tbl <- tt_to_export()
+    tmpf <- tempfile(fileext = ".rtf")
+    
+    expect_error(export_as_rtf(tbl, file = tmpf, landscape = TRUE, margins = c(2, 2, 2, 2), colwidths = 2),
+                 "non-null colwidths argument")
+    
+    res <- export_as_rtf(tbl, file = tmpf)
+    expect_true(file.exists(tmpf))
+})
