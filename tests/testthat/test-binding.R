@@ -200,3 +200,59 @@ test_that("cbinding table with counts and with NA counts works", {
     expect_identical(mform$strings[2, 4], "(N=129)")
     expect_identical(mform$strings[2, 5], "")
 })
+
+test_that("rbinding 2 tables with all different annotations removes them", {
+    tbl_a <- basic_table(title = "Title A", subtitles = "Subtitle A", main_footer = "Footer A", prov_footer = "PF A") %>% 
+        build_table(ex_adsl)
+    tbl_b <- basic_table(title = "Title B", subtitles = "Subtitle B", main_footer = "Footer B", prov_footer = "PF B") %>%
+        build_table(ex_adsl)
+
+    tbl_ab <- rbind(tbl_a, tbl_b)
+    expect_identical(main_title(tbl_ab), "")
+    expect_identical(subtitles(tbl_ab), character())
+    expect_identical(main_footer(tbl_ab), character())
+    expect_identical(prov_footer(tbl_ab), character())
+})
+
+test_that("rbinding 2 tables with all same annotations keeps them", {
+    tbl_a <- basic_table(
+        title = "Title", subtitles = c("S1", "S2"), main_footer = c("F1", "F2"), prov_footer = c("PF1", "PF2")) %>% 
+        build_table(ex_adsl)
+    tbl_b <- basic_table(
+        title = "Title", subtitles = c("S1", "S2"), main_footer = c("F1", "F2"), prov_footer = c("PF1", "PF2")) %>% 
+        build_table(ex_adsl)
+
+    tbl_ab <- rbind(tbl_a, tbl_b)
+    expect_identical(main_title(tbl_ab), "Title")
+    expect_identical(subtitles(tbl_ab), c("S1", "S2"))
+    expect_identical(main_footer(tbl_ab),  c("F1", "F2"))
+    expect_identical(prov_footer(tbl_ab), c("PF1", "PF2"))
+})
+
+test_that("rbinding 2 tables with each annotation missing from one table works", {
+    tbl_a <- basic_table(subtitles = c("S1", "S2"), prov_footer = c("PF1", "PF2")) %>% 
+        build_table(ex_adsl)
+    tbl_b <- basic_table(title = "Title", main_footer = c("F1", "F2")) %>% 
+        build_table(ex_adsl)
+
+    tbl_ab <- rbind(tbl_a, tbl_b)
+    expect_identical(main_title(tbl_ab), "Title")
+    expect_identical(subtitles(tbl_ab), c("S1", "S2"))
+    expect_identical(main_footer(tbl_ab),  c("F1", "F2"))
+    expect_identical(prov_footer(tbl_ab), c("PF1", "PF2"))
+})
+
+test_that("rbinding >2 tables removes all annotations", {
+    tbl_a <- basic_table(title = "Title", subtitles = "Subtitle", main_footer = "Footer", prov_footer = "PF") %>% 
+        build_table(ex_adsl)
+    tbl_b <- basic_table(title = "Title", subtitles = "Subtitle", main_footer = "Footer", prov_footer = "PF") %>%
+        build_table(ex_adsl)
+    tbl_c <- basic_table(title = "Title", subtitles = "Subtitle", main_footer = "Footer", prov_footer = "PF") %>%
+        build_table(ex_adsl)
+
+    tbl_abc <- rbind(tbl_a, tbl_b, tbl_c)
+    expect_identical(main_title(tbl_abc), "")
+    expect_identical(subtitles(tbl_abc), character())
+    expect_identical(main_footer(tbl_abc), character())
+    expect_identical(prov_footer(tbl_abc), character())
+})

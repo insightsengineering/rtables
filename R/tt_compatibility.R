@@ -374,6 +374,21 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
+    rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
+    # If rbinding only 2 tables, annotations can be retained if only present in one table or shared
+    if (!any(lapply(x, obj_name) == "rbind_root")) {
+        all_titles <- unique(lapply(x, main_title))[unique(lapply(x, main_title)) != ""]
+        if (length(all_titles) == 1) rbind_annot[["title"]] <- all_titles[[1]]
+        
+        all_subtitles <- unique(lapply(x, subtitles))[unlist(lapply(unique(lapply(x, subtitles)), \(x) length(x) > 0))]
+        if (length(all_subtitles) == 1) rbind_annot[["subtitles"]] <- all_subtitles[[1]]
+        
+        all_footers <- unique(lapply(x, main_footer))[unlist(lapply(unique(lapply(x, main_footer)), \(x) length(x) > 0))]
+        if (length(all_footers) == 1) rbind_annot[["footer"]] <- all_footers[[1]]
+        
+        all_pf <- unique(lapply(x, prov_footer))[unlist(lapply(unique(lapply(x, prov_footer)), \(x) length(x) > 0))]
+        if (length(all_pf) == 1) rbind_annot[["pf"]] <- all_pf[[1]]
+    }
 
     ## if we got only ElementaryTable and
     ## TableRow objects, construct a new
@@ -396,7 +411,14 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     }
 
 
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
+    TableTree(kids = x, 
+              cinfo = firstcols, 
+              name = "rbind_root", 
+              label = "", 
+              title = rbind_annot[["title"]], 
+              subtitles = rbind_annot[["subtitles"]],
+              main_footer = rbind_annot[["footer"]],
+              prov_footer = rbind_annot[["pf"]])
 
 }
 
