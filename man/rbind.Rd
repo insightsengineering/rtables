@@ -32,6 +32,11 @@ A formal table object.
 \description{
 rbind TableTree and related objects
 }
+\note{
+When two table objects are bound, annotations are retained \emph{only} if identical in both tables or
+present in only one of the two tables. Otherwise, any annotations are removed and must be set for
+the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}} functions.
+}
 \examples{
 mtbl <- rtable(
    header = rheader(
@@ -59,7 +64,7 @@ mtbl <- rtable(
    )
  ))
 
- rbind(mtbl, mtbl2)
+rbind(mtbl, mtbl2)
 rbind(mtbl, rrow(), mtbl2)
 rbind(mtbl, rrow("aaa"), indent(mtbl2))
 }

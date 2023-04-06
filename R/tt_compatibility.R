@@ -375,8 +375,8 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
     rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
-    # If rbinding only 2 tables, annotations can be retained if only present in one table or shared
-    if (!any(lapply(x, obj_name) == "rbind_root")) {
+    # If rbinding 2 tables, annotations are retained if only present in one table or shared by both
+    if (!any(sapply(x, obj_name) == "rbind_root") & all(sapply(x, \(x) is(x, "ElementaryTable")))) {
         all_titles <- unique(lapply(x, main_title))[unique(lapply(x, main_title)) != ""]
         if (length(all_titles) == 1) rbind_annot[["title"]] <- all_titles[[1]]
         
@@ -429,6 +429,11 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
 #'
+#' @note 
+#' When two table objects are bound, annotations are retained _only_ if identical in both tables or 
+#' present in only one of the two tables. Otherwise, any annotations are removed and must be set for 
+#' the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] functions.
+#'
 #' @examples
 #' mtbl <- rtable(
 #'    header = rheader(
@@ -456,7 +461,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #'    )
 #'  ))
 #'
-#'  rbind(mtbl, mtbl2)
+#' rbind(mtbl, mtbl2)
 #' rbind(mtbl, rrow(), mtbl2)
 #' rbind(mtbl, rrow("aaa"), indent(mtbl2))
 setMethod("rbind", "VTableNodeInfo",
