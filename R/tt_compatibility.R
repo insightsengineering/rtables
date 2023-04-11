@@ -386,7 +386,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     all_footers <- lapply(x, function(x) if (is.null(attr(x, "main_footer"))) character() else main_footer(x))
     if (length(all_footers[[1]]) > 0 & all(sapply(all_footers[[-1]], function(x) length(x) == 0))) {
-      rbind_annot[["footers"]] <- all_footers[[1]]
+      rbind_annot[["footer"]] <- all_footers[[1]]
     }
 
     all_pfs <- lapply(x, function(x) if (is.null(attr(x, "provenance_footer"))) character() else prov_footer(x))
