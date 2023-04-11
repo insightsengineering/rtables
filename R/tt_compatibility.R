@@ -375,19 +375,23 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
     rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
-    # If rbinding 2 tables, annotations are retained if only present in one table or shared by both
-    if (!any(sapply(x, obj_name) == "rbind_root") & all(sapply(x, \(x) is(x, "ElementaryTable")))) {
-        all_titles <- unique(lapply(x, main_title))[unique(lapply(x, main_title)) != ""]
-        if (length(all_titles) == 1) rbind_annot[["title"]] <- all_titles[[1]]
-        
-        all_subtitles <- unique(lapply(x, subtitles))[unlist(lapply(unique(lapply(x, subtitles)), \(x) length(x) > 0))]
-        if (length(all_subtitles) == 1) rbind_annot[["subtitles"]] <- all_subtitles[[1]]
-        
-        all_footers <- unique(lapply(x, main_footer))[unlist(lapply(unique(lapply(x, main_footer)), \(x) length(x) > 0))]
-        if (length(all_footers) == 1) rbind_annot[["footer"]] <- all_footers[[1]]
-        
-        all_pf <- unique(lapply(x, prov_footer))[unlist(lapply(unique(lapply(x, prov_footer)), \(x) length(x) > 0))]
-        if (length(all_pf) == 1) rbind_annot[["pf"]] <- all_pf[[1]]
+    # Titles/footer info are (independently) retained from first object if all other objects have none
+    all_titles <- lapply(x, function(x) if (is.null(attr(x, "main_title"))) "" else main_title(x))
+    if (all_titles[[1]] != "" & all(all_titles[[-1]] == "")) rbind_annot[["title"]] <- all_titles[[1]]
+
+    all_sts <- lapply(x, function(x) if (is.null(attr(x, "subtitles"))) character() else subtitles(x))
+    if (length(all_sts[[1]]) > 0 & all(sapply(all_sts[[-1]], function(x) length(x) == 0))) {
+      rbind_annot[["subtitles"]] <- all_sts[[1]]
+    }
+
+    all_footers <- lapply(x, function(x) if (is.null(attr(x, "main_footer"))) character() else main_footer(x))
+    if (length(all_footers[[1]]) > 0 & all(sapply(all_footers[[-1]], function(x) length(x) == 0))) {
+      rbind_annot[["footers"]] <- all_footers[[1]]
+    }
+
+    all_pfs <- lapply(x, function(x) if (is.null(attr(x, "provenance_footer"))) character() else prov_footer(x))
+    if (length(all_pfs[[1]]) > 0 & all(sapply(all_pfs[[-1]], function(x) length(x) == 0))) {
+      rbind_annot[["pf"]] <- all_pfs[[1]]
     }
 
     ## if we got only ElementaryTable and
@@ -430,9 +434,9 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' @param \dots ANY. Elements to be stacked.
 #'
 #' @note 
-#' When two table objects are bound, annotations are retained _only_ if identical in both tables or 
-#' present in only one of the two tables. Otherwise, any annotations are removed and must be set for 
-#' the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] functions.
+#' When objects are rbinded, titles and footer information are retained from the first object (if any exist)
+#' and all other objects have no titles/footers. Otherwise, all titles/footers are removed and must be set 
+#' for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] functions.
 #'
 #' @examples
 #' mtbl <- rtable(

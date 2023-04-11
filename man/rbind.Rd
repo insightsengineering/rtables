@@ -33,9 +33,9 @@ A formal table object.
 rbind TableTree and related objects
 }
 \note{
-When two table objects are bound, annotations are retained \emph{only} if identical in both tables or
-present in only one of the two tables. Otherwise, any annotations are removed and must be set for
-the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}} functions.
+When objects are rbinded, titles and footer information are retained from the first object (if any exist)
+and all other objects have no titles/footers. Otherwise, all titles/footers are removed and must be set
+for the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}} functions.
 }
 \examples{
 mtbl <- rtable(

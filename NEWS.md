@@ -1,6 +1,6 @@
 ## rtables 0.6.0.1
  * bumped devel version
- * Joining 2 tables via `rbind` will retain annotations if only present in one table or shared between both tables.
+ * Binding objects via `rbind` will retain titles/footer information if only present in the first object being bound.
 
 ## rtables 0.6.0
  * added `make_split_fun` function for creation of custom split functions
