@@ -214,7 +214,7 @@ test_that("rbinding 2 objects both with titles/footers removes them", {
     expect_identical(prov_footer(tbl_ab), character())
 })
 
-test_that("rbinding objects with only annotations for first object keeps them", {
+test_that("rbinding objects with only titles/footers for first object keeps them", {
     tbl_a <- basic_table(
         title = "Title", subtitles = c("S1", "S2"), main_footer = c("F1", "F2"), prov_footer = c("PF1", "PF2")) %>% 
         build_table(ex_adsl)
