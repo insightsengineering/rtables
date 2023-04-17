@@ -1,0 +1,28 @@
+---
+name: Integration Tests 🧪
+
+on:
+  schedule:
+    - cron: '45 3 * * 0'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dependency-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        test-strategy: ["min", "release", "max"]
+    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
+    name: Dependency Test - ${{ matrix.test-strategy }} 🔢
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+      GCHAT_WEBHOOK: ${{ secrets.GCHAT_WEBHOOK }}
+    with:
+      strategy: ${{ matrix.test-strategy }}
+  cran-status:
+    name: CRAN Status Monitor 🪞
+    uses: insightsengineering/r.pkg.template/.github/workflows/cran-status.yaml@main
+    with:
+      issue-assignees: "shajoezhu,Melkiades,edelarua,gmbecker,ayogasekaram"
