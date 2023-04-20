@@ -290,15 +290,16 @@ test_that("Pagination works with section dividers", {
     ], ttlst[[1]])
 
     expect_identical(
-        export_as_txt(ttlst[[1]][7:8, keep_titles = TRUE]),
-        "big title\n\n——————————————\n       all obs\n——————————————\nMean    34.89 \n~~~~~~~~~~~~~~\nM             \n"
+        export_as_txt(ttlst[[1]][7:8, keep_titles = TRUE], hsep = "-"),
+        "big title\n\n--------------\n       all obs\n--------------\nMean    34.89 \n~~~~~~~~~~~~~~\nM             \n"
     )
 
     expect_identical(
-        paste0(export_as_txt(tail(ttlst[[1]], 1)), export_as_txt(head(ttlst[[2]], 1))),
+        paste0(export_as_txt(tail(ttlst[[1]], 1), hsep = "-"),
+               export_as_txt(head(ttlst[[2]], 1), hsep = "-" )),
         paste0(
-            "big title\n\n——————————————\n       all obs\n——————————————\nMean    34.28 \n",
-            "big title\n\n———————————\n    all obs\n———————————\nU          \n"
+            "big title\n\n--------------\n       all obs\n--------------\nMean    34.28 \n",
+            "big title\n\n-----------\n    all obs\n-----------\nU          \n"
         )
     )
 })

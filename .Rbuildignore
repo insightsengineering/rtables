@@ -9,6 +9,7 @@
 ^README\.Rmd$
 ^[^/]*.R$
 ^[^/]*html$
+^[^/]*pdf$
 ^\..*$
 ^\.CI-FORCE-RELEASE-VERSION$
 ^\.Rproj\.user$
