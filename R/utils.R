@@ -113,7 +113,8 @@ func_takes <- function(func, params, is_first = FALSE) {
 #'   analyze(c("AGE"), function(x) {
 #'     in_rows(
 #'       "mean" = rcell(mean(x), align = "right"),
-#'       "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
+#'       "sd" = rcell(sd(x), align = "left"), 
+#'       .formats = c("xx.x")
 #'     )
 #'   }, show_labels = "visible", na_str = "NE")
 #'
@@ -124,7 +125,7 @@ func_takes <- function(func, params, is_first = FALSE) {
 #'
 #' @export
 rtables_aligns <- function() {
-  c("left", "right", "center")
+  c("left", "right", "center", "decimal", "dec_right", "dec_left")
 }
 
 chk_rtables_align <- function(algn) {

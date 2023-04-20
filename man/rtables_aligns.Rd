@@ -45,7 +45,8 @@ lyt3 <- basic_table() \%>\%
   analyze(c("AGE"), function(x) {
     in_rows(
       "mean" = rcell(mean(x), align = "right"),
-      "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
+      "sd" = rcell(sd(x), align = "left"), 
+      .formats = c("xx.x")
     )
   }, show_labels = "visible", na_str = "NE")
 

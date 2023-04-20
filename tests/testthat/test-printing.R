@@ -217,6 +217,60 @@ test_that("alignment works", {
 })
 
 
+test_that("tabulation works with decimal alignment", {
+  df <- data.frame(
+    USUBJID = as.character(c(1:15, 1)),
+    ARM = factor(c("A", "B", "B", "A", "A", "A", "B", "A", "B", "B", "B", "B", "B", "B", "B", "C"),
+      levels = c("A", "B", "C")
+    ),
+    AETOXGR = factor(c(1, 1, 2, 3, 4, 1, 2, 5, 4, 4, 4, 4, 4, 4, 4, 4), levels = c(1:5)),
+    stringsAsFactors = FALSE
+  )
+  
+  tbl <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    analyze("AETOXGR", afun = function(x, .spl_context) {
+        a <- as.list(table(x))
+        
+        ref_col <- .spl_context$cur_col_subset
+        which_ref_col <- sapply(.spl_context, function(i) identical(i, ref_col))
+        col_nm_matched <- names(which_ref_col[which_ref_col])
+        stopifnot(col_nm_matched > 1)
+        
+        if (col_nm_matched[1] == "A") {
+            al_v <- rep("decimal", length(a))
+        } else if(col_nm_matched[1] == "B") {
+            al_v <- rep("dec_right", length(a))
+            al_v[3] <- "left"
+        } else if(col_nm_matched[1] == "C") {
+            al_v <- rep("dec_left", length(a))
+        }
+        
+        in_rows(
+        .list = lapply(a, function(x) x / sum(unlist(a))),
+        .formats = "xx.xxx%",
+        .aligns = al_v
+        )
+    }) %>%
+    build_table(df)
+  
+  al_mat <- matrix_form(tbl)$aligns
+  al_expect <- matrix(nrow = nrow(al_mat), ncol = ncol(al_mat))
+  al_expected[, 1] <- "left"
+  al_expected[, 2] <- "decimal"
+  al_expected[, 3] <- "dec_right"
+  al_expected[4, 3] <- "left"
+  al_expected[, 4] <- "dec_left"
+  al_expected[1, -1] <- "center"
+  
+  expect_identical(al_mat, al_expected)
+  
+  # Printed comparison with padding
+  # cat(toString(tbl, widths = c(15, 10)))
+  
+})
+
+
 test_that("Various Printing things work", {
 
     txtcon <- textConnection("printoutput", "w")
