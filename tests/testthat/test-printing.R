@@ -255,7 +255,7 @@ test_that("tabulation works with decimal alignment", {
     build_table(df)
   
   al_mat <- matrix_form(tbl)$aligns
-  al_expect <- matrix(nrow = nrow(al_mat), ncol = ncol(al_mat))
+  al_expected <- matrix(nrow = nrow(al_mat), ncol = ncol(al_mat))
   al_expected[, 1] <- "left"
   al_expected[, 2] <- "decimal"
   al_expected[, 3] <- "dec_right"
