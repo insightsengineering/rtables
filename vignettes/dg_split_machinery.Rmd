@@ -24,26 +24,13 @@ final form.
 
 ## The Split Machinery
 
-The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions.
+The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `split_functions` and function documentation like `?split_rows_by` and `?split_funcs`.
+
+The following will describe how the split machinery mainly for the row domain. Further information on how columns are defined will follow.
+
+
+## `do_split`
 
 ```{r, message=FALSE}
 library(rtables)
 ```
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
