@@ -22,7 +22,7 @@ repository will work/be correct, but they likely are not in their
 final form.
 
 
-## The Split Machinery
+# The Split Machinery
 
 The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `split_functions`(link?) and function documentation like `?split_rows_by` and `?split_funcs`.
 
@@ -33,7 +33,12 @@ NB: we must remind the reader that `rtables` is still under active development, 
 
 ## Process and Methods
 
-We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by heavy use of `browser()` and `debug()` on internal functions between the others (`rtables:::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use functions like `methods()` (?). 
+We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by heavy use of `browser()` and `debugonce()` on internal functions between the others (`rtables:::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
+
+* `methods()`: This function lists the methods that are available for a generic function. `showMethods()` is better for having more detailed information about each method (e.g. inheritance).
+* `class()`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for documentation or examples of how to work with the class (?). Also `help()` calls may be informative here, as it will call the documentation of the specific class.
+* `str()`: This function provides a detailed summary of the structure of an object, including its class and the names and classes of its components. This can be problematic with some objects in `rtables` as they may depend on a cascade of other complex objects. Similarly, `attributes()` can be used to retrieve useful information, even if storing important variables in this way is currently discouraged and deprecated.
+* `summary()`: This can be useful at times if used on objects as it reveals if they are `S4` or `S3`. This can be retrieved also with `mode()`.
 
 We explore and analyze the split machinery now with a growing amount of complexity, always following relevant functions and methods throughout their execution. By incrementally discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
 
@@ -42,17 +47,171 @@ In practice, the majority of the split engine resides in the source file `split_
 
 ## `do_split`
 
-The split machinery is so fundamental to `rtables` that relevant functions like `do_split` are executed, even when no split is requested. The following example shows how this is done.
+The split machinery is so fundamental to `rtables` that relevant functions like `do_split` are executed, even when no split is requested. The following example shows how we can enter `do_split` and start understanding the class hierarchy and the main split engine.
 
 ```{r, message=FALSE}
 library(rtables)
-debugonce(rtables:::do_split)
+# debugonce(rtables:::do_split) # Uncomment me to enter the function!!!
 basic_table() %>% 
     build_table(DM)
 ```
+We will enter `do_split`. Here, we copied it so to allow the reader to go through the general structure with its enhanced comments and sections. Each section in the code reflects roughly a section of this vignette.
 
-Now, looking at the first function called from `do_split` may give us a good overview of how the split itself is defined. This is, of course. a check-function (`check_validsplit`) that is used to verify if the split is valid for the data. If you search the package for `check_validsplit`, you will find that it is defined as a generic in `split_funs`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. The virtual class `VAnalyzeSplit` (convention: it starts with "V") defines the main parent of analysis split which we discuss in detail in related vignette (here ?). Already, we can intuit that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, i.e. in the main `tt_dotabulation.R` source file. This is again something related to making the analyze rows as it mainly checks for `VAnalyzeSplit`. We will discuss the other classes when they will appear in our examples. 
+```{r, eval=FALSE}
+### NB This is called at EACH level of recursive splitting
+do_split <- function(spl,
+                     df,
+                     vals = NULL,
+                     labels = NULL,
+                     trim = FALSE,
+                     spl_context) {
+# CHECKS #
+    ## this will error if, e.g., df doesn't have columns
+    ## required by spl, or generally any time the spl
+    ## can't be applied to df
+    check_validsplit(spl, df)
+    
+# SPLIT FUNCTION #
+    ## note the <- here!!!
+    if(!is.null(splfun <- split_fun(spl))) {
+        ## Currently the contract is that split_functions take df, vals, labels and
+        ## return list(values=., datasplit=., labels = .), optionally with
+        ## an additional extras element
+        if(func_takes(splfun, ".spl_context")) {
+            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim,
+                                   .spl_context = spl_context),
+                            error = function(e) e) ## rawvalues(spl_context ))
+        } else {
+            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim),
+                            error = function(e) e)
+        }
+        if(is(ret, "error")) {
+            stop("Error applying custom split function: ", ret$message, "\n\tsplit: ",
+                 class(spl), " (", payloadmsg(spl), ")\n",
+                 "\toccured at path: ",
+                 spl_context_to_disp_path(spl_context), "\n")
+        }
+    } else {
+# .apply_split_inner #
+        # This is called when no split function is provided. Please note that also when provided,
+        # this function will be probably called, as far as the main splitting method is not willingly
+        # modified by the split function.
+        ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
+    }
 
-For the moment, we see with `class(spl)` (from the main `do_split` browsing option) that we are dealing with an `AllSplit` object. 
+# EXTRA #
+    ## this adds .ref_full and .in_ref_col
+    if(is(spl, "VarLevWBaselineSplit"))
+        ret <- .add_ref_extras(spl, df, ret)
+
+# FIXUPVALS #
+    ## this:
+    ## - guarantees that ret$values contains SplitValue objects
+    ## - removes the extras element since its redundant after the above
+    ## - Ensures datasplit and values lists are named according to labels
+    ## - ensures labels are character not factor
+    ret <- .fixupvals(ret)
+    
+# RETURN #
+    ret
+}
+```
 
 
+### Checks and classes
+
+Now, looking at the first function called from `do_split` may give us a good overview of how the split itself is defined. This is, of course, the check-function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe step-by-step the split-class hierarchy, but we invite the reader to explore this autonomously in future occasions. 
+
+Lets then search the package for `check_validsplit`, you will find that it is defined as a generic in `split_funs`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (convention: it starts with "V") defines the main parent of analysis split which we discuss in detail in related vignette (here ?). Already, we can intuit that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, i.e. in the main `tt_dotabulation.R` source file. This is again something related to making the analyze rows as it mainly checks for `VAnalyzeSplit`. We will discuss the other classes when they will appear in our examples. 
+
+For the moment, we see with `class(spl)` (from the main `do_split` browsing option) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we will produce the following:
+
+```
+Function: check_validsplit (package rtables)
+spl="AllSplit"
+    (inherited from: spl="Split")
+spl="CompoundSplit"
+spl="MultiVarSplit"
+spl="Split"
+spl="VAnalyzeSplit"
+spl="VarLevelSplit"
+```
+
+We understand that `AllSplit` is a class parent of `Split`. Its definition and constructor resides in `00tabletrees.R`. Reading it structure can be useful to understand how the split object is constructed and handled. Please see the comments in the following:
+
+```{r, eval=FALSE}
+setClass("AllSplit", contains = "Split")
+
+AllSplit <- function(split_label = "",
+                    cfun = NULL,
+                    cformat = NULL,
+                    cna_str = NA_character_,
+                    split_format = NULL,
+                    split_na_str = NA_character_,
+                    split_name = NULL,
+                    extra_args = list(),
+                    indent_mod = 0L,
+                    cindent_mod = 0L,
+                    cvar = "",
+                    cextra_args = list(),
+                    ...) {
+    if(is.null(split_name)) { # If the split has no name
+        if(nzchar(split_label)) # (std is "")
+            split_name <- split_label 
+        else
+            split_name <- "all obs" # Nor label, a standard split with all 
+                                    # observations is assigned.
+    }
+    new("AllSplit", split_label = split_label,
+        content_fun = cfun,
+        content_format = cformat,
+        content_na_str = cna_str,
+        split_format = split_format,
+        split_na_str = split_na_str,
+        name = split_name,
+        label_children = FALSE,
+        extra_args = extra_args,
+        indent_modifier = as.integer(indent_mod),
+        content_indent_modifier = as.integer(cindent_mod),
+        content_var = cvar,
+        split_label_position = "hidden",
+        content_extra_args = cextra_args,
+        page_title_prefix = NA_character_,
+        child_section_div = NA_character_)
+}
+```
+
+Now lets see if we can find some of these values in our object:
+```{r, eval=FALSE}
+Browse[2]> str(spl)
+Formal class 'AllSplit' [package "rtables"] with 17 slots
+  ..@ payload                : NULL
+  ..@ name                   : chr "all obs"
+  ..@ split_label            : chr ""
+  ..@ split_format           : NULL
+  ..@ split_na_str           : chr NA
+  ..@ split_label_position   : chr "hidden"
+  ..@ content_fun            : NULL
+  ..@ content_format         : NULL
+  ..@ content_na_str         : chr NA
+  ..@ content_var            : chr ""
+  ..@ label_children         : logi FALSE
+  ..@ extra_args             : list()
+  ..@ indent_modifier        : int 0
+  ..@ content_indent_modifier: int 0
+  ..@ content_extra_args     : list()
+  ..@ page_title_prefix      : chr NA
+  ..@ child_section_div      : chr NA
+```
+
+We will describe some of these more in detail when they will be necessary in future examples. Now, we gave you a hint of the complex class hierarchy that makes up `rtables`, but we need to go forward in `do_split`. In our case, being `AllSplit` inherited from `Split`, we are sure that the called function will be the following (note the comment!):
+
+```{r, eval=FALSE}
+## default does nothing, add methods as they become
+## required
+setMethod("check_validsplit", "Split",
+          function(spl, df)
+    invisible(NULL))
+```
+
+### Split function and `.apply_split_inner`
