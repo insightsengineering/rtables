@@ -116,6 +116,7 @@ do_split <- function(spl,
     ret
 }
 ```
+We will see how input parameters are used and where. The most important ones are `spl` and `df`; the split objects and the input `data.frame`. We invite the reader to try exploring a bit `spl` before continuing.
 
 
 ### Checks and classes
@@ -215,3 +216,7 @@ setMethod("check_validsplit", "Split",
 ```
 
 ### Split function and `.apply_split_inner`
+
+Before diving into custom split functions we need to take a moment to analyze how `.apply_split_inner` works. This function is routinely called, also in the case we do have a split function. Lets see why by entering it with `debugonce(.apply_split_inner)`. Of course, we are still in the `do_split` call coming from the first example.
+
+
