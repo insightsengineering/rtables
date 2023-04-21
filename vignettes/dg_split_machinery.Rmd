@@ -24,13 +24,35 @@ final form.
 
 ## The Split Machinery
 
-The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `split_functions` and function documentation like `?split_rows_by` and `?split_funcs`.
+The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `split_functions`(link?) and function documentation like `?split_rows_by` and `?split_funcs`.
 
-The following will describe how the split machinery mainly for the row domain. Further information on how columns are defined will follow.
+The following vignette will describe how the split machinery works for the row domain. Further information on how columns are defined will follow soon. 
+
+NB: we must remind the reader that `rtables` is still under active development, and it saw the efforts of multiple contributors across different years. Therefore, we could stumble upon legacy mechanisms and a couple of on-going transformations that could look different in the future.
+
+
+## Process and Methods
+
+We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by heavy use of `browser()` and `debug()` on internal functions between the others (`rtables:::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use functions like `methods()` (?). 
+
+We explore and analyze the split machinery now with a growing amount of complexity, always following relevant functions and methods throughout their execution. By incrementally discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
+
+In practice, the majority of the split engine resides in the source file `split_funs.R` with occasional incursion into `make_split_fun.R` for custom split function creation and rarer references to other more general tabulation files.
 
 
 ## `do_split`
 
+The split machinery is so fundamental to `rtables` that relevant functions like `do_split` are executed, even when no split is requested. The following example shows how this is done.
+
 ```{r, message=FALSE}
 library(rtables)
+debugonce(rtables:::do_split)
+basic_table() %>% 
+    build_table(DM)
 ```
+
+Now, looking at the first function called from `do_split` may give us a good overview of how the split itself is defined. This is, of course. a check-function (`check_validsplit`) that is used to verify if the split is valid for the data. If you search the package for `check_validsplit`, you will find that it is defined as a generic in `split_funs`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. The virtual class `VAnalyzeSplit` (convention: it starts with "V") defines the main parent of analysis split which we discuss in detail in related vignette (here ?). Already, we can intuit that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, i.e. in the main `tt_dotabulation.R` source file. This is again something related to making the analyze rows as it mainly checks for `VAnalyzeSplit`. We will discuss the other classes when they will appear in our examples. 
+
+For the moment, we see with `class(spl)` (from the main `do_split` browsing option) that we are dealing with an `AllSplit` object. 
+
+
