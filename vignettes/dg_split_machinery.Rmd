@@ -24,23 +24,22 @@ final form.
 
 # The Split Machinery
 
-The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `split_functions`(link xxx) and function documentation like `?split_rows_by` and `?split_funcs`.
+The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `vignette("split_functions")` and function documentation like `?split_rows_by` and `?split_funcs`.
 
 The following vignette will describe how the split machinery works for the row domain. Further information on how columns are defined will follow soon. 
 
-NB: we must remind the reader that `rtables` is still under active development, and it saw the efforts of multiple contributors across different years. Therefore, we could stumble upon legacy mechanisms and a couple of on-going transformations that could look different in the future.
+NB: we must remind the reader that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and a couple of on-going transformations that could look different in the future.
 
 
 ## Process and Methods
 
-We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by heavy use of `browser()` and `debugonce()` on internal functions between the others (`rtables:::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
+We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by using `browser()` and `debugonce()` on internal and exported functions (`rtables:::` or `rtables::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
 
-* `methods(generic.function)`: This function lists the methods that are available for a generic function. `showMethods(generic.function)` is better for having more detailed information about each method (e.g. inheritance).
-* `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for documentation or examples of how to work with the class (xxx). Also `help()` calls may be informative here, as it will call the documentation of the specific class.
-* `getClass` (xxx)`str(object, max.level = 2)`: This function provides a detailed summary of the structure of an object, including its class and the names and classes of its components. This can be problematic with some objects in `rtables` as they may depend on a cascade of other complex objects. Similarly, `attributes()` can be used to retrieve useful information, even if storing important variables in this way is currently discouraged and deprecated.
-* `summary(object)`: This can be useful at times if used on objects as it reveals if they are `S4` or `S3`. This can be retrieved also with `mode()`. (`is.S4`xxx)
+* `methods(generic.function)`: This function lists the methods that are available for a generic function. For `S4` generic functions, `showMethods(generic.function)` is giving a more detailed information about each method (e.g. inheritance).
+* `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for its documentation and examples. Also `help(class)` calls may be informative here, as it will call the documentation of the specific class.
+* `getClass(class)`: This describes in a compact way the type of class, the slots that it has, and the relationships that it may have with the other classes that may inherit or be inherited by it. With `getClass(object)`, instead, we can see to which values the slots of the object are assigned. It is possible to use `str(object, max.level = 2)` to see a less formal and more compact descriptions of the slots, but it may be problematic when there are one or more objects in the class slots. Hence, the maximum number of level should always be limited to 2 or 3 (`max.level = 2`). Similarly, `attributes()` can be used to retrieve some information, but we need to remember that storing important variables in this way is not encouraged. Information regarding the type of class can be retrieved with `mode()` and indirectly by `summary()` and `is.S4()`.
 
-We explore and analyze the split machinery now with a growing amount of complexity, always following relevant functions and methods throughout their execution. By incrementally discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
+We explore and analyze the split machinery now with a growing amount of complexity, always following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
 
 In practice, the majority of the split engine resides in the source file `R/split_funs.R` with occasional incursion into `R/make_split_fun.R` for custom split function creation and rarer references to other more general tabulation files.
 
@@ -56,6 +55,7 @@ library(rtables)
 basic_table() %>% 
     build_table(DM)
 ```
+
 In the following, we copied it so to allow the reader to go through the general structure with its enhanced comments and sections. Each section in the code reflects roughly a section of this vignette.
 
 ```{r, eval=FALSE}
@@ -67,12 +67,17 @@ do_split <- function(spl,
                      trim = FALSE,
                      spl_context) {
 # CHECKS #
-    ## this will error if, e.g., df doesn't have columns
-    ## required by spl, or generally any time the spl
-    ## can't be applied to df
+    ## This will error if, e.g., df does not have columns
+    ##  required by spl, or generally any time the split (spl)
+    ##  can not be applied to df
     check_validsplit(spl, df)
     
 # SPLIT FUNCTION #
+    ## In special cases, we need to partition data (split)
+    ##  in a very specific way, e.g. depending on the data or 
+    ##  external values. These can be achieved by using a custom
+    ##  split function.
+    
     ## note the <- here!!!
     if(!is.null(splfun <- split_fun(spl))) {
         ## Currently the contract is that split_functions take df, vals, labels and
@@ -94,9 +99,9 @@ do_split <- function(spl,
         }
     } else {
 # .apply_split_inner #
-        # This is called when no split function is provided. Please note that also when provided,
-        # this function will be probably called, as far as the main splitting method is not willingly
-        # modified by the split function.
+        ## This is called when no split function is provided. Please note that also when provided,
+        ##  this function will be probably called, as far as the main splitting method is not willingly
+        ##  modified by the split function.
         ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
     }
 
@@ -117,16 +122,16 @@ do_split <- function(spl,
     ret
 }
 ```
-We will see how input parameters are used and where. The most important ones are `spl` and `df`; the split objects and the input `data.frame`. We invite the reader to try exploring a bit `spl` before continuing.
+We will see how input parameters are used and where. The most important ones are `spl` and `df`; the split objects and the input `data.frame`.
 
 
 ### Checks and Classes
 
-Now, looking at the first function called from `do_split` may give us a good overview of how the split itself is defined. This is, of course, the check-function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe step-by-step the split-class hierarchy, but we invite the reader to explore this autonomously in future occasions. 
+We will start by looking at the first function called from `do_split`. This may give us a good overview of how the split itself is defined. This is, of course, the check-function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe step-by-step the split-class hierarchy, but we invite the reader to explore this autonomously in future occasions. 
 
-Lets then search the package for `check_validsplit`, you will find that it is defined as a generic in `split_funs`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (convention: it starts with "V") defines the main parent of analysis split which we discuss in detail in related vignette (here xxx). Already, we can intuit that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, i.e. in the main `R/tt_dotabulation.R` source file. This is again something related to making the "analyze" rows as it mainly checks for `VAnalyzeSplit` (link to tabulation dev guide xxx). We will discuss the other classes when they will appear in our examples (link to class hierarchy xxx). 
+Lets then search the package for `check_validsplit`, you will find that it is defined as a generic in `R/split_funs.R`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (convention: it starts with "V") defines the main parent of analysis split which we discuss in detail in related vignette `vignette()` (xxx). From this, we can intuit that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, i.e. in the main `R/tt_dotabulation.R` source file. This is again something related to making the "analyze" rows as it mainly checks for `VAnalyzeSplit` (link to tabulation dev guide xxx). We will discuss the other classes when they will appear in our examples (link to class hierarchy xxx). 
 
-For the moment, we see with `class(spl)` (from the main `do_split` function) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we will produce the following: (xxx add getClass inheritance call, describe that we have specific method for multivarsplit but not allsplit -> only inherited from split)
+For the moment, we see with `class(spl)` (from the main `do_split` function) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we will produce the following: 
 
 ```
 Function: check_validsplit (package rtables)
@@ -138,8 +143,8 @@ spl="Split"
 spl="VAnalyzeSplit"
 spl="VarLevelSplit"
 ```
-
-We understand that `AllSplit` is a class parent of `Split`. This is a virtual class (xxx). All class definitions and constructors reside in `R/00tabletrees.R`, and also `AllSplit` one (xxx rephrase). Reading it structure can be useful to understand how the split object is constructed and handled. Please see the comments in the following:
+(xxx add getClass inheritance call, describe that we have specific method for multivarsplit but not allsplit -> only inherited from split)
+It means that each of the listed classes has a dedicated definition of `check_validsplit` that may largely differ from the others. Only the class `AllSplit` does not have its own function definition as it is inherited from the `Split` class. Therefore, we understand that `AllSplit` is a class parent of `Split`. This is one of the first definition of a virtual class in the package and it is the only one that does not present the "V" prefix. Any of these classes are defined along with their constructor in `R/00tabletrees.R`. Reading how `AllSplit` is structured can be an useful example to understand how split objects are expected to work. Please see the comments in the following:
 
 ```{r, eval=FALSE}
 setClass("AllSplit", contains = "Split")
@@ -183,9 +188,10 @@ AllSplit <- function(split_label = "",
 }
 ```
 
-Now lets see if we can find some of these values in our object: (getClass xxx)
+We can see also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)` for having also all the values. Note that the first call will give also a lot of information about the class hierarchy. We will discuss the majority of these by the end of this document. Now lets see if we can find some of the values described in the constructor in our object. To do so we will show here the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less informative.
+
 ```{r, eval=FALSE}
-Browse[2]> str(spl)
+Browse[2]> str(spl, max.level = 2)
 Formal class 'AllSplit' [package "rtables"] with 17 slots
   ..@ payload                : NULL
   ..@ name                   : chr "all obs"
@@ -206,7 +212,7 @@ Formal class 'AllSplit' [package "rtables"] with 17 slots
   ..@ child_section_div      : chr NA
 ```
 
-We will describe some of these more in detail when they will be necessary in future examples. Now, we gave you a hint of the complex class hierarchy that makes up `rtables`, but we need to go forward in `do_split`. In our case, being `AllSplit` inherited from `Split`, we are sure that the called function will be the following (read the comment!):
+Detail about these slots will be necessary in future examples, and we will deal with them at that time. Now, we gave you a hint of the complex class hierarchy that makes up `rtables`, and how to explore it autonomously. Lets go forward in `do_split`. In our case, being `AllSplit` inherited from `Split`, we are sure that the called function will be the following (read the comment!):
 
 ```{r, eval=FALSE}
 ## default does nothing, add methods as they become
@@ -218,7 +224,7 @@ setMethod("check_validsplit", "Split",
 
 ### Split function and `.apply_split_inner`
 
-Before diving into custom split functions we need to take a moment to analyze how `.apply_split_inner` works. This function is routinely called, also in the case we do have a split function. Lets see why by entering it with `debugonce(.apply_split_inner)`. Of course, we are still in the `do_split` call coming from the first example.
+Before diving into custom split functions we need to take a moment to analyze how `.apply_split_inner` works. This function is routinely called, also in the case we do have a split function. Lets see why this can be the case by entering it with `debugonce(.apply_split_inner)`. Of course, we are still browsing `do_split` in debug mode from the first example.
 
 example with simple split
 
