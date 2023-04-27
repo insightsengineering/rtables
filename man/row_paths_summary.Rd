@@ -28,7 +28,7 @@ lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_cols_by("SEX", split_fun = drop_split_levels) \%>\%
   analyze(c("AGE", "BMRKR2"))
-  
+
 tbl <- build_table(lyt, ex_adsl_MF)
 tbl
 

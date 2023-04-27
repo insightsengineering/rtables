@@ -458,7 +458,7 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{str}{VTableTree}(object, ...)
+\S4method{str}{VTableTree}(object, max.level = 3L, ...)
 
 \S4method{table_structure_inner}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
@@ -1091,6 +1091,10 @@ not match a formal argument of the tabulation function.}
 \item{print_indent}{indent for print}
 
 \item{object}{The object to modify in-place}
+
+\item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
+VTableTree method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
+appropriate for \code{VTableTree} objects.}
 
 \item{value}{The new value}
 
