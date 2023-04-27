@@ -143,7 +143,6 @@ spl="Split"
 spl="VAnalyzeSplit"
 spl="VarLevelSplit"
 ```
-(xxx add getClass inheritance call, describe that we have specific method for multivarsplit but not allsplit -> only inherited from split)
 It means that each of the listed classes has a dedicated definition of `check_validsplit` that may largely differ from the others. Only the class `AllSplit` does not have its own function definition as it is inherited from the `Split` class. Therefore, we understand that `AllSplit` is a class parent of `Split`. This is one of the first definition of a virtual class in the package and it is the only one that does not present the "V" prefix. Any of these classes are defined along with their constructor in `R/00tabletrees.R`. Reading how `AllSplit` is structured can be an useful example to understand how split objects are expected to work. Please see the comments in the following:
 
 ```{r, eval=FALSE}
@@ -224,7 +223,114 @@ setMethod("check_validsplit", "Split",
 
 ### Split function and `.apply_split_inner`
 
-Before diving into custom split functions we need to take a moment to analyze how `.apply_split_inner` works. This function is routinely called, also in the case we do have a split function. Lets see why this can be the case by entering it with `debugonce(.apply_split_inner)`. Of course, we are still browsing `do_split` in debug mode from the first example.
+Before diving into custom split functions we need to take a moment to analyze how `.apply_split_inner` works. This function is routinely called, also in the case we do have a split function. Lets see why this can be the case by entering it with `debugonce(.apply_split_inner)`. Of course, we are still browsing `do_split` in debug mode from the first example. We printed and commented it in the following:
+
+```{r, eval=FALSE}
+.apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
+
+    ## try to calculate values first. Most of the time we can
+    if(is.null(vals))
+        vals <- .applysplit_rawvals(spl, df)
+    extr <- .applysplit_extras(spl, df, vals)
+
+    if(is.null(vals)) {
+        return(list(values = list(),
+                    datasplit = list(),
+                    labels = list(),
+                    extras = list()))
+    }
+
+    dpart <- .applysplit_datapart(spl, df, vals)
+
+    if(is.null(labels))
+        labels <- .applysplit_partlabels(spl, df, vals, labels)
+    else
+        stopifnot(names(labels) == names(vals))
+    ## get rid of columns that would not have any
+    ## observations.
+    ##
+    ## But only if there were any rows to start with
+    ## if not we're in a manually constructed table
+    ## column tree
+    if(trim) {
+        hasdata <- sapply(dpart, function(x) nrow(x) > 0)
+        if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
+            dpart <- dpart[hasdata]
+            vals <- vals[hasdata]
+            extr <- extr[hasdata]
+            labels <- labels[hasdata]
+        }
+    }
+
+    if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
+        vord <- seq_along(vals)
+    } else {
+        vord <- match(spl_child_order(spl),
+                     vals)
+        vord <- vord[!is.na(vord)]
+    }
+
+
+    ## FIXME: should be an S4 object, not a list
+    ret <- list(values = vals[vord],
+               datasplit = dpart[vord],
+               labels = labels[vord],
+               extras = extr[vord])
+    ret
+}
+```
+
+After reading `.apply_split_inner`, we see that there are some fundamental functions, defined strictly for internal use (convention: they start with ".") that are generics and depend on the kind of split in input. `R/split_funs.R` is very kind and group their generic definition at the beginning of the file. These functions are the main dispatcher for the majority of the split machinery. This is a clear example that shows how using `S4` logic helps clarity and flexibility in programming, allowing for easy extension of the program. For compactness we show also the `showMethods` result for each generic.
+
+```{r, eval=FALSE}
+setGeneric(".applysplit_rawvals",
+           function(spl, df) standardGeneric(".applysplit_rawvals"))
+# Browse[2]> showMethods(.applysplit_rawvals)
+# Function: .applysplit_rawvals (package rtables)
+# spl="AllSplit"
+# spl="ManualSplit"
+# spl="MultiVarSplit"
+# spl="VAnalyzeSplit"
+# spl="VarLevelSplit"
+# spl="VarStaticCutSplit"
+# Nothing here is inherited from the virtual class Split!!!
+
+setGeneric(".applysplit_datapart",
+           function(spl, df, vals) standardGeneric(".applysplit_datapart"))
+# Same as .applysplit_rawvals
+
+setGeneric(".applysplit_extras",
+           function(spl, df, vals) standardGeneric(".applysplit_extras"))
+# Browse[2]> showMethods(.applysplit_extras)
+# Function: .applysplit_extras (package rtables)
+# spl="AllSplit"
+#     (inherited from: spl="Split")
+# spl="Split"
+# This means there is only a function for the virtual class Split!!!
+
+setGeneric(".applysplit_partlabels",
+           function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels"))
+# Browse[2]> showMethods(.applysplit_partlabels)
+# Function: .applysplit_partlabels (package rtables)
+# spl="AllSplit"
+#     (inherited from: spl="Split")
+# spl="MultiVarSplit"
+# spl="Split"
+# spl="VarLevelSplit"
+
+setGeneric("check_validsplit", # our friend 
+           function(spl, df) standardGeneric("check_validsplit"))
+# Note: check_validsplit is an internal function but it is not excluded that one
+#       day it will be exported. That is way it does not have the "." prefix.
+
+setGeneric(".applysplit_ref_vals",
+          function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
+# Browse[2]> showMethods(.applysplit_ref_vals)
+# Function: .applysplit_ref_vals (package rtables)
+# spl="Split"
+# spl="VarLevWBaselineSplit"
+
+```
 
 example with simple split
 
