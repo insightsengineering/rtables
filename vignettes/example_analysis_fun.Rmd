@@ -113,11 +113,10 @@ a_cox_summary <- function(df,
   ## If cov is numeric, the median value of cov is used as a row label instead
   cov_lvls <- if (is.factor(df[[cov]])) levels(df[[cov]]) else as.character(median(df[[cov]]))
 
-  ## Use tern function to calculate and extract information relevant to cov from
-  ## the model. Default controls are applied via the `control_coxreg` function from tern
+  ## Use tern function to calculate and extract information relevant to cov from the model
   cov_rows <- tern:::h_coxreg_extract_interaction(
-    effect = "ARM", covar = cov, mod = model, data = df,
-    control = tern::control_coxreg(), at = NULL
+    effect = "ARM", covar = cov, mod = model, data = df, at = NULL,
+    control = list(pval_method = "wald", ties = "exact", conf_level = 0.95, interaction = FALSE)
   )
   ## Effect p-value is only printed for treatment effect row
   if (!cov == "ARM") cov_rows[, "pval"] <- NA_real_
