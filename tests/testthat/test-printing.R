@@ -341,7 +341,10 @@ test_that("Cell and column label wrapping works in printing", {
     clw <- c(5, 7, 6, 6) + 12
 
     # Checking in detail if Cell values did wrap correctly
-    result <- toString(matrix_form(tt_for_wrap[10, 1, keep_footers = TRUE], TRUE), widths = c(10, 8), col_gap = 2)
+    result <- toString(matrix_form(tt_for_wrap[10, 1, keep_footers = TRUE], TRUE),
+                       widths = c(10, 8),
+                       col_gap = 2,
+                       hsep = "-")
     splitted_res <- strsplit(result, "\n")[[1]]
 
     # First column (rownames) has widths 10 and there is colgap 2
@@ -351,7 +354,7 @@ test_that("Cell and column label wrapping works in printing", {
     expect_identical(.count_chr_from_str(splitted_res[1], " ", TRUE), 8L)
 
     # Separator is at the right place and colnames are wrapped
-    expect_identical(splitted_res[7], "————————————————————")
+    expect_identical(splitted_res[7], "--------------------")
     expected <- c("            Incredib",
                   "            ly long ",
                   "             column ",
@@ -384,9 +387,12 @@ test_that("Cell and column label wrapping works in printing", {
     tt_simple <- basic_table() %>%
         analyze("AGE", format = "xx.xxxx") %>%
         build_table(ex_adsl)
-    result <- toString(matrix_form(tt_simple, TRUE), widths = c(2, 3), col_gap = 1)
+    result <- toString(matrix_form(tt_simple, TRUE),
+                       widths = c(2, 3),
+                       col_gap = 1,
+                       hsep = "-")
     sre3 <- strsplit(result, "\n")[[1]]
-    expected <- c("   all", "   obs", "——————", "Me 34.", "an 88 ")
+    expected <- c("   all", "   obs", "------", "Me 34.", "an 88 ")
     expect_identical(sre3, expected)
 
     # See if general table has the right amount of \n
@@ -399,12 +405,12 @@ test_that("row label indentation is kept even if there are newline characters", 
     ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
         filter(ARM == "A: Drug X")
     ANL$ARM <- factor(ANL$ARM)
-    
+
     ## toy example where we take the mean of the first variable and the
     ## count of >.5 for the second.
     colfuns <- list(function(x) in_rows(" " = mean(x), .formats = "xx.x"), # Empty labels are introduced
                     function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
-    
+
     tbl_a <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) %>%
@@ -412,29 +418,29 @@ test_that("row label indentation is kept even if there are newline characters", 
                       split_fun = drop_split_levels,
                       label_pos = "topleft") %>%
         summarize_row_groups(indent_mod = 2) %>%
-        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft", 
-                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>% 
+        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft",
+                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>%
         analyze_colvars(afun = colfuns, indent_mod = 4) %>%
         build_table(ANL)
-    
+
     # Decorating
     table_inset(tbl_a) <- 2
     main_title(tbl_a) <- "Summary of \nTime and \nTreatment"
     subtitles(tbl_a) <- paste("Number: ", 1:3)
     main_footer(tbl_a) <- "NE: Not Estimable"
-    
+
     # Matrix form and toString
     mf_a <- matrix_form(tbl_a, TRUE, FALSE)
-    expect_error(res_a <- toString(mf_a, widths = c(15, 12, 12)), 
+    expect_error(res_a <- toString(mf_a, widths = c(15, 12, 12)),
                  regexp = "Inserted width\\(s\\) for column\\(s\\) 1 is\\(are\\) not wide enough for the desired indentation.")
     res_a <- toString(mf_a, widths = c(16, 12, 12))
     # 2 is the indentation of summarize_row_groups
     # 1 is the standard indentation
     # 1 + 1 + 4 is the standard nesting indentation (twice) + 4 manual indentation (indentation_mod)
-    man_ind <- c(2, 1, 1 + 1 + 4) 
+    man_ind <- c(2, 1, 1 + 1 + 4)
     expect_equal(mf_rinfo(mf_a)$indent[1:3], table_inset(tbl_a) + man_ind)
     res_a <- strsplit(res_a, "\n")[[1]]
-    
+
     # Checking indentation size propagation
     ind_s1 <- 3
     ind_s2 <- 2
@@ -442,29 +448,29 @@ test_that("row label indentation is kept even if there are newline characters", 
     mf3_v2 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s2)
     which_to_rm <- which(names(mf3_v1) %in% c("strings", "formats", "indent_size"))
     expect_equal(mf3_v1[-which_to_rm], mf3_v2[-which_to_rm]) # These should be the only differences
-    
+
     str_v1 <- strsplit(mf3_v1$strings[3, 1], "ASIAN")[[1]]
     str_v2 <- strsplit(mf3_v2$strings[3, 1], "ASIAN")[[1]]
     expect_equal(nchar(str_v1), (2 + 2) * ind_s1) # (inset + indent of summ group) * indent_size
     expect_equal(nchar(str_v2), (2 + 2) * ind_s2) # (inset + indent of summ group) * indent_size
     expect_equal(nchar(str_v1), nchar(str_v2) + 4) # This should be the diff in indentation
-    
+
     # Number of characters (so indentation) are the same when indent_size is used in mf() or toString()
     ind_tbl_v1 <- strsplit(toString(mf3_v1), "\n")[[1]]
     ind_tbl_v2 <- strsplit(toString(tbl_a, indent_size = 3), "\n")[[1]]
     expect_equal(ind_tbl_v1, ind_tbl_v2)
-    
+
     tbl_b <- basic_table() %>%
         split_cols_by("ARM") %>%
         split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
         split_rows_by("RACE", split_label = "Ethnicity",
                       label_pos = "topleft") %>%
         summarize_row_groups(indent_mod = 2) %>%
-        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft", 
-                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>% 
+        split_rows_by("SEX", split_label = "Sex", label_pos = "topleft",
+                      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>%
         analyze_colvars(afun = colfuns, indent_mod = 4) %>%
         build_table(ANL)
-    
+
     # Decorating
     table_inset(tbl_b) <- 2
     main_title(tbl_b) <- "Summary of \nTime and \nTreatment"
@@ -473,7 +479,7 @@ test_that("row label indentation is kept even if there are newline characters", 
     mf_b <- matrix_form(tbl_b, indent_rownames = TRUE, expand_newlines = TRUE)
     res_b <- toString(mf_b, widths = c(16, 12, 12))
     res_b <- strsplit(res_b, "\n")[[1]]
-    
+
     # Taking out the splitted col names and the trailing 0s lets check it is the same none-the-less
     res_a <- res_a[-10]
     res_b <- res_b[-c(10, 11)]
