@@ -32,10 +32,11 @@ NB: we must remind the reader that `rtables` is still under active development, 
 
 
 ## Process and Methods
+(xxx reference to class vignette with this)
 
 We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by using `browser()` and `debugonce()` on internal and exported functions (`rtables:::` or `rtables::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
 
-* `methods(generic.function)`: This function lists the methods that are available for a generic function. For `S4` generic functions, `showMethods(generic.function)` is giving a more detailed information about each method (e.g. inheritance).
+* `methods(generic.function)`: This function lists the methods that are available for a generic function. For `S4` generic functions, `showMethods(generic.function)` is giving a more detailed information about each method (e.g. inheritance). (xxx methods and showMethods are not showing the same. Second is showing only S4)
 * `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for its documentation and examples. Also `help(class)` calls may be informative here, as it will call the documentation of the specific class.
 * `getClass(class)`: This describes in a compact way the type of class, the slots that it has, and the relationships that it may have with the other classes that may inherit or be inherited by it. With `getClass(object)`, instead, we can see to which values the slots of the object are assigned. It is possible to use `str(object, max.level = 2)` to see a less formal and more compact descriptions of the slots, but it may be problematic when there are one or more objects in the class slots. Hence, the maximum number of level should always be limited to 2 or 3 (`max.level = 2`). Similarly, `attributes()` can be used to retrieve some information, but we need to remember that storing important variables in this way is not encouraged. Information regarding the type of class can be retrieved with `mode()` and indirectly by `summary()` and `is.S4()`.
 
@@ -49,10 +50,9 @@ In practice, the majority of the split engine resides in the source file `R/spli
 The split machinery is so fundamental to `rtables` that relevant functions like `do_split` are executed, even when no split is requested. The following example shows how we can enter `do_split` and start understanding the class hierarchy and the main split engine.
 
 ```{r, message=FALSE}
-## utility fnc xxx
 library(rtables)
 # debugonce(rtables:::do_split) # Uncomment me to enter the function!!!
-basic_table() %>% 
+basic_table() %>%
     build_table(DM)
 ```
 
@@ -122,7 +122,7 @@ do_split <- function(spl,
     ret
 }
 ```
-We will see how input parameters are used and where. The most important ones are `spl` and `df`; the split objects and the input `data.frame`.
+We will see how input parameters are used and where. The most important ones are `spl` and `df`: the split objects and the input `data.frame`.
 
 
 ### Checks and Classes
@@ -187,7 +187,7 @@ AllSplit <- function(split_label = "",
 }
 ```
 
-We can see also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)` for having also all the values. Note that the first call will give also a lot of information about the class hierarchy. We will discuss the majority of these by the end of this document. Now lets see if we can find some of the values described in the constructor in our object. To do so we will show here the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less informative.
+We can see also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)` for having also all the values. Note that the first call will give also a lot of information about the class hierarchy. For more information regarding class hierarchy, please refer to the relevant vignette (xxx). We will discuss the majority of the slots by the end of this document. Now lets see if we can find some of the values described in the constructor in our object. To do so we will show here the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less informative or not at all informative if the maximum level of nesting is not set (e.g. `max.level = 2`).
 
 ```{r, eval=FALSE}
 Browse[2]> str(spl, max.level = 2)
@@ -211,7 +211,7 @@ Formal class 'AllSplit' [package "rtables"] with 17 slots
   ..@ child_section_div      : chr NA
 ```
 
-Detail about these slots will be necessary in future examples, and we will deal with them at that time. Now, we gave you a hint of the complex class hierarchy that makes up `rtables`, and how to explore it autonomously. Lets go forward in `do_split`. In our case, being `AllSplit` inherited from `Split`, we are sure that the called function will be the following (read the comment!):
+Details about these slots will be necessary in future examples, and we will deal with them at that time. Now, we gave you a hint of the complex class hierarchy that makes up `rtables`, and how to explore it autonomously. Lets go forward in `do_split`. In our case, being `AllSplit` inherited from `Split`, we are sure that the called function will be the following (read the comment!):
 
 ```{r, eval=FALSE}
 ## default does nothing, add methods as they become
@@ -227,12 +227,19 @@ Before diving into custom split functions we need to take a moment to analyze ho
 
 ```{r, eval=FALSE}
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
-
+    # INPUTS #
+    # In this case .applysplit_rawvals will attempt finding the split values if vals is NULL.
+    # Please notice that they might be a non-mutually exclusive set or subset of elements that
+    # will constitute the split.
+    
     ## try to calculate values first. Most of the time we can
     if(is.null(vals))
         vals <- .applysplit_rawvals(spl, df)
+    
+    # This call extracts extra parameters from the split, according to the split values
     extr <- .applysplit_extras(spl, df, vals)
 
+    # If there are no values to do the split upon, we return an empty final split
     if(is.null(vals)) {
         return(list(values = list(),
                     datasplit = list(),
@@ -283,7 +290,9 @@ Before diving into custom split functions we need to take a moment to analyze ho
 After reading `.apply_split_inner`, we see that there are some fundamental functions, defined strictly for internal use (convention: they start with ".") that are generics and depend on the kind of split in input. `R/split_funs.R` is very kind and group their generic definition at the beginning of the file. These functions are the main dispatcher for the majority of the split machinery. This is a clear example that shows how using `S4` logic helps clarity and flexibility in programming, allowing for easy extension of the program. For compactness we show also the `showMethods` result for each generic.
 
 ```{r, eval=FALSE}
-setGeneric(".applysplit_rawvals",
+# Retrieves the values that will constitute the splits (facets), not necessarily a unique list.
+# They could come from the data cuts for example -> it can be anything if it produces a set of strings.
+setGeneric(".applysplit_rawvals", 
            function(spl, df) standardGeneric(".applysplit_rawvals"))
 # Browse[2]> showMethods(.applysplit_rawvals)
 # Function: .applysplit_rawvals (package rtables)
@@ -295,10 +304,12 @@ setGeneric(".applysplit_rawvals",
 # spl="VarStaticCutSplit"
 # Nothing here is inherited from the virtual class Split!!!
 
+# Contains the subset of the data (default, but these can overlap, can also NOT be mutually exclusive).
 setGeneric(".applysplit_datapart",
            function(spl, df, vals) standardGeneric(".applysplit_datapart"))
 # Same as .applysplit_rawvals
 
+# Extract the extra parameter for the split
 setGeneric(".applysplit_extras",
            function(spl, df, vals) standardGeneric(".applysplit_extras"))
 # Browse[2]> showMethods(.applysplit_extras)
@@ -306,8 +317,10 @@ setGeneric(".applysplit_extras",
 # spl="AllSplit"
 #     (inherited from: spl="Split")
 # spl="Split"
-# This means there is only a function for the virtual class Split!!!
+# This means there is only a function for the virtual class Split. 
+#  So all splits behaves the same!!!
 
+# Split label retrieval and assignment if visible.
 setGeneric(".applysplit_partlabels",
            function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels"))
 # Browse[2]> showMethods(.applysplit_partlabels)
@@ -332,9 +345,50 @@ setGeneric(".applysplit_ref_vals",
 
 ```
 
+Now, we know that `.applysplit_extras` is the function that will be called first because we did not specify any `vals` and it is therefore `NULL`. This is a generic function as it can be seen by `showMethod(.applysplit_extras)`. It is indeed an `S4` generics and its source code can be determined by the following:
+
+```{r, eval=FALSE}
+Browse[3]> getMethod(".applysplit_rawvals", "AllSplit")
+Method Definition:
+
+function (spl, df) 
+obj_name(spl)
+<bytecode: 0x55f37d386cc0>
+<environment: namespace:rtables>
+
+Signatures:
+        spl       
+target  "AllSplit"
+defined "AllSplit"
+
+# What is obj_name -> slot in spl
+Browse[3]> obj_name(spl)
+[1] "all obs"
+
+# coming from
+Browse[3]> getMethod("obj_name", "Split")
+Method Definition:
+
+function (obj) 
+obj@name ##### Slot that we could see from str(spl, max.level = 2)
+<bytecode: 0x55f37dec7ac0>
+<environment: namespace:rtables>
+
+Signatures:
+        obj    
+target  "Split"
+defined "Split"
+```
+
+Then we have `.applysplit_extras` that will be covered in later sections and simply extracts the extra arguments from the split objects and assign them to their relative split values. If no split values are still available, the function will exit here with an empty split. Otherwise the data will be divided in different splits or data subsets (facets) with `.applysplit_datapart`. In our current example the resulting list comprises the whole input data set (i.e. do `getMethod(".applysplit_datapart", "AllSplit")` and a list will be evident: `function (spl, df, vals) list(df)`).
+
+Next, split labels are checked. If they are not present split values (`vals`) will be used with `.applysplit_partlabels` that, in the case of it being applied to a  `Split` object, it translates into `as.character(vals)`. Otherwise, the inserted labels are checked against the name of split values.
+
 example with simple split
 
 example with simple split function
+
+example with simple split function + extra args (exploration too)
 
 
 
