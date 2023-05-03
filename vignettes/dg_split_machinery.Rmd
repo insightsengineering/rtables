@@ -36,9 +36,10 @@ NB: we must remind the reader that `rtables` is still under active development, 
 
 We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by using `browser()` and `debugonce()` on internal and exported functions (`rtables:::` or `rtables::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
 
-* `methods(generic.function)`: This function lists the methods that are available for a generic function. For `S4` generic functions, `showMethods(generic.function)` is giving a more detailed information about each method (e.g. inheritance). (xxx methods and showMethods are not showing the same. Second is showing only S4)
-* `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for its documentation and examples. Also `help(class)` calls may be informative here, as it will call the documentation of the specific class.
+* `methods(generic_function)`: This function lists the methods that are available for a generic function. Specifically for `S4` generic functions, `showMethods(generic_function)` is giving a more detailed information about each method (e.g. inheritance). 
+* `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for its documentation and examples. Indeed, `help(class)` may be informative, as it will call the documentation of the specific class. Similarly, the `?` operator will call the disambiguation page that delivers you to different `S4` methods. For `S3` methods it is necessary to postfix the class name with a dot (e.g. `?summary.lm`).
 * `getClass(class)`: This describes in a compact way the type of class, the slots that it has, and the relationships that it may have with the other classes that may inherit or be inherited by it. With `getClass(object)`, instead, we can see to which values the slots of the object are assigned. It is possible to use `str(object, max.level = 2)` to see a less formal and more compact descriptions of the slots, but it may be problematic when there are one or more objects in the class slots. Hence, the maximum number of level should always be limited to 2 or 3 (`max.level = 2`). Similarly, `attributes()` can be used to retrieve some information, but we need to remember that storing important variables in this way is not encouraged. Information regarding the type of class can be retrieved with `mode()` and indirectly by `summary()` and `is.S4()`.
+*`getAnywhere(function)` is very useful to get the source code of internal functions and specific generics. It works very well with `S3` methods, and will in any case display for each of the found methods, its relevant namespace. Similarly, `getMethod(S4_generic, S4_class)` can retrieve the source code of `S4` methods that are specific to a class. 
 
 We explore and analyze the split machinery now with a growing amount of complexity, always following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
 
@@ -227,15 +228,17 @@ Before diving into custom split functions we need to take a moment to analyze ho
 
 ```{r, eval=FALSE}
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
-    # INPUTS #
+    # - INPUTS - #
     # In this case .applysplit_rawvals will attempt finding the split values if vals is NULL.
     # Please notice that they might be a non-mutually exclusive set or subset of elements that
     # will constitute the split.
     
+    # - SPLIT VALS - # 
     ## try to calculate values first. Most of the time we can
     if(is.null(vals))
         vals <- .applysplit_rawvals(spl, df)
     
+    # - EXTRA PARAMETERS - #
     # This call extracts extra parameters from the split, according to the split values
     extr <- .applysplit_extras(spl, df, vals)
 
@@ -247,12 +250,16 @@ Before diving into custom split functions we need to take a moment to analyze ho
                     extras = list()))
     }
 
+    # - DATA SUBSETTING - #
     dpart <- .applysplit_datapart(spl, df, vals)
 
+    # - LABEL RETRIEVAL - #
     if(is.null(labels))
         labels <- .applysplit_partlabels(spl, df, vals, labels)
     else
         stopifnot(names(labels) == names(vals))
+    
+    # - TRIM - #
     ## get rid of columns that would not have any
     ## observations.
     ##
@@ -269,6 +276,8 @@ Before diving into custom split functions we need to take a moment to analyze ho
         }
     }
 
+    # - ORDER RESULTS - #
+    # Finds relevant order depending on spl_child_order()
     if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
         vord <- seq_along(vals)
     } else {
@@ -382,9 +391,150 @@ defined "Split"
 
 Then we have `.applysplit_extras` that will be covered in later sections and simply extracts the extra arguments from the split objects and assign them to their relative split values. If no split values are still available, the function will exit here with an empty split. Otherwise the data will be divided in different splits or data subsets (facets) with `.applysplit_datapart`. In our current example the resulting list comprises the whole input data set (i.e. do `getMethod(".applysplit_datapart", "AllSplit")` and a list will be evident: `function (spl, df, vals) list(df)`).
 
-Next, split labels are checked. If they are not present split values (`vals`) will be used with `.applysplit_partlabels` that, in the case of it being applied to a  `Split` object, it translates into `as.character(vals)`. Otherwise, the inserted labels are checked against the name of split values.
+Next, split labels are checked. If they are not present split values (`vals`) will be used with `.applysplit_partlabels` that, in the case of it being applied to a `Split` object, it translates into `as.character(vals)`. Otherwise, the inserted labels are checked against the name of split values.
 
-example with simple split
+Lastly, the split values are ordered on the basis of `spl_child_order`. In our case, which concerns the general `AllSplit`, the sorting will not happen, i.e. it will be simply dependent on the number of split values `seq_along(vals)`.
+
+#### A simple split
+
+In the following, we demonstrate how row splits work according to the features that we have already described. We add two splits and see how `do_split` behavior changes. Note that if we do not add an `analyze` call, the split will behave as before, giving an empty table with all observations. As default, calling `analyze` on a variable will produce a mean for each data subset that has been generated by the splits. We want to go beyond the first call (xxx, why??) of `do_split` that is by design on all observation with the purpose of generating the root split that contains all data. To achieve this goal we need to use `debug(fnc)` instead of `debugonce(fnc)` as we will need to step in each of the splits.
+
+```{r, message=FALSE}
+library(rtables)
+# debug(rtables:::do_split) # Uncomment me to enter the function!!!
+basic_table() %>%
+    split_rows_by("SEX") %>% 
+    split_rows_by("ARM") %>% 
+    analyze("BMRKR1") %>% # analysis is needed to produce the splits !!
+    build_table(DM) %>% 
+    prune_table() # only to take out NAs in print
+# undebug(rtables:::do_split) # reset the debug mode
+```
+
+Now, we might want to check the formal class of `spl` before anything else.
+
+```{r, eval=FALSE}
+Browse[2]> str(spl, max.level = 2)
+Formal class 'VarLevelSplit' [package "rtables"] with 20 slots
+  ..@ value_label_var        : chr "SEX"
+  ..@ value_order            : chr [1:4] "F" "M" "U" "UNDIFFERENTIATED"
+  ..@ split_fun              : NULL
+  ..@ payload                : chr "SEX"
+  ..@ name                   : chr "SEX"
+  ..@ split_label            : chr "SEX"
+  ..@ split_format           : NULL
+  ..@ split_na_str           : chr NA
+  ..@ split_label_position   : chr "hidden"
+  ..@ content_fun            : NULL
+  ..@ content_format         : NULL
+  ..@ content_na_str         : chr NA
+  ..@ content_var            : chr ""
+  ..@ label_children         : logi NA
+  ..@ extra_args             : list()
+  ..@ indent_modifier        : int 0
+  ..@ content_indent_modifier: int 0
+  ..@ content_extra_args     : list()
+  ..@ page_title_prefix      : chr NA
+  ..@ child_section_div      : chr NA
+```
+
+From this, we can directly infer that the class is different now (`VarLevelSplit`) and understand that the split label will be hidden (`split_label_position` slot). Moreover, we see a specific value order with specific split values. Also, `VarLevelSplit` seems to have three more slots than `AllSplit`. What are they precisely?
+```{r, eval=FALSE}
+slots_as <- getSlots("AllSplit") # inherits virtual class Split and is general class for all splits
+# getClass("CustomizableSplit") # -> Extends: "Split", Known Subclasses: Class "VarLevelSplit", directly
+slots_cs <- getSlots("CustomizableSplit") 
+slots_vls <- getSlots("VarLevelSplit")
+
+slots_cs[!(names(slots_cs) %in% names(slots_as))]
+#        split_fun 
+# "functionOrNULL" 
+slots_vls[!(names(slots_vls) %in% names(slots_cs))]
+# value_label_var     value_order 
+#     "character"           "ANY"
+```
+
+Remember always to check the constructor and class definition inside `R/00tabletrees.R` if exploratory tools do not suffice. Now, `check_validsplit(spl, df)` will dispatch to a different method than before (`getMethod("check_validsplit", "VarLevelSplit")`). Indeed, it uses the internal utility function `.checkvarsok` to check if the `vars`, i.e. the `payload` is actually present in `names(df)`.
+
+Now, the next relevant function will be `.apply_split_inner` where we want to see exactly what changes (`debugonce(.apply_split_inner)`). Of course, this function is directly called as no custom split function is provided. Being parameter `vals` not specified (`NULL`), the split values are retrieved from `df` by using the split payload to select specific columns (`varvec <- df[[spl_payload(spl)]]`). Every time no split values are specified, they will be retrieved from the selected column as unique values, if character, or levels, if factor. 
+
+Next, `.applysplit_datapart` creates a named list of facets or data subsets. In this case, the result is actually a mutually exclusive partition of the data. `.applysplit_partlabels` is a bit less linear as it has to take into account the possibility of having specified labels in the payload (xxx). Beside looking at the function source code with `getMethod(".applysplit_partlabels", "VarLevelSplit")`, we can enter in debugging mode the `S4` generic function as follows:
+
+```{r, eval=FALSE}
+eval(debugcall(.applysplit_partlabels(spl, df, vals, labels)))
+# We leave to the smart developer to see how the labels are assigned
+```
+In our case, the final labels are `vals` as nothing different was specified. Their order is retrieved from the split object (`spl_child_order(spl)`) and matched with current split values. The returned list is then processed as it was before.
+
+If we continue with the next call of `do_split`, the same procedure is accomplished for the second `ARM` split. Before concluding this iteration, we take a moment to talk a bit more in detail about how `.fixupvals(partinfo)` works. It is not a generic function and the source code can be easily accessed as follows. We will not describe this into details, but we suggest to run through it with `debugonce(.fixupvals)` to understand what it does in practice.
+
+```{r, eval=FALSE}
+# Note: comments are added to enhance readability
+Browse[2]> .fixupvals
+function(partinfo) {
+    # Guarantee of character labels
+    if(is.factor(partinfo$labels))
+        partinfo$labels <- as.character(partinfo$labels)
+
+    # General import of values (in theory this may be an S4 obj in the future)
+    vals <- partinfo$values
+    if(is.factor(vals))
+        vals <- levels(vals)[vals]
+    extr <- partinfo$extras
+    dpart <- partinfo$datasplit
+    labels <- partinfo$labels
+    
+    # Assigning labels at any cost
+    if(is.null(labels)) {
+        if(!is.null(names(vals)))
+            labels <- names(vals)
+        else if(!is.null(names(dpart)))
+            labels <- names(dpart)
+        else if (!is.null(names(extr)))
+            labels <- names(extr)
+    }
+
+    if(is.null(vals) && !is.null(extr))
+        vals <- seq_along(extr)
+    
+    # No split will happen as there are no split values
+    if(length(vals) == 0) {
+        stopifnot(length(extr) == 0)
+        return(partinfo)
+    }
+    ## length(vals) > 0 from here down
+
+    if(are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
+        if(!is.null(extr)) {
+            warning("Got a partinfo list with values that are ",
+                    "already SplitValue objects and non-null extras ",
+                    "element. This shouldn't happen")
+        }
+    } else {
+        # reformatting of extra args
+        if(is.null(extr))
+            extr <- rep(list(list()), length(vals))
+# --->  # Main constructor of SplitValue objects
+        vals <- make_splvalue_vec(vals, extr, labels = labels)
+    }
+    ## we're done with this so take it off
+    partinfo$extras <- NULL
+
+    vnames <- value_names(vals)
+    names(vals) <- vnames
+    partinfo$values <- vals
+
+    if(!identical(names(dpart), vnames)) {
+        names(dpart) <- vnames
+        partinfo$datasplit <- dpart
+    }
+
+
+    partinfo$labels <- labels
+    
+    # Check to have only single elements in partinfo (xxx)
+    stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
+    partinfo
+```
 
 example with simple split function
 
@@ -393,23 +543,4 @@ example with simple split function + extra args (exploration too)
 
 
 Final examples with `MultiVarSplit` & `CompoundSplit`
-These generics do different things for different classes. the power of S4
-```{r, eval=FALSE}
-setGeneric(".applysplit_rawvals", # these with dots are ONLY internals or for devs
-           function(spl, df) standardGeneric(".applysplit_rawvals"))
 
-setGeneric(".applysplit_datapart",
-           function(spl, df, vals) standardGeneric(".applysplit_datapart"))
-
-setGeneric(".applysplit_extras",
-           function(spl, df, vals) standardGeneric(".applysplit_extras"))
-
-setGeneric(".applysplit_partlabels",
-           function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels"))
-
-setGeneric("check_validsplit", # may be useful to be called one day (not exported bc it may change)
-           function(spl, df) standardGeneric("check_validsplit"))
-
-setGeneric(".applysplit_ref_vals",
-          function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
-```
