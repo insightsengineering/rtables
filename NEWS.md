@@ -1,4 +1,4 @@
-## rtables 0.6.0.1
+## rtables 0.6.0.3
  * bumped devel version
 
 ## rtables 0.6.0

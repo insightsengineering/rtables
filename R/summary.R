@@ -12,7 +12,7 @@
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("SEX", "AGE"))
-#'   
+#'
 #' tbl <- build_table(lyt, ex_adsl)
 #' tbl
 #'
@@ -20,12 +20,12 @@
 #' col_paths(tbl)
 #'
 #' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
-#' 
+#'
 #' @return a list of paths to each row/column within \code{x}
-#' 
-#' @seealso [cell_values()], [`fnotes_at_path<-`], 
+#'
+#' @seealso [cell_values()], [`fnotes_at_path<-`],
 #'   [row_paths_summary()], [col_paths_summary()]
-#' 
+#'
 #' @export
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
@@ -57,7 +57,7 @@ col_paths <- function(x) {
 #'   split_cols_by("ARM") %>%
 #'   split_cols_by("SEX", split_fun = drop_split_levels) %>%
 #'   analyze(c("AGE", "BMRKR2"))
-#'   
+#'
 #' tbl <- build_table(lyt, ex_adsl_MF)
 #' tbl
 #'
@@ -439,16 +439,22 @@ is_empty_ElementaryTable <- function(x) {
 }
 
 #' @export
-setGeneric("str", function(object)
+setGeneric("str", function(object, ...)
     standardGeneric("str"))
 
 #' @rdname int_methods
+#' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the
+#' VTableTree method, unlike the underlying default of `NA`. `NA` is *not*
+#' appropriate for `VTableTree` objects.
 #' @export
 setMethod("str", "VTableTree",
-          function(object,...){
-              utils::str(object)
-              warning("str() is not ideal for determining rtable structure. Please consider table_structure()")
-              })
+          function(object, max.level = 3L, ...){
+    utils::str(object, max.level = max.level, ...)
+    warning("str provides a low level, implementation-detail-specific description of the TableTree object structure. ",
+            "See table_structure(.) for a summary of table struture intended for end users.",
+            call. = FALSE)
+    invisible(NULL)
+})
 
 #' @rdname int_methods
 #' @inheritParams table_structure_inner
