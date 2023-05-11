@@ -36,7 +36,8 @@ row_paths <- function(x) {
 #' @rdname make_col_row_df
 #' @export
 col_paths <- function(x) {
-  stopifnot(is_rtable(x))
+    if(!is(coltree(x), "LayoutColTree"))
+        stop("I don't know how to extract the column paths from an object of class ", class(x))
   make_col_df(x, visible_only = TRUE)$path
 }
 

@@ -1601,16 +1601,24 @@ setMethod("length", "CellValue",
           function(x) 1L)
 
 setClass("RefFootnote", representation(value = "character",
-                                       index = "integer"))
+                                       index = "integer",
+                                       symbol = "character"))
 
 
-RefFootnote <- function(note, index = NA_integer_) {
+RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
     if(is(note, "RefFootnote"))
         return(note)
     else if(length(note) == 0)
         return(NULL)
+    if(length(symbol) != 1L)
+        stop("Referential footnote can only have a single string as its index.",
+             " Got char vector of length ", length(index))
+    if(!is.na(symbol) &&
+       (index == "NA" || grepl("[{}]", index)))
+        stop("The string 'NA' and strings containing '{' or '}' cannot be used as ",
+             "referential footnote index symbols. Got string '", index, "'.")
 
-    new("RefFootnote", value = note, index = index)
+    new("RefFootnote", value = note, index = index, symbol = symbol)
 }
 
 #' Cell Value constructor

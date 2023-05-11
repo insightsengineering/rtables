@@ -65,21 +65,24 @@ text (in points)}
 
 \item{font_size}{numeric(1). Font size, defaults to 12.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated before writing the file. Defaults to \code{TRUE} if any sort of page dimension is specified.}
+\item{paginate}{logical(1). Whether pagination should be performed,
+defaults to \code{TRUE} if page size is specified (including
+the default).}
 
-\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+\item{lpp}{numeric(1) or NULL. Lines per page. if NA (the default,
+this is calculated automatically based on the specified page
+size). \code{NULL} indicates no vertical pagination should occur.}
 
-\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. \code{NULL} (the default) indicates no horizontal
-pagination should be done.}
+\item{cpp}{numeric(1) or NULL. Width in characters per page. if NA (the default,
+this is calculated automatically based on the specified page
+size). \code{NULL} indicates no horizontal pagination should occur.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+\item{hsep}{character(1).   Characters  to  repeat   to  create
+header/body separator line.}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level.
-Defaults to 2}
+\item{indent_size}{numeric(1). Indent size in characters. Ignored
+when \code{x} is already a MatrixPrintForm object in favor of information
+there.}
 
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
 and footnotes be wrapped?}
@@ -91,7 +94,8 @@ of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+\item{colwidths}{numeric vector.  Column widths (in characters) for
+use with vertical pagination.}
 
 \item{...}{arguments passed on to \code{paginate_table}}
 }

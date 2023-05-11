@@ -320,6 +320,8 @@
 \alias{col_fnotes_here<-,LayoutColLeaf-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
+\alias{ref_symbol,RefFootnote-method}
+\alias{ref_symbol<-,RefFootnote-method}
 \alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
@@ -1013,6 +1015,10 @@ spl_varnames(object) <- value
 \S4method{ref_index}{RefFootnote}(obj)
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
+
+\S4method{ref_symbol}{RefFootnote}(obj)
+
+\S4method{ref_symbol}{RefFootnote}(obj) <- value
 
 \S4method{ref_msg}{RefFootnote}(obj)
 
