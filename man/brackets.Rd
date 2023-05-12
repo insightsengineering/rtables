@@ -2,6 +2,7 @@
 % Please edit documentation in R/tt_pos_and_access.R
 \name{[<-,VTableTree,ANY,ANY,list-method}
 \alias{[<-,VTableTree,ANY,ANY,list-method}
+\alias{brackets}
 \alias{[,VTableTree,logical,logical,ANY-method}
 \alias{[,VTableTree,logical,ANY,ANY-method}
 \alias{[,VTableTree,logical,missing,ANY-method}

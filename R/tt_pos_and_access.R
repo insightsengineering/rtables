@@ -348,6 +348,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' Retrieve and assign elements of a `TableTree`
 #'
 #' @rdname brackets
+#' @aliases brackets
 #'
 #' @param x TableTree
 #' @param i index
