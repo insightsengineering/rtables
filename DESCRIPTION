@@ -37,7 +37,6 @@ Suggests:
     flextable,
     knitr,
     officer,
-    r2rtf,
     rmarkdown,
     survival,
     testthat,
