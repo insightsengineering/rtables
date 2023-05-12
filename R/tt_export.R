@@ -118,12 +118,27 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
     ret
 }
 
-.need_pag <- function(page_type, pg_width, pg_height, cpp, lpp) {
-    !(is.null(page_type) && is.null(pg_width) && is.null(pg_height) && is.null(cpp) && is.null(lpp))
-
-}
-
 ### Migrated to formatters.
+
+#' @importFrom formatters export_as_txt
+#' 
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#'
+#' cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
+#'
+#' \dontrun{
+#' tf <- tempfile(fileext = ".txt")
+#' export_as_txt(tbl, file = tf)
+#' system2("cat", tf)
+#' }
+#' 
+#' @export
+formatters::export_as_txt
 
 ## #' Export as plain text with page break symbol
 ## #'
@@ -144,21 +159,6 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 ## #'
 ## #' @seealso [export_as_pdf()]
 ## #'
-## #' @examples
-## #'
-## #' lyt <- basic_table() %>%
-## #'   split_cols_by("ARM") %>%
-## #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
-## #'
-## #' tbl <- build_table(lyt, ex_adsl)
-## #'
-## #' cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
-## #'
-## #' \dontrun{
-## #' tf <- tempfile(fileext = ".txt")
-## #' export_as_txt(tbl, file = tf)
-## #' system2("cat", tf)
-## #' }
 ## export_as_txt <- function(tt, file = NULL,
 ##                           page_type = NULL,
 ##                           landscape = FALSE,
@@ -380,7 +380,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
 #' (unlike when printed to the terminal), with `cpp`, as
 #' defined above, as the default `max_width`.
 #'
-#' @seealso [export_as_txt()]
+#' @seealso [formatters::export_as_txt()]
 #'
 #'
 #' @importFrom grid textGrob get.gpar

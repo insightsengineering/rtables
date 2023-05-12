@@ -128,5 +128,5 @@ export_as_pdf(tbl, file = tf, lpp = 8)
 
 }
 \seealso{
-\code{\link[=export_as_txt]{export_as_txt()}}
+\code{\link[formatters:export_as_txt]{formatters::export_as_txt()}}
 }
