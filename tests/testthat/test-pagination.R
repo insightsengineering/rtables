@@ -134,6 +134,11 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(nrow(res2b[[1]]), 59L)
     expect_identical(vapply(res2b, ncol, 1L), rep(3L, 4))
 
+    ## topleft perservation
+    top_left(tt) <- "hahaha I'm a topleft"
+    res3 <- paginate_table(tt, lpp = 75, cpp = 45)
+    expect_identical(top_left(tt), top_left(res3[[1]]))
+
 
 
     lyt2 <- basic_table() %>%

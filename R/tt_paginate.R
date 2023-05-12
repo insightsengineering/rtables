@@ -795,10 +795,10 @@ paginate_table <- function(tt,
 
     res <- lapply(inds$pag_row_indices,
                   function(ii) {
-        subt <- tt[ii, keep_titles = TRUE, reindex_refs = FALSE, drop = FALSE]
+        subt <- tt[ii, drop = FALSE, keep_titles = TRUE, keep_topleft = TRUE, reindex_refs = FALSE]
         lapply(inds$pag_col_indices,
                function(jj) {
-            subt[, jj, drop = FALSE, keep_titles = TRUE, reindex_refs = FALSE]
+            subt[, jj, drop = FALSE, keep_titles = TRUE, keep_topleft = TRUE, reindex_refs = FALSE]
         })
     })
     res <- unlist(res, recursive = FALSE)
