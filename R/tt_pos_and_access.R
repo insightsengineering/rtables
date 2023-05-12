@@ -1352,17 +1352,3 @@ setMethod("tail", "VTableTree",
                      reindex_refs = reindex_refs)
     res
 })
-
-
-#' @rdname brackets
-#' @name bracket_subsetting
-#' @export
-#' @usage
-#' x[i, j, ...]
-base::`[`
-
-#' @rdname brackets
-#' @export
-#' @usage
-#' x[i, j, ...] <- value
-base::`[<-`
