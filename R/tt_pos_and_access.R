@@ -556,6 +556,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
     replace_rowsbynum(x, i, ...)
 })
 
+#' @inheritParams brackets
 #' @exportMethod [<-
 #' @rdname int_methods
 setMethod("[<-", c("VTableTree", value = "CellValue"),

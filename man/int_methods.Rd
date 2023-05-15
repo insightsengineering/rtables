@@ -1170,6 +1170,15 @@ be immediately recalculated. Defaults to TRUE.}
 \item{path}{character. A vector path for a position within the structure of a
 tabletree. Each element represents a subsequent choice amongst the children
 of the previous choice.}
+
+\item{i}{index}
+
+\item{j}{index}
+
+\item{drop}{logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of \code{i} and \code{j}. It is not possible
+to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
+Defaults to \code{FALSE}.}
 }
 \value{
 Various, but should be considered implementation details.
