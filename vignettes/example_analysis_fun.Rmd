@@ -44,14 +44,14 @@ anl <- adtte %>%
 
 #### `tidy` Method for `summary.coxph` Objects
 
+This method allows the `tidy` function from the `broom` package to operate on `summary.coxph` output, extracting the values of interest to this analysis and returning a tidied `tibble::tibble()` object.
+
 ```{r}
-tidy.summary.coxph <- function(x,
-                               ...) {
+tidy.summary.coxph <- function(x, ...) {
   checkmate::assert_class(x, "summary.coxph")
   pval <- x$coefficients
   confint <- x$conf.int
   levels <- rownames(pval)
-
   pval <- tibble::as_tibble(pval)
   confint <- tibble::as_tibble(confint)
 
@@ -62,7 +62,9 @@ tidy.summary.coxph <- function(x,
 }
 ```
 
-#### Function to Calculate Interaction Effects
+#### Function to Estimate Interaction Effects
+
+The `h_coxreg_inter_effect` helper function is used within the following helper function, `h_coxreg_extract_effect`, to estimate interaction effects from a given model for a given covariate. The function calculates the desired statistics from the given model and returns a `data.frame` with label information for each row as well as the statistics `n`, `hr` (hazard ratio), `lcl` (CI lower bound), `ucl` (CI upper bound), `pval` (effect p-value), and `pval_inter` (interaction p-value). If a numeric covariate is selected, the median value is used as the sole "level" for which an interaction effect is calculated. For non-numeric covariates, an interaction effect is calculated for each level of the covariate, with each result returned on a separate row.
 
 ```{r}
 h_coxreg_inter_effect <- function(x,
@@ -72,82 +74,84 @@ h_coxreg_inter_effect <- function(x,
                                   label,
                                   control,
                                   data) {
-    if (is.numeric(x)) {
-        betas <- stats::coef(mod)
-        attrs <- attr(stats::terms(mod), "term.labels")
-        term_indices <- grep(pattern = effect, x = attrs[!grepl("strata\\(", attrs)])
-        betas <- betas[term_indices]
-        betas_var <- diag(stats::vcov(mod))[term_indices]
-        betas_cov <- stats::vcov(mod)[term_indices[1], term_indices[2]]
-        xval <- stats::median(x)
-        effect_index <- !grepl(covar, names(betas))
-        coef_hat <- betas[effect_index] + xval * betas[!effect_index]
-        coef_se <- sqrt(betas_var[effect_index] + xval ^ 2 * betas_var[!effect_index] + 2 * xval * betas_cov)
-        q_norm <- stats::qnorm((1 + control$conf_level) / 2)
-    } else {
-        var_lvl <- paste0(effect, levels(data[[effect]])[-1]) # [-1]: reference level
-        giv_lvl <- paste0(covar, levels(data[[covar]]))
-        design_mat <- expand.grid(effect = var_lvl, covar = giv_lvl)
-        design_mat <- design_mat[order(design_mat$effect, design_mat$covar), ]
-        design_mat <- within(data = design_mat, expr = {
-            inter <- paste0(effect, ":", covar)
-            rev_inter <- paste0(covar, ":", effect)
-        })
-        split_by_variable <- design_mat$effect
-        interaction_names <- paste(design_mat$effect, design_mat$covar, sep = "/")
-        mmat <- stats::model.matrix(mod)[1, ]
-        mmat[!mmat == 0] <- 0
-        design_mat <- apply(X = design_mat, MARGIN = 1, FUN = function(x) {
-            mmat[names(mmat) %in% x[-which(names(x) == "covar")]] <- 1
-            mmat
-        })
-        colnames(design_mat) <- interaction_names
-        coef <- stats::coef(mod)
-        vcov <- stats::vcov(mod)
-        betas <- as.matrix(coef)
-        coef_hat <- t(design_mat) %*% betas
-        dimnames(coef_hat)[2] <- "coef"
-        coef_se <- apply(design_mat, 2, function(x) {
-            vcov_el <- as.logical(x)
-            y <- vcov[vcov_el, vcov_el]
-            y <- sum(y)
-            y <- sqrt(y)
-            y
-        })
-        q_norm <- stats::qnorm((1 + control$conf_level) / 2)
-        y <- cbind(coef_hat, `se(coef)` = coef_se)
-        y <- apply(y, 1, function(x) {
-            x["hr"] <- exp(x["coef"])
-            x["lcl"] <- exp(x["coef"] - q_norm * x["se(coef)"])
-            x["ucl"] <- exp(x["coef"] + q_norm * x["se(coef)"])
-            x
-        })
-        y <- t(y)
-        y <- by(y, split_by_variable, identity)
-        y <- lapply(y, as.matrix)
-        attr(y, "details") <- paste0(
-            "Estimations of ", effect, " hazard ratio given the level of ", covar, " compared to ",
-            effect, " level ", levels(data[[effect]])[1], "."
-        )
-        xval <- levels(data[[covar]])
-    }
-    data.frame(
-        effect = "Covariate:",
-        term = rep(covar, length(xval)),
-        term_label = as.character(paste0("  ", xval)),
-        level = as.character(xval),
-        n = NA,
-        hr = if (is.numeric(x)) exp(coef_hat) else y[[1]][, "hr"],
-        lcl = if (is.numeric(x)) exp(coef_hat - q_norm * coef_se) else y[[1]][, "lcl"],
-        ucl = if (is.numeric(x)) exp(coef_hat + q_norm * coef_se) else y[[1]][, "ucl"],
-        pval = NA,
-        pval_inter = NA,
-        stringsAsFactors = FALSE
+  if (is.numeric(x)) {
+    betas <- stats::coef(mod)
+    attrs <- attr(stats::terms(mod), "term.labels")
+    term_indices <- grep(pattern = effect, x = attrs[!grepl("strata\\(", attrs)])
+    betas <- betas[term_indices]
+    betas_var <- diag(stats::vcov(mod))[term_indices]
+    betas_cov <- stats::vcov(mod)[term_indices[1], term_indices[2]]
+    xval <- stats::median(x)
+    effect_index <- !grepl(covar, names(betas))
+    coef_hat <- betas[effect_index] + xval * betas[!effect_index]
+    coef_se <- sqrt(betas_var[effect_index] + xval ^ 2 * betas_var[!effect_index] + 2 * xval * betas_cov)
+    q_norm <- stats::qnorm((1 + control$conf_level) / 2)
+  } else {
+    var_lvl <- paste0(effect, levels(data[[effect]])[-1]) # [-1]: reference level
+    giv_lvl <- paste0(covar, levels(data[[covar]]))
+    design_mat <- expand.grid(effect = var_lvl, covar = giv_lvl)
+    design_mat <- design_mat[order(design_mat$effect, design_mat$covar), ]
+    design_mat <- within(data = design_mat, expr = {
+      inter <- paste0(effect, ":", covar)
+      rev_inter <- paste0(covar, ":", effect)
+    })
+    split_by_variable <- design_mat$effect
+    interaction_names <- paste(design_mat$effect, design_mat$covar, sep = "/")
+    mmat <- stats::model.matrix(mod)[1, ]
+    mmat[!mmat == 0] <- 0
+    design_mat <- apply(X = design_mat, MARGIN = 1, FUN = function(x) {
+      mmat[names(mmat) %in% x[-which(names(x) == "covar")]] <- 1
+      mmat
+    })
+    colnames(design_mat) <- interaction_names
+    coef <- stats::coef(mod)
+    vcov <- stats::vcov(mod)
+    betas <- as.matrix(coef)
+    coef_hat <- t(design_mat) %*% betas
+    dimnames(coef_hat)[2] <- "coef"
+    coef_se <- apply(design_mat, 2, function(x) {
+      vcov_el <- as.logical(x)
+      y <- vcov[vcov_el, vcov_el]
+      y <- sum(y)
+      y <- sqrt(y)
+      y
+    })
+    q_norm <- stats::qnorm((1 + control$conf_level) / 2)
+    y <- cbind(coef_hat, `se(coef)` = coef_se)
+    y <- apply(y, 1, function(x) {
+      x["hr"] <- exp(x["coef"])
+      x["lcl"] <- exp(x["coef"] - q_norm * x["se(coef)"])
+      x["ucl"] <- exp(x["coef"] + q_norm * x["se(coef)"])
+      x
+    })
+    y <- t(y)
+    y <- by(y, split_by_variable, identity)
+    y <- lapply(y, as.matrix)
+    attr(y, "details") <- paste0(
+      "Estimations of ", effect, " hazard ratio given the level of ", covar, " compared to ",
+      effect, " level ", levels(data[[effect]])[1], "."
     )
+    xval <- levels(data[[covar]])
+  }
+  data.frame(
+    effect = "Covariate:",
+    term = rep(covar, length(xval)),
+    term_label = as.character(paste0("  ", xval)),
+    level = as.character(xval),
+    n = NA,
+    hr = if (is.numeric(x)) exp(coef_hat) else y[[1]][, "hr"],
+    lcl = if (is.numeric(x)) exp(coef_hat - q_norm * coef_se) else y[[1]][, "lcl"],
+    ucl = if (is.numeric(x)) exp(coef_hat + q_norm * coef_se) else y[[1]][, "ucl"],
+    pval = NA,
+    pval_inter = NA,
+    stringsAsFactors = FALSE
+  )
 }
 ```
 
 #### Function to Extract Effect Information
+
+Using the previous two helper functions, `h_coxreg_extract_effect` uses ANOVA to extract information from the given model about the given covariate. This function will extract different information depending on whether the effect of interest is a treatment/main effect or an interaction effect, and returns a `data.frame` with label information for each row (corresponding to each effect) as well as the statistics `n`, `hr`, `lcl`, `ucl`, `pval`, and `pval_inter` (for interaction effects only). This helper function is used directly within our analysis function to analyze the Cox regression model and extract relevant information to be processed and displayed within our output table.
 
 ```{r}
 h_coxreg_extract_effect <- function(effect, covar, mod, data) {
