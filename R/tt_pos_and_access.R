@@ -345,10 +345,9 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 })
 
 
-#' Retrieve and assign elements of a `TableTree`
-#'
-#' @rdname brackets
-#' @aliases brackets
+#' @name brackets
+#' 
+#' @title Retrieve and assign elements of a `TableTree`
 #'
 #' @param x TableTree
 #' @param i index
@@ -456,118 +455,109 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' # Note that order can not be changed with subsetting
 #' tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
 #'
-#' @aliases [,VTableTree,logical,logical,ANY-method
-#' [,VTableTree,logical,ANY,ANY-method
-#' [,VTableTree,logical,missing,ANY-method
-#' [,VTableTree,ANY,logical,ANY-method
-#' [,VTableTree,ANY,missing,ANY-method
-#' [,VTableTree,ANY,character,ANY-method
-#' [,VTableTree,character,ANY,ANY-method
-#'
-#' @exportMethod [<-
-setMethod("[<-", c("VTableTree", value = "list"),
-          function(x, i, j, ...,  value) {
+NULL
 
-
-    nr <- nrow(x)
-    if(missing(i))
-        i <- seq_len(NROW(x))
-    else if(is(i, "character"))
-        i <- .path_to_pos(i, x)
-    else
-        i <- .j_to_posj(i, nr)
-
-    if(missing(j)) {
-        j <- seq_along(col_exprs(col_info(x)))
-    } else if(is(j, "character")) {
-        j <- .path_to_pos(j, x, cols = TRUE)
-    } else {
-        j <- .j_to_posj(j, ncol(x))
-    }
-
-    if(length(i) > 1 && length(j) < ncol(x))
-        stop("cannot modify multiple rows in not all columns.")
-
-    if(are(value, "TableRow"))
-
-        value <- rep(value, length.out = length(i))
-    else
-        value <- rep(value, length.out = length(i) * length(j))
-
-    counter <- 0
-    ## this has access to value, i, and j by scoping
-    replace_rowsbynum <- function(x, i, valifnone = NULL) {
-        maxi <- max(i)
-        if(counter >= maxi)
-            return(valifnone)
-
-        if(labelrow_visible(x)) {
-            counter <<- counter + 1
-            if(counter %in% i) {
-                nxtval <- value[[1]]
-                if(is(nxtval, "LabelRow")) {
-                    tt_labelrow(x) <- nxtval
-                } else {
-                    stop("can't replace label with value of class",
-                         class(nxtval))
-                }
-                ## we're done with this one move to
-                ## the next
-                value <<- value[-1]
-            }
-        }
-        if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
-            ctab <- content_table(x)
-
-            content_table(x) <- replace_rowsbynum(ctab, i)
-        }
-        if(counter >= maxi) { #already done
-            return(x)
-        }
-        kids <- tree_children(x)
-
-        if(length(kids) > 0) {
-            for(pos in seq_along(kids)) {
-                curkid <- kids[[pos]]
-                if(is(curkid, "TableRow")) {
-                    counter <<- counter + 1
-                    if(counter %in% i) {
-                        nxtval <- value[[1]]
-                        if(is(nxtval, class(curkid))) {
-                            if(no_colinfo(nxtval) &&
-                               length(row_values(nxtval)) == ncol(x)) {
-                                col_info(nxtval) <- col_info(x)
-                            }
-                            stopifnot(identical(col_info(x), col_info(nxtval)))
-                            curkid <- nxtval
-                            value <- value[-1]
-                        } else {
-                            rvs <- row_values(curkid)
-                            rvs[j] <- value[seq_along(j)]
-                            row_values(curkid) <- rvs
-                            value <- value[-(seq_along(j))]
-                        }
-                        kids[[pos]] <- curkid
-                    }
-                } else {
-                    kids[[pos]] <- replace_rowsbynum(curkid, i)
-                }
-                if(counter >= maxi)
-                    break
-            }
-        }
-        tree_children(x) <- kids
-        x
-    }
-    replace_rowsbynum(x, i, ...)
-})
-
-#' @exportMethod [<-
+#' @export
 #' @rdname brackets
-setMethod("[<-", c("VTableTree", value = "CellValue"),
+setMethod("[<-", c("VTableTree"),
           function(x, i, j, ...,  value) {
-    x[i = i, j = j, ...] <- list(value)
-    x
+    
+    if (is(value, "CellValue")) {
+        x[i = i, j = j, ...] <- list(value)
+        x
+    } else {
+        nr <- nrow(x)
+        if(missing(i))
+            i <- seq_len(NROW(x))
+        else if(is(i, "character"))
+            i <- .path_to_pos(i, x)
+        else
+            i <- .j_to_posj(i, nr)
+    
+        if(missing(j)) {
+            j <- seq_along(col_exprs(col_info(x)))
+        } else if(is(j, "character")) {
+            j <- .path_to_pos(j, x, cols = TRUE)
+        } else {
+            j <- .j_to_posj(j, ncol(x))
+        }
+    
+        if(length(i) > 1 && length(j) < ncol(x))
+            stop("cannot modify multiple rows in not all columns.")
+    
+        if(are(value, "TableRow"))
+    
+            value <- rep(value, length.out = length(i))
+        else
+            value <- rep(value, length.out = length(i) * length(j))
+    
+        counter <- 0
+        ## this has access to value, i, and j by scoping
+        replace_rowsbynum <- function(x, i, valifnone = NULL) {
+            maxi <- max(i)
+            if(counter >= maxi)
+                return(valifnone)
+    
+            if(labelrow_visible(x)) {
+                counter <<- counter + 1
+                if(counter %in% i) {
+                    nxtval <- value[[1]]
+                    if(is(nxtval, "LabelRow")) {
+                        tt_labelrow(x) <- nxtval
+                    } else {
+                        stop("can't replace label with value of class",
+                             class(nxtval))
+                    }
+                    ## we're done with this one move to
+                    ## the next
+                    value <<- value[-1]
+                }
+            }
+            if(is(x, "TableTree") && nrow(content_table(x)) > 0) {
+                ctab <- content_table(x)
+    
+                content_table(x) <- replace_rowsbynum(ctab, i)
+            }
+            if(counter >= maxi) { #already done
+                return(x)
+            }
+            kids <- tree_children(x)
+    
+            if(length(kids) > 0) {
+                for(pos in seq_along(kids)) {
+                    curkid <- kids[[pos]]
+                    if(is(curkid, "TableRow")) {
+                        counter <<- counter + 1
+                        if(counter %in% i) {
+                            nxtval <- value[[1]]
+                            if(is(nxtval, class(curkid))) {
+                                if(no_colinfo(nxtval) &&
+                                   length(row_values(nxtval)) == ncol(x)) {
+                                    col_info(nxtval) <- col_info(x)
+                                }
+                                stopifnot(identical(col_info(x), col_info(nxtval)))
+                                curkid <- nxtval
+                                value <- value[-1]
+                            } else {
+                                rvs <- row_values(curkid)
+                                rvs[j] <- value[seq_along(j)]
+                                row_values(curkid) <- rvs
+                                value <- value[-(seq_along(j))]
+                            }
+                            kids[[pos]] <- curkid
+                        }
+                    } else {
+                        kids[[pos]] <- replace_rowsbynum(curkid, i)
+                    }
+                    if(counter >= maxi)
+                        break
+                }
+            }
+            tree_children(x) <- kids
+            x
+        }
+        replace_rowsbynum(x, i, ...)
+    }
 })
 
 ## this is going to be hard :( :( :(
@@ -910,115 +900,29 @@ subset_by_rownum <- function(tt,
     ret
 }
 
-
-#' @exportMethod [
+#' @export
 #' @rdname brackets
-#' @aliases [,VTableTree,logical,logical-method
-setMethod("[", c("VTableTree", "logical", "logical"),
+setMethod("[", c("VTableTree"),
           function(x, i, j, ..., drop = FALSE) {
-    i <- .j_to_posj(i, nrow(x))
-    j <- .j_to_posj(j, ncol(x))
-    x[i, j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,logical,ANY-method
-setMethod("[", c("VTableTree", "logical", "ANY"),
-          function(x, i, j, ..., drop = FALSE) {
-    i <- .j_to_posj(i, nrow(x))
-    x[i, j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,logical,missing-method
-setMethod("[", c("VTableTree", "logical", "missing"),
-          function(x, i, j, ..., drop = FALSE) {
-    j <- seq_len(ncol(x))
-    i <- .j_to_posj(i, nrow(x))
-    x[i, j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,logical-method
-setMethod("[", c("VTableTree", "ANY", "logical"),
-          function(x, i, j, ..., drop = FALSE) {
-    j <- .j_to_posj(j, ncol(x))
-    x[i, j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,missing-method
-setMethod("[", c("VTableTree", "ANY", "missing"),
-          function(x, i, j, ..., drop = FALSE) {
-    j <- seq_len(ncol(x))
-    x[i = i, j = j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,missing,ANY-method
-
-setMethod("[", c("VTableTree", "missing", "ANY"),
-          function(x, i, j, ..., drop = FALSE) {
-    i <- seq_len(nrow(x))
-    x[i = i, j = j, ..., drop = drop]
-})
-
-
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,character-method
-setMethod("[", c("VTableTree", "ANY", "character"),
-          function(x, i, j, ..., drop = FALSE) {
-    ##j <- .colpath_to_j(j, coltree(x))
-    j <- .path_to_pos(path = j, tt = x, cols = TRUE)
-    x[i = i, j = j, ..., drop = drop]
-})
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,character,ANY-method
-setMethod("[", c("VTableTree", "character", "ANY"),
-          function(x, i, j, ..., drop = FALSE) {
-    ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
-    i <- .path_to_pos(i, x)
-    x[i = i, j = j, ..., drop = drop]
-})
-
-## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,character,character-method
-setMethod("[", c("VTableTree", "character", "character"),
-          function(x, i, j, ..., drop = FALSE) {
-    ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
-    i <- .path_to_pos(i, x)
-    ##j <- .colpath_to_j(j, coltree(x))
-    j <- .path_to_pos(path = j, tt = x, cols = TRUE)
-    x[i = i, j = j, ..., drop = drop]
-})
-
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,missing,numeric-method
-setMethod("[", c("VTableTree", "missing", "numeric"),
-          function(x, i, j, ..., drop = FALSE) {
-    i <- seq_len(nrow(x))
-    x[i, j, ..., drop = drop]
-})
-
-
-#' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,numeric,numeric-method
-setMethod("[", c("VTableTree", "numeric", "numeric"),
-          function(x, i, j, ..., drop = FALSE) {
+    
+    ## Checking i input
+    if (missing(i)) {
+        i <- seq_len(nrow(x))
+    } else if (is.character(i)) {
+        i <- .path_to_pos(i, x)
+    } else if (is.logical(i)) {
+        i <- .j_to_posj(i, nrow(x))
+    }
+              
+    ## Checking j input 
+    if (missing(j)){
+        j <- seq_len(ncol(x))
+    } else if (is.character(j)) {
+        j <- .path_to_pos(path = j, tt = x, cols = TRUE)
+    } else if (is.logical(j)) {
+        j <- .j_to_posj(j, ncol(x))
+    }
+              
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
     keep_topleft <- list(...)[["keep_topleft"]] %||% NA
