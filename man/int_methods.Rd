@@ -330,6 +330,15 @@
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
 \alias{tt_at_path<-,VTableTree,ANY,NULL-method}
 \alias{tt_at_path<-,VTableTree,ANY,TableRow-method}
+\alias{[<-,VTableTree,ANY,ANY,CellValue-method}
+\alias{[,VTableTree,logical,ANY-method}
+\alias{[,VTableTree,logical,missing-method}
+\alias{[,VTableTree,ANY,logical-method}
+\alias{[,VTableTree,ANY,missing-method}
+\alias{[,VTableTree,missing,ANY-method}
+\alias{[,VTableTree,ANY,character-method}
+\alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,missing,numeric-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
 \title{combine SplitVector objects}
@@ -1035,6 +1044,24 @@ spl_varnames(object) <- value
 \S4method{tt_at_path}{VTableTree,ANY,`NULL`}(tt, path, ...) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,TableRow}(tt, path, ...) <- value
+
+\S4method{[}{VTableTree,ANY,ANY,CellValue}(x, i, j, ...) <- value
+
+\S4method{[}{VTableTree,logical,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,logical,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
 
 \S4method{print}{VTableTree}(x, ...)
 
