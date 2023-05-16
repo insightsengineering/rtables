@@ -13,7 +13,7 @@ editor_options:
 
 ## Introduction
 
-In this vignette we will demonstrate how a complex analysis function can be constructed in order to build highly-customized tables with `rtables`. This example will detail the steps in creating an analysis function to calculate a basic univariable Cox regression summary table to analyze the treatment effect of the `ARM` variable and any covariate/interaction effects for a survival analysis. For a Cox regression analysis function with more customization options and the capability of fitting multivariable Cox regression models see the [`summarize_coxreg()`](https://insightsengineering.github.io/tern/main/reference/cox_regression.html) function from the `tern` package, which builds upon the concepts used in the construction of this example.
+In this vignette we will demonstrate how a complex analysis function can be constructed in order to build highly-customized tables with `rtables`. This example will detail the steps in creating an analysis function to calculate a basic univariable Cox regression summary table to analyze the treatment effect of the `ARM` variable and any covariate/interaction effects for a survival analysis. For a Cox regression analysis function with more customization options and the capability of fitting multivariable Cox regression models see the [`summarize_coxreg()`](https://insightsengineering.github.io/tern/main/reference/cox_regression.html) function from the [`tern`](https://insightsengineering.github.io/tern/main/index.html) package, which builds upon the concepts used in the construction of this example.
 
 The packages used in this vignette are:
 
@@ -42,6 +42,8 @@ anl <- adtte %>%
 
 ## Creating Helper Functions: Cox Regression Model Calculations
 
+These helper functions are taken from [`tern`](https://insightsengineering.github.io/tern/main/index.html), with additional capabilities pruned to provide only the functionality needed for this vignette. If using `tern`, the following three helper functions can be ignored and `h_coxreg_extract_interaction()` in the analysis function replaced with `tern` internal function [`tern:::h_coxreg_extract_interaction()`](https://insightsengineering.github.io/tern/main/reference/cox_regression_inter.html).
+
 ### `tidy` Method for `summary.coxph` Objects: `tidy.summary.coxph`
 
 This method allows the `tidy` function from the `broom` package to operate on `summary.coxph` output, extracting the values of interest to this analysis and returning a tidied `tibble::tibble()` object.
@@ -64,7 +66,7 @@ tidy.summary.coxph <- function(x, ...) {
 
 ### Function to Estimate Interaction Effects: `h_coxreg_inter_effect`
 
-The `h_coxreg_inter_effect` helper function is used within the following helper function, `h_coxreg_extract_effect`, to estimate interaction effects from a given model for a given covariate. The function calculates the desired statistics from the given model and returns a `data.frame` with label information for each row as well as the statistics `n`, `hr` (hazard ratio), `lcl` (CI lower bound), `ucl` (CI upper bound), `pval` (effect p-value), and `pval_inter` (interaction p-value). If a numeric covariate is selected, the median value is used as the sole "level" for which an interaction effect is calculated. For non-numeric covariates, an interaction effect is calculated for each level of the covariate, with each result returned on a separate row.
+The `h_coxreg_inter_effect` helper function is used within the following helper function, `h_coxreg_extract_interaction`, to estimate interaction effects from a given model for a given covariate. The function calculates the desired statistics from the given model and returns a `data.frame` with label information for each row as well as the statistics `n`, `hr` (hazard ratio), `lcl` (CI lower bound), `ucl` (CI upper bound), `pval` (effect p-value), and `pval_inter` (interaction p-value). If a numeric covariate is selected, the median value is used as the sole "level" for which an interaction effect is calculated. For non-numeric covariates, an interaction effect is calculated for each level of the covariate, with each result returned on a separate row.
 
 ```{r}
 h_coxreg_inter_effect <- function(x,
@@ -149,12 +151,12 @@ h_coxreg_inter_effect <- function(x,
 }
 ```
 
-### Function to Extract Effect Information: `h_coxreg_extract_effect`
+### Function to Extract Effect Information: `h_coxreg_extract_interaction`
 
-Using the previous two helper functions, `h_coxreg_extract_effect` uses ANOVA to extract information from the given model about the given covariate. This function will extract different information depending on whether the effect of interest is a treatment/main effect or an interaction effect, and returns a `data.frame` with label information for each row (corresponding to each effect) as well as the statistics `n`, `hr`, `lcl`, `ucl`, `pval`, and `pval_inter` (for interaction effects only). This helper function is used directly within our analysis function to analyze the Cox regression model and extract relevant information to be processed and displayed within our output table.
+Using the previous two helper functions, `h_coxreg_extract_interaction` uses ANOVA to extract information from the given model about the given covariate. This function will extract different information depending on whether the effect of interest is a treatment/main effect or an interaction effect, and returns a `data.frame` with label information for each row (corresponding to each effect) as well as the statistics `n`, `hr`, `lcl`, `ucl`, `pval`, and `pval_inter` (for interaction effects only). This helper function is used directly within our analysis function to analyze the Cox regression model and extract relevant information to be processed and displayed within our output table.
 
 ```{r}
-h_coxreg_extract_effect <- function(effect, covar, mod, data) {
+h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
   control <- list(pval_method = "wald", ties = "exact", conf_level = 0.95, interaction = FALSE)
   test_statistic <- c(wald = "Wald", likelihood = "LR")[control$pval_method]
   mod_aov <- withCallingHandlers(
@@ -257,7 +259,7 @@ The arguments of our analysis function will be as follows:
 -   `cache_env` - an `environment` object that can be used to store cached models so that we can prevent repeatedly fitting the same model. Instead, each model will be generated once per covariate per column and then reused.
 -   `cov_main` - a `logical` value indicating whether or not the current row is summarizing covariate main effects.
 
-The analysis function works within a given row/column split context by using the current covariate (`cov`) and the `cached_model` function to obtain the desired Cox regression model. From this model, the `h_coxreg_extract_interaction` function from `tern` is able to extract information/statistics relevant to the analysis and store it in a `data.frame`. The rows in this `data.frame` that are of interest in the current row/column split context are then extracted and the statistic to be printed in the current column is retrieved from these rows. Finally, the formatted rows containing the value of this statistic are returned with appropriate labelling. For more detail see the commented function code below, where the purpose of each line within `a_cox_summary` is described.
+The analysis function works within a given row/column split context by using the current covariate (`cov`) and the `cached_model` function to obtain the desired Cox regression model. From this model, the `h_coxreg_extract_interaction` function is able to extract information/statistics relevant to the analysis and store it in a `data.frame`. The rows in this `data.frame` that are of interest in the current row/column split context are then extracted and the statistic to be printed in the current column is retrieved from these rows. Finally, the formatted rows containing the value of this statistic are returned with appropriate labelling. For more detail see the commented function code below, where the purpose of each line within `a_cox_summary` is described.
 
 ```{r}
 a_cox_summary <- function(df,
@@ -283,7 +285,7 @@ a_cox_summary <- function(df,
   cov_lvls <- if (is.factor(df[[cov]])) levels(df[[cov]]) else as.character(median(df[[cov]]))
 
   ## Use function to calculate and extract information relevant to cov from the model
-  cov_rows <- h_coxreg_extract_effect(effect = "ARM", covar = cov, mod = model, data = df)
+  cov_rows <- h_coxreg_extract_interaction(effect = "ARM", covar = cov, mod = model, data = df)
   ## Effect p-value is only printed for treatment effect row
   if (!cov == "ARM") cov_rows[, "pval"] <- NA_real_
   ## Extract rows containing statistics for cov from model information
