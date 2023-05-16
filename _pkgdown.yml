@@ -31,6 +31,11 @@ articles:
 
 reference:
 
+  - title: For Developers
+    desc: Vignettes aimed at package developers
+    contents:
+    - dg_table_hierarchy
+    
   - title: Argument Conventions
     desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:
