@@ -40,9 +40,9 @@ anl <- adtte %>%
   dplyr::mutate(EVENT = 1 - CNSR)
 ```
 
-## Helper Functions: Cox Regression Model Calculations
+## Creating Helper Functions: Cox Regression Model Calculations
 
-#### `tidy` Method for `summary.coxph` Objects
+### `tidy` Method for `summary.coxph` Objects: `tidy.summary.coxph`
 
 This method allows the `tidy` function from the `broom` package to operate on `summary.coxph` output, extracting the values of interest to this analysis and returning a tidied `tibble::tibble()` object.
 
@@ -62,7 +62,7 @@ tidy.summary.coxph <- function(x, ...) {
 }
 ```
 
-#### Function to Estimate Interaction Effects
+### Function to Estimate Interaction Effects: `h_coxreg_inter_effect`
 
 The `h_coxreg_inter_effect` helper function is used within the following helper function, `h_coxreg_extract_effect`, to estimate interaction effects from a given model for a given covariate. The function calculates the desired statistics from the given model and returns a `data.frame` with label information for each row as well as the statistics `n`, `hr` (hazard ratio), `lcl` (CI lower bound), `ucl` (CI upper bound), `pval` (effect p-value), and `pval_inter` (interaction p-value). If a numeric covariate is selected, the median value is used as the sole "level" for which an interaction effect is calculated. For non-numeric covariates, an interaction effect is calculated for each level of the covariate, with each result returned on a separate row.
 
@@ -149,7 +149,7 @@ h_coxreg_inter_effect <- function(x,
 }
 ```
 
-#### Function to Extract Effect Information
+### Function to Extract Effect Information: `h_coxreg_extract_effect`
 
 Using the previous two helper functions, `h_coxreg_extract_effect` uses ANOVA to extract information from the given model about the given covariate. This function will extract different information depending on whether the effect of interest is a treatment/main effect or an interaction effect, and returns a `data.frame` with label information for each row (corresponding to each effect) as well as the statistics `n`, `hr`, `lcl`, `ucl`, `pval`, and `pval_inter` (for interaction effects only). This helper function is used directly within our analysis function to analyze the Cox regression model and extract relevant information to be processed and displayed within our output table.
 
@@ -185,7 +185,7 @@ h_coxreg_extract_effect <- function(effect, covar, mod, data) {
   } else {
     pval <- sum_anova[sum_anova$term == effect, ][["p.value"]]
     
-    # Test the interaction effect.
+    ## Test the interaction effect
     pval_inter <- sum_anova[grep(":", sum_anova$term), ][["p.value"]]
     covar_test <- data.frame(
       effect = "Covariate:",
@@ -195,7 +195,7 @@ h_coxreg_extract_effect <- function(effect, covar, mod, data) {
       pval_inter = pval_inter,
       stringsAsFactors = FALSE
     )
-    # Estimate the interaction.
+    ## Estimate the interaction
     y <- h_coxreg_inter_effect(
       data[[covar]],
       covar = covar,
