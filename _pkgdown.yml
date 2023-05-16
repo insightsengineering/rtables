@@ -28,7 +28,7 @@ articles:
     - custom_appearance
     - advanced_usage
     - format_precedence
-    - example_analysis_fun
+    - example_analysis_coxreg
 
 reference:
 
