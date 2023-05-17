@@ -4,7 +4,12 @@
         return(refs)
 
     lapply(refs, function(refi) {
-        ref_index(refi) <- cur_idx_fun()
+        ## these can be symbols, e.g. ^, † now, those are
+        ## special and don't get reindexed cause they're not numbered
+        ## to begin with
+        idx <- ref_index(refi)
+        if(is.na(idx) || !is.na(as.integer(idx)))
+            ref_index(refi) <- cur_idx_fun()
         refi
     })
 }
@@ -18,18 +23,10 @@ setMethod(".idx_helper", "TableRow",
     row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
                                           cur_idx_fun)
 
-    ## if(length(row_footnotes(tr)) > 0) {
-    ##     row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
-    ##                                           cur_idx_fun)
-    ## }
-
-    ## crfs <- cell_footnotes(tr)
-    ## if(length(unlist(crfs)) > 0) {
-
-        cell_footnotes(tr) <- lapply(cell_footnotes(tr), ##crfs,
-                                     .reindex_one_pos,
-                                     cur_idx_fun = cur_idx_fun
-                                     )
+    cell_footnotes(tr) <- lapply(cell_footnotes(tr), ##crfs,
+                                 .reindex_one_pos,
+                                 cur_idx_fun = cur_idx_fun
+                                 )
     tr
 })
 

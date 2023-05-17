@@ -137,6 +137,7 @@ test_that("export_as_pdf works", {
     expect_warning(export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
                    "width of page 1 exceeds the available space")
     expect_true(file.exists(tmpf))
+    file.remove(tmpf)
     expect_warning(export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
                    "height of page 1 exceeds the available space")
 
@@ -210,7 +211,7 @@ test_that("flextable export works", {
     expect_equal(sum(unlist(nrow(ft))), 20)
     ft
 
-    ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20)
+    ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
     expect_equal(length(ft2), 6)
 })
 
@@ -240,13 +241,13 @@ test_that("path_enriched_df works for tables with a column that has all length 1
 })
 
 test_that("export_as_rtf works", {
-    
+
     tbl <- tt_to_export()
     tmpf <- tempfile(fileext = ".rtf")
-    
+
     expect_error(export_as_rtf(tbl, file = tmpf, landscape = TRUE, margins = c(2, 2, 2, 2), colwidths = 2),
                  "non-null colwidths argument")
-    
+
     res <- export_as_rtf(tbl, file = tmpf)
     expect_true(file.exists(tmpf))
 })

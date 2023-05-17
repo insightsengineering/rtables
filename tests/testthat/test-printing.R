@@ -446,7 +446,7 @@ test_that("row label indentation is kept even if there are newline characters", 
     ind_s2 <- 2
     mf3_v1 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s1)
     mf3_v2 <- matrix_form(tbl_a, indent_rownames = TRUE, expand_newlines = FALSE, indent_size = ind_s2)
-    which_to_rm <- which(names(mf3_v1) %in% c("strings", "formats", "indent_size"))
+    which_to_rm <- which(names(mf3_v1) %in% c("strings", "formats", "indent_size", "col_widths"))
     expect_equal(mf3_v1[-which_to_rm], mf3_v2[-which_to_rm]) # These should be the only differences
 
     str_v1 <- strsplit(mf3_v1$strings[3, 1], "ASIAN")[[1]]
