@@ -1,5 +1,14 @@
-## rtables 0.6.0.3
- * bumped devel version
+## rtables 0.6.0.9004
+ * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
+ * Moved `export_as_txt` to `formatters`. Added to reexports. 
+ * Fixed warning in `str` function when called upon table objects. 
+ * Maximal level of nesting (`max.level`) set for `str` at 3 to avoid displaying all nested structures.
+ * Started deprecation cycle for `trim_zero_rows`.
+ * Fixed bug occurring when extracting `cell_values` after sorting.
+ * Removed deprecated function `vpaginate_table`.
+ * Added examples and details for `sort_at_path`.
+ * Added `split_label` to function `split_rows_by_multivar` and `extra_args` to function `split_cols_by_multivar`.
+ * Added `split_rows_by_multivar` documentation.
 
 ## rtables 0.6.0
  * added `make_split_fun` function for creation of custom split functions
