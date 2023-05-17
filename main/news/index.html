@@ -27,12 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -54,8 +48,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.0.3" id="rtables-0603">rtables 0.6.0.3<a class="anchor" aria-label="anchor" href="#rtables-0603"></a></h2>
-<ul><li>bumped devel version</li>
+<h2 class="pkg-version" data-toc-text="0.6.0.9004" id="rtables-0609004">rtables 0.6.0.9004<a class="anchor" aria-label="anchor" href="#rtables-0609004"></a></h2>
+<ul><li>Improved resilience of pagination machinery (<code>paginate_table</code>) by generalizing parameters’ defaults (<code>cpp</code>, <code>lpp</code>, and <code>font_size</code>).</li>
+<li>Moved <code>export_as_txt</code> to <code>formatters</code>. Added to reexports.</li>
+<li>Fixed warning in <code>str</code> function when called upon table objects.</li>
+<li>Maximal level of nesting (<code>max.level</code>) set for <code>str</code> at 3 to avoid displaying all nested structures.</li>
+<li>Started deprecation cycle for <code>trim_zero_rows</code>.</li>
+<li>Fixed bug occurring when extracting <code>cell_values</code> after sorting.</li>
+<li>Removed deprecated function <code>vpaginate_table</code>.</li>
+<li>Added examples and details for <code>sort_at_path</code>.</li>
+<li>Added <code>split_label</code> to function <code>split_rows_by_multivar</code> and <code>extra_args</code> to function <code>split_cols_by_multivar</code>.</li>
+<li>Added <code>split_rows_by_multivar</code> documentation.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="rtables-060">rtables 0.6.0<a class="anchor" aria-label="anchor" href="#rtables-060"></a></h2><p class="text-muted">CRAN release: 2023-03-02</p>
