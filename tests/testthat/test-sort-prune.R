@@ -48,8 +48,9 @@ test_that("pruning and trimming work", {
     expect_identical(prune_table(smallertab, prune_zeros_only),
                      smallertab)
     expect_identical(dim(ptab), c(4L, 3L))
+    trm1 <- trim_rows(smallertab)
     ## ensure/retain structure unawareness of trim_rows
-    expect_identical(dim(trim_rows(smallertab)), c(6L, 3L))
+    expect_identical(dim(trm1), c(6L, 3L))
 
     smallertab2 <- basic_table() %>%
         split_cols_by("ARM") %>%
@@ -103,7 +104,6 @@ test_that("sort_at_path just returns an empty input table", {
     silly_prune_condition <- function(tt) {
         return(TRUE)
     }
-    # Note: not sure why there is a warning from below. Probably separate problem.
     emptytable <- trim_rows(rawtable, silly_prune_condition)
     expect_identical(dim(emptytable), c(0L, ncol(rawtable)))
     result <- sort_at_path(
@@ -123,7 +123,7 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
         analyze("COUNTRY") %>%
         build_table(ex_adsl)
 
-    tzr_tbl1 <- trim_zero_rows(tbl)
+    expect_warning({tzr_tbl1 <- trim_zero_rows(tbl)}, "deprecated")
     tr_tbl1 <- trim_rows(tbl)
 
     expect_true(all(unclass(compare_rtables(tzr_tbl1, tr_tbl1)) == "."))
@@ -134,7 +134,7 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
         analyze("COUNTRY") %>%
         build_table(ex_adsl)
 
-    tzr_tbl2 <- trim_zero_rows(tbl2)
+    expect_warning({tzr_tbl2 <- trim_zero_rows(tbl2)}, "deprecated")
     tr_tbl2 <- trim_rows(tbl2)
 
     expect_true(all(unclass(compare_rtables(tzr_tbl2, tr_tbl2)) == "."))
@@ -146,7 +146,7 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
         analyze("COUNTRY") %>%
         build_table(ex_adsl)
 
-    tzr_tbl3 <- trim_zero_rows(tbl3)
+    expect_warning({tzr_tbl3 <- trim_zero_rows(tbl3)}, "deprecated")
     tr_tbl3 <- trim_rows(tbl3)
 
     expect_true(all(unclass(compare_rtables(tzr_tbl3, tr_tbl3)) == "."))
@@ -263,11 +263,11 @@ test_that("paths come out correct when sorting with '*'", {
         summarize_row_groups() %>%
         analyze("STRATA1") %>%
         build_table(DM)
-    
+
     scorefun <- function(tt) sum(unlist(row_values(tt)))
-    
+
     tbl <- sort_at_path(tbl, c("RACE", "*", "STRATA1"), scorefun)
-    
+
     res <- cell_values(tbl,
                        c("RACE", "BLACK OR AFRICAN AMERICAN", "STRATA1", "C"),
                        c("ARM", "A: Drug X"))

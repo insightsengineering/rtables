@@ -126,7 +126,7 @@ reference:
     - rbind
     - cbind_rtables
     - asvec
-    - bracket_subsetting
+    - brackets
     - clear_indent_mods
     - head
 

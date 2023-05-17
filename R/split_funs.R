@@ -79,7 +79,7 @@ setGeneric(".applysplit_ref_vals",
 #' functions and modify either the incoming data before they are called or
 #' their outputs.
 #'
-#' @seealso [make_split_fun()] for the API for creating custom split functions, 
+#' @seealso [make_split_fun()] for the API for creating custom split functions,
 #' and [split_funcs] for a variety of pre-defined split functions.
 #'
 #' @examples
@@ -310,7 +310,6 @@ do_split <- function(spl,
 
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
-    ## try to calculate values first. Most of the time we can
     if(is.null(vals))
         vals <- .applysplit_rawvals(spl, df)
     extr <- .applysplit_extras(spl, df, vals)
@@ -589,8 +588,6 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     if(is.null(labels)) {
         if(varname == vlabelname) {
             labels <- vals
-            ## } else if (is.factor(df[[vlabelname]])) {
-            ##     labels = levels(df[varvec %in% vals, ][[vlabelname]])
         } else {
             labfact <- is.factor(df[[vlabelname]])
             lablevs <- if(labfact) levels(df[[vlabelname]]) else NULL
@@ -650,9 +647,9 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 #' @inherit add_overall_level return
 NULL
 
-#' @rdname split_funcs 
+#' @rdname split_funcs
 #' @export
-#' 
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
