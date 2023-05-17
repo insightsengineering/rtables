@@ -4,17 +4,11 @@
 \alias{brackets}
 \alias{[<-,VTableTree,ANY,ANY,list-method}
 \alias{[,VTableTree,logical,logical-method}
-\alias{[,VTableTree,character,character-method}
-\alias{[,VTableTree,numeric,numeric-method}
 \title{Retrieve and assign elements of a \code{TableTree}}
 \usage{
 \S4method{[}{VTableTree,ANY,ANY,list}(x, i, j, ...) <- value
 
 \S4method{[}{VTableTree,logical,logical}(x, i, j, ..., drop = FALSE)
-
-\S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
-
-\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
 \item{x}{TableTree}

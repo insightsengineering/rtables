@@ -314,6 +314,7 @@ setGeneric("tt_at_path<-",
            function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -324,6 +325,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
 ## because that is how lists behave.
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -333,6 +335,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
 
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
           function(tt, path, ..., value) {
     stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))
@@ -559,6 +562,7 @@ setMethod("[<-", c("VTableTree", value = "list"),
 #' @inheritParams brackets
 #' @exportMethod [<-
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[<-", c("VTableTree", value = "CellValue"),
           function(x, i, j, ...,  value) {
     x[i = i, j = j, ...] <- list(value)
@@ -917,6 +921,7 @@ setMethod("[", c("VTableTree", "logical", "logical"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .j_to_posj(i, nrow(x))
@@ -925,6 +930,7 @@ setMethod("[", c("VTableTree", "logical", "ANY"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "logical", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
@@ -934,6 +940,7 @@ setMethod("[", c("VTableTree", "logical", "missing"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j <- .j_to_posj(j, ncol(x))
@@ -942,6 +949,7 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
@@ -950,6 +958,7 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "missing", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
@@ -960,6 +969,7 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##j <- .colpath_to_j(j, coltree(x))
@@ -969,6 +979,7 @@ setMethod("[", c("VTableTree", "ANY", "character"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "character", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -978,7 +989,8 @@ setMethod("[", c("VTableTree", "character", "ANY"),
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
 #' @exportMethod [
-#' @rdname brackets
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -991,6 +1003,7 @@ setMethod("[", c("VTableTree", "character", "character"),
 
 #' @exportMethod [
 #' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
@@ -999,7 +1012,8 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 
 #' @exportMethod [
-#' @rdname brackets
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
@@ -1150,7 +1164,8 @@ setMethod("head", "VTableTree",
 #' stopifnot(identical(cvlist[[1]], cvnolist))
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
     standardGeneric("cell_values"))
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "VTableTree",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1158,7 +1173,8 @@ setMethod("cell_values", "VTableTree",
                       omit_labrows = omit_labrows, value_at = FALSE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "TableRow",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1168,7 +1184,8 @@ setMethod("cell_values", "TableRow",
                        omit_labrows = omit_labrows, value_at = FALSE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "LabelRow",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1189,7 +1206,8 @@ setMethod("value_at", "VTableTree",
                       omit_labrows = FALSE, value_at = TRUE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod value_at
 setMethod("value_at", "TableRow",
           function(tt, rowpath, colpath = NULL) {
@@ -1198,7 +1216,8 @@ setMethod("value_at", "TableRow",
 })
 
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod value_at
 setMethod("value_at", "LabelRow",
           function(tt, rowpath, colpath = NULL) {

@@ -338,7 +338,14 @@
 \alias{[,VTableTree,missing,ANY-method}
 \alias{[,VTableTree,ANY,character-method}
 \alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,character,character-method}
 \alias{[,VTableTree,missing,numeric-method}
+\alias{[,VTableTree,numeric,numeric-method}
+\alias{cell_values,VTableTree-method}
+\alias{cell_values,TableRow-method}
+\alias{cell_values,LabelRow-method}
+\alias{value_at,TableRow-method}
+\alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
 \title{combine SplitVector objects}
@@ -1061,7 +1068,21 @@ spl_varnames(object) <- value
 
 \S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
 
+\S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
+
 \S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{TableRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{LabelRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{value_at}{TableRow}(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{LabelRow}(tt, rowpath = NULL, colpath = NULL)
 
 \S4method{print}{VTableTree}(x, ...)
 
@@ -1207,3 +1228,4 @@ indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
 }
+\keyword{internal}
