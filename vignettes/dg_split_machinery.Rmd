@@ -487,12 +487,12 @@ In our case, the final labels are `vals` because they were not assigned. Their o
 
 If we continue with the next call of `do_split`, the same procedure is accomplished for the second `ARM` split. This is done on the partition that was already done in the first split. The only give out of this is the fact that the main `df` is constituted by a subset (facet) of the total data, according to the first split. This will be done iteratively for as many data split as requested. Before concluding this iteration, we take a moment to talk a bit more in detail about how `.fixupvals(partinfo)` works. It is not a generic function and the source code can be easily accessed as follows. We suggest to run through it with `debugonce(.fixupvals)` to understand what it does in practice. The fundamental aspects are listed in the following:
 
-(xxx todo)
- ## .fixupvals:
-    ## - ensures labels are character not factor
-    ## - Ensures datasplit and values lists are named according to labels
-    ## - guarantees that ret$values contains SplitValue objects
-    ## - removes the extras element since its redundant after the above (included in the SplitValue object)
+* Ensures that labels are character and not factor.
+* Ensures that the splits of data and list of values are named according to labels.
+* Guarantees that `ret$values` contains `SplitValue` objects.
+* Removes the list element `extra` since its now included in the `SplitValue`.
+
+Note that this function can occasionally be called more than once on the same return object (a named list for now). Of course, after the first call only checks are applied.
 
 ```{r, eval=FALSE}
 # rtables 6.0.2
