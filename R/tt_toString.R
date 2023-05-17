@@ -118,6 +118,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
     format_strs_mat[seq_len(nlh),] <- matform$strings[seq_len(nlh),]
 
     matform$strings <- format_strs_mat
+    if(is.null(widths))
+        widths <- propose_column_widths(matform)
     toString(matform, widths = widths, col_gap = col_gap, hsep = hsep,
              tf_wrap = tf_wrap, max_width = max_width)
 }
@@ -183,7 +185,7 @@ setMethod("matrix_form", "VTableTree",
                    indent_rownames = FALSE,
                    expand_newlines = TRUE,
                    indent_size = 2) {
-    
+
     stopifnot(is(obj, "VTableTree"))
 
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -298,6 +300,14 @@ setMethod("matrix_form", "VTableTree",
 })
 
 
+.resolve_fn_symbol <- function(fn) {
+    if(!is(fn, "RefFootnote"))
+        return(NULL)
+    ret <- ref_symbol(fn)
+    if(is.na(ret))
+        ret <- as.character(ref_index(fn))
+    ret
+}
 
 
 
@@ -307,12 +317,12 @@ format_fnote_ref <- function(fn) {
     else if(is.list(fn) && all(vapply(fn, is.list, TRUE)))
         return(vapply(fn, format_fnote_ref, ""))
     if(is.list(fn)) {
-        inds <- unlist(lapply(unlist(fn), function(x) if(is(x, "RefFootnote")) x@index else NULL))
+        inds <- unlist(lapply(unlist(fn), .resolve_fn_symbol))
     } else {
-        inds <- fn@index
+        inds <- .resolve_fn_symbol(fn)
     }
     if(length(inds) > 0) {
-        paste0(" {", paste(inds, collapse = ", "), "}")
+        paste0(" {", paste(unique(inds), collapse = ", "), "}")
     } else {
         ""
     }
@@ -327,7 +337,7 @@ format_fnote_note <- function(fn) {
     }
 
     if(is(fn, "RefFootnote")) {
-        paste0("{", ref_index(fn), "} - ", ref_msg(fn))
+        paste0("{", .resolve_fn_symbol(fn), "} - ", ref_msg(fn))
     } else {
         NULL
     }
@@ -335,27 +345,12 @@ format_fnote_note <- function(fn) {
 
 .fn_ind_extractor <- function(strs) {
     res <- suppressWarnings(as.numeric(gsub("\\{([[:digit:]]+)\\}.*", "\\1", strs)))
-    if(!(sum(is.na(res)) %in% c(0L, length(res))))
-        stop("Got NAs mixed with non-NAS for extracted footnote indices. This should not happen")
+    res[res == "NA"] <- NA_character_
+    ## these mixing is allowed now with symbols
+    ## if(!(sum(is.na(res)) %in% c(0L, length(res))))
+    ##     stop("Got NAs mixed with non-NAS for extracted footnote indices. This should not happen")
     res
 }
-
-## .colref_mat_helper <- function(vals, span) {
-##         val <- paste(lapply(vals, format_fnote_ref), collapse = " ")
-##         if(length(val) == 0)
-##             val <- ""
-##         rep(val, times = span)
-## }
-
-## get_colref_matrix <- function(tt) {
-##     cdf <- make_col_df(tt, visible_only=FALSE)
-##     objs <- cdf$col_fnotes
-##     spans <- cdf$total_span
-##     vals <- mapply(.colref_mat_helper,
-##                    vals = objs,
-##                    span = spans)
-##     vals
-## }
 
 get_ref_matrix <- function(tt) {
     if(ncol(tt) == 0 || nrow(tt) == 0) {
@@ -373,66 +368,38 @@ get_ref_matrix <- function(tt) {
 
 get_formatted_fnotes <- function(tt) {
     colresfs <- unlist(make_col_df(tt, visible_only = FALSE)$col_fnotes)
-    colstrs <- unlist(lapply(colresfs, format_fnote_note))
     rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
-    lst <- unlist(lapply(rows, cell_footnotes), recursive = FALSE)
-    cellstrs <- unlist(lapply(lst, format_fnote_note))
-    rstrs <- unlist(lapply(rows, function(rw) format_fnote_note(row_footnotes(rw))))
-    allstrs <- c(colstrs, rstrs, cellstrs)
-    inds <- .fn_ind_extractor(allstrs)
-    allstrs[order(inds)]
+    lst <- c(colresfs,
+             unlist(lapply(rows,
+                           function(r) unlist(c(row_footnotes(r), cell_footnotes(r)),
+                                              recursive = FALSE)),
+                    recursive = FALSE))
+
+    inds <- vapply(lst, ref_index, 1L)
+    stopifnot(all(is.na(inds)) || !is.unsorted(inds))
+    syms <- vapply(lst, ref_symbol, "")
+    keep <- is.na(syms) | !duplicated(syms)
+    inds <- inds[keep]
+    lst <- lst[keep]
+    syms <- syms[keep]
+    vapply(lst, format_fnote_note, "")
+
+
+
+    ##                    , recursive = FALSE)
+    ## rlst <- unlist(lapply(rows, row_footnotes))
+    ## lst <-
+    ## syms <- vapply(lst, ref_symbol, "")
+    ## keep <- is.na(syms) | !duplicated(syms)
+    ## lst <- lst[keep]
+    ## inds <- vapply(lst, ref_index, 1L)
+    ## cellstrs <- unlist(lapply(lst, format_fnote_note))
+    ## rstrs <- unlist(lapply(rows, function(rw) format_fnote_note(row_footnotes(rw))))
+    ## allstrs <- c(colstrs, rstrs, cellstrs)
+    ## inds <- .fn_ind_extractor(allstrs)
+    ## allstrs[order(inds)]
 }
 
-
-
-## ## print depths (not to be confused with tree depths)
-## .cleaf_depths <- function(ctree = coltree(cinfo), depth = 1, cinfo) {
-##     if(is(ctree, "LayoutColLeaf"))
-##         return(depth)
-##     unlist(lapply(tree_children(ctree), .cleaf_depths, depth = depth + 1))
-## }
-
-
-## .do_tbl_h_piece <- function(ct, padding = 0, span = 1) {
-
-##     if(is(ct, "LayoutColLeaf")) {
-##       ##   padcells <- if(padding > 0) list(rep(list(rcell("", colspan = 1)), padding))
-
-##         return(c(list(rcell(obj_label(ct), colspan = 1))))
-##     }
-
-
-##     nleafs <- length(collect_leaves(ct))
-##     padcells <- if(padding > 0) list(rep(list(rcell("", colspan = 1)), padding))
-
-##     kids <- tree_children(ct)
-##     cdepths <- vapply(kids, function(k) max(.cleaf_depths(k)), 1)
-##     pieces <- mapply(.do_tbl_h_piece,
-##                      ct = kids, padding = max(cdepths) - cdepths,
-##                      SIMPLIFY= FALSE)
-##     ## listpieces <- vapply(pieces, function(x) {
-##     ##     any(vapply(x, function(y) is.list(y) && !is(y, "CellValue"), NA))
-##     ##     }, NA)
-##     ## if(any(listpieces))
-##     ##     pieces[listpieces] <- lapply(pieces[listpieces], unlist)
-##     lpieces <- vapply(pieces, length, 1L)
-
-##     nmcell <- list(rcell(obj_label(ct), colspan = nleafs))
-
-##     stopifnot(length(unique(lpieces)) == 1)
-##     rowparts <- lapply(1:max(lpieces),
-##                        function(i) {
-##         res = lapply(pieces, `[[`, i = i)
-##         if(!are(res, "CellValue"))
-##             res = unlist(res, recursive = FALSE)
-##         res
-##     })
-
-
-##     c(padcells,
-##       nmcell,
-##       rowparts)
-## }
 
 .do_tbl_h_piece2 <- function(tt) {
     coldf <- make_col_df(tt, visible_only = FALSE)
@@ -549,7 +516,7 @@ get_formatted_fnotes <- function(tt) {
                 stop("This 2d format is not supported for column counts. Please choose a 1d format or a 2d format that includes a % value.")
             }
         } else if (cfmt_dim == "3d") {stop("3d formats are not supported for column counts.")}
-        
+
         body <- rbind(body, vapply(counts, format_rcell,
                                    character(1),
                                    format = cformat,
