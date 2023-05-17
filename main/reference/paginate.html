@@ -12,7 +12,7 @@ direction, as required for the specified page size."><!-- mathjax --><script src
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,12 +29,6 @@ direction, as required for the specified page size."><!-- mathjax --><script src
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -83,8 +77,8 @@ direction, as required for the specified page size.</p>
 <span>  pg_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pg_height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>top <span class="op">=</span> <span class="fl">0.5</span>, bottom <span class="op">=</span> <span class="fl">0.5</span>, left <span class="op">=</span> <span class="fl">0.75</span>, right <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>,</span>
-<span>  <span class="va">lpp</span>,</span>
-<span>  <span class="va">cpp</span>,</span>
+<span>  lpp <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
+<span>  cpp <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
 <span>  min_siblings <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  nosplitin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  colwidths <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -168,16 +162,17 @@ be inverted  for landscape?  Defaults to  <code>FALSE</code>, ignored when
 
 
 <dt>margins</dt>
-<dd><p>numeric(4). Named numeric vector containing <code>'top'</code>,
-<code>'bottom'</code>, <code>'left'</code>, and <code>'right'</code> margins in inches. Defaults
+<dd><p>numeric(4). Named numeric vector containing <code>'bottom'</code>,
+<code>'left'</code>, <code>'top'</code>, and <code>'right'</code> margins in inches. Defaults
 to <code>.5</code> inches for both vertical margins and <code>.75</code> for both
 horizontal margins.</p></dd>
 
 
 <dt>cpp</dt>
 <dd><p>numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. <code>NULL</code> (the default) indicates no horizontal
-pagination should be done.</p></dd>
+horizontal pagination. <code>NA</code> (the default) indicates cpp should be inferred from
+the page size; <code>NULL</code> indicates no horizontal pagination should be done
+regardless of page size.</p></dd>
 
 
 <dt>tf_wrap</dt>

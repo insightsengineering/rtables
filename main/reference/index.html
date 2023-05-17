@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -433,7 +427,7 @@
         <dd>convert to a vector</dd>
       </dl><dl><dt>
           
-          <code><a href="brackets.html">`[`</a></code> <code><a href="brackets.html">`[&lt;-`()</a></code> 
+          <code><a href="brackets.html">`[&lt;-`(<i>&lt;VTableTree&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;list&gt;</i>)</a></code> <code><a href="brackets.html">`[`(<i>&lt;VTableTree&gt;</i>,<i>&lt;logical&gt;</i>,<i>&lt;logical&gt;</i>)</a></code> 
         </dt>
         <dd>Retrieve and assign elements of a <code>TableTree</code></dd>
       </dl><dl><dt>
@@ -554,16 +548,6 @@
           <code><a href="export_as_pdf.html">export_as_pdf()</a></code> 
         </dt>
         <dd>Export as PDF</dd>
-      </dl><dl><dt>
-          
-          <code><a href="export_as_rtf.html">export_as_rtf()</a></code> 
-        </dt>
-        <dd>Export table to RTF</dd>
-      </dl><dl><dt>
-          
-          <code><a href="export_as_txt.html">export_as_txt()</a></code> 
-        </dt>
-        <dd>Export as plain text with page break symbol</dd>
       </dl><dl><dt>
           
           <code><a href="tsv_io.html">export_as_tsv()</a></code> <code><a href="tsv_io.html">import_from_tsv()</a></code> 
@@ -818,7 +802,7 @@ browser</dd>
 
       <dl><dt>
           
-          <code><a href="ref_fnotes.html">row_footnotes()</a></code> <code><a href="ref_fnotes.html">`row_footnotes&lt;-`()</a></code> <code><a href="ref_fnotes.html">cell_footnotes()</a></code> <code><a href="ref_fnotes.html">`cell_footnotes&lt;-`()</a></code> <code><a href="ref_fnotes.html">col_fnotes_here()</a></code> <code><a href="ref_fnotes.html">`col_fnotes_here&lt;-`()</a></code> <code><a href="ref_fnotes.html">ref_index()</a></code> <code><a href="ref_fnotes.html">`ref_index&lt;-`()</a></code> <code><a href="ref_fnotes.html">ref_msg()</a></code> <code><a href="ref_fnotes.html">`fnotes_at_path&lt;-`()</a></code> 
+          <code><a href="ref_fnotes.html">row_footnotes()</a></code> <code><a href="ref_fnotes.html">`row_footnotes&lt;-`()</a></code> <code><a href="ref_fnotes.html">cell_footnotes()</a></code> <code><a href="ref_fnotes.html">`cell_footnotes&lt;-`()</a></code> <code><a href="ref_fnotes.html">col_fnotes_here()</a></code> <code><a href="ref_fnotes.html">`col_fnotes_here&lt;-`()</a></code> <code><a href="ref_fnotes.html">ref_index()</a></code> <code><a href="ref_fnotes.html">`ref_index&lt;-`()</a></code> <code><a href="ref_fnotes.html">ref_symbol()</a></code> <code><a href="ref_fnotes.html">`ref_symbol&lt;-`()</a></code> <code><a href="ref_fnotes.html">ref_msg()</a></code> <code><a href="ref_fnotes.html">`fnotes_at_path&lt;-`()</a></code> 
         </dt>
         <dd>Referential Footnote Accessors</dd>
       </dl><dl><dt>

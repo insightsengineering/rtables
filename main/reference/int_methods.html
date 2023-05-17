@@ -12,7 +12,7 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,12 +29,6 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -63,947 +57,1001 @@ R CMD check. End users should pay no attention to this documentation.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span>, cmpnd_fun <span class="op">=</span> <span class="va">AnalyzeMultiVars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span>, cmpnd_fun <span class="op">=</span> <span class="va">AnalyzeMultiVars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span>, cmpnd_fun <span class="op">=</span> <span class="va">AnalyzeMultiVars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span>, cmpnd_fun <span class="op">=</span> <span class="va">AnalyzeMultiVars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">split_rows</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">cmpnd_last_rowsplit</span><span class="op">(</span><span class="va">lyt</span>, <span class="va">spl</span>, <span class="va">constructor</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">split_cols</span><span class="op">(</span>lyt <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">spl</span>, <span class="va">pos</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">.add_row_summary</span><span class="op">(</span></span>
-<span>  <span class="va">lyt</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">cfun</span>,</span>
-<span>  child_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"visible"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
-<span>  cformat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cna_str <span class="op">=</span> <span class="st">"-"</span>,</span>
-<span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  cvar <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">.add_row_summary</span><span class="op">(</span></span>
-<span>  <span class="va">lyt</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">cfun</span>,</span>
-<span>  child_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"visible"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
-<span>  cformat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cna_str <span class="op">=</span> <span class="st">"-"</span>,</span>
-<span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  cvar <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">.add_row_summary</span><span class="op">(</span></span>
-<span>  <span class="va">lyt</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">cfun</span>,</span>
-<span>  child_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"visible"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
-<span>  cformat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cna_str <span class="op">=</span> <span class="st">"-"</span>,</span>
-<span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  cvar <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">.add_row_summary</span><span class="op">(</span></span>
-<span>  <span class="va">lyt</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">cfun</span>,</span>
-<span>  child_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"visible"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
-<span>  cformat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cna_str <span class="op">=</span> <span class="st">"-"</span>,</span>
-<span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  cvar <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">.add_row_summary</span><span class="op">(</span></span>
-<span>  <span class="va">lyt</span>,</span>
-<span>  <span class="va">label</span>,</span>
-<span>  <span class="va">cfun</span>,</span>
-<span>  child_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"visible"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
-<span>  cformat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cna_str <span class="op">=</span> <span class="st">"-"</span>,</span>
-<span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  cvar <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarDynCutSplit</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">fix_dyncuts</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableTree</span></span>
-<span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ElementaryTable</span></span>
-<span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">summarize_rows_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">object</span>, max.level <span class="op">=</span> <span class="fl">3L</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableTree</span></span>
-<span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ElementaryTable</span></span>
-<span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">table_structure_inner</span><span class="op">(</span><span class="va">obj</span>, depth <span class="op">=</span> <span class="fl">0</span>, indent <span class="op">=</span> <span class="fl">0</span>, print_indent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTree</span></span>
-<span><span class="fu"><a href="tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu"><a href="tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTree</span></span>
-<span><span class="fu"><a href="tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="tree_children.html">tree_children</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableTree</span></span>
-<span><span class="fu"><a href="content_table.html">content_table</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu"><a href="content_table.html">content_table</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableTree,ElementaryTable</span></span>
-<span><span class="fu"><a href="content_table.html">content_table</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">next_rpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span>, for_analyze <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">next_rpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span>, for_analyze <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">next_rpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span>, for_analyze <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">next_rpos</span><span class="op">(</span><span class="va">obj</span>, <span class="va">nested</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">next_cpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">next_cpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">next_cpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">next_cpos</span><span class="op">(</span><span class="va">obj</span>, nested <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">last_rowsplit</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">last_rowsplit</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitVector</span></span>
-<span><span class="fu">last_rowsplit</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataRowLayout</span></span>
-<span><span class="fu">last_rowsplit</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">last_rowsplit</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">rlayout</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">rlayout</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">rlayout</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">rlayout</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">rlayout</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">tree_pos</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VLayoutNode</span></span>
-<span><span class="fu">tree_pos</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">pos_subset</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">pos_subset</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VLayoutNode</span></span>
-<span><span class="fu">pos_subset</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">pos_splits</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">pos_splits</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VLayoutNode</span></span>
-<span><span class="fu">pos_splits</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">pos_splvals</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">pos_splvals</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VLayoutNode</span></span>
-<span><span class="fu">pos_splvals</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">pos_splval_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">pos_splval_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_payload</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">spl_payload</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_payload</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">spl_payload</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">spl_label_var</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarLevelSplit</span></span>
-<span><span class="fu">spl_label_var</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">spl_label_var</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tt_labelrow</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">tt_labelrow</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tt_labelrow</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,LabelRow</span></span>
-<span><span class="fu">tt_labelrow</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VAnalyzeSplit</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VAnalyzeSplit</span></span>
-<span><span class="fu">labelrow_visible</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">label_kids</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">label_kids</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">label_kids</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split,character</span></span>
-<span><span class="fu">label_kids</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split,logical</span></span>
-<span><span class="fu">label_kids</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">vis_label</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">vis_label</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">label_position</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">label_position</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VAnalyzeSplit</span></span>
-<span><span class="fu">label_position</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">label_position</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">label_position</span><span class="op">(</span><span class="va">spl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">content_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_fun</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_fun</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">analysis_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for AnalyzeVarSplit</span></span>
-<span><span class="fu">analysis_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for AnalyzeColVarSplit</span></span>
-<span><span class="fu">analysis_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CustomizableSplit</span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for CustomizableSplit</span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">split_fun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">content_extra_args</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_extra_args</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_extra_args</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_extra_args</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">content_var</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_var</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_var</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_var</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">avar_inclNAs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VAnalyzeSplit</span></span>
-<span><span class="fu">avar_inclNAs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">avar_inclNAs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VAnalyzeSplit</span></span>
-<span><span class="fu">avar_inclNAs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">spl_labelvar</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarLevelSplit</span></span>
-<span><span class="fu">spl_labelvar</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarLevelSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarLevelSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for ManualSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for AllSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarStaticCutSplit</span></span>
-<span><span class="fu">spl_child_order</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">root_spl</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataAxisLayout</span></span>
-<span><span class="fu">root_spl</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">root_spl</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataAxisLayout</span></span>
-<span><span class="fu">root_spl</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spanned_cells</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">spanned_cells</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">spanned_cells</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">spanned_values</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_na_str</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">set_format_recursive</span><span class="op">(</span><span class="va">obj</span>, <span class="va">format</span>, <span class="va">na_str</span>, override <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">set_format_recursive</span><span class="op">(</span><span class="va">obj</span>, <span class="va">format</span>, <span class="va">na_str</span>, override <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">set_format_recursive</span><span class="op">(</span><span class="va">obj</span>, <span class="va">format</span>, override <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">content_na_str</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_na_str</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_na_str</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_na_str</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableTree</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ElementaryTable</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTree</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VLeaf</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu"><a href="collect_leaves.html">collect_leaves</a></span><span class="op">(</span><span class="va">tt</span>, incl.cont <span class="op">=</span> <span class="cn">TRUE</span>, add.labrows <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu">row_cspans</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">cell_cspan</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">cell_cspan</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">cell_cspan</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">cell_cspan</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">cell_align</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">cell_align</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">cell_align</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">cell_align</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">tt_level</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VNodeInfo</span></span>
-<span><span class="fu">tt_level</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tt_level</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VNodeInfo</span></span>
-<span><span class="fu">tt_level</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">tt_level</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu">indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">content_indent_mod</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ValueWrapper</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LevelComboSplitValue</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for list</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu">rawvalues</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for list</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ValueWrapper</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LevelComboSplitValue</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu">value_names</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ANY</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TreePos</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for list</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ValueWrapper</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LevelComboSplitValue</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">value_labels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_varlabels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">spl_varlabels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_varlabels</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">spl_varlabels</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">splv_extra</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitValue</span></span>
-<span><span class="fu">splv_extra</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">splv_extra</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for SplitValue</span></span>
-<span><span class="fu">splv_extra</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">split_exargs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">split_exargs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">split_exargs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for Split</span></span>
-<span><span class="fu">split_exargs</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColTree</span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColLeaf</span></span>
-<span><span class="fu">col_extra_args</span><span class="op">(</span><span class="va">obj</span>, df <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColTree</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">disp_ccounts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for InstantiatedColumnInfo</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataColLayout</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for PreDataTableLayouts</span></span>
-<span><span class="fu">colcount_format</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">x</span>, mode <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for ElementaryTable</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">x</span>, mode <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_cuts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarStaticCutSplit</span></span>
-<span><span class="fu">spl_cuts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_cutlabels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarStaticCutSplit</span></span>
-<span><span class="fu">spl_cutlabels</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_cutfun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarDynCutSplit</span></span>
-<span><span class="fu">spl_cutfun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_cutlabelfun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarDynCutSplit</span></span>
-<span><span class="fu">spl_cutlabelfun</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_is_cmlcuts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VarDynCutSplit</span></span>
-<span><span class="fu">spl_is_cmlcuts</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_varnames</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">spl_varnames</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">spl_varnames</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for MultiVarSplit</span></span>
-<span><span class="fu">spl_varnames</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">row_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RowsVerticalSection</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">row_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">row_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">row_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for TableRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LabelRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CellValue</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for DataRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for ContentRow</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">cell_footnotes</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColTree</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">col_fnotes_here</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColLeaf</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">col_fnotes_here</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColTree</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">col_fnotes_here</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for LayoutColLeaf</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">col_fnotes_here</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for RefFootnote</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">ref_index</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for RefFootnote</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">ref_index</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for RefFootnote</span></span>
-<span><span class="fu"><a href="ref_fnotes.html">ref_msg</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,character</span></span>
-<span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">obj</span>, rowpath <span class="op">=</span> <span class="cn">NULL</span>, colpath <span class="op">=</span> <span class="cn">NULL</span>, reset_idx <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,`NULL`</span></span>
-<span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">obj</span>, rowpath <span class="op">=</span> <span class="cn">NULL</span>, colpath <span class="op">=</span> <span class="cn">NULL</span>, reset_idx <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableNodeInfo,missing</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/methods/cbind2.html" class="external-link">rbind2</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="ttap.html">tt_at_path</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">path</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,ANY,VTableTree</span></span>
-<span><span class="fu"><a href="ttap.html">tt_at_path</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,ANY,`NULL`</span></span>
-<span><span class="fu"><a href="ttap.html">tt_at_path</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree,ANY,TableRow</span></span>
-<span><span class="fu"><a href="ttap.html">tt_at_path</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">path</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for VTableTree</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/methods/show.html" class="external-link">show</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code># S4 method for SplitVector
+c(x, ...)
+
+split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
+
+# S4 method for `NULL`
+split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
+
+# S4 method for PreDataRowLayout
+split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
+
+# S4 method for SplitVector
+split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
+
+# S4 method for PreDataTableLayouts
+split_rows(lyt, spl, pos)
+
+# S4 method for ANY
+split_rows(lyt, spl, pos)
+
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+# S4 method for `NULL`
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+# S4 method for PreDataRowLayout
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+# S4 method for SplitVector
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+# S4 method for PreDataTableLayouts
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+# S4 method for ANY
+cmpnd_last_rowsplit(lyt, spl, constructor)
+
+split_cols(lyt = NULL, spl, pos)
+
+# S4 method for `NULL`
+split_cols(lyt = NULL, spl, pos)
+
+# S4 method for PreDataColLayout
+split_cols(lyt = NULL, spl, pos)
+
+# S4 method for SplitVector
+split_cols(lyt = NULL, spl, pos)
+
+# S4 method for PreDataTableLayouts
+split_cols(lyt = NULL, spl, pos)
+
+# S4 method for ANY
+split_cols(lyt = NULL, spl, pos)
+
+.add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  cna_str = "-",
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+# S4 method for PreDataTableLayouts
+.add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  cna_str = "-",
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+# S4 method for PreDataRowLayout
+.add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  cna_str = "-",
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+# S4 method for SplitVector
+.add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  cna_str = "-",
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+# S4 method for Split
+.add_row_summary(
+  lyt,
+  label,
+  cfun,
+  child_labels = c("default", "visible", "hidden"),
+  cformat = NULL,
+  cna_str = "-",
+  indent_mod = 0L,
+  cvar = "",
+  extra_args = list()
+)
+
+fix_dyncuts(spl, df)
+
+# S4 method for Split
+fix_dyncuts(spl, df)
+
+# S4 method for VarDynCutSplit
+fix_dyncuts(spl, df)
+
+# S4 method for VTableTree
+fix_dyncuts(spl, df)
+
+# S4 method for PreDataRowLayout
+fix_dyncuts(spl, df)
+
+# S4 method for PreDataColLayout
+fix_dyncuts(spl, df)
+
+# S4 method for SplitVector
+fix_dyncuts(spl, df)
+
+# S4 method for PreDataTableLayouts
+fix_dyncuts(spl, df)
+
+summarize_rows_inner(obj, depth = 0, indent = 0)
+
+# S4 method for TableTree
+summarize_rows_inner(obj, depth = 0, indent = 0)
+
+# S4 method for ElementaryTable
+summarize_rows_inner(obj, depth = 0, indent = 0)
+
+# S4 method for TableRow
+summarize_rows_inner(obj, depth = 0, indent = 0)
+
+# S4 method for LabelRow
+summarize_rows_inner(obj, depth = 0, indent = 0)
+
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+# S4 method for VTableTree
+str(object, max.level = 3L, ...)
+
+# S4 method for TableTree
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+# S4 method for ElementaryTable
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+# S4 method for TableRow
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+# S4 method for LabelRow
+table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+# S4 method for TableRow
+nrow(x)
+
+# S4 method for TableRow
+ncol(x)
+
+# S4 method for LabelRow
+ncol(x)
+
+# S4 method for InstantiatedColumnInfo
+ncol(x)
+
+# S4 method for VTree
+tree_children(x)
+
+# S4 method for VTableTree
+tree_children(x)
+
+# S4 method for ANY
+tree_children(x)
+
+# S4 method for VTree
+tree_children(x) &lt;- value
+
+# S4 method for VTableTree
+tree_children(x) &lt;- value
+
+# S4 method for TableTree
+content_table(obj)
+
+# S4 method for ANY
+content_table(obj)
+
+# S4 method for TableTree,ElementaryTable
+content_table(obj) &lt;- value
+
+next_rpos(obj, nested = TRUE, for_analyze = FALSE)
+
+# S4 method for PreDataTableLayouts
+next_rpos(obj, nested = TRUE, for_analyze = FALSE)
+
+# S4 method for PreDataRowLayout
+next_rpos(obj, nested = TRUE, for_analyze = FALSE)
+
+# S4 method for ANY
+next_rpos(obj, nested)
+
+next_cpos(obj, nested = TRUE)
+
+# S4 method for PreDataTableLayouts
+next_cpos(obj, nested = TRUE)
+
+# S4 method for PreDataColLayout
+next_cpos(obj, nested = TRUE)
+
+# S4 method for ANY
+next_cpos(obj, nested = TRUE)
+
+last_rowsplit(obj)
+
+# S4 method for `NULL`
+last_rowsplit(obj)
+
+# S4 method for SplitVector
+last_rowsplit(obj)
+
+# S4 method for PreDataRowLayout
+last_rowsplit(obj)
+
+# S4 method for PreDataTableLayouts
+last_rowsplit(obj)
+
+rlayout(obj)
+
+# S4 method for PreDataTableLayouts
+rlayout(obj)
+
+# S4 method for ANY
+rlayout(obj)
+
+rlayout(object) &lt;- value
+
+# S4 method for PreDataTableLayouts
+rlayout(object) &lt;- value
+
+tree_pos(obj)
+
+# S4 method for VLayoutNode
+tree_pos(obj)
+
+pos_subset(obj)
+
+# S4 method for TreePos
+pos_subset(obj)
+
+# S4 method for VLayoutNode
+pos_subset(obj)
+
+pos_splits(obj)
+
+# S4 method for TreePos
+pos_splits(obj)
+
+# S4 method for VLayoutNode
+pos_splits(obj)
+
+pos_splvals(obj)
+
+# S4 method for TreePos
+pos_splvals(obj)
+
+# S4 method for VLayoutNode
+pos_splvals(obj)
+
+pos_splval_labels(obj)
+
+# S4 method for TreePos
+pos_splval_labels(obj)
+
+spl_payload(obj)
+
+# S4 method for Split
+spl_payload(obj)
+
+spl_payload(obj) &lt;- value
+
+# S4 method for Split
+spl_payload(obj) &lt;- value
+
+spl_label_var(obj)
+
+# S4 method for VarLevelSplit
+spl_label_var(obj)
+
+# S4 method for Split
+spl_label_var(obj)
+
+tt_labelrow(obj)
+
+# S4 method for VTableTree
+tt_labelrow(obj)
+
+tt_labelrow(obj) &lt;- value
+
+# S4 method for VTableTree,LabelRow
+tt_labelrow(obj) &lt;- value
+
+labelrow_visible(obj)
+
+# S4 method for VTableTree
+labelrow_visible(obj)
+
+# S4 method for LabelRow
+labelrow_visible(obj)
+
+# S4 method for VAnalyzeSplit
+labelrow_visible(obj)
+
+labelrow_visible(obj) &lt;- value
+
+# S4 method for VTableTree
+labelrow_visible(obj) &lt;- value
+
+# S4 method for LabelRow
+labelrow_visible(obj) &lt;- value
+
+# S4 method for VAnalyzeSplit
+labelrow_visible(obj) &lt;- value
+
+label_kids(spl)
+
+# S4 method for Split
+label_kids(spl)
+
+label_kids(spl) &lt;- value
+
+# S4 method for Split,character
+label_kids(spl) &lt;- value
+
+# S4 method for Split,logical
+label_kids(spl) &lt;- value
+
+vis_label(spl)
+
+# S4 method for Split
+vis_label(spl)
+
+label_position(spl)
+
+# S4 method for Split
+label_position(spl)
+
+# S4 method for VAnalyzeSplit
+label_position(spl)
+
+label_position(spl) &lt;- value
+
+# S4 method for Split
+label_position(spl) &lt;- value
+
+content_fun(obj)
+
+# S4 method for Split
+content_fun(obj)
+
+content_fun(object) &lt;- value
+
+# S4 method for Split
+content_fun(object) &lt;- value
+
+analysis_fun(obj)
+
+# S4 method for AnalyzeVarSplit
+analysis_fun(obj)
+
+# S4 method for AnalyzeColVarSplit
+analysis_fun(obj)
+
+split_fun(obj)
+
+# S4 method for CustomizableSplit
+split_fun(obj)
+
+# S4 method for Split
+split_fun(obj)
+
+split_fun(obj) &lt;- value
+
+# S4 method for CustomizableSplit
+split_fun(obj) &lt;- value
+
+# S4 method for Split
+split_fun(obj) &lt;- value
+
+content_extra_args(obj)
+
+# S4 method for Split
+content_extra_args(obj)
+
+content_extra_args(object) &lt;- value
+
+# S4 method for Split
+content_extra_args(object) &lt;- value
+
+content_var(obj)
+
+# S4 method for Split
+content_var(obj)
+
+content_var(object) &lt;- value
+
+# S4 method for Split
+content_var(object) &lt;- value
+
+avar_inclNAs(obj)
+
+# S4 method for VAnalyzeSplit
+avar_inclNAs(obj)
+
+avar_inclNAs(obj) &lt;- value
+
+# S4 method for VAnalyzeSplit
+avar_inclNAs(obj) &lt;- value
+
+spl_labelvar(obj)
+
+# S4 method for VarLevelSplit
+spl_labelvar(obj)
+
+spl_child_order(obj)
+
+# S4 method for VarLevelSplit
+spl_child_order(obj)
+
+spl_child_order(obj) &lt;- value
+
+# S4 method for VarLevelSplit
+spl_child_order(obj) &lt;- value
+
+# S4 method for ManualSplit
+spl_child_order(obj)
+
+# S4 method for MultiVarSplit
+spl_child_order(obj)
+
+# S4 method for AllSplit
+spl_child_order(obj)
+
+# S4 method for VarStaticCutSplit
+spl_child_order(obj)
+
+root_spl(obj)
+
+# S4 method for PreDataAxisLayout
+root_spl(obj)
+
+root_spl(obj) &lt;- value
+
+# S4 method for PreDataAxisLayout
+root_spl(obj) &lt;- value
+
+spanned_values(obj)
+
+# S4 method for TableRow
+spanned_values(obj)
+
+# S4 method for LabelRow
+spanned_values(obj)
+
+spanned_cells(obj)
+
+# S4 method for TableRow
+spanned_cells(obj)
+
+# S4 method for LabelRow
+spanned_cells(obj)
+
+spanned_values(obj) &lt;- value
+
+# S4 method for TableRow
+spanned_values(obj) &lt;- value
+
+# S4 method for LabelRow
+spanned_values(obj) &lt;- value
+
+# S4 method for CellValue
+obj_na_str(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+obj_na_str(obj) &lt;- value
+
+# S4 method for Split
+obj_na_str(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+obj_na_str(obj)
+
+set_format_recursive(obj, format, na_str, override = FALSE)
+
+# S4 method for TableRow
+set_format_recursive(obj, format, na_str, override = FALSE)
+
+# S4 method for LabelRow
+set_format_recursive(obj, format, override = FALSE)
+
+content_format(obj)
+
+# S4 method for Split
+content_format(obj)
+
+content_format(obj) &lt;- value
+
+# S4 method for Split
+content_format(obj) &lt;- value
+
+content_na_str(obj)
+
+# S4 method for Split
+content_na_str(obj)
+
+content_na_str(obj) &lt;- value
+
+# S4 method for Split
+content_na_str(obj) &lt;- value
+
+# S4 method for TableTree
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+# S4 method for ElementaryTable
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+# S4 method for VTree
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+# S4 method for VLeaf
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+# S4 method for `NULL`
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+# S4 method for ANY
+collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
+
+row_cspans(obj)
+
+# S4 method for TableRow
+row_cspans(obj)
+
+# S4 method for LabelRow
+row_cspans(obj)
+
+row_cspans(obj) &lt;- value
+
+# S4 method for TableRow
+row_cspans(obj) &lt;- value
+
+# S4 method for LabelRow
+row_cspans(obj) &lt;- value
+
+cell_cspan(obj)
+
+# S4 method for CellValue
+cell_cspan(obj)
+
+cell_cspan(obj) &lt;- value
+
+# S4 method for CellValue
+cell_cspan(obj) &lt;- value
+
+cell_align(obj)
+
+# S4 method for CellValue
+cell_align(obj)
+
+cell_align(obj) &lt;- value
+
+# S4 method for CellValue
+cell_align(obj) &lt;- value
+
+tt_level(obj)
+
+# S4 method for VNodeInfo
+tt_level(obj)
+
+tt_level(obj) &lt;- value
+
+# S4 method for VNodeInfo
+tt_level(obj) &lt;- value
+
+# S4 method for VTableTree
+tt_level(obj) &lt;- value
+
+indent_mod(obj)
+
+# S4 method for Split
+indent_mod(obj)
+
+# S4 method for VTableNodeInfo
+indent_mod(obj)
+
+# S4 method for ANY
+indent_mod(obj)
+
+# S4 method for RowsVerticalSection
+indent_mod(obj)
+
+indent_mod(obj) &lt;- value
+
+# S4 method for Split
+indent_mod(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+indent_mod(obj) &lt;- value
+
+# S4 method for CellValue
+indent_mod(obj) &lt;- value
+
+# S4 method for RowsVerticalSection
+indent_mod(obj) &lt;- value
+
+content_indent_mod(obj)
+
+# S4 method for Split
+content_indent_mod(obj)
+
+# S4 method for VTableNodeInfo
+content_indent_mod(obj)
+
+content_indent_mod(obj) &lt;- value
+
+# S4 method for Split
+content_indent_mod(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+content_indent_mod(obj) &lt;- value
+
+rawvalues(obj)
+
+# S4 method for ValueWrapper
+rawvalues(obj)
+
+# S4 method for LevelComboSplitValue
+rawvalues(obj)
+
+# S4 method for list
+rawvalues(obj)
+
+# S4 method for ANY
+rawvalues(obj)
+
+# S4 method for CellValue
+rawvalues(obj)
+
+# S4 method for TreePos
+rawvalues(obj)
+
+# S4 method for RowsVerticalSection
+rawvalues(obj)
+
+value_names(obj)
+
+# S4 method for ANY
+value_names(obj)
+
+# S4 method for TreePos
+value_names(obj)
+
+# S4 method for list
+value_names(obj)
+
+# S4 method for ValueWrapper
+value_names(obj)
+
+# S4 method for LevelComboSplitValue
+value_names(obj)
+
+# S4 method for RowsVerticalSection
+value_names(obj)
+
+value_labels(obj)
+
+# S4 method for ANY
+value_labels(obj)
+
+# S4 method for TreePos
+value_labels(obj)
+
+# S4 method for list
+value_labels(obj)
+
+# S4 method for RowsVerticalSection
+value_labels(obj)
+
+# S4 method for ValueWrapper
+value_labels(obj)
+
+# S4 method for LevelComboSplitValue
+value_labels(obj)
+
+# S4 method for MultiVarSplit
+value_labels(obj)
+
+spl_varlabels(obj)
+
+# S4 method for MultiVarSplit
+spl_varlabels(obj)
+
+spl_varlabels(object) &lt;- value
+
+# S4 method for MultiVarSplit
+spl_varlabels(object) &lt;- value
+
+splv_extra(obj)
+
+# S4 method for SplitValue
+splv_extra(obj)
+
+splv_extra(obj) &lt;- value
+
+# S4 method for SplitValue
+splv_extra(obj) &lt;- value
+
+split_exargs(obj)
+
+# S4 method for Split
+split_exargs(obj)
+
+split_exargs(obj) &lt;- value
+
+# S4 method for Split
+split_exargs(obj) &lt;- value
+
+col_extra_args(obj, df = NULL)
+
+# S4 method for InstantiatedColumnInfo
+col_extra_args(obj, df = NULL)
+
+# S4 method for PreDataTableLayouts
+col_extra_args(obj, df = NULL)
+
+# S4 method for PreDataColLayout
+col_extra_args(obj, df = NULL)
+
+# S4 method for LayoutColTree
+col_extra_args(obj, df = NULL)
+
+# S4 method for LayoutColLeaf
+col_extra_args(obj, df = NULL)
+
+disp_ccounts(obj)
+
+# S4 method for VTableTree
+disp_ccounts(obj)
+
+# S4 method for InstantiatedColumnInfo
+disp_ccounts(obj)
+
+# S4 method for PreDataTableLayouts
+disp_ccounts(obj)
+
+# S4 method for PreDataColLayout
+disp_ccounts(obj)
+
+disp_ccounts(obj) &lt;- value
+
+# S4 method for VTableTree
+disp_ccounts(obj) &lt;- value
+
+# S4 method for InstantiatedColumnInfo
+disp_ccounts(obj) &lt;- value
+
+# S4 method for PreDataColLayout
+disp_ccounts(obj) &lt;- value
+
+# S4 method for LayoutColTree
+disp_ccounts(obj) &lt;- value
+
+# S4 method for PreDataTableLayouts
+disp_ccounts(obj) &lt;- value
+
+colcount_format(obj)
+
+# S4 method for InstantiatedColumnInfo
+colcount_format(obj)
+
+# S4 method for VTableNodeInfo
+colcount_format(obj)
+
+# S4 method for PreDataColLayout
+colcount_format(obj)
+
+# S4 method for PreDataTableLayouts
+colcount_format(obj)
+
+colcount_format(obj) &lt;- value
+
+# S4 method for InstantiatedColumnInfo
+colcount_format(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+colcount_format(obj) &lt;- value
+
+# S4 method for PreDataColLayout
+colcount_format(obj) &lt;- value
+
+# S4 method for PreDataTableLayouts
+colcount_format(obj) &lt;- value
+
+# S4 method for TableRow
+as.vector(x, mode = "any")
+
+# S4 method for ElementaryTable
+as.vector(x, mode = "any")
+
+spl_cuts(obj)
+
+# S4 method for VarStaticCutSplit
+spl_cuts(obj)
+
+spl_cutlabels(obj)
+
+# S4 method for VarStaticCutSplit
+spl_cutlabels(obj)
+
+spl_cutfun(obj)
+
+# S4 method for VarDynCutSplit
+spl_cutfun(obj)
+
+spl_cutlabelfun(obj)
+
+# S4 method for VarDynCutSplit
+spl_cutlabelfun(obj)
+
+spl_is_cmlcuts(obj)
+
+# S4 method for VarDynCutSplit
+spl_is_cmlcuts(obj)
+
+spl_varnames(obj)
+
+# S4 method for MultiVarSplit
+spl_varnames(obj)
+
+spl_varnames(object) &lt;- value
+
+# S4 method for MultiVarSplit
+spl_varnames(object) &lt;- value
+
+# S4 method for TableRow
+row_footnotes(obj)
+
+# S4 method for RowsVerticalSection
+row_footnotes(obj)
+
+# S4 method for TableRow
+row_footnotes(obj) &lt;- value
+
+# S4 method for VTableTree
+row_footnotes(obj)
+
+# S4 method for CellValue
+cell_footnotes(obj)
+
+# S4 method for TableRow
+cell_footnotes(obj)
+
+# S4 method for LabelRow
+cell_footnotes(obj)
+
+# S4 method for VTableTree
+cell_footnotes(obj)
+
+# S4 method for CellValue
+cell_footnotes(obj) &lt;- value
+
+# S4 method for DataRow
+cell_footnotes(obj) &lt;- value
+
+# S4 method for ContentRow
+cell_footnotes(obj) &lt;- value
+
+# S4 method for LayoutColTree
+col_fnotes_here(obj)
+
+# S4 method for LayoutColLeaf
+col_fnotes_here(obj)
+
+# S4 method for LayoutColTree
+col_fnotes_here(obj) &lt;- value
+
+# S4 method for LayoutColLeaf
+col_fnotes_here(obj) &lt;- value
+
+# S4 method for RefFootnote
+ref_index(obj)
+
+# S4 method for RefFootnote
+ref_index(obj) &lt;- value
+
+# S4 method for RefFootnote
+ref_symbol(obj)
+
+# S4 method for RefFootnote
+ref_symbol(obj) &lt;- value
+
+# S4 method for RefFootnote
+ref_msg(obj)
+
+# S4 method for VTableTree,character
+fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) &lt;- value
+
+# S4 method for VTableTree,`NULL`
+fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) &lt;- value
+
+# S4 method for VTableNodeInfo,missing
+rbind2(x, y)
+
+# S4 method for VTableTree
+tt_at_path(tt, path, ...)
+
+# S4 method for VTableTree,ANY,VTableTree
+tt_at_path(tt, path, ...) &lt;- value
+
+# S4 method for VTableTree,ANY,`NULL`
+tt_at_path(tt, path, ...) &lt;- value
+
+# S4 method for VTableTree,ANY,TableRow
+tt_at_path(tt, path, ...) &lt;- value
+
+# S4 method for VTableTree,ANY,ANY,CellValue
+[(x, i, j, ...) &lt;- value
+
+# S4 method for VTableTree,logical,ANY
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,logical,missing
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,ANY,logical
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,ANY,missing
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,missing,ANY
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,ANY,character
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,character,ANY
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,character,character
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,missing,numeric
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree,numeric,numeric
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for VTableTree
+cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+# S4 method for TableRow
+cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+# S4 method for LabelRow
+cell_values(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+# S4 method for TableRow
+value_at(tt, rowpath = NULL, colpath = NULL)
+
+# S4 method for LabelRow
+value_at(tt, rowpath = NULL, colpath = NULL)
+
+# S4 method for VTableTree
+print(x, ...)
+
+# S4 method for VTableTree
+show(object)</code></pre></div>
     </div>
 
     <div class="section level2">
@@ -1183,6 +1231,21 @@ be immediately recalculated. Defaults to TRUE.</p></dd>
 <dd><p>character. A vector path for a position within the structure of a
 tabletree. Each element represents a subsequent choice amongst the children
 of the previous choice.</p></dd>
+
+
+<dt>i</dt>
+<dd><p>index</p></dd>
+
+
+<dt>j</dt>
+<dd><p>index</p></dd>
+
+
+<dt>drop</dt>
+<dd><p>logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of <code>i</code> and <code>j</code>. It is not possible
+to return a vector of values. To do so please consider using <code><a href="cell_values.html">cell_values()</a></code>.
+Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

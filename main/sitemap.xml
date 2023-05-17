@@ -178,12 +178,6 @@
     <loc>https://insightsengineering.github.io/rtables/main/reference/export_as_pdf.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/main/reference/export_as_rtf.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/main/reference/export_as_txt.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/format_rcell.html</loc>
   </url>
   <url>
@@ -278,6 +272,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/rcell.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/reexports.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/ref_fnotes.html</loc>

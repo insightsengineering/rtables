@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -148,29 +142,32 @@ text (in points)</p></dd>
 
 
 <dt>paginate</dt>
-<dd><p>logical(1). Should <code>tt</code> be paginated before writing the file. Defaults to <code>TRUE</code> if any sort of page dimension is specified.</p></dd>
+<dd><p>logical(1). Whether pagination should be performed,
+defaults to <code>TRUE</code> if page size is specified (including
+the default).</p></dd>
 
 
 <dt>lpp</dt>
-<dd><p>numeric. Maximum lines per page including (re)printed header and context rows</p></dd>
+<dd><p>numeric(1) or NULL. Lines per page. if NA (the default,
+this is calculated automatically based on the specified page
+size). <code>NULL</code> indicates no vertical pagination should occur.</p></dd>
 
 
 <dt>cpp</dt>
-<dd><p>numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. <code>NULL</code> (the default) indicates no horizontal
-pagination should be done.</p></dd>
+<dd><p>numeric(1) or NULL. Width in characters per page. if NA (the default,
+this is calculated automatically based on the specified page
+size). <code>NULL</code> indicates no horizontal pagination should occur.</p></dd>
 
 
 <dt>hsep</dt>
-<dd><p>character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to <code>-</code> elsewhere (with a once per session warning).</p></dd>
+<dd><p>character(1).   Characters  to  repeat   to  create
+header/body separator line.</p></dd>
 
 
 <dt>indent_size</dt>
-<dd><p>numeric(1). Number of spaces to use per indent level.
-Defaults to 2</p></dd>
+<dd><p>numeric(1). Indent size in characters. Ignored
+when <code>x</code> is already a MatrixPrintForm object in favor of information
+there.</p></dd>
 
 
 <dt>tf_wrap</dt>
@@ -188,7 +185,8 @@ completely if <code>tf_wrap</code> is <code>FALSE</code>.</p></dd>
 
 
 <dt>colwidths</dt>
-<dd><p>numeric vector. Column widths for use with vertical pagination.</p></dd>
+<dd><p>numeric vector.  Column widths (in characters) for
+use with vertical pagination.</p></dd>
 
 
 <dt>...</dt>
@@ -207,7 +205,7 @@ defined above, as the default <code>max_width</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="export_as_txt.html">export_as_txt()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">formatters::export_as_txt()</a></code></p></div>
     </div>
 
     <div class="section level2">

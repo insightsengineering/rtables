@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-05-09</h4>
+            <h4 data-toc-skip class="date">2023-05-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/title_footer.Rmd" class="external-link"><code>vignettes/title_footer.Rmd</code></a></small>
       <div class="d-none name"><code>title_footer.Rmd</code></div>
@@ -119,7 +113,7 @@ and footer element during layout construction:</p>
 <span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_as_txt.html">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
@@ -173,44 +167,28 @@ variable being split.</p>
 <span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_as_txt.html">export_as_txt</a></span><span class="op">(</span><span class="va">tbl2</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n~~~~ Page Break ~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl2</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n~~~~ Page Break ~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: F</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
 <span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># A                                                 </span></span>
-<span><span class="co">#   mean       30.9         32.9           36.0     </span></span>
-<span><span class="co"># B                                                 </span></span>
-<span><span class="co">#   mean       34.9         32.9           34.4     </span></span>
-<span><span class="co"># C                                                 </span></span>
-<span><span class="co">#   mean       35.2         36.0           34.3     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: M</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># A                                                 </span></span>
-<span><span class="co">#   mean       35.1         31.1           35.6     </span></span>
-<span><span class="co"># B                                                 </span></span>
-<span><span class="co">#   mean       36.6         32.1           34.4     </span></span>
-<span><span class="co"># C                                                 </span></span>
-<span><span class="co">#   mean       37.4         32.8           32.8     </span></span>
+<span><span class="co"># F                                                 </span></span>
+<span><span class="co">#   A                                               </span></span>
+<span><span class="co">#     mean     30.9         32.9           36.0     </span></span>
+<span><span class="co">#   B                                               </span></span>
+<span><span class="co">#     mean     34.9         32.9           34.4     </span></span>
+<span><span class="co">#   C                                               </span></span>
+<span><span class="co">#     mean     35.2         36.0           34.3     </span></span>
+<span><span class="co"># M                                                 </span></span>
+<span><span class="co">#   A                                               </span></span>
+<span><span class="co">#     mean     35.1         31.1           35.6     </span></span>
+<span><span class="co">#   B                                               </span></span>
+<span><span class="co">#     mean     36.6         32.1           34.4     </span></span>
+<span><span class="co">#   C                                               </span></span>
+<span><span class="co">#     mean     37.4         32.8           32.8     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
@@ -231,112 +209,28 @@ resulting page, as seen below:</p>
 <span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_as_txt.html">export_as_txt</a></span><span class="op">(</span><span class="va">tbl3</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n~~~~ Page Break ~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl3</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n~~~~ Page Break ~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: F</span></span>
-<span><span class="co"># Stratification - Strata: A</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
 <span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         30.9         32.9           36.0     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: F</span></span>
-<span><span class="co"># Stratification - Strata: B</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         34.9         32.9           34.4     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: F</span></span>
-<span><span class="co"># Stratification - Strata: C</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         35.2         36.0           34.3     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: M</span></span>
-<span><span class="co"># Stratification - Strata: A</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         35.1         31.1           35.6     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: M</span></span>
-<span><span class="co"># Stratification - Strata: B</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         36.6         32.1           34.4     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ~~~~ Page Break ~~~~</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: M</span></span>
-<span><span class="co"># Stratification - Strata: C</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co">#            A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————</span></span>
-<span><span class="co"># mean         37.4         32.8           32.8     </span></span>
+<span><span class="co"># F                                                 </span></span>
+<span><span class="co">#   A                                               </span></span>
+<span><span class="co">#     mean     30.9         32.9           36.0     </span></span>
+<span><span class="co">#   B                                               </span></span>
+<span><span class="co">#     mean     34.9         32.9           34.4     </span></span>
+<span><span class="co">#   C                                               </span></span>
+<span><span class="co">#     mean     35.2         36.0           34.3     </span></span>
+<span><span class="co"># M                                                 </span></span>
+<span><span class="co">#   A                                               </span></span>
+<span><span class="co">#     mean     35.1         31.1           35.6     </span></span>
+<span><span class="co">#   B                                               </span></span>
+<span><span class="co">#     mean     36.6         32.1           34.4     </span></span>
+<span><span class="co">#   C                                               </span></span>
+<span><span class="co">#     mean     37.4         32.8           32.8     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
@@ -380,49 +274,32 @@ Time<a class="anchor" aria-label="anchor" href="#adding-cell--and-analysis-row-r
 <span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">afun</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_as_txt.html">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, paginate <span class="op">=</span> <span class="cn">TRUE</span>, page_break <span class="op">=</span> <span class="st">"\n\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: F</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co">#                A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
-<span><span class="co"># A                                                     </span></span>
-<span><span class="co">#   mean           30.9         32.9           36.0     </span></span>
-<span><span class="co"># B                                                     </span></span>
-<span><span class="co">#   mean           34.9         32.9         34.4 {1}   </span></span>
-<span><span class="co"># C                                                     </span></span>
-<span><span class="co">#   mean {2}       35.2         36.0           34.3     </span></span>
+<span><span class="co"># F                                                     </span></span>
+<span><span class="co">#   A                                                   </span></span>
+<span><span class="co">#     mean         30.9         32.9           36.0     </span></span>
+<span><span class="co">#   B                                                   </span></span>
+<span><span class="co">#     mean         34.9         32.9         34.4 {1}   </span></span>
+<span><span class="co">#   C                                                   </span></span>
+<span><span class="co">#     mean {2}     35.2         36.0           34.3     </span></span>
+<span><span class="co"># M                                                     </span></span>
+<span><span class="co">#   A                                                   </span></span>
+<span><span class="co">#     mean         35.1         31.1           35.6     </span></span>
+<span><span class="co">#   B                                                   </span></span>
+<span><span class="co">#     mean         36.6         32.1         34.4 {3}   </span></span>
+<span><span class="co">#   C                                                   </span></span>
+<span><span class="co">#     mean {4}     37.4         32.8           32.8     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># {1} - these Strata B patients got the drug combination</span></span>
 <span><span class="co"># {2} - This is strata level C for these patients</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Analysis was done using cool methods that are correct</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># Study XXXXXXXX</span></span>
-<span><span class="co"># subtitle YYYYYYYYYY</span></span>
-<span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
-<span><span class="co"># Patient Subset - Gender: M</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
-<span><span class="co">#                A: Drug X   B: Placebo   C: Combination</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
-<span><span class="co"># A                                                     </span></span>
-<span><span class="co">#   mean           35.1         31.1           35.6     </span></span>
-<span><span class="co"># B                                                     </span></span>
-<span><span class="co">#   mean           36.6         32.1         34.4 {3}   </span></span>
-<span><span class="co"># C                                                     </span></span>
-<span><span class="co">#   mean {4}       37.4         32.8           32.8     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————</span></span>
-<span><span class="co"># </span></span>
 <span><span class="co"># {3} - these Strata B patients got the drug combination</span></span>
 <span><span class="co"># {4} - This is strata level C for these patients</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
