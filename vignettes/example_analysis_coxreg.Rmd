@@ -4,8 +4,8 @@ author: "Emily de la Rua and Gabriel Becker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Example Complex Analysis Function: Modelling Cox Regression}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Example Complex Analysis Function: Modelling Cox Regression}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -13,7 +13,7 @@ editor_options:
 
 ## Introduction
 
-In this vignette we will demonstrate how a complex analysis function can be constructed in order to build highly-customized tables with `rtables`. This example will detail the steps in creating an analysis function to calculate a basic univariable Cox regression summary table to analyze the treatment effect of the `ARM` variable and any covariate/interaction effects for a survival analysis. For a Cox regression analysis function with more customization options and the capability of fitting multivariable Cox regression models see the [`summarize_coxreg()`](https://insightsengineering.github.io/tern/main/reference/cox_regression.html) function from the [`tern`](https://insightsengineering.github.io/tern/main/index.html) package, which builds upon the concepts used in the construction of this example.
+In this vignette we will demonstrate how a complex analysis function can be constructed in order to build highly-customized tables with `rtables`. This example will detail the steps in creating an analysis function to calculate a basic univariable Cox regression summary table to analyze the treatment effect of the `ARM` variable and any covariate/interaction effects for a survival analysis. For a Cox regression analysis function with more customization options and the capability of fitting multivariable Cox regression models, see the [`summarize_coxreg()`](https://insightsengineering.github.io/tern/main/reference/cox_regression.html) function from the [`tern`](https://insightsengineering.github.io/tern/main/index.html) package, which builds upon the concepts used in the construction of this example.
 
 The packages used in this vignette are:
 
@@ -214,7 +214,7 @@ h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
 
 ## Creating a Helper Function: `cached_model`
 
-Next we will create a helper function, `cached_model`, which will be used within our analysis function to cache and return the fitted Cox regression model for the current covariate. The `df` argument will be directly inherited from the `df` argument to the analysis function, which contains the full dataset being analyzed. The `cov` argument will be the covariate that is being analyzed depending on the current row context. If the treatment effect is currently being analyzed, this value will be an empty string. The `cache_env` parameter will be an environment object which is used to store the model for the current covariate, also inherited directly from the analysis function. Of course, this function can also be run outside of the analysis function and will still cache and return a Cox regression model.
+Next, we will create a helper function, `cached_model`, which will be used within our analysis function to cache and return the fitted Cox regression model for the current covariate. The `df` argument will be directly inherited from the `df` argument passed to the analysis function, which contains the full dataset being analyzed. The `cov` argument will be the covariate that is being analyzed depending on the current row context. If the treatment effect is currently being analyzed, this value will be an empty string. The `cache_env` parameter will be an environment object which is used to store the model for the current covariate, also inherited directly from the analysis function. Of course, this function can also be run outside of the analysis function and will still cache and return a Cox regression model.
 
 Using these arguments, the `cached_model` function first checks if a model for the given covariate `cov` is already stored in the caching environment `cache_env`. If so, then this model is retrieved and returned by `cached_model`. If not, the model must be constructed. This is done by first constructing the model formula, `model_form`, starting with only the treatment effect (`ARM`) and adding a covariate effect if one is currently being analyzed. Then a Cox regression model is fit using `df` and the model formula, and this model is both returned and stored in the caching environment object as `cache_env[[cov]]`.
 
@@ -248,7 +248,7 @@ cached_model <- function(df, cov, cache_env) {
 
 ## Creating the Analysis Function: `a_cox_summary`
 
-With our data prepared and helper function created, we can proceed to constructing our analysis function `a_cox_summary`, which will be used to populate all of the rows in our table. In order to be used to generate both data rows (for interaction effects) and content rows (for main effects), we must create a function that can be used as both `afun` in `analyze` and `cfun` in `summarize_row_groups`. Therefore, our function must accept either `x` or `df` as its first parameter and also accept the `labelstr` parameter.
+With our data prepared and helper function created, we can proceed to construct our analysis function `a_cox_summary`, which will be used to populate all of the rows in our table. In order to be used to generate both data rows (for interaction effects) and content rows (for main effects), we must create a function that can be used as both `afun` in `analyze` and `cfun` in `summarize_row_groups`. Therefore, our function must accept either `x` or `df` as its first parameter and also accept the `labelstr` parameter.
 
 The arguments of our analysis function will be as follows:
 
@@ -331,9 +331,9 @@ my_envs <- replicate(length(my_stats), list(new.env())) ## Caching environments
 
 Finally, the table layout can be constructed and used to build the desired table.
 
-We first split our `basic_table` using `split_cols_by_multivar` to ensure that each statistic exists in its own column. To do so, we choose a variable (in this case `STUDYID`) which shares the same value in every row, and use it as the split variable for every column so that the full dataset is used to compute the model for every column. We use the `extra_args` argument for which each list element's element positions correspond to the children of (columns generated by) this split. These arguments are inherited by all following layout elements operating within this split, which use these elements as argument inputs. To elaborate on this, we have three elements in `extra_args`: `stat`, `format`, and `cache_env` - each of which are arguments of `a_cox_summary` and have length equal to the number of columns (as defined above). For each use of our analysis function following this column split, depending on the current column context, the corresponding element of each of these three list elements will inherited from `extra_args` and used as input. For example, if `analyze_colvars` is called with `a_cox_summary` as `afun` and is performing calculations for column 1, `my_stats[1]` (`"n"`) will be given as argument `stat`, `my_formats[1]` (`"xx"`) as argument `format`, and `my_envs[1]` (`new.env()`) as `cache_env`. This is useful for our table since we want each column to print out values for a different statistic and apply its corresponding format.
+We first split our `basic_table` using `split_cols_by_multivar` to ensure that each statistic exists in its own column. To do so, we choose a variable (in this case `STUDYID`) which shares the same value in every row, and use it as the split variable for every column so that the full dataset is used to compute the model for every column. We use the `extra_args` argument for which each list element's element positions correspond to the children of (columns generated by) this split. These arguments are inherited by all following layout elements operating within this split, which use these elements as argument inputs. To elaborate on this, we have three elements in `extra_args`: `stat`, `format`, and `cache_env` - each of which are arguments of `a_cox_summary` and have length equal to the number of columns (as defined above). For each use of our analysis function following this column split, depending on the current column context, the corresponding element of each of these three list elements will be inherited from `extra_args` and used as input. For example, if `analyze_colvars` is called with `a_cox_summary` as `afun` and is performing calculations for column 1, `my_stats[1]` (`"n"`) will be given as argument `stat`, `my_formats[1]` (`"xx"`) as argument `format`, and `my_envs[1]` (`new.env()`) as `cache_env`. This is useful for our table since we want each column to print out values for a different statistic and apply its corresponding format.
 
-Next we can use `summarize_row_groups` to generate the content row for treatment effect. This is the first instance where `extra_args` from the column split will be inherited and used as argument input in `cfun`.
+Next, we can use `summarize_row_groups` to generate the content row for treatment effect. This is the first instance where `extra_args` from the column split will be inherited and used as argument input in `cfun`.
 
 After generating the treatment effect row, we want to add rows for covariates. We use `split_rows_by_multivar` to split rows by covariate and apply appropriate labels.
 
