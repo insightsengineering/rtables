@@ -1,5 +1,22 @@
-## rtables 0.6.0.3
- * bumped devel version
+## rtables 0.6.0.9005
+ * Moved `export_as_txt` to `formatters`. Added to reexports. 
+ * Migrated `export_as_rtf` to `formatters`. Not re-exported.
+ * add `r2rtf` to Suggests
+ * pagination logic has been migrated completely (excepting page_by splits) to `formatters` and is now invoked from there. paginate_table remains as a convenience function.
+ * Removed warning in `str` method when called upon table objects. 
+ * Provide `str` method for `VTableTree` objects with a default `max.level` of 3, as the infinite default from base is not 
+   useful or informative.
+ * default `font_size` value is now `8` across pagination and export machinery
+ * `margins` argument in pagination and export machinery now (correctly) interpreted as inches. This change is inherited from `formatters`
+ * `lpp` and `cpp` now default to `NA_integer_`, which is interpreted as inferring their value from the physical page size specified. 
+ * Horizontal pagination now occurs by default due to the above (because there is a default page type - `"letter"`. Pagination can still be turned off in either direction by setting `l/cpp` to `NULL` explicitly.
+ * Referential footnotes now have both a `symbol` and an `index`. Messages associated with symbols will only appear once per page in the footer materials regardless of number of elements referenced in the page with that symbol. Matches and inherits from changes in `formatters`
+ * Started deprecation cycle for `trim_zero_rows`.
+ * Fixed bug occurring when extracting `cell_values` after sorting.
+ * Removed deprecated function `vpaginate_table`.
+ * Added examples and details for `sort_at_path`.
+ * Added `split_label` to function `split_rows_by_multivar` and `extra_args` to function `split_cols_by_multivar`.
+ * Added `split_rows_by_multivar` documentation.
 
 ## rtables 0.6.0
  * added `make_split_fun` function for creation of custom split functions

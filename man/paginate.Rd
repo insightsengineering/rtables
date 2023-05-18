@@ -19,7 +19,7 @@ paginate_table(
   tt,
   page_type = "letter",
   font_family = "Courier",
-  font_size = 12,
+  font_size = 8,
   lineheight = 1,
   landscape = FALSE,
   pg_width = NULL,

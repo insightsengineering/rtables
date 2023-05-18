@@ -1,6 +1,6 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.0.9004
+Version: 0.6.0.9005
 Date: 2023-05-04
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
@@ -42,7 +42,8 @@ Suggests:
     testthat,
     tibble,
     tidyr,
-    xml2
+    xml2,
+    r2rtf
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
