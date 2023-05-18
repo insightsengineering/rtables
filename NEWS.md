@@ -1,4 +1,4 @@
-## rtables 0.6.0.9004
+## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
  * Moved `export_as_txt` to `formatters`. Added to reexports. 
  * Fixed warning in `str` function when called upon table objects. 
