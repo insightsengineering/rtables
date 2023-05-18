@@ -256,7 +256,7 @@ The arguments of our analysis function will be as follows:
 -   `labelstr` - the `string` label for the variable being analyzed in the current row/column split context.
 -   `.spl_context` - a `data.frame` containing the `value` column which is used by this analysis function to determine the name of the variable/covariate in the current split. For more details on the information stored by `.spl_context` see `?analyze`.
 -   `stat` and `format` - `string`s that indicate which statistic column we are currently in and what format should be applied to print the statistic.
--   `cache_env` - an `environment` object that can be used to store cached models so that we can prevent repeatedly fitting the same model. Instead, each model will be generated once per covariate per column and then reused.
+-   `cache_env` - an `environment` object that can be used to store cached models so that we can prevent repeatedly fitting the same model. Instead, each model will be generated once per covariate and then reused.
 -   `cov_main` - a `logical` value indicating whether or not the current row is summarizing covariate main effects.
 
 The analysis function works within a given row/column split context by using the current covariate (`cov`) and the `cached_model` function to obtain the desired Cox regression model. From this model, the `h_coxreg_extract_interaction` function is able to extract information/statistics relevant to the analysis and store it in a `data.frame`. The rows in this `data.frame` that are of interest in the current row/column split context are then extracted and the statistic to be printed in the current column is retrieved from these rows. Finally, the formatted rows containing the value of this statistic are returned with appropriate labelling. For more detail see the commented function code below, where the purpose of each line within `a_cox_summary` is described.
@@ -314,7 +314,7 @@ a_cox_summary <- function(df,
 
 ## Selecting Parameters
 
-We are able to customize our Cox regression summary using this analysis function by selecting covariates (and their labels), statistics (and their labels), and statistic formats to use when generating the output table. We also initialize new environment objects (one for each column) to be used by the analysis function as the caching environments to store our models in. For the purpose of this example, we will choose all 5 of the possible statistics to include in the table: n, hazard ratio, confidence interval, effect p-value, and interaction p-value.
+We are able to customize our Cox regression summary using this analysis function by selecting covariates (and their labels), statistics (and their labels), and statistic formats to use when generating the output table. We also initialize a new environment object to be used by the analysis function as the caching environment to store our models in. For the purpose of this example, we will choose all 5 of the possible statistics to include in the table: n, hazard ratio, confidence interval, effect p-value, and interaction p-value.
 
 ```{r}
 my_covs <- c("AGE", "RACE") ## Covariates
