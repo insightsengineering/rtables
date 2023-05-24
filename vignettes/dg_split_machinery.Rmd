@@ -557,7 +557,7 @@ basic_table() %>%
 # PS: this produces the same output as before with the filters
 ```
 
-After skipping the root split, we enter the split based on column `SEX`. As we specified a split function, we retrieve the split function by using `splfun <- split_fun(spl)` and use this to enter an error catching framework (xxx rephrase) that is designed to give informative errors. Later we will see exactly how it works.
+After skipping the root split, we enter the split based on column `SEX`. As we specified a split function, we retrieve the split function by using `splfun <- split_fun(spl)` and enter an `if-else` statement for the two possible cases where there is split contenxt or not. In both cases, an error catching framework is used so to give informative errors in case of failure. Later we will see better how it works.
 
 Here, we invite to always keep a keen eye on `spl_context`, as it is fundamental for more sophisticate splits, e.g. in the cases where the split itself depends mainly on preceding splits or values. Please, when the split function is called, take a moment to look at how `drop_split_levels` is defined. You will see that it is fundamentally a wrapper of `.apply_split_inner` that drops empty factor levels, therefore avoiding empty split.
 
@@ -587,9 +587,10 @@ There are many split functions already included in `rtables`. Lists of them can 
 
 #### Custom split functions
 
-Now we try to create our custom split function. Firstly, we will see how the system manages error messages. For a general understanding of how we can provide custom split functions, please read `?custom_split_funs` in detail. In the following we use browser() to enter our custom split function.
+Now we try to create our custom split function. Firstly, we will see how the system manages error messages. For a general understanding of how we can provide custom split functions, please read `?custom_split_funs` in detail. In the following we use browser() to enter our custom split functions. For the error cases, we invite the reader to activate `options(error = recover)` so to investigate the cases where we have an error. Note that you can retrieve original behavior by restarting `R` session or by caching the default option value. Another smart possibility is to use `callr` to retrieve the default as follows: `default_opts <- callr::r(function(){options()}); options(error = default_opts$error)`.
 
-```{r, eval=FALSE}
+```{r}
+# rtables 6.0.2
 # Table call with only function changing
 simple_table <- function(DM, f){
     lyt <- basic_table() %>% 
@@ -603,44 +604,148 @@ simple_table <- function(DM, f){
 exploratory_split_fun <- function(df, spl) NULL
 # debug(rtables:::do_split)
 simple_table(DM, exploratory_split_fun)
-# (xxx)
 # undebug(rtables:::do_split)
 
-exploratory_split <- function(df, spl, ...){
-    # browser()
-    
-    my_payload <- "SEX"
-    vals <- levels(df[[my_payload]])
-    datasplit <- lapply(seq_along(vals), function(i) {
-        df[df[[my_payload]] == vals[[i]], ]
-    })
-    names(datasplit) <- as.character(vals)
-    
-    # Return a split result!!
-    make_split_result(vals, datasplits, vals)
-# function(values, datasplit, labels, extras = NULL) {
-#     if(length(values) == 1 && is(datasplit, "data.frame"))
-#         datasplit <- list(datasplit)
-    
-    # the core is a list with same number of elements (xxx) 
-    # (xxx it may go in more generally)
-    
-#     ret <- list(values = values, datasplit = datasplit, labels = labels)
-#     if(!is.null(extras))
-#         ret$extras <- extras
-#     .fixupvals(ret)
-# }
-}
-
-simple_table(DM, exploratory_split)
 ```
 
-### Extra arguments - `extra_args` in detail - lets see what is found
-(xxx - `analyze_colvars(my_afun, extra_args = list(ref_rowgroup = "V1"))`)
+Commented debugging options can get you above and before the error. Nonetheless using the recover option will get you the possibility to select the frame number, i.e. the trace level to enter as debugging selecting the last one (10 in my case), will allow you to see the value of `ret` from `rtables:::do_split` that is the simple error and how the informative error message that follows is created.
+
+```{r, eval=FALSE}
+# rtables 6.0.2
+# Debugging level
+10: tt_dotabulation.R#627: do_split(spl, df, spl_context = spl_context)
+
+# Original call and final error
+> simple_table(DM, exploratory_split_fun)
+Error in do_split(spl, df, spl_context = spl_context) : 
+  Error applying custom split function: unused arguments (vals, labels, trim = trim) # This is main error
+	split: VarLevelSplit (ARM) # Split reference
+	occured at path: root # Path level (where it happened)
+```
+
+The previous split function fails because not all arguments are present. A simple way to avoid this is to add `...` to the function call. Now lets construct an interesting split function (and error):
+
+```{r}
+# rtables 6.0.2
+f_brakes_if <- function(split_col = NULL, error = FALSE){
+    function(df, spl, ...){ # order matters! more than naming
+        # browser() # To check how it works
+        if (is.null(split_col)) { # Retrieves the default
+            split_col <- spl_variable(spl) # Internal accessor to split obj
+        }
+        my_payload <- split_col # Changing split column value
+        
+        vals <- levels(df[[my_payload]]) # Extracting values to split
+        datasplit <- lapply(seq_along(vals), function(i) {
+            df[df[[my_payload]] == vals[[i]], ]
+        })
+        names(datasplit) <- as.character(vals)
+        
+        # Fantasy error
+        if (isTRUE(error)) {
+            # browser() # If you need to check how it works
+            mystery_error_values <- sapply(datasplit, function(x) mean(x$BMRKR1))
+            if (any(mystery_error_values > 6)) {
+                stop("It should not be more than 6! Should it be? Found in split values: ",
+                     names(datasplit)[which(mystery_error_values > 6)])
+            }
+        }
+        
+        # Handy function to return a split result!!
+        make_split_result(vals, datasplit, vals)
+    }
+}
+simple_table(DM, f_brakes_if()) # works!
+simple_table(DM, f_brakes_if(split_col = "STRATA1")) # works!
+# Does not work, but in an informative way
+simple_table(DM, f_brakes_if(error = TRUE)) 
+```
+
+Now we will dwell a moment to the relatively new machinery to create custom split functions. Before doing so, please read the relevant documentation `?make_split_fun`. The majority of functions already included in `rtables` can be or will be written with `make_split_fun` as it is a more stable constructor for such functions. We invite the reader to take a look at `make_split_fun.R`. The majority of functions should be very understandable as fare as you got into this guide. We want to highlight that if no core split function is specified, which is commonly the case, `make_split_fun` calls directly `do_base_split` which is a minimal wrapper of our well known `do_split`. `drop_facet_levels` for example is a pre-processing function that at the core simply removes empty factor levels from the split "column", thus avoiding empty lines to be shown. It is possible, also to add a list of functions, as it can be seen in the examples of `?make_split_fun`. Note that all the inputs must be listed if there is a list of functions, otherwise the loop will not work (xxx, list only for pre and post, not core because you can have multiple sequential functions, write an issue informative error for not list xxx). Included post-processing functions are more interesting as they interact with the split object, e.g. by reordering the facets or by adding an overall facet (`add_overall_facet`). The smart reader will have noticed as the core function and many of the post processing functions rely on `make_split_result` which is a way to get the correct split return structure. Lastly it is possible to change the core split and the post according to the new custom split if needed. Note that this works only in the row space at the moment.
+
+#### `.spl_context` - a bit of context to our splits
+The best way to understand what split context does and how to use it is to read relevant vignette (xxx advanced usage), and to use `browser()` to see how it is structured.
+
+```{r, eval=FALSE}
+# rtables 6.0.2
+browsing_f <- function(df, spl, .spl_context, ...) { # (xxx needed for core)
+    browser()
+    # do_base_split(spl, df, ...) # order matters!!
+    do_base_split(spl = spl, df = df, vals = NULL, labels = NULL, trim = TRUE)
+    # trim works ONLY when there is a mixed table (some values are 0s and some have content -> trims the 0s) trim_levels_to_group and trim_levels_to_map are the replacement
+}
+
+basic_table() %>% 
+    split_rows_by("ARM") %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
+                  cutlabels = c("young", "old")) %>% 
+    split_rows_by("SEX", split_fun = make_split_fun(
+        # pre = list(drop_facet_levels), # This is dropping the sex levels (age is upper level) add issue for this -> split_rows_by() wrapper with spl_fun
+        core_split = browsing_f#, #(xxx why does this fail?)
+        # post = list(trim_levels_in_facets("AGE")) #(xxx why too fails? how to trim the empty levels?)
+    )) %>% 
+    summarize_row_groups() %>% 
+    build_table(DM)
+
+# The following is the .spl_contest printout:
+Browse[1]> .spl_context
+    split     value full_parent_df all_cols_n      all obs
+1    root      root   c("S1", ....        356 TRUE, TR....
+2     ARM A: Drug X   c("S6", ....        121 TRUE, TR....
+3 STRATA1         A   c("S14",....         36 TRUE, TR....
+4     AGE     young   c("S14",....         36 TRUE, TR....
+                        
+# NOTE: make_split_fun(pre = list(drop_facet_levels)) and drop_split_levels 
+#       do the same in this case
+```
+Here we can see what is the split column variable (`split`, first column) at this level of the splitting procedure. `value` is the current split value that is being dealt with. Now, for the next column, lets see the number of rows of these dataframes: `sapply(.spl_context$full_parent_df, nrow) # [1] 356 121  36  36`. Indeed, the `root` level contains the full input dataframe, while the other levels are subgroups of the full data according to the split value. `all_cols_n` shows exactly the numbers just described. `all obs` (xxx is the column "filter" name). It is possible to use the same information to make complex splits also on the column space by using the full dataframe and the value splits to select the interested values. This is something we will fix when it will be a more apparent need.
+
+### Extra arguments `extra_args`
+This functionality is well known and used in the setting of analysis functions (xxx vignette), but we show here how this can also apply to splits.
+(xxx intent is to set them on the parent and then used in the analyze call - possible this does not work. Issue to investigate this and if we need it xxx)
+
+```{r, eval=FALSE}
+# rtables 6.0.2
+
+# Lets use the tracer!!
+my_tracer <- quote(if (!is(spl, "AllSplit") && 
+                       spl_variable(spl) == "SEX") browser())
+trace(what = "do_split", 
+      tracer = my_tracer, 
+      where = asNamespace("rtables"))
+
+basic_table() %>% 
+    split_rows_by("ARM") %>% 
+    split_rows_by("SEX", split_fun = drop_split_levels) %>% 
+    analyze("BMRKR1", extra_args = list("a" = 3)) %>% 
+    build_table(DM)
+
+untrace(what = "do_split", 
+        where = asNamespace("rtables"))
+```
 
 
 ### (xxx - the other parameters... trim?? Maybe it does not work, vestigial)
 (xxx use trace to find if vals and labels are used)
+
+```{r, eval=FALSE}
+my_tracer <- quote(if (!isTRUE(trim)) browser())
+trace(what = "do_split", 
+      tracer = my_tracer, 
+      where = asNamespace("rtables"))
+
+wrapper_do_split <- function(){
+    do_base_split(spl, df, vals = NULL, labels = NULL, trim = TRUE)
+}
+basic_table() %>% 
+    split_rows_by("ARM") %>% 
+    split_rows_by("SEX") %>% 
+    analyze("BMRKR1") %>% 
+    build_table(DM)
+untrace(what = "do_split", 
+        where = asNamespace("rtables"))
+```
 
 Final examples with `MultiVarSplit` & `CompoundSplit`
 
