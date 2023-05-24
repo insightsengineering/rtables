@@ -699,7 +699,7 @@ non_null_na <- function(x) !is.null(x) && is.na(x)
 paginate_table <- function(tt,
                            page_type = "letter",
                            font_family = "Courier",
-                           font_size = 12,
+                           font_size = 8,
                            lineheight = 1,
                            landscape = FALSE,
                            pg_width = NULL,
@@ -802,33 +802,5 @@ paginate_table <- function(tt,
         })
     })
     res <- unlist(res, recursive = FALSE)
-
-    ## else if(!is.null(lpp)) {
-    ##     inds <- pag_tt_indices(tt, lpp = lpp,
-    ##                            min_siblings = min_siblings,
-    ##                            nosplitin = nosplitin,
-    ##                            colwidths = colwidths,
-    ##                            verbose = verbose,
-    ##                            max_width = max_width)
-    ##     res <- lapply(inds, function(x) tt[x, , keep_topleft = TRUE,
-    ##                             keep_titles = TRUE,
-    ##                             reindex_refs = FALSE])
-    ## } else { ## lpp is NULL
-    ##     res <- list(tt)
-    ## }
-
-    ## if(!is.null(cpp)) {
-    ##     inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths,
-    ##                               verbose = verbose,
-    ##                               rep_cols = 0L)
-    ##     res <- lapply(res,
-    ##                   function(oneres) {
-    ##                       lapply(inds,
-    ##                              function(ii) oneres[, ii, drop = FALSE,
-    ##                                                  keep_titles = TRUE,
-    ##                                                  reindex_refs = FALSE])
-    ##                   })
-    ##     res <- unlist(res, recursive = FALSE)
-    ## }
     res
 }

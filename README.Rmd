@@ -67,7 +67,7 @@ License Version 2.
 
 ## Installation
 
-`rtables` is now available on CRAN and you can install the latest released version with:
+`rtables` is available on CRAN and you can install the latest released version with:
 
 ```r
 install.packages("rtables")
@@ -83,11 +83,11 @@ remotes::install_github("insightsengineering/rtables")
 Note you might need to set your `GITHUB_PAT` environment variable in order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN releases) can be
-found in the [releases list](https://github.com/insightsengineering/rtables/releases)
+found in the [releases list](https://github.com/insightsengineering/rtables/releases).
 
 ## Usage
 
-We first begin with a demographic table alike example and then show the creation of a more complex table.
+We first demonstrate with a demographic table-like example and then show the creation of a more complex table.
 
 
 ```{r, message=FALSE}
