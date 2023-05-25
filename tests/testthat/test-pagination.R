@@ -29,6 +29,26 @@ test_that("Page by splitting works", {
             split_rows_by("ARM", page_by = TRUE) %>%
             analyze("AGE")},
         "page_by splits cannot be nested within non-page_by splits")
+
+    lyt2 <- basic_table(title = "main title",
+                        subtitles = "subtitle",
+                        main_footer = "main footer",
+                        prov_footer = "provenance footer") |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") |>
+    split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
+    summarize_row_groups() |>
+    analyze("AGE", afun = function(x, ...) in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.x (xx.x)"),
+                                                 "range" = rcell(range(x), format = "xx.x - xx.x")))
+
+    tbl2 <- build_table(lyt2, ex_adsl)
+
+    ttlst2 <- paginate_table(tbl2, lpp = 16, cpp = 55)
+    expect_equal(length(ttlst2),
+                 8)
+    txt <- export_as_txt(tbl2, lpp = 16, cpp = 55)
+    expect_true(grepl("Stratum: B", txt))
 })
 
 
