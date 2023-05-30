@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,14 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -80,7 +72,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-05-18</h4>
+            <h4 data-toc-skip class="date">2023-05-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
@@ -341,19 +333,32 @@ declared via <code>page_by = TRUE</code> within a call to
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">df</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, page_type <span class="op">=</span> <span class="st">"letter"</span>,</span>
 <span>                  page_break <span class="op">=</span> <span class="st">"\n\n~~~~~~ Page Break ~~~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                Arm A           Arm B    </span></span>
+<pre><code><span><span class="co"># </span></span>
+<span><span class="co"># country: CAN</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co">#                Arm A           Arm B    </span></span>
 <span><span class="co">#            Female   Male   Female   Male</span></span>
 <span><span class="co"># ————————————————————————————————————————</span></span>
-<span><span class="co"># CAN                                     </span></span>
-<span><span class="co">#   Left                                  </span></span>
-<span><span class="co">#     mean    38.9    40.4    40.3    37.7</span></span>
-<span><span class="co">#   Right                                 </span></span>
-<span><span class="co">#     mean    36.6    40.2    40.2    40.6</span></span>
-<span><span class="co"># USA                                     </span></span>
-<span><span class="co">#   Left                                  </span></span>
-<span><span class="co">#     mean    40.4    39.7    39.2    40.1</span></span>
-<span><span class="co">#   Right                                 </span></span>
-<span><span class="co">#     mean    36.9    39.8    38.5    39.0</span></span></code></pre>
+<span><span class="co"># Left                                    </span></span>
+<span><span class="co">#   mean      38.9    40.4    40.3    37.7</span></span>
+<span><span class="co"># Right                                   </span></span>
+<span><span class="co">#   mean      36.6    40.2    40.2    40.6</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ~~~~~~ Page Break ~~~~~~</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># country: USA</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co">#                Arm A           Arm B    </span></span>
+<span><span class="co">#            Female   Male   Female   Male</span></span>
+<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># Left                                    </span></span>
+<span><span class="co">#   mean      40.4    39.7    39.2    40.1</span></span>
+<span><span class="co"># Right                                   </span></span>
+<span><span class="co">#   mean      36.9    39.8    38.5    39.0</span></span></code></pre>
 <p>We go into more detail on page-by splits and how to control the
 page-group specific titles in the Title and footer vignette.</p>
 <p>Note that if you print or render a table without pagination, the
