@@ -648,16 +648,13 @@ pag_btw_kids <- function(tt) {
     })
 }
 
-
-do_force_paginate <- function(tt,
-                              force_pag = vapply(tree_children(tt), has_force_pag, NA),
-                              verbose = FALSE) {
-
-
+force_paginate <- function(tt,
+                   force_pag = vapply(tree_children(tt), has_force_pag, NA),
+                   verbose = FALSE) {
     ## forced pagination is happening at this
     if(has_force_pag(tt)) {
         ret <- pag_btw_kids(tt)
-        return(lapply(ret, do_force_paginate))
+        return(unlist(lapply(ret, force_paginate)))
 
     }
     chunks <- list()
@@ -668,7 +665,7 @@ do_force_paginate <- function(tt,
                                           tt,
                                           NULL)
 
-            chunks <- c(chunks, do_force_paginate(outertbl))
+            chunks <- c(chunks, force_paginate(outertbl))
             kinds <- kinds[-1]
         } else {
             tmptbl <- tt
@@ -679,10 +676,12 @@ do_force_paginate <- function(tt,
             kinds <- kinds[-useinds]
         }
     }
-    chunks
+    unlist(chunks, recursive = TRUE)
 }
 
-
+#' @importFrom formatters do_forced_paginate
+setMethod("do_forced_paginate", "VTableTree",
+          function(obj) force_paginate(obj))
 
 non_null_na <- function(x) !is.null(x) && is.na(x)
 
@@ -759,11 +758,11 @@ paginate_table <- function(tt,
 
     force_pag <- vapply(tree_children(tt), has_force_pag, TRUE)
     if(has_force_pag(tt) || any(force_pag)) {
-        spltabs <- do_force_paginate(tt, verbose = verbose)
+        spltabs <- do_forced_paginate(tt)
         spltabs <- unlist(spltabs, recursive = TRUE)
         ret <- lapply(spltabs, paginate_table,
                       lpp = lpp,
-                      cpp = NULL,
+                      cpp = cpp,
                       min_siblings = min_siblings,
                       nosplitin = nosplitin,
                       colwidths = colwidths,
