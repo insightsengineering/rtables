@@ -50,6 +50,6 @@ jobs:
   vbump:
     name: Version Bump 🤜🤛
     # if: github.event_name == 'push'
-    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@fix/repo-github-token
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
