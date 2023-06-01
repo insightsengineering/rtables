@@ -23,10 +23,10 @@ jobs:
       sd-direction: upstream
   coverage:
     if: github.event_name == 'pull_request'
-    name: Coverage 📔 
-    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
+    name: Coverage 📔
+    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@fix/repo-github-token
     secrets:
-      REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       sd-direction: upstream
   roxygen:
