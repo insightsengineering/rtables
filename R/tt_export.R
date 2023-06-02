@@ -100,6 +100,78 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 
 }
 
+do_label_row <- function(rdfrow, maxlen) {
+    pth <- rdfrow$path[[1]]
+    c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)), list(content = FALSE, node_class = rdfrow$node_class))
+}
+
+
+make_ard_md_colnames <- function(maxlen) {
+    spllen <- (maxlen - 2) / 2
+    stopifnot(spllen == floor(spllen))
+    ret <- character()
+    if(spllen > 0 )
+        ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+    ret <- c(ret, c("avar_name", "row_name", "is_group_summary", "node_class"))
+}
+
+
+do_content_row <- function(rdfrow, maxlen) {
+    pth <- rdfrow$path[[1]]
+
+    contpos <- which(pth == "@content")
+
+    seq_before <- seq_len(contpos - 1)
+
+    ret <- c(as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+      list(tail(pth, 1)),
+      list(content = TRUE, node_class = rdfrow$node_class))
+}
+
+do_data_row <- function(rdfrow, maxlen) {
+
+    pth <- rdfrow$path[[1]]
+    pthlen <- length(pth)
+
+    c(as.list(pth[seq_len(pthlen - 2)]),
+      replicate(maxlen - pthlen, list(NA_character_)),
+      as.list(tail(pth, 2)),
+      list(content = FALSE, node_class = rdfrow$node_class))
+
+
+}
+
+
+handle_rdf_row <- function(rdfrow, maxlen) {
+    nclass <- rdfrow$node_class
+    if(rdfrow$path[[1]][1] == "root") {
+        rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
+        maxlen <- maxlen - 1
+    }
+    ret <- switch(nclass,
+           LabelRow = do_label_row(rdfrow, maxlen),
+           ContentRow = do_content_row(rdfrow, maxlen),
+           DataRow = do_data_row(rdfrow, maxlen),
+           stop("Unrecognized node type in row dataframe, unable to generate ARD")
+           )
+    setNames(ret, make_ard_md_colnames(maxlen))
+}
+
+
+## NOT ELIGIBLE FOR EXPORT
+experimental_ard <- function(tt) {
+
+    cellvals <- as.data.frame(do.call(rbind, cell_values(tt)))
+    row.names(cellvals) <- NULL
+    rdf <- make_row_df(tt)
+    df <- cbind(rdf[rdf$node_class != "LabelRow", c("name", "label", "path", "reprint_inds", "node_class")],
+                cellvals)
+    maxlen <- max(lengths(df$path))
+    metadf <- do.call(rbind.data.frame, lapply(seq_len(NROW(df)), function(ii) handle_rdf_row(df[ii,], maxlen = maxlen)))
+    cbind(metadf[metadf$node_class != "LabelRow",],
+          cellvals)
+}
+
 .split_colwidths <- function(ptabs, nctot, colwidths) {
 
     ret <- list()
