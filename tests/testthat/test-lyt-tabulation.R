@@ -1180,9 +1180,9 @@ test_that("counts_wpcts works as expected", {
     rows_res <- counts_wpcts(DM$SEX, 400)
     rows_exp <- in_rows(
         .list = list(
-            F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"), 
-            M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"), 
-            U = rcell(c(0, 0), format = "xx (xx.x%)"), 
+            F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"),
+            M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"),
+            U = rcell(c(0, 0), format = "xx (xx.x%)"),
             UNDIFFERENTIATED = rcell(c(0, 0), format = "xx (xx.x%)"))
     )
     expect_identical(rows_res, rows_exp)
@@ -1193,4 +1193,116 @@ test_that("counts_wpcts returns error correctly", {
         counts_wpcts(DM$AGE, 400),
         "using the 'counts_wpcts' analysis function requires factor data to guarantee equal numbers"
     )
+})
+
+
+
+test_that("qtable works", {
+    nice_comp_table <- function(t1, t2) {
+        expect_identical(row_paths(t1), row_paths(t2))
+        expect_identical(col_paths(t1), col_paths(t2))
+        expect_equal(cell_values(t1), cell_values(t2))
+        expect_identical(top_left(t1), top_left(t2))
+    }
+    summary_list <- function(x, ...) as.list(summary(x))
+    summary_list2 <- function(x, ...) in_rows(.list = summary_list(x, ...), .formats = "xx.xx")
+
+    t0 <- qtable(ex_adsl)
+    count <- function(df, ...) rcell(NROW(df), label = "count")
+    count_use_nms <- function(df, .spl_context, ...) {
+        nm <- tail(.spl_context$value, 1)
+        rcell(NROW(df), label = nm)
+
+    }
+    t0b <- basic_table(show_colcounts = TRUE) %>% analyze(names(ex_adsl)[1], count) %>% build_table(ex_adsl)
+    nice_comp_table(t0, t0b)
+
+    t1 <- qtable(ex_adsl, row_vars = "ARM")
+    t1b <- basic_table(show_colcounts = TRUE) %>%
+        split_rows_by("ARM", child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t1, t1b)
+    t2 <- qtable(ex_adsl, col_vars = "ARM")
+    t2b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count) %>%
+        build_table(ex_adsl)
+    nice_comp_table(t2, t2b)
+
+    t3 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM")
+    t3b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t3, t3b)
+
+    t4 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"), col_vars = c("ARM", "STRATA1"))
+    t4b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        split_cols_by("STRATA1") %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t4, t4b)
+
+    t5 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                 col_vars = c("ARM", "STRATA1"), avar = "AGE", afun = mean)
+
+    mean_use_nm <- function(x, .spl_context, ...) {
+        rcell(mean(x, ...), format = "xx.xx", label = tail(.spl_context$value, 1))
+    }
+    t5b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_cols_by("STRATA1", split_fun = drop_split_levels) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze("AGE", mean_use_nm) %>%
+        append_topleft("AGE - mean") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t5, t5b)
+    t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
+    t6b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("SEX",, split_fun = drop_split_levels) %>%
+        analyze("AGE", summary_list2) %>%
+        append_topleft("AGE - summary_list") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t6, t6b)
+
+    t7 <- suppressWarnings(qtable(ex_adsl, row_vars = "SEX",
+                            col_vars = "ARM", avar = "AGE", afun = range))
+    range_use_nms <- function(x, .spl_context, ...) rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
+
+    t7b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze("AGE", range_use_nms) %>%
+        append_topleft("AGE - range") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t7, t7b)
+
+    t8 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                col_vars = c("ARM"), avar = "AGE", afun = mean,
+                summarize_groups = TRUE)
+
+    t9 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                col_vars = c("ARM"), avar = "AGE", afun = summary_list,
+                summarize_groups = TRUE)
+    t9b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        analyze("AGE", summary_list2) %>%
+        append_topleft("AGE - summary_list") %>%
+        build_table(ex_adsl)
+
+    nice_comp_table(t9, t9b)
 })

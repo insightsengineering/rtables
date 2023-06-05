@@ -102,17 +102,16 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 
 do_label_row <- function(rdfrow, maxlen) {
     pth <- rdfrow$path[[1]]
-    c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)), list(content = FALSE, node_class = rdfrow$node_class))
+    c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)), list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
 }
 
 
 make_ard_md_colnames <- function(maxlen) {
-    spllen <- (maxlen - 2) / 2
-    stopifnot(spllen == floor(spllen))
+    spllen <- floor((maxlen - 2) / 2)
     ret <- character()
     if(spllen > 0 )
         ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
-    ret <- c(ret, c("avar_name", "row_name", "is_group_summary", "node_class"))
+    ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
 }
 
 
@@ -125,18 +124,21 @@ do_content_row <- function(rdfrow, maxlen) {
 
     ret <- c(as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
       list(tail(pth, 1)),
-      list(content = TRUE, node_class = rdfrow$node_class))
+      list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class))
 }
 
 do_data_row <- function(rdfrow, maxlen) {
 
     pth <- rdfrow$path[[1]]
     pthlen <- length(pth)
-
+    ## odd means we have a multi-analsysis step in the path, we dont' want that in the ard
+    if(pthlen %% 2 == 1) {
+        pth <- pth[-1*(pthlen - 2)]
+    }
     c(as.list(pth[seq_len(pthlen - 2)]),
       replicate(maxlen - pthlen, list(NA_character_)),
       as.list(tail(pth, 2)),
-      list(content = FALSE, node_class = rdfrow$node_class))
+      list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
 
 
 }
@@ -158,18 +160,72 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 }
 
 
-## NOT ELIGIBLE FOR EXPORT
-experimental_ard <- function(tt) {
+#' ARD Specifications
+#'
+#' @return a named list of ard extraction functions by "specification"
+#' @export
+#' @examples
+#' ard_specs()
+ard_specs <- function() {
+   list(v0_experimental = ard_v0_experimental)
+}
 
-    cellvals <- as.data.frame(do.call(rbind, cell_values(tt)))
+lookup_ard_specfun <- function(spec) {
+    if(!(spec %in% names(ard_specs())))
+        stop("unrecognized ARD specification: ",
+             spec,
+             "If that specification is correct you may  need to update your version of rtables")
+    ard_specs()[[spec]]
+}
+
+ard_v0_experimental <- function(tt) {
+
+    raw_cvals <- cell_values(tt)
+    ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
+    ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
+    ## at this point.
+    if(nrow(tt) == 1 && length(raw_cvals) > 1)
+        raw_cvals <- list(raw_cvals)
+    cellvals <- as.data.frame(do.call(rbind, raw_cvals))
     row.names(cellvals) <- NULL
     rdf <- make_row_df(tt)
-    df <- cbind(rdf[rdf$node_class != "LabelRow", c("name", "label", "path", "reprint_inds", "node_class")],
+    df <- cbind(rdf[rdf$node_class != "LabelRow",
+                    c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")],
                 cellvals)
     maxlen <- max(lengths(df$path))
     metadf <- do.call(rbind.data.frame, lapply(seq_len(NROW(df)), function(ii) handle_rdf_row(df[ii,], maxlen = maxlen)))
     cbind(metadf[metadf$node_class != "LabelRow",],
           cellvals)
+}
+
+#' Generate an Analysis Ready Dataset (ARD)
+#'
+#' @param tt VTableTree. The table.
+#' @param spec character(1). The specification to use to
+#' extract the ARD. See details
+#' @param ... Passed to spec-specific ARD conversion function.
+#'
+#' @details ARD specifications may differ in the exact information they include and
+#' the form in which they represent it. Specifications whose names end in "_experimental"
+#' are subject to change without notice, but specifications without the "_experimental"
+#' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#'
+#' @note This function may eventually be migrated to a separate package, and so should
+#' not be called via `::`
+#' @export
+#' @examples
+#'
+#' lyt <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_rows_by("STRATA1") %>%
+#'   analyze(c("AGE", "BMRKR2"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#' as_ard(tbl)
+as_ard <- function(tt, spec = "v0_experimental", ...) {
+
+    ard_fun <- lookup_ard_specfun(spec)
+    ard_fun(tt, ...)
 }
 
 .split_colwidths <- function(ptabs, nctot, colwidths) {

@@ -1494,6 +1494,7 @@ qtable <- function(data,
            ## we will be calling.
            identical(mget(as.character(subafun),
                           mode = "function",
+                          envir = parent.frame(1),
                           ifnotfound = list(NULL),
                           inherits = TRUE
                           )[[1]], afun)) {
@@ -1508,7 +1509,7 @@ qtable <- function(data,
     if(is.null(avar))
         avar <- names(data)[1]
     fakeres <- afun(data[[avar]], ...)
-    multirow <- is.list(fakeres) || is(fakeres, "RowsVerticalSection")
+    multirow <- is.list(fakeres) || is(fakeres, "RowsVerticalSection") || summarize_groups
 
     lyt <- basic_table(title = title,
                        subtitles = subtitles,
@@ -1519,17 +1520,23 @@ qtable <- function(data,
     for(var in col_vars)
         lyt <- split_cols_by(lyt, var)
 
-    for(var in head(row_vars, -1))
+    for(var in head(row_vars, -1)) {
         lyt <- split_rows_by(lyt, var, split_fun = if(drop_levels) drop_split_levels else NULL)
+        if(summarize_groups)
+            lyt <- summarize_row_groups(lyt)
+    }
 
     if(length(row_vars) > 0 ) {
         lyt <- append_topleft(lyt, row_labels)
-        row_labels <- NA_character_
+
         if(!multirow) {
+            row_labels <- NA_character_
             lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL, child_labels = "hidden")
         } else {
             lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL)
         }
+        if(summarize_groups)
+            lyt <- summarize_row_groups(lyt)
     }
     inner_afun <- .quick_afun(afun, row_labels)
     lyt <- analyze(lyt, avar, afun = inner_afun, extra_args = list(...))

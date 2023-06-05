@@ -212,6 +212,12 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
+  - title: Analysis Ready Datasets (ARDs)
+    desc: Functions for generating ARDs from rtables TableTree objects
+    contents:
+    - as_ard
+    - ard_specs
+
   - title: internal
     desc: Internal documented methods
     contents:
