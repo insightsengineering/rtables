@@ -106,6 +106,12 @@
     <loc>https://insightsengineering.github.io/rtables/main/reference/append_topleft.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/ard_specs.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/as_ard.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/as_html.html</loc>
   </url>
   <url>
@@ -266,6 +272,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/prune_table.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/qtable.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/rbind.html</loc>
