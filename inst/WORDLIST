@@ -5,6 +5,9 @@ afun
 allcols
 amongst
 AnalyzeMultiVars
+ARD
+ard
+ARDs
 Arg
 args
 arguemnts
@@ -63,6 +66,7 @@ emph
 ethnicities
 exargs
 expr
+facetted
 facetting
 FlexTable
 flextable
@@ -137,6 +141,7 @@ pre
 priori
 programmatically
 Qi
+qtable
 quartiles
 radoption
 rbound
