@@ -23,29 +23,41 @@ License: Apache License 2.0 | file LICENSE
 URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
-Depends: 
+Depends:
     formatters (>= 0.5.0),
-    magrittr,
+    magrittr (>= 1.5),
     methods,
     R (>= 2.10)
 Imports:
     grid,
-    htmltools,
+    htmltools (>= 0.5.4),
     stats
 Suggests:
-    dplyr,
-    flextable,
-    knitr,
-    officer,
+    dplyr (>= 1.0.0),
+    flextable (>= 0.5.10),
+    knitr (>= 1.42),
+    officer (>= 0.3.10),
     r2rtf,
-    rmarkdown,
-    survival,
-    testthat,
-    tibble,
+    survival (>= 2.43-1),
+    testthat (>= 3.0.4),
+    tibble (>= 3.1.0),
     tidyr,
-    xml2
-VignetteBuilder: 
+    xml2 (>= 1.1.0)
+VignetteBuilder:
     knitr
+Remotes:
+    insightsengineering/formatters@*release,
+    tidyverse/magrittr@*release,
+    rstudio/htmltools@*release,
+    tidyverse/dplyr@*release,
+    davidgohel/flextable@*release,
+    yihui/knitr@*release,
+    davidgohel/officer@*release,
+    r-lib/testthat@*release,
+    tidyverse/tibble@*release,
+    tidyverse/tidyr@*release,
+    r-lib/xml2@*release,
+    Merck/r2rtf@*release
 Encoding: UTF-8
 Language: en-US
 LazyData: true
