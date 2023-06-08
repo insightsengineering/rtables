@@ -37,11 +37,9 @@ Suggests:
     flextable (>= 0.5.10),
     knitr (>= 1.42),
     officer (>= 0.3.10),
-    r2rtf,
     survival (>= 2.43-1),
     testthat (>= 3.0.4),
     tibble (>= 3.1.0),
-    tidyr,
     xml2 (>= 1.1.0)
 VignetteBuilder:
     knitr
@@ -55,9 +53,7 @@ Remotes:
     davidgohel/officer@*release,
     r-lib/testthat@*release,
     tidyverse/tibble@*release,
-    tidyverse/tidyr@*release,
-    r-lib/xml2@*release,
-    Merck/r2rtf@*release
+    r-lib/xml2@*release
 Encoding: UTF-8
 Language: en-US
 LazyData: true

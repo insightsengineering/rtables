@@ -1,5 +1,6 @@
 ## rtables 0.6.1.9002
  * fix major regressions for page_by machinery caused by migration to formatters 0.5.0 pagination framework.
+ * Remove `r2rtf` and `tidyr` from package dependencies as they belong to `formatters`.
  * Specify minimal version of dependencies.
 
 ## rtables 0.6.1
