@@ -603,9 +603,10 @@ simple_table <- function(DM, f){
 # First round will fail because there are unused arguments
 exploratory_split_fun <- function(df, spl) NULL
 # debug(rtables:::do_split)
-simple_table(DM, exploratory_split_fun)
+err_msg <- tryCatch(simple_table(DM, exploratory_split_fun), error = function(e) e)
 # undebug(rtables:::do_split)
 
+message(err_msg$message)
 ```
 
 Commented debugging options can get you above and before the error. Nonetheless using the recover option will get you the possibility to select the frame number, i.e. the trace level to enter as debugging selecting the last one (10 in my case), will allow you to see the value of `ret` from `rtables:::do_split` that is the simple error and how the informative error message that follows is created.
@@ -657,22 +658,31 @@ f_brakes_if <- function(split_col = NULL, error = FALSE){
 }
 simple_table(DM, f_brakes_if()) # works!
 simple_table(DM, f_brakes_if(split_col = "STRATA1")) # works!
+
 # Does not work, but in an informative way
-simple_table(DM, f_brakes_if(error = TRUE)) 
+# simple_table(DM, f_brakes_if(error = TRUE))
+
+# Error in do_split(spl, df, spl_context = spl_context) :
+# Error applying custom split function: It should not be more than 6! Should it be? Found in split values: B: Placebo
+# split: VarLevelSplit (ARM)
+# occured at path: root
 ```
 
-Now we will dwell a moment to the relatively new machinery to create custom split functions. Before doing so, please read the relevant documentation `?make_split_fun`. The majority of functions already included in `rtables` can be or will be written with `make_split_fun` as it is a more stable constructor for such functions. We invite the reader to take a look at `make_split_fun.R`. The majority of functions should be very understandable as fare as you got into this guide. We want to highlight that if no core split function is specified, which is commonly the case, `make_split_fun` calls directly `do_base_split` which is a minimal wrapper of our well known `do_split`. `drop_facet_levels` for example is a pre-processing function that at the core simply removes empty factor levels from the split "column", thus avoiding empty lines to be shown. It is possible, also to add a list of functions, as it can be seen in the examples of `?make_split_fun`. Note that all the inputs must be listed if there is a list of functions, otherwise the loop will not work (xxx, list only for pre and post, not core because you can have multiple sequential functions, write an issue informative error for not list xxx). Included post-processing functions are more interesting as they interact with the split object, e.g. by reordering the facets or by adding an overall facet (`add_overall_facet`). The smart reader will have noticed as the core function and many of the post processing functions rely on `make_split_result` which is a way to get the correct split return structure. Lastly it is possible to change the core split and the post according to the new custom split if needed. Note that this works only in the row space at the moment.
+Now we will dwell a moment to the relatively new machinery to create custom split functions. Before doing so, please read the relevant documentation `?make_split_fun`. The majority of functions already included in `rtables` can be or will be written with `make_split_fun` as it is a more stable constructor for such functions. We invite the reader to take a look at `make_split_fun.R`. The majority of functions should be very understandable as far as you got into this guide. We want to highlight that if no core split function is specified, which is commonly the case, `make_split_fun` calls directly `do_base_split` which is a minimal wrapper of our well known `do_split`. `drop_facet_levels` for example is a pre-processing function that at the core simply removes empty factor levels from the split "column", thus avoiding empty lines to be shown. 
+
+It is possible, also to add a list of functions, as it can be seen in the examples of `?make_split_fun`. Note that pre and post processing need a list in input to support the possibility to combine multiple functions. The core splitting function, instead, must be a single function call as it is not expected to have stacked features. This needs rarely to be modified and the majority of the included split functions work with pre or post processing. Included post-processing functions are interesting as they interact with the split object, e.g. by reordering the facets or by adding an overall facet (`add_overall_facet`). The smart reader will have noticed as the core function rely somehow on `do_split` and many of the post processing functions rely on `make_split_result` which is the best way to get the correct split return structure. Note that modifying the core split works only in the row space at the moment.
 
 #### `.spl_context` - a bit of context to our splits
-The best way to understand what split context does and how to use it is to read relevant vignette (xxx advanced usage), and to use `browser()` to see how it is structured.
+The best way to understand what split context does and how to use it is to read relevant vignette (xxx advanced usage), and to use `browser()` a split function to see how it is structured. As `.spl_context` is needed for rewriting core functions, we propose here a wrapper of `do_base_split`, which is a handy redirection to the standard `do_split` without
+the split function part, i.e. it is a wrapper of `.apply_split_inner`, the real core splitting machinery. For curiosity we set here `trim = TRUE`. This trimming works only when there is a mixed table (some values are 0s and some have content, there it trims the 0s). This is rarely the case and we encourage using the replacement functions `trim_levels_to_group` and `trim_levels_to_map`. Nowadays, it should even be impossible to set it differently from `trim = FALSE`.
 
+(write an issue informative error for not list xxx).
 ```{r, eval=FALSE}
 # rtables 6.0.2
-browsing_f <- function(df, spl, .spl_context, ...) { # (xxx needed for core)
-    browser()
-    # do_base_split(spl, df, ...) # order matters!!
+browsing_f <- function(df, spl, .spl_context, ...) {
+    # browser()
+    # do_base_split(df, spl, ...) # order matters!! This would fail if done
     do_base_split(spl = spl, df = df, vals = NULL, labels = NULL, trim = TRUE)
-    # trim works ONLY when there is a mixed table (some values are 0s and some have content -> trims the 0s) trim_levels_to_group and trim_levels_to_map are the replacement
 }
 
 basic_table() %>% 
@@ -681,9 +691,9 @@ basic_table() %>%
     split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
                   cutlabels = c("young", "old")) %>% 
     split_rows_by("SEX", split_fun = make_split_fun(
-        # pre = list(drop_facet_levels), # This is dropping the sex levels (age is upper level) add issue for this -> split_rows_by() wrapper with spl_fun
+        pre = list(drop_facet_levels), # This is dropping the sex levels (age is upper level) add issue for this -> split_rows_by() wrapper with spl_fun
         core_split = browsing_f#, #(xxx why does this fail?)
-        # post = list(trim_levels_in_facets("AGE")) #(xxx why too fails? how to trim the empty levels?)
+        post = list(trim_levels_in_facets("AGE")) #(xxx why too fails? how to trim the empty levels?)
     )) %>% 
     summarize_row_groups() %>% 
     build_table(DM)
@@ -718,7 +728,7 @@ trace(what = "do_split",
 basic_table() %>% 
     split_rows_by("ARM") %>% 
     split_rows_by("SEX", split_fun = drop_split_levels) %>% 
-    analyze("BMRKR1", extra_args = list("a" = 3)) %>% 
+    summarize_row_groups(extra_args = list(a  = 3)) %>% 
     build_table(DM)
 
 untrace(what = "do_split", 
