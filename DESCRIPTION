@@ -51,9 +51,11 @@ Config/Needs/verdepcheck:
     davidgohel/flextable,
     yihui/knitr,
     davidgohel/officer,
+    survival,
     r-lib/testthat,
     tidyverse/tibble,
     r-lib/xml2
+Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
