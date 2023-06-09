@@ -265,9 +265,8 @@ prune_table <- function(tt,
                       depth = depth + 1)
 
     keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
-    if(length(keepkids) > 0)
-        tree_children(tt) <- keepkids
-    else
-        tt <- NULL
+    
+    tree_children(tt) <- keepkids
+    
     tt
 }
