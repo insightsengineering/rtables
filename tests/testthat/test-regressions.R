@@ -186,7 +186,7 @@ test_that("row subsetting works on table with only content rows", {
     rw <- tab[1, ]
     expect_identical(cell_values(rw),
                      cell_values(tab)[[1]])
-    expect_identical(tab[1, 1, drop = TRUE],
+    expect_identical(unname(tab[1, 1, drop = TRUE]),
                      79 * c(1, 1 / sum(DM$ARM == "A: Drug X")))
 })
 

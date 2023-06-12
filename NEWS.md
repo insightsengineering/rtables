@@ -1,3 +1,6 @@
+## rtables 0.6.1.9003
+ * fix major regressions for page_by machinery caused by migration to formatters 0.5.0 pagination framework.
+
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
  * Moved `export_as_txt` to `formatters`. Added to reexports. 

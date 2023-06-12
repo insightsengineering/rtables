@@ -1354,6 +1354,8 @@ setMethod(".add_row_summary", "Split",
             cnt <- sum(!is.na(df))
         }
         ## the formatter does the *100 so we don't here.
+        ## TODO name elements of this so that ARD generation has access to them
+        ## ret <- rcell(c(n = cnt, pct = cnt / .N_col),
         ret <- rcell(c(cnt, cnt / .N_col),
                     format = format,
                     label = label)
