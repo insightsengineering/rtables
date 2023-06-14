@@ -184,6 +184,9 @@
     <loc>https://insightsengineering.github.io/rtables/main/reference/export_as_pdf.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/find_degen_struct.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/format_rcell.html</loc>
   </url>
   <url>
@@ -316,6 +319,9 @@
     <loc>https://insightsengineering.github.io/rtables/main/reference/rtinner.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/sanitize_table_struct.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/score_funs.html</loc>
   </url>
   <url>
@@ -398,6 +404,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/update_ref_indexing.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/validate_table_struct.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/value_formats.html</loc>
