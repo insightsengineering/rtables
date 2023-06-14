@@ -1,4 +1,4 @@
-#' Find degenerate (sub)structures within a table
+#' Find degenerate (sub)structures within a table (Experimental)
 #' @param tt TableTree
 #'
 #' This function returns a list with the row-paths to all
@@ -32,7 +32,7 @@ find_degen_struct <- function(tt) {
     degen
 }
 
-#' Validate and Assert valid table structure
+#' Validate and Assert valid table structure (Experimental).
 #'
 #' @param tt TableTree
 #'
@@ -53,6 +53,9 @@ find_degen_struct <- function(tt) {
 #' @return for `validate_table_struct` a logical value indicating valid structure;
 #' `assert_valid_table` is called for its side-effect of throwing an error
 #' or warning for degenerate tables.
+#'
+#' @note This function is experimental and the exact text of the warning/error
+#' is subject to change in future releases.
 #'
 #' @export
 #' @examples
@@ -136,7 +139,12 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 }
 
 
-#' Sanitize degenerate table structures
+#' Sanitize degenerate table structures (Experimental)
+#'
+#'
+#' @description Experimental function to correct structure
+#' of degenerate tables by adding messaging rows to empty
+#' sub-structures.
 #'
 #' @param tt TableTree
 #' @param empty_msg character(1). The string which should be spanned across
