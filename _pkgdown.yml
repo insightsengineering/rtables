@@ -127,6 +127,11 @@ reference:
     - clear_indent_mods
     - head
 
+  - title: Validating and Fixing Table Structure
+    contents:
+    - validate_table_struct
+    - sanitize_table_struct
+    - find_degen_struct
     
   - title: Sorting and Pruning
     contents:
