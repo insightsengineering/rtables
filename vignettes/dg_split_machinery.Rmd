@@ -684,16 +684,27 @@ browsing_f <- function(df, spl, .spl_context, ...) {
     # do_base_split(df, spl, ...) # order matters!! This would fail if done
     do_base_split(spl = spl, df = df, vals = NULL, labels = NULL, trim = TRUE)
 }
-
+fnc_tmp <- function(innervar) { # Exploring trim_levels_in_facets (check its form)
+    function(ret, ...) {
+            # browser()
+            for(var in innervar) { # of course AGE is not here, so nothing is dropped!!
+                ret$datasplit <- lapply(ret$datasplit, function(df) {
+                    df[[var]] <- factor(df[[var]])
+                    df
+                })
+            }
+            ret
+        }
+}
 basic_table() %>% 
     split_rows_by("ARM") %>% 
     split_rows_by("STRATA1") %>% 
     split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
                   cutlabels = c("young", "old")) %>% 
     split_rows_by("SEX", split_fun = make_split_fun(
-        pre = list(drop_facet_levels), # This is dropping the sex levels (age is upper level) add issue for this -> split_rows_by() wrapper with spl_fun
-        core_split = browsing_f#, #(xxx why does this fail?)
-        post = list(trim_levels_in_facets("AGE")) #(xxx why too fails? how to trim the empty levels?)
+        pre = list(drop_facet_levels), # This is dropping the sex levels (age is upper level)
+        core_split = browsing_f,
+        post = list(fnc_tmp("AGE")) # To drop these we should use a split_fun in the above level for that
     )) %>% 
     summarize_row_groups() %>% 
     build_table(DM)
@@ -707,9 +718,9 @@ Browse[1]> .spl_context
 4     AGE     young   c("S14",....         36 TRUE, TR....
                         
 # NOTE: make_split_fun(pre = list(drop_facet_levels)) and drop_split_levels 
-#       do the same in this case
+#       do the same thing in this case
 ```
-Here we can see what is the split column variable (`split`, first column) at this level of the splitting procedure. `value` is the current split value that is being dealt with. Now, for the next column, lets see the number of rows of these dataframes: `sapply(.spl_context$full_parent_df, nrow) # [1] 356 121  36  36`. Indeed, the `root` level contains the full input dataframe, while the other levels are subgroups of the full data according to the split value. `all_cols_n` shows exactly the numbers just described. `all obs` (xxx is the column "filter" name). It is possible to use the same information to make complex splits also on the column space by using the full dataframe and the value splits to select the interested values. This is something we will fix when it will be a more apparent need.
+Here we can see what is the split column variable (`split`, first column) at this level of the splitting procedure. `value` is the current split value that is being dealt with. Now, for the next column, lets see the number of rows of these dataframes: `sapply(.spl_context$full_parent_df, nrow) # [1] 356 121  36  36`. Indeed, the `root` level contains the full input dataframe, while the other levels are subgroups of the full data according to the split value. `all_cols_n` shows exactly the numbers just described. `all obs` is the current filter applied to the columns. Appling this to the root data (or the row subgroup data) reveals the current facet column-wise (and row-wise if in row split). It is possible to use the same information to make complex splits also on the column space by using the full dataframe and the value splits to select the interested values. This is something we will change and simplify when it is a more apparent need.
 
 ### Extra arguments `extra_args`
 This functionality is well known and used in the setting of analysis functions (xxx vignette), but we show here how this can also apply to splits.
@@ -719,43 +730,130 @@ This functionality is well known and used in the setting of analysis functions (
 # rtables 6.0.2
 
 # Lets use the tracer!!
-my_tracer <- quote(if (!is(spl, "AllSplit") && 
-                       spl_variable(spl) == "SEX") browser())
+my_tracer <- quote(if (length(spl@extra_args) > 0) browser())
 trace(what = "do_split", 
       tracer = my_tracer, 
       where = asNamespace("rtables"))
-
+custom_mean_var <- function(var) {
+    function(df, labelstr, na.rm = FALSE, ...) {
+        # browser()
+        mean(df[[var]], na.rm = na.rm)
+    }
+}
+DM_ageNA <- DM
+DM_ageNA$AGE[1] <- NA
 basic_table() %>% 
     split_rows_by("ARM") %>% 
     split_rows_by("SEX", split_fun = drop_split_levels) %>% 
-    summarize_row_groups(extra_args = list(a  = 3)) %>% 
-    build_table(DM)
+    summarize_row_groups(cfun = custom_mean_var("AGE"), 
+                         extra_args = list(na.rm  = TRUE), format = "xx.x", 
+                         label_fstr = "label %s") %>% 
+    split_rows_by("STRATA1") %>% 
+    analyze("AGE") %>% 
+    build_table(DM_ageNA)
 
+# As we can see that was not possible. What if we now force it a bit?
+my_split_fun <- function(df, spl, .spl_context, ...) {
+    spl@extra_args <- list(na.rm = TRUE)
+    drop_split_levels(df, spl)
+} # does not work
+basic_table() %>% 
+    split_rows_by("ARM") %>% 
+    split_rows_by("SEX", split_fun = my_split_fun) %>% 
+    analyze("AGE") %>% 
+    build_table(DM_ageNA)
+# We invite the developer now to test all the tests file of this package with the tracer on
+# therefore -> extra_args is not currently used in splits
 untrace(what = "do_split", 
         where = asNamespace("rtables"))
-```
-
-
-### (xxx - the other parameters... trim?? Maybe it does not work, vestigial)
-(xxx use trace to find if vals and labels are used)
-
-```{r, eval=FALSE}
-my_tracer <- quote(if (!isTRUE(trim)) browser())
+# Let's try with the other variables identically
+my_tracer <- quote(if (!is.null(vals) || !is.null(labels) || isTRUE(trim)) {
+    print("A LOT TO SAY")
+    message("CANT BLOCK US ALL")
+    stop("NOW FOR SURE")
+    browser()
+    })
 trace(what = "do_split", 
       tracer = my_tracer, 
       where = asNamespace("rtables"))
+# Run tests by copying the above in setup-fakedata.R (then devtools::test())
+untrace(what = "do_split", 
+        where = asNamespace("rtables"))
+```
+As we have demonstrated, all the above seems like impossible cases, and are to be 
+considered as vestigial and deprecated heritage.
 
-wrapper_do_split <- function(){
-    do_base_split(spl, df, vals = NULL, labels = NULL, trim = TRUE)
-}
-basic_table() %>% 
-    split_rows_by("ARM") %>% 
-    split_rows_by("SEX") %>% 
-    analyze("BMRKR1") %>% 
-    build_table(DM)
+Final examples with `MultiVarSplit` & `CompoundSplit`
+
+# (xxx) can I swap split_cols_by_multivar -> probably you cannot atm, yes can do 
+custom split function that does the "fake" split
+
+Firstly, we want to see how `MultiVarSplit` class behaves for an example case taken from
+`?split_rows_by_multivar`.
+
+```{r, eval=FALSE}
+# rtables 6.0.2
+
+my_tracer <- quote(if (is(spl, "MultiVarSplit")) browser())
+trace(what = "do_split", 
+      tracer = my_tracer, 
+      where = asNamespace("rtables"))
+# We want also to take a look at the following:
+debugonce(rtables:::.apply_split_inner)
+lyt <- basic_table() %>%
+    split_cols_by("ARM") %>% 
+    split_rows_by_multivar(c("SEX", "STRATA1")) %>%
+    summarize_row_groups() %>%
+    analyze(c("AGE", "SEX"))
+
+build_table(lyt, DM)
 untrace(what = "do_split", 
         where = asNamespace("rtables"))
 ```
 
-Final examples with `MultiVarSplit` & `CompoundSplit`
+If we print them out, we will notice that the two groups (one called "SEX" and the other "STRATA1") are identical along the columns. This is because no subgroup was actually created. This is an interesting way to personalize splits and with the help of custom split functions and their split context, also to have widely different subgroups in the table.
 
+Lastly, we will briefly show an example of a split with cumulative function and how to replace it and solve the problem with empty age groups we had before. In the following, we propose the same simplified situation:
+
+```{r}
+# rtables 6.0.2
+
+cutfun <- function(x) {
+    # browser()
+  cutpoints <- c(0, mean(x), max(x))
+
+  names(cutpoints) <- c("", "Younger", "Older")
+  cutpoints
+}
+
+tbl <- basic_table() %>% 
+    split_rows_by("ARM", 
+                  split_fun = drop_and_remove_levels(c("B: Placebo", "C: Combination"))) %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
+    # split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
+    #               cutlabels = c("young", "old")) %>% # our objective is to take out empty levels from this!
+    split_rows_by("SEX", split_fun = drop_split_levels) %>% 
+    summarize_row_groups() %>% 
+    build_table(DM)
+
+# (xxx) The real new thing
+
+# 
+# lyt5 <- basic_table() %>%
+#   split_cols_by_cutfun("AGE", cutfun = cutfun) %>%
+#   analyze("SEX")
+# 
+# tbl5 <- build_table(lyt5, ex_adsl)
+# tbl5
+
+tbl
+```
+The reader will notice here that there is `old` printed out without any data in it. We want to trim it!
+(xxx) to drop values you need to override the core with make_split_fun
+(xxx) add the pre-proc with z-scoring
+```{r}
+# try with pruning
+prune_table(tbl) #(xxx) what is going on here?
+
+```
