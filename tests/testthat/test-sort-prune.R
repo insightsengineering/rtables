@@ -42,6 +42,16 @@ test_that("pruning and trimming work", {
                      smallertab[1:4, ])
 
 
+    biggertab <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX") %>%
+        split_rows_by("STRATA1") %>%
+        analyze("AGE") %>%
+        build_table(subset(DM, STRATA1 != "C"))
+
+    ## something trimmed from every outer facet
+    pbtab <- prune_table(biggertab)
+    expect_equal(nrow(pbtab), 10)
 
 
     ## this one doesn't remove NA rows
