@@ -51,7 +51,6 @@ Config/Needs/verdepcheck:
     davidgohel/flextable,
     yihui/knitr,
     davidgohel/officer,
-    survival,
     r-lib/testthat,
     tidyverse/tibble,
     r-lib/xml2
