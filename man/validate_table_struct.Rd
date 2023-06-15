@@ -3,7 +3,7 @@
 \name{validate_table_struct}
 \alias{validate_table_struct}
 \alias{assert_valid_table}
-\title{Validate and Assert valid table structure}
+\title{Validate and Assert valid table structure (Experimental).}
 \usage{
 validate_table_struct(tt)
 
@@ -35,7 +35,11 @@ for \code{validate_table_struct} a logical value indicating valid structure;
 or warning for degenerate tables.
 }
 \description{
-Validate and Assert valid table structure
+Validate and Assert valid table structure (Experimental).
+}
+\note{
+This function is experimental and the exact text of the warning/error
+is subject to change in future releases.
 }
 \examples{
 validate_table_struct(rtable("hahaha"))

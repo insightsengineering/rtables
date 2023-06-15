@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_table_struct.R
 \name{sanitize_table_struct}
 \alias{sanitize_table_struct}
-\title{Sanitize degenerate table structures}
+\title{Sanitize degenerate table structures (Experimental)}
 \usage{
 sanitize_table_struct(tt, empty_msg = "-- This Section Contains No Data --")
 }
@@ -17,7 +17,9 @@ If \code{tt} is already valid, it is returned unmodified. If \code{tt} is
 degenerate, a modified, non-degenerate version of the table is returned.
 }
 \description{
-Sanitize degenerate table structures
+Experimental function to correct structure
+of degenerate tables by adding messaging rows to empty
+sub-structures.
 }
 \details{
 This function locates degenerate portions of the table (including the table
