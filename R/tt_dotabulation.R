@@ -56,15 +56,20 @@ match_extra_args <- function(f,
 #' @return a RowsVerticalSection object representing the k x 1 section of the
 #'   table being generated, with k the number of rows the analysis function
 #'   generates
-gen_onerv <- function(csub, col, count, cextr, dfpart, func, totcount, splextra,
+gen_onerv <- function(csub, col, count, cextr, cpath,
+                     dfpart, func, totcount, splextra,
                      takesdf = .takes_df(func),
                      baselinedf,
                      inclNAs,
                      col_parent_inds,
                      spl_context) {
-
+    # browser()
+    spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
     spl_context$cur_col_subset <- col_parent_inds
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
+    spl_context$cur_col_split <- list(cpath[seq(1, length(cpath), 2)])
+    spl_context$cur_col_split_val <- list(cpath[seq(2, length(cpath), 2)])
+    
     ## workaround for https://github.com/insightsengineering/rtables/issues/159
     if(NROW(dfpart) > 0) {
         inds <- eval(csub, envir = dfpart)
@@ -215,15 +220,20 @@ gen_rowvalues <- function(dfpart,
 
     allfuncs <- rep(func, length.out = length(colexprs))
 
-
+    # browser()
 
     if(is.null(takesdf))
         takesdf <- .takes_df(allfuncs)
+    
+    # Adding path information about columns
+    cpaths <- col_paths(cinfo)
+    
     rawvals <- mapply(gen_onerv,
                      csub = colexprs,
                      col = datcol,
                      count = colcounts,
                      cextr = colextras,
+                     cpath = cpaths,
                      baselinedf = baselines,
                      func = allfuncs,
                      takesdf = takesdf,
@@ -264,6 +274,7 @@ gen_rowvalues <- function(dfpart,
                                                  list(dfpart[0, ])),
                            inclNAs,
                            spl_context = context_df_row(cinfo = cinfo)) {
+    # browser()
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -622,7 +633,7 @@ setMethod(".make_split_kids", "Split",
                    cinfo, ## used for sanity check
                    baselines, ## used to calc new baselines
                    spl_context) {
-
+    # browser()
     ## do the core splitting of data into children for this split
     rawpart <- do_split(spl, df, spl_context = spl_context)
     dataspl <- rawpart[["datasplit"]]
@@ -1041,9 +1052,10 @@ build_table <- function(lyt, df,
         ## this seems to be covered by grabbing the partlabel
         ## TODO confirm this
         ## lab <- obj_label(firstspl)
+        # browser()
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,
-                              splvec = splvec,
+                             splvec = splvec,
                              cinfo = cinfo,
                              ## XXX are these ALWAYS right?
                              make_lrow = label_kids(firstspl),

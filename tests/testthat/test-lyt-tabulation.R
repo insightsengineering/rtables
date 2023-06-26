@@ -930,6 +930,45 @@ test_that(".spl_context works in content and analysis functions", {
                                `[[`, 2L)))
 })
 
+test_that(".spl_context contains information about the column split", {
+    DM_tmp <- DM %>% 
+        mutate(method = factor("Mean")) %>% 
+        mutate(SEX = factor(SEX))
+    DM_tmp <- rbind(DM_tmp, DM_tmp %>% 
+                        mutate(method = factor("SD")))
+    
+    analysis_fun_fin <- function(x, .spl_context, labelstr = "", ...) {
+        if (any(.spl_context$cur_col_split_val[[2]] == "SD")) {
+            res <- list("SOMETHING" = sd(x))
+        } else if (any(.spl_context$cur_col_split_val[[2]] == "Mean")) {
+            res <- list("SOMETHING" = mean(x))
+        }
+            
+        in_rows(.list = res)
+    }
+    lyt <- basic_table() %>% 
+        split_rows_by("STRATA1") %>%
+        split_cols_by(var = "method") %>%
+        split_cols_by("SEX") %>%
+        analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.x")
+    
+    lyt %>% build_table(DM_tmp)
+})
+
+test_that(".spl_context contains col information and multivars works", {
+    DM_tmp <- DM %>% 
+        mutate(SEX = factor(SEX))
+    
+    lyt <- basic_table() %>% 
+        split_rows_by("STRATA1") %>%
+        split_cols_by_multivar(vars = c("BMRKR1", "BMRKR1"), 
+                               varlabels = c("M", "SD")) %>%
+        split_cols_by("SEX") %>%
+        analyze_colvars(afun = list("Mean" = mean, "SD" = sd), format = "xx.x")
+    
+    lyt %>% build_table(DM_tmp)
+})
+
 test_that("cut functions work", {
 
     ctnames <- c("young", "medium", "old")
@@ -1269,7 +1308,7 @@ test_that("qtable works", {
     t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
     t6b <-  basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
-        split_rows_by("SEX",, split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
         analyze("AGE", summary_list2) %>%
         append_topleft("AGE - summary_list") %>%
         build_table(ex_adsl)
