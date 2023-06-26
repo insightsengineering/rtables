@@ -968,10 +968,9 @@ test_that(".spl_context contains col information and multivars works", {
     
     lyt %>% build_table(DM_tmp)
 })
+
 test_that(".spl_context contains information about combo counts", {
-    DM_tmp <- DM %>% 
-        mutate(SEX = factor(SEX))
-    
+    ## Fix for https://github.com/insightsengineering/rtables/issues/517
     combodf <- tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
         "all_X", "All Drug X", c("A: Drug X", "C: Combination"), list(),
@@ -989,10 +988,16 @@ test_that(".spl_context contains information about combo counts", {
                                                           first = TRUE#,
                                                           #keep_levels = FALSE
                                                           )) %>%
-        split_rows_by("SEX") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
         analyze(vars = "BMRKR1", afun = mean_wrapper, format = "xx.")
     
-    lyt %>% build_table(DM_tmp, alt_counts_df = ex_adsl)
+    tbl <- lyt %>% build_table(DM)
+    spl_ctx_cnt <- sapply(seq_len(ncol(tbl)), function(x) tbl[3, x, drop = TRUE])
+    expect_identical(col_counts(tbl), spl_ctx_cnt)
+    
+    tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
+    spl_ctx_cnt <- sapply(seq_len(ncol(tbl)), function(x) tbl[3, x, drop = TRUE])
+    expect_identical(col_counts(tbl), spl_ctx_cnt)
 })
 
 
