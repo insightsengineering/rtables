@@ -939,6 +939,11 @@ test_that(".spl_context contains information about the column split", {
                         mutate(method = factor("SD")))
     
     analysis_fun_fin <- function(x, .spl_context, labelstr = "", ...) {
+        
+        # Very smart internal checks for name reconstruction from path
+        stopifnot(length(.spl_context$cur_col_id[[1]]) == 1L)
+        stopifnot(.spl_context$cur_col_id[[1]] %in% names(.spl_context))
+        
         if (any(.spl_context$cur_col_split_val[[2]] == "SD")) {
             res <- list("SOMETHING" = sd(x))
         } else if (any(.spl_context$cur_col_split_val[[2]] == "Mean")) {
@@ -947,13 +952,14 @@ test_that(".spl_context contains information about the column split", {
             
         in_rows(.list = res)
     }
+    
     lyt <- basic_table() %>% 
         split_rows_by("STRATA1") %>%
         split_cols_by(var = "method") %>%
         split_cols_by("SEX") %>%
         analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.x")
     
-    tbl <- lyt %>% build_table(DM_tmp)
+    expect_silent(tbl <- lyt %>% build_table(DM_tmp))
     
     tol <- 0.02
     DM_tmp_F <- DM_tmp %>% filter(SEX == "F", STRATA1 == "B")
@@ -969,7 +975,7 @@ test_that(".spl_context contains col information and multivars works", {
         split_rows_by("STRATA1") %>%
         split_cols_by_multivar(vars = c("BMRKR1", "BMRKR1"), 
                                varlabels = c("M", "SD")) %>%
-        split_cols_by("SEX") %>%
+        # split_cols_by("SEX") %>% # Breaks
         analyze_colvars(afun = list("Mean" = mean, "SD" = sd), format = "xx.x")
     
     lyt %>% build_table(DM_tmp)

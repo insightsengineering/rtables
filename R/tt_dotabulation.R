@@ -63,7 +63,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
                      inclNAs,
                      col_parent_inds,
                      spl_context) {
-    # browser()
     spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
     spl_context$cur_col_subset <- col_parent_inds
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
@@ -151,6 +150,7 @@ gen_rowvalues <- function(dfpart,
                          baselines,
                          inclNAs,
                          spl_context = spl_context) {
+    # browser()
     colexprs <- col_exprs(cinfo)
     colcounts <- col_counts(cinfo)
     colextras <- col_extra_args(cinfo, NULL)
@@ -222,8 +222,6 @@ gen_rowvalues <- function(dfpart,
 
     allfuncs <- rep(func, length.out = length(colexprs))
 
-    # browser()
-
     if(is.null(takesdf))
         takesdf <- .takes_df(allfuncs)
     
@@ -273,7 +271,6 @@ gen_rowvalues <- function(dfpart,
                                                  list(dfpart[0, ])),
                            inclNAs,
                            spl_context = context_df_row(cinfo = cinfo)) {
-    # browser()
     if(is.null(datcol) && !is.na(rvlab))
         stop("NULL datcol but non-na rowvar label")
     if(!is.null(datcol) && !is.na(datcol)) {
@@ -632,7 +629,6 @@ setMethod(".make_split_kids", "Split",
                    cinfo, ## used for sanity check
                    baselines, ## used to calc new baselines
                    spl_context) {
-    # browser()
     ## do the core splitting of data into children for this split
     rawpart <- do_split(spl, df, spl_context = spl_context)
     dataspl <- rawpart[["datasplit"]]
@@ -1051,7 +1047,6 @@ build_table <- function(lyt, df,
         ## this seems to be covered by grabbing the partlabel
         ## TODO confirm this
         ## lab <- obj_label(firstspl)
-        # browser()
         recursive_applysplit(df = df, lvl = 0L,
                              name = nm,
                              splvec = splvec,
