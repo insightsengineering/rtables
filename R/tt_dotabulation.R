@@ -67,6 +67,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
     spl_context$cur_col_subset <- col_parent_inds
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
+    spl_context$cur_tot_col_count <- count
     spl_context$cur_col_split <- list(cpath[seq(1, length(cpath), 2)])
     spl_context$cur_col_split_val <- list(cpath[seq(2, length(cpath), 2)])
     
@@ -153,6 +154,7 @@ gen_rowvalues <- function(dfpart,
     colexprs <- col_exprs(cinfo)
     colcounts <- col_counts(cinfo)
     colextras <- col_extra_args(cinfo, NULL)
+    cpaths <- col_paths(cinfo)
     ## XXX I don't think this is used anywhere???
     ##splextra = c(splextra, list(.spl_context = spl_context))
     totcount <- col_total(cinfo)
@@ -224,9 +226,6 @@ gen_rowvalues <- function(dfpart,
 
     if(is.null(takesdf))
         takesdf <- .takes_df(allfuncs)
-    
-    # Adding path information about columns
-    cpaths <- col_paths(cinfo)
     
     rawvals <- mapply(gen_onerv,
                      csub = colexprs,

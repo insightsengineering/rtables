@@ -968,6 +968,33 @@ test_that(".spl_context contains col information and multivars works", {
     
     lyt %>% build_table(DM_tmp)
 })
+test_that(".spl_context contains information about combo counts", {
+    DM_tmp <- DM %>% 
+        mutate(SEX = factor(SEX))
+    
+    combodf <- tribble(
+        ~valname, ~label, ~levelcombo, ~exargs,
+        "all_X", "All Drug X", c("A: Drug X", "C: Combination"), list(),
+        "all_pt", "All Patients", c("A: Drug X", "B: Placebo", "C: Combination"), list()
+    )
+    mean_wrapper <- function(x, spl, .spl_context, ...){
+        tentative_n <- .spl_context$cur_tot_col_count[1]
+        in_rows("mean" = mean(x),
+                "n" = tentative_n,
+                "for_fun" = mean(x) / tentative_n)
+    }
+    
+    lyt <- basic_table(show_colcounts = TRUE) %>% 
+        split_cols_by("ARM", split_fun = add_combo_levels(combodf, 
+                                                          first = TRUE#,
+                                                          #keep_levels = FALSE
+                                                          )) %>%
+        split_rows_by("SEX") %>%
+        analyze(vars = "BMRKR1", afun = mean_wrapper, format = "xx.")
+    
+    lyt %>% build_table(DM_tmp, alt_counts_df = ex_adsl)
+})
+
 
 test_that("cut functions work", {
 
