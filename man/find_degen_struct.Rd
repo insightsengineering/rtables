@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_table_struct.R
 \name{find_degen_struct}
 \alias{find_degen_struct}
-\title{Find degenerate (sub)structures within a table}
+\title{Find degenerate (sub)structures within a table (Experimental)}
 \usage{
 find_degen_struct(tt)
 }
@@ -19,7 +19,7 @@ row paths, if any, to degenerate substructures within
 the table.
 }
 \description{
-Find degenerate (sub)structures within a table
+Find degenerate (sub)structures within a table (Experimental)
 }
 \examples{
 find_degen_struct(rtable("hi"))
