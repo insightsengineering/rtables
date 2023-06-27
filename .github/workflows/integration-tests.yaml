@@ -4,6 +4,7 @@ name: Integration Tests 🧪
 on:
   schedule:
     - cron: '45 3 * * 0'
+  workflow_dispatch:
 
 jobs:
   dependency-test:

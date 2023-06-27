@@ -29,6 +29,26 @@ test_that("Page by splitting works", {
             split_rows_by("ARM", page_by = TRUE) %>%
             analyze("AGE")},
         "page_by splits cannot be nested within non-page_by splits")
+
+    lyt2 <- basic_table(title = "main title",
+                        subtitles = "subtitle",
+                        main_footer = "main footer",
+                        prov_footer = "provenance footer") %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+        split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") %>%
+        split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+        summarize_row_groups() %>%
+        analyze("AGE", afun = function(x, ...) in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.x (xx.x)"),
+                                                 "range" = rcell(range(x), format = "xx.x - xx.x")))
+
+    tbl2 <- build_table(lyt2, ex_adsl)
+
+    ttlst2 <- paginate_table(tbl2, lpp = 16, cpp = 55)
+    expect_equal(length(ttlst2),
+                 8)
+    txt <- export_as_txt(tbl2, lpp = 16, cpp = 55)
+    expect_true(grepl("Stratum: B", txt))
 })
 
 
@@ -63,7 +83,7 @@ test_that("vertical and horizontal pagination work", {
     hpag2 <- paginate_table(simple_tbl, lpp = 80, cpp = 23)
     expect_identical(hpag1, hpag2)
 
-    hpag3 <- paginate_table(simple_tbl, lpp = 80, cpp = 24)
+    hpag3 <- paginate_table(simple_tbl, lpp = 80, cpp = 24, verbose = TRUE)
     expect_equal(rep(2, 3),
                  sapply(hpag3, ncol))
 
@@ -110,7 +130,9 @@ test_that("vertical and horizontal pagination work", {
     expect_identical(tt[, 1:2, keep_titles = TRUE,
                         reindex_refs = FALSE], res[[1]])
 
-    res2 <- paginate_table(tt, lpp = 75, cpp = 45, verbose = TRUE)
+    ## this was lpp = 75, but manual line counting suggests that
+    ## was a bad test, enforcing an off-by-one error.
+    res2 <- paginate_table(tt, lpp = 76, cpp = 45, verbose = TRUE)
     expect_identical(length(res2), 6L)
     expect_identical(res2[[1]], tt[1:63, 1:2, keep_titles = TRUE,
                                    reindex_refs = FALSE])
@@ -131,6 +153,11 @@ test_that("vertical and horizontal pagination work", {
     ## XXX TODO do careful analuysis to ensure this is actually right.
     expect_identical(nrow(res2b[[1]]), 59L)
     expect_identical(vapply(res2b, ncol, 1L), rep(3L, 4))
+
+    ## topleft perservation
+    top_left(tt) <- "hahaha I'm a topleft"
+    res3 <- paginate_table(tt, lpp = 75, cpp = 45)
+    expect_identical(top_left(tt), top_left(res3[[1]]))
 
 
 
@@ -219,8 +246,8 @@ test_that("cell and column wrapping works in pagination", {
                        2L, 1L, 1L, 1L, 3L)) ## the 2 is row label wrap, 3s are cell wraps
 
     # propose_column_widths(matrix_form(tt_for_wrap, TRUE))
-    pg_tbl_w_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, colwidths = clw)
-    pg_tbl_no_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp)
+    pg_tbl_w_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL, colwidths = clw)
+    pg_tbl_no_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL,  verbose = TRUE)
     res1 <- toString(matrix_form(pg_tbl_no_clw[[1]], TRUE))
     res2 <- toString(matrix_form(tt_for_wrap, TRUE))
 
@@ -230,13 +257,13 @@ test_that("cell and column wrapping works in pagination", {
 
 
     ## entire table takes exactly 25 lines when content is wrapped
-    result <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 25L)
+    result <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 25L, cpp = NULL)
     expect_identical(result[[1]], tt_for_wrap)
 
     ## paginating at 24 walks up
     ##  10 row too long with wrap -> 9 label row -> 8 ok
     ## paginates after row 8 (BOAA -> AGE-> Mean)
-    result2 <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 24L)
+    result2 <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 24L, cpp = NULL)
     expect_identical(sapply(result2, nrow),
                      c(8L, 3L))
     result_str <- toString(result[[1]], widths = clw)
@@ -290,13 +317,13 @@ test_that("Pagination works with section dividers", {
     ], ttlst[[1]])
 
     expect_identical(
-        export_as_txt(ttlst[[1]][7:8, keep_titles = TRUE], hsep = "-"),
+        export_as_txt(ttlst[[1]][7:8, keep_titles = TRUE], hsep = "-", paginate = FALSE),
         "big title\n\n--------------\n       all obs\n--------------\nMean    34.89 \n~~~~~~~~~~~~~~\nM             \n"
     )
 
     expect_identical(
-        paste0(export_as_txt(tail(ttlst[[1]], 1), hsep = "-"),
-               export_as_txt(head(ttlst[[2]], 1), hsep = "-" )),
+        paste0(export_as_txt(tail(ttlst[[1]], 1), hsep = "-", paginate = FALSE),
+               export_as_txt(head(ttlst[[2]], 1), hsep = "-" , paginate = FALSE)),
         paste0(
             "big title\n\n--------------\n       all obs\n--------------\nMean    34.28 \n",
             "big title\n\n-----------\n    all obs\n-----------\nU          \n"

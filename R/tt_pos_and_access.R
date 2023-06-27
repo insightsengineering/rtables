@@ -132,7 +132,7 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #' tbl2 <- insert_row_at_path(tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
 #'                           rrow("new row", 555))
 #' tbl2
-#' 
+#'
 #' tbl3 <- insert_row_at_path(tbl2, c("COUNTRY", "CHN", "AGE", "Mean"),
 #'                           rrow("new row redux", 888),
 #'                           after = TRUE)
@@ -280,10 +280,10 @@ setMethod("tt_at_path", "VTableTree",
 
 #' @export
 #' @rdname ttap
-#' 
+#'
 #' @note Setting `NULL` at a defined path removes the corresponding sub table.
-#' 
-#' @examples 
+#'
+#' @examples
 #' # Accessing sub table.
 #' lyt <- basic_table() %>%
 #'    split_cols_by("ARM") %>%
@@ -314,6 +314,7 @@ setGeneric("tt_at_path<-",
            function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -324,6 +325,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
 ## because that is how lists behave.
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
           function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
@@ -333,6 +335,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
 
 #' @export
 #' @rdname int_methods
+#' @keywords internal
 setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
           function(tt, path, ..., value) {
     stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))
@@ -345,9 +348,9 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 })
 
 
-#' Retrieve and assign elements of a `TableTree`
+#' @name brackets
 #'
-#' @rdname brackets
+#' @title Retrieve and assign elements of a `TableTree`
 #'
 #' @param x TableTree
 #' @param i index
@@ -359,7 +362,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' @param \dots Includes
 #' \describe{
 #' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `top-left`
-#' material for the table be retained after subsetting. Defaults to `TRUE` if 
+#' material for the table be retained after subsetting. Defaults to `TRUE` if
 #' all rows are included (i.e. subsetting was by column), and drops it otherwise.}
 #' \item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
 #' \item{\emph{keep_footers}}{logical(1) Should non-referential footer
@@ -369,29 +372,29 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' \code{TRUE}.}
 #' }
 #' @param value Replacement value (list, `TableRow`, or `TableTree`)
-#' 
+#'
 #' @return a \code{TableTree} (or \code{ElementaryTable}) object, unless a
 #'   single cell was selected with \code{drop=TRUE}, in which case the (possibly
 #'   multi-valued) fully stripped raw value of the selected cell.
-#' 
+#'
 #' @details by default, subsetting drops the information about title, subtitle,
-#' main footer, provenance footer, and `topleft`. If only a column is selected 
-#' and all rows are kept, the `topleft` information remains as default. Any 
-#' referential footnote is kept whenever the subset table contains the 
-#' referenced element. 
-#' 
+#' main footer, provenance footer, and `topleft`. If only a column is selected
+#' and all rows are kept, the `topleft` information remains as default. Any
+#' referential footnote is kept whenever the subset table contains the
+#' referenced element.
+#'
 #' @note subsetting always preserve the original order, even if provided
-#' indexes do not preserve it. If sorting is needed, please consider 
+#' indexes do not preserve it. If sorting is needed, please consider
 #' using `sort_at_path()`. Also note that `character` indices are treated as paths,
 #' not vectors of names in both `[` and `[<-`.
-#' 
-#' @seealso Regarding sorting: `sort_at_path()` and how to understand path 
+#'
+#' @seealso Regarding sorting: `sort_at_path()` and how to understand path
 #' structure: `summarize_row_groups()`, and `summarize_col_groups()`.
 #'
 #' @examples
-#' lyt <- basic_table(title = "Title", 
-#'                    subtitles = c("Sub", "titles"), 
-#'                    prov_footer = "prov footer", 
+#' lyt <- basic_table(title = "Title",
+#'                    subtitles = c("Sub", "titles"),
+#'                    prov_footer = "prov footer",
 #'                    main_footer = "main footer") %>%
 #'    split_cols_by("ARM") %>%
 #'    split_rows_by("SEX") %>%
@@ -400,29 +403,29 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' tbl <- build_table(lyt, DM)
 #' top_left(tbl) <- "Info"
 #' tbl
-#' 
+#'
 #' # As default header, footer, and topleft information is lost
 #' tbl[1, ]
 #' tbl[1:2, 2]
-#' 
+#'
 #' # Also boolean filters can work
 #' tbl[, c(FALSE, TRUE, FALSE)]
-#' 
+#'
 #' # If drop = TRUE, the content values are directly retrieved
 #' tbl[2, 1]
 #' tbl[2, 1, drop = TRUE]
-#' 
+#'
 #' # Drop works also if vectors are selected, but not matrices
 #' tbl[, 1, drop = TRUE]
 #' tbl[2, , drop = TRUE]
 #' tbl[1, 1, drop = TRUE] # NULL because it is a label row
 #' tbl[2, 1:2, drop = TRUE] # vectors can be returned only with cell_values()
 #' tbl[1:2, 1:2, drop = TRUE] # no dropping because it is a matrix
-#' 
+#'
 #' # If all rows are selected, topleft is kept by default
 #' tbl[, 2]
 #' tbl[, 1]
-#' 
+#'
 #' # It is possible to deselect values
 #' tbl[-2, ]
 #' tbl[, -1]
@@ -432,19 +435,19 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[6, ] <- list(-111, -222, -333)
 #' tbl
-#' 
+#'
 #' # We can keep some information from the original table if we need
 #' tbl[1, 2, keep_titles = TRUE]
 #' tbl[1, 2, keep_footers = TRUE, keep_titles = FALSE]
 #' tbl[1, 2, keep_footers = FALSE, keep_titles = TRUE]
 #' tbl[1, 2, keep_footers = TRUE]
 #' tbl[1, 2, keep_topleft = TRUE]
-#' 
+#'
 #' # Keeps the referential footnotes when subset contains them
 #' fnotes_at_path(tbl, rowpath = c("SEX", "M", "AGE", "Mean")) <- "important"
 #' tbl[4, 1]
 #' tbl[2, 1] # None present
-#' 
+#'
 #' # We can reindex referential footnotes, so that the new table does not depend
 #' #  on the original one
 #' fnotes_at_path(tbl, rowpath = c("SEX", "U", "AGE", "Mean")) <- "important"
@@ -454,16 +457,11 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #'
 #' # Note that order can not be changed with subsetting
 #' tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
-#' 
-#' @aliases [,VTableTree,logical,logical,ANY-method
-#' [,VTableTree,logical,ANY,ANY-method
-#' [,VTableTree,logical,missing,ANY-method
-#' [,VTableTree,ANY,logical,ANY-method
-#' [,VTableTree,ANY,missing,ANY-method
-#' [,VTableTree,ANY,character,ANY-method
-#' [,VTableTree,character,ANY,ANY-method
-#' 
+#'
+NULL
+
 #' @exportMethod [<-
+#' @rdname brackets
 setMethod("[<-", c("VTableTree", value = "list"),
           function(x, i, j, ...,  value) {
 
@@ -561,8 +559,10 @@ setMethod("[<-", c("VTableTree", value = "list"),
     replace_rowsbynum(x, i, ...)
 })
 
+#' @inheritParams brackets
 #' @exportMethod [<-
-#' @rdname brackets
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[<-", c("VTableTree", value = "CellValue"),
           function(x, i, j, ...,  value) {
     x[i = i, j = j, ...] <- list(value)
@@ -588,12 +588,12 @@ setGeneric("subset_cols",
            })
 
 setMethod("subset_cols", c("TableTree", "numeric"),
-          function(tt, j, newcinfo = NULL, 
+          function(tt, j, newcinfo = NULL,
                    keep_topleft, keep_titles, keep_footers, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo <- col_info(tt)
-        newcinfo <- subset_cols(cinfo, j, 
+        newcinfo <- subset_cols(cinfo, j,
                                 keep_topleft = keep_topleft, ...)
     }
     ## topleft taken care of in creation of newcinfo
@@ -607,21 +607,21 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo,  ...)
 
-    tt2 <- .h_copy_titles_footers_topleft(tt2, tt, 
-                                        keep_titles, 
-                                        keep_footers, 
+    tt2 <- .h_copy_titles_footers_topleft(tt2, tt,
+                                        keep_titles,
+                                        keep_footers,
                                         keep_topleft)
     tt2
 })
 
 setMethod("subset_cols", c("ElementaryTable", "numeric"),
-          function(tt, j, newcinfo = NULL, 
+          function(tt, j, newcinfo = NULL,
                    keep_topleft, keep_titles, keep_footers, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if(is.null(newcinfo)) {
         cinfo <- col_info(tt)
         newcinfo <- subset_cols(cinfo, j, keep_topleft = keep_topleft,
-                               keep_titles = keep_titles, 
+                               keep_titles = keep_titles,
                                keep_footers = keep_footers, ...)
     }
     ## topleft handled in creation of newcinfo
@@ -631,9 +631,9 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
-    tt2 <- .h_copy_titles_footers_topleft(tt2, tt, 
-                                        keep_titles, 
-                                        keep_footers, 
+    tt2 <- .h_copy_titles_footers_topleft(tt2, tt,
+                                        keep_titles,
+                                        keep_footers,
                                         keep_topleft)
     tt2
 })
@@ -829,7 +829,7 @@ subset_by_rownum <- function(tt,
                              i,
                              keep_topleft = FALSE,
                              keep_titles = TRUE,
-                             keep_footers = keep_titles, 
+                             keep_footers = keep_titles,
                              ...) {
     stopifnot(is(tt, "VTableNodeInfo"))
     counter <- 0
@@ -862,7 +862,7 @@ subset_by_rownum <- function(tt,
             ctab <- content_table(x)
 
             content_table(x) <- prune_rowsbynum(ctab, i,
-                                                valifnone = ElementaryTable(cinfo = col_info(ctab), 
+                                                valifnone = ElementaryTable(cinfo = col_info(ctab),
                                                                             iscontent = TRUE))
         }
         kids <- tree_children(x)
@@ -900,10 +900,10 @@ subset_by_rownum <- function(tt,
         ## }
     }
     ret <- prune_rowsbynum(tt, i)
-    
-    ret <- .h_copy_titles_footers_topleft(ret, tt, 
-                                        keep_titles, 
-                                        keep_footers, 
+
+    ret <- .h_copy_titles_footers_topleft(ret, tt,
+                                        keep_titles,
+                                        keep_footers,
                                         keep_topleft)
 
     ret
@@ -912,7 +912,6 @@ subset_by_rownum <- function(tt,
 
 #' @exportMethod [
 #' @rdname brackets
-#' @aliases [,VTableTree,logical,logical-method
 setMethod("[", c("VTableTree", "logical", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .j_to_posj(i, nrow(x))
@@ -921,8 +920,8 @@ setMethod("[", c("VTableTree", "logical", "logical"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,logical,ANY-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "logical", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- .j_to_posj(i, nrow(x))
@@ -930,8 +929,8 @@ setMethod("[", c("VTableTree", "logical", "ANY"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,logical,missing-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "logical", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
@@ -940,8 +939,8 @@ setMethod("[", c("VTableTree", "logical", "missing"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,logical-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "logical"),
           function(x, i, j, ..., drop = FALSE) {
     j <- .j_to_posj(j, ncol(x))
@@ -949,8 +948,8 @@ setMethod("[", c("VTableTree", "ANY", "logical"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,missing-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "missing"),
           function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
@@ -958,9 +957,8 @@ setMethod("[", c("VTableTree", "ANY", "missing"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,missing,ANY-method
-
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "missing", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
@@ -970,8 +968,8 @@ setMethod("[", c("VTableTree", "missing", "ANY"),
 
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,ANY,character-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "ANY", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##j <- .colpath_to_j(j, coltree(x))
@@ -980,8 +978,8 @@ setMethod("[", c("VTableTree", "ANY", "character"),
 })
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,character,ANY-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "character", "ANY"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -991,8 +989,8 @@ setMethod("[", c("VTableTree", "character", "ANY"),
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,character,character-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "character", "character"),
           function(x, i, j, ..., drop = FALSE) {
     ##i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
@@ -1004,8 +1002,8 @@ setMethod("[", c("VTableTree", "character", "character"),
 
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,missing,numeric-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "missing", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
@@ -1014,8 +1012,8 @@ setMethod("[", c("VTableTree", "missing", "numeric"),
 
 
 #' @exportMethod [
-#' @rdname brackets
-#' @aliases [,VTableTree,numeric,numeric-method
+#' @rdname int_methods
+#' @keywords internal
 setMethod("[", c("VTableTree", "numeric", "numeric"),
           function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
@@ -1024,7 +1022,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     keep_footers <- list(...)[["keep_footers"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
-    
+
     nr <- nrow(x)
     nc <- ncol(x)
     i <- .j_to_posj(i, nr)
@@ -1040,7 +1038,7 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
     } else if (is.na(keep_topleft)) {
         keep_topleft <- TRUE
     }
-    
+
     ##  if(!missing(j) && length(j) < nc)
     if(length(j) < nc)
         x <- subset_cols(x, j,
@@ -1122,7 +1120,7 @@ setMethod("head", "VTableTree",
 #' @export
 #'
 #' @examples
-#' lyt <- basic_table() %>% 
+#' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_cols_by("SEX") %>%
 #'   split_rows_by("RACE") %>%
@@ -1166,7 +1164,8 @@ setMethod("head", "VTableTree",
 #' stopifnot(identical(cvlist[[1]], cvnolist))
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
     standardGeneric("cell_values"))
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "VTableTree",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1174,7 +1173,8 @@ setMethod("cell_values", "VTableTree",
                       omit_labrows = omit_labrows, value_at = FALSE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "TableRow",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1184,7 +1184,8 @@ setMethod("cell_values", "TableRow",
                        omit_labrows = omit_labrows, value_at = FALSE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod cell_values
 setMethod("cell_values", "LabelRow",
           function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
@@ -1205,7 +1206,8 @@ setMethod("value_at", "VTableTree",
                       omit_labrows = FALSE, value_at = TRUE)
 })
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod value_at
 setMethod("value_at", "TableRow",
           function(tt, rowpath, colpath = NULL) {
@@ -1214,7 +1216,8 @@ setMethod("value_at", "TableRow",
 })
 
 
-#'@rdname cell_values
+#' @rdname int_methods
+#' @keywords internal
 #' @exportMethod value_at
 setMethod("value_at", "LabelRow",
           function(tt, rowpath, colpath = NULL) {
@@ -1249,26 +1252,28 @@ setMethod("value_at", "LabelRow",
     }
 }
 
+## empty_table is created in onLoad because it depends on other things there.
+
 # Helper function to copy or not header, footer, and topleft information
-.h_copy_titles_footers_topleft <- function(new, 
-                                           old, 
-                                           keep_titles, 
-                                           keep_footers, 
+.h_copy_titles_footers_topleft <- function(new,
+                                           old,
+                                           keep_titles,
+                                           keep_footers,
                                            keep_topleft,
-                                           reindex_refs = FALSE) {
+                                           reindex_refs = FALSE,
+                                           empt_tbl = empty_table) {
     ## Please note that the standard adopted come from an empty table
-    empt_tbl <- rtable(" ")
-    
+
     # titles
     if(isTRUE(keep_titles)) {
         main_title(new) <- main_title(old)
         subtitles(new) <- subtitles(old)
-        
+
     } else {
         main_title(new) <-  main_title(empt_tbl)
         subtitles(new) <- subtitles(empt_tbl)
     }
-    
+
     # fnotes
     if (isTRUE(keep_footers)) {
         main_footer(new) <- main_footer(old)
@@ -1277,17 +1282,17 @@ setMethod("value_at", "LabelRow",
         main_footer(new) <- main_footer(empt_tbl)
         prov_footer(new) <- prov_footer(empt_tbl)
     }
-    
+
     # topleft
     if (isTRUE(keep_topleft))
         top_left(new) <- top_left(old)
     else
         top_left(new) <- top_left(empt_tbl)
-    
+
     # reindex references
     if(reindex_refs)
         new <- update_ref_indexing(new)
-    
+
     new
 }
 
@@ -1317,7 +1322,7 @@ setMethod("head", "VTableTree",
                    ## FALSE because this is a glance
                    ## more often than a subset op
                    reindex_refs = FALSE) {
-              
+
     ## default
     res <- callNextMethod()
     res <- .h_copy_titles_footers_topleft(old = x, new = res,
@@ -1350,18 +1355,3 @@ setMethod("tail", "VTableTree",
                      reindex_refs = reindex_refs)
     res
 })
-
-
-#' @rdname brackets
-#' @name bracket_subsetting
-#' @export
-#' @usage
-#' x[i, j, ...]
-base::`[`
-
-#' @rdname brackets
-#' @export
-#' @usage
-#' x[i, j, ...] <- value
-base::`[<-`
-

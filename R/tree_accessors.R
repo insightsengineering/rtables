@@ -2413,6 +2413,28 @@ setMethod("ref_index<-", "RefFootnote",
 })
 
 
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_symbol", function(obj) standardGeneric("ref_symbol"))
+#' @export
+#' @rdname int_methods
+setMethod("ref_symbol", "RefFootnote",
+          function(obj) obj@symbol)
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_symbol<-", function(obj, value) standardGeneric("ref_symbol<-"))
+#' @export
+#' @rdname int_methods
+setMethod("ref_symbol<-", "RefFootnote",
+          function(obj, value) {
+    obj@symbol <- value
+    obj
+})
+
+
+
+
 
 
 #' @export

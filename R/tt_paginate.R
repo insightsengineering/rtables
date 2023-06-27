@@ -648,16 +648,13 @@ pag_btw_kids <- function(tt) {
     })
 }
 
-
-do_force_paginate <- function(tt,
-                              force_pag = vapply(tree_children(tt), has_force_pag, NA),
-                              verbose = FALSE) {
-
-
+force_paginate <- function(tt,
+                   force_pag = vapply(tree_children(tt), has_force_pag, NA),
+                   verbose = FALSE) {
     ## forced pagination is happening at this
     if(has_force_pag(tt)) {
         ret <- pag_btw_kids(tt)
-        return(lapply(ret, do_force_paginate))
+        return(unlist(lapply(ret, force_paginate)))
 
     }
     chunks <- list()
@@ -668,7 +665,7 @@ do_force_paginate <- function(tt,
                                           tt,
                                           NULL)
 
-            chunks <- c(chunks, do_force_paginate(outertbl))
+            chunks <- c(chunks, force_paginate(outertbl))
             kinds <- kinds[-1]
         } else {
             tmptbl <- tt
@@ -679,17 +676,21 @@ do_force_paginate <- function(tt,
             kinds <- kinds[-useinds]
         }
     }
-    chunks
+    unlist(chunks, recursive = TRUE)
 }
 
+#' @importFrom formatters do_forced_paginate
+setMethod("do_forced_paginate", "VTableTree",
+          function(obj) force_paginate(obj))
 
-
+non_null_na <- function(x) !is.null(x) && is.na(x)
 
 #' @export
 #' @aliases paginate_table
 #' @param cpp numeric(1) or NULL. Width (in characters) of the pages for
-#' horizontal pagination. `NULL` (the default) indicates no horizontal
-#' pagination should be done.
+#' horizontal pagination. `NA` (the default) indicates cpp should be inferred from
+#' the page size; `NULL` indicates no horizontal pagination should be done
+#' regardless of page size.
 #' @rdname paginate
 #' @inheritParams formatters::vert_pag_indices
 #' @inheritParams formatters::page_lcpp
@@ -697,14 +698,14 @@ do_force_paginate <- function(tt,
 paginate_table <- function(tt,
                            page_type = "letter",
                            font_family = "Courier",
-                           font_size = 12,
+                           font_size = 8,
                            lineheight = 1,
                            landscape = FALSE,
                            pg_width = NULL,
                            pg_height = NULL,
                            margins = c(top = .5, bottom = .5, left = .75, right = .75),
-                           lpp,
-                           cpp,
+                           lpp = NA_integer_,
+                           cpp = NA_integer_,
                            min_siblings = 2,
                            nosplitin = character(),
                            colwidths = NULL,
@@ -712,8 +713,8 @@ paginate_table <- function(tt,
                            max_width = NULL,
                            verbose = FALSE) {
 
-    if(missing(lpp) && missing(cpp) &&
-        !is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height))) {
+    if((non_null_na(lpp) || non_null_na(cpp)) &&
+        (!is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height)))) {
         pg_lcpp <- page_lcpp(page_type = page_type,
                              font_family = font_family,
                              font_size = font_size,
@@ -723,14 +724,14 @@ paginate_table <- function(tt,
                              margins = margins,
                              landscape = landscape)
 
-        if(missing(lpp))
+        if(non_null_na(lpp))
             lpp <- pg_lcpp$lpp
-        if(missing(cpp))
+        if(is.na(cpp))
             cpp <- pg_lcpp$cpp
     } else {
-        if(missing(cpp))
+        if(non_null_na(cpp))
             cpp <- NULL
-        if(missing(lpp))
+        if(non_null_na(lpp))
             lpp <- 70
     }
 
@@ -757,45 +758,48 @@ paginate_table <- function(tt,
 
     force_pag <- vapply(tree_children(tt), has_force_pag, TRUE)
     if(has_force_pag(tt) || any(force_pag)) {
-        spltabs <- do_force_paginate(tt, verbose = verbose)
+        spltabs <- do_forced_paginate(tt)
         spltabs <- unlist(spltabs, recursive = TRUE)
         ret <- lapply(spltabs, paginate_table,
                       lpp = lpp,
-                      cpp = NULL,
+                      cpp = cpp,
                       min_siblings = min_siblings,
                       nosplitin = nosplitin,
                       colwidths = colwidths,
-                      verbose = verbose,
                       tf_wrap = tf_wrap,
-                      max_width = max_width)
-        res <- unlist(ret, recursive = TRUE)
+                      max_width = max_width,
+                      verbose = verbose)
+        return(unlist(ret, recursive = TRUE))
 
-    } else if(!is.null(lpp)) {
-        inds <- pag_tt_indices(tt, lpp = lpp,
-                               min_siblings = min_siblings,
-                               nosplitin = nosplitin,
-                               colwidths = colwidths,
-                               verbose = verbose,
-                               max_width = max_width)
-        res <- lapply(inds, function(x) tt[x, , keep_topleft = TRUE,
-                                keep_titles = TRUE,
-                                reindex_refs = FALSE])
-    } else { ## lpp is NULL
-        res <- list(tt)
     }
 
-    if(!is.null(cpp)) {
-        inds  <- vert_pag_indices(tt, cpp = cpp, colwidths = colwidths,
-                                  verbose = verbose,
-                                  rep_cols = 0L)
-        res <- lapply(res,
-                      function(oneres) {
-                          lapply(inds,
-                                 function(ii) oneres[, ii, drop = FALSE,
-                                                     keep_titles = TRUE,
-                                                     reindex_refs = FALSE])
-                      })
-        res <- unlist(res, recursive = FALSE)
-    }
+    inds <- paginate_indices(tt,
+                             page_type = page_type,
+                             font_family = font_family,
+                             font_size = font_size,
+                             lineheight = lineheight,
+                             landscape = landscape,
+                             pg_width = pg_width,
+                             pg_height = pg_height,
+                             margins = margins,
+                             lpp = lpp,
+                             cpp = cpp,
+                             min_siblings =  min_siblings,
+                             nosplitin = nosplitin,
+                             colwidths = colwidths,
+                             tf_wrap = tf_wrap,
+                             max_width = max_width,
+                             verbose = verbose) ## paginate_table apparently doesn't accept indent_size
+
+
+    res <- lapply(inds$pag_row_indices,
+                  function(ii) {
+        subt <- tt[ii, drop = FALSE, keep_titles = TRUE, keep_topleft = TRUE, reindex_refs = FALSE]
+        lapply(inds$pag_col_indices,
+               function(jj) {
+            subt[, jj, drop = FALSE, keep_titles = TRUE, keep_topleft = TRUE, reindex_refs = FALSE]
+        })
+    })
+    res <- unlist(res, recursive = FALSE)
     res
 }

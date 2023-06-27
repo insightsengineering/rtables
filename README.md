@@ -75,8 +75,8 @@ further advances remain under active development.
 
 ## Installation
 
-`rtables` is now available on CRAN and you can install the latest
-released version with:
+`rtables` is available on CRAN and you can install the latest released
+version with:
 
 ``` r
 install.packages("rtables")
@@ -95,12 +95,12 @@ order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN
 releases) can be found in the [releases
-list](https://github.com/insightsengineering/rtables/releases)
+list](https://github.com/insightsengineering/rtables/releases).
 
 ## Usage
 
-We first begin with a demographic table alike example and then show the
-creation of a more complex table.
+We first demonstrate with a demographic table-like example and then show
+the creation of a more complex table.
 
 ``` r
 library(rtables)
