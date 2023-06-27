@@ -24,7 +24,9 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
-      default-landing-page: latest-tag
+      default-landing-page: latest-release
+      latest-tag-alt-name: latest-release
+      branches-or-tags-to-list: ^main$|^latest-release$|^release-candidate$|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)|^v([0-9]+\\.)?([0-9]+\\.)?([0-9]+)(-rc[0-9]+)$
   validation:
     name: R Package Validation report 📃
     needs: release
