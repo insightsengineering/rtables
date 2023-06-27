@@ -42,8 +42,6 @@ anl <- adtte %>%
 
 ## Creating Helper Functions: Cox Regression Model Calculations
 
-These helper functions are taken from [`tern`](https://insightsengineering.github.io/tern/main/index.html), with additional capabilities pruned to provide only the functionality needed for this vignette. If using `tern`, the following three helper functions can be ignored and `h_coxreg_extract_interaction()` in the analysis function replaced with `tern` internal function [`tern:::h_coxreg_extract_interaction()`](https://insightsengineering.github.io/tern/main/reference/cox_regression_inter.html).
-
 ### `tidy` Method for `summary.coxph` Objects: `tidy.summary.coxph`
 
 This method allows the `tidy` function from the `broom` package to operate on `summary.coxph` output, extracting the values of interest to this analysis and returning a tidied `tibble::tibble()` object.
@@ -214,7 +212,7 @@ h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
 
 ## Creating a Helper Function: `cached_model`
 
-Next, we will create a helper function, `cached_model`, which will be used within our analysis function to cache and return the fitted Cox regression model for the current covariate. The `df` argument will be directly inherited from the `df` argument passed to the analysis function, which contains the full dataset being analyzed. The `cov` argument will be the covariate that is being analyzed depending on the current row context. If the treatment effect is currently being analyzed, this value will be an empty string. The `cache_env` parameter will be an environment object which is used to store the model for the current covariate, also inherited directly from the analysis function. Of course, this function can also be run outside of the analysis function and will still cache and return a Cox regression model.
+Next, we will create a helper function, `cached_model`, which will be used within our analysis function to cache and return the fitted Cox regression model for the current covariate. The `df` argument will be directly inherited from the `df` argument passed to the analysis function, which contains the full dataset being analyzed. The `cov` argument will be the covariate that is being analyzed depending on the current row context. If the treatment effect is currently being analyzed, this value will be an empty string. The `cache_env` parameter will be an environment object which is used to store the model for the current covariate, also passed down from the analysis function. Of course, this function can also be run outside of the analysis function and will still cache and return a Cox regression model.
 
 Using these arguments, the `cached_model` function first checks if a model for the given covariate `cov` is already stored in the caching environment `cache_env`. If so, then this model is retrieved and returned by `cached_model`. If not, the model must be constructed. This is done by first constructing the model formula, `model_form`, starting with only the treatment effect (`ARM`) and adding a covariate effect if one is currently being analyzed. Then a Cox regression model is fit using `df` and the model formula, and this model is both returned and stored in the caching environment object as `cache_env[[cov]]`.
 
@@ -248,7 +246,7 @@ cached_model <- function(df, cov, cache_env) {
 
 ## Creating the Analysis Function: `a_cox_summary`
 
-With our data prepared and helper function created, we can proceed to construct our analysis function `a_cox_summary`, which will be used to populate all of the rows in our table. In order to be used to generate both data rows (for interaction effects) and content rows (for main effects), we must create a function that can be used as both `afun` in `analyze` and `cfun` in `summarize_row_groups`. Therefore, our function must accept either `x` or `df` as its first parameter and also accept the `labelstr` parameter.
+With our data prepared and helper function created, we can proceed to construct our analysis function `a_cox_summary`, which will be used to populate all of the rows in our table. In order to be used to generate both data rows (for interaction effects) and content rows (for main effects), we must create a function that can be used as both `afun` in `analyze` and `cfun` in `summarize_row_groups`. Therefore, our function must accept the `labelstr` parameter.
 
 The arguments of our analysis function will be as follows:
 
@@ -256,10 +254,10 @@ The arguments of our analysis function will be as follows:
 -   `labelstr` - the `string` label for the variable being analyzed in the current row/column split context.
 -   `.spl_context` - a `data.frame` containing the `value` column which is used by this analysis function to determine the name of the variable/covariate in the current split. For more details on the information stored by `.spl_context` see `?analyze`.
 -   `stat` and `format` - `string`s that indicate which statistic column we are currently in and what format should be applied to print the statistic.
--   `cache_env` - an `environment` object that can be used to store cached models so that we can prevent repeatedly fitting the same model. Instead, each model will be generated once per covariate and then reused.
+-   `cache_env` - an `environment` object that can be used to store cached models so that we can prevent repeatedly fitting the same model. Instead, each model will be generated once per covariate and then reused. This argument will be passed directly to the `cached_model` helper function we defined previously.
 -   `cov_main` - a `logical` value indicating whether or not the current row is summarizing covariate main effects.
 
-The analysis function works within a given row/column split context by using the current covariate (`cov`) and the `cached_model` function to obtain the desired Cox regression model. From this model, the `h_coxreg_extract_interaction` function is able to extract information/statistics relevant to the analysis and store it in a `data.frame`. The rows in this `data.frame` that are of interest in the current row/column split context are then extracted and the statistic to be printed in the current column is retrieved from these rows. Finally, the formatted rows containing the value of this statistic are returned with appropriate labelling. For more detail see the commented function code below, where the purpose of each line within `a_cox_summary` is described.
+The analysis function works within a given row/column split context by using the current covariate (`cov`) and the `cached_model` function to obtain the desired Cox regression model. From this model, the `h_coxreg_extract_interaction` function is able to extract information/statistics relevant to the analysis and store it in a `data.frame`. The rows in this `data.frame` that are of interest in the current row/column split context are then extracted and the statistic to be printed in the current column is retrieved from these rows. Finally, the formatted cells with this statistic are returned as a `VerticalRowsSection` object. For more detail see the commented function code below, where the purpose of each line within `a_cox_summary` is described.
 
 ```{r}
 a_cox_summary <- function(df,
