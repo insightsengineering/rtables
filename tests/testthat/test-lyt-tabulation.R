@@ -931,10 +931,10 @@ test_that(".spl_context works in content and analysis functions", {
 })
 
 test_that(".spl_context contains information about the column split", {
-    ## Duplication hack
+    ## Duplication hack # xxx send it to Gabe
     DM_tmp <- DM %>% 
-        mutate(method = factor("Mean")) %>% 
-        mutate(SEX = factor(SEX))
+        mutate(method = factor("Mean")) 
+    
     DM_tmp <- rbind(DM_tmp, DM_tmp %>% 
                         mutate(method = factor("SD")))
     
@@ -956,7 +956,7 @@ test_that(".spl_context contains information about the column split", {
     lyt <- basic_table() %>% 
         split_rows_by("STRATA1") %>%
         split_cols_by(var = "method") %>%
-        split_cols_by("SEX") %>%
+        split_cols_by("SEX", split_fun = drop_split_levels) %>%
         analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.x")
     
     expect_silent(tbl <- lyt %>% build_table(DM_tmp))
@@ -964,50 +964,98 @@ test_that(".spl_context contains information about the column split", {
     tol <- 0.02
     DM_tmp_F <- DM_tmp %>% filter(SEX == "F", STRATA1 == "B")
     expect_equal(tbl[4, 1, drop = TRUE], mean(DM_tmp_F$BMRKR1), tolerance = tol)
-    expect_equal(tbl[4, 3, drop = TRUE], sd(DM_tmp_F$BMRKR1), tolerance = tol)
+    expect_equal(tbl[4, 3, drop = TRUE], sd(DM_tmp_F$BMRKR1), tolerance = tol) # xxx why -0.011?
 })
 
 test_that(".spl_context contains col information and multivars works", {
-    DM_tmp <- DM %>% 
+    DM_tmp <- DM %>% # xxx file an issue for this 
+                     # xxx add documentation for not supported + error
         mutate(SEX = factor(SEX))
     
     lyt <- basic_table() %>% 
         split_rows_by("STRATA1") %>%
-        split_cols_by_multivar(vars = c("BMRKR1", "BMRKR1"), 
-                               varlabels = c("M", "SD")) %>%
-        # split_cols_by("SEX") %>% # Breaks
-        analyze_colvars(afun = list("Mean" = mean, "SD" = sd), format = "xx.x")
+        # split_cols_by_multivar(vars = c("BMRKR1", "BMRKR1"), 
+        #                        varlabels = c("M", "SD")) %>%
+        split_cols_by("ARM") %>% # Breaks
+        split_cols_by("SEX") %>% # Breaks
+        analyze(vars = c("BMRKR1"), afun = list("Mean" = mean, "Mean" = mean,
+                                                "SD" = sd, "SD" = sd), 
+                # xxx with 2 should work
+                format = "xx.x")
+        # analyze(vars = c("BMRKR1", "BMRKR1"), 
+        #         afun = list("F" = mean, "SD" = min),
+        #         show_labels = "hidden")
     
     lyt %>% build_table(DM_tmp)
 })
 
 test_that(".spl_context contains information about combo counts", {
+    # xxx full_alt_parent_df + expr
+    ## xxx create convenience function from expr to col subset at certain level
     ## Fix for https://github.com/insightsengineering/rtables/issues/517
     combodf <- tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
         "all_X", "All Drug X", c("A: Drug X", "C: Combination"), list(),
         "all_pt", "All Patients", c("A: Drug X", "B: Placebo", "C: Combination"), list()
     )
-    mean_wrapper <- function(x, spl, .spl_context, ...){
-        tentative_n <- .spl_context$cur_tot_col_count[1]
-        in_rows("mean" = mean(x),
-                "n" = tentative_n,
-                "for_fun" = mean(x) / tentative_n)
+    
+    n_wrapper_alt_df <- function(alt_counts_df) {
+        function(x, .spl_context, .N_col, .alt_counts_df, .all_col_exprs, 
+                 .all_col_counts, ...) { 
+            # xxx only if it is in formals we calculate it, 
+            # xxx  see `newbl_raw <- lapply(baselines,`
+            if (.spl_context$cur_col_id[[1]] != "all_X") {
+                in_rows("n" = .N_col, .formats = "xx")
+            } else {
+                # browser()
+                # Normal execution - no use of cexpr
+                alt_df1 <- .alt_counts_df %>% 
+                    filter(ARM == "A: Drug X")
+                alt_df2 <- .alt_counts_df %>% 
+                    filter(ARM == "C: Combination")
+                
+                # Use of cexpr
+                alt_df1c <- .alt_counts_df %>% 
+                    filter(eval(.all_col_exprs[["A: Drug X"]]))
+                alt_df2c <- .alt_counts_df %>% 
+                    filter(eval(.all_col_exprs[["C: Combination"]]))
+                
+                # Super manual extraction
+                alt_df1b <- alt_counts_df %>% 
+                    filter(ARM == "A: Drug X") %>% 
+                    filter(STRATA1 == .spl_context$value[[2]])
+                alt_df2b <- .alt_counts_df %>% 
+                    filter(ARM == "C: Combination") %>% 
+                    filter(STRATA1 == .spl_context$value[[2]])
+                
+                # This would break the checks if not working
+                stopifnot(nrow(alt_df1) == nrow(alt_df1b))
+                stopifnot(nrow(alt_df1) == nrow(alt_df1c))
+                stopifnot(nrow(alt_df2) == nrow(alt_df2b))
+                stopifnot(nrow(alt_df2) == nrow(alt_df2c))
+                
+                # General info
+                stopifnot(.all_col_counts[["all_X"]] == .N_col)
+                stopifnot(.all_col_exprs[["all_X"]] == .spl_context$cur_col_expr[[2]])
+                
+                # Fin needed output 
+                in_rows("n" = c(nrow(alt_df1c), 
+                                nrow(alt_df2c)), 
+                        .formats = "xx - xx")
+            }
+        }
     }
     
     lyt <- basic_table(show_colcounts = TRUE) %>% 
         split_cols_by("ARM", split_fun = add_combo_levels(combodf, 
-                                                          first = TRUE#,
-                                                          #keep_levels = FALSE
+                                                          first = TRUE
+                                                          # keep_levels = c("all_X")
                                                           )) %>%
-        split_rows_by("SEX", split_fun = drop_split_levels) %>%
-        analyze(vars = "BMRKR1", afun = mean_wrapper, format = "xx.")
-    
-    tbl <- lyt %>% build_table(DM)
-    spl_ctx_cnt <- sapply(seq_len(ncol(tbl)), function(x) tbl[3, x, drop = TRUE])
-    expect_identical(col_counts(tbl), spl_ctx_cnt)
+        split_rows_by("STRATA1", split_fun = drop_split_levels) %>%
+        analyze(vars = "BMRKR1", afun = n_wrapper_alt_df(ex_adsl))
     
     tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
+    
     spl_ctx_cnt <- sapply(seq_len(ncol(tbl)), function(x) tbl[3, x, drop = TRUE])
     expect_identical(col_counts(tbl), spl_ctx_cnt)
 })

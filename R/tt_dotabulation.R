@@ -2,8 +2,11 @@
 match_extra_args <- function(f,
                             .N_col,
                             .N_total,
+                            .all_col_exprs, 
+                            .all_col_counts,
                             .var,
                             .ref_group = NULL,
+                            .alt_counts_df = NULL,
                             .ref_full = NULL,
                             .in_ref_col = NULL,
                             .spl_context = NULL,
@@ -14,7 +17,9 @@ match_extra_args <- function(f,
         .N_col = .N_col,
         .N_total = .N_total,
         .N_row = .N_row,
-        .df_row = .df_row
+        .df_row = .df_row,
+        .all_col_exprs = .all_col_exprs, 
+        .all_col_counts = .all_col_counts
     ),
     extras)
     formargs <- formals(f)
@@ -26,6 +31,8 @@ match_extra_args <- function(f,
         possargs <- c(possargs, list(.var = .var))
     if(!is.null(.ref_group))
         possargs <- c(possargs, list(.ref_group = .ref_group))
+    if(!is.null(.alt_counts_df))
+        possargs <- c(possargs, list(.alt_counts_df = .alt_counts_df))
     if(!is.null(.ref_full))
         possargs <- c(possargs, list(.ref_full = .ref_full))
     if(!is.null(.in_ref_col))
@@ -58,15 +65,22 @@ match_extra_args <- function(f,
 #'   generates
 gen_onerv <- function(csub, col, count, cextr, cpath,
                      dfpart, func, totcount, splextra,
+                     all_col_exprs,
+                     all_col_counts,
                      takesdf = .takes_df(func),
                      baselinedf,
+                     alt_dfpart,
                      inclNAs,
                      col_parent_inds,
                      spl_context) {
+    # xxx exceptions to check: add_overall_level, add_overall_col
+    # xxx multilevels (e.g. 3+)
+    # xxx cbind
+    # browser()
     spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
     spl_context$cur_col_subset <- col_parent_inds
+    spl_context$cur_col_expr <- csub
     spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
-    spl_context$cur_tot_col_count <- count
     spl_context$cur_col_split <- list(cpath[seq(1, length(cpath), 2)])
     spl_context$cur_col_split_val <- list(cpath[seq(2, length(cpath), 2)])
     
@@ -97,12 +111,18 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
         baselinedf <- baselinedf[[col]]
     }
     args <- list(dat)
-
-    exargs <-    match_extra_args(func,
+    
+    names(all_col_counts) <- names(all_col_exprs)
+    
+    # xxx to add to docs: .alt_counts_df, .all_col_exprs, .all_col_counts
+    exargs <- match_extra_args(func,
                               .N_col = count,
                               .N_total = totcount,
+                              .all_col_exprs = all_col_exprs, 
+                              .all_col_counts = all_col_counts,
                               .var = col,
                               .ref_group = baselinedf,
+                              .alt_counts_df = alt_dfpart,
                               .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
                               .N_row = NROW(dfpart),
@@ -148,6 +168,7 @@ gen_rowvalues <- function(dfpart,
                          splextra,
                          takesdf = NULL,
                          baselines,
+                         alt_dfpart,
                          inclNAs,
                          spl_context = spl_context) {
     # browser()
@@ -219,7 +240,7 @@ gen_rowvalues <- function(dfpart,
         exargs <- rep(exargs, length.out = length(colexprs))
 
     }
-
+    # browser()
     allfuncs <- rep(func, length.out = length(colexprs))
 
     if(is.null(takesdf))
@@ -232,10 +253,13 @@ gen_rowvalues <- function(dfpart,
                      cextr = colextras,
                      cpath = cpaths,
                      baselinedf = baselines,
+                     alt_dfpart = list(alt_dfpart),
                      func = allfuncs,
                      takesdf = takesdf,
                      col_parent_inds = spl_context[, names(colexprs),
                                                    drop = FALSE],
+                     all_col_exprs = list(colexprs),
+                     all_col_counts = list(colcounts),
                      splextra = exargs,
                      MoreArgs = list(dfpart = dfpart,
                                      totcount = totcount,
@@ -257,6 +281,7 @@ gen_rowvalues <- function(dfpart,
 #' @noRd
 #' @return a list of table rows, even when only one is generated
 .make_tablerows <- function(dfpart,
+                           alt_dfpart,
                            func,
                            cinfo,
                            datcol = NULL,
@@ -282,8 +307,9 @@ gen_rowvalues <- function(dfpart,
     } else {
         rowvar  <- NA_character_
     }
-
+    
     rawvals <- gen_rowvalues(dfpart,
+                            alt_dfpart = alt_dfpart,
                             datcol = datcol,
                             cinfo = cinfo,
                             func = func,
@@ -409,6 +435,7 @@ gen_rowvalues <- function(dfpart,
                       indent_mod = 0L,
                       cvar = NULL,
                       inclNAs,
+                      alt_df,
                       extra_args,
                       spl_context = context_df_row(cinfo = cinfo)) {
 
@@ -426,6 +453,7 @@ gen_rowvalues <- function(dfpart,
                                    takesdf = rep(.takes_df(cfunc),
                                                  length.out = ncol(cinfo)),
                                    inclNAs = FALSE,
+                                   alt_dfpart = alt_df,
                                    splextra = extra_args,
                                    spl_context = spl_context),
                              error = function(e) e)
@@ -452,6 +480,7 @@ gen_rowvalues <- function(dfpart,
 
 
 .make_analyzed_tab <- function(df,
+                              alt_df,
                               spl,
                               cinfo,
                               partlabel = "",
@@ -466,6 +495,7 @@ gen_rowvalues <- function(dfpart,
     if(nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
         defrlabel <- partlabel
     }
+    # browser()
     kids <- tryCatch(.make_tablerows(df,
                                      func = analysis_fun(spl),
                                      defrowlabs = defrlabel, # XXX
@@ -474,7 +504,8 @@ gen_rowvalues <- function(dfpart,
                                      lev = lvl + 1L,
                                      format = obj_format(spl),
                                      splextra = split_exargs(spl),
-                                            baselines = baselines,
+                                     baselines = baselines,
+                                     alt_dfpart = alt_df,
                                      inclNAs = avar_inclNAs(spl),
                                      spl_context = spl_context),
                      error = function(e) e)
@@ -515,6 +546,7 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
                    make_lrow, ## unused here
                    ...,
                    df,
+                   alt_df,
                    lvl,
                    name,
                    cinfo,
@@ -527,6 +559,7 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
         spvis <- nsibs > 0
 
     ret <- .make_analyzed_tab(df = df,
+                             alt_df,
                              spl = spl,
                              cinfo = cinfo,
                              lvl = lvl + 1L,
@@ -625,12 +658,14 @@ setMethod(".make_split_kids", "Split",
                    ...,
                    splvec, ## passed to recursive_applysplit
                    df, ## used to apply split
+                   alt_df, ## used to apply split for alternative df
                    lvl,  ## used to calculate innerlev
                    cinfo, ## used for sanity check
                    baselines, ## used to calc new baselines
                    spl_context) {
     ## do the core splitting of data into children for this split
     rawpart <- do_split(spl, df, spl_context = spl_context)
+    # browser()
     dataspl <- rawpart[["datasplit"]]
     ## these are SplitValue objects
     splvals <- rawpart[["values"]]
@@ -684,6 +719,14 @@ setMethod(".make_split_kids", "Split",
                 rawdat[[1]][0, ]
         })
     })
+    
+    # Apply same split for alt_counts_df
+    if (!is.null(alt_df)) {
+        # browser()
+        alt_dfpart <- do_split(spl,
+                               alt_df,
+                               spl_context = spl_context)[["datasplit"]]
+    }
 
 
     stopifnot(length(newbaselines) == length(dataspl),
@@ -693,7 +736,7 @@ setMethod(".make_split_kids", "Split",
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
 
     ## do full recursive_applysplit on each part of the split defined by spl
-    inner <- unlist(mapply(function(dfpart,  nm, label, baselines, splval) {
+    inner <- unlist(mapply(function(dfpart, alt_dfpart, nm, label, baselines, splval) {
 
         rsplval <- context_df_row(split = obj_name(spl),
                                   value = value_names(splval),
@@ -703,6 +746,7 @@ setMethod(".make_split_kids", "Split",
         ## if(length(rsplval) > 0)
         ##     rsplval <- setNames(rsplval, obj_name(spl))
         recursive_applysplit(df = dfpart,
+                             alt_df = alt_dfpart,
                              name = nm,
                              lvl = innerlev,
                              splvec = splvec,
@@ -719,6 +763,7 @@ setMethod(".make_split_kids", "Split",
                              ##splval should still be retaining its name
                              spl_context = rbind(spl_context, rsplval))
     }, dfpart = dataspl,
+    alt_dfpart = alt_dfpart,
     label = partlabels,
     nm = nms,
     baselines = newbaselines,
@@ -753,10 +798,11 @@ context_df_row <- function(split = character(),
                 full_parent_df = I(full_parent_df),
                 #     parent_cold_inds = I(parent_col_inds),
                       stringsAsFactors = FALSE)
-    if(nrow(ret) > 0)
+    if(nrow(ret) > 0) {
         ret$all_cols_n <- nrow(full_parent_df[[1]])
-    else
-        ret$all_cols_n <- integer() ## should this be numeric???
+    } else {
+        ret$all_cols_n <- integer() ## should this be numeric??? This never happens
+    }
 
     if(!is.null(cinfo)) {
         if(nrow(ret) > 0)
@@ -777,6 +823,7 @@ context_df_row <- function(split = character(),
 
 recursive_applysplit <- function(df,
                                 lvl = 0L,
+                                alt_df,
                                 splvec,
                                 name,
                        #         label,
@@ -813,6 +860,7 @@ recursive_applysplit <- function(df,
                       na_str = cna_str,
                       indent_mod = cindent_mod,
                       cvar = cvar,
+                      alt_df = alt_df,
                       extra_args = cextra_args,
                       spl_context = spl_context)
 
@@ -838,6 +886,7 @@ recursive_applysplit <- function(df,
         ## to the various methods of .make_split_kids
         kids <- .make_split_kids(spl = spl,
                                 df = df,
+                                alt_df = alt_df,
                                 lvl = lvl,
                                 splvec = splvec,
                                 name = name,
@@ -1015,7 +1064,6 @@ build_table <- function(lyt, df,
     lyt <- fix_analyze_vis(lyt)
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
 
-
     rtpos <- TreePos()
     cinfo <- create_colinfo(lyt, df, rtpos,
                            counts = col_counts,
@@ -1024,10 +1072,21 @@ build_table <- function(lyt, df,
                            topleft)
       if(!is.null(col_counts))
         disp_ccounts(cinfo) <- TRUE
+    
+    # ## xxx check analysis functionS and summary fncS for 
+    # #      absence of analysis params
+    # fil_params <- .check_analysis_fun_params(func)
+    # if (fil_params$.ref_group) {
+    #     # baselines <- replicate(length(col_exprs(cinfo)), list(dfpart[0, ]))
+    # }
+    ## Fixing columns replication of alternate df
+    # alt_df_tmp <- rep_len(alt_counts_df, length(col_exprs(cinfo)))
+    # names(alt_df_tmp) <- names(col_exprs(cinfo))
 
     rlyt <- rlayout(lyt)
     rtspl <- root_spl(rlyt)
     ctab <- .make_ctab(df, 0L,
+                      alt_df = NULL,
                       name = "root",
                       label = "",
                       cinfo = cinfo, ##cexprs, ctree,
@@ -1048,6 +1107,7 @@ build_table <- function(lyt, df,
         ## TODO confirm this
         ## lab <- obj_label(firstspl)
         recursive_applysplit(df = df, lvl = 0L,
+                             alt_df = alt_counts_df,
                              name = nm,
                              splvec = splvec,
                              cinfo = cinfo,
@@ -1058,7 +1118,9 @@ build_table <- function(lyt, df,
                              cna_str = content_na_str(firstspl),
                              cvar = content_var(firstspl),
                              cextra_args = content_extra_args(firstspl),
-                             spl_context = context_df_row(split = "root", value = "root", full_parent_df = list(df), cinfo = cinfo),
+                             spl_context = context_df_row(split = "root", value = "root", 
+                                                          full_parent_df = list(df), 
+                                                          cinfo = cinfo),
                              ## we DO want the 'outer table' if the first
                              ## one is a multi-analyze
                              no_outer_tbl = !is(firstspl, "AnalyzeMultiVars"))
@@ -1163,6 +1225,17 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     df
 }
 
+.check_analysis_fun_params <- function(func) {
+    browser()
+    f_params <- formals(func)
+    
+    # Checking data heavy parameters that should undergo rowsplitting
+    params <- c(".ref_group")
+    fil_params <- params %in% names(f_params)
+    names(fil_params) <- params
+    
+    fil_params
+}
 
 fix_split_vars <- function(lyt, df, char_ok) {
     df <- fix_split_vars_inner(clayout(lyt), df, char_ok = char_ok)
