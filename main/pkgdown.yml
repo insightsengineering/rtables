@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -15,7 +15,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2023-06-15T17:54Z
+last_built: 2023-06-29T03:04Z
 urls:
   reference: https://insightsengineering.github.io/rtables/main/reference
   article: https://insightsengineering.github.io/rtables/main/articles
