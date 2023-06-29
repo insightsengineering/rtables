@@ -375,22 +375,27 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
     rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
-    # Titles/footer info are (independently) retained from first object if all other objects have none
-    all_titles <- lapply(x, function(x) if (is.null(attr(x, "main_title"))) "" else main_title(x))
-    if (all_titles[[1]] != "" & all(all_titles[[-1]] == "")) rbind_annot[["title"]] <- all_titles[[1]]
+    # Titles/footer info are (independently) retained from first object if identical or missing in all other objects
+    all_titles <- sapply(x, function(x) if (is.null(attr(x, "main_title"))) "" else main_title(x))
+    if (all_titles[1] != "" && (all(all_titles[-1] == "") || length(unique(all_titles)) == 1)) {
+      rbind_annot[["title"]] <- all_titles[[1]]
+    }
 
     all_sts <- lapply(x, function(x) if (is.null(attr(x, "subtitles"))) character() else subtitles(x))
-    if (length(all_sts[[1]]) > 0 & all(sapply(all_sts[[-1]], function(x) length(x) == 0))) {
+    if (length(all_sts[[1]]) > 0 && (all(sapply(all_sts[[-1]], length) == 0) ||
+      !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_sts)))) {
       rbind_annot[["subtitles"]] <- all_sts[[1]]
     }
 
     all_footers <- lapply(x, function(x) if (is.null(attr(x, "main_footer"))) character() else main_footer(x))
-    if (length(all_footers[[1]]) > 0 & all(sapply(all_footers[[-1]], function(x) length(x) == 0))) {
+    if (length(all_footers[[1]]) > 0 && (all(sapply(all_footers[[-1]], length) == 0) ||
+      !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_footers)))) {
       rbind_annot[["footer"]] <- all_footers[[1]]
     }
 
     all_pfs <- lapply(x, function(x) if (is.null(attr(x, "provenance_footer"))) character() else prov_footer(x))
-    if (length(all_pfs[[1]]) > 0 & all(sapply(all_pfs[[-1]], function(x) length(x) == 0))) {
+    if (length(all_pfs[[1]]) > 0 && (all(sapply(all_pfs[[-1]], length) == 0) ||
+      !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_pfs)))) {
       rbind_annot[["pf"]] <- all_pfs[[1]]
     }
 
@@ -415,11 +420,11 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     }
 
 
-    TableTree(kids = x, 
-              cinfo = firstcols, 
-              name = "rbind_root", 
-              label = "", 
-              title = rbind_annot[["title"]], 
+    TableTree(kids = x,
+              cinfo = firstcols,
+              name = "rbind_root",
+              label = "",
+              title = rbind_annot[["title"]],
               subtitles = rbind_annot[["subtitles"]],
               main_footer = rbind_annot[["footer"]],
               prov_footer = rbind_annot[["pf"]])
@@ -433,10 +438,11 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
 #'
-#' @note 
-#' When objects are rbinded, titles and footer information are retained from the first object (if any exist)
-#' and all other objects have no titles/footers. Otherwise, all titles/footers are removed and must be set 
-#' for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] functions.
+#' @note
+#' When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all 
+#' other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed 
+#' and must be set for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] 
+#' functions.
 #'
 #' @examples
 #' mtbl <- rtable(
