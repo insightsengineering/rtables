@@ -703,13 +703,13 @@ setMethod(".make_split_kids", "Split",
             if(nm %in% names(bldataspl))
                 bldataspl[[nm]]
             else
-                dataspl[[1]][0, ]
+                dataspl[[1]][0, ] # xxx isnt it better to have NULL here?
         })
 
         names(res) <- names(dataspl)
         res
     })
-    newbaselines <- lapply(names(dataspl),
+    newbaselines <- lapply(names(dataspl), # xxx why is this done again?
                           function(nm) {
         lapply(newbl_raw,
                function(rawdat) {
@@ -726,6 +726,8 @@ setMethod(".make_split_kids", "Split",
         alt_dfpart <- do_split(spl,
                                alt_df,
                                spl_context = spl_context)[["datasplit"]]
+    } else {
+        alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }
 
 
@@ -734,7 +736,7 @@ setMethod(".make_split_kids", "Split",
                   identical(unique(sapply(newbaselines, length)),
                             length(col_exprs(cinfo))))
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
-
+    
     ## do full recursive_applysplit on each part of the split defined by spl
     inner <- unlist(mapply(function(dfpart, alt_dfpart, nm, label, baselines, splval) {
 
