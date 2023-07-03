@@ -19,7 +19,7 @@ test_that(".spl_context contains information about the column split", {
         } else if (any(.spl_context$cur_col_split_val[[2]] == "Mean")) {
             res <- list("SOMETHING" = mean(x))
         }
-        
+            
         in_rows(.list = res)
     }
     
@@ -39,7 +39,7 @@ test_that(".spl_context contains information about the column split", {
 
 test_that(".spl_context contains col information and multivars works", {
     DM_tmp <- DM %>% # xxx file an issue for this 
-        # xxx add documentation for not supported + error
+                     # xxx add documentation for not supported + error
         mutate(SEX = factor(SEX))
     
     lyt <- basic_table() %>% 
@@ -52,9 +52,9 @@ test_that(".spl_context contains col information and multivars works", {
                                                 "SD" = sd, "SD" = sd), 
                 # xxx with 2 should work
                 format = "xx.x")
-    # analyze(vars = c("BMRKR1", "BMRKR1"), 
-    #         afun = list("F" = mean, "SD" = min),
-    #         show_labels = "hidden")
+        # analyze(vars = c("BMRKR1", "BMRKR1"), 
+        #         afun = list("F" = mean, "SD" = min),
+        #         show_labels = "hidden")
     
     lyt %>% build_table(DM_tmp)
 })
@@ -130,7 +130,7 @@ test_that(".spl_context contains information about combo counts", {
     nrow_manual <- lapply(sort(unique(ex_adsl$STRATA1)), function(x) {
         tmp_strata <- ex_adsl %>% filter(STRATA1 == x)
         sapply(list(tmp_strata %>% filter(ARM == "A: Drug X"),
-                    tmp_strata %>% filter(ARM == "C: Combination")), nrow)
+                 tmp_strata %>% filter(ARM == "C: Combination")), nrow)
     })
     
     expect_identical(nrow_manual, spl_ctx_cnt)
