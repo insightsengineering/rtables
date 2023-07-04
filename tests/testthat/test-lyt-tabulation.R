@@ -871,7 +871,20 @@ test_that("topleft label position works", {
     expect_identical(c("Ethnicity", "  Factor2"),
                    top_left(tab))
     expect_identical(14L,
-                   nrow(tab))
+                     nrow(tab))
+
+    ## https://github.com/insightsengineering/rtables/issues/657
+    tab2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE", split_fun = drop_split_levels, split_label = "RACE", label_pos = "hidden", page_by = TRUE) %>%
+        split_rows_by("STRATA1", split_fun = drop_split_levels, split_label = "Strata", label_pos = "topleft") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, split_label = "Gender", label_pos = "topleft") %>%
+        analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
+        build_table(DM)
+
+    ptab <- paginate_table(tab2)
+    expect_identical(top_left(ptab[[1]]),
+                     c("Strata", "  Gender"))
 })
 
 
@@ -1305,4 +1318,14 @@ test_that("qtable works", {
         build_table(ex_adsl)
 
     nice_comp_table(t9, t9b)
+})
+
+
+## https://github.com/insightsengineering/rtables/issues/671
+test_that("problematic labels are caught and give informative error message", {
+    lyt <- basic_table() %>%
+        split_rows_by("Species") %>%
+        analyze("Sepal.Length", afun = make_afun(simple_analysis, .labels = list(Mean = "this is {test}")))
+
+    expect_error(build_table(lyt, iris), "Labels cannot contain [{] or [}] due to")
 })
