@@ -1,4 +1,4 @@
-## rtables 0.6.1.9006
+## rtables 0.6.1.9007
  * fix major regressions for page_by machinery caused by migration to formatters 0.5.0 pagination framework.
 
 ## rtables 0.6.1
