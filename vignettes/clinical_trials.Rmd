@@ -488,6 +488,8 @@ ADAE2 <- ADAE2 %>%
   ) %>%
   select(USUBJID, ARM, AGE, SEX, AESEQ, AEDECOD, AEBODSYS, AETOXGR)
 
+ADSL2 <- ADSL2 %>% left_join(ADAE2 %>% select(USUBJID, AEBODSYS, AEDECOD, AETOXGR)) # xxx to lose after added checks
+
 ADAE2
 ```
 
@@ -497,6 +499,7 @@ We start by defining an events summary function:
 
 ```{r}
 s_events_patients <- function(x, labelstr, .N_col) {
+    # browser()
   in_rows(
     "Total number of patients with at least one event" =
       rcell(length(unique(x)) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),

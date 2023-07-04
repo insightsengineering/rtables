@@ -701,9 +701,16 @@ setMethod(".make_split_kids", "Split",
         if(is.null(dat))
             return(NULL)
         ## apply the same splitting on the
-        bldataspl <- do_split(spl,
-                             dat,
-                             spl_context = spl_context)[["datasplit"]]
+        bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
+                              error = function(e) e)
+        
+        # Error localization
+        if (is(bldataspl, "error")) {
+            stop("Following error encountered in splitting .ref_group (baselines): ", 
+                 bldataspl$message,
+                 call. = FALSE)
+        }
+        
         ## we only keep the ones correspnoding with actual data splits
         res <- lapply(names(dataspl),
                     function(nm) {
@@ -729,10 +736,16 @@ setMethod(".make_split_kids", "Split",
     
     # Apply same split for alt_counts_df
     if (!is.null(alt_df)) {
-        # browser()
-        alt_dfpart <- do_split(spl,
-                               alt_df,
-                               spl_context = spl_context)[["datasplit"]]
+        alt_dfpart <- tryCatch(do_split(spl, alt_df, 
+                                        spl_context = spl_context)[["datasplit"]],
+                               error = function(e) e)
+        
+        # Error localization
+        if (is(alt_dfpart, "error")) {
+            stop("Following error encountered in splitting alt_counts_df: ", 
+                 alt_dfpart$message,
+                 call. = FALSE)
+        }
     } else {
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }

@@ -136,5 +136,14 @@ test_that(".spl_context contains information about combo counts", {
     expect_identical(nrow_manual, spl_ctx_cnt)
 })
 
+test_that("Error localization for missing split variable when done in alt_count_df", {
+    lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1")
+    lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1")
+    expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
+    expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM), 
+                 regexp = paste0("Following error encountered in splitting ",
+                 "alt_counts_df:  variable\\(s\\) \\[ARMCD\\] ",
+                 "not present in data. \\(VarLevelSplit\\)"))
+})
 
 context("Analysis functions (cfun)")
