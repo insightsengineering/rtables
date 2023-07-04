@@ -222,7 +222,7 @@ Most arguments beyond \code{tt} and \code{visible_only} are present so that
 and should not be set during a top-level call
 }
 \note{
-the technically present root tree node is excluded from the summary returned by
+the technically present root tree node is excluded from the summary returned dby
 both \code{make_row_df} and \code{make_col_df}, as it is simply the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }
