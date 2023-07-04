@@ -331,16 +331,16 @@
 \alias{tt_at_path<-,VTableTree,ANY,NULL-method}
 \alias{tt_at_path<-,VTableTree,ANY,TableRow-method}
 \alias{[<-,VTableTree,ANY,ANY,CellValue-method}
-\alias{[,VTableTree,logical,ANY,ANY-method}
-\alias{[,VTableTree,logical,missing,ANY-method}
-\alias{[,VTableTree,ANY,logical,ANY-method}
-\alias{[,VTableTree,ANY,missing,ANY-method}
-\alias{[,VTableTree,missing,ANY,ANY-method}
-\alias{[,VTableTree,ANY,character,ANY-method}
-\alias{[,VTableTree,character,ANY,ANY-method}
-\alias{[,VTableTree,character,character,ANY-method}
-\alias{[,VTableTree,missing,numeric,ANY-method}
-\alias{[,VTableTree,numeric,numeric,ANY-method}
+\alias{[,VTableTree,logical,ANY-method}
+\alias{[,VTableTree,logical,missing-method}
+\alias{[,VTableTree,ANY,logical-method}
+\alias{[,VTableTree,ANY,missing-method}
+\alias{[,VTableTree,missing,ANY-method}
+\alias{[,VTableTree,ANY,character-method}
+\alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,character,character-method}
+\alias{[,VTableTree,missing,numeric-method}
+\alias{[,VTableTree,numeric,numeric-method}
 \alias{cell_values,VTableTree-method}
 \alias{cell_values,TableRow-method}
 \alias{cell_values,LabelRow-method}
@@ -1054,25 +1054,25 @@ spl_varnames(object) <- value
 
 \S4method{[}{VTableTree,ANY,ANY,CellValue}(x, i, j, ...) <- value
 
-\S4method{[}{VTableTree,logical,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,logical,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,logical,missing,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,logical,missing}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,ANY,logical,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,missing,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,missing,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,ANY,character,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,character,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,character,character,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,missing,numeric,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{VTableTree,numeric,numeric,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
 
 \S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
