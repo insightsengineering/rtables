@@ -1306,3 +1306,13 @@ test_that("qtable works", {
 
     nice_comp_table(t9, t9b)
 })
+
+
+## https://github.com/insightsengineering/rtables/issues/671
+test_that("problematic labels are caught and give informative error message", {
+    lyt <- basic_table() %>%
+        split_rows_by("Species") %>%
+        analyze("Sepal.Length", afun = make_afun(simple_analysis, .labels = list(Mean = "this is {test}")))
+
+    expect_error(build_table(lyt, iris), "Labels cannot contain [{] or [}] due to")
+})
