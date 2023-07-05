@@ -107,7 +107,7 @@ do_label_row <- function(rdfrow, maxlen) {
 }
 
 
-make_ard_md_colnames <- function(maxlen) {
+make_flat_df_md_colnames <- function(maxlen) {
   spllen <- floor((maxlen - 2) / 2)
   ret <- character()
   if (spllen > 0) {
@@ -159,7 +159,7 @@ handle_rdf_row <- function(rdfrow, maxlen) {
     DataRow = do_data_row(rdfrow, maxlen),
     stop("Unrecognized node type in row dataframe, unable to generate ARD")
   )
-  setNames(ret, make_ard_md_colnames(maxlen))
+  setNames(ret, make_flat_df_md_colnames(maxlen))
 }
 
 
@@ -168,23 +168,23 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 #' @return a named list of ard extraction functions by "specification"
 #' @export
 #' @examples
-#' ard_specs()
-ard_specs <- function() {
-  list(v0_experimental = ard_v0_experimental)
+#' flat_df_specs()
+flat_df_specs <- function() {
+  list(v0_experimental = flat_df_v0_experimental)
 }
 
-lookup_ard_specfun <- function(spec) {
-  if (!(spec %in% names(ard_specs()))) {
+lookup_flat_df_specfun <- function(spec) {
+  if (!(spec %in% names(flat_df_specs()))) {
     stop(
       "unrecognized ARD specification: ",
       spec,
       "If that specification is correct you may  need to update your version of rtables"
     )
   }
-  ard_specs()[[spec]]
+  flat_df_specs()[[spec]]
 }
 
-ard_v0_experimental <- function(tt) {
+flat_df_v0_experimental <- function(tt) {
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
@@ -244,8 +244,8 @@ ard_v0_experimental <- function(tt) {
 #' # You can utilize `tidyr::unnest_longer` to peform this function
 #' split_cell_values_df <- flattened_df %>% tidyr::unnest_longer(c("A: Drug X", "B: Placebo", "C: Combination"))
 as_dataframe_with_spec <- function(tt, spec = "v0_experimental", ...) {
-  ard_fun <- lookup_ard_specfun(spec)
-  ard_fun(tt, ...)
+  flat_df_fun <- lookup_flat_df_specfun(spec)
+  flat_df_fun(tt, ...)
 }
 
 .split_colwidths <- function(ptabs, nctot, colwidths) {

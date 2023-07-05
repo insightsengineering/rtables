@@ -55,18 +55,22 @@ Create a FlexTable object representing an rtables TableTree
 }
 \examples{
 analysisfun <- function(x, ...) {
-    in_rows(row1 = 5,
-            row2 = c(1, 2),
-            .row_footnotes = list(row1 = "row 1 - row footnote"),
-            .cell_footnotes = list(row2 = "row 2 - cell footnote"))
+  in_rows(
+    row1 = 5,
+    row2 = c(1, 2),
+    .row_footnotes = list(row1 = "row 1 - row footnote"),
+    .cell_footnotes = list(row2 = "row 2 - cell footnote")
+  )
 }
 
-lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
-               main_footer = "ha HA! Footer!") \%>\%
-split_cols_by("ARM") \%>\%
-analyze("AGE", afun = analysisfun)
+lyt <- basic_table(
+  title = "Title says Whaaaat", subtitles = "Oh, ok.",
+  main_footer = "ha HA! Footer!"
+) \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = analysisfun)
 
-tbl <-  build_table(lyt, ex_adsl)
+tbl <- build_table(lyt, ex_adsl)
 ft <- tt_to_flextable(tbl)
 ft
 }
