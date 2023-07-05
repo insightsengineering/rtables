@@ -53,7 +53,7 @@ match_extra_args <- function(f,
 }
 
 
-.takes_df <- function(f) {
+.takes_df <- function(f) { # xxx candidate for merger: func_takes
     if(is.list(f))
         return(vapply(f, .takes_df, NA))
     !is.null(formals(f)) && names(formals(f))[1] == "df"
@@ -76,7 +76,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     # xxx exceptions to check: add_overall_level, add_overall_col
     # xxx multilevels (e.g. 3+)
     # xxx cbind
-    # browser()
     if (NROW(spl_context) > 0) {
         spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
         spl_context$cur_col_subset <- col_parent_inds
@@ -173,7 +172,6 @@ gen_rowvalues <- function(dfpart,
                          alt_dfpart,
                          inclNAs,
                          spl_context = spl_context) {
-    # browser()
     colexprs <- col_exprs(cinfo)
     colcounts <- col_counts(cinfo)
     colextras <- col_extra_args(cinfo, NULL)
@@ -242,7 +240,6 @@ gen_rowvalues <- function(dfpart,
         exargs <- rep(exargs, length.out = length(colexprs))
 
     }
-    # browser()
     allfuncs <- rep(func, length.out = length(colexprs))
 
     if(is.null(takesdf))
@@ -502,7 +499,6 @@ gen_rowvalues <- function(dfpart,
     if(nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
         defrlabel <- partlabel
     }
-    # browser()
     kids <- tryCatch(.make_tablerows(df,
                                      func = analysis_fun(spl),
                                      defrowlabs = defrlabel, # XXX
@@ -672,7 +668,6 @@ setMethod(".make_split_kids", "Split",
                    spl_context) {
     ## do the core splitting of data into children for this split
     rawpart <- do_split(spl, df, spl_context = spl_context)
-    # browser()
     dataspl <- rawpart[["datasplit"]]
     ## these are SplitValue objects
     splvals <- rawpart[["values"]]
@@ -696,46 +691,56 @@ setMethod(".make_split_kids", "Split",
     ## rtables tabulation works
     ## (a) will only help if analyses that use baseline
     ## info are mixed with those who don't.
-    newbl_raw <- lapply(baselines,
-                       function(dat) {
-        if(is.null(dat))
-            return(NULL)
-        ## apply the same splitting on the
-        bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
-                              error = function(e) e)
-        
-        # Error localization
-        if (is(bldataspl, "error")) {
-            stop("Following error encountered in splitting .ref_group (baselines): ", 
-                 bldataspl$message,
-                 call. = FALSE)
-        }
-        
-        ## we only keep the ones correspnoding with actual data splits
-        res <- lapply(names(dataspl),
-                    function(nm) {
-            if(nm %in% names(bldataspl))
-                bldataspl[[nm]]
-            else
-                dataspl[[1]][0, ] # xxx isnt it better to have NULL here?
+    # Chosen (a) because (b) is major reworking
+    fnc_vec <- lapply(splvec[sapply(splvec, is, "VAnalyzeSplit")], analysis_fun)
+    if (any(unlist(func_takes(fnc_vec, c(".ref_group"))))) {
+        newbl_raw <- lapply(baselines, function(dat) {
+            if(is.null(dat))
+                return(NULL)
+            ## apply the same splitting on the
+            bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
+                                  error = function(e) e)
+            
+            # Error localization
+            if (is(bldataspl, "error")) {
+                stop("Following error encountered in splitting .ref_group (baselines): ", 
+                     bldataspl$message,
+                     call. = FALSE)
+            }
+            
+            ## we only keep the ones corresponding with actual data splits
+            res <- lapply(names(dataspl),
+                        function(nm) {
+                if(nm %in% names(bldataspl))
+                    bldataspl[[nm]]
+                else
+                    dataspl[[1]][0, ] # xxx isn't it better to have NULL here?
+            })
+    
+            names(res) <- names(dataspl)
+            res
         })
-
-        names(res) <- names(dataspl)
-        res
-    })
-    newbaselines <- lapply(names(dataspl), # xxx why is this done again?
-                          function(nm) {
-        lapply(newbl_raw,
-               function(rawdat) {
-            if(nm %in% names(rawdat))
-                rawdat[[nm]]
-            else
-                rawdat[[1]][0, ]
+        newbaselines <- lapply(names(dataspl), # xxx why is this done again?
+                              function(nm) {
+            lapply(newbl_raw,
+                   function(rawdat) {
+                if(nm %in% names(rawdat))
+                    rawdat[[nm]]
+                else
+                    rawdat[[1]][0, ]
+            })
         })
-    })
+        stopifnot(length(newbaselines) == length(dataspl),
+                  length(newbaselines) == 0 ||
+                      identical(unique(sapply(newbaselines, length)),
+                                length(col_exprs(cinfo))))
+    } else {
+        newbaselines <- lapply(col_extra_args(cinfo), function(x) x$.ref_full)
+    }
     
     # Apply same split for alt_counts_df
-    if (!is.null(alt_df)) {
+    if (!is.null(alt_df) &&
+        any(unlist(func_takes(fnc_vec, c(".alt_count_df"))))) {
         alt_dfpart <- tryCatch(do_split(spl, alt_df, 
                                         spl_context = spl_context)[["datasplit"]],
                                error = function(e) e)
@@ -751,10 +756,6 @@ setMethod(".make_split_kids", "Split",
     }
 
 
-    stopifnot(length(newbaselines) == length(dataspl),
-              length(newbaselines) == 0 ||
-                  identical(unique(sapply(newbaselines, length)),
-                            length(col_exprs(cinfo))))
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
     
     ## do full recursive_applysplit on each part of the split defined by spl
@@ -1245,18 +1246,6 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     }
 
     df
-}
-
-.check_analysis_fun_params <- function(func) {
-    browser()
-    f_params <- formals(func)
-    
-    # Checking data heavy parameters that should undergo rowsplitting
-    params <- c(".ref_group")
-    fil_params <- params %in% names(f_params)
-    names(fil_params) <- params
-    
-    fil_params
 }
 
 fix_split_vars <- function(lyt, df, char_ok) {

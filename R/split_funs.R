@@ -209,11 +209,6 @@ NULL
     partinfo
 }
 
-func_takes <- function(fun, argname, truefordots = FALSE) {
-    fnames <- names(formals(fun))
-    argname %in% fnames || (truefordots && "..." %in% fnames)
-}
-
 #' Apply Basic Split (For Use In Custom Split Functions)
 #'
 #' This function is intended for use inside custom split functions. It applies

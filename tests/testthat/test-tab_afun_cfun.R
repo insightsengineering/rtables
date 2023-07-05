@@ -60,8 +60,6 @@ test_that(".spl_context contains col information and multivars works", {
 })
 
 test_that(".spl_context contains information about combo counts", {
-    # xxx full_alt_parent_df + expr
-    ## xxx create convenience function from expr to col subset at certain level
     ## Fix for https://github.com/insightsengineering/rtables/issues/517
     combodf <- tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
@@ -71,9 +69,7 @@ test_that(".spl_context contains information about combo counts", {
     
     n_wrapper_alt_df <- function(alt_counts_df) {
         function(x, .spl_context, .N_col, .alt_counts_df, .all_col_exprs, 
-                 .all_col_counts, ...) { # xxx no false positive on custom params
-            # xxx only if it is in formals we calculate it, 
-            # xxx  see `newbl_raw <- lapply(baselines,`
+                 .all_col_counts, ...) { 
             if (.spl_context$cur_col_id[[1]] != "all_X") {
                 in_rows("n" = .N_col, .formats = "xx")
             } else {
@@ -87,6 +83,7 @@ test_that(".spl_context contains information about combo counts", {
                 alt_df1c <- .alt_counts_df %>% 
                     filter(eval(.all_col_exprs[["A: Drug X"]]))
                 alt_df2c <- .alt_counts_df %>% 
+# xxx create convenience function from expr to col subset at certain level
                     filter(eval(.all_col_exprs[["C: Combination"]]))
                 
                 # Super manual extraction
@@ -121,7 +118,7 @@ test_that(".spl_context contains information about combo counts", {
         analyze(vars = "BMRKR1", afun = n_wrapper_alt_df(ex_adsl))
     
     # NB: If you add keep_levels = c("all_X") to add_combo_levels the other 
-    #     column expressions are missing
+    #     column expressions are missing -> Expected!
     
     tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
     
@@ -136,14 +133,38 @@ test_that(".spl_context contains information about combo counts", {
     expect_identical(nrow_manual, spl_ctx_cnt)
 })
 
+test_that("Checking soundness of all extra params", {
+    
+})
+
 test_that("Error localization for missing split variable when done in alt_count_df", {
-    lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1")
-    lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1")
+    # Error we want to happen
+    afun_tmp <- function(x, .alt_count_df, ...) mean(x)
+    lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
+    lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
     expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM), 
                  regexp = paste0("Following error encountered in splitting ",
                  "alt_counts_df:  variable\\(s\\) \\[ARMCD\\] ",
                  "not present in data. \\(VarLevelSplit\\)"))
+    
+    # Split not requested so no error
+    expect_silent(lyt_row %>% build_table(ex_adsl))
+    expect_silent(lyt_col %>% build_table(ex_adsl))
+    
+    # What if it is not asked by the function?
+    afun_tmp <- function(x, ...) mean(x)
+    lyt_col <- basic_table() %>% 
+        split_cols_by("ARMCD") %>% 
+        analyze("BMRKR1", afun = afun_tmp)
+    lyt_row <- basic_table() %>% 
+        split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>% 
+        split_rows_by("ARMCD") %>% 
+        analyze("BMRKR1", afun = afun_tmp)
+    # Error on the columns should happen because it is used for counts on column space
+    expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
+    expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
+    
 })
 
 context("Analysis functions (cfun)")
