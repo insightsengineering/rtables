@@ -691,54 +691,58 @@ setMethod(".make_split_kids", "Split",
     ## rtables tabulation works
     ## (a) will only help if analyses that use baseline
     ## info are mixed with those who don't.
-    # Chosen (a) because (b) is major reworking
-    fnc_vec <- lapply(splvec[sapply(splvec, is, "VAnalyzeSplit")], analysis_fun)
-    if (any(unlist(func_takes(fnc_vec, c(".ref_group"))))) {
-        newbl_raw <- lapply(baselines, function(dat) {
-            if(is.null(dat))
-                return(NULL)
-            ## apply the same splitting on the
-            bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
-                                  error = function(e) e)
-            
-            # Error localization
-            if (is(bldataspl, "error")) {
-                stop("Following error encountered in splitting .ref_group (baselines): ", 
-                     bldataspl$message,
-                     call. = FALSE)
-            }
-            
-            ## we only keep the ones corresponding with actual data splits
-            res <- lapply(names(dataspl),
-                        function(nm) {
-                if(nm %in% names(bldataspl))
-                    bldataspl[[nm]]
-                else
-                    dataspl[[1]][0, ] # xxx isn't it better to have NULL here?
-            })
+    newbl_raw <- lapply(baselines, function(dat) {
+        
+        # If no ref_group is specified
+        if(is.null(dat)) return(NULL)
+        
+        ## apply the same splitting on the
+        bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
+                              error = function(e) e)
+        
+        # Error localization
+        if (is(bldataspl, "error")) {
+            stop("Following error encountered in splitting .ref_group (baselines): ", 
+                 bldataspl$message,
+                 call. = FALSE)
+        }
+        
+        ## we only keep the ones corresponding with actual data splits
+        res <- lapply(names(dataspl),
+                    function(nm) {
+            if(nm %in% names(bldataspl))
+                bldataspl[[nm]]
+            else
+                dataspl[[1]][0, ]
+        })
+
+        names(res) <- names(dataspl)
+        res
+    })
+        
+    newbaselines <- lapply(names(dataspl), function(nm) {
+        lapply(newbl_raw, function(rawdat) {
+            if(nm %in% names(rawdat))
+                rawdat[[nm]]
+            else
+                rawdat[[1]][0, ]
+        })
+    })
     
-            names(res) <- names(dataspl)
-            res
-        })
-        newbaselines <- lapply(names(dataspl), # xxx why is this done again?
-                              function(nm) {
-            lapply(newbl_raw,
-                   function(rawdat) {
-                if(nm %in% names(rawdat))
-                    rawdat[[nm]]
-                else
-                    rawdat[[1]][0, ]
-            })
-        })
-        stopifnot(length(newbaselines) == length(dataspl),
-                  length(newbaselines) == 0 ||
-                      identical(unique(sapply(newbaselines, length)),
-                                length(col_exprs(cinfo))))
-    } else {
-        newbaselines <- lapply(col_extra_args(cinfo), function(x) x$.ref_full)
+    if (length(newbaselines) != length(dataspl)) {
+        stop("Baselines (ref_group) after row split does not have",
+             " the same number of levels of input data split. ",
+             "Contact the maintainer.") # nocov
     }
+    if (!identical(unique(sapply(newbaselines, length)), 
+                   length(col_exprs(cinfo)))) {
+        stop("Baselines (ref_group) do not have the same number of column",
+             " in each split. Contact the maintainer.") # nocov
+    }
+    stopifnot(length(newbaselines) == 0)
     
     # Apply same split for alt_counts_df
+    fnc_vec <- lapply(splvec[sapply(splvec, is, "VAnalyzeSplit")], analysis_fun)
     if (!is.null(alt_df) &&
         any(unlist(func_takes(fnc_vec, c(".alt_count_df"))))) {
         alt_dfpart <- tryCatch(do_split(spl, alt_df, 
