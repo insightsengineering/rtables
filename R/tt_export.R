@@ -198,14 +198,14 @@ ard_v0_experimental <- function(tt) {
           cellvals)
 }
 
-#' Generate an Analysis Ready Dataset (ARD)
+#' Generate a Flattened Data Frame
 #'
 #' @param tt VTableTree. The table.
 #' @param spec character(1). The specification to use to
-#' extract the ARD. See details
-#' @param ... Passed to spec-specific ARD conversion function.
+#' extract the flattened data frame. See details
+#' @param ... Passed to spec-specific flattened data frame conversion function.
 #'
-#' @details ARD specifications may differ in the exact information they include and
+#' @details Flattened data frame specifications may differ in the exact information they include and
 #' the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.
@@ -214,15 +214,26 @@ ard_v0_experimental <- function(tt) {
 #' not be called via `::`
 #' @export
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'     split_cols_by("ARM") %>%
 #'     split_rows_by("STRATA1") %>%
-#'   analyze(c("AGE", "BMRKR2"))
-#'
+#'     add_colcounts() %>% 
+#'     analyze(head(c("AGE", "BMRKR2"), -1), afun = function(x) {
+#'         list(
+#'             "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'             "range" = rcell(diff(range(x)), format = "xx.xx")
+#'         )
+#'     })
+#' 
 #' tbl <- build_table(lyt, ex_adsl)
-#' as_ard(tbl)
-as_ard <- function(tt, spec = "v0_experimental", ...) {
+#' flattened_df <- as_dataframe_with_spec(tbl)
+#' 
+#' # You may need to split cell values that have 2 values
+#' # You can utilize `tidyr::unnest_longer` to peform this function
+#' split_cell_values_df <- flattened_df %>% tidyr::unnest_longer(c("A: Drug X", "B: Placebo", "C: Combination"))
+
+
+as_dataframe_with_spec <- function(tt, spec = "v0_experimental", ...) {
 
     ard_fun <- lookup_ard_specfun(spec)
     ard_fun(tt, ...)
