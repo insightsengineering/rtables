@@ -734,12 +734,12 @@ setMethod(".make_split_kids", "Split",
              " the same number of levels of input data split. ",
              "Contact the maintainer.") # nocov
     }
-    if (!identical(unique(sapply(newbaselines, length)), 
+    if (length(newbaselines) == 0 ||
+        !identical(unique(sapply(newbaselines, length)), 
                    length(col_exprs(cinfo)))) {
         stop("Baselines (ref_group) do not have the same number of column",
              " in each split. Contact the maintainer.") # nocov
     }
-    stopifnot(length(newbaselines) == 0)
     
     # Apply same split for alt_counts_df
     fnc_vec <- lapply(splvec[sapply(splvec, is, "VAnalyzeSplit")], analysis_fun)
@@ -1100,16 +1100,6 @@ build_table <- function(lyt, df,
       if(!is.null(col_counts))
         disp_ccounts(cinfo) <- TRUE
     
-    # ## xxx check analysis functionS and summary fncS for 
-    # #      absence of analysis params
-    # fil_params <- .check_analysis_fun_params(func)
-    # if (fil_params$.ref_group) {
-    #     # baselines <- replicate(length(col_exprs(cinfo)), list(dfpart[0, ]))
-    # }
-    ## Fixing columns replication of alternate df
-    # alt_df_tmp <- rep_len(alt_counts_df, length(col_exprs(cinfo)))
-    # names(alt_df_tmp) <- names(col_exprs(cinfo))
-
     rlyt <- rlayout(lyt)
     rtspl <- root_spl(rlyt)
     ctab <- .make_ctab(df, 0L,
