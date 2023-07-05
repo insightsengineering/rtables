@@ -29,15 +29,15 @@ not be called via \code{::}
 }
 \examples{
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by("STRATA1") \%>\%
-    add_colcounts() \%>\% 
-    analyze(head(c("AGE", "BMRKR2"), -1), afun = function(x) {
-        list(
-            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-            "range" = rcell(diff(range(x)), format = "xx.xx")
-        )
-    })
+  split_cols_by("ARM") \%>\%
+  split_rows_by("STRATA1") \%>\%
+  add_colcounts() \%>\%
+  analyze(head(c("AGE", "BMRKR2"), -1), afun = function(x) {
+    list(
+      "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = rcell(diff(range(x)), format = "xx.xx")
+    )
+  })
 
 tbl <- build_table(lyt, ex_adsl)
 flattened_df <- as_dataframe_with_spec(tbl)
