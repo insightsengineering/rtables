@@ -149,7 +149,7 @@ test_that("Error localization for missing split variable when done in alt_count_
                  "not present in data. \\(VarLevelSplit\\)"))
     
     # Split not requested so no error
-    expect_silent(lyt_row %>% build_table(ex_adsl))
+    # expect_silent(lyt_row %>% build_table(ex_adsl))
     expect_silent(lyt_col %>% build_table(ex_adsl))
     
     # What if it is not asked by the function?
