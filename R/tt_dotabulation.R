@@ -766,9 +766,6 @@ setMethod(".make_split_kids", "Split",
                  call. = FALSE)
         }
     } else {
-        if (acdf_param) 
-            stop("Inserted .alt_counts_df in cfun/afun but no alt_counts_df",
-                 " provided in build_table().")
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }
 

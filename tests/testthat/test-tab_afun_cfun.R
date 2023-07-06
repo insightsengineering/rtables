@@ -149,7 +149,7 @@ test_that("Error localization for missing split variable when done in alt_count_
                  "not present in data. \\(VarLevelSplit\\)"))
     
     # Split not requested so no error
-    # expect_silent(lyt_row %>% build_table(ex_adsl))
+    expect_silent(lyt_row %>% build_table(ex_adsl))
     expect_silent(lyt_col %>% build_table(ex_adsl))
     
     # What if it is not asked by the function?
@@ -186,8 +186,7 @@ test_that(".alt_counts_df appears in cfun but not in afun.", {
         summarize_row_groups(cfun = cfun_tmp) %>%
         split_rows_by("ARMCD") %>% 
         analyze("BMRKR1", afun = afun_tmp)
-    expect_error(lyt %>% build_table(ex_adsl),
-                 paste0("Inserted .alt_counts_df in cfun/afun but no alt_",
-                        "counts_df provided in build_table()."))
-    expect_silent(tbl <- lyt %>% build_table(ex_adsl, alt_counts_df = DM))
+    
+    expect_silent(lyt %>% build_table(ex_adsl))
+    expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = DM))
 })
