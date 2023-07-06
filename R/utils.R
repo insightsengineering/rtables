@@ -56,11 +56,12 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 func_takes <- function(func, params) {
     if(is.list(func))
         return(lapply(func, func_takes, params = params))
-    if (!is(func, "function")) { # safe-net: should this fail instead?
-        setNames(rep(FALSE, length(params)), params)
+    if (is.null(func) || !is(func, "function")) {
+        # safe-net: should this fail instead?
+        return(setNames(rep(FALSE, length(params)), params))
     }
     f_params <- formals(func)
-    setNames(params %in% names(f_params), params)
+    return(setNames(params %in% names(f_params), params))
 }
 
 #' @title Alignment utils

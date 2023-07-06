@@ -27,7 +27,7 @@ test_that(".spl_context contains information about the column split", {
         split_rows_by("STRATA1") %>%
         split_cols_by(var = "method") %>%
         split_cols_by("SEX", split_fun = drop_split_levels) %>%
-        analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.x")
+        analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.xx")
     
     expect_silent(tbl <- lyt %>% build_table(DM_tmp))
     
@@ -138,8 +138,11 @@ test_that("Checking soundness of all extra params", {
 })
 
 test_that("Error localization for missing split variable when done in alt_count_df", {
+    # xxx - do the same for .ref_group?
+    # xxx - trying to merge .if_in_formals, func_takes, .takes_df and match_args?
+    
     # Error we want to happen
-    afun_tmp <- function(x, .alt_count_df, ...) mean(x)
+    afun_tmp <- function(x, .alt_counts_df, ...) mean(x)
     lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
@@ -167,4 +170,27 @@ test_that("Error localization for missing split variable when done in alt_count_
     
 })
 
-context("Analysis functions (cfun)")
+context("Content functions (cfun)")
+
+test_that(".alt_counts_df appears in cfun but not in afun.", {
+    afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
+    cfun_tmp <- function(x, .alt_counts_df, labelstr, .N_col, ...) {
+        
+        stopifnot(nrow(DM %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
+        stopifnot(nrow(DM) == .N_col)
+        
+        in_rows(c(length(x), length(x) / .N_col), 
+                .names = labelstr, 
+                .formats = c("xx (xx.xx)"))
+    }
+    
+    lyt <- basic_table() %>% 
+        split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>% 
+        summarize_row_groups(cfun = cfun_tmp) %>%
+        split_rows_by("ARMCD") %>% 
+        analyze("BMRKR1", afun = afun_tmp)
+    expect_error(lyt %>% build_table(ex_adsl),
+                 paste0("Inserted .alt_counts_df in cfun/afun but no alt_",
+                        "counts_df provided in build_table()."))
+    expect_silent(tbl <- lyt %>% build_table(ex_adsl, alt_counts_df = DM))
+})

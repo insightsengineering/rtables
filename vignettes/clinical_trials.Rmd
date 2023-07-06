@@ -488,8 +488,6 @@ ADAE2 <- ADAE2 %>%
   ) %>%
   select(USUBJID, ARM, AGE, SEX, AESEQ, AEDECOD, AEBODSYS, AETOXGR)
 
-ADSL2 <- ADSL2 %>% left_join(ADAE2 %>% select(USUBJID, AEBODSYS, AEDECOD, AETOXGR)) # xxx to lose after added checks
-
 ADAE2
 ```
 

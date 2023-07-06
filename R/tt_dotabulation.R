@@ -59,6 +59,23 @@ match_extra_args <- function(f,
     !is.null(formals(f)) && names(formals(f))[1] == "df"
 }
 
+.check_afun_cfun_params <- function(spl_vec, params) {
+    if(is(spl_vec, "PreDataRowLayout")) {
+        r_spl <- root_spl(spl_vec)
+        tmp_splvec <- c(r_spl, spl_vec[[1]])
+    } else if (inherits(spl_vec, "Split")) {
+        tmp_splvec <- list(spl_vec)
+    } else {
+        stop("Checking parameters of afun/cfun failed because of",
+             " unexpected split input. Contact the maintainer.") # nocov
+    }
+    fnc_vec <- sapply(tmp_splvec, function(spl_i) {
+        if (is(spl_i, "VAnalyzeSplit")) analysis_fun(spl_i)
+        else content_fun(spl_i)
+    })
+    sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
+}
+
 #' @noRd
 #' @return a RowsVerticalSection object representing the k x 1 section of the
 #'   table being generated, with k the number of rows the analysis function
@@ -291,7 +308,8 @@ gen_rowvalues <- function(dfpart,
                            rowconstr = DataRow,
                            splextra = list(),
                            takesdf = NULL,
-                           baselines = NULL,
+                           baselines = replicate(length(col_exprs(cinfo)),
+                                                 list(dfpart[0, ])),
                            inclNAs,
                            spl_context = context_df_row(cinfo = cinfo)) {
     if(is.null(datcol) && !is.na(rvlab))
@@ -429,6 +447,7 @@ gen_rowvalues <- function(dfpart,
 
 }
 
+# Makes content table xxx renaming
 .make_ctab <- function(df, lvl, ##treepos,
                       name,
                       label,
@@ -691,6 +710,7 @@ setMethod(".make_split_kids", "Split",
     ## rtables tabulation works
     ## (a) will only help if analyses that use baseline
     ## info are mixed with those who don't.
+    # browser()
     newbl_raw <- lapply(baselines, function(dat) {
         
         # If no ref_group is specified
@@ -741,10 +761,9 @@ setMethod(".make_split_kids", "Split",
              " in each split. Contact the maintainer.") # nocov
     }
     
+    acdf_param <- .check_afun_cfun_params(spl, ".alt_counts_df")
     # Apply same split for alt_counts_df
-    fnc_vec <- lapply(splvec[sapply(splvec, is, "VAnalyzeSplit")], analysis_fun)
-    if (!is.null(alt_df) &&
-        any(unlist(func_takes(fnc_vec, c(".alt_count_df"))))) {
+    if (!is.null(alt_df) && acdf_param) {
         alt_dfpart <- tryCatch(do_split(spl, alt_df, 
                                         spl_context = spl_context)[["datasplit"]],
                                error = function(e) e)
@@ -756,6 +775,9 @@ setMethod(".make_split_kids", "Split",
                  call. = FALSE)
         }
     } else {
+        if (acdf_param) 
+            stop("Inserted .alt_counts_df in cfun/afun but no alt_counts_df",
+                 " provided in build_table().")
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }
 
@@ -1090,6 +1112,9 @@ build_table <- function(lyt, df,
     lyt <- set_def_child_ord(lyt, df)
     lyt <- fix_analyze_vis(lyt)
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
+    # This check should be added to cinfo and sent everywhere but for the moment
+    # there is little advantage in this as there are no other cases of this checks.
+    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_counts_df")) 
 
     rtpos <- TreePos()
     cinfo <- create_colinfo(lyt, df, rtpos,
