@@ -4,7 +4,10 @@
 \alias{spl_context}
 \title{.spl_context within analysis and split functions}
 \description{
-.spl_context within analysis and split functions
+\code{.spl_context} is an optional parameter for any of \code{rtables}' special
+functions, them being \code{afun} (analysis function in \link{analyze}),
+\code{cfun} (content or label function in \link{summarize_row_groups}),
+or \code{split_fun} (e.g. for \link{split_rows_by}).
 }
 \section{.spl_context Details}{
 

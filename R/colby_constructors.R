@@ -833,9 +833,14 @@ split_rows_by_cutfun <- function(lyt, var,
 
 
 #' @title .spl_context within analysis and split functions
-#'
+#' 
+#' @description
+#' `.spl_context` is an optional parameter for any of `rtables`' special 
+#' functions, them being `afun` (analysis function in [analyze]), 
+#' `cfun` (content or label function in [summarize_row_groups]),
+#' or `split_fun` (e.g. for [split_rows_by]).
+#' 
 #' @name spl_context
-#' @rdname spl_context
 #'
 #' @section .spl_context Details:
 #' The `.spl_context` `data.frame` gives information about the subsets of data
@@ -873,9 +878,51 @@ split_rows_by_cutfun <- function(lyt, var,
 #' `col_counts` or `col_total` arguments to \code{\link{build_table}}}
 NULL
 
-
-
-
+#' @title Additional parameters within analysis and content functions 
+#' (`afun/cfun`)
+#' 
+#' @description 
+#' It is possible to add specific parameters to `afun` and `cfun`, in [analyze]
+#' and [summarize_row_groups] respectively. These parameters grant access to 
+#' relevant information like the row split structure (see [spl_context]) and the
+#' predefined baseline (`.ref_group`).
+#' 
+#' @details
+#' We list and describe here all the parameters that can be added to a custom 
+#' analysis function:
+#' 
+#' \describe{
+#'   \item{.N_col}{column-wise N (column count) for the full column being
+#'     tabulated within}
+#'   \item{.N_total}{overall N (all observation count, defined as sum of column
+#'     counts) for the tabulation}
+#'   \item{.N_row}{row-wise N (row group count) for the group of observations
+#'     being analyzed (ie with no column-based subsetting)}
+#'   \item{.df_row}{ data.frame for observations in the row group being analyzed
+#'     (ie with no column-based subsetting)}
+#'   \item{.var}{variable that is analyzed}
+#'   \item{.ref_group}{data.frame or vector of subset corresponding to the
+#'     `ref_group` column including subsetting defined by row-splitting.
+#'     Optional and only required/meaningful if a `ref_group` column has been
+#'     defined}
+#'   \item{.ref_full}{data.frame or vector of subset corresponding to the
+#'     `ref_group` column without subsetting defined by row-splitting. Optional
+#'     and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
+#'     within the reference column}
+#'   \item{.spl_context}{data.frame, each row gives information about a
+#'     previous/'ancestor' split state. See \code{\link{spl_context}}.}
+#' }
+#' 
+#' @note If any of these formals is specified incorrectly or not 
+#'  present in the tabulation machinery, it will be as if missing. For
+#'  example`.ref_group` will be missing if no baseline is previously defined
+#'  during data splitting (via `ref_group` parameters in, e.g., [split_rows_by]).
+#'  Similarly, if no `alt_counts_df` is provided into [build_table], 
+#'  `.alt_counts_df` will not be present.
+#'
+#' @name additional_fun_params
+NULL
 
 #' Generate Rows Analyzing Variables Across Columns
 #'
@@ -886,6 +933,7 @@ NULL
 #' nesting by default.
 #'
 #' @inheritParams lyt_args
+#' 
 #' @inherit split_cols_by return
 #'
 #' @details
@@ -913,37 +961,13 @@ NULL
 #'   being tabulated
 #'   }
 #' }
-#'
+#' 
 #' In addition to differentiation on the first argument, the analysis function
 #' can optionally accept a number of other parameters which, \emph{if and only
 #' if} present in the formals will be passed to the function by the tabulation
-#' machinery. These are as follows:
-#'
-#' \describe{
-#'   \item{.N_col}{column-wise N (column count) for the full column being
-#'     tabulated within}
-#'   \item{.N_total}{overall N (all observation count, defined as sum of column
-#'     counts) for the tabulation}
-#'   \item{.N_row}{row-wise N (row group count) for the group of observations
-#'     being analyzed (ie with no column-based subsetting)}
-#'   \item{.df_row}{ data.frame for observations in the row group being analyzed
-#'     (ie with no column-based subsetting)}
-#'   \item{.var}{variable that is analyzed}
-#'   \item{.ref_group}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column including subsetting defined by row-splitting.
-#'     Optional and only required/meaningful if a `ref_group` column has been
-#'     defined}
-#'   \item{.ref_full}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column without subsetting defined by row-splitting. Optional
-#'     and only required/meaningful if a `ref_group` column has been defined}
-#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
-#'     within the reference column}
-#'   \item{.spl_context}{data.frame, each row gives information about a
-#'     previous/'ancestor' split state. see below}
-#' }
-#'
-#' @inheritSection spl_context .spl_context Details
-#'
+#' machinery. These are listed and described in [additional_fun_params].
+#' 
+#' @inherit split_cols_by return
 #'
 #' @note None of the arguments described in the Details section
 #' can be overridden via extra_args or when calling
@@ -953,8 +977,6 @@ NULL
 #' must be calculated within \code{afun} based on a combination
 #' of extra arguments and the unmodified values provided by the
 #' tabulation framework.
-#'
-#' @inherit split_cols_by return
 #'
 #' @export
 #'
@@ -1069,8 +1091,10 @@ get_acolvar_vars <- function(lyt) {
 #' @inheritParams  lyt_args
 #'
 #' @param afun function or list. Function(s) to be used to calculate the values
-#'   in each column.  the list will be repped out as needed and matched by
-#'   position with the columns during tabulation.
+#'   in each column.  The list will be repped out as needed and matched by
+#'   position with the columns during tabulation. This functions accepts the same
+#'   parameters as [analyze]'s `afun`. For further information see 
+#'   [additional_fun_params].
 #'
 #' @export
 #'
@@ -1414,6 +1438,9 @@ counts_wpcts<- function(x, .N_col) {
 #' the second parameter, which accepts the `label` of the level of the parent
 #' split currently being summarized. Can additionally take any optional argument
 #' supported by analysis functions. (see \code{\link{analyze}}).
+#' 
+#' In addition, if complex custom functions are needed, we suggest checking the
+#' available [additional_fun_params] that apply here as for `afun`.
 #'
 #' @export
 #'

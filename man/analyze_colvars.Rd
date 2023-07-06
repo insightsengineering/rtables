@@ -18,8 +18,10 @@ analyze_colvars(
 \item{lyt}{layout object pre-data used for tabulation}
 
 \item{afun}{function or list. Function(s) to be used to calculate the values
-in each column.  the list will be repped out as needed and matched by
-position with the columns during tabulation.}
+in each column.  The list will be repped out as needed and matched by
+position with the columns during tabulation. This functions accepts the same
+parameters as \link{analyze}'s \code{afun}. For further information see
+\link{additional_fun_params}.}
 
 \item{format}{FormatSpec. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as

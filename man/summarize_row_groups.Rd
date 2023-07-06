@@ -67,6 +67,9 @@ and column-splitting for the cell being calculated. Must accept \code{labelstr} 
 the second parameter, which accepts the \code{label} of the level of the parent
 split currently being summarized. Can additionally take any optional argument
 supported by analysis functions. (see \code{\link{analyze}}).
+
+In addition, if complex custom functions are needed, we suggest checking the
+available \link{additional_fun_params} that apply here as for \code{afun}.
 }
 \examples{
 
