@@ -52,13 +52,6 @@ match_extra_args <- function(f,
     possargs[names(possargs) %in% formnms]
 }
 
-
-.takes_df <- function(f) { # xxx candidate for merger: func_takes
-    if(is.list(f))
-        return(vapply(f, .takes_df, NA))
-    !is.null(formals(f)) && names(formals(f))[1] == "df"
-}
-
 .check_afun_cfun_params <- function(spl_vec, params) {
     if(is(spl_vec, "PreDataRowLayout")) {
         r_spl <- root_spl(spl_vec)
