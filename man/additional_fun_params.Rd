@@ -21,7 +21,7 @@ tabulated within}
 counts) for the tabulation}
 \item{.N_row}{row-wise N (row group count) for the group of observations
 being analyzed (ie with no column-based subsetting)}
-\item{.df_row}{ data.frame for observations in the row group being analyzed
+\item{.df_row}{data.frame for observations in the row group being analyzed
 (ie with no column-based subsetting)}
 \item{.var}{variable that is analyzed}
 \item{.ref_group}{data.frame or vector of subset corresponding to the
@@ -34,7 +34,14 @@ and only required/meaningful if a \code{ref_group} column has been defined}
 \item{.in_ref_col}{boolean indicates if calculation is done for cells
 within the reference column}
 \item{.spl_context}{data.frame, each row gives information about a
-previous/'ancestor' split state. See \code{\link{spl_context}}.}
+previous/'ancestor' split state. See \code{\link{spl_context}}}
+\item{.alt_counts_df}{list of data.frames, i.e. the \code{alt_count_df} after
+row splitting. Each element of the list represent a column-wise split.}
+\item{.all_col_exprs}{vector of expressions. Each of them represents a
+different column splitting.}
+\item{.all_col_counts}{vector of integers. Each of them represents the global
+count for each column. It differs if \code{alt_counts_df} is used
+(see \link{build_table}).}
 }
 }
 \note{

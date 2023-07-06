@@ -863,11 +863,19 @@ split_rows_by_cutfun <- function(lyt, var,
 #'     column in the table structure}{ These list columns (named the same as
 #'     \code{names(col_exprs(tab))}) contain logical vectors corresponding to
 #'     the subset of this row's `full_parent_df` corresponding to that column}
+#'   \item{cur_col_id}{Identifier of the current column. This may be an internal
+#'     name, constructed by pasting the column path together}
 #'   \item{cur_col_subset}{List column containing logical vectors indicating the
 #'     subset of that row's `full_parent_df` for the column currently being
 #'     created by the analysis function}
+#'   \item{cur_col_expr}{Current column expression. This may be used to filter
+#'     `.alt_counts_df` or any external data}
 #'   \item{cur_col_n}{integer column containing the observation counts for that
 #'     split}
+#'   \item{cur_col_split}{Current column split names. This is recovered from the
+#'     current column path}
+#'   \item{cur_col_split_val}{Current column split values. This is recovered from the
+#'     current column path}
 #' }
 #'
 #' \emph{note Within analysis functions that accept `.spl_context`, the
@@ -898,7 +906,7 @@ NULL
 #'     counts) for the tabulation}
 #'   \item{.N_row}{row-wise N (row group count) for the group of observations
 #'     being analyzed (ie with no column-based subsetting)}
-#'   \item{.df_row}{ data.frame for observations in the row group being analyzed
+#'   \item{.df_row}{data.frame for observations in the row group being analyzed
 #'     (ie with no column-based subsetting)}
 #'   \item{.var}{variable that is analyzed}
 #'   \item{.ref_group}{data.frame or vector of subset corresponding to the
@@ -911,7 +919,14 @@ NULL
 #'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
 #'     within the reference column}
 #'   \item{.spl_context}{data.frame, each row gives information about a
-#'     previous/'ancestor' split state. See \code{\link{spl_context}}.}
+#'     previous/'ancestor' split state. See \code{\link{spl_context}}}
+#'   \item{.alt_counts_df}{list of data.frames, i.e. the `alt_count_df` after 
+#'     row splitting. Each element of the list represent a column-wise split.}
+#'   \item{.all_col_exprs}{vector of expressions. Each of them represents a 
+#'     different column splitting.}
+#'   \item{.all_col_counts}{vector of integers. Each of them represents the global
+#'     count for each column. It differs if `alt_counts_df` is used 
+#'     (see [build_table]).}
 #' }
 #' 
 #' @note If any of these formals is specified incorrectly or not 

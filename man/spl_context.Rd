@@ -31,11 +31,19 @@ grouping (union of all columns)}
 column in the table structure}{ These list columns (named the same as
 \code{names(col_exprs(tab))}) contain logical vectors corresponding to
 the subset of this row's \code{full_parent_df} corresponding to that column}
+\item{cur_col_id}{Identifier of the current column. This may be an internal
+name, constructed by pasting the column path together}
 \item{cur_col_subset}{List column containing logical vectors indicating the
 subset of that row's \code{full_parent_df} for the column currently being
 created by the analysis function}
+\item{cur_col_expr}{Current column expression. This may be used to filter
+\code{.alt_counts_df} or any external data}
 \item{cur_col_n}{integer column containing the observation counts for that
 split}
+\item{cur_col_split}{Current column split names. This is recovered from the
+current column path}
+\item{cur_col_split_val}{Current column split values. This is recovered from the
+current column path}
 }
 
 \emph{note Within analysis functions that accept \code{.spl_context}, the
