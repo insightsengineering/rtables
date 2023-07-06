@@ -52,18 +52,23 @@ match_extra_args <- function(f,
     possargs[names(possargs) %in% formnms]
 }
 
+# This checks if the input params are used anywhere in cfun/afun
 .check_afun_cfun_params <- function(spl_vec, params) {
+    # Case it is a row layout: for build_table checks
     if(is(spl_vec, "PreDataRowLayout")) {
         r_spl <- root_spl(spl_vec)
         tmp_splvec <- c(r_spl, spl_vec[[1]])
+    # When it is a single split obj it needs to be wrapped
     } else if (inherits(spl_vec, "Split")) {
         tmp_splvec <- list(spl_vec)
+    # Case used in .make_split_kids so to check spl_vec and current spl
     } else if (is.list(spl_vec)) {
         tmp_splvec <- spl_vec  
     } else {
         stop("Checking parameters of afun/cfun failed because of",
              " unexpected split input. Contact the maintainer.") # nocov
     }
+    
     fnc_vec <- sapply(tmp_splvec, function(spl_i) {
         if (is(spl_i, "VAnalyzeSplit")) analysis_fun(spl_i)
         else content_fun(spl_i)
