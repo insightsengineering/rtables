@@ -1,7 +1,7 @@
-context("ARDs")
+context("Flattened Data Frames")
 
 
-test_that("ARD generation works v0", {
+test_that("Flattening Data Frame generation works v0", {
 
     ## change here (only) when v0 is crystalized (no longer experimental)
     spec_version <- "v0_experimental"
@@ -9,14 +9,14 @@ test_that("ARD generation works v0", {
 
     tbl <- build_table(lyt, rawdat)
 
-    ard <- as_ard(tbl, spec_version)
-    expect_identical(ard[2, "ARM1.M"][[1]],
+    flattened_df <- as_dataframe_with_spec(tbl, spec_version)
+    expect_identical(flattened_df[2, "ARM1.M"][[1]],
                      c(37, 37/256))
 
     expect_identical(nrow(tbl) - 8L,
-                     nrow(ard))
+                     nrow(flattened_df))
 
-    expect_identical(names(ard)[1:5],
+    expect_identical(names(flattened_df)[1:5],
                      c("spl_var_1", "spl_value_1", "spl_var_2", "spl_value_2", "avar_name"))
 
     ## handle multiple analyses
@@ -26,10 +26,10 @@ test_that("ARD generation works v0", {
         analyze(c("AGE", "BMRKR2"))
 
     tbl2 <- build_table(lyt, ex_adsl)
-    ard2 <- as_ard(tbl2, spec_version )
+    flattened_df2 <- as_dataframe_with_spec(tbl2, spec_version )
 
     ## regression test
-    expect_false(any(is.na(ard2$spl_var_1)))
+    expect_false(any(is.na(flattened_df2$spl_var_1)))
 
     ## test colvar analysis and bug regarding 1 row multi column tables
     test <- data.frame(
@@ -42,8 +42,8 @@ test_that("ARD generation works v0", {
         analyze_colvars(afun = length, inclNAs = TRUE)
 
     tbl3 <- build_table(lyt3, test)
-    ard3 <- as_ard(tbl3, spec_version)
+    flattened_df3 <- as_dataframe_with_spec(tbl3, spec_version)
 
-    expect_identical(nrow(ard3), 1L)
+    expect_identical(nrow(flattened_df3), 1L)
 
 })
