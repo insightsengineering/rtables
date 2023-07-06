@@ -748,9 +748,9 @@ setMethod(".make_split_kids", "Split",
              " the same number of levels of input data split. ",
              "Contact the maintainer.") # nocov
     }
-    if (length(newbaselines) == 0 ||
-        identical(unique(sapply(newbaselines, length)), 
-                   length(col_exprs(cinfo)))) {
+    if (length(newbaselines) != 0 ||	
+        !identical(unique(sapply(newbaselines, length)),	
+                  length(col_exprs(cinfo)))) {
         stop("Baselines (ref_group) do not have the same number of columns",
              " in each split. Contact the maintainer.") # nocov
     }
