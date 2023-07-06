@@ -171,19 +171,40 @@ context("Content functions (cfun)")
 
 test_that(".alt_counts_df appears in cfun but not in afun.", {
     afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
-    cfun_tmp <- function(x, .alt_counts_df, labelstr, .N_col, ...) {
+    cfun_tmp <- function(x, .alt_counts_df, labelstr, .N_col, 
+                         .spl_context,
+                         .all_col_exprs,
+                         .all_col_counts,
+                         ...) {
+        browser()
+        if (!missing(.alt_counts_df)) {
+            stopifnot(nrow(DM %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
+            stopifnot(nrow(DM) == .N_col)
+        }
         
-        stopifnot(nrow(DM %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
-        stopifnot(nrow(DM) == .N_col)
+        # Checking cur_col_n is the same as .N_col for root and length(x) for split
+        stopifnot(identical(.spl_context$cur_col_n, c(.N_col, length(x))))
+        
+        # Checking internal names for all column counts correspond to .spl_context
+        stopifnot(all(names(.all_col_counts) %in% colnames(.spl_context)))
+        
+        # Checking that current col id and col counts agree with .N_col
+        stopifnot(.all_col_counts[.spl_context$cur_col_id[1]] == .N_col)
+        
+        # Checking col expression
+        stopifnot(identical(.all_col_exprs[.spl_context$cur_col_id[1]][[1]],
+                            .spl_context$cur_col_expr[1])) # Uses the root one
         
         in_rows(c(length(x), length(x) / .N_col), 
                 .names = labelstr, 
                 .formats = c("xx (xx.xx)"))
     }
     
-    lyt <- basic_table() %>% 
+    lyt <- basic_table(show_colcounts = TRUE) %>% 
+        split_cols_by("SEX", split_fun = keep_split_levels(c("F", "U"))) %>% 
+        split_cols_by("STRATA2", split_fun = keep_split_levels("S1")) %>% 
         split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>% 
-        summarize_row_groups(cfun = cfun_tmp) %>%
+        summarize_row_groups(var = "BMRKR1", cfun = cfun_tmp) %>%
         split_rows_by("ARMCD") %>% 
         analyze("BMRKR1", afun = afun_tmp)
     

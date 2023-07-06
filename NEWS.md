@@ -1,5 +1,11 @@
 ## rtables 0.6.1.9010
- * fix major regressions for page_by machinery caused by migration to formatters 0.5.0 pagination framework.
+
+### Features
+ * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
+ * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations to `alt_count_df`, i.e. `.alt_counts_df`, `.all_col_exprs`, and `.all_col_counts`.
+
+#### Bug Fixes
+ * Fix major regressions for `page_b`y machinery caused by migration to `formatters` 0.5.0 pagination framework.
 
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
