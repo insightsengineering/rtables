@@ -64,6 +64,7 @@ reference:
     desc: Functions that are useful to be used with the `analyze*` functions.
     contents:
     - in_rows
+    - additional_fun_params
     - simple_analysis
     - make_afun
     - list_wrap_x

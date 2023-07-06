@@ -840,9 +840,8 @@ split_rows_by_cutfun <- function(lyt, var,
 #' `cfun` (content or label function in [summarize_row_groups]),
 #' or `split_fun` (e.g. for [split_rows_by]).
 #' 
-#' @name spl_context
 #'
-#' @section .spl_context Details:
+#' @details
 #' The `.spl_context` `data.frame` gives information about the subsets of data
 #' corresponding to the splits within-which the current `analyze` action is
 #' nested. Taken together, these correspond to the path that the resulting (set
@@ -884,6 +883,8 @@ split_rows_by_cutfun <- function(lyt, var,
 #' subsets of the data. These numbers will not, and currently cannot, reflect
 #' alternate column observation counts provided by the `alt_counts_df`,
 #' `col_counts` or `col_total` arguments to \code{\link{build_table}}}
+#' 
+#' @name spl_context
 NULL
 
 #' @title Additional parameters within analysis and content functions 

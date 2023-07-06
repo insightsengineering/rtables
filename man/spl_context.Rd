@@ -9,8 +9,7 @@ functions, them being \code{afun} (analysis function in \link{analyze}),
 \code{cfun} (content or label function in \link{summarize_row_groups}),
 or \code{split_fun} (e.g. for \link{split_rows_by}).
 }
-\section{.spl_context Details}{
-
+\details{
 The \code{.spl_context} \code{data.frame} gives information about the subsets of data
 corresponding to the splits within-which the current \code{analyze} action is
 nested. Taken together, these correspond to the path that the resulting (set
@@ -53,4 +52,3 @@ subsets of the data. These numbers will not, and currently cannot, reflect
 alternate column observation counts provided by the \code{alt_counts_df},
 \code{col_counts} or \code{col_total} arguments to \code{\link{build_table}}}
 }
-
