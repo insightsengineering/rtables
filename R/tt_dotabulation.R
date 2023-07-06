@@ -323,13 +323,7 @@ gen_rowvalues <- function(dfpart,
     } else {
         rowvar  <- NA_character_
     }
-    
-    # Done to keep the structure if baselines is not broadcasted
-    if (is.null(baselines)) {
-        baselines <- setNames(replicate(length(col_exprs(cinfo)), list(dfpart[0, ])),
-                              names(col_exprs(cinfo)))
-    }
-    
+
     rawvals <- gen_rowvalues(dfpart,
                             alt_dfpart = alt_dfpart,
                             datcol = datcol,
@@ -755,9 +749,9 @@ setMethod(".make_split_kids", "Split",
              "Contact the maintainer.") # nocov
     }
     if (length(newbaselines) == 0 ||
-        !identical(unique(sapply(newbaselines, length)), 
+        identical(unique(sapply(newbaselines, length)), 
                    length(col_exprs(cinfo)))) {
-        stop("Baselines (ref_group) do not have the same number of column",
+        stop("Baselines (ref_group) do not have the same number of columns",
              " in each split. Contact the maintainer.") # nocov
     }
     
