@@ -58,6 +58,8 @@ match_extra_args <- function(f,
         tmp_splvec <- c(r_spl, spl_vec[[1]])
     } else if (inherits(spl_vec, "Split")) {
         tmp_splvec <- list(spl_vec)
+    } else if (is.list(spl_vec)) {
+        tmp_splvec <- spl_vec  
     } else {
         stop("Checking parameters of afun/cfun failed because of",
              " unexpected split input. Contact the maintainer.") # nocov
@@ -66,6 +68,7 @@ match_extra_args <- function(f,
         if (is(spl_i, "VAnalyzeSplit")) analysis_fun(spl_i)
         else content_fun(spl_i)
     })
+    
     sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
 }
 
@@ -748,7 +751,8 @@ setMethod(".make_split_kids", "Split",
              " in each split. Contact the maintainer.") # nocov
     }
     
-    acdf_param <- .check_afun_cfun_params(spl, ".alt_counts_df")
+    acdf_param <- .check_afun_cfun_params(c(spl, splvec), ".alt_counts_df")
+    
     # Apply same split for alt_counts_df
     if (!is.null(alt_df) && acdf_param) {
         alt_dfpart <- tryCatch(do_split(spl, alt_df, 

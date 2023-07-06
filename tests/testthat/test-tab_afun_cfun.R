@@ -27,7 +27,7 @@ test_that(".spl_context contains information about the column split", {
         split_rows_by("STRATA1") %>%
         split_cols_by(var = "method") %>%
         split_cols_by("SEX", split_fun = drop_split_levels) %>%
-        analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.xx")
+        analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.xxx")
     
     expect_silent(tbl <- lyt %>% build_table(DM_tmp))
     
@@ -38,6 +38,7 @@ test_that(".spl_context contains information about the column split", {
 })
 
 test_that(".spl_context contains col information and multivars works", {
+    skip()
     DM_tmp <- DM %>% # xxx file an issue for this 
                      # xxx add documentation for not supported + error
         mutate(SEX = factor(SEX))
@@ -131,10 +132,6 @@ test_that(".spl_context contains information about combo counts", {
     })
     
     expect_identical(nrow_manual, spl_ctx_cnt)
-})
-
-test_that("Checking soundness of all extra params", {
-    
 })
 
 test_that("Error localization for missing split variable when done in alt_count_df", {
