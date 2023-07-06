@@ -161,6 +161,7 @@ test_that("Error localization for missing split variable when done in alt_count_
         split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>% 
         split_rows_by("ARMCD") %>% 
         analyze("BMRKR1", afun = afun_tmp)
+    
     # Error on the columns should happen because it is used for counts on column space
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
     expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
@@ -170,20 +171,28 @@ test_that("Error localization for missing split variable when done in alt_count_
 context("Content functions (cfun)")
 
 test_that(".alt_counts_df appears in cfun but not in afun.", {
+    # Adding STRATA2 col to DM for alt_counts_df col split
+    alt_tmp <- DM %>% left_join(ex_adsl %>% 
+                                    mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>% 
+                                    select(ID, STRATA2))
+    
     afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
     cfun_tmp <- function(x, .alt_counts_df, labelstr, .N_col, 
                          .spl_context,
                          .all_col_exprs,
                          .all_col_counts,
                          ...) {
-        browser()
         if (!missing(.alt_counts_df)) {
-            stopifnot(nrow(DM %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
-            stopifnot(nrow(DM) == .N_col)
+            # .alt_counts_df is only row splitted matter
+            stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
+            
+            # Filtered column number of elemens correspond to .N_col
+            stopifnot(nrow(alt_tmp %>% 
+                               filter(eval(.spl_context$cur_col_expr[1]))) == .N_col)
+        } else {
+            # Checking cur_col_n is the same as .N_col for root and length(x) for split
+            stopifnot(identical(.spl_context$cur_col_n, c(.N_col, length(x))))
         }
-        
-        # Checking cur_col_n is the same as .N_col for root and length(x) for split
-        stopifnot(identical(.spl_context$cur_col_n, c(.N_col, length(x))))
         
         # Checking internal names for all column counts correspond to .spl_context
         stopifnot(all(names(.all_col_counts) %in% colnames(.spl_context)))
@@ -209,5 +218,7 @@ test_that(".alt_counts_df appears in cfun but not in afun.", {
         analyze("BMRKR1", afun = afun_tmp)
     
     expect_silent(lyt %>% build_table(ex_adsl))
-    expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = DM))
+    expect_error(lyt %>% build_table(ex_adsl, alt_counts_df = DM))
+    
+    expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = alt_tmp))
 })
