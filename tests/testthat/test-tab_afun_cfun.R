@@ -68,7 +68,7 @@ test_that(".spl_context contains information about combo counts", {
         "all_pt", "All Patients", c("A: Drug X", "B: Placebo", "C: Combination"), list()
     )
     
-    n_wrapper_alt_df <- function(alt_counts_df, cols_id) {
+    n_wrapper_alt_df <- function(alt_counts_df) {
         function(x, .spl_context, .N_col, .alt_counts_df, .all_col_exprs, 
                  .all_col_counts, ...) { 
             
