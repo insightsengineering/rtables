@@ -13,6 +13,7 @@ match_extra_args <- function(f,
                             .N_row,
                             .df_row,
                             extras) {
+    # This list is always present
     possargs <- c(list(
         .N_col = .N_col,
         .N_total = .N_total,
@@ -22,8 +23,6 @@ match_extra_args <- function(f,
         .all_col_counts = .all_col_counts
     ),
     extras)
-    formargs <- formals(f)
-    formnms <- names(formargs)
 
     ## specialized arguments that must be named in formals, cannot go
     ## anonymously into ...
@@ -37,18 +36,22 @@ match_extra_args <- function(f,
         possargs <- c(possargs, list(.ref_full = .ref_full))
     if(!is.null(.in_ref_col))
         possargs <- c(possargs, list(.in_ref_col = .in_ref_col))
+    
+    # Special case: .spl_context
     if(!is.null(.spl_context) && !(".spl_context" %in% names(possargs)))
         possargs <- c(possargs, list(.spl_context = .spl_context))
     else
         possargs$.spl_context <- NULL
 
-
+    # Extra args handling
+    formargs <- formals(f)
+    formnms <- names(formargs)
     exnms <- names(extras)
     if(is.null(formargs))
         return(NULL)
     else if("..." %in% names(formargs))
         formnms <- c(formnms, exnms[nzchar(exnms)])
-
+    
     possargs[names(possargs) %in% formnms]
 }
 
@@ -91,9 +94,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
                      inclNAs,
                      col_parent_inds,
                      spl_context) {
-    # xxx exceptions to check: add_overall_level, add_overall_col
-    # xxx multilevels (e.g. 3+)
-    # xxx cbind
     if (NROW(spl_context) > 0) {
         spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
         spl_context$cur_col_subset <- col_parent_inds

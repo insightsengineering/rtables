@@ -68,32 +68,61 @@ test_that(".spl_context contains information about combo counts", {
         "all_pt", "All Patients", c("A: Drug X", "B: Placebo", "C: Combination"), list()
     )
     
-    n_wrapper_alt_df <- function(alt_counts_df) {
+    n_wrapper_alt_df <- function(alt_counts_df, cols_id) {
         function(x, .spl_context, .N_col, .alt_counts_df, .all_col_exprs, 
                  .all_col_counts, ...) { 
-            if (.spl_context$cur_col_id[[1]] != "all_X") {
+            
+            cur_col <- paste0(.spl_context$cur_col_split_val[[1]], collapse = ".")
+            
+            # Checks on new .spl_context content
+            stopifnot(.spl_context$cur_col_id[[1]] == cur_col)
+            stopifnot(cur_col %in% names(.spl_context))
+            if (.spl_context$cur_col_split[[1]][1] != "All Patients 2") {
+                stopifnot(all(.spl_context$cur_col_split[[1]] == c("ARM", "COUNTRY")))
+            }
+            
+            if (grepl("all_X", .spl_context$cur_col_id[[1]]) ||
+                .spl_context$cur_col_id[[1]] == "All Patients 2") {
                 in_rows("n" = .N_col, .formats = "xx")
             } else {
-                # Normal execution - no use of cexpr
-                alt_df1 <- .alt_counts_df %>% 
-                    filter(ARM == "A: Drug X")
-                alt_df2 <- .alt_counts_df %>% 
-                    filter(ARM == "C: Combination")
+                AC_colname <- vapply(c("A: Drug X", "C: Combination"),
+                                     function(nmi) {
+                                         paste0(c(nmi, 
+                                                  .spl_context$cur_col_split_val[[1]][2]),
+                                                collapse = ".")
+                                     }, FUN.VALUE = character(1))
                 
                 # Use of cexpr
                 alt_df1c <- .alt_counts_df %>% 
-                    filter(eval(.all_col_exprs[["A: Drug X"]]))
+                    filter(eval(.all_col_exprs[[AC_colname[1]]]))
                 alt_df2c <- .alt_counts_df %>% 
-# xxx create convenience function from expr to col subset at certain level
-                    filter(eval(.all_col_exprs[["C: Combination"]]))
+                    filter(eval(.all_col_exprs[[AC_colname[2]]]))
+                
+                # Normal execution - no use of cexpr
+                alt_df1 <- .alt_counts_df %>% 
+                    filter(ARM == "A: Drug X",
+                           COUNTRY == .spl_context$cur_col_split_val[[1]][2])
+                alt_df2 <- .alt_counts_df %>% 
+                    filter(ARM == "C: Combination",
+                           COUNTRY == .spl_context$cur_col_split_val[[1]][2])
                 
                 # Super manual extraction
                 alt_df1b <- alt_counts_df %>% 
-                    filter(ARM == "A: Drug X") %>% 
-                    filter(STRATA1 == .spl_context$value[[2]])
+                    filter(ARM == "A: Drug X",
+                           COUNTRY == .spl_context$cur_col_split_val[[1]][2],
+                           SEX == .spl_context$value[3])
                 alt_df2b <- .alt_counts_df %>% 
-                    filter(ARM == "C: Combination") %>% 
+                    filter(ARM == "C: Combination",
+                           COUNTRY == .spl_context$cur_col_split_val[[1]][2],
+                           SEX == .spl_context$value[3])
+                
+                # All strata is add_overall_level -> filter not needed
+                if (.spl_context$value[[2]] != "All Strata") {
+                alt_df1b <- alt_df1b %>% 
                     filter(STRATA1 == .spl_context$value[[2]])
+                alt_df2b <- alt_df2b %>% 
+                    filter(STRATA1 == .spl_context$value[[2]])
+                }
                 
                 # This would break the tests if no match
                 stopifnot(nrow(alt_df1) == nrow(alt_df1b))
@@ -102,8 +131,9 @@ test_that(".spl_context contains information about combo counts", {
                 stopifnot(nrow(alt_df2) == nrow(alt_df2c))
                 
                 # General info
-                stopifnot(.all_col_counts[["all_X"]] == .N_col)
-                stopifnot(.all_col_exprs[["all_X"]] == .spl_context$cur_col_expr[[2]])
+                stopifnot(.all_col_counts[[.spl_context$cur_col_id[[1]]]] == .N_col)
+                stopifnot(identical(.all_col_exprs[[.spl_context$cur_col_id[[1]]]],
+                              .spl_context$cur_col_expr[3]))
                 
                 # Fin needed output 
                 in_rows("n" = c(nrow(alt_df1c), 
@@ -115,7 +145,10 @@ test_that(".spl_context contains information about combo counts", {
     
     lyt <- basic_table(show_colcounts = TRUE) %>% 
         split_cols_by("ARM", split_fun = add_combo_levels(combodf, first = TRUE)) %>%
-        split_rows_by("STRATA1", split_fun = drop_split_levels) %>%
+        split_cols_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+        split_rows_by("STRATA1", split_fun = add_overall_level("All Strata")) %>%
+        split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+        add_overall_col("All Patients 2") %>% 
         analyze(vars = "BMRKR1", afun = n_wrapper_alt_df(ex_adsl))
     
     # NB: If you add keep_levels = c("all_X") to add_combo_levels the other 
@@ -123,10 +156,13 @@ test_that(".spl_context contains information about combo counts", {
     
     tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
     
-    spl_ctx_cnt <- lapply(seq(2, nrow(tbl), 2), function(x) tbl[x, 2, drop = TRUE])
+    expect_silent(cbind_rtables(tbl, tbl))
+    expect_silent(rbind(tbl, tbl))
+    
+    spl_ctx_cnt <- lapply(seq(8, nrow(tbl), 5), function(x) tbl[x, 2, drop = TRUE])
     
     nrow_manual <- lapply(sort(unique(ex_adsl$STRATA1)), function(x) {
-        tmp_strata <- ex_adsl %>% filter(STRATA1 == x)
+        tmp_strata <- ex_adsl %>% filter(STRATA1 == x, SEX == "F", COUNTRY == "USA")
         sapply(list(tmp_strata %>% filter(ARM == "A: Drug X"),
                  tmp_strata %>% filter(ARM == "C: Combination")), nrow)
     })
