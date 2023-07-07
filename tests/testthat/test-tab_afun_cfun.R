@@ -171,9 +171,6 @@ test_that(".spl_context contains information about combo counts", {
 })
 
 test_that("Error localization for missing split variable when done in alt_count_df", {
-    # xxx - do the same for .ref_group?
-    # xxx - trying to merge .if_in_formals, func_takes, .takes_df and match_args?
-    
     # Error we want to happen
     afun_tmp <- function(x, .alt_counts_df, ...) mean(x)
     lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
@@ -201,7 +198,6 @@ test_that("Error localization for missing split variable when done in alt_count_
     # Error on the columns should happen because it is used for counts on column space
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
     expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
-    
 })
 
 context("Content functions (cfun)")
