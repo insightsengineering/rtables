@@ -106,8 +106,7 @@ rtables_aligns <- function() {
 }
 
 chk_rtables_align <- function(algn) { # xxx duplication with formatters
-    if(any(is.na(algn) | !(algn %in% rtables_aligns())))
-        stop("Unsupported text-alignment: ", algn)
+    check_aligns(algn)
     algn
 }
 

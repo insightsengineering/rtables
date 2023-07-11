@@ -216,8 +216,7 @@ test_that("alignment works", {
 
 })
 
-
-test_that("tabulation works with decimal alignment", {
+test_that("Decimal alignment works", {
   df <- data.frame(
     ARM = factor(c("decimal", "dec_right", "dec_left")),
     AETOXGR = factor(seq(1:3)),
@@ -229,7 +228,7 @@ test_that("tabulation works with decimal alignment", {
     analyze("AETOXGR", afun = function(x, .spl_context, .var) {
         form_v <- list_valid_format_labels()[[1]]
         num_v <- as.list(rep(11.11111, length(form_v)))
-        names(num_v) <- paste0("calc_", seq_along(form_v))
+        names(num_v) <- paste0("c", seq_along(form_v))
         
         # xxx to be replaced by cur_col_id
         ref_col <- .spl_context$cur_col_subset
@@ -245,27 +244,28 @@ test_that("tabulation works with decimal alignment", {
     }) %>%
     build_table(df)
   
-  
+  cw <- propose_column_widths(tbl)
+  cw[2:4] <- cw[2:4] + 5
   # Printed comparison with padding
-  res <- strsplit(toString(tbl, widths = c(15, 40, 40), hsep = "-"), "\\\n")[[1]]
+  res <- strsplit(toString(tbl, widths = cw, hsep = "-"), "\\\n")[[1]]
   expected <- c(
-      "            dec_left      dec_right       decimal   ",
-      "----------------------------------------------------",
-      "calc_1      11.11111         11.11111      11.11111 ",
-      "calc_2      11               11            11       ",
-      "calc_3      11.1             11.1          11.1     ",
-      "calc_4      11.11            11.11         11.11    ",
-      "calc_5      11.111           11.111        11.111   ",
-      "calc_6      11.1111          11.1111       11.1111  ",
-      "calc_7    1111.111%        1111.111%     1111.111%  ",
-      "calc_8    1111%            1111%         1111%      ",
-      "calc_9    1111.1%          1111.1%       1111.1%    ",
-      "calc_10   1111.11%         1111.11%      1111.11%   ",
-      "calc_11   1111.111%        1111.111%     1111.111%  ",
-      "calc_12   (N=11.11111)   (N=11.11111)   (N=11.11111)",
-      "calc_13     11.1             11.1          11.1     ",
-      "calc_14     11.11            11.11         11.11    ",
-      "calc_15     11.1111          11.1111       11.1111  "
+      "             dec_left                dec_right                 decimal        ",
+      "------------------------------------------------------------------------------",
+      "c1      11.11111                             11.11111           11.11111      ",
+      "c2      11                                   11                 11            ",
+      "c3      11.1                                 11.1               11.1          ",
+      "c4      11.11                                11.11              11.11         ",
+      "c5      11.111                               11.111             11.111        ",
+      "c6      11.1111                              11.1111            11.1111       ",
+      "c7    1111.111%                            1111.111%          1111.111%       ",
+      "c8    1111%                                1111%              1111%           ",
+      "c9    1111.1%                              1111.1%            1111.1%         ",
+      "c10   1111.11%                             1111.11%           1111.11%        ",
+      "c11   1111.111%                            1111.111%          1111.111%       ",
+      "c12   (N=11.11111)                       (N=11.11111)        (N=11.11111)     ",
+      "c13     11.1                                 11.1               11.1          ",
+      "c14     11.11                                11.11              11.11         ",
+      "c15     11.1111                              11.1111            11.1111       "
   )
   expect_identical(res, expected)
 })
