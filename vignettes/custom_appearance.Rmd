@@ -37,7 +37,8 @@ library(dplyr)
 
 It is possible to align the content by assigning `"left"`, `"center"`
 (default), and `"right"` to `.aligns` and `align` arguments in
-`in_rows()` and `rcell()`, respectively.
+`in_rows()` and `rcell()`, respectively. It is also possible to use `decimal`,
+`dec_right`, and `dec_left` for decimal alignments.
 
 Please consider using `?in_rows` and `?rcell` for further
 clarifications on the two arguments, and use `rtables_aligns()` to see
