@@ -219,55 +219,55 @@ test_that("alignment works", {
 
 test_that("tabulation works with decimal alignment", {
   df <- data.frame(
-    USUBJID = as.character(c(1:15, 1)),
-    ARM = factor(c("A", "B", "B", "A", "A", "A", "B", "A", "B", "B", "B", "B", "B", "B", "B", "C"),
-      levels = c("A", "B", "C")
-    ),
-    AETOXGR = factor(c(1, 1, 2, 3, 4, 1, 2, 5, 4, 4, 4, 4, 4, 4, 4, 4), levels = c(1:5)),
+    ARM = factor(c("decimal", "dec_right", "dec_left")),
+    AETOXGR = factor(seq(1:3)),
     stringsAsFactors = FALSE
   )
   
   tbl <- basic_table() %>%
     split_cols_by("ARM") %>%
-    analyze("AETOXGR", afun = function(x, .spl_context) {
-        a <- as.list(table(x))
+    analyze("AETOXGR", afun = function(x, .spl_context, .var) {
+        form_v <- list_valid_format_labels()[[1]]
+        num_v <- as.list(rep(11.11111, length(form_v)))
+        names(num_v) <- paste0("calc_", seq_along(form_v))
         
+        # xxx to be replaced by cur_col_id
         ref_col <- .spl_context$cur_col_subset
         which_ref_col <- sapply(.spl_context, function(i) identical(i, ref_col))
         col_nm_matched <- names(which_ref_col[which_ref_col])
         stopifnot(col_nm_matched > 1)
         
-        if (col_nm_matched[1] == "A") {
-            al_v <- rep("decimal", length(a))
-        } else if(col_nm_matched[1] == "B") {
-            al_v <- rep("dec_right", length(a))
-            al_v[3] <- "left"
-        } else if(col_nm_matched[1] == "C") {
-            al_v <- rep("dec_left", length(a))
-        }
-        
         in_rows(
-        .list = lapply(a, function(x) x / sum(unlist(a))),
-        .formats = "xx.xxx%",
-        .aligns = al_v
+            .list = num_v,
+            .formats = form_v,
+            .aligns = rep(col_nm_matched[1], length(num_v))
         )
     }) %>%
     build_table(df)
   
-  al_mat <- matrix_form(tbl)$aligns
-  al_expected <- matrix(nrow = nrow(al_mat), ncol = ncol(al_mat))
-  al_expected[, 1] <- "left"
-  al_expected[, 2] <- "decimal"
-  al_expected[, 3] <- "dec_right"
-  al_expected[4, 3] <- "left"
-  al_expected[, 4] <- "dec_left"
-  al_expected[1, -1] <- "center"
-  
-  expect_identical(al_mat, al_expected)
   
   # Printed comparison with padding
-  # cat(toString(tbl, widths = c(15, 10)))
-  
+  res <- strsplit(toString(tbl, widths = c(15, 40, 40), hsep = "-"), "\\\n")[[1]]
+  expected <- c(
+      "            dec_left      dec_right       decimal   ",
+      "----------------------------------------------------",
+      "calc_1      11.11111         11.11111      11.11111 ",
+      "calc_2      11               11            11       ",
+      "calc_3      11.1             11.1          11.1     ",
+      "calc_4      11.11            11.11         11.11    ",
+      "calc_5      11.111           11.111        11.111   ",
+      "calc_6      11.1111          11.1111       11.1111  ",
+      "calc_7    1111.111%        1111.111%     1111.111%  ",
+      "calc_8    1111%            1111%         1111%      ",
+      "calc_9    1111.1%          1111.1%       1111.1%    ",
+      "calc_10   1111.11%         1111.11%      1111.11%   ",
+      "calc_11   1111.111%        1111.111%     1111.111%  ",
+      "calc_12   (N=11.11111)   (N=11.11111)   (N=11.11111)",
+      "calc_13     11.1             11.1          11.1     ",
+      "calc_14     11.11            11.11         11.11    ",
+      "calc_15     11.1111          11.1111       11.1111  "
+  )
+  expect_identical(res, expected)
 })
 
 

@@ -102,10 +102,10 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 #'
 #' @export
 rtables_aligns <- function() {
-  c("left", "right", "center", "decimal", "dec_right", "dec_left")
+  list_valid_aligns()
 }
 
-chk_rtables_align <- function(algn) {
+chk_rtables_align <- function(algn) { # xxx duplication with formatters
     if(any(is.na(algn) | !(algn %in% rtables_aligns())))
         stop("Unsupported text-alignment: ", algn)
     algn
