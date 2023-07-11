@@ -1,4 +1,4 @@
-## rtables 0.6.1.9010
+## rtables 0.6.1.9011
 
 ### Enhancements
  * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
