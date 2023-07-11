@@ -6,6 +6,7 @@ articles:
   baseline: baseline.html
   clinical_trials: clinical_trials.html
   custom_appearance: custom_appearance.html
+  example_analysis_coxreg: example_analysis_coxreg.html
   format_precedence: format_precedence.html
   introduction: introduction.html
   manual_table_construction: manual_table_construction.html
@@ -15,7 +16,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2023-07-04T03:46Z
+last_built: 2023-07-11T02:03Z
 urls:
   reference: https://insightsengineering.github.io/rtables/main/reference
   article: https://insightsengineering.github.io/rtables/main/articles
