@@ -320,6 +320,8 @@
 \alias{col_fnotes_here<-,LayoutColLeaf-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
+\alias{ref_symbol,RefFootnote-method}
+\alias{ref_symbol<-,RefFootnote-method}
 \alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
@@ -328,6 +330,22 @@
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
 \alias{tt_at_path<-,VTableTree,ANY,NULL-method}
 \alias{tt_at_path<-,VTableTree,ANY,TableRow-method}
+\alias{[<-,VTableTree,ANY,ANY,CellValue-method}
+\alias{[,VTableTree,logical,ANY-method}
+\alias{[,VTableTree,logical,missing-method}
+\alias{[,VTableTree,ANY,logical-method}
+\alias{[,VTableTree,ANY,missing-method}
+\alias{[,VTableTree,missing,ANY-method}
+\alias{[,VTableTree,ANY,character-method}
+\alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,character,character-method}
+\alias{[,VTableTree,missing,numeric-method}
+\alias{[,VTableTree,numeric,numeric-method}
+\alias{cell_values,VTableTree-method}
+\alias{cell_values,TableRow-method}
+\alias{cell_values,LabelRow-method}
+\alias{value_at,TableRow-method}
+\alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
 \title{combine SplitVector objects}
@@ -458,7 +476,7 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
 
-\S4method{str}{VTableTree}(object, ...)
+\S4method{str}{VTableTree}(object, max.level = 3L, ...)
 
 \S4method{table_structure_inner}{TableTree}(obj, depth = 0, indent = 0, print_indent = 0)
 
@@ -1014,6 +1032,10 @@ spl_varnames(object) <- value
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
 
+\S4method{ref_symbol}{RefFootnote}(obj)
+
+\S4method{ref_symbol}{RefFootnote}(obj) <- value
+
 \S4method{ref_msg}{RefFootnote}(obj)
 
 \S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
@@ -1029,6 +1051,38 @@ spl_varnames(object) <- value
 \S4method{tt_at_path}{VTableTree,ANY,`NULL`}(tt, path, ...) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,TableRow}(tt, path, ...) <- value
+
+\S4method{[}{VTableTree,ANY,ANY,CellValue}(x, i, j, ...) <- value
+
+\S4method{[}{VTableTree,logical,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,logical,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{TableRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{LabelRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{value_at}{TableRow}(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{LabelRow}(tt, rowpath = NULL, colpath = NULL)
 
 \S4method{print}{VTableTree}(x, ...)
 
@@ -1092,6 +1146,10 @@ not match a formal argument of the tabulation function.}
 
 \item{object}{The object to modify in-place}
 
+\item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
+VTableTree method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
+appropriate for \code{VTableTree} objects.}
+
 \item{value}{The new value}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
@@ -1133,6 +1191,15 @@ be immediately recalculated. Defaults to TRUE.}
 \item{path}{character. A vector path for a position within the structure of a
 tabletree. Each element represents a subsequent choice amongst the children
 of the previous choice.}
+
+\item{i}{index}
+
+\item{j}{index}
+
+\item{drop}{logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of \code{i} and \code{j}. It is not possible
+to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
+Defaults to \code{FALSE}.}
 }
 \value{
 Various, but should be considered implementation details.
@@ -1161,3 +1228,4 @@ indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
 }
+\keyword{internal}

@@ -9,6 +9,8 @@
 \alias{col_fnotes_here<-}
 \alias{ref_index}
 \alias{ref_index<-}
+\alias{ref_symbol}
+\alias{ref_symbol<-}
 \alias{ref_msg}
 \alias{fnotes_at_path<-}
 \title{Referential Footnote Accessors}
@@ -28,6 +30,10 @@ col_fnotes_here(obj) <- value
 ref_index(obj)
 
 ref_index(obj) <- value
+
+ref_symbol(obj)
+
+ref_symbol(obj) <- value
 
 ref_msg(obj)
 

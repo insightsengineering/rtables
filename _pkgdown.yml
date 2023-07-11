@@ -28,6 +28,7 @@ articles:
     - custom_appearance
     - advanced_usage
     - format_precedence
+    - example_analysis_coxreg
 
 reference:
 
@@ -43,6 +44,7 @@ reference:
   - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
     contents:
+    - qtable
     - build_table
     - basic_table
     - analyze
@@ -122,10 +124,15 @@ reference:
     - rbind
     - cbind_rtables
     - asvec
-    - bracket_subsetting
+    - brackets
     - clear_indent_mods
     - head
 
+  - title: Validating and Fixing Table Structure
+    contents:
+    - validate_table_struct
+    - sanitize_table_struct
+    - find_degen_struct
     
   - title: Sorting and Pruning
     contents:
@@ -210,6 +217,12 @@ reference:
     contents:
     - row_footnotes
     - update_ref_indexing
+
+  - title: Analysis Ready Datasets (ARDs)
+    desc: Functions for generating ARDs from rtables TableTree objects
+    contents:
+    - as_ard
+    - ard_specs
 
   - title: internal
     desc: Internal documented methods

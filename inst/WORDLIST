@@ -5,6 +5,9 @@ afun
 allcols
 amongst
 AnalyzeMultiVars
+ARD
+ard
+ARDs
 Arg
 args
 arguemnts
@@ -39,6 +42,7 @@ comparead
 compat
 constr
 Controling
+cpp
 CRAN's
 cre
 ctb
@@ -50,6 +54,7 @@ Davide
 davide
 dby
 decrementing
+degen
 desc
 df
 dimensioned
@@ -62,6 +67,7 @@ emph
 ethnicities
 exargs
 expr
+facetted
 facetting
 FlexTable
 flextable
@@ -136,6 +142,7 @@ pre
 priori
 programmatically
 Qi
+qtable
 quartiles
 radoption
 rbound
@@ -162,9 +169,7 @@ rrows
 RStudio
 rtable
 rtablel
-RTF
 rtf
-rtfs
 sabanes
 Sabanés
 Saibah
@@ -180,6 +185,7 @@ sprintf
 Stoilova
 str
 strs
+struct
 Subtable
 subtable
 subtable's

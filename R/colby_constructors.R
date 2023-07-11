@@ -91,7 +91,7 @@ setMethod("split_rows", "PreDataTableLayouts",
        identical(label_position(spl), "topleft") &&
        length(split_label) == 1  && nzchar(split_label)) {
         addtl <- TRUE
-        label_position(spl) <- "hidden"
+##        label_position(spl) <- "hidden"
     }
 
     rlyt <- split_rows(rlyt, spl, pos)
@@ -331,7 +331,9 @@ setMethod(".tl_indent_inner", "PreDataRowLayout",
 })
 
 setMethod(".tl_indent_inner", "SplitVector",
-          function(lyt) length(lyt)  - 1L)
+          function(lyt) {
+    sum(vapply(lyt, function(x) label_position(x) == "topleft", TRUE)) - 1L
+}) ##length(lyt)  - 1L)
 
 
 .tl_indent <- function(lyt, nested = TRUE) {
@@ -1354,6 +1356,8 @@ setMethod(".add_row_summary", "Split",
             cnt <- sum(!is.na(df))
         }
         ## the formatter does the *100 so we don't here.
+        ## TODO name elements of this so that ARD generation has access to them
+        ## ret <- rcell(c(n = cnt, pct = cnt / .N_col),
         ret <- rcell(c(cnt, cnt / .N_col),
                     format = format,
                     label = label)

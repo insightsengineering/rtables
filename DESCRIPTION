@@ -1,47 +1,56 @@
 Package: rtables
 Title: Reporting Tables
-Date: 2023-03-02
-Version: 0.6.0.1
+Version: 0.6.1.9011
+Date: 2023-07-11
 Authors@R: c(
-  person("Gabriel", "Becker", email = "gabembecker@gmail.com", role = c("aut", "cre")),
-  person("Adrian", "Waddell", email = "adrian.waddell@gene.com", role = "aut"),
-  person("Daniel", "Sabanés Bové", email = "daniel.sabanes_bove@roche.com", role = "ctb"),
-  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "ctb"),
-  person("Davide", "Garolini", email = "davide.garolini@roche.com", role = "ctb")
+    person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
+    person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
+    person("Daniel", "Sabanés Bové", , "daniel.sabanes_bove@roche.com", role = "ctb"),
+    person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "ctb"),
+    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "ctb")
   )
-Description: Reporting tables often have structure that goes beyond simple rectangular
-  data. The 'rtables' package provides a framework for declaring complex multi-level tabulations
-  and then applying them to data. This framework models both tabulation and the resulting
-  tables as hierarchical, tree-like objects which support sibling sub-tables, arbitrary splitting
-  or grouping of data in row and column dimensions, cells containing multiple values,
-  and the concept of contextual summary computations. A convenient pipe-able interface is provided
-  for declaring table layouts and the corresponding computations, and then applying them to data.
-Depends: methods, magrittr, formatters (>= 0.4.0), R (>= 2.10)
-Imports:
-  stats,
-  htmltools,
-  grid
-Suggests:
-  dplyr,
-  tibble,
-  tidyr,
-  testthat,
-  xml2,
-  knitr,
-  rmarkdown,
-  flextable,
-  officer,
-  r2rtf,
-  survival
+Description: Reporting tables often have structure that goes beyond simple
+    rectangular data. The 'rtables' package provides a framework for
+    declaring complex multi-level tabulations and then applying them to
+    data. This framework models both tabulation and the resulting tables
+    as hierarchical, tree-like objects which support sibling sub-tables,
+    arbitrary splitting or grouping of data in row and column dimensions,
+    cells containing multiple values, and the concept of contextual
+    summary computations. A convenient pipe-able interface is provided for
+    declaring table layouts and the corresponding computations, and then
+    applying them to data.
 License: Apache License 2.0 | file LICENSE
+URL: https://github.com/insightsengineering/rtables,
+    https://insightsengineering.github.io/rtables/
+BugReports: https://github.com/insightsengineering/rtables/issues
+Depends: 
+    formatters (>= 0.5.0),
+    magrittr,
+    methods,
+    R (>= 2.10)
+Imports:
+    grid,
+    htmltools,
+    stats
+Suggests:
+    dplyr,
+    flextable,
+    knitr,
+    officer,
+    r2rtf,
+    rmarkdown,
+    survival,
+    testthat,
+    tibble,
+    tidyr,
+    xml2
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-VignetteBuilder: knitr
-URL: https://github.com/insightsengineering/rtables, https://insightsengineering.github.io/rtables/
-BugReports: https://github.com/insightsengineering/rtables/issues
 Collate:
     '00tabletrees.R'
     'Viewer.R'
@@ -72,4 +81,5 @@ Collate:
     'tt_export.R'
     'index_footnotes.R'
     'tt_from_df.R'
+    'validate_table_struct.R'
     'zzz_constants.R'

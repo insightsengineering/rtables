@@ -186,7 +186,7 @@ test_that("row subsetting works on table with only content rows", {
     rw <- tab[1, ]
     expect_identical(cell_values(rw),
                      cell_values(tab)[[1]])
-    expect_identical(tab[1, 1, drop = TRUE],
+    expect_identical(unname(tab[1, 1, drop = TRUE]),
                      79 * c(1, 1 / sum(DM$ARM == "A: Drug X")))
 })
 
@@ -560,4 +560,30 @@ test_that("indent mod preserved when paginating between multi-analyses", {
     rdf <- make_row_df(res[[2]])
     expect_equal(rdf$indent[2], #smoker row
                  0)
+})
+
+
+## https://github.com/insightsengineering/rtables/issues/634
+## problem was actually in formatters fixed there in PR #152
+test_that("export_as_txt works when there are newlines in column labels (naturally or after wrapping", {
+    tbl <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by("ACTARM") %>%
+    split_rows_by(
+      "PARAMCD",
+      labels_var = "PARAM",
+      split_fun = drop_split_levels
+    ) %>%
+    split_rows_by(
+      "AVISIT",
+      split_fun = drop_split_levels,
+      label_pos = "hidden"
+    ) %>%
+    split_cols_by_multivar(
+      vars = c("AVAL", "CHG"),
+      varlabels = c("Analysis Value", "Change from\nBaseline")
+    ) %>%
+    analyze_colvars(afun = mean) %>%
+    build_table(formatters::ex_adlb)
+
+    expect_silent({tmp <- export_as_txt(tbl, lpp = 20)})
 })

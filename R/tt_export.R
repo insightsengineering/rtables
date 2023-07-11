@@ -100,6 +100,134 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 
 }
 
+do_label_row <- function(rdfrow, maxlen) {
+    pth <- rdfrow$path[[1]]
+    c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)), list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
+}
+
+
+make_ard_md_colnames <- function(maxlen) {
+    spllen <- floor((maxlen - 2) / 2)
+    ret <- character()
+    if(spllen > 0 )
+        ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+    ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
+}
+
+
+do_content_row <- function(rdfrow, maxlen) {
+    pth <- rdfrow$path[[1]]
+
+    contpos <- which(pth == "@content")
+
+    seq_before <- seq_len(contpos - 1)
+
+    ret <- c(as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+      list(tail(pth, 1)),
+      list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class))
+}
+
+do_data_row <- function(rdfrow, maxlen) {
+
+    pth <- rdfrow$path[[1]]
+    pthlen <- length(pth)
+    ## odd means we have a multi-analsysis step in the path, we dont' want that in the ard
+    if(pthlen %% 2 == 1) {
+        pth <- pth[-1*(pthlen - 2)]
+    }
+    c(as.list(pth[seq_len(pthlen - 2)]),
+      replicate(maxlen - pthlen, list(NA_character_)),
+      as.list(tail(pth, 2)),
+      list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
+
+
+}
+
+
+handle_rdf_row <- function(rdfrow, maxlen) {
+    nclass <- rdfrow$node_class
+    if(rdfrow$path[[1]][1] == "root") {
+        rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
+        maxlen <- maxlen - 1
+    }
+    ret <- switch(nclass,
+           LabelRow = do_label_row(rdfrow, maxlen),
+           ContentRow = do_content_row(rdfrow, maxlen),
+           DataRow = do_data_row(rdfrow, maxlen),
+           stop("Unrecognized node type in row dataframe, unable to generate ARD")
+           )
+    setNames(ret, make_ard_md_colnames(maxlen))
+}
+
+
+#' ARD Specifications
+#'
+#' @return a named list of ard extraction functions by "specification"
+#' @export
+#' @examples
+#' ard_specs()
+ard_specs <- function() {
+   list(v0_experimental = ard_v0_experimental)
+}
+
+lookup_ard_specfun <- function(spec) {
+    if(!(spec %in% names(ard_specs())))
+        stop("unrecognized ARD specification: ",
+             spec,
+             "If that specification is correct you may  need to update your version of rtables")
+    ard_specs()[[spec]]
+}
+
+ard_v0_experimental <- function(tt) {
+
+    raw_cvals <- cell_values(tt)
+    ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
+    ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
+    ## at this point.
+    if(nrow(tt) == 1 && length(raw_cvals) > 1)
+        raw_cvals <- list(raw_cvals)
+    cellvals <- as.data.frame(do.call(rbind, raw_cvals))
+    row.names(cellvals) <- NULL
+    rdf <- make_row_df(tt)
+    df <- cbind(rdf[rdf$node_class != "LabelRow",
+                    c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")],
+                cellvals)
+    maxlen <- max(lengths(df$path))
+    metadf <- do.call(rbind.data.frame, lapply(seq_len(NROW(df)), function(ii) handle_rdf_row(df[ii,], maxlen = maxlen)))
+    cbind(metadf[metadf$node_class != "LabelRow",],
+          cellvals)
+}
+
+#' Generate an Analysis Ready Dataset (ARD)
+#'
+#' @param tt VTableTree. The table.
+#' @param spec character(1). The specification to use to
+#' extract the ARD. See details
+#' @param ... Passed to spec-specific ARD conversion function.
+#'
+#' @details ARD specifications may differ in the exact information they include and
+#' the form in which they represent it. Specifications whose names end in "_experimental"
+#' are subject to change without notice, but specifications without the "_experimental"
+#' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#'
+#' @note This function may eventually be migrated to a separate package, and so should
+#' not be called via `::`
+#' @export
+#' @examples
+#'
+#' lyt <- basic_table() %>%
+#'     split_cols_by("ARM") %>%
+#'     split_rows_by("STRATA1") %>%
+#'   analyze(c("AGE", "BMRKR2"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#' as_ard(tbl)
+as_ard <- function(tt, spec = "v0_experimental", ...) {
+
+    ard_fun <- lookup_ard_specfun(spec)
+    ard_fun(tt, ...)
+}
+
 .split_colwidths <- function(ptabs, nctot, colwidths) {
 
     ret <- list()
@@ -118,31 +246,11 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
     ret
 }
 
-.need_pag <- function(page_type, pg_width, pg_height, cpp, lpp) {
-    !(is.null(page_type) && is.null(pg_width) && is.null(pg_height) && is.null(cpp) && is.null(lpp))
+### Migrated to formatters.
 
-}
-#' Export as plain text with page break symbol
-#'
-#' @inheritParams gen_args
-#' @inheritParams tostring
-#' @inheritParams paginate_table
-#' @param file character(1). File to write.
-#' @param paginate logical(1). Should \code{tt} be paginated before writing the file. Defaults to `TRUE` if any sort of page dimension is specified.
-#' @param \dots Passed directly to \code{\link{paginate_table}}
-#' @param page_break character(1). Page break symbol (defaults to outputting \code{"\\s"}).
-#' @return \code{file} (this function is called for the side effect of writing the file.
-#'
-#' @note When specified, `font_size` is used *only* to determine pagination based
-#' on page dimensions. The written file is populated in raw ASCII text, which
-#' does not have the concept of font size.
-#'
-#' @export
-#'
-#' @seealso [export_as_pdf()]
+#' @importFrom formatters export_as_txt
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -156,77 +264,100 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-export_as_txt <- function(tt, file = NULL,
-                          page_type = NULL,
-                          landscape = FALSE,
-                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
-                          font_family = "Courier",
-                          font_size = 8,  # grid parameters
-                          paginate = .need_pag(page_type, pg_width, pg_height, lpp, cpp),
-                          cpp = NULL,
-                          lpp = NULL,
-                          ..., page_break = "\\s\\n",
-                          hsep = default_hsep(),
-                          indent_size = 2,
-                          tf_wrap = paginate,
-                          max_width = cpp,
-                          colwidths = propose_column_widths(matrix_form(tt, TRUE))) {
-    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
-        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
-             ncol(tt) + 1, "], got length ", length(colwidths))
-    if(paginate) {
-        gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
+#'
+#' @export
+formatters::export_as_txt
 
-        pdf(file = tempfile(), width = pg_width, height = pg_height)
-        on.exit(dev.off())
-        grid.newpage()
-        pushViewport(plotViewport(margins = c(0, 0, 0, 0), gp = gp_plot))
+## #' Export as plain text with page break symbol
+## #'
+## #' @inheritParams gen_args
+## #' @inheritParams tostring
+## #' @inheritParams paginate_table
+## #' @param file character(1). File to write.
+## #' @param paginate logical(1). Should \code{tt} be paginated before writing the file. Defaults to `TRUE` if any sort of page dimension is specified.
+## #' @param \dots Passed directly to \code{\link{paginate_table}}
+## #' @param page_break character(1). Page break symbol (defaults to outputting \code{"\\s"}).
+## #' @return \code{file} (this function is called for the side effect of writing the file.
+## #'
+## #' @note When specified, `font_size` is used *only* to determine pagination based
+## #' on page dimensions. The written file is populated in raw ASCII text, which
+## #' does not have the concept of font size.
+## #'
+## #' @export
+## #'
+## #' @seealso [export_as_pdf()]
+## #'
+## export_as_txt <- function(tt, file = NULL,
+##                           page_type = NULL,
+##                           landscape = FALSE,
+##                           pg_width = page_dim(page_type)[if(landscape) 2 else 1],
+##                           pg_height = page_dim(page_type)[if(landscape) 1 else 2],
+##                           font_family = "Courier",
+##                           font_size = 8,  # grid parameters
+##                           paginate = .need_pag(page_type, pg_width, pg_height, lpp, cpp),
+##                           cpp = NULL,
+##                           lpp = NULL,
+##                           ..., page_break = "\\s\\n",
+##                           hsep = default_hsep(),
+##                           indent_size = 2,
+##                           tf_wrap = paginate,
+##                           max_width = cpp,
+##                           colwidths = propose_column_widths(matrix_form(tt, TRUE))) {
+##     if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+##         stop("non-null colwidths argument must have length ncol(tt) + 1 [",
+##              ncol(tt) + 1, "], got length ", length(colwidths))
+##     if(paginate) {
+##         gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
-        cur_gpar <-  get.gpar()
-        if(is.null(page_type) && is.null(pg_width) && is.null(pg_height) &&
-           (is.null(cpp) || is.null(lpp))) {
-            page_type <- "letter"
-            pg_width <- page_dim(page_type)[if(landscape) 2 else 1]
-            pg_height <- page_dim(page_type)[if(landscape) 1 else 2]
-        }
+##         pdf(file = tempfile(), width = pg_width, height = pg_height)
+##         on.exit(dev.off())
+##         grid.newpage()
+##         pushViewport(plotViewport(margins = c(0, 0, 0, 0), gp = gp_plot))
 
-        if (is.null(lpp)) {
-            lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                         (cur_gpar$cex * cur_gpar$lineheight))
-        }
-        if(is.null(cpp)) {
-            cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-                         font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
-        }
-        if(tf_wrap && is.null(max_width))
-            max_width <- cpp
+##         cur_gpar <-  get.gpar()
+##         if(is.null(page_type) && is.null(pg_width) && is.null(pg_height) &&
+##            (is.null(cpp) || is.null(lpp))) {
+##             page_type <- "letter"
+##             pg_width <- page_dim(page_type)[if(landscape) 2 else 1]
+##             pg_height <- page_dim(page_type)[if(landscape) 1 else 2]
+##         }
 
-        tbls <- paginate_table(tt, cpp = cpp, lpp = lpp, tf_wrap = tf_wrap, max_width = max_width,
-                               colwidths = colwidths, ...)
-    } else {
-        tbls <- list(tt)
-    }
+##         if (is.null(lpp)) {
+##             lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
+##                          (cur_gpar$cex * cur_gpar$lineheight))
+##         }
+##         if(is.null(cpp)) {
+##             cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
+##                          font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi)
+##         }
+##         if(tf_wrap && is.null(max_width))
+##             max_width <- cpp
 
-    res <- paste(mapply(function(tb, cwidths, ...) {
-        ## 1 and +1 are because cwidths includes rowlabel 'column'
-        cinds <- c(1, .figure_out_colinds(tb, tt) + 1L)
-        toString(tb, widths = cwidths[cinds], ...)
-    },
-    MoreArgs = list(hsep = hsep,
-                    indent_size = indent_size,
-                    tf_wrap = tf_wrap,
-                    max_width = max_width,
-                    cwidths = colwidths),
-    SIMPLIFY = FALSE,
-    tb = tbls),
-    collapse = page_break)
+##         tbls <- paginate_table(tt, cpp = cpp, lpp = lpp, tf_wrap = tf_wrap, max_width = max_width,
+##                                colwidths = colwidths, ...)
+##     } else {
+##         tbls <- list(tt)
+##     }
 
-    if(!is.null(file))
-        cat(res, file = file)
-    else
-        res
-}
+##     res <- paste(mapply(function(tb, cwidths, ...) {
+##         ## 1 and +1 are because cwidths includes rowlabel 'column'
+##         cinds <- c(1, .figure_out_colinds(tb, tt) + 1L)
+##         toString(tb, widths = cwidths[cinds], ...)
+##     },
+##     MoreArgs = list(hsep = hsep,
+##                     indent_size = indent_size,
+##                     tf_wrap = tf_wrap,
+##                     max_width = max_width,
+##                     cwidths = colwidths),
+##     SIMPLIFY = FALSE,
+##     tb = tbls),
+##     collapse = page_break)
+
+##     if(!is.null(file))
+##         cat(res, file = file)
+##     else
+##         res
+## }
 
 
 #' Create a FlexTable object representing an rtables TableTree
@@ -273,7 +404,9 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
         if(is.null(lpp))
             stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
         tabs <- paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
-        return(lapply(tabs, tt_to_flextable, paginate = FALSE, total_width = total_width, colwidths = colwidths))
+        cinds <- lapply(tabs, function(tb) c(1, .figure_out_colinds(tb, tt) + 1L))
+        return(mapply(tt_to_flextable, tt = tabs, colwidths = cinds, MoreArgs = list(paginate = FALSE, total_width = total_width),
+                      SIMPLIFY = FALSE))
     }
 
     final_cwidths <- total_width * colwidths / sum(colwidths)
@@ -346,7 +479,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
 #'
 #' The PDF output is based on the ASCII output created with `toString`
 #'
-#' @inheritParams export_as_txt
+#' @inheritParams formatters::export_as_txt
 #' @inheritParams tostring
 #' @inheritParams grid::plotViewport
 #' @inheritParams paginate_table
@@ -375,7 +508,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
 #' (unlike when printed to the terminal), with `cpp`, as
 #' defined above, as the default `max_width`.
 #'
-#' @seealso [export_as_txt()]
+#' @seealso [formatters::export_as_txt()]
 #'
 #'
 #' @importFrom grid textGrob get.gpar
@@ -498,84 +631,4 @@ export_as_pdf <- function(tt,
         grid.draw(g)
     }
      list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, lpp = lpp, cpp = cpp)
-}
-
-.margin_lines_to_in <- function(margins, font_size, font_family) {
-    tmpfile <- tempfile(fileext = ".pdf")
-    gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
-    pdf(file = tmpfile, width = 20, height = 20)
-    on.exit({dev.off(); file.remove(tmpfile)})
-    grid.newpage()
-    pushViewport(plotViewport(margins = margins, gp = gp_plot))
-    c(bottom = convertHeight(unit(margins["bottom"], "lines"), "inches", valueOnly = TRUE),
-      left = convertWidth(unit(1, "strwidth", strrep("m", margins["left"])), "inches", valueOnly = TRUE),
-      top = convertHeight(unit(margins["top"], "lines"), "inches", valueOnly = TRUE),
-      right = convertWidth(unit(1, "strwidth", strrep("m", margins["right"])), "inches", valueOnly = TRUE))
-}
-
-
-#' Export table to RTF
-#'
-#' Experimental export to the RTF format.
-#'
-#' @details RTF export occurs by via the following steps
-#'
-#' \itemize{
-#' \item{the table is paginated to the page size (Vertically and horizontally)}
-#' \item{Each separate page is converted to a MatrixPrintForm and from there to RTF-encoded text}
-#' \item{Separate rtfs text chunks are combined and written out as a single RTF file}
-#' }
-#'
-#' Conversion of `MatrixPrintForm` objects to RTF is done via [formatters::mpf_to_rtf()].
-#' @inheritParams export_as_txt
-#' @inheritParams tostring
-#' @inheritParams grid::plotViewport
-#' @inheritParams paginate_table
-#' @export
-
-export_as_rtf <- function(tt,
-                      file = NULL,
-                      colwidths = propose_column_widths(matrix_form(tt, TRUE)),
-                      page_type = "letter",
-                      pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                      pg_height = page_dim(page_type)[if(landscape) 1 else 2],
-                      landscape = FALSE,
-                      margins = c(bottom = 4, left = 4, top=4, right = 4),
-                      font_size = 8,
-                      font_family = "Courier",
-                      ...) {
-    if(!requireNamespace("r2rtf"))
-        stop("RTF export requires the r2rtf package, please install it.")
-    if(is.null(names(margins)))
-        names(margins) <- c("bottom", "left", "top", "right")
-    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
-        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
-             ncol(tt) + 1, "], got length ", length(colwidths))
-
-    margins_in <- .margin_lines_to_in(margins, font_size, font_family)
-    true_width <- pg_width - sum(margins_in[c("left", "right")])
-    true_height <- pg_height - sum(margins_in[c("top", "bottom")])
-
-    tbls <- paginate_table(tt, font_family = font_family, font_size = font_size,
-                           pg_width = true_width,
-                           pg_height = true_height,
-                           margins = c(bottom = 0, left = 0, top = 0, right = 0),
-                           lineheight = 1.25,
-                           colwidths = colwidths,
-                           ...)
-
-    rtftxts <- lapply(tbls, function(tbl) r2rtf::rtf_encode(mpf_to_rtf(tbl,
-                                                                       colwidths = colwidths[c(1, .figure_out_colinds(tbl, tt))],
-                                                                       page_type = page_type,
-                                                                       pg_width = pg_width,
-                                                                       pg_height = pg_height,
-                                                                       font_size = font_size,
-                                                                       margins = c(top = 0, left = 0, bottom = 0, right = 0))))
-    restxt <- paste(rtftxts[[1]]$start,
-                    paste(sapply(rtftxts, function(x) x$body), collapse = "\n{\\pard\\fs2\\par}\\page{\\pard\\fs2\\par}\n"),
-                    rtftxts[[1]]$end)
-    if(!is.null(file))
-        cat(restxt, file = file)
-    else
-        restxt
 }
