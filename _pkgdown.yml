@@ -217,11 +217,11 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: Flattening rtable TableTree Objects
-    desc: Functions for generating flattened data frames from rtables TableTree objects
+  - title: Result Dataframe Functions
+    desc: Functions for generating result data frames from rtables TableTree objects
     contents:
-    - as_dataframe_with_spec
-    - flat_df_specs
+    - as_result_df
+    - result_df_specs
 
   - title: internal
     desc: Internal documented methods
