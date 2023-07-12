@@ -51,7 +51,34 @@ test_that("Page by splitting works", {
     expect_true(grepl("Stratum: B", txt))
 })
 
+test_that("export_as_txt prints split level header correctly when using page_by", {
+  # single level in page_by split
+  tbl <- basic_table() %>%
+    split_rows_by("PARAMCD", labels_var = "PARAMCD", split_label = "aaa",
+                  label_pos = "topleft",
+                  split_fun = drop_split_levels, page_by = TRUE) %>%
+    split_rows_by("AVISIT", label_pos = "topleft",
+                  split_fun = keep_split_levels("SCREENING")) %>%
+    analyze("AVAL") %>%
+    build_table(ex_adlb[ex_adlb$PARAMCD == "ALT",])
+  tbl_txt <- tbl %>% export_as_txt(lpp = 100)
 
+  expect_true(grepl("^\naaa: ALT", tbl_txt))
+
+  # multiple levels in page_by split
+  tbl <- basic_table() %>%
+    split_rows_by("PARAMCD", labels_var = "PARAMCD", split_label = "aaa",
+                  label_pos = "topleft",
+                  split_fun = drop_split_levels, page_by = TRUE) %>%
+    split_rows_by("AVISIT", label_pos = "topleft",
+                  split_fun = keep_split_levels("SCREENING")) %>%
+    analyze("AVAL") %>%
+    build_table(ex_adlb[ex_adlb$PARAMCD != "IGA",])
+  tbl_txt <- tbl %>% export_as_txt(lpp = 100)
+  
+  expect_true(grepl("^\naaa: ALT", tbl_txt))
+  expect_true(grepl("\naaa: CRP", tbl_txt))
+})
 
 test_that("vertical and horizontal pagination work", {
 
