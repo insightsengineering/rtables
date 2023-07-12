@@ -33,6 +33,8 @@ Imports:
     htmltools,
     stats
 Suggests:
+    broom,
+    car,
     dplyr,
     flextable,
     knitr,
