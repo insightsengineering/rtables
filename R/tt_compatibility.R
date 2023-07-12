@@ -42,7 +42,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 }
 
 
-#' rrowl
+#' `rrowl`
 #'
 #' @inheritParams compat_args
 #' @param \dots values in vector/list form
@@ -400,7 +400,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
 }
 
-#' rbind TableTree and related objects
+#' `rbind` `TableTree` and related objects
 #' @rdname rbind
 #' @aliases rbind
 #' @exportMethod rbind
@@ -443,7 +443,7 @@ setMethod("rbind", "VTableNodeInfo",
 })
 
 #' @exportMethod rbind2
-#' @param y Second element to be rbound via `rbind2`
+#' @param y Second element to be `rbound` via `rbind2`
 #' @rdname int_methods
 setMethod("rbind2", c("VTableNodeInfo", "missing"),
           function(x, y) {
@@ -558,7 +558,7 @@ chk_cbindable_many <- function(lst) {
 }
 
 
-#' cbind two rtables
+#' `cbind` two `rtables`
 #'
 #' @param x A table or row object
 #' @param \dots 1 or more further objects of the same class as \code{x}
@@ -794,14 +794,14 @@ chk_compat_cinfos <- function(tt1, tt2) {
 }
 
 
-#' \[DEPRECATED\] insert rrows at (before) a specific location
+#' \[DEPRECATED\] insert `rrows` at (before) a specific location
 #'
 #' This function is deprecated and will be removed in a future release of
 #' `rtables`. Please use \code{\link{insert_row_at_path}} or
 #' \code{\link{label_at_path}} instead.
 #' @param tbl `rtable`
 #' @param rrow `rrow` to append to `rtable`
-#' @param at position into which to put the `rrow`, defaults to beginning (ie 1)
+#' @param at position into which to put the `rrow`, defaults to beginning (i.e. 1)
 #' @param ascontent logical. Currently ignored.
 #'
 #' @return A `TableTree` of the same specific class as \code{tbl}

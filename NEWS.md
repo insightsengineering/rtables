@@ -73,7 +73,7 @@
  * Increase versioned dependency on `formatters` to `>0.3.3.5` for `table_inset` support
  * Use `exact=TRUE` in all calls to `attr` within access functions
  * Increase versioned dependency on `formatters` to `>0.3.3.4`
- * layouting instructions now accept `na_str` argument, which specifies na string with the same
+ * layouting instructions now accept `na_str` argument, which specifies `na` string with the same
    inheritance rules as formats
  * (pre-data) Split and (post tabulation) Table/row S4 classes now carry around `na_str` information
  * Increase versioned dependency on `formatters` to `>= 0.3.3.3` for support of `na_str`s with `NA_character_` values

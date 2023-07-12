@@ -113,7 +113,7 @@ should accept. Defaults to NA.}
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 

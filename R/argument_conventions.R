@@ -136,7 +136,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   the current split value and generates the row/column label.
 #'   Comparison-based splits it can contain up to two \code{"\%s"}.
 #' @param child_labels string. One of \code{"default"}, \code{"visible"},
-#'   \code{"hidden"}. What should the display behavior be for the  labels (ie
+#'   \code{"hidden"}. What should the display behavior be for the  labels (i.e.
 #'   label rows) of the children of this split. Defaults to \code{"default"}
 #'   which flags the label row as visible only if the child has 0 content rows.
 #' @param extra_args list. Extra arguments to be passed to the tabulation

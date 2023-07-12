@@ -5,7 +5,7 @@
 \alias{rbind,VTableNodeInfo-method}
 \alias{rbind}
 \alias{rbind2,VTableNodeInfo,ANY-method}
-\title{rbind TableTree and related objects}
+\title{\code{rbind} \code{TableTree} and related objects}
 \usage{
 rbindl_rtables(x, gap = 0, check_headers = TRUE)
 
@@ -30,7 +30,7 @@ rbindl_rtables(x, gap = 0, check_headers = TRUE)
 A formal table object.
 }
 \description{
-rbind TableTree and related objects
+\code{rbind} \code{TableTree} and related objects
 }
 \examples{
 mtbl <- rtable(

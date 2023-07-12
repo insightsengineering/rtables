@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{insert_rrow}
 \alias{insert_rrow}
-\title{[DEPRECATED] insert rrows at (before) a specific location}
+\title{[DEPRECATED] insert \code{rrows} at (before) a specific location}
 \usage{
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
@@ -11,7 +11,7 @@ insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 
 \item{rrow}{\code{rrow} to append to \code{rtable}}
 
-\item{at}{position into which to put the \code{rrow}, defaults to beginning (ie 1)}
+\item{at}{position into which to put the \code{rrow}, defaults to beginning (i.e. 1)}
 
 \item{ascontent}{logical. Currently ignored.}
 }

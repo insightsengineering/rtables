@@ -5,7 +5,7 @@
 #' @title Internal Generics and Methods
 #' @rdname int_methods
 #' @description These are internal methods that are documented only to satisfy
-#' R CMD check. End users should pay no attention to this documentation.
+#' `R CMD check`. End users should pay no attention to this documentation.
 #' @inheritParams gen_args
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
@@ -2042,7 +2042,7 @@ setMethod("spl_varnames<-", "MultiVarSplit",
 
 #' Top Left Material (Experimental)
 #' @inheritParams gen_args
-#' @description A TableTree object can have \emph{top left material} which is a sequence
+#' @description A `TableTree` object can have \emph{top left material} which is a sequence
 #' of strings which are printed in the area of the table between the column header display
 #' and the label of the first row.  These functions access and modify that material.
 #'

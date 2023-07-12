@@ -271,7 +271,7 @@ setClass("ManualSplit", contains = "AllSplit",
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
 #' @inheritParams gen_args
-#' @param levels character. Levels of the split (ie the children of the manual
+#' @param levels character. Levels of the split (i.e. the children of the manual
 #'   split)
 #' @author Gabriel Becker
 #' @return A \code{ManualSplit} object.
@@ -1043,7 +1043,7 @@ setClass("InstantiatedColumnInfo",
 
 #' @rdname cinfo
 #' @export
-#' @param treelyt LayoutColTree.
+#' @param treelyt `LayoutColTree`.
 #' @param csubs list. List of subsetting expressions
 #' @param extras list. Extra arguments associated with the columns
 #' @param cnts integer. Counts.

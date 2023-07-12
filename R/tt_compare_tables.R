@@ -7,7 +7,7 @@
 #' @inheritParams gen_args
 #'
 #' @details \code{all_zero_or_na} returns \code{TRUE} (and thus indicates
-#'   trimming/pruning) for any \emph{non-LabelRow} \code{TableRow} which contain
+#'   trimming/pruning) for any \emph{non-\code{LabelRow}} \code{TableRow} which contain
 #'   only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and
 #'   \code{-Inf} values.
 #' @rdname trim_prune_funs

@@ -19,7 +19,7 @@ InstantiatedColumnInfo(
 )
 }
 \arguments{
-\item{treelyt}{LayoutColTree.}
+\item{treelyt}{\code{LayoutColTree}.}
 
 \item{csubs}{list. List of subsetting expressions}
 

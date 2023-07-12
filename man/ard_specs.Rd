@@ -2,15 +2,15 @@
 % Please edit documentation in R/tt_export.R
 \name{ard_specs}
 \alias{ard_specs}
-\title{ARD Specifications}
+\title{\code{ARD} Specifications}
 \usage{
 ard_specs()
 }
 \value{
-a named list of ard extraction functions by "specification"
+a named list of \code{ard} extraction functions by "specification"
 }
 \description{
-ARD Specifications
+\code{ARD} Specifications
 }
 \examples{
 ard_specs()

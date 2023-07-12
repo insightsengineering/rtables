@@ -27,7 +27,7 @@ If \code{path} resolves to a single row, the label for that row
 is retrieved or set. If, instead, \code{path} resolves to a subtable,
 the text for the row-label associated with that path is retrieved
 or set. In the subtable case, if the label text is set to a non-NA
-value, the labelrow will be set to visible, even if it was not before.
+value, the \code{labelrow} will be set to visible, even if it was not before.
 Similarly, if the label row text for a subtable is set to NA,
 the label row will bet set to non-visible, so the row will not
 appear at all when the table is printed.

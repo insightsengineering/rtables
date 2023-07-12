@@ -946,7 +946,7 @@ NULL
 #'
 #'
 #' @note None of the arguments described in the Details section
-#' can be overridden via extra_args or when calling
+#' can be overridden via \code{extra_args} or when calling
 #' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
 #' be overridden via the \code{col_counts} argument to
 #' \code{\link{build_table}}. Alternative values for the others
@@ -1382,7 +1382,7 @@ setMethod(".add_row_summary", "Split",
 #' @param x factor. Vector of data, provided by rtables pagination machinery
 #' @param .N_col integer(1). Total count for the column, provided by rtables pagination machinery
 #'
-#' @return A RowsVerticalSection object with counts (and percents) for each level of the factor
+#' @return A `RowsVerticalSection` object with counts (and percents) for each level of the factor
 #' @export
 #' @examples
 #'
@@ -1767,7 +1767,7 @@ list_wrap_df <- function(f) {
 #' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
 #' normally would be, while 2d formats which don't include a percent, and all 3d
 #' formats result in an error. Formats in the form of functions are not supported for
-#' colcount format. See \code{\link[formatters]{list_valid_format_labels}} for
+#' `colcount` format. See \code{\link[formatters]{list_valid_format_labels}} for
 #' the list of valid format labels to select from.
 #'
 #' @inherit split_cols_by return

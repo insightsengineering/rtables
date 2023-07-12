@@ -640,7 +640,7 @@ setMethod(".make_split_kids", "Split",
     ##
     ## XXX this is a lot of data churn, if it proves too slow
     ## we can
-    ## a) check if any of the analyses (ie the afuns) need the baseline in this
+    ## a) check if any of the analyses (i.e. the afuns) need the baseline in this
     ##    splitvec and not do any of this if not, or
     ## b) refactor row splitting to behave like column splitting
     ##
@@ -794,7 +794,7 @@ recursive_applysplit <- function(df,
         return(splvec[[1]])
 
     ## the content function is the one from the PREVIOUS
-    ## split, ie the one whose children we are now constructing
+    ## split, i.e. the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
     ## declaring layouts much more sane.
     ctab <- .make_ctab(df,

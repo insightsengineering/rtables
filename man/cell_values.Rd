@@ -69,7 +69,7 @@ cell_values(tbl, c("RACE", "ASIAN", "STRATA1"),
 cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 
 
-## any arm, male columns from the ASIAN content (ie summary) row
+## any arm, male columns from the ASIAN content (i.e. summary) row
 cell_values(tbl, c("RACE", "ASIAN", "@content"),
             c("ARM", "B: Placebo", "SEX", "M"))
 cell_values(tbl, c("RACE", "ASIAN", "@content"),

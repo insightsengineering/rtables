@@ -56,7 +56,7 @@ kept when tabulating.}
 at this point in the structure}}
 
 \item{drop_outlevs}{logical(1). Should empty levels in the variable being
-split on (ie the 'outer' variable, not \code{innervar}) be dropped?
+split on (i.e. the 'outer' variable, not \code{innervar}) be dropped?
 Defaults to \code{TRUE}}
 }
 \value{

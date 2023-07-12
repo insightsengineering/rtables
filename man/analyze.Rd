@@ -134,7 +134,7 @@ previous/'ancestor' split state. see below}
 }
 \note{
 None of the arguments described in the Details section
-can be overridden via extra_args or when calling
+can be overridden via \code{extra_args} or when calling
 \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
 be overridden via the \code{col_counts} argument to
 \code{\link{build_table}}. Alternative values for the others

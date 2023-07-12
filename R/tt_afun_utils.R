@@ -69,7 +69,7 @@ rcell <- function(x,
 #'   the reference column, this value otherwise}, and should be passed the value
 #'   of \code{.in_ref_col} when it is used.
 #'
-#' @param  is_ref logical(1).  Are  we  in  the reference  column  (ie
+#' @param  is_ref logical(1).  Are  we  in  the reference  column  (i.e.
 #'     .in_ref_col should be passed to this argument)
 #' @param refval ANY. Value to use when in the reference column. Defaults
 #' to \code{NULL}
@@ -252,13 +252,13 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #' @param .ungroup_stats character. Vector of names, which must match elements
 #'   of \code{.stats}
 #' @param ... dots. Additional arguments to \code{fun} which effectively become
-#'   new defaults. These can still be overridden by extra args within a split.
+#'   new defaults. These can still be overridden by \code{extra_args} within a split.
 #' @param .null_ref_cells logical(1). Should cells for the reference column be
 #'   NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
 #'   \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this
 #'   argument occurs after \code{...} so it must be \emph{fully} specified  by
 #'   name when set.
-#' @param .format_na_strs ANY. vector/list of na strings to override any
+#' @param .format_na_strs ANY. vector/list of \code{na} strings to override any
 #'   defaults applied by \code{fun}.
 #' @return A function suitable for use in \code{\link{analyze}} with element
 #'   selection, reformatting, and relabeling performed automatically.
@@ -432,7 +432,7 @@ make_afun <- function(fun,
         }
 
         for(var in allvars) {
-            ## not missing, ie specified in the direct call, takes precedence
+            ## not missing, i.e. specified in the direct call, takes precedence
             if(var %in% fun_fnames &&
                eval(parser_helper(text = paste0("!missing(", var, ")"))))
                 sfunargs[[var]] <- get(var)

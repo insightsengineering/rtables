@@ -6,7 +6,7 @@
 #'
 #' @title Return List with Table Row/Col Paths
 #'
-#' @param x an rtable object
+#' @param x an `rtable` object
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -44,7 +44,7 @@ col_paths <- function(x) {
 
 #' Print Row/Col Paths Summary
 #'
-#' @param x an rtable object
+#' @param x an `rtable` object
 #'
 #' @export
 #' @return A data.frame summarizing the row- or column-structure of \code{x}.

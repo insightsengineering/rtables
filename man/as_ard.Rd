@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_export.R
 \name{as_ard}
 \alias{as_ard}
-\title{Generate an Analysis Ready Dataset (ARD)}
+\title{Generate an Analysis Ready Dataset (\code{ARD})}
 \usage{
 as_ard(tt, spec = "v0_experimental", ...)
 }
@@ -10,15 +10,15 @@ as_ard(tt, spec = "v0_experimental", ...)
 \item{tt}{\code{VTableTree}. The table.}
 
 \item{spec}{character(1). The specification to use to
-extract the ARD. See details}
+extract the \code{ARD}. See details}
 
-\item{...}{Passed to spec-specific ARD conversion function.}
+\item{...}{Passed to spec-specific \code{ARD} conversion function.}
 }
 \description{
-Generate an Analysis Ready Dataset (ARD)
+Generate an Analysis Ready Dataset (\code{ARD})
 }
 \details{
-ARD specifications may differ in the exact information they include and
+\code{ARD} specifications may differ in the exact information they include and
 the form in which they represent it. Specifications whose names end in "_experimental"
 are subject to change without notice, but specifications without the "_experimental"
 suffix will remain available \emph{including any bugs in their construction} indefinitely.

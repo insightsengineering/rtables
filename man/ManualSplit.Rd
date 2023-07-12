@@ -19,7 +19,7 @@ ManualSplit(
 )
 }
 \arguments{
-\item{levels}{character. Levels of the split (ie the children of the manual
+\item{levels}{character. Levels of the split (i.e. the children of the manual
 split)}
 
 \item{label}{character(1). A label (not to be confused with the name) for the

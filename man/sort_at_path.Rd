@@ -66,7 +66,7 @@ calling one of the various \code{\link[=analyze]{analyze()}} instances.
 Built-in score functions are \code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}.
 They are both working with content rows (coming from \code{\link[=summarize_row_groups]{summarize_row_groups()}})
 while a custom score function needs to be used on \code{DataRow}s. Here, some
-useful decriptor and accessor functions (coming from related vignette):
+useful descriptor and accessor functions (coming from related vignette):
 \itemize{
 \item \code{\link[=cell_values]{cell_values()}} - Retrieves a named list of a \code{TableRow} or
 \code{TableTree} object's values.

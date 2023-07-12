@@ -200,7 +200,7 @@ setMethod("insert_row_at_path", c("VTableTree", "ANY"),
 #' is retrieved or set. If, instead, `path` resolves to a subtable,
 #' the text for the row-label associated with that path is retrieved
 #' or set. In the subtable case, if the label text is set to a non-NA
-#' value, the labelrow will be set to visible, even if it was not before.
+#' value, the `labelrow` will be set to visible, even if it was not before.
 #' Similarly, if the label row text for a subtable is set to NA,
 #' the label row will bet set to non-visible, so the row will not
 #' appear at all when the table is printed.
@@ -1144,7 +1144,7 @@ setMethod("head", "VTableTree",
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 #'
 #'
-#' ## any arm, male columns from the ASIAN content (ie summary) row
+#' ## any arm, male columns from the ASIAN content (i.e. summary) row
 #' cell_values(tbl, c("RACE", "ASIAN", "@content"),
 #'             c("ARM", "B: Placebo", "SEX", "M"))
 #' cell_values(tbl, c("RACE", "ASIAN", "@content"),

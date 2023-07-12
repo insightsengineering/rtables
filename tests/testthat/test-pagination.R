@@ -70,7 +70,7 @@ test_that("vertical and horizontal pagination work", {
     ## colheader takes up 2, repeated across vert pag
     ## all columns take up 7 (4 for content + 3 for cols sep)
 
-    ## should be one col per page, ie 6 pages
+    ## should be one col per page, i.e. 6 pages
     hpag1 <- paginate_table(simple_tbl, lpp = 80, cpp = 17)
     expect_equal(rep(1, 6),
                  sapply(hpag1, ncol))

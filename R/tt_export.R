@@ -10,7 +10,7 @@ NULL
 #' corresponding paths via \code{\link{path_enriched_df}}. I then
 #' writes that data.frame out as a `tsv` file.
 #'
-#' By default (ie when \code{value_func} is not specified,
+#' By default (i.e. when \code{value_func} is not specified,
 #' List columns where at least one value has length > 1 are collapsed
 #' to character vectors by collapsing the list element with \code{"|"}.
 #'
@@ -160,9 +160,9 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 }
 
 
-#' ARD Specifications
+#' `ARD` Specifications
 #'
-#' @return a named list of ard extraction functions by "specification"
+#' @return a named list of `ard` extraction functions by "specification"
 #' @export
 #' @examples
 #' ard_specs()
@@ -198,14 +198,14 @@ ard_v0_experimental <- function(tt) {
           cellvals)
 }
 
-#' Generate an Analysis Ready Dataset (ARD)
+#' Generate an Analysis Ready Dataset (`ARD`)
 #'
 #' @param tt `VTableTree`. The table.
 #' @param spec character(1). The specification to use to
-#' extract the ARD. See details
-#' @param ... Passed to spec-specific ARD conversion function.
+#' extract the `ARD`. See details
+#' @param ... Passed to spec-specific `ARD` conversion function.
 #'
-#' @details ARD specifications may differ in the exact information they include and
+#' @details `ARD` specifications may differ in the exact information they include and
 #' the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.

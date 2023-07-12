@@ -1112,7 +1112,7 @@ rows. Must accept \code{x} or \code{df} as first parameter. Must accept
 arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
@@ -1186,7 +1186,7 @@ indicates footnote should go on the row rather than cell}
 \item{reset_idx}{logical(1). Should the numbering for referential footnotes
 be immediately recalculated. Defaults to TRUE.}
 
-\item{y}{Second element to be rbound via \code{rbind2}}
+\item{y}{Second element to be \code{rbound} via \code{rbind2}}
 
 \item{path}{character. A vector path for a position within the structure of a
 \code{tabletree}. Each element represents a subsequent choice amongst the children
@@ -1206,7 +1206,7 @@ Various, but should be considered implementation details.
 }
 \description{
 These are internal methods that are documented only to satisfy
-R CMD check. End users should pay no attention to this documentation.
+\verb{R CMD check}. End users should pay no attention to this documentation.
 }
 \examples{
 

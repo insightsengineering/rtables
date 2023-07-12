@@ -292,7 +292,7 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 #'
 #' @details For `add_combo_facet`, the data associated with the resulting
 #' facet will be the data associated with the facets for each level in
-#' `levels`, rbound together. In particular, this means that if those levels
+#' `levels`, `rbound` together. In particular, this means that if those levels
 #' are overlapping, data that appears in both will be duplicated.
 #'
 #' @return a function which can be used within the `post` argument in

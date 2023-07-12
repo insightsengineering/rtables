@@ -6,7 +6,7 @@
 
 ## .apply_spl_datapart - generate data partition
 
-## .apply_spl_rawvals - Generate raw (ie non SplitValue object) partition values
+## .apply_spl_rawvals - Generate raw (i.e. non SplitValue object) partition values
 
 
 
@@ -803,7 +803,7 @@ reorder_split_levels <- function(neworder,
 #'   (e.g., empty levels dropped) \emph{separately within each grouping defined
 #'   at this point in the structure}
 #' @param drop_outlevs logical(1). Should empty levels in the variable being
-#'   split on (ie the 'outer' variable, not \code{innervar}) be dropped?
+#'   split on (i.e. the 'outer' variable, not \code{innervar}) be dropped?
 #'   Defaults to \code{TRUE}
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {

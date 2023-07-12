@@ -77,7 +77,7 @@ cont_n_onecol <- function(j) {
 #'   Built-in score functions are [cont_n_allcols()] and [cont_n_onecol()].
 #'   They are both working with content rows (coming from [summarize_row_groups()])
 #'   while a custom score function needs to be used on `DataRow`s. Here, some 
-#'   useful decriptor and accessor functions (coming from related vignette):
+#'   useful descriptor and accessor functions (coming from related vignette):
 #'    - [cell_values()] - Retrieves a named list of a `TableRow` or
 #'        `TableTree` object's values.
 #'    - [obj_name()] - Retrieves the name of an object. Note this can differ
