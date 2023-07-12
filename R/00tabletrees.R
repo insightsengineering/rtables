@@ -10,6 +10,26 @@
 ## multicolumn: each child analyzes a different column
 ## arbitrary: children are not related to each other in any systematic fashion.
 
+
+## null is ok here.
+check_ok_label <- function(lbl, multi_ok = FALSE) {
+
+    if(length(lbl) == 0) {
+        return(TRUE)
+    }
+
+    if(length(lbl) > 1) {
+        if(multi_ok)
+            return(all(vapply(lbl, check_ok_label, TRUE)))
+        stop("got a label of length > 1")
+    }
+
+    if (grepl("([{}])", lbl)) {
+        stop("Labels cannot contain { or } due to their use for indicating referential footnotes")
+    }
+    invisible(TRUE)
+}
+
 valid_lbl_pos <- c("default", "visible", "hidden", "topleft")
 .labelkids_helper <- function(charval) {
     ret <- switch(charval,
@@ -74,7 +94,7 @@ SplitValue <- function(val, extr = list(), label = val) {
         extr <- list(extr)
     if (!is(label, "character"))
         label <- as.character(label)
-
+    check_ok_label(label)
     new("SplitValue", value = val,
         extra = extr, label = label)
 }
@@ -85,6 +105,7 @@ setClass("LevelComboSplitValue",
 
 ## wrapped in user-facing `add_combo_facet`
 LevelComboSplitValue <- function(val, extr, combolevels, label = val) {
+    check_ok_label(label)
     new("LevelComboSplitValue",
         value = val,
         extra = extr,
@@ -156,6 +177,7 @@ VarLevelSplit <- function(var,
     child_labels <- match.arg(child_labels)
     if (is.null(labels_var))
         labels_var <- var
+    check_ok_label(split_label)
     new("VarLevelSplit", payload = var,
         split_label = split_label,
         name = split_name,
@@ -201,6 +223,7 @@ AllSplit <- function(split_label = "",
         else
             split_name <- "all obs"
     }
+    check_ok_label(split_label)
     new("AllSplit", split_label = split_label,
         content_fun = cfun,
         content_format = cformat,
@@ -222,7 +245,8 @@ AllSplit <- function(split_label = "",
 setClass("RootSplit", contains = "AllSplit")
 
 RootSplit <- function(split_label = "", cfun = NULL, cformat = NULL, cna_str = NA_character_, cvar = "",
-                     split_format = NULL, split_na_str = NA_character_, cextra_args = list(), ...) {
+                      split_format = NULL, split_na_str = NA_character_, cextra_args = list(), ...) {
+    check_ok_label(split_label)
     new("RootSplit", split_label = split_label,
         content_fun = cfun,
         content_format = cformat,
@@ -262,6 +286,7 @@ ManualSplit <- function(levels, label, name = "manual",
                        page_prefix = NA_character_,
                        section_div = NA_character_) {
     label_pos <- match.arg(label_pos, label_pos_values)
+    check_ok_label(label, multi_ok = TRUE)
     new("ManualSplit",
         split_label = label,
         levels = levels,
@@ -338,6 +363,7 @@ MultiVarSplit <- function(vars,
                          split_fun = NULL,
                          page_prefix = NA_character_,
                          section_div = NA_character_) {
+    check_ok_label(split_label)
     ## no topleft allowed
     label_pos <- match.arg(label_pos, label_pos_values[-3])
     child_labels <- match.arg(child_labels)
@@ -413,6 +439,7 @@ make_static_cut_split <- function(var,
                              page_prefix = NA_character_,
                              section_div = NA_character_) {
     cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
+    check_ok_label(split_label)
 
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels <- match.arg(child_labels)
@@ -491,6 +518,7 @@ VarDynCutSplit <- function(var,
                           label_pos = "visible",
                           page_prefix = NA_character_,
                           section_div = NA_character_) {
+    check_ok_label(split_label)
     label_pos <- match.arg(label_pos, label_pos_values)
     child_labels <- match.arg(child_labels)
     new("VarDynCutSplit", payload = var,
@@ -554,6 +582,7 @@ AnalyzeVarSplit <- function(var,
                            label_pos = "default",
                            cvar = ""
                            ) {
+    check_ok_label(split_label)
     label_pos <- match.arg(label_pos, c("default", label_pos_values))
     if(!any(nzchar(defrowlab))) {
         defrowlab <- as.character(substitute(afun))
@@ -698,6 +727,7 @@ AnalyzeMultiVars <- function(var,
         defrowlab <- .repoutlst(defrowlab, nv)
         afun <- .repoutlst(afun, nv)
         split_label <- .repoutlst(split_label, nv)
+        check_ok_label(split_label, multi_ok = TRUE)
         cfun <- .repoutlst(cfun, nv)
         cformat <- .repoutlst(cformat, nv)
 ##        split_format = .repoutlst(split_format, nv)
@@ -743,7 +773,6 @@ AnalyzeMultiVars <- function(var,
         if(is.null(split_name))
             split_name <- paste(c("ma", vapply(pld, obj_name, "")),
                                 collapse = "_")
-
         ret <- new("AnalyzeMultiVars",
                    payload = pld,
                    split_label = "",
@@ -789,6 +818,7 @@ VarLevWBaselineSplit <- function(var,
                                  valorder = NULL,
                                  split_name = var,
                                  extra_args = list()) {
+    check_ok_label(split_label)
     new("VarLevWBaselineSplit",
         payload = var,
         ref_group_value = ref_group,
@@ -843,6 +873,7 @@ TreePos <- function(spls = list(),
                    svals = list(),
                    svlabels =  character(),
                    sub = NULL) {
+    check_ok_label(svlabels, multi_ok = TRUE)
     svals <- make_splvalue_vec(vals = svals)
     if (is.null(sub)) {
         if (length(spls) > 0) {
@@ -870,7 +901,7 @@ make_child_pos <- function(parpos,
         nsplitval <- SplitValue(newval, extr = newextra, label  = newlab)
     else
         nsplitval <- newval
-
+    check_ok_label(newlab)
     newpos <- TreePos(
         spls = c(pos_splits(parpos), newspl),
         svals = c(pos_splvals(parpos), nsplitval),
@@ -958,6 +989,7 @@ LayoutColTree <- function(lev = 0L,
         stop("LayoutColTree constructor got NULL for spl. ", # nocov
         "This should never happen. Please contact the maintainer.") # nocov
     footnotes <- make_ref_value(footnotes)
+    check_ok_label(label)
     new("LayoutColTree", level = lev, children = kids,
         name = .chkname(name),
         summary_func = summary_function,
@@ -975,6 +1007,7 @@ LayoutColLeaf <- function(lev = 0L,
                           name = label,
                           label = "",
                           tpos = TreePos()) {
+    check_ok_label(label)
     new("LayoutColLeaf", level = lev, name = .chkname(name), label = label,
         pos_in_tree = tpos##,
         ##subset = sub#,
@@ -1109,6 +1142,7 @@ LabelRow <- function(lev = 1L,
                     cinfo = EmptyColInfo,
                     indent_mod = 0L,
                     table_inset = 0L) {
+    check_ok_label(label)
     new("LabelRow",
         leaf_value = list(),
         level = lev,
@@ -1182,7 +1216,7 @@ setClass("LabelRow", contains = "TableRow",
        !is.null(unlist(lapply(vals, cell_cspan))))
         cspan <- vapply(vals, cell_cspan, 0L)
 
-
+    check_ok_label(label)
     rw <- new(klass,
              leaf_value = vals,
              name = .chkname(name),
@@ -1319,6 +1353,7 @@ ElementaryTable <- function(kids = list(),
                            hsep = default_hsep(),
                            trailing_sep = NA_character_,
                            inset = 0L) {
+    check_ok_label(label)
     if (is.null(cinfo)) {
         if (length(kids) > 0)
             cinfo <- col_info(kids[[1]])
@@ -1406,7 +1441,7 @@ TableTree <- function(kids = list(),
                      hsep = default_hsep(),
                      trailing_sep = NA_character_,
                      inset = 0L) {
-
+    check_ok_label(label)
     cinfo <- .calc_cinfo(cinfo, cont, kids)
 
     kids <- .enforce_valid_kids(kids, cinfo)
@@ -1656,6 +1691,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
         label <- obj_label(val)
     if(!is.list(footnotes))
         footnotes <- lapply(footnotes, RefFootnote)
+    check_ok_label(label)
     ret <- structure(list(val), format = format, colspan = colspan,
                      label = label,
                      indent_mod = indent_mod, footnotes = footnotes,
@@ -1702,6 +1738,7 @@ RowsVerticalSection <- function(values,
 
     if (!is.null(indent_mods))
         indent_mods <- as.integer(indent_mods)
+    check_ok_label(labels, multi_ok = TRUE)
     structure(values, class = "RowsVerticalSection", row_names = names,
               row_labels = labels, indent_mods = indent_mods,
               row_formats = formats,

@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.1.9007
-Date: 2023-06-29
+Version: 0.6.1.9012
+Date: 2023-07-12
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
@@ -33,6 +33,8 @@ Imports:
     htmltools,
     stats
 Suggests:
+    broom,
+    car,
     dplyr,
     flextable,
     knitr,

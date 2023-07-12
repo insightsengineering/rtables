@@ -728,6 +728,11 @@ drop_split_levels <- function(df,
     var <- spl_payload(spl)
     df2 <- df
     df2[[var]] <- factor(df[[var]])
+    lblvar <- spl_label_var(spl)
+    if(!is.null(lblvar)) {
+        df2[[lblvar]] <- factor(df[[lblvar]])
+    }
+
     .apply_split_inner(spl, df2, vals = vals,
                        labels = labels,
                        trim = trim)
