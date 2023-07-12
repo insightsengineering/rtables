@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.914427706165554" branch-rate="0" lines-covered="5888" lines-valid="6439" branches-covered="0" branches-valid="0" complexity="0" version="3.6.2" timestamp="2023-07-06 15:19:32.906544">
+<coverage line-rate="0.914427706165554" branch-rate="0" lines-covered="5888" lines-valid="6439" branches-covered="0" branches-valid="0" complexity="0" version="3.6.2" timestamp="2023-07-12 12:45:07.116578">
   <sources>
     <source>/__w/rtables/rtables/rtables</source>
   </sources>
@@ -17531,7 +17531,7 @@
                 <line number="105" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="make_flat_df_md_colnames" signature="" line-rate="1" branch-rate="0" complexity="0">
+            <method name="make_result_df_md_colnames" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
                 <line number="110" hits="33" branch="false"/>
                 <line number="111" hits="33" branch="false"/>
@@ -17577,12 +17577,12 @@
                 <line number="159" hits="33" branch="false"/>
               </lines>
             </method>
-            <method name="flat_df_specs" signature="" line-rate="1" branch-rate="0" complexity="0">
+            <method name="result_df_specs" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
                 <line number="170" hits="6" branch="false"/>
               </lines>
             </method>
-            <method name="lookup_flat_df_specfun" signature="" line-rate="0.4" branch-rate="0" complexity="0">
+            <method name="lookup_result_df_specfun" signature="" line-rate="0.4" branch-rate="0" complexity="0">
               <lines>
                 <line number="174" hits="3" branch="false"/>
                 <line number="175" hits="0" branch="false"/>
@@ -17591,7 +17591,7 @@
                 <line number="178" hits="3" branch="false"/>
               </lines>
             </method>
-            <method name="flat_df_v0_experimental" signature="" line-rate="1" branch-rate="0" complexity="0">
+            <method name="result_df_v0_experimental" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
                 <line number="183" hits="3" branch="false"/>
                 <line number="187" hits="3" branch="false"/>
@@ -17608,7 +17608,7 @@
                 <line number="198" hits="3" branch="false"/>
               </lines>
             </method>
-            <method name="as_dataframe_with_spec" signature="" line-rate="1" branch-rate="0" complexity="0">
+            <method name="as_result_df" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
                 <line number="227" hits="3" branch="false"/>
                 <line number="228" hits="3" branch="false"/>
