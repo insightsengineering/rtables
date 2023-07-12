@@ -41,7 +41,7 @@
 \alias{make_row_df,VTableTree-method}
 \alias{make_row_df,TableRow-method}
 \alias{make_row_df,LabelRow-method}
-\title{Methods for generics in the formatters package}
+\title{Methods for generics in the \code{formatters} package}
 \usage{
 \S4method{obj_name}{VNodeInfo}(obj)
 
@@ -172,7 +172,7 @@
 \item{max_width}{numeric(1). Width strings should be wrapped to
 when determining how many lines they require.}
 
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary.
@@ -183,7 +183,7 @@ Defaults to \code{TRUE}. May not be supported by all methods.}
 \item{indent}{integer(1). Internal detail do not set manually.}
 
 \item{path}{character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+\code{tabletree}. Each element represents a subsequent choice amongst the children
 of the previous choice.}
 
 \item{incontent}{logical(1). Internal detail do not set manually.}
@@ -222,7 +222,7 @@ Most arguments beyond \code{tt} and \code{visible_only} are present so that
 and should not be set during a top-level call
 }
 \note{
-the technically present root tree node is excluded from the summary returned dby
+the technically present root tree node is excluded from the summary returned by
 both \code{make_row_df} and \code{make_col_df}, as it is simply the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }

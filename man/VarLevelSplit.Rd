@@ -71,7 +71,7 @@ table.}
 \item{split_fun}{function/NULL. custom splitting function See
 \code{\link{custom_split_funs}}}
 
-\item{split_format}{FormatSpec. Default format associated with the split
+\item{split_format}{\code{FormatSpec}. Default format associated with the split
 being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
@@ -97,9 +97,9 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{cindent_mod}{numeric(1). The indent modifier for the content tables
@@ -121,7 +121,7 @@ divider after each group defined by this split instruction, or
 \item{ref_group}{character. Value of \code{var} to be taken as the
 ref_group/control to be compared against.}
 
-\item{label_fstr}{string. An sprintf style format string containing. For
+\item{label_fstr}{string. An \code{sprintf} style format string containing. For
 non-comparison splits, it can contain  up to one \code{"\%s"} which takes
 the current split value and generates the row/column label.
 Comparison-based splits it can contain up to two \code{"\%s"}.}

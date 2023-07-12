@@ -8,7 +8,7 @@
 ## quantilecut: cut on quantiles of observed values for a variable
 ## missing: split obs based on missingness of a variable/observation. This could be used for compare to ref_group??
 ## multicolumn: each child analyzes a different column
-## arbitrary: children are not related to eachother in any systematic fashion.
+## arbitrary: children are not related to each other in any systematic fashion.
 
 valid_lbl_pos <- c("default", "visible", "hidden", "topleft")
 .labelkids_helper <- function(charval) {
@@ -992,7 +992,7 @@ LayoutColLeaf <- function(lev = 0L,
 ## various aspects of the column layout
 ## once its applied to the data.
 
-#' InstantiatedColumnInfo
+#' `InstantiatedColumnInfo`
 #' @inheritParams gen_args
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
@@ -1238,7 +1238,7 @@ etable_validity  <- function(object) {
 }
 ## nocov end
 
-#' TableTree classes
+#' `TableTree` classes
 #' @exportClass ElementaryTable
 #' @author Gabriel Becker
 #' @return A formal object representing a populated table.

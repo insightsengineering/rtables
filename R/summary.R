@@ -206,7 +206,7 @@ fast_rsummry_bind <- function(lst) {
 #' summarize_rows
 #'
 #' `summarize_rows` is deprecated in favor of `make_row_df`.
-#' @param obj VTableTree.
+#' @param obj `VTableTree`.
 #' @return A data.frame summarizing the rows in \code{obj}.
 #' @export
 summarize_rows <- function(obj) {
@@ -445,7 +445,7 @@ setGeneric("str", function(object, ...)
 
 #' @rdname int_methods
 #' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the
-#' VTableTree method, unlike the underlying default of `NA`. `NA` is *not*
+#' `VTableTree` method, unlike the underlying default of `NA`. `NA` is *not*
 #' appropriate for `VTableTree` objects.
 #' @export
 setMethod("str", "VTableTree",

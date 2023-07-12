@@ -31,7 +31,7 @@ the resulting table structure regardless of presence in the data).}
 \item{reorder}{logical(1). Should the order of \code{only} be used as the
 order of the children of the split. defaults to \code{TRUE}}
 
-\item{df}{dataset (data.frame or tibble)}
+\item{df}{dataset (\code{data.frame} or \code{tibble})}
 
 \item{spl}{A Split object defining a partitioning or analysis/tabulation of
 the data.}

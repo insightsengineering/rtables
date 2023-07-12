@@ -352,7 +352,7 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #'
 #' @title Retrieve and assign elements of a `TableTree`
 #'
-#' @param x TableTree
+#' @param x `TableTree`
 #' @param i index
 #' @param j index
 #' @param drop logical(1). Should the value in the cell be returned if one

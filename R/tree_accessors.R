@@ -14,7 +14,7 @@
 NULL
 
 #' @rdname dimensions
-#' @return the number of rows (nrow), columns (ncol) or both (dim) of the object.
+#' @return the number of rows (`nrow`), columns (`ncol`) or both (`dim`) of the object.
 #' @exportMethod nrow
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE, TRUE)))
@@ -123,11 +123,11 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 })
 
 
-#' Retrieve or set Content Table from a TableTree
+#' Retrieve or set Content Table from a `TableTree`
 #'
 #' Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise
 #'
-#' @param obj TableTree. The TableTree
+#' @param obj `TableTree`. The `TableTree`
 #' @return the \code{ElementaryTable} containing the (top level) \emph{content rows} of \code{obj} ( or \code{NULL}
 #' if \code{obj} is not a formal table object).
 #' @export
@@ -143,7 +143,7 @@ setMethod("content_table", "ANY",
           function(obj) NULL)
 
 #' @export
-#' @param value ElementaryTable. The new content table for \code{obj}.
+#' @param value `ElementaryTable`. The new content table for \code{obj}.
 #' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
 #' @exportMethod "content_table<-"
@@ -331,7 +331,7 @@ setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
                                         # #' @inherit formatters::formatter_methods
-#' Methods for generics in the formatters package
+#' Methods for generics in the `formatters` package
 #'
 #' See the `formatters` documentation for descriptions of these generics.
 #' @inheritParams gen_args
@@ -1000,7 +1000,7 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #'
 #' Returns a matrix of formats for the cells in a table
 #' @param obj A table or row object.
-#' @param default FormatSpec.
+#' @param default `FormatSpec`.
 #' @export
 #' @return Matrix (storage mode list) containing the effective format for each
 #' cell position in the table (including 'virtual' cells implied by label rows,
@@ -1459,7 +1459,7 @@ spl_ref_group <- function(obj) {
 #'   generated from a  Pre-Data layout object
 #' @param path character or NULL. `col_counts` getter and setter only.
 #'   Path (in column structure).
-#' @param rtpos TreePos. Root position.
+#' @param rtpos `TreePos`. Root position.
 #'
 #' @return A \code{LayoutColTree} object.
 #'
@@ -1894,7 +1894,7 @@ setMethod("colcount_format<-", "PreDataTableLayouts",
 
 #' Exported for use in tern
 #'
-#' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
+#' Does the `table`/`row`/`InstantiatedColumnInfo` object contain no column structure information?
 #'
 #' @inheritParams gen_args
 #' @rdname no_info
@@ -1914,10 +1914,10 @@ setMethod("no_colinfo", "InstantiatedColumnInfo",
            function(obj) length(obj@subset_exprs) == 0) ##identical(obj, EmptyColInfo))
 
 
-#' Names of a TableTree
+#' Names of a `TableTree`
 #'
 #' @param x the object.
-#' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
+#' @details For `TableTrees` with more than one level of splitting in columns, the names are defined to be the top-level
 #'   split values repped out across the columns that they span.
 #' @rdname names
 #' @return The column names of \code{x}, as defined in the details above.

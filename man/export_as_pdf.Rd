@@ -29,7 +29,7 @@ export_as_pdf(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{file}{file to write, must have \code{.pdf} extension}
@@ -77,11 +77,11 @@ size). \code{NULL} indicates no vertical pagination should occur.}
 this is calculated automatically based on the specified page
 size). \code{NULL} indicates no horizontal pagination should occur.}
 
-\item{hsep}{character(1).   Characters  to  repeat   to  create
+\item{hsep}{character(1). Characters to repeat to create
 header/body separator line.}
 
 \item{indent_size}{numeric(1). Indent size in characters. Ignored
-when \code{x} is already a MatrixPrintForm object in favor of information
+when \code{x} is already a \code{MatrixPrintForm} object in favor of information
 there.}
 
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,

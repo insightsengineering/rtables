@@ -36,7 +36,7 @@ paginate_table(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}

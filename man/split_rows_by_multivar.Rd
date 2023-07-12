@@ -33,7 +33,7 @@ child (which are based on the data and type of split during tabulation).}
 
 \item{varlabels}{character vector. Labels for \code{vars}}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 

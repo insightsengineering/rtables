@@ -1,4 +1,4 @@
-#' Score functions for sorting TableTrees
+#' Score functions for sorting `TableTrees`
 #' 
 #' @rdname score_funs
 #' 

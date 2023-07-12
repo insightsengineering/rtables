@@ -508,9 +508,9 @@ s_events_patients <- function(x, labelstr, .N_col) {
 
 So, for a population of `5` patients where
 
-* one patient has 2 AEs
-* one patient has 1 AE
-* three patients have no AEs
+* one patient has 2 `AE`s
+* one patient has 1 `AE`
+* three patients have no `AE`s
 
 we would get the following summary:
 
@@ -535,7 +535,7 @@ adae_tbl
 ```
 
 Note that the column `N`s are wrong as by default they are set to the
-number of rows per group (i.e. number of AEs per arm here). This also
+number of rows per group (i.e. number of `AE`s per arm here). This also
 affects the percentages. For this table we are interested in the
 number of patients per column/arm which is usually taken from `ADSL`
 (var `ADSL2` here).
@@ -612,7 +612,7 @@ table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID") 
 table_count_once_per_id(ADAE2)
 ```
 
-So the desired AE table is:
+So the desired `AE` table is:
 
 ```{r}
 adae_soc_lyt3 <- basic_table(show_colcounts = TRUE) %>%

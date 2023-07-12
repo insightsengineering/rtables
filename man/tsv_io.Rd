@@ -15,7 +15,7 @@ export_as_tsv(
 import_from_tsv(file)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{file}{character(1). The path of the file to written to or read from.}
@@ -34,7 +34,7 @@ re-constituted list values for \code{export_as_tsv}.
 \description{
 This function creates a flat tabular file of cell values and
 corresponding paths via \code{\link{path_enriched_df}}. I then
-writes that data.frame out as a tsv file.
+writes that data.frame out as a \code{tsv} file.
 }
 \details{
 By default (ie when \code{value_func} is not specified,

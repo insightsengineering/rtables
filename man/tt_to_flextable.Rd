@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_export.R
 \name{tt_to_flextable}
 \alias{tt_to_flextable}
-\title{Create a FlexTable object representing an rtables TableTree}
+\title{Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}}
 \usage{
 tt_to_flextable(
   tt,
@@ -17,11 +17,11 @@ tt_to_flextable(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated and exported as
-multiple flextables. Defaults to \code{FALSE}}
+multiple \code{flextables}. Defaults to \code{FALSE}}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -45,13 +45,13 @@ the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
-flextable(s). Defaults to 5.}
+\code{flextable(s)}. Defaults to 5.}
 }
 \value{
-a flextable object
+a \code{flextable} object
 }
 \description{
-Create a FlexTable object representing an rtables TableTree
+Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}
 }
 \examples{
 analysisfun <- function(x, ...) {

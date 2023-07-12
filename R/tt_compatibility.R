@@ -451,8 +451,8 @@ setMethod("rbind2", c("VTableNodeInfo", "missing"),
 })
 
 #' @exportMethod rbind2
-#' @param x VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
-#' @param y VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
+#' @param x `VTableNodeInfo`. `TableTree`, `ElementaryTable` or `TableRow` object.
+#' @param y `VTableNodeInfo`. `TableTree`, `ElementaryTable` or `TableRow` object.
 #' @rdname rbind
 setMethod("rbind2", "VTableNodeInfo",
           function(x, y) {
@@ -797,20 +797,20 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' \[DEPRECATED\] insert rrows at (before) a specific location
 #'
 #' This function is deprecated and will be removed in a future release of
-#' rtables. Please use \code{\link{insert_row_at_path}} or
+#' `rtables`. Please use \code{\link{insert_row_at_path}} or
 #' \code{\link{label_at_path}} instead.
-#' @param tbl rtable
-#' @param rrow rrow to append to rtable
-#' @param at position into which to put the rrow, defaults to beginning (ie 1)
+#' @param tbl `rtable`
+#' @param rrow `rrow` to append to `rtable`
+#' @param at position into which to put the `rrow`, defaults to beginning (ie 1)
 #' @param ascontent logical. Currently ignored.
 #'
-#' @return A TableTree of the same specific class as \code{tbl}
+#' @return A `TableTree` of the same specific class as \code{tbl}
 #'
 #' @export
 #'
 #' @inherit rbindl_rtables return
 #'
-#' @note Label rows (ie a row with no data values, only a row.name) can only be
+#' @note Label rows (i.e. a row with no data values, only a `row.name`) can only be
 #'   inserted at positions which do not already contain a label row when there
 #'   is a non-trivial nested row structure in \code{tbl}
 #' @examples

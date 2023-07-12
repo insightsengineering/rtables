@@ -46,7 +46,7 @@ Every layout must start with a basic table.
 \code{colcount_format} is ignored if \code{show_colcounts} is \code{FALSE} (the default).
 When \code{show_colcounts} is \code{TRUE}, and \code{colcount_format} is 2-dimensional with
 a percent component, the value component for the percent is always populated
-with \code{1} (ie 100\%). 1d formats are used to render the counts exactly as they
+with \code{1} (i.e. 100\%). 1d formats are used to render the counts exactly as they
 normally would be, while 2d formats which don't include a percent, and all 3d
 formats result in an error. Formats in the form of functions are not supported for
 colcount format. See \code{\link[formatters]{list_valid_format_labels}} for

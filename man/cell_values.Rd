@@ -13,7 +13,7 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 \S4method{value_at}{VTableTree}(tt, rowpath = NULL, colpath = NULL)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{rowpath}{character. Path in row-split space to the desired row(s). Can

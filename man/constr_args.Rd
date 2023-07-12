@@ -37,18 +37,18 @@ constr_args(
 \arguments{
 \item{kids}{list. List of direct children.}
 
-\item{cont}{ElementaryTable. Content table.}
+\item{cont}{\code{ElementaryTable}. Content table.}
 
 \item{lev}{integer. Nesting level (roughly, indentation level in practical
 terms).}
 
-\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed
-the content table for another TableTree.}
+\item{iscontent}{logical. Is the \code{TableTree}/\code{ElementaryTable} being constructed
+the content table for another \code{TableTree}.}
 
-\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the
+\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
 
-\item{labelrow}{LabelRow. The LabelRow object to assign to this Table.
+\item{labelrow}{\code{LabelRow}. The \code{LabelRow} object to assign to this Table.
 Constructed from \code{label} by default if not specified.}
 
 \item{vals}{list. cell values for the row}
@@ -56,9 +56,9 @@ Constructed from \code{label} by default if not specified.}
 \item{cspan}{integer. Column span. \code{1} indicates no spanning.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{cindent_mod}{numeric(1). The indent modifier for the content tables
@@ -74,7 +74,7 @@ object/structure.}
 when tabulating row group summaries.}
 
 \item{child_names}{character. Names to be given to the sub splits contained
-by a compound split (typically a AnalyzeMultiVars split object).}
+by a compound split (typically a \code{AnalyzeMultiVars} split object).}
 
 \item{title}{character(1). Main title. Ignored for subtables.}
 

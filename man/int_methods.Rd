@@ -348,7 +348,7 @@
 \alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
-\title{combine SplitVector objects}
+\title{combine \code{SplitVector} objects}
 \usage{
 \S4method{c}{SplitVector}(x, ...)
 
@@ -1091,7 +1091,7 @@ spl_varnames(object) <- value
 \arguments{
 \item{x}{The object.}
 
-\item{...}{Splits or SplitVector objects}
+\item{...}{Splits or \code{SplitVector} objects}
 
 \item{lyt}{layout object pre-data used for tabulation}
 
@@ -1134,7 +1134,7 @@ function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{df}{dataset (data.frame or tibble)}
+\item{df}{dataset (\code{data.frame} or \code{tibble})}
 
 \item{obj}{The object.}
 
@@ -1147,7 +1147,7 @@ not match a formal argument of the tabulation function.}
 \item{object}{The object to modify in-place}
 
 \item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
-VTableTree method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
+\code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
 appropriate for \code{VTableTree} objects.}
 
 \item{value}{The new value}
@@ -1159,7 +1159,7 @@ analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -1168,7 +1168,7 @@ Defaults to \code{"NA"}.}
 
 \item{override}{logical(1).}
 
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
@@ -1189,7 +1189,7 @@ be immediately recalculated. Defaults to TRUE.}
 \item{y}{Second element to be rbound via \code{rbind2}}
 
 \item{path}{character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+\code{tabletree}. Each element represents a subsequent choice amongst the children
 of the previous choice.}
 
 \item{i}{index}

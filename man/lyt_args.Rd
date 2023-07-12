@@ -71,7 +71,7 @@ pathing. When \code{vars} are all unique this will be the variable names.
 If not, these will be variable names with suffixes as necessary to enforce
 uniqueness.}
 
-\item{split_format}{FormatSpec. Default format associated with the split
+\item{split_format}{\code{FormatSpec}. Default format associated with the split
 being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
@@ -81,7 +81,7 @@ existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
 new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -124,7 +124,7 @@ analysis function outputs for two different partitions and returns a single
 value. Defaults to subtraction. If a string, taken as the name of a
 function.}
 
-\item{label_fstr}{string. An sprintf style format string containing. For
+\item{label_fstr}{string. An \code{sprintf} style format string containing. For
 non-comparison splits, it can contain  up to one \code{"\%s"} which takes
 the current split value and generates the row/column label.
 Comparison-based splits it can contain up to two \code{"\%s"}.}
@@ -165,9 +165,9 @@ corresponds to the unmodified default behavior.}
 to the variable(s) in \code{vars} be visible in the resulting table.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}

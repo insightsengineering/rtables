@@ -14,7 +14,7 @@ rbindl_rtables(x, gap = 0, check_headers = TRUE)
 \S4method{rbind2}{VTableNodeInfo,ANY}(x, y)
 }
 \arguments{
-\item{x}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
+\item{x}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
 
 \item{gap}{deprecated. Ignored.}
 
@@ -24,7 +24,7 @@ rbindl_rtables(x, gap = 0, check_headers = TRUE)
 
 \item{deparse.level}{numeric(1). Currently Ignored.}
 
-\item{y}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
+\item{y}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
 }
 \value{
 A formal table object.

@@ -21,7 +21,7 @@ value_formats(obj, default = obj_format(obj))
 \arguments{
 \item{obj}{A table or row object.}
 
-\item{default}{FormatSpec.}
+\item{default}{\code{FormatSpec}.}
 }
 \value{
 Matrix (storage mode list) containing the effective format for each

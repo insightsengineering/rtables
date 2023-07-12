@@ -5,9 +5,9 @@ label_pos_values <- c("hidden", "visible", "topleft")
 #' @rdname int_methods
 NULL
 
-#' combine SplitVector objects
-#' @param x SplitVecttor
-#' @param ... Splits or SplitVector objects
+#' combine `SplitVector` objects
+#' @param x `SplitVecttor`
+#' @param ... Splits or `SplitVector` objects
 #' @exportMethod c
 #' @return Various, but should be considered implementation details.
 #' @rdname int_methods
@@ -847,7 +847,7 @@ split_rows_by_cutfun <- function(lyt, var,
 #'   \item{split}{The name of the split (often the variable being split in the
 #'     simple case)}
 #'   \item{value}{The string representation of the value at that split}
-#'   \item{full_parent_df}{a dataframe containing the full data (ie across all
+#'   \item{full_parent_df}{a dataframe containing the full data (i.e. across all
 #'     columns) corresponding to the path defined by the combination of `split`
 #'     and `value` of this row \emph{and all rows above this row}}
 #'   \item{all_cols_n}{the number of observations  corresponding to this row
@@ -923,9 +923,9 @@ NULL
 #'   \item{.N_total}{overall N (all observation count, defined as sum of column
 #'     counts) for the tabulation}
 #'   \item{.N_row}{row-wise N (row group count) for the group of observations
-#'     being analyzed (ie with no column-based subsetting)}
+#'     being analyzed (i.e. with no column-based subsetting)}
 #'   \item{.df_row}{ data.frame for observations in the row group being analyzed
-#'     (ie with no column-based subsetting)}
+#'     (i.e. with no column-based subsetting)}
 #'   \item{.var}{variable that is analyzed}
 #'   \item{.ref_group}{data.frame or vector of subset corresponding to the
 #'     `ref_group` column including subsetting defined by row-splitting.
@@ -1658,7 +1658,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #'   within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via
 #'   \code{list(...)}.
-#' @return An InstantiatedColumnInfo object, suitable for use declaring the
+#' @return An `InstantiatedColumnInfo` object, suitable for use declaring the
 #'   column structure for a manually constructed table.
 #' @author Gabriel Becker
 #'
@@ -1762,7 +1762,7 @@ list_wrap_df <- function(f) {
 #' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default).
 #' When `show_colcounts` is `TRUE`, and `colcount_format` is 2-dimensional with
 #' a percent component, the value component for the percent is always populated
-#' with `1` (ie 100%). 1d formats are used to render the counts exactly as they
+#' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
 #' normally would be, while 2d formats which don't include a percent, and all 3d
 #' formats result in an error. Formats in the form of functions are not supported for
 #' colcount format. See \code{\link[formatters]{list_valid_format_labels}} for

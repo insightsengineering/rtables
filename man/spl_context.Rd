@@ -19,7 +19,7 @@ via the following columns:
 \item{split}{The name of the split (often the variable being split in the
 simple case)}
 \item{value}{The string representation of the value at that split}
-\item{full_parent_df}{a dataframe containing the full data (ie across all
+\item{full_parent_df}{a dataframe containing the full data (i.e. across all
 columns) corresponding to the path defined by the combination of \code{split}
 and \code{value} of this row \emph{and all rows above this row}}
 \item{all_cols_n}{the number of observations  corresponding to this row

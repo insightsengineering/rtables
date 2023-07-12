@@ -32,7 +32,7 @@ child (which are based on the data and type of split during tabulation).}
 \item{split_fun}{function/NULL. custom splitting function See
 \code{\link{custom_split_funs}}}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 

@@ -919,8 +919,8 @@ select_all_levels <- new("AllLevelsSentinel")
 #' Add Combination Levels to split
 #' @inheritParams sf_args
 #' @inherit add_overall_level return
-#' @param combosdf data.frame/tbl_df. Columns valname, label, levelcombo,
-#'   exargs. Of which levelcombo and exargs are list columns. Passing the
+#' @param combosdf `data.frame`/`tbl_df`. Columns `valname`, `label`, `levelcombo`,
+#'   `exargs`. Of which `levelcombo` and `exargs` are list columns. Passing the
 #'   \code{select_all_levels} object as a value in the \code{comblevels} column
 #'   indicates that an overall/all-observations level should be created.
 #' @param keep_levels character or NULL. If non-NULL, the levels to retain

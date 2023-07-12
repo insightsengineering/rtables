@@ -7,7 +7,7 @@
 update_ref_indexing(tt)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 }
 \description{

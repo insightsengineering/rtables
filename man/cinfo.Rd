@@ -4,7 +4,7 @@
 \name{InstantiatedColumnInfo-class}
 \alias{InstantiatedColumnInfo-class}
 \alias{InstantiatedColumnInfo}
-\title{InstantiatedColumnInfo}
+\title{\code{InstantiatedColumnInfo}}
 \usage{
 InstantiatedColumnInfo(
   treelyt = LayoutColTree(),
@@ -45,5 +45,5 @@ displayed during printing.}
 an \code{InstantiateadColumnInfo} object.
 }
 \description{
-InstantiatedColumnInfo
+\code{InstantiatedColumnInfo}
 }

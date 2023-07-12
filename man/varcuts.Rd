@@ -106,7 +106,7 @@ analyses, which is not allowed.}
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults
 to \code{FALSE}}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -114,9 +114,9 @@ declared via strings (\code{"xx.x"}) or function. In cases such as
 Defaults to \code{"NA"}.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{section_div}{character(1). String which should be repeated as a section
