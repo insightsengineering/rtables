@@ -217,13 +217,14 @@ test_that("alignment works", {
 })
 
 test_that("Decimal alignment works", {
+  dec_als <- c("dec_left", "decimal", "dec_right")
   df <- data.frame(
-    ARM = factor(c("decimal", "dec_right", "dec_left")),
+    ARM = factor(dec_als, levels = dec_als),
     AETOXGR = factor(seq(1:3)),
     stringsAsFactors = FALSE
   )
   
-  tbl <- basic_table() %>%
+  lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     analyze("AETOXGR", afun = function(x, .spl_context, .var) {
         form_v <- list_valid_format_labels()[[1]]
@@ -241,31 +242,32 @@ test_that("Decimal alignment works", {
             .formats = form_v,
             .aligns = rep(col_nm_matched[1], length(num_v))
         )
-    }) %>%
-    build_table(df)
+    }) 
+  
+  tbl <- build_table(lyt, df)
   
   cw <- propose_column_widths(tbl)
-  cw[2:4] <- cw[2:4] + 5
+  cw[2:4] <- cw[2:4] + 3
   # Printed comparison with padding
   res <- strsplit(toString(tbl, widths = cw, hsep = "-"), "\\\n")[[1]]
   expected <- c(
-      "             dec_left                dec_right                 decimal        ",
-      "------------------------------------------------------------------------------",
-      "c1      11.11111                             11.11111           11.11111      ",
-      "c2      11                                   11                 11            ",
-      "c3      11.1                                 11.1               11.1          ",
-      "c4      11.11                                11.11              11.11         ",
-      "c5      11.111                               11.111             11.111        ",
-      "c6      11.1111                              11.1111            11.1111       ",
-      "c7    1111.111%                            1111.111%          1111.111%       ",
-      "c8    1111%                                1111%              1111%           ",
-      "c9    1111.1%                              1111.1%            1111.1%         ",
-      "c10   1111.11%                             1111.11%           1111.11%        ",
-      "c11   1111.111%                            1111.111%          1111.111%       ",
-      "c12   (N=11.11111)                       (N=11.11111)        (N=11.11111)     ",
-      "c13     11.1                                 11.1               11.1          ",
-      "c14     11.11                                11.11              11.11         ",
-      "c15     11.1111                              11.1111            11.1111       "
+      "         dec_left           decimal          dec_right   ",
+      "---------------------------------------------------------",
+      "c1       11.11111           11.11111            11.11111 ",
+      "c2       11                 11                  11       ",
+      "c3       11.1               11.1                11.1     ",
+      "c4       11.11              11.11               11.11    ",
+      "c5       11.111             11.111              11.111   ",
+      "c6       11.1111            11.1111             11.1111  ",
+      "c7     1111.111%          1111.111%           1111.111%  ",
+      "c8     1111%              1111%               1111%      ",
+      "c9     1111.1%            1111.1%             1111.1%    ",
+      "c10    1111.11%           1111.11%            1111.11%   ",
+      "c11    1111.111%          1111.111%           1111.111%  ",
+      "c12   (N=11.11111)       (N=11.11111)        (N=11.11111)",
+      "c13      11.1               11.1                11.1     ",
+      "c14      11.11              11.11               11.11    ",
+      "c15      11.1111            11.1111             11.1111  "
   )
   expect_identical(res, expected)
 })
