@@ -1329,3 +1329,24 @@ test_that("problematic labels are caught and give informative error message", {
 
     expect_error(build_table(lyt, iris), "Labels cannot contain [{] or [}] due to")
 })
+
+# https://github.com/insightsengineering/rtables/issues/651
+test_that("page_by = TRUE on a split without levels gives informative warning", {
+    df <- data.frame(1, 2, 3, 4, 5) %>% mutate_all(as.factor)
+    colnames(df) <- c("detect_me", letters[seq(2, 4)])
+    df <- df[-1, ]
+    # Define the split function
+    split_fun <- drop_split_levels
+    
+    lyt <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("b") %>%
+        split_rows_by("detect_me", split_fun = split_fun, page_by = TRUE, 
+                      label_pos = "hidden", 
+                      split_label = 'asda', labels_var = "d") %>%
+        split_rows_by("c", split_fun = split_fun, 
+                      label_pos = "topleft", 
+                      split_label = "a_split_label") %>%
+        analyze("d")
+    expect_warning(result <- build_table(lyt, df), regexp = "*detect_me*")
+    expect_error(paginate_table(result)) # Nothing to paginate (degenerate)
+})

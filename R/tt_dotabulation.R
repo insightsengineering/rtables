@@ -622,7 +622,6 @@ setMethod(".make_split_kids", "Split",
                    cinfo, ## used for sanity check
                    baselines, ## used to calc new baselines
                    spl_context) {
-
     ## do the core splitting of data into children for this split
     rawpart <- do_split(spl, df, spl_context = spl_context)
     dataspl <- rawpart[["datasplit"]]
@@ -720,6 +719,18 @@ setMethod(".make_split_kids", "Split",
     SIMPLIFY = FALSE))
 
     inner <- .set_kids_sect_sep(inner, spl)
+    
+    # Trying to split nothing with page_by
+    if (is.null(inner) && !is.na(ptitle_prefix(spl))) {
+        warning("The split/faceting column ", obj_name(spl),
+                " does not contain any value to split, while",
+                " page_by = TRUE. Turning pagination off.")
+        ptit_prefix <- NA
+    } else {
+        ptit_prefix <- ptitle_prefix(spl)
+    }
+    
+    
     ## This is where we need to build the structural tables
     ## even if they are invisible becasue their labels are not
     ## not shown.
@@ -730,7 +741,7 @@ setMethod(".make_split_kids", "Split",
                          cinfo = cinfo,
                          iscontent = FALSE,
                          indent_mod = indent_mod(spl),
-                         page_title = ptitle_prefix(spl)
+                         page_title = ptit_prefix
                          )
     ##kids = inner
     kids <- list(innertab)
