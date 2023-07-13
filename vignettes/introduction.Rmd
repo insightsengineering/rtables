@@ -29,7 +29,6 @@ output tables in `R`. Most of the design requirements for `rtables`
 have their origin in studying tables that are commonly used to report
 analyses from clinical trials; however, we were careful to keep
 `rtables` a general purpose toolkit.
-v
 There are a number of other table frameworks available in `R` such as
 [gt](https://gt.rstudio.com/) from `RStudio`,
 [xtable](https://CRAN.R-project.org/package=xtable),
