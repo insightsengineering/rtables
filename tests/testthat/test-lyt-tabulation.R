@@ -359,7 +359,7 @@ test_that("error localization works", {
         analyze("BMRKR1", afun = mean)
 # nolint start
     expect_error(build_table(lyt3, DM),
-                 "Error.*custom split function: oopsi.e. daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]")
+                 "Error.*custom split function: oopsie daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]")
 # nolint end
 })
 
