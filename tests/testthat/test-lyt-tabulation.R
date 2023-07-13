@@ -349,7 +349,7 @@ test_that("error localization works", {
                  "Error in content.*function: placebos are bad.*path: ARM\\[B: Placebo\\]")
 
     splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-        stop("oopsi.e. daisy")
+        stop("oopsie daisy")
     }
 
     lyt3 <- basic_table() %>%
