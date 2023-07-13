@@ -109,13 +109,10 @@
     <loc>https://insightsengineering.github.io/rtables/main/reference/append_topleft.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/main/reference/ard_specs.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/main/reference/as_ard.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/as_html.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/as_result_df.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/asvec.html</loc>
@@ -293,6 +290,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/ref_fnotes.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/main/reference/result_df_specs.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/main/reference/rheader.html</loc>
