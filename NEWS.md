@@ -1,6 +1,7 @@
 
 ## rtables 0.6.1.9014
  * fix major regressions for page_by machinery caused by migration to `formatters` 0.5.0 pagination framework.
+ * cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
 
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
