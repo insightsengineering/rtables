@@ -48,7 +48,7 @@ This method allows the `tidy` function from the `broom` package to operate on `s
 
 ```{r}
 tidy.summary.coxph <- function(x, ...) {
-  checkmate::assert_class(x, "summary.coxph")
+  is(x, "summary.coxph")
   pval <- x$coefficients
   confint <- x$conf.int
   levels <- rownames(pval)
