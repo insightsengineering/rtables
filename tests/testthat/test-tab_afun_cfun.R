@@ -110,7 +110,7 @@ test_that(".spl_context contains information about combo counts", {
                 # General info
                 stopifnot(.all_col_counts[[.spl_context$cur_col_id[[1]]]] == .N_col)
                 stopifnot(identical(.all_col_exprs[[.spl_context$cur_col_id[[1]]]],
-                              .spl_context$cur_col_expr[3]))
+                              .spl_context$cur_col_expr[[3]]))
                 
                 # Fin needed output 
                 in_rows("n" = c(nrow(alt_df1c), 
@@ -197,7 +197,7 @@ test_that(".alt_df appears in cfun but not in afun.", {
             
             # Filtered column number of elemens correspond to .N_col
             stopifnot(nrow(alt_tmp %>% 
-                               filter(eval(.spl_context$cur_col_expr[1]))) == .N_col)
+                               filter(eval(.spl_context$cur_col_expr[[1]]))) == .N_col)
         } else {
             # Checking cur_col_n is the same as .N_col for root and length(x) for split
             stopifnot(identical(.spl_context$cur_col_n, c(.N_col, length(x))))
@@ -211,7 +211,7 @@ test_that(".alt_df appears in cfun but not in afun.", {
         
         # Checking col expression
         stopifnot(identical(.all_col_exprs[.spl_context$cur_col_id[1]][[1]],
-                            .spl_context$cur_col_expr[1])) # Uses the root one
+                            .spl_context$cur_col_expr[[1]])) # Uses the root one
         
         in_rows(c(length(x), length(x) / .N_col), 
                 .names = labelstr, 
