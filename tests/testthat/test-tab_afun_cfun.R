@@ -31,10 +31,9 @@ test_that(".spl_context contains information about the column split", {
     
     expect_silent(tbl <- lyt %>% build_table(DM_tmp))
     
-    tol <- 0.02
-    DM_tmp_F <- DM_tmp %>% filter(SEX == "F", STRATA1 == "B")
-    expect_equal(tbl[4, 1, drop = TRUE], mean(DM_tmp_F$BMRKR1), tolerance = tol)
-    expect_equal(tbl[4, 3, drop = TRUE], sd(DM_tmp_F$BMRKR1), tolerance = tol) # xxx why -0.011?
+    DM_B_F <- DM %>% filter(SEX == "F", STRATA1 == "B")
+    expect_equal(tbl[4, 1, drop = TRUE], mean(DM_B_F$BMRKR1))
+    expect_equal(tbl[4, 3, drop = TRUE], sd(DM_B_F$BMRKR1))
 })
 
 test_that(".spl_context contains col information and multivars works", {
