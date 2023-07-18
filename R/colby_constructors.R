@@ -867,8 +867,8 @@ split_rows_by_cutfun <- function(lyt, var,
 #'   \item{cur_col_subset}{List column containing logical vectors indicating the
 #'     subset of that row's `full_parent_df` for the column currently being
 #'     created by the analysis function}
-#'   \item{cur_col_expr}{Current column expression. This may be used to filter
-#'     `.alt_df` or any external data}
+#'   \item{cur_col_expr}{List of current column expression. This may be used to 
+#'     filter `.alt_df` or any external data by column}
 #'   \item{cur_col_n}{integer column containing the observation counts for that
 #'     split}
 #'   \item{cur_col_split}{Current column split names. This is recovered from the
@@ -921,8 +921,9 @@ NULL
 #'     within the reference column}
 #'   \item{.spl_context}{data.frame, each row gives information about a
 #'     previous/'ancestor' split state. See \code{\link{spl_context}}}
-#'   \item{.alt_df}{list of data.frames, i.e. the `alt_count_df` after 
-#'     row splitting. Each element of the list represent a column-wise split.}
+#'   \item{.alt_df}{data.frame, i.e. the `alt_count_df` after 
+#'     row splitting. It can be used with `.all_col_exprs` and `.spl_context`
+#'     information to retrieve current faceting, but for `alt_count_df`.}
 #'   \item{.all_col_exprs}{list of expressions. Each of them represents a 
 #'     different column splitting.}
 #'   \item{.all_col_counts}{vector of integers. Each of them represents the global

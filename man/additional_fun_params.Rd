@@ -35,8 +35,9 @@ and only required/meaningful if a \code{ref_group} column has been defined}
 within the reference column}
 \item{.spl_context}{data.frame, each row gives information about a
 previous/'ancestor' split state. See \code{\link{spl_context}}}
-\item{.alt_df}{list of data.frames, i.e. the \code{alt_count_df} after
-row splitting. Each element of the list represent a column-wise split.}
+\item{.alt_df}{data.frame, i.e. the \code{alt_count_df} after
+row splitting. It can be used with \code{.all_col_exprs} and \code{.spl_context}
+information to retrieve current faceting, but for \code{alt_count_df}.}
 \item{.all_col_exprs}{list of expressions. Each of them represents a
 different column splitting.}
 \item{.all_col_counts}{vector of integers. Each of them represents the global

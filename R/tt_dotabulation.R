@@ -97,7 +97,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     if (NROW(spl_context) > 0) {
         spl_context$cur_col_id <- paste(cpath[seq(2, length(cpath), 2)], collapse = ".")
         spl_context$cur_col_subset <- col_parent_inds
-        spl_context$cur_col_expr <- csub
+        spl_context$cur_col_expr <- list(csub)
         spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
         spl_context$cur_col_split <- list(cpath[seq(1, length(cpath), 2)])
         spl_context$cur_col_split_val <- list(cpath[seq(2, length(cpath), 2)])
