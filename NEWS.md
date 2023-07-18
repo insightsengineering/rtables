@@ -34,16 +34,16 @@
 
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
- * Moved `export_as_txt` to `formatters`. Added to reexports.
+ * Moved `export_as_txt` to `formatters`. Added to reexports. 
  * Migrated `export_as_rtf` to `formatters`. Not re-exported.
  * add `r2rtf` to Suggests
  * pagination logic has been migrated completely (excepting page_by splits) to `formatters` and is now invoked from there. paginate_table remains as a convenience function.
- * Removed warning in `str` method when called upon table objects.
- * Provide `str` method for `VTableTree` objects with a default `max.level` of 3, as the infinite default from base is not
+ * Removed warning in `str` method when called upon table objects. 
+ * Provide `str` method for `VTableTree` objects with a default `max.level` of 3, as the infinite default from base is not 
    useful or informative.
  * default `font_size` value is now `8` across pagination and export machinery
  * `margins` argument in pagination and export machinery now (correctly) interpreted as inches. This change is inherited from `formatters`
- * `lpp` and `cpp` now default to `NA_integer_`, which is interpreted as inferring their value from the physical page size specified.
+ * `lpp` and `cpp` now default to `NA_integer_`, which is interpreted as inferring their value from the physical page size specified. 
  * Horizontal pagination now occurs by default due to the above (because there is a default page type - `"letter"`. Pagination can still be turned off in either direction by setting `l/cpp` to `NULL` explicitly.
  * Referential footnotes now have both a `symbol` and an `index`. Messages associated with symbols will only appear once per page in the footer materials regardless of number of elements referenced in the page with that symbol. Matches and inherits from changes in `formatters`
  * Started deprecation cycle for `trim_zero_rows`.
@@ -78,7 +78,7 @@
  * `export_to_txt` now automatically paginates when any form of page dimension is provided
    (previously the default was unconditionally not paginating).
  * Versioned dependency on `formatters` increased to `>=0.4.0`
-
+ 
 ## rtables 0.5.3
  * `[<-` now treats character `i` and `j` values as paths, the same as `[` always has.
  * `[<-` `CellValue` method now preserves `CellValue` attributes (e.g., format)
@@ -93,7 +93,7 @@
  * export functions now accepts `tf_wrap` and `max_width` and use them in both pagination (when turned on) *and* `toString` when used (pdf, txt exporters).
  * versioned dependency on `formatters` increased to `>0.3.3.10`
  * `export_as_pdf` now accepts standard page/font size parameters
- * original parameters (`width`, `height`, `fontsize` are soft deprecated (no warning) and
+ * original parameters (`width`, `height`, `fontsize` are soft deprecated (no warning) and 
    will be fully deprecated and then removed in the future.
  * `toString` method for `VTableTree` now accepts `tf_wrap` and `max_width`
  * `export_as_txt` and `export_as_pdf` now accept `cpp`, as well as `tf_wrap` and `max_width` and
@@ -122,7 +122,7 @@
  * Updated versioned dependency on `formatters` to `>=0.3.2.3`
  * Equivalent split functions with different enclosing environments (e.g., 2 identical calls to `add_combo_levels` [#340](https://github.com/insightsengineering/rtables/issues/304)) no longer block `rbind`ing
  * Fixed various documentation bugs where description section was being added to header.
-
+ 
 ## rtables 0.5.1.4
  * empty level check for splitting variables reinstated.
 
@@ -148,8 +148,8 @@
  
 ## rtables 0.5.0
  * `formatable` dependency renamed to `formatters` for suitability of release to CRAN
- * Update versioned dependency of `formatters` (previously `formatable`) to `>=0.2.0`
-
+ * Update versioned dependency of `formatters` (previously `formatable`) to `>=0.2.0` 
+ 
 ## rtables 0.4.1.0004
  * Fix bug when function format combined with NULL `cfun` caused error ([#307](https://github.com/insightsengineering/rtables/issues/307))
  * Fix bug in `path_enriched_df` (which powers `tsv` export), related to ([#308](https://github.com/insightsengineering/rtables/issues/308))
@@ -171,7 +171,7 @@
  * new `tt_to_flextable` coercion function
  * new `export_as_pdf` exporter function
  * `value_at` and `cell_values` functions now have methods for `TableRow` objects making them usable in sorting/pruning functions
-
+ 
 ## rtables 0.3.8.9001
  * new `trim_levels_to_map` split function based on `[@wwojciech](https://github.com/wwojciech)`'s work in [#203](https://github.com/insightsengineering/rtables/issues/203)
  * support for column referential footnotes
@@ -180,7 +180,6 @@
  * `value_at` and `cell_values` now work for `tablerow` objects
  * Fixed `as_html` bug in `multivar` split columns case 
  * Fixed pagination off-by-one error
-
 
 ## rtables 0.3.8.9000
 
@@ -254,8 +253,8 @@ tables in the context of clinical trials.
 
 ## rtables 0.3.2.17.9041
 
-* Allow single variable to be used within `split_cols_by_multivar`
-* Various removal of defunct
+* Allow single variable to be used within `split_cols_by_multivar` 
+* Various removal of defunct 
 
 ## rtables 0.3.2.17.9040
 
@@ -301,7 +300,7 @@ tables in the context of clinical trials.
 
 ## rtables 0.3.2.17.9027
 
-* issues with no news:
+* issues with no news: 
 
 ## rtables 0.1.7
 
@@ -324,7 +323,7 @@ tables in the context of clinical trials.
 * `col_by` in `rtabulate` now accepts matrices:
   - `col_by_to_matrix`, `col_by_to_factor`, `by_factor_to_matrix`.
   - `by_add_total`, `by_all`, `by_combine`, `by_quartile`, `by_compare_subset`,  `by_hierarchical`, `by_drop_empty_cols`.
-
+  
 * New utility functions to deal with variable labels:
   - `label`, `var_labels<-`, `var_labels`, `var_labels_remove`, `var_relabel`, `with_label`.
 
