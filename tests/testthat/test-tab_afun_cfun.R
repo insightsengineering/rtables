@@ -69,7 +69,7 @@ test_that(".spl_context contains information about combo counts", {
     )
     
     n_wrapper_alt_df <- function(alt_counts_df) {
-        function(x, .spl_context, .N_col, .alt_counts_df, .all_col_exprs, 
+        function(x, .spl_context, .N_col, .alt_df, .all_col_exprs, 
                  .all_col_counts, ...) { 
             
             cur_col <- paste0(.spl_context$cur_col_split_val[[1]], collapse = ".")
@@ -93,16 +93,16 @@ test_that(".spl_context contains information about combo counts", {
                                      }, FUN.VALUE = character(1))
                 
                 # Use of cexpr
-                alt_df1c <- .alt_counts_df %>% 
+                alt_df1c <- .alt_df %>% 
                     filter(eval(.all_col_exprs[[AC_colname[1]]]))
-                alt_df2c <- .alt_counts_df %>% 
+                alt_df2c <- .alt_df %>% 
                     filter(eval(.all_col_exprs[[AC_colname[2]]]))
                 
                 # Normal execution - no use of cexpr
-                alt_df1 <- .alt_counts_df %>% 
+                alt_df1 <- .alt_df %>% 
                     filter(ARM == "A: Drug X",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
-                alt_df2 <- .alt_counts_df %>% 
+                alt_df2 <- .alt_df %>% 
                     filter(ARM == "C: Combination",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
                 
@@ -172,7 +172,7 @@ test_that(".spl_context contains information about combo counts", {
 
 test_that("Error localization for missing split variable when done in alt_count_df", {
     # Error we want to happen
-    afun_tmp <- function(x, .alt_counts_df, ...) mean(x)
+    afun_tmp <- function(x, .alt_df, ...) mean(x)
     lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
@@ -202,21 +202,21 @@ test_that("Error localization for missing split variable when done in alt_count_
 
 context("Content functions (cfun)")
 
-test_that(".alt_counts_df appears in cfun but not in afun.", {
+test_that(".alt_df appears in cfun but not in afun.", {
     # Adding STRATA2 col to DM for alt_counts_df col split
     alt_tmp <- DM %>% left_join(ex_adsl %>% 
                                     mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>% 
                                     select(ID, STRATA2))
     
     afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
-    cfun_tmp <- function(x, .alt_counts_df, labelstr, .N_col, 
+    cfun_tmp <- function(x, .alt_df, labelstr, .N_col, 
                          .spl_context,
                          .all_col_exprs,
                          .all_col_counts,
                          ...) {
-        if (!missing(.alt_counts_df)) {
-            # .alt_counts_df is only row splitted matter
-            stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_counts_df))
+        if (!missing(.alt_df)) {
+            # .alt_df is only row splitted matter
+            stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_df))
             
             # Filtered column number of elemens correspond to .N_col
             stopifnot(nrow(alt_tmp %>% 
