@@ -28,30 +28,30 @@ License: Apache License 2.0 | file LICENSE
 URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
-Depends: 
+Depends:
     formatters (>= 0.5.2),
-    magrittr,
+    magrittr (>= 1.5),
     methods,
     R (>= 2.10)
 Imports:
     grid,
-    htmltools,
+    htmltools (>= 0.5.4),
     stats
 Suggests:
     broom,
     car,
-    dplyr,
-    flextable,
-    knitr,
-    officer,
-    r2rtf,
-    rmarkdown,
+    dplyr (>= 1.0.0),
+    flextable (>= 0.8.4),
+    knitr (>= 1.34),
+    officer (>= 0.5.0),
+    r2rtf (>= 0.3.2),
+    rmarkdown (>= 1.11),
     survival,
-    testthat,
-    tibble,
-    tidyr,
-    xml2
-VignetteBuilder: 
+    testthat (>= 3.0.4),
+    tibble (>= 2.0.1),
+    tidyr (>= 0.8.3),
+    xml2 (>= 1.1.0)
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
