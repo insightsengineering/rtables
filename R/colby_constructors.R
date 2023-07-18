@@ -868,7 +868,7 @@ split_rows_by_cutfun <- function(lyt, var,
 #'     subset of that row's `full_parent_df` for the column currently being
 #'     created by the analysis function}
 #'   \item{cur_col_expr}{Current column expression. This may be used to filter
-#'     `.alt_counts_df` or any external data}
+#'     `.alt_df` or any external data}
 #'   \item{cur_col_n}{integer column containing the observation counts for that
 #'     split}
 #'   \item{cur_col_split}{Current column split names. This is recovered from the
@@ -921,7 +921,7 @@ NULL
 #'     within the reference column}
 #'   \item{.spl_context}{data.frame, each row gives information about a
 #'     previous/'ancestor' split state. See \code{\link{spl_context}}}
-#'   \item{.alt_counts_df}{list of data.frames, i.e. the `alt_count_df` after 
+#'   \item{.alt_df}{list of data.frames, i.e. the `alt_count_df` after 
 #'     row splitting. Each element of the list represent a column-wise split.}
 #'   \item{.all_col_exprs}{vector of expressions. Each of them represents a 
 #'     different column splitting.}
@@ -935,7 +935,7 @@ NULL
 #'  example`.ref_group` will be missing if no baseline is previously defined
 #'  during data splitting (via `ref_group` parameters in, e.g., [split_rows_by]).
 #'  Similarly, if no `alt_counts_df` is provided into [build_table], 
-#'  `.alt_counts_df` will not be present.
+#'  `.alt_df` will not be present.
 #'
 #' @name additional_fun_params
 NULL

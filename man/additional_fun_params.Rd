@@ -35,7 +35,7 @@ and only required/meaningful if a \code{ref_group} column has been defined}
 within the reference column}
 \item{.spl_context}{data.frame, each row gives information about a
 previous/'ancestor' split state. See \code{\link{spl_context}}}
-\item{.alt_counts_df}{list of data.frames, i.e. the \code{alt_count_df} after
+\item{.alt_df}{list of data.frames, i.e. the \code{alt_count_df} after
 row splitting. Each element of the list represent a column-wise split.}
 \item{.all_col_exprs}{vector of expressions. Each of them represents a
 different column splitting.}
@@ -50,5 +50,5 @@ present in the tabulation machinery, it will be as if missing. For
 example\code{.ref_group} will be missing if no baseline is previously defined
 during data splitting (via \code{ref_group} parameters in, e.g., \link{split_rows_by}).
 Similarly, if no \code{alt_counts_df} is provided into \link{build_table},
-\code{.alt_counts_df} will not be present.
+\code{.alt_df} will not be present.
 }

@@ -2,8 +2,8 @@
 
 ### Enhancements
  * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
- * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations. `.alt_counts_df` gives access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
- * Added check for `.alt_counts_df` that prevents its calculation if not present in analysis functions.
+ * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations. `.alt_df` gives access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
+ * Added check for `.alt_df` that prevents its calculation if not present in analysis functions.
 
 ### Bug Fixes
  * Fix major regressions for `page_by` machinery caused by migration to `formatters` 0.5.0 pagination framework.

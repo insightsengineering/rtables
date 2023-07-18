@@ -111,7 +111,7 @@ test_that(".spl_context contains information about combo counts", {
                     filter(ARM == "A: Drug X",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2],
                            SEX == .spl_context$value[3])
-                alt_df2b <- .alt_counts_df %>% 
+                alt_df2b <- alt_counts_df %>% 
                     filter(ARM == "C: Combination",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2],
                            SEX == .spl_context$value[3])

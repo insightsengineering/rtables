@@ -6,7 +6,7 @@ match_extra_args <- function(f,
                             .all_col_counts,
                             .var,
                             .ref_group = NULL,
-                            .alt_counts_df = NULL,
+                            .alt_df = NULL,
                             .ref_full = NULL,
                             .in_ref_col = NULL,
                             .spl_context = NULL,
@@ -30,8 +30,8 @@ match_extra_args <- function(f,
         possargs <- c(possargs, list(.var = .var))
     if(!is.null(.ref_group))
         possargs <- c(possargs, list(.ref_group = .ref_group))
-    if(!is.null(.alt_counts_df))
-        possargs <- c(possargs, list(.alt_counts_df = .alt_counts_df))
+    if(!is.null(.alt_df))
+        possargs <- c(possargs, list(.alt_df = .alt_df))
     if(!is.null(.ref_full))
         possargs <- c(possargs, list(.ref_full = .ref_full))
     if(!is.null(.in_ref_col))
@@ -133,7 +133,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     
     names(all_col_counts) <- names(all_col_exprs)
     
-    # xxx to add to docs: .alt_counts_df, .all_col_exprs, .all_col_counts
     exargs <- match_extra_args(func,
                               .N_col = count,
                               .N_total = totcount,
@@ -141,7 +140,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
                               .all_col_counts = all_col_counts,
                               .var = col,
                               .ref_group = baselinedf,
-                              .alt_counts_df = alt_dfpart,
+                              .alt_df = alt_dfpart,
                               .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
                               .N_row = NROW(dfpart),
@@ -756,7 +755,7 @@ setMethod(".make_split_kids", "Split",
              " in each split. Contact the maintainer.") # nocov
     }
     
-    acdf_param <- .check_afun_cfun_params(c(spl, splvec), ".alt_counts_df")
+    acdf_param <- .check_afun_cfun_params(c(spl, splvec), ".alt_df")
     
     # Apply same split for alt_counts_df
     if (!is.null(alt_df) && acdf_param) {
@@ -1107,7 +1106,7 @@ build_table <- function(lyt, df,
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
     # This check should be added to cinfo and sent everywhere but for the moment
     # there is little advantage in this as there are no other cases of this checks.
-    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_counts_df")) 
+    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_df")) 
 
     rtpos <- TreePos()
     cinfo <- create_colinfo(lyt, df, rtpos,
