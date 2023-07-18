@@ -1,7 +1,8 @@
 context("Analysis functions (afun)")
 
 test_that(".spl_context contains information about the column split", {
-    ## Duplication hack # xxx send it to Gabe
+    ## Duplication hack -> This would need to use  split_cols_by_multivar(...)
+    # Workaround for #690
     DM_tmp <- DM %>% 
         mutate(method = factor("Mean")) 
     
@@ -34,29 +35,6 @@ test_that(".spl_context contains information about the column split", {
     DM_B_F <- DM %>% filter(SEX == "F", STRATA1 == "B")
     expect_equal(tbl[4, 1, drop = TRUE], mean(DM_B_F$BMRKR1))
     expect_equal(tbl[4, 3, drop = TRUE], sd(DM_B_F$BMRKR1))
-})
-
-test_that(".spl_context contains col information and multivars works", {
-    skip()
-    DM_tmp <- DM %>% # xxx file an issue for this 
-                     # xxx add documentation for not supported + error
-        mutate(SEX = factor(SEX))
-    
-    lyt <- basic_table() %>% 
-        split_rows_by("STRATA1") %>%
-        # split_cols_by_multivar(vars = c("BMRKR1", "BMRKR1"), 
-        #                        varlabels = c("M", "SD")) %>%
-        split_cols_by("ARM") %>% # Breaks
-        split_cols_by("SEX") %>% # Breaks
-        analyze(vars = c("BMRKR1"), afun = list("Mean" = mean, "Mean" = mean,
-                                                "SD" = sd, "SD" = sd), 
-                # xxx with 2 should work
-                format = "xx.x")
-        # analyze(vars = c("BMRKR1", "BMRKR1"), 
-        #         afun = list("F" = mean, "SD" = min),
-        #         show_labels = "hidden")
-    
-    lyt %>% build_table(DM_tmp)
 })
 
 test_that(".spl_context contains information about combo counts", {

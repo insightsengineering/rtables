@@ -37,7 +37,7 @@ within the reference column}
 previous/'ancestor' split state. See \code{\link{spl_context}}}
 \item{.alt_df}{list of data.frames, i.e. the \code{alt_count_df} after
 row splitting. Each element of the list represent a column-wise split.}
-\item{.all_col_exprs}{vector of expressions. Each of them represents a
+\item{.all_col_exprs}{list of expressions. Each of them represents a
 different column splitting.}
 \item{.all_col_counts}{vector of integers. Each of them represents the global
 count for each column. It differs if \code{alt_counts_df} is used
