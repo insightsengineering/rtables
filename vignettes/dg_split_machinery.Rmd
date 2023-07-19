@@ -724,7 +724,6 @@ Here we can see what is the split column variable (`split`, first column) at thi
 
 ### Extra arguments `extra_args`
 This functionality is well known and used in the setting of analysis functions (xxx vignette), but we show here how this can also apply to splits.
-(xxx intent is to set them on the parent and then used in the analyze call - possible this does not work. Issue to investigate this and if we need it xxx)
 
 ```{r, eval=FALSE}
 # rtables 6.0.2
@@ -785,9 +784,6 @@ considered as vestigial and deprecated heritage.
 
 Final examples with `MultiVarSplit` & `CompoundSplit`
 
-# (xxx) can I swap split_cols_by_multivar -> probably you cannot atm, yes can do 
-custom split function that does the "fake" split
-
 Firstly, we want to see how `MultiVarSplit` class behaves for an example case taken from
 `?split_rows_by_multivar`.
 
@@ -803,6 +799,7 @@ debugonce(rtables:::.apply_split_inner)
 lyt <- basic_table() %>%
     split_cols_by("ARM") %>% 
     split_rows_by_multivar(c("SEX", "STRATA1")) %>%
+    # split_rows_by("COUNTRY", split_fun = keep_split_levels("PAK")) %>% # xxx for #690 #691
     summarize_row_groups() %>%
     analyze(c("AGE", "SEX"))
 
@@ -813,47 +810,98 @@ untrace(what = "do_split",
 
 If we print them out, we will notice that the two groups (one called "SEX" and the other "STRATA1") are identical along the columns. This is because no subgroup was actually created. This is an interesting way to personalize splits and with the help of custom split functions and their split context, also to have widely different subgroups in the table.
 
-Lastly, we will briefly show an example of a split with cumulative function and how to replace it and solve the problem with empty age groups we had before. In the following, we propose the same simplified situation:
+We grasp the occasion to explain that with `xxx` comments we indicate placeholders for TODOs and warnings that needs further work. We invite the reader to try to understand why `split_rows_by_multivar` can have other row splits under it (see `xxx` comment in the previous code), while `split_cols_by_multivar` does not. It is a known bug at the moment, and we would be pleased to have a fix. The issues are often linked in the code by their code number (e.g. `#690`).
+
+Lastly, we will briefly show an example of a split with cut function and how to replace it and solve the problem with empty age groups we had before. In the following, we propose the same simplified situation:
 
 ```{r}
 # rtables 6.0.2
 
 cutfun <- function(x) {
-    # browser()
-  cutpoints <- c(0, mean(x), max(x))
+  # browser()
+  cutpoints <- c(0, 50, 100)
 
   names(cutpoints) <- c("", "Younger", "Older")
   cutpoints
 }
 
-tbl <- basic_table() %>% 
+tbl <- basic_table(show_colcounts = TRUE) %>% 
     split_rows_by("ARM", 
                   split_fun = drop_and_remove_levels(c("B: Placebo", "C: Combination"))) %>% 
     split_rows_by("STRATA1") %>% 
     split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
     # split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
-    #               cutlabels = c("young", "old")) %>% # our objective is to take out empty levels from this!
+    #               cutlabels = c("young", "old")) %>% # Works the same
     split_rows_by("SEX", split_fun = drop_split_levels) %>% 
-    summarize_row_groups() %>% 
+    summarize_row_groups() %>%  # This is degenerate!!! 
     build_table(DM)
-
-# (xxx) The real new thing
-
-# 
-# lyt5 <- basic_table() %>%
-#   split_cols_by_cutfun("AGE", cutfun = cutfun) %>%
-#   analyze("SEX")
-# 
-# tbl5 <- build_table(lyt5, ex_adsl)
-# tbl5
 
 tbl
 ```
-The reader will notice here that there is `old` printed out without any data in it. We want to trim it!
-(xxx) to drop values you need to override the core with make_split_fun
-(xxx) add the pre-proc with z-scoring
-```{r}
-# try with pruning
-prune_table(tbl) #(xxx) what is going on here?
+For both cases (`*_cuts` and `*_cutfun`), we have empty levels that are not dropped. This is to be expected and can be avoided by using a dedicated split function. Only intentionally looking at the future split is possible to know if there is any element in it. At the moment, though, it is not possible to add `spl_fun` to dedicated split function like `split_rows_by_cuts`.
 
+Note too that in the previous table we used only `summarize_row_groups` but no `analyze`. This rendered nicely but it is not the standard way to go as `summarize_row_groups` was intended ONLY to decorate row groups, i.e. row with labels. Internally, these rows are called content rows and that is why the analysis functions here are called `cfun` instead of `afun`. Indeed, also the tabulation machinery presents these two differences as it is described here (xxx link to tabulation vignette).
+
+We can try anyway to construct the split function for cuts manually with `make_split_fun`:
+```{r, eval=FALSE}
+my_count_afun <- function(x, .N_col, .spl_context, ...) {
+    # browser()
+    out <- list(c(length(x), length(x)/.N_col))
+    names(out) <- .spl_context$value[nrow(.spl_context)] # workaround (xxx #689)
+    in_rows(.list = out,
+            .formats = c("xx (xx.x%)"))
+}
+# ?make_split_fun # To check for docs/examples
+
+# Core split
+cuts_core <- function(spl, df, vals, labels, .spl_context) {
+    # browser()
+    young_v <- as.numeric(df[["AGE"]]) < 50
+    make_split_result(c("young", "old"),
+                      datasplit = list(df[young_v,], df[!young_v,]),
+                      labels = c("Younger", "Older"))
+}
+drop_empties <- function(splret, spl, fulldf, ...){
+    # browser()
+    nrows_data_split <- vapply(splret$datasplit, nrow, numeric(1))
+    to_keep <- nrows_data_split > 0
+    make_split_result(splret$values[to_keep],
+                      splret$datasplit[to_keep],
+                      splret$labels[to_keep])
+}
+gen_split <- make_split_fun(core_split = cuts_core,
+                            post = list(drop_empties))
+
+tbl <- basic_table(show_colcounts = TRUE) %>% 
+    split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by("AGE", split_fun = gen_split) %>%
+    split_rows_by("SEX", split_fun = drop_split_levels, 
+                  child_labels = "hidden") %>% 
+    analyze("BMRKR1", afun = my_count_afun) %>%  # This is NOT degenerate!!! BMRKR1 is only placeholder
+    build_table(DM)
+
+tbl
+# why is it missing Older? (xxx)
+# why the core split seems different from inside??? (xxx)
 ```
+There is another way to go. We could prune them out!
+```{r}
+# rtables 6.0.2
+
+tbl <- basic_table(show_colcounts = TRUE) %>% 
+    split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
+                  cutlabels = c("young", "old")) %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>% 
+    summarize_row_groups() %>%  # This is degenerate!!! # we keep it until #689 
+    build_table(DM)
+
+tbl
+
+# Trying with pruning
+prune_table(tbl) #(xxx) what is going on here?
+# It is degenerate -> what to do?
+```
+(xxx) add the pre-proc with z-scoring
