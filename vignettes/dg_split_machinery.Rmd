@@ -747,24 +747,39 @@ basic_table() %>%
     summarize_row_groups(cfun = custom_mean_var("AGE"), 
                          extra_args = list(na.rm  = TRUE), format = "xx.x", 
                          label_fstr = "label %s") %>% 
-    split_rows_by("STRATA1") %>% 
-    analyze("AGE") %>% 
+    # content_extra_args, c_extra_args are different slots!! (xxx)
+    split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>% 
+    analyze("AGE") %>% # check with the extra_args (xxx)
     build_table(DM_ageNA)
+# You can accumulate extra_args down to other splits. It is possible this does not
+#   work. Should it? That is why extra_args lives only in splits (xxx) check if it works
+#   as is. Difficult to find an use case for this. Maybe it could work for the ref_group
+#   info. That does not work with nesting already (fairly sure that it will break stuff).
+#   Does it make sense to have more than one ref_group at any point of the analysis? No docs,
+#   send a warning if users try to nest things with ref_group (that is passed around via
+#   extra_args)
 
 # As we can see that was not possible. What if we now force it a bit?
 my_split_fun <- function(df, spl, .spl_context, ...) {
     spl@extra_args <- list(na.rm = TRUE)
+    # does not work because do_split is not changing the object
+    # the split does not do anything with it
     drop_split_levels(df, spl)
 } # does not work
 basic_table() %>% 
     split_rows_by("ARM") %>% 
     split_rows_by("SEX", split_fun = my_split_fun) %>% 
-    analyze("AGE") %>% 
+    analyze("AGE", inclNAs = TRUE, afun = mean) %>%  # include_NAs is set FALSE 
     build_table(DM_ageNA)
+# extra_args is in available in cols but not in rows, because different columns 
+#  may need it for different col space. Row-wise it seems not necessary.
+#  The only thing that works is adding it to analyze (xxx) check if it is worth adding
+
 # We invite the developer now to test all the tests file of this package with the tracer on
-# therefore -> extra_args is not currently used in splits
-untrace(what = "do_split", 
-        where = asNamespace("rtables"))
+# therefore -> extra_args is not currently used in splits (xxx could be wrong) 
+# could be not being hooked up
+untrace(what = "do_split", where = asNamespace("rtables"))
+
 # Let's try with the other variables identically
 my_tracer <- quote(if (!is.null(vals) || !is.null(labels) || isTRUE(trim)) {
     print("A LOT TO SAY")
