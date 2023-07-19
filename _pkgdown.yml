@@ -28,11 +28,13 @@ articles:
     - custom_appearance
     - advanced_usage
     - format_precedence
+    - example_analysis_coxreg
+    
   - title: For Developers
     desc: Vignettes aimed at package developers
     contents:
     - dg_split_machinery
-    
+
 reference:
 
   - title: Argument Conventions
@@ -131,6 +133,11 @@ reference:
     - clear_indent_mods
     - head
 
+  - title: Validating and Fixing Table Structure
+    contents:
+    - validate_table_struct
+    - sanitize_table_struct
+    - find_degen_struct
     
   - title: Sorting and Pruning
     contents:
@@ -216,11 +223,11 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: Analysis Ready Datasets (ARDs)
-    desc: Functions for generating ARDs from rtables TableTree objects
+  - title: Result Dataframe Functions
+    desc: Functions for generating result data frames from rtables TableTree objects
     contents:
-    - as_ard
-    - ard_specs
+    - as_result_df
+    - result_df_specs
 
   - title: internal
     desc: Internal documented methods
