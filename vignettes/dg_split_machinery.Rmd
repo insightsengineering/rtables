@@ -798,6 +798,11 @@ As we have demonstrated, all the above seems like impossible cases, and are to b
 considered as vestigial and deprecated heritage.
 
 Final examples with `MultiVarSplit` & `CompoundSplit`
+xxx CompoundSplit is used when you have an analyze with multiple variables or MultiVarSplit (nope it is a different thing, it is a single split that generates facets with different variables) makes a special AnalyzeMultiVars (inherits from CompoundSplit). AnalyzeMultiVars is for analyzing the same facets multiple times. MultiVarColSplit works with analyze_colvars, it is a different object. 
+.set_kids_sect_sep adds things between children (can be set from split)
+xxx
+
+xxx file issue for multiple analyze_colvars
 
 Firstly, we want to see how `MultiVarSplit` class behaves for an example case taken from
 `?split_rows_by_multivar`.
@@ -813,12 +818,16 @@ trace(what = "do_split",
 debugonce(rtables:::.apply_split_inner)
 lyt <- basic_table() %>%
     split_cols_by("ARM") %>% 
-    split_rows_by_multivar(c("SEX", "STRATA1")) %>%
-    # split_rows_by("COUNTRY", split_fun = keep_split_levels("PAK")) %>% # xxx for #690 #691
+    split_rows_by_multivar(c("BMRKR1", "BMRKR1"), 
+                           varlabels = c("SD", "MEAN")) %>%
+    split_rows_by("COUNTRY",
+                  split_fun = keep_split_levels("PAK")) %>% # xxx for #690 #691
     summarize_row_groups() %>%
-    analyze(c("AGE", "SEX"))
+    analyze(c("AGE", "SEX")) 
 
 build_table(lyt, DM)
+
+# xxx check empty space on top -> check if it is a bug, file it
 untrace(what = "do_split", 
         where = asNamespace("rtables"))
 ```
@@ -870,8 +879,12 @@ my_count_afun <- function(x, .N_col, .spl_context, ...) {
 
 # Core split
 cuts_core <- function(spl, df, vals, labels, .spl_context) {
-    # browser()
-    young_v <- as.numeric(df[["AGE"]]) < 50
+    # browser() # file an issue xxx
+    # variables that are split on are converted to factor during the original clean-up
+    # cut split are not doing it but it is an exception. xxx 
+    # young_v <- as.numeric(df[["AGE"]]) < 50
+    # current solution:
+    young_v <- as.numeric(as.character(df[["AGE"]])) < 50
     make_split_result(c("young", "old"),
                       datasplit = list(df[young_v,], df[!young_v,]),
                       labels = c("Younger", "Older"))
@@ -891,14 +904,14 @@ tbl <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) %>% 
     split_rows_by("STRATA1") %>% 
     split_rows_by("AGE", split_fun = gen_split) %>%
-    split_rows_by("SEX", split_fun = drop_split_levels, 
-                  child_labels = "hidden") %>% 
-    analyze("BMRKR1", afun = my_count_afun) %>%  # This is NOT degenerate!!! BMRKR1 is only placeholder
+    analyze("SEX") %>% # It is the last step!! No need of BMRKR1 right?
+    # split_rows_by("SEX", split_fun = drop_split_levels, 
+    #               child_labels = "hidden") %>% # close issue #689. would it work for
+    # analyze_colvars? probably (xxx)
+    # analyze("BMRKR1", afun = my_count_afun) %>%  # This is NOT degenerate!!! BMRKR1 is only placeholder
     build_table(DM)
 
 tbl
-# why is it missing Older? (xxx)
-# why the core split seems different from inside??? (xxx)
 ```
 There is another way to go. We could prune them out!
 ```{r}
@@ -916,7 +929,9 @@ tbl <- basic_table(show_colcounts = TRUE) %>%
 tbl
 
 # Trying with pruning
-prune_table(tbl) #(xxx) what is going on here?
+prune_table(tbl) #(xxx) what is going on here? it is degenerate so it has no real leaves
 # It is degenerate -> what to do?
+# The same mechanism is applied in the case of NULL leaves, they are rolled up in the 
+#  table tree
 ```
 (xxx) add the pre-proc with z-scoring
