@@ -1,3 +1,5 @@
+## rtables 0.6.2.9000
+
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
  * Fixed `page_by` labels become missing when only one level exist in the `split_rows_by`.
