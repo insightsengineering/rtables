@@ -1105,7 +1105,7 @@ build_table <- function(lyt, df,
     lyt <- fix_analyze_vis(lyt)
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
     # This check should be added to cinfo and sent everywhere but for the moment
-    # there is little advantage in this as there are no other cases of this checks.
+    # there is little advantage in this as there are no other cases for these checks.
     # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_df")) 
 
     rtpos <- TreePos()
