@@ -185,9 +185,12 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
                  "used for that position.")
         counts <- as.integer(counts)
     }
-
-    if(is.null(alt_counts_df))
+    
+    counts_df_name <- "df"
+    if(is.null(alt_counts_df)){
         alt_counts_df <- df
+        counts_df_name <- "alt_counts_df"
+    }
     calcpos <- is.na(counts)
 
     calccounts <- sapply(cexprs, function(ex) {
@@ -198,7 +201,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
             } else {
                 vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
                 if(is(vec, "try-error"))
-                    stop(sprintf(paste("alt_counts_df (or df) appears",
+                    stop(sprintf(paste(counts_df_name, "appears",
                                        "incompatible with column-split",
                                        "structure. Offending column subset",
                                        "expression: %s\nOriginal error",
