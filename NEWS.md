@@ -1,12 +1,18 @@
-## rtables 0.6.1.9014
+## rtables 0.6.2.9000
 
 ### Enhancements
  * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
  * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations. `.alt_df` gives access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
  * Added check for `.alt_df` that prevents its calculation if not present in analysis functions.
-
-### Bug Fixes
- * Fix major regressions for `page_by` machinery caused by migration to `formatters` 0.5.0 pagination framework.
+ * 
+## rtables 0.6.2
+ * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
+ * Fixed `page_by` labels become missing when only one level exist in the `split_rows_by`.
+ * Fixed a bug when dropping `var` levels but not `lblvar` levels.
+ * Added checks to catch bad labels (with {}) and throw informative error.
+ * Added `qtable` function to create a table with a single top-level structure in both row and column dimensions  involving faceting by 0 or more variables in each.
+ * Added `as_result_df` function to flattern a table into a dataframe.
+ * Added `sanitize_table_struct`, `validate_table_struct`, `find_degen_struct` to support degenerative table rendering.
 
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
