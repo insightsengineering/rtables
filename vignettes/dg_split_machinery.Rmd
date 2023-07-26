@@ -31,7 +31,7 @@ NB: we must remind the reader that `rtables` is still under active development, 
 
 ## Process and Methods
 
-As always, we encourage the reader to familiarize with `vignette("dg_debugging_rtables")` before going further. This document has a general validity, even if it has been tailored to study and understand complex packages like `rtables`.
+As always, we encourage the reader to familiarize with `vignette("dg_debug_rtables")` before going further. This document has a general validity, even if it has been tailored to study and understand complex packages like `rtables`.
 
 Here, we explore and study the split machinery with a growing amount of complexity, always following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
 
