@@ -1,0 +1,186 @@
+---
+title: "Exploratory Analysis"
+author: "Jana Stoilova, Adrian Waddell and Gabriel Becker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exploratory Analysis}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+
+## Introduction
+
+In this vignette, we would like to introduce how `qtable()` can be used to 
+easily create cross tabulations for exploratory data analysis. `qtable()` is
+an extension of `table()` from base R and can do much beyond creating two-way 
+contingency tables. The function has a simple to use interface while internally 
+it builds layouts using the `rtables` framework.
+
+## Getting Started
+
+Load packages used in this vignette:
+```{r, message=FALSE}
+library(rtables)
+library(dplyr)
+```
+
+Let's start by seeing what `table()` can do:
+```{r}
+table(ex_adsl$ARM)
+table(ex_adsl$SEX, ex_adsl$ARM)
+```
+
+We can easily recreate the cross-tables above with `qtable()` by specifying a 
+data.frame with variable(s) to tabulate. The first variable controls how to 
+split the data by rows. Optionally, a second variable can be used to control how 
+to define the column facets of the table.
+```{r}
+qtable(ex_adsl, "ARM")
+qtable(ex_adsl, row_vars = "ARM", col_vars = "SEX")
+```
+
+Aside from the display style, the main difference is that `qtable()` will
+add (N=xx) in the table header by default. This can be removed with 
+`show_colcounts`.
+
+```{r}
+qtable(ex_adsl, "ARM", show_colcounts = FALSE)
+```
+
+## Nested Tables
+
+Providing more than one variable name for the row or column structure in 
+`qtable()` will create a nested table. Arbitrary nesting is supported in each
+dimension. 
+
+```{r}
+qtable(ex_adsl, row_vars = c("SEX", "STRATA1"), col_vars = c("ARM", "STRATA2"))
+```
+
+Note that by default, unobserved factor levels within a facet are not part of
+the table. This can be modified with `drop_levels`. The code below adds a row 
+of 0s for `STRATA1` level "B" nested under the `SEX` level "UNDIFFERENTIATED".
+
+```{r}
+qtable(ex_adsl, row_vars = c("SEX", "STRATA1"), col_vars = c("ARM", "STRATA2"), drop_levels = FALSE)
+```
+
+In contrast, `table()` cannot return a nested table. Rather it produces a list
+of contingency tables when more than two variables are used as inputs. 
+```{r}
+table(ex_adsl$SEX, ex_adsl$STRATA1, ex_adsl$ARM, ex_adsl$STRATA2) 
+```
+
+With some help from `stats::ftable()` the nested structure can be achieved in
+two steps.
+```{r}
+t1 <- ftable(ex_adsl[, c("SEX", "STRATA1", "ARM", "STRATA2")]) 
+ftable(t1, row.vars = c("SEX", "STRATA1"))
+```
+
+## NA Values
+
+So far all the examples we have seen used counts to summarize the data in each
+table cell as this is the default analysis performed by `qtable()`. Internally,
+a single variable specified by `avar` is used to generate 
+the counts in the table. The default is the first variable in `data` which is 
+"STUDYID" in the case of `ex_adsl`.
+
+Let's see what happens when we introduce some `NA` values into the analysis
+variable:
+```{r}
+tmp_adsl <- ex_adsl
+tmp_adsl[[1]] <- NA
+
+qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
+```
+The resulting table is empty because all the values of the analysis variable are
+`NA`. Remember to always pre-process the data for `NA` values when doing
+quick exploratory analysis and using the default counts aggregate function to 
+avoid incorrect results.
+
+## Custom Aggregation
+
+A powerful feature of `qtable()` is that the user can define the type of
+function used to summarize the data in each facet. We can specify the type of 
+analysis summary using the `afun` argument:
+
+```{r}
+qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = mean)
+```
+
+Note that the analysis variable `AGE` and analysis function name are included
+in the top right header of the table. 
+
+If the analysis function returns a vector of 2 or 3 elements, the result is displayed in 
+multi-valued single cells. 
+```{r}
+qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = range)
+```
+
+If you want to use an analysis function with more than 3 summary elements,
+you can use a list. In this case, the values are displayed in the table as 
+multiple stacked cells within each face. If the list elements are named, the
+names are used as row labels.
+
+```{r}
+fivenum2 <- function(x) {
+    setNames(as.list(fivenum(x)), c("min","Q1","MED","Q3","max"))
+}
+qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum2)
+```
+
+More advanced formatting can be controlled with `in_rows()`. See function
+documentation for more details.
+```{r}
+meansd_range = function(x) {
+    in_rows(
+        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+        "Range" = rcell(range(x), format = "xx - xx")
+    )
+}
+
+qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = meansd_range)
+```
+
+## Table Decorations
+
+Tables generated with `qtable()` can include annotations such as titles, 
+subtitles and footnotes like so:
+```{r}
+qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
+       title = "Strata 2 Summary", 
+       subtitle = paste0("STUDY ", ex_adsl$STUDYID[1]), 
+       main_footer = paste0("Date: ", as.character(Sys.Date())))
+
+```
+
+## TODO
+-  summarize row groups
+
+## Summary
+
+Here is what we have learned in this vignette about `qtable()`:
+
+* Can replace and extend uses of `table()`
+* Useful for exploratory data analysis
+* Complex tables will require the full `rtables` layout framework
+
+As the intended use of `qtable()` is for exploratory data analysis, there is 
+limited functionality for building complex tables. For details on how to get
+started with the core `rtables` layout functionality start with the [`introduction`](https://insightsengineering.github.io/rtables/main/articles/introduction.html)
+vignette.
