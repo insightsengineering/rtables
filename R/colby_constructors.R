@@ -868,7 +868,8 @@ split_rows_by_cutfun <- function(lyt, var,
 #'     subset of that row's `full_parent_df` for the column currently being
 #'     created by the analysis function}
 #'   \item{cur_col_expr}{List of current column expression. This may be used to 
-#'     filter `.alt_df` or any external data by column}
+#'     filter `.alt_df_row` or any external data by column. Filtering `.alt_df_row`
+#'     by columns produces `.alt_df`.}
 #'   \item{cur_col_n}{integer column containing the observation counts for that
 #'     split}
 #'   \item{cur_col_split}{Current column split names. This is recovered from the
@@ -921,9 +922,15 @@ NULL
 #'     within the reference column}
 #'   \item{.spl_context}{data.frame, each row gives information about a
 #'     previous/'ancestor' split state. See \code{\link{spl_context}}}
-#'   \item{.alt_df}{data.frame, i.e. the `alt_count_df` after 
+#'   \item{.alt_df_row}{data.frame, i.e. the `alt_count_df` after 
 #'     row splitting. It can be used with `.all_col_exprs` and `.spl_context`
-#'     information to retrieve current faceting, but for `alt_count_df`.}
+#'     information to retrieve current faceting, but for `alt_count_df`.
+#'     It can be an empty table if all the entries are filtered out.}
+#'   \item{.alt_df}{data.frame, `.alt_df_row` but filtered by columns expression.
+#'     This data present the same faceting of main data `df`. This also filters
+#'     `NAs` out if related parameters are set to (e.g. `inclNAs` in [analyze]). 
+#'     Similarly to `.alt_df_row`, it can be an empty table if all the entries 
+#'     are filtered out.}
 #'   \item{.all_col_exprs}{list of expressions. Each of them represents a 
 #'     different column splitting.}
 #'   \item{.all_col_counts}{vector of integers. Each of them represents the global
@@ -936,7 +943,7 @@ NULL
 #'  example`.ref_group` will be missing if no baseline is previously defined
 #'  during data splitting (via `ref_group` parameters in, e.g., [split_rows_by]).
 #'  Similarly, if no `alt_counts_df` is provided into [build_table], 
-#'  `.alt_df` will not be present.
+#'  `.alt_df_row` and `.alt_df` will not be present.
 #'
 #' @name additional_fun_params
 NULL
@@ -984,8 +991,6 @@ NULL
 #' if} present in the formals will be passed to the function by the tabulation
 #' machinery. These are listed and described in [additional_fun_params].
 #' 
-#' @inherit split_cols_by return
-#'
 #' @note None of the arguments described in the Details section
 #' can be overridden via extra_args or when calling
 #' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can

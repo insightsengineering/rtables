@@ -36,7 +36,8 @@ name, constructed by pasting the column path together}
 subset of that row's \code{full_parent_df} for the column currently being
 created by the analysis function}
 \item{cur_col_expr}{List of current column expression. This may be used to
-filter \code{.alt_df} or any external data by column}
+filter \code{.alt_df_row} or any external data by column. Filtering \code{.alt_df_row}
+by columns produces \code{.alt_df}.}
 \item{cur_col_n}{integer column containing the observation counts for that
 split}
 \item{cur_col_split}{Current column split names. This is recovered from the

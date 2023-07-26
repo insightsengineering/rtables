@@ -35,9 +35,15 @@ and only required/meaningful if a \code{ref_group} column has been defined}
 within the reference column}
 \item{.spl_context}{data.frame, each row gives information about a
 previous/'ancestor' split state. See \code{\link{spl_context}}}
-\item{.alt_df}{data.frame, i.e. the \code{alt_count_df} after
+\item{.alt_df_row}{data.frame, i.e. the \code{alt_count_df} after
 row splitting. It can be used with \code{.all_col_exprs} and \code{.spl_context}
-information to retrieve current faceting, but for \code{alt_count_df}.}
+information to retrieve current faceting, but for \code{alt_count_df}.
+It can be an empty table if all the entries are filtered out.}
+\item{.alt_df}{data.frame, \code{.alt_df_row} but filtered by columns expression.
+This data present the same faceting of main data \code{df}. This also filters
+\code{NAs} out if related parameters are set to (e.g. \code{inclNAs} in \link{analyze}).
+Similarly to \code{.alt_df_row}, it can be an empty table if all the entries
+are filtered out.}
 \item{.all_col_exprs}{list of expressions. Each of them represents a
 different column splitting.}
 \item{.all_col_counts}{vector of integers. Each of them represents the global
@@ -51,5 +57,5 @@ present in the tabulation machinery, it will be as if missing. For
 example\code{.ref_group} will be missing if no baseline is previously defined
 during data splitting (via \code{ref_group} parameters in, e.g., \link{split_rows_by}).
 Similarly, if no \code{alt_counts_df} is provided into \link{build_table},
-\code{.alt_df} will not be present.
+\code{.alt_df_row} and \code{.alt_df} will not be present.
 }

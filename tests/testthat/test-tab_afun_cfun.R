@@ -37,7 +37,7 @@ test_that(".spl_context contains information about the column split", {
     expect_equal(tbl[4, 3, drop = TRUE], sd(DM_B_F$BMRKR1))
 })
 
-test_that(".spl_context contains information about combo counts", {
+test_that(".spl_context and afun extra parameters contain information about combo counts", {
     ## Fix for https://github.com/insightsengineering/rtables/issues/517
     combodf <- tribble(
         ~valname, ~label, ~levelcombo, ~exargs,
@@ -46,8 +46,14 @@ test_that(".spl_context contains information about combo counts", {
     )
     
     n_wrapper_alt_df <- function(alt_counts_df) {
-        function(x, .spl_context, .N_col, .alt_df, .all_col_exprs, 
-                 .all_col_counts, ...) { 
+        function(x, 
+                 .spl_context, 
+                 .N_col, 
+                 .alt_df_row, 
+                 .alt_df, 
+                 .all_col_exprs, 
+                 .all_col_counts, 
+                 ...) { 
             
             cur_col <- paste0(.spl_context$cur_col_split_val[[1]], collapse = ".")
             
@@ -62,24 +68,25 @@ test_that(".spl_context contains information about combo counts", {
                 .spl_context$cur_col_id[[1]] == "All Patients 2") {
                 in_rows("n" = .N_col, .formats = "xx")
             } else {
+                # Needed to find the names of columns we need that are not the current one
                 AC_colname <- vapply(c("A: Drug X", "C: Combination"),
                                      function(nmi) {
                                          paste0(c(nmi, 
                                                   .spl_context$cur_col_split_val[[1]][2]),
                                                 collapse = ".")
                                      }, FUN.VALUE = character(1))
-                
+                browser()
                 # Use of cexpr
-                alt_df1c <- .alt_df %>% 
+                alt_df1c <- .alt_df_row %>% 
                     filter(eval(.all_col_exprs[[AC_colname[1]]]))
-                alt_df2c <- .alt_df %>% 
+                alt_df2c <- .alt_df_row %>% 
                     filter(eval(.all_col_exprs[[AC_colname[2]]]))
                 
                 # Normal execution - no use of cexpr
-                alt_df1 <- .alt_df %>% 
+                alt_df1 <- .alt_df_row %>% 
                     filter(ARM == "A: Drug X",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
-                alt_df2 <- .alt_df %>% 
+                alt_df2 <- .alt_df_row %>% 
                     filter(ARM == "C: Combination",
                            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
                 
@@ -147,9 +154,38 @@ test_that(".spl_context contains information about combo counts", {
     expect_identical(nrow_manual, spl_ctx_cnt)
 })
 
+test_that("Triggering warning in .alt_df for empty table", {
+    df_test <- tibble(col_split = factor(letters[1:3]), 
+                 row_split = factor(LETTERS[10:12]), 
+                 num_val = 1:3)
+    alt_df <- df_test %>% slice(2:3) %>% mutate(col_split = letters[4:5])
+    
+    lyt <- basic_table(show_colcounts = TRUE) %>% 
+        split_rows_by("row_split") %>% 
+        split_cols_by("col_split")
+    
+    # No afun with .alt_df
+    lyt_f <- lyt %>% analyze("num_val")
+    expect_silent(lyt_f %>% build_table(df_test, alt_df))
+    
+    # afun tests
+    afun <- function(x, .spl_context, .alt_df, .alt_df_row) {
+        if (.spl_context$value[[2]] == "J") {
+            stopifnot(nrow(.alt_df) == nrow(.alt_df_row), nrow(.alt_df) == 0)
+        } else {
+            stopifnot(nrow(.alt_df) == 0, nrow(.alt_df_row) > 0)
+        }
+        mean(x)
+    }
+    
+    lyt_f <- lyt %>% analyze("num_val", afun = afun)
+    expect_warning(lyt_f %>% build_table(df_test, alt_df),
+                   "Subsetting alt_count_df as df brought to an empty table. *")
+})
+
 test_that("Error localization for missing split variable when done in alt_count_df", {
     # Error we want to happen
-    afun_tmp <- function(x, .alt_df, ...) mean(x)
+    afun_tmp <- function(x, .alt_df_row, ...) mean(x)
     lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
     expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
@@ -179,23 +215,26 @@ test_that("Error localization for missing split variable when done in alt_count_
 
 context("Content functions (cfun)")
 
-test_that(".alt_df appears in cfun but not in afun.", {
+test_that(".alt_df_row appears in cfun but not in afun.", {
     # Adding STRATA2 col to DM for alt_counts_df col split
     alt_tmp <- DM %>% left_join(ex_adsl %>% 
                                     mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>% 
                                     select(ID, STRATA2))
     
     afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
-    cfun_tmp <- function(x, .alt_df, labelstr, .N_col, 
+    cfun_tmp <- function(x, labelstr, 
+                         .alt_df_row, 
+                         .alt_df, 
+                         .N_col, 
                          .spl_context,
                          .all_col_exprs,
                          .all_col_counts,
                          ...) {
-        if (!missing(.alt_df)) {
-            # .alt_df is only row splitted matter
-            stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_df))
+        if (!missing(.alt_df_row)) {
+            # .alt_df_row is only row-splitted matter
+            stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_df_row))
             
-            # Filtered column number of elemens correspond to .N_col
+            # Filtered column number of elements correspond to .N_col
             stopifnot(nrow(alt_tmp %>% 
                                filter(eval(.spl_context$cur_col_expr[[1]]))) == .N_col)
         } else {

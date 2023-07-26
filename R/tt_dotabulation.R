@@ -6,6 +6,7 @@ match_extra_args <- function(f,
                             .all_col_counts,
                             .var,
                             .ref_group = NULL,
+                            .alt_df_row = NULL,
                             .alt_df = NULL,
                             .ref_full = NULL,
                             .in_ref_col = NULL,
@@ -30,6 +31,8 @@ match_extra_args <- function(f,
         possargs <- c(possargs, list(.var = .var))
     if(!is.null(.ref_group))
         possargs <- c(possargs, list(.ref_group = .ref_group))
+    if(!is.null(.alt_df_row))
+        possargs <- c(possargs, list(.alt_df_row = .alt_df_row))
     if(!is.null(.alt_df))
         possargs <- c(possargs, list(.alt_df = .alt_df))
     if(!is.null(.ref_full))
@@ -72,11 +75,13 @@ match_extra_args <- function(f,
              " unexpected split input. Contact the maintainer.") # nocov
     }
     
+    # Extract all the functions in the layout
     fnc_vec <- sapply(tmp_splvec, function(spl_i) {
         if (is(spl_i, "VAnalyzeSplit")) analysis_fun(spl_i)
         else content_fun(spl_i)
     })
     
+    # For each parameter, check if it is called
     sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
 }
 
@@ -101,6 +106,24 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
         spl_context$cur_col_n <- vapply(col_parent_inds, sum, 1L)
         spl_context$cur_col_split <- list(cpath[seq(1, length(cpath), 2)])
         spl_context$cur_col_split_val <- list(cpath[seq(2, length(cpath), 2)])
+    }
+    
+    # Making .alt_df from alt_dfpart (i.e. .alt_df_row)
+    if (NROW(alt_dfpart) > 0) {
+        alt_dfpart_fil <- alt_dfpart[eval(csub, envir = alt_dfpart), , drop = FALSE]
+        if (!is.null(col) && !inclNAs) {
+            alt_dfpart_fil <- alt_dfpart_fil[!is.na(alt_dfpart_fil[[col]]), ,
+                                             drop = FALSE]
+        }
+        if (NROW(alt_dfpart_fil) == 0) {
+            warning("Subsetting alt_count_df as df brought to an empty table. ",
+                    "Therefore, .alt_df will be empty if used. ",
+                    "If also .alt_df_row is empty, the applied row split is the ",
+                    "cause, otherwise it is the columnwise filtering and/or the ",
+                    "removal of NAs.")
+        }
+    } else {
+        alt_dfpart_fil <- alt_dfpart
     }
     
     ## workaround for https://github.com/insightsengineering/rtables/issues/159
@@ -140,7 +163,8 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
                               .all_col_counts = all_col_counts,
                               .var = col,
                               .ref_group = baselinedf,
-                              .alt_df = alt_dfpart,
+                              .alt_df_row = alt_dfpart,
+                              .alt_df = alt_dfpart_fil,
                               .ref_full = fullrefcoldat,
                                   .in_ref_col = inrefcol,
                               .N_row = NROW(dfpart),
@@ -704,7 +728,6 @@ setMethod(".make_split_kids", "Split",
     ## rtables tabulation works
     ## (a) will only help if analyses that use baseline
     ## info are mixed with those who don't.
-    # browser()
     newbl_raw <- lapply(baselines, function(dat) {
         
         # If no ref_group is specified
@@ -755,10 +778,11 @@ setMethod(".make_split_kids", "Split",
              " in each split. Contact the maintainer.") # nocov
     }
     
-    acdf_param <- .check_afun_cfun_params(c(spl, splvec), ".alt_df")
+    acdf_param <- .check_afun_cfun_params(c(spl, splvec), 
+                                          c(".alt_df", ".alt_df_row"))
     
     # Apply same split for alt_counts_df
-    if (!is.null(alt_df) && acdf_param) {
+    if (!is.null(alt_df) && any(acdf_param)) {
         alt_dfpart <- tryCatch(do_split(spl, alt_df, 
                                         spl_context = spl_context)[["datasplit"]],
                                error = function(e) e)
@@ -1106,7 +1130,7 @@ build_table <- function(lyt, df,
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
     # This check should be added to cinfo and sent everywhere but for the moment
     # there is little advantage in this as there are no other cases for these checks.
-    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_df")) 
+    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_df", ".alt_df_row")) 
 
     rtpos <- TreePos()
     cinfo <- create_colinfo(lyt, df, rtpos,
