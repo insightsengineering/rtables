@@ -20,5 +20,23 @@ Any code or prose which appears in a version of this vignette on the `main` bran
 
 # Tabulation
 
-Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We assume any reader is already familiar with the documentation related to `build_table`. 
+Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We will sometimes see functions and methods that are present in other files like `colby_construction.R`. We assume any reader is already familiar with the documentation related to `build_table`. Also, we suggest reading first the vignette regarding the split machinery (`vignette("dg_split_machinery")`), as it is instrumental in understanding how the layout object, which is built principally of splits, is tabulated when data is applied.
 
+This time, we enter in _medias res_ into `build_table` to see how it is meant to work.
+
+```{r, eval=FALSE}
+# rtables 6.2.0
+debugonce(build_table)
+
+# A very simple layout
+lyt <- basic_table() %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by("SEX", split_fun = drop_split_levels) %>% 
+    split_cols_by("ARM") %>% 
+    analyze("BMRKR1")
+# lyt must be a PreDataTableLayouts object
+is(lyt, "PreDataTableLayouts")
+
+lyt %>% build_table(DM)
+
+```
