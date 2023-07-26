@@ -14,6 +14,11 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+## Disclaimer
+
+Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`. (xxx we should insert it automatically)
 
 # Tabulation
+
+Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We assume any reader is already familiar with the documentation related to `build_table`. 
 
