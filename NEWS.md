@@ -1,5 +1,13 @@
-## rtables 0.6.1.9014
- * fix major regressions for page_by machinery caused by migration to formatters 0.5.0 pagination framework.
+## rtables 0.6.2.9000
+
+## rtables 0.6.2
+ * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
+ * Fixed `page_by` labels become missing when only one level exist in the `split_rows_by`.
+ * Fixed a bug when dropping `var` levels but not `lblvar` levels.
+ * Added checks to catch bad labels (with {}) and throw informative error.
+ * Added `qtable` function to create a table with a single top-level structure in both row and column dimensions  involving faceting by 0 or more variables in each.
+ * Added `as_result_df` function to flattern a table into a dataframe.
+ * Added `sanitize_table_struct`, `validate_table_struct`, `find_degen_struct` to support degenerative table rendering.
 
 ## rtables 0.6.1
  * Improved resilience of pagination machinery (`paginate_table`) by generalizing parameters' defaults (`cpp`, `lpp`, and `font_size`).
