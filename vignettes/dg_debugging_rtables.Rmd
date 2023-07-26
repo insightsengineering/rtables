@@ -1,0 +1,96 @@
+---
+title: "Debugging in `rtables` and beyond"
+author: "Davide Garolini"
+date: '`r Sys.Date()`'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rtables Advanced Usage}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Debugging in `rtables` and beyond
+
+This is a not-so-short not-comprehensive guide to debugging `rtables`. It is to be considered, though, of general validity and of personal use.
+
+-=-=-=- Notes from meeting
+Debugging:
+-> easy to find the problem
+-> never write clever code, impossible to debug
+
+* Coding Error, code does not do what you intended -> Bug in the punch card
+* Unexpected Input. Defensive programming FAIL FAST FAIL LOUD -> useful and not too consuming
+* Bug in Dependency -> never use 
+
+e.g. of FFFL
+as close as possible to the source
+* bad inputs should be found very early
+
+
+Worst: silently giving incorrect results
+
+common things that we can catch early
+missing values/column length == 0 or length > 1
+
+ROBUSTNESS: refuse to do stuff that can be very problematic
+
+WHAT TO DO
+* Read Error Messages
+debugcall you can add the signature (formals)
+trace is powerful because you can add the reaction)
+tracer is very good, at where it happens
+
+options(error=recover) is the best way to debug
+core tool when developing/debugging
+
+dump.frames and debugger
+it saves it to a file or an object and then you call debugger to step in it
+as you did recover. You save the global form
+
+warn global option
+<0 ignored
+0 top level function call
+1 immediately as they occur
+>=2 throws errors
+
+<<- for recover or debugger gives it to the global environment
+
+lo-fi debugging
+PRINT / CAT
+print position of a function you get to then you get to a point where it breaks
+
+comment blocks -> does not work with pipes (use identity() it is a step
+that does nothing but does not break the pipes)
+
+browser bombing
+
+regression tests
+almost every bug should become a regression test
+
+debugging with pipes
+-> pipes are better to write code but horrible to debug
+
+T pipe %T>% does print it midway
+
+debug_pipe -> it is like the T pipe going into browser()
+
+Shiny debugging is more difficult due to reactivity
+
+DO NOT BE CLEVER WITH CODE - ONLY IF YOU HAVE TO, CLEVER IS ALSO SUBJECTIVE 
+AND IT WILL CHANGE WITH TIME
+-=-=-=-
+
+
+We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by using `browser()` and `debugonce()` on internal and exported functions (`rtables:::` or `rtables::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
+
+* `methods(generic_function)`: This function lists the methods that are available for a generic function. Specifically for `S4` generic functions, `showMethods(generic_function)` is giving a more detailed information about each method (e.g. inheritance). 
+* `class(object)`: This function returns the class of an object. If the class is not one of the built-in classes in R, you can use this information to search for its documentation and examples. Indeed, `help(class)` may be informative, as it will call the documentation of the specific class. Similarly, the `?` operator will call the disambiguation page that delivers you to different `S4` methods. For `S3` methods it is necessary to postfix the class name with a dot (e.g. `?summary.lm`).
+* `getClass(class)`: This describes in a compact way the type of class, the slots that it has, and the relationships that it may have with the other classes that may inherit or be inherited by it. With `getClass(object)`, instead, we can see to which values the slots of the object are assigned. It is possible to use `str(object, max.level = 2)` to see a less formal and more compact descriptions of the slots, but it may be problematic when there are one or more objects in the class slots. Hence, the maximum number of level should always be limited to 2 or 3 (`max.level = 2`). Similarly, `attributes()` can be used to retrieve some information, but we need to remember that storing important variables in this way is not encouraged. Information regarding the type of class can be retrieved with `mode()` and indirectly by `summary()` and `is.S4()`.
+*`getAnywhere(function)` is very useful to get the source code of internal functions and specific generics. It works very well with `S3` methods, and will in any case display for each of the found methods, its relevant namespace. Similarly, `getMethod(S4_generic, S4_class)` can retrieve the source code of `S4` methods that are specific to a class.
+* `eval(debugcall(generic_function(obj)))`: this is a very useful way to browser a `S4` method defined specifically for a defined object without having to manually insert `browser()` into the code. It is also possible to do similarly with R > 3.4.0 where `debug*()` calls can have the triggering signature (class) specified. Both of these are modern and simplified wrappers of tracing function `trace()`.
