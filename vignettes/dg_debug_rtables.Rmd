@@ -20,9 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 This is a not-so-short not-comprehensive guide to debugging `rtables`. It is to be considered, though, of general validity and of personal use.
 
 -=-=-=- Notes from meeting
-Debugging:
--> easy to find the problem
--> never write clever code, impossible to debug
+In general code must be in a way that:
+-> it is easy to read and find problems
+-> it is not clever, because it is impossible to debug
 
 * Coding Error, code does not do what you intended -> Bug in the punch card
 * Unexpected Input. Defensive programming FAIL FAST FAIL LOUD -> useful and not too consuming

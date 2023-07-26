@@ -33,8 +33,9 @@ articles:
   - title: For Developers
     desc: Vignettes aimed at package developers
     contents:
-    - dg_split_machinery
     - dg_debug_rtables
+    - dg_split_machinery
+    - dg_tabulation
 
 reference:
 
