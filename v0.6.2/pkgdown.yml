@@ -1,0 +1,23 @@
+pandoc: 3.1.1
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  advanced_usage: advanced_usage.html
+  baseline: baseline.html
+  clinical_trials: clinical_trials.html
+  custom_appearance: custom_appearance.html
+  example_analysis_coxreg: example_analysis_coxreg.html
+  format_precedence: format_precedence.html
+  introduction: introduction.html
+  manual_table_construction: manual_table_construction.html
+  sorting_pruning: sorting_pruning.html
+  split_functions: split_functions.html
+  subsetting_tables: subsetting_tables.html
+  tabulation_concepts: tabulation_concepts.html
+  tabulation_dplyr: tabulation_dplyr.html
+  title_footer: title_footer.html
+last_built: 2023-07-27T11:56Z
+urls:
+  reference: https://insightsengineering.github.io/rtables/v0.6.2/reference
+  article: https://insightsengineering.github.io/rtables/v0.6.2/articles
+
