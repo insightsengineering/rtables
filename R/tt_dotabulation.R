@@ -1375,7 +1375,7 @@ guess_format <- function(val) {
 
     if(.takes_df(afun)) {
         function(df, .spl_context, ...) {
-            if(!is.null(lbls) && is.na(lbls))
+           if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
                 lbls <- tail(.spl_context$value, 1)
             if(".spl_context" %in% names(formals(afun)))
                 res <- afun(df = df, .spl_context = .spl_context, ...)
@@ -1384,16 +1384,19 @@ guess_format <- function(val) {
             if(is(res, "RowsVerticalSection")) {
                 ret <- res
             } else {
-                if(!is.list(res))
+                if(!is.list(res)) {
                     ret <- rcell(res, label = lbls, format = guess_format(res))
-                else
+                } else {
+                    if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+                        names(res) <- lbls
                     ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
+                }
             }
             ret
         }
     } else {
         function(x, .spl_context, ...) {
-            if(!is.null(lbls) && is.na(lbls))
+            if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
                 lbls <- tail(.spl_context$value, 1)
             if(".spl_context" %in% names(formals(afun)))
                 res <- afun(x = x, .spl_context = .spl_context, ...)
@@ -1402,10 +1405,13 @@ guess_format <- function(val) {
             if(is(res, "RowsVerticalSection")) {
                 ret <- res
             } else {
-                if(!is.list(res))
+                if(!is.list(res)) {
                     ret <- rcell(res, label = lbls, format = guess_format(res))
-                else
+                } else {
+                    if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+                        names(res) <- lbls
                     ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
+                }
             }
             ret
         }
@@ -1484,25 +1490,26 @@ qtable <- function(data,
                    drop_levels = TRUE,
                    ...) {
 
-    if(is.null(row_labels)) {
-        subafun <- substitute(afun)
-        if(is.name(subafun) &&
-           is.function(afun) &&
-           ## this is gross. basically testing
-           ## if the symbol we have corresponds
-           ## in some meaningful way to the function
+    subafun <- substitute(afun)
+    if(is.name(subafun) &&
+       is.function(afun) &&
+       ## this is gross. basically testing
+       ## if the symbol we have corresponds
+       ## in some meaningful way to the function
            ## we will be calling.
-           identical(mget(as.character(subafun),
-                          mode = "function",
-                          envir = parent.frame(1),
-                          ifnotfound = list(NULL),
-                          inherits = TRUE
-                          )[[1]], afun)) {
-            row_labels <- paste(avar, as.character(subafun), sep = " - ")
-        } else {
-            row_labels <- if(is.null(avar)) "count" else avar
-        }
+       identical(mget(as.character(subafun),
+                      mode = "function",
+                      envir = parent.frame(1),
+                      ifnotfound = list(NULL),
+                      inherits = TRUE
+                      )[[1]], afun)) {
+        dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
+    } else {
+        dflt_row_lbl <- if(is.null(avar)) "count" else avar
     }
+
+    if(is.null(row_labels))
+        row_labels <- dflt_row_lbl
     if(is.null(afun))
         afun <- count
 
@@ -1526,10 +1533,12 @@ qtable <- function(data,
             lyt <- summarize_row_groups(lyt)
     }
 
+    tleft <- if(multirow || length(row_vars) > 0) dflt_row_lbl else character()
     if(length(row_vars) > 0 ) {
-        lyt <- append_topleft(lyt, row_labels)
-
         if(!multirow) {
+            ## in the single row in splitting case, we use the row label as the topleft
+            ## and the split values as the row labels for a more compact apeparance
+            tleft <- row_labels
             row_labels <- NA_character_
             lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL, child_labels = "hidden")
         } else {
@@ -1540,6 +1549,7 @@ qtable <- function(data,
     }
     inner_afun <- .quick_afun(afun, row_labels)
     lyt <- analyze(lyt, avar, afun = inner_afun, extra_args = list(...))
+    lyt <- append_topleft(lyt, tleft)
 
     build_table(lyt, data)
 }
