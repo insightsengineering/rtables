@@ -23,7 +23,7 @@ position with the columns during tabulation. This functions accepts the same
 parameters as \link{analyze}'s \code{afun}. For further information see
 \link{additional_fun_params}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 

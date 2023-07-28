@@ -10,11 +10,11 @@ label_at_path(tt, path)
 label_at_path(tt, path) <- value
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{path}{character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+\code{tabletree}. Each element represents a subsequent choice amongst the children
 of the previous choice.}
 
 \item{value}{The new value}
@@ -27,7 +27,7 @@ If \code{path} resolves to a single row, the label for that row
 is retrieved or set. If, instead, \code{path} resolves to a subtable,
 the text for the row-label associated with that path is retrieved
 or set. In the subtable case, if the label text is set to a non-NA
-value, the labelrow will be set to visible, even if it was not before.
+value, the \code{labelrow} will be set to visible, even if it was not before.
 Similarly, if the label row text for a subtable is set to NA,
 the label row will bet set to non-visible, so the row will not
 appear at all when the table is printed.

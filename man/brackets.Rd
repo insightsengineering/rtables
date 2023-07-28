@@ -11,7 +11,7 @@
 \S4method{[}{VTableTree,logical,logical}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
-\item{x}{TableTree}
+\item{x}{\code{TableTree}}
 
 \item{i}{index}
 

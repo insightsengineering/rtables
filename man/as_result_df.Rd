@@ -7,7 +7,7 @@
 as_result_df(tt, spec = "v0_experimental", ...)
 }
 \arguments{
-\item{tt}{VTableTree. The table.}
+\item{tt}{\code{VTableTree}. The table.}
 
 \item{spec}{character(1). The specification to use to
 extract the result data frame. See details}

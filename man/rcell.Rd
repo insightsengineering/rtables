@@ -55,7 +55,7 @@ for currently supported alignments.}
 \item{format_na_str}{character(1). String which should be displayed when
 formatted if this cell's value(s) are all NA.}
 
-\item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
+\item{is_ref}{logical(1).  Are  we  in  the reference  column  (i.e.
 .in_ref_col should be passed to this argument)}
 
 \item{refval}{ANY. Value to use when in the reference column. Defaults

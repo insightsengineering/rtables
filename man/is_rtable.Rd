@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{is_rtable}
 \alias{is_rtable}
-\title{Check if an object is a valid rtable}
+\title{Check if an object is a valid \code{rtable}}
 \usage{
 is_rtable(x)
 }
@@ -13,7 +13,7 @@ is_rtable(x)
 \code{TRUE} if \code{x} is a formal Table object, \code{FALSE} otherwise.
 }
 \description{
-Check if an object is a valid rtable
+Check if an object is a valid \code{rtable}
 }
 \examples{
 is_rtable(build_table(basic_table(), iris))

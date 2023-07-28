@@ -1,6 +1,6 @@
 
 
-#' Check if an object is a valid rtable
+#' Check if an object is a valid `rtable`
 #'
 #' @param x an object
 #'

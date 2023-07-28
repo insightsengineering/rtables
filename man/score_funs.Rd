@@ -3,14 +3,14 @@
 \name{cont_n_allcols}
 \alias{cont_n_allcols}
 \alias{cont_n_onecol}
-\title{Score functions for sorting TableTrees}
+\title{Score functions for sorting \code{TableTrees}}
 \usage{
 cont_n_allcols(tt)
 
 cont_n_onecol(j)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{j}{numeric(1). Number of column used for scoring.}
@@ -20,7 +20,7 @@ A single numeric value indicating score according to the relevant
 metric for \code{tt}, to be used when sorting.
 }
 \description{
-Score functions for sorting TableTrees
+Score functions for sorting \code{TableTrees}
 }
 \seealso{
 For examples and details please read main documentation

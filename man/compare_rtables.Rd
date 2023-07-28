@@ -13,9 +13,9 @@ compare_rtables(
 )
 }
 \arguments{
-\item{object}{rtable to test}
+\item{object}{\code{rtable} to test}
 
-\item{expected}{rtable expected}
+\item{expected}{\code{rtable} expected}
 
 \item{tol}{numerical tolerance}
 
