@@ -907,9 +907,9 @@ NULL
 #'   \item{.N_total}{overall N (all observation count, defined as sum of column
 #'     counts) for the tabulation}
 #'   \item{.N_row}{row-wise N (row group count) for the group of observations
-#'     being analyzed (ie with no column-based subsetting)}
+#'     being analyzed (i.e. with no column-based subsetting)}
 #'   \item{.df_row}{data.frame for observations in the row group being analyzed
-#'     (ie with no column-based subsetting)}
+#'     (i.e. with no column-based subsetting)}
 #'   \item{.var}{variable that is analyzed}
 #'   \item{.ref_group}{data.frame or vector of subset corresponding to the
 #'     `ref_group` column including subsetting defined by row-splitting.
@@ -989,7 +989,7 @@ NULL
 #' In addition to differentiation on the first argument, the analysis function
 #' can optionally accept a number of other parameters which, \emph{if and only
 #' if} present in the formals will be passed to the function by the tabulation
-#' machinery. These are listed and described in [additional_fun_params].
+#' machinery. These are listed and described in [`additional_fun_params`].
 #' 
 #' @note None of the arguments described in the Details section
 #' can be overridden via \code{extra_args} or when calling
@@ -1115,8 +1115,8 @@ get_acolvar_vars <- function(lyt) {
 #' @param afun function or list. Function(s) to be used to calculate the values
 #'   in each column.  The list will be repped out as needed and matched by
 #'   position with the columns during tabulation. This functions accepts the same
-#'   parameters as [analyze]'s `afun`. For further information see 
-#'   [additional_fun_params].
+#'   parameters as [analyze] like `afun` and `format`. For further information see 
+#'   [`additional_fun_params`].
 #'
 #' @export
 #'

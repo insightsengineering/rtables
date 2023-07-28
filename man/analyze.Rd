@@ -107,8 +107,7 @@ being tabulated
 In addition to differentiation on the first argument, the analysis function
 can optionally accept a number of other parameters which, \emph{if and only
 if} present in the formals will be passed to the function by the tabulation
-machinery. These are listed and described in \link{additional_fun_params}.
-
+machinery. These are listed and described in \code{\link{additional_fun_params}}.
 }
 \note{
 None of the arguments described in the Details section
@@ -120,7 +119,6 @@ must be calculated within \code{afun} based on a combination
 of extra arguments and the unmodified values provided by the
 tabulation framework.
 }
-
 \examples{
 
 lyt <- basic_table() \%>\%

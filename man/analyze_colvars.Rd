@@ -20,8 +20,8 @@ analyze_colvars(
 \item{afun}{function or list. Function(s) to be used to calculate the values
 in each column.  The list will be repped out as needed and matched by
 position with the columns during tabulation. This functions accepts the same
-parameters as \link{analyze}'s \code{afun}. For further information see
-\link{additional_fun_params}.}
+parameters as \link{analyze} like \code{afun} and \code{format}. For further information see
+\code{\link{additional_fun_params}}.}
 
 \item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
