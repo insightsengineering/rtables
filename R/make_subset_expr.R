@@ -186,10 +186,10 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
         counts <- as.integer(counts)
     }
     
-    counts_df_name <- "df"
+    counts_df_name <- "alt_counts_df"
     if(is.null(alt_counts_df)){
         alt_counts_df <- df
-        counts_df_name <- "alt_counts_df"
+        counts_df_name <- "df"
     }
     calcpos <- is.na(counts)
 

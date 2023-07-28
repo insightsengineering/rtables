@@ -58,33 +58,6 @@ match_extra_args <- function(f,
     possargs[names(possargs) %in% formnms]
 }
 
-# This checks if the input params are used anywhere in cfun/afun
-.check_afun_cfun_params <- function(spl_vec, params) {
-    # Case it is a row layout: for build_table checks
-    if(is(spl_vec, "PreDataRowLayout")) {
-        r_spl <- root_spl(spl_vec)
-        tmp_splvec <- c(r_spl, spl_vec[[1]])
-    # When it is a single split obj it needs to be wrapped
-    } else if (inherits(spl_vec, "Split")) {
-        tmp_splvec <- list(spl_vec)
-    # Case used in .make_split_kids so to check spl_vec and current spl
-    } else if (is.list(spl_vec)) {
-        tmp_splvec <- spl_vec  
-    } else {
-        stop("Checking parameters of afun/cfun failed because of",
-             " unexpected split input. Contact the maintainer.") # nocov
-    }
-    
-    # Extract all the functions in the layout
-    fnc_vec <- sapply(tmp_splvec, function(spl_i) {
-        if (is(spl_i, "VAnalyzeSplit")) analysis_fun(spl_i)
-        else content_fun(spl_i)
-    })
-    
-    # For each parameter, check if it is called
-    sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
-}
-
 #' @noRd
 #' @return a RowsVerticalSection object representing the k x 1 section of the
 #'   table being generated, with k the number of rows the analysis function
@@ -114,13 +87,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
         if (!is.null(col) && !inclNAs) {
             alt_dfpart_fil <- alt_dfpart_fil[!is.na(alt_dfpart_fil[[col]]), ,
                                              drop = FALSE]
-        }
-        if (NROW(alt_dfpart_fil) == 0) {
-            warning("Subsetting alt_count_df as df brought to an empty table. ",
-                    "Therefore, .alt_df will be empty if used. ",
-                    "If also .alt_df_row is empty, the applied row split is the ",
-                    "cause, otherwise it is the columnwise filtering and/or the ",
-                    "removal of NAs.")
         }
     } else {
         alt_dfpart_fil <- alt_dfpart
@@ -778,7 +744,8 @@ setMethod(".make_split_kids", "Split",
              " in each split. Contact the maintainer.") # nocov
     }
     
-    acdf_param <- .check_afun_cfun_params(c(spl, splvec), 
+    # If params are not present do not do the calculation
+    acdf_param <- .check_afun_cfun_params(SplitVector(spl, splvec), 
                                           c(".alt_df", ".alt_df_row"))
     
     # Apply same split for alt_counts_df
@@ -1130,8 +1097,13 @@ build_table <- function(lyt, df,
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
     # This check should be added to cinfo and sent everywhere but for the moment
     # there is little advantage in this as there are no other cases for these checks.
-    # Commented: .check_afun_cfun_params(rlayout(lyt), c(".alt_df", ".alt_df_row")) 
-
+    alt_params <- .check_afun_cfun_params(lyt, c(".alt_df", ".alt_df_row")) 
+    if (any(alt_params) && is.null(alt_counts_df)) {
+        stop("Layout contains afun/cfun functions that have optional parameters ",
+             ".alt_df and/or .alt_df_row, but no alt_count_df was provided in ",
+             "build_table().")
+    }
+    
     rtpos <- TreePos()
     cinfo <- create_colinfo(lyt, df, rtpos,
                            counts = col_counts,
@@ -1477,6 +1449,44 @@ setMethod("fix_analyze_vis", "SplitVector",
     }
     lyt[[len]] <- lastspl
     lyt
+})
+
+# This checks if the input params are used anywhere in cfun/afun
+setGeneric(".check_afun_cfun_params", function(lyt, params) 
+    standardGeneric(".check_afun_cfun_params"))
+
+setMethod(".check_afun_cfun_params", "PreDataTableLayouts",
+          function(lyt, params) {
+              .check_afun_cfun_params(rlayout(lyt), params)
+          })
+
+setMethod(".check_afun_cfun_params", "PreDataRowLayout",
+          function(lyt, params) {
+              .check_afun_cfun_params(SplitVector(root_spl(lyt), lyt[[1]]), 
+                                      params)
+          })
+
+setMethod(".check_afun_cfun_params", "Split", 
+          function(lyt, params) {
+              .check_afun_cfun_params(SplitVector(lyt), params)
+          })
+
+# Helper function for .check_afun_cfun_params
+.afun_cfun_extract <- function(spl_i) {
+    if (is(spl_i, "VAnalyzeSplit")) {
+        analysis_fun(spl_i)
+    } else {
+        content_fun(spl_i)
+    }
+}
+# Main function for checking parameters
+setMethod(".check_afun_cfun_params", "SplitVector", 
+          function(lyt, params) {
+    # Extract all the functions in the layout
+    fnc_vec <- lapply(lyt, .afun_cfun_extract)
+    
+    # For each parameter, check if it is called
+    sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
 })
 
 count <- function(df, ...) NROW(df)
