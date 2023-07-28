@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{cbind_rtables}
 \alias{cbind_rtables}
-\title{cbind two rtables}
+\title{\code{cbind} two \code{rtables}}
 \usage{
 cbind_rtables(x, ...)
 }
@@ -15,7 +15,7 @@ cbind_rtables(x, ...)
 A formal table object.
 }
 \description{
-cbind two rtables
+\code{cbind} two \code{rtables}
 }
 \examples{
 

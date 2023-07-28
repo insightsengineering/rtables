@@ -75,7 +75,7 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' @inheritParams gen_args
 #'
 #' @details  After adding or removing  referential footnotes manually,
-#'     or  after subsetting  a table,  the reference  indexes (ie  the
+#'     or  after subsetting  a table,  the reference  indexes (i.e.  the
 #'     number associated  with specific  footnotes) may  be incorrect.
 #'     This function recalculates these based on the full table.
 #'

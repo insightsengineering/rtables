@@ -1,5 +1,5 @@
 #' Find degenerate (sub)structures within a table (Experimental)
-#' @param tt TableTree
+#' @param tt `TableTree`
 #'
 #' This function returns a list with the row-paths to all
 #' structural subtables which contain no data rows (
@@ -34,9 +34,9 @@ find_degen_struct <- function(tt) {
 
 #' Validate and Assert valid table structure (Experimental).
 #'
-#' @param tt TableTree
+#' @param tt `TableTree`
 #'
-#' A TableTree (rtables-built table) is considered degenerate if
+#' A `TableTree` (`rtables`-built table) is considered degenerate if
 #' \enumerate{
 #' \item{it contains no subtables or data rows (content rows do not count)}
 #' \item{it contains a subtable which is degenerate by the criterion above}
@@ -146,7 +146,7 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 #' of degenerate tables by adding messaging rows to empty
 #' sub-structures.
 #'
-#' @param tt TableTree
+#' @param tt `TableTree`
 #' @param empty_msg character(1). The string which should be spanned across
 #' the inserted empty rows.
 #'

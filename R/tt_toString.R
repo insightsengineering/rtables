@@ -125,10 +125,10 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 }
 
 
-#' Transform rtable to a list of matrices which can be used for outputting
+#' Transform `rtable` to a list of matrices which can be used for outputting
 #'
-#' Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
-#' map the rtable to an in between state with the formatted cells in a matrix form.
+#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
+#' map the `rtable` to an in between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in
@@ -739,7 +739,7 @@ empty_string_after <- function(x, indices) {
 #' @param including_newline boolean: should newlines also be indented
 #'
 #' @export
-#' @return \code{x} indented by left-padding with code{indent*incr} white-spaces.
+#' @return \code{x} indented by left-padding with \code{indent*incr} white-spaces.
 #' @examples
 #' indent_string("a", 0)
 #' indent_string("a", 1)

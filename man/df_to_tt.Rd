@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_from_df.R
 \name{df_to_tt}
 \alias{df_to_tt}
-\title{Create ElementaryTable from data.frame}
+\title{Create \code{ElementaryTable} from data.frame}
 \usage{
 df_to_tt(df)
 }
@@ -14,7 +14,7 @@ an \code{ElementaryTable} object with unnested columns corresponding to
 \code{names(df)} and row labels corresponding to \code{row.names(df)}
 }
 \description{
-Create ElementaryTable from data.frame
+Create \code{ElementaryTable} from data.frame
 }
 \examples{
 df_to_tt(mtcars)
