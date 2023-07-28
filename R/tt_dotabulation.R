@@ -54,7 +54,6 @@ match_extra_args <- function(f,
         return(NULL)
     else if("..." %in% names(formargs))
         formnms <- c(formnms, exnms[nzchar(exnms)])
-    
     possargs[names(possargs) %in% formnms]
 }
 
@@ -766,7 +765,6 @@ setMethod(".make_split_kids", "Split",
 
 
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
-    
     ## do full recursive_applysplit on each part of the split defined by spl
     inner <- unlist(mapply(function(dfpart, alt_dfpart, nm, label, baselines, splval) {
 
@@ -1112,7 +1110,6 @@ build_table <- function(lyt, df,
                            topleft)
       if(!is.null(col_counts))
         disp_ccounts(cinfo) <- TRUE
-    
     rlyt <- rlayout(lyt)
     rtspl <- root_spl(rlyt)
     ctab <- .make_ctab(df, 0L,

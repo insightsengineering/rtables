@@ -985,7 +985,7 @@ NULL
 #'   being tabulated
 #'   }
 #' }
-#' 
+#'
 #' In addition to differentiation on the first argument, the analysis function
 #' can optionally accept a number of other parameters which, \emph{if and only
 #' if} present in the formals will be passed to the function by the tabulation
