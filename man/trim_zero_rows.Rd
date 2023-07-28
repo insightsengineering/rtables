@@ -10,7 +10,7 @@ trim_zero_rows(tbl)
 \item{tbl}{table object}
 }
 \value{
-an rtable object
+an \code{rtable} object
 }
 \description{
 Trim Zero Rows

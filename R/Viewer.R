@@ -1,14 +1,14 @@
 #' @importFrom utils  browseURL
 NULL
 
-#' Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
+#' Display an \code{\link{rtable}} object in the Viewer pane in `RStudio` or in a
 #' browser
 #'
 #' The table will be displayed using the bootstrap styling for tables.
 #'
 #' @param x object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})
 #' @param y optional second argument of same type as \code{x}
-#' @param row.names.bold row.names.bold boolean, make rownames bold
+#' @param row.names.bold row.names.bold boolean, make `row.names` bold
 #' @param ... arguments passed to \code{as_html}
 #'
 #'

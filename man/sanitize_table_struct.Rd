@@ -7,7 +7,7 @@
 sanitize_table_struct(tt, empty_msg = "-- This Section Contains No Data --")
 }
 \arguments{
-\item{tt}{TableTree}
+\item{tt}{\code{TableTree}}
 
 \item{empty_msg}{character(1). The string which should be spanned across
 the inserted empty rows.}
