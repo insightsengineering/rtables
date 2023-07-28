@@ -84,7 +84,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     # Making .alt_df from alt_dfpart (i.e. .alt_df_row)
     if (NROW(alt_dfpart) > 0) {
         alt_dfpart_fil <- alt_dfpart[eval(csub, envir = alt_dfpart), , drop = FALSE]
-        if (!is.null(col) && !inclNAs) {
+        if (!is.null(col) && col %in% names(alt_dfpart_fil) && !inclNAs) {
             alt_dfpart_fil <- alt_dfpart_fil[!is.na(alt_dfpart_fil[[col]]), ,
                                              drop = FALSE]
         }
