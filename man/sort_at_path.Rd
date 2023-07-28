@@ -14,11 +14,11 @@ sort_at_path(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{path}{character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+\code{tabletree}. Each element represents a subsequent choice amongst the children
 of the previous choice.}
 
 \item{scorefun}{function. Scoring function, should accept the type of
@@ -66,7 +66,7 @@ calling one of the various \code{\link[=analyze]{analyze()}} instances.
 Built-in score functions are \code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}.
 They are both working with content rows (coming from \code{\link[=summarize_row_groups]{summarize_row_groups()}})
 while a custom score function needs to be used on \code{DataRow}s. Here, some
-useful decriptor and accessor functions (coming from related vignette):
+useful descriptor and accessor functions (coming from related vignette):
 \itemize{
 \item \code{\link[=cell_values]{cell_values()}} - Retrieves a named list of a \code{TableRow} or
 \code{TableTree} object's values.

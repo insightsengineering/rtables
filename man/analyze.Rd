@@ -35,7 +35,7 @@ populated by the tabulation framework. See Details in
 \item{table_names}{character. Names for the tables representing each atomic
 analysis. Defaults to \code{var}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -108,10 +108,11 @@ In addition to differentiation on the first argument, the analysis function
 can optionally accept a number of other parameters which, \emph{if and only
 if} present in the formals will be passed to the function by the tabulation
 machinery. These are listed and described in \link{additional_fun_params}.
+
 }
 \note{
 None of the arguments described in the Details section
-can be overridden via extra_args or when calling
+can be overridden via \code{extra_args} or when calling
 \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
 be overridden via the \code{col_counts} argument to
 \code{\link{build_table}}. Alternative values for the others
@@ -119,6 +120,7 @@ must be calculated within \code{afun} based on a combination
 of extra arguments and the unmodified values provided by the
 tabulation framework.
 }
+
 \examples{
 
 lyt <- basic_table() \%>\%

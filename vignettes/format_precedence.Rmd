@@ -35,7 +35,7 @@ place. In such a case, the final format that will be applied depends
 on format precedence rules defined by `rtables`. In this vignette, we
 describe the basic rules of `rtables` format precedence.
 
-The examples shown in this vignette utilize the example ADSL
+The examples shown in this vignette utilize the example `ADSL`
 dataset, a demographic table that summarizes the variables
 content for different population subsets (encoded in the columns).
 

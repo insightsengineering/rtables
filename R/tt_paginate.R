@@ -3,9 +3,9 @@
 ## 1. user defined number of lines per page
 ## 2. all lines have the same height
 ## 3. header always reprinted on all pages
-## 4. "Label-rows", ie content rows above break in the nesting structure, optionaly reprinted (default TRUE)
+## 4. "Label-rows", i.e. content rows above break in the nesting structure, optionaly reprinted (default TRUE)
 ## 5. Never (?) break on a "label"/content row
-## 6. Never (?) break on the second (ie after the first) data row at a particular leaf Elementary table.
+## 6. Never (?) break on the second (i.e. after the first) data row at a particular leaf Elementary table.
 ##
 ## Current behavior: paginate_ttree takes a TableTree object and
 ## returns a list of rtable (S3) objects for printing.
@@ -440,7 +440,7 @@ setMethod("inner_col_df", "LayoutColTree",
 
 
 
-## THIS INCLUDES BOTH "table stub" (ie column label and top_left) AND
+## THIS INCLUDES BOTH "table stub" (i.e. column label and top_left) AND
 ## title/subtitle!!!!!
 .header_rep_nlines <- function(tt, colwidths, max_width, verbose = FALSE) {
     cinfo_lines <- nlines(col_info(tt), colwidths = colwidths, max_width = max_width)
@@ -479,7 +479,7 @@ setMethod("inner_col_df", "LayoutColTree",
 }
 
 
-#' Pagination of a TableTree
+#' Pagination of a `TableTree`
 #'
 #'
 #' Paginate  an  `rtables` table  in  the  vertical and/or  horizontal
@@ -688,7 +688,7 @@ non_null_na <- function(x) !is.null(x) && is.na(x)
 #' @export
 #' @aliases paginate_table
 #' @param cpp numeric(1) or NULL. Width (in characters) of the pages for
-#' horizontal pagination. `NA` (the default) indicates cpp should be inferred from
+#' horizontal pagination. `NA` (the default) indicates `cpp` should be inferred from
 #' the page size; `NULL` indicates no horizontal pagination should be done
 #' regardless of page size.
 #' @rdname paginate

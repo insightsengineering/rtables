@@ -15,7 +15,7 @@ within each value of the first, and so on.}
 \code{list(...)}.}
 }
 \value{
-An InstantiatedColumnInfo object, suitable for use declaring the
+An \code{InstantiatedColumnInfo} object, suitable for use declaring the
 column structure for a manually constructed table.
 }
 \description{

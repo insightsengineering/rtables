@@ -10,9 +10,9 @@ validate_table_struct(tt)
 assert_valid_table(tt, warn_only = FALSE)
 }
 \arguments{
-\item{tt}{TableTree
+\item{tt}{\code{TableTree}
 
-A TableTree (rtables-built table) is considered degenerate if
+A \code{TableTree} (\code{rtables}-built table) is considered degenerate if
 \enumerate{
 \item{it contains no subtables or data rows (content rows do not count)}
 \item{it contains a subtable which is degenerate by the criterion above}

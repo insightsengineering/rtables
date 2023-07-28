@@ -5,9 +5,9 @@ label_pos_values <- c("hidden", "visible", "topleft")
 #' @rdname int_methods
 NULL
 
-#' combine SplitVector objects
-#' @param x SplitVecttor
-#' @param ... Splits or SplitVector objects
+#' combine `SplitVector` objects
+#' @param x `SplitVecttor`
+#' @param ... Splits or `SplitVector` objects
 #' @exportMethod c
 #' @return Various, but should be considered implementation details.
 #' @rdname int_methods
@@ -853,7 +853,7 @@ split_rows_by_cutfun <- function(lyt, var,
 #'   \item{split}{The name of the split (often the variable being split in the
 #'     simple case)}
 #'   \item{value}{The string representation of the value at that split}
-#'   \item{full_parent_df}{a dataframe containing the full data (ie across all
+#'   \item{full_parent_df}{a dataframe containing the full data (i.e. across all
 #'     columns) corresponding to the path defined by the combination of `split`
 #'     and `value` of this row \emph{and all rows above this row}}
 #'   \item{all_cols_n}{the number of observations  corresponding to this row
@@ -992,7 +992,7 @@ NULL
 #' machinery. These are listed and described in [additional_fun_params].
 #' 
 #' @note None of the arguments described in the Details section
-#' can be overridden via extra_args or when calling
+#' can be overridden via \code{extra_args} or when calling
 #' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
 #' be overridden via the \code{col_counts} argument to
 #' \code{\link{build_table}}. Alternative values for the others
@@ -1428,7 +1428,7 @@ setMethod(".add_row_summary", "Split",
 #' @param x factor. Vector of data, provided by rtables pagination machinery
 #' @param .N_col integer(1). Total count for the column, provided by rtables pagination machinery
 #'
-#' @return A RowsVerticalSection object with counts (and percents) for each level of the factor
+#' @return A `RowsVerticalSection` object with counts (and percents) for each level of the factor
 #' @export
 #' @examples
 #'
@@ -1709,7 +1709,7 @@ setMethod("fix_dyncuts", "PreDataTableLayouts",
 #'   within each value of the first, and so on.
 #' @param .lst A list of sets of levels, by default populated via
 #'   \code{list(...)}.
-#' @return An InstantiatedColumnInfo object, suitable for use declaring the
+#' @return An `InstantiatedColumnInfo` object, suitable for use declaring the
 #'   column structure for a manually constructed table.
 #' @author Gabriel Becker
 #'
@@ -1813,10 +1813,10 @@ list_wrap_df <- function(f) {
 #' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default).
 #' When `show_colcounts` is `TRUE`, and `colcount_format` is 2-dimensional with
 #' a percent component, the value component for the percent is always populated
-#' with `1` (ie 100%). 1d formats are used to render the counts exactly as they
+#' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
 #' normally would be, while 2d formats which don't include a percent, and all 3d
 #' formats result in an error. Formats in the form of functions are not supported for
-#' colcount format. See \code{\link[formatters]{list_valid_format_labels}} for
+#' `colcount` format. See \code{\link[formatters]{list_valid_format_labels}} for
 #' the list of valid format labels to select from.
 #'
 #' @inherit split_cols_by return
