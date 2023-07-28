@@ -14,7 +14,7 @@ label_at_path instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,17 +31,6 @@ label_at_path instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -58,14 +47,14 @@ label_at_path instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>[DEPRECATED] insert rrows at (before) a specific location</h1>
+      <img src="" class="logo" alt=""><h1>[DEPRECATED] insert <code>rrows</code> at (before) a specific location</h1>
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/R/tt_compatibility.R" class="external-link"><code>R/tt_compatibility.R</code></a></small>
       <div class="d-none name"><code>insert_rrow.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>This function is deprecated and will be removed in a future release of
-rtables. Please use <code><a href="insert_row_at_path.html">insert_row_at_path</a></code> or
+<code>rtables</code>. Please use <code><a href="insert_row_at_path.html">insert_row_at_path</a></code> or
 <code><a href="label_at_path.html">label_at_path</a></code> instead.</p>
     </div>
 
@@ -77,15 +66,15 @@ rtables. Please use <code><a href="insert_row_at_path.html">insert_row_at_path</
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tbl</dt>
-<dd><p>rtable</p></dd>
+<dd><p><code>rtable</code></p></dd>
 
 
 <dt>rrow</dt>
-<dd><p>rrow to append to rtable</p></dd>
+<dd><p><code>rrow</code> to append to <code>rtable</code></p></dd>
 
 
 <dt>at</dt>
-<dd><p>position into which to put the rrow, defaults to beginning (ie 1)</p></dd>
+<dd><p>position into which to put the <code>rrow</code>, defaults to beginning (i.e. 1)</p></dd>
 
 
 <dt>ascontent</dt>
@@ -96,13 +85,13 @@ rtables. Please use <code><a href="insert_row_at_path.html">insert_row_at_path</
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A TableTree of the same specific class as <code>tbl</code></p>
+<p>A <code>TableTree</code> of the same specific class as <code>tbl</code></p>
 
 
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Label rows (ie a row with no data values, only a row.name) can only be
+    <p>Label rows (i.e. a row with no data values, only a <code>row.name</code>) can only be
 inserted at positions which do not already contain a label row when there
 is a non-trivial nested row structure in <code>tbl</code></p>
     </div>

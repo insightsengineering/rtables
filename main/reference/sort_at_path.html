@@ -12,7 +12,7 @@ at a particular Path in the table tree."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,17 +29,6 @@ at a particular Path in the table tree."><!-- mathjax --><script src="https://cd
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -81,13 +70,13 @@ at a particular Path in the table tree.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tt</dt>
-<dd><p>TableTree (or related class). A TableTree object representing a
+<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
 populated table.</p></dd>
 
 
 <dt>path</dt>
 <dd><p>character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+<code>tabletree</code>. Each element represents a subsequent choice amongst the children
 of the previous choice.</p></dd>
 
 
@@ -142,7 +131,7 @@ calling one of the various <code><a href="analyze.html">analyze()</a></code> ins
 <p>Built-in score functions are <code><a href="score_funs.html">cont_n_allcols()</a></code> and <code><a href="score_funs.html">cont_n_onecol()</a></code>.
 They are both working with content rows (coming from <code><a href="summarize_row_groups.html">summarize_row_groups()</a></code>)
 while a custom score function needs to be used on <code>DataRow</code>s. Here, some
-useful decriptor and accessor functions (coming from related vignette):</p><ul><li><p><code><a href="cell_values.html">cell_values()</a></code> - Retrieves a named list of a <code>TableRow</code> or
+useful descriptor and accessor functions (coming from related vignette):</p><ul><li><p><code><a href="cell_values.html">cell_values()</a></code> - Retrieves a named list of a <code>TableRow</code> or
 <code>TableTree</code> object's values.</p></li>
 <li><p><code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this can differ
 from the label that is displayed (if any is) when printing.</p></li>

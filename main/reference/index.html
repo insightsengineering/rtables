@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -327,7 +316,7 @@
           
           <code><a href="format_rcell.html">format_rcell()</a></code> 
         </dt>
-        <dd>Format rcell</dd>
+        <dd>Format <code>rcell</code></dd>
       </dl><dl><dt>
           
           <code><a href="value_formats.html">value_formats()</a></code> 
@@ -430,12 +419,12 @@
           
           <code><a href="rbind.html">rbindl_rtables()</a></code> <code><a href="rbind.html">rbind(<i>&lt;VTableNodeInfo&gt;</i>)</a></code> <code><a href="rbind.html">rbind2(<i>&lt;VTableNodeInfo&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> 
         </dt>
-        <dd>rbind TableTree and related objects</dd>
+        <dd><code>rbind</code> <code>TableTree</code> and related objects</dd>
       </dl><dl><dt>
           
           <code><a href="cbind_rtables.html">cbind_rtables()</a></code> 
         </dt>
-        <dd>cbind two rtables</dd>
+        <dd><code>cbind</code> two <code>rtables</code></dd>
       </dl><dl><dt>
           
           <code><a href="asvec.html">as.vector(<i>&lt;VTableTree&gt;</i>)</a></code> 
@@ -497,7 +486,7 @@
           
           <code><a href="prune_table.html">prune_table()</a></code> 
         </dt>
-        <dd>Recursively prune a TableTree</dd>
+        <dd>Recursively prune a <code>TableTree</code></dd>
       </dl><dl><dt>
           
           <code><a href="trim_prune_funs.html">all_zero_or_na()</a></code> <code><a href="trim_prune_funs.html">all_zero()</a></code> <code><a href="trim_prune_funs.html">content_all_zeros_nas()</a></code> <code><a href="trim_prune_funs.html">prune_empty_level()</a></code> <code><a href="trim_prune_funs.html">prune_zeros_only()</a></code> <code><a href="trim_prune_funs.html">low_obs_pruner()</a></code> 
@@ -522,7 +511,7 @@
           
           <code><a href="score_funs.html">cont_n_allcols()</a></code> <code><a href="score_funs.html">cont_n_onecol()</a></code> 
         </dt>
-        <dd>Score functions for sorting TableTrees</dd>
+        <dd>Score functions for sorting <code>TableTrees</code></dd>
       </dl></div><div class="section level2">
       <h2 id="compatibility-layer">Compatibility Layer<a class="anchor" aria-label="anchor" href="#compatibility-layer"></a></h2>
       
@@ -558,17 +547,17 @@
           
           <code><a href="rrowl.html">rrowl()</a></code> 
         </dt>
-        <dd>rrowl</dd>
+        <dd><code>rrowl</code></dd>
       </dl><dl><dt>
           
           <code><a href="indent.html">indent()</a></code> 
         </dt>
-        <dd>Change indentation of all rrows in an rtable</dd>
+        <dd>Change indentation of all <code>rrows</code> in an <code>rtable</code></dd>
       </dl><dl><dt>
           
           <code><a href="df_to_tt.html">df_to_tt()</a></code> 
         </dt>
-        <dd>Create ElementaryTable from data.frame</dd>
+        <dd>Create <code>ElementaryTable</code> from data.frame</dd>
       </dl></div><div class="section level2">
       <h2 id="output-functions">Output Functions<a class="anchor" aria-label="anchor" href="#output-functions"></a></h2>
       
@@ -599,7 +588,7 @@
           
           <code><a href="tt_to_flextable.html">tt_to_flextable()</a></code> 
         </dt>
-        <dd>Create a FlexTable object representing an rtables TableTree</dd>
+        <dd>Create a <code>FlexTable</code> object representing an <code>rtables</code> <code>TableTree</code></dd>
       </dl><dl><dt>
           
           <code><a href="tostring.html">toString(<i>&lt;VTableTree&gt;</i>)</a></code> 
@@ -614,7 +603,7 @@
           
           <code><a href="path_enriched_df.html">path_enriched_df()</a></code> 
         </dt>
-        <dd>Transform TableTree object to Path-Enriched data.frame</dd>
+        <dd>Transform <code>TableTree</code> object to Path-Enriched data.frame</dd>
       </dl></div><div class="section level2">
       <h2 id="utility-functions">Utility Functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a></h2>
       
@@ -630,7 +619,7 @@
           
           <code><a href="Viewer.html">Viewer()</a></code> 
         </dt>
-        <dd>Display an <code>rtable</code> object in the Viewer pane in RStudio or in a
+        <dd>Display an <code>rtable</code> object in the Viewer pane in <code>RStudio</code> or in a
 browser</dd>
       </dl><dl><dt>
           
@@ -646,7 +635,7 @@ browser</dd>
           
           <code><a href="is_rtable.html">is_rtable()</a></code> 
         </dt>
-        <dd>Check if an object is a valid rtable</dd>
+        <dd>Check if an object is a valid <code>rtable</code></dd>
       </dl></div><div class="section level2">
       <h2 id="pagination">Pagination<a class="anchor" aria-label="anchor" href="#pagination"></a></h2>
       
@@ -662,7 +651,7 @@ browser</dd>
           
           <code><a href="paginate.html">pag_tt_indices()</a></code> <code><a href="paginate.html">paginate_table()</a></code> 
         </dt>
-        <dd>Pagination of a TableTree</dd>
+        <dd>Pagination of a <code>TableTree</code></dd>
       </dl><dl><dt>
           
           <code><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df()</a></code> 
@@ -688,7 +677,7 @@ browser</dd>
           
           <code><a href="content_table.html">content_table()</a></code> <code><a href="content_table.html">`content_table&lt;-`()</a></code> 
         </dt>
-        <dd>Retrieve or set Content Table from a TableTree</dd>
+        <dd>Retrieve or set Content Table from a <code>TableTree</code></dd>
       </dl><dl><dt>
           
           <code><a href="tree_children.html">tree_children()</a></code> <code><a href="tree_children.html">`tree_children&lt;-`()</a></code> 
@@ -794,7 +783,7 @@ browser</dd>
           
           <code><a href="cinfo.html">InstantiatedColumnInfo()</a></code> 
         </dt>
-        <dd>InstantiatedColumnInfo</dd>
+        <dd><code>InstantiatedColumnInfo</code></dd>
       </dl><dl><dt>
           
           <code><a href="rowclasses.html">LabelRow()</a></code> <code><a href="rowclasses.html">.tablerow()</a></code> <code><a href="rowclasses.html">DataRow()</a></code> <code><a href="rowclasses.html">ContentRow()</a></code> 
@@ -804,7 +793,7 @@ browser</dd>
           
           <code><a href="tabclasses.html">ElementaryTable()</a></code> <code><a href="tabclasses.html">TableTree()</a></code> 
         </dt>
-        <dd>TableTree classes</dd>
+        <dd><code>TableTree</code> classes</dd>
       </dl></div><div class="section level2">
       <h2 id="pathing-related-functions">Pathing Related Functions<a class="anchor" aria-label="anchor" href="#pathing-related-functions"></a></h2>
       

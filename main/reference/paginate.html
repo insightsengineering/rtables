@@ -12,7 +12,7 @@ direction, as required for the specified page size."><!-- mathjax --><script src
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,17 +29,6 @@ direction, as required for the specified page size."><!-- mathjax --><script src
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -56,7 +45,7 @@ direction, as required for the specified page size."><!-- mathjax --><script src
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Pagination of a TableTree</h1>
+      <img src="" class="logo" alt=""><h1>Pagination of a <code>TableTree</code></h1>
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/R/tt_paginate.R" class="external-link"><code>R/tt_paginate.R</code></a></small>
       <div class="d-none name"><code>paginate.Rd</code></div>
     </div>
@@ -102,7 +91,7 @@ direction, as required for the specified page size.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tt</dt>
-<dd><p>TableTree (or related class). A TableTree object representing a
+<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
 populated table.</p></dd>
 
 
@@ -181,7 +170,7 @@ horizontal margins.</p></dd>
 
 <dt>cpp</dt>
 <dd><p>numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. <code>NA</code> (the default) indicates cpp should be inferred from
+horizontal pagination. <code>NA</code> (the default) indicates <code>cpp</code> should be inferred from
 the page size; <code>NULL</code> indicates no horizontal pagination should be done
 regardless of page size.</p></dd>
 

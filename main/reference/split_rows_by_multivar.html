@@ -12,7 +12,7 @@ levels of a single variable, we use split_rows_by_multivar."><!-- mathjax --><sc
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,17 +29,6 @@ levels of a single variable, we use split_rows_by_multivar."><!-- mathjax --><sc
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -110,7 +99,7 @@ child (which are based on the data and type of split during tabulation).</p></dd
 
 
 <dt>format</dt>
-<dd><p>FormatSpec. Format associated with this split. Formats can be
+<dd><p><code>FormatSpec</code>. Format associated with this split. Formats can be
 declared via strings (<code>"xx.x"</code>) or function. In cases such as
 <code>analyze</code> calls, they can character vectors or lists of functions.</p></dd>
 
@@ -129,7 +118,7 @@ analyses, which is not allowed.</p></dd>
 
 <dt>child_labels</dt>
 <dd><p>string. One of <code>"default"</code>, <code>"visible"</code>,
-<code>"hidden"</code>. What should the display behavior be for the  labels (ie
+<code>"hidden"</code>. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to <code>"default"</code>
 which flags the label row as visible only if the child has 0 content rows.</p></dd>
 

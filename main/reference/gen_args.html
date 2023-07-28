@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -97,11 +86,11 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>df</dt>
-<dd><p>dataset (data.frame or tibble)</p></dd>
+<dd><p>dataset (<code>data.frame</code> or <code>tibble</code>)</p></dd>
 
 
 <dt>alt_counts_df</dt>
-<dd><p>dataset (data.frame or tibble). Alternative full data
+<dd><p>dataset (<code>data.frame</code> or <code>tibble</code>). Alternative full data
 the rtables framework will use (<em>only</em>) when calculating column
 counts.</p></dd>
 
@@ -117,12 +106,12 @@ layout feature be added to. Defaults to the current</p></dd>
 
 
 <dt>tt</dt>
-<dd><p>TableTree (or related class). A TableTree object representing a
+<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
 populated table.</p></dd>
 
 
 <dt>tr</dt>
-<dd><p>TableRow (or related class). A TableRow object representing a
+<dd><p><code>TableRow</code> (or related class). A <code>TableRow</code> object representing a
 single row within a populated table.</p></dd>
 
 
@@ -153,7 +142,7 @@ to <code>FALSE</code>.</p></dd>
 
 <dt>path</dt>
 <dd><p>character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+<code>tabletree</code>. Each element represents a subsequent choice amongst the children
 of the previous choice.</p></dd>
 
 
@@ -164,9 +153,9 @@ object/structure.</p></dd>
 
 <dt>label_pos</dt>
 <dd><p>character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-<code>default</code> indicates that the variable should be visible if and only if
+displayed, Accepts <code>"hidden"</code> (default for non-analyze row splits), <code>"visible"</code>,
+<code>"topleft"</code>, and - for analyze splits only - <code>"default"</code>.  For analyze calls,
+<code>"default"</code> indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.</p></dd>
 
 

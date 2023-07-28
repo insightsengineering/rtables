@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -149,7 +138,7 @@ uniqueness.</p></dd>
 
 
 <dt>split_format</dt>
-<dd><p>FormatSpec. Default format associated with the split
+<dd><p><code>FormatSpec</code>. Default format associated with the split
 being created.</p></dd>
 
 
@@ -165,7 +154,7 @@ analyses, which is not allowed.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>FormatSpec. Format associated with this split. Formats can be
+<dd><p><code>FormatSpec</code>. Format associated with this split. Formats can be
 declared via strings (<code>"xx.x"</code>) or function. In cases such as
 <code>analyze</code> calls, they can character vectors or lists of functions.</p></dd>
 
@@ -232,7 +221,7 @@ function.</p></dd>
 
 
 <dt>label_fstr</dt>
-<dd><p>string. An sprintf style format string containing. For
+<dd><p>string. An <code>sprintf</code> style format string containing. For
 non-comparison splits, it can contain  up to one <code>"%s"</code> which takes
 the current split value and generates the row/column label.
 Comparison-based splits it can contain up to two <code>"%s"</code>.</p></dd>
@@ -240,7 +229,7 @@ Comparison-based splits it can contain up to two <code>"%s"</code>.</p></dd>
 
 <dt>child_labels</dt>
 <dd><p>string. One of <code>"default"</code>, <code>"visible"</code>,
-<code>"hidden"</code>. What should the display behavior be for the  labels (ie
+<code>"hidden"</code>. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to <code>"default"</code>
 which flags the label row as visible only if the child has 0 content rows.</p></dd>
 
@@ -295,9 +284,9 @@ to the variable(s) in <code>vars</code> be visible in the resulting table.</p></
 
 <dt>label_pos</dt>
 <dd><p>character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-<code>default</code> indicates that the variable should be visible if and only if
+displayed, Accepts <code>"hidden"</code> (default for non-analyze row splits), <code>"visible"</code>,
+<code>"topleft"</code>, and - for analyze splits only - <code>"default"</code>.  For analyze calls,
+<code>"default"</code> indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.</p></dd>
 
 

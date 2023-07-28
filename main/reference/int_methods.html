@@ -12,7 +12,7 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,17 +29,6 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -56,14 +45,14 @@ R CMD check. End users should pay no attention to this documentation."><!-- math
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>combine SplitVector objects</h1>
+      <img src="" class="logo" alt=""><h1>combine <code>SplitVector</code> objects</h1>
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/R/colby_constructors.R" class="external-link"><code>R/colby_constructors.R</code></a>, <a href="https://github.com/insightsengineering/rtables/blob/HEAD/R/summary.R" class="external-link"><code>R/summary.R</code></a>, <a href="https://github.com/insightsengineering/rtables/blob/HEAD/R/tree_accessors.R" class="external-link"><code>R/tree_accessors.R</code></a>, and 3 more</small>
       <div class="d-none name"><code>int_methods.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>These are internal methods that are documented only to satisfy
-R CMD check. End users should pay no attention to this documentation.</p>
+<code>R CMD check</code>. End users should pay no attention to this documentation.</p>
     </div>
 
     <div class="section level2">
@@ -1072,7 +1061,7 @@ show(object)</code></pre></div>
 
 
 <dt>...</dt>
-<dd><p>Splits or SplitVector objects</p></dd>
+<dd><p>Splits or <code>SplitVector</code> objects</p></dd>
 
 
 <dt>lyt</dt>
@@ -1109,7 +1098,7 @@ arguments accepted by analysis functions. See <code><a href="analyze.html">analy
 
 <dt>child_labels</dt>
 <dd><p>string. One of <code>"default"</code>, <code>"visible"</code>,
-<code>"hidden"</code>. What should the display behavior be for the  labels (ie
+<code>"hidden"</code>. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to <code>"default"</code>
 which flags the label row as visible only if the child has 0 content rows.</p></dd>
 
@@ -1143,7 +1132,7 @@ not match a formal argument of the tabulation function.</p></dd>
 
 
 <dt>df</dt>
-<dd><p>dataset (data.frame or tibble)</p></dd>
+<dd><p>dataset (<code>data.frame</code> or <code>tibble</code>)</p></dd>
 
 
 <dt>obj</dt>
@@ -1168,7 +1157,7 @@ not match a formal argument of the tabulation function.</p></dd>
 
 <dt>max.level</dt>
 <dd><p>numeric(1). Passed to <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">utils::str</a></code>. Defaults to 3 for the
-VTableTree method, unlike the underlying default of <code>NA</code>. <code>NA</code> is <em>not</em>
+<code>VTableTree</code> method, unlike the underlying default of <code>NA</code>. <code>NA</code> is <em>not</em>
 appropriate for <code>VTableTree</code> objects.</p></dd>
 
 
@@ -1188,7 +1177,7 @@ analyses, which is not allowed.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>FormatSpec. Format associated with this split. Formats can be
+<dd><p><code>FormatSpec</code>. Format associated with this split. Formats can be
 declared via strings (<code>"xx.x"</code>) or function. In cases such as
 <code>analyze</code> calls, they can character vectors or lists of functions.</p></dd>
 
@@ -1203,7 +1192,7 @@ Defaults to <code>"NA"</code>.</p></dd>
 
 
 <dt>tt</dt>
-<dd><p>TableTree (or related class). A TableTree object representing a
+<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
 populated table.</p></dd>
 
 
@@ -1235,12 +1224,12 @@ be immediately recalculated. Defaults to TRUE.</p></dd>
 
 
 <dt>y</dt>
-<dd><p>Second element to be rbound via <code>rbind2</code></p></dd>
+<dd><p>Second element to be <code>rbound</code> via <code>rbind2</code></p></dd>
 
 
 <dt>path</dt>
 <dd><p>character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+<code>tabletree</code>. Each element represents a subsequent choice amongst the children
 of the previous choice.</p></dd>
 
 

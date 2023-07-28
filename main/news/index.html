@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -58,6 +47,10 @@
       <small>Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.2.9000" id="rtables-0629000">rtables 0.6.2.9000<a class="anchor" aria-label="anchor" href="#rtables-0629000"></a></h2>
+<ul><li>Cleaned up spelling in documentation (<a href="https://github.com/insightsengineering/rtables/issues/685" class="external-link">#685</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="rtables-062">rtables 0.6.2<a class="anchor" aria-label="anchor" href="#rtables-062"></a></h2>
 <ul><li>Fixed major regressions for <code>page_by</code> machinery caused by migration to <code>formatters</code> 0.5.1 pagination framework.</li>
@@ -111,7 +104,7 @@
 <code>export_as_pdf</code> now correctly takes <code>margins</code> into account when calculating <code>lpp</code> and <code>cpp</code> from page size.</li>
 <li>exporters now pass down non-default <code>colwidths</code> values correctly</li>
 <li>
-<code>nlines</code> <code>TableRow</code> method (used for both rows and column label extent in paginaton) now correctly handles column spanning</li>
+<code>nlines</code> <code>TableRow</code> method (used for both rows and column label extent in pagination) now correctly handles column spanning</li>
 <li>pagination with <code>verbose = TRUE</code> now includes original and adjusted lines-per page information</li>
 <li>
 <code>cont_n_allcols</code> and <code>cont_n_onecol</code> score functions now throw errors when they are applied to subtables that have no content table, instead of the previously returned <code>NA</code>
@@ -134,7 +127,7 @@
 <ul><li>
 <code>[&lt;-</code> now treats character <code>i</code> and <code>j</code> values as paths, the same as <code>[</code> always has.</li>
 <li>
-<code>[&lt;-</code> <code>CellValue</code> method now preserves CellValue attributes (e.g., format)</li>
+<code>[&lt;-</code> <code>CellValue</code> method now preserves <code>CellValue</code> attributes (e.g., format)</li>
 <li>More detailed subsetting and modification vignette</li>
 <li>
 <code>nlines</code> methods now accept both <code>colwidths</code> and <code>max_width</code>
@@ -145,7 +138,7 @@
 <code>make_col_df</code> now accepts <code>colwidths</code> argument, and can be called directly on <code>InstantiatedColumnInfo</code> objects</li>
 <li>versioned dependency on <code>formatters</code> increase to <code>&gt;0.3.3.12</code>
 </li>
-<li>wordwrapping title/footer materials no longer fails in the presence of <code>""</code> values.</li>
+<li>word wrapping title/footer materials no longer fails in the presence of <code>""</code> values.</li>
 <li>versioned dependency on <code>formatters</code> increase to <code>&gt;0.3.3.11</code>
 </li>
 <li>
@@ -170,9 +163,9 @@
 <li>Use <code>exact=TRUE</code> in all calls to <code>attr</code> within access functions</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;0.3.3.4</code>
 </li>
-<li>layouting instructions now accept na_str argument, which specifies na string with the same inheritance rules as formats</li>
-<li>(pre-data) Split and (post tabulation) Table/row S4 classes now carry around na_str information</li>
-<li>Increase versioned dependency on <code>formatters</code> to <code>&gt;= 0.3.3.3</code> for support of na_strs with <code>NA_character_</code> values</li>
+<li>layouting instructions now accept <code>na_str</code> argument, which specifies <code>na</code> string with the same inheritance rules as formats</li>
+<li>(pre-data) Split and (post tabulation) Table/row S4 classes now carry around <code>na_str</code> information</li>
+<li>Increase versioned dependency on <code>formatters</code> to <code>&gt;= 0.3.3.3</code> for support of <code>na_str</code>s with <code>NA_character_</code> values</li>
 <li>
 <code>paginate_table</code> now takes page dimension and font information and uses <code><a href="https://rdrr.io/pkg/formatters/man/page_lcpp.html" class="external-link">formatters::page_lcpp</a></code> to calculate <code>lpp</code> and <code>cpp</code> automatically when those are provided.</li>
 <li>Increase versioned dependency on <code>formatters</code> to <code>&gt;= 0.3.3.2</code> for <code>page_lcpp</code>
@@ -192,7 +185,7 @@
 <ul><li>Support for section dividers (<code>section_div</code> argument in <code>split_rows_by*</code> function)</li>
 <li>Updated versioned dependency on <code>formatters</code> to <code>&gt;=0.3.2.3</code>
 </li>
-<li>Equivalent split functions with different enclosing environments (e.g., 2 identical calls to <code>add_combo_levels</code> <a href="https://github.com/insightsengineering/rtables/issues/340" class="external-link">#340</a>) no longer block <code>rbind</code>ing</li>
+<li>Equivalent split functions with different enclosing environments (e.g., 2 identical calls to <code>add_combo_levels</code> <a href="https://github.com/insightsengineering/rtables/issues/304" class="external-link">#340</a>) no longer block <code>rbind</code>ing</li>
 <li>Fixed various documentation bugs where description section was being added to header.</li>
 </ul></div>
     <div class="section level2">
@@ -212,7 +205,7 @@
 <ul><li>
 <code>col_counts</code> getter and setter now accept <code>path</code> argument.</li>
 <li>empty levels of a splitting variable now result in an informative error message (character and factor cases).</li>
-<li>fixed bug in handling of column extra arguments that was preventing cbinding tables from working correctly (<a href="https://github.com/insightsengineering/rtables/issues/324" class="external-link">#324</a>)</li>
+<li>fixed bug in handling of column extra arguments that was preventing <code>cbind</code>ing tables from working correctly ([#324]](<a href="https://github.com/insightsengineering/rtables/issues/324" class="external-link uri">https://github.com/insightsengineering/rtables/issues/324</a>))</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="rtables-051">rtables 0.5.1<a class="anchor" aria-label="anchor" href="#rtables-051"></a></h2><p class="text-muted">CRAN release: 2022-05-21</p>
@@ -237,8 +230,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1.0004" id="rtables-0410004">rtables 0.4.1.0004<a class="anchor" aria-label="anchor" href="#rtables-0410004"></a></h2>
-<ul><li>Fix bug when function format combined with NULL cfun caused error (<a href="https://github.com/insightsengineering/rtables/issues/307" class="external-link">#307</a>)</li>
-<li>Fix bug in <code>path_enriched_df</code> (which powers tsv export), related to (<a href="https://github.com/insightsengineering/rtables/issues/308" class="external-link">#308</a>)</li>
+<ul><li>Fix bug when function format combined with NULL <code>cfun</code> caused error (<a href="https://github.com/insightsengineering/rtables/issues/307" class="external-link">#307</a>)</li>
+<li>Fix bug in <code>path_enriched_df</code> (which powers <code>tsv</code> export), related to (<a href="https://github.com/insightsengineering/rtables/issues/308" class="external-link">#308</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1.0002" id="rtables-0410002">rtables 0.4.1.0002<a class="anchor" aria-label="anchor" href="#rtables-0410002"></a></h2>
@@ -268,14 +261,15 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.8.9001" id="rtables-0389001">rtables 0.3.8.9001<a class="anchor" aria-label="anchor" href="#rtables-0389001"></a></h2>
-<ul><li>new <code>trim_levels_to_map</code> split function based on wwojtek’s work in <a href="https://github.com/insightsengineering/rtables/issues/203" class="external-link">#203</a></li>
+<ul><li>new <code>trim_levels_to_map</code> split function based on <code>[@wwojciech](https://github.com/wwojciech)</code>’s work in <a href="https://github.com/insightsengineering/rtables/issues/203" class="external-link">#203</a>
+</li>
 <li>support for column referential footnotes</li>
 <li>support for adding footnotes to existing table via <code>fnotes_at_path&lt;-</code> function</li>
 <li>
 <code>trim_levels_in_group</code> now trims empty levels of outer (split) variable by default</li>
 <li>
-<code>value_at</code> and <code>cell_values</code> now work for tablerow objects</li>
-<li>Fixed <code>as_html</code> bug in multivar split columns case</li>
+<code>value_at</code> and <code>cell_values</code> now work for <code>tablerow</code> objects</li>
+<li>Fixed <code>as_html</code> bug in <code>multivar</code> split columns case</li>
 <li>Fixed pagination off-by-one error</li>
 </ul></div>
     <div class="section level2">
@@ -286,13 +280,13 @@
 <ul><li>Add experimental support for newlines in column names, row labels, and cell values (not supported in top-left annotations)</li>
 <li>
 <code>as_html</code> refactored to support newlines while respecting table structure</li>
-<li>self_extent column of df returned by <code>make_row_df</code> now reflects extent <em>in lines</em>, thus will return larger values if the row-label or any cell values contain newlines.</li>
+<li>self_extent column of <code>df</code> returned by <code>make_row_df</code> now reflects extent <em>in lines</em>, thus will return larger values if the row-label or any cell values contain newlines.</li>
 <li>Fix bug where tables output using <code>as_html</code> (or viewed in <code>Viewer</code>) were missing the table class attribute (<a href="https://github.com/insightsengineering/rtables/issues/194" class="external-link">#194</a>)</li>
-<li>inserting a DataRow with incorrect number of columns is now an error (<a href="https://github.com/insightsengineering/rtables/issues/199" class="external-link">#199</a>)</li>
-<li>Referential footer machinery now works in colspan case.</li>
+<li>inserting a <code>DataRow</code> with incorrect number of columns is now an error (<a href="https://github.com/insightsengineering/rtables/issues/199" class="external-link">#199</a>)</li>
+<li>Referential footer machinery now works in <code>colspan</code> case.</li>
 <li>Fix extraneous footnote attribute bug (<a href="https://github.com/insightsengineering/rtables/issues/198" class="external-link">#198</a>)</li>
 <li>Fix max -Inf warning when content rows appear at positions whose children have 0 visible rows (<a href="https://github.com/insightsengineering/rtables/issues/200" class="external-link">#200</a>)</li>
-<li>Resync NEWS.md file</li>
+<li>Resync <code>NEWS.md</code> file</li>
 <li>Introduce titles and footnotes</li>
 <li>Support automatic population of top-left</li>
 <li>Introduce referential footnote support for cells and row labels</li>
@@ -301,7 +295,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.7" id="rtables-037">rtables 0.3.7<a class="anchor" aria-label="anchor" href="#rtables-037"></a></h2>
-<p>Synchronize release with GitHub commit sha.</p>
+<p>Synchronize release with GitHub commit <code>sha</code>.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6" id="rtables-036">rtables 0.3.6<a class="anchor" aria-label="anchor" href="#rtables-036"></a></h2><p class="text-muted">CRAN release: 2021-01-22</p>
@@ -309,11 +303,11 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5" id="rtables-035">rtables 0.3.5<a class="anchor" aria-label="anchor" href="#rtables-035"></a></h2>
-<p>Documentation-text only changes to introduction vignette to pass CRAN’s URL checks. All package, example, test, and vignette code fully identical to that in tagged github release 0.3.4</p>
+<p>Documentation-text only changes to introduction vignette to pass CRAN’s URL checks. All package, example, test, and vignette code fully identical to that in tagged GitHub release 0.3.4</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.4" id="rtables-034">rtables 0.3.4<a class="anchor" aria-label="anchor" href="#rtables-034"></a></h2>
-<p>Minor changes to the 0.3.3 version in order to submit rtables to CRAN.</p>
+<p>Minor changes to the 0.3.3 version in order to submit <code>rtables</code> to CRAN.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.3" id="rtables-033">rtables 0.3.3<a class="anchor" aria-label="anchor" href="#rtables-033"></a></h2>
@@ -323,11 +317,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9046" id="rtables-032179046">rtables 0.3.2.17.9046<a class="anchor" aria-label="anchor" href="#rtables-032179046"></a></h2>
 <ul><li>
-<code>make_afun</code> now <code><a href="https://rdrr.io/r/base/force.html" class="external-link">force()</a></code>s all customization arguments immediately, which prevents problems when called within loop/lapply constructs.</li>
+<code>make_afun</code> now <code><a href="https://rdrr.io/r/base/force.html" class="external-link">force()</a></code>s all customization arguments immediately, which prevents problems when called within loop/<code>lapply</code> constructs.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9045" id="rtables-032179045">rtables 0.3.2.17.9045<a class="anchor" aria-label="anchor" href="#rtables-032179045"></a></h2>
-<ul><li>Tabulation machinery no longer removes NAs mandatorily in some cases, including multivar column splits</li>
+<ul><li>Tabulation machinery no longer removes NAs mandatorily in some cases, including <code>multivar</code> column splits</li>
 <li>
 <code>analyze_colvars</code>’s <code>inclNAs</code> argument now respected.</li>
 </ul></div>
@@ -344,8 +338,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9042" id="rtables-032179042">rtables 0.3.2.17.9042<a class="anchor" aria-label="anchor" href="#rtables-032179042"></a></h2>
-<ul><li>Fix naming/pathing for columns in multivar case (split itself now has default name “multivars”)</li>
-<li>Fix labeling bug when same variable appears multiple times in MultiVarSplit with different associated levels</li>
+<ul><li>Fix naming/pathing for columns in <code>multivar</code> case (split itself now has default name <code>"multivars"</code>)</li>
+<li>Fix labeling bug when same variable appears multiple times in <code>MultiVarSplit</code> with different associated levels</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9041" id="rtables-032179041">rtables 0.3.2.17.9041<a class="anchor" aria-label="anchor" href="#rtables-032179041"></a></h2>
@@ -359,7 +353,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9039" id="rtables-032179039">rtables 0.3.2.17.9039<a class="anchor" aria-label="anchor" href="#rtables-032179039"></a></h2>
-<ul><li>Fix bug in display of column information when column structure is not symmetric, as with recursive cbinds.</li>
+<ul><li>Fix bug in display of column information when column structure is not symmetric, as with recursive <code>cbind</code>s.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9036" id="rtables-032179036">rtables 0.3.2.17.9036<a class="anchor" aria-label="anchor" href="#rtables-032179036"></a></h2>
@@ -377,9 +371,10 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9034" id="rtables-032179034">rtables 0.3.2.17.9034<a class="anchor" aria-label="anchor" href="#rtables-032179034"></a></h2>
-<ul><li>Fix internal <code>value_formats</code> accessor so it operates on CellValues rather than the raw contained values (thus always returning NULL)</li>
+<ul><li>Fix internal <code>value_formats</code> accessor so it operates on <code>CellValue</code>s rather than the raw contained values (thus always returning NULL)</li>
 <li>
-<code>rrow</code> constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/insightsengineering/rtables/issues/112" class="external-link">#112</a></li>
+<code>rrow</code> constructor no longer interprets cell formats a row format when they are the same across all cells. Fixes bug in “correct way” code discussed in <a href="https://github.com/insightsengineering/rtables/issues/112" class="external-link">#112</a>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9033" id="rtables-032179033">rtables 0.3.2.17.9033<a class="anchor" aria-label="anchor" href="#rtables-032179033"></a></h2>
@@ -387,7 +382,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9031" id="rtables-032179031">rtables 0.3.2.17.9031<a class="anchor" aria-label="anchor" href="#rtables-032179031"></a></h2>
-<ul><li>cbind_rtables can now take more than 2 tables.</li>
+<ul><li>
+<code>cbind_rtables</code> can now take more than 2 tables.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2.17.9029" id="rtables-032179029">rtables 0.3.2.17.9029<a class="anchor" aria-label="anchor" href="#rtables-032179029"></a></h2>
@@ -470,7 +466,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.5" id="rtables-0105">rtables 0.1.0.5<a class="anchor" aria-label="anchor" href="#rtables-0105"></a></h2>
-<ul><li>Added <code>sprintf_format</code> for formatting rcells (thanks to Doug Kelkhoff for the suggestion).</li>
+<ul><li>Added <code>sprintf_format</code> for formatting <code>rcell</code>s (thanks to Doug Kelkhoff for the suggestion).</li>
 <li>Added <code>"(N=xx)"</code> and <code>"&gt;999.9"</code> format labels.</li>
 <li>
 <code>rtabulate</code> has now an argument <code>col_N</code> and the function <code>col_N()</code>.</li>

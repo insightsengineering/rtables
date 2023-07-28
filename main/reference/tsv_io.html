@@ -14,7 +14,7 @@ writes that data.frame out as a tsv file."><!-- mathjax --><script src="https://
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,17 +31,6 @@ writes that data.frame out as a tsv file."><!-- mathjax --><script src="https://
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -66,7 +55,7 @@ writes that data.frame out as a tsv file."><!-- mathjax --><script src="https://
     <div class="ref-description section level2">
     <p>This function creates a flat tabular file of cell values and
 corresponding paths via <code><a href="path_enriched_df.html">path_enriched_df</a></code>. I then
-writes that data.frame out as a tsv file.</p>
+writes that data.frame out as a <code>tsv</code> file.</p>
     </div>
 
     <div class="section level2">
@@ -84,7 +73,7 @@ writes that data.frame out as a tsv file.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tt</dt>
-<dd><p>TableTree (or related class). A TableTree object representing a
+<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
 populated table.</p></dd>
 
 
@@ -112,7 +101,7 @@ re-constituted list values for <code>export_as_tsv</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>By default (ie when <code>value_func</code> is not specified,
+    <p>By default (i.e. when <code>value_func</code> is not specified,
 List columns where at least one value has length &gt; 1 are collapsed
 to character vectors by collapsing the list element with <code>"|"</code>.</p>
     </div>
