@@ -744,7 +744,7 @@ setMethod(".make_split_kids", "Split",
     }
     
     # If params are not present do not do the calculation
-    acdf_param <- .check_afun_cfun_params(SplitVector(spl, splvec), 
+    acdf_param <- check_afun_cfun_params(SplitVector(spl, splvec), 
                                           c(".alt_df", ".alt_df_row"))
     
     # Apply same split for alt_counts_df
@@ -1093,9 +1093,9 @@ build_table <- function(lyt, df,
     lyt <- set_def_child_ord(lyt, df)
     lyt <- fix_analyze_vis(lyt)
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
-    # This check should be added to cinfo and sent everywhere but for the moment
+    # xxx This check should be added to cinfo and sent everywhere but for the moment
     # there is little advantage in this as there are no other cases for these checks.
-    alt_params <- .check_afun_cfun_params(lyt, c(".alt_df", ".alt_df_row")) 
+    alt_params <- check_afun_cfun_params(lyt, c(".alt_df", ".alt_df_row")) 
     if (any(alt_params) && is.null(alt_counts_df)) {
         stop("Layout contains afun/cfun functions that have optional parameters ",
              ".alt_df and/or .alt_df_row, but no alt_count_df was provided in ",
@@ -1449,26 +1449,28 @@ setMethod("fix_analyze_vis", "SplitVector",
 })
 
 # This checks if the input params are used anywhere in cfun/afun
-setGeneric(".check_afun_cfun_params", function(lyt, params) 
-    standardGeneric(".check_afun_cfun_params"))
+setGeneric("check_afun_cfun_params", function(lyt, params) 
+    standardGeneric("check_afun_cfun_params"))
 
-setMethod(".check_afun_cfun_params", "PreDataTableLayouts",
+setMethod("check_afun_cfun_params", "PreDataTableLayouts",
           function(lyt, params) {
-              .check_afun_cfun_params(rlayout(lyt), params)
+              # clayout does not have analysis functions
+              check_afun_cfun_params(rlayout(lyt), params)
           })
 
-setMethod(".check_afun_cfun_params", "PreDataRowLayout",
+setMethod("check_afun_cfun_params", "PreDataRowLayout",
           function(lyt, params) {
-              .check_afun_cfun_params(SplitVector(root_spl(lyt), lyt[[1]]), 
+              # xxx root_spl separately to lyt[[1]] <- lapply it
+              check_afun_cfun_params(SplitVector(root_spl(lyt), lyt[[1]]), 
                                       params)
           })
 
-setMethod(".check_afun_cfun_params", "Split", 
+setMethod("check_afun_cfun_params", "Split", # xxx put the main here
           function(lyt, params) {
-              .check_afun_cfun_params(SplitVector(lyt), params)
+              check_afun_cfun_params(SplitVector(lyt), params)
           })
 
-# Helper function for .check_afun_cfun_params
+# Helper function for check_afun_cfun_params
 .afun_cfun_extract <- function(spl_i) {
     if (is(spl_i, "VAnalyzeSplit")) {
         analysis_fun(spl_i)
@@ -1477,7 +1479,7 @@ setMethod(".check_afun_cfun_params", "Split",
     }
 }
 # Main function for checking parameters
-setMethod(".check_afun_cfun_params", "SplitVector", 
+setMethod("check_afun_cfun_params", "SplitVector", 
           function(lyt, params) {
     # Extract all the functions in the layout
     fnc_vec <- lapply(lyt, .afun_cfun_extract)
