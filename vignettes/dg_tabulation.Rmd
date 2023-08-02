@@ -40,3 +40,17 @@ is(lyt, "PreDataTableLayouts")
 lyt %>% build_table(DM)
 
 ```
+
+Now lets see the interior of our `build_table`, After initial check that the layout is a pre-data table layout, it is checked if the coulmn layout is defined (`clayout` accessor), i.e. it does not have any column split. If that is the case, a `All obs` column is added automatically with all observations. After this, there are a couple of defensive programming calls that do checks and fixtures as we finally have the data. These divide in two kinds: the one that are mainly concerning the layout, which are defined as generics and the one concerning the data that is instead a function as it is not dependent on the layout class. Indeed, the layout is structured and can be divided in `clayout` and `rlayout` (column and row layout). The first one is used to create `cinfo` which is the general object and container of the column splits and information. The second one contains the obligatory all data split, i.e. the root split (accessible with `root_spl`), and the row splits' vectors which are iterative splits in the row space. In the following we consider first the checks and defensive programming.
+```{r, eval=FALSE}
+    ## do checks and defensive programming now that we have the data
+    lyt <- fix_dyncuts(lyt, df) # now that I have the data, I create the splits
+    lyt <- set_def_child_ord(lyt, df) # with the data I set the same order for all splits
+    lyt <- fix_analyze_vis(lyt) # checks if the analyze last split should be visible
+    df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts)) 
+    # checks if split vars are present
+    
+    lyt[] # preserve names and it is just warning if longer
+    lyt@.Data # might not preserve the names -> xxx fixme comment there
+    # Do extensive testing about these behaviors
+```
