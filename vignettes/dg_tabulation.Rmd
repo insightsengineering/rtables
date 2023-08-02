@@ -47,10 +47,17 @@ Now lets see the interior of our `build_table`, After initial check that the lay
     lyt <- fix_dyncuts(lyt, df) # now that I have the data, I create the splits
     lyt <- set_def_child_ord(lyt, df) # with the data I set the same order for all splits
     lyt <- fix_analyze_vis(lyt) # checks if the analyze last split should be visible
+    # If there is only one you will not get the variable name otherwise you get it if you
+    # have multivar and default is na. You can do it now only because you are sure to
+    # have the whole layout.
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts)) 
     # checks if split vars are present
     
     lyt[] # preserve names and it is just warning if longer
     lyt@.Data # might not preserve the names -> xxx fixme comment there
     # Do extensive testing about these behaviors
+    
+    # xxx PreDataAxisLayout is virtual class that both row and cols layouts inherit from
+    # Virtual classes are handy for group classes that need to share common things like 
+    # labels or functions that need to be applicable to their subclasses
 ```
