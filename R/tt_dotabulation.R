@@ -1460,33 +1460,35 @@ setMethod("check_afun_cfun_params", "PreDataTableLayouts",
 
 setMethod("check_afun_cfun_params", "PreDataRowLayout",
           function(lyt, params) {
-              # xxx root_spl separately to lyt[[1]] <- lapply it
-              check_afun_cfun_params(SplitVector(root_spl(lyt), lyt[[1]]), 
-                                      params)
+              ro_spl_parm_l <- check_afun_cfun_params(root_spl(lyt), params)
+              r_spl_parm_l <- lapply(lyt, check_afun_cfun_params, params = params)
+              Reduce(`|`, c(list(ro_spl_parm_l), r_spl_parm_l))
           })
 
-setMethod("check_afun_cfun_params", "Split", # xxx put the main here
+# Main function for checking parameters
+setMethod("check_afun_cfun_params", "SplitVector", 
           function(lyt, params) {
-              check_afun_cfun_params(SplitVector(lyt), params)
+              param_l <- lapply(lyt, check_afun_cfun_params, params = params)
+              Reduce(`|`, param_l)
           })
 
 # Helper function for check_afun_cfun_params
-.afun_cfun_extract <- function(spl_i) {
+.afun_cfun_switch <- function(spl_i) {
     if (is(spl_i, "VAnalyzeSplit")) {
         analysis_fun(spl_i)
     } else {
         content_fun(spl_i)
     }
 }
-# Main function for checking parameters
-setMethod("check_afun_cfun_params", "SplitVector", 
+
+setMethod("check_afun_cfun_params", "Split",
           function(lyt, params) {
-    # Extract all the functions in the layout
-    fnc_vec <- lapply(lyt, .afun_cfun_extract)
-    
-    # For each parameter, check if it is called
-    sapply(params, function(pai) any(unlist(func_takes(fnc_vec, pai))))
-})
+              # Extract function in the split
+              fnc <- .afun_cfun_switch(lyt)
+              
+              # For each parameter, check if it is called
+              sapply(params, function(pai) any(unlist(func_takes(fnc, pai))))
+          })
 
 count <- function(df, ...) NROW(df)
 
