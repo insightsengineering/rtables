@@ -1093,8 +1093,6 @@ build_table <- function(lyt, df,
     lyt <- set_def_child_ord(lyt, df)
     lyt <- fix_analyze_vis(lyt)
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
-    # xxx This check should be added to cinfo and sent everywhere but for the moment
-    # there is little advantage in this as there are no other cases for these checks.
     alt_params <- check_afun_cfun_params(lyt, c(".alt_df", ".alt_df_row")) 
     if (any(alt_params) && is.null(alt_counts_df)) {
         stop("Layout contains afun/cfun functions that have optional parameters ",
@@ -1480,6 +1478,12 @@ setMethod("check_afun_cfun_params", "SplitVector",
         content_fun(spl_i)
     }
 }
+
+# Extreme case that happens only when using add_existing_table
+setMethod("check_afun_cfun_params", "VTableTree",
+          function(lyt, params) {
+              setNames(logical(length(params)), params) # All FALSE
+          })
 
 setMethod("check_afun_cfun_params", "Split",
           function(lyt, params) {

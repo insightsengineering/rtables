@@ -50,7 +50,7 @@ test_that("existing table in layout works", {
                 table_names = c("AGE1", "AGE2")
         )
 
-tab2 <- build_table(thing2, rawdat)
+    tab2 <- build_table(thing2, rawdat)
 
 
     thing3 <- basic_table() %>%
