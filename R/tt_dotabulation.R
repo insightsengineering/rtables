@@ -1194,6 +1194,10 @@ build_table <- function(lyt, df,
     tab
 }
 
+# fix_split_vars ----
+# These checks guarantee that all the split variables are present in the data. 
+# No generic is needed because it is not dependent on the input layout but 
+# on the df.
 fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     var <- spl_payload(spl)
     if(!(var %in% names(df)))
@@ -1275,6 +1279,7 @@ fix_split_vars_inner <- function(lyt, df, char_ok) {
     df
 }
 
+# set_def_child_ord ----
 ## the table is built by recursively splitting the data and doing things to each
 ## piece. The order (or even values) of unique(df[[col]]) is not guaranteed to
 ## be the same in all the different partitions. This addresses that.
@@ -1401,6 +1406,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
     }
 }
 
+# fix_analyze_vis ----
 ## now that we know for sure the number of siblings
 ## collaplse NAs to TRUE/FALSE for whether
 ## labelrows should be visible for ElementaryTables
@@ -1446,6 +1452,7 @@ setMethod("fix_analyze_vis", "SplitVector",
     lyt
 })
 
+# check_afun_cfun_params ----
 # This checks if the input params are used anywhere in cfun/afun
 setGeneric("check_afun_cfun_params", function(lyt, params) 
     standardGeneric("check_afun_cfun_params"))
@@ -1494,6 +1501,7 @@ setMethod("check_afun_cfun_params", "Split",
               sapply(params, function(pai) any(unlist(func_takes(fnc, pai))))
           })
 
+# Helper fnc ----
 count <- function(df, ...) NROW(df)
 
 guess_format <- function(val) {
@@ -1552,7 +1560,7 @@ guess_format <- function(val) {
     }
 }
 
-
+# qtable ----
 #' Generalized Frequency Table
 #'
 #' @description This function provides a convenience interface for
