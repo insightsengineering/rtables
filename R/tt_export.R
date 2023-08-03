@@ -8,9 +8,9 @@ NULL
 #'
 #' This function creates a flat tabular file of cell values and
 #' corresponding paths via \code{\link{path_enriched_df}}. I then
-#' writes that data.frame out as a tsv file.
+#' writes that data.frame out as a `tsv` file.
 #'
-#' By default (ie when \code{value_func} is not specified,
+#' By default (i.e. when \code{value_func} is not specified,
 #' List columns where at least one value has length > 1 are collapsed
 #' to character vectors by collapsing the list element with \code{"|"}.
 #'
@@ -66,7 +66,7 @@ collapse_values <- function(colvals) {
     vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
-#' Transform TableTree object to Path-Enriched data.frame
+#' Transform `TableTree` object to Path-Enriched data.frame
 #'
 #' @inheritParams gen_args
 #' @param path_fun function. Function to transform paths into single-string
@@ -106,7 +106,7 @@ do_label_row <- function(rdfrow, maxlen) {
 }
 
 
-make_ard_md_colnames <- function(maxlen) {
+make_result_df_md_colnames <- function(maxlen) {
     spllen <- floor((maxlen - 2) / 2)
     ret <- character()
     if(spllen > 0 )
@@ -131,7 +131,7 @@ do_data_row <- function(rdfrow, maxlen) {
 
     pth <- rdfrow$path[[1]]
     pthlen <- length(pth)
-    ## odd means we have a multi-analsysis step in the path, we dont' want that in the ard
+    ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
     if(pthlen %% 2 == 1) {
         pth <- pth[-1*(pthlen - 2)]
     }
@@ -154,31 +154,31 @@ handle_rdf_row <- function(rdfrow, maxlen) {
            LabelRow = do_label_row(rdfrow, maxlen),
            ContentRow = do_content_row(rdfrow, maxlen),
            DataRow = do_data_row(rdfrow, maxlen),
-           stop("Unrecognized node type in row dataframe, unable to generate ARD")
+           stop("Unrecognized node type in row dataframe, unable to generate result data frame")
            )
-    setNames(ret, make_ard_md_colnames(maxlen))
+    setNames(ret, make_result_df_md_colnames(maxlen))
 }
 
 
-#' ARD Specifications
+#' Result Data Frame Specifications
 #'
-#' @return a named list of ard extraction functions by "specification"
+#' @return a named list of result data frame extraction functions by "specification"
 #' @export
 #' @examples
-#' ard_specs()
-ard_specs <- function() {
-   list(v0_experimental = ard_v0_experimental)
+#' result_df_specs()
+result_df_specs <- function() {
+   list(v0_experimental = result_df_v0_experimental)
 }
 
-lookup_ard_specfun <- function(spec) {
-    if(!(spec %in% names(ard_specs())))
-        stop("unrecognized ARD specification: ",
+lookup_result_df_specfun <- function(spec) {
+    if(!(spec %in% names(result_df_specs())))
+        stop("unrecognized result data frame specification: ",
              spec,
              "If that specification is correct you may  need to update your version of rtables")
-    ard_specs()[[spec]]
+    result_df_specs()[[spec]]
 }
 
-ard_v0_experimental <- function(tt) {
+result_df_v0_experimental <- function(tt) {
 
     raw_cvals <- cell_values(tt)
     ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
@@ -198,14 +198,14 @@ ard_v0_experimental <- function(tt) {
           cellvals)
 }
 
-#' Generate an Analysis Ready Dataset (ARD)
+#' Generate a Result Data Frame
 #'
-#' @param tt VTableTree. The table.
+#' @param tt `VTableTree`. The table.
 #' @param spec character(1). The specification to use to
-#' extract the ARD. See details
-#' @param ... Passed to spec-specific ARD conversion function.
+#' extract the result data frame. See details
+#' @param ... Passed to spec-specific result data frame conversion function.
 #'
-#' @details ARD specifications may differ in the exact information they include and
+#' @details Result data frame specifications may differ in the exact information they include and
 #' the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.
@@ -221,11 +221,11 @@ ard_v0_experimental <- function(tt) {
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' as_ard(tbl)
-as_ard <- function(tt, spec = "v0_experimental", ...) {
+#' as_result_df(tbl)
+as_result_df <- function(tt, spec = "v0_experimental", ...) {
 
-    ard_fun <- lookup_ard_specfun(spec)
-    ard_fun(tt, ...)
+    result_df_fun <- lookup_result_df_specfun(spec)
+    result_df_fun(tt, ...)
 }
 
 .split_colwidths <- function(ptabs, nctot, colwidths) {
@@ -360,15 +360,15 @@ formatters::export_as_txt
 ## }
 
 
-#' Create a FlexTable object representing an rtables TableTree
+#' Create a `FlexTable` object representing an `rtables` `TableTree`
 #'
 #' @inheritParams gen_args
 #' @param paginate logical(1). Should \code{tt} be paginated and exported as
-#'   multiple flextables. Defaults to \code{FALSE}
+#'   multiple `flextables`. Defaults to \code{FALSE}
 #' @inheritParams paginate_table
 #' @param total_width numeric(1). Total width in inches for the resulting
-#'   flextable(s). Defaults to 5.
-#' @return a flextable object
+#'   `flextable(s)`. Defaults to 5.
+#' @return a `flextable` object
 #' @export
 #' @examples
 #' analysisfun <- function(x, ...) {

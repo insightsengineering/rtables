@@ -12,7 +12,7 @@ counts_wpcts(x, .N_col)
 \item{.N_col}{integer(1). Total count for the column, provided by rtables pagination machinery}
 }
 \value{
-A RowsVerticalSection object with counts (and percents) for each level of the factor
+A \code{RowsVerticalSection} object with counts (and percents) for each level of the factor
 }
 \description{
 Analysis function to count levels of a factor with percentage of the column total

@@ -36,7 +36,7 @@ child (which are based on the data and type of split during tabulation).}
 \item{split_fun}{function/NULL. custom splitting function See
 \code{\link{custom_split_funs}}}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -49,14 +49,14 @@ new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the

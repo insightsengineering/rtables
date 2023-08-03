@@ -20,12 +20,12 @@ summarize_row_groups(
 
 \item{var}{string, variable name}
 
-\item{label_fstr}{string. An sprintf style format string containing. For
+\item{label_fstr}{string. An \code{sprintf} style format string containing. For
 non-comparison splits, it can contain  up to one \code{"\%s"} which takes
 the current split value and generates the row/column label.
 Comparison-based splits it can contain up to two \code{"\%s"}.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 

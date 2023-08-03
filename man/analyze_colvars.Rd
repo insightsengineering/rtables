@@ -21,7 +21,7 @@ analyze_colvars(
 in each column.  the list will be repped out as needed and matched by
 position with the columns during tabulation.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 

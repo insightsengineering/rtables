@@ -14,8 +14,8 @@ select_all_levels
 add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 }
 \arguments{
-\item{combosdf}{data.frame/tbl_df. Columns valname, label, levelcombo,
-exargs. Of which levelcombo and exargs are list columns. Passing the
+\item{combosdf}{\code{data.frame}/\code{tbl_df}. Columns \code{valname}, \code{label}, \code{levelcombo},
+\code{exargs}. Of which \code{levelcombo} and \code{exargs} are list columns. Passing the
 \code{select_all_levels} object as a value in the \code{comblevels} column
 indicates that an overall/all-observations level should be created.}
 

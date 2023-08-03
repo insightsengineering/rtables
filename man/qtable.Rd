@@ -66,11 +66,11 @@ both row and column dimensions  involving faceting by 0 or more
 variables in each.
 
 The display  of the table depends on certain
-details  of the  tabulation.   In  the case  of  an afun  which
+details  of the  tabulation.   In  the case  of  an \code{afun} which
 returns a single  cell's contents (either a scalar  or a vector
 of 2 or 3 elements), the  label rows for the deepest-nested row
 facets will be hidden and the labels used there will be used as
-the analysis row labels. In the case of an afun which returns a
+the analysis row labels. In the case of an \code{afun} which returns a
 list (corresponding to  multiple cells), the names  of the list
 will be used as the analysis  row labels and the deepest nested
 row labels will not be hidden.

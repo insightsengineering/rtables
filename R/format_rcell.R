@@ -1,4 +1,4 @@
-#' Format rcell
+#' Format `rcell`
 #'
 #' This is a wrapper around
 #' \code{\link[formatters:format_value]{formatters::format_value}} for use with

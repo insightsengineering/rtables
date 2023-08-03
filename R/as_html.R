@@ -23,13 +23,13 @@ div_helper <- function(lst, class) {
 
 #' Convert an `rtable` object to a `shiny.tag` html object
 #'
-#' The returned `html` object can be immediately used in shiny and rmarkdown.
+#' The returned `html` object can be immediately used in `shiny` and `rmarkdown`.
 #'
 #' @param x `rtable` object
-#' @param class_table class for table tag
-#' @param class_tr class for tr tag
-#' @param class_td class for td tag
-#' @param class_th class for th tag
+#' @param class_table class for `table` tag
+#' @param class_tr class for `tr` tag
+#' @param class_td class for `td` tag
+#' @param class_th class for `th` tag
 #' @param width width
 #' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
 #'

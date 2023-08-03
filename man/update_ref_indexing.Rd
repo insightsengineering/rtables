@@ -7,7 +7,7 @@
 update_ref_indexing(tt)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 }
 \description{
@@ -15,7 +15,7 @@ Re-indexes footnotes within a built table
 }
 \details{
 After adding or removing  referential footnotes manually,
-or  after subsetting  a table,  the reference  indexes (ie  the
+or  after subsetting  a table,  the reference  indexes (i.e.  the
 number associated  with specific  footnotes) may  be incorrect.
 This function recalculates these based on the full table.
 }
