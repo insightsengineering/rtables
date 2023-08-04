@@ -376,24 +376,24 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
     # Titles/footer info are (independently) retained from first object if identical or missing in all other objects
-    all_titles <- sapply(x, function(x) if (is.null(attr(x, "main_title"))) "" else main_title(x))
+    all_titles <- sapply(x, main_title)
     if (all_titles[1] != "" && (all(all_titles[-1] == "") || length(unique(all_titles)) == 1)) {
       rbind_annot[["title"]] <- all_titles[[1]]
     }
 
-    all_sts <- lapply(x, function(x) if (is.null(attr(x, "subtitles"))) character() else subtitles(x))
+    all_sts <- lapply(x, subtitles)
     if (length(all_sts[[1]]) > 0 && (all(sapply(all_sts[[-1]], length) == 0) ||
       !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_sts)))) {
       rbind_annot[["subtitles"]] <- all_sts[[1]]
     }
 
-    all_footers <- lapply(x, function(x) if (is.null(attr(x, "main_footer"))) character() else main_footer(x))
+    all_footers <- lapply(x, main_footer)
     if (length(all_footers[[1]]) > 0 && (all(sapply(all_footers[[-1]], length) == 0) ||
       !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_footers)))) {
       rbind_annot[["footer"]] <- all_footers[[1]]
     }
 
-    all_pfs <- lapply(x, function(x) if (is.null(attr(x, "provenance_footer"))) character() else prov_footer(x))
+    all_pfs <- lapply(x, prov_footer)
     if (length(all_pfs[[1]]) > 0 && (all(sapply(all_pfs[[-1]], length) == 0) ||
       !isFALSE(Reduce(function(x, y) if (identical(x, y)) x else FALSE, all_pfs)))) {
       rbind_annot[["pf"]] <- all_pfs[[1]]
