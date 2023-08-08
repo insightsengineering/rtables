@@ -1349,6 +1349,14 @@ test_that("qtable works", {
     expect_identical(top_left(t13), character())
     mpf13 <- matrix_form(t13)
     expect_equal(mf_strings(mpf13)[3, 1], "mylabel")
+
+    expect_error(qtable(ex_adsl , row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
+                        afun = mean, row_labels = c("ABC", "EFG", "HIJ")),
+                 "does not agree with number of rows")
+
+    expect_error(qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3,
+                        row_labels = "ABC"),
+                 "does not agree with number of rows")
 })
 
 
