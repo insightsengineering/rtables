@@ -392,20 +392,28 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
                             ...,
                             colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
                             tf_wrap = !is.null(cpp),
+                            tt_font_size = 9, # for the moment global
+                            tt_font = "arial",
                             max_width = cpp,
                             total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
-        stop("this function requires the flextable and officer packages. ",
+        stop("This function requires the flextable and officer packages. ",
              "Please install them if you wish to use it")
     }
+    if(!requireNamespace("checkmate")) {
+        stop("This function uses checkmate.")
+    }
+    checkmate::assert_int(tt_font_size)
+    checkmate::assert_character(tt_font)
 
-    ## if we're paginating, just call
+    ## if we're paginating, just call -> pagination happens also afterwards if needed
     if(paginate) {
         if(is.null(lpp))
             stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
         tabs <- paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, ...)
         cinds <- lapply(tabs, function(tb) c(1, .figure_out_colinds(tb, tt) + 1L))
-        return(mapply(tt_to_flextable, tt = tabs, colwidths = cinds, MoreArgs = list(paginate = FALSE, total_width = total_width),
+        return(mapply(tt_to_flextable, tt = tabs, colwidths = cinds, 
+                      MoreArgs = list(paginate = FALSE, total_width = total_width),
                       SIMPLIFY = FALSE))
     }
 
@@ -420,7 +428,7 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     rdf <- make_row_df(tt)
 
     hdr <- matform$strings[1:hnum, , drop = FALSE]
-
+    
     flx <- flextable::qflextable(content)
 
     flx <- flextable::set_header_labels(flx, values = setNames(as.vector(hdr[hnum, , drop = TRUE]), names(content)))
@@ -437,34 +445,49 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     }
     flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1), align = "center", part = "header")
     flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1),  align = "center", part = "body")
+    
+    # Bolding
+    flx <- flextable::bold(flx, j = 2:(NCOL(tt) + 1), part = "header")
+    # Bolding content rows
+    row_df <- make_row_df(tt)
+    flx <- flextable::bold(flx, j = 1, i = which(row_df$node_class == "ContentRow"), part = "body")
+    browser()
+    
+    # Rownames indentation
     for(i in seq_len(NROW(tt))) {
         flx <- flextable::padding(flx, i = i, j = 1, padding.left = 10 * rdf$indent[[i]])
     }
+    
+    # Adding footer line separator if present
     if(length(matform$ref_footnotes) > 0) {
         flx <- flextable::add_footer_lines(flx, values = matform$ref_footnotes)
     }
-
+    
+    # Header lines (?)
     if(length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
         real_titles <- all_titles(tt)
         real_titles <- real_titles[nzchar(real_titles)]
-        flx <- flextable::hline(flx, i = 1L,
-                                border = officer::fp_border(), part = "header")
+        # flx <- flextable::hline(flx, i = 1L,
+        #                         border = officer::fp_border(), part = "header")
         ## rev is because add_header_lines(top=TRUE) seems to put them in backwards!!! AAHHHH
         flx <- flextable::add_header_lines(flx, values = rev(real_titles),
                                            top = TRUE)
     }
-
+    
+    # Footer lines (?)
     if(length(all_footers(tt)) > 0) {
         flx <- flextable::hline(flx, i = length(matform$ref_footnotes),
                                 border = officer::fp_border(), part = "footer")
         flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
     }
 
-    flx <- flextable::font(flx, fontname = "courier")
+    flx <- flextable::font(flx, fontname = tt_font, part = "all")
+    flx <- flextable::fontsize(flx, size = tt_font_size, part = "all")
 
     flextable::set_table_properties(flx, layout = "autofit")
 }
 
+# only used in pagination
 .tab_to_colpath_set <- function(tt) {
     vapply(collect_leaves(coltree(tt)),
            function(y) paste(pos_to_path(tree_pos(y)), collapse = " "),

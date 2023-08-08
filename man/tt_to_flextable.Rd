@@ -12,6 +12,8 @@ tt_to_flextable(
   ...,
   colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
   tf_wrap = !is.null(cpp),
+  tt_font_size = 9,
+  tt_font = "arial",
   max_width = cpp,
   total_width = 10
 )
