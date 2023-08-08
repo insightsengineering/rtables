@@ -1,6 +1,6 @@
 ## rtables 0.6.2.9001
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
- * Binding objects via `rbind` will retain titles/footer information if only present in the first object being bound.
+ * Binding objects via `rbind` will retain titles/footer information if identical in all objects or only present in the first object being bound.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
