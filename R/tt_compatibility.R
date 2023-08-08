@@ -354,6 +354,23 @@ rtablel <- function(header, ..., format = NULL, hsep = default_hsep(), inset = 0
     do.call(rtable, args_list)
 }
 
+# All object annotations are identical (and exist)
+all_annots_identical <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && length(unique(all_annots)) == 1
+    } else {
+        length(all_annots[[1]]) > 0 && Reduce(identical, all_annots)
+    }
+}
+
+# Only first object has annotations
+only_first_annot <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && all(all_annots[-1] == "")
+    } else {
+        length(all_annots[[1]]) > 0 && all(sapply(all_annots, length)[-1] == 0)
+    }
+}
 
 #' @rdname rbind
 #' @return A formal table object.
@@ -377,21 +394,16 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
     # Titles/footer info are (independently) retained from first object if identical or missing in all other objects
     all_titles <- sapply(x, main_title)
-    if (all_titles[1] != "" && (length(unique(all_titles)) == 1) || all(all_titles[-1] == "")) {
-      rbind_annot[["title"]] <- all_titles[[1]]
-    }
+    if (all_annots_identical(all_titles) || only_first_annot(all_titles)) rbind_annot[["title"]] <- all_titles[[1]]
+
     all_sts <- lapply(x, subtitles)
-    if (length(all_sts[[1]]) > 0 && (Reduce(identical, all_sts) || all(sapply(all_sts, length)[-1] == 0))) {
-      rbind_annot[["subtitles"]] <- all_sts[[1]]
-    }
+    if (all_annots_identical(all_sts) || only_first_annot(all_sts)) rbind_annot[["subtitles"]] <- all_sts[[1]]
+
     all_ftrs <- lapply(x, main_footer)
-    if (length(all_ftrs[[1]]) > 0 && (Reduce(identical, all_ftrs) || all(sapply(all_ftrs, length)[-1] == 0))) {
-      rbind_annot[["footer"]] <- all_ftrs[[1]]
-    }
+    if (all_annots_identical(all_ftrs) || only_first_annot(all_ftrs)) rbind_annot[["footer"]] <- all_ftrs[[1]]
+
     all_pfs <- lapply(x, prov_footer)
-    if (length(all_pfs[[1]]) > 0 && (Reduce(identical, all_pfs) || all(sapply(all_pfs, length)[-1] == 0))) {
-      rbind_annot[["pf"]] <- all_pfs[[1]]
-    }
+    if (all_annots_identical(all_pfs) || only_first_annot(all_pfs)) rbind_annot[["pf"]] <- all_pfs[[1]]
 
     ## if we got only ElementaryTable and
     ## TableRow objects, construct a new
