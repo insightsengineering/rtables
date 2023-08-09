@@ -47,13 +47,13 @@ table(ex_adsl$SEX, ex_adsl$ARM)
 ```
 
 We can easily recreate the cross-tables above with `qtable()` by
-specifying a data.frame with variable(s) to tabulate. The first variable
-controls how to split the data by rows. Optionally, a second variable
-can be used to control how to define the column facets of the table.
+specifying a data.frame with variable(s) to tabulate. The `col_vars` and
+`row_vars` arguments control how to split the data across columns and rows
+respectively. 
 
 ```{r}
-qtable(ex_adsl, "ARM")
-qtable(ex_adsl, row_vars = "ARM", col_vars = "SEX")
+qtable(ex_adsl, col_vars = "ARM")
+qtable(ex_adsl, col_vars = "ARM", row_vars = "SEX")
 ```
 
 Aside from the display style, the main difference is that `qtable()`
@@ -64,14 +64,13 @@ will add (N=xx) in the table header by default. This can be removed with
 qtable(ex_adsl, "ARM", show_colcounts = FALSE)
 ```
 
-An additional note is that any variables used as the row or column
-facets should not have any empty strings (""). This is because non empty
-values are required as labels when generating the table. The code below
-will generate an error.
+Any variables used as the row or column facets should not have any empty 
+strings (""). This is because non empty values are required as labels when 
+generating the table. The code below will generate an error.
 
 ```{r, eval = FALSE}
 tmp_adsl <- ex_adsl
-tmp_adsl$new <- ""
+tmp_adsl$new <- rep_len(c("","A", "B"), nrow(tmp_adsl))
 
 qtable(tmp_adsl, row_vars = "new")
 ```
@@ -92,7 +91,10 @@ below adds a row of 0s for `STRATA1` level "B" nested under the `SEX`
 level "UNDIFFERENTIATED".
 
 ```{r}
-qtable(ex_adsl, row_vars = c("SEX", "STRATA1"), col_vars = c("ARM", "STRATA2"), drop_levels = FALSE)
+qtable(ex_adsl, 
+       row_vars = c("SEX", "STRATA1"), 
+       col_vars = c("ARM", "STRATA2"), 
+       drop_levels = FALSE)
 ```
 
 In contrast, `table()` cannot return a nested table. Rather it produces
@@ -113,11 +115,11 @@ ftable(t1, row.vars = c("SEX", "STRATA1"))
 
 ## NA Values
 
-So far all the examples we have seen used counts to summarize the data
-in each table cell as this is the default analysis performed by
-`qtable()`. Internally, a single variable specified by `avar` is used to
-generate the counts in the table. The default is the first variable in
-`data` which is "STUDYID" in the case of `ex_adsl`.
+So far in all the examples we have seen we used counts to summarize the data
+in each table cell as this is the default analysis used by
+`qtable()`. Internally, a single analysis variable specified by `avar` is used
+to generate the counts in the table. The default analysis variable is the first 
+variable in `data`. In the case of `ex_adsl` this is "STUDYID".
 
 Let's see what happens when we introduce some `NA` values into the
 analysis variable:
@@ -129,15 +131,18 @@ tmp_adsl[[1]] <- NA_character_
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
 ```
 
-The resulting table is empty because all the values of the analysis
-variable are `NA`. 
+The resulting table is showing 0's across all cells because all the values of
+the analysis variable are `NA`. 
 
-Remember to always pre-process the data for `NA`
-values when doing quick exploratory analysis and using the default
-counts aggregate function to avoid misleading results.
+Keep this behavior in mind when doing quick exploratory analysis using the 
+default counts aggregate function of `qtable`. 
+
+If this does not suit your purpose, you can either pre-process your data to 
+recode the `NA` values or use another analysis function. We will see how
+the latter is done in the [Custom Aggregation] section.
 
 ```{r}
-# Convert NA values
+# Recode NA values
 tmp_adsl[[1]] <- forcats::fct_na_value_to_level(tmp_adsl[[1]], level = "<NA>")
 
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
@@ -151,7 +156,7 @@ tmp_adsl$new1 <- factor(NA_character_, levels = c("X", "Y", "Z"))
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "new1")
 ```
 
-Explicitly labelling the `NA` levels in the column facet adds a column to the
+Explicitly labeling the `NA` levels in the column facet adds a column to the
 table:
 ```{r}
 tmp_adsl$new2 <- forcats::fct_na_value_to_level(tmp_adsl$new1, level = "<NA>")
@@ -219,12 +224,12 @@ qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
        summarize_groups = TRUE, avar = "AGE", afun = mean)
 ```
 
-In the second table there are marginal summary rows for each level of
-`STRATA1` and `STRATA2`. The number 18 in the second row summarizes the
-count of records part of `ARM` level "A: Drug X", `STRATA1` level "A",
-and `STRATA2` level "S1". The percent is calculated as the cell count
-divided by the column count as shown in the table header. So we can see
-that the mean `AGE` of 31.61 in that subgroup is based on 18 subjects
+In the second table there are marginal summary rows for each level of the
+two row facet variables: `STRATA1` and `STRATA2`. The number 18 in the second
+row gives the count of observations part of `ARM` level "A: Drug X",
+`STRATA1` level "A", and `STRATA2` level "S1". The percent is calculated as
+the cell count divided by the column count given in the table header. So we can
+see that the mean `AGE` of 31.61 in that subgroup is based on 18 subjects
 which correspond to 13.4% of the subjects in arm "A: Drug X".
 
 See `?summarize_row_groups` for how to add marginal summary rows when
@@ -256,7 +261,3 @@ there is limited functionality for building very complex tables. For
 details on how to get started with the core `rtables` layout
 functionality see the [`introduction`](https://insightsengineering.github.io/rtables/main/articles/introduction.html)
 vignette.
-
-## TODO
-
--   check summarize_groups interaction with row_labels
