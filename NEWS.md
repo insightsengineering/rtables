@@ -1,5 +1,6 @@
 ## rtables 0.6.2.9001
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
+ * Added vignette on exploratory analysis with `qtable`.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.

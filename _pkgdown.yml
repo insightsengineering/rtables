@@ -17,6 +17,7 @@ articles:
     contents:
     - introduction
     - clinical_trials
+    - exploratory_analysis
     - subsetting_tables
     - split_functions
     - tabulation_dplyr
