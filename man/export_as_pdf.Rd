@@ -29,7 +29,7 @@ export_as_pdf(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{file}{file to write, must have \code{.pdf} extension}

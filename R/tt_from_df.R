@@ -1,4 +1,4 @@
-#' Create ElementaryTable from data.frame
+#' Create `ElementaryTable` from data.frame
 #' @param df data.frame.
 #' @return an \code{ElementaryTable} object with unnested columns corresponding to
 #' \code{names(df)} and row labels corresponding to \code{row.names(df)}
