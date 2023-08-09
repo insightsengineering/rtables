@@ -3,16 +3,16 @@
 \name{content_table}
 \alias{content_table}
 \alias{content_table<-}
-\title{Retrieve or set Content Table from a TableTree}
+\title{Retrieve or set Content Table from a \code{TableTree}}
 \usage{
 content_table(obj)
 
 content_table(obj) <- value
 }
 \arguments{
-\item{obj}{TableTree. The TableTree}
+\item{obj}{\code{TableTree}. The \code{TableTree}}
 
-\item{value}{ElementaryTable. The new content table for \code{obj}.}
+\item{value}{\code{ElementaryTable}. The new content table for \code{obj}.}
 }
 \value{
 the \code{ElementaryTable} containing the (top level) \emph{content rows} of \code{obj} ( or \code{NULL}

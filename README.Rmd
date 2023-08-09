@@ -26,7 +26,7 @@ suppressPackageStartupMessages(library(dplyr))
 [![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml)
 
 ![GitHub forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)
-![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
+![GitHub repo stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/rtables)
 ![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/rtables)
@@ -45,7 +45,7 @@ suppressPackageStartupMessages(library(dplyr))
 
 The `rtables` R package was designed to create and display complex tables with R. The cells in an `rtable` may contain
 any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
-`rtables` can be outputted in `ascii` `html`, and `pdf`, as well powerpoint (via conversion to `flextable` objects). `rtf` support is in development and will be in a future release.
+`rtables` can be outputted in `ascii` `html`, and `pdf`, as well Power Point (via conversion to `flextable` objects). `rtf` support is in development and will be in a future release.
 
 `rtables` is developed and copy written by `F. Hoffmann-La Roche` and it is released open source under Apache
 License Version 2. 
@@ -59,7 +59,7 @@ License Version 2.
 * flexible formatting (cell spans, rounding, alignment, etc.)
 * multiple output formats (html, ascii, latex, pdf, xml)
 * flexible pagination in both horizontal and vertical directions
-* distinguish between name and label in the data structure to work with CDISC standards
+* distinguish between name and label in the data structure to work with `CDISC` standards
 * title, footnotes, cell cell/row/column references
 
 `rtables` currently covers virtually all of these requirements, and further advances remain under active development.

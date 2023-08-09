@@ -2,7 +2,7 @@
 % Please edit documentation in R/Viewer.R
 \name{Viewer}
 \alias{Viewer}
-\title{Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a
+\title{Display an \code{\link{rtable}} object in the Viewer pane in \code{RStudio} or in a
 browser}
 \usage{
 Viewer(x, y = NULL, row.names.bold = FALSE, ...)
@@ -12,7 +12,7 @@ Viewer(x, y = NULL, row.names.bold = FALSE, ...)
 
 \item{y}{optional second argument of same type as \code{x}}
 
-\item{row.names.bold}{row.names.bold boolean, make rownames bold}
+\item{row.names.bold}{row.names.bold boolean, make \code{row.names} bold}
 
 \item{...}{arguments passed to \code{as_html}}
 }

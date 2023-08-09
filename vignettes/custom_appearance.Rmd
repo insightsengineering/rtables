@@ -242,7 +242,7 @@ A character value can be specified to modify the horizontal separation
 between column headers and the table. Horizontal separation applies
 when:
 
-1. separating title + subtitles from the column labels + topleft
+1. separating title + subtitles from the column labels + top left
    materials,
 2. column labels + top left material from row labels + cells,
 3. row labels + cells from footer content, and
@@ -403,7 +403,7 @@ Below is an example using the `label_pos` argument for modifying label
 visibility:
 
 Label order will mirror the order of `split_rows_by` calls. If the
-labels of any subgroups should be hidden, the `label_pos` arugment
+labels of any subgroups should be hidden, the `label_pos` argument
 should be set to hidden.
 
 "SEX" label position is hidden - 

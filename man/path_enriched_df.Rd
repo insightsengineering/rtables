@@ -2,12 +2,12 @@
 % Please edit documentation in R/tt_export.R
 \name{path_enriched_df}
 \alias{path_enriched_df}
-\title{Transform TableTree object to Path-Enriched data.frame}
+\title{Transform \code{TableTree} object to Path-Enriched data.frame}
 \usage{
 path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{path_fun}{function. Function to transform paths into single-string
@@ -24,7 +24,7 @@ A data frame of \code{tt}'s cell values (processed by
 (processed by by \code{path_fun}).
 }
 \description{
-Transform TableTree object to Path-Enriched data.frame
+Transform \code{TableTree} object to Path-Enriched data.frame
 }
 \examples{
 

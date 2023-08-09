@@ -7,7 +7,7 @@
 #' @inheritParams gen_args
 #'
 #' @details \code{all_zero_or_na} returns \code{TRUE} (and thus indicates
-#'   trimming/pruning) for any \emph{non-LabelRow} \code{TableRow} which contain
+#'   trimming/pruning) for any \emph{non-\code{LabelRow}} \code{TableRow} which contain
 #'   only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and
 #'   \code{-Inf} values.
 #' @rdname trim_prune_funs
@@ -59,7 +59,7 @@ all_zero <- function(tr) {
 }
 #' Trim rows from a populated table without regard for table structure
 #' @inheritParams gen_args
-#' @param criteria function. Function which takes a TableRow object and returns
+#' @param criteria function. Function which takes a `TableRow` object and returns
 #'   \code{TRUE} if that row should be removed. Defaults to
 #'   \code{\link{all_zero_or_na}}
 #' @return The table with rows that have only NA or 0 cell values removed
@@ -207,7 +207,7 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
     }
 }
 
-#' Recursively prune a TableTree
+#' Recursively prune a `TableTree`
 #'
 #' @inheritParams gen_args
 #' @param prune_func function. A Function to be called on each subtree which
@@ -218,7 +218,7 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' @param depth numeric(1). Used internally, not intended to be set by the end
 #'   user.
 #'
-#' @return A TableTree pruned via recursive application of \code{prune_func}.
+#' @return A `TableTree` pruned via recursive application of \code{prune_func}.
 #'
 #' @export
 #'

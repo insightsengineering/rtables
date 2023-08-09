@@ -2,7 +2,7 @@
 % Please edit documentation in R/format_rcell.R
 \name{format_rcell}
 \alias{format_rcell}
-\title{Format rcell}
+\title{Format \code{rcell}}
 \usage{
 format_rcell(
   x,
