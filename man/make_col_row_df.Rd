@@ -10,7 +10,7 @@ row_paths(x)
 col_paths(x)
 }
 \arguments{
-\item{x}{an rtable object}
+\item{x}{an \code{rtable} object}
 }
 \value{
 a list of paths to each row/column within \code{x}

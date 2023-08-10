@@ -80,7 +80,7 @@ arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{cformat}{format spec. Format for content rows}
 
-\item{split_format}{FormatSpec. Default format associated with the split
+\item{split_format}{\code{FormatSpec}. Default format associated with the split
 being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
@@ -102,9 +102,9 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{cvar}{character(1). The variable, if any, which the content function
@@ -113,12 +113,12 @@ should accept. Defaults to NA.}
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
 \item{child_names}{character. Names to be given to the sub splits contained
-by a compound split (typically a AnalyzeMultiVars split object).}
+by a compound split (typically a \code{AnalyzeMultiVars} split object).}
 
 \item{section_div}{character(1). String which should be repeated as a section
 divider after each group defined by this split instruction, or

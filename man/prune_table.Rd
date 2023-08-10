@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compare_tables.R
 \name{prune_table}
 \alias{prune_table}
-\title{Recursively prune a TableTree}
+\title{Recursively prune a \code{TableTree}}
 \usage{
 prune_table(
   tt,
@@ -12,7 +12,7 @@ prune_table(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{prune_func}{function. A Function to be called on each subtree which
@@ -26,10 +26,10 @@ happen at all levels}
 user.}
 }
 \value{
-A TableTree pruned via recursive application of \code{prune_func}.
+A \code{TableTree} pruned via recursive application of \code{prune_func}.
 }
 \description{
-Recursively prune a TableTree
+Recursively prune a \code{TableTree}
 }
 \examples{
 adsl <- ex_adsl

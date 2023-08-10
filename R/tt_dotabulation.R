@@ -639,7 +639,7 @@ setMethod(".make_split_kids", "Split",
     ##
     ## XXX this is a lot of data churn, if it proves too slow
     ## we can
-    ## a) check if any of the analyses (ie the afuns) need the baseline in this
+    ## a) check if any of the analyses (i.e. the afuns) need the baseline in this
     ##    splitvec and not do any of this if not, or
     ## b) refactor row splitting to behave like column splitting
     ##
@@ -805,7 +805,7 @@ recursive_applysplit <- function(df,
         return(splvec[[1]])
 
     ## the content function is the one from the PREVIOUS
-    ## split, ie the one whose children we are now constructing
+    ## split, i.e. the one whose children we are now constructing
     ## this is a bit annoying but makes the semantics for
     ## declaring layouts much more sane.
     ctab <- .make_ctab(df,
@@ -1452,11 +1452,11 @@ guess_format <- function(val) {
 #' variables in each.
 #'
 #' The display  of the table depends on certain
-#' details  of the  tabulation.   In  the case  of  an afun  which
+#' details  of the  tabulation.   In  the case  of  an `afun` which
 #' returns a single  cell's contents (either a scalar  or a vector
 #' of 2 or 3 elements), the  label rows for the deepest-nested row
 #' facets will be hidden and the labels used there will be used as
-#' the analysis row labels. In the case of an afun which returns a
+#' the analysis row labels. In the case of an `afun` which returns a
 #' list (corresponding to  multiple cells), the names  of the list
 #' will be used as the analysis  row labels and the deepest nested
 #' row labels will not be hidden.

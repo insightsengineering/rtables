@@ -25,7 +25,7 @@ add_analyzed_var <- function(lyt, var, label = var, afun,
 #'
 #' @param tbl table object
 #'
-#' @return an rtable object
+#' @return an `rtable` object
 #'
 #' @export
 trim_zero_rows <- function(tbl) {

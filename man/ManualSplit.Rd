@@ -19,7 +19,7 @@ ManualSplit(
 )
 }
 \arguments{
-\item{levels}{character. Levels of the split (ie the children of the manual
+\item{levels}{character. Levels of the split (i.e. the children of the manual
 split)}
 
 \item{label}{character(1). A label (not to be confused with the name) for the
@@ -48,9 +48,9 @@ should accept. Defaults to NA.}
 when tabulating row group summaries.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value,

@@ -20,5 +20,5 @@ no_colinfo(obj)
 \code{FALSE} otherwise.
 }
 \description{
-Does the table/row/InstantiatedColumnInfo object contain no column structure information?
+Does the \code{table}/\code{row}/\code{InstantiatedColumnInfo} object contain no column structure information?
 }
