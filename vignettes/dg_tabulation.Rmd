@@ -20,7 +20,7 @@ Any code or prose which appears in a version of this vignette on the `main` bran
 
 # Tabulation
 
-Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We will sometimes see functions and methods that are present in other files like `colby_construction.R`. We assume any reader is already familiar with the documentation related to `build_table`. Also, we suggest reading first the vignette regarding the split machinery (`vignette("dg_split_machinery")`), as it is instrumental in understanding how the layout object, which is built principally of splits, is tabulated when data is applied.
+Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We will sometimes see functions and methods that are present in other files like `colby_construction.R` or `make_subset_expr.R`. We assume any reader is already familiar with the documentation related to `build_table`. Also, we suggest reading first the vignette regarding the split machinery (`vignette("dg_split_machinery")`), as it is instrumental in understanding how the layout object, which is built principally of splits, is tabulated when data is applied.
 
 This time, we enter in _medias res_ into `build_table` to see how it is meant to work.
 
@@ -44,20 +44,36 @@ lyt %>% build_table(DM)
 Now lets see the interior of our `build_table`, After initial check that the layout is a pre-data table layout, it is checked if the coulmn layout is defined (`clayout` accessor), i.e. it does not have any column split. If that is the case, a `All obs` column is added automatically with all observations. After this, there are a couple of defensive programming calls that do checks and fixtures as we finally have the data. These divide in two kinds: the one that are mainly concerning the layout, which are defined as generics and the one concerning the data that is instead a function as it is not dependent on the layout class. Indeed, the layout is structured and can be divided in `clayout` and `rlayout` (column and row layout). The first one is used to create `cinfo` which is the general object and container of the column splits and information. The second one contains the obligatory all data split, i.e. the root split (accessible with `root_spl`), and the row splits' vectors which are iterative splits in the row space. In the following we consider first the checks and defensive programming.
 ```{r, eval=FALSE}
     ## do checks and defensive programming now that we have the data
-    lyt <- fix_dyncuts(lyt, df) # now that I have the data, I create the splits
-    lyt <- set_def_child_ord(lyt, df) # with the data I set the same order for all splits
-    lyt <- fix_analyze_vis(lyt) # checks if the analyze last split should be visible
+    lyt <- fix_dyncuts(lyt, df) # Now that I have the data, I create the splits that depends on data
+    lyt <- set_def_child_ord(lyt, df) # With the data I set the same order for all splits
+    lyt <- fix_analyze_vis(lyt) # Checks if the analyze last split should be visible
     # If there is only one you will not get the variable name otherwise you get it if you
-    # have multivar and default is na. You can do it now only because you are sure to
+    # have multivar. Default is NA. You can do it now only because you are sure to
     # have the whole layout.
     df <- fix_split_vars(lyt, df, char_ok = is.null(col_counts)) 
     # checks if split vars are present
     
-    lyt[] # preserve names and it is just warning if longer
-    lyt@.Data # might not preserve the names -> xxx fixme comment there
-    # Do extensive testing about these behaviors
-    
-    # xxx PreDataAxisLayout is virtual class that both row and cols layouts inherit from
-    # Virtual classes are handy for group classes that need to share common things like 
-    # labels or functions that need to be applicable to their subclasses
+    lyt[] # preserve names and it is just warning if longer, and repeats the value if only one
+    lyt@.Data # might not preserve the names # it works only when it is another class that inherits from lists
+    # We suggest to do extensive testing about these behaviors in order to do choose
+    # the appropriate one
 ```
+Along the various checks and defensive programming, we found `PreDataAxisLayout` which is a virtual class that both row and cols layouts inherit from. Virtual classes are handy for group classes that need to share common things like labels or functions that need to be applicable to their relative classes. Check more information about `rtables` class hierarchy in the dedicated dev vignette (xxx add).
+
+Now, we continue with `build_table`. We notice after the checks `TreePos()` which is a constructor for an oject that retains a representation of the tree position along with split values and labels. This is mainly used by `create_colinfo` that we decide to enter now with `debugonce(create_colinfo)`. This function creates the object that represent the column splits and everything else that may be related with the columns. In particular, in this function the column counts are calculated. The parameter inputs are as follows:
+
+```{r, eval=FALSE}
+cinfo <- create_colinfo(lyt, # Main layout with col splits info
+                        df, # df used for splits and col counts if no alt_counts_df is present
+                        rtpos, # TreePos (does not change in out of this function)
+                        counts = col_counts, # If we want to overwrite the calculations with df/alt_counts_df
+                        alt_counts_df = alt_counts_df, # alternative data for col counts
+                        total = col_total, # calculated from build_table inputs (nrow of df or alt_counts_df)
+                        topleft) # topleft information added into build_table
+```
+
+`create_colinfo` is in `make_subset_expr.R`. Here, we see that if `topleft` is present in `build_table`, it will override the one in `lyt`. 
+
+xxx -> add a warning for NAs in the splits 
+
+xxx -> precedence for col counts: document it if not present. Original use case is that you split events while the right colcounts is patients. First only counts as vector was added, but it is often the case that you have the possibility to add alt_counts_df
