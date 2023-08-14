@@ -885,6 +885,25 @@ test_that("topleft label position works", {
     ptab <- paginate_table(tab2)
     expect_identical(top_left(ptab[[1]]),
                      c("Strata", "  Gender"))
+
+    ## https://github.com/insightsengineering/rtables/issues/651
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+    expect_error(build_table(lyt2, DM[0,]), "Page-by split resulted in zero")
+
+    lyt3 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+
+    baddm <- DM
+    baddm$COUNTRY <- NA_character_
+    ## brittle test because I couldn't figure out how to get the regex to handle newlines and check both the path
+    ## part and primary message part
+    expect_error(build_table(lyt3, baddm), "Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n", fixed = TRUE)
 })
 
 

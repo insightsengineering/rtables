@@ -1,3 +1,6 @@
+## rtables 0.6.2.9003
+ * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
+
 ## rtables 0.6.2.9002
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
 
@@ -7,7 +10,7 @@
  * Fixed a bug when dropping `var` levels but not `lblvar` levels.
  * Added checks to catch bad labels (with {}) and throw informative error.
  * Added `qtable` function to create a table with a single top-level structure in both row and column dimensions  involving faceting by 0 or more variables in each.
- * Added `as_result_df` function to flattern a table into a dataframe.
+ * Added `as_result_df` function to flatten a table into a dataframe.
  * Added `sanitize_table_struct`, `validate_table_struct`, `find_degen_struct` to support degenerative table rendering.
 
 ## rtables 0.6.1
