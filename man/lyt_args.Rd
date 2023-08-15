@@ -182,7 +182,7 @@ analysis. Defaults to \code{var}.}
 displayed during printing.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{formatters::list_valid_aligns}}
 for currently supported alignments.}
 
 \item{page_by}{logical(1). Should pagination be forced between different

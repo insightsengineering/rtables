@@ -9,7 +9,7 @@
 ### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
  * Custom appearance vignette updated with decimal alignment support.
- * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded `check_rtables_aligns` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
+ * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded internal function `chk_rtables_align` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
  * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
 
 ## rtables 0.6.2
