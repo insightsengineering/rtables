@@ -1523,7 +1523,7 @@ guess_format <- function(val) {
 
     if(.takes_df(afun)) {
         function(df, .spl_context, ...) {
-            if(!is.null(lbls) && is.na(lbls))
+           if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
                 lbls <- tail(.spl_context$value, 1)
             if(".spl_context" %in% names(formals(afun)))
                 res <- afun(df = df, .spl_context = .spl_context, ...)
@@ -1532,16 +1532,19 @@ guess_format <- function(val) {
             if(is(res, "RowsVerticalSection")) {
                 ret <- res
             } else {
-                if(!is.list(res))
+                if(!is.list(res)) {
                     ret <- rcell(res, label = lbls, format = guess_format(res))
-                else
+                } else {
+                    if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+                        names(res) <- lbls
                     ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
+                }
             }
             ret
         }
     } else {
         function(x, .spl_context, ...) {
-            if(!is.null(lbls) && is.na(lbls))
+            if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
                 lbls <- tail(.spl_context$value, 1)
             if(".spl_context" %in% names(formals(afun)))
                 res <- afun(x = x, .spl_context = .spl_context, ...)
@@ -1550,10 +1553,13 @@ guess_format <- function(val) {
             if(is(res, "RowsVerticalSection")) {
                 ret <- res
             } else {
-                if(!is.list(res))
+                if(!is.list(res)) {
                     ret <- rcell(res, label = lbls, format = guess_format(res))
-                else
+                } else {
+                    if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+                        names(res) <- lbls
                     ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
+                }
             }
             ret
         }
@@ -1561,6 +1567,16 @@ guess_format <- function(val) {
 }
 
 # qtable ----
+
+n_cells_res <- function(res) {
+    ans <- 1L
+    if(is.list(res))
+        ans <- length(res)
+    else if(is(res, "RowsVerticalSection"))
+        ans <- length(res$values) # XXX penetrating the abstraction
+    ans
+}
+
 #' Generalized Frequency Table
 #'
 #' @description This function provides a convenience interface for
@@ -1579,6 +1595,7 @@ guess_format <- function(val) {
 #' @param drop_levels logical(1). Should unobserved factor levels be dropped during facetting. Defaults to `TRUE`.
 #' @param summarize_groups logical(1). Should each level of nesting include marginal summary rows. Defaults to `FALSE`
 #' @param ... passed to `afun`, if specified. Otherwise ignored.
+#' @param .default_rlabel character(1). This is an implementation detail that should not be set by end users.
 #' @inheritParams constr_args
 #' @inheritParams basic_table
 #'
@@ -1603,6 +1620,10 @@ guess_format <- function(val) {
 #' set,  and  the  function   used  (captured  via  substitute)  where
 #' possible, or 'count' if not.
 #'
+#' @return for `qtable` a built TableTree object representing the desired table,
+#' for `qtable_layout`, a `PreDataTableLayouts` object declaring the structure of
+#' the desired table, suitable for passing to `build_table`.
+#'
 #' @examples
 #'
 #' qtable(ex_adsl)
@@ -1617,7 +1638,7 @@ guess_format <- function(val) {
 #' suppressWarnings(qtable(ex_adsl, row_vars = "SEX",
 #'                  col_vars = "ARM", avar = "AGE", afun = range))
 #' @export
-qtable <- function(data,
+qtable_layout <- function(data,
                    row_vars = character(),
                    col_vars = character(),
                    avar = NULL,
@@ -1630,27 +1651,29 @@ qtable <- function(data,
                    prov_footer = character(),
                    show_colcounts = TRUE,
                    drop_levels = TRUE,
-                   ...) {
+                   ...,
+                   .default_rlabel = NULL) {
 
-    if(is.null(row_labels)) {
-        subafun <- substitute(afun)
-        if(is.name(subafun) &&
-           is.function(afun) &&
-           ## this is gross. basically testing
-           ## if the symbol we have corresponds
-           ## in some meaningful way to the function
-           ## we will be calling.
-           identical(mget(as.character(subafun),
-                          mode = "function",
-                          envir = parent.frame(1),
-                          ifnotfound = list(NULL),
-                          inherits = TRUE
-                          )[[1]], afun)) {
-            row_labels <- paste(avar, as.character(subafun), sep = " - ")
-        } else {
-            row_labels <- if(is.null(avar)) "count" else avar
-        }
+    subafun <- substitute(afun)
+    if(!is.null(.default_rlabel)) {
+        dflt_row_lbl <- .default_rlabel
+    } else if (is.name(subafun) &&
+               is.function(afun) &&
+       ## this is gross. basically testing
+       ## if the symbol we have corresponds
+       ## in some meaningful way to the function
+       ## we will be calling.
+       identical(mget(as.character(subafun),
+                      mode = "function",
+                      envir = parent.frame(1),
+                      ifnotfound = list(NULL),
+                      inherits = TRUE
+                      )[[1]], afun)) {
+        dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
+    } else {
+        dflt_row_lbl <- if(is.null(avar)) "count" else avar
     }
+
     if(is.null(afun))
         afun <- count
 
@@ -1658,6 +1681,19 @@ qtable <- function(data,
         avar <- names(data)[1]
     fakeres <- afun(data[[avar]], ...)
     multirow <- is.list(fakeres) || is(fakeres, "RowsVerticalSection") || summarize_groups
+    ## this is before we plug in the default so if not specified by the user
+    ## explicitly, row_labels is NULL at this point.
+    if(!is.null(row_labels) &&
+       length(row_labels) != n_cells_res(fakeres))
+        stop("Length of row_labels (",
+             length(row_labels),
+             ") does not agree with number of rows generated by analysis function (",
+             n_cells_res(fakeres),
+             ").")
+
+    if(is.null(row_labels))
+        row_labels <- dflt_row_lbl
+
 
     lyt <- basic_table(title = title,
                        subtitles = subtitles,
@@ -1674,10 +1710,12 @@ qtable <- function(data,
             lyt <- summarize_row_groups(lyt)
     }
 
+    tleft <- if(multirow || length(row_vars) > 0) dflt_row_lbl else character()
     if(length(row_vars) > 0 ) {
-        lyt <- append_topleft(lyt, row_labels)
-
         if(!multirow) {
+            ## in the single row in splitting case, we use the row label as the topleft
+            ## and the split values as the row labels for a more compact apeparance
+            tleft <- row_labels
             row_labels <- NA_character_
             lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL, child_labels = "hidden")
         } else {
@@ -1688,6 +1726,58 @@ qtable <- function(data,
     }
     inner_afun <- .quick_afun(afun, row_labels)
     lyt <- analyze(lyt, avar, afun = inner_afun, extra_args = list(...))
+    lyt <- append_topleft(lyt, tleft)
+}
 
+#' @rdname qtable_layout
+#' @export
+qtable <- function(data,
+                   row_vars = character(),
+                   col_vars = character(),
+                   avar = NULL,
+                   row_labels = NULL,
+                   afun = NULL,
+                   summarize_groups = FALSE,
+                   title = "",
+                   subtitles = character(),
+                   main_footer = character(),
+                   prov_footer = character(),
+                   show_colcounts = TRUE,
+                   drop_levels = TRUE,
+                   ...) {
+    ## this involves substitution so it needs to appear in both functions. Gross but true.
+    subafun <- substitute(afun)
+    if (is.name(subafun) &&
+        is.function(afun) &&
+        ## this is gross. basically testing
+        ## if the symbol we have corresponds
+        ## in some meaningful way to the function
+        ## we will be calling.
+       identical(mget(as.character(subafun),
+                      mode = "function",
+                      envir = parent.frame(1),
+                      ifnotfound = list(NULL),
+                      inherits = TRUE
+                      )[[1]], afun)) {
+        dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
+    } else {
+        dflt_row_lbl <- if(is.null(avar)) "count" else avar
+    }
+
+    lyt <- qtable_layout(data = data,
+                         row_vars = row_vars,
+                         col_vars = col_vars,
+                         avar = avar,
+                         row_labels = row_labels,
+                         afun = afun,
+                         summarize_groups = summarize_groups,
+                         title = title,
+                         subtitles = subtitles,
+                         main_footer = main_footer,
+                         prov_footer = prov_footer,
+                         show_colcounts = show_colcounts,
+                         drop_levels = drop_levels,
+                         ...,
+                         .default_rlabel = dflt_row_lbl)
     build_table(lyt, data)
 }

@@ -1,4 +1,4 @@
-## rtables 0.6.2.9001
+## rtables 0.6.2.9002
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
 
 ### Enhancements
