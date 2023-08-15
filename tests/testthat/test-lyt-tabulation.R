@@ -1318,6 +1318,45 @@ test_that("qtable works", {
         build_table(ex_adsl)
 
     nice_comp_table(t9, t9b)
+
+    ## regressions tests for https://github.com/insightsengineering/rtables/issues/698
+
+    fivenum3 <- function(x) {
+        as.list(fivenum(x))
+    }
+
+    t10 <- qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5])
+    expect_equal(top_left(t10), "AGE - fivenum3")
+
+    mpf10 <- matrix_form(t10)
+    expect_equal(mf_strings(mpf10)[3:7, 1],
+                 letters[1:5])
+
+    t11 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5])
+    expect_equal(top_left(t11), "AGE - fivenum3")
+    mpf11 <- matrix_form(t11)
+    expect_equal(mf_strings(mpf11)[4:8, 1],
+                 letters[1:5])
+
+
+    t12 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
+    ## compactness
+    expect_equal(top_left(t12), "mylabel")
+    mpf12 <- matrix_form(t12)
+    expect_equal(mf_strings(mpf12)[3:4,1], levels(ex_adsl$STRATA2))
+
+    t13 <- qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
+    expect_identical(top_left(t13), character())
+    mpf13 <- matrix_form(t13)
+    expect_equal(mf_strings(mpf13)[3, 1], "mylabel")
+
+    expect_error(qtable(ex_adsl , row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
+                        afun = mean, row_labels = c("ABC", "EFG", "HIJ")),
+                 "does not agree with number of rows")
+
+    expect_error(qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3,
+                        row_labels = "ABC"),
+                 "does not agree with number of rows")
 })
 
 
