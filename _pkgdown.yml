@@ -100,7 +100,6 @@ reference:
     contents:
     - format_rcell
     - value_formats
-    - rtables_aligns
      
   - title: Table Structure Information
     contents:

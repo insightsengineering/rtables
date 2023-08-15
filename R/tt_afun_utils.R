@@ -28,7 +28,7 @@ rcell <- function(x,
                   align = NULL,
                   format_na_str = NULL) {
     if(!is.null(align))
-        align <- chk_rtables_align(align)
+        align <- check_aligns(align)
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -61,7 +61,7 @@ rcell <- function(x,
         )# RefFootnote(footnote))
     }
     if(!is.null(align))
-        cell_align(ret) <- chk_rtables_align(align)
+        cell_align(ret) <- check_aligns(align)
     ret
 }
 
@@ -105,7 +105,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .row_footnotes list. Referential footnotes messages to be associated
 #'   by name with \emph{rows}
 #' @param .aligns character or NULL. Alignments for the cells. Standard for `NULL`
-#'   is `"center"`. See \code{\link{rtables_aligns}} for currently supported
+#'   is `"center"`. See \code{\link{formatters::list_valid_aligns}} for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
 #'

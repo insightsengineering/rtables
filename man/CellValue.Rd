@@ -36,7 +36,7 @@ corresponds to the unmodified default behavior.}
 \item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{formatters::list_valid_aligns}}
 for currently supported alignments.}
 
 \item{format_na_str}{character(1). String which should be displayed when
