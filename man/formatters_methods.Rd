@@ -22,20 +22,12 @@
 \alias{obj_na_str,Split-method}
 \alias{main_title,VTitleFooter-method}
 \alias{main_title<-,VTitleFooter-method}
-\alias{main_title,TableRow-method}
-\alias{main_title<-,TableRow-method}
 \alias{subtitles,VTitleFooter-method}
 \alias{subtitles<-,VTitleFooter-method}
-\alias{subtitles,TableRow-method}
-\alias{subtitles<-,TableRow-method}
 \alias{main_footer,VTitleFooter-method}
 \alias{main_footer<-,VTitleFooter-method}
-\alias{main_footer,TableRow-method}
-\alias{main_footer<-,TableRow-method}
 \alias{prov_footer,VTitleFooter-method}
 \alias{prov_footer<-,VTitleFooter-method}
-\alias{prov_footer,TableRow-method}
-\alias{prov_footer<-,TableRow-method}
 \alias{table_inset,VTableNodeInfo-method}
 \alias{table_inset,PreDataTableLayouts-method}
 \alias{table_inset<-,VTableNodeInfo-method}
@@ -93,33 +85,17 @@
 
 \S4method{main_title}{VTitleFooter}(obj) <- value
 
-\S4method{main_title}{TableRow}(obj)
-
-\S4method{main_title}{TableRow}(obj) <- value
-
 \S4method{subtitles}{VTitleFooter}(obj)
 
 \S4method{subtitles}{VTitleFooter}(obj) <- value
-
-\S4method{subtitles}{TableRow}(obj)
-
-\S4method{subtitles}{TableRow}(obj) <- value
 
 \S4method{main_footer}{VTitleFooter}(obj)
 
 \S4method{main_footer}{VTitleFooter}(obj) <- value
 
-\S4method{main_footer}{TableRow}(obj)
-
-\S4method{main_footer}{TableRow}(obj) <- value
-
 \S4method{prov_footer}{VTitleFooter}(obj)
 
 \S4method{prov_footer}{VTitleFooter}(obj) <- value
-
-\S4method{prov_footer}{TableRow}(obj)
-
-\S4method{prov_footer}{TableRow}(obj) <- value
 
 \S4method{table_inset}{VTableNodeInfo}(obj)
 

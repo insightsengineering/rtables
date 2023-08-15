@@ -391,19 +391,32 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
-    rbind_annot <- list(title = "", subtitles = character(), footer = character(), pf = character())
-    # Titles/footer info are (independently) retained from first object if identical or missing in all other objects
+    rbind_annot <- list(main_title = "", 
+                        subtitles = character(), 
+                        main_footer = character(), 
+                        prov_footer = character())
+
+    # Titles/footer info are (independently) retained from first object if 
+    # identical or missing in all other objects
     all_titles <- sapply(x, main_title)
-    if (all_annots_identical(all_titles) || only_first_annot(all_titles)) rbind_annot[["title"]] <- all_titles[[1]]
+    if (all_annots_identical(all_titles) || only_first_annot(all_titles)) {
+        rbind_annot[["main_title"]] <- all_titles[[1]]
+    }
 
     all_sts <- lapply(x, subtitles)
-    if (all_annots_identical(all_sts) || only_first_annot(all_sts)) rbind_annot[["subtitles"]] <- all_sts[[1]]
+    if (all_annots_identical(all_sts) || only_first_annot(all_sts)) {
+        rbind_annot[["subtitles"]] <- all_sts[[1]]
+    }
 
     all_ftrs <- lapply(x, main_footer)
-    if (all_annots_identical(all_ftrs) || only_first_annot(all_ftrs)) rbind_annot[["footer"]] <- all_ftrs[[1]]
+    if (all_annots_identical(all_ftrs) || only_first_annot(all_ftrs)) {
+        rbind_annot[["main_footer"]] <- all_ftrs[[1]]
+    }
 
     all_pfs <- lapply(x, prov_footer)
-    if (all_annots_identical(all_pfs) || only_first_annot(all_pfs)) rbind_annot[["pf"]] <- all_pfs[[1]]
+    if (all_annots_identical(all_pfs) || only_first_annot(all_pfs)) {
+        rbind_annot[["prov_footer"]] <- all_pfs[[1]]
+    }
 
     ## if we got only ElementaryTable and
     ## TableRow objects, construct a new
@@ -430,10 +443,10 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
               cinfo = firstcols,
               name = "rbind_root",
               label = "",
-              title = rbind_annot[["title"]],
+              title = rbind_annot[["main_title"]],
               subtitles = rbind_annot[["subtitles"]],
-              main_footer = rbind_annot[["footer"]],
-              prov_footer = rbind_annot[["pf"]])
+              main_footer = rbind_annot[["main_footer"]],
+              prov_footer = rbind_annot[["prov_footer"]])
 
 }
 

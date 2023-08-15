@@ -2198,20 +2198,6 @@ setMethod("main_title<-", "VTitleFooter",
               obj
           })
 
-#' @rdname formatters_methods
-#' @export
-setMethod("main_title", "TableRow",
-          function(obj) "")
-
-##' @rdname formatters_methods
-##' @export
-setMethod("main_title<-", "TableRow",
-          function(obj, value) {
-              stopifnot(length(value) == 1)
-              obj@main_title <- value
-              obj
-          })
-
 ##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles", "VTitleFooter",
@@ -2221,20 +2207,6 @@ setMethod("subtitles", "VTitleFooter",
 ##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles<-", "VTitleFooter",
-          function(obj, value) {
-              obj@subtitles <- value
-              obj
-          })
-
-##' @rdname formatters_methods
-##' @export
-setMethod("subtitles", "TableRow",
-          function(obj) character())
-
-
-##' @rdname formatters_methods
-##' @export
-setMethod("subtitles<-", "TableRow",
           function(obj, value) {
               obj@subtitles <- value
               obj
@@ -2256,20 +2228,6 @@ setMethod("main_footer<-", "VTitleFooter",
 
 ##' @rdname formatters_methods
 ##' @export
-setMethod("main_footer", "TableRow",
-          function(obj) character())
-
-
-##' @rdname formatters_methods
-##' @export
-setMethod("main_footer<-", "TableRow",
-          function(obj, value) {
-              obj@main_footer <- value
-              obj
-          })
-
-##' @rdname formatters_methods
-##' @export
 setMethod("prov_footer", "VTitleFooter",
           function(obj) obj@provenance_footer)
 
@@ -2277,20 +2235,6 @@ setMethod("prov_footer", "VTitleFooter",
 ##' @rdname formatters_methods
 ##' @export
 setMethod("prov_footer<-", "VTitleFooter",
-          function(obj, value) {
-              obj@provenance_footer <- value
-              obj
-          })
-
-##' @rdname formatters_methods
-##' @export
-setMethod("prov_footer", "TableRow",
-          function(obj) character())
-
-
-##' @rdname formatters_methods
-##' @export
-setMethod("prov_footer<-", "TableRow",
           function(obj, value) {
               obj@provenance_footer <- value
               obj
