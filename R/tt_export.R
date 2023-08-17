@@ -498,6 +498,63 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
           .tab_to_colpath_set(fulltab))
 }
 
+#' Export as word document
+#'
+#' The docx output is based on [tt_to_flextable()] and `officer` package.
+#'
+#' @seealso [tt_to_flextable()]
+#'
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#'
+#' \dontrun{
+#' tf <- tempfile(fileext = ".pdf")
+#' export_as_doc(tbl, file = tf)
+#' }
+#'
+#' @export
+export_as_doc <- function(tbl, 
+                          doc_file, 
+                          template_file = NULL,
+                          section_properties = NULL) {
+    # Checks
+    if(!requireNamespace("flextable") || !requireNamespace("officer")) {
+        stop("This function requires the flextable and officer packages. ",
+             "Please install them if you wish to use it")
+    }
+    if (!is(tbl, "flextable")) {
+        flex_tbl <- tt_to_flextable(tbl)
+    }
+    if (!file.exists(template_file)) {
+        template_file <- NULL
+    }
+    
+    # Create a new empty Word document
+    doc <- officer::read_docx(template_file)
+    
+    # Extract title
+    mt_tbl <- main_title(tbl)
+    if (length(mt_tbl) > 0) {
+        doc <- officer::body_add_par(doc, mt_tbl, style = "heading 1")
+    }
+    
+    # Add the table to the document
+    doc <- flextable::body_add_flextable(doc, ftab, align = "center") 
+    
+    if (!is.null(section_properties)) {
+        doc <- officer::body_set_default_section(doc, section_properties)
+    }
+    
+    # table_stylenames() # Should we create one? xxx
+    
+    # Save the Word document to a file
+    print(doc, target = doc_file)
+}
+
 #' Export as PDF
 #'
 #' The PDF output is based on the ASCII output created with `toString`

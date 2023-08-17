@@ -215,6 +215,33 @@ test_that("flextable export works", {
     expect_equal(length(ft2), 6)
 })
 
+test_that("export_as_doc works thanks to tt_to_flextable", {
+    # Create data
+    lyt <- make_big_lyt()
+    tbl <- build_table(lyt, rawdat)
+    top_left(tbl) <- "Ethnicity"
+    main_title(tbl) <- "Main title"
+    main_footer(tbl) <- "Some Footer"
+    
+    # Get the flextable
+    flex_tbl <- tt_to_flextable(tbl)
+    
+    # Add section properties if necessary
+    section_properties <- officer::prop_section(
+        page_size = officer::page_size(
+            orient = "landscape",
+            width = 8.3, height = 11.7
+        ),
+        type = "continuous",
+        page_margins = officer::page_mar()
+    )
+    doc_file <- "/mnt/c/Users/GAROLIND/Downloads_Feb-Aug23/main.docx"
+    doc_file <- tempfile(fileext = ".docx")
+    
+    export_as_doc(tbl, doc_file, section_properties)
+
+    expect_true(file.exists(doc_file))
+})
 
 test_that("as_html smoke test", {
 
