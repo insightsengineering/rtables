@@ -19,13 +19,13 @@ as_html(
 
 \item{width}{width}
 
-\item{class_table}{class for table tag}
+\item{class_table}{class for \code{table} tag}
 
-\item{class_tr}{class for tr tag}
+\item{class_tr}{class for \code{tr} tag}
 
-\item{class_td}{class for td tag}
+\item{class_td}{class for \code{td} tag}
 
-\item{class_th}{class for th tag}
+\item{class_th}{class for \code{th} tag}
 
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
 }
@@ -33,7 +33,7 @@ as_html(
 A \code{shiny.tag} object representing \code{x} in HTML.
 }
 \description{
-The returned \code{html} object can be immediately used in shiny and rmarkdown.
+The returned \code{html} object can be immediately used in \code{shiny} and \code{rmarkdown}.
 }
 \examples{
 

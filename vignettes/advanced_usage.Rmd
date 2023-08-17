@@ -215,7 +215,7 @@ build_table(lyt, dta_test)
 ```
 
 
-We can further simulate the formal modeling of reference row(s) using the "extra args" machinery
+We can further simulate the formal modeling of reference row(s) using the `extra_args` machinery
 
 
 

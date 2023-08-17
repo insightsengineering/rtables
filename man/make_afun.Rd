@@ -35,11 +35,11 @@ generated rows.}
 \item{.ungroup_stats}{character. Vector of names, which must match elements
 of \code{.stats}}
 
-\item{.format_na_strs}{ANY. vector/list of na strings to override any
+\item{.format_na_strs}{ANY. vector/list of \code{na} strings to override any
 defaults applied by \code{fun}.}
 
 \item{...}{dots. Additional arguments to \code{fun} which effectively become
-new defaults. These can still be overridden by extra args within a split.}
+new defaults. These can still be overridden by \code{extra_args} within a split.}
 
 \item{.null_ref_cells}{logical(1). Should cells for the reference column be
 NULL-ed by the returned analysis function. Defaults to \code{TRUE} if

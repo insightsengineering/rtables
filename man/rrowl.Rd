@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rrowl}
 \alias{rrowl}
-\title{rrowl}
+\title{\code{rrowl}}
 \usage{
 rrowl(row.name, ..., format = NULL, indent = 0, inset = 0L)
 }
@@ -26,7 +26,7 @@ constructed. See \code{\link[formatters]{table_inset}}.}
 A row object of the context-appropriate type (label or data)
 }
 \description{
-rrowl
+\code{rrowl}
 }
 \examples{
 rrowl("a", c(1,2,3), format = "xx")

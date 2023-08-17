@@ -2,7 +2,7 @@
 % Please edit documentation in R/indent.R
 \name{indent}
 \alias{indent}
-\title{Change indentation of all rrows in an rtable}
+\title{Change indentation of all \code{rrows} in an \code{rtable}}
 \usage{
 indent(x, by = 1)
 }
@@ -16,7 +16,7 @@ indentation is set to 0.}
 \code{x} with its indent modifier incremented by \code{by}.
 }
 \description{
-Change indentation of all rrows in an rtable
+Change indentation of all \code{rrows} in an \code{rtable}
 }
 \examples{
 is_setosa <- iris$Species == "setosa"

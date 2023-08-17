@@ -2,29 +2,29 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{insert_rrow}
 \alias{insert_rrow}
-\title{[DEPRECATED] insert rrows at (before) a specific location}
+\title{[DEPRECATED] insert \code{rrows} at (before) a specific location}
 \usage{
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
 \arguments{
-\item{tbl}{rtable}
+\item{tbl}{\code{rtable}}
 
-\item{rrow}{rrow to append to rtable}
+\item{rrow}{\code{rrow} to append to \code{rtable}}
 
-\item{at}{position into which to put the rrow, defaults to beginning (ie 1)}
+\item{at}{position into which to put the \code{rrow}, defaults to beginning (i.e. 1)}
 
 \item{ascontent}{logical. Currently ignored.}
 }
 \value{
-A TableTree of the same specific class as \code{tbl}
+A \code{TableTree} of the same specific class as \code{tbl}
 }
 \description{
 This function is deprecated and will be removed in a future release of
-rtables. Please use \code{\link{insert_row_at_path}} or
+\code{rtables}. Please use \code{\link{insert_row_at_path}} or
 \code{\link{label_at_path}} instead.
 }
 \note{
-Label rows (ie a row with no data values, only a row.name) can only be
+Label rows (i.e. a row with no data values, only a \code{row.name}) can only be
 inserted at positions which do not already contain a label row when there
 is a non-trivial nested row structure in \code{tbl}
 }

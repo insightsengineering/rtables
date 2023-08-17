@@ -14,7 +14,7 @@
 
 ![GitHub
 forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)
-![GitHub Repo
+![GitHub repo
 stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
 
 ![GitHub commit
@@ -47,7 +47,7 @@ The `rtables` R package was designed to create and display complex
 tables with R. The cells in an `rtable` may contain any high-dimensional
 data structure which can then be displayed with cell-specific formatting
 instructions. Currently, `rtables` can be outputted in `ascii` `html`,
-and `pdf`, as well powerpoint (via conversion to `flextable` objects).
+and `pdf`, as well Power Point (via conversion to `flextable` objects).
 `rtf` support is in development and will be in a future release.
 
 `rtables` is developed and copy written by `F. Hoffmann-La Roche` and it
@@ -67,7 +67,7 @@ this undertaking are listed below:
 - multiple output formats (html, ascii, latex, pdf, xml)
 - flexible pagination in both horizontal and vertical directions
 - distinguish between name and label in the data structure to work with
-  CDISC standards
+  `CDISC` standards
 - title, footnotes, cell cell/row/column references
 
 `rtables` currently covers virtually all of these requirements, and

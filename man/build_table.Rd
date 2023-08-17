@@ -18,9 +18,9 @@ build_table(
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{df}{dataset (data.frame or tibble)}
+\item{df}{dataset (\code{data.frame} or \code{tibble})}
 
-\item{alt_counts_df}{dataset (data.frame or tibble). Alternative full data
+\item{alt_counts_df}{dataset (\code{data.frame} or \code{tibble}). Alternative full data
 the rtables framework will use (\emph{only}) when calculating column
 counts.}
 

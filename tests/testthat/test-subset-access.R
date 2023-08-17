@@ -38,7 +38,7 @@ test_that("cell_values function works as desired", {
   cvres3 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
                         c("ARM", "A: Drug X", "SEX", "M"))
   expect_identical(cvres3, cvres1[[3]])
-  ## any arm, male columns from the ASIAN content (ie summary) row
+  ## any arm, male columns from the ASIAN content (i.e. summary) row
   cvres4 <- cell_values(tbl, c("RACE", "ASIAN", "@content"))
   expect_identical(cvres4[2], cvres1[[1]])
 
