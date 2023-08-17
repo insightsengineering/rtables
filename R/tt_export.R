@@ -443,14 +443,14 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
         }
 
     }
-    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1), align = "center", part = "header")
-    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1),  align = "center", part = "body")
     
-    # Bolding
-    flx <- flextable::bold(flx, j = 2:(NCOL(tt) + 1), part = "header")
-    # Bolding content rows
-    row_df <- make_row_df(tt)
-    flx <- flextable::bold(flx, j = 1, i = which(row_df$node_class == "ContentRow"), part = "body")
+    # Custom theme
+    flx <- flex_theme_for_rtables(flx)
+    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1), align = "center", part = "header") # Done with theme
+    flx <- flextable::align(flx, j = 2:(NCOL(tt) + 1),  align = "center", part = "body")
+    flx <- flextable::bold(flx, j = 2:(NCOL(tt) + 1), part = "header") # Done with theme
+    # Bolding content rows -> manual
+    flx <- flextable::bold(flx, j = 1, i = which(rdf$node_class == "ContentRow"), part = "body")
     browser()
     
     # Rownames indentation
@@ -463,12 +463,12 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
         flx <- flextable::add_footer_lines(flx, values = matform$ref_footnotes)
     }
     
-    # Header lines (?)
+    # Title lines
     if(length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
         real_titles <- all_titles(tt)
         real_titles <- real_titles[nzchar(real_titles)]
-        # flx <- flextable::hline(flx, i = 1L,
-        #                         border = officer::fp_border(), part = "header")
+        flx <- flextable::hline(flx, i = 1L,
+                                border = officer::fp_border(), part = "header")
         ## rev is because add_header_lines(top=TRUE) seems to put them in backwards!!! AAHHHH
         flx <- flextable::add_header_lines(flx, values = rev(real_titles),
                                            top = TRUE)
@@ -485,6 +485,21 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     flx <- flextable::fontsize(flx, size = tt_font_size, part = "all")
 
     flextable::set_table_properties(flx, layout = "autofit")
+}
+
+flex_theme_for_rtables <- function(x) {
+    if (!inherits(x, "flextable")) {
+        stop(sprintf("Function `%s` supports only flextable objects.", 
+                     "theme_box()"))
+    }
+    x <- flx
+    x <- border_remove(x)
+    fp_bdr <- fp_border()
+    x <- border_outer(x, part = "all", border = fp_bdr)
+    x <- bold(x = x, bold = TRUE, part = "header")
+    x <- align_text_col(x, align = "center", header = TRUE)
+    # x <- align_nottext_col(x, align = "right", header = TRUE)
+    fix_border_issues(x) # needed?
 }
 
 # only used in pagination
