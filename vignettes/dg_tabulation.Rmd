@@ -82,15 +82,80 @@ cinfo <- create_colinfo(lyt, # Main layout with col splits info
     ctree <- coltree(clayout, df = df, rtpos = rtpos) # Main constructor of LayoutColTree 
     # The above is referenced as generic and principally represented as 
     # setMethod("coltree", "PreDataColLayout", (located in `tree_accessor.R`).
-    # This is a call that restructure information from clayout and df and rtpos to get a more compact column tree
-    # layout. Part of this design is related to past implementations.
+    # This is a call that restructure information from clayout and df and rtpos 
+    # to get a more compact column tree layout. Part of this design is related 
+    # to past implementations.
 
-    cexprs <- make_col_subsets(ctree, df) # extracts expressions in a compact fashion. WARNING, removing NAs at this step
-                                          # is automatic. This should be coupled with a warning for NAs in the split (xxx)
+    cexprs <- make_col_subsets(ctree, df) # extracts expressions in a compact fashion. WARNING, 
+                                          # removing NAs at this step is automatic. This should 
+                                          # be coupled with a warning for NAs in the split (xxx)
     colextras <- col_extra_args(ctree) # retrieves extra_args from the tree. It may be not used
 
 ```
 
 Next in the function there is the creation of the column counts. For now this happens only at the leaf level but it can be certainly calculated for all levels independently (this is current issue in `rtables`, i.e. how to print other levels' totals). Precedence for col counts may be not documented (xxx todo). Original use case is that you split events while the column counts is the number of patients and not events. First only counts as vector was added, but it is often the case that you have the possibility to add `alt_counts_df`. Finally the `cinfo` object is created (`InstantiatedColumnInfo`) with all the above information.
 
-Now, if we continue in `build_table` we hit `.make_ctab` for a root split. This is a general initial value that produces the root split as a content row. Indeed `ctab` stays for content row which is a row that has only a label in it. From the documentation regarding `summarize_row_groups`, you know that this is the way `rtables` defines label rows, as content rows. `.make_ctab` is very close to the actual creation of the table row which is done with `.make_tablerows`. This function also uses `parent_cfun` and `.make_caller` to retrieve the content function inserted in above levels
+Now, if we continue in `build_table` we hit `.make_ctab` for a root split. This is a general initial procedure that generates the needed root split as a content row. Indeed `ctab` stays for content row which is a row that has only a label in it. From the documentation regarding `summarize_row_groups`, you know that this is the way `rtables` defines label rows, i.e. as content rows. `.make_ctab` is very close to the actual creation of the table row which is done with `.make_tablerows`. Note that this function also uses `parent_cfun` and `.make_caller` to retrieve the content function inserted in above levels. We split here what is the structural handling of the table object and the rows creation engine that are divided by `.make_tablerows` call. If you search the whole package, you will find that this function is called only twice, once in `.make_ctab` and once in `.make_analyzed_tab`. These two are the final elements of the table construction: the creation of rows.
+
+Going back to `build_table`, you will see that the row layout is actually a list of split vectors. The fundamental line `    kids <- lapply(seq_along(rlyt), function(i) {` allows us to appreciate this. Going forward we see how `recursive_applysplit` is applied to each split vector. It may be worth it to check how, in our test case, this vector looks like.
+
+```{r, eval=FALSE}
+# rtables 6.2.0
+
+# A very simple layout
+lyt <- basic_table() %>% 
+    split_rows_by("STRATA1") %>% 
+    split_rows_by("SEX", split_fun = drop_split_levels) %>% 
+    split_cols_by("ARM") %>% 
+    analyze("BMRKR1")
+rlyt <- rtables:::rlayout(lyt)
+str(rlyt, max.level = 2)
+Formal class 'PreDataRowLayout' [package "rtables"] with 2 slots
+  ..@ .Data     :List of 2 # rlyt is a rtables object (PreDataRowLayout) that is also a list!
+  ..@ root_split:Formal class 'RootSplit' [package "rtables"] with 17 slots # another object!
+
+str(rtables:::root_spl(rlyt), max.level = 2) # it is still a split
+
+str(rlyt[[1]], max.level = 3) # still a rtables object (SplitVector) that is a list
+Formal class 'SplitVector' [package "rtables"] with 1 slot
+  ..@ .Data:List of 3
+  .. ..$ :Formal class 'VarLevelSplit' [package "rtables"] with 20 slots
+  .. ..$ :Formal class 'VarLevelSplit' [package "rtables"] with 20 slots
+  .. ..$ :Formal class 'AnalyzeMultiVars' [package "rtables"] with 17 slots
+```
+
+The last print is very informative. We can see from the layout construction that this object is built with 2 `VarLevelSplit` on the rows and one final `AnalyzeMultiVars` which is the leaf analysis split that has the final level rows. The second split vector is the following `AnalyzeVarSplit`.
+
+```{r, eval=FALSE}
+> str(rlyt[[2]], max.level = 5)
+Formal class 'SplitVector' [package "rtables"] with 1 slot
+  ..@ .Data:List of 1
+  .. ..$ :Formal class 'AnalyzeVarSplit' [package "rtables"] with 21 slots
+  .. .. .. ..@ analysis_fun           :function (x, ...)  
+  .. .. .. .. ..- attr(*, "srcref")= 'srcref' int [1:8] 1723 5 1732 5 5 5 4198 4207
+  .. .. .. .. .. ..- attr(*, "srcfile")=Classes 'srcfilealias', 'srcfile' <environment: 0x560d8e67b750> 
+  .. .. .. ..@ default_rowlabel       : chr "Var3 Counts"
+  .. .. .. ..@ include_NAs            : logi FALSE
+  .. .. .. ..@ var_label_position     : chr "default"
+  .. .. .. ..@ payload                : chr "VAR3"
+  .. .. .. ..@ name                   : chr "VAR3"
+  .. .. .. ..@ split_label            : chr "Var3 Counts"
+  .. .. .. ..@ split_format           : NULL
+  .. .. .. ..@ split_na_str           : chr NA
+  .. .. .. ..@ split_label_position   : chr(0) 
+  .. .. .. ..@ content_fun            : NULL
+  .. .. .. ..@ content_format         : NULL
+  .. .. .. ..@ content_na_str         : chr(0) 
+  .. .. .. ..@ content_var            : chr ""
+  .. .. .. ..@ label_children         : logi FALSE
+  .. .. .. ..@ extra_args             : list()
+  .. .. .. ..@ indent_modifier        : int 0
+  .. .. .. ..@ content_indent_modifier: int 0
+  .. .. .. ..@ content_extra_args     : list()
+  .. .. .. ..@ page_title_prefix      : chr NA
+  .. .. .. ..@ child_section_div      : chr NA
+```
+
+Continuing in `recursive_applysplit`, this is made up of two main calls: one to `.make_ctab` which makes the content row and calculates the counts if specified so, and `.make_split_kids`. This eventually contains `recursive_applysplit` if the split vector is built of `VarLevelSplit`. Ineed, here, it being a generic is very handy to switch between different downstream processes. In our case (`rlyt[[1]]`), we will call `setMethod(".make_split_kids", "Split",` twice before getting to the analysis split. There, we can have a multi variable split which would apply `.make_split_kids` to each of its elements, in turns calling the main `setMethod(".make_split_kids", "VAnalyzeSplit",` which would in turn go to `.make_analyzed_tab`. There are interesting edge cases here for different split cases like `split_by_multivars` and when one of the splits has a reference group. In the code here, it is called `baseline` internally. If we follow this variable across the function layers we will see that where the split (`do_split`) happens (in  `setMethod(".make_split_kids", "Split",`), we have a second split for the reference group. This is done so to have available this in each row, to calculate, for example, differences with reference group. 
+
+Now we move towards `.make_tablerows`, and here anlysis functions become key, i.e. is the place where these are applied and analyzed. First of all, the external `tryCatch` is used to cache errors at a higher level, so to differentiate the two major blocks. The function parameters are quite intuitive, with the exception of `spl_context`. This is a fundamental parameter, that helps keeping information about the splits that can be visible from analysis functions. Follow up and down this value and you will see that is brought and updated everywhere a split happens, except for columns. Column-related information is added last, when in `gen_onerv` which is the lowest level, where one result value is produced. From `.make_tablerows` we go to `gen_rowvalues`, beside some row and referential footers handling. `gen_rowvalues` unpacks the `cinfo` object and crosses it with the arriving row splitted information to generate rows. In particular `rawvals <- mapply(gen_onerv,` maps the columns to generate a list of values corresponding to a table row. Looking at the final if in `gen_onerv` we see that `if(!is(val, "RowsVerticalSection")) {` the function `in_rows` is called. We invite to read what are the building blocks of that and why `.make_tablerows` has the following function `rowconstr` that other is not if the constructor of a data row `DataRow` or a `ContentRow` depending if it is called from `.make_ctab` or `.make_analyzed_tab`.
