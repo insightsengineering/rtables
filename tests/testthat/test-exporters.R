@@ -216,6 +216,8 @@ test_that("flextable export works", {
 })
 
 test_that("export_as_doc works thanks to tt_to_flextable", {
+    source("tests/testthat/setup-fakedata.R")
+    
     # Create data
     lyt <- make_big_lyt()
     tbl <- build_table(lyt, rawdat)
@@ -236,7 +238,7 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
         page_margins = officer::page_mar()
     )
     doc_file <- "/mnt/c/Users/GAROLIND/Downloads_Feb-Aug23/main.docx"
-    doc_file <- tempfile(fileext = ".docx")
+    # doc_file <- tempfile(fileext = ".docx")
     
     export_as_doc(tbl, doc_file, section_properties)
 

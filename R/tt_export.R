@@ -484,7 +484,8 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     flx <- flextable::font(flx, fontname = tt_font, part = "all")
     flx <- flextable::fontsize(flx, size = tt_font_size, part = "all")
 
-    flextable::set_table_properties(flx, layout = "autofit")
+    flx
+    # flextable::set_table_properties(flx, layout = "autofit")
 }
 
 flex_theme_for_rtables <- function(x) {
@@ -492,12 +493,12 @@ flex_theme_for_rtables <- function(x) {
         stop(sprintf("Function `%s` supports only flextable objects.", 
                      "theme_box()"))
     }
-    x <- flx
+    # x <- flx
     x <- border_remove(x)
     fp_bdr <- fp_border()
     x <- border_outer(x, part = "all", border = fp_bdr)
     x <- bold(x = x, bold = TRUE, part = "header")
-    x <- align_text_col(x, align = "center", header = TRUE)
+    # x <- align_text_col(x, align = "center", header = TRUE)
     # x <- align_nottext_col(x, align = "right", header = TRUE)
     fix_border_issues(x) # needed?
 }
@@ -558,7 +559,7 @@ export_as_doc <- function(tbl,
     }
     
     # Add the table to the document
-    doc <- flextable::body_add_flextable(doc, ftab, align = "center") 
+    doc <- flextable::body_add_flextable(doc, flex_tbl, align = "center") 
     
     if (!is.null(section_properties)) {
         doc <- officer::body_set_default_section(doc, section_properties)
