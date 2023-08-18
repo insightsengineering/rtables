@@ -29,29 +29,13 @@ output tables in `R`. Most of the design requirements for `rtables`
 have their origin in studying tables that are commonly used to report
 analyses from clinical trials; however, we were careful to keep
 `rtables` a general purpose toolkit.
-There are a number of other table frameworks available in `R` such as
-[gt](https://gt.rstudio.com/) from `RStudio`,
-[xtable](https://CRAN.R-project.org/package=xtable),
-[tableone](https://CRAN.R-project.org/package=tableone), and
-[tables](https://CRAN.R-project.org/package=tables) to name a
-few. There is a number of reasons to implement `rtables` (yet another
-tables R package):
-
-* output tables in ASCII to text files
-* table rendering (ASCII, HTML, etc.) is separate from the data
-  model. Hence, one always has access to the non-rounded/non-formatted
-  numbers.
-* pagination in both horizontal and vertical directions to meet the
-  health authority submission requirements
-* cell, row, column, table reference system
-* titles, footers, and referential footnotes
-* path based access to cell content which will be useful for automated
-  content generation
 
 In the remainder of this vignette, we give a short introduction into
 `rtables` and tabulating a table. The content is based on the [useR
 2020 presentation from Gabriel
-Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA).
+Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) and 
+[rtables - A Framework For Creating Complex Structured Reporting Tables Via
+Multi-Level Faceted Computations](https://arxiv.org/pdf/2306.16610.pdf).
 
 The packages used for this vignette are `rtables` and `dplyr`:
 
@@ -393,10 +377,30 @@ row_paths_summary(tbl)
 col_paths_summary(tbl)
 ```
 
+## Comparing with Other Tabulation Frameworks
 
+There are a number of other table frameworks available in `R` such as
+[gt](https://gt.rstudio.com/) from `RStudio`,
+[xtable](https://CRAN.R-project.org/package=xtable),
+[tableone](https://CRAN.R-project.org/package=tableone), and
+[tables](https://CRAN.R-project.org/package=tables) to name a
+few. There is a number of reasons to implement `rtables` (yet another
+tables R package):
 
+* output tables in ASCII to text files
+* table rendering (ASCII, HTML, etc.) is separate from the data
+  model. Hence, one always has access to the non-rounded/non-formatted
+  numbers.
+* pagination in both horizontal and vertical directions to meet the
+  health authority submission requirements
+* cell, row, column, table reference system
+* titles, footers, and referential footnotes
+* path based access to cell content which will be useful for automated
+  content generation
 
-
+More comparisons of the various tabulation frameworks can be found in
+a summary compiled by the 
+[R Consortium Tables Working Group](https://github.com/RConsortium/rtrs-wg).
 
 ## Summary
 
