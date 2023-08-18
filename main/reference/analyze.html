@@ -18,7 +18,7 @@ nesting by default."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,17 +35,6 @@ nesting by default."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -195,47 +184,8 @@ being tabulated</p></li>
 </ul><p>In addition to differentiation on the first argument, the analysis function
 can optionally accept a number of other parameters which, <em>if and only
 if</em> present in the formals will be passed to the function by the tabulation
-machinery. These are as follows:</p>
-<dl><dt>.N_col</dt>
-<dd><p>column-wise N (column count) for the full column being
-tabulated within</p></dd>
-
-<dt>.N_total</dt>
-<dd><p>overall N (all observation count, defined as sum of column
-counts) for the tabulation</p></dd>
-
-<dt>.N_row</dt>
-<dd><p>row-wise N (row group count) for the group of observations
-being analyzed (i.e. with no column-based subsetting)</p></dd>
-
-<dt>.df_row</dt>
-<dd><p>data.frame for observations in the row group being analyzed
-(i.e. with no column-based subsetting)</p></dd>
-
-<dt>.var</dt>
-<dd><p>variable that is analyzed</p></dd>
-
-<dt>.ref_group</dt>
-<dd><p>data.frame or vector of subset corresponding to the
-<code>ref_group</code> column including subsetting defined by row-splitting.
-Optional and only required/meaningful if a <code>ref_group</code> column has been
-defined</p></dd>
-
-<dt>.ref_full</dt>
-<dd><p>data.frame or vector of subset corresponding to the
-<code>ref_group</code> column without subsetting defined by row-splitting. Optional
-and only required/meaningful if a <code>ref_group</code> column has been defined</p></dd>
-
-<dt>.in_ref_col</dt>
-<dd><p>boolean indicates if calculation is done for cells
-within the reference column</p></dd>
-
-<dt>.spl_context</dt>
-<dd><p>data.frame, each row gives information about a
-previous/'ancestor' split state. see below</p></dd>
-
-
-</dl></div>
+machinery. These are listed and described in <code><a href="additional_fun_params.html">additional_fun_params</a></code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>None of the arguments described in the Details section
@@ -246,55 +196,6 @@ be overridden via the <code>col_counts</code> argument to
 must be calculated within <code>afun</code> based on a combination
 of extra arguments and the unmodified values provided by the
 tabulation framework.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="-spl-context-details">.spl_context Details<a class="anchor" aria-label="anchor" href="#-spl-context-details"></a></h2>
-    
-
-<p>The <code>.spl_context</code> <code>data.frame</code> gives information about the subsets of data
-corresponding to the splits within-which the current <code>analyze</code> action is
-nested. Taken together, these correspond to the path that the resulting (set
-of) rows the analysis function is creating, although the information is in a
-slightly different form. Each split (which correspond to groups of rows in
-the resulting table), as well as the initial 'root' "split", is represented
-via the following columns:</p><dl><dt>split</dt>
-<dd><p>The name of the split (often the variable being split in the
-simple case)</p></dd>
-
-<dt>value</dt>
-<dd><p>The string representation of the value at that split</p></dd>
-
-<dt>full_parent_df</dt>
-<dd><p>a dataframe containing the full data (i.e. across all
-columns) corresponding to the path defined by the combination of <code>split</code>
-and <code>value</code> of this row <em>and all rows above this row</em></p></dd>
-
-<dt>all_cols_n</dt>
-<dd><p>the number of observations  corresponding to this row
-grouping (union of all columns)</p></dd>
-
-<dt><em>(row-split and analyze contexts only)</em> &lt;1 column for each
-column in the table structure</dt>
-<dd><p>These list columns (named the same as
-<code>names(col_exprs(tab))</code>) contain logical vectors corresponding to
-the subset of this row's <code>full_parent_df</code> corresponding to that column</p></dd>
-
-<dt>cur_col_subset</dt>
-<dd><p>List column containing logical vectors indicating the
-subset of that row's <code>full_parent_df</code> for the column currently being
-created by the analysis function</p></dd>
-
-<dt>cur_col_n</dt>
-<dd><p>integer column containing the observation counts for that
-split</p></dd>
-
-
-</dl><p><em>note Within analysis functions that accept <code>.spl_context</code>, the
-<code>all_cols_n</code> and <code>cur_col_n</code> columns of the dataframe will contain the 'true'
-observation counts corresponding to the row-group and row-group x column
-subsets of the data. These numbers will not, and currently cannot, reflect
-alternate column observation counts provided by the <code>alt_counts_df</code>,
-<code>col_counts</code> or <code>col_total</code> arguments to <code><a href="build_table.html">build_table</a></code></em></p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
