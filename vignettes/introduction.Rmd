@@ -44,6 +44,13 @@ library(rtables)
 library(dplyr)
 ```
 
+## Conceptual Model
+- tables as a faceted data visualization
+- ggplot2 example
+
+## Overview
+- graphic: layout --> formatted table
+
 ## Data 
 
 The data used in this vignette is a made up using random number
@@ -86,13 +93,47 @@ lyt <- basic_table(show_colcounts = TRUE) %>%
   summarize_row_groups() %>%
   split_rows_by("handed") %>%
   summarize_row_groups() %>%
-  analyze("age", afun = mean, format = "xx.x")
+  analyze("age", afun = mean, format = "xx.xx")
 
 tbl <- build_table(lyt, df)
 tbl
 ```
 
-## Starting Simple
+## Quick Start
+The table above can be achieved via the `qtable` function. If you are new
+to tabulation with the `rtables` layout framework, you can use this
+convenience wrapper to create many types of two-way frequency tables.
+
+The purpose of `qtable` is to enable quick exploratory data analysis. See the 
+[`exploratory_analysis`](https://insightsengineering.github.io/rtables/main/articles/exploratory_analysis.html) vignette for more details.
+
+Here is the code to recreate the table above:
+```{r}
+qtable(df,
+       row_vars = c("country", "handed"),
+       col_vars = c("arm", "gender"),
+       avar = "age",
+       afun = mean,
+       summarize_groups = TRUE,
+       row_labels = "mean"
+       )
+```
+
+From the `qtable` function arguments above we can see many of the
+key concepts of the underlying `rtables` layout framework.
+The user needs to define: 
+
+ - Which variables should be used as facets in the row and/or column space?
+ - Which variable should be used in the summary analysis?
+ - Which function should be used as a summary? 
+ - Should the table include any marginal summaries?
+ - Are any labels needed to clarify the table content?
+ 
+In the sections below we will look at translating each of these questions 
+to a set of features part of the `rtables` layout framework. Now let's take a
+look building the example table with a layout. 
+
+## Layout Instructions
 
 In `rtables` a basic table is defined to have 0 rows and one column
 representing all data. Analyzing a variable is one way of adding a
@@ -106,8 +147,6 @@ tbl <- build_table(lyt, df)
 tbl
 ```
 
-
-### Layout Instructions
 
 In the code above we first described the table and assigned that
 description to a variable `lyt`. We then built the table using the
@@ -143,7 +182,7 @@ Using those functions, it is possible to create a wide variety of
 tables as we will show in this document.
 
 
-### Adding Column Structure
+## Adding Column Structure
 
 We will now add more structure to the columns by adding a column split
 based on the factor variable `arm`:
@@ -182,7 +221,7 @@ The first column represents the data in `df` where `df$arm == "A" &
 df$gender == "Female"` and the second column the data in `df` where
 `df$arm == "A" & df$gender == "Male"`, and so on.
 
-### Adding Row Structure
+## Adding Row Structure
 
 So far, we have created layouts with analysis and column splitting
 instructions, i.e. `analyze()` and `split_cols_by()`,
@@ -234,7 +273,7 @@ Note that if you print or render a table without pagination, the
 page_by splits are currently rendered as normal row splits. This may
 change in future releases.
 
-### Adding Group Information
+## Adding Group Information
 
 When adding row splits, we get by default label rows for each split
 level, for example `CAN` and `USA` in the table above. Besides the
