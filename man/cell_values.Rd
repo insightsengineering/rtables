@@ -13,7 +13,7 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 \S4method{value_at}{VTableTree}(tt, rowpath = NULL, colpath = NULL)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{rowpath}{character. Path in row-split space to the desired row(s). Can
@@ -69,7 +69,7 @@ cell_values(tbl, c("RACE", "ASIAN", "STRATA1"),
 cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 
 
-## any arm, male columns from the ASIAN content (ie summary) row
+## any arm, male columns from the ASIAN content (i.e. summary) row
 cell_values(tbl, c("RACE", "ASIAN", "@content"),
             c("ARM", "B: Placebo", "SEX", "M"))
 cell_values(tbl, c("RACE", "ASIAN", "@content"),

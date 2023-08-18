@@ -8,7 +8,7 @@
 ## quantilecut: cut on quantiles of observed values for a variable
 ## missing: split obs based on missingness of a variable/observation. This could be used for compare to ref_group??
 ## multicolumn: each child analyzes a different column
-## arbitrary: children are not related to eachother in any systematic fashion.
+## arbitrary: children are not related to each other in any systematic fashion.
 
 
 ## null is ok here.
@@ -271,7 +271,7 @@ setClass("ManualSplit", contains = "AllSplit",
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
 #' @inheritParams gen_args
-#' @param levels character. Levels of the split (ie the children of the manual
+#' @param levels character. Levels of the split (i.e. the children of the manual
 #'   split)
 #' @author Gabriel Becker
 #' @return A \code{ManualSplit} object.
@@ -1025,7 +1025,7 @@ LayoutColLeaf <- function(lev = 0L,
 ## various aspects of the column layout
 ## once its applied to the data.
 
-#' InstantiatedColumnInfo
+#' `InstantiatedColumnInfo`
 #' @inheritParams gen_args
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
@@ -1043,7 +1043,7 @@ setClass("InstantiatedColumnInfo",
 
 #' @rdname cinfo
 #' @export
-#' @param treelyt LayoutColTree.
+#' @param treelyt `LayoutColTree`.
 #' @param csubs list. List of subsetting expressions
 #' @param extras list. Extra arguments associated with the columns
 #' @param cnts integer. Counts.
@@ -1272,7 +1272,7 @@ etable_validity  <- function(object) {
 }
 ## nocov end
 
-#' TableTree classes
+#' `TableTree` classes
 #' @exportClass ElementaryTable
 #' @author Gabriel Becker
 #' @return A formal object representing a populated table.

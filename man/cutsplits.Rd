@@ -76,7 +76,7 @@ arguments accepted by analysis functions. See \code{\link{analyze}}.}
 \item{cna_str}{character. NA string for use with \code{cformat} for content
 table.}
 
-\item{split_format}{FormatSpec. Default format associated with the split
+\item{split_format}{\code{FormatSpec}. Default format associated with the split
 being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
@@ -84,7 +84,7 @@ being created.}
 \item{split_name}{string. Name associated with this split (for pathing, etc)}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
@@ -108,9 +108,9 @@ should accept. Defaults to NA.}
 when tabulating row group summaries.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{cumulative}{logical. Should the cuts be treated as cumulative. Defaults

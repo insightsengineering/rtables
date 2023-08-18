@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_toString.R
 \name{matrix_form,VTableTree-method}
 \alias{matrix_form,VTableTree-method}
-\title{Transform rtable to a list of matrices which can be used for outputting}
+\title{Transform \code{rtable} to a list of matrices which can be used for outputting}
 \usage{
 \S4method{matrix_form}{VTableTree}(
   obj,
@@ -42,8 +42,8 @@ With an additional \code{nrow_header} attribute indicating the number of
 pseudo "rows"  the column structure defines.
 }
 \description{
-Although rtables are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
-map the rtable to an in between state with the formatted cells in a matrix form.
+Although \code{rtables} are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
+map the \code{rtable} to an in between state with the formatted cells in a matrix form.
 }
 \details{
 The strings in the return object are defined as follows: row labels are those

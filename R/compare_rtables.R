@@ -6,8 +6,8 @@
 #'columnar structure mismatch, \code{R} indicates row-structure mismatch, and
 #'\code{S} indicates mismatch in both row and column structure.
 #'
-#'@param object rtable to test
-#'@param expected rtable expected
+#'@param object `rtable` to test
+#'@param expected `rtable` expected
 #'@param tol numerical tolerance
 #'@param comp.attr boolean. Compare format of cells. Other attributes are
 #'  silently ignored.

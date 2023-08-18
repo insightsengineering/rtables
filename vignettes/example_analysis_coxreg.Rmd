@@ -24,7 +24,7 @@ library(dplyr)
 
 ## Data Pre-Processing
 
-First, we prepare the data that will be used to generate a table in this example. We will use the example ADTTE (Time-To-Event Analysis) dataset `ex_adtte` from the `formatters` package, which contains our treatment variable `ARM`, several variables that can be chosen as covariates, and censor variable `CNSR` from which we will derive the event variable `EVENT` required for our model. For the purpose of this example, we will use age (`AGE`) and race (`RACE`) as our covariates.
+First, we prepare the data that will be used to generate a table in this example. We will use the example `ADTTE` (Time-To-Event Analysis) dataset `ex_adtte` from the `formatters` package, which contains our treatment variable `ARM`, several variables that can be chosen as covariates, and censor variable `CNSR` from which we will derive the event variable `EVENT` required for our model. For the purpose of this example, we will use age (`AGE`) and race (`RACE`) as our covariates.
 
 We prepare the data as needed to observe the desired effects in our summary table. `PARAMCD` is filtered so that only records of overall survival (OS) are included, and we filter and mutate to include only the levels of interest in our covariates. The `ARM` variable is mutated to indicate that `"B: Placebo"` should be used as the reference level of our treatment variable, and the `EVENT` variable is derived from `CNSR`.
 

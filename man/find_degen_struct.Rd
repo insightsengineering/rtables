@@ -7,7 +7,7 @@
 find_degen_struct(tt)
 }
 \arguments{
-\item{tt}{TableTree
+\item{tt}{\code{TableTree}
 
 This function returns a list with the row-paths to all
 structural subtables which contain no data rows (
