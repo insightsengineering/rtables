@@ -28,7 +28,7 @@ rcell <- function(x,
                   align = NULL,
                   format_na_str = NULL) {
     if(!is.null(align))
-        align <- check_aligns(align)
+        check_aligns(align)
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -61,7 +61,7 @@ rcell <- function(x,
         )# RefFootnote(footnote))
     }
     if(!is.null(align))
-        cell_align(ret) <- check_aligns(align)
+        cell_align(ret) <- align
     ret
 }
 
