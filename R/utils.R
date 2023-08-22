@@ -51,6 +51,29 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
+# Shorthand for functions that take df as first parameter
+.takes_df <- function(f) {
+    func_takes(f, "df", is_first = TRUE)
+}
+
+# Checking if function takes parameters
+func_takes <- function(func, params, is_first = FALSE) {
+    if(is.list(func))
+        return(lapply(func, func_takes, params = params, is_first = is_first))
+    if (is.null(func) || !is(func, "function")) {
+        # safe-net: should this fail instead?
+        return(setNames(rep(FALSE, length(params)), params))
+    }
+    f_params <- formals(func)
+    if (!is_first) {
+        return(setNames(params %in% names(f_params), params))
+    } else {
+        if (length(params) > 1L)
+            stop("is_first works only with one parameters.")
+        return(!is.null(f_params) && names(f_params)[1] == params)
+    }
+}
+
 #' @title Alignment utils
 #'
 #' @description Currently supported cell value alignments. These values

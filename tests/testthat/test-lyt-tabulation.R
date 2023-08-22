@@ -1,4 +1,4 @@
-context("tabulation framework")
+context("Tabulation framework")
 
 
 test_that("summarize_row_groups works with provided funcs", {
@@ -50,7 +50,7 @@ test_that("existing table in layout works", {
                 table_names = c("AGE1", "AGE2")
         )
 
-tab2 <- build_table(thing2, rawdat)
+    tab2 <- build_table(thing2, rawdat)
 
 
     thing3 <- basic_table() %>%
@@ -1301,7 +1301,7 @@ test_that("qtable works", {
     t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
     t6b <-  basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
-        split_rows_by("SEX",, split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
         analyze("AGE", summary_list2) %>%
         append_topleft("AGE - summary_list") %>%
         build_table(ex_adsl)
