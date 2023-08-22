@@ -163,7 +163,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param table_names character. Names for the tables representing each atomic
 #'   analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different
-#'   children resulting form this split.
+#'   children resulting form this split. An error will rise if the selected split 
+#'   does not contain at least one value that is not `NA`. 
 #' @param format_na_str character(1). String which should be displayed when
 #'   formatted if this cell's value(s) are all NA.
 #' @inherit gen_args return

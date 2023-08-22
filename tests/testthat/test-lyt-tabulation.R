@@ -903,7 +903,20 @@ test_that("topleft label position works", {
     baddm$COUNTRY <- NA_character_
     ## brittle test because I couldn't figure out how to get the regex to handle newlines and check both the path
     ## part and primary message part
-    expect_error(build_table(lyt3, baddm), "Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n", fixed = TRUE)
+    error_msg <- paste0("Page-by split resulted in zero pages (no observed values of split variable?). ",
+    "\n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n")
+    expect_error(build_table(lyt3, baddm), error_msg, fixed = TRUE)
+    
+    # Similar error if the problematic split is done on alt_counts_df (related to #651)
+    lyt4 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE", afun = function(x, .alt_df) mean(x))
+    
+    error_msg2 <- paste0("Following error encountered in splitting alt_counts_df: ",
+                         error_msg)
+    expect_error(build_table(lyt4, DM, alt_counts_df = baddm), error_msg2, fixed = TRUE)
 })
 
 

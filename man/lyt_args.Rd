@@ -186,7 +186,8 @@ It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_a
 for currently supported alignments.}
 
 \item{page_by}{logical(1). Should pagination be forced between different
-children resulting form this split.}
+children resulting form this split. An error will rise if the selected split
+does not contain at least one value that is not \code{NA}.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value,
 when forcing pagination between the children of this split/table}
