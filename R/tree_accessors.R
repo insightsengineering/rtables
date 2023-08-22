@@ -2198,11 +2198,16 @@ setMethod("main_title<-", "VTitleFooter",
               obj
           })
 
+# Getters for TableRow is here for convenience for binding (no need of setters)
+#' @rdname formatters_methods
+#' @export
+setMethod("main_title", "TableRow",
+          function(obj) "")
+
 ##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles", "VTitleFooter",
           function(obj) obj@subtitles)
-
 
 ##' @rdname formatters_methods
 ##' @export
@@ -2211,6 +2216,11 @@ setMethod("subtitles<-", "VTitleFooter",
               obj@subtitles <- value
               obj
           })
+
+##' @rdname formatters_methods
+##' @export
+setMethod("subtitles", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
 
 ##' @rdname formatters_methods
 ##' @export
@@ -2228,6 +2238,12 @@ setMethod("main_footer<-", "VTitleFooter",
 
 ##' @rdname formatters_methods
 ##' @export
+setMethod("main_footer", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
+
+
+##' @rdname formatters_methods
+##' @export
 setMethod("prov_footer", "VTitleFooter",
           function(obj) obj@provenance_footer)
 
@@ -2239,6 +2255,12 @@ setMethod("prov_footer<-", "VTitleFooter",
               obj@provenance_footer <- value
               obj
           })
+
+##' @rdname formatters_methods
+##' @export
+setMethod("prov_footer", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
+
 
 make_ref_value <-  function(value) {
     if(is(value, "RefFootnote"))
