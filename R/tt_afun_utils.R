@@ -7,8 +7,8 @@
 #' @inheritParams lyt_args
 #' @param x ANY. Cell value.
 #' @param format character(1) or function. The format label (string) or 
-#'   formatter function to apply to `x`. See 
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#'   `formatters` function to apply to `x`. See 
+#'   [formatters::list_valid_format_labels()] for currently supported 
 #'   format labels.
 #' @param label character(1). Label or `NULL`. If non-null, it will be looked at
 #'   when determining row labels.
@@ -105,7 +105,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .row_footnotes list. Referential footnotes messages to be associated
 #'   by name with \emph{rows}
 #' @param .aligns character or NULL. Alignments for the cells. Standard for `NULL`
-#'   is `"center"`. See \code{\link{formatters::list_valid_aligns}} for currently supported
+#'   is `"center"`. See [formatters::list_valid_aligns()] for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
 #'
