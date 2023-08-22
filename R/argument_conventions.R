@@ -104,7 +104,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   declared via strings (\code{"xx.x"}) or function. In cases such as
 #'   \code{analyze} calls, they can character vectors or lists of functions.
 #' @param align character(1) or `NULL`. Alignment the value should be rendered with.
-#'   It defaults to `"center"` if `NULL` is used. See \code{\link{formatters::list_valid_aligns}} 
+#'   It defaults to `"center"` if `NULL` is used. See [formatters::list_valid_aligns()]
 #'   for currently supported alignments.
 #' @param cfun list/function/NULL. tabulation function(s) for creating content
 #'   rows. Must accept \code{x} or \code{df} as first parameter. Must accept
