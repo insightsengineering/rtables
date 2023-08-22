@@ -6,7 +6,7 @@
  * Added `.alt_df` to have the exact same subset of `df` in `afun/cfun`.
  * Added check for `.alt_df_row` that prevents its calculation if not present in analysis functions.
 
-### Miscellanous
+### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
  * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
 
