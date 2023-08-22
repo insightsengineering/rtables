@@ -299,7 +299,15 @@ do_split <- function(spl,
     ## - Ensures datasplit and values lists are named according to labels
     ## - ensures labels are character not factor
     ret <- .fixupvals(ret)
-
+    ## we didn't put this in .fixupvals because that get called withint he split functions
+    ## created by make_split_fun and its not clear this check should be happening then.
+    if(has_force_pag(spl) &&  ## this means it's page_by=TRUE
+       length(ret$datasplit) == 0) {
+        stop("Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: ",
+             class(spl), " (", payloadmsg(spl), ")\n",
+             "\toccured at path: ",
+             spl_context_to_disp_path(spl_context), "\n")
+    }
     ret
 }
 
