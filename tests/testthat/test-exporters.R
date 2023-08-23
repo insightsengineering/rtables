@@ -221,6 +221,7 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
     # Create data
     lyt <- make_big_lyt()
     tbl <- build_table(lyt, rawdat)
+    tbl <- result
     top_left(tbl) <- "Ethnicity"
     main_title(tbl) <- "Main title"
     main_footer(tbl) <- "Some Footer"

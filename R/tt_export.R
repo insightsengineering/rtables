@@ -494,7 +494,7 @@ flex_theme_for_rtables <- function(x) {
                      "theme_box()"))
     }
     # x <- flx
-    x <- border_remove(x)
+    x <- flextable::border_remove(x)
     fp_bdr <- fp_border()
     x <- border_outer(x, part = "all", border = fp_bdr)
     x <- bold(x = x, bold = TRUE, part = "header")
