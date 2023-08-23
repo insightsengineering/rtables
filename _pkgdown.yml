@@ -10,28 +10,39 @@ navbar:
     - icon: fa-github fa-lg
       href: https://github.com/insightsengineering/rtables
 
-
 articles:
-  - title: For Users
-    desc: Vignettes aimed at package users
+  - title: Getting Started
+    navbar: Getting Started
     contents:
     - introduction
     - clinical_trials
-    - subsetting_tables
-    - split_functions
-    - tabulation_dplyr
-    - tabulation_concepts
-    - baseline
-    - sorting_pruning
-    - manual_table_construction
-    - title_footer
+
+  - title: Table Customization
+    navbar: Table Customization
+    contents:
     - custom_appearance
-    - advanced_usage
+    - title_footer
+    - sorting_pruning
+    
+  - title: rtables Concepts
+    contents:
+    - subsetting_tables
+    - baseline
+    - split_functions
     - format_precedence
+
+  - title: Advanced Usage
+    contents:
+    - advanced_usage
     - example_analysis_coxreg
+    
+  - title: Other
+    contents:
+    - tabulation_concepts  
+    - manual_table_construction
+    - tabulation_dplyr
 
 reference:
-
   - title: Argument Conventions
     desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:
