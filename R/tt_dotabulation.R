@@ -759,6 +759,18 @@ setMethod(".make_split_kids", "Split",
                  alt_dfpart$message,
                  call. = FALSE)
         }
+        
+        # Error if split does not have the same values in the alt_df (and order)
+        alt_df_spl_vals <- levels(as.factor(alt_df[[spl_payload(spl)]]))
+        # The following breaks if there are different levels (do_split returns empty list)
+        # or if there are different number of the same levels
+        if (length(alt_dfpart) != length(dataspl)) {
+            stop("alt_counts_df split variable(s) [", spl_payload(spl), 
+                 "] (in split ", as.character(class(spl)), 
+                 ") has not the same factor levels of df.\ndf has c(", 
+                 paste(names(dataspl), collapse = ", "), ") levels while ",
+                 "alt_counts_df has c(", paste(alt_df_spl_vals, collapse = ", "), ")")
+        }
     } else {
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }

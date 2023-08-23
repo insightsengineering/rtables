@@ -185,6 +185,37 @@ test_that("Error localization for missing split variable when done in alt_count_
     expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
 })
 
+test_that("Error localization for missmatch split variable when done in alt_count_df", {
+    afun_tmp <- function(x, .alt_df_row, .spl_context,...) {
+        # Important check that order is aligned even if source levels are not
+        stopifnot(as.character(unique(.alt_df_row$ARMCD)) == .spl_context$value[2])
+        mean(x)
+    }
+    lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
+    
+    # Mismatch in the number of splits (NA is 0)
+    DM_tmp <- DM %>% mutate("ARMCD" = NA_character_)
+    expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp), 
+                 regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    
+    # Mismatch of levels
+    armcd_col <- factor(sample(c("arm A", "arm B", "arm C"), nrow(DM), replace = TRUE))
+    DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
+    expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp), 
+                 regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    
+    # Mismatch in the number of levels 
+    armcd_col2 <- factor(sample(levels(ex_adsl$ARMCD)[c(1, 2)], nrow(DM), replace = TRUE))
+    DM_tmp <- DM %>% mutate("ARMCD" = armcd_col2)
+    expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp), 
+                 regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    
+    # Another order -> should work? yes, split is valid
+    levels(armcd_col) <- levels(ex_adsl$ARMCD)[c(1, 3, 2)]
+    DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
+    expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
+})
+
 context("Content functions (cfun)")
 
 test_that(".alt_df_row appears in cfun but not in afun.", {
