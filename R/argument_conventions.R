@@ -104,7 +104,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   declared via strings (\code{"xx.x"}) or function. In cases such as
 #'   \code{analyze} calls, they can character vectors or lists of functions.
 #' @param align character(1) or `NULL`. Alignment the value should be rendered with.
-#'   It defaults to `"center"` if `NULL` is used. See \code{\link{rtables_aligns}} 
+#'   It defaults to `"center"` if `NULL` is used. See [formatters::list_valid_aligns()]
 #'   for currently supported alignments.
 #' @param cfun list/function/NULL. tabulation function(s) for creating content
 #'   rows. Must accept \code{x} or \code{df} as first parameter. Must accept
@@ -163,7 +163,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param table_names character. Names for the tables representing each atomic
 #'   analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different
-#'   children resulting form this split.
+#'   children resulting form this split. An error will rise if the selected split 
+#'   does not contain at least one value that is not `NA`. 
 #' @param format_na_str character(1). String which should be displayed when
 #'   formatted if this cell's value(s) are all NA.
 #' @inherit gen_args return

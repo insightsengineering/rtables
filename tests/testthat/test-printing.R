@@ -216,6 +216,62 @@ test_that("alignment works", {
 
 })
 
+test_that("Decimal alignment works", {
+  dec_als <- c("dec_left", "decimal", "dec_right")
+  df <- data.frame(
+    ARM = factor(dec_als, levels = dec_als),
+    AETOXGR = factor(seq(1:3)),
+    stringsAsFactors = FALSE
+  )
+  
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    analyze("AETOXGR", afun = function(x, .spl_context, .var) {
+        form_v <- list_valid_format_labels()[[1]]
+        num_v <- as.list(rep(11.11111, length(form_v)))
+        names(num_v) <- paste0("c", seq_along(form_v))
+        
+        # xxx to be replaced by cur_col_id
+        ref_col <- .spl_context$cur_col_subset
+        which_ref_col <- sapply(.spl_context, function(i) identical(i, ref_col))
+        col_nm_matched <- names(which_ref_col[which_ref_col])
+        stopifnot(col_nm_matched > 1)
+        
+        in_rows(
+            .list = num_v,
+            .formats = form_v,
+            .aligns = rep(col_nm_matched[1], length(num_v))
+        )
+    }) 
+  
+  tbl <- build_table(lyt, df)
+  
+  cw <- propose_column_widths(tbl)
+  cw[2:4] <- cw[2:4] + 3
+  # Printed comparison with padding
+  res <- strsplit(toString(tbl, widths = cw, hsep = "-"), "\\\n")[[1]]
+  expected <- c(
+      "         dec_left           decimal          dec_right   ",
+      "---------------------------------------------------------",
+      "c1       11.11111           11.11111            11.11111 ",
+      "c2       11                 11                  11       ",
+      "c3       11.1               11.1                11.1     ",
+      "c4       11.11              11.11               11.11    ",
+      "c5       11.111             11.111              11.111   ",
+      "c6       11.1111            11.1111             11.1111  ",
+      "c7     1111.111%          1111.111%           1111.111%  ",
+      "c8     1111%              1111%               1111%      ",
+      "c9     1111.1%            1111.1%             1111.1%    ",
+      "c10    1111.11%           1111.11%            1111.11%   ",
+      "c11    1111.111%          1111.111%           1111.111%  ",
+      "c12   (N=11.11111)       (N=11.11111)        (N=11.11111)",
+      "c13      11.1               11.1                11.1     ",
+      "c14      11.11              11.11               11.11    ",
+      "c15      11.1111            11.1111             11.1111  "
+  )
+  expect_identical(res, expected)
+})
+
 
 test_that("Various Printing things work", {
 
