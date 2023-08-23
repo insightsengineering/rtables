@@ -156,9 +156,15 @@ NULL
 
     if(are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
         if(!is.null(extr)) {
-            warning("Got a partinfo list with values that are ",
-                    "already SplitValue objects and non-null extras ",
-                    "element. This shouldn't happen")
+            ## in_ref_cols is in here for some reason even though its already in the SplitValue object.
+            ## https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598
+            ## the if is a bandaid.
+            ## XXX FIXME RIGHT
+            sq <- seq_along(vals)
+            if(any(vapply(sq, function(i) !all(names(extr[[i]]) %in%  names(splv_extra(vals[[i]]))), TRUE)))
+                warning("Got a partinfo list with values that are ",
+                        "already SplitValue objects and non-null extras ",
+                        "element. This shouldn't happen")
         }
     } else {
         if(is.null(extr))

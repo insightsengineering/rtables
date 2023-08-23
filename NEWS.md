@@ -5,6 +5,7 @@
  * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations. `.alt_df_row` gives access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
  * Added `.alt_df` to have the exact same subset of `df` in `afun/cfun`.
  * Added check for `.alt_df_row` that prevents its calculation if not present in analysis functions.
+ * Removed superfluous warning which arose for custom split functions when reference group is is set (https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598)
 
 ### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
