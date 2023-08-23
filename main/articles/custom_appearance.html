@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,17 +44,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -83,7 +72,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini, Abinaya Yogasekaram, and Gabriel Becker</h4>
             
-            <h4 data-toc-skip class="date">2023-08-22</h4>
+            <h4 data-toc-skip class="date">2023-08-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/custom_appearance.Rmd" class="external-link"><code>vignettes/custom_appearance.Rmd</code></a></small>
       <div class="d-none name"><code>custom_appearance.Rmd</code></div>
@@ -111,11 +100,22 @@ customize the appearance of <code>rtables</code>.</p>
 <p>It is possible to align the content by assigning <code>"left"</code>,
 <code>"center"</code> (default), and <code>"right"</code> to
 <code>.aligns</code> and <code>align</code> arguments in
-<code><a href="../reference/in_rows.html">in_rows()</a></code> and <code><a href="../reference/rcell.html">rcell()</a></code>, respectively.</p>
+<code><a href="../reference/in_rows.html">in_rows()</a></code> and <code><a href="../reference/rcell.html">rcell()</a></code>, respectively. It is
+also possible to use <code>decimal</code>, <code>dec_right</code>, and
+<code>dec_left</code> for decimal alignments. The first takes all
+numerical values and aligns the decimal character <code>.</code> in
+every value of the column that has <code>align = "decimal"</code>. Also
+numberic without decimal values are aligned according to an imaginary
+<code>.</code> if specified as such. <code>dec_left</code> and
+<code>dec_right</code> behave similarly, with the difference that if the
+column present empty spaces at left or right, it pushes values towards
+left or right taking the one value that has most decimal characters, if
+right, or non-decimal values if left. For more details, please read the
+related documentation page <code><a href="https://rdrr.io/pkg/formatters/man/decimal_align.html" class="external-link">help("decimal_align")</a></code>.</p>
 <p>Please consider using <code><a href="../reference/in_rows.html">?in_rows</a></code> and <code><a href="../reference/rcell.html">?rcell</a></code>
 for further clarifications on the two arguments, and use
-<code><a href="../reference/rtables_aligns.html">rtables_aligns()</a></code> to see all available alignment
-options.</p>
+<code><a href="https://rdrr.io/pkg/formatters/man/list_formats.html" class="external-link">formatters::list_valid_aligns()</a></code> to see all available
+alignment options.</p>
 <p>In the following we show two simplified examples that use
 <code>align</code> and <code>.aligns</code>, respectively.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
