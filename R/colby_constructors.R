@@ -1816,7 +1816,7 @@ list_wrap_df <- function(f) {
 #' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
 #' normally would be, while 2d formats which don't include a percent, and all 3d
 #' formats result in an error. Formats in the form of functions are not supported for
-#' `colcount` format. See \code{\link[formatters]{list_valid_format_labels}} for
+#' `colcount` format. See [formatters::list_valid_format_labels()] for
 #' the list of valid format labels to select from.
 #'
 #' @inherit split_cols_by return

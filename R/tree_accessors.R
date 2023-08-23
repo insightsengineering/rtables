@@ -1187,7 +1187,7 @@ setMethod("cell_align<-", "CellValue", function(obj, value) {
     } else {
         value <- tolower(value)
     }
-    chk_rtables_align(value)
+    check_aligns(value)
     attr(obj, "align") <- value
     obj
 })
