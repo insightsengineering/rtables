@@ -183,7 +183,7 @@ tbl <- build_table(lyt, df)
 tbl
 ```
 
-We can now spotcheck that the values are the same
+We can now spot check that the values are the same
 
 ```{r}
 frm_rtables_h <- cell_values(tbl, rowpath = c("country", "CAN", "handed", "Right", "@content"),

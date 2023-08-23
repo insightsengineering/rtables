@@ -3,7 +3,7 @@
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
 \alias{paginate_table}
-\title{Pagination of a TableTree}
+\title{Pagination of a \code{TableTree}}
 \usage{
 pag_tt_indices(
   tt,
@@ -36,7 +36,7 @@ paginate_table(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
@@ -85,7 +85,7 @@ to \code{.5} inches for both vertical margins and \code{.75} for both
 horizontal margins.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. \code{NA} (the default) indicates cpp should be inferred from
+horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be inferred from
 the page size; \code{NULL} indicates no horizontal pagination should be done
 regardless of page size.}
 

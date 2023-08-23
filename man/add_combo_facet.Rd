@@ -29,7 +29,7 @@ Add a combination facet during postprocessing stage in a custom split fun.
 \details{
 For \code{add_combo_facet}, the data associated with the resulting
 facet will be the data associated with the facets for each level in
-\code{levels}, rbound together. In particular, this means that if those levels
+\code{levels}, \code{rbound} together. In particular, this means that if those levels
 are overlapping, data that appears in both will be duplicated.
 }
 \examples{

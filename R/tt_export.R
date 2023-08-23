@@ -8,9 +8,9 @@ NULL
 #'
 #' This function creates a flat tabular file of cell values and
 #' corresponding paths via \code{\link{path_enriched_df}}. I then
-#' writes that data.frame out as a tsv file.
+#' writes that data.frame out as a `tsv` file.
 #'
-#' By default (ie when \code{value_func} is not specified,
+#' By default (i.e. when \code{value_func} is not specified,
 #' List columns where at least one value has length > 1 are collapsed
 #' to character vectors by collapsing the list element with \code{"|"}.
 #'
@@ -66,7 +66,7 @@ collapse_values <- function(colvals) {
     vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
-#' Transform TableTree object to Path-Enriched data.frame
+#' Transform `TableTree` object to Path-Enriched data.frame
 #'
 #' @inheritParams gen_args
 #' @param path_fun function. Function to transform paths into single-string
@@ -200,7 +200,7 @@ result_df_v0_experimental <- function(tt) {
 
 #' Generate a Result Data Frame
 #'
-#' @param tt VTableTree. The table.
+#' @param tt `VTableTree`. The table.
 #' @param spec character(1). The specification to use to
 #' extract the result data frame. See details
 #' @param ... Passed to spec-specific result data frame conversion function.
@@ -360,15 +360,15 @@ formatters::export_as_txt
 ## }
 
 
-#' Create a FlexTable object representing an rtables TableTree
+#' Create a `FlexTable` object representing an `rtables` `TableTree`
 #'
 #' @inheritParams gen_args
 #' @param paginate logical(1). Should \code{tt} be paginated and exported as
-#'   multiple flextables. Defaults to \code{FALSE}
+#'   multiple `flextables`. Defaults to \code{FALSE}
 #' @inheritParams paginate_table
 #' @param total_width numeric(1). Total width in inches for the resulting
-#'   flextable(s). Defaults to 5.
-#' @return a flextable object
+#'   `flextable(s)`. Defaults to 5.
+#' @return a `flextable` object
 #' @export
 #' @examples
 #' analysisfun <- function(x, ...) {

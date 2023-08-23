@@ -229,13 +229,13 @@ sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_all
 
 ### Wildcards in Sort Paths
 
- Unlike other uses of pathing (currentl), a sorting path can contain
+ Unlike other uses of pathing (currently), a sorting path can contain
  "*". This indicates that the children of each subtable matching he
  `*` element of the path should be sorted **separately** as indicated
  by the remainder of the path after the `*` and the score function.
 
 Thus we can extend our sorting of strata within the `ASIAN` subtable
-to all race-specific subtables bjy using the wildcard:
+to all race-specific subtables by using the wildcard:
 
 ```{r}
 sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), scorefun = cont_n_allcols)
@@ -409,7 +409,7 @@ sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"),
 ```
 
 In the above table we see that the mean and median rows are reordered
-by their values in the first column, comparead to the raw table, as
+by their values in the first column, compared to the raw table, as
 desired.
 
 With this function we can also do the same for columns that are nested
