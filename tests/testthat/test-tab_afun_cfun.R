@@ -204,6 +204,12 @@ test_that("Error localization for missmatch split variable when done in alt_coun
     expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp), 
                  regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
     
+    # Mix mismatch of levels
+    armcd_col <- factor(sample(c("arm A", "ARM B", "ARM C"), nrow(DM), replace = TRUE))
+    DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
+    expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp), 
+                 regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    
     # Mismatch in the number of levels 
     armcd_col2 <- factor(sample(levels(ex_adsl$ARMCD)[c(1, 2)], nrow(DM), replace = TRUE))
     DM_tmp <- DM %>% mutate("ARMCD" = armcd_col2)
@@ -212,6 +218,11 @@ test_that("Error localization for missmatch split variable when done in alt_coun
     
     # Another order -> should work? yes, split is valid
     levels(armcd_col) <- levels(ex_adsl$ARMCD)[c(1, 3, 2)]
+    DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
+    expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
+    
+    # Mix mismatch of levels but covering them all -> valid split
+    armcd_col <- factor(sample(c("arm A", levels(ex_adsl$ARMCD)), nrow(DM), replace = TRUE))
     DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
     expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
 })
