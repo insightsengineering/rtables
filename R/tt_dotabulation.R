@@ -1003,6 +1003,9 @@ recursive_applysplit <- function(df,
 #' In particular, this means that in the case of splitting based on cuts of the
 #' data, any dynamic cuts will have been calculated based on \code{df} and
 #' simply re-used for the count calculation.
+#' 
+#' Footers spanning more than one line can be supplied as a character vector to 
+#' maintain indentation. See \link[formatters]{main_footer}.
 #'
 #' @note When overriding the column counts or totals care must be taken that,
 #'   e.g., `length()` or `nrow()` are not called within tabulation functions,
