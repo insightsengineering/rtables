@@ -1,4 +1,4 @@
-context("tabulation framework")
+context("Tabulation framework")
 
 
 test_that("summarize_row_groups works with provided funcs", {
@@ -50,7 +50,7 @@ test_that("existing table in layout works", {
                 table_names = c("AGE1", "AGE2")
         )
 
-tab2 <- build_table(thing2, rawdat)
+    tab2 <- build_table(thing2, rawdat)
 
 
     thing3 <- basic_table() %>%
@@ -885,6 +885,38 @@ test_that("topleft label position works", {
     ptab <- paginate_table(tab2)
     expect_identical(top_left(ptab[[1]]),
                      c("Strata", "  Gender"))
+
+    ## https://github.com/insightsengineering/rtables/issues/651
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+    expect_error(build_table(lyt2, DM[0,]), "Page-by split resulted in zero")
+
+    lyt3 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+
+    baddm <- DM
+    baddm$COUNTRY <- NA_character_
+    ## brittle test because I couldn't figure out how to get the regex to handle newlines and check both the path
+    ## part and primary message part
+    error_msg <- paste0("Page-by split resulted in zero pages (no observed values of split variable?). ",
+    "\n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n")
+    expect_error(build_table(lyt3, baddm), error_msg, fixed = TRUE)
+
+    # Similar error if the problematic split is done on alt_counts_df (related to #651)
+    lyt4 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE", afun = function(x, .alt_df) mean(x))
+
+    error_msg2 <- paste0("Following error encountered in splitting alt_counts_df: ",
+                         error_msg)
+    expect_error(build_table(lyt4, DM, alt_counts_df = baddm), error_msg2, fixed = TRUE)
 })
 
 
@@ -1282,7 +1314,7 @@ test_that("qtable works", {
     t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
     t6b <-  basic_table(show_colcounts = TRUE) %>%
         split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
-        split_rows_by("SEX",, split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
         analyze("AGE", summary_list2) %>%
         append_topleft("AGE - summary_list") %>%
         build_table(ex_adsl)
@@ -1367,4 +1399,21 @@ test_that("problematic labels are caught and give informative error message", {
         analyze("Sepal.Length", afun = make_afun(simple_analysis, .labels = list(Mean = "this is {test}")))
 
     expect_error(build_table(lyt, iris), "Labels cannot contain [{] or [}] due to")
+})
+
+## No superfluous warning
+
+test_that("No superfluous warning when ref group is set with custom split fun", {
+    reorder_facets <- function(splret, spl, fulldf, ...) {
+    # browser() if you enter here the order of splret seems already correct
+        ord <- order(names(splret$values))
+        make_split_result(splret$values[ord],
+                          splret$datasplit[ord],
+                          splret$labels[ord])
+    }
+
+    lyt <- basic_table() %>%
+        split_cols_by("Species", ref_group = "virginica", split_fun = make_split_fun(post = list(reorder_facets))) %>%
+        analyze("Sepal.Length")
+    expect_silent(build_table(lyt, iris))
 })

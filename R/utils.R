@@ -51,63 +51,28 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
-#' @title Alignment utils
-#'
-#' @description Currently supported cell value alignments. These values
-#'   may be used to set content alignment (`align` in [rcell()] or `.aligns`
-#'   in [in_rows()]).
-#'
-#' @return a vector of alignments currently supported.
-#'
-#' @examples
-#' # See the alignments available in rtables
-#' rtables_aligns()
-#'
-#' # Right alignment with align in rcell()
-#' lyt <- basic_table() %>%
-#'   analyze("Species", function(x) in_rows(left = rcell("r", align = "right")))
-#'
-#' tbl <- build_table(lyt, iris)
-#' tbl
-#'
-#' # Set multiple alignments using character vectors with .aligns in in_rows()
-#' lyt2 <- basic_table() %>%
-#'   analyze("Species", function(x) {
-#'     in_rows(
-#'       left = rcell("l"),
-#'       right = rcell("r"),
-#'       .aligns = c("left", "right")
-#'     )
-#'   })
-#'
-#' tbl2 <- build_table(lyt2, iris)
-#' tbl2
-#'
-#' # Clinical data example:
-#' lyt3 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
-#'   analyze(c("AGE"), function(x) {
-#'     in_rows(
-#'       "mean" = rcell(mean(x), align = "right"),
-#'       "sd" = rcell(sd(x), align = "left"), .formats = c("xx.x")
-#'     )
-#'   }, show_labels = "visible", na_str = "NE")
-#'
-#' tbl3 <- build_table(lyt3, ex_adsl)
-#' tbl3
-#'
-#' @seealso [in_rows()], [rcell()]
-#'
-#' @export
-rtables_aligns <- function() {
-  c("left", "right", "center")
+
+# Shorthand for functions that take df as first parameter
+.takes_df <- function(f) {
+    func_takes(f, "df", is_first = TRUE)
 }
 
-chk_rtables_align <- function(algn) {
-    if(any(is.na(algn) | !(algn %in% rtables_aligns())))
-        stop("Unsupported text-alignment: ", algn)
-    algn
+# Checking if function takes parameters
+func_takes <- function(func, params, is_first = FALSE) {
+    if(is.list(func))
+        return(lapply(func, func_takes, params = params, is_first = is_first))
+    if (is.null(func) || !is(func, "function")) {
+        # safe-net: should this fail instead?
+        return(setNames(rep(FALSE, length(params)), params))
+    }
+    f_params <- formals(func)
+    if (!is_first) {
+        return(setNames(params %in% names(f_params), params))
+    } else {
+        if (length(params) > 1L)
+            stop("is_first works only with one parameters.")
+        return(!is.null(f_params) && names(f_params)[1] == params)
+    }
 }
 
 #' Translate spl_context to Path for display in error messages
