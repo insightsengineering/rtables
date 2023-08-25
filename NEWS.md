@@ -6,6 +6,7 @@
  * Added `.alt_df` to have the exact same subset of `df` in `afun/cfun`.
  * Added check for `.alt_df_row` that prevents its calculation if not present in analysis functions.
  * Removed superfluous warning which arose for custom split functions when reference group is is set (https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598)
+ * Binding objects via `rbind` will retain titles/footer information if identical in all objects or only present in the first object being bound.
 
 ### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
