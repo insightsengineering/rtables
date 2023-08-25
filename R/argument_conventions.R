@@ -210,7 +210,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #' @param subtitles character. Subtitles [subtitles()] can be vector of strings; 
 #'   hence every element is printed in a separate line. Ignored for subtables.
 #' @param main_footer character. Main global (non-referential) footer materials 
-#'   [main_footer()]. If it a vector of strings, they will be printed on different
+#'   [main_footer()]. If it is a vector of strings, they will be printed on different
 #'   lines.
 #' @param prov_footer character. Provenance-related global footer materials
 #'   [prov_footer()]. It can be also a vector of strings, printed on different lines.
