@@ -216,7 +216,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   [prov_footer()]. It can be also a vector of strings, printed on different lines.
 #'   Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current
-#'   level [fnotes_at_path()].
+#'   level when row paths are specified [`fnotes_at_path<-`()].
 #' @param trailing_sep character(1). String which will be used as a section
 #'   divider after the printing of the last row contained in this (sub)-table,
 #'   unless that row is also the last table row to be printed overall, or

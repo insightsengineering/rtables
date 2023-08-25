@@ -91,7 +91,7 @@ lines.}
 Generally should not be modified by hand.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level \code{\link[=fnotes_at_path]{fnotes_at_path()}}.}
+level when row paths are specified .}
 
 \item{page_title}{character. Page specific title(s).}
 
