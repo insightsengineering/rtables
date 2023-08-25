@@ -83,7 +83,7 @@ Ignored for subtables.}
 hence every element is printed in a separate line. Ignored for subtables.}
 
 \item{main_footer}{character. Main global (non-referential) footer materials
-\code{\link[=main_footer]{main_footer()}}. If it a vector of strings, they will be printed on different
+\code{\link[=main_footer]{main_footer()}}. If it is a vector of strings, they will be printed on different
 lines.}
 
 \item{prov_footer}{character. Provenance-related global footer materials
