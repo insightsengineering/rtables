@@ -205,13 +205,18 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   when tabulating row group summaries.
 #' @param child_names character. Names to be given to the sub splits contained
 #'   by a compound split (typically a `AnalyzeMultiVars` split object).
-#' @param title character(1). Main title. Ignored for subtables.
-#' @param subtitles character. Subtitles. Ignored for subtables.
-#' @param main_footer character. Main global (non-referential) footer materials.
-#' @param prov_footer character. Provenance-related global footer materials.
+#' @param title character(1). Main title [main_title()] is a single string. 
+#'   Ignored for subtables.
+#' @param subtitles character. Subtitles [subtitles()] can be vector of strings; 
+#'   hence every element is printed in a separate line. Ignored for subtables.
+#' @param main_footer character. Main global (non-referential) footer materials 
+#'   [main_footer()]. If it a vector of strings, they will be printed on different
+#'   lines.
+#' @param prov_footer character. Provenance-related global footer materials
+#'   [prov_footer()]. It can be also a vector of strings, printed on different lines.
 #'   Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current
-#'   level
+#'   level [fnotes_at_path()].
 #' @param trailing_sep character(1). String which will be used as a section
 #'   divider after the printing of the last row contained in this (sub)-table,
 #'   unless that row is also the last table row to be printed overall, or

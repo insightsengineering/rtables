@@ -93,13 +93,18 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title \code{\link[=main_title]{main_title()}} is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles \code{\link[=subtitles]{subtitles()}} can be vector of strings;
+hence every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+\code{\link[=main_footer]{main_footer()}}. If it a vector of strings, they will be printed on different
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+\code{\link[=prov_footer]{prov_footer()}}. It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator

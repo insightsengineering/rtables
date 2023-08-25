@@ -55,13 +55,18 @@ qtable(
 
 \item{summarize_groups}{logical(1). Should each level of nesting include marginal summary rows. Defaults to \code{FALSE}}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title \code{\link[=main_title]{main_title()}} is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles \code{\link[=subtitles]{subtitles()}} can be vector of strings;
+hence every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+\code{\link[=main_footer]{main_footer()}}. If it a vector of strings, they will be printed on different
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+\code{\link[=prov_footer]{prov_footer()}}. It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
