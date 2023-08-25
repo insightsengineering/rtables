@@ -1,4 +1,4 @@
-## rtables 0.6.2.9005
+## rtables 0.6.2.9006
 
 ### Enhancements
  * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
@@ -12,6 +12,8 @@
  * Custom appearance vignette updated with decimal alignment support.
  * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded internal function `chk_rtables_align` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
  * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
+ * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685)) 
+ * Added `qtable_layout` and fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698))
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
