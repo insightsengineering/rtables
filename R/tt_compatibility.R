@@ -354,6 +354,23 @@ rtablel <- function(header, ..., format = NULL, hsep = default_hsep(), inset = 0
     do.call(rtable, args_list)
 }
 
+# All object annotations are identical (and exist)
+all_annots_identical <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && length(unique(all_annots)) == 1
+    } else {
+        length(all_annots[[1]]) > 0 && Reduce(identical, all_annots)
+    }
+}
+
+# Only first object has annotations
+only_first_annot <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && all(all_annots[-1] == "")
+    } else {
+        length(all_annots[[1]]) > 0 && all(sapply(all_annots, length)[-1] == 0)
+    }
+}
 
 #' @rdname rbind
 #' @return A formal table object.
@@ -374,6 +391,32 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
+    rbind_annot <- list(main_title = "", 
+                        subtitles = character(), 
+                        main_footer = character(), 
+                        prov_footer = character())
+
+    # Titles/footer info are (independently) retained from first object if 
+    # identical or missing in all other objects
+    all_titles <- sapply(x, main_title)
+    if (all_annots_identical(all_titles) || only_first_annot(all_titles)) {
+        rbind_annot[["main_title"]] <- all_titles[[1]]
+    }
+
+    all_sts <- lapply(x, subtitles)
+    if (all_annots_identical(all_sts) || only_first_annot(all_sts)) {
+        rbind_annot[["subtitles"]] <- all_sts[[1]]
+    }
+
+    all_ftrs <- lapply(x, main_footer)
+    if (all_annots_identical(all_ftrs) || only_first_annot(all_ftrs)) {
+        rbind_annot[["main_footer"]] <- all_ftrs[[1]]
+    }
+
+    all_pfs <- lapply(x, prov_footer)
+    if (all_annots_identical(all_pfs) || only_first_annot(all_pfs)) {
+        rbind_annot[["prov_footer"]] <- all_pfs[[1]]
+    }
 
     ## if we got only ElementaryTable and
     ## TableRow objects, construct a new
@@ -396,7 +439,14 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     }
 
 
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
+    TableTree(kids = x,
+              cinfo = firstcols,
+              name = "rbind_root",
+              label = "",
+              title = rbind_annot[["main_title"]],
+              subtitles = rbind_annot[["subtitles"]],
+              main_footer = rbind_annot[["main_footer"]],
+              prov_footer = rbind_annot[["prov_footer"]])
 
 }
 
@@ -406,6 +456,12 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' @exportMethod rbind
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
+#'
+#' @note
+#' When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all 
+#' other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed 
+#' and must be set for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] 
+#' functions.
 #'
 #' @examples
 #' mtbl <- rtable(
@@ -434,7 +490,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #'    )
 #'  ))
 #'
-#'  rbind(mtbl, mtbl2)
+#' rbind(mtbl, mtbl2)
 #' rbind(mtbl, rrow(), mtbl2)
 #' rbind(mtbl, rrow("aaa"), indent(mtbl2))
 setMethod("rbind", "VTableNodeInfo",
