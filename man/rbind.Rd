@@ -32,6 +32,12 @@ A formal table object.
 \description{
 \code{rbind} \code{TableTree} and related objects
 }
+\note{
+When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all
+other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed
+and must be set for the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}}
+functions.
+}
 \examples{
 mtbl <- rtable(
    header = rheader(
@@ -59,7 +65,7 @@ mtbl <- rtable(
    )
  ))
 
- rbind(mtbl, mtbl2)
+rbind(mtbl, mtbl2)
 rbind(mtbl, rrow(), mtbl2)
 rbind(mtbl, rrow("aaa"), indent(mtbl2))
 }
