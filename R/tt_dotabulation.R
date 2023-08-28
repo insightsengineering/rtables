@@ -765,12 +765,17 @@ setMethod(".make_split_kids", "Split",
         # or if there are different number of the same levels
         if (!all(names(dataspl) %in% names(alt_dfpart)) ||
             length(alt_dfpart) != length(dataspl)) {
-            alt_df_spl_vals <- levels(as.factor(alt_df[[spl_payload(spl)]]))
+            alt_df_spl_vals <- unique(alt_df[[spl_payload(spl)]])
+            if (is.factor(alt_df_spl_vals)) {
+                alt_df_spl_vals <- levels(alt_df_spl_vals)
+            }
+            spl_val2 <- paste0('"', paste(alt_df_spl_vals, collapse = '", "'), '"')
+
             stop("alt_counts_df split variable(s) [", spl_payload(spl), 
                  "] (in split ", as.character(class(spl)), 
-                 ") has not the same factor levels of df.\ndf has c(", 
-                 paste(names(dataspl), collapse = ", "), ") levels while ",
-                 "alt_counts_df has c(", paste(alt_df_spl_vals, collapse = ", "), ")")
+                 ") has not the same factor levels of df.\ndf has c(", '"', 
+                 paste(names(dataspl), collapse = '", "'), '"', ") levels while ",
+                 "alt_counts_df has c(", ifelse(length(alt_df_spl_vals) > 0, spl_val2, ""), ")")
         }
     } else {
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
