@@ -111,7 +111,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' 
 #' @note
 #'   In post-processing, referential footnotes can also be added using row and column
-#'   paths with [`fnotes_at_path<-`()].
+#'   paths with [`fnotes_at_path<-`].
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of
