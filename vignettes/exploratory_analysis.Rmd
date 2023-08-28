@@ -252,7 +252,7 @@ qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
 
 Here is what we have learned in this vignette:
 
--   `qtable()` can replace and extend uses of `table()`
+-   `qtable()` can replace and extend uses of `table()` and `stats::ftable()`
 
 -   `qtable()` is useful for exploratory data analysis
 
