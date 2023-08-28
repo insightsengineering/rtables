@@ -1818,15 +1818,20 @@ list_wrap_df <- function(f) {
 #' formats result in an error. Formats in the form of functions are not supported for
 #' `colcount` format. See [formatters::list_valid_format_labels()] for
 #' the list of valid format labels to select from.
+#' 
 #'
 #' @inherit split_cols_by return
 #'
-#' @note Because percent components in `colcount_format` are *always*
+#' @note - Because percent components in `colcount_format` are *always*
 #' populated with the value 1, we can get arguably strange results, such as
 #' that individual arm columns and a combined "all patients" column all
 #' list "100%" as their percentage, even though the individual arm columns
 #' represent strict subsets of the all patients column.
 #'
+#' - Note that subtitles ([subtitles()]) and footers ([main_footer()] and [prov_footer()]) 
+#' that spans more than one line can be supplied as a character vector to maintain 
+#' indentation on multiple lines.
+#' 
 #' @examples
 #'
 #' lyt <- basic_table() %>%
