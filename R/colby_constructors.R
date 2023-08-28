@@ -833,11 +833,15 @@ split_rows_by_cutfun <- function(lyt, var,
 
 
 #' @title .spl_context within analysis and split functions
+#' 
+#' @description
+#' `.spl_context` is an optional parameter for any of `rtables`' special 
+#' functions, them being `afun` (analysis function in [analyze]), 
+#' `cfun` (content or label function in [summarize_row_groups]),
+#' or `split_fun` (e.g. for [split_rows_by]).
+#' 
 #'
-#' @name spl_context
-#' @rdname spl_context
-#'
-#' @section .spl_context Details:
+#' @details
 #' The `.spl_context` `data.frame` gives information about the subsets of data
 #' corresponding to the splits within-which the current `analyze` action is
 #' nested. Taken together, these correspond to the path that the resulting (set
@@ -858,11 +862,20 @@ split_rows_by_cutfun <- function(lyt, var,
 #'     column in the table structure}{ These list columns (named the same as
 #'     \code{names(col_exprs(tab))}) contain logical vectors corresponding to
 #'     the subset of this row's `full_parent_df` corresponding to that column}
+#'   \item{cur_col_id}{Identifier of the current column. This may be an internal
+#'     name, constructed by pasting the column path together}
 #'   \item{cur_col_subset}{List column containing logical vectors indicating the
 #'     subset of that row's `full_parent_df` for the column currently being
 #'     created by the analysis function}
+#'   \item{cur_col_expr}{List of current column expression. This may be used to 
+#'     filter `.alt_df_row` or any external data by column. Filtering `.alt_df_row`
+#'     by columns produces `.alt_df`.}
 #'   \item{cur_col_n}{integer column containing the observation counts for that
 #'     split}
+#'   \item{cur_col_split}{Current column split names. This is recovered from the
+#'     current column path}
+#'   \item{cur_col_split_val}{Current column split values. This is recovered from the
+#'     current column path}
 #' }
 #'
 #' \emph{note Within analysis functions that accept `.spl_context`, the
@@ -871,11 +884,69 @@ split_rows_by_cutfun <- function(lyt, var,
 #' subsets of the data. These numbers will not, and currently cannot, reflect
 #' alternate column observation counts provided by the `alt_counts_df`,
 #' `col_counts` or `col_total` arguments to \code{\link{build_table}}}
+#' 
+#' @name spl_context
 NULL
 
-
-
-
+#' @title Additional parameters within analysis and content functions 
+#' (`afun/cfun`)
+#' 
+#' @description 
+#' It is possible to add specific parameters to `afun` and `cfun`, in [analyze]
+#' and [summarize_row_groups] respectively. These parameters grant access to 
+#' relevant information like the row split structure (see [spl_context]) and the
+#' predefined baseline (`.ref_group`).
+#' 
+#' @details
+#' We list and describe here all the parameters that can be added to a custom 
+#' analysis function:
+#' 
+#' \describe{
+#'   \item{.N_col}{column-wise N (column count) for the full column being
+#'     tabulated within}
+#'   \item{.N_total}{overall N (all observation count, defined as sum of column
+#'     counts) for the tabulation}
+#'   \item{.N_row}{row-wise N (row group count) for the group of observations
+#'     being analyzed (i.e. with no column-based subsetting)}
+#'   \item{.df_row}{data.frame for observations in the row group being analyzed
+#'     (i.e. with no column-based subsetting)}
+#'   \item{.var}{variable that is analyzed}
+#'   \item{.ref_group}{data.frame or vector of subset corresponding to the
+#'     `ref_group` column including subsetting defined by row-splitting.
+#'     Optional and only required/meaningful if a `ref_group` column has been
+#'     defined}
+#'   \item{.ref_full}{data.frame or vector of subset corresponding to the
+#'     `ref_group` column without subsetting defined by row-splitting. Optional
+#'     and only required/meaningful if a `ref_group` column has been defined}
+#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
+#'     within the reference column}
+#'   \item{.spl_context}{data.frame, each row gives information about a
+#'     previous/'ancestor' split state. See \code{\link{spl_context}}}
+#'   \item{.alt_df_row}{data.frame, i.e. the `alt_count_df` after 
+#'     row splitting. It can be used with `.all_col_exprs` and `.spl_context`
+#'     information to retrieve current faceting, but for `alt_count_df`.
+#'     It can be an empty table if all the entries are filtered out.}
+#'   \item{.alt_df}{data.frame, `.alt_df_row` but filtered by columns expression.
+#'     This data present the same faceting of main data `df`. This also filters
+#'     `NAs` out if related parameters are set to (e.g. `inclNAs` in [analyze]). 
+#'     Similarly to `.alt_df_row`, it can be an empty table if all the entries 
+#'     are filtered out.}
+#'   \item{.all_col_exprs}{list of expressions. Each of them represents a 
+#'     different column splitting.}
+#'   \item{.all_col_counts}{vector of integers. Each of them represents the global
+#'     count for each column. It differs if `alt_counts_df` is used 
+#'     (see [build_table]).}
+#' }
+#' 
+#' @note If any of these formals is specified incorrectly or not 
+#'  present in the tabulation machinery, it will be as if missing. For
+#'  example`.ref_group` will be missing if no baseline is previously defined
+#'  during data splitting (via `ref_group` parameters in, e.g., [split_rows_by]).
+#'  Similarly, if no `alt_counts_df` is provided into [build_table], 
+#'  `.alt_df_row` and `.alt_df` will not be present.
+#'
+#' @name additional_fun_params
+NULL
 
 #' Generate Rows Analyzing Variables Across Columns
 #'
@@ -886,6 +957,7 @@ NULL
 #' nesting by default.
 #'
 #' @inheritParams lyt_args
+#' 
 #' @inherit split_cols_by return
 #'
 #' @details
@@ -917,34 +989,8 @@ NULL
 #' In addition to differentiation on the first argument, the analysis function
 #' can optionally accept a number of other parameters which, \emph{if and only
 #' if} present in the formals will be passed to the function by the tabulation
-#' machinery. These are as follows:
-#'
-#' \describe{
-#'   \item{.N_col}{column-wise N (column count) for the full column being
-#'     tabulated within}
-#'   \item{.N_total}{overall N (all observation count, defined as sum of column
-#'     counts) for the tabulation}
-#'   \item{.N_row}{row-wise N (row group count) for the group of observations
-#'     being analyzed (i.e. with no column-based subsetting)}
-#'   \item{.df_row}{ data.frame for observations in the row group being analyzed
-#'     (i.e. with no column-based subsetting)}
-#'   \item{.var}{variable that is analyzed}
-#'   \item{.ref_group}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column including subsetting defined by row-splitting.
-#'     Optional and only required/meaningful if a `ref_group` column has been
-#'     defined}
-#'   \item{.ref_full}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column without subsetting defined by row-splitting. Optional
-#'     and only required/meaningful if a `ref_group` column has been defined}
-#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
-#'     within the reference column}
-#'   \item{.spl_context}{data.frame, each row gives information about a
-#'     previous/'ancestor' split state. see below}
-#' }
-#'
-#' @inheritSection spl_context .spl_context Details
-#'
-#'
+#' machinery. These are listed and described in [`additional_fun_params`].
+#' 
 #' @note None of the arguments described in the Details section
 #' can be overridden via \code{extra_args} or when calling
 #' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
@@ -953,8 +999,6 @@ NULL
 #' must be calculated within \code{afun} based on a combination
 #' of extra arguments and the unmodified values provided by the
 #' tabulation framework.
-#'
-#' @inherit split_cols_by return
 #'
 #' @export
 #'
@@ -1069,8 +1113,10 @@ get_acolvar_vars <- function(lyt) {
 #' @inheritParams  lyt_args
 #'
 #' @param afun function or list. Function(s) to be used to calculate the values
-#'   in each column.  the list will be repped out as needed and matched by
-#'   position with the columns during tabulation.
+#'   in each column.  The list will be repped out as needed and matched by
+#'   position with the columns during tabulation. This functions accepts the same
+#'   parameters as [analyze] like `afun` and `format`. For further information see 
+#'   [`additional_fun_params`].
 #'
 #' @export
 #'
@@ -1414,6 +1460,9 @@ counts_wpcts<- function(x, .N_col) {
 #' the second parameter, which accepts the `label` of the level of the parent
 #' split currently being summarized. Can additionally take any optional argument
 #' supported by analysis functions. (see \code{\link{analyze}}).
+#' 
+#' In addition, if complex custom functions are needed, we suggest checking the
+#' available [additional_fun_params] that apply here as for `afun`.
 #'
 #' @export
 #'
@@ -1767,7 +1816,7 @@ list_wrap_df <- function(f) {
 #' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
 #' normally would be, while 2d formats which don't include a percent, and all 3d
 #' formats result in an error. Formats in the form of functions are not supported for
-#' `colcount` format. See \code{\link[formatters]{list_valid_format_labels}} for
+#' `colcount` format. See [formatters::list_valid_format_labels()] for
 #' the list of valid format labels to select from.
 #'
 #' @inherit split_cols_by return
