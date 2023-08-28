@@ -15,7 +15,7 @@
  * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685)).
  * Added `qtable_layout` and fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698)).
- * Error catching and test coverage for cases where `df` presents different splits from `alt_counts_df`.
+ * Error catching and test coverage for cases where `alt_counts_df` presents different splits from `df`.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
