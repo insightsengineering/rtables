@@ -91,7 +91,7 @@ lines.}
 Generally should not be modified by hand.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level when row paths are specified .}
+level. In post-processing, this can be achieved with .}
 
 \item{page_title}{character. Page specific title(s).}
 

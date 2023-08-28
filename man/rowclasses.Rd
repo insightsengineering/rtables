@@ -81,7 +81,7 @@ Defaults to \code{"NA"}.}
 \item{klass}{Internal detail.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level when row paths are specified .}
+level. In post-processing, this can be achieved with .}
 
 \item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }
