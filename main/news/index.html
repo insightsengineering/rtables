@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -59,9 +48,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.2.9006" id="rtables-0629006">rtables 0.6.2.9006<a class="anchor" aria-label="anchor" href="#rtables-0629006"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.2.9008" id="rtables-0629008">rtables 0.6.2.9008<a class="anchor" aria-label="anchor" href="#rtables-0629008"></a></h2>
 <div class="section level3">
-<h3 id="enhancements-0-6-2-9006">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-6-2-9006"></a></h3>
+<h3 id="enhancements-0-6-2-9008">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-6-2-9008"></a></h3>
 <ul><li>Analysis functions (<code>cfun/afun</code>) have more information about current column split; <code>.spl_context</code> has access to <code>cur_col_id</code>, <code>cur_col_expr</code>, <code>cur_col_split</code>, and <code>cur_col_split_val</code>.</li>
 <li>Analysis functions (<code>cfun/afun</code>) can use new parameters to extend analysis calculations. <code>.alt_df_row</code> gives access to <code>alt_counts_df</code> across columns, while <code>.all_col_exprs</code> and <code>.all_col_counts</code> contains global information about all columns.</li>
 <li>Added <code>.alt_df</code> to have the exact same subset of <code>df</code> in <code>afun/cfun</code>.</li>
@@ -70,13 +59,14 @@
 <li>Binding objects via <code>rbind</code> will retain titles/footer information if identical in all objects or only present in the first object being bound.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="miscellaneous-0-6-2-9006">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-2-9006"></a></h3>
+<h3 id="miscellaneous-0-6-2-9008">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-2-9008"></a></h3>
 <ul><li>Cleaned up spelling in documentation (<a href="https://github.com/insightsengineering/rtables/issues/685" class="external-link">#685</a>)</li>
 <li>Custom appearance vignette updated with decimal alignment support.</li>
 <li>Alignment checks have been moved into <code>formatters</code>: <code><a href="https://rdrr.io/pkg/formatters/man/check_formats.html" class="external-link">formatters::check_aligns</a></code> superseded internal function <code>chk_rtables_align</code> and <code><a href="https://rdrr.io/pkg/formatters/man/list_formats.html" class="external-link">formatters::list_valid_aligns</a></code> superseded <code>rtables_aligns</code>.</li>
 <li>Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.</li>
 <li>Cleaned up spelling in documentation (<a href="https://github.com/insightsengineering/rtables/issues/685" class="external-link">#685</a>)</li>
 <li>Added <code>qtable_layout</code> and fixed <code>qtable</code> labeling via <code>row_labels</code> (<a href="https://github.com/insightsengineering/rtables/issues/698" class="external-link">#698</a>)</li>
+<li>Added vignette on exploratory analysis with <code>qtable</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">

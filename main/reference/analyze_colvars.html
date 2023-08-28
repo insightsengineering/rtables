@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -184,11 +173,11 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               value       pctdiff       value       pctdiff       value       pctdiff  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)   79 (65.3%)   68 (64.2%)   68 (64.2%)   84 (65.1%)   84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.0          32          -0.2          37          -0.2          46    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.2           40          -0.1          29          0.2           39    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)   28 (23.1%)   24 (22.6%)   24 (22.6%)   27 (20.9%)   27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.2          12          0.1           16          0.0           12    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.1           14          -0.0          15          0.4           18    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)   14 (11.6%)   14 (13.2%)   14 (13.2%)   18 (14.0%)   18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.2           8           -0.1          4           -0.4          11    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.3          9           -0.1          6           -0.2          10    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -205,11 +194,11 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Measurement    Pct Diff    Measurement    Pct Diff    Measurement    Pct Diff </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)    79 (65.3%)   68 (64.2%)    68 (64.2%)   84 (65.1%)    84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.01         0.48         -0.16         0.55         -0.21         0.50   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.16          0.51         -0.05         0.48         0.18          0.46   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)    28 (23.1%)   24 (22.6%)    24 (22.6%)   27 (20.9%)    27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.22         0.45         0.08          0.59         0.01          0.48   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.13          0.50         -0.02         0.54         0.43          0.56   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)    14 (11.6%)   14 (13.2%)    14 (13.2%)   18 (14.0%)    18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.18          0.53         -0.14         0.35         -0.35         0.55   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.34         0.62         -0.09         0.53         -0.18         0.53   </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
