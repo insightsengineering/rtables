@@ -110,7 +110,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .format_na_strs character or NULL. NA strings for the cells
 #' 
 #' @note
-#'   In post-processing, referential footnotes can be also added by using row and column
+#'   In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`()].
 #'
 #' @export
