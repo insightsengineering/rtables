@@ -115,7 +115,7 @@ ftable(t1, row.vars = c("SEX", "STRATA1"))
 
 ## NA Values
 
-So far in all the examples we have seen we used counts to summarize the data
+So far in all the examples we have seen, we used counts to summarize the data
 in each table cell as this is the default analysis used by
 `qtable()`. Internally, a single analysis variable specified by `avar` is used
 to generate the counts in the table. The default analysis variable is the first 
@@ -224,7 +224,7 @@ qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
        summarize_groups = TRUE, avar = "AGE", afun = mean)
 ```
 
-In the second table there are marginal summary rows for each level of the
+In the second table, there are marginal summary rows for each level of the
 two row facet variables: `STRATA1` and `STRATA2`. The number 18 in the second
 row gives the count of observations part of `ARM` level "A: Drug X",
 `STRATA1` level "A", and `STRATA2` level "S1". The percent is calculated as
