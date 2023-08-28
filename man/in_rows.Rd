@@ -52,8 +52,8 @@ this object should be considered an internal implementation detail.
 define the cells that get placed into multiple rows in \code{afun}
 }
 \note{
-In post-processing, referential footnotes can be also added by using row and column
-paths with .
+In post-processing, referential footnotes can also be added using row and column
+paths with \code{\link{fnotes_at_path<-}}.
 }
 \examples{
 in_rows(1, 2, 3, .names = c("a", "b", "c"))
