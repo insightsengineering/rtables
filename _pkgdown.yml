@@ -11,10 +11,10 @@ navbar:
 
 articles:
   - title: Getting Started
-    navbar: ~
+    navbar: Getting Started
     contents:
     - introduction
-    - eexploratory analysis
+    - exploratory_analysis
     
   - title: Clinical Trials
     navbar: Clinical Trials
