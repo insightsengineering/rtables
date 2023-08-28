@@ -13,8 +13,9 @@
  * Custom appearance vignette updated with decimal alignment support.
  * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded internal function `chk_rtables_align` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
  * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
- * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685)) 
- * Added `qtable_layout` and fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698))
+ * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685)).
+ * Added `qtable_layout` and fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698)).
+ * Error catching and test coverage for cases where `df` presents different splits from `alt_counts_df`.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
