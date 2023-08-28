@@ -11,10 +11,15 @@ navbar:
 
 articles:
   - title: Getting Started
-    navbar: Getting Started
+    navbar: ~
     contents:
     - introduction
+    
+  - title: Clinical Trials
+    navbar: Clinical Trials
+    contents:
     - clinical_trials
+    - baseline
 
   - title: Table Customization
     navbar: Table Customization
@@ -23,12 +28,12 @@ articles:
     - title_footer
     - sorting_pruning
     
-  - title: rtables Concepts
+  - title: \{rtables\} Concepts
     contents:
     - subsetting_tables
-    - baseline
     - split_functions
     - format_precedence
+    - tabulation_concepts  
 
   - title: Advanced Usage
     contents:
@@ -37,7 +42,6 @@ articles:
     
   - title: Other
     contents:
-    - tabulation_concepts  
     - manual_table_construction
     - tabulation_dplyr
 
