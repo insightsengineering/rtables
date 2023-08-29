@@ -788,7 +788,7 @@ setMethod(".make_split_kids", "Split",
             
             stop("alt_counts_df split variable(s) [", spl_payload(spl), 
                  "] (in split ", as.character(class(spl)), 
-                 ") has not the same factor levels of df.\ndf has c(", '"', 
+                 ") does not have the same factor levels of df.\ndf has c(", '"', 
                  paste(names(dataspl), collapse = '", "'), '"', ") levels while alt_counts_df has ", 
                  ifelse(length(alt_df_spl_vals) > 0, paste_vec(alt_df_spl_vals), ""), 
                  " unique values", end_part)
