@@ -797,6 +797,7 @@ setMethod(".make_split_kids", "Split",
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }
 
+
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
     ## do full recursive_applysplit on each part of the split defined by spl
     inner <- unlist(mapply(function(dfpart, alt_dfpart, nm, label, baselines, splval) {
