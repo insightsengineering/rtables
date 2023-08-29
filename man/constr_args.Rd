@@ -76,17 +76,22 @@ when tabulating row group summaries.}
 \item{child_names}{character. Names to be given to the sub splits contained
 by a compound split (typically a \code{AnalyzeMultiVars} split object).}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
+every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level}
+level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
 \item{page_title}{character. Page specific title(s).}
 

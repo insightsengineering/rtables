@@ -33,10 +33,10 @@ concatenated to \code{...}}
 rows.}
 
 \item{.cell_footnotes}{list. Referential footnote messages to be associated
-by name with \emph{cells}}
+by name with \emph{cells}.}
 
 \item{.row_footnotes}{list. Referential footnotes messages to be associated
-by name with \emph{rows}}
+by name with \emph{rows}.}
 
 \item{.aligns}{character or NULL. Alignments for the cells. Standard for \code{NULL}
 is \code{"center"}. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for currently supported
@@ -50,6 +50,10 @@ this object should be considered an internal implementation detail.
 }
 \description{
 define the cells that get placed into multiple rows in \code{afun}
+}
+\note{
+In post-processing, referential footnotes can also be added using row and column
+paths with \code{\link{fnotes_at_path<-}}.
 }
 \examples{
 in_rows(1, 2, 3, .names = c("a", "b", "c"))

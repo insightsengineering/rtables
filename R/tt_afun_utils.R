@@ -101,13 +101,17 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .indent_mods integer or NULL. Indent modifications for the defined
 #'   rows.
 #' @param .cell_footnotes list. Referential footnote messages to be associated
-#'   by name with \emph{cells}
+#'   by name with \emph{cells}.
 #' @param .row_footnotes list. Referential footnotes messages to be associated
-#'   by name with \emph{rows}
+#'   by name with \emph{rows}.
 #' @param .aligns character or NULL. Alignments for the cells. Standard for `NULL`
 #'   is `"center"`. See [formatters::list_valid_aligns()] for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
+#' 
+#' @note
+#'   In post-processing, referential footnotes can also be added using row and column
+#'   paths with [`fnotes_at_path<-`].
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of
