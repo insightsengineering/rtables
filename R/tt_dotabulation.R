@@ -753,34 +753,49 @@ setMethod(".make_split_kids", "Split",
                                         spl_context = spl_context)[["datasplit"]],
                                error = function(e) e)
         
+        # Removing NA rows - to explore why this happens at all in a split
+        # This would be a fix but it is done in post-processing instead of pre-proc -> xxx
+        # x alt_dfpart <- lapply(alt_dfpart, function(data) {
+        # x    data[!apply(is.na(data), 1, all), ]
+        # x })
+
         # Error localization
         if (is(alt_dfpart, "error")) {
             stop("Following error encountered in splitting alt_counts_df: ", 
                  alt_dfpart$message,
                  call. = FALSE)
         }
-        
         # Error if split does not have the same values in the alt_df (and order)
         # The following breaks if there are different levels (do_split returns empty list)
-        # or if there are different number of the same levels
+        # or if there are different number of the same levels. Added handling of NAs
+        # in the values of the factor when is all only NAs
+        is_all_na <- all(is.na(alt_df[[spl_payload(spl)]]))
+        
         if (!all(names(dataspl) %in% names(alt_dfpart)) ||
-            length(alt_dfpart) != length(dataspl)) {
+            length(alt_dfpart) != length(dataspl) ||
+            is_all_na) {
             alt_df_spl_vals <- unique(alt_df[[spl_payload(spl)]])
-            if (is.factor(alt_df_spl_vals)) {
-                alt_df_spl_vals <- levels(alt_df_spl_vals)
+            end_part <- ""
+            
+            if (!all(alt_df_spl_vals %in% levels(alt_df_spl_vals))) {
+                end_part <- paste0(" and following levels: ",
+                                   paste_vec(levels(alt_df_spl_vals)))
             }
-            spl_val2 <- paste0('"', paste(alt_df_spl_vals, collapse = '", "'), '"')
-
+            
+            if (is_all_na) {
+                end_part <- ". Found only NAs in alt_counts_df split"
+            }
+            
             stop("alt_counts_df split variable(s) [", spl_payload(spl), 
                  "] (in split ", as.character(class(spl)), 
                  ") has not the same factor levels of df.\ndf has c(", '"', 
-                 paste(names(dataspl), collapse = '", "'), '"', ") levels while ",
-                 "alt_counts_df has c(", ifelse(length(alt_df_spl_vals) > 0, spl_val2, ""), ")")
+                 paste(names(dataspl), collapse = '", "'), '"', ") levels while alt_counts_df has ", 
+                 ifelse(length(alt_df_spl_vals) > 0, paste_vec(alt_df_spl_vals), ""), 
+                 " unique values", end_part)
         }
     } else {
         alt_dfpart <- setNames(rep(list(NULL), length(dataspl)), names(dataspl))
     }
-
 
     innerlev <- lvl + (have_controws || is.na(make_lrow) || make_lrow)
     ## do full recursive_applysplit on each part of the split defined by spl
