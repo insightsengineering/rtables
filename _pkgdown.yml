@@ -1,8 +1,7 @@
 url: https://insightsengineering.github.io/rtables
 
 template:
-  bootstrap: 5
-  bootswatch: flatly
+  package: nesttemplate
 
 navbar:
   type: default
@@ -10,29 +9,44 @@ navbar:
     - icon: fa-github fa-lg
       href: https://github.com/insightsengineering/rtables
 
-
 articles:
-  - title: For Users
-    desc: Vignettes aimed at package users
+  - title: Getting Started
+    navbar: Getting Started
     contents:
     - introduction
-    - clinical_trials
     - exploratory_analysis
+    
+  - title: Clinical Trials
+    navbar: Clinical Trials
+    contents:
+    - clinical_trials
+    - baseline
+
+  - title: Table Customization
+    navbar: Table Customization
+    contents:
+    - custom_appearance
+    - title_footer
+    - sorting_pruning
+    
+  - title: \{rtables\} Concepts
+    contents:
     - subsetting_tables
     - split_functions
-    - tabulation_dplyr
-    - tabulation_concepts
-    - baseline
-    - sorting_pruning
-    - manual_table_construction
-    - title_footer
-    - custom_appearance
-    - advanced_usage
     - format_precedence
+    - tabulation_concepts  
+
+  - title: Advanced Usage
+    contents:
+    - advanced_usage
     - example_analysis_coxreg
+    
+  - title: Other
+    contents:
+    - manual_table_construction
+    - tabulation_dplyr
 
 reference:
-
   - title: Argument Conventions
     desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:
