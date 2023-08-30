@@ -143,7 +143,7 @@ the latter is done in the [Custom Aggregation] section.
 
 ```{r}
 # Recode NA values
-tmp_adsl[[1]] <- forcats::fct_na_value_to_level(tmp_adsl[[1]], level = "<NA>")
+tmp_adsl[[1]] <- addNA(tmp_adsl[[1]])
 
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
 ```
@@ -159,7 +159,8 @@ qtable(tmp_adsl, row_vars = "ARM", col_vars = "new1")
 Explicitly labeling the `NA` levels in the column facet adds a column to the
 table:
 ```{r}
-tmp_adsl$new2 <- forcats::fct_na_value_to_level(tmp_adsl$new1, level = "<NA>")
+tmp_adsl$new2 <- addNA(tmp_adsl$new1)
+levels(tmp_adsl$new2)[4] <- "<NA>" # NA needs to be a recognizible string
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "new2")
 ```
 
