@@ -1,3 +1,5 @@
+## rtables 0.6.3.9000
+
 ## rtables 0.6.3
 ### New Features
  * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations: `.alt_df_row` and `.alt_df` give access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
