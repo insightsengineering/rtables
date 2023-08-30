@@ -12,6 +12,7 @@ Authors@R: c(
     person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "ctb"),
     person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb"),
     person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("ctb", "cre")),
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd"))
   )
 Description: Reporting tables often have structure that goes beyond simple
     rectangular data. The 'rtables' package provides a framework for
