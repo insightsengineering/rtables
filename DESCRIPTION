@@ -4,7 +4,7 @@ Version: 0.6.3
 Date: 2023-08-29
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
-           comment = "original creator of the package"),
+           comment = "Original creator of the package"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("Daniel", "Sabanés Bové", , "daniel.sabanes_bove@roche.com", role = "ctb"),
     person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "ctb"),
