@@ -1,13 +1,17 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.2.9011
+Version: 0.6.3
 Date: 2023-08-29
 Authors@R: c(
-    person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
+    person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
+           comment = "original creator of the package"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("Daniel", "Sabanés Bové", , "daniel.sabanes_bove@roche.com", role = "ctb"),
     person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "ctb"),
-    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "ctb")
+    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "ctb"),
+    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "ctb"),
+    person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb"),
+    person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("ctb", "cre")),
   )
 Description: Reporting tables often have structure that goes beyond simple
     rectangular data. The 'rtables' package provides a framework for
@@ -24,7 +28,7 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends: 
-    formatters (>= 0.5.1.9002),
+    formatters (>= 0.5.2),
     magrittr,
     methods,
     R (>= 2.10)
