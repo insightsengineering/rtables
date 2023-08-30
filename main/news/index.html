@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,17 +43,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -75,26 +64,30 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.2.9010" id="rtables-0629010">rtables 0.6.2.9010<a class="anchor" aria-label="anchor" href="#rtables-0629010"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.3" id="rtables-063">rtables 0.6.3<a class="anchor" aria-label="anchor" href="#rtables-063"></a></h2><p class="text-muted">CRAN release: 2023-08-30</p>
 <div class="section level3">
-<h3 id="enhancements-0-6-2-9010">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-6-2-9010"></a></h3>
-<ul><li>Analysis functions (<code>cfun/afun</code>) have more information about current column split; <code>.spl_context</code> has access to <code>cur_col_id</code>, <code>cur_col_expr</code>, <code>cur_col_split</code>, and <code>cur_col_split_val</code>.</li>
-<li>Analysis functions (<code>cfun/afun</code>) can use new parameters to extend analysis calculations. <code>.alt_df_row</code> gives access to <code>alt_counts_df</code> across columns, while <code>.all_col_exprs</code> and <code>.all_col_counts</code> contains global information about all columns.</li>
-<li>Added <code>.alt_df</code> to have the exact same subset of <code>df</code> in <code>afun/cfun</code>.</li>
-<li>Added check for <code>.alt_df_row</code> that prevents its calculation if not present in analysis functions.</li>
-<li>Removed superfluous warning which arose for custom split functions when reference group is is set (<a href="https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598" class="external-link uri">https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598</a>)</li>
+<h3 id="new-features-0-6-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-3"></a></h3>
+<ul><li>Analysis functions (<code>cfun/afun</code>) can use new parameters to extend analysis calculations: <code>.alt_df_row</code> and <code>.alt_df</code> give access to <code>alt_counts_df</code> across columns, while <code>.all_col_exprs</code> and <code>.all_col_counts</code> contains global information about all columns.</li>
 <li>Binding objects via <code>rbind</code> will retain titles/footer information if identical in all objects or only present in the first object being bound.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="miscellaneous-0-6-2-9010">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-2-9010"></a></h3>
+<h3 id="enhancements-0-6-3">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-0-6-3"></a></h3>
+<ul><li>Analysis functions (<code>cfun/afun</code>) have more information about current column split; <code>.spl_context</code> has access to <code>cur_col_id</code>, <code>cur_col_expr</code>, <code>cur_col_split</code>, and <code>cur_col_split_val</code>.</li>
+<li>Added vignette on exploratory analysis with <code>qtable</code>.</li>
+<li>Extracted <code>qtable_layout</code> from <code>qtable</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-3">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-3"></a></h3>
+<ul><li>Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.</li>
+<li>Removed superfluous warning which arose for custom split functions when reference group is is set (<a href="https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598" class="external-link uri">https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598</a>).</li>
+<li>Fixed <code>qtable</code> labeling via <code>row_labels</code> (<a href="https://github.com/insightsengineering/rtables/issues/698" class="external-link">#698</a>).</li>
+<li>Error catching and test coverage for cases where <code>alt_counts_df</code> presents different splits from <code>df</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="miscellaneous-0-6-3">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-3"></a></h3>
 <ul><li>Cleaned up spelling in documentation (<a href="https://github.com/insightsengineering/rtables/issues/685" class="external-link">#685</a>)</li>
 <li>Custom appearance vignette updated with decimal alignment support.</li>
 <li>Alignment checks have been moved into <code>formatters</code>: <code><a href="https://rdrr.io/pkg/formatters/man/check_formats.html" class="external-link">formatters::check_aligns</a></code> superseded internal function <code>chk_rtables_align</code> and <code><a href="https://rdrr.io/pkg/formatters/man/list_formats.html" class="external-link">formatters::list_valid_aligns</a></code> superseded <code>rtables_aligns</code>.</li>
-<li>Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.</li>
-<li>Cleaned up spelling in documentation (<a href="https://github.com/insightsengineering/rtables/issues/685" class="external-link">#685</a>)</li>
-<li>Added <code>qtable_layout</code> and fixed <code>qtable</code> labeling via <code>row_labels</code> (<a href="https://github.com/insightsengineering/rtables/issues/698" class="external-link">#698</a>)</li>
-<li>Added vignette on exploratory analysis with <code>qtable</code>.</li>
-<li>Error catching and test coverage for cases where <code>alt_counts_df</code> presents different splits from <code>df</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
