@@ -8,17 +8,17 @@ different variables entirely, rather than different levels of a single
 variable, we use split_cols_by_multivar"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+<![endif]--><link rel="stylesheet" href="../consent.css"><script src="../consent.js" type="text/javascript" charset="utf-8"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
 
-    
+    <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,8 +27,24 @@ variable, we use split_cols_by_multivar"><!-- mathjax --><script src="https://cd
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/index.html">Articles</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
+    <a class="dropdown-item" href="../articles/introduction.html">Introduction to rtables</a>
+    <a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
+    <a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
+    <a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
+    <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
+    <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
+    <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -38,9 +54,10 @@ variable, we use split_cols_by_multivar"><!-- mathjax --><script src="https://cd
           data-bs-toggle="dropdown" role="button"
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
 <!-- end dropdown for versions -->
@@ -175,11 +192,11 @@ layouting functions, and to <code>build_table</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               value       pctdiff       value       pctdiff       value       pctdiff  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)   79 (65.3%)   68 (64.2%)   68 (64.2%)   84 (65.1%)   84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.1           44          -0.1          31          -0.1          39    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.1          43          0.0           34          -0.1          40    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)   28 (23.1%)   24 (22.6%)   24 (22.6%)   27 (20.9%)   27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.1           14          0.1           13          -0.0          14    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.2          19          0.3           14          0.0           9     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)   14 (11.6%)   14 (13.2%)   14 (13.2%)   18 (14.0%)   18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.4          9           0.1           7           0.2           9     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.2           10          -0.2          11          0.2           7     </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -187,15 +204,10 @@ layouting functions, and to <code>build_table</code>.</p>
     </nav></aside></div>
 
 
-    <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Gabriel Becker, Adrian Waddell.</p>
+    <footer><div class="nest">
+  <p>rtables is a part of the <strong>NEST</strong> and <a href="https://pharmaverse.org/" class="external-link"><strong>pharmaverse</strong></a>.</p>
 </div>
-
-<div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
-</div>
-
-    </footer></div>
+<script type="text/javascript" src="../analytics.js"></script></footer></div>
 
   
 
