@@ -6,7 +6,7 @@
 
 ## .apply_spl_datapart - generate data partition
 
-## .apply_spl_rawvals - Generate raw (ie non SplitValue object) partition values
+## .apply_spl_rawvals - Generate raw (i.e. non SplitValue object) partition values
 
 
 
@@ -79,7 +79,7 @@ setGeneric(".applysplit_ref_vals",
 #' functions and modify either the incoming data before they are called or
 #' their outputs.
 #'
-#' @seealso [make_split_fun()] for the API for creating custom split functions, 
+#' @seealso [make_split_fun()] for the API for creating custom split functions,
 #' and [split_funcs] for a variety of pre-defined split functions.
 #'
 #' @examples
@@ -156,9 +156,15 @@ NULL
 
     if(are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
         if(!is.null(extr)) {
-            warning("Got a partinfo list with values that are ",
-                    "already SplitValue objects and non-null extras ",
-                    "element. This shouldn't happen")
+            ## in_ref_cols is in here for some reason even though its already in the SplitValue object.
+            ## https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598
+            ## the if is a bandaid.
+            ## XXX FIXME RIGHT
+            sq <- seq_along(vals)
+            if(any(vapply(sq, function(i) !all(names(extr[[i]]) %in%  names(splv_extra(vals[[i]]))), TRUE)))
+                warning("Got a partinfo list with values that are ",
+                        "already SplitValue objects and non-null extras ",
+                        "element. This shouldn't happen")
         }
     } else {
         if(is.null(extr))
@@ -207,11 +213,6 @@ NULL
         partinfo$extras <- newextras
     }
     partinfo
-}
-
-func_takes <- function(fun, argname, truefordots = FALSE) {
-    fnames <- names(formals(fun))
-    argname %in% fnames || (truefordots && "..." %in% fnames)
 }
 
 #' Apply Basic Split (For Use In Custom Split Functions)
@@ -304,13 +305,20 @@ do_split <- function(spl,
     ## - Ensures datasplit and values lists are named according to labels
     ## - ensures labels are character not factor
     ret <- .fixupvals(ret)
-
+    ## we didn't put this in .fixupvals because that get called withint he split functions
+    ## created by make_split_fun and its not clear this check should be happening then.
+    if(has_force_pag(spl) &&  ## this means it's page_by=TRUE
+       length(ret$datasplit) == 0) {
+        stop("Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: ",
+             class(spl), " (", payloadmsg(spl), ")\n",
+             "\toccured at path: ",
+             spl_context_to_disp_path(spl_context), "\n")
+    }
     ret
 }
 
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
 
-    ## try to calculate values first. Most of the time we can
     if(is.null(vals))
         vals <- .applysplit_rawvals(spl, df)
     extr <- .applysplit_extras(spl, df, vals)
@@ -589,8 +597,6 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     if(is.null(labels)) {
         if(varname == vlabelname) {
             labels <- vals
-            ## } else if (is.factor(df[[vlabelname]])) {
-            ##     labels = levels(df[varvec %in% vals, ][[vlabelname]])
         } else {
             labfact <- is.factor(df[[vlabelname]])
             lablevs <- if(labfact) levels(df[[vlabelname]]) else NULL
@@ -650,9 +656,9 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 #' @inherit add_overall_level return
 NULL
 
-#' @rdname split_funcs 
+#' @rdname split_funcs
 #' @export
-#' 
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -731,6 +737,11 @@ drop_split_levels <- function(df,
     var <- spl_payload(spl)
     df2 <- df
     df2[[var]] <- factor(df[[var]])
+    lblvar <- spl_label_var(spl)
+    if(!is.null(lblvar)) {
+        df2[[lblvar]] <- factor(df[[lblvar]])
+    }
+
     .apply_split_inner(spl, df2, vals = vals,
                        labels = labels,
                        trim = trim)
@@ -801,7 +812,7 @@ reorder_split_levels <- function(neworder,
 #'   (e.g., empty levels dropped) \emph{separately within each grouping defined
 #'   at this point in the structure}
 #' @param drop_outlevs logical(1). Should empty levels in the variable being
-#'   split on (ie the 'outer' variable, not \code{innervar}) be dropped?
+#'   split on (i.e. the 'outer' variable, not \code{innervar}) be dropped?
 #'   Defaults to \code{TRUE}
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
@@ -922,8 +933,8 @@ select_all_levels <- new("AllLevelsSentinel")
 #' Add Combination Levels to split
 #' @inheritParams sf_args
 #' @inherit add_overall_level return
-#' @param combosdf data.frame/tbl_df. Columns valname, label, levelcombo,
-#'   exargs. Of which levelcombo and exargs are list columns. Passing the
+#' @param combosdf `data.frame`/`tbl_df`. Columns `valname`, `label`, `levelcombo`,
+#'   `exargs`. Of which `levelcombo` and `exargs` are list columns. Passing the
 #'   \code{select_all_levels} object as a value in the \code{comblevels} column
 #'   indicates that an overall/all-observations level should be created.
 #' @param keep_levels character or NULL. If non-NULL, the levels to retain

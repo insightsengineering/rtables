@@ -320,6 +320,8 @@
 \alias{col_fnotes_here<-,LayoutColLeaf-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
+\alias{ref_symbol,RefFootnote-method}
+\alias{ref_symbol<-,RefFootnote-method}
 \alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
@@ -328,9 +330,25 @@
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
 \alias{tt_at_path<-,VTableTree,ANY,NULL-method}
 \alias{tt_at_path<-,VTableTree,ANY,TableRow-method}
+\alias{[<-,VTableTree,ANY,ANY,CellValue-method}
+\alias{[,VTableTree,logical,ANY-method}
+\alias{[,VTableTree,logical,missing-method}
+\alias{[,VTableTree,ANY,logical-method}
+\alias{[,VTableTree,ANY,missing-method}
+\alias{[,VTableTree,missing,ANY-method}
+\alias{[,VTableTree,ANY,character-method}
+\alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,character,character-method}
+\alias{[,VTableTree,missing,numeric-method}
+\alias{[,VTableTree,numeric,numeric-method}
+\alias{cell_values,VTableTree-method}
+\alias{cell_values,TableRow-method}
+\alias{cell_values,LabelRow-method}
+\alias{value_at,TableRow-method}
+\alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
-\title{combine SplitVector objects}
+\title{combine \code{SplitVector} objects}
 \usage{
 \S4method{c}{SplitVector}(x, ...)
 
@@ -1014,6 +1032,10 @@ spl_varnames(object) <- value
 
 \S4method{ref_index}{RefFootnote}(obj) <- value
 
+\S4method{ref_symbol}{RefFootnote}(obj)
+
+\S4method{ref_symbol}{RefFootnote}(obj) <- value
+
 \S4method{ref_msg}{RefFootnote}(obj)
 
 \S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
@@ -1030,6 +1052,38 @@ spl_varnames(object) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,TableRow}(tt, path, ...) <- value
 
+\S4method{[}{VTableTree,ANY,ANY,CellValue}(x, i, j, ...) <- value
+
+\S4method{[}{VTableTree,logical,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,logical,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,missing}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,missing,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,numeric,numeric}(x, i, j, ..., drop = FALSE)
+
+\S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{TableRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{cell_values}{LabelRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
+\S4method{value_at}{TableRow}(tt, rowpath = NULL, colpath = NULL)
+
+\S4method{value_at}{LabelRow}(tt, rowpath = NULL, colpath = NULL)
+
 \S4method{print}{VTableTree}(x, ...)
 
 \S4method{show}{VTableTree}(object)
@@ -1037,7 +1091,7 @@ spl_varnames(object) <- value
 \arguments{
 \item{x}{The object.}
 
-\item{...}{Splits or SplitVector objects}
+\item{...}{Splits or \code{SplitVector} objects}
 
 \item{lyt}{layout object pre-data used for tabulation}
 
@@ -1058,7 +1112,7 @@ rows. Must accept \code{x} or \code{df} as first parameter. Must accept
 arguments accepted by analysis functions. See \code{\link{analyze}}.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
@@ -1080,7 +1134,7 @@ function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{df}{dataset (data.frame or tibble)}
+\item{df}{dataset (\code{data.frame} or \code{tibble})}
 
 \item{obj}{The object.}
 
@@ -1093,7 +1147,7 @@ not match a formal argument of the tabulation function.}
 \item{object}{The object to modify in-place}
 
 \item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
-VTableTree method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
+\code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
 appropriate for \code{VTableTree} objects.}
 
 \item{value}{The new value}
@@ -1105,7 +1159,7 @@ analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -1114,7 +1168,7 @@ Defaults to \code{"NA"}.}
 
 \item{override}{logical(1).}
 
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
@@ -1132,18 +1186,27 @@ indicates footnote should go on the row rather than cell}
 \item{reset_idx}{logical(1). Should the numbering for referential footnotes
 be immediately recalculated. Defaults to TRUE.}
 
-\item{y}{Second element to be rbound via \code{rbind2}}
+\item{y}{Second element to be \code{rbound} via \code{rbind2}}
 
 \item{path}{character. A vector path for a position within the structure of a
-tabletree. Each element represents a subsequent choice amongst the children
+\code{tabletree}. Each element represents a subsequent choice amongst the children
 of the previous choice.}
+
+\item{i}{index}
+
+\item{j}{index}
+
+\item{drop}{logical(1). Should the value in the cell be returned if one
+cell is selected by the combination of \code{i} and \code{j}. It is not possible
+to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
+Defaults to \code{FALSE}.}
 }
 \value{
 Various, but should be considered implementation details.
 }
 \description{
 These are internal methods that are documented only to satisfy
-R CMD check. End users should pay no attention to this documentation.
+\verb{R CMD check}. End users should pay no attention to this documentation.
 }
 \examples{
 
@@ -1165,3 +1228,4 @@ indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
 }
+\keyword{internal}

@@ -37,10 +37,18 @@ library(dplyr)
 
 It is possible to align the content by assigning `"left"`, `"center"`
 (default), and `"right"` to `.aligns` and `align` arguments in
-`in_rows()` and `rcell()`, respectively.
+`in_rows()` and `rcell()`, respectively. It is also possible to use `decimal`,
+`dec_right`, and `dec_left` for decimal alignments. The first takes all numerical
+values and aligns the decimal character `.` in every value of the column that has
+`align = "decimal"`. Also numberic without decimal values are aligned according to
+an imaginary `.` if specified as such. `dec_left` and `dec_right` behave similarly,
+with the difference that if the column present empty spaces at left or right, it
+pushes values towards left or right taking the one value that has most decimal 
+characters, if right, or non-decimal values if left. For more details, please read
+the related documentation page `help("decimal_align")`.
 
 Please consider using `?in_rows` and `?rcell` for further
-clarifications on the two arguments, and use `rtables_aligns()` to see
+clarifications on the two arguments, and use `formatters::list_valid_aligns()` to see
 all available alignment options.
 
 In the following we show two simplified examples that use `align` and
@@ -241,7 +249,7 @@ A character value can be specified to modify the horizontal separation
 between column headers and the table. Horizontal separation applies
 when:
 
-1. separating title + subtitles from the column labels + topleft
+1. separating title + subtitles from the column labels + top left
    materials,
 2. column labels + top left material from row labels + cells,
 3. row labels + cells from footer content, and
@@ -402,7 +410,7 @@ Below is an example using the `label_pos` argument for modifying label
 visibility:
 
 Label order will mirror the order of `split_rows_by` calls. If the
-labels of any subgroups should be hidden, the `label_pos` arugment
+labels of any subgroups should be hidden, the `label_pos` argument
 should be set to hidden.
 
 "SEX" label position is hidden - 

@@ -5,7 +5,7 @@
 \alias{names,InstantiatedColumnInfo-method}
 \alias{names,LayoutColTree-method}
 \alias{row.names,VTableTree-method}
-\title{Names of a TableTree}
+\title{Names of a \code{TableTree}}
 \usage{
 \S4method{names}{VTableNodeInfo}(x)
 
@@ -22,9 +22,9 @@
 The column names of \code{x}, as defined in the details above.
 }
 \description{
-Names of a TableTree
+Names of a \code{TableTree}
 }
 \details{
-For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
+For \code{TableTrees} with more than one level of splitting in columns, the names are defined to be the top-level
 split values repped out across the columns that they span.
 }

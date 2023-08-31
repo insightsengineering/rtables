@@ -5,7 +5,7 @@
 #' @title Internal Generics and Methods
 #' @rdname int_methods
 #' @description These are internal methods that are documented only to satisfy
-#' R CMD check. End users should pay no attention to this documentation.
+#' `R CMD check`. End users should pay no attention to this documentation.
 #' @inheritParams gen_args
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
@@ -14,7 +14,7 @@
 NULL
 
 #' @rdname dimensions
-#' @return the number of rows (nrow), columns (ncol) or both (dim) of the object.
+#' @return the number of rows (`nrow`), columns (`ncol`) or both (`dim`) of the object.
 #' @exportMethod nrow
 setMethod("nrow", "VTableTree",
           function(x) length(collect_leaves(x, TRUE, TRUE)))
@@ -123,11 +123,11 @@ setMethod("tree_children<-", c(x = "VTableTree"),
 })
 
 
-#' Retrieve or set Content Table from a TableTree
+#' Retrieve or set Content Table from a `TableTree`
 #'
 #' Returns the content table of \code{obj} if it is a \code{TableTree} object, or \code{NULL} otherwise
 #'
-#' @param obj TableTree. The TableTree
+#' @param obj `TableTree`. The `TableTree`
 #' @return the \code{ElementaryTable} containing the (top level) \emph{content rows} of \code{obj} ( or \code{NULL}
 #' if \code{obj} is not a formal table object).
 #' @export
@@ -143,7 +143,7 @@ setMethod("content_table", "ANY",
           function(obj) NULL)
 
 #' @export
-#' @param value ElementaryTable. The new content table for \code{obj}.
+#' @param value `ElementaryTable`. The new content table for \code{obj}.
 #' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
 #' @exportMethod "content_table<-"
@@ -331,7 +331,7 @@ setMethod("spl_label_var", "Split", function(obj) NULL)
 
 ### name related things
                                         # #' @inherit formatters::formatter_methods
-#' Methods for generics in the formatters package
+#' Methods for generics in the `formatters` package
 #'
 #' See the `formatters` documentation for descriptions of these generics.
 #' @inheritParams gen_args
@@ -1000,7 +1000,7 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #'
 #' Returns a matrix of formats for the cells in a table
 #' @param obj A table or row object.
-#' @param default FormatSpec.
+#' @param default `FormatSpec`.
 #' @export
 #' @return Matrix (storage mode list) containing the effective format for each
 #' cell position in the table (including 'virtual' cells implied by label rows,
@@ -1187,7 +1187,7 @@ setMethod("cell_align<-", "CellValue", function(obj, value) {
     } else {
         value <- tolower(value)
     }
-    chk_rtables_align(value)
+    check_aligns(value)
     attr(obj, "align") <- value
     obj
 })
@@ -1459,7 +1459,7 @@ spl_ref_group <- function(obj) {
 #'   generated from a  Pre-Data layout object
 #' @param path character or NULL. `col_counts` getter and setter only.
 #'   Path (in column structure).
-#' @param rtpos TreePos. Root position.
+#' @param rtpos `TreePos`. Root position.
 #'
 #' @return A \code{LayoutColTree} object.
 #'
@@ -1894,7 +1894,7 @@ setMethod("colcount_format<-", "PreDataTableLayouts",
 
 #' Exported for use in tern
 #'
-#' Does the table/row/InstantiatedColumnInfo object contain no column structure information?
+#' Does the `table`/`row`/`InstantiatedColumnInfo` object contain no column structure information?
 #'
 #' @inheritParams gen_args
 #' @rdname no_info
@@ -1914,10 +1914,10 @@ setMethod("no_colinfo", "InstantiatedColumnInfo",
            function(obj) length(obj@subset_exprs) == 0) ##identical(obj, EmptyColInfo))
 
 
-#' Names of a TableTree
+#' Names of a `TableTree`
 #'
 #' @param x the object.
-#' @details For TableTrees with more than one level of splitting in columns, the names are defined to be the top-level
+#' @details For `TableTrees` with more than one level of splitting in columns, the names are defined to be the top-level
 #'   split values repped out across the columns that they span.
 #' @rdname names
 #' @return The column names of \code{x}, as defined in the details above.
@@ -2042,7 +2042,7 @@ setMethod("spl_varnames<-", "MultiVarSplit",
 
 #' Top Left Material (Experimental)
 #' @inheritParams gen_args
-#' @description A TableTree object can have \emph{top left material} which is a sequence
+#' @description A `TableTree` object can have \emph{top left material} which is a sequence
 #' of strings which are printed in the area of the table between the column header display
 #' and the label of the first row.  These functions access and modify that material.
 #'
@@ -2198,12 +2198,16 @@ setMethod("main_title<-", "VTitleFooter",
               obj
           })
 
+# Getters for TableRow is here for convenience for binding (no need of setters)
+#' @rdname formatters_methods
+#' @export
+setMethod("main_title", "TableRow",
+          function(obj) "")
 
 ##' @rdname formatters_methods
 ##' @export
 setMethod("subtitles", "VTitleFooter",
           function(obj) obj@subtitles)
-
 
 ##' @rdname formatters_methods
 ##' @export
@@ -2213,6 +2217,10 @@ setMethod("subtitles<-", "VTitleFooter",
               obj
           })
 
+##' @rdname formatters_methods
+##' @export
+setMethod("subtitles", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
 
 ##' @rdname formatters_methods
 ##' @export
@@ -2228,6 +2236,10 @@ setMethod("main_footer<-", "VTitleFooter",
               obj
           })
 
+##' @rdname formatters_methods
+##' @export
+setMethod("main_footer", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
 
 
 ##' @rdname formatters_methods
@@ -2243,6 +2255,11 @@ setMethod("prov_footer<-", "VTitleFooter",
               obj@provenance_footer <- value
               obj
           })
+
+##' @rdname formatters_methods
+##' @export
+setMethod("prov_footer", "TableRow", # Only getter: see main_title for TableRow
+          function(obj) character())
 
 
 make_ref_value <-  function(value) {
@@ -2411,6 +2428,28 @@ setMethod("ref_index<-", "RefFootnote",
     obj@index <- value
     obj
 })
+
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_symbol", function(obj) standardGeneric("ref_symbol"))
+#' @export
+#' @rdname int_methods
+setMethod("ref_symbol", "RefFootnote",
+          function(obj) obj@symbol)
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("ref_symbol<-", function(obj, value) standardGeneric("ref_symbol<-"))
+#' @export
+#' @rdname int_methods
+setMethod("ref_symbol<-", "RefFootnote",
+          function(obj, value) {
+    obj@symbol <- value
+    obj
+})
+
+
 
 
 

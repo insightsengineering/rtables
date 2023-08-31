@@ -32,8 +32,8 @@ non_ref_rcell(
 \item{x}{ANY. Cell value.}
 
 \item{format}{character(1) or function. The format label (string) or
-formatter function to apply to \code{x}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
+\code{formatters} function to apply to \code{x}. See
+\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported
 format labels.}
 
 \item{colspan}{integer(1). Column span value.}
@@ -49,13 +49,13 @@ corresponds to the unmodified default behavior.}
 \item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}}
 for currently supported alignments.}
 
 \item{format_na_str}{character(1). String which should be displayed when
 formatted if this cell's value(s) are all NA.}
 
-\item{is_ref}{logical(1).  Are  we  in  the reference  column  (ie
+\item{is_ref}{logical(1).  Are  we  in  the reference  column  (i.e.
 .in_ref_col should be passed to this argument)}
 
 \item{refval}{ANY. Value to use when in the reference column. Defaults

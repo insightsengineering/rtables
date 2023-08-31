@@ -1,7 +1,7 @@
 ## NB handling the case where there are no values is done during tabulation
 ## which is the only reason expression(TRUE) is ok, because otherwise
 ## we (sometimes) run into
-## factor()[TRUE] giving <NA> (ie length 1)
+## factor()[TRUE] giving <NA> (i.e. length 1)
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 setMethod("make_subset_expr", "VarLevelSplit",
           function(spl, val) {
@@ -185,9 +185,12 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
                  "used for that position.")
         counts <- as.integer(counts)
     }
-
-    if(is.null(alt_counts_df))
+    
+    counts_df_name <- "alt_counts_df"
+    if(is.null(alt_counts_df)){
         alt_counts_df <- df
+        counts_df_name <- "df"
+    }
     calcpos <- is.na(counts)
 
     calccounts <- sapply(cexprs, function(ex) {
@@ -198,7 +201,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
             } else {
                 vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
                 if(is(vec, "try-error"))
-                    stop(sprintf(paste("alt_counts_df (or df) appears",
+                    stop(sprintf(paste(counts_df_name, "appears",
                                        "incompatible with column-split",
                                        "structure. Offending column subset",
                                        "expression: %s\nOriginal error",

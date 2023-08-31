@@ -6,7 +6,7 @@
 \alias{ElementaryTable}
 \alias{TableTree-class}
 \alias{TableTree}
-\title{TableTree classes}
+\title{\code{TableTree} classes}
 \usage{
 ElementaryTable(
   kids = list(),
@@ -68,20 +68,20 @@ terms).}
 \item{label}{character(1). A label (not to be confused with the name) for the
 object/structure.}
 
-\item{labelrow}{LabelRow. The LabelRow object to assign to this Table.
+\item{labelrow}{\code{LabelRow}. The \code{LabelRow} object to assign to this Table.
 Constructed from \code{label} by default if not specified.}
 
 \item{rspans}{data.frame. Currently stored but otherwise ignored.}
 
-\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the
+\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
 
-\item{iscontent}{logical. Is the TableTree/ElementaryTable being constructed
-the content table for another TableTree.}
+\item{iscontent}{logical. Is the \code{TableTree}/\code{ElementaryTable} being constructed
+the content table for another \code{TableTree}.}
 
 \item{var}{string, variable name}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -93,13 +93,18 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
+every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
@@ -118,7 +123,7 @@ represents a single facet.}
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
-\item{cont}{ElementaryTable. Content table.}
+\item{cont}{\code{ElementaryTable}. Content table.}
 
 \item{page_title}{character. Page specific title(s).}
 }
@@ -126,7 +131,7 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 A formal object representing a populated table.
 }
 \description{
-TableTree classes
+\code{TableTree} classes
 
 Table Constructors and Classes
 }

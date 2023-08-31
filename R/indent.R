@@ -1,7 +1,7 @@
 
-#' Change indentation of all rrows in an rtable
+#' Change indentation of all `rrows` in an `rtable`
 #'
-#' Change indentation of all rrows in an rtable
+#' Change indentation of all `rrows` in an `rtable`
 #'
 #' @param x \code{\link{rtable}} object
 #' @param by integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the

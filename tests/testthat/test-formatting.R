@@ -74,7 +74,7 @@ test_that("rcell format_na_str functionality works", {
                    .format_na_strs = list(val1 = "hiya", val2 = "lowdown"))
 })
 
-test_that("format_na_str functionality works in get_formatted_cells (ie printing) and make_afun", {
+test_that("format_na_str functionality works in get_formatted_cells (i.e. printing) and make_afun", {
 
     DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
     DM2$AGE <- NA

@@ -42,7 +42,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 }
 
 
-#' rrowl
+#' `rrowl`
 #'
 #' @inheritParams compat_args
 #' @param \dots values in vector/list form
@@ -354,6 +354,23 @@ rtablel <- function(header, ..., format = NULL, hsep = default_hsep(), inset = 0
     do.call(rtable, args_list)
 }
 
+# All object annotations are identical (and exist)
+all_annots_identical <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && length(unique(all_annots)) == 1
+    } else {
+        length(all_annots[[1]]) > 0 && Reduce(identical, all_annots)
+    }
+}
+
+# Only first object has annotations
+only_first_annot <- function(all_annots) {
+    if (!is.list(all_annots)) {
+        all_annots[1] != "" && all(all_annots[-1] == "")
+    } else {
+        length(all_annots[[1]]) > 0 && all(sapply(all_annots, length)[-1] == 0)
+    }
+}
 
 #' @rdname rbind
 #' @return A formal table object.
@@ -374,6 +391,32 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
     lapply(x, function(xi) chk_compat_cinfos(x[[1]], xi)) ##col_info(xi)))
 
+    rbind_annot <- list(main_title = "", 
+                        subtitles = character(), 
+                        main_footer = character(), 
+                        prov_footer = character())
+
+    # Titles/footer info are (independently) retained from first object if 
+    # identical or missing in all other objects
+    all_titles <- sapply(x, main_title)
+    if (all_annots_identical(all_titles) || only_first_annot(all_titles)) {
+        rbind_annot[["main_title"]] <- all_titles[[1]]
+    }
+
+    all_sts <- lapply(x, subtitles)
+    if (all_annots_identical(all_sts) || only_first_annot(all_sts)) {
+        rbind_annot[["subtitles"]] <- all_sts[[1]]
+    }
+
+    all_ftrs <- lapply(x, main_footer)
+    if (all_annots_identical(all_ftrs) || only_first_annot(all_ftrs)) {
+        rbind_annot[["main_footer"]] <- all_ftrs[[1]]
+    }
+
+    all_pfs <- lapply(x, prov_footer)
+    if (all_annots_identical(all_pfs) || only_first_annot(all_pfs)) {
+        rbind_annot[["prov_footer"]] <- all_pfs[[1]]
+    }
 
     ## if we got only ElementaryTable and
     ## TableRow objects, construct a new
@@ -396,16 +439,29 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
     }
 
 
-    TableTree(kids = x, cinfo = firstcols, name = "rbind_root", label = "")
+    TableTree(kids = x,
+              cinfo = firstcols,
+              name = "rbind_root",
+              label = "",
+              title = rbind_annot[["main_title"]],
+              subtitles = rbind_annot[["subtitles"]],
+              main_footer = rbind_annot[["main_footer"]],
+              prov_footer = rbind_annot[["prov_footer"]])
 
 }
 
-#' rbind TableTree and related objects
+#' `rbind` `TableTree` and related objects
 #' @rdname rbind
 #' @aliases rbind
 #' @exportMethod rbind
 #' @param deparse.level numeric(1). Currently Ignored.
 #' @param \dots ANY. Elements to be stacked.
+#'
+#' @note
+#' When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all 
+#' other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed 
+#' and must be set for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()] 
+#' functions.
 #'
 #' @examples
 #' mtbl <- rtable(
@@ -434,7 +490,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #'    )
 #'  ))
 #'
-#'  rbind(mtbl, mtbl2)
+#' rbind(mtbl, mtbl2)
 #' rbind(mtbl, rrow(), mtbl2)
 #' rbind(mtbl, rrow("aaa"), indent(mtbl2))
 setMethod("rbind", "VTableNodeInfo",
@@ -443,7 +499,7 @@ setMethod("rbind", "VTableNodeInfo",
 })
 
 #' @exportMethod rbind2
-#' @param y Second element to be rbound via `rbind2`
+#' @param y Second element to be `rbound` via `rbind2`
 #' @rdname int_methods
 setMethod("rbind2", c("VTableNodeInfo", "missing"),
           function(x, y) {
@@ -451,8 +507,8 @@ setMethod("rbind2", c("VTableNodeInfo", "missing"),
 })
 
 #' @exportMethod rbind2
-#' @param x VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
-#' @param y VTableNodeInfo. TableTree, ElementaryTable or TableRow object.
+#' @param x `VTableNodeInfo`. `TableTree`, `ElementaryTable` or `TableRow` object.
+#' @param y `VTableNodeInfo`. `TableTree`, `ElementaryTable` or `TableRow` object.
 #' @rdname rbind
 setMethod("rbind2", "VTableNodeInfo",
           function(x, y) {
@@ -558,7 +614,7 @@ chk_cbindable_many <- function(lst) {
 }
 
 
-#' cbind two rtables
+#' `cbind` two `rtables`
 #'
 #' @param x A table or row object
 #' @param \dots 1 or more further objects of the same class as \code{x}
@@ -794,23 +850,23 @@ chk_compat_cinfos <- function(tt1, tt2) {
 }
 
 
-#' \[DEPRECATED\] insert rrows at (before) a specific location
+#' \[DEPRECATED\] insert `rrows` at (before) a specific location
 #'
 #' This function is deprecated and will be removed in a future release of
-#' rtables. Please use \code{\link{insert_row_at_path}} or
+#' `rtables`. Please use \code{\link{insert_row_at_path}} or
 #' \code{\link{label_at_path}} instead.
-#' @param tbl rtable
-#' @param rrow rrow to append to rtable
-#' @param at position into which to put the rrow, defaults to beginning (ie 1)
+#' @param tbl `rtable`
+#' @param rrow `rrow` to append to `rtable`
+#' @param at position into which to put the `rrow`, defaults to beginning (i.e. 1)
 #' @param ascontent logical. Currently ignored.
 #'
-#' @return A TableTree of the same specific class as \code{tbl}
+#' @return A `TableTree` of the same specific class as \code{tbl}
 #'
 #' @export
 #'
 #' @inherit rbindl_rtables return
 #'
-#' @note Label rows (ie a row with no data values, only a row.name) can only be
+#' @note Label rows (i.e. a row with no data values, only a `row.name`) can only be
 #'   inserted at positions which do not already contain a label row when there
 #'   is a non-trivial nested row structure in \code{tbl}
 #' @examples

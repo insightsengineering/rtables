@@ -118,7 +118,7 @@ col_total(obj) <- value
 \item{df}{data.frame/NULL. Data to use if the column information is being
 generated from a  Pre-Data layout object}
 
-\item{rtpos}{TreePos. Root position.}
+\item{rtpos}{\code{TreePos}. Root position.}
 
 \item{path}{character or NULL. \code{col_counts} getter and setter only.
 Path (in column structure).}

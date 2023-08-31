@@ -22,13 +22,13 @@ prune_zeros_only(tt)
 low_obs_pruner(min, type = c("sum", "mean"))
 }
 \arguments{
-\item{tr}{TableRow (or related class). A TableRow object representing a
+\item{tr}{\code{TableRow} (or related class). A \code{TableRow} object representing a
 single row within a populated table.}
 
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
-\item{criteria}{function. Function which takes a TableRow object and returns
+\item{criteria}{function. Function which takes a \code{TableRow} object and returns
 \code{TRUE} if that row should be removed. Defaults to
 \code{\link{all_zero_or_na}}}
 
@@ -49,7 +49,7 @@ tables.
 }
 \details{
 \code{all_zero_or_na} returns \code{TRUE} (and thus indicates
-trimming/pruning) for any \emph{non-LabelRow} \code{TableRow} which contain
+trimming/pruning) for any \emph{non-\code{LabelRow}} \code{TableRow} which contain
 only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and
 \code{-Inf} values.
 

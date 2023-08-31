@@ -4,10 +4,12 @@
 \alias{spl_context}
 \title{.spl_context within analysis and split functions}
 \description{
-.spl_context within analysis and split functions
+\code{.spl_context} is an optional parameter for any of \code{rtables}' special
+functions, them being \code{afun} (analysis function in \link{analyze}),
+\code{cfun} (content or label function in \link{summarize_row_groups}),
+or \code{split_fun} (e.g. for \link{split_rows_by}).
 }
-\section{.spl_context Details}{
-
+\details{
 The \code{.spl_context} \code{data.frame} gives information about the subsets of data
 corresponding to the splits within-which the current \code{analyze} action is
 nested. Taken together, these correspond to the path that the resulting (set
@@ -19,7 +21,7 @@ via the following columns:
 \item{split}{The name of the split (often the variable being split in the
 simple case)}
 \item{value}{The string representation of the value at that split}
-\item{full_parent_df}{a dataframe containing the full data (ie across all
+\item{full_parent_df}{a dataframe containing the full data (i.e. across all
 columns) corresponding to the path defined by the combination of \code{split}
 and \code{value} of this row \emph{and all rows above this row}}
 \item{all_cols_n}{the number of observations  corresponding to this row
@@ -28,11 +30,20 @@ grouping (union of all columns)}
 column in the table structure}{ These list columns (named the same as
 \code{names(col_exprs(tab))}) contain logical vectors corresponding to
 the subset of this row's \code{full_parent_df} corresponding to that column}
+\item{cur_col_id}{Identifier of the current column. This may be an internal
+name, constructed by pasting the column path together}
 \item{cur_col_subset}{List column containing logical vectors indicating the
 subset of that row's \code{full_parent_df} for the column currently being
 created by the analysis function}
+\item{cur_col_expr}{List of current column expression. This may be used to
+filter \code{.alt_df_row} or any external data by column. Filtering \code{.alt_df_row}
+by columns produces \code{.alt_df}.}
 \item{cur_col_n}{integer column containing the observation counts for that
 split}
+\item{cur_col_split}{Current column split names. This is recovered from the
+current column path}
+\item{cur_col_split_val}{Current column split values. This is recovered from the
+current column path}
 }
 
 \emph{note Within analysis functions that accept \code{.spl_context}, the
@@ -42,4 +53,3 @@ subsets of the data. These numbers will not, and currently cannot, reflect
 alternate column observation counts provided by the \code{alt_counts_df},
 \code{col_counts} or \code{col_total} arguments to \code{\link{build_table}}}
 }
-

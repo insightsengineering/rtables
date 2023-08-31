@@ -71,7 +71,7 @@ pathing. When \code{vars} are all unique this will be the variable names.
 If not, these will be variable names with suffixes as necessary to enforce
 uniqueness.}
 
-\item{split_format}{FormatSpec. Default format associated with the split
+\item{split_format}{\code{FormatSpec}. Default format associated with the split
 being created.}
 
 \item{split_na_str}{character. NA string vector for use with \code{split_format}.}
@@ -81,7 +81,7 @@ existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
 new top-level element (`FALSE). Ignored if it would nest a split underneath
 analyses, which is not allowed.}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -124,13 +124,13 @@ analysis function outputs for two different partitions and returns a single
 value. Defaults to subtraction. If a string, taken as the name of a
 function.}
 
-\item{label_fstr}{string. An sprintf style format string containing. For
+\item{label_fstr}{string. An \code{sprintf} style format string containing. For
 non-comparison splits, it can contain  up to one \code{"\%s"} which takes
 the current split value and generates the row/column label.
 Comparison-based splits it can contain up to two \code{"\%s"}.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (ie
+\code{"hidden"}. What should the display behavior be for the  labels (i.e.
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
@@ -165,9 +165,9 @@ corresponds to the unmodified default behavior.}
 to the variable(s) in \code{vars} be visible in the resulting table.}
 
 \item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts  hidden (default for non-analyze row splits), visible,
-topleft, and - for analyze splits only - default.  For analyze calls,
-\code{default} indicates that the variable should be visible if and only if
+displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
+\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
+\code{"default"} indicates that the variable should be visible if and only if
 multiple variables are analyzed at the same level of nesting.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
@@ -182,11 +182,12 @@ analysis. Defaults to \code{var}.}
 displayed during printing.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link{rtables_aligns}}
+It defaults to \code{"center"} if \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}}
 for currently supported alignments.}
 
 \item{page_by}{logical(1). Should pagination be forced between different
-children resulting form this split.}
+children resulting form this split. An error will rise if the selected split
+does not contain at least one value that is not \code{NA}.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value,
 when forcing pagination between the children of this split/table}

@@ -13,7 +13,7 @@ clear_indent_mods(tt)
 \S4method{clear_indent_mods}{TableRow}(tt)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 }
 \value{

@@ -1,4 +1,4 @@
-context("tabulation framework")
+context("Tabulation framework")
 
 
 test_that("summarize_row_groups works with provided funcs", {
@@ -50,7 +50,7 @@ test_that("existing table in layout works", {
                 table_names = c("AGE1", "AGE2")
         )
 
-tab2 <- build_table(thing2, rawdat)
+    tab2 <- build_table(thing2, rawdat)
 
 
     thing3 <- basic_table() %>%
@@ -871,7 +871,52 @@ test_that("topleft label position works", {
     expect_identical(c("Ethnicity", "  Factor2"),
                    top_left(tab))
     expect_identical(14L,
-                   nrow(tab))
+                     nrow(tab))
+
+    ## https://github.com/insightsengineering/rtables/issues/657
+    tab2 <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("RACE", split_fun = drop_split_levels, split_label = "RACE", label_pos = "hidden", page_by = TRUE) %>%
+        split_rows_by("STRATA1", split_fun = drop_split_levels, split_label = "Strata", label_pos = "topleft") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, split_label = "Gender", label_pos = "topleft") %>%
+        analyze("AGE", mean, var_labels = "Age", format = "xx.xx") %>%
+        build_table(DM)
+
+    ptab <- paginate_table(tab2)
+    expect_identical(top_left(ptab[[1]]),
+                     c("Strata", "  Gender"))
+
+    ## https://github.com/insightsengineering/rtables/issues/651
+    lyt2 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+    expect_error(build_table(lyt2, DM[0,]), "Page-by split resulted in zero")
+
+    lyt3 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE")
+
+    baddm <- DM
+    baddm$COUNTRY <- NA_character_
+    ## brittle test because I couldn't figure out how to get the regex to handle newlines and check both the path
+    ## part and primary message part
+    error_msg <- paste0("Page-by split resulted in zero pages (no observed values of split variable?). ",
+    "\n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n")
+    expect_error(build_table(lyt3, baddm), error_msg, fixed = TRUE)
+
+    # Similar error if the problematic split is done on alt_counts_df (related to #651)
+    lyt4 <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
+        analyze("AGE", afun = function(x, .alt_df) mean(x))
+
+    error_msg2 <- paste0("Following error encountered in splitting alt_counts_df: ",
+                         error_msg)
+    expect_error(build_table(lyt4, DM, alt_counts_df = baddm), error_msg2, fixed = TRUE)
 })
 
 
@@ -1180,9 +1225,9 @@ test_that("counts_wpcts works as expected", {
     rows_res <- counts_wpcts(DM$SEX, 400)
     rows_exp <- in_rows(
         .list = list(
-            F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"), 
-            M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"), 
-            U = rcell(c(0, 0), format = "xx (xx.x%)"), 
+            F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"),
+            M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"),
+            U = rcell(c(0, 0), format = "xx (xx.x%)"),
             UNDIFFERENTIATED = rcell(c(0, 0), format = "xx (xx.x%)"))
     )
     expect_identical(rows_res, rows_exp)
@@ -1193,4 +1238,182 @@ test_that("counts_wpcts returns error correctly", {
         counts_wpcts(DM$AGE, 400),
         "using the 'counts_wpcts' analysis function requires factor data to guarantee equal numbers"
     )
+})
+
+
+
+test_that("qtable works", {
+    nice_comp_table <- function(t1, t2) {
+        expect_identical(row_paths(t1), row_paths(t2))
+        expect_identical(col_paths(t1), col_paths(t2))
+        expect_equal(cell_values(t1), cell_values(t2))
+        expect_identical(top_left(t1), top_left(t2))
+    }
+    summary_list <- function(x, ...) as.list(summary(x))
+    summary_list2 <- function(x, ...) in_rows(.list = summary_list(x, ...), .formats = "xx.xx")
+
+    t0 <- qtable(ex_adsl)
+    count <- function(df, ...) rcell(NROW(df), label = "count")
+    count_use_nms <- function(df, .spl_context, ...) {
+        nm <- tail(.spl_context$value, 1)
+        rcell(NROW(df), label = nm)
+
+    }
+    t0b <- basic_table(show_colcounts = TRUE) %>% analyze(names(ex_adsl)[1], count) %>% build_table(ex_adsl)
+    nice_comp_table(t0, t0b)
+
+    t1 <- qtable(ex_adsl, row_vars = "ARM")
+    t1b <- basic_table(show_colcounts = TRUE) %>%
+        split_rows_by("ARM", child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t1, t1b)
+    t2 <- qtable(ex_adsl, col_vars = "ARM")
+    t2b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count) %>%
+        build_table(ex_adsl)
+    nice_comp_table(t2, t2b)
+
+    t3 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM")
+    t3b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t3, t3b)
+
+    t4 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"), col_vars = c("ARM", "STRATA1"))
+    t4b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", child_labels = "hidden") %>%
+        split_cols_by("STRATA1") %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        analyze(names(ex_adsl)[1], count_use_nms) %>%
+        append_topleft("count") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t4, t4b)
+
+    t5 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                 col_vars = c("ARM", "STRATA1"), avar = "AGE", afun = mean)
+
+    mean_use_nm <- function(x, .spl_context, ...) {
+        rcell(mean(x, ...), format = "xx.xx", label = tail(.spl_context$value, 1))
+    }
+    t5b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_cols_by("STRATA1", split_fun = drop_split_levels) %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze("AGE", mean_use_nm) %>%
+        append_topleft("AGE - mean") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t5, t5b)
+    t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
+    t6b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
+        analyze("AGE", summary_list2) %>%
+        append_topleft("AGE - summary_list") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t6, t6b)
+
+    t7 <- suppressWarnings(qtable(ex_adsl, row_vars = "SEX",
+                            col_vars = "ARM", avar = "AGE", afun = range))
+    range_use_nms <- function(x, .spl_context, ...) rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
+
+    t7b <-  basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
+        analyze("AGE", range_use_nms) %>%
+        append_topleft("AGE - range") %>%
+        build_table(ex_adsl)
+    nice_comp_table(t7, t7b)
+
+    t8 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                col_vars = c("ARM"), avar = "AGE", afun = mean,
+                summarize_groups = TRUE)
+
+    t9 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+                col_vars = c("ARM"), avar = "AGE", afun = summary_list,
+                summarize_groups = TRUE)
+    t9b <- basic_table(show_colcounts = TRUE) %>%
+        split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
+        split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        split_rows_by("SEX", split_fun = drop_split_levels) %>%
+        summarize_row_groups() %>%
+        analyze("AGE", summary_list2) %>%
+        append_topleft("AGE - summary_list") %>%
+        build_table(ex_adsl)
+
+    nice_comp_table(t9, t9b)
+
+    ## regressions tests for https://github.com/insightsengineering/rtables/issues/698
+
+    fivenum3 <- function(x) {
+        as.list(fivenum(x))
+    }
+
+    t10 <- qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5])
+    expect_equal(top_left(t10), "AGE - fivenum3")
+
+    mpf10 <- matrix_form(t10)
+    expect_equal(mf_strings(mpf10)[3:7, 1],
+                 letters[1:5])
+
+    t11 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5])
+    expect_equal(top_left(t11), "AGE - fivenum3")
+    mpf11 <- matrix_form(t11)
+    expect_equal(mf_strings(mpf11)[4:8, 1],
+                 letters[1:5])
+
+
+    t12 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
+    ## compactness
+    expect_equal(top_left(t12), "mylabel")
+    mpf12 <- matrix_form(t12)
+    expect_equal(mf_strings(mpf12)[3:4,1], levels(ex_adsl$STRATA2))
+
+    t13 <- qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
+    expect_identical(top_left(t13), character())
+    mpf13 <- matrix_form(t13)
+    expect_equal(mf_strings(mpf13)[3, 1], "mylabel")
+
+    expect_error(qtable(ex_adsl , row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
+                        afun = mean, row_labels = c("ABC", "EFG", "HIJ")),
+                 "does not agree with number of rows")
+
+    expect_error(qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3,
+                        row_labels = "ABC"),
+                 "does not agree with number of rows")
+})
+
+
+## https://github.com/insightsengineering/rtables/issues/671
+test_that("problematic labels are caught and give informative error message", {
+    lyt <- basic_table() %>%
+        split_rows_by("Species") %>%
+        analyze("Sepal.Length", afun = make_afun(simple_analysis, .labels = list(Mean = "this is {test}")))
+
+    expect_error(build_table(lyt, iris), "Labels cannot contain [{] or [}] due to")
+})
+
+## No superfluous warning
+
+test_that("No superfluous warning when ref group is set with custom split fun", {
+    reorder_facets <- function(splret, spl, fulldf, ...) {
+    # browser() if you enter here the order of splret seems already correct
+        ord <- order(names(splret$values))
+        make_split_result(splret$values[ord],
+                          splret$datasplit[ord],
+                          splret$labels[ord])
+    }
+
+    lyt <- basic_table() %>%
+        split_cols_by("Species", ref_group = "virginica", split_fun = make_split_fun(post = list(reorder_facets))) %>%
+        analyze("Sepal.Length")
+    expect_silent(build_table(lyt, iris))
 })

@@ -3,7 +3,7 @@
 \name{pag_tt_indices}
 \alias{pag_tt_indices}
 \alias{paginate_table}
-\title{Pagination of a TableTree}
+\title{Pagination of a \code{TableTree}}
 \usage{
 pag_tt_indices(
   tt,
@@ -19,14 +19,14 @@ paginate_table(
   tt,
   page_type = "letter",
   font_family = "Courier",
-  font_size = 12,
+  font_size = 8,
   lineheight = 1,
   landscape = FALSE,
   pg_width = NULL,
   pg_height = NULL,
   margins = c(top = 0.5, bottom = 0.5, left = 0.75, right = 0.75),
-  lpp,
-  cpp,
+  lpp = NA_integer_,
+  cpp = NA_integer_,
   min_siblings = 2,
   nosplitin = character(),
   colwidths = NULL,
@@ -36,7 +36,7 @@ paginate_table(
 )
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
@@ -79,14 +79,15 @@ be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
 
 \item{pg_height}{numeric(1). Page height in inches.}
 
-\item{margins}{numeric(4). Named numeric vector containing \code{'top'},
-\code{'bottom'}, \code{'left'}, and \code{'right'} margins in inches. Defaults
+\item{margins}{numeric(4). Named numeric vector containing \code{'bottom'},
+\code{'left'}, \code{'top'}, and \code{'right'} margins in inches. Defaults
 to \code{.5} inches for both vertical margins and \code{.75} for both
 horizontal margins.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. \code{NULL} (the default) indicates no horizontal
-pagination should be done.}
+horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be inferred from
+the page size; \code{NULL} indicates no horizontal pagination should be done
+regardless of page size.}
 
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
 and footnotes be wrapped?}

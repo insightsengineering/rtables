@@ -7,8 +7,8 @@
 #' @inheritParams lyt_args
 #' @param x ANY. Cell value.
 #' @param format character(1) or function. The format label (string) or 
-#'   formatter function to apply to `x`. See 
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#'   `formatters` function to apply to `x`. See 
+#'   [formatters::list_valid_format_labels()] for currently supported 
 #'   format labels.
 #' @param label character(1). Label or `NULL`. If non-null, it will be looked at
 #'   when determining row labels.
@@ -28,7 +28,7 @@ rcell <- function(x,
                   align = NULL,
                   format_na_str = NULL) {
     if(!is.null(align))
-        align <- chk_rtables_align(align)
+        check_aligns(align)
     if(is(x, "CellValue")) {
         if(!is.null(label))
             obj_label(x) <- label
@@ -61,7 +61,7 @@ rcell <- function(x,
         )# RefFootnote(footnote))
     }
     if(!is.null(align))
-        cell_align(ret) <- chk_rtables_align(align)
+        cell_align(ret) <- align
     ret
 }
 
@@ -69,7 +69,7 @@ rcell <- function(x,
 #'   the reference column, this value otherwise}, and should be passed the value
 #'   of \code{.in_ref_col} when it is used.
 #'
-#' @param  is_ref logical(1).  Are  we  in  the reference  column  (ie
+#' @param  is_ref logical(1).  Are  we  in  the reference  column  (i.e.
 #'     .in_ref_col should be passed to this argument)
 #' @param refval ANY. Value to use when in the reference column. Defaults
 #' to \code{NULL}
@@ -101,13 +101,17 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .indent_mods integer or NULL. Indent modifications for the defined
 #'   rows.
 #' @param .cell_footnotes list. Referential footnote messages to be associated
-#'   by name with \emph{cells}
+#'   by name with \emph{cells}.
 #' @param .row_footnotes list. Referential footnotes messages to be associated
-#'   by name with \emph{rows}
+#'   by name with \emph{rows}.
 #' @param .aligns character or NULL. Alignments for the cells. Standard for `NULL`
-#'   is `"center"`. See \code{\link{rtables_aligns}} for currently supported
+#'   is `"center"`. See [formatters::list_valid_aligns()] for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
+#' 
+#' @note
+#'   In post-processing, referential footnotes can also be added using row and column
+#'   paths with [`fnotes_at_path<-`].
 #'
 #' @export
 #' @return an \code{RowsVerticalSection} object (or \code{NULL}). The details of
@@ -252,13 +256,13 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #' @param .ungroup_stats character. Vector of names, which must match elements
 #'   of \code{.stats}
 #' @param ... dots. Additional arguments to \code{fun} which effectively become
-#'   new defaults. These can still be overridden by extra args within a split.
+#'   new defaults. These can still be overridden by \code{extra_args} within a split.
 #' @param .null_ref_cells logical(1). Should cells for the reference column be
 #'   NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
 #'   \code{fun} accepts \code{.in_ref_col} as a formal argument. Note this
 #'   argument occurs after \code{...} so it must be \emph{fully} specified  by
 #'   name when set.
-#' @param .format_na_strs ANY. vector/list of na strings to override any
+#' @param .format_na_strs ANY. vector/list of \code{na} strings to override any
 #'   defaults applied by \code{fun}.
 #' @return A function suitable for use in \code{\link{analyze}} with element
 #'   selection, reformatting, and relabeling performed automatically.
@@ -432,7 +436,7 @@ make_afun <- function(fun,
         }
 
         for(var in allvars) {
-            ## not missing, ie specified in the direct call, takes precedence
+            ## not missing, i.e. specified in the direct call, takes precedence
             if(var %in% fun_fnames &&
                eval(parser_helper(text = paste0("!missing(", var, ")"))))
                 sfunargs[[var]] <- get(var)

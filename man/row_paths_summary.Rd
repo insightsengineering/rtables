@@ -10,7 +10,7 @@ row_paths_summary(x)
 col_paths_summary(x)
 }
 \arguments{
-\item{x}{an rtable object}
+\item{x}{an \code{rtable} object}
 }
 \value{
 A data.frame summarizing the row- or column-structure of \code{x}.

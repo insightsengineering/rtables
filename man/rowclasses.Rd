@@ -53,7 +53,7 @@ to same as the corresponding label, but is not required to be.}
 
 \item{vis}{logical. Should the row be visible (\code{LabelRow} only).}
 
-\item{cinfo}{InstantiatedColumnInfo (or NULL). Column structure for the
+\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
@@ -71,7 +71,7 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{var}{string, variable name}
 
-\item{format}{FormatSpec. Format associated with this split. Formats can be
+\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
@@ -81,7 +81,7 @@ Defaults to \code{"NA"}.}
 \item{klass}{Internal detail.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level}
+level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
 \item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }

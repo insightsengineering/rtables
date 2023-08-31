@@ -37,7 +37,7 @@ A character vector representing the top-left material of \code{obj} (or
 \code{obj} after modification, in the case of the setter).
 }
 \description{
-A TableTree object can have \emph{top left material} which is a sequence
+A \code{TableTree} object can have \emph{top left material} which is a sequence
 of strings which are printed in the area of the table between the column header display
 and the label of the first row.  These functions access and modify that material.
 }

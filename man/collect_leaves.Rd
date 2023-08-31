@@ -7,7 +7,7 @@
 collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
 }
 \arguments{
-\item{tt}{TableTree (or related class). A TableTree object representing a
+\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
 \item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}

@@ -5,7 +5,7 @@
 \alias{rbind,VTableNodeInfo-method}
 \alias{rbind}
 \alias{rbind2,VTableNodeInfo,ANY-method}
-\title{rbind TableTree and related objects}
+\title{\code{rbind} \code{TableTree} and related objects}
 \usage{
 rbindl_rtables(x, gap = 0, check_headers = TRUE)
 
@@ -14,7 +14,7 @@ rbindl_rtables(x, gap = 0, check_headers = TRUE)
 \S4method{rbind2}{VTableNodeInfo,ANY}(x, y)
 }
 \arguments{
-\item{x}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
+\item{x}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
 
 \item{gap}{deprecated. Ignored.}
 
@@ -24,13 +24,19 @@ rbindl_rtables(x, gap = 0, check_headers = TRUE)
 
 \item{deparse.level}{numeric(1). Currently Ignored.}
 
-\item{y}{VTableNodeInfo. TableTree, ElementaryTable or TableRow object.}
+\item{y}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
 }
 \value{
 A formal table object.
 }
 \description{
-rbind TableTree and related objects
+\code{rbind} \code{TableTree} and related objects
+}
+\note{
+When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all
+other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed
+and must be set for the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}}
+functions.
 }
 \examples{
 mtbl <- rtable(
@@ -59,7 +65,7 @@ mtbl <- rtable(
    )
  ))
 
- rbind(mtbl, mtbl2)
+rbind(mtbl, mtbl2)
 rbind(mtbl, rrow(), mtbl2)
 rbind(mtbl, rrow("aaa"), indent(mtbl2))
 }

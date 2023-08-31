@@ -6,7 +6,7 @@
 #'
 #' @title Return List with Table Row/Col Paths
 #'
-#' @param x an rtable object
+#' @param x an `rtable` object
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -36,14 +36,15 @@ row_paths <- function(x) {
 #' @rdname make_col_row_df
 #' @export
 col_paths <- function(x) {
-  stopifnot(is_rtable(x))
+    if(!is(coltree(x), "LayoutColTree"))
+        stop("I don't know how to extract the column paths from an object of class ", class(x))
   make_col_df(x, visible_only = TRUE)$path
 }
 
 
 #' Print Row/Col Paths Summary
 #'
-#' @param x an rtable object
+#' @param x an `rtable` object
 #'
 #' @export
 #' @return A data.frame summarizing the row- or column-structure of \code{x}.
@@ -205,7 +206,7 @@ fast_rsummry_bind <- function(lst) {
 #' summarize_rows
 #'
 #' `summarize_rows` is deprecated in favor of `make_row_df`.
-#' @param obj VTableTree.
+#' @param obj `VTableTree`.
 #' @return A data.frame summarizing the rows in \code{obj}.
 #' @export
 summarize_rows <- function(obj) {
@@ -444,7 +445,7 @@ setGeneric("str", function(object, ...)
 
 #' @rdname int_methods
 #' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the
-#' VTableTree method, unlike the underlying default of `NA`. `NA` is *not*
+#' `VTableTree` method, unlike the underlying default of `NA`. `NA` is *not*
 #' appropriate for `VTableTree` objects.
 #' @export
 setMethod("str", "VTableTree",
