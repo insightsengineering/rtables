@@ -136,7 +136,7 @@
  * `col_counts` getter and setter now accept `path` argument.
  * empty levels of a splitting variable now result in an informative error message (character and factor cases).
  * fixed bug in handling of column extra arguments that was preventing `cbind`ing tables from working correctly ([#324]](https://github.com/insightsengineering/rtables/issues/324))
-
+ 
 ## rtables 0.5.1
  * empty factor levels are now *not* dropped for column splits when ref_group is set ([#323](https://github.com/insightsengineering/rtables/issues/323))
  * `linesep` argument to `toString` and related functions renamed to `hsep`
@@ -180,6 +180,7 @@
  * `value_at` and `cell_values` now work for `tablerow` objects
  * Fixed `as_html` bug in `multivar` split columns case 
  * Fixed pagination off-by-one error
+
 
 ## rtables 0.3.8.9000
 
