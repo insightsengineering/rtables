@@ -1,6 +1,6 @@
 ## rtables 0.6.3.9000
 ### Miscellaneous
- * Specify minimal version of dependent packages.
+ * Specified minimal version of package dependencies.
 
 ## rtables 0.6.3
 ### New Features
