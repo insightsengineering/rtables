@@ -1,17 +1,25 @@
-## rtables 0.6.2.9005
+## rtables 0.6.3.9000
+
+## rtables 0.6.3
+### New Features
+ * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations: `.alt_df_row` and `.alt_df` give access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
+ * Binding objects via `rbind` will retain titles/footer information if identical in all objects or only present in the first object being bound.
 
 ### Enhancements
  * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
- * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations. `.alt_df_row` gives access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
- * Added `.alt_df` to have the exact same subset of `df` in `afun/cfun`.
- * Added check for `.alt_df_row` that prevents its calculation if not present in analysis functions.
- * Removed superfluous warning which arose for custom split functions when reference group is is set (https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598)
+ * Added vignette on exploratory analysis with `qtable`.
+ * Extracted `qtable_layout` from `qtable`.
 
+### Bug Fixes
+ * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
+ * Removed superfluous warning which arose for custom split functions when reference group is is set (https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598).
+ * Fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698)).
+ * Error catching and test coverage for cases where `alt_counts_df` presents different splits from `df`.
+ 
 ### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
  * Custom appearance vignette updated with decimal alignment support.
  * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded internal function `chk_rtables_align` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
- * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.

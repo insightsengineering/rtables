@@ -97,3 +97,8 @@ spl_context_to_disp_path <- function(ctx) {
         ret <- "root"
     ret
 }
+
+# Utility function to paste vector of values in a nice way
+paste_vec <- function(vec) {
+    paste0('c("', paste(vec, collapse = '", "'), '")')
+}
