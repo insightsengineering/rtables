@@ -1,4 +1,4 @@
-## rtables 0.6.3.9000
+## rtables 0.6.3.9001
 ### Miscellaneous
  * Specified minimal version of package dependencies.
 
