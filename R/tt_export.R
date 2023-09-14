@@ -387,13 +387,16 @@ formatters::export_as_txt
 #' ft <- tt_to_flextable(tbl)
 #' ft
 
-tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
+
+# xxx minimal (no additional formatting) flextable as default + default theme
+tt_to_flextable <- function(tt,
+                            theme = NULL,
+                            paginate = FALSE, 
+                            lpp = NULL,
                             cpp = NULL,
                             ...,
                             colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
                             tf_wrap = !is.null(cpp),
-                            tt_font_size = 9, # for the moment global
-                            tt_font = "arial",
                             max_width = cpp,
                             total_width = 10) {
     if(!requireNamespace("flextable") || !requireNamespace("officer")) {
@@ -403,8 +406,6 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     if(!requireNamespace("checkmate")) {
         stop("This function uses checkmate.")
     }
-    checkmate::assert_int(tt_font_size)
-    checkmate::assert_character(tt_font)
 
     ## if we're paginating, just call -> pagination happens also afterwards if needed
     if(paginate) {
@@ -426,12 +427,15 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
     content <- as.data.frame(matform$strings[-(1:hnum), , drop = FALSE])
 
     rdf <- make_row_df(tt)
-
+browser()
     hdr <- matform$strings[1:hnum, , drop = FALSE]
     
     flx <- flextable::qflextable(content)
 
-    flx <- flextable::set_header_labels(flx, values = setNames(as.vector(hdr[hnum, , drop = TRUE]), names(content)))
+    flx <- flextable::set_header_labels(
+        flx, 
+        values = setNames(as.vector(hdr[hnum, , drop = TRUE]), names(content))
+    )
     flx <- flextable::width(flx, width = final_cwidths)
 
     if(hnum > 1) {
@@ -481,14 +485,14 @@ tt_to_flextable <- function(tt, paginate = FALSE, lpp = NULL,
         flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
     }
 
-    flx <- flextable::font(flx, fontname = tt_font, part = "all")
-    flx <- flextable::fontsize(flx, size = tt_font_size, part = "all")
+    # flx <- flextable::font(flx, fontname = tt_font, part = "all")
+    # flx <- flextable::fontsize(flx, size = tt_font_size, part = "all")
 
     flx
     # flextable::set_table_properties(flx, layout = "autofit")
 }
 
-flex_theme_for_rtables <- function(x) {
+ltheme_flex_for_rtables <- function(x) {
     if (!inherits(x, "flextable")) {
         stop(sprintf("Function `%s` supports only flextable objects.", 
                      "theme_box()"))
