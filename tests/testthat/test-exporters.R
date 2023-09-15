@@ -221,10 +221,14 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
     # Create data
     lyt <- make_big_lyt()
     tbl <- build_table(lyt, rawdat)
-    tbl <- result
     top_left(tbl) <- "Ethnicity"
     main_title(tbl) <- "Main title"
-    main_footer(tbl) <- "Some Footer"
+    subtitles(tbl) <- c("Some Many", "Subtitles")
+    main_footer(tbl) <- c("Some Footer", "Mehr")
+    prov_footer(tbl) <- "Some prov Footer"
+    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK")) <- "factor 2"
+    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK"), 
+                   colpath = c("ARM", "ARM1", "SEX",  "F")) <- "factor 3"
     
     # Get the flextable
     flex_tbl <- tt_to_flextable(tbl)

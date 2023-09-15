@@ -6,14 +6,15 @@
 \usage{
 tt_to_flextable(
   tt,
+  theme = theme_flx_default,
+  indent_size = NULL,
+  titles_as_header = TRUE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
   ...,
   colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
   tf_wrap = !is.null(cpp),
-  tt_font_size = 9,
-  tt_font = "arial",
   max_width = cpp,
   total_width = 10
 )
@@ -21,6 +22,9 @@ tt_to_flextable(
 \arguments{
 \item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
+
+\item{indent_size}{numeric(1). Number of spaces to use per indent level.
+Defaults to 2}
 
 \item{paginate}{logical(1). Should \code{tt} be paginated and exported as
 multiple \code{flextables}. Defaults to \code{FALSE}}
