@@ -389,7 +389,7 @@ formatters::export_as_txt
 
 # xxx minimal (no additional formatting) flextable as default + default theme
 tt_to_flextable <- function(tt,
-                            theme = theme_flx_default,
+                            theme = theme_flx_default(),
                             border = officer::fp_border(width = 0.5),
                             indent_size = NULL,
                             titles_as_header = TRUE,
@@ -407,6 +407,9 @@ tt_to_flextable <- function(tt,
     }
     if(!requireNamespace("checkmate")) {
         stop("This function uses checkmate.")
+    }
+    if (!inherits(tt, "VTableTree")) {
+        stop("Input table is not an rtables' object.")
     }
     checkmate::assert_flag(titles_as_header)
 
@@ -508,7 +511,7 @@ tt_to_flextable <- function(tt,
     flx <- flextable::width(flx, width = final_cwidths)
 
     if (!is.null(theme)) {
-        flx <- theme(flx, border = border)
+        flx <- theme(flx)
     }
     
     # Title lines (after theme for problems with lines)
@@ -530,48 +533,72 @@ tt_to_flextable <- function(tt,
 
 # Custom theme
 #' @export
-theme_flx_default <- function(flx, 
+theme_flx_default <- function(tt = NULL, # Option for more complicated stuff
                               font_size = 9, 
                               font = "arial",
                               bold = c("header", "content_rows"),
+                              bold_manual = NULL,
                               border = officer::fp_border(width = 0.5)) {
-    if(!requireNamespace("flextable") || !requireNamespace("officer")) {
-        stop("This function requires the flextable and officer packages. ",
-             "Please install them if you wish to use it")
+    function(flx) {
+        if(!requireNamespace("flextable") || !requireNamespace("officer")) {
+            stop("This function requires the flextable and officer packages. ",
+                 "Please install them if you wish to use it")
+        }
+        if(!requireNamespace("checkmate")) {
+            stop("This function uses checkmate.")
+        }
+        if (!inherits(flx, "flextable")) {
+            stop(sprintf("Function `%s` supports only flextable objects.", 
+                         "theme_box()"))
+        }
+        if (!is.null(tt) && !inherits(tt, "VTableTree")) {
+            stop("Input table is not an rtables' object.")
+        }
+        checkmate::assert_int(font_size)
+        checkmate::assert_choice(font, c("arial")) # xxx to add other fonts
+        checkmate::assert_subset(bold, 
+                                 eval(formals(theme_flx_default)$bold), 
+                                 empty.ok = TRUE)
+        checkmate::assert_int(nrow_header, null.ok = TRUE)
+        
+        # Font setting
+        flx <- flextable::fontsize(flx, size = font_size, part = "all") %>% 
+            flextable::fontsize(size = font_size - 1, part = "footer") %>% 
+            flextable::font(fontname = font, part = "all")
+        
+        # Vertical borders
+        flx <- flx %>% 
+            flextable::border_outer(part = "body", border = border) %>% 
+            flextable::border_outer(part = "header", border = border)
+
+        browser()
+        # Bold settings
+        if (any(bold == "header")) {
+            flx <- flextable::bold(flx, j = 2:(NCOL(tt) + 1), part = "header") # Done with theme
+        }
+        # Content rows are effectively our labels in row names
+        if (any(bold == "content_rows")) {
+            rdf <- make_row_df(tt)
+            which_body <- which(rdf$node_class == "ContentRow" )
+            flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
+        }
+        # If you want specific cells to be bold
+        if (!is.null(bold_manual)) {
+            checkmate::assert_list(bold_manual)
+            valid_sections <- c("header", "body") # Only valid values
+            checkmate::assert_subset(names(bold_manual), valid_sections)
+            for (bi in seq_along(bold_manual)) {
+                bld_tmp <- bold_manual[[bi]]
+                checkmate::assert_list(bld_tmp, names = c("i", "j"))
+                flx <- flextable::bold(flx, j = bld_tmp$i, i = bld_tmp$j, 
+                                       part = names(bold_manual)[bi])
+                
+            }
+        }
+        # flextable::set_table_properties(flx, layout = "autofit")
+        # fix_border_issues(x) # needed?
+        flx
     }
-    if (!inherits(flx, "flextable")) {
-        stop(sprintf("Function `%s` supports only flextable objects.", 
-                     "theme_box()"))
-    }
-    if(!requireNamespace("checkmate")) {
-        stop("This function uses checkmate.")
-    }
-    browser()
-    checkmate::assert_int(font_size)
-    checkmate::assert_choice(font, c("arial")) # xxx to add other fonts
-    checkmate::assert_subset(bold, 
-                             eval(formals(theme_flx_default)$bold), 
-                             empty.ok = TRUE)
-    checkmate::assert_int(nrow_header, null.ok = TRUE)
-    
-    # Font setting
-    flx <- flextable::fontsize(flx, size = font_size, part = "all") %>% 
-        flextable::fontsize(size = font_size - 1, part = "footer") %>% 
-        flextable::font(fontname = font, part = "all")
-    
-    # Vertical borders
-    flx <- flx %>% 
-        flextable::border_outer(part = "body", border = border) %>% 
-        flextable::border_outer(part = "header", border = border)
-    
-    # Bold settings
-    # which(rdf$node_class == "ContentRow")
-    # which_header <- 2:(NCOL(tt) + 1)
-    flx <- flextable::bold(flx, j = which_header, part = "header") # Done with theme
-    # Bolding content rows -> manual
-    flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
-    # flextable::set_table_properties(flx, layout = "autofit")
-    # fix_border_issues(x) # needed?
 }
 
 
