@@ -23,8 +23,8 @@ tt_to_flextable(
 
 theme_docx_default(
   tt = NULL,
+  font = "Arial",
   font_size = 9,
-  font = "arial",
   bold = c("header", "content_rows", "label_rows"),
   bold_manual = NULL,
   border = officer::fp_border(width = 0.5)
@@ -44,6 +44,11 @@ to \code{rtables} default.}
 \item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
 \code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
 by 5 as default.}
+
+\item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
+for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
+it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
+as a text paragraph above the table.}
 
 \item{paginate}{logical(1). If you need \code{.docx} export and you use
 \code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation
@@ -74,12 +79,17 @@ completely if \code{tf_wrap} is \code{FALSE}.}
 \item{total_width}{numeric(1). Total width in inches for the resulting
 \code{flextable(s)}. Defaults to 10.}
 
-\item{font_size}{numeric(1). Font size, defaults to 12.}
+\item{font}{character(1). Defaults to \code{"Arial"}. If the font is not vailable, \code{flextable}
+default is used.}
 
-\item{title_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
-for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
-it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
-as a text paragraph above the table.}
+\item{font_size}{integer(1). Positive integerish value that defaults to 9.}
+
+\item{bold}{character vector. It can be any combination of \code{c("header", "content_rows", "label_rows")}. The first one renders all column names bold (not \code{topleft} content).
+Second and third option use \code{\link[=make_row_df]{make_row_df()}} to render content or/and label
+rows as bold.}
+
+\item{bold_manual}{named list. List of indexes lists. See example for needed structure.
+Accepted groupings/names are \code{c("header", "body")}.}
 }
 \value{
 a \code{flextable} object.
@@ -87,11 +97,11 @@ a \code{flextable} object.
 \description{
 Principally used for export (\code{\link[=export_as_docx]{export_as_docx()}}), this function produces a \code{flextable}
 from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style will be used. Otherwise,
-\link{theme_docx_default(tt)} will produce a \code{.docx}-friendly table.
+\code{\link[=theme_docx_default]{theme_docx_default()}} will produce a \code{.docx}-friendly table.
 }
 \section{Functions}{
 \itemize{
-\item \code{theme_docx_default()}: theme function for
+\item \code{theme_docx_default()}: main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
 
 }}
 \examples{
@@ -110,10 +120,23 @@ analyze("AGE", afun = analysisfun)
 tbl <-  build_table(lyt, ex_adsl)
 # rtables style
 tt_to_flextable(tbl,  theme = NULL)
-# 
-tt_to_flextable(tbl,  theme = theme_docx_default(tt, font_size = 7))
+
+tt_to_flextable(tbl,  theme = theme_docx_default(tbl, font_size = 7))
+
+# Custom theme
+special_bold <- list("header" = list("i" = 1, "j" = c(1, 3)),
+                     "body" = list("i" = c(1, 2), "j" = 1))
+custom_theme <- theme_docx_default(tbl, 
+                                   font_size = 10, 
+                                   font = "Brush Script MT",
+                                   border = officer::fp_border(color = "pink", width = 2),
+                                   bold = NULL,
+                                   bold_manual = special_bold)
+tt_to_flextable(tbl, theme = custom_theme)
 
 }
 \seealso{
+\code{\link[=export_as_docx]{export_as_docx()}}
+
 \code{\link[=export_as_docx]{export_as_docx()}}
 }

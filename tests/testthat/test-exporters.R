@@ -302,7 +302,7 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
     
     doc_file <- tempfile(fileext = ".docx")
     
-    export_as_doc(tbl, filex = doc_file, template_file = doc_file,
+    export_as_docx(tbl, file = doc_file, template_file = doc_file,
                   section_properties =  section_properties)
     
     expect_true(file.exists(doc_file))

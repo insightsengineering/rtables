@@ -468,7 +468,7 @@ export_as_pdf <- function(tt,
 #' )
 #' 
 #' \dontrun{
-#' tf <- tempfile(fileext = ".pdf")
+#' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties)
 #' }
 #'
@@ -540,7 +540,7 @@ margins_landscape <- function() {
 #' @description
 #' Principally used for export ([export_as_docx()]), this function produces a `flextable`
 #' from an `rtables` table. If `theme = NULL`, `rtables`-like style will be used. Otherwise,
-#' [theme_docx_default(tt)] will produce a `.docx`-friendly table.
+#' [theme_docx_default()] will produce a `.docx`-friendly table.
 #'
 #' @inheritParams gen_args
 #' @param theme function(1). Defaults to `theme_docx_default(tt)`. It expects a
@@ -551,7 +551,7 @@ margins_landscape <- function() {
 #' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
 #'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
 #'   by 5 as default.
-#' @param title_as_header logical(1). Defaults to `TRUE` and makes additional header rows
+#' @param titles_as_header logical(1). Defaults to `TRUE` and makes additional header rows
 #'   for [main_title()] string and [subtitles()] character vector (one per element). If `FALSE`
 #'   it is still possible to use the same parameter in [export_as_docx()] to add these titles
 #'   as a text paragraph above the table.
@@ -584,7 +584,7 @@ margins_landscape <- function() {
 #' # rtables style
 #' tt_to_flextable(tbl,  theme = NULL)
 #' 
-#' tt_to_flextable(tbl,  theme = theme_docx_default(tt, font_size = 7))
+#' tt_to_flextable(tbl,  theme = theme_docx_default(tbl, font_size = 7))
 #'
 #' @name tt_to_flextable
 #' @export
@@ -718,16 +718,41 @@ tt_to_flextable <- function(tt,
                         border = border)
     }
     flx <- flextable::set_table_properties(flx, layout = "autofit")
-    flx <- fix_border_issues(flx) # needed?`
+    flx <- flextable::fix_border_issues(flx) # needed?`
 
     flx
 }
 
-#' @describeIn tt_to_flextable theme function for
+#' @describeIn tt_to_flextable main theme function for [export_as_docx()]
+#' @param font character(1). Defaults to `"Arial"`. If the font is not vailable, `flextable`
+#'   default is used.
+#' @param font_size integer(1). Positive integerish value that defaults to 9.
+#' @param bold character vector. It can be any combination of `c("header", "content_rows",
+#'   "label_rows")`. The first one renders all column names bold (not `topleft` content).
+#'   Second and third option use [rtables::make_row_df()] to render content or/and label
+#'   rows as bold.
+#' @param bold_manual named list. List of indexes lists. See example for needed structure.
+#'   Accepted groupings/names are `c("header", "body")`.
+#' @inheritParams export_as_docx
+#' 
+#' @seealso [export_as_docx()]
+#' 
+#' @examples
+#' # Custom theme
+#' special_bold <- list("header" = list("i" = 1, "j" = c(1, 3)),
+#'                      "body" = list("i" = c(1, 2), "j" = 1))
+#' custom_theme <- theme_docx_default(tbl, 
+#'                                    font_size = 10, 
+#'                                    font = "Brush Script MT",
+#'                                    border = officer::fp_border(color = "pink", width = 2),
+#'                                    bold = NULL,
+#'                                    bold_manual = special_bold)
+#' tt_to_flextable(tbl, theme = custom_theme)
+#' 
 #' @export
 theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
-                               font_size = 9,
                                font = "Arial",
+                               font_size = 9,
                                bold = c("header", "content_rows", "label_rows"),
                                bold_manual = NULL,
                                border = officer::fp_border(width = 0.5)) {
@@ -746,7 +771,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
         if (!is.null(tt) && !inherits(tt, "VTableTree")) {
             stop("Input table is not an rtables' object.")
         }
-        checkmate::assert_int(font_size)
+        checkmate::assert_int(font_size, lower = 1)
         checkmate::assert_string(font)
         checkmate::assert_subset(bold,
                                  eval(formals(theme_docx_default)$bold),

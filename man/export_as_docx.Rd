@@ -25,6 +25,11 @@ populated table.}
 \item{file}{character(1). String that indicates the final file output. It needs to have \code{.docx}
 extension.}
 
+\item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
+for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
+it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
+as a text paragraph above the table.}
+
 \item{template_file}{character(1). Template file that \code{officer} will use as a starting
 point for the final document. It will attach the table and use the defaults defined in
 the template file. Output will be doc \code{file} nonetheless.}
@@ -61,7 +66,7 @@ section_properties <- officer::prop_section(
 )
 
 \dontrun{
-tf <- tempfile(fileext = ".pdf")
+tf <- tempfile(fileext = ".docx")
 export_as_docx(tbl, file = tf, section_properties = section_properties)
 }
 
