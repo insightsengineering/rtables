@@ -2,11 +2,13 @@
 % Please edit documentation in R/tt_export.R
 \name{tt_to_flextable}
 \alias{tt_to_flextable}
-\title{Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}}
+\alias{theme_docx_default}
+\title{Create a \code{FlexTable} from an \code{rtables} table}
 \usage{
 tt_to_flextable(
   tt,
-  theme = theme_flx_default,
+  theme = theme_docx_default(tt),
+  border = officer::fp_border(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
   paginate = FALSE,
@@ -18,16 +20,35 @@ tt_to_flextable(
   max_width = cpp,
   total_width = 10
 )
+
+theme_docx_default(
+  tt = NULL,
+  font_size = 9,
+  font = "arial",
+  bold = c("header", "content_rows", "label_rows"),
+  bold_manual = NULL,
+  border = officer::fp_border(width = 0.5)
+)
 }
 \arguments{
 \item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level.
-Defaults to 2}
+\item{theme}{function(1). Defaults to \code{theme_docx_default(tt)}. It expects a
+a theme function that is designed internally as a function of a \code{flextable} object
+and changes its layout and style. If set to \code{NULL}, it will produce a table similar
+to \code{rtables} default.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated and exported as
-multiple \code{flextables}. Defaults to \code{FALSE}}
+\item{border}{\code{officer} border object. Defaults to \code{officer::fp_border(width = 0.5)}.}
+
+\item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
+\code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
+by 5 as default.}
+
+\item{paginate}{logical(1). If you need \code{.docx} export and you use
+\code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation
+between the two mechanisms is not guaranteed. This option splits \code{tt} in different
+"pages" as multiple \code{flextables}. Defaults to \code{FALSE}.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -51,14 +72,28 @@ the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
-\code{flextable(s)}. Defaults to 5.}
+\code{flextable(s)}. Defaults to 10.}
+
+\item{font_size}{numeric(1). Font size, defaults to 12.}
+
+\item{title_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
+for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
+it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
+as a text paragraph above the table.}
 }
 \value{
-a \code{flextable} object
+a \code{flextable} object.
 }
 \description{
-Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}
+Principally used for export (\code{\link[=export_as_docx]{export_as_docx()}}), this function produces a \code{flextable}
+from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style will be used. Otherwise,
+\link{theme_docx_default(tt)} will produce a \code{.docx}-friendly table.
 }
+\section{Functions}{
+\itemize{
+\item \code{theme_docx_default()}: theme function for
+
+}}
 \examples{
 analysisfun <- function(x, ...) {
     in_rows(row1 = 5,
@@ -73,6 +108,12 @@ split_cols_by("ARM") \%>\%
 analyze("AGE", afun = analysisfun)
 
 tbl <-  build_table(lyt, ex_adsl)
-ft <- tt_to_flextable(tbl)
-ft
+# rtables style
+tt_to_flextable(tbl,  theme = NULL)
+# 
+tt_to_flextable(tbl,  theme = theme_docx_default(tt, font_size = 7))
+
+}
+\seealso{
+\code{\link[=export_as_docx]{export_as_docx()}}
 }

@@ -188,68 +188,6 @@ test_that("exporting pdf does the inset", {
 })
 
 
-test_that("flextable export works", {
-
-    analysisfun <- function(x, ...) {
-        in_rows(row1 = 5,
-                row2 = c(1, 2),
-                .row_footnotes = list(row1 = "row 1 - row footnote"),
-                .cell_footnotes = list(row2 = "row 2 - cell footnote"))
-    }
-
-    lyt <- basic_table() %>%
-        split_cols_by("ARM") %>%
-        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
-        split_rows_by("STRATA1") %>%
-        summarize_row_groups() %>%
-        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
-        analyze("AGE", afun = analysisfun)
-
-
-    tbl <-  build_table(lyt, ex_adsl)
-    ft <- tt_to_flextable(tbl, total_width = 20)
-    expect_equal(sum(unlist(nrow(ft))), 20)
-    ft
-
-    ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
-    expect_equal(length(ft2), 6)
-})
-
-test_that("export_as_doc works thanks to tt_to_flextable", {
-    source("tests/testthat/setup-fakedata.R")
-    
-    # Create data
-    lyt <- make_big_lyt()
-    tbl <- build_table(lyt, rawdat)
-    top_left(tbl) <- "Ethnicity"
-    main_title(tbl) <- "Main title"
-    subtitles(tbl) <- c("Some Many", "Subtitles")
-    main_footer(tbl) <- c("Some Footer", "Mehr")
-    prov_footer(tbl) <- "Some prov Footer"
-    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK")) <- "factor 2"
-    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK"), 
-                   colpath = c("ARM", "ARM1", "SEX",  "F")) <- "factor 3"
-    
-    # Get the flextable
-    flex_tbl <- tt_to_flextable(tbl)
-    
-    # Add section properties if necessary
-    section_properties <- officer::prop_section(
-        page_size = officer::page_size(
-            orient = "landscape",
-            width = 8.3, height = 11.7
-        ),
-        type = "continuous",
-        page_margins = officer::page_mar()
-    )
-    doc_file <- "/mnt/c/Users/GAROLIND/Downloads_Feb-Aug23/main.docx"
-    # doc_file <- tempfile(fileext = ".docx")
-    
-    export_as_doc(tbl, doc_file, section_properties)
-
-    expect_true(file.exists(doc_file))
-})
-
 test_that("as_html smoke test", {
 
     tmpf <- tempfile(fileext = ".html")
@@ -284,4 +222,69 @@ test_that("export_as_rtf works", {
 
     res <- export_as_rtf(tbl, file = tmpf)
     expect_true(file.exists(tmpf))
+})
+
+
+test_that("flextable export works", {
+    
+    analysisfun <- function(x, ...) {
+        in_rows(row1 = 5,
+                row2 = c(1, 2),
+                .row_footnotes = list(row1 = "row 1 - row footnote"),
+                .cell_footnotes = list(row2 = "row 2 - cell footnote"))
+    }
+    
+    lyt <- basic_table() %>%
+        split_cols_by("ARM") %>%
+        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
+        split_rows_by("STRATA1") %>%
+        summarize_row_groups() %>%
+        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
+        analyze("AGE", afun = analysisfun)
+    
+    
+    tbl <-  build_table(lyt, ex_adsl)
+    ft <- tt_to_flextable(tbl, total_width = 20)
+    expect_equal(sum(unlist(nrow(ft))), 20)
+    ft
+    
+    ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
+    expect_equal(length(ft2), 6)
+})
+
+test_that("export_as_doc works thanks to tt_to_flextable", {
+    source("tests/testthat/setup-fakedata.R")
+    
+    # Create data
+    lyt <- make_big_lyt()
+    tbl <- build_table(lyt, rawdat)
+    top_left(tbl) <- "Ethnicity"
+    main_title(tbl) <- "Main title"
+    subtitles(tbl) <- c("Some Many", "Subtitles")
+    main_footer(tbl) <- c("Some Footer", "Mehr")
+    prov_footer(tbl) <- "Some prov Footer"
+    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK")) <- "factor 2"
+    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK"), 
+                   colpath = c("ARM", "ARM1", "SEX",  "F")) <- "factor 3"
+    
+    # Get the flextable
+    flex_tbl <- tt_to_flextable(tbl)
+
+    
+    # Add section properties if necessary
+    section_properties <- officer::prop_section(
+        page_size = officer::page_size(
+            orient = "portrait",
+            width = 8.5, height = 11
+        ),
+        type = "continuous",
+        page_margins = margins_potrait()
+    )
+    doc_file <- "/mnt/c/Users/GAROLIND/Downloads_Feb-Aug23/main.docx"
+    # doc_file <- tempfile(fileext = ".docx")
+    
+    export_as_doc(tbl, doc_file = doc_file, 
+                  section_properties =  section_properties)
+    
+    expect_true(file.exists(doc_file))
 })
