@@ -225,7 +225,7 @@ test_that("export_as_rtf works", {
 })
 
 
-test_that("flextable export works", {
+test_that("Can create flextable object that works with different styles", {
     
     analysisfun <- function(x, ...) {
         in_rows(row1 = 5,
@@ -246,16 +246,35 @@ test_that("flextable export works", {
     tbl <-  build_table(lyt, ex_adsl)
     ft <- tt_to_flextable(tbl, total_width = 20)
     expect_equal(sum(unlist(nrow(ft))), 20)
-    ft
     
     ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
     expect_equal(length(ft2), 6)
+    
+    expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
+    
+    # Custom theme
+    special_bold <- list("header" = list("i" = c(1, 2), "j" = c(1, 3)),
+                         "body" = list("i" = c(1, 2), "j" = 1))
+    custom_theme <- theme_docx_default(tbl, 
+                                       font_size = 10, 
+                                       font = "Brush Script MT",
+                                       border = officer::fp_border(color = "pink", width = 2),
+                                       bold = NULL,
+                                       bold_manual = special_bold)
+    expect_silent(tt_to_flextable(tbl, theme = custom_theme))
+    
+    # Custom theme error
+    special_bold <- list("header" = list("asdai" = c(1, 2), "j" = c(1, 3)),
+                         "body" = list("i" = c(1, 2), "j" = 1))
+    custom_theme <- theme_docx_default(tbl, 
+                                       font_size = 10, 
+                                       font = "Brush Script MT",
+                                       bold = NULL,
+                                       bold_manual = special_bold)
+    expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
 })
 
 test_that("export_as_doc works thanks to tt_to_flextable", {
-    source("tests/testthat/setup-fakedata.R")
-    
-    # Create data
     lyt <- make_big_lyt()
     tbl <- build_table(lyt, rawdat)
     top_left(tbl) <- "Ethnicity"
@@ -280,10 +299,10 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
         type = "continuous",
         page_margins = margins_potrait()
     )
-    doc_file <- "/mnt/c/Users/GAROLIND/Downloads_Feb-Aug23/main.docx"
-    # doc_file <- tempfile(fileext = ".docx")
     
-    export_as_doc(tbl, doc_file = doc_file, 
+    doc_file <- tempfile(fileext = ".docx")
+    
+    export_as_doc(tbl, filex = doc_file, template_file = doc_file,
                   section_properties =  section_properties)
     
     expect_true(file.exists(doc_file))

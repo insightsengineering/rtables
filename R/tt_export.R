@@ -727,17 +727,17 @@ tt_to_flextable <- function(tt,
 #' @export
 theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
                                font_size = 9,
-                               font = "arial",
+                               font = "Arial",
                                bold = c("header", "content_rows", "label_rows"),
                                bold_manual = NULL,
                                border = officer::fp_border(width = 0.5)) {
     function(flx) {
-        if(!requireNamespace("flextable") || !requireNamespace("officer")) {
+        if(!requireNamespace("flextable") || !requireNamespace("officer")) { # nocov
             stop("This function requires the flextable and officer packages. ",
-                 "Please install them if you wish to use it")
+                 "Please install them if you wish to use it") # nocov
         }
-        if(!requireNamespace("checkmate")) {
-            stop("This function uses checkmate.")
+        if(!requireNamespace("checkmate")) { # nocov
+            stop("This function uses checkmate.") # nocov
         }
         if (!inherits(flx, "flextable")) {
             stop(sprintf("Function `%s` supports only flextable objects.",
@@ -747,7 +747,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
             stop("Input table is not an rtables' object.")
         }
         checkmate::assert_int(font_size)
-        checkmate::assert_choice(font, c("arial")) # xxx to add other fonts
+        checkmate::assert_string(font)
         checkmate::assert_subset(bold,
                                  eval(formals(theme_docx_default)$bold),
                                  empty.ok = TRUE)
@@ -784,8 +784,13 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
             checkmate::assert_subset(names(bold_manual), valid_sections)
             for (bi in seq_along(bold_manual)) {
                 bld_tmp <- bold_manual[[bi]]
-                checkmate::assert_list(bld_tmp, names = c("i", "j"))
-                flx <- flextable::bold(flx, j = bld_tmp$i, i = bld_tmp$j,
+                checkmate::assert_list(bld_tmp)
+                if (!all(c("i", "j") %in% names(bld_tmp)) ||
+                    !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
+                    stop("Found an allowed section for manual bold (", names(bold_manual)[bi],
+                         ") that was not a named list with i (row) and j (col) integer vectors.")
+                }
+                flx <- flextable::bold(flx, i = bld_tmp$i, j = bld_tmp$j,
                                        part = names(bold_manual)[bi])
             }
         }
