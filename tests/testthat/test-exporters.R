@@ -288,7 +288,6 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
     
     # Get the flextable
     flex_tbl <- tt_to_flextable(tbl)
-
     
     # Add section properties if necessary
     section_properties <- officer::prop_section(

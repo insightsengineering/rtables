@@ -713,13 +713,15 @@ tt_to_flextable <- function(tt,
         flx <- flextable::add_header_lines(flx, values = real_titles, top = TRUE) %>%
             # Remove the added borders
             remove_hborder(part = "header", w = c("inner", "top")) %>%
-            # Readd the separator between titles and real headers
+            # Re-add the separator between titles and real headers
             add_hborder(part = "header", ii = length(real_titles),
-                        border = border)
+                        border = border) %>% 
+            # Remove vertical borders added by theme eventually
+            remove_vborder(part = "header", ii = seq_along(real_titles))
     }
+    # These final formatting need to work with colwidths
     flx <- flextable::set_table_properties(flx, layout = "autofit")
     flx <- flextable::fix_border_issues(flx) # needed?`
-
     flx
 }
 
@@ -747,7 +749,8 @@ tt_to_flextable <- function(tt,
 #'                                    border = officer::fp_border(color = "pink", width = 2),
 #'                                    bold = NULL,
 #'                                    bold_manual = special_bold)
-#' tt_to_flextable(tbl, theme = custom_theme)
+#' tt_to_flextable(tbl, border = officer::fp_border(color = "pink", width = 2),
+#'                 theme = custom_theme)
 #' 
 #' @export
 theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
@@ -776,7 +779,6 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
         checkmate::assert_subset(bold,
                                  eval(formals(theme_docx_default)$bold),
                                  empty.ok = TRUE)
-
         # Font setting
         flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
             flextable::fontsize(size = font_size - 1, part = "footer") %>%
@@ -819,7 +821,6 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
                                        part = names(bold_manual)[bi])
             }
         }
-
         flx
     }
 }
@@ -849,8 +850,14 @@ remove_hborder <- function(flx, part, w = c("top", "bottom", "inner")) {
             part = part
         )
     }
-
     flx
+}
+
+# Remove vertical borders from both sides (for titles)
+remove_vborder <- function(flx, part, ii) {
+    flx <- flextable::border(flx, i = ii, part = part,
+                             border.left = flextable::fp_border_default(width = 0),
+                             border.right = flextable::fp_border_default(width = 0))
 }
 
 # Add horizontal border
@@ -862,7 +869,6 @@ add_hborder <- function(flx, part, ii, border) {
     if (length(ii) > 0) {
         flx <- flextable::border(flx, i = ii, border.bottom = border, part = part)
     }
-
     flx
 }
 
