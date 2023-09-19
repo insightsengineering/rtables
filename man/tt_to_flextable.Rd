@@ -106,33 +106,43 @@ from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style 
 }}
 \examples{
 analysisfun <- function(x, ...) {
-    in_rows(row1 = 5,
-            row2 = c(1, 2),
-            .row_footnotes = list(row1 = "row 1 - row footnote"),
-            .cell_footnotes = list(row2 = "row 2 - cell footnote"))
+  in_rows(
+    row1 = 5,
+    row2 = c(1, 2),
+    .row_footnotes = list(row1 = "row 1 - row footnote"),
+    .cell_footnotes = list(row2 = "row 2 - cell footnote")
+  )
 }
 
-lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
-               main_footer = "ha HA! Footer!") \%>\%
-split_cols_by("ARM") \%>\%
-analyze("AGE", afun = analysisfun)
+lyt <- basic_table(
+  title = "Title says Whaaaat", subtitles = "Oh, ok.",
+  main_footer = "ha HA! Footer!"
+) \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = analysisfun)
 
-tbl <-  build_table(lyt, ex_adsl)
+tbl <- build_table(lyt, ex_adsl)
 # rtables style
-tt_to_flextable(tbl,  theme = NULL)
+tt_to_flextable(tbl, theme = NULL)
 
-tt_to_flextable(tbl,  theme = theme_docx_default(tbl, font_size = 7))
+tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
 
 # Custom theme
-special_bold <- list("header" = list("i" = 1, "j" = c(1, 3)),
-                     "body" = list("i" = c(1, 2), "j" = 1))
-custom_theme <- theme_docx_default(tbl, 
-                                   font_size = 10, 
-                                   font = "Brush Script MT",
-                                   border = officer::fp_border(color = "pink", width = 2),
-                                   bold = NULL,
-                                   bold_manual = special_bold)
-tt_to_flextable(tbl, theme = custom_theme)
+special_bold <- list(
+  "header" = list("i" = 1, "j" = c(1, 3)),
+  "body" = list("i" = c(1, 2), "j" = 1)
+)
+custom_theme <- theme_docx_default(tbl,
+  font_size = 10,
+  font = "Brush Script MT",
+  border = officer::fp_border(color = "pink", width = 2),
+  bold = NULL,
+  bold_manual = special_bold
+)
+tt_to_flextable(tbl,
+  border = officer::fp_border(color = "pink", width = 2),
+  theme = custom_theme
+)
 
 }
 \seealso{
