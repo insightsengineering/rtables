@@ -43,7 +43,7 @@ to \code{rtables} default.}
 
 \item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
 \code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
-by 5 as default.}
+by 2 mm (5.67 pt) as default.}
 
 \item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
 for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}

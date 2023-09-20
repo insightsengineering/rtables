@@ -574,7 +574,7 @@ margins_landscape <- function() {
 #' @param border `officer` border object. Defaults to `officer::fp_border(width = 0.5)`.
 #' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
 #'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
-#'   by 5 as default.
+#'   by 2 mm (5.67 pt) as default.
 #' @param titles_as_header logical(1). Defaults to `TRUE` and makes additional header rows
 #'   for [main_title()] string and [subtitles()] character vector (one per element). If `FALSE`
 #'   it is still possible to use the same parameter in [export_as_docx()] to add these titles
@@ -649,7 +649,8 @@ tt_to_flextable <- function(tt,
     ))
   }
   # Calculate the needed colwidths
-  final_cwidths <- total_width * colwidths / sum(colwidths)
+  final_cwidths <- total_width * colwidths / sum(colwidths) # xxx to fix
+  # xxx FIXME missing transformer from character based widths to mm or pt
 
   # Extract relevant information
   matform <- matrix_form(tt, indent_rownames = TRUE)
@@ -691,7 +692,7 @@ tt_to_flextable <- function(tt,
         flx,
         top = TRUE,
         values = as.vector(hdr[i, sel]),
-        colwidths = as.integer(matform$spans[i, sel])
+        colwidths = as.integer(matform$spans[i, sel]) # xxx to fix
       )
     }
   }
@@ -709,12 +710,13 @@ tt_to_flextable <- function(tt,
   # Rownames indentation
   checkmate::check_int(indent_size, null.ok = TRUE)
   if (is.null(indent_size)) {
-    indent_size <- matform$indent_size * 5
+    indent_size <- matform$indent_size * word_mm_to_pt(2) # default is 2mm (5.7pt)
   }
   for (i in seq_len(NROW(tt))) {
     flx <- flextable::padding(flx,
       i = i, j = 1,
-      padding.left = indent_size * rdf$indent[[i]]
+      padding.left = indent_size * rdf$indent[[i]] + word_mm_to_pt(0.1), # 0.1 mmm in pt
+      padding.right = word_mm_to_pt(0.1) # 0.1 mmm in pt (so not to touch the border)
     )
   }
 
@@ -729,7 +731,7 @@ tt_to_flextable <- function(tt,
     flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
   }
 
-  flx <- flextable::width(flx, width = final_cwidths)
+  flx <- flextable::width(flx, width = final_cwidths) # xxx to fix
 
   if (!is.null(theme)) {
     flx <- theme(flx)
@@ -752,8 +754,8 @@ tt_to_flextable <- function(tt,
       remove_vborder(part = "header", ii = seq_along(real_titles))
   }
   # These final formatting need to work with colwidths
-  flx <- flextable::set_table_properties(flx, layout = "autofit")
-  flx <- flextable::fix_border_issues(flx) # needed?`
+  flx <- flextable::set_table_properties(flx, layout = "autofit") # xxx to fix
+  flx <- flextable::fix_border_issues(flx) # needed? # xxx to fix
   flx
 }
 
@@ -868,8 +870,26 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
         )
       }
     }
+    
+    # vertical padding is manual atm and respect doc std
+    flx <- flx %>%
+        # flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = , part = "body") %>% # not specified
+        flextable::padding(j = 1, padding.top = 1, padding.bottom = 1, part = "body") %>%
+        flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = 0, padding.bottom = 3, part = "header")
+
+    # single line spacing (for safety) -> space = 1
+    flx <- flextable::line_spacing(flx, space = 1, part = "all")
+
     flx
   }
+}
+# Padding helper functions to transform mm to pt and viceversa
+# # General note for word: 1pt -> 0.3527777778mm -> 0.013888888888889"
+word_inch_to_pt <- function(inch) { # nocov
+  inch / 0.013888888888889 # nocov
+}
+word_mm_to_pt <- function(mm) {
+  mm / 0.3527777778
 }
 
 # Polish horizontal borders
