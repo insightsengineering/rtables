@@ -441,6 +441,9 @@ export_as_pdf <- function(tt,
 #' @inheritParams gen_args
 #' @param file character(1). String that indicates the final file output. It needs to have `.docx`
 #'   extension.
+#' @param doc_metadata list of character(1)s. Any value that can be used as metadata by 
+#'   `?officer::set_doc_properties`. Important text values are `title, subject, creator, description`
+#'   while `created` is a date object.
 #' @inheritParams tt_to_flextable
 #' @param template_file character(1). Template file that `officer` will use as a starting
 #'   point for the final document. It will attach the table and use the defaults defined in
@@ -456,25 +459,18 @@ export_as_pdf <- function(tt,
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#'
-#' section_properties <- officer::prop_section(
-#'   page_size = officer::page_size(
-#'     orient = "portrait",
-#'     width = 8.5, height = 11
-#'   ),
-#'   type = "continuous",
-#'   page_margins = margins_potrait()
-#' )
-#'
+#' 
+#' # See how section_properties_portrait function is built for custom
 #' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
-#' export_as_docx(tbl, file = tf, section_properties = section_properties)
+#' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 #' }
 #'
 #' @name export_as_docx
 #' @export
 export_as_docx <- function(tt,
                            file,
+                           doc_metadata = NULL,
                            titles_as_header = FALSE,
                            template_file = NULL,
                            section_properties = NULL) {
@@ -517,9 +513,41 @@ export_as_docx <- function(tt,
     doc <- officer::body_set_default_section(doc, section_properties)
   }
 
+  if (!is.null(doc_metadata)) {
+    # Checks for values rely on officer function
+    doc <- do.call(officer::set_doc_properties, c(list("x" = doc), doc_metadata))
+  }
+
   # Save the Word document to a file
   print(doc, target = file)
 }
+
+#' @describeIn export_as_docx helper function that defines standard portrait properties for tables.
+#' @export
+section_properties_portrait <- function() {
+    officer::prop_section(
+      page_size = officer::page_size(
+        orient = "portrait",
+        width = 8.5, height = 11
+      ),
+      type = "continuous",
+      page_margins = margins_potrait()
+    )
+}
+
+#' @describeIn export_as_docx helper function that defines standard landscape properties for tables.
+#' @export
+section_properties_landscape <- function() {
+    officer::prop_section(
+      page_size = officer::page_size(
+        orient = "landscape",
+        width = 8.5, height = 11
+      ),
+      type = "continuous",
+      page_margins = margins_landscape()
+    )
+}
+
 #' @describeIn export_as_docx helper function that defines standard portrait margins for tables.
 #' @export
 margins_potrait <- function() {

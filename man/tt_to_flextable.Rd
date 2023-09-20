@@ -8,7 +8,7 @@
 tt_to_flextable(
   tt,
   theme = theme_docx_default(tt),
-  border = officer::fp_border(width = 0.5),
+  border = flextable::fp_border_default(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
   paginate = FALSE,
@@ -27,7 +27,7 @@ theme_docx_default(
   font_size = 9,
   bold = c("header", "content_rows", "label_rows"),
   bold_manual = NULL,
-  border = officer::fp_border(width = 0.5)
+  border = flextable::fp_border_default(width = 0.5)
 )
 }
 \arguments{
@@ -135,12 +135,12 @@ special_bold <- list(
 custom_theme <- theme_docx_default(tbl,
   font_size = 10,
   font = "Brush Script MT",
-  border = officer::fp_border(color = "pink", width = 2),
+  border = flextable::fp_border_default(color = "pink", width = 2),
   bold = NULL,
   bold_manual = special_bold
 )
 tt_to_flextable(tbl,
-  border = officer::fp_border(color = "pink", width = 2),
+  border = flextable::fp_border_default(color = "pink", width = 2),
   theme = custom_theme
 )
 

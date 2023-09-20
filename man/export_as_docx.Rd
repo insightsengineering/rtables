@@ -2,6 +2,8 @@
 % Please edit documentation in R/tt_export.R
 \name{export_as_docx}
 \alias{export_as_docx}
+\alias{section_properties_portrait}
+\alias{section_properties_landscape}
 \alias{margins_potrait}
 \alias{margins_landscape}
 \title{Export as word document}
@@ -9,10 +11,15 @@
 export_as_docx(
   tt,
   file,
+  doc_metadata = NULL,
   titles_as_header = FALSE,
   template_file = NULL,
   section_properties = NULL
 )
+
+section_properties_portrait()
+
+section_properties_landscape()
 
 margins_potrait()
 
@@ -24,6 +31,10 @@ populated table.}
 
 \item{file}{character(1). String that indicates the final file output. It needs to have \code{.docx}
 extension.}
+
+\item{doc_metadata}{list of character(1)s. Any value that can be used as metadata by
+\code{?officer::set_doc_properties}. Important text values are \verb{title, subject, creator, description}
+while \code{created} is a date object.}
 
 \item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
 for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
@@ -44,6 +55,10 @@ file (\code{template_file}). This function is based on \code{\link[=tt_to_flexta
 }
 \section{Functions}{
 \itemize{
+\item \code{section_properties_portrait()}: helper function that defines standard portrait properties for tables.
+
+\item \code{section_properties_landscape()}: helper function that defines standard landscape properties for tables.
+
 \item \code{margins_potrait()}: helper function that defines standard portrait margins for tables.
 
 \item \code{margins_landscape()}: helper function that defines standard landscape margins for tables.
@@ -56,18 +71,10 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, ex_adsl)
 
-section_properties <- officer::prop_section(
-  page_size = officer::page_size(
-    orient = "portrait",
-    width = 8.5, height = 11
-  ),
-  type = "continuous",
-  page_margins = margins_potrait()
-)
-
+# See how section_properties_portrait function is built for custom
 \dontrun{
 tf <- tempfile(fileext = ".docx")
-export_as_docx(tbl, file = tf, section_properties = section_properties)
+export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 }
 
 }

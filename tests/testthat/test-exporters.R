@@ -303,20 +303,17 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
   # Get the flextable
   flex_tbl <- tt_to_flextable(tbl)
 
-  # Add section properties if necessary
-  section_properties <- officer::prop_section(
-    page_size = officer::page_size(
-      orient = "portrait",
-      width = 8.5, height = 11
-    ),
-    type = "continuous",
-    page_margins = margins_potrait()
-  )
   doc_file <- tempfile(fileext = ".docx")
 
   expect_silent(export_as_docx(tbl,
-    file = doc_file, template_file = doc_file,
-    section_properties = section_properties
+    file = doc_file, doc_metadata = list("title" = "meh"), 
+    template_file = doc_file,
+    section_properties = section_properties_portrait()
+  ))
+  expect_silent(export_as_docx(tbl,
+    file = doc_file, doc_metadata = list("title" = "meh"), 
+    template_file = doc_file,
+    section_properties = section_properties_landscape()
   ))
 
   expect_true(file.exists(doc_file))
