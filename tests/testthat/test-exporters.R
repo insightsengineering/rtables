@@ -224,85 +224,100 @@ test_that("export_as_rtf works", {
     expect_true(file.exists(tmpf))
 })
 
+# Flextable and docx support ---------------------------------------------------
 
 test_that("Can create flextable object that works with different styles", {
-    
-    analysisfun <- function(x, ...) {
-        in_rows(row1 = 5,
-                row2 = c(1, 2),
-                .row_footnotes = list(row1 = "row 1 - row footnote"),
-                .cell_footnotes = list(row2 = "row 2 - cell footnote"))
-    }
-    
-    lyt <- basic_table() %>%
-        split_cols_by("ARM") %>%
-        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
-        split_rows_by("STRATA1") %>%
-        summarize_row_groups() %>%
-        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
-        analyze("AGE", afun = analysisfun)
-    
-    
-    tbl <-  build_table(lyt, ex_adsl)
-    ft <- tt_to_flextable(tbl, total_width = 20)
-    expect_equal(sum(unlist(nrow(ft))), 20)
-    
-    ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
-    expect_equal(length(ft2), 6)
-    
-    expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
-    
-    # Custom theme
-    special_bold <- list("header" = list("i" = c(1, 2), "j" = c(1, 3)),
-                         "body" = list("i" = c(1, 2), "j" = 1))
-    custom_theme <- theme_docx_default(tbl, 
-                                       font_size = 10, 
-                                       font = "Brush Script MT",
-                                       border = officer::fp_border(color = "pink", width = 2),
-                                       bold = NULL,
-                                       bold_manual = special_bold)
-    expect_silent(tt_to_flextable(tbl, theme = custom_theme))
-    
-    # Custom theme error
-    special_bold <- list("header" = list("asdai" = c(1, 2), "j" = c(1, 3)),
-                         "body" = list("i" = c(1, 2), "j" = 1))
-    custom_theme <- theme_docx_default(tbl, 
-                                       font_size = 10, 
-                                       font = "Brush Script MT",
-                                       bold = NULL,
-                                       bold_manual = special_bold)
-    expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
+  analysisfun <- function(x, ...) {
+    in_rows(
+      row1 = 5,
+      row2 = c(1, 2),
+      .row_footnotes = list(row1 = "row 1 - row footnote"),
+      .cell_footnotes = list(row2 = "row 2 - cell footnote")
+    )
+  }
+
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
+    split_rows_by("STRATA1") %>%
+    summarize_row_groups() %>%
+    split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
+    analyze("AGE", afun = analysisfun)
+
+
+  tbl <- build_table(lyt, ex_adsl)
+  ft <- tt_to_flextable(tbl, total_width = 20)
+  expect_equal(sum(unlist(nrow(ft))), 20)
+
+  ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
+  expect_equal(length(ft2), 6)
+
+  expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
+
+  # Custom theme
+  special_bold <- list(
+    "header" = list("i" = c(1, 2), "j" = c(1, 3)),
+    "body" = list("i" = c(1, 2), "j" = 1)
+  )
+  custom_theme <- theme_docx_default(tbl,
+    font_size = 10,
+    font = "Brush Script MT",
+    border = officer::fp_border(color = "pink", width = 2),
+    bold = NULL,
+    bold_manual = special_bold
+  )
+  expect_silent(tt_to_flextable(tbl, theme = custom_theme))
+
+  # Custom theme error
+  special_bold <- list(
+    "header" = list("asdai" = c(1, 2), "j" = c(1, 3)),
+    "body" = list("i" = c(1, 2), "j" = 1)
+  )
+  custom_theme <- theme_docx_default(tbl,
+    font_size = 10,
+    font = "Brush Script MT",
+    bold = NULL,
+    bold_manual = special_bold
+  )
+  expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
+  
+  # internal package check
+  not_a_pkg <- "bwrereloakdosirabttjtaeerr"
+  expect_error(check_required_packages(c("flextable", not_a_pkg)), not_a_pkg)
 })
 
 test_that("export_as_doc works thanks to tt_to_flextable", {
-    lyt <- make_big_lyt()
-    tbl <- build_table(lyt, rawdat)
-    top_left(tbl) <- "Ethnicity"
-    main_title(tbl) <- "Main title"
-    subtitles(tbl) <- c("Some Many", "Subtitles")
-    main_footer(tbl) <- c("Some Footer", "Mehr")
-    prov_footer(tbl) <- "Some prov Footer"
-    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK")) <- "factor 2"
-    fnotes_at_path(tbl, rowpath = c("RACE", "BLACK"), 
-                   colpath = c("ARM", "ARM1", "SEX",  "F")) <- "factor 3"
-    
-    # Get the flextable
-    flex_tbl <- tt_to_flextable(tbl)
-    
-    # Add section properties if necessary
-    section_properties <- officer::prop_section(
-        page_size = officer::page_size(
-            orient = "portrait",
-            width = 8.5, height = 11
-        ),
-        type = "continuous",
-        page_margins = margins_potrait()
-    )
-    
-    doc_file <- tempfile(fileext = ".docx")
-    
-    export_as_docx(tbl, file = doc_file, template_file = doc_file,
-                  section_properties =  section_properties)
-    
-    expect_true(file.exists(doc_file))
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  top_left(tbl) <- "Ethnicity"
+  main_title(tbl) <- "Main title"
+  subtitles(tbl) <- c("Some Many", "Subtitles")
+  main_footer(tbl) <- c("Some Footer", "Mehr")
+  prov_footer(tbl) <- "Some prov Footer"
+  fnotes_at_path(tbl, rowpath = c("RACE", "BLACK")) <- "factor 2"
+  fnotes_at_path(tbl,
+    rowpath = c("RACE", "BLACK"),
+    colpath = c("ARM", "ARM1", "SEX", "F")
+  ) <- "factor 3"
+
+  # Get the flextable
+  flex_tbl <- tt_to_flextable(tbl)
+
+  # Add section properties if necessary
+  section_properties <- officer::prop_section(
+    page_size = officer::page_size(
+      orient = "portrait",
+      width = 8.5, height = 11
+    ),
+    type = "continuous",
+    page_margins = margins_potrait()
+  )
+  doc_file <- tempfile(fileext = ".docx")
+
+  expect_silent(export_as_docx(tbl,
+    file = doc_file, template_file = doc_file,
+    section_properties = section_properties
+  ))
+
+  expect_true(file.exists(doc_file))
 })

@@ -479,12 +479,7 @@ export_as_docx <- function(tt,
                            template_file = NULL,
                            section_properties = NULL) {
   # Checks
-  if (!requireNamespace("flextable") || !requireNamespace("officer")) {
-    stop(
-      "This function requires the flextable and officer packages. ",
-      "Please install them if you wish to use it"
-    )
-  }
+  check_required_packages(c("flextable", "officer"))
   if (inherits(tt, "VTableTree")) {
     flex_tbl <- tt_to_flextable(tt, titles_as_header = titles_as_header)
   } else {
@@ -595,7 +590,7 @@ margins_landscape <- function() {
 #' @export
 tt_to_flextable <- function(tt,
                             theme = theme_docx_default(tt),
-                            border = officer::fp_border(width = 0.5),
+                            border = flextable::fp_border_default(width = 0.5),
                             indent_size = NULL,
                             titles_as_header = TRUE,
                             paginate = FALSE,
@@ -606,15 +601,7 @@ tt_to_flextable <- function(tt,
                             tf_wrap = !is.null(cpp),
                             max_width = cpp,
                             total_width = 10) {
-  if (!requireNamespace("flextable") || !requireNamespace("officer")) {
-    stop(
-      "This function requires the flextable and officer packages. ",
-      "Please install them if you wish to use it"
-    )
-  }
-  if (!requireNamespace("checkmate")) {
-    stop("This function uses checkmate.")
-  }
+  check_required_packages(c("flextable", "checkmate"))
   if (!inherits(tt, "VTableTree")) {
     stop("Input table is not an rtables' object.")
   }
@@ -765,12 +752,12 @@ tt_to_flextable <- function(tt,
 #' custom_theme <- theme_docx_default(tbl,
 #'   font_size = 10,
 #'   font = "Brush Script MT",
-#'   border = officer::fp_border(color = "pink", width = 2),
+#'   border = flextable::fp_border_default(color = "pink", width = 2),
 #'   bold = NULL,
 #'   bold_manual = special_bold
 #' )
 #' tt_to_flextable(tbl,
-#'   border = officer::fp_border(color = "pink", width = 2),
+#'   border = flextable::fp_border_default(color = "pink", width = 2),
 #'   theme = custom_theme
 #' )
 #'
@@ -780,17 +767,9 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
                                font_size = 9,
                                bold = c("header", "content_rows", "label_rows"),
                                bold_manual = NULL,
-                               border = officer::fp_border(width = 0.5)) {
+                               border = flextable::fp_border_default(width = 0.5)) {
   function(flx) {
-    if (!requireNamespace("flextable") || !requireNamespace("officer")) { # nocov
-      stop(
-        "This function requires the flextable and officer packages. ",
-        "Please install them if you wish to use it"
-      ) # nocov
-    }
-    if (!requireNamespace("checkmate")) { # nocov
-      stop("This function uses checkmate.") # nocov
-    }
+    check_required_packages(c("flextable", "checkmate"))
     if (!inherits(flx, "flextable")) {
       stop(sprintf(
         "Function `%s` supports only flextable objects.",
@@ -806,6 +785,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
       eval(formals(theme_docx_default)$bold),
       empty.ok = TRUE
     )
+    
     # Font setting
     flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
       flextable::fontsize(size = font_size - 1, part = "footer") %>%
@@ -815,6 +795,12 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
       flextable::border_outer(part = "header", border = border)
+    
+    # Vertical alignment -> all top for now, we will set it for the future
+    flx <- flx %>%
+        flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "body") %>%
+        flextable::valign(j = 1, valign = "top", part = "body") %>%
+        flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "header")
 
     # Bold settings
     if (any(bold == "header")) {
@@ -940,4 +926,15 @@ apply_alignments <- function(flx, aligns_df, part) {
     .tab_to_colpath_set(subtab),
     .tab_to_colpath_set(fulltab)
   )
+}
+
+check_required_packages <- function(pkgs) {
+    for (pkgi in pkgs) {
+        if (!requireNamespace(pkgi)) {
+            stop(
+                "This function requires the ", pkgi, " package. ",
+                "Please install it if you wish to use it"
+            )
+        }
+    }
 }
