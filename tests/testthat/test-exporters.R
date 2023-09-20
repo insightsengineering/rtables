@@ -225,7 +225,6 @@ test_that("export_as_rtf works", {
 })
 
 # Flextable and docx support ---------------------------------------------------
-
 test_that("Can create flextable object that works with different styles", {
   analysisfun <- function(x, ...) {
     in_rows(
@@ -280,7 +279,7 @@ test_that("Can create flextable object that works with different styles", {
     bold_manual = special_bold
   )
   expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
-  
+
   # internal package check
   not_a_pkg <- "bwrereloakdosirabttjtaeerr"
   expect_error(check_required_packages(c("flextable", not_a_pkg)), not_a_pkg)
@@ -306,12 +305,12 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
   doc_file <- tempfile(fileext = ".docx")
 
   expect_silent(export_as_docx(tbl,
-    file = doc_file, doc_metadata = list("title" = "meh"), 
+    file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
     section_properties = section_properties_portrait()
   ))
   expect_silent(export_as_docx(tbl,
-    file = doc_file, doc_metadata = list("title" = "meh"), 
+    file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
     section_properties = section_properties_landscape()
   ))
