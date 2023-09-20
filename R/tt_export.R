@@ -485,8 +485,10 @@ export_as_docx <- function(tt,
     if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
       # Ugly but I could not find a getter for font.size
       font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
+      font_sz_footer <- flex_tbl$header$styles$text$font.size$data[1, 1] - 1
       font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
       fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
+      fpt_footer <- officer::fp_text(font.family = font_fam, font.size = font_sz_footer)
     }
   } else {
     flex_tbl <- tt
@@ -523,11 +525,11 @@ export_as_docx <- function(tt,
     # (this is usually done differently, i.e. inside footnotes)
     matform <- matrix_form(tt, indent_rownames = TRUE)
     if (length(matform$ref_footnotes) > 0) {
-      doc <- add_text_par(doc, matform$ref_footnotes, fpt)
+      doc <- add_text_par(doc, matform$ref_footnotes, fpt_footer)
     }
     # Footer lines
     if (length(all_footers(tt)) > 0) {
-      doc <- add_text_par(doc, all_footers(tt), fpt)
+      doc <- add_text_par(doc, all_footers(tt), fpt_footer)
     }
   }
 
@@ -544,8 +546,9 @@ export_as_docx <- function(tt,
 add_text_par <- function(doc, chr_v, text_format) {
   for (ii in seq_along(chr_v)) {
     cur_fp <- officer::fpar(officer::ftext(chr_v[ii], prop = text_format))
-    officer::body_add_fpar(doc, cur_fp)
+    doc <- officer::body_add_fpar(doc, cur_fp)
   }
+  doc
 }
 
 #' @describeIn export_as_docx helper function that defines standard portrait properties for tables.
