@@ -441,7 +441,7 @@ export_as_pdf <- function(tt,
 #' @inheritParams gen_args
 #' @param file character(1). String that indicates the final file output. It needs to have `.docx`
 #'   extension.
-#' @param doc_metadata list of character(1)s. Any value that can be used as metadata by 
+#' @param doc_metadata list of character(1)s. Any value that can be used as metadata by
 #'   `?officer::set_doc_properties`. Important text values are `title, subject, creator, description`
 #'   while `created` is a date object.
 #' @inheritParams tt_to_flextable
@@ -459,7 +459,7 @@ export_as_pdf <- function(tt,
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' 
+#'
 #' # See how section_properties_portrait function is built for custom
 #' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
@@ -478,14 +478,16 @@ export_as_docx <- function(tt,
   # Checks
   check_required_packages(c("flextable", "officer"))
   if (inherits(tt, "VTableTree")) {
-    flex_tbl <- tt_to_flextable(tt, titles_as_header = titles_as_header,
-                                footers_as_text = footers_as_text)
-      if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
-        # Ugly but I could not find a getter for font.size
-        font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
-        font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
-        fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
-      }
+    flex_tbl <- tt_to_flextable(tt,
+      titles_as_header = titles_as_header,
+      footers_as_text = footers_as_text
+    )
+    if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
+      # Ugly but I could not find a getter for font.size
+      font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
+      font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
+      fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
+    }
   } else {
     flex_tbl <- tt
   }
@@ -517,16 +519,16 @@ export_as_docx <- function(tt,
 
   # add footers as paragraphs
   if (isTRUE(footers_as_text) && inherits(tt, "VTableTree")) {
-      # Adding referantial footer line separator if present 
-      # (this is usually done differently, i.e. inside footnotes)
-      matform <- matrix_form(tt, indent_rownames = TRUE)
-      if (length(matform$ref_footnotes) > 0) {
-          doc <- add_text_par(doc, matform$ref_footnotes, fpt)
-      }
-      # Footer lines
-      if (length(all_footers(tt)) > 0) {
-          doc <- add_text_par(doc, all_footers(tt), fpt)
-      }
+    # Adding referantial footer line separator if present
+    # (this is usually done differently, i.e. inside footnotes)
+    matform <- matrix_form(tt, indent_rownames = TRUE)
+    if (length(matform$ref_footnotes) > 0) {
+      doc <- add_text_par(doc, matform$ref_footnotes, fpt)
+    }
+    # Footer lines
+    if (length(all_footers(tt)) > 0) {
+      doc <- add_text_par(doc, all_footers(tt), fpt)
+    }
   }
 
   if (!is.null(doc_metadata)) {
@@ -540,36 +542,36 @@ export_as_docx <- function(tt,
 
 # Shorthand to add text paragraph
 add_text_par <- function(doc, chr_v, text_format) {
-    for (ii in seq_along(chr_v)) {
-        cur_fp <- officer::fpar(officer::ftext(chr_v[ii], prop = text_format))
-        officer::body_add_fpar(doc, cur_fp)
-    }
+  for (ii in seq_along(chr_v)) {
+    cur_fp <- officer::fpar(officer::ftext(chr_v[ii], prop = text_format))
+    officer::body_add_fpar(doc, cur_fp)
+  }
 }
 
 #' @describeIn export_as_docx helper function that defines standard portrait properties for tables.
 #' @export
 section_properties_portrait <- function() {
-    officer::prop_section(
-      page_size = officer::page_size(
-        orient = "portrait",
-        width = 8.5, height = 11
-      ),
-      type = "continuous",
-      page_margins = margins_potrait()
-    )
+  officer::prop_section(
+    page_size = officer::page_size(
+      orient = "portrait",
+      width = 8.5, height = 11
+    ),
+    type = "continuous",
+    page_margins = margins_potrait()
+  )
 }
 
 #' @describeIn export_as_docx helper function that defines standard landscape properties for tables.
 #' @export
 section_properties_landscape <- function() {
-    officer::prop_section(
-      page_size = officer::page_size(
-        orient = "landscape",
-        width = 8.5, height = 11
-      ),
-      type = "continuous",
-      page_margins = margins_landscape()
-    )
+  officer::prop_section(
+    page_size = officer::page_size(
+      orient = "landscape",
+      width = 8.5, height = 11
+    ),
+    type = "continuous",
+    page_margins = margins_landscape()
+  )
 }
 
 #' @describeIn export_as_docx helper function that defines standard portrait margins for tables.
@@ -599,14 +601,14 @@ margins_landscape <- function() {
 #' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
 #'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
 #'   by 2 mm (5.67 pt) as default.
-#' @param titles_as_header logical(1). Defaults to `TRUE` for [tt_to_flextable()], so the 
-#'   table is self-contained as it makes additional header rows for [main_title()] 
+#' @param titles_as_header logical(1). Defaults to `TRUE` for [tt_to_flextable()], so the
+#'   table is self-contained as it makes additional header rows for [main_title()]
 #'   string and [subtitles()] character vector (one per element). `FALSE` is suggested
-#'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above 
+#'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above
 #'   the table. Same style is applied.
-#' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so 
+#' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so
 #'   the table is self-contained with the flextable definition of footnotes. `TRUE` is
-#'   used for [export_as_docx()] to add the footers as a new paragraph after the table. 
+#'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
 #'   Same style is applied, but with a smaller font.
 #' @param paginate logical(1). If you need `.docx` export and you use
 #'   `export_as_docx`, we suggest relying on `word` pagination system. Cooperation
@@ -783,7 +785,7 @@ tt_to_flextable <- function(tt,
       # Remove vertical borders added by theme eventually
       remove_vborder(part = "header", ii = seq_along(real_titles))
   }
-  
+
   # These final formatting need to work with colwidths
   flx <- flextable::set_table_properties(flx, layout = "autofit", align = "left") # xxx to fix
   # NB: autofit or fixed may be switched if widths are correctly staying in the page
@@ -847,7 +849,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
       eval(formals(theme_docx_default)$bold),
       empty.ok = TRUE
     )
-    
+
     # Font setting
     flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
       flextable::fontsize(size = font_size - 1, part = "footer") %>%
@@ -857,12 +859,12 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
       flextable::border_outer(part = "header", border = border)
-    
+
     # Vertical alignment -> all top for now, we will set it for the future
     flx <- flx %>%
-        flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "body") %>%
-        flextable::valign(j = 1, valign = "top", part = "body") %>%
-        flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "header")
+      flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "body") %>%
+      flextable::valign(j = 1, valign = "top", part = "body") %>%
+      flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "header")
 
     # Bold settings
     if (any(bold == "header")) {
@@ -902,12 +904,12 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
         )
       }
     }
-    
+
     # vertical padding is manual atm and respect doc std
     flx <- flx %>%
-        # flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = , part = "body") %>% # not specified
-        flextable::padding(j = 1, padding.top = 1, padding.bottom = 1, part = "body") %>%
-        flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = 0, padding.bottom = 3, part = "header")
+      # flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = , part = "body") %>% # not specified
+      flextable::padding(j = 1, padding.top = 1, padding.bottom = 1, part = "body") %>%
+      flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = 0, padding.bottom = 3, part = "header")
 
     # single line spacing (for safety) -> space = 1
     flx <- flextable::line_spacing(flx, space = 1, part = "all")
@@ -1011,12 +1013,12 @@ apply_alignments <- function(flx, aligns_df, part) {
 }
 
 check_required_packages <- function(pkgs) {
-    for (pkgi in pkgs) {
-        if (!requireNamespace(pkgi)) {
-            stop(
-                "This function requires the ", pkgi, " package. ",
-                "Please install it if you wish to use it"
-            )
-        }
+  for (pkgi in pkgs) {
+    if (!requireNamespace(pkgi)) {
+      stop(
+        "This function requires the ", pkgi, " package. ",
+        "Please install it if you wish to use it"
+      )
     }
+  }
 }
