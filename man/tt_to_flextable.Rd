@@ -11,6 +11,7 @@ tt_to_flextable(
   border = flextable::fp_border_default(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
+  footers_as_text = FALSE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
@@ -45,10 +46,16 @@ to \code{rtables} default.}
 \code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
 by 2 mm (5.67 pt) as default.}
 
-\item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
-for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
-it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
-as a text paragraph above the table.}
+\item{titles_as_header}{logical(1). Defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the
+table is self-contained as it makes additional header rows for \code{\link[=main_title]{main_title()}}
+string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). \code{FALSE} is suggested
+for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above
+the table. Same style is applied.}
+
+\item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
+the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
+used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
+Same style is applied, but with a smaller font.}
 
 \item{paginate}{logical(1). If you need \code{.docx} export and you use
 \code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation

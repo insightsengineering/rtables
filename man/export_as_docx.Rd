@@ -13,6 +13,7 @@ export_as_docx(
   file,
   doc_metadata = NULL,
   titles_as_header = FALSE,
+  footers_as_text = TRUE,
   template_file = NULL,
   section_properties = NULL
 )
@@ -36,10 +37,16 @@ extension.}
 \code{?officer::set_doc_properties}. Important text values are \verb{title, subject, creator, description}
 while \code{created} is a date object.}
 
-\item{titles_as_header}{logical(1). Defaults to \code{TRUE} and makes additional header rows
-for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). If \code{FALSE}
-it is still possible to use the same parameter in \code{\link[=export_as_docx]{export_as_docx()}} to add these titles
-as a text paragraph above the table.}
+\item{titles_as_header}{logical(1). Defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the
+table is self-contained as it makes additional header rows for \code{\link[=main_title]{main_title()}}
+string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). \code{FALSE} is suggested
+for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above
+the table. Same style is applied.}
+
+\item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
+the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
+used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
+Same style is applied, but with a smaller font.}
 
 \item{template_file}{character(1). Template file that \code{officer} will use as a starting
 point for the final document. It will attach the table and use the defaults defined in
