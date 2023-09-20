@@ -808,11 +808,13 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
     }
     # Content rows are effectively our labels in row names
     if (any(bold == "content_rows")) {
+      if (is.null(tt)) stop('bold = "content_rows" needs the original rtables object (tt).')
       rdf <- make_row_df(tt)
       which_body <- which(rdf$node_class == "ContentRow")
       flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
     }
     if (any(bold == "label_rows")) {
+      if (is.null(tt)) stop('bold = "content_rows" needs the original rtables object (tt).')
       rdf <- make_row_df(tt)
       which_body <- which(rdf$node_class == "LabelRow")
       flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
