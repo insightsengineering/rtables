@@ -472,12 +472,20 @@ export_as_docx <- function(tt,
                            file,
                            doc_metadata = NULL,
                            titles_as_header = FALSE,
+                           footers_as_text = TRUE,
                            template_file = NULL,
                            section_properties = NULL) {
   # Checks
   check_required_packages(c("flextable", "officer"))
   if (inherits(tt, "VTableTree")) {
-    flex_tbl <- tt_to_flextable(tt, titles_as_header = titles_as_header)
+    flex_tbl <- tt_to_flextable(tt, titles_as_header = titles_as_header,
+                                footers_as_text = footers_as_text)
+      if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
+        # Ugly but I could not find a getter for font.size
+        font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
+        font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
+        fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
+      }
   } else {
     flex_tbl <- tt
   }
@@ -492,25 +500,33 @@ export_as_docx <- function(tt,
     doc <- officer::read_docx()
   }
 
+  if (!is.null(section_properties)) {
+    doc <- officer::body_set_default_section(doc, section_properties)
+  }
+
   # Extract title
   if (isFALSE(titles_as_header) && inherits(tt, "VTableTree")) {
-    mt_tbl <- main_title(tt)
-    if (length(mt_tbl) > 0) {
-      doc <- officer::body_add_par(doc, mt_tbl, style = "Normal")
-    }
-    st_tbl <- subtitles(tt)
-    if (length(st_tbl) > 0) {
-      for (ii in seq_along(st_tbl)) {
-        doc <- officer::body_add_par(doc, st_tbl[ii], style = "Normal")
-      }
+    ts_tbl <- all_titles(tt)
+    if (length(ts_tbl) > 0) {
+      doc <- add_text_par(doc, ts_tbl, fpt)
     }
   }
 
   # Add the table to the document
-  doc <- flextable::body_add_flextable(doc, flex_tbl, align = "center", )
+  doc <- flextable::body_add_flextable(doc, flex_tbl, align = "left")
 
-  if (!is.null(section_properties)) {
-    doc <- officer::body_set_default_section(doc, section_properties)
+  # add footers as paragraphs
+  if (isTRUE(footers_as_text) && inherits(tt, "VTableTree")) {
+      # Adding referantial footer line separator if present 
+      # (this is usually done differently, i.e. inside footnotes)
+      matform <- matrix_form(tt, indent_rownames = TRUE)
+      if (length(matform$ref_footnotes) > 0) {
+          doc <- add_text_par(doc, matform$ref_footnotes, fpt)
+      }
+      # Footer lines
+      if (length(all_footers(tt)) > 0) {
+          doc <- add_text_par(doc, all_footers(tt), fpt)
+      }
   }
 
   if (!is.null(doc_metadata)) {
@@ -520,6 +536,14 @@ export_as_docx <- function(tt,
 
   # Save the Word document to a file
   print(doc, target = file)
+}
+
+# Shorthand to add text paragraph
+add_text_par <- function(doc, chr_v, text_format) {
+    for (ii in seq_along(chr_v)) {
+        cur_fp <- officer::fpar(officer::ftext(chr_v[ii], prop = text_format))
+        officer::body_add_fpar(doc, cur_fp)
+    }
 }
 
 #' @describeIn export_as_docx helper function that defines standard portrait properties for tables.
@@ -575,10 +599,15 @@ margins_landscape <- function() {
 #' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
 #'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
 #'   by 2 mm (5.67 pt) as default.
-#' @param titles_as_header logical(1). Defaults to `TRUE` and makes additional header rows
-#'   for [main_title()] string and [subtitles()] character vector (one per element). If `FALSE`
-#'   it is still possible to use the same parameter in [export_as_docx()] to add these titles
-#'   as a text paragraph above the table.
+#' @param titles_as_header logical(1). Defaults to `TRUE` for [tt_to_flextable()], so the 
+#'   table is self-contained as it makes additional header rows for [main_title()] 
+#'   string and [subtitles()] character vector (one per element). `FALSE` is suggested
+#'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above 
+#'   the table. Same style is applied.
+#' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so 
+#'   the table is self-contained with the flextable definition of footnotes. `TRUE` is
+#'   used for [export_as_docx()] to add the footers as a new paragraph after the table. 
+#'   Same style is applied, but with a smaller font.
 #' @param paginate logical(1). If you need `.docx` export and you use
 #'   `export_as_docx`, we suggest relying on `word` pagination system. Cooperation
 #'   between the two mechanisms is not guaranteed. This option splits `tt` in different
@@ -621,6 +650,7 @@ tt_to_flextable <- function(tt,
                             border = flextable::fp_border_default(width = 0.5),
                             indent_size = NULL,
                             titles_as_header = TRUE,
+                            footers_as_text = FALSE,
                             paginate = FALSE,
                             lpp = NULL,
                             cpp = NULL,
@@ -721,13 +751,13 @@ tt_to_flextable <- function(tt,
   }
 
   # Adding referantial footer line separator if present
-  if (length(matform$ref_footnotes) > 0) {
+  if (length(matform$ref_footnotes) > 0 && isFALSE(footers_as_text)) {
     flx <- flextable::add_footer_lines(flx, values = matform$ref_footnotes) %>%
       add_hborder(part = "body", ii = nrow(tt), border = border)
   }
 
   # Footer lines
-  if (length(all_footers(tt)) > 0) {
+  if (length(all_footers(tt)) > 0 && isFALSE(footers_as_text)) {
     flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
   }
 
@@ -753,9 +783,11 @@ tt_to_flextable <- function(tt,
       # Remove vertical borders added by theme eventually
       remove_vborder(part = "header", ii = seq_along(real_titles))
   }
+  
   # These final formatting need to work with colwidths
-  flx <- flextable::set_table_properties(flx, layout = "autofit") # xxx to fix
-  flx <- flextable::fix_border_issues(flx) # needed? # xxx to fix
+  flx <- flextable::set_table_properties(flx, layout = "autofit", align = "left") # xxx to fix
+  # NB: autofit or fixed may be switched if widths are correctly staying in the page
+  flx <- flextable::fix_border_issues(flx) # Fixes some rendering gaps in borders
   flx
 }
 
