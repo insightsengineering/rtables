@@ -71,6 +71,12 @@ file (\code{template_file}). This function is based on \code{\link[=tt_to_flexta
 \item \code{margins_landscape()}: helper function that defines standard landscape margins for tables.
 
 }}
+\note{
+\code{export_as_docx()} does not have many options available. We suggest, if you need
+specific formats and details to use \code{\link[=tt_to_flextable]{tt_to_flextable()}} first and then \code{export_as_docx}.
+Only \code{title_as_header} and \code{footer_as_text} need to be specified again if changed in
+\code{tt_to_flextable()}.
+}
 \examples{
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%

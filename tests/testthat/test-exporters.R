@@ -279,6 +279,29 @@ test_that("Can create flextable object that works with different styles", {
     bold_manual = special_bold
   )
   expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
+  
+  
+  # header colcounts not in a newline works
+  topleft_t1 <- topleft_t2 <- basic_table(show_colcounts = TRUE) %>%
+  split_rows_by("ARM", label_pos = "topleft") %>%
+      split_cols_by("STRATA1")
+  
+  topleft_t1 <- topleft_t1 %>% 
+      analyze("BMRKR1") %>% 
+      build_table(DM) 
+  topleft_t1a <- tt_to_flextable(topleft_t1, counts_in_newline = FALSE)
+  topleft_t1b <- tt_to_flextable(topleft_t1, counts_in_newline = TRUE)
+  
+  topleft_t2 <- topleft_t2 %>% 
+      split_rows_by("SEX", label_pos = "topleft") %>%
+      analyze("BMRKR1") %>% 
+      build_table(DM) %>% 
+      tt_to_flextable(counts_in_newline = FALSE)
+  
+  expect_equal(flextable::nrow_part(topleft_t2, part = "header"), 2L)
+  expect_equal(flextable::nrow_part(topleft_t1a, part = "header"), 1L)
+  expect_equal(flextable::nrow_part(topleft_t1b, part = "header"), 2L)
+  
 
   # internal package check
   not_a_pkg <- "bwrereloakdosirabttjtaeerr"
@@ -300,11 +323,17 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
   ) <- "factor 3"
 
   # Get the flextable
-  flex_tbl <- tt_to_flextable(tbl)
+  flex_tbl <- tt_to_flextable(tbl, titles_as_header = TRUE, footers_as_text = FALSE)
 
   doc_file <- tempfile(fileext = ".docx")
 
   expect_silent(export_as_docx(tbl,
+    file = doc_file, doc_metadata = list("title" = "meh"),
+    template_file = doc_file,
+    section_properties = section_properties_portrait()
+  ))
+  # flx table in input
+  expect_silent(export_as_docx(flex_tbl,
     file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
     section_properties = section_properties_portrait()

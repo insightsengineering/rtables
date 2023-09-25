@@ -12,6 +12,7 @@ tt_to_flextable(
   indent_size = NULL,
   titles_as_header = TRUE,
   footers_as_text = FALSE,
+  counts_in_newline = FALSE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
@@ -56,6 +57,10 @@ the table. Same style is applied.}
 the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
 used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
 Same style is applied, but with a smaller font.}
+
+\item{counts_in_newline}{logical(1). Defaults to \code{FALSE}. In \code{rtables} text printing
+(\code{\link[formatters:tostring]{formatters::toString()}}), the column counts, i.e. \code{(N=xx)}, is always on a new line.
+We noticed that for \code{docx} exports could be necessary to have it on the same line.}
 
 \item{paginate}{logical(1). If you need \code{.docx} export and you use
 \code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation

@@ -450,6 +450,11 @@ export_as_pdf <- function(tt,
 #'   the template file. Output will be doc `file` nonetheless.
 #' @param section_properties `officer::prop_section` object. Here you can set margins and page
 #'   size.
+#'   
+#' @note `export_as_docx()` does not have many options available. We suggest, if you need
+#'   specific formats and details to use [tt_to_flextable()] first and then `export_as_docx`.
+#'   Only `title_as_header` and `footer_as_text` need to be specified again if changed in
+#'   `tt_to_flextable()`. 
 #'
 #' @seealso [tt_to_flextable()]
 #'
@@ -487,6 +492,8 @@ export_as_docx <- function(tt,
       font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
       font_sz_footer <- flex_tbl$header$styles$text$font.size$data[1, 1] - 1
       font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
+      
+      # Set the test as the tt
       fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
       fpt_footer <- officer::fp_text(font.family = font_fam, font.size = font_sz_footer)
     }
@@ -613,6 +620,9 @@ margins_landscape <- function() {
 #'   the table is self-contained with the flextable definition of footnotes. `TRUE` is
 #'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
 #'   Same style is applied, but with a smaller font.
+#' @param counts_in_newline logical(1). Defaults to `FALSE`. In `rtables` text printing
+#'   ([formatters::toString()]), the column counts, i.e. `(N=xx)`, is always on a new line.
+#'   We noticed that for `docx` exports could be necessary to have it on the same line.
 #' @param paginate logical(1). If you need `.docx` export and you use
 #'   `export_as_docx`, we suggest relying on `word` pagination system. Cooperation
 #'   between the two mechanisms is not guaranteed. This option splits `tt` in different
@@ -656,6 +666,7 @@ tt_to_flextable <- function(tt,
                             indent_size = NULL,
                             titles_as_header = TRUE,
                             footers_as_text = FALSE,
+                            counts_in_newline = FALSE,
                             paginate = FALSE,
                             lpp = NULL,
                             cpp = NULL,
@@ -669,6 +680,8 @@ tt_to_flextable <- function(tt,
     stop("Input table is not an rtables' object.")
   }
   checkmate::assert_flag(titles_as_header)
+  checkmate::assert_flag(footers_as_text)
+  checkmate::assert_flag(counts_in_newline)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
@@ -683,18 +696,19 @@ tt_to_flextable <- function(tt,
       SIMPLIFY = FALSE
     ))
   }
+  
   # Calculate the needed colwidths
   final_cwidths <- total_width * colwidths / sum(colwidths) # xxx to fix
   # xxx FIXME missing transformer from character based widths to mm or pt
 
   # Extract relevant information
   matform <- matrix_form(tt, indent_rownames = TRUE)
-  body <- mf_strings(matform)
+  body <- mf_strings(matform) # Contains header
+  spans <- mf_spans(matform) # Contains header
+  mpf_aligns <- mf_aligns(matform) # Contains header
   hnum <- mf_nlheader(matform) # Number of lines for the header
   rdf <- make_row_df(tt) # Row-wise info
 
-  # Aligns pre-processing
-  mpf_aligns <- matform$aligns
   # decimal alignment pre-proc
   if (any(grepl("dec", mpf_aligns))) {
     body <- decimal_align(body, mpf_aligns)
@@ -710,8 +724,32 @@ tt_to_flextable <- function(tt,
     # Default rtables if no footnotes
     remove_hborder(part = "body", w = "bottom")
 
-  # Header addition
+  # Header addition -> NB: here we have a problem with (N=xx)
   hdr <- body[seq_len(hnum), , drop = FALSE]
+  
+  # IMPORTANT: Fix of (N=xx) which is by default on a new line but we usually do not
+  # want this, and it depends on the size of the table, it is not another 
+  # row with different columns -> All of this should be fixed at source (in toString)
+  det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
+  has_nclab <- apply(det_nclab, 1, any)
+  if (isFALSE(counts_in_newline) && any(has_nclab)) {
+      whsnc <- which(has_nclab) # which rows have it
+      what_is_nclab <- det_nclab[whsnc, ]
+      # condition for popping the interested row by merging the upper one
+      hdr[whsnc - 1, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab], 
+                                           hdr[whsnc, what_is_nclab], sep = " ")
+      hdr[whsnc, what_is_nclab] <- ""
+      
+      # We can remove the row if they are all ""
+      if (all(!nzchar( hdr[whsnc, ]))) {
+          hdr <- hdr[-whsnc, , drop = FALSE]
+          spans <- spans[-whsnc, , drop = FALSE]
+          body <- body[-whsnc, , drop = FALSE]
+          mpf_aligns <- mpf_aligns[-whsnc, , drop = FALSE]
+          hnum <- hnum - 1
+      }
+  }
+
   flx <- flx %>%
     flextable::set_header_labels( # Needed bc headers must be unique
       values = setNames(
@@ -722,12 +760,12 @@ tt_to_flextable <- function(tt,
   # If there are more rows
   if (hnum > 1) {
     for (i in seq(hnum - 1, 1)) {
-      sel <- spans_to_viscell(matform$spans[i, ])
+      sel <- spans_to_viscell(spans[i, ])
       flx <- flextable::add_header_row(
         flx,
         top = TRUE,
         values = as.vector(hdr[i, sel]),
-        colwidths = as.integer(matform$spans[i, sel]) # xxx to fix
+        colwidths = as.integer(spans[i, sel]) # xxx to fix
       )
     }
   }
@@ -793,6 +831,7 @@ tt_to_flextable <- function(tt,
   flx <- flextable::set_table_properties(flx, layout = "autofit", align = "left") # xxx to fix
   # NB: autofit or fixed may be switched if widths are correctly staying in the page
   flx <- flextable::fix_border_issues(flx) # Fixes some rendering gaps in borders
+  
   flx
 }
 
