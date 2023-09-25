@@ -730,26 +730,28 @@ tt_to_flextable <- function(tt,
   # IMPORTANT: Fix of (N=xx) which is by default on a new line but we usually do not
   # want this, and it depends on the size of the table, it is not another
   # row with different columns -> All of this should be fixed at source (in toString)
-  det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
-  has_nclab <- apply(det_nclab, 1, any)
-  if (isFALSE(counts_in_newline) && any(has_nclab)) {
-    whsnc <- which(has_nclab) # which rows have it
-    what_is_nclab <- det_nclab[whsnc, ]
-    # condition for popping the interested row by merging the upper one
-    hdr[whsnc - 1, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
-      hdr[whsnc, what_is_nclab],
-      sep = " "
-    )
-    hdr[whsnc, what_is_nclab] <- ""
-
-    # We can remove the row if they are all ""
-    if (all(!nzchar(hdr[whsnc, ]))) {
-      hdr <- hdr[-whsnc, , drop = FALSE]
-      spans <- spans[-whsnc, , drop = FALSE]
-      body <- body[-whsnc, , drop = FALSE]
-      mpf_aligns <- mpf_aligns[-whsnc, , drop = FALSE]
-      hnum <- hnum - 1
-    }
+  if (hnum > 1) { # otherwise nothing to do
+      det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
+      has_nclab <- apply(det_nclab, 1, any)
+      if (isFALSE(counts_in_newline) && any(has_nclab)) {
+        whsnc <- which(has_nclab) # which rows have it
+        what_is_nclab <- det_nclab[whsnc, ]
+        # condition for popping the interested row by merging the upper one
+        hdr[whsnc - 1, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
+          hdr[whsnc, what_is_nclab],
+          sep = " "
+        )
+        hdr[whsnc, what_is_nclab] <- ""
+    
+        # We can remove the row if they are all ""
+        if (all(!nzchar(hdr[whsnc, ]))) {
+          hdr <- hdr[-whsnc, , drop = FALSE]
+          spans <- spans[-whsnc, , drop = FALSE]
+          body <- body[-whsnc, , drop = FALSE]
+          mpf_aligns <- mpf_aligns[-whsnc, , drop = FALSE]
+          hnum <- hnum - 1
+        }
+      }
   }
 
   flx <- flx %>%
