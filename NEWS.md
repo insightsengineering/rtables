@@ -1,4 +1,7 @@
 ## rtables 0.6.3.9001
+### Bug Fixes
+* Fixed bug causing all-`NA` rows to be included in every `.df_row` split.
+
 ### Miscellaneous
  * Specified minimal version of package dependencies.
 
