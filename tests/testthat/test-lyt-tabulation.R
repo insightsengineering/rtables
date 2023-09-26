@@ -679,6 +679,38 @@ test_that(".df_row analysis function argument works", {
                                ARM2 = c(nfemale, narm2))))
 })
 
+test_that("analysis function arguments work with NA rows in data", {
+  afun <- function(x, .df_row, ...) {list(
+    "number of rows in .df_row" = nrow(.df_row),
+    "length of x" = length(x)
+  )}
+  
+  df <- data.frame(
+    a_var = factor(c('a', NA, 'b', 'b', 'a', 'a', 'b', 'c', 'a', NA)),
+    b_var = factor(c(NA,  NA, 'x', 'x', 'y', 'x', 'x', 'y', 'x', NA))
+  )
+  
+  l <- basic_table() %>%
+    add_overall_col("all pts") %>%
+    split_rows_by("a_var") %>%
+    analyze("b_var", afun = afun)
+  
+  tbl <- build_table(l, df)
+  rws <- collect_leaves(tbl, add.labrows = FALSE)
+  
+  na <- sum(!is.na(df$a_var) & df$a_var == "a")
+  nb <- sum(!is.na(df$a_var) & df$a_var == "b")
+  nc <- sum(!is.na(df$a_var) & df$a_var == "c")
+  na_x <- length(df$b_var[!is.na(df$a_var) & df$a_var == "a" & !is.na(df$b_var)])
+  nb_x <- length(df$b_var[!is.na(df$a_var) & df$a_var == "b" & !is.na(df$b_var)])
+  nc_x <- length(df$b_var[!is.na(df$a_var) & df$a_var == "c" & !is.na(df$b_var)])
+  
+  expect_identical(
+    unlist(lapply(rws, row_values), use.names = FALSE),
+    c(na, na_x, nb, nb_x, nc, nc_x)
+  )
+})
+
 test_that("analyze_colvars inclNAs works", {
 
     ## inclNAs
