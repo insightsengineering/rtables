@@ -1,4 +1,8 @@
 ## rtables 0.6.3.9001
+### New Features
+ * Added support for `.docx` exports with `export_as_docx()`.
+ * Expanded support for `flextable` customization with theme function specific for word documents (`theme_docx_default()`).
+
 ### Miscellaneous
  * Specified minimal version of package dependencies.
 
