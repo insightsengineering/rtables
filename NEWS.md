@@ -3,6 +3,9 @@
  * Added support for `.docx` exports with `export_as_docx()`.
  * Expanded support for `flextable` customization with theme function specific for word documents (`theme_docx_default()`).
 
+### Bug Fixes
+* Fixed bug causing all-`NA` rows to be included in every `.df_row` split.
+
 ### Miscellaneous
  * Specified minimal version of package dependencies.
 

@@ -476,7 +476,8 @@ setMethod(".applysplit_datapart", "VarLevelSplit",
              ") not present in the data")
     }
     ret <- lapply(seq_along(vals), function(i) {
-        df[df[[spl_payload(spl)]] == vals[[i]], ]
+        spl_col <- df[[spl_payload(spl)]]
+        df[!is.na(spl_col) & spl_col == vals[[i]], ]
     })
     names(ret) <- as.character(vals)
     ret
