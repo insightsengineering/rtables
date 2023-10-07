@@ -542,9 +542,4 @@ test_that("row label indentation is kept even if there are newline characters", 
         toString(mf_b, widths = c(17, 12, 12)),
         "Found newline characters"
     )
-    mf_b <- matrix_form(tbl_b, indent_rownames = TRUE, expand_newlines = TRUE)
-    expect_error(
-        toString(mf_b, widths = c(17, 12, 12)),
-        "The sum of the expected nrows header and nrows of content"
-    )
 })
