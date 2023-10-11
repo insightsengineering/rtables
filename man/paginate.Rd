@@ -242,5 +242,4 @@ tmp <- lapply(tbls, function(tbli) {
   cat("\n\n")
 })
 
-
 }

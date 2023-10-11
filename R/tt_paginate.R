@@ -3,7 +3,7 @@
 ## 1. user defined number of lines per page
 ## 2. all lines have the same height
 ## 3. header always reprinted on all pages
-## 4. "Label-rows", i.e. content rows above break in the nesting structure, optionaly reprinted (default TRUE)
+## 4. "Label-rows", i.e. content rows above break in the nesting structure, optionally reprinted (default TRUE)
 ## 5. Never (?) break on a "label"/content row
 ## 6. Never (?) break on the second (i.e. after the first) data row at a particular leaf Elementary table.
 ##
@@ -150,6 +150,8 @@ pos_to_path <- function(pos) {
 
 
 
+# make_row_df ---------------------------------------------------------------
+# 
 #' @inherit formatters::make_row_df
 #'
 # #' @note the technically present root tree node is excluded from the summary
@@ -478,6 +480,7 @@ setMethod("inner_col_df", "LayoutColTree",
     flines
 }
 
+# Pagination ---------------------------------------------------------------
 
 #' Pagination of a `TableTree`
 #'
@@ -532,10 +535,8 @@ setMethod("inner_col_df", "LayoutColTree",
 #' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other
 #'   considerations. Defaults to none.
 #'
-#' @export
 #' @return for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
 #' The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
-#' @rdname paginate
 #'
 #' @examples
 #'
@@ -582,7 +583,8 @@ setMethod("inner_col_df", "LayoutColTree",
 #'   cat("\n\n")
 #' })
 #'
-#'
+#' @rdname paginate
+#' @export
 pag_tt_indices <- function(tt, lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
@@ -685,16 +687,16 @@ setMethod("do_forced_paginate", "VTableTree",
 
 non_null_na <- function(x) !is.null(x) && is.na(x)
 
-#' @export
 #' @aliases paginate_table
 #' @param cpp numeric(1) or NULL. Width (in characters) of the pages for
 #' horizontal pagination. `NA` (the default) indicates `cpp` should be inferred from
 #' the page size; `NULL` indicates no horizontal pagination should be done
 #' regardless of page size.
-#' @rdname paginate
 #' @inheritParams formatters::vert_pag_indices
 #' @inheritParams formatters::page_lcpp
 #' @inheritParams formatters::toString
+#' @rdname paginate
+#' @export
 paginate_table <- function(tt,
                            page_type = "letter",
                            font_family = "Courier",
