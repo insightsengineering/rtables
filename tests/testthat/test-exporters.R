@@ -194,7 +194,27 @@ test_that("as_html smoke test", {
 
     tbl <- tt_to_export()
     oldo <- options(viewer = identity)
-    fl <- Viewer(tbl)
+    expect_silent(fl <- Viewer(tbl))
+    xml2::read_html(fl)
+    expect_true(TRUE)
+    options(oldo)
+})
+
+test_that("as_html Viewer with newline test", {
+
+    tmpf <- tempfile(fileext = ".html")
+    
+    colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
+                    function(x) rcell(sd(x), format = "xx.x"))
+    varlabs <- c("Mean Age", "SD\nLine Break!!! \nAge")
+    
+    lyt <- basic_table() %>%
+        split_cols_by_multivar(c("AGE", "AGE"), varlabels = varlabs) %>%
+        analyze_colvars(afun = colfuns)
+    
+    tbl <- build_table(lyt, DM)
+    oldo <- options(viewer = identity)
+    expect_silent(fl <- Viewer(tbl))
     xml2::read_html(fl)
     expect_true(TRUE)
     options(oldo)

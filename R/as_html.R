@@ -34,8 +34,6 @@ div_helper <- function(lst, class) {
 #' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
 #'
 #' @return A \code{shiny.tag} object representing \code{x} in HTML.
-#' @importFrom htmltools tags
-#' @export
 #'
 #' @examples
 #'
@@ -56,6 +54,9 @@ div_helper <- function(lst, class) {
 #' \dontrun{
 #' Viewer(tbl)
 #' }
+#' 
+#' @importFrom htmltools tags
+#' @export
 as_html <- function(x,
                     width = NULL,
                     class_table = "table table-condensed table-hover",
@@ -118,8 +119,12 @@ as_html <- function(x,
                                                                style = paste0("padding-left: ", indent * 3, "ch"))
     }
   }
-
-  cells[!mat$display] <- NA_integer_
+  
+  if (any(!mat$display)) {
+      ii  <- apply(mat$display, 2, function(xx) any(!xx))
+      jj  <- apply(mat$display, 1, function(xx) any(!xx))
+      cells[ii, jj, drop = FALSE] <- NA_integer_
+  }
 
   rows <- apply(cells, 1, function(row) {
     tags$tr(
