@@ -5,6 +5,9 @@
 ### Bug Fixes
 * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
 
+### Miscellaneous
+* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
+
 ## rtables 0.6.4
 ### New Features
  * Added support for `.docx` exports with `export_as_docx()`.
