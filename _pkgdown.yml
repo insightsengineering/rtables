@@ -12,16 +12,16 @@ navbar:
       icon: fa-github fa-lg
       href: https://github.com/insightsengineering/rtables
     dev-guide:
-      text: Developers Guide
+      text: Developer Guide
       menu:
-        - text: Debugging in `rtables` and Beyond
-          href: dev-guide/dg_debug_rtables.html
-        - text: The Split Machinery
-          href: dev-guide/dg_split_machinery.html
+        - text: Debugging in {rtables} and Beyond
+          href: ../inst/dev-guide/dg_debug_rtables.html
+        - text: Split Machinery
+          href: ../inst/dev-guide/dg_split_machinery.html
         - text: Table Hierarchy
-          href: dev-guide/dg_table_hierarchy.html
+          href: ../inst/dev-guide/dg_table_hierarchy.html
         - text: Tabulation
-          href: dev-guide/dg_tabulation.html
+          href: ../inst/dev-guide/dg_tabulation.html
 
 articles:
   - title: Getting Started

@@ -2,11 +2,13 @@
 title: "Debugging in `rtables` and Beyond"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: spacelab
 editor_options: 
   chunk_output_type: console
 knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../../docs/dev-guide")})
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`.
 
-# Debugging in `rtables` and beyond
+---
 
 This is a not-so-short and not-comprehensive guide to debugging `rtables`. It is to be considered, though, of general validity and of personal use.
 

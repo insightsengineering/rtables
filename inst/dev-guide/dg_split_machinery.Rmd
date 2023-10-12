@@ -1,12 +1,17 @@
 ---
-title: "The Split Machinery"
+title: "Split Machinery"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: spacelab
+    toc: true
+    toc_float:
+      collapsed: false
 editor_options: 
   chunk_output_type: console
 knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../../docs/dev-guide")})
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`.
 
 
-# The Split Machinery
+## Introduction
 
 The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `vignette("split_functions")` and function documentation like `?split_rows_by` and `?split_funcs`.
 
