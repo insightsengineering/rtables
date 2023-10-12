@@ -12,7 +12,6 @@ NULL
 #' @param ... arguments passed to \code{as_html}
 #'
 #'
-#' @export
 #'
 #' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
@@ -42,8 +41,8 @@ NULL
 #' Viewer(tbl, tbl2)
 #'
 #' }
+#' @export
 Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
-
   check_convert <- function(x, name, accept_NULL = FALSE) {
     if (accept_NULL && is.null(x)) {
       NULL

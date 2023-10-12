@@ -34,8 +34,6 @@ div_helper <- function(lst, class) {
 #' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
 #'
 #' @return A \code{shiny.tag} object representing \code{x} in HTML.
-#' @importFrom htmltools tags
-#' @export
 #'
 #' @examples
 #'
@@ -56,6 +54,9 @@ div_helper <- function(lst, class) {
 #' \dontrun{
 #' Viewer(tbl)
 #' }
+#' 
+#' @importFrom htmltools tags
+#' @export
 as_html <- function(x,
                     width = NULL,
                     class_table = "table table-condensed table-hover",
@@ -75,8 +76,8 @@ as_html <- function(x,
   nrh <- mf_nrheader(mat)
   nc <- ncol(x) + 1
 
-  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)),
-                  ncol = nc)
+  # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
+  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)), ncol = nc)
 
   for(i in unique(mat$line_grouping)) {
     rows <- which(mat$line_grouping == i)
@@ -118,8 +119,30 @@ as_html <- function(x,
                                                                style = paste0("padding-left: ", indent * 3, "ch"))
     }
   }
-
-  cells[!mat$display] <- NA_integer_
+  
+  if (any(!mat$display)) {
+      # Check that expansion kept the same display info
+      check_expansion <- c()
+      for(ii in unique(mat$line_grouping)) {
+          rows <- which(mat$line_grouping == ii)
+          check_expansion <- c(
+            check_expansion,
+            apply(mat$display[rows, , drop = FALSE], 2, function(x) all(x) || all(!x))
+          )
+      }
+      
+      if (!all(check_expansion)) {
+          stop("Found that a group of rows have different display options even if ",
+               "they belong to the same line group. This should not happen. Please ",
+               "file an issue or report to the maintainers.") # nocov
+      }
+      
+      for (ii in unique(mat$line_grouping)) {
+          rows <- which(mat$line_grouping == ii)
+          should_display_col <- apply(mat$display[rows, , drop = FALSE], 2, any)
+          cells[ii, !should_display_col] <- NA_integer_
+      }
+  }
 
   rows <- apply(cells, 1, function(row) {
     tags$tr(

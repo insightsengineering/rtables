@@ -2,6 +2,9 @@
 ### New Features
 * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
 
+### Bug Fixes
+* Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+
 ## rtables 0.6.4
 ### New Features
  * Added support for `.docx` exports with `export_as_docx()`.
