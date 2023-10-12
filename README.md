@@ -205,7 +205,8 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 - Part 1
   [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
-- Part 2 - Forthcoming
+- Part 2 
+  [Slides](https://drive.google.com/file/d/1erjr3AMMzh1TQYW5yduqWNxBDO30gi2o/view?usp=sharing)
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
