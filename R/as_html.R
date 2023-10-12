@@ -76,8 +76,8 @@ as_html <- function(x,
   nrh <- mf_nrheader(mat)
   nc <- ncol(x) + 1
 
-  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)),
-                  ncol = nc)
+  # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
+  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)), ncol = nc)
 
   for(i in unique(mat$line_grouping)) {
     rows <- which(mat$line_grouping == i)
@@ -121,9 +121,27 @@ as_html <- function(x,
   }
   
   if (any(!mat$display)) {
-      ii  <- apply(mat$display, 2, function(xx) any(!xx))
-      jj  <- apply(mat$display, 1, function(xx) any(!xx))
-      cells[ii, jj, drop = FALSE] <- NA_integer_
+      # Check that expansion kept the same display info
+      check_expansion <- c()
+      for(ii in unique(mat$line_grouping)) {
+          rows <- which(mat$line_grouping == ii)
+          check_expansion <- c(
+            check_expansion,
+            apply(mat$display[rows, , drop = FALSE], 2, function(x) all(x) || all(!x))
+          )
+      }
+      
+      if (!all(check_expansion)) {
+          stop("Found that a group of rows have different display options even if ",
+               "they belong to the same line group. This should not happen. Please ",
+               "file an issue or report to the maintainers.") # nocov
+      }
+      
+      for (ii in unique(mat$line_grouping)) {
+          rows <- which(mat$line_grouping == ii)
+          should_display_col <- apply(mat$display[rows, , drop = FALSE], 2, any)
+          cells[ii, !should_display_col] <- NA_integer_
+      }
   }
 
   rows <- apply(cells, 1, function(row) {

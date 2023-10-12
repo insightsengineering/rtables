@@ -212,9 +212,21 @@ test_that("as_html Viewer with newline test", {
         split_cols_by_multivar(c("AGE", "AGE"), varlabels = varlabs) %>%
         analyze_colvars(afun = colfuns)
     
-    tbl <- build_table(lyt, DM)
+    tbl_wrapping <- build_table(lyt, DM)
+    
+    tbl_normal <- rtable(
+        header = c("Treatement\nN=100", "Comparison\nN=300"),
+        format = "xx (xx.xx%)",
+        rrow("A", c(104, .2), c(100, .4)),
+        rrow("B", c(23, .4), c(43, .5)),
+        rrow(),
+        rrow("this is a very long section header"),
+        rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
+        rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+    )
     oldo <- options(viewer = identity)
-    expect_silent(fl <- Viewer(tbl))
+    expect_silent(fl <- Viewer(tbl_wrapping))
+    expect_silent(fl <- Viewer(tbl_normal))
     xml2::read_html(fl)
     expect_true(TRUE)
     options(oldo)
