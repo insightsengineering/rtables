@@ -2,23 +2,27 @@
 title: "Tabulation"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{rtables Advanced Usage}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
+output:
+  html_document:
+    theme: spacelab
+    toc: true
+    toc_float:
+      collapsed: false
 editor_options: 
   chunk_output_type: console
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 ## Disclaimer
 
 Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`. (xxx we should insert it automatically)
 
-# Tabulation
+## Introduction
 
 Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to the data. The layout object, with all its splits (see `vignette("dg_split_machinery")`) and `analyze`s, can be applied to different data to produce valid tables. This process is happening principally inside the file `tt_dotabulation.R` and its principal user-facing function `build_table` that resides in it. We will sometimes see functions and methods that are present in other files like `colby_construction.R` or `make_subset_expr.R`. We assume any reader is already familiar with the documentation related to `build_table`. Also, we suggest reading first the vignette regarding the split machinery (`vignette("dg_split_machinery")`), as it is instrumental in understanding how the layout object, which is built principally of splits, is tabulated when data is applied.
 
