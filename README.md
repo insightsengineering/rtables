@@ -204,9 +204,9 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 ### Advanced rtables Training
 
 - Part 1
-  [Slides]("~/nest_projects/rtables/inst/extdata/Advanced_rtables_-Part_1-Final_Version_part1.pdf")
+  [Slides]("~/nest_projects/rtables/inst/extdata/Advanced_rtables_part1.pdf")
 - Part 2 
-  [Slides]("~/nest_projects/rtables/inst/extdata/Advanced_rtables_-Part_1-Final_Version_part2.pdf"")
+  [Slides]("~/nest_projects/rtables/inst/extdata/Advanced_rtables_part2.pdf")
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
