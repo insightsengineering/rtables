@@ -1,8 +1,17 @@
 ---
 title: "Table Hierarchy"
 author: "Abinaya Yogasekaram"
-output: rmarkdown::html_vignette
-date: "r Sys.Date()"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: spacelab
+    toc: true
+    toc_float:
+      collapsed: false
+editor_options: 
+  chunk_output_type: console
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +21,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Disclaimer
 
 This vignette is currently under development.
+
+## Introduction
 
 The scope of this vignette is to understand the structure of rtable objects, class hierarchy with an exploration of tree structures as S4 objects. Exploring table structure enables a better understanding of rtables concepts such as split machinery, tabulation, pagination and export. More details from the user's perspective of table structure can be found in the relevant vignettes. 
 
