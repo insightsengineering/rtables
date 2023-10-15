@@ -545,11 +545,14 @@ test_that("row label indentation is kept even if there are newline characters", 
 })
 
 test_that("Support for newline characters in all the parts", {
+    set.seed(1)
     DM_trick <- DM %>% 
-        mutate(ARM2 = sample(c("TWO\nwords\n", "A wo\n\nrd"), replace = TRUE, nrow(DM))) # last \n is eaten up
+        mutate(ARM2 = sample(c("TWO\nwords\n", "A wo\n\nrd"),
+                             replace = TRUE, nrow(DM))) # last \n is eaten up
     levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
     tbl <- basic_table() %>% 
-        split_rows_by("SEX", split_label = "m\nannaggia\nsda\n", label_pos = "visible") %>% # last \n bug
+        split_rows_by("SEX", split_label = "m\nannaggia\nsda\n",
+                      label_pos = "visible") %>% # last \n bug
         split_cols_by("ARM2", split_label = "sda") %>% 
         analyze("BMRKR1", na_str = "asd\nasd") %>%  # \n error
         build_table(DM_trick)
@@ -557,7 +560,7 @@ test_that("Support for newline characters in all the parts", {
     top_left(tbl) <- c("a", "b\nd\n\n", "c\n\n") # last \n is eaten up, if in the middle error
     main_title(tbl) <- "why not \nalso here\n"
     # matrix_form(tbl)
-    # to_string_matrix2(tbl, hsep = "-", with_spaces = TRUE, print_txt_to_copy = TRUE)
+    to_string_matrix2(tbl, hsep = "-", with_spaces = TRUE, print_txt_to_copy = TRUE)
     out <- strsplit(toString(tbl, hsep = "-"), "\\n")[[1]]
     expected <- c(
         "why not ",
@@ -569,26 +572,26 @@ test_that("Support for newline characters in all the parts", {
         "b                                ",
         "d                                ",
         "                                 ",
-        "                     A wo        ",
-        "c                            TWO ",
-        "                      rd    words",
+        "c                            A wo",
+        "                      TWO        ",
+        "                     words    rd ",
         "---------------------------------",
         "m                                ",
         "annaggia                         ",
         "sda                              ",
         "  F                              ",
-        "    Mean             5.95   6.13 ",
+        "    Mean             5.81    6.29",
         "  M                              ",
-        "    Mean             5.82   5.46 ",
+        "    Mean             6.15    5.21",
         "  U                              ",
         "  N                              ",
         "  D                              ",
         "                                 ",
-        "    Mean             asd     asd ",
-        "                     asd     asd ",
+        "    Mean              asd    asd ",
+        "                      asd    asd ",
         "  UNDIFFERENTIATED               ",
-        "    Mean             asd     asd ",
-        "                     asd     asd "
+        "    Mean              asd    asd ",
+        "                      asd    asd "
     )
     expect_identical(out, expected)
 })
