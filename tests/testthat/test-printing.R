@@ -147,7 +147,7 @@ test_that("newline in column names and possibly cell values work", {
     expect_identical(mf_nlheader(matform2),
                      4L)
     expect_identical(matform2$strings[1:4, 1, drop = TRUE],
-                     c("Ethnicity", "  Factor2", "", ""))
+                     c("", "", "Ethnicity", "  Factor2"))
 
     ## cell has \n
 
@@ -557,10 +557,8 @@ test_that("Support for newline characters in all the parts", {
         analyze("BMRKR1", na_str = "asd\nasd") %>%  # \n error
         build_table(DM_trick)
     
-    top_left(tbl) <- c("a", "b\nd\n\n", "c\n\n") # last \n is eaten up, if in the middle error
+    top_left(tbl) <- c("\na", "b\nd\n\n", "c\n\n") # last \n is eaten up, if in the middle error
     main_title(tbl) <- "why not \nalso here\n"
-    # matrix_form(tbl)
-    to_string_matrix2(tbl, hsep = "-", with_spaces = TRUE, print_txt_to_copy = TRUE)
     out <- strsplit(toString(tbl, hsep = "-"), "\\n")[[1]]
     expected <- c(
         "why not ",
@@ -568,12 +566,13 @@ test_that("Support for newline characters in all the parts", {
         "",
         "",
         "---------------------------------",
+        "                                 ",
         "a                                ",
         "b                                ",
         "d                                ",
         "                                 ",
-        "c                            A wo",
-        "                      TWO        ",
+        "                             A wo",
+        "c                     TWO        ",
         "                     words    rd ",
         "---------------------------------",
         "m                                ",
