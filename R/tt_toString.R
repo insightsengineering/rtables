@@ -531,7 +531,9 @@ get_formatted_fnotes <- function(tt) {
     if(lentl == 0) {
         tl <- rep("", nli)
     } else if(lentl > nli) {
-        tl <- paste0(tl, collapse = "\n")
+        tl_tmp <- paste0(tl, collapse = "\n")
+        tl <- rep("", nli)
+        tl[length(tl)] <- tl_tmp
     } else if (lentl < nli) {
         # We want topleft alignment that goes to the bottom!
         tl <- c(rep("", nli - lentl), tl)
