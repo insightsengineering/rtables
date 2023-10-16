@@ -1,6 +1,7 @@
 ## rtables 0.6.4.9003
 ### New Features
 * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+* `ref_group` in column splits will not change the order now.
 
 ### Bug Fixes
 * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.

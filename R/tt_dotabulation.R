@@ -1375,20 +1375,12 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
                 levels(vec)
             else
                 unique(vec)
-
-        if(is.factor(vals)) {
-            ## this sorts the levels
-            vals <- levels(relevel(droplevels(vals), bline))
-        }
     }
     if (!bline %in% vals) {
         stop(paste0(
             'Reference group "', bline, '"', ' was not present in the levels of ', spl_payload(lyt), ' in the data.'
         ))
     }
-    pos <- match(bline, vals)
-    ## same order except ref_group always first
-    vals <- c(bline, vals[-pos])
     spl_child_order(lyt) <- vals
     lyt
 })
