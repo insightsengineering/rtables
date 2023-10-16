@@ -536,7 +536,8 @@ get_formatted_fnotes <- function(tt) {
         span <- rbind(matrix(1, nrow = npad, ncol = ncol(span)), span)
         fnote <- rbind(matrix(list(), nrow = npad, ncol = ncol(body)), fnote)
     } else if (lentl < nli) {
-        tl <- c(tl, rep("", nli - lentl))
+        # We want topleft alignment that goes to the bottom!
+        tl <- c(rep("", nli - lentl), tl)
     }
     list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span),
          footnotes = cbind(list(list()), fnote))
