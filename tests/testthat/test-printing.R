@@ -545,35 +545,20 @@ test_that("row label indentation is kept even if there are newline characters", 
 })
 
 test_that("Support for newline characters in all the parts", {
-    set.seed(1)
-    DM_trick <- DM %>% 
-        mutate(ARM2 = sample(c("TWO\nwords\n", "A wo\n\nrd"),
-                             replace = TRUE, nrow(DM))) # last \n is eaten up
-    levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
-    tbl <- basic_table() %>% 
-        split_rows_by("SEX", split_label = "m\nannaggia\nsda\n",
-                      label_pos = "visible") %>% # last \n bug
-        split_cols_by("ARM2", split_label = "sda") %>% 
-        analyze("BMRKR1", na_str = "asd\nasd") %>%  # \n error
-        build_table(DM_trick)
-    
-    top_left(tbl) <- c("\na", "b\nd\n\n", "c\n\n") # last \n is eaten up, if in the middle error
-    main_title(tbl) <- "why not \nalso here\n"
-    out <- strsplit(toString(tbl, hsep = "-"), "\\n")[[1]]
+    out <- strsplit(toString(tt_for_nl, hsep = "-"), "\\n")[[1]]
     expected <- c(
-        "why not ",
+        "why not",
         "also here",
-        "",
         "",
         "---------------------------------",
         "                                 ",
         "a                                ",
         "b                                ",
         "d                                ",
-        "                                 ",
         "                             A wo",
-        "c                     TWO        ",
-        "                     words    rd ",
+        "                      TWO        ",
+        "c                    words    rd ",
+        "                                 ",
         "---------------------------------",
         "m                                ",
         "annaggia                         ",
@@ -585,12 +570,38 @@ test_that("Support for newline characters in all the parts", {
         "  U                              ",
         "  N                              ",
         "  D                              ",
-        "                                 ",
+        "   {1, 2}                        ",
         "    Mean              asd    asd ",
         "                      asd    asd ",
         "  UNDIFFERENTIATED               ",
         "    Mean              asd    asd ",
-        "                      asd    asd "
+        "                      asd    asd ",
+        "---------------------------------",
+        "",
+        "{1} - a fancy footnote",
+        "crazy",
+        "{2} - ahahha",
+        "---------------------------------",
+        "",
+        "This",
+        "is",
+        "a",
+        "",
+        "weird one",
+        "",
+        "This",
+        "is",
+        "a",
+        "",
+        "weird one"
     )
+    expect_identical(out, expected)
+    
+    # Resolution of footers work with tf_wrap = TRUE
+    out <- strsplit(toString(tt_for_nl, tf_wrap = TRUE, hsep = "-"), "\\n")[[1]]
+    expect_identical(out, expected)
+    
+    # Export_as_txt too
+    out <- strsplit(export_as_txt(tt_for_nl, file = NULL), "\\n")[[1]]
     expect_identical(out, expected)
 })

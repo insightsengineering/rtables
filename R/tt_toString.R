@@ -274,8 +274,28 @@ setMethod("matrix_form", "VTableTree",
                                body_ref_strs)),
                    nrow = nrow(body),
                    ncol = ncol(body))
+    # Solve \n in titles
+    if (any(grepl("\n", all_titles(obj)))) {
+        if (any(grepl("\n", main_title(obj)))) {
+            tmp_title_vec <- unlist(strsplit(all_titles(obj), "\n", fixed = TRUE))
+            main_title(obj) <- tmp_title_vec[1]
+            subtitles(obj) <- tmp_title_vec[-1]
+        } else {
+            subtitles(obj) <- unlist(strsplit(subtitles(obj), "\n", fixed = TRUE))
+        }
+    }
+    
+    # Solve \n in footers
+    if (any(grepl("\n", all_footers(obj)))) {
+        main_footer(obj) <- unlist(strsplit(main_footer(obj), "\n", fixed = TRUE))
+        prov_footer(obj) <- unlist(strsplit(prov_footer(obj), "\n", fixed = TRUE))
+    }
+    
+    # xxx \n in page titles are not working atm (I think)
+    # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
+    ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
+    pag_titles <- page_titles(obj)
 
-    ref_fnotes <- get_formatted_fnotes(obj)
     MatrixPrintForm(strings = body,
                     spans = spans,
                     aligns = aligns,
@@ -291,7 +311,7 @@ setMethod("matrix_form", "VTableTree",
                     has_topleft = TRUE,
                     main_title = main_title(obj),
                     subtitles = subtitles(obj),
-                    page_titles = page_titles(obj),
+                    page_titles = pag_titles,
                     main_footer = main_footer(obj),
                     prov_footer = prov_footer(obj),
                     table_inset = table_inset(obj),
