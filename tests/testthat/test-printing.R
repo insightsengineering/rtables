@@ -602,6 +602,6 @@ test_that("Support for newline characters in all the parts", {
     expect_identical(out, expected)
     
     # Export_as_txt too
-    out <- strsplit(export_as_txt(tt_for_nl, file = NULL), "\\n")[[1]]
+    out <- strsplit(export_as_txt(tt_for_nl, file = NULL, hsep = "-"), "\\n")[[1]]
     expect_identical(out, expected)
 })
