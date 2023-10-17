@@ -1,4 +1,4 @@
-## rtables 0.6.4.9003
+## rtables 0.6.4.9004
 ### New Features
 * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
 
