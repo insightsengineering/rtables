@@ -187,7 +187,6 @@ setMethod("matrix_form", "VTableTree",
                    indent_size = 2) {
 
     stopifnot(is(obj, "VTableTree"))
-
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
     sr <- make_row_df(obj)
@@ -277,19 +276,17 @@ setMethod("matrix_form", "VTableTree",
     # Solve \n in titles
     if (any(grepl("\n", all_titles(obj)))) {
         if (any(grepl("\n", main_title(obj)))) {
-            tmp_title_vec <- unlist(strsplit(all_titles(obj), "\n", fixed = TRUE))
+            tmp_title_vec <- .quick_handle_nl(main_title(obj))
             main_title(obj) <- tmp_title_vec[1]
-            subtitles(obj) <- tmp_title_vec[-1]
+            subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
         } else {
-            subtitles(obj) <- unlist(strsplit(subtitles(obj), "\n", fixed = TRUE))
+            subtitles(obj) <- .quick_handle_nl(subtitles(obj))
         }
     }
     
     # Solve \n in footers
-    if (any(grepl("\n", all_footers(obj)))) {
-        main_footer(obj) <- unlist(strsplit(main_footer(obj), "\n", fixed = TRUE))
-        prov_footer(obj) <- unlist(strsplit(prov_footer(obj), "\n", fixed = TRUE))
-    }
+    main_footer(obj) <- .quick_handle_nl(main_footer(obj))
+    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
     
     # xxx \n in page titles are not working atm (I think)
     # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
@@ -319,6 +316,13 @@ setMethod("matrix_form", "VTableTree",
                     )
 })
 
+.quick_handle_nl <- function(str_v){
+    if (any(grepl("\n", str_v))) {
+        return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
+    } else {
+        return(str_v)
+    }
+}
 
 .resolve_fn_symbol <- function(fn) {
     if(!is(fn, "RefFootnote"))
