@@ -147,7 +147,7 @@ test_that("newline in column names and possibly cell values work", {
     expect_identical(mf_nlheader(matform2),
                      4L)
     expect_identical(matform2$strings[1:4, 1, drop = TRUE],
-                     c("Ethnicity", "  Factor2", "", ""))
+                     c("", "", "Ethnicity", "  Factor2"))
 
     ## cell has \n
 
@@ -542,4 +542,55 @@ test_that("row label indentation is kept even if there are newline characters", 
         toString(mf_b, widths = c(17, 12, 12)),
         "Found newline characters"
     )
+})
+
+test_that("Support for newline characters in all the parts", {
+    set.seed(1)
+    DM_trick <- DM %>% 
+        mutate(ARM2 = sample(c("TWO\nwords\n", "A wo\n\nrd"),
+                             replace = TRUE, nrow(DM))) # last \n is eaten up
+    levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
+    tbl <- basic_table() %>% 
+        split_rows_by("SEX", split_label = "m\nannaggia\nsda\n",
+                      label_pos = "visible") %>% # last \n bug
+        split_cols_by("ARM2", split_label = "sda") %>% 
+        analyze("BMRKR1", na_str = "asd\nasd") %>%  # \n error
+        build_table(DM_trick)
+    
+    top_left(tbl) <- c("\na", "b\nd\n\n", "c\n\n") # last \n is eaten up, if in the middle error
+    main_title(tbl) <- "why not \nalso here\n"
+    out <- strsplit(toString(tbl, hsep = "-"), "\\n")[[1]]
+    expected <- c(
+        "why not ",
+        "also here",
+        "",
+        "",
+        "---------------------------------",
+        "                                 ",
+        "a                                ",
+        "b                                ",
+        "d                                ",
+        "                                 ",
+        "                             A wo",
+        "c                     TWO        ",
+        "                     words    rd ",
+        "---------------------------------",
+        "m                                ",
+        "annaggia                         ",
+        "sda                              ",
+        "  F                              ",
+        "    Mean             5.81    6.29",
+        "  M                              ",
+        "    Mean             6.15    5.21",
+        "  U                              ",
+        "  N                              ",
+        "  D                              ",
+        "                                 ",
+        "    Mean              asd    asd ",
+        "                      asd    asd ",
+        "  UNDIFFERENTIATED               ",
+        "    Mean              asd    asd ",
+        "                      asd    asd "
+    )
+    expect_identical(out, expected)
 })

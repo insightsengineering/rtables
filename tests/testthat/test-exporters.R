@@ -255,6 +255,7 @@ test_that("export_as_rtf works", {
     res <- export_as_rtf(tbl, file = tmpf)
     expect_true(file.exists(tmpf))
 })
+
 # Flextable and docx support ---------------------------------------------------
 test_that("Can create flextable object that works with different styles", {
   analysisfun <- function(x, ...) {
