@@ -1029,7 +1029,7 @@ test_that("cut functions work", {
 
     mf <- matrix_form(tbl)
     expect_identical(mf$strings[2, , drop = TRUE],
-                     c("", rep(ctnames, 3)))
+                     c("counts", rep(ctnames, 3)))
 
     lcm <- basic_table() %>%
         split_cols_by("ARM") %>%
