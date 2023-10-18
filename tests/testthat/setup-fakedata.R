@@ -135,7 +135,7 @@ make_big_lyt <- function() {
 export_fact <- function() {
     tbl2 <- NULL
     function() {
-        if(is.null(tbl2)) {
+        if (is.null(tbl2)) {
             lyt <- basic_table() %>%
                 split_cols_by("ARM") %>%
                 split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
