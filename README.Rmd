@@ -17,8 +17,7 @@ suppressPackageStartupMessages(library(rtables))
 suppressPackageStartupMessages(library(dplyr))
 ```
 
-# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
-
+# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables.png" align="right" height="200" width="200"/></a>
 
 <!-- start badges -->
 [![Check 🛠](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml)
