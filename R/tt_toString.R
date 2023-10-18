@@ -187,7 +187,6 @@ setMethod("matrix_form", "VTableTree",
                    indent_size = 2) {
 
     stopifnot(is(obj, "VTableTree"))
-
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
     sr <- make_row_df(obj)
@@ -274,8 +273,26 @@ setMethod("matrix_form", "VTableTree",
                                body_ref_strs)),
                    nrow = nrow(body),
                    ncol = ncol(body))
+    # Solve \n in titles
+    if (any(grepl("\n", all_titles(obj)))) {
+        if (any(grepl("\n", main_title(obj)))) {
+            tmp_title_vec <- .quick_handle_nl(main_title(obj))
+            main_title(obj) <- tmp_title_vec[1]
+            subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
+        } else {
+            subtitles(obj) <- .quick_handle_nl(subtitles(obj))
+        }
+    }
+    
+    # Solve \n in footers
+    main_footer(obj) <- .quick_handle_nl(main_footer(obj))
+    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
+    
+    # xxx \n in page titles are not working atm (I think)
+    # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
+    ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
+    pag_titles <- page_titles(obj)
 
-    ref_fnotes <- get_formatted_fnotes(obj)
     MatrixPrintForm(strings = body,
                     spans = spans,
                     aligns = aligns,
@@ -291,7 +308,7 @@ setMethod("matrix_form", "VTableTree",
                     has_topleft = TRUE,
                     main_title = main_title(obj),
                     subtitles = subtitles(obj),
-                    page_titles = page_titles(obj),
+                    page_titles = pag_titles,
                     main_footer = main_footer(obj),
                     prov_footer = prov_footer(obj),
                     table_inset = table_inset(obj),
@@ -299,6 +316,13 @@ setMethod("matrix_form", "VTableTree",
                     )
 })
 
+.quick_handle_nl <- function(str_v){
+    if (any(grepl("\n", str_v))) {
+        return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
+    } else {
+        return(str_v)
+    }
+}
 
 .resolve_fn_symbol <- function(fn) {
     if(!is(fn, "RefFootnote"))
