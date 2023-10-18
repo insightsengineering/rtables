@@ -370,7 +370,7 @@ test_that("Pagination works with non-default min_siblings", {
 
     expect_error(
         paginate_table(tt, lpp = 3, min_siblings = 1),
-        "Unable to find any valid pagination between 1 and 1"
+        "Unable to find any valid pagination split between rows 1 and 1"
     )
 })
 
