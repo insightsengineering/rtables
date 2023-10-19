@@ -31,19 +31,19 @@ is a non-trivial nested row structure in \code{tbl}
 \examples{
 o <- options(warn = 0)
 lyt <- basic_table() \%>\%
-    split_cols_by("Species") \%>\%
-    analyze("Sepal.Length")
-    
+  split_cols_by("Species") \%>\%
+  analyze("Sepal.Length")
+
 tbl <- build_table(lyt, iris)
 
 insert_rrow(tbl, rrow("Hello World"))
 insert_rrow(tbl, rrow("Hello World"), at = 2)
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("Species") \%>\%
-    split_rows_by("Species") \%>\%
-    analyze("Sepal.Length")
-    
+  split_cols_by("Species") \%>\%
+  split_rows_by("Species") \%>\%
+  analyze("Sepal.Length")
+
 tbl2 <- build_table(lyt2, iris)
 
 insert_rrow(tbl2, rrow("Hello World"))

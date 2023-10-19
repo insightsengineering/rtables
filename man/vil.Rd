@@ -56,13 +56,15 @@ is undefined and should not be relied upon.
 }
 \examples{
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by("SEX") \%>\%
-    summarize_row_groups(label_fstr = "Overall (N)") \%>\%
-    split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
-    analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_cols_by("SEX") \%>\%
+  summarize_row_groups(label_fstr = "Overall (N)") \%>\%
+  split_rows_by("RACE",
+    split_label = "Ethnicity", labels_var = "ethn_lab",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
+  analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
 vars_in_layout(lyt)
 

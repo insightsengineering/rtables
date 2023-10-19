@@ -75,10 +75,11 @@ available \link{additional_fun_params} that apply here as for \code{afun}.
 
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
 
-lyt <- basic_table() \%>\% split_cols_by("ARM") \%>\%
-    split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
-    summarize_row_groups(label_fstr = "\%s (n)") \%>\%
-    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
+  summarize_row_groups(label_fstr = "\%s (n)") \%>\%
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 lyt
 
 tbl <- build_table(lyt, DM2)
@@ -90,21 +91,25 @@ row_paths_summary(tbl) # summary count is a content table
 ## use a cfun and extra_args to customize summarization
 ## behavior
 sfun <- function(x, labelstr, trim) {
-    in_rows(
-        c(mean(x, trim = trim), trim),
-        .formats = "xx.x (xx.x\%)",
-        .labels = sprintf("\%s (Trimmed mean and trim \%\%)",
-                              labelstr)
+  in_rows(
+    c(mean(x, trim = trim), trim),
+    .formats = "xx.x (xx.x\%)",
+    .labels = sprintf(
+      "\%s (Trimmed mean and trim \%\%)",
+      labelstr
     )
+  )
 }
 
 lyt2 <- basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
-    summarize_row_groups("AGE", cfun = sfun,
-                         extra_args = list(trim = .2)) \%>\%
-    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx") \%>\%
-    append_topleft(c("Country", "  Age"))
+  split_cols_by("ARM") \%>\%
+  split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
+  summarize_row_groups("AGE",
+    cfun = sfun,
+    extra_args = list(trim = .2)
+  ) \%>\%
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx") \%>\%
+  append_topleft(c("Country", "  Age"))
 
 tbl2 <- build_table(lyt2, DM2)
 tbl2

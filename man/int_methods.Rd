@@ -1220,10 +1220,13 @@ iris2 <- iris \%>\%
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
-  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
-          format = "xx.xx")
+  analyze(c("Sepal.Length", "Petal.Width"),
+    afun = list_wrap_x(summary),
+    format = "xx.xx"
+  )
 
 tbl <- build_table(lyt, iris2)
+
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl

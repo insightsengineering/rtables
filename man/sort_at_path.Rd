@@ -87,27 +87,27 @@ should not happen in practice).
 # Function that gives two statistics per table-tree "leaf"
 more_analysis_fnc <- function(x) {
   in_rows(
-      "median" = median(x),
-      "mean" = mean(x),
-      .formats = "xx.x"
+    "median" = median(x),
+    "mean" = mean(x),
+    .formats = "xx.x"
   )
 }
-  
+
 # Main layout of the table
 raw_lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by(
-        "RACE",
-        split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
-    ) \%>\%
-    summarize_row_groups() \%>\%
-    split_rows_by("STRATA1") \%>\%
-    summarize_row_groups() \%>\%
-    analyze("AGE", afun = more_analysis_fnc)
+  split_cols_by("ARM") \%>\%
+  split_rows_by(
+    "RACE",
+    split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  split_rows_by("STRATA1") \%>\%
+  summarize_row_groups() \%>\%
+  analyze("AGE", afun = more_analysis_fnc)
 
 # Creating the table and pruning empty and NAs
 tbl <- build_table(raw_lyt, DM) \%>\%
-    prune_table() 
+  prune_table()
 
 # Peek at the table structure to understand how it is built
 table_structure(tbl)
@@ -117,7 +117,7 @@ table_structure(tbl)
 # is a "ContentRow". In this case, we also base our sorting only on the second column.
 sort_at_path(tbl, c("ASIAN", "STRATA1"), cont_n_onecol(2))
 
-# Custom scoring function that is working on "DataRow"s  
+# Custom scoring function that is working on "DataRow"s
 scorefun <- function(tt) {
   # Here we could use browser()
   sum(unlist(row_values(tt))) # Different accessor function
