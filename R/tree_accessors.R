@@ -195,22 +195,22 @@ setMethod(
 )
 
 .check_if_nest <- function(obj, nested, for_analyze) {
-  if (!nested)
+  if (!nested) {
     FALSE
-  else
+  } else {
     ## can always nest analyze splits (almost? what about colvars noncolvars mixing? prolly ok?)
     for_analyze ||
       ## If its not an analyze split it can't go under an analyze split
       !(is(last_rowsplit(obj), "VAnalyzeSplit") ||
-        is(last_rowsplit(obj), "AnalyzeMultiVars")) ## should this be CompoundSplit?
+        is(last_rowsplit(obj), "AnalyzeMultiVars")) ## should this be CompoundSplit? # nolint
+  }
 }
 #' @rdname int_methods
 setMethod(
   "next_rpos", "PreDataRowLayout",
   function(obj, nested, for_analyze) {
     l <- length(obj)
-    if (length(obj[[l]]) > 0L &&
-      !.check_if_nest(obj, nested, for_analyze)) {
+    if (length(obj[[l]]) > 0L && !.check_if_nest(obj, nested, for_analyze)) {
       l <- l + 1L
     }
     l

@@ -201,7 +201,7 @@ setMethod(
     if (incontent)
       path <- c(path, "@content")
     else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
-    ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root
+    ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root # nolint
       path <- c(path, obj_name(tt))
 
     ret <- list()
@@ -787,7 +787,7 @@ paginate_table <- function(tt,
                            max_width = NULL,
                            verbose = FALSE) {
   if ((non_null_na(lpp) || non_null_na(cpp)) &&
-    (!is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height)))) {
+    (!is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height)))) { # nolint
     pg_lcpp <- page_lcpp(
       page_type = page_type,
       font_family = font_family,

@@ -164,17 +164,20 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
 
   if (length(l) == 0) {
-    if (length(.labels) > 0 ||
-      length(.formats) > 0 ||
-      length(.names) > 0 ||
-      length(.indent_mods) > 0 ||
-      length(.format_na_strs) > 0)
+    if (
+      length(.labels) > 0 ||
+        length(.formats) > 0 ||
+        length(.names) > 0 ||
+        length(.indent_mods) > 0 ||
+        length(.format_na_strs) > 0
+    ) {
       stop(
         "in_rows got 0 rows but length >0 of at least one of ",
         ".labels, .formats, .names, .indent_mods, .format_na_strs. ",
         "Does your analysis/summary function handle the 0 row ",
         "df/length 0 x case?"
       )
+    }
     l2 <- list()
   } else {
     if (is.null(.formats))
@@ -465,8 +468,7 @@ make_afun <- function(fun,
 
     for (var in allvars) {
       ## not missing, i.e. specified in the direct call, takes precedence
-      if (var %in% fun_fnames &&
-        eval(parser_helper(text = paste0("!missing(", var, ")"))))
+      if (var %in% fun_fnames && eval(parser_helper(text = paste0("!missing(", var, ")"))))
         sfunargs[[var]] <- get(var)
       ## not specified in the call, but specified in the constructor
       else if (var %in% names(custargs))
@@ -486,8 +488,7 @@ make_afun <- function(fun,
       stopifnot(all(.stats %in% names(rawvals)))
     else
       .stats <- names(rawvals)
-    if (!is.null(.ungroup_stats) &&
-      !all(.ungroup_stats %in% .stats)) {
+    if (!is.null(.ungroup_stats) && !all(.ungroup_stats %in% .stats)) {
       stop(
         "Stats specified for ungrouping not included in non-null .stats list: ",
         setdiff(.ungroup_stats, .stats)

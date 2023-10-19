@@ -215,8 +215,7 @@ sort_at_path <- function(tt,
   } else {
     scores <- unlist(scores)
   }
-  if (!is.null(dim(scores)) ||
-    length(scores) != length(kids))
+  if (!is.null(dim(scores)) || length(scores) != length(kids))
     stop(
       "Score function does not appear to have return exactly one ",
       "scalar value per child"

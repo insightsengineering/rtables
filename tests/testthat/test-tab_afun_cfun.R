@@ -6,8 +6,10 @@ test_that(".spl_context contains information about the column split", {
   DM_tmp <- DM %>%
     mutate(method = factor("Mean"))
 
-  DM_tmp <- rbind(DM_tmp, DM_tmp %>%
-    mutate(method = factor("SD")))
+  DM_tmp <- rbind(
+    DM_tmp,
+    DM_tmp %>% mutate(method = factor("SD"))
+  )
 
   analysis_fun_fin <- function(x, .spl_context, labelstr = "", ...) {
     # Very smart internal checks for name reconstruction from path
@@ -62,8 +64,7 @@ test_that(".spl_context and afun extra parameters contain information about comb
         stopifnot(all(.spl_context$cur_col_split[[1]] == c("ARM", "COUNTRY")))
       }
 
-      if (grepl("all_X", .spl_context$cur_col_id[[1]]) ||
-        .spl_context$cur_col_id[[1]] == "All Patients 2") {
+      if (grepl("all_X", .spl_context$cur_col_id[[1]]) || .spl_context$cur_col_id[[1]] == "All Patients 2") {
         in_rows("n" = .N_col, .formats = "xx")
       } else {
         # Needed to find the names of columns we need that are not the current one
@@ -281,9 +282,11 @@ context("Content functions (cfun)")
 
 test_that(".alt_df_row appears in cfun but not in afun.", {
   # Adding STRATA2 col to DM for alt_counts_df col split
-  alt_tmp <- DM %>% left_join(ex_adsl %>%
-    mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>%
-    select(ID, STRATA2))
+  alt_tmp <- DM %>% left_join(
+    ex_adsl %>%
+      mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>%
+      select(ID, STRATA2)
+  )
 
   afun_tmp <- function(x, ...) rcell(mean(x), label = "MeAn", format = "xx.x")
   cfun_tmp <- function(x, labelstr,
@@ -299,8 +302,10 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
       stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_df_row))
 
       # Filtered column number of elements correspond to .N_col
-      stopifnot(nrow(alt_tmp %>%
-        filter(eval(.spl_context$cur_col_expr[[1]]))) == .N_col)
+      stopifnot(nrow(
+        alt_tmp %>%
+          filter(eval(.spl_context$cur_col_expr[[1]]))
+      ) == .N_col)
     } else {
       # Checking cur_col_n is the same as .N_col for root and length(x) for split
       stopifnot(identical(.spl_context$cur_col_n, c(.N_col, length(x))))

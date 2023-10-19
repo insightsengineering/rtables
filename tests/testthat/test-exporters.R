@@ -136,8 +136,7 @@ test_that("tsv roundtripping for path_enriched_df", {
     unclass(newdf[1, 2]), # AsIs "class"
     list(as.character(c(
       16,
-      16 / sum(ex_adsl$ARM == "A: Drug X" &
-        ex_adsl$SEX == "M")
+      16 / sum(ex_adsl$ARM == "A: Drug X" & ex_adsl$SEX == "M")
     )))
   )
 })

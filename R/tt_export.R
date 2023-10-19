@@ -353,8 +353,7 @@ export_as_pdf <- function(tt,
                           tf_wrap = TRUE,
                           max_width = NULL,
                           colwidths = propose_column_widths(matrix_form(tt, TRUE)),
-                          ... # passed to paginate_table
-) {
+                          ...) { # passed to paginate_table
   stopifnot(file_ext(file) != ".pdf")
   if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
     stop(
@@ -381,12 +380,15 @@ export_as_pdf <- function(tt,
 
   cur_gpar <- get.gpar()
   if (is.null(lpp)) {
-    lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-      (cur_gpar$cex * cur_gpar$lineheight)) - sum(margins[c(1, 3)]) # bottom, top
+    lpp <- floor(
+      convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) / (cur_gpar$cex * cur_gpar$lineheight)
+    ) - sum(margins[c(1, 3)]) # bottom, top
   }
   if (is.null(cpp)) {
-    cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-      font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi) - sum(margins[c(2, 4)]) # left, right
+    cpp <- floor(
+      convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
+        font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi
+    ) - sum(margins[c(2, 4)]) # left, right
   }
   if (tf_wrap && is.null(max_width))
     max_width <- cpp
@@ -431,12 +433,12 @@ export_as_pdf <- function(tt,
     }
 
     if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) >
-      convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) {
+      convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) { # nolint
       exceeds_height[i] <- TRUE
       warning("height of page ", i, " exceeds the available space")
     }
     if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) >
-      convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) {
+      convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) { # nolint
       exceeds_width[i] <- TRUE
       warning("width of page ", i, " exceeds the available space")
     }
@@ -835,8 +837,7 @@ tt_to_flextable <- function(tt,
   }
 
   # Title lines (after theme for problems with lines)
-  if (titles_as_header &&
-    length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
+  if (titles_as_header && length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
     real_titles <- all_titles(tt)
     real_titles <- real_titles[nzchar(real_titles)]
     flx <- flextable::add_header_lines(flx, values = real_titles, top = TRUE) %>%
@@ -957,8 +958,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
       for (bi in seq_along(bold_manual)) {
         bld_tmp <- bold_manual[[bi]]
         checkmate::assert_list(bld_tmp)
-        if (!all(c("i", "j") %in% names(bld_tmp)) ||
-          !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
+        if (!all(c("i", "j") %in% names(bld_tmp)) || !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
           stop(
             "Found an allowed section for manual bold (", names(bold_manual)[bi],
             ") that was not a named list with i (row) and j (col) integer vectors."

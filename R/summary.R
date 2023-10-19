@@ -409,7 +409,8 @@ setMethod(
 table_structure <- function(x, detail = c("subtable", "row")) {
   detail <- match.arg(detail)
 
-  switch(    detail,
+  switch(
+    detail,
     subtable = treestruct(x),
     row = table_structure_inner(x),
     stop("unsupported level of detail ", detail)

@@ -53,18 +53,16 @@ makefakedat2 <- function(n = 1000) {
   )
   datadf$ethn_label <- c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
   datadf$gend_label <- c(M = "Male", F = "Female")[datadf$SEX]
-  mu <- 5 + (as.integer(factor(datadf$RACE)) +
-    as.integer(factor(datadf$ARM)) +
-    as.integer(factor(datadf$SEX))) / 2
-  datadf$VALUE <- ifelse(datadf$VISIT == "BASELINE",
+  mu <- 5 + (as.integer(factor(datadf$RACE)) + as.integer(factor(datadf$ARM)) + as.integer(factor(datadf$SEX))) / 2
+  datadf$VALUE <- ifelse(
+    datadf$VISIT == "BASELINE",
     5,
     5 + rnorm(n, mu, 4)
   )
   datadf$PCTDIFF <- NA_real_
   seconds <- seq(2, n, by = 2)
-  datadf$PCTDIFF[seq(2, n, by = 2)] <- 100 * (datadf$VALUE[seconds] -
-    datadf$VALUE[seconds - 1]) /
-    datadf$VALUE[seconds - 1]
+  datadf$PCTDIFF[seq(2, n, by = 2)] <- 100 * (datadf$VALUE[seconds] - datadf$VALUE[seconds - 1]) /
+    datadf$VALUE[seconds - 1] # nolint
 
   datadf
 }

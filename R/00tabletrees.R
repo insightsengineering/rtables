@@ -341,8 +341,7 @@ setClass("MultiVarSplit",
   validity = function(object) {
     length(object@payload) >= 1 &&
       all(!is.na(object@payload)) &&
-      (length(object@var_labels) == 0 ||
-        length(object@payload) == length(object@var_labels))
+      (length(object@var_labels) == 0 || length(object@payload) == length(object@var_labels))
   }
 )
 
@@ -1186,9 +1185,7 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
 
   nleaves <- length(leaves)
   snas <- sum(is.na(cnts))
-  if (length(csubs) != nleaves ||
-    length(extras) != nleaves ||
-    length(cnts) != nleaves)
+  if (length(csubs) != nleaves || length(extras) != nleaves || length(cnts) != nleaves)
     stop(
       "Mismatching number of columns indicated by: csubs [",
       length(csubs), "], ",
@@ -1333,16 +1330,13 @@ setClass("LabelRow",
                       indent_mod = 0L,
                       footnotes = list(),
                       table_inset = 0L) {
-  if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) &&
-    !missing(label))
+  if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label))
     name <- label
   vals <- lapply(vals, rcell)
   rlabels <- unique(unlist(lapply(vals, obj_label)))
-  if ((missing(label) || is.null(label) || identical(label, "")) &&
-    sum(nzchar(rlabels)) == 1)
+  if ((missing(label) || is.null(label) || identical(label, "")) && sum(nzchar(rlabels)) == 1)
     label <- rlabels[nzchar(rlabels)]
-  if (missing(cspan) &&
-    !is.null(unlist(lapply(vals, cell_cspan))))
+  if (missing(cspan) && !is.null(unlist(lapply(vals, cell_cspan))))
     cspan <- vapply(vals, cell_cspan, 0L)
 
   check_ok_label(label)
@@ -1433,9 +1427,7 @@ setClass("ElementaryTable",
         ## have different environments so we can't use identical here
         ## all.equal requires the **values within the closures** to be the
         ## same but not the actual enclosing environments.
-        else if (!identical(colinfo, col_info(x),
-          ignore.environment = TRUE
-        ))
+        else if (!identical(colinfo, col_info(x), ignore.environment = TRUE))
           stop(
             "attempted to add child with non-matching, non-empty ",
             "column info to an existing table"
@@ -1601,8 +1593,7 @@ TableTree <- function(kids = list(),
     stop("Got table tree with content table and content position")
   if (no_colinfo(labelrow))
     col_info(labelrow) <- cinfo
-  if ((is.null(cont) || nrow(cont) == 0) &&
-    all(sapply(kids, is, "DataRow"))) {
+  if ((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
     if (!is.na(page_title))
       stop("Got a page title prefix for an Elementary Table")
     ## constructor takes care of recursive format application
@@ -1827,8 +1818,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
       "Referential footnote can only have a single string as its index.",
       " Got char vector of length ", length(index)
     )
-  if (!is.na(symbol) &&
-    (index == "NA" || grepl("[{}]", index)))
+  if (!is.na(symbol) && (index == "NA" || grepl("[{}]", index)))
     stop(
       "The string 'NA' and strings containing '{' or '}' cannot be used as ",
       "referential footnote index symbols. Got string '", index, "'."
@@ -1866,8 +1856,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
   ## it we use that.
   ## NB: we need to be able to override a non-empty label with an empty one
   ## so we can't have "" mean "not given a label" here
-  if ((is.null(label) || is.na(label)) &&
-    !is.null(obj_label(val)))
+  if ((is.null(label) || is.na(label)) && !is.null(obj_label(val)))
     label <- obj_label(val)
   if (!is.list(footnotes))
     footnotes <- lapply(footnotes, RefFootnote)

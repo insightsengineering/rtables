@@ -47,10 +47,13 @@ test_that("Page by splitting works", {
     split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
     summarize_row_groups() %>%
     analyze("AGE", afun = function(x, ...) {
-      in_rows("mean (sd)" = rcell(
-        c(mean(x), sd(x)),
-        format = "xx.x (xx.x)"
-      ), "range" = rcell(range(x), format = "xx.x - xx.x")      )
+      in_rows(
+        "mean (sd)" = rcell(
+          c(mean(x), sd(x)),
+          format = "xx.x (xx.x)"
+        ),
+        "range" = rcell(range(x), format = "xx.x - xx.x")
+      )
     })
 
   tbl2 <- build_table(lyt2, ex_adsl)
@@ -192,27 +195,27 @@ test_that("vertical and horizontal pagination work", {
 
   expect_identical(length(res), 3L)
 
-  expect_identical(tt[, 1:2,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ], res[[1]])
+  expect_identical(
+    tt[, 1:2, keep_titles = TRUE, reindex_refs = FALSE],
+    res[[1]]
+  )
 
   ## this was lpp = 75, but manual line counting suggests that
   ## was a bad test, enforcing an off-by-one error.
   res2 <- paginate_table(tt, lpp = 76, cpp = 45, verbose = TRUE)
   expect_identical(length(res2), 6L)
-  expect_identical(res2[[1]], tt[1:63, 1:2,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ])
-  expect_identical(res2[[2]], tt[1:63, 3:4,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ])
-  expect_identical(res2[[4]], tt[c(38, 57, 64:NROW(tt)), 1:2,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ])
+  expect_identical(
+    res2[[1]],
+    tt[1:63, 1:2, keep_titles = TRUE, reindex_refs = FALSE]
+  )
+  expect_identical(
+    res2[[2]],
+    tt[1:63, 3:4, keep_titles = TRUE, reindex_refs = FALSE]
+  )
+  expect_identical(
+    res2[[4]],
+    tt[c(38, 57, 64:NROW(tt)), 1:2, keep_titles = TRUE, reindex_refs = FALSE]
+  )
 
   expect_identical(
     main_title(tt),
@@ -273,9 +276,9 @@ test_that("vertical and horizontal pagination work", {
     lpp = 25,
     cpp = 40, tf_wrap = FALSE
   )
-  expect_true(all(mapply(function(a, b) identical(dim(a), dim(b)),
-    a = res3a, b = res3b
-  )))
+  expect_true(all(
+    mapply(function(a, b) identical(dim(a), dim(b)), a = res3a, b = res3b)
+  ))
 
   res3c <- paginate_table(tt2, lpp = 29, cpp = 40, tf_wrap = FALSE)
   expect_equal(
@@ -296,10 +299,10 @@ test_that("inset and pagination work together", {
 
   expect_identical(length(res), 3L)
 
-  expect_identical(tt[, 1:2,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ], res[[1]])
+  expect_identical(
+    tt[, 1:2, keep_titles = TRUE, reindex_refs = FALSE],
+    res[[1]]
+  )
 
   expect_identical(
     main_title(tt),
@@ -412,10 +415,10 @@ test_that("Pagination works with section dividers", {
 
   expect_identical(length(ttlst), 2L)
 
-  expect_identical(tt[1:14,
-    keep_titles = TRUE,
-    reindex_refs = FALSE
-  ], ttlst[[1]])
+  expect_identical(
+    tt[1:14, keep_titles = TRUE, reindex_refs = FALSE],
+    ttlst[[1]]
+  )
 
   expect_identical(
     export_as_txt(ttlst[[1]][7:8, keep_titles = TRUE], hsep = "-", paginate = FALSE),

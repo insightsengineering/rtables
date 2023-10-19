@@ -12,9 +12,7 @@ add_analyzed_var <- function(lyt, var, label = var, afun,
   )
   .Deprecated("analyze")
 
-  if (!nested &&
-    (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
-      is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+  if (!nested && (is(last_rowsplit(lyt), "AnalyzeVarSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
     cmpnd_last_rowsplit(lyt, spl)
   } else {
     pos <- next_rpos(lyt, nested)

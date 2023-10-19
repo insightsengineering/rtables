@@ -303,8 +303,7 @@ test_that("make_split_fun works", {
     split_cols_by("SEX") %>%
     analyze("AGE")
 
-  adslsub <- subset(ex_adsl, (ARM == "A: Drug X" & SEX == "F") |
-    (ARM == "B: Placebo" & SEX == "M"))
+  adslsub <- subset(ex_adsl, (ARM == "A: Drug X" & SEX == "F") | (ARM == "B: Placebo" & SEX == "M"))
   tbl2a <- build_table(lyt2a, adslsub)
 
   mysplitfun2 <- make_split_fun(

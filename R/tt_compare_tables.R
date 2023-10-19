@@ -196,10 +196,9 @@ prune_zeros_only <- function(tt) {
 low_obs_pruner <- function(min, type = c("sum", "mean")) {
   type <- match.arg(type)
   function(tt) {
-    if (is(tt, "TableRow") ||
-      ## note the <- in there!!!
-      NROW(ctab <- content_table(tt)) != 1)
+    if (is(tt, "TableRow") || NROW(ctab <- content_table(tt)) != 1) { ## note the <- in there!!!
       return(FALSE) ## only trimming on count content rows
+    }
     ctr <- tree_children(ctab)[[1]]
     vals <- sapply(row_values(ctr), function(v) v[[1]])
     sumvals <- sum(vals)

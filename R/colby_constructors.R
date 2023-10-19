@@ -81,8 +81,7 @@ setMethod(
     ##     return(cmpnd_last_rowsplit(lyt, spl, cmpnd_fun))
     ## }
 
-    if (has_force_pag(spl) && length(lyt) > 0 &&
-      !has_force_pag(lyt[[length(lyt)]]))
+    if (has_force_pag(spl) && length(lyt) > 0 && !has_force_pag(lyt[[length(lyt)]]))
       stop("page_by splits cannot be nested within non-page_by splits",
         call. = FALSE
       )
@@ -98,9 +97,11 @@ setMethod(
     rlyt <- rlayout(lyt)
     addtl <- FALSE
     split_label <- obj_label(spl)
-    if (is(spl, "Split") && ## exclude existing tables that are being tacked in
-      identical(label_position(spl), "topleft") &&
-      length(split_label) == 1 && nzchar(split_label)) {
+    if (
+      is(spl, "Split") && ## exclude existing tables that are being tacked in
+        identical(label_position(spl), "topleft") &&
+        length(split_label) == 1 && nzchar(split_label)
+    ) {
       addtl <- TRUE
       ##        label_position(spl) <- "hidden"
     }
@@ -1141,17 +1142,22 @@ analyze <- function(lyt,
                     section_div = NA_character_) {
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
-  if (is.name(subafun) &&
-    is.function(afun) &&
-    ## this is gross. basically testing
-    ## if the symbol we have corresponds
-    ## in some meaningful way to the function
-    ## we will be calling.
-    identical(mget(as.character(subafun),
-      mode = "function",
-      ifnotfound = list(NULL),
-      inherits = TRUE
-    )[[1]], afun)) {
+  if (
+    is.name(subafun) &&
+      is.function(afun) &&
+      ## this is gross. basically testing
+      ## if the symbol we have corresponds
+      ## in some meaningful way to the function
+      ## we will be calling.
+      identical(
+        mget(
+          as.character(subafun),
+          mode = "function",
+          ifnotfound = list(NULL),
+          inherits = TRUE
+        )[[1]], afun
+      )
+  ) {
     defrowlab <- as.character(subafun)
   } else {
     defrowlab <- var_labels
@@ -1170,9 +1176,7 @@ analyze <- function(lyt,
     section_div = section_div
   )
 
-  if (nested &&
-    (is(last_rowsplit(lyt), "VAnalyzeSplit") ||
-      is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
+  if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
     cmpnd_last_rowsplit(lyt, spl, AnalyzeMultiVars)
   } else {
     ## analysis compounding now done in split_rows
@@ -1273,17 +1277,23 @@ analyze_colvars <- function(lyt, afun,
                             inclNAs = FALSE) {
   if (is.function(afun)) {
     subafun <- substitute(afun)
-    if (is.name(subafun) &&
-      is.function(afun) &&
-      ## this is gross. basically testing
-      ## if the symbol we have corresponds
-      ## in some meaningful way to the function
-      ## we will be calling.
-      identical(mget(as.character(subafun),
-        mode = "function",
-        ifnotfound = list(NULL),
-        inherits = TRUE
-      )[[1]], afun)) {
+    if (
+      is.name(subafun) &&
+        is.function(afun) &&
+        ## this is gross. basically testing
+        ## if the symbol we have corresponds
+        ## in some meaningful way to the function
+        ## we will be calling.
+        identical(
+          mget(
+            as.character(subafun),
+            mode = "function",
+            ifnotfound = list(NULL),
+            inherits = TRUE
+          )[[1]],
+          afun
+        )
+    ) {
       defrowlab <- as.character(subafun)
     } else {
       defrowlab <- ""
@@ -1405,8 +1415,7 @@ setMethod(
            cvar = "",
            extra_args = list()) {
     child_labels <- match.arg(child_labels)
-    if (length(lyt) == 0 ||
-      (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
+    if (length(lyt) == 0 || (length(lyt) == 1 && length(lyt[[1]]) == 0)) {
       ## XXX ignoring indent mod here
       rt <- root_spl(lyt)
       rt <- .add_row_summary(rt,
@@ -1485,8 +1494,7 @@ setMethod(
     content_var(lyt) <- cvar
     ## obj_format(lyt) = cformat
     content_format(lyt) <- cformat
-    if (!identical(child_labels, "default") &&
-      !identical(child_labels, label_kids(lyt))) {
+    if (!identical(child_labels, "default") && !identical(child_labels, label_kids(lyt))) {
       label_kids(lyt) <- child_labels
     }
     content_na_str <- cna_str
@@ -1653,8 +1661,7 @@ summarize_row_groups <- function(lyt,
                                  indent_mod = 0L,
                                  extra_args = list()) {
   if (is.null(cfun)) {
-    if (is.character(format) &&
-      length(gregexpr("xx(\\.x*){0,1}", format)[[1]]) == 1) {
+    if (is.character(format) && length(gregexpr("xx(\\.x*){0,1}", format)[[1]]) == 1) {
       cfun <- .count_raw_constr(var, format, label_fstr)
     } else {
       cfun <- .count_wpcts_constr(var, format, label_fstr)
@@ -1781,8 +1788,7 @@ setMethod(
     cfun <- spl_cutfun(spl)
     cuts <- cfun(varvec)
     cutlabels <- spl_cutlabelfun(spl)(cuts)
-    if (length(cutlabels) != length(cuts) - 1 &&
-      !is.null(names(cuts))) {
+    if (length(cutlabels) != length(cuts) - 1 && !is.null(names(cuts))) {
       cutlabels <- names(cuts)[-1]
     }
 

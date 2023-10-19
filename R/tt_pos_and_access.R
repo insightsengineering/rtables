@@ -565,8 +565,7 @@ setMethod(
             if (counter %in% i) {
               nxtval <- value[[1]]
               if (is(nxtval, class(curkid))) {
-                if (no_colinfo(nxtval) &&
-                  length(row_values(nxtval)) == ncol(x)) {
+                if (no_colinfo(nxtval) && length(row_values(nxtval)) == ncol(x)) {
                   col_info(nxtval) <- col_info(x)
                 }
                 stopifnot(identical(col_info(x), col_info(nxtval)))
@@ -721,9 +720,7 @@ path_to_regex <- function(path) {
     rowdf <- make_col_df(tt)
   else
     rowdf <- make_row_df(tt)
-  if (length(path) == 0 ||
-    identical(path, "*") ||
-    identical(path, "root"))
+  if (length(path) == 0 || identical(path, "*") || identical(path, "root"))
     return(seq(1, nrow(rowdf)))
 
   paths <- rowdf$path
@@ -738,9 +735,7 @@ path_to_regex <- function(path) {
     )
 
   idxdiffs <- diff(allmatchs)
-  if (!distinct_ok &&
-    length(idxdiffs) > 0 &&
-    any(idxdiffs > 1)) {
+  if (!distinct_ok && length(idxdiffs) > 0 && any(idxdiffs > 1)) {
     firstnon <- min(which(idxdiffs > 1))
     ## its firstnon here because we would want firstnon-1 but
     ## the diffs are actually shifted 1 so they cancel out
@@ -951,9 +946,7 @@ subset_by_rownum <- function(tt,
       }
       kids <- kids[sapply(kids, function(x) NROW(x) > 0)]
     }
-    if (length(kids) == 0 &&
-      NROW(content_table(x)) == 0 &&
-      !labelrow_visible(x)) {
+    if (length(kids) == 0 && NROW(content_table(x)) == 0 && !labelrow_visible(x)) {
       return(valifnone)
     } else {
       tree_children(x) <- kids

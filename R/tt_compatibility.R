@@ -100,8 +100,7 @@ hrows_to_colinfo <- function(rows) {
   unqvals <- lapply(vals, unique)
   formats <- lapply(rows, obj_format)
   counts <- NULL
-  if (formats[nr] == "(N=xx)" ||
-    all(sapply(row_cells(rows[[nr]]), obj_format) == "(N=xx)")) { ## count row
+  if (formats[nr] == "(N=xx)" || all(sapply(row_cells(rows[[nr]]), obj_format) == "(N=xx)")) { ## count row
     counts <- vals[[nr]]
     vals <- vals[-nr]
     cspans <- cspans[-nr]
@@ -394,8 +393,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 
   firstcols <- col_info(x[[1]])
   i <- 1
-  while (no_colinfo(firstcols) &&
-    i <= length(x)) {
+  while (no_colinfo(firstcols) && i <= length(x)) {
     firstcols <- col_info(x[[i]])
     i <- i + 1
   }
@@ -750,8 +748,7 @@ setMethod(
   function(x, cinfo, .list) {
     stopifnot(are(.list, class(x)))
     ##   chk_cbindable(x,y)
-    if (nrow(x) == 0 &&
-      all(vapply(.list, nrow, 1L) == 0)) {
+    if (nrow(x) == 0 && all(vapply(.list, nrow, 1L) == 0)) {
       col_info(x) <- cinfo
       return(x) ## this needs testing... I was right, it did #136
     }
@@ -814,10 +811,12 @@ setMethod(
     fullvy <- vy <- row_cells(xlst[[i]]) # nolint
     fullcspy <- cspy <- row_cspans(xlst[[i]]) # nolint
 
-    if (i > 1 &&
-      identical(rawvalues(vy[[1]]), rawvalues(lastval)) &&
-      ##  cspy[1] == lastspn &&
-      lastspn > 1) {
+    if (
+      i > 1 &&
+        identical(rawvalues(vy[[1]]), rawvalues(lastval)) &&
+        ##  cspy[1] == lastspn &&
+        lastspn > 1
+    ) {
       vy <- vy[-1]
       cspans[strt - 1L] <- lastspn + cspy[1]
       cspy <- cspy[-1]
@@ -916,8 +915,7 @@ chk_compat_cinfos <- function(tt1, tt2) {
     )
   }
 
-  if (any(nzchar(top_left(ci1))) && any(nzchar(top_left(ci2))) &&
-    !identical(top_left(ci1), top_left(ci2))) {
+  if (any(nzchar(top_left(ci1))) && any(nzchar(top_left(ci2))) && !identical(top_left(ci1), top_left(ci2))) {
     stop(
       "Top-left materials not compatible: Got non-empty, non-matching ",
       "top-left materials. Clear them using top_left(x)<-character() ",
@@ -1020,8 +1018,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
   totnr <- nrow(tt)
   endpos <- pos + totnr
   atend <- !islab && endpos == at - 1
-  if (at == pos + 1  &&
-    islab) {
+  if (at == pos + 1  && islab) {
     if (labelrow_visible(tt))
       stop("Inserting a label row at a position that already has a label row is not currently supported")
     tt_labelrow(tt) <- row
@@ -1101,8 +1098,7 @@ setMethod(
     contpos <- pos + contnr
     islab <- is(row, "LabelRow")
     ## this will NOT insert it as
-    if ((contnr > 0 || islab) &&
-      contpos > at) {
+    if ((contnr > 0 || islab) && contpos > at) {
       content_table(tt) <- recurse_insert(ctab, row, at, pos, TRUE)
       return(tt)
     }

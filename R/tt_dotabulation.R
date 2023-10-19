@@ -360,13 +360,15 @@ gen_rowvalues <- function(dfpart,
   ## default row labels
   ## this is guaranteed to be a RowsVerticalSection object.
   rv1col <- rawvals[[maxind]]
-  if (!is(rv1col, "RowsVerticalSection"))
   ## nocov start
+  if (!is(rv1col, "RowsVerticalSection")) {
     stop(
       "gen_rowvalues appears to have generated something that was not ",
       "a RowsVerticalSection object. Please contact the maintainer."
     )
+  }
   # nocov end
+
   labels <- value_labels(rv1col)
 
   ncrows <- max(unqlens)
@@ -597,7 +599,7 @@ setMethod(
            cinfo,
            baselines,
            spl_context,
-           nsibs = 0  ) {
+           nsibs = 0) {
     spvis <- labelrow_visible(spl)
     if (is.na(spvis))
       spvis <- nsibs > 0
@@ -643,8 +645,7 @@ setMethod(
            have_controws,
            make_lrow, ## used here
            spl_context,
-           ... ## all passed directly down to VAnalyzeSplit method
-  ) {
+           ...) { ## all passed directly down to VAnalyzeSplit method
     avspls <- spl_payload(spl)
 
     nspl <- length(avspls)
@@ -664,9 +665,7 @@ setMethod(
 
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
-    if (!identical(make_lrow, FALSE) &&
-      !have_controws &&
-      length(kids) == 1) {
+    if (!identical(make_lrow, FALSE) && !have_controws && length(kids) == 1) {
       ## we only analyzed one var so
       ## we don't need an extra wrapper table
       ## in the structure
@@ -681,8 +680,7 @@ setMethod(
 
     nms <- vapply(kids, obj_name, "")
     labs <- vapply(kids, obj_label, "")
-    if (length(unique(nms)) != length(nms) &&
-      length(unique(nms)) != length(nms)) {
+    if (length(unique(nms)) != length(nms) && length(unique(nms)) != length(nms)) {
       warning("Non-unique sibling analysis table names. Using Labels ",
         "instead. Use the table_names argument to analyze to avoid ",
         "this when analyzing the same variable multiple times.",
@@ -837,9 +835,7 @@ setMethod(
       # in the values of the factor when is all only NAs
       is_all_na <- all(is.na(alt_df[[spl_payload(spl)]]))
 
-      if (!all(names(dataspl) %in% names(alt_dfpart)) ||
-        length(alt_dfpart) != length(dataspl) ||
-        is_all_na) {
+      if (!all(names(dataspl) %in% names(alt_dfpart)) || length(alt_dfpart) != length(dataspl) || is_all_na) {
         alt_df_spl_vals <- unique(alt_df[[spl_payload(spl)]])
         end_part <- ""
 
@@ -1286,12 +1282,9 @@ build_table <- function(lyt, df,
     )
   })
   kids <- kids[!sapply(kids, is.null)]
-  if (length(kids) > 0)
-    names(kids) <- sapply(kids, obj_name)
+  if (length(kids) > 0) names(kids) <- sapply(kids, obj_name)
 
-  if (nrow(ctab) == 0L &&
-    length(kids) == 1L &&
-    is(kids[[1]], "VTableTree")) {
+  if (nrow(ctab) == 0L && length(kids) == 1L && is(kids[[1]], "VTableTree")) {
     tab <- kids[[1]]
     main_title(tab) <- main_title(lyt)
     subtitles(tab) <- subtitles(lyt)
@@ -1382,8 +1375,7 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
     lblvec <- df[[lblvar]]
     tab <- table(varvec, lblvec)
 
-    if (any(rowSums(tab > 0) > 1) ||
-      any(colSums(tab > 0) > 1))
+    if (any(rowSums(tab > 0) > 1) || any(colSums(tab > 0) > 1))
       stop(sprintf(
         paste(
           "There does not appear to be a 1-1",
@@ -1427,8 +1419,7 @@ fix_split_vars_inner <- function(lyt, df, char_ok) {
   varspls <- allspls[sapply(allspls, is, "VarLevelSplit")]
   unqvarinds <- !duplicated(sapply(varspls, spl_payload))
   unqvarspls <- varspls[unqvarinds]
-  for (spl in unqvarspls)
-    df <- fix_one_split_var(spl, df, char_ok = char_ok)
+  for (spl in unqvarspls) df <- fix_one_split_var(spl, df, char_ok = char_ok)
 
   df
 }
@@ -1494,8 +1485,7 @@ setMethod(
   "set_def_child_ord", "VarLevWBaselineSplit",
   function(lyt, df) {
     bline <- spl_ref_group(lyt)
-    if (!is.null(spl_child_order(lyt)) &&
-      match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
+    if (!is.null(spl_child_order(lyt)) && match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
       return(lyt)
 
     if (!is.null(split_fun(lyt))) {
@@ -1620,8 +1610,7 @@ setMethod(
     if (len == 0)
       return(lyt)
     lastspl <- lyt[[len]]
-    if (!(is(lastspl, "VAnalyzeSplit") ||
-      is(lastspl, "AnalyzeMultivar")))
+    if (!(is(lastspl, "VAnalyzeSplit") || is(lastspl, "AnalyzeMultivar")))
       return(lyt)
 
     if (is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl))) {
@@ -1867,18 +1856,24 @@ qtable_layout <- function(data,
   subafun <- substitute(afun)
   if (!is.null(.default_rlabel)) {
     dflt_row_lbl <- .default_rlabel
-  } else if (is.name(subafun) &&
-    is.function(afun) &&
-    ## this is gross. basically testing
-    ## if the symbol we have corresponds
-    ## in some meaningful way to the function
-    ## we will be calling.
-    identical(mget(as.character(subafun),
-      mode = "function",
-      envir = parent.frame(1),
-      ifnotfound = list(NULL),
-      inherits = TRUE
-    )[[1]], afun)) {
+  } else if (
+    is.name(subafun) &&
+      is.function(afun) &&
+      ## this is gross. basically testing
+      ## if the symbol we have corresponds
+      ## in some meaningful way to the function
+      ## we will be calling.
+      identical(
+        mget(
+          as.character(subafun),
+          mode = "function",
+          envir = parent.frame(1),
+          ifnotfound = list(NULL),
+          inherits = TRUE
+        )[[1]],
+        afun
+      )
+  ) {
     dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
   } else {
     dflt_row_lbl <- if (is.null(avar)) "count" else avar
@@ -1893,8 +1888,7 @@ qtable_layout <- function(data,
   multirow <- is.list(fakeres) || is(fakeres, "RowsVerticalSection") || summarize_groups
   ## this is before we plug in the default so if not specified by the user
   ## explicitly, row_labels is NULL at this point.
-  if (!is.null(row_labels) &&
-    length(row_labels) != n_cells_res(fakeres))
+  if (!is.null(row_labels) && length(row_labels) != n_cells_res(fakeres))
     stop(
       "Length of row_labels (",
       length(row_labels),
@@ -1915,8 +1909,7 @@ qtable_layout <- function(data,
     show_colcounts = show_colcounts
   )
 
-  for (var in col_vars)
-    lyt <- split_cols_by(lyt, var)
+  for (var in col_vars) lyt <- split_cols_by(lyt, var)
 
   for (var in head(row_vars, -1)) {
     lyt <- split_rows_by(lyt, var, split_fun = if (drop_levels) drop_split_levels else NULL)
@@ -1964,18 +1957,19 @@ qtable <- function(data,
                    ...) {
   ## this involves substitution so it needs to appear in both functions. Gross but true.
   subafun <- substitute(afun)
-  if (is.name(subafun) &&
-    is.function(afun) &&
-    ## this is gross. basically testing
-    ## if the symbol we have corresponds
-    ## in some meaningful way to the function
-    ## we will be calling.
-    identical(mget(as.character(subafun),
-      mode = "function",
-      envir = parent.frame(1),
-      ifnotfound = list(NULL),
-      inherits = TRUE
-    )[[1]], afun)) {
+  if (
+    is.name(subafun) && is.function(afun) &&
+      ## this is gross. basically testing
+      ## if the symbol we have corresponds
+      ## in some meaningful way to the function
+      ## we will be calling.
+      identical(
+        mget(
+          as.character(subafun), mode = "function", envir = parent.frame(1), ifnotfound = list(NULL), inherits = TRUE
+        )[[1]],
+        afun
+      )
+  ) {
     dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
   } else {
     dflt_row_lbl <- if (is.null(avar)) "count" else avar

@@ -337,8 +337,7 @@ do_split <- function(spl,
   ret <- .fixupvals(ret)
   ## we didn't put this in .fixupvals because that get called withint he split functions
   ## created by make_split_fun and its not clear this check should be happening then.
-  if (has_force_pag(spl) && ## this means it's page_by=TRUE
-    length(ret$datasplit) == 0) {
+  if (has_force_pag(spl) && length(ret$datasplit) == 0) { ## this means it's page_by=TRUE
     stop(
       "Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: ",
       class(spl), " (", payloadmsg(spl), ")\n",
@@ -682,10 +681,7 @@ setMethod(
         labfact <- is.factor(df[[vlabelname]])
         lablevs <- if (labfact) levels(df[[vlabelname]]) else NULL
         labels <- sapply(vals, function(v) {
-          vlabel <- unique(df[varvec == v,
-            vlabelname,
-            drop = TRUE
-          ])
+          vlabel <- unique(df[varvec == v, vlabelname, drop = TRUE])
           ## TODO remove this once 1-to-1 value-label map is enforced
           ## elsewhere.
           stopifnot(length(vlabel) < 2)
@@ -1124,8 +1120,7 @@ add_combo_levels <- function(combosdf,
         stopifnot(all(lcombo %in% c(ret$labels, ret$vals)))
         subdf <- do.call(
           rbind,
-          ret$datasplit[names(ret$datasplit) %in% lcombo |
-            ret$vals %in% lcombo]
+          ret$datasplit[names(ret$datasplit) %in% lcombo | ret$vals %in% lcombo]
         )
       }
       ret <- .add_combo_part_info(

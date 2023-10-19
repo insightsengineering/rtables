@@ -431,8 +431,7 @@ test_that("label_at_path works", {
   newthangalangs <- paste(orig_labs, "redux")
 
   tab7 <- tab
-  for (i in seq_along(orig_labs))
-    label_at_path(tab7, rps[[i]]) <- newthangalangs[i]
+  for (i in seq_along(orig_labs)) label_at_path(tab7, rps[[i]]) <- newthangalangs[i]
 
   expect_identical(
     newthangalangs,
