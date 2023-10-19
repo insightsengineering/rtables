@@ -30,4 +30,4 @@ jobs:
     name: CRAN Status Monitor 📺
     uses: insightsengineering/r.pkg.template/.github/workflows/cran-status.yaml@main
     with:
-      issue-assignees: "shajoezhu,Melkiades,edelarua,gmbecker,ayogasekaram"
+      issue-assignees: "shajoezhu,Melkiades,edelarua,ayogasekaram"
