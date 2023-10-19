@@ -1,7 +1,6 @@
 context("Exporters")
 
 test_that("export_as_txt works with and without pagination", {
-
   lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -11,11 +10,15 @@ test_that("export_as_txt works with and without pagination", {
   tmptxtf <- tempfile()
   export_as_txt(tbl, file = tmptxtf, paginate = TRUE, lpp = 8, verbose = TRUE)
   txtlns <- readLines(tmptxtf)
-  expect_identical(grep("\\\\s\\\\n", txtlns),
-    c(9L, 17L))
+  expect_identical(
+    grep("\\\\s\\\\n", txtlns),
+    c(9L, 17L)
+  )
 
-  expect_identical(toString(tbl),
-    export_as_txt(tbl, file = NULL, paginate = FALSE))
+  expect_identical(
+    toString(tbl),
+    export_as_txt(tbl, file = NULL, paginate = FALSE)
+  )
 })
 
 test_that("export_as_txt works with wrapping", {
@@ -30,7 +33,8 @@ test_that("export_as_txt works with wrapping", {
     lpp = 150,
     colwidths = clw,
     tf_wrap = TRUE,
-    max_width = 20, cpp = 80, verbose = TRUE)
+    max_width = 20, cpp = 80, verbose = TRUE
+  )
   txtlns1 <- readLines(tmptxtf1)
   pagepos1 <- grep("\\\\s\\\\n", txtlns1)
   expect_identical(pagepos1, 30L) ## c(30L, 58L))
@@ -43,7 +47,8 @@ test_that("export_as_txt works with wrapping", {
     lpp = NULL,
     colwidths = clw,
     tf_wrap = TRUE,
-    max_width = 20, cpp = 80)
+    max_width = 20, cpp = 80
+  )
 
   txtlns1b <- readLines(tmptxtf1b)
   expect_identical(txtlns1, txtlns1b)
@@ -60,7 +65,8 @@ test_that("export_as_txt works with wrapping", {
     lpp = lpp_tmp,
     colwidths = clw,
     tf_wrap = FALSE,
-    max_width = 20, verbose = TRUE))
+    max_width = 20, verbose = TRUE
+  ))
   txtlns2 <- readLines(tmptxtf2)
   pagepos2 <- grep("\\\\s\\\\n", txtlns2)
   expect_identical(pagepos2, 18L) ## c(26L, 50L))
@@ -72,14 +78,16 @@ test_that("export_as_txt works with wrapping", {
     lpp = lpp_tmp,
     colwidths = clw,
     tf_wrap = TRUE,
-    max_width = 20, verbose = TRUE))
+    max_width = 20, verbose = TRUE
+  ))
   export_as_txt(tt_for_wrap,
     file = tmptxtf2b,
     paginate = TRUE,
     lpp = lpp_tmp,
     colwidths = clw,
     tf_wrap = TRUE,
-    max_width = 40, verbose = TRUE)
+    max_width = 40, verbose = TRUE
+  )
   txtlns2b <- readLines(tmptxtf2b)
   pagepos2b <- grep("\\\\s\\\\n", txtlns2b)
   expect_identical(pagepos2b, c(16L, 33L, 49L)) ## 16 because we dont' get our first pick of pagination spots anymore
@@ -95,7 +103,8 @@ test_that("export_as_txt works with wrapping", {
     colwidths = clw,
     tf_wrap = TRUE,
     max_width = 20,
-    cpp = 80))
+    cpp = 80
+  ))
   export_as_txt(tt_for_wrap,
     file = tmptxtf3,
     paginate = TRUE,
@@ -103,7 +112,8 @@ test_that("export_as_txt works with wrapping", {
     colwidths = clw,
     tf_wrap = TRUE,
     max_width = 40,
-    cpp = 80, verbose = TRUE)
+    cpp = 80, verbose = TRUE
+  )
 
   txtlns3 <- readLines(tmptxtf3)
   pagepos3 <- grep("\\\\s\\\\n", txtlns3)
@@ -111,7 +121,6 @@ test_that("export_as_txt works with wrapping", {
 })
 
 test_that("tsv roundtripping for path_enriched_df", {
-
   tbl2 <- tt_to_export()
 
   df <- path_enriched_df(tbl2)
@@ -123,28 +132,34 @@ test_that("tsv roundtripping for path_enriched_df", {
   newdf <- import_from_tsv(tmptsv)
 
   expect_true(all(sapply(newdf, is.list)))
-  expect_equal(unclass(newdf[1, 2]), # AsIs "class"
-    list(as.character(c(16,
+  expect_equal(
+    unclass(newdf[1, 2]), # AsIs "class"
+    list(as.character(c(
+      16,
       16 / sum(ex_adsl$ARM == "A: Drug X" &
-        ex_adsl$SEX == "M")))))
+        ex_adsl$SEX == "M")
+    )))
+  )
 })
 
 test_that("export_as_pdf works", {
-
   tbl <- tt_to_export()
   tmpf <- tempfile(fileext = ".pdf")
 
-  expect_warning(export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
-    "width of page 1 exceeds the available space")
+  expect_warning(
+    export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
+    "width of page 1 exceeds the available space"
+  )
   expect_true(file.exists(tmpf))
   file.remove(tmpf)
-  expect_warning(export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
-    "height of page 1 exceeds the available space")
+  expect_warning(
+    export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
+    "height of page 1 exceeds the available space"
+  )
 
   res <- export_as_pdf(tbl, file = tmpf)
 
   expect_equal(res$npages, 3)
-
 })
 
 # test_that("exporting pdfs gives the correct values", {
@@ -189,7 +204,6 @@ test_that("exporting pdf does the inset", {
 
 
 test_that("as_html smoke test", {
-
   tmpf <- tempfile(fileext = ".html")
 
   tbl <- tt_to_export()
@@ -201,11 +215,12 @@ test_that("as_html smoke test", {
 })
 
 test_that("as_html Viewer with newline test", {
-
   tmpf <- tempfile(fileext = ".html")
 
-  colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
-    function(x) rcell(sd(x), format = "xx.x"))
+  colfuns <- list(
+    function(x) rcell(mean(x), format = "xx.x"),
+    function(x) rcell(sd(x), format = "xx.x")
+  )
   varlabs <- c("Mean Age", "SD\nLine Break!!! \nAge")
 
   lyt <- basic_table() %>%
@@ -235,7 +250,6 @@ test_that("as_html Viewer with newline test", {
 
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
-
   my_table <- basic_table() %>%
     split_rows_by("Species") %>%
     analyze("Petal.Length") %>%
@@ -245,12 +259,13 @@ test_that("path_enriched_df works for tables with a column that has all length 1
 })
 
 test_that("export_as_rtf works", {
-
   tbl <- tt_to_export()
   tmpf <- tempfile(fileext = ".rtf")
 
-  expect_error(export_as_rtf(tbl, file = tmpf, landscape = TRUE, margins = c(2, 2, 2, 2), colwidths = 2),
-    "non-null colwidths argument")
+  expect_error(
+    export_as_rtf(tbl, file = tmpf, landscape = TRUE, margins = c(2, 2, 2, 2), colwidths = 2),
+    "non-null colwidths argument"
+  )
 
   res <- export_as_rtf(tbl, file = tmpf)
   expect_true(file.exists(tmpf))

@@ -3,14 +3,14 @@ context("Indent modifiers")
 test_that("indent modifiers propogated from analyze calls properly", {
   lyt <- basic_table() %>%
     analyze("Sepal.Width", afun = mean, show_labels = "visible") %>%
-    analyze("Sepal.Width", afun = median, show_labels = "hidden", indent_mod = 2L,
-      table_names = "SecondAge")
+    analyze("Sepal.Width",
+      afun = median, show_labels = "hidden", indent_mod = 2L,
+      table_names = "SecondAge"
+    )
   tab <- build_table(lyt, iris)
   expect_equal(rtables:::indent_mod(tree_children(tab)[[2]]), 2L)
 
   expect_equal(make_row_df(tab)$indent, c(0, 1, 2))
-
-
 })
 
 
@@ -20,7 +20,8 @@ test_that("indents are correct in make_row_df", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label") %>%
+      labels_var = "fac2_label"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -29,16 +30,22 @@ test_that("indents are correct in make_row_df", {
 
   t1 <- build_table(l1, rawdat)
   pgdf1 <- make_row_df(t1)
-  expect_identical(rep(c(0, 1, 2, 2, 1, 2, 2), 2),
-    pgdf1$indent)
+  expect_identical(
+    rep(c(0, 1, 2, 2, 1, 2, 2), 2),
+    pgdf1$indent
+  )
 
-  l2 <- l1 %>% analyze("AGE", var_labels = "Age Analysis Redux", table_names = "AgeRedux",
-    afun = range, format = "xx - xx")
+  l2 <- l1 %>% analyze("AGE",
+    var_labels = "Age Analysis Redux", table_names = "AgeRedux",
+    afun = range, format = "xx - xx"
+  )
 
   t2 <- build_table(l2, rawdat)
   pgdf2 <- make_row_df(t2)
-  expect_identical(rep(c(0, 1, 2, 3, 3, 2, 3, 1, 2, 3, 3, 2, 3), 2),
-    pgdf2$indent)
+  expect_identical(
+    rep(c(0, 1, 2, 3, 3, 2, 3, 1, 2, 3, 3, 2, 3), 2),
+    pgdf2$indent
+  )
 
 
   l3 <- basic_table() %>%
@@ -47,7 +54,8 @@ test_that("indents are correct in make_row_df", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      indent_mod = 0) %>%
+      indent_mod = 0
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -57,8 +65,10 @@ test_that("indents are correct in make_row_df", {
 
   t3 <- build_table(l3, rawdat)
   pgdf3 <- make_row_df(t3)
-  expect_identical(rep(c(0, 1, 1, 1, 1, 1, 1), 2),
-    pgdf3$indent)
+  expect_identical(
+    rep(c(0, 1, 1, 1, 1, 1, 1), 2),
+    pgdf3$indent
+  )
 
   l4 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
@@ -66,7 +76,8 @@ test_that("indents are correct in make_row_df", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      indent_mod = -1) %>%
+      indent_mod = -1
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -75,8 +86,10 @@ test_that("indents are correct in make_row_df", {
     )
   t4 <- build_table(l4, rawdat)
   pagdf4 <- make_row_df(t4)
-  expect_identical(rep(c(0, 0, 2, 2, 0, 2, 2), 2),
-    pagdf4$indent)
+  expect_identical(
+    rep(c(0, 0, 2, 2, 0, 2, 2), 2),
+    pagdf4$indent
+  )
 
   l5 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2) %>%
@@ -84,7 +97,8 @@ test_that("indents are correct in make_row_df", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      indent_mod = -2) %>%
+      indent_mod = -2
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -93,17 +107,22 @@ test_that("indents are correct in make_row_df", {
     )
   t5 <- build_table(l5, rawdat)
   pgdf5 <- make_row_df(t5)
-  expect_identical(rep(c(2, 1, 3, 3, 1, 3, 3), 2),
-    pgdf5$indent)
+  expect_identical(
+    rep(c(2, 1, 3, 3, 1, 3, 3), 2),
+    pgdf5$indent
+  )
 
   l6 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 0,
-      label_pos = "visible") %>%
+    split_rows_by("RACE", "Ethnicity",
+      labels_var = "ethn_label", indent_mod = 0,
+      label_pos = "visible"
+    ) %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      indent_mod = 0) %>%
+      indent_mod = 0
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -112,8 +131,10 @@ test_that("indents are correct in make_row_df", {
     )
   t6 <- build_table(l6, rawdat)
   pgdf6 <- make_row_df(t6)
-  expect_identical(c(0, rep(c(1, 2, 3, 3, 2, 3, 3), 2)),
-    pgdf6$indent)
+  expect_identical(
+    c(0, rep(c(1, 2, 3, 3, 2, 3, 3), 2)),
+    pgdf6$indent
+  )
 
 
 
@@ -122,13 +143,16 @@ test_that("indents are correct in make_row_df", {
   ## values are different.
 
   l7 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2,
-      label_pos = "visible") %>%
+    split_rows_by("RACE", "Ethnicity",
+      labels_var = "ethn_label", indent_mod = 2,
+      label_pos = "visible"
+    ) %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)", indent_mod = -1) %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      indent_mod = 0) %>%
+      indent_mod = 0
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -137,13 +161,13 @@ test_that("indents are correct in make_row_df", {
     )
   t7 <- build_table(l7, rawdat)
   pgdf7 <- make_row_df(t7)
-  expect_identical(c(2, rep(c(1, 3, 4, 4, 3, 4, 4), 2)),
-    pgdf7$indent)
+  expect_identical(
+    c(2, rep(c(1, 3, 4, 4, 3, 4, 4), 2)),
+    pgdf7$indent
+  )
 })
 
 test_that("getters and setters work", {
-
-
   t0 <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
@@ -172,26 +196,25 @@ test_that("getters and setters work", {
   print(rvs)
   sink(NULL)
 
-  expect_equal(c(2, 3, -1),
-    as.numeric(substr(outputstr2[4:6], 35, 36)))
+  expect_equal(
+    c(2, 3, -1),
+    as.numeric(substr(outputstr2[4:6], 35, 36))
+  )
 
-  expect_equal(indent_mod(rvs),
-    c(hi = 2, lo = 3, med = -1))
+  expect_equal(
+    indent_mod(rvs),
+    c(hi = 2, lo = 3, med = -1)
+  )
 
   spl <- VarLevelSplit("age", "myagesplit")
   expect_equal(indent_mod(spl), 0)
   indent_mod(spl) <- 3
   expect_identical(indent_mod(spl), 3L) ## this tests implicit conversion
-
-
-
 })
 
 
 
 test_that("clear_indent_mods works as desired", {
-
-
   lytm <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary", indent_mod = 1L) %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
@@ -206,8 +229,8 @@ test_that("clear_indent_mods works as desired", {
     analyze("AGE") %>%
     build_table(ex_adae)
 
-  expect_identical(matrix_form(clear_indent_mods(tm)),
-    matrix_form(t0))
-
-
+  expect_identical(
+    matrix_form(clear_indent_mods(tm)),
+    matrix_form(t0)
+  )
 })

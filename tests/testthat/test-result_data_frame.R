@@ -2,7 +2,6 @@ context("Result Data Frames")
 
 
 test_that("Result Data Frame generation works v0", {
-
   ## change here (only) when v0 is crystalized (no longer experimental)
   spec_version <- "v0_experimental"
   lyt <- make_big_lyt()
@@ -10,14 +9,20 @@ test_that("Result Data Frame generation works v0", {
   tbl <- build_table(lyt, rawdat)
 
   result_df <- as_result_df(tbl, spec_version)
-  expect_identical(result_df[2, "ARM1.M"][[1]],
-    c(37, 37 / 256))
+  expect_identical(
+    result_df[2, "ARM1.M"][[1]],
+    c(37, 37 / 256)
+  )
 
-  expect_identical(nrow(tbl) - 8L,
-    nrow(result_df))
+  expect_identical(
+    nrow(tbl) - 8L,
+    nrow(result_df)
+  )
 
-  expect_identical(names(result_df)[1:5],
-    c("spl_var_1", "spl_value_1", "spl_var_2", "spl_value_2", "avar_name"))
+  expect_identical(
+    names(result_df)[1:5],
+    c("spl_var_1", "spl_value_1", "spl_var_2", "spl_value_2", "avar_name")
+  )
 
   ## handle multiple analyses
   lyt <- basic_table() %>%
@@ -45,5 +50,4 @@ test_that("Result Data Frame generation works v0", {
   result_df3 <- as_result_df(tbl3, spec_version)
 
   expect_identical(nrow(result_df3), 1L)
-
 })

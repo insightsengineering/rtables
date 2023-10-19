@@ -25,29 +25,38 @@ setMethod("spl_variable", "VarDynCutSplit", function(spl) spl_payload(spl))
 setMethod("spl_variable", "VarStaticCutSplit", function(spl) spl_payload(spl))
 #' @rdname spl_variable
 #' @export
-setMethod("spl_variable", "Split",
+setMethod(
+  "spl_variable", "Split",
   function(spl) stop("Split class ", class(spl), " not associated with a single variable.")
 )
 
 in_col_split <- function(spl_ctx) {
-  identical(names(spl_ctx),
-    names(context_df_row(cinfo = NULL)))
+  identical(
+    names(spl_ctx),
+    names(context_df_row(cinfo = NULL))
+  )
 }
 
 
 assert_splres_element <- function(pinfo, nm, len = NULL, component = NULL) {
   msg_2_append <- ""
   if (!is.null(component)) {
-    msg_2_append <- paste0("Invalid split function constructed by upstream call to ",
+    msg_2_append <- paste0(
+      "Invalid split function constructed by upstream call to ",
       "make_split_fun. Problem source: ",
-      component, " argument.")
+      component, " argument."
+    )
   }
   if (!(nm %in% names(pinfo)))
-    stop("Split result does not have required element: ", nm, ".",
-      msg_2_append)
+    stop(
+      "Split result does not have required element: ", nm, ".",
+      msg_2_append
+    )
   if (!is.null(len) && length(pinfo[[nm]]) != len)
-    stop("Split result element ", nm, " does not have required length ", len, ".",
-      msg_2_append)
+    stop(
+      "Split result element ", nm, " does not have required length ", len, ".",
+      msg_2_append
+    )
   TRUE
 }
 
@@ -85,14 +94,17 @@ validate_split_result <- function(pinfo, component = NULL) {
 #'
 #'
 #' @examples
-#' splres <- make_split_result(values = c("hi", "lo"),
+#' splres <- make_split_result(
+#'   values = c("hi", "lo"),
 #'   datasplit = list(hi = mtcars, lo = mtcars[1:10, ]),
-#'   labels = c("more data", "less data"))
+#'   labels = c("more data", "less data")
+#' )
 #'
 #' splres2 <- add_to_split_result(splres,
 #'   values = "med",
 #'   datasplit = list(med = mtcars[1:20, ]),
-#'   labels = "kinda some data")
+#'   labels = "kinda some data"
+#' )
 #' @rdname make_split_result
 #' @export
 #' @family make_custom_split
@@ -111,8 +123,10 @@ make_split_result <- function(values, datasplit, labels, extras = NULL) {
 add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL) {
   validate_split_result(splres)
   newstuff <- make_split_result(values, datasplit, labels, extras)
-  ret <- lapply(names(splres),
-    function(nm) c(splres[[nm]], newstuff[[nm]]))
+  ret <- lapply(
+    names(splres),
+    function(nm) c(splres[[nm]], newstuff[[nm]])
+  )
   names(ret) <- names(splres)
   .fixupvals(ret)
 }
@@ -188,8 +202,10 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' custom split functions do.
 #' @examples
 #'
-#' mysplitfun <- make_split_fun(pre = list(drop_facet_levels),
-#'   post = list(add_overall_facet("ALL", "All Arms")))
+#' mysplitfun <- make_split_fun(
+#'   pre = list(drop_facet_levels),
+#'   post = list(add_overall_facet("ALL", "All Arms"))
+#' )
 #'
 #'
 #' basic_table(show_colcounts = TRUE) %>%
@@ -201,14 +217,20 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' ## we add an overall facet and the reorder the facets
 #' reorder_facets <- function(splret, spl, fulldf, ...) {
 #'   ord <- order(names(splret$values))
-#'   make_split_result(splret$values[ord],
+#'   make_split_result(
+#'     splret$values[ord],
 #'     splret$datasplit[ord],
-#'     splret$labels[ord])
+#'     splret$labels[ord]
+#'   )
 #' }
 #'
-#' mysplitfun2 <- make_split_fun(pre = list(drop_facet_levels),
-#'   post = list(add_overall_facet("ALL", "All Arms"),
-#'     reorder_facets))
+#' mysplitfun2 <- make_split_fun(
+#'   pre = list(drop_facet_levels),
+#'   post = list(
+#'     add_overall_facet("ALL", "All Arms"),
+#'     reorder_facets
+#'   )
+#' )
 #' basic_table(show_colcounts = TRUE) %>%
 #'   split_cols_by("ARM", split_fun = mysplitfun2) %>%
 #'   analyze("AGE") %>%
@@ -217,14 +239,18 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
 #'   make_split_result(c("stupid", "silly"),
 #'     datasplit = list(df[1:10, ], df[11:30, ]),
-#'     labels = c("first 10", "second 20"))
+#'     labels = c("first 10", "second 20")
+#'   )
 #' }
 #'
 #' dumb_30_facet <- add_combo_facet("dumb",
 #'   label = "thirty patients",
-#'   levels = c("stupid", "silly"))
-#' nonsense_splfun <- make_split_fun(core_split = very_stupid_core,
-#'   post = list(dumb_30_facet))
+#'   levels = c("stupid", "silly")
+#' )
+#' nonsense_splfun <- make_split_fun(
+#'   core_split = very_stupid_core,
+#'   post = list(dumb_30_facet)
+#' )
 #'
 #' ## recall core split overriding is not supported in column space
 #' ## currently, but we can see it in action in row space
@@ -249,13 +275,17 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
       else
         df <- pre_fn(df = df, spl = spl, vals = vals, labels = labels)
       if (!is(df, "data.frame"))
-        stop("Error in custom split function, pre-split step did not return a data.frame. ",
-          "See upstream call to make_split_fun for original source of error.")
+        stop(
+          "Error in custom split function, pre-split step did not return a data.frame. ",
+          "See upstream call to make_split_fun for original source of error."
+        )
     }
 
     if (!all(orig_columns %in% names(df)))
-      stop("Preprocessing functions(s) in custom split function removed a column from the incoming data.",
-        " This is not supported. See upstread make_split_fun call (pre argument) for original source of error.")
+      stop(
+        "Preprocessing functions(s) in custom split function removed a column from the incoming data.",
+        " This is not supported. See upstread make_split_fun call (pre argument) for original source of error."
+      )
 
     if (is.null(core_split)) {
       ret <- do_base_split(spl = spl, df = df, vals = vals, labels = labels)
@@ -263,8 +293,10 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
       ret <- core_split(spl = spl, df = df, vals = vals, labels = labels, .spl_context)
       validate_split_result(ret, component = "core_split")
     } else {
-      stop("Use of custom split functions which override core splitting ",
-        "behavior is not currently supported in column space.")
+      stop(
+        "Use of custom split functions which override core splitting ",
+        "behavior is not currently supported in column space."
+      )
     }
 
     for (post_fn in post) {
@@ -299,9 +331,13 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 #' @seealso \code{\link{make_split_fun}}
 #'
 #' @examples
-#' mysplfun <- make_split_fun(post = list(add_combo_facet("A_B", label = "Arms A+B",
-#'   levels = c("A: Drug X", "B: Placebo")),
-#' add_overall_facet("ALL", label = "All Arms")))
+#' mysplfun <- make_split_fun(post = list(
+#'   add_combo_facet("A_B",
+#'     label = "Arms A+B",
+#'     levels = c("A: Drug X", "B: Placebo")
+#'   ),
+#'   add_overall_facet("ALL", label = "All Arms")
+#' ))
 #'
 #' lyt <- basic_table(show_colcounts = TRUE) %>%
 #'   split_cols_by("ARM", split_fun = mysplfun) %>%
@@ -314,16 +350,20 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 add_combo_facet <- function(name, label = name, levels, extra = list()) {
   function(ret, spl, .spl_context, fulldf) {
     val <- LevelComboSplitValue(val = name, extr = extra, combolevels = levels, label = label)
-    add_to_split_result(ret, values = list(val), labels = label,
-      datasplit = list(do.call(rbind, ret$datasplit[levels])))
+    add_to_split_result(ret,
+      values = list(val), labels = label,
+      datasplit = list(do.call(rbind, ret$datasplit[levels]))
+    )
   }
 }
 
 #' @rdname add_combo_facet
 #' @export
 add_overall_facet <- function(name, label, extra = list()) {
-  add_combo_facet(name = name, label = label, levels = select_all_levels,
-    extra = extra)
+  add_combo_facet(
+    name = name, label = label, levels = select_all_levels,
+    extra = extra
+  )
 }
 
 #' Trim Levels of Another Variable From Each Facet (Postprocessing split step)

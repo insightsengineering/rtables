@@ -77,7 +77,8 @@ validate_table_struct <- function(tt) {
   if (has_cont) {
     contpos <- which(pth == "@content")
     cont_disp <- paste(tail(pth, length(pth) - contpos + 1),
-      collapse = "->")
+      collapse = "->"
+    )
     pth <- head(pth, contpos)
   } else {
     cont_disp <- character()
@@ -96,25 +97,32 @@ validate_table_struct <- function(tt) {
   }
   topaste <- c(topaste, cont_disp)
   paste(topaste, collapse = "->")
-
 }
 
-no_analyze_guess <- paste0("Was this table created using ",
+no_analyze_guess <- paste0(
+  "Was this table created using ",
   "summarize_row_groups but no calls ",
-  "to analyze?\n")
+  "to analyze?\n"
+)
 
 use_sanitize_msg <- paste("  Use sanitize_table_struct() to fix these issues")
 
 make_degen_message <- function(degen_pths, tt) {
-  msg <- sprintf(paste0("Invalid table - found %d (sub)structures which contain no data rows.",
-    "\n\tThe first occured at path:  %s"),
-  length(degen_pths), .path_to_disp(degen_pths[[1]]))
+  msg <- sprintf(
+    paste0(
+      "Invalid table - found %d (sub)structures which contain no data rows.",
+      "\n\tThe first occured at path:  %s"
+    ),
+    length(degen_pths), .path_to_disp(degen_pths[[1]])
+  )
   if (length(degen_pths) == 1 && length(degen_pths[[1]]) == 1) {
     msg <- paste(msg, "  Likely Cause: Empty data or first row split on variable with only NA values",
-      sep = "\n")
+      sep = "\n"
+    )
   } else if (all(make_row_df(tt)$node_class %in% c("LabelRow", "ContentRow"))) {
     msg <- paste(msg, "  Cause: Layout did not contain any analyze() calls (only summarize_row_groups())",
-      sep = "\n")
+      sep = "\n"
+    )
   }
   msg <- paste(msg, use_sanitize_msg, sep = "\n")
   msg
@@ -176,16 +184,17 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 #' badtab <- build_table(lyt, DM)
 #' sanitize_table_struct(badtab)
 sanitize_table_struct <- function(tt, empty_msg = "-- This Section Contains No Data --") {
-
   rdf <- make_row_df(tt)
 
-  emptyrow <- DataRow(vals = list(empty_msg),
+  emptyrow <- DataRow(
+    vals = list(empty_msg),
     name = "empty_section",
     label = "",
     cspan = ncol(tt),
     cinfo = col_info(tt),
     format = "xx",
-    table_inset = table_inset(tt))
+    table_inset = table_inset(tt)
+  )
   degen_pths <- find_degen_struct(tt)
 
   if (identical(degen_pths, list("root"))) {

@@ -221,12 +221,14 @@ each level of nesting. For example, compare these two tables:
 
 ```{r}
 qtable(
-  ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
+  ex_adsl,
+  row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
   avar = "AGE", afun = mean
 )
 
 qtable(
-  ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
+  ex_adsl,
+  row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
   summarize_groups = TRUE, avar = "AGE", afun = mean
 )
 ```
@@ -249,7 +251,8 @@ subtitles and footnotes like so:
 
 ```{r}
 qtable(
-  ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
+  ex_adsl,
+  row_vars = "STRATA2", col_vars = "ARM",
   title = "Strata 2 Summary",
   subtitle = paste0("STUDY ", ex_adsl$STUDYID[1]),
   main_footer = paste0("Date: ", as.character(Sys.Date()))

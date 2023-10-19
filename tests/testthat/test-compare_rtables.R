@@ -1,5 +1,4 @@
 test_that("compare_rtables", {
-
   lyt <- make_big_lyt()
 
   ## hack to force all counts to "happen to be different"
@@ -34,6 +33,4 @@ test_that("compare_rtables", {
 
   stupid_cmp <- compare_rtables(tab, tab[, -1], tol = 1e5)
   expect_true(all(stupid_cmp[, 1:3] == "."))
-
-
 })

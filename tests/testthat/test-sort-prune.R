@@ -38,8 +38,10 @@ test_that("pruning and trimming work", {
   ptab <- prune_table(smallertab, silly_prune)
   ## ensure that empty subtables are removed when pruning
 
-  expect_identical(prune_table(smallertab),
-    smallertab[1:4, ])
+  expect_identical(
+    prune_table(smallertab),
+    smallertab[1:4, ]
+  )
 
 
   biggertab <- basic_table() %>%
@@ -55,8 +57,10 @@ test_that("pruning and trimming work", {
 
 
   ## this one doesn't remove NA rows
-  expect_identical(prune_table(smallertab, prune_zeros_only),
-    smallertab)
+  expect_identical(
+    prune_table(smallertab, prune_zeros_only),
+    smallertab
+  )
   expect_identical(dim(ptab), c(4L, 3L))
   trm1 <- trim_rows(smallertab)
   ## ensure/retain structure unawareness of trim_rows
@@ -69,20 +73,25 @@ test_that("pruning and trimming work", {
     analyze("AGE") %>%
     build_table(DM)
 
-  expect_identical(row.names(prune_table(smallertab)),
-    row.names(prune_table(smallertab2)))
+  expect_identical(
+    row.names(prune_table(smallertab)),
+    row.names(prune_table(smallertab2))
+  )
 
-  expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
-    smallertab2[1:2, ])
+  expect_identical(
+    prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
+    smallertab2[1:2, ]
+  )
 
-  expect_identical(prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
-    smallertab2[1:2, ])
+  expect_identical(
+    prune_table(smallertab2, low_obs_pruner(60, type = "mean")),
+    smallertab2[1:2, ]
+  )
 
-  expect_identical(prune_table(smallertab2, low_obs_pruner(180)),
-    smallertab2[1:2, ])
-
-
-
+  expect_identical(
+    prune_table(smallertab2, low_obs_pruner(180)),
+    smallertab2[1:2, ]
+  )
 })
 
 test_that("provided score functions work", {
@@ -102,7 +111,6 @@ test_that("provided score functions work", {
   dmsub <- subset(DM, ARM == "A: Drug X")
   counts2 <- table(dmsub$SEX)
   expect_identical(scores2, setNames(as.numeric(counts2), names(counts2)))
-
 })
 
 
@@ -126,8 +134,6 @@ test_that("sort_at_path just returns an empty input table", {
 
 
 test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", {
-
-
   tbl <- basic_table() %>%
     split_rows_by("RACE") %>%
     analyze("COUNTRY") %>%
@@ -169,8 +175,10 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
 
   ptbl <- prune_table(bigtbl)
   nspl <- split(ex_adsl, ex_adsl$RACE)
-  num <- sum(sapply(nspl, function(df) 2 * length(unique(df$COUNTRY))),
-    length(unique(ex_adsl$RACE)))
+  num <- sum(
+    sapply(nspl, function(df) 2 * length(unique(df$COUNTRY))),
+    length(unique(ex_adsl$RACE))
+  )
   expect_equal(nrow(ptbl), num)
 
   tr_tbl <- trim_rows(bigtbl)
@@ -180,7 +188,6 @@ test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", 
 
 
 test_that("provided score functions throw informative errors when invalid and * in paths work", {
-
   grade_groups_dict <- list(
     "Any Grade" = c("1", "2", "3", "4", "5"),
     "Grade 1-2" = c("1", "2"),
@@ -200,13 +207,15 @@ test_that("provided score functions throw informative errors when invalid and * 
     form <- as.formula(sprintf("grade_num ~ %s", id))
     aggrdf <- stats::aggregate(form, data = df, FUN = max)
 
-    in_rows(.list = lapply(grade_groups, function(x) {
-      subdf <- aggrdf[aggrdf$grade_num %in% x, ]
-      cnt <- length(unique(unclass(subdf)[[id]]))
-      c(cnt, cnt / .N_col)
-    }),
-    .names = names(grade_groups),
-    .formats = "xx (xx.x%)")
+    in_rows(
+      .list = lapply(grade_groups, function(x) {
+        subdf <- aggrdf[aggrdf$grade_num %in% x, ]
+        cnt <- length(unique(unclass(subdf)[[id]]))
+        c(cnt, cnt / .N_col)
+      }),
+      .names = names(grade_groups),
+      .formats = "xx (xx.x%)"
+    )
   }
 
 
@@ -224,17 +233,20 @@ test_that("provided score functions throw informative errors when invalid and * 
       split_fun = drop_split_levels,
       label_pos = "topleft",
       split_label = "aebod sys label",
-      child_labels = "visible") %>%
+      child_labels = "visible"
+    ) %>%
     summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) %>%
     split_rows_by("AEDECOD",
       indent_mod = -1,
       split_fun = drop_split_levels,
       label_pos = "topleft",
-      split_label = "aedecod label") %>%
+      split_label = "aedecod label"
+    ) %>%
     analyze("AETOXGR",
       basic_grade_count,
       extra_args = list(grade_groups = grade_groups_dict),
-      indent_mod = -1)
+      indent_mod = -1
+    )
   raw_tbl <- build_table(lyt_raw, ex_adae)
 
   expect_silent({
@@ -246,24 +258,32 @@ test_that("provided score functions throw informative errors when invalid and * 
   })
 
   ## spot check that things were reordered as we expect
-  expect_identical(row_paths(raw_tbl)[63:71], ## "cl B.2" ->  "dcd B.2.1.2.1" old position
-    row_paths(stbl)[72:80]) ## "cl B.2" -> "dcd B.2.1.2.1" new position
-  expect_error({
-    sort_at_path(raw_tbl,
-      path = c("AEBODSYS", "*", "AEDECOD"),
-      scorefun = cont_n_allcols,
-      decreasing = TRUE
-    )
-  }, "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1", fixed = TRUE)
-  expect_error({
-    sort_at_path(raw_tbl,
-      path = c("AEBODSYS", "*", "AEDECOD"),
-      scorefun = cont_n_onecol(1),
-      decreasing = TRUE
-    )
-  }, "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1", fixed = TRUE)
-
-
+  expect_identical(
+    row_paths(raw_tbl)[63:71], ## "cl B.2" ->  "dcd B.2.1.2.1" old position
+    row_paths(stbl)[72:80]
+  ) ## "cl B.2" -> "dcd B.2.1.2.1" new position
+  expect_error(
+    {
+      sort_at_path(raw_tbl,
+        path = c("AEBODSYS", "*", "AEDECOD"),
+        scorefun = cont_n_allcols,
+        decreasing = TRUE
+      )
+    },
+    "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      sort_at_path(raw_tbl,
+        path = c("AEBODSYS", "*", "AEDECOD"),
+        scorefun = cont_n_onecol(1),
+        decreasing = TRUE
+      )
+    },
+    "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1",
+    fixed = TRUE
+  )
 })
 
 test_that("paths come out correct when sorting with '*'", {
@@ -278,9 +298,13 @@ test_that("paths come out correct when sorting with '*'", {
 
   tbl <- sort_at_path(tbl, c("RACE", "*", "STRATA1"), scorefun)
 
-  res <- cell_values(tbl,
+  res <- cell_values(
+    tbl,
     c("RACE", "BLACK OR AFRICAN AMERICAN", "STRATA1", "C"),
-    c("ARM", "A: Drug X"))
-  expect_equal(res,
-    list("A: Drug X" = 12))
+    c("ARM", "A: Drug X")
+  )
+  expect_equal(
+    res,
+    list("A: Drug X" = 12)
+  )
 })

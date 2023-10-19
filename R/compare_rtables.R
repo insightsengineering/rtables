@@ -87,16 +87,19 @@
 #' compare_rtables(object, expected)
 compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
                             structure = FALSE) {
-
   # if (identical(object, expected)) return(invisible(TRUE))
 
   if (!is(object, "VTableTree")) {
-    stop("argument object is expected to be of class TableTree or ",
-      "ElementaryTable")
+    stop(
+      "argument object is expected to be of class TableTree or ",
+      "ElementaryTable"
+    )
   }
   if (!is(expected, "VTableTree")) {
-    stop("argument expected is expected to be of class TableTree or ",
-      "ElementaryTable")
+    stop(
+      "argument expected is expected to be of class TableTree or ",
+      "ElementaryTable"
+    )
   }
   dim_out <- apply(rbind(dim(object), dim(expected)), 2, max)
 
@@ -109,8 +112,10 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
   }
 
   if (!comp.attr) {
-    attr(X, "info") <- c(attr(X, "info"),
-      "cell attributes have not been compared")
+    attr(X, "info") <- c(
+      attr(X, "info"),
+      "cell attributes have not been compared"
+    )
   }
   if (!identical(row.names(object), row.names(expected)))
     attr(X, "info") <- c(attr(X, "info"), "row labels are not the same")
@@ -149,8 +154,10 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
     orows <- list(orows)
     erows <- list(erows)
   }
-  res <- mapply(compare_rrows, row1 = orows, row2 = erows, tol = tol, ncol = ncol(object),
-    USE.NAMES = FALSE, SIMPLIFY = FALSE)
+  res <- mapply(compare_rrows,
+    row1 = orows, row2 = erows, tol = tol, ncol = ncol(object),
+    USE.NAMES = FALSE, SIMPLIFY = FALSE
+  )
   X <- do.call(rbind, res)
   rpo <- row_paths(object)
   rpe <- row_paths(expected)

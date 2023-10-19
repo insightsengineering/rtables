@@ -28,22 +28,30 @@ setGeneric("simple_analysis", function(x, ...) standardGeneric("simple_analysis"
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
-setMethod("simple_analysis", "numeric",
-  function(x, ...) in_rows("Mean" = rcell(mean(x, ...), format = "xx.xx")))
+setMethod(
+  "simple_analysis", "numeric",
+  function(x, ...) in_rows("Mean" = rcell(mean(x, ...), format = "xx.xx"))
+)
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
-setMethod("simple_analysis", "logical",
-  function(x, ...) in_rows("Count" = rcell(sum(x, ...), format = "xx")))
+setMethod(
+  "simple_analysis", "logical",
+  function(x, ...) in_rows("Count" = rcell(sum(x, ...), format = "xx"))
+)
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
-setMethod("simple_analysis", "factor",
-  function(x, ...) in_rows(.list = as.list(table(x))))
+setMethod(
+  "simple_analysis", "factor",
+  function(x, ...) in_rows(.list = as.list(table(x)))
+)
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
-setMethod("simple_analysis", "ANY",
+setMethod(
+  "simple_analysis", "ANY",
   function(x, ...) {
     stop("No default simple_analysis behavior for class ", class(x), " please specify FUN  explicitly.")
-  })
+  }
+)

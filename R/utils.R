@@ -89,7 +89,8 @@ spl_context_to_disp_path <- function(ctx) {
   if (ctx$split[1] == "root" && ctx$value[1] == "root")
     ctx <- ctx[-1, ]
   ret <- paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
-    collapse = "->")
+    collapse = "->"
+  )
   if (length(ret) == 0 ||
     nchar(ret) == 0)
     ret <- "root"

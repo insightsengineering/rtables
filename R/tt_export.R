@@ -41,15 +41,15 @@ export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
 ##' @rdname tsv_io
 import_from_tsv <- function(file) {
   rawdf <- read.table(file, header = TRUE, sep = "\t")
-  as.data.frame(lapply(rawdf,
+  as.data.frame(lapply(
+    rawdf,
     function(col) {
       if (!any(grepl(.collapse_char, col, fixed = TRUE)))
         col
       else
         I(strsplit(col, split = .collapse_char_esc))
-    }))
-
-
+    }
+  ))
 }
 
 collapse_path <- function(paths) {
@@ -96,13 +96,14 @@ path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_
   colnames(cvs) <- path_fun(cdf$path)
   preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
   cbind.data.frame(row_path = preppaths, cvs)
-
 }
 
 do_label_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
-  c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
+  c(
+    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
 }
 
 
@@ -122,25 +123,26 @@ do_content_row <- function(rdfrow, maxlen) {
 
   seq_before <- seq_len(contpos - 1)
 
-  c(as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+  c(
+    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
     list(tail(pth, 1)),
-    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class))
+    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
+  )
 }
 
 do_data_row <- function(rdfrow, maxlen) {
-
   pth <- rdfrow$path[[1]]
   pthlen <- length(pth)
   ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
   if (pthlen %% 2 == 1) {
     pth <- pth[-1 * (pthlen - 2)]
   }
-  c(as.list(pth[seq_len(pthlen - 2)]),
+  c(
+    as.list(pth[seq_len(pthlen - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
     as.list(tail(pth, 2)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
-
-
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
 }
 
 
@@ -172,14 +174,15 @@ result_df_specs <- function() {
 
 lookup_result_df_specfun <- function(spec) {
   if (!(spec %in% names(result_df_specs())))
-    stop("unrecognized result data frame specification: ",
+    stop(
+      "unrecognized result data frame specification: ",
       spec,
-      "If that specification is correct you may  need to update your version of rtables")
+      "If that specification is correct you may  need to update your version of rtables"
+    )
   result_df_specs()[[spec]]
 }
 
 result_df_v0_experimental <- function(tt) {
-
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
@@ -189,14 +192,22 @@ result_df_v0_experimental <- function(tt) {
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
   rdf <- make_row_df(tt)
-  df <- cbind(rdf[rdf$node_class != "LabelRow",
-    c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")],
-  cellvals)
+  df <- cbind(
+    rdf[
+      rdf$node_class != "LabelRow",
+      c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")
+    ],
+    cellvals
+  )
   maxlen <- max(lengths(df$path))
-  metadf <- do.call(rbind.data.frame, lapply(seq_len(NROW(df)),
-    function(ii) handle_rdf_row(df[ii, ], maxlen = maxlen)))
-  cbind(metadf[metadf$node_class != "LabelRow", ],
-    cellvals)
+  metadf <- do.call(rbind.data.frame, lapply(
+    seq_len(NROW(df)),
+    function(ii) handle_rdf_row(df[ii, ], maxlen = maxlen)
+  ))
+  cbind(
+    metadf[metadf$node_class != "LabelRow", ],
+    cellvals
+  )
 }
 
 #' Generate a Result Data Frame
@@ -224,13 +235,11 @@ result_df_v0_experimental <- function(tt) {
 #' tbl <- build_table(lyt, ex_adsl)
 #' as_result_df(tbl)
 as_result_df <- function(tt, spec = "v0_experimental", ...) {
-
   result_df_fun <- lookup_result_df_specfun(spec)
   result_df_fun(tt, ...)
 }
 
 .split_colwidths <- function(ptabs, nctot, colwidths) {
-
   ret <- list()
   i <- 1L
 
@@ -348,8 +357,10 @@ export_as_pdf <- function(tt,
 ) {
   stopifnot(file_ext(file) != ".pdf")
   if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
-    stop("non-null colwidths argument must have length ncol(tt) + 1 [",
-      ncol(tt) + 1, "], got length ", length(colwidths))
+    stop(
+      "non-null colwidths argument must have length ncol(tt) + 1 [",
+      ncol(tt) + 1, "], got length ", length(colwidths)
+    )
 
   gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
@@ -381,18 +392,24 @@ export_as_pdf <- function(tt,
     max_width <- cpp
 
   tbls <- if (paginate) {
-    paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width,
-      colwidths = colwidths, ...)
+    paginate_table(tt,
+      lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width,
+      colwidths = colwidths, ...
+    )
   } else {
     list(tt)
   }
-  stbls <- lapply(lapply(tbls,
+  stbls <- lapply(lapply(
+    tbls,
     function(tbl_i) {
       cinds <- c(1, .figure_out_colinds(tbl_i, tt) + 1L)
-      toString(tbl_i, widths = colwidths[cinds], hsep = hsep,
+      toString(tbl_i,
+        widths = colwidths[cinds], hsep = hsep,
         indent_size = indent_size, tf_wrap = tf_wrap,
-        max_width = max_width)
-    }), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+        max_width = max_width
+      )
+    }
+  ), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
   gtbls <- lapply(stbls, function(txt) {
     textGrob(
       label = txt,
@@ -426,8 +443,10 @@ export_as_pdf <- function(tt,
 
     grid.draw(g)
   }
-  list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height,
-    lpp = lpp, cpp = cpp)
+  list(
+    file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height,
+    lpp = lpp, cpp = cpp
+  )
 }
 # Flextable and docx -----------------------------------------------------------
 #' Export as word document

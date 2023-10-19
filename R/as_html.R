@@ -62,7 +62,6 @@ as_html <- function(x,
                     class_td = NULL,
                     class_th = NULL,
                     link_label = NULL) {
-
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -114,7 +113,8 @@ as_html <- function(x,
     indent <- mat$row_info$indent[i]
     if (indent > 0) {
       cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
-        style = paste0("padding-left: ", indent * 3, "ch"))
+        style = paste0("padding-left: ", indent * 3, "ch")
+      )
     }
   }
 
@@ -130,9 +130,11 @@ as_html <- function(x,
     }
 
     if (!all(check_expansion)) {
-      stop("Found that a group of rows have different display options even if ",
+      stop(
+        "Found that a group of rows have different display options even if ",
         "they belong to the same line group. This should not happen. Please ",
-        "file an issue or report to the maintainers.") # nocov
+        "file an issue or report to the maintainers."
+      ) # nocov
     }
 
     for (ii in unique(mat$line_grouping)) {
@@ -149,47 +151,80 @@ as_html <- function(x,
     )
   })
 
-  hdrtag <- div_helper(class = "rtables-titles-block",
-    list(div_helper(class = "rtables-main-titles-block",
-      lapply(main_title(x), tags$p,
-        class = "rtables-main-title")),
-    div_helper(class = "rtables-subtitles-block",
-      lapply(subtitles(x), tags$p,
-        class = "rtables-subtitle"))))
+  hdrtag <- div_helper(
+    class = "rtables-titles-block",
+    list(
+      div_helper(
+        class = "rtables-main-titles-block",
+        lapply(main_title(x), tags$p,
+          class = "rtables-main-title"
+        )
+      ),
+      div_helper(
+        class = "rtables-subtitles-block",
+        lapply(subtitles(x), tags$p,
+          class = "rtables-subtitle"
+        )
+      )
+    )
+  )
 
 
-  tabletag <- do.call(tags$table,
-    c(rows,
-      list(class = class_table,
+  tabletag <- do.call(
+    tags$table,
+    c(
+      rows,
+      list(
+        class = class_table,
         tags$caption(sprintf("(\\#tag:%s)", link_label),
           style = "caption-side:top;",
-          .noWS = "after-begin", hdrtag))))
+          .noWS = "after-begin", hdrtag
+        )
+      )
+    )
+  )
 
-  rfnotes <- div_helper(class = "rtables-ref-footnotes-block",
+  rfnotes <- div_helper(
+    class = "rtables-ref-footnotes-block",
     lapply(mat$ref_footnotes, tags$p,
-      class = "rtables-referential-footnote"))
+      class = "rtables-referential-footnote"
+    )
+  )
 
-  mftr <- div_helper(class = "rtables-main-footers-block",
+  mftr <- div_helper(
+    class = "rtables-main-footers-block",
     lapply(main_footer(x), tags$p,
-      class = "rtables-main-footer"))
+      class = "rtables-main-footer"
+    )
+  )
 
-  pftr <- div_helper(class = "rtables-prov-footers-block",
+  pftr <- div_helper(
+    class = "rtables-prov-footers-block",
     lapply(prov_footer(x), tags$p,
-      class = "rtables-prov-footer"))
+      class = "rtables-prov-footer"
+    )
+  )
 
   ## XXX this omits the divs entirely if they are empty. Do we want that or do
   ## we want them to be there but empty??
-  ftrlst <- list(if (length(mat$ref_footnotes) > 0) rfnotes,
+  ftrlst <- list(
+    if (length(mat$ref_footnotes) > 0) rfnotes,
     if (length(main_footer(x)) > 0) mftr,
-    if (length(prov_footer(x)) > 0) pftr)
+    if (length(prov_footer(x)) > 0) pftr
+  )
 
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
 
-  ftrtag <- div_helper(class = "rtables-footers-block",
-    ftrlst)
+  ftrtag <- div_helper(
+    class = "rtables-footers-block",
+    ftrlst
+  )
 
-  div_helper(class = "rtables-all-parts-block",
+  div_helper(
+    class = "rtables-all-parts-block",
     list( # hdrtag,
       tabletag,
-      ftrtag))
+      ftrtag
+    )
+  )
 }

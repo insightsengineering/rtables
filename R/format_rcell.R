@@ -36,7 +36,6 @@ format_rcell <- function(x, format,
                          pr_row_format = NULL,
                          pr_row_na_str = NULL,
                          shell = FALSE) {
-
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
   if (is.null(format) && !is.null(pr_row_format)) {

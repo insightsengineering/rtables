@@ -18,8 +18,10 @@ NULL
 #' @examples
 #'
 #' if (interactive()) {
-#'   sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-#'     labels = c("S.L > 5", "S.L <= 5"))
+#'   sl5 <- factor(iris$Sepal.Length > 5,
+#'     levels = c(TRUE, FALSE),
+#'     labels = c("S.L > 5", "S.L <= 5")
+#'   )
 #'
 #'   df <- cbind(iris, sl5 = sl5)
 #'
@@ -39,7 +41,6 @@ NULL
 #'   )
 #'
 #'   Viewer(tbl, tbl2)
-#'
 #' }
 #' @export
 Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
@@ -61,7 +62,8 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   html_output <- if (is.null(y)) {
     x_tag
   } else {
-    tags$div(class = "container-fluid", htmltools::tags$div(class = "row",
+    tags$div(class = "container-fluid", htmltools::tags$div(
+      class = "row",
       tags$div(class = "col-xs-6", x_tag),
       tags$div(class = "col-xs-6", y_tag)
     ))
@@ -93,11 +95,15 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
     tags$head(
       tags$meta(charset = "utf-8"),
       tags$meta("http-equiv" = "X-UA-Compatible", content = "IE=edge"),
-      tags$meta(name = "viewport",
-        content = "width=device-width, initial-scale=1"),
+      tags$meta(
+        name = "viewport",
+        content = "width=device-width, initial-scale=1"
+      ),
       tags$title("rtable"),
-      tags$link(href = "css/bootstrap.min.css",
-        rel = "stylesheet")
+      tags$link(
+        href = "css/bootstrap.min.css",
+        rel = "stylesheet"
+      )
     ),
     tags$body(
       html_output
@@ -116,5 +122,4 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   } else {
     browseURL(htmlFile)
   }
-
 }

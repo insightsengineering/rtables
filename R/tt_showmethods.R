@@ -2,18 +2,23 @@ treestruct <- function(obj, ind = 0L) {
   nc <- ncol(obj)
   cat(rep(" ", times = ind),
     sprintf("[%s] %s", class(obj), obj_name(obj)),
-    sep = "")
+    sep = ""
+  )
   if (!is(obj, "ElementaryTable") && nrow(obj@content) > 0) {
     crows <- nrow(content_table(obj))
     ccols <- if (crows == 0) 0 else nc
-    cat(sprintf(" [cont: %d x %d]",
-      crows, ccols))
+    cat(sprintf(
+      " [cont: %d x %d]",
+      crows, ccols
+    ))
   }
   if (is(obj, "VTableTree") && length(tree_children(obj))) {
     kids <- tree_children(obj)
     if (are(kids, "TableRow")) {
-      cat(sprintf(" (%d x %d)\n",
-        length(kids), nc))
+      cat(sprintf(
+        " (%d x %d)\n",
+        length(kids), nc
+      ))
     } else {
       cat("\n")
       lapply(kids, treestruct, ind = ind + 1)
@@ -26,49 +31,68 @@ treestruct <- function(obj, ind = 0L) {
 
 
 
-setGeneric("ploads_to_str",
-  function(x, collapse = ":") standardGeneric("ploads_to_str"))
+setGeneric(
+  "ploads_to_str",
+  function(x, collapse = ":") standardGeneric("ploads_to_str")
+)
 
-setMethod("ploads_to_str", "Split",
+setMethod(
+  "ploads_to_str", "Split",
   function(x, collapse = ":") {
     paste(sapply(spl_payload(x), ploads_to_str),
-      collapse = collapse)
-  })
+      collapse = collapse
+    )
+  }
+)
 
-setMethod("ploads_to_str", "CompoundSplit",
+setMethod(
+  "ploads_to_str", "CompoundSplit",
   function(x, collapse = ":") {
     paste(sapply(spl_payload(x), ploads_to_str),
-      collapse = collapse)
-  })
+      collapse = collapse
+    )
+  }
+)
 
-setMethod("ploads_to_str", "list",
+setMethod(
+  "ploads_to_str", "list",
   function(x, collapse = ":") {
     stop("Please contact the maintainer")
-  })
+  }
+)
 
-setMethod("ploads_to_str", "SplitVector",
+setMethod(
+  "ploads_to_str", "SplitVector",
   function(x, collapse = ":") {
     sapply(x, ploads_to_str)
-  })
+  }
+)
 
 
-setMethod("ploads_to_str", "ANY",
+setMethod(
+  "ploads_to_str", "ANY",
   function(x, collapse = ":") {
     paste(x)
-  })
+  }
+)
 
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
 
-setMethod("payloadmsg", "VarLevelSplit",
+setMethod(
+  "payloadmsg", "VarLevelSplit",
   function(spl) {
     spl_payload(spl)
-  })
+  }
+)
 
-setMethod("payloadmsg", "MultiVarSplit",
-  function(spl) "var")
+setMethod(
+  "payloadmsg", "MultiVarSplit",
+  function(spl) "var"
+)
 
-setMethod("payloadmsg", "VarLevWBaselineSplit",
+setMethod(
+  "payloadmsg", "VarLevWBaselineSplit",
   function(spl) {
     paste0(
       spl_payload(spl), "[bsl ",
@@ -78,26 +102,34 @@ setMethod("payloadmsg", "VarLevWBaselineSplit",
   }
 )
 
-setMethod("payloadmsg", "ManualSplit",
-  function(spl) "mnl")
+setMethod(
+  "payloadmsg", "ManualSplit",
+  function(spl) "mnl"
+)
 
-setMethod("payloadmsg", "AllSplit",
-  function(spl) "all")
+setMethod(
+  "payloadmsg", "AllSplit",
+  function(spl) "all"
+)
 
 
-setMethod("payloadmsg", "ANY",
+setMethod(
+  "payloadmsg", "ANY",
   function(spl) {
     warning("don't know how to make payload print message for Split of class", class(spl))
     "XXX"
-  })
+  }
+)
 
 spldesc <- function(spl, value = "") {
   value <- rawvalues(value)
   payloadmsg <- payloadmsg(spl)
   format <- "%s (%s)"
-  sprintf(format,
+  sprintf(
+    format,
     value,
-    payloadmsg)
+    payloadmsg
+  )
 }
 
 
@@ -111,57 +143,80 @@ layoutmsg <- function(obj) {
   if (is(obj, "LayoutAxisTree")) {
     kids <- tree_children(obj)
     return(unlist(lapply(kids, layoutmsg)))
-
   }
 
-  msg <- paste(collapse = " -> ",
+  msg <- paste(
+    collapse = " -> ",
     mapply(spldesc,
       spl = spllst,
-      value = spvallst))
+      value = spvallst
+    )
+  )
   msg
 }
 
-setMethod("show", "LayoutAxisTree",
+setMethod(
+  "show", "LayoutAxisTree",
   function(object) {
     msg <- layoutmsg(object)
     cat(msg, "\n")
     invisible(object)
-  })
+  }
+)
 
 
 setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
 
-setMethod("spltype_abbrev", "VarLevelSplit",
-  function(obj) "lvls")
+setMethod(
+  "spltype_abbrev", "VarLevelSplit",
+  function(obj) "lvls"
+)
 
-setMethod("spltype_abbrev", "VarLevWBaselineSplit",
-  function(obj) paste("ref_group", obj@ref_group_value))
+setMethod(
+  "spltype_abbrev", "VarLevWBaselineSplit",
+  function(obj) paste("ref_group", obj@ref_group_value)
+)
 
 
-setMethod("spltype_abbrev", "MultiVarSplit",
-  function(obj) "vars")
+setMethod(
+  "spltype_abbrev", "MultiVarSplit",
+  function(obj) "vars"
+)
 
-setMethod("spltype_abbrev", "VarStaticCutSplit",
-  function(obj) "scut")
+setMethod(
+  "spltype_abbrev", "VarStaticCutSplit",
+  function(obj) "scut"
+)
 
-setMethod("spltype_abbrev", "VarDynCutSplit",
-  function(obj) "dcut")
-setMethod("spltype_abbrev", "AllSplit",
-  function(obj) "all obs")
+setMethod(
+  "spltype_abbrev", "VarDynCutSplit",
+  function(obj) "dcut"
+)
+setMethod(
+  "spltype_abbrev", "AllSplit",
+  function(obj) "all obs"
+)
 ## setMethod("spltype_abbrev", "NULLSplit",
 ##           function(obj) "no obs")
 
-setMethod("spltype_abbrev", "AnalyzeVarSplit",
-  function(obj) "** analysis **")
+setMethod(
+  "spltype_abbrev", "AnalyzeVarSplit",
+  function(obj) "** analysis **"
+)
 
-setMethod("spltype_abbrev", "CompoundSplit",
+setMethod(
+  "spltype_abbrev", "CompoundSplit",
   function(obj) paste("compound", paste(sapply(spl_payload(obj), spltype_abbrev), collapse = " "))
 )
 
-setMethod("spltype_abbrev", "AnalyzeMultiVars",
-  function(obj) "** multivar analysis **")
-setMethod("spltype_abbrev", "AnalyzeColVarSplit",
-  function(obj) "** col-var analysis **")
+setMethod(
+  "spltype_abbrev", "AnalyzeMultiVars",
+  function(obj) "** multivar analysis **"
+)
+setMethod(
+  "spltype_abbrev", "AnalyzeColVarSplit",
+  function(obj) "** col-var analysis **"
+)
 
 
 
@@ -171,50 +226,59 @@ docat_splitvec <- function(object, indent = 0) {
     cat(rep(" ", times = indent), sep = "")
   if (length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
     tab <- object[[1]]
-    msg <- sprintf("A Pre-Existing Table [%d x %d]",
-      nrow(tab), ncol(tab))
+    msg <- sprintf(
+      "A Pre-Existing Table [%d x %d]",
+      nrow(tab), ncol(tab)
+    )
   } else {
-
     plds <- ploads_to_str(object) ## lapply(object, spl_payload))
 
     tabbrev <- sapply(object, spltype_abbrev)
-    msg <- paste(collapse = " -> ",
-      paste0(plds, " (", tabbrev, ")"))
+    msg <- paste(
+      collapse = " -> ",
+      paste0(plds, " (", tabbrev, ")")
+    )
   }
   cat(msg, "\n")
 }
 
-setMethod("show", "SplitVector",
+setMethod(
+  "show", "SplitVector",
   function(object) {
-
     cat("A SplitVector Pre-defining a Tree Structure\n\n")
     docat_splitvec(object)
     cat("\n")
     invisible(object)
-  })
+  }
+)
 
 
 docat_predataxis <- function(object, indent = 0) {
   lapply(object, docat_splitvec)
 }
 
-setMethod("show", "PreDataColLayout",
+setMethod(
+  "show", "PreDataColLayout",
   function(object) {
     cat("A Pre-data Column Layout Object\n\n")
     docat_predataxis(object)
     invisible(object)
-  })
+  }
+)
 
 
-setMethod("show", "PreDataRowLayout",
+setMethod(
+  "show", "PreDataRowLayout",
   function(object) {
     cat("A Pre-data Row Layout Object\n\n")
     docat_predataxis(object)
     invisible(object)
-  })
+  }
+)
 
 
-setMethod("show", "PreDataTableLayouts",
+setMethod(
+  "show", "PreDataTableLayouts",
   function(object) {
     cat("A Pre-data Table Layout\n")
     cat("\nColumn-Split Structure:\n")
@@ -223,22 +287,29 @@ setMethod("show", "PreDataTableLayouts",
     docat_predataxis(object@row_layout)
     cat("\n")
     invisible(object)
-  })
+  }
+)
 
-setMethod("show", "InstantiatedColumnInfo",
+setMethod(
+  "show", "InstantiatedColumnInfo",
   function(object) {
     layoutmsg <- layoutmsg(coltree(object))
     cat("An InstantiatedColumnInfo object",
       "Columns:",
       layoutmsg,
       if (disp_ccounts(object))
-        paste("ColumnCounts:\n",
+        paste(
+          "ColumnCounts:\n",
           paste(col_counts(object),
-            collapse = ", ")),
+            collapse = ", "
+          )
+        ),
       "",
-      sep = "\n")
+      sep = "\n"
+    )
     invisible(object)
-  })
+  }
+)
 
 
 #' @rdname int_methods
@@ -256,11 +327,14 @@ setMethod("show", "VTableTree", function(object) {
 
 
 setMethod("show", "TableRow", function(object) {
-  cat(sprintf("[%s indent_mod %d]: %s   %s\n",
+  cat(sprintf(
+    "[%s indent_mod %d]: %s   %s\n",
     class(object),
     indent_mod(object),
     obj_label(object),
     paste(as.vector(get_formatted_cells(object)),
-      collapse = "   ")))
+      collapse = "   "
+    )
+  ))
   invisible(object)
 })

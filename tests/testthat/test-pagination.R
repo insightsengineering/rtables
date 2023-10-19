@@ -2,9 +2,6 @@ context("Pagination")
 
 
 test_that("Page by splitting works", {
-
-
-
   lyt <- basic_table(title = "big title") %>%
     split_rows_by("SEX", page_by = TRUE) %>%
     analyze("AGE")
@@ -13,27 +10,37 @@ test_that("Page by splitting works", {
 
   ttlst <- paginate_table(tt)
 
-  expect_identical(names(ttlst),
-    levels(DM$SEX))
+  expect_identical(
+    names(ttlst),
+    levels(DM$SEX)
+  )
 
-  expect_error({
-    basic_table(title = "big title") %>%
-      analyze("AGE") %>%
-      split_rows_by("SEX", page_by = TRUE) %>%
-      analyze("AGE")},
-  "page_by splits cannot have top-level siblings")
+  expect_error(
+    {
+      basic_table(title = "big title") %>%
+        analyze("AGE") %>%
+        split_rows_by("SEX", page_by = TRUE) %>%
+        analyze("AGE")
+    },
+    "page_by splits cannot have top-level siblings"
+  )
 
-  expect_error({
-    basic_table() %>%
-      split_rows_by("SEX") %>%
-      split_rows_by("ARM", page_by = TRUE) %>%
-      analyze("AGE")},
-  "page_by splits cannot be nested within non-page_by splits")
+  expect_error(
+    {
+      basic_table() %>%
+        split_rows_by("SEX") %>%
+        split_rows_by("ARM", page_by = TRUE) %>%
+        analyze("AGE")
+    },
+    "page_by splits cannot be nested within non-page_by splits"
+  )
 
-  lyt2 <- basic_table(title = "main title",
+  lyt2 <- basic_table(
+    title = "main title",
     subtitles = "subtitle",
     main_footer = "main footer",
-    prov_footer = "provenance footer") %>%
+    prov_footer = "provenance footer"
+  ) %>%
     split_cols_by("ARM") %>%
     split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
     split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") %>%
@@ -41,15 +48,18 @@ test_that("Page by splitting works", {
     summarize_row_groups() %>%
     analyze("AGE", afun = function(x, ...) {
       in_rows("mean (sd)" = rcell(
-        c(mean(x), sd(x)), format = "xx.x (xx.x)"), "range" = rcell(range(x), format = "xx.x - xx.x")
-      )
+        c(mean(x), sd(x)),
+        format = "xx.x (xx.x)"
+      ), "range" = rcell(range(x), format = "xx.x - xx.x")      )
     })
 
   tbl2 <- build_table(lyt2, ex_adsl)
 
   ttlst2 <- paginate_table(tbl2, lpp = 16, cpp = 55)
-  expect_equal(length(ttlst2),
-    8)
+  expect_equal(
+    length(ttlst2),
+    8
+  )
   txt <- export_as_txt(tbl2, lpp = 16, cpp = 55)
   expect_true(grepl("Stratum: B", txt))
 })
@@ -57,11 +67,15 @@ test_that("Page by splitting works", {
 test_that("export_as_txt prints split level header correctly when using page_by", {
   # single level in page_by split
   tbl <- basic_table() %>%
-    split_rows_by("PARAMCD", labels_var = "PARAMCD", split_label = "aaa",
+    split_rows_by("PARAMCD",
+      labels_var = "PARAMCD", split_label = "aaa",
       label_pos = "topleft",
-      split_fun = drop_split_levels, page_by = TRUE) %>%
-    split_rows_by("AVISIT", label_pos = "topleft",
-      split_fun = keep_split_levels("SCREENING")) %>%
+      split_fun = drop_split_levels, page_by = TRUE
+    ) %>%
+    split_rows_by("AVISIT",
+      label_pos = "topleft",
+      split_fun = keep_split_levels("SCREENING")
+    ) %>%
     analyze("AVAL") %>%
     build_table(ex_adlb[ex_adlb$PARAMCD == "ALT", ])
   tbl_txt <- tbl %>% export_as_txt(lpp = 100)
@@ -70,11 +84,15 @@ test_that("export_as_txt prints split level header correctly when using page_by"
 
   # multiple levels in page_by split
   tbl <- basic_table() %>%
-    split_rows_by("PARAMCD", labels_var = "PARAMCD", split_label = "aaa",
+    split_rows_by("PARAMCD",
+      labels_var = "PARAMCD", split_label = "aaa",
       label_pos = "topleft",
-      split_fun = drop_split_levels, page_by = TRUE) %>%
-    split_rows_by("AVISIT", label_pos = "topleft",
-      split_fun = keep_split_levels("SCREENING")) %>%
+      split_fun = drop_split_levels, page_by = TRUE
+    ) %>%
+    split_rows_by("AVISIT",
+      label_pos = "topleft",
+      split_fun = keep_split_levels("SCREENING")
+    ) %>%
     analyze("AVAL") %>%
     build_table(ex_adlb[ex_adlb$PARAMCD != "IGA", ])
   tbl_txt <- tbl %>% export_as_txt(lpp = 100)
@@ -84,14 +102,17 @@ test_that("export_as_txt prints split level header correctly when using page_by"
 })
 
 test_that("vertical and horizontal pagination work", {
-
-  spoof_df <- data.frame(arm = factor(c("a", "b", "c", "d", "e", "f")),
-    var1 = 6)
+  spoof_df <- data.frame(
+    arm = factor(c("a", "b", "c", "d", "e", "f")),
+    var1 = 6
+  )
   simple_lyt <- basic_table() %>%
     split_cols_by("arm") %>%
     analyze("var1", function(x, ...) {
-      in_rows(.list = replicate(30, list(1234)),
-        .names = paste0("mynameis", 1:30))
+      in_rows(
+        .list = replicate(30, list(1234)),
+        .names = paste0("mynameis", 1:30)
+      )
     })
 
   simple_tbl <- build_table(simple_lyt, spoof_df)
@@ -102,8 +123,10 @@ test_that("vertical and horizontal pagination work", {
 
   ## should be one col per page, i.e. 6 pages
   hpag1 <- paginate_table(simple_tbl, lpp = 80, cpp = 17)
-  expect_equal(rep(1, 6),
-    sapply(hpag1, ncol))
+  expect_equal(
+    rep(1, 6),
+    sapply(hpag1, ncol)
+  )
 
   ## 16 is too small to fit any columns (After col divider)
   ## onto a page with the row names, so this is an error
@@ -114,15 +137,19 @@ test_that("vertical and horizontal pagination work", {
   expect_identical(hpag1, hpag2)
 
   hpag3 <- paginate_table(simple_tbl, lpp = 80, cpp = 24, verbose = TRUE)
-  expect_equal(rep(2, 3),
-    sapply(hpag3, ncol))
+  expect_equal(
+    rep(2, 3),
+    sapply(hpag3, ncol)
+  )
 
   ## preceding siblings <2
   expect_error(paginate_table(simple_tbl, lpp = 3, cpp = 120))
 
   vpag1 <- paginate_table(simple_tbl, lpp = 3, cpp = 120, min_siblings = 0)
-  expect_equal(rep(1, 30),
-    sapply(vpag1, nrow))
+  expect_equal(
+    rep(1, 30),
+    sapply(vpag1, nrow)
+  )
 
   ## no lines for rows after header column
   expect_error(paginate_table(simple_tbl, lpp = 2, cpp = 120, min_siblings = 0))
@@ -130,22 +157,30 @@ test_that("vertical and horizontal pagination work", {
   ## first lpp that allows the default min_siblings = 2 to succeed,
   ## 3 rows per page, 10 pages
   vpag2 <- paginate_table(simple_tbl, lpp = 5, cpp = 120)
-  expect_equal(rep(3, 10),
-    sapply(vpag2, nrow))
+  expect_equal(
+    rep(3, 10),
+    sapply(vpag2, nrow)
+  )
 
   ## uneven pages, 8, 8, 8, 6 rows
   vpag3 <- paginate_table(simple_tbl, lpp = 10, cpp = 120)
-  expect_equal(c(8, 8, 8, 6),
-    sapply(vpag3, nrow))
+  expect_equal(
+    c(8, 8, 8, 6),
+    sapply(vpag3, nrow)
+  )
 
   ## combined pagination
 
   cpag1 <- paginate_table(simple_tbl, lpp = 5, cpp = 17)
-  expect_equal(replicate(60, list(c(3, 1))),
-    lapply(cpag1, dim))
+  expect_equal(
+    replicate(60, list(c(3, 1))),
+    lapply(cpag1, dim)
+  )
   ## ordering: horizontal pagination first then vertical in resulting list
-  expect_equal(sapply(cpag1, names),
-    rep(c("a", "b", "c", "d", "e", "f"), 10))
+  expect_equal(
+    sapply(cpag1, names),
+    rep(c("a", "b", "c", "d", "e", "f"), 10)
+  )
 
   tt <- tt_to_export()
   main_title(tt) <- "main title"
@@ -157,24 +192,32 @@ test_that("vertical and horizontal pagination work", {
 
   expect_identical(length(res), 3L)
 
-  expect_identical(tt[, 1:2, keep_titles = TRUE,
-    reindex_refs = FALSE], res[[1]])
+  expect_identical(tt[, 1:2,
+    keep_titles = TRUE,
+    reindex_refs = FALSE
+  ], res[[1]])
 
   ## this was lpp = 75, but manual line counting suggests that
   ## was a bad test, enforcing an off-by-one error.
   res2 <- paginate_table(tt, lpp = 76, cpp = 45, verbose = TRUE)
   expect_identical(length(res2), 6L)
-  expect_identical(res2[[1]], tt[1:63, 1:2, keep_titles = TRUE,
-    reindex_refs = FALSE])
+  expect_identical(res2[[1]], tt[1:63, 1:2,
+    keep_titles = TRUE,
+    reindex_refs = FALSE
+  ])
   expect_identical(res2[[2]], tt[1:63, 3:4,
     keep_titles = TRUE,
-    reindex_refs = FALSE])
+    reindex_refs = FALSE
+  ])
   expect_identical(res2[[4]], tt[c(38, 57, 64:NROW(tt)), 1:2,
     keep_titles = TRUE,
-    reindex_refs = FALSE])
+    reindex_refs = FALSE
+  ])
 
-  expect_identical(main_title(tt),
-    main_title(res[[1]]))
+  expect_identical(
+    main_title(tt),
+    main_title(res[[1]])
+  )
   expect_identical(subtitles(tt), subtitles(res[[2]]))
   expect_identical(main_footer(tt), main_footer(res[[3]]))
   expect_identical(prov_footer(tt), prov_footer(res[[1]]))
@@ -192,35 +235,53 @@ test_that("vertical and horizontal pagination work", {
 
 
   lyt2 <- basic_table() %>%
-    analyze("mpg",
-      function(x) in_rows(.list = setNames(as.list(x), as.character(seq_along(x)))))
+    analyze(
+      "mpg",
+      function(x) in_rows(.list = setNames(as.list(x), as.character(seq_along(x))))
+    )
 
   tt2 <- build_table(lyt2, cbind(mtcars, mtcars))
 
-  main_title(tt2) <- paste(strrep("a", 25),
-    strrep("A", 25))
+  main_title(tt2) <- paste(
+    strrep("a", 25),
+    strrep("A", 25)
+  )
 
-  subtitles(tt2) <- c(paste(strrep("a", 25),
-    strrep("A", 25)),
-  "sub titles")
+  subtitles(tt2) <- c(
+    paste(
+      strrep("a", 25),
+      strrep("A", 25)
+    ),
+    "sub titles"
+  )
 
-  main_footer(tt2) <- paste(strrep("a", 25),
-    strrep("A", 25))
+  main_footer(tt2) <- paste(
+    strrep("a", 25),
+    strrep("A", 25)
+  )
 
-  prov_footer(tt2) <- paste(strrep("a", 25),
-    strrep("A", 25))
+  prov_footer(tt2) <- paste(
+    strrep("a", 25),
+    strrep("A", 25)
+  )
 
-  res3a <- paginate_table(tt2, lpp = 29,
-    cpp = 40, tf_wrap = TRUE)
-  res3b <- paginate_table(tt2, lpp = 25,
-    cpp = 40, tf_wrap = FALSE)
+  res3a <- paginate_table(tt2,
+    lpp = 29,
+    cpp = 40, tf_wrap = TRUE
+  )
+  res3b <- paginate_table(tt2,
+    lpp = 25,
+    cpp = 40, tf_wrap = FALSE
+  )
   expect_true(all(mapply(function(a, b) identical(dim(a), dim(b)),
-    a = res3a, b = res3b)))
+    a = res3a, b = res3b
+  )))
 
   res3c <- paginate_table(tt2, lpp = 29, cpp = 40, tf_wrap = FALSE)
-  expect_equal(nrow(res3a[[1]]),
-    nrow(res3c[[1]]) - 4)
-
+  expect_equal(
+    nrow(res3a[[1]]),
+    nrow(res3c[[1]]) - 4
+  )
 })
 
 test_that("inset and pagination work together", {
@@ -265,15 +326,23 @@ test_that("cell and column wrapping works in pagination", {
   ## can't break after on BLACK OR AFRICAN AMERICAN row (label)
   ## 2 pages, one after full asian block, one after full BOAA block
   res2 <- pag_tt_indices(tt_for_wrap, lpp = lpp_tmp, colwidths = clw)
-  expect_identical(res2,
-    list(1:5, 6:10))
-  expect_identical(nlines(col_info(tt_for_wrap), colwidths = clw),
-    nlines(col_info(tt_for_wrap)) + 2L) ## 2 new lines from wrapping
+  expect_identical(
+    res2,
+    list(1:5, 6:10)
+  )
+  expect_identical(
+    nlines(col_info(tt_for_wrap), colwidths = clw),
+    nlines(col_info(tt_for_wrap)) + 2L
+  ) ## 2 new lines from wrapping
 
   pdf <- make_row_df(tt_for_wrap, colwidths = clw)
-  expect_identical(pdf$self_extent,
-    c(1L, 1L, 1L, 1L, 3L,
-      2L, 1L, 1L, 1L, 3L)) ## the 2 is row label wrap, 3s are cell wraps
+  expect_identical(
+    pdf$self_extent,
+    c(
+      1L, 1L, 1L, 1L, 3L,
+      2L, 1L, 1L, 1L, 3L
+    )
+  ) ## the 2 is row label wrap, 3s are cell wraps
 
   # propose_column_widths(matrix_form(tt_for_wrap, TRUE))
   pg_tbl_w_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL, colwidths = clw)
@@ -294,8 +363,10 @@ test_that("cell and column wrapping works in pagination", {
   ##  10 row too long with wrap -> 9 label row -> 8 ok
   ## paginates after row 8 (BOAA -> AGE-> Mean)
   result2 <- paginate_table(tt_for_wrap, colwidths = clw, lpp = 24L, cpp = NULL)
-  expect_identical(sapply(result2, nrow),
-    c(8L, 3L))
+  expect_identical(
+    sapply(result2, nrow),
+    c(8L, 3L)
+  )
   result_str <- toString(result[[1]], widths = clw)
   expect_identical(.count_chr_from_str(result_str, "\n"), 25L)
 
@@ -352,8 +423,10 @@ test_that("Pagination works with section dividers", {
   )
 
   expect_identical(
-    paste0(export_as_txt(tail(ttlst[[1]], 1), hsep = "-", paginate = FALSE),
-      export_as_txt(head(ttlst[[2]], 1), hsep = "-", paginate = FALSE)),
+    paste0(
+      export_as_txt(tail(ttlst[[1]], 1), hsep = "-", paginate = FALSE),
+      export_as_txt(head(ttlst[[2]], 1), hsep = "-", paginate = FALSE)
+    ),
     paste0(
       "big title\n\n--------------\n       all obs\n--------------\nMean    34.28 \n",
       "big title\n\n-----------\n    all obs\n-----------\nU          \n"

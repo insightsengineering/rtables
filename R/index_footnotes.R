@@ -17,32 +17,40 @@
 setGeneric(".idx_helper", function(tr, cur_idx_fun) standardGeneric(".idx_helper"))
 
 
-setMethod(".idx_helper", "TableRow",
+setMethod(
+  ".idx_helper", "TableRow",
   function(tr, cur_idx_fun) {
-    row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
-      cur_idx_fun)
+    row_footnotes(tr) <- .reindex_one_pos(
+      row_footnotes(tr),
+      cur_idx_fun
+    )
 
     cell_footnotes(tr) <- lapply(cell_footnotes(tr), ## crfs,
       .reindex_one_pos,
       cur_idx_fun = cur_idx_fun
     )
     tr
-  })
+  }
+)
 
-setMethod(".idx_helper", "VTableTree",
+setMethod(
+  ".idx_helper", "VTableTree",
   function(tr, cur_idx_fun) {
     if (!labelrow_visible(tr)) {
       stop("got a row footnote on a non-visible label row. this should never happen") # nocov
     }
     lr <- tt_labelrow(tr)
 
-    row_footnotes(lr) <- .reindex_one_pos(row_footnotes(lr),
-      cur_idx_fun)
+    row_footnotes(lr) <- .reindex_one_pos(
+      row_footnotes(lr),
+      cur_idx_fun
+    )
 
     tt_labelrow(tr) <- lr
 
     tr
-  })
+  }
+)
 
 index_col_refs <- function(tt, cur_idx_fun) {
   ctree <- coltree(tt)
@@ -53,19 +61,21 @@ index_col_refs <- function(tt, cur_idx_fun) {
 
 
 .index_col_refs_inner <- function(ctree, cur_idx_fun) {
-  col_fnotes_here(ctree) <- .reindex_one_pos(col_fnotes_here(ctree),
-    cur_idx_fun)
+  col_fnotes_here(ctree) <- .reindex_one_pos(
+    col_fnotes_here(ctree),
+    cur_idx_fun
+  )
 
   if (is(ctree, "LayoutColTree"))
     tree_children(ctree) <- lapply(tree_children(ctree),
       .index_col_refs_inner,
-      cur_idx_fun = cur_idx_fun)
+      cur_idx_fun = cur_idx_fun
+    )
   ctree
   ## cfs <- col_fnotes_here(ctree)
   ## if(length(unlist(cfs)) > 0) {
   ##     col_fnotes_here(ctree) <- .reindex_one_pos(lapply(cfs,
   ##                                      function(refs) lapply(refs, function(refi) {
-
 }
 
 #' Update footnote indexes on a built table
@@ -104,8 +114,10 @@ update_ref_indexing <- function(tt) {
   for (i in seq_len(nrow(rdf))) {
     path <- rdf$path[[i]]
     tt_at_path(tt, path) <-
-      .idx_helper(tt_at_path(tt, path),
-        cur_index)
+      .idx_helper(
+        tt_at_path(tt, path),
+        cur_index
+      )
   }
   tt
 }

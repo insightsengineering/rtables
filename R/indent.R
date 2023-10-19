@@ -57,7 +57,8 @@ indent <- function(x, by = 1) {
 setGeneric("clear_indent_mods", function(tt) standardGeneric("clear_indent_mods"))
 #' @export
 #' @rdname clear_imods
-setMethod("clear_indent_mods", "VTableTree",
+setMethod(
+  "clear_indent_mods", "VTableTree",
   function(tt) {
     ct <- content_table(tt)
     if (!is.null(ct)) {
@@ -66,11 +67,14 @@ setMethod("clear_indent_mods", "VTableTree",
     tree_children(tt) <- lapply(tree_children(tt), clear_indent_mods)
     indent_mod(tt) <- 0L
     tt
-  })
+  }
+)
 #' @export
 #' @rdname clear_imods
-setMethod("clear_indent_mods", "TableRow",
+setMethod(
+  "clear_indent_mods", "TableRow",
   function(tt) {
     indent_mod(tt) <- 0L
     tt
-  })
+  }
+)

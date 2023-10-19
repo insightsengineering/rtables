@@ -12,14 +12,17 @@ library(dplyr)
 ## eat the one-time warning
 suppressWarnings(formatters::default_hsep())
 makefakedat <- function(n = 1000) {
-  datadf <- data.frame(stringsAsFactors = FALSE,
+  datadf <- data.frame(
+    stringsAsFactors = FALSE,
     ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),
     SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
     FACTOR2 = c("A", sample(c("A", "B", "C"), n - 1, replace = TRUE)),
     RACE = c("WHITE", sample(c("WHITE", "BLACK"), n - 1, replace = TRUE)),
     AGE = runif(n, 40, 70),
     VAR3 = c("level1", sample(c("level1", "level2"), n - 1,
-      replace = TRUE)))
+      replace = TRUE
+    ))
+  )
 
   datadf$ethn_label <- c(WHITE = "Caucasian", BLACK = "African American")[datadf$RACE]
   datadf$fac2_label <- paste("Level", datadf$FACTOR2)
@@ -35,12 +38,16 @@ makefakedat2 <- function(n = 1000) {
   }
 
   many2s <- rep(2, n / 2)
-  datadf <- data.frame(stringsAsFactors = FALSE,
+  datadf <- data.frame(
+    stringsAsFactors = FALSE,
     ARM = rep(c("ARM1", "ARM2"), times = rep(n / 2, 2)),
-    SEX = rep(sample(c("M", "F"), n / 2, replace = TRUE),
-      many2s),
+    SEX = rep(
+      sample(c("M", "F"), n / 2, replace = TRUE),
+      many2s
+    ),
     RACE = rep(sample(c("WHITE", "BLACK"), n / 2, replace = TRUE),
-      times = many2s),
+      times = many2s
+    ),
     PATID = rep(seq(1, n / 2), many2s),
     VISIT = rep(c("BASELINE", "FOLLOWUP"))
   )
@@ -51,7 +58,8 @@ makefakedat2 <- function(n = 1000) {
     as.integer(factor(datadf$SEX))) / 2
   datadf$VALUE <- ifelse(datadf$VISIT == "BASELINE",
     5,
-    5 + rnorm(n, mu, 4))
+    5 + rnorm(n, mu, 4)
+  )
   datadf$PCTDIFF <- NA_real_
   seconds <- seq(2, n, by = 2)
   datadf$PCTDIFF[seq(2, n, by = 2)] <- 100 * (datadf$VALUE[seconds] -
@@ -76,13 +84,15 @@ refcompmean <- function(x, .ref_group, .in_ref_col, ...) {
   )
 }
 
-complx_lyt_rnames <- c("Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
+complx_lyt_rnames <- c(
+  "Caucasian (n)", "Level A", "Age Analysis", "mean", "median",
   "Age Analysis redux", "range", "Level B", "Age Analysis",
   "mean", "median", "Age Analysis redux", "range",
   "African American (n)", "Level A", "Age Analysis", "mean", "median",
   "Age Analysis redux", "range", "Level B", "Age Analysis",
   "mean", "median", "Age Analysis redux", "range",
-  "level1", "level2")
+  "level1", "level2"
+)
 
 
 make_big_lyt <- function() {
@@ -104,7 +114,8 @@ make_big_lyt <- function() {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      label_pos = "hidden") %>%
+      label_pos = "hidden"
+    ) %>%
     ## Add count summary within FACTOR2 categories
     summarize_row_groups("FACTOR2") %>%
     ## Add analysis/data rows by analyzing AGE variable
@@ -124,7 +135,6 @@ make_big_lyt <- function() {
       format = "xx.x - xx.x",
       table_names = "AgeRedux"
     ) %>%
-
     ## Note nested=TRUE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
@@ -162,13 +172,16 @@ tt_to_test_wrapping <- function() {
   levels(trimmed_data$ARM)[1] <- "Incredibly long column name to be wrapped"
   levels(trimmed_data$ARM)[2] <- "This_should_be_somewhere_split"
 
-  basic_table(title = "Enough long title to be probably wider than expected",
-    main_footer = "Also this seems quite wider than expected initially.") %>%
+  basic_table(
+    title = "Enough long title to be probably wider than expected",
+    main_footer = "Also this seems quite wider than expected initially."
+  ) %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = drop_split_levels) %>%
     analyze(c("AGE", "EOSDY"),
       na_str = "A very long content to_be_wrapped_and_splitted",
-      inclNAs = TRUE) %>%
+      inclNAs = TRUE
+    ) %>%
     build_table(trimmed_data)
 }
 
@@ -178,11 +191,14 @@ tt_to_test_newline_chars <- function() {
   set.seed(1)
   DM_trick <- DM %>%
     mutate(ARM2 = sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
-      replace = TRUE, nrow(DM))) # last \n is eaten up if no empty space
+      replace = TRUE, nrow(DM)
+    )) # last \n is eaten up if no empty space
   levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
   tbl <- basic_table() %>%
-    split_rows_by("SEX", split_label = "m\nannaggia\nsda\n",
-      label_pos = "visible") %>%
+    split_rows_by("SEX",
+      split_label = "m\nannaggia\nsda\n",
+      label_pos = "visible"
+    ) %>%
     split_cols_by("ARM2", split_label = "sda") %>%
     analyze("BMRKR1", na_str = "asd\nasd") %>%
     build_table(DM_trick)

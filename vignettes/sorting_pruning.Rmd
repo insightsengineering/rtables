@@ -505,11 +505,13 @@ silly_gender_diffcount <- function(tt) {
   ## the [1] below is cause these are count (pct%) cells
   ## and we only want the count part!
   mcount <- unlist(cell_values(
-    tt, rowpath = rpath,
+    tt,
+    rowpath = rpath,
     colpath = c("ARM", "C: Combination", "SEX", "M")
   ))[1]
   fcount <- unlist(cell_values(
-    tt, rowpath = rpath,
+    tt,
+    rowpath = rpath,
     colpath = c("ARM", "C: Combination", "SEX", "F")
   ))[1]
   (mcount - fcount) / fcount

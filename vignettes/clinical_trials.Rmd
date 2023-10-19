@@ -507,7 +507,6 @@ s_events_patients <- function(x, labelstr, .N_col) {
   in_rows(
     "Total number of patients with at least one event" =
       rcell(length(unique(x)) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
-
     "Total number of events" = rcell(length(x), format = "xx")
   )
 }
@@ -604,7 +603,6 @@ need to write a custom analysis function:
 
 ```{r}
 table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID") {
-
   x <- df[[termvar]]
   id <- df[[idvar]]
 
@@ -763,7 +761,6 @@ comparison vs. control group. Let's start with the analysis function:
 
 ```{r}
 s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
-
   if (.in_ref_col) {
     return(in_rows(
       "Difference in Response Rates (%)" = rcell(numeric(0)),
@@ -791,21 +788,27 @@ s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
   in_rows(
     "Difference in Response Rates (%)" = non_ref_rcell(
       (mean(x) - mean(.ref_group)) * 100,
-      .in_ref_col, format = "xx.xx"
+      .in_ref_col,
+      format = "xx.xx"
     ),
     "95% CI (Wald, with correction)" = non_ref_rcell(
       fit$conf.int * 100,
-      .in_ref_col, format = "(xx.xx, xx.xx)"
+      .in_ref_col,
+      format = "(xx.xx, xx.xx)"
     ),
     "p-value (Chi-Squared Test)" = non_ref_rcell(
       fit$p.value,
-      .in_ref_col, format = "x.xxxx | (<0.0001)"
+      .in_ref_col,
+      format = "x.xxxx | (<0.0001)"
     ),
-    "Odds Ratio (95% CI)" = non_ref_rcell(c(
-      exp(stats::coef(fit_glm)[-1]),
-      exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
-    ),
-    .in_ref_col, format = "xx.xx (xx.xx - xx.xx)")
+    "Odds Ratio (95% CI)" = non_ref_rcell(
+      c(
+        exp(stats::coef(fit_glm)[-1]),
+        exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
+      ),
+      .in_ref_col,
+      format = "xx.xx (xx.xx - xx.xx)"
+    )
   )
 }
 
@@ -823,7 +826,8 @@ rsp_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze(
-    "is_rsp", s_unstrat_resp, show_labels = "visible",
+    "is_rsp", s_unstrat_resp,
+    show_labels = "visible",
     var_labels = "Unstratified Response Analysis"
   )
 
@@ -1075,7 +1079,8 @@ lyt <- basic_table(show_colcounts = TRUE) %>%
   analyze("ARM", a_cph, extra_args = list(full_cox_fit = cph), show_labels = "hidden") %>%
   ## Time-to-event analysis
   analyze(
-    "ARM", a_tte, var_labels = "Time to first adverse event", show_labels = "visible",
+    "ARM", a_tte,
+    var_labels = "Time to first adverse event", show_labels = "visible",
     extra_args = list(kp_table = surv_tbl),
     table_names = "kapmeier"
   )
@@ -1101,7 +1106,8 @@ within the table. The referential footnote created earlier in the
 time-to-event analysis function (`a_tte`) is also displayed.
 
 ```{r}
-fnotes_at_path(tbl_tte,
+fnotes_at_path(
+  tbl_tte,
   c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")
 ) <- "Product-limit (Kaplan-Meier) estimates."
 

@@ -95,12 +95,15 @@ all_zero <- function(tr) {
 trim_rows <- function(tt, criteria = all_zero_or_na) {
   rows <- collect_leaves(tt, TRUE, TRUE)
   torm <- vapply(rows, criteria,
-    NA, USE.NAMES = FALSE)
+    NA,
+    USE.NAMES = FALSE
+  )
   tt[!torm, ,
     keep_topleft = TRUE,
     keep_titles = TRUE,
     keep_footers = TRUE,
-    reindex_refs = TRUE]
+    reindex_refs = TRUE
+  ]
 }
 
 #' @rdname trim_prune_funs
@@ -261,7 +264,8 @@ prune_table <- function(tt,
   keepkids <- lapply(keepkids, prune_table,
     prune_func = prune_func,
     stop_depth = stop_depth,
-    depth = depth + 1)
+    depth = depth + 1
+  )
 
   keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
   if (length(keepkids) > 0)

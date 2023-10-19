@@ -97,7 +97,8 @@ picky_splitter <- function(var) {
       do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
     else
       add_overall_level(
-        "Overall", label = "All Obs", first = FALSE
+        "Overall",
+        label = "All Obs", first = FALSE
       )(df = df, spl = spl, vals = orig_vals, trim = trim)
   }
 }
@@ -202,7 +203,8 @@ my_afun <- function(x, .var, .spl_context) {
   valnum <- min(2L, as.integer(gsub("[^[:digit:]]*", "", val)))
   fstringpt <- paste0("xx.", strrep("x", valnum))
   fmt_mnsd <- if (show_it) sprintf("%s (%s)", fstringpt, fstringpt) else "xx"
-  in_rows(n = if (show_it) n, ## NULL otherwise
+  in_rows(
+    n = if (show_it) n, ## NULL otherwise
     "Mean, SD" = if (show_it) c(meanval, sdval), ## NULL otherwise
     .formats = c(n = "xx", "Mean, SD" = fmt_mnsd)
   )
@@ -234,7 +236,8 @@ my_afun <- function(x, .var, ref_rowgroup, .spl_context) {
   ## we show it if its not a CHG within V1
   show_it <- val != ref_rowgroup || .var != "CHG"
   fmt_mnsd <- if (show_it) "xx.x (xx.x)" else "xx"
-  in_rows(n = if (show_it) n, ## NULL otherwise
+  in_rows(
+    n = if (show_it) n, ## NULL otherwise
     "Mean, SD" = if (show_it) c(meanval, sdval), ## NULL otherwise
     .formats = c(n = "xx", "Mean, SD" = fmt_mnsd)
   )

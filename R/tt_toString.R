@@ -55,12 +55,16 @@ setMethod("toString", "VTableTree", function(x,
                                              indent_size = 2,
                                              tf_wrap = FALSE,
                                              max_width = NULL) {
-  toString(matrix_form(x, indent_rownames = TRUE,
-    indent_size = indent_size),
-  widths = widths, col_gap = col_gap,
-  hsep = hsep,
-  tf_wrap = tf_wrap,
-  max_width = max_width)
+  toString(
+    matrix_form(x,
+      indent_rownames = TRUE,
+      indent_size = indent_size
+    ),
+    widths = widths, col_gap = col_gap,
+    hsep = hsep,
+    tf_wrap = tf_wrap,
+    max_width = max_width
+  )
 })
 
 #' Table shells
@@ -90,8 +94,10 @@ setMethod("toString", "VTableTree", function(x,
 #' table_shell(tbl)
 table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
                         tf_wrap = FALSE, max_width = NULL) {
-  cat(table_shell_str(tt = tt, widths = widths, col_gap = col_gap, hsep = hsep,
-    tf_wrap = tf_wrap, max_width = max_width))
+  cat(table_shell_str(
+    tt = tt, widths = widths, col_gap = col_gap, hsep = hsep,
+    tf_wrap = tf_wrap, max_width = max_width
+  ))
 }
 
 ## XXX consider moving to formatters, its really just a function
@@ -100,9 +106,9 @@ table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
 #' @export
 table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
                             tf_wrap = FALSE, max_width = NULL) {
-
   matform <- matrix_form(tt, indent_rownames = TRUE)
-  format_strs <- vapply(as.vector(matform$formats),
+  format_strs <- vapply(
+    as.vector(matform$formats),
     function(x) {
       if (inherits(x, "function"))
         "<fnc>"
@@ -110,7 +116,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
         x
       else
         stop("Don't know how to make a shell with formats of class: ", class(x))
-    }, "")
+    }, ""
+  )
 
   format_strs_mat <- matrix(format_strs, ncol = ncol(matform$strings))
   format_strs_mat[, 1] <- matform$strings[, 1]
@@ -120,8 +127,10 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   matform$strings <- format_strs_mat
   if (is.null(widths))
     widths <- propose_column_widths(matform)
-  toString(matform, widths = widths, col_gap = col_gap, hsep = hsep,
-    tf_wrap = tf_wrap, max_width = max_width)
+  toString(matform,
+    widths = widths, col_gap = col_gap, hsep = hsep,
+    tf_wrap = tf_wrap, max_width = max_width
+  )
 }
 
 
@@ -173,19 +182,20 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"),
-#'     afun = list_wrap_x(summary), format = "xx.xx")
+#'     afun = list_wrap_x(summary), format = "xx.xx"
+#'   )
 #'
 #' lyt
 #'
 #' tbl <- build_table(lyt, iris2)
 #'
 #' matrix_form(tbl)
-setMethod("matrix_form", "VTableTree",
+setMethod(
+  "matrix_form", "VTableTree",
   function(obj,
            indent_rownames = FALSE,
            expand_newlines = TRUE,
            indent_size = 2) {
-
     stopifnot(is(obj, "VTableTree"))
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
@@ -223,8 +233,10 @@ setMethod("matrix_form", "VTableTree",
 
     body <- rbind(header_content$body, body_content_strings)
 
-    hdr_fmt_blank <- matrix("", nrow = nrow(header_content$body),
-      ncol = ncol(header_content$body))
+    hdr_fmt_blank <- matrix("",
+      nrow = nrow(header_content$body),
+      ncol = ncol(header_content$body)
+    )
     if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
@@ -242,9 +254,12 @@ setMethod("matrix_form", "VTableTree",
     row.names(spans) <- NULL
 
     ## unused??? space <- matrix(rep(0, length(body)), nrow = nrow(body))
-    aligns <- rbind(matrix(rep("center", length(header_content$body)),
-      nrow = nrow(header_content$body)),
-    body_aligns)
+    aligns <- rbind(
+      matrix(rep("center", length(header_content$body)),
+        nrow = nrow(header_content$body)
+      ),
+      body_aligns
+    )
 
     aligns[, 1] <- "left" # row names and topleft (still needed for topleft)
 
@@ -255,9 +270,11 @@ setMethod("matrix_form", "VTableTree",
     nr_header <- nrow(header_content$body)
     if (indent_rownames) {
       body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent),
-        incr = indent_size)
+        incr = indent_size
+      )
       formats[, 1] <- indent_string(formats[, 1], c(rep(0, nr_header), sr$indent),
-        incr = indent_size)
+        incr = indent_size
+      )
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
@@ -268,11 +285,17 @@ setMethod("matrix_form", "VTableTree",
     }, ""), ncol = ncol(body))
     body_ref_strs <- get_ref_matrix(obj)
 
-    body <- matrix(paste0(body,
-      rbind(col_ref_strs,
-        body_ref_strs)),
-    nrow = nrow(body),
-    ncol = ncol(body))
+    body <- matrix(
+      paste0(
+        body,
+        rbind(
+          col_ref_strs,
+          body_ref_strs
+        )
+      ),
+      nrow = nrow(body),
+      ncol = ncol(body)
+    )
     # Solve \n in titles
     if (any(grepl("\n", all_titles(obj)))) {
       if (any(grepl("\n", main_title(obj)))) {
@@ -293,7 +316,8 @@ setMethod("matrix_form", "VTableTree",
     ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
     pag_titles <- page_titles(obj)
 
-    MatrixPrintForm(strings = body,
+    MatrixPrintForm(
+      strings = body,
       spans = spans,
       aligns = aligns,
       formats = formats,
@@ -314,7 +338,8 @@ setMethod("matrix_form", "VTableTree",
       table_inset = table_inset(obj),
       indent_size = indent_size
     )
-  })
+  }
+)
 
 .quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
@@ -386,7 +411,8 @@ get_ref_matrix <- function(tt) {
   bodymat <- matrix(cstrs,
     byrow = TRUE,
     nrow = nrow(tt),
-    ncol = ncol(tt))
+    ncol = ncol(tt)
+  )
   cbind(vapply(rows, function(rw) format_fnote_ref(row_footnotes(rw)), ""), bodymat)
 }
 
@@ -448,10 +474,12 @@ get_formatted_fnotes <- function(tt) {
     cur <- cur + 1
   }
   chunks <- .pad_tops(chunks)
-  lapply(seq_len(length(chunks[[1]])),
+  lapply(
+    seq_len(length(chunks[[1]])),
     function(i) {
       DataRow(unlist(lapply(chunks, `[[`, i), recursive = FALSE))
-    })
+    }
+  )
 }
 .pad_end <- function(lst, padto, ncols) {
   curcov <- sum(vapply(lst, cell_cspan, 0L))
@@ -469,16 +497,20 @@ get_formatted_fnotes <- function(tt) {
   if (all(!needpad))
     return(chunks)
 
-  chunks[needpad] <- lapply(chunks[needpad],
+  chunks[needpad] <- lapply(
+    chunks[needpad],
     function(chk) {
       span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
       needed <- padto - length(chk)
-      c(replicate(rcell("", colspan = span),
-        n = needed),
-      chk)
-    })
+      c(
+        replicate(rcell("", colspan = span),
+          n = needed
+        ),
+        chk
+      )
+    }
+  )
   chunks
-
 }
 
 .do_header_chunk <- function(coldf) {
@@ -488,17 +520,23 @@ get_formatted_fnotes <- function(tt) {
   nleafcols <- length(coldf$leaf_indices[[1]])
 
   spldfs <- split(coldf, lengths(coldf$path))
-  toret <- lapply(seq_along(spldfs),
+  toret <- lapply(
+    seq_along(spldfs),
     function(i) {
       rws <- spldfs[[i]]
 
-      thisbit <- lapply(seq_len(nrow(rws)),
+      thisbit <- lapply(
+        seq_len(nrow(rws)),
         function(ri) {
-          rcell(rws[ri, "label", drop = TRUE], colspan = rws$total_span[ri],
-            footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]])
-        })
+          rcell(rws[ri, "label", drop = TRUE],
+            colspan = rws$total_span[ri],
+            footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]]
+          )
+        }
+      )
       .pad_end(thisbit, nleafcols)
-    })
+    }
+  )
 
   toret
 }
@@ -522,10 +560,12 @@ get_formatted_fnotes <- function(tt) {
     rep(cs, cs)
   }), ncol = nc, byrow = TRUE)
 
-  fnote <- do.call(rbind,
+  fnote <- do.call(
+    rbind,
     lapply(rows, function(x) {
       cell_footnotes(x)
-    }))
+    })
+  )
 
 
 
@@ -551,7 +591,8 @@ get_formatted_fnotes <- function(tt) {
     body <- rbind(body, vapply(counts, format_rcell,
       character(1),
       format = cformat,
-      na_str = ""))
+      na_str = ""
+    ))
     span <- rbind(span, rep(1, nc))
     fnote <- rbind(fnote, rep(list(list()), nc))
   }
@@ -569,8 +610,10 @@ get_formatted_fnotes <- function(tt) {
     # We want topleft alignment that goes to the bottom!
     tl <- c(rep("", nli - lentl), tl)
   }
-  list(body = cbind(tl, body, deparse.level = 0), span = cbind(1, span),
-    footnotes = cbind(list(list()), fnote))
+  list(
+    body = cbind(tl, body, deparse.level = 0), span = cbind(1, span),
+    footnotes = cbind(list(list()), fnote)
+  )
 }
 
 
@@ -603,9 +646,9 @@ get_formatted_fnotes <- function(tt) {
 #' @rdname gfc
 setGeneric("get_formatted_cells", function(obj, shell = FALSE) standardGeneric("get_formatted_cells"))
 #' @rdname gfc
-setMethod("get_formatted_cells", "TableTree",
+setMethod(
+  "get_formatted_cells", "TableTree",
   function(obj, shell = FALSE) {
-
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell)
 
     ct <- get_formatted_cells(content_table(obj), shell = shell)
@@ -618,42 +661,50 @@ setMethod("get_formatted_cells", "TableTree",
     }
 
     do.call(rbind, c(list(lr), list(ct), els))
-  })
+  }
+)
 
 #' @rdname gfc
-setMethod("get_formatted_cells", "ElementaryTable",
+setMethod(
+  "get_formatted_cells", "ElementaryTable",
   function(obj, shell = FALSE) {
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell)
     els <- lapply(tree_children(obj), get_formatted_cells, shell = shell)
     do.call(rbind, c(list(lr), els))
-  })
+  }
+)
 
 #' @rdname gfc
-setMethod("get_formatted_cells", "TableRow",
+setMethod(
+  "get_formatted_cells", "TableRow",
   function(obj, shell = FALSE) {
-
     # Parent row format and na_str
     pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
     pr_row_na_str <- obj_na_str(obj) %||% "NA"
 
-    matrix(unlist(Map(function(val, spn, shelli) {
-      stopifnot(is(spn, "integer"))
+    matrix(
+      unlist(Map(function(val, spn, shelli) {
+        stopifnot(is(spn, "integer"))
 
-      out <- format_rcell(val,
-        pr_row_format = pr_row_format,
-        pr_row_na_str = pr_row_na_str,
-        shell = shelli)
-      if (!is.function(out) && is.character(out)) {
-        out <- paste(out, collapse = ", ")
-      }
+        out <- format_rcell(val,
+          pr_row_format = pr_row_format,
+          pr_row_na_str = pr_row_na_str,
+          shell = shelli
+        )
+        if (!is.function(out) && is.character(out)) {
+          out <- paste(out, collapse = ", ")
+        }
 
-      rep(list(out), spn)
-    }, val = row_cells(obj), spn = row_cspans(obj), shelli = shell)),
-    ncol = ncol(obj))
-  })
+        rep(list(out), spn)
+      }, val = row_cells(obj), spn = row_cspans(obj), shelli = shell)),
+      ncol = ncol(obj)
+    )
+  }
+)
 
 #' @rdname gfc
-setMethod("get_formatted_cells", "LabelRow",
+setMethod(
+  "get_formatted_cells", "LabelRow",
   function(obj, shell = FALSE) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     vstr <- if (shell) "-" else ""
@@ -662,15 +713,16 @@ setMethod("get_formatted_cells", "LabelRow",
     } else {
       matrix(character(0), ncol = nc)
     }
-  })
+  }
+)
 
 
 #' @rdname gfc
 setGeneric("get_cell_aligns", function(obj) standardGeneric("get_cell_aligns"))
 #' @rdname gfc
-setMethod("get_cell_aligns", "TableTree",
+setMethod(
+  "get_cell_aligns", "TableTree",
   function(obj) {
-
     lr <- get_cell_aligns(tt_labelrow(obj))
 
     ct <- get_cell_aligns(content_table(obj))
@@ -683,28 +735,35 @@ setMethod("get_cell_aligns", "TableTree",
     }
 
     do.call(rbind, c(list(lr), list(ct), els))
-  })
+  }
+)
 
 #' @rdname gfc
-setMethod("get_cell_aligns", "ElementaryTable",
+setMethod(
+  "get_cell_aligns", "ElementaryTable",
   function(obj) {
     lr <- get_cell_aligns(tt_labelrow(obj))
     els <- lapply(tree_children(obj), get_cell_aligns)
     do.call(rbind, c(list(lr), els))
-  })
+  }
+)
 
 #' @rdname gfc
-setMethod("get_cell_aligns", "TableRow",
+setMethod(
+  "get_cell_aligns", "TableRow",
   function(obj) {
     als <- vapply(row_cells(obj), cell_align, "")
     spns <- row_cspans(obj)
 
     matrix(rep(als, times = spns),
-      ncol = ncol(obj))
-  })
+      ncol = ncol(obj)
+    )
+  }
+)
 
 #' @rdname gfc
-setMethod("get_cell_aligns", "LabelRow",
+setMethod(
+  "get_cell_aligns", "LabelRow",
   function(obj) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     if (labelrow_visible(obj)) {
@@ -712,7 +771,8 @@ setMethod("get_cell_aligns", "LabelRow",
     } else {
       matrix(character(0), ncol = nc)
     }
-  })
+  }
+)
 
 
 
@@ -730,7 +790,6 @@ setMethod("get_cell_aligns", "LabelRow",
 #' remove_consecutive_numbers(x = c(2, 4, 5, 6, 9))
 #' remove_consecutive_numbers(x = 4:9)
 remove_consecutive_numbers <- function(x) {
-
   # actually should be integer
   stopifnot(is.wholenumber(x), is.numeric(x), !is.unsorted(x))
 
@@ -749,7 +808,6 @@ remove_consecutive_numbers <- function(x) {
 #' empty_string_after(letters[1:5], 2)
 #' empty_string_after(letters[1:5], c(2, 4))
 empty_string_after <- function(x, indices) {
-
   if (length(indices) > 0) {
     offset <- 0
     for (i in sort(indices)) {
@@ -778,7 +836,6 @@ empty_string_after <- function(x, indices) {
 #' indent_string(paste0(letters[1:3], "\n", LETTERS[1:3]), 0:2)
 #'
 indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
-
   if (length(x) > 0) {
     indent <- rep_len(indent, length.out = length(x))
     incr <- rep_len(incr, length.out = length(x))
@@ -875,7 +932,9 @@ mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep
 
   header_rows <- seq_len(nheader)
   nchwidth <- nchar(rows_formatted[1])
-  paste(c(rows_formatted[header_rows],
+  paste(c(
+    rows_formatted[header_rows],
     substr(strrep(hsep, nchwidth), 1, nchwidth),
-    rows_formatted[-header_rows]), collapse = "\n")
+    rows_formatted[-header_rows]
+  ), collapse = "\n")
 }

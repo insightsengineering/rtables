@@ -10,7 +10,6 @@ test_that(".spl_context contains information about the column split", {
     mutate(method = factor("SD")))
 
   analysis_fun_fin <- function(x, .spl_context, labelstr = "", ...) {
-
     # Very smart internal checks for name reconstruction from path
     stopifnot(length(.spl_context$cur_col_id[[1]]) == 1L)
     stopifnot(.spl_context$cur_col_id[[1]] %in% names(.spl_context))
@@ -54,7 +53,6 @@ test_that(".spl_context and afun extra parameters contain information about comb
              .all_col_exprs,
              .all_col_counts,
              ...) {
-
       cur_col <- paste0(.spl_context$cur_col_split_val[[1]], collapse = ".")
 
       # Checks on new .spl_context content
@@ -71,10 +69,16 @@ test_that(".spl_context and afun extra parameters contain information about comb
         # Needed to find the names of columns we need that are not the current one
         AC_colname <- vapply(c("A: Drug X", "C: Combination"),
           function(nmi) {
-            paste0(c(nmi,
-              .spl_context$cur_col_split_val[[1]][2]),
-            collapse = ".")
-          }, FUN.VALUE = character(1))
+            paste0(
+              c(
+                nmi,
+                .spl_context$cur_col_split_val[[1]][2]
+              ),
+              collapse = "."
+            )
+          },
+          FUN.VALUE = character(1)
+        )
         # Use of cexpr
         alt_df1c <- .alt_df_row %>%
           filter(eval(.all_col_exprs[[AC_colname[1]]]))
@@ -83,21 +87,29 @@ test_that(".spl_context and afun extra parameters contain information about comb
 
         # Normal execution - no use of cexpr
         alt_df1 <- .alt_df_row %>%
-          filter(ARM == "A: Drug X",
-            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
+          filter(
+            ARM == "A: Drug X",
+            COUNTRY == .spl_context$cur_col_split_val[[1]][2]
+          )
         alt_df2 <- .alt_df_row %>%
-          filter(ARM == "C: Combination",
-            COUNTRY == .spl_context$cur_col_split_val[[1]][2])
+          filter(
+            ARM == "C: Combination",
+            COUNTRY == .spl_context$cur_col_split_val[[1]][2]
+          )
 
         # Super manual extraction
         alt_df1b <- alt_counts_df %>%
-          filter(ARM == "A: Drug X",
+          filter(
+            ARM == "A: Drug X",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2],
-            SEX == .spl_context$value[3])
+            SEX == .spl_context$value[3]
+          )
         alt_df2b <- alt_counts_df %>%
-          filter(ARM == "C: Combination",
+          filter(
+            ARM == "C: Combination",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2],
-            SEX == .spl_context$value[3])
+            SEX == .spl_context$value[3]
+          )
 
         # All strata is add_overall_level -> filter not needed
         if (.spl_context$value[[2]] != "All Strata") {
@@ -115,15 +127,21 @@ test_that(".spl_context and afun extra parameters contain information about comb
 
         # General info
         expect_equal(.all_col_counts[[.spl_context$cur_col_id[[1]]]], .N_col)
-        expect_equal(.all_col_exprs[[.spl_context$cur_col_id[[1]]]],
-          .spl_context$cur_col_expr[[3]])
+        expect_equal(
+          .all_col_exprs[[.spl_context$cur_col_id[[1]]]],
+          .spl_context$cur_col_expr[[3]]
+        )
         expect_silent(filtering <- eval(.spl_context$cur_col_expr[[1]], .alt_df_row))
         expect_equal(.alt_df_row[filtering, ], .alt_df) # Main check for col-filter
 
         # Fin needed output
-        in_rows("n" = c(nrow(alt_df1c),
-          nrow(alt_df2c)),
-        .formats = "xx - xx")
+        in_rows(
+          "n" = c(
+            nrow(alt_df1c),
+            nrow(alt_df2c)
+          ),
+          .formats = "xx - xx"
+        )
       }
     }
   }
@@ -139,7 +157,8 @@ test_that(".spl_context and afun extra parameters contain information about comb
   # NB: If you add keep_levels = c("all_X") to add_combo_levels the other
   #     column expressions are missing -> Expected!
   expect_error(lyt %>% build_table(DM),
-    regexp = "Layout contains afun\\/cfun functions that have optional*")
+    regexp = "Layout contains afun\\/cfun functions that have optional*"
+  )
 
   tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
 
@@ -150,8 +169,10 @@ test_that(".spl_context and afun extra parameters contain information about comb
 
   nrow_manual <- lapply(sort(unique(ex_adsl$STRATA1)), function(x) {
     tmp_strata <- ex_adsl %>% filter(STRATA1 == x, SEX == "F", COUNTRY == "USA")
-    sapply(list(tmp_strata %>% filter(ARM == "A: Drug X"),
-      tmp_strata %>% filter(ARM == "C: Combination")), nrow)
+    sapply(list(
+      tmp_strata %>% filter(ARM == "A: Drug X"),
+      tmp_strata %>% filter(ARM == "C: Combination")
+    ), nrow)
   })
 
   expect_identical(nrow_manual, spl_ctx_cnt)
@@ -160,13 +181,20 @@ test_that(".spl_context and afun extra parameters contain information about comb
 test_that("Error localization for missing split variable when done in alt_count_df", {
   # Error we want to happen
   afun_tmp <- function(x, .alt_df_row, ...) mean(x)
-  lyt_col <- basic_table() %>% split_cols_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
-  lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
+  lyt_col <- basic_table() %>%
+    split_cols_by("ARMCD") %>%
+    analyze("BMRKR1", afun = afun_tmp)
+  lyt_row <- basic_table() %>%
+    split_rows_by("ARMCD") %>%
+    analyze("BMRKR1", afun = afun_tmp)
   expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM),
-    regexp = paste0("Following error encountered in splitting ",
+    regexp = paste0(
+      "Following error encountered in splitting ",
       "alt_counts_df:  variable\\(s\\) \\[ARMCD\\] ",
-      "not present in data. \\(VarLevelSplit\\)"))
+      "not present in data. \\(VarLevelSplit\\)"
+    )
+  )
 
   # What if it is not asked by the function?
   afun_tmp <- function(x, ...) mean(x)
@@ -179,8 +207,10 @@ test_that("Error localization for missing split variable when done in alt_count_
     analyze("BMRKR1", afun = afun_tmp)
 
   # Error on the columns should happen because it is used for counts on column space
-  expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM),
-    "alt_counts_df appears incompatible with column-split structure*")
+  expect_error(
+    lyt_col %>% build_table(ex_adsl, alt_counts_df = DM),
+    "alt_counts_df appears incompatible with column-split structure*"
+  )
   expect_silent(lyt_col %>% build_table(ex_adsl)) # it is specific of alt_counts_df
   expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
 })
@@ -195,30 +225,36 @@ test_that("Error localization for missmatch split variable when done in alt_coun
     stopifnot(as.character(check_val) == .spl_context$value[2])
     mean(x)
   }
-  lyt_row <- basic_table() %>% split_rows_by("ARMCD") %>% analyze("BMRKR1", afun = afun_tmp)
+  lyt_row <- basic_table() %>%
+    split_rows_by("ARMCD") %>%
+    analyze("BMRKR1", afun = afun_tmp)
 
   # Mismatch in the number of splits (NA is 0)
   DM_tmp <- DM %>% mutate("ARMCD" = NA_character_)
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
-    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
+  )
 
   # Mismatch of levels
   armcd_col <- factor(sample(c("arm A", "arm B", "arm C"), nrow(DM), replace = TRUE))
   DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
-    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
+  )
 
   # Mix mismatch of levels
   armcd_col <- factor(sample(c("arm A", "ARM B", "ARM C"), nrow(DM), replace = TRUE))
   DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
-    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
+  )
 
   # Mismatch in the number of levels
   armcd_col2 <- factor(sample(levels(ex_adsl$ARMCD)[c(1, 2)], nrow(DM), replace = TRUE))
   DM_tmp <- DM %>% mutate("ARMCD" = armcd_col2)
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
-    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
+  )
 
   # Another order -> should work? yes, split is valid
   levels(armcd_col) <- levels(ex_adsl$ARMCD)[c(1, 3, 2)]
@@ -233,7 +269,8 @@ test_that("Error localization for missmatch split variable when done in alt_coun
   # Values are all NA, but the levels are correct
   DM_tmp$ARMCD <- factor(NA, levels = levels(ex_adsl$ARMCD))
   expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
-    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *"))
+    regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
+  )
 
   DM_tmp$ARMCD <- factor(NA, levels = levels(ex_adsl$ARMCD))
   DM_tmp$ARMCD[seq_along(levels(ex_adsl$ARMCD))] <- levels(ex_adsl$ARMCD)
@@ -276,12 +313,15 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
     stopifnot(.all_col_counts[.spl_context$cur_col_id[1]] == .N_col)
 
     # Checking col expression
-    stopifnot(identical(.all_col_exprs[.spl_context$cur_col_id[1]][[1]],
-      .spl_context$cur_col_expr[[1]])) # Uses the root one
+    stopifnot(identical(
+      .all_col_exprs[.spl_context$cur_col_id[1]][[1]],
+      .spl_context$cur_col_expr[[1]]
+    )) # Uses the root one
 
     in_rows(c(length(x), length(x) / .N_col),
       .names = labelstr,
-      .formats = c("xx (xx.xx)"))
+      .formats = c("xx (xx.xx)")
+    )
   }
 
   lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -292,9 +332,13 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
     split_rows_by("ARMCD") %>%
     analyze("BMRKR1", afun = afun_tmp)
 
-  expect_error(lyt %>% build_table(ex_adsl),
-    "Layout contains afun/cfun functions that have optional*")
-  expect_error(lyt %>% build_table(ex_adsl, alt_counts_df = DM),
-    "alt_counts_df appears incompatible with column-split*")
+  expect_error(
+    lyt %>% build_table(ex_adsl),
+    "Layout contains afun/cfun functions that have optional*"
+  )
+  expect_error(
+    lyt %>% build_table(ex_adsl, alt_counts_df = DM),
+    "alt_counts_df appears incompatible with column-split*"
+  )
   expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = alt_tmp))
 })

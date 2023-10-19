@@ -1,8 +1,6 @@
 context("rtables")
 
 test_that("rtable design decisions", {
-
-
   # An rtable gets created with header amd body specification
   t1 <- rtable(
     header = c("A", "B"),
@@ -34,7 +32,8 @@ test_that("rtable design decisions", {
     rrow(),
     rrow("this is a very long section header"),
     rrow("estimate", rcell(55.23, "xx.xx", colspan = 2)),
-    rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
+    rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2))
+  )
 
   tbl
   ## see redesign/breaking_changes.md
@@ -71,12 +70,10 @@ test_that("rtable design decisions", {
     rrow("group 2", c(4.3214, .432132))
   )
   t3
-
 })
 
 
 test_that("multi-header tables work", {
-
   t1 <- rtable(
     header = rheader(
       rrow(NULL, rcell("A", colspan = 2), rcell("B", colspan = 2)),
@@ -91,65 +88,64 @@ test_that("multi-header tables work", {
   expect_equal(ncol(t1), 4)
   expect_equal(names(t1), c("A", "A", "B", "B"))
 
-  t2 <- rtable(header = rheader(
-    rrow(NULL, rcell("A"), rcell("B")),
-    rrow(NULL, rcell(50L, format = "(N=xx)"), rcell(70L, format = "(N=xx)"))),
-  rrowl("row 1", 1:2))
+  t2 <- rtable(
+    header = rheader(
+      rrow(NULL, rcell("A"), rcell("B")),
+      rrow(NULL, rcell(50L, format = "(N=xx)"), rcell(70L, format = "(N=xx)"))
+    ),
+    rrowl("row 1", 1:2)
+  )
   expect_identical(col_counts(t2), c(50L, 70L))
-
 })
 
 
 test_that("test sprintf based format", {
-
   expect_equal(format_rcell(rcell(12.213743534, sprintf_format("%.3f"))), "12.214")
   expect_equal(format_rcell(rcell(12.2134543534, sprintf_format("%.3f"))), "12.213")
 
   expect_equal(format_rcell(rcell(c(12.21, 7.321), sprintf_format("%.1f and %.2f"))), "12.2 and 7.32")
-
 })
 
 test_that("test p-value format", {
-
   expect_equal(format_rcell(rcell(0.02, "x.xxxx | (<0.0001)")), "0.0200")
   expect_equal(format_rcell(rcell(0.0234934, "x.xxxx | (<0.0001)")), "0.0235")
   expect_equal(format_rcell(rcell(0.00000001, "x.xxxx | (<0.0001)")), "<0.0001")
-
 })
 
 test_that("test 3d format (estimate and CI)", {
-
   expect_equal(format_rcell(rcell(c(0.02, -0.05, 0.0434235), "xx.xx (xx.xx - xx.xx)")), "0.02 (-0.05 - 0.04)")
   expect_equal(format_rcell(rcell(c(12.34590, 3.2359, 324.2492), "xx.xx (xx.xx - xx.xx)")), "12.35 (3.24 - 324.25)")
-
 })
 
 
 test_that("df_to_tt works", {
-
   mttt <- df_to_tt(mtcars)
 
   expect_identical(dim(mttt), dim(mtcars))
   expect_identical(names(mttt), names(mtcars))
   expect_identical(row.names(mttt), row.names(mtcars))
   expect_equal(lapply(seq_along(mtcars[[1]]), function(i) unclass(mtcars[i, ])),
-    unname(cell_values(mttt)), check.attributes = FALSE)
+    unname(cell_values(mttt)),
+    check.attributes = FALSE
+  )
 })
 
 test_that("non-ref-rcell works", {
-
   expect_identical(format_rcell(non_ref_rcell(5, TRUE)), "")
   expect_identical(format_rcell(non_ref_rcell(5, FALSE)), "5")
 })
 
 test_that("rtablel works", {
-
-  tbl <- rtablel(c("hi", "there"),
+  tbl <- rtablel(
+    c("hi", "there"),
     list(rrow("", 5, 6), rrow("B", 6, "")),
-    list(rrow("C", 7, 8), rrow("what", 10, 11)))
+    list(rrow("C", 7, 8), rrow("what", 10, 11))
+  )
   expect_identical(dim(tbl), c(4L, 2L))
 
 
-  expect_identical(unname(unlist(cell_values(tbl))),
-    c("5", "6", "6", "", "7", "8", "10", "11"))
+  expect_identical(
+    unname(unlist(cell_values(tbl))),
+    c("5", "6", "6", "", "7", "8", "10", "11")
+  )
 })

@@ -68,10 +68,12 @@ col_paths <- function(x) {
 #' # manually constructed table
 #' tbl2 <- rtable(
 #'   rheader(
-#'     rrow("row 1", rcell("a", colspan = 2),
+#'     rrow(
+#'       "row 1", rcell("a", colspan = 2),
 #'       rcell("b", colspan = 2)
 #'     ),
-#'     rrow("h2", "a", "b", "c", "d")),
+#'     rrow("h2", "a", "b", "c", "d")
+#'   ),
 #'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 #' )
 #' col_paths_summary(tbl2)
@@ -164,7 +166,8 @@ summarize_row_df_unclassed <- function(name,
                                        ## footnotes = list()
                                        num_row_refs = 0L,
                                        num_cell_refs = 0L) {
-  list(name = name,
+  list(
+    name = name,
     label = label,
     indent = indent,
     depth = level,
@@ -172,7 +175,8 @@ summarize_row_df_unclassed <- function(name,
     indent_mod = indent_mod,
     level = level,
     num_row_refs = num_row_refs,
-    num_cell_refs = num_cell_refs)
+    num_cell_refs = num_cell_refs
+  )
   ##  footnotes = footnotes)##,
   ## stringsAsFactors = FALSE)
 }
@@ -187,12 +191,14 @@ fast_rsummry_bind <- function(lst) {
   } else if (length(lst) == 1L) {
     return(as.data.frame(lst[[1]]))
   } else {
-    res <- lapply(seq_along(srow_df_names),
+    res <- lapply(
+      seq_along(srow_df_names),
       function(i) {
         do.call(c, lapply(lst, function(x) {
           if (length(x) > 0) x[[i]] else x
         }))
-      })
+      }
+    )
     names(res) <- srow_df_names
     res <- as.data.frame(res)
   }
@@ -231,8 +237,10 @@ summarize_rows <- function(obj) {
 #' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
-#'     format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"),
+#'     afun = list_wrap_x(summary),
+#'     format = "xx.xx"
+#'   )
 #'
 #' tbl <- build_table(lyt, iris2)
 #'
@@ -242,9 +250,9 @@ setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0) {
 })
 
 #' @rdname int_methods
-setMethod("summarize_rows_inner", "TableTree",
+setMethod(
+  "summarize_rows_inner", "TableTree",
   function(obj, depth = 0, indent = 0) {
-
     indent <- max(0L, indent + indent_mod(obj))
 
     lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
@@ -257,15 +265,18 @@ setMethod("summarize_rows_inner", "TableTree",
 
     ctab <- content_table(obj)
     if (NROW(ctab)) {
-      ct <- summarize_rows_inner(ctab, depth = depth,
-        indent = indent + indent_mod(ctab))
+      ct <- summarize_rows_inner(ctab,
+        depth = depth,
+        indent = indent + indent_mod(ctab)
+      )
       ret <- c(ret, ct)
       indent <- indent + (length(ct) > 0) * (1 + indent_mod(ctab))
     }
 
     kids <- tree_children(obj)
     els <- lapply(tree_children(obj), summarize_rows_inner,
-      depth = depth + 1, indent = indent)
+      depth = depth + 1, indent = indent
+    )
     if (!are(kids, "TableRow")) {
       if (!are(kids, "VTableTree")) {
         ## hatchet job of a hack, wrap em just so we can unlist em all at
@@ -281,12 +292,12 @@ setMethod("summarize_rows_inner", "TableTree",
 
     ## row.names(df) <- NULL
     ## df
-
-  })
+  }
+)
 #' @rdname int_methods
-setMethod("summarize_rows_inner", "ElementaryTable",
+setMethod(
+  "summarize_rows_inner", "ElementaryTable",
   function(obj, depth = 0, indent = 0) {
-
     indent <- max(0L, indent + indent_mod(obj))
     lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
     if (!is.null(lr)) {
@@ -296,25 +307,29 @@ setMethod("summarize_rows_inner", "ElementaryTable",
       ret <- list()
     }
 
-    els <- lapply(tree_children(obj), summarize_rows_inner, depth = depth + 1,
-      indent = indent)
+    els <- lapply(tree_children(obj), summarize_rows_inner,
+      depth = depth + 1,
+      indent = indent
+    )
 
     c(ret, els)
     ## df <- do.call(rbind, c(list(lr), els))
     ## row.names(df) <- NULL
     ## df
-
-  })
+  }
+)
 .num_cell_refs <- function(tr) {
-  sum(vapply(cell_footnotes(tr),
+  sum(vapply(
+    cell_footnotes(tr),
     function(cfn) length(cfn) > 0,
-    FALSE))
+    FALSE
+  ))
 }
 
 #' @rdname int_methods
-setMethod("summarize_rows_inner", "TableRow",
+setMethod(
+  "summarize_rows_inner", "TableRow",
   function(obj, depth = 0, indent = 0) {
-
     indent <- max(0L, indent + indent_mod(obj))
 
     summarize_row_df_unclassed(
@@ -328,12 +343,12 @@ setMethod("summarize_rows_inner", "TableRow",
       num_row_refs = length(row_footnotes(obj)),
       num_cell_refs = .num_cell_refs(obj)
     )
-
-  })
+  }
+)
 #' @rdname int_methods
-setMethod("summarize_rows_inner", "LabelRow",
+setMethod(
+  "summarize_rows_inner", "LabelRow",
   function(obj, depth = 0, indent = 0) {
-
     indent <- max(0L, indent + indent_mod(obj))
 
     if (labelrow_visible(obj)) {
@@ -351,7 +366,8 @@ setMethod("summarize_rows_inner", "LabelRow",
     } else {
       summarize_row_df_empty
     }
-  })
+  }
+)
 
 
 
@@ -377,8 +393,10 @@ setMethod("summarize_rows_inner", "LabelRow",
 #' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
-#'     format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"),
+#'     afun = list_wrap_x(summary),
+#'     format = "xx.xx"
+#'   )
 #'
 #' tbl <- build_table(lyt, iris2)
 #' tbl
@@ -389,16 +407,13 @@ setMethod("summarize_rows_inner", "LabelRow",
 #'
 #' table_structure(tbl, detail = "row")
 table_structure <- function(x, detail = c("subtable", "row")) {
-
   detail <- match.arg(detail)
 
-  switch(
-    detail,
+  switch(    detail,
     subtable = treestruct(x),
     row = table_structure_inner(x),
     stop("unsupported level of detail ", detail)
   )
-
 }
 
 
@@ -408,17 +423,18 @@ table_structure <- function(x, detail = c("subtable", "row")) {
 #' @param depth depth in tree
 #' @param indent indent
 #' @param print_indent indent for print
-setGeneric("table_structure_inner",
+setGeneric(
+  "table_structure_inner",
   function(obj,
            depth = 0,
            indent = 0,
            print_indent = 0) {
     standardGeneric("table_structure_inner")
-  })
+  }
+)
 
 
 scat <- function(..., indent = 0, newline = TRUE) {
-
   txt <- paste(..., collapse = "", sep = "")
 
   cat(indent_string(txt, indent))
@@ -449,27 +465,34 @@ setGeneric("str", function(object, ...) {
 #' `VTableTree` method, unlike the underlying default of `NA`. `NA` is *not*
 #' appropriate for `VTableTree` objects.
 #' @export
-setMethod("str", "VTableTree",
+setMethod(
+  "str", "VTableTree",
   function(object, max.level = 3L, ...) {
     utils::str(object, max.level = max.level, ...)
     warning("str provides a low level, implementation-detail-specific description of the TableTree object structure. ",
       "See table_structure(.) for a summary of table struture intended for end users.",
-      call. = FALSE)
+      call. = FALSE
+    )
     invisible(NULL)
-  })
+  }
+)
 
 #' @rdname int_methods
 #' @inheritParams table_structure_inner
-setMethod("table_structure_inner", "TableTree",
+setMethod(
+  "table_structure_inner", "TableTree",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
-
     indent <- indent + indent_mod(obj)
 
     scat("TableTree: ", "[", obj_name(obj), "] (",
-      obj_label(obj), ")", indent = print_indent)
+      obj_label(obj), ")",
+      indent = print_indent
+    )
 
-    table_structure_inner(tt_labelrow(obj), depth, indent,
-      print_indent + 1)
+    table_structure_inner(
+      tt_labelrow(obj), depth, indent,
+      print_indent + 1
+    )
 
     ctab <- content_table(obj)
     visible_content <- if (is_empty_ElementaryTable(ctab)) {
@@ -477,9 +500,11 @@ setMethod("table_structure_inner", "TableTree",
       FALSE
     } else {
       scat("content:", indent = print_indent + 1)
-      table_structure_inner(ctab, depth = depth,
+      table_structure_inner(ctab,
+        depth = depth,
         indent = indent + indent_mod(ctab),
-        print_indent = print_indent + 2)
+        print_indent = print_indent + 2
+      )
     }
 
     if (length(tree_children(obj)) == 0) {
@@ -489,25 +514,30 @@ setMethod("table_structure_inner", "TableTree",
       lapply(tree_children(obj), table_structure_inner,
         depth = depth + 1,
         indent = indent + visible_content * (1 + indent_mod(ctab)),
-        print_indent = print_indent + 2)
+        print_indent = print_indent + 2
+      )
     }
 
     invisible(NULL)
-
-  })
+  }
+)
 
 #' @rdname int_methods
-setMethod("table_structure_inner", "ElementaryTable",
+setMethod(
+  "table_structure_inner", "ElementaryTable",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
-
     scat("ElementaryTable: ", "[", obj_name(obj),
-      "] (", obj_label(obj), ")", indent = print_indent)
+      "] (", obj_label(obj), ")",
+      indent = print_indent
+    )
 
 
     indent <- indent + indent_mod(obj)
 
-    table_structure_inner(tt_labelrow(obj), depth,
-      indent, print_indent + 1)
+    table_structure_inner(
+      tt_labelrow(obj), depth,
+      indent, print_indent + 1
+    )
 
 
     if (length(tree_children(obj)) == 0) {
@@ -516,35 +546,42 @@ setMethod("table_structure_inner", "ElementaryTable",
       scat("children: ", indent = print_indent + 1)
       lapply(tree_children(obj), table_structure_inner,
         depth = depth + 1, indent = indent,
-        print_indent = print_indent + 2)
+        print_indent = print_indent + 2
+      )
     }
 
     invisible(NULL)
-
-  })
+  }
+)
 
 #' @rdname int_methods
-setMethod("table_structure_inner", "TableRow",
+setMethod(
+  "table_structure_inner", "TableRow",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
-
     scat(class(obj), ": ", "[", obj_name(obj), "] (",
-      obj_label(obj), ")", indent = print_indent)
+      obj_label(obj), ")",
+      indent = print_indent
+    )
 
     indent <- indent + indent_mod(obj)
 
     invisible(NULL)
-  })
+  }
+)
 
 #' @rdname int_methods
-setMethod("table_structure_inner", "LabelRow",
+setMethod(
+  "table_structure_inner", "LabelRow",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
-
     indent <- indent + indent_mod(obj)
 
     txtvis <- if (!obj_visible(obj)) " - <not visible>" else ""
 
     scat("labelrow: ", "[", obj_name(obj), "] (", obj_label(obj), ")",
-      txtvis, indent = print_indent)
+      txtvis,
+      indent = print_indent
+    )
 
     obj_visible(obj)
-  })
+  }
+)

@@ -56,7 +56,8 @@ recursive_replace <- function(tab, path, value) { ## incontent = FALSE, rows = N
       path = path[-1],
       ## rows = rows,
       ## cols = cols,
-      value = value)
+      value = value
+    )
     content_table(tab) <- ctb
     tab
   } else { ## length(path) > 1, more recursing to do
@@ -65,8 +66,10 @@ recursive_replace <- function(tab, path, value) { ## incontent = FALSE, rows = N
     ## expression
     ## for now only the last step supports selecting
     ## multiple kids
-    stopifnot(length(kidel) == 1,
-      is.character(kidel) || is.factor(kidel))
+    stopifnot(
+      length(kidel) == 1,
+      is.character(kidel) || is.factor(kidel)
+    )
     knms <- names(tree_children(tab))
     if (!(kidel %in% knms))
       stop(sprintf("position element %s not in names of next level children", kidel))
@@ -79,7 +82,8 @@ recursive_replace <- function(tab, path, value) { ## incontent = FALSE, rows = N
       ## incontent = incontent,
       ## rows = rows,
       ## cols = cols,
-      value)
+      value
+    )
     tree_children(tab)[[kidel]] <- newkid
     tab
   }
@@ -104,7 +108,8 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
   stopifnot(kidel %in% knms)
   newkid <- col_fnotes_at_path(kids[[kidel]],
     path[-1],
-    fnotes = fnotes)
+    fnotes = fnotes
+  )
   kids[[kidel]] <- newkid
   tree_children(ctree) <- kids
   ctree
@@ -128,22 +133,28 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #'
 #' tbl <- build_table(lyt, DM)
 #'
-#' tbl2 <- insert_row_at_path(tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
-#'   rrow("new row", 555))
+#' tbl2 <- insert_row_at_path(
+#'   tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
+#'   rrow("new row", 555)
+#' )
 #' tbl2
 #'
 #' tbl3 <- insert_row_at_path(tbl2, c("COUNTRY", "CHN", "AGE", "Mean"),
 #'   rrow("new row redux", 888),
-#'   after = TRUE)
+#'   after = TRUE
+#' )
 #' tbl3
 #' @seealso [DataRow()] [rrow()]
 
-setGeneric("insert_row_at_path", signature = c("tt", "value"),
+setGeneric("insert_row_at_path",
+  signature = c("tt", "value"),
   function(tt, path, value, after = FALSE) {
     standardGeneric("insert_row_at_path")
-  })
+  }
+)
 #' @rdname insert_row_at_path
-setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
+setMethod(
+  "insert_row_at_path", c("VTableTree", "DataRow"),
   function(tt, path, value, after = FALSE) {
     if (no_colinfo(value))
       col_info(value) <- col_info(tt)
@@ -153,8 +164,10 @@ setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
     origpath <- path # nolint
     idx_row <- tt_at_path(tt, path)
     if (!is(idx_row, "DataRow"))
-      stop("path must resolve fully to a non-content data row. Insertion of ",
-        "rows elsewhere in the tree is not currently supported.")
+      stop(
+        "path must resolve fully to a non-content data row. Insertion of ",
+        "rows elsewhere in the tree is not currently supported."
+      )
 
     posnm <- tail(path, 1)
 
@@ -165,28 +178,37 @@ setMethod("insert_row_at_path", c("VTableTree", "DataRow"),
     ind <- which(names(kids) == posnm)
     if (length(ind) != 1L) {
       ## nocov start
-      stop("table children do not appear to be named correctly at this ",
+      stop(
+        "table children do not appear to be named correctly at this ",
         "path. This should not happen, please contact the maintainer of ",
-        "rtables.")
+        "rtables."
+      )
       ## nocov end
     }
     if (after)
       ind <- ind + 1
 
     sq <- seq_along(kids)
-    tree_children(subtt) <- c(kids[sq < ind],
+    tree_children(subtt) <- c(
+      kids[sq < ind],
       setNames(list(value), obj_name(value)),
-      kids[sq >= ind])
+      kids[sq >= ind]
+    )
     tt_at_path(tt, path) <- subtt
     tt
-  })
+  }
+)
 #' @rdname insert_row_at_path
-setMethod("insert_row_at_path", c("VTableTree", "ANY"),
+setMethod(
+  "insert_row_at_path", c("VTableTree", "ANY"),
   function(tt, path, value) {
-    stop("Currently only insertion of DataRow objects is supported. Got ",
+    stop(
+      "Currently only insertion of DataRow objects is supported. Got ",
       "object of class ", class(value), ". Please use rrow() or DataRow() ",
-      "to construct your row before insertion.")
-  })
+      "to construct your row before insertion."
+    )
+  }
+)
 
 
 #' Label at Path
@@ -250,11 +272,14 @@ setGeneric("tt_at_path", function(tt, path, ...) standardGeneric("tt_at_path"))
 #' @export
 #' @inheritParams tt_at_path
 #' @rdname int_methods
-setMethod("tt_at_path", "VTableTree",
+setMethod(
+  "tt_at_path", "VTableTree",
   function(tt, path, ...) {
-    stopifnot(is(path, "character"),
+    stopifnot(
+      is(path, "character"),
       length(path) > 0,
-      !anyNA(path))
+      !anyNA(path)
+    )
     if (identical(path[1], "root"))
       path <- path[-1]
     ## handle pathing that hits the root split by name
@@ -275,7 +300,8 @@ setMethod("tt_at_path", "VTableTree",
       curpath <- curpath[-1]
     }
     cur
-  })
+  }
+)
 
 #' @export
 #' @rdname ttap
@@ -309,33 +335,38 @@ setMethod("tt_at_path", "VTableTree",
 #' tt_at_path(tbl3, path = c("SEX", "F", "BMRKR2")) <- sub_tbl
 #' tbl3
 #'
-setGeneric("tt_at_path<-",
-  function(tt, path, ..., value) standardGeneric("tt_at_path<-"))
+setGeneric(
+  "tt_at_path<-",
+  function(tt, path, ..., value) standardGeneric("tt_at_path<-")
+)
 #' @export
 #' @rdname int_methods
 #' @keywords internal
-setMethod("tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
+setMethod(
+  "tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
   function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
-
-  })
+  }
+)
 
 ## this one removes the child at path from the parents list of children,
 ## because that is how lists behave.
 #' @export
 #' @rdname int_methods
 #' @keywords internal
-setMethod("tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
+setMethod(
+  "tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
   function(tt, path, ..., value) {
     do_recursive_replace(tt, path = path, value = value)
-
-  })
+  }
+)
 
 
 #' @export
 #' @rdname int_methods
 #' @keywords internal
-setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
+setMethod(
+  "tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
   function(tt, path, ..., value) {
     stopifnot(is(tt_at_path(tt = tt, path = path), "TableRow"))
     do_recursive_replace(tt, path = path, value = value)
@@ -344,7 +375,8 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
     ## i <- .path_to_pos(path = path, tt = tt)
 
     ## replace_rows(tt, i = i, value = list(value))
-  })
+  }
+)
 
 
 #' @name brackets
@@ -391,10 +423,12 @@ setMethod("tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
 #' structure: `summarize_row_groups()`, and `summarize_col_groups()`.
 #'
 #' @examples
-#' lyt <- basic_table(title = "Title",
+#' lyt <- basic_table(
+#'   title = "Title",
 #'   subtitles = c("Sub", "titles"),
 #'   prov_footer = "prov footer",
-#'   main_footer = "main footer") %>%
+#'   main_footer = "main footer"
+#' ) %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX") %>%
 #'   analyze(c("AGE"))
@@ -461,10 +495,9 @@ NULL
 
 #' @exportMethod [<-
 #' @rdname brackets
-setMethod("[<-", c("VTableTree", value = "list"),
+setMethod(
+  "[<-", c("VTableTree", value = "list"),
   function(x, i, j, ..., value) {
-
-
     nr <- nrow(x)
     if (missing(i))
       i <- seq_len(NROW(x))
@@ -504,8 +537,10 @@ setMethod("[<-", c("VTableTree", value = "list"),
           if (is(nxtval, "LabelRow")) {
             tt_labelrow(x) <- nxtval
           } else {
-            stop("can't replace label with value of class",
-              class(nxtval))
+            stop(
+              "can't replace label with value of class",
+              class(nxtval)
+            )
           }
           ## we're done with this one move to
           ## the next
@@ -556,17 +591,20 @@ setMethod("[<-", c("VTableTree", value = "list"),
       x
     }
     replace_rowsbynum(x, i, ...)
-  })
+  }
+)
 
 #' @inheritParams brackets
 #' @exportMethod [<-
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[<-", c("VTableTree", value = "CellValue"),
+setMethod(
+  "[<-", c("VTableTree", value = "CellValue"),
   function(x, i, j, ..., value) {
     x[i = i, j = j, ...] <- list(value)
     x
-  })
+  }
+)
 
 ## this is going to be hard :( :( :(
 
@@ -575,7 +613,8 @@ setMethod("[<-", c("VTableTree", value = "CellValue"),
 ## we have two options here: path like we do with rows and positional
 ## in leaf space.
 
-setGeneric("subset_cols",
+setGeneric(
+  "subset_cols",
   function(tt,
            j,
            newcinfo = NULL,
@@ -584,16 +623,19 @@ setGeneric("subset_cols",
            keep_footers = keep_titles,
            ...) {
     standardGeneric("subset_cols")
-  })
+  }
+)
 
-setMethod("subset_cols", c("TableTree", "numeric"),
+setMethod(
+  "subset_cols", c("TableTree", "numeric"),
   function(tt, j, newcinfo = NULL,
            keep_topleft, keep_titles, keep_footers, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if (is.null(newcinfo)) {
       cinfo <- col_info(tt)
       newcinfo <- subset_cols(cinfo, j,
-        keep_topleft = keep_topleft, ...)
+        keep_topleft = keep_topleft, ...
+      )
     }
     ## topleft taken care of in creation of newcinfo
     kids <- tree_children(tt)
@@ -606,22 +648,28 @@ setMethod("subset_cols", c("TableTree", "numeric"),
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
 
-    tt2 <- .h_copy_titles_footers_topleft(tt2, tt,
+    tt2 <- .h_copy_titles_footers_topleft(
+      tt2, tt,
       keep_titles,
       keep_footers,
-      keep_topleft)
+      keep_topleft
+    )
     tt2
-  })
+  }
+)
 
-setMethod("subset_cols", c("ElementaryTable", "numeric"),
+setMethod(
+  "subset_cols", c("ElementaryTable", "numeric"),
   function(tt, j, newcinfo = NULL,
            keep_topleft, keep_titles, keep_footers, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if (is.null(newcinfo)) {
       cinfo <- col_info(tt)
-      newcinfo <- subset_cols(cinfo, j, keep_topleft = keep_topleft,
+      newcinfo <- subset_cols(cinfo, j,
+        keep_topleft = keep_topleft,
         keep_titles = keep_titles,
-        keep_footers = keep_footers, ...)
+        keep_footers = keep_footers, ...
+      )
     }
     ## topleft handled in creation of newcinfo
     kids <- tree_children(tt)
@@ -630,12 +678,15 @@ setMethod("subset_cols", c("ElementaryTable", "numeric"),
     col_info(tt2) <- newcinfo
     tree_children(tt2) <- newkids
     tt_labelrow(tt2) <- subset_cols(tt_labelrow(tt2), j, newcinfo, ...)
-    tt2 <- .h_copy_titles_footers_topleft(tt2, tt,
+    tt2 <- .h_copy_titles_footers_topleft(
+      tt2, tt,
       keep_titles,
       keep_footers,
-      keep_topleft)
+      keep_topleft
+    )
     tt2
-  })
+  }
+)
 
 
 ## small utility to transform any negative
@@ -680,9 +731,11 @@ path_to_regex <- function(path) {
   pathstrs <- vapply(paths, paste, "", collapse = path_collapse_sep)
   allmatchs <- grep(pathregex, pathstrs)
   if (length(allmatchs) == 0)
-    stop(if (cols) "column path [" else "row path [",
+    stop(
+      if (cols) "column path [" else "row path [",
       paste(path, collapse = "->"),
-      "] does not appear valid for this table")
+      "] does not appear valid for this table"
+    )
 
   idxdiffs <- diff(allmatchs)
   if (!distinct_ok &&
@@ -714,20 +767,23 @@ path_to_regex <- function(path) {
   res <- res[res > 0]
   stopifnot(sum(res) == length(j))
   res
-
 }
 
 select_cells_j <- function(cells, j) {
   if (length(j) != length(unique(j)))
     stop("duplicate column selections is not currently supported")
-  spans <- vapply(cells, function(x) cell_cspan(x),
-    integer(1))
+  spans <- vapply(
+    cells, function(x) cell_cspan(x),
+    integer(1)
+  )
   inds <- rep(seq_along(cells), times = spans)
   selinds <- inds[j]
   retcells <- cells[selinds[!duplicated(selinds)]]
-  newspans <- vapply(split(selinds, selinds),
+  newspans <- vapply(
+    split(selinds, selinds),
     length,
-    integer(1))
+    integer(1)
+  )
 
   mapply(function(cl, sp) {
     cell_cspan(cl) <- sp
@@ -735,13 +791,16 @@ select_cells_j <- function(cells, j) {
   }, cl = retcells, sp = newspans, SIMPLIFY = FALSE)
 }
 
-setMethod("subset_cols", c("ANY", "character"),
+setMethod(
+  "subset_cols", c("ANY", "character"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     j <- .path_to_pos(path = j, tt = tt, cols = TRUE)
     subset_cols(tt, j, newcinfo = newcinfo, keep_topleft = keep_topleft, ...)
-  })
+  }
+)
 
-setMethod("subset_cols", c("TableRow", "numeric"),
+setMethod(
+  "subset_cols", c("TableRow", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if (is.null(newcinfo)) {
@@ -755,9 +814,11 @@ setMethod("subset_cols", c("TableRow", "numeric"),
       row_cspans(tt2) <- .fix_rowcspans(tt2, j)
     col_info(tt2) <- newcinfo
     tt2
-  })
+  }
+)
 
-setMethod("subset_cols", c("LabelRow", "numeric"),
+setMethod(
+  "subset_cols", c("LabelRow", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     j <- .j_to_posj(j, ncol(tt))
     if (is.null(newcinfo)) {
@@ -766,10 +827,12 @@ setMethod("subset_cols", c("LabelRow", "numeric"),
     }
     col_info(tt) <- newcinfo
     tt
-  })
+  }
+)
 
 
-setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
+setMethod(
+  "subset_cols", c("InstantiatedColumnInfo", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
     if (!is.null(newcinfo))
       return(newcinfo)
@@ -779,16 +842,20 @@ setMethod("subset_cols", c("InstantiatedColumnInfo", "numeric"),
     newcsubs <- col_exprs(tt)[j]
     newcounts <- col_counts(tt)[j]
     tl <- if (keep_topleft) top_left(tt) else character()
-    InstantiatedColumnInfo(treelyt = newctree,
+    InstantiatedColumnInfo(
+      treelyt = newctree,
       csubs = newcsubs,
       extras = newcextra,
       cnts = newcounts,
       dispcounts = disp_ccounts(tt),
       countformat = colcount_format(tt),
-      topleft = tl)
-  })
+      topleft = tl
+    )
+  }
+)
 
-setMethod("subset_cols", c("LayoutColTree", "numeric"),
+setMethod(
+  "subset_cols", c("LayoutColTree", "numeric"),
   function(tt, j, newcinfo = NULL, ...) {
     lst <- collect_leaves(tt)
     j <- .j_to_posj(j, length(lst))
@@ -818,7 +885,8 @@ setMethod("subset_cols", c("LayoutColTree", "numeric"),
       }
     }
     prune_children(tt, j)
-  })
+  }
+)
 
 
 
@@ -861,8 +929,11 @@ subset_by_rownum <- function(tt,
       ctab <- content_table(x)
 
       content_table(x) <- prune_rowsbynum(ctab, i,
-        valifnone = ElementaryTable(cinfo = col_info(ctab),
-          iscontent = TRUE))
+        valifnone = ElementaryTable(
+          cinfo = col_info(ctab),
+          iscontent = TRUE
+        )
+      )
     }
     kids <- tree_children(x)
     if (counter > maxi) { # already done
@@ -900,10 +971,12 @@ subset_by_rownum <- function(tt,
   }
   ret <- prune_rowsbynum(tt, i)
 
-  ret <- .h_copy_titles_footers_topleft(ret, tt,
+  ret <- .h_copy_titles_footers_topleft(
+    ret, tt,
     keep_titles,
     keep_footers,
-    keep_topleft)
+    keep_topleft
+  )
 
   ret
 }
@@ -911,109 +984,130 @@ subset_by_rownum <- function(tt,
 
 #' @exportMethod [
 #' @rdname brackets
-setMethod("[", c("VTableTree", "logical", "logical"),
+setMethod(
+  "[", c("VTableTree", "logical", "logical"),
   function(x, i, j, ..., drop = FALSE) {
     i <- .j_to_posj(i, nrow(x))
     j <- .j_to_posj(j, ncol(x))
     x[i, j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "logical", "ANY"),
+setMethod(
+  "[", c("VTableTree", "logical", "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     i <- .j_to_posj(i, nrow(x))
     x[i, j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "logical", "missing"),
+setMethod(
+  "[", c("VTableTree", "logical", "missing"),
   function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
     i <- .j_to_posj(i, nrow(x))
     x[i, j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "ANY", "logical"),
+setMethod(
+  "[", c("VTableTree", "ANY", "logical"),
   function(x, i, j, ..., drop = FALSE) {
     j <- .j_to_posj(j, ncol(x))
     x[i, j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "ANY", "missing"),
+setMethod(
+  "[", c("VTableTree", "ANY", "missing"),
   function(x, i, j, ..., drop = FALSE) {
     j <- seq_len(ncol(x))
     x[i = i, j = j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "missing", "ANY"),
+setMethod(
+  "[", c("VTableTree", "missing", "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
     x[i = i, j = j, ..., drop = drop]
-  })
+  }
+)
 
 
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "ANY", "character"),
+setMethod(
+  "[", c("VTableTree", "ANY", "character"),
   function(x, i, j, ..., drop = FALSE) {
     ## j <- .colpath_to_j(j, coltree(x))
     j <- .path_to_pos(path = j, tt = x, cols = TRUE)
     x[i = i, j = j, ..., drop = drop]
-  })
+  }
+)
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "character", "ANY"),
+setMethod(
+  "[", c("VTableTree", "character", "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     ## i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
     i <- .path_to_pos(i, x)
     x[i = i, j = j, ..., drop = drop]
-  })
+  }
+)
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "character", "character"),
+setMethod(
+  "[", c("VTableTree", "character", "character"),
   function(x, i, j, ..., drop = FALSE) {
     ## i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
     i <- .path_to_pos(i, x)
     ## j <- .colpath_to_j(j, coltree(x))
     j <- .path_to_pos(path = j, tt = x, cols = TRUE)
     x[i = i, j = j, ..., drop = drop]
-  })
+  }
+)
 
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "missing", "numeric"),
+setMethod(
+  "[", c("VTableTree", "missing", "numeric"),
   function(x, i, j, ..., drop = FALSE) {
     i <- seq_len(nrow(x))
     x[i, j, ..., drop = drop]
-  })
+  }
+)
 
 
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
-setMethod("[", c("VTableTree", "numeric", "numeric"),
+setMethod(
+  "[", c("VTableTree", "numeric", "numeric"),
   function(x, i, j, ..., drop = FALSE) {
     ## have to do it this way because we can't add an argument since we don't
     ## own the generic declaration
@@ -1033,7 +1127,8 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
       x <- subset_by_rownum(x, i,
         keep_topleft = keep_topleft,
         keep_titles = keep_titles,
-        keep_footers = keep_footers)
+        keep_footers = keep_footers
+      )
     } else if (is.na(keep_topleft)) {
       keep_topleft <- TRUE
     }
@@ -1043,23 +1138,28 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
       x <- subset_cols(x, j,
         keep_topleft = keep_topleft,
         keep_titles = keep_titles,
-        keep_footers = keep_footers)
+        keep_footers = keep_footers
+      )
 
     # Dropping everything
     if (drop) {
       if (length(j) == 1L && length(i) == 1L) {
         rw <- collect_leaves(x, TRUE, TRUE)[[1]]
         if (is(rw, "LabelRow")) {
-          warning("The value selected with drop = TRUE belongs ",
-            "to a label row. NULL will be returned")
+          warning(
+            "The value selected with drop = TRUE belongs ",
+            "to a label row. NULL will be returned"
+          )
           x <- NULL
         } else {
           x <- row_values(rw)[[1]]
         }
       } else {
-        warning("Trying to drop more than one subsetted value. ",
+        warning(
+          "Trying to drop more than one subsetted value. ",
           "We support this only with accessor function `cell_values()`. ",
-          "No drop will be done at this time.")
+          "No drop will be done at this time."
+        )
         drop <- FALSE
       }
     }
@@ -1070,21 +1170,25 @@ setMethod("[", c("VTableTree", "numeric", "numeric"),
         x <- update_ref_indexing(x)
     }
     x
-  })
+  }
+)
 
 #' @importFrom utils compareVersion
 
 setGeneric("tail", tail)
-setMethod("tail", "VTableTree",
+setMethod(
+  "tail", "VTableTree",
   function(x, n = 6L, ...) {
     if (compareVersion("4.0.0", as.character(getRversion())) <= 0)
       tail.matrix(x, n, keepnums = FALSE)
     else
       tail.matrix(x, n, addrownums = FALSE)
-  })
+  }
+)
 
 setGeneric("head", head)
-setMethod("head", "VTableTree",
+setMethod(
+  "head", "VTableTree",
   function(x, n = 6L, ...) {
     head.matrix(x, n)
   }
@@ -1134,32 +1238,46 @@ setMethod("head", "VTableTree",
 #' row_paths_summary(tbl)
 #' col_paths_summary(tbl)
 #'
-#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
-#'   c("ARM", "A: Drug X", "SEX", "F"))
+#' cell_values(
+#'   tbl, c("RACE", "ASIAN", "STRATA1", "B"),
+#'   c("ARM", "A: Drug X", "SEX", "F")
+#' )
 #'
 #' # it's also possible to access multiple values by being less specific
-#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1"),
-#'   c("ARM", "A: Drug X", "SEX", "F"))
+#' cell_values(
+#'   tbl, c("RACE", "ASIAN", "STRATA1"),
+#'   c("ARM", "A: Drug X", "SEX", "F")
+#' )
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 #'
 #'
 #' ## any arm, male columns from the ASIAN content (i.e. summary) row
-#' cell_values(tbl, c("RACE", "ASIAN", "@content"),
-#'   c("ARM", "B: Placebo", "SEX", "M"))
-#' cell_values(tbl, c("RACE", "ASIAN", "@content"),
-#'   c("ARM", "*", "SEX", "M"))
+#' cell_values(
+#'   tbl, c("RACE", "ASIAN", "@content"),
+#'   c("ARM", "B: Placebo", "SEX", "M")
+#' )
+#' cell_values(
+#'   tbl, c("RACE", "ASIAN", "@content"),
+#'   c("ARM", "*", "SEX", "M")
+#' )
 #'
 #' ## all columns
 #' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"))
 #'
 #' ## all columns for the Combination arm
-#' cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
-#'   c("ARM", "C: Combination"))
+#' cell_values(
+#'   tbl, c("RACE", "ASIAN", "STRATA1", "B"),
+#'   c("ARM", "C: Combination")
+#' )
 #'
-#' cvlist <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
-#'   c("ARM", "B: Placebo", "SEX", "M"))
-#' cvnolist <- value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
-#'   c("ARM", "B: Placebo", "SEX", "M"))
+#' cvlist <- cell_values(
+#'   tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+#'   c("ARM", "B: Placebo", "SEX", "M")
+#' )
+#' cvnolist <- value_at(
+#'   tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+#'   c("ARM", "B: Placebo", "SEX", "M")
+#' )
 #' stopifnot(identical(cvlist[[1]], cvnolist))
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE) {
   standardGeneric("cell_values")
@@ -1168,30 +1286,40 @@ setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labr
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod cell_values
-setMethod("cell_values", "VTableTree",
+setMethod(
+  "cell_values", "VTableTree",
   function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
-    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath,
-      omit_labrows = omit_labrows, value_at = FALSE)
-  })
+    .inner_cell_value(tt,
+      rowpath = rowpath, colpath = colpath,
+      omit_labrows = omit_labrows, value_at = FALSE
+    )
+  }
+)
 
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod cell_values
-setMethod("cell_values", "TableRow",
+setMethod(
+  "cell_values", "TableRow",
   function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
     if (!is.null(rowpath))
       stop("cell_values on TableRow objects must have NULL rowpath")
-    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath,
-      omit_labrows = omit_labrows, value_at = FALSE)
-  })
+    .inner_cell_value(tt,
+      rowpath = rowpath, colpath = colpath,
+      omit_labrows = omit_labrows, value_at = FALSE
+    )
+  }
+)
 
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod cell_values
-setMethod("cell_values", "LabelRow",
+setMethod(
+  "cell_values", "LabelRow",
   function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
     stop("calling cell_values on LabelRow is not meaningful")
-  })
+  }
+)
 
 
 
@@ -1203,29 +1331,39 @@ setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL) {
 
 #' @rdname cell_values
 #' @exportMethod value_at
-setMethod("value_at", "VTableTree",
+setMethod(
+  "value_at", "VTableTree",
   function(tt, rowpath, colpath = NULL) {
-    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath,
-      omit_labrows = FALSE, value_at = TRUE)
-  })
+    .inner_cell_value(tt,
+      rowpath = rowpath, colpath = colpath,
+      omit_labrows = FALSE, value_at = TRUE
+    )
+  }
+)
 
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod value_at
-setMethod("value_at", "TableRow",
+setMethod(
+  "value_at", "TableRow",
   function(tt, rowpath, colpath = NULL) {
-    .inner_cell_value(tt, rowpath = rowpath, colpath = colpath,
-      omit_labrows = FALSE, value_at = TRUE)
-  })
+    .inner_cell_value(tt,
+      rowpath = rowpath, colpath = colpath,
+      omit_labrows = FALSE, value_at = TRUE
+    )
+  }
+)
 
 
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod value_at
-setMethod("value_at", "LabelRow",
+setMethod(
+  "value_at", "LabelRow",
   function(tt, rowpath, colpath = NULL) {
     stop("calling value_at for LabelRow objects is not meaningful")
-  })
+  }
+)
 
 
 
@@ -1244,7 +1382,9 @@ setMethod("value_at", "LabelRow",
   rows <- collect_leaves(subtree, TRUE, !omit_labrows)
   if (value_at && (ncol(subtree) != 1 || length(rows) != 1))
     stop("Combination of rowpath and colpath does not select individual cell.\n",
-      "  To retrieve more than one cell value at a time use cell_values().", call. = FALSE)
+      "  To retrieve more than one cell value at a time use cell_values().",
+      call. = FALSE
+    )
   if (length(rows) == 1) {
     ret <- row_values(rows[[1]])
     if (value_at && ncol(subtree) == 1)
@@ -1271,7 +1411,6 @@ setMethod("value_at", "LabelRow",
   if (isTRUE(keep_titles)) {
     main_title(new) <- main_title(old)
     subtitles(new) <- subtitles(old)
-
   } else {
     main_title(new) <- main_title(empt_tbl)
     subtitles(new) <- subtitles(empt_tbl)
@@ -1318,23 +1457,26 @@ setGeneric("head")
 #' @docType methods
 #' @export
 #' @rdname head_tail
-setMethod("head", "VTableTree",
+setMethod(
+  "head", "VTableTree",
   function(x, n = 6, ..., keep_topleft = TRUE,
            keep_titles = TRUE,
            keep_footers = keep_titles,
            ## FALSE because this is a glance
            ## more often than a subset op
            reindex_refs = FALSE) {
-
     ## default
     res <- callNextMethod()
-    res <- .h_copy_titles_footers_topleft(old = x, new = res,
+    res <- .h_copy_titles_footers_topleft(
+      old = x, new = res,
       keep_topleft = keep_topleft,
       keep_titles = keep_titles,
       keep_footers = keep_footers,
-      reindex_refs = reindex_refs)
+      reindex_refs = reindex_refs
+    )
     res
-  })
+  }
+)
 
 #' @docType methods
 #' @export
@@ -1343,7 +1485,8 @@ setGeneric("tail")
 #' @docType methods
 #' @export
 #' @rdname head_tail
-setMethod("tail", "VTableTree",
+setMethod(
+  "tail", "VTableTree",
   function(x, n = 6, ..., keep_topleft = TRUE,
            keep_titles = TRUE,
            keep_footers = keep_titles,
@@ -1351,10 +1494,13 @@ setMethod("tail", "VTableTree",
            ## more often than a subset op
            reindex_refs = FALSE) {
     res <- callNextMethod()
-    res <- .h_copy_titles_footers_topleft(old = x, new = res,
+    res <- .h_copy_titles_footers_topleft(
+      old = x, new = res,
       keep_topleft = keep_topleft,
       keep_titles = keep_titles,
       keep_footers = keep_footers,
-      reindex_refs = reindex_refs)
+      reindex_refs = reindex_refs
+    )
     res
-  })
+  }
+)

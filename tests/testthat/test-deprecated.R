@@ -9,8 +9,6 @@ test_that("deprecated things are still there and work kinda", {
 })
 
 test_that("deprecated insert_rrow and summarize_rows still currently work", {
-
-
   tbl <- basic_table() %>%
     split_cols_by("Species") %>%
     analyze("Sepal.Length") %>%
@@ -83,7 +81,8 @@ test_that("add_colcounts format argument works", {
   lyt <- basic_table() %>%
     add_colcounts(format = "xx (xx)") %>%
     split_cols_by("ARM")
-  expect_error(matrix_form(build_table(lyt, DM)),
+  expect_error(
+    matrix_form(build_table(lyt, DM)),
     paste(
       "This 2d format is not supported for column counts.",
       "Please choose a 1d format or a 2d format that includes a % value."

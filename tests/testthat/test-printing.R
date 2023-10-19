@@ -1,7 +1,6 @@
 context("Printing tables")
 
 test_that("toString method works correclty", {
-
   tbl <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("Species") %>%
     analyze(c("Sepal.Length", "Petal.Width"), function(x) {
@@ -17,7 +16,8 @@ test_that("toString method works correclty", {
 
   capture.output(print(tbl))
 
-  expstr_lns <- c("                 setosa      versicolor     virginica ",
+  expstr_lns <- c(
+    "                 setosa      versicolor     virginica ",
     "                 (N=50)        (N=50)        (N=50)   ",
     "======================================================",
     "Sepal.Length                                          ",
@@ -27,13 +27,15 @@ test_that("toString method works correclty", {
     "Petal.Width                                           ",
     "  Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)",
     "  Variance        0.011         0.039         0.075   ",
-    "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n")
+    "  Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5 \n"
+  )
 
   exp_str <- paste(expstr_lns, collapse = "\n")
 
   expect_identical(
     toString(tbl),
-    exp_str)
+    exp_str
+  )
 })
 
 test_that("labels correctly used for columns rather than names", {
@@ -45,20 +47,36 @@ test_that("labels correctly used for columns rather than names", {
   tbl <- build_table(lyt, rawdat)
 
   matform <- matrix_form(tbl)
-  expect_identical(matform$strings[1:2, ],
-    matrix(c("", rep(c("ARM1", "ARM2"), times = c(2, 2)),
-      "", rep(c("Male", "Female"), times = 2)),
-    byrow = TRUE, nrow = 2, dimnames = NULL))
-  expect_identical(matform$spans,
-    matrix(c(1, rep(2, 4),
-      rep(1, 10)),
-    byrow = TRUE,
-    nrow = 3,
-    dimnames = list(NULL, c("", paste(rep(c("ARM1", "ARM2"),
-      times = c(2, 2)),
-    rep(c("M", "F"),
-      times = 2),
-    sep = ".")))))
+  expect_identical(
+    matform$strings[1:2, ],
+    matrix(
+      c(
+        "", rep(c("ARM1", "ARM2"), times = c(2, 2)),
+        "", rep(c("Male", "Female"), times = 2)
+      ),
+      byrow = TRUE, nrow = 2, dimnames = NULL
+    )
+  )
+  expect_identical(
+    matform$spans,
+    matrix(
+      c(
+        1, rep(2, 4),
+        rep(1, 10)
+      ),
+      byrow = TRUE,
+      nrow = 3,
+      dimnames = list(NULL, c("", paste(
+        rep(c("ARM1", "ARM2"),
+          times = c(2, 2)
+        ),
+        rep(c("M", "F"),
+          times = 2
+        ),
+        sep = "."
+      )))
+    )
+  )
 
   ## multivarsplit varlabels work correctly
   tbl2 <- basic_table() %>%
@@ -71,23 +89,31 @@ test_that("labels correctly used for columns rather than names", {
 
   matform2 <- matrix_form(tbl2)
 
-  expect_identical(matform2$strings[1:2, ],
-    matrix(c("", rep(c("ARM1", "ARM2"), times = c(2, 2)),
-      "", rep(c("Measurement", "Pct Diff"), times = 2)),
-    byrow = TRUE, nrow = 2))
+  expect_identical(
+    matform2$strings[1:2, ],
+    matrix(
+      c(
+        "", rep(c("ARM1", "ARM2"), times = c(2, 2)),
+        "", rep(c("Measurement", "Pct Diff"), times = 2)
+      ),
+      byrow = TRUE, nrow = 2
+    )
+  )
 
   ## same var different labels in split_by_multivar
   vlabs <- c("Age", "SecondAge", "Gender", "Age Redux")
   lyt3 <- basic_table() %>%
     split_cols_by_multivar(c("AGE", "AGE", "SEX", "AGE"),
-      varlabels = vlabs) %>%
+      varlabels = vlabs
+    ) %>%
     analyze_colvars(list(mean, median, function(x, ...) max(table(x)), sd))
 
   tbl3 <- build_table(lyt3, rawdat)
   matform3 <- matrix_form(tbl3)
-  expect_identical(matform3$strings[1, ],
-    c("", vlabs))
-
+  expect_identical(
+    matform3$strings[1, ],
+    c("", vlabs)
+  )
 })
 
 test_that("nested identical labels work ok", {
@@ -106,8 +132,6 @@ test_that("nested identical labels work ok", {
 
 
 test_that("newline in column names and possibly cell values work", {
-
-
   df <- data.frame(
     n = 1,
     median = 10
@@ -119,11 +143,17 @@ test_that("newline in column names and possibly cell values work", {
   tbl <- build_table(lyt, df)
 
   mat <- matrix_form(tbl)
-  expect_identical(mat$strings,
-    matrix(c("", "", "Median",
-      "", "N", "(Days)",
-      "mean", "1", "10"),
-    nrow = 3, byrow = TRUE))
+  expect_identical(
+    mat$strings,
+    matrix(
+      c(
+        "", "", "Median",
+        "", "N", "(Days)",
+        "mean", "1", "10"
+      ),
+      nrow = 3, byrow = TRUE
+    )
+  )
   ## Test top_left preservation
   rawdat2 <- rawdat
   rawdat2$arm_label <- ifelse(rawdat2$ARM == "ARM1", "Arm\n 1 ", "Arm\n 2 ")
@@ -135,7 +165,8 @@ test_that("newline in column names and possibly cell values work", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      label_pos = "topleft") %>%
+      label_pos = "topleft"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -144,12 +175,18 @@ test_that("newline in column names and possibly cell values work", {
 
   tbl2 <- build_table(lyt2, rawdat2)
   matform2 <- matrix_form(tbl2)
-  expect_identical(dim(matform2$strings),
-    c(18L, 5L))
-  expect_identical(mf_nlheader(matform2),
-    4L)
-  expect_identical(matform2$strings[1:4, 1, drop = TRUE],
-    c("", "", "Ethnicity", "  Factor2"))
+  expect_identical(
+    dim(matform2$strings),
+    c(18L, 5L)
+  )
+  expect_identical(
+    mf_nlheader(matform2),
+    4L
+  )
+  expect_identical(
+    matform2$strings[1:4, 1, drop = TRUE],
+    c("", "", "Ethnicity", "  Factor2")
+  )
 
   ## cell has \n
 
@@ -163,34 +200,42 @@ test_that("newline in column names and possibly cell values work", {
       else
         val <- paste(mn)
       in_rows(my_row_label = rcell(val,
-        format = "xx"))
+        format = "xx"
+      ))
     })
   tbl3 <- build_table(lyt3, DM)
   matform3 <- matrix_form(tbl3)
-  expect_identical(matform3$strings[, 1, drop = TRUE],
-    c("",
+  expect_identical(
+    matform3$strings[, 1, drop = TRUE],
+    c(
+      "",
       "F", "my_row_label", "",
       "M", "my_row_label", "",
       "U", "my_row_label",
-      "UNDIFFERENTIATED", "my_row_label"))
-  expect_identical(matform3$strings[, 2, drop = TRUE],
-    c("A: Drug X",
+      "UNDIFFERENTIATED", "my_row_label"
+    )
+  )
+  expect_identical(
+    matform3$strings[, 2, drop = TRUE],
+    c(
+      "A: Drug X",
       "", "33.71", "",
       "", "36.55", "  ^  ",
       "", "NaN",
-      "", "NaN"))
-
-
+      "", "NaN"
+    )
+  )
 })
 
 
 test_that("alignment works", {
-
   lyt <- basic_table() %>%
     analyze("AGE", function(x) {
-      in_rows(left = rcell("l", align = "left"),
+      in_rows(
+        left = rcell("l", align = "left"),
         right = rcell("r", align = "right"),
-        center = rcell("c", align = "center"))
+        center = rcell("c", align = "center")
+      )
     })
 
   ## set the hsep so it works the same in all locales since thats not what
@@ -198,24 +243,30 @@ test_that("alignment works", {
   aligntab <- build_table(lyt, DM, hsep = "=")
 
   matform <- matrix_form(aligntab)
-  expect_identical(matform$aligns,
-    cbind("left", c("center", "left", "right", "center")))
+  expect_identical(
+    matform$aligns,
+    cbind("left", c("center", "left", "right", "center"))
+  )
 
   str <- toString(aligntab)
-  expect_identical(str,
-    gsub("—", horizontal_sep(aligntab),
-      "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"))
+  expect_identical(
+    str,
+    gsub(
+      "—", horizontal_sep(aligntab),
+      "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"
+    )
+  )
 
   lyt2 <- basic_table() %>%
     analyze("AGE", function(x) {
-      in_rows(.list = list(left = "l", right = "r", center = "c"),
-        .aligns = c(left = "left", right = "right", center = "center"))
+      in_rows(
+        .list = list(left = "l", right = "r", center = "c"),
+        .aligns = c(left = "left", right = "right", center = "center")
+      )
     })
 
   aligntab2 <- build_table(lyt, DM, hsep = "=")
   expect_identical(aligntab, aligntab2)
-
-
 })
 
 test_that("Decimal alignment works", {
@@ -276,7 +327,6 @@ test_that("Decimal alignment works", {
 
 
 test_that("Various Printing things work", {
-
   txtcon <- textConnection("printoutput", "w")
   sink(txtcon)
   lyt <- make_big_lyt()
@@ -296,18 +346,23 @@ test_that("Various Printing things work", {
     rtables:::RootSplit("MyRoot"),
     ManualSplit(c("0", "1", "2"), label = LETTERS[1:3]),
     rtables:::make_static_cut_split("x", "StaticCut", c(1, 3, 5),
-      cutlabels = LETTERS[1:3]),
+      cutlabels = LETTERS[1:3]
+    ),
     rtables:::make_static_cut_split("x", "CumuStaticCut", c(1, 3, 5),
       cutlabels = LETTERS[1:3],
-      cumulative = TRUE),
+      cumulative = TRUE
+    ),
     VarDynCutSplit("x", "DynCut", rtables:::qtile_cuts),
     VarLevWBaselineSplit("X", "ref", split_label = "VWBaseline"),
-    AnalyzeColVarSplit(list(mean))))
+    AnalyzeColVarSplit(list(mean))
+  ))
   splvec <- rtables:::cmpnd_last_rowsplit(splvec, AnalyzeVarSplit("x", afun = mean), AnalyzeMultiVars)
   print(splvec)
 
-  fakelyt <- rtables:::PreDataTableLayouts(rlayout = rtables:::PreDataRowLayout(splvec),
-    clayout = rtables:::PreDataColLayout(splvec))
+  fakelyt <- rtables:::PreDataTableLayouts(
+    rlayout = rtables:::PreDataRowLayout(splvec),
+    clayout = rtables:::PreDataColLayout(splvec)
+  )
   print(fakelyt)
   print(rtables:::rlayout(fakelyt))
   print(rtables:::clayout(fakelyt))
@@ -402,7 +457,8 @@ test_that("Cell and column label wrapping works in printing", {
   result <- toString(matrix_form(tt_for_wrap[10, 1, keep_footers = TRUE], TRUE),
     widths = c(10, 8),
     col_gap = 2,
-    hsep = "-")
+    hsep = "-"
+  )
   splitted_res <- strsplit(result, "\n")[[1]]
 
   # First column (rownames) has widths 10 and there is colgap 2
@@ -413,22 +469,26 @@ test_that("Cell and column label wrapping works in printing", {
 
   # Separator is at the right place and colnames are wrapped
   expect_identical(splitted_res[7], "--------------------")
-  expected <- c("            Incredib",
+  expected <- c(
+    "            Incredib",
     "            ly long ",
     "             column ",
     "              name  ",
     "             to be  ",
-    "            wrapped ")
+    "            wrapped "
+  )
   expect_identical(splitted_res[1:6], expected)
 
   # String replacement of NAs wider than expected works with cell wrapping
-  expected <- c("Mean         A very ",
+  expected <- c(
+    "Mean         A very ",
     "              long  ",
     "            content ",
     "            to_be_wr",
     "            apped_an",
     "            d_splitt",
-    "               ed   ")
+    "               ed   "
+  )
   expect_identical(splitted_res[8:14], expected)
 
   # Testing if footers are not affected by this
@@ -437,9 +497,11 @@ test_that("Cell and column label wrapping works in printing", {
   # Works for row names too
   result <- toString(matrix_form(tt_for_wrap[6, 1], TRUE), widths = c(10, 8), col_gap = 2)
   splitted_res2 <- strsplit(result, "\n")[[1]]
-  expected <- c("BLACK OR            ",
+  expected <- c(
+    "BLACK OR            ",
     "AFRICAN             ",
-    "AMERICAN            ")
+    "AMERICAN            "
+  )
   expect_identical(splitted_res2[8:10], expected)
 
   # Test if it works with numeric values
@@ -449,7 +511,8 @@ test_that("Cell and column label wrapping works in printing", {
   result <- toString(matrix_form(tt_simple, TRUE),
     widths = c(2, 3),
     col_gap = 1,
-    hsep = "-")
+    hsep = "-"
+  )
   sre3 <- strsplit(result, "\n")[[1]]
   expected <- c("   all", "   obs", "------", "Me 34.", "an 88 ")
   expect_identical(sre3, expected)
@@ -468,18 +531,24 @@ test_that("row label indentation is kept even if there are newline characters", 
 
   ## toy example where we take the mean of the first variable and the
   ## count of >.5 for the second.
-  colfuns <- list(function(x) in_rows(" " = mean(x), .formats = "xx.x"), # Empty labels are introduced
-    function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx"))
+  colfuns <- list(
+    function(x) in_rows(" " = mean(x), .formats = "xx.x"), # Empty labels are introduced
+    function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
+  )
 
   tbl_a <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) %>%
-    split_rows_by("RACE", split_label = "Ethnicity",
+    split_rows_by("RACE",
+      split_label = "Ethnicity",
       split_fun = drop_split_levels,
-      label_pos = "topleft") %>%
+      label_pos = "topleft"
+    ) %>%
     summarize_row_groups(indent_mod = 2) %>%
-    split_rows_by("SEX", split_label = "Sex", label_pos = "topleft",
-      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>%
+    split_rows_by("SEX",
+      split_label = "Sex", label_pos = "topleft",
+      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))
+    ) %>%
     analyze_colvars(afun = colfuns, indent_mod = 4) %>%
     build_table(ANL)
 
@@ -525,11 +594,15 @@ test_that("row label indentation is kept even if there are newline characters", 
   tbl_b <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
-    split_rows_by("RACE", split_label = "Ethnicity",
-      label_pos = "topleft") %>%
+    split_rows_by("RACE",
+      split_label = "Ethnicity",
+      label_pos = "topleft"
+    ) %>%
     summarize_row_groups(indent_mod = 2) %>%
-    split_rows_by("SEX", split_label = "Sex", label_pos = "topleft",
-      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))) %>%
+    split_rows_by("SEX",
+      split_label = "Sex", label_pos = "topleft",
+      split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))
+    ) %>%
     analyze_colvars(afun = colfuns, indent_mod = 4) %>%
     build_table(ANL)
 

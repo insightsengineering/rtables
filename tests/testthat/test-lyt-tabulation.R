@@ -12,7 +12,6 @@ test_that("summarize_row_groups works with provided funcs", {
   tbl_str <- toString(tb1)
 
   expect(TRUE, "succeeded")
-
 })
 
 
@@ -61,7 +60,8 @@ test_that("existing table in layout works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     analyze("AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx") %>%
+      format = "xx.xx"
+    ) %>%
     ## stack an existing table onto the layout and thus the generated table
     add_existing_table(tab2)
 
@@ -71,7 +71,6 @@ test_that("existing table in layout works", {
 })
 
 test_that("Nested splits in column space work", {
-
   dat2 <- subset(ex_adsl, SEX %in% c("M", "F"))
   tbl2 <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -80,12 +79,17 @@ test_that("Nested splits in column space work", {
     build_table(dat2)
 
   mf <- matrix_form(tbl2)
-  expect_identical(unname(mf$strings[1, , drop = TRUE]),
-    c("", "A: Drug X", "A: Drug X", "B: Placebo", "B: Placebo",
-      "C: Combination", "C: Combination"))
-  expect_identical(unname(mf$display[1, , drop = TRUE]),
-    c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
-
+  expect_identical(
+    unname(mf$strings[1, , drop = TRUE]),
+    c(
+      "", "A: Drug X", "A: Drug X", "B: Placebo", "B: Placebo",
+      "C: Combination", "C: Combination"
+    )
+  )
+  expect_identical(
+    unname(mf$display[1, , drop = TRUE]),
+    c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)
+  )
 })
 
 
@@ -97,7 +101,8 @@ test_that("labelkids parameter works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label", child_labels = "visible") %>%
+      labels_var = "fac2_label", child_labels = "visible"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -107,8 +112,10 @@ test_that("labelkids parameter works", {
 
   tabyes <- build_table(yeslabellyt, rawdat)
 
-  expect_identical(row.names(tabyes)[1:4],
-    c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis"))
+  expect_identical(
+    row.names(tabyes)[1:4],
+    c("Caucasian", "Caucasian (n)", "Level A", "Age Analysis")
+  )
 
 
   misslabellyt <- basic_table() %>%
@@ -118,7 +125,8 @@ test_that("labelkids parameter works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label", child_labels = "default") %>%
+      labels_var = "fac2_label", child_labels = "default"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -126,8 +134,10 @@ test_that("labelkids parameter works", {
     )
 
   tabmiss <- build_table(misslabellyt, rawdat)
-  expect_identical(row.names(tabmiss)[1:4],
-    c("Caucasian (n)", "Level A", "mean", "median"))
+  expect_identical(
+    row.names(tabmiss)[1:4],
+    c("Caucasian (n)", "Level A", "mean", "median")
+  )
 
 
   nolabellyt <- basic_table() %>%
@@ -137,7 +147,8 @@ test_that("labelkids parameter works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label", child_labels = "hidden") %>%
+      labels_var = "fac2_label", child_labels = "hidden"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -147,8 +158,10 @@ test_that("labelkids parameter works", {
 
 
   tabno <- build_table(nolabellyt, rawdat)
-  expect_identical(row.names(tabno)[1:4],
-    c("Caucasian (n)", "mean", "median", "mean"))
+  expect_identical(
+    row.names(tabno)[1:4],
+    c("Caucasian (n)", "mean", "median", "mean")
+  )
 
   mixedlyt2 <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -157,7 +170,8 @@ test_that("labelkids parameter works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label", child_labels = "hidden") %>%
+      labels_var = "fac2_label", child_labels = "hidden"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -166,8 +180,10 @@ test_that("labelkids parameter works", {
     )
 
   tabmixed2 <- build_table(mixedlyt2, rawdat)
-  expect_identical(row.names(tabmixed2)[1:4],
-    c("Caucasian (n)", "Age Analysis", "mean", "median"))
+  expect_identical(
+    row.names(tabmixed2)[1:4],
+    c("Caucasian (n)", "Age Analysis", "mean", "median")
+  )
 
 
   mixedlyt <- basic_table() %>%
@@ -177,7 +193,8 @@ test_that("labelkids parameter works", {
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
-      labels_var = "fac2_label", child_labels = "visible") %>%
+      labels_var = "fac2_label", child_labels = "visible"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -186,8 +203,10 @@ test_that("labelkids parameter works", {
     )
 
   tabmixed <- build_table(mixedlyt, rawdat)
-  expect_identical(row.names(tabmixed)[1:4],
-    c("Caucasian", "Caucasian (n)", "Level A", "mean"))
+  expect_identical(
+    row.names(tabmixed)[1:4],
+    c("Caucasian", "Caucasian (n)", "Level A", "mean")
+  )
 
 
   varshowlyt <- basic_table() %>%
@@ -198,7 +217,8 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      label_pos = "visible") %>%
+      label_pos = "visible"
+    ) %>%
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -207,15 +227,16 @@ test_that("labelkids parameter works", {
     )
 
   varshowtab <- build_table(varshowlyt, rawdat)
-  expect_identical(row.names(varshowtab)[1:4],
-    c("Caucasian (n)", "Factor2", "Level A", "mean"))
+  expect_identical(
+    row.names(varshowtab)[1:4],
+    c("Caucasian (n)", "Factor2", "Level A", "mean")
+  )
 })
 
 
 
 
 test_that("ref_group comparisons work", {
-
   blthing <- basic_table() %>%
     split_cols_by("ARM", ref_group = "ARM1") %>%
     analyze("AGE", show_labels = "hidden") %>%
@@ -235,10 +256,14 @@ test_that("ref_group comparisons work", {
     split_cols_by("ARM") %>%
     split_cols_by("SEX", ref_group = "F") %>%
     analyze("AGE", mean, show_labels = "hidden") %>%
-    analyze("AGE", refcompmean, show_labels = "hidden",
-      table_names = "AGE2a") %>%
-    split_rows_by("RACE", nested = FALSE,
-      split_fun = drop_split_levels) %>%
+    analyze("AGE", refcompmean,
+      show_labels = "hidden",
+      table_names = "AGE2a"
+    ) %>%
+    split_rows_by("RACE",
+      nested = FALSE,
+      split_fun = drop_split_levels
+    ) %>%
     analyze("AGE", mean, show_labels = "hidden") %>%
     analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2b")
 
@@ -262,7 +287,8 @@ test_that("ref_group comparisons work", {
   combodf <- tribble(
     ~valname, ~label, ~levelcombo, ~exargs,
     "A_", "Arm 1", c("A: Drug X"), list(),
-    "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list())
+    "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list()
+  )
 
   l3 <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by(
@@ -270,8 +296,10 @@ test_that("ref_group comparisons work", {
       split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C")),
       ref_group = "A_"
     ) %>%
-    analyze(c("AGE", "AGE"), afun = list(mean, refcompmean),
-      show_labels = "hidden", table_names = c("AGE1", "AGE2"))
+    analyze(c("AGE", "AGE"),
+      afun = list(mean, refcompmean),
+      show_labels = "hidden", table_names = c("AGE1", "AGE2")
+    )
   bltab3 <- build_table(l3, DM)
   d10 <- bltab3[1, 1, drop = TRUE]
   d11 <- bltab3[1, 2, drop = TRUE]
@@ -290,8 +318,10 @@ test_that("missing vars caught", {
       format = "xx.xx"
     )
 
-  expect_error(build_table(misscol, rawdat),
-    "Split variable [[]SX[]] not found in data being tabulated.")
+  expect_error(
+    build_table(misscol, rawdat),
+    "Split variable [[]SX[]] not found in data being tabulated."
+  )
 
   missrsplit <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -302,8 +332,10 @@ test_that("missing vars caught", {
       format = "xx.xx"
     )
 
-  expect_error(build_table(missrsplit, rawdat),
-    "Split variable [[]RACER[]] not found in data being tabulated.")
+  expect_error(
+    build_table(missrsplit, rawdat),
+    "Split variable [[]RACER[]] not found in data being tabulated."
+  )
 
   missrsplit <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -314,8 +346,10 @@ test_that("missing vars caught", {
       format = "xx.xx"
     )
 
-  expect_error(build_table(missrsplit, rawdat),
-    "Value label variable [[]ethnNA_label[]] not found in data being tabulated.")
+  expect_error(
+    build_table(missrsplit, rawdat),
+    "Value label variable [[]ethnNA_label[]] not found in data being tabulated."
+  )
 
   missavar <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -326,13 +360,14 @@ test_that("missing vars caught", {
       format = "xx.xx"
     )
 
-  expect_error(build_table(missavar, rawdat),
-    ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
+  expect_error(
+    build_table(missavar, rawdat),
+    ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*"
+  )
 })
 
 # https://github.com/insightsengineering/rtables/issues/329
 test_that("error localization works", {
-
   afun <- function(x, .spl_context) {
     if (NROW(.spl_context) > 0 &&
       .spl_context[NROW(.spl_context), "value", drop = TRUE] == "WHITE")
@@ -346,8 +381,10 @@ test_that("error localization works", {
     split_rows_by("RACE") %>%
     analyze("BMRKR1", afun = afun)
   # nolint start
-  expect_error(build_table(lyt, DM),
-    "Error[^)]*analysis function \\(var[^B]*BMRKR1\\): error for white statistics.*ARM\\[A: Drug X\\]->RACE\\[WHITE\\]")
+  expect_error(
+    build_table(lyt, DM),
+    "Error[^)]*analysis function \\(var[^B]*BMRKR1\\): error for white statistics.*ARM\\[A: Drug X\\]->RACE\\[WHITE\\]"
+  )
   # nolint end
   cfun <- function(df, labelstr) {
     if (labelstr == "B: Placebo")
@@ -361,8 +398,10 @@ test_that("error localization works", {
     split_rows_by("RACE") %>%
     analyze("BMRKR1", afun = mean)
 
-  expect_error(build_table(lyt2, DM),
-    "Error in content.*function: placebos are bad.*path: ARM\\[B: Placebo\\]")
+  expect_error(
+    build_table(lyt2, DM),
+    "Error in content.*function: placebos are bad.*path: ARM\\[B: Placebo\\]"
+  )
 
   splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     stop("oopsie daisy")
@@ -374,8 +413,10 @@ test_that("error localization works", {
     split_rows_by("RACE", split_fun = splfun) %>%
     analyze("BMRKR1", afun = mean)
   # nolint start
-  expect_error(build_table(lyt3, DM),
-    "Error.*custom split function: oopsie daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]")
+  expect_error(
+    build_table(lyt3, DM),
+    "Error.*custom split function: oopsie daisy.*VarLevelSplit \\(RACE\\).*path: ARM\\[A: Drug X\\]"
+  )
   # nolint end
 })
 
@@ -386,7 +427,8 @@ test_that("cfun args", {
     stopifnot(is(df, "data.frame"))
     in_rows(
       rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
-      .names = labelstr)
+      .names = labelstr
+    )
   }
   lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -402,8 +444,10 @@ test_that("cfun args", {
     in_rows(
       c(mean(x, trim = 0.2), 0.2),
       .formats = "xx.x (xx.x%)",
-      .labels = sprintf("%s (Trimmed mean and trim %%)",
-        labelstr)
+      .labels = sprintf(
+        "%s (Trimmed mean and trim %%)",
+        labelstr
+      )
     )
   }
   lyt <- basic_table() %>%
@@ -449,14 +493,15 @@ test_that("label_var works as expected", {
   rawdat2$gend_label[5] <- "XXXXX"
   ## nolint start
   ## test check for label-value concordance.
-  expect_error(build_table(yeslblslyt, rawdat2),
-    "There does not appear to be a 1-1 correspondence between values in split var \\[SEX\\] and label var \\[gend_label\\]")
+  expect_error(
+    build_table(yeslblslyt, rawdat2),
+    "There does not appear to be a 1-1 correspondence between values in split var \\[SEX\\] and label var \\[gend_label\\]"
+  )
   ## nolint end
 })
 
 
 test_that("factors with unobserved levels work as expected", {
-
   ## default behavior is that empty levels are NOT dropped
   ## rows
   lyt <- basic_table() %>%
@@ -476,7 +521,6 @@ test_that("factors with unobserved levels work as expected", {
 
 
 test_that(".N_row argument in afun works correctly", {
-
   lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX") %>%
@@ -499,7 +543,8 @@ test_that("extra args works", {
     },
     function(x, cutoff = .5, na.rm = TRUE) {
       rcell(sum(c(NA, x > cutoff), na.rm = na.rm), format = "xx")
-    })
+    }
+  )
 
   l <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -522,26 +567,36 @@ test_that("extra args works", {
   vals_noex <- row_values(tree_children(tbl_noex)[[1]])
   vals_ex <- row_values(tree_children(tbl_ex)[[1]])
 
-  expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
-    unlist(vals_ex[c(1, 3)]))
+  expect_identical(
+    unlist(vals_noex[c(1, 3)]) + 5,
+    unlist(vals_ex[c(1, 3)])
+  )
   truevals <- tapply(rawdat2$PCTDIFF,
     rawdat2$ARM,
     function(x) sum(x > 100, na.rm = TRUE),
-    simplify = FALSE)
-  expect_equal(unname(unlist(truevals)),
-    unname(unlist(vals_ex[c(2, 4)])))
+    simplify = FALSE
+  )
+  expect_equal(
+    unname(unlist(truevals)),
+    unname(unlist(vals_ex[c(2, 4)]))
+  )
 
   vals_noex <- row_values(tree_children(tbl_noex)[[1]])
   vals_ex <- row_values(tree_children(tbl_ex)[[1]])
 
-  expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
-    unlist(vals_ex[c(1, 3)]))
+  expect_identical(
+    unlist(vals_noex[c(1, 3)]) + 5,
+    unlist(vals_ex[c(1, 3)])
+  )
   truevals <- tapply(rawdat2$PCTDIFF,
     rawdat2$ARM,
     function(x) sum(x > 100, na.rm = TRUE),
-    simplify = FALSE)
-  expect_equal(unname(unlist(truevals)),
-    unname(unlist(vals_ex[c(2, 4)])))
+    simplify = FALSE
+  )
+  expect_equal(
+    unname(unlist(truevals)),
+    unname(unlist(vals_ex[c(2, 4)]))
+  )
 
   ## single argument passed to all functions
   l2b <- basic_table() %>%
@@ -558,7 +613,6 @@ test_that("extra args works", {
   lyt <- basic_table() %>%
     analyze("Sepal.Length", afun = function(x, a) {
       in_rows(mean_a = rcell(mean(x) + a, format = "xx"))
-
     }, extra_args = list(a = 1))
 
 
@@ -569,7 +623,6 @@ test_that("extra args works", {
   lyt2 <- basic_table() %>%
     analyze("Sepal.Length", afun = function(x, a, b) {
       in_rows(mean_a = rcell(mean(x) + a + b, format = "xx"))
-
     }, extra_args = list(a = 1, b = 3))
 
 
@@ -588,21 +641,27 @@ test_that("Colcounts work correctly", {
   lyt2 <- lyt1 %>% split_cols_by("ARM")
   tbl2 <- build_table(lyt2, DM)
 
-  expect_identical(col_counts(tbl2),
-    as.integer(table(DM$ARM)))
+  expect_identical(
+    col_counts(tbl2),
+    as.integer(table(DM$ARM))
+  )
 
   DMchar <- DM
   DMchar$ARM <- as.character(DM$ARM)
   tbl2chr <- build_table(lyt2, DMchar)
 
   tbl3 <- build_table(lyt2, DM, col_counts = c(500L, NA, NA))
-  expect_identical(col_counts(tbl3),
-    c(500L, as.integer(table(DM$ARM))[2:3]))
+  expect_identical(
+    col_counts(tbl3),
+    c(500L, as.integer(table(DM$ARM))[2:3])
+  )
   expect_error(build_table(lyt2, DMchar, col_counts = c(500L, NA, NA)))
   expect_error(build_table(lyt2, DM, col_counts = c(20L, 40L)))
 
-  tbl4 <- basic_table(show_colcounts = TRUE,
-    colcount_format = "xx (xx%)") %>%
+  tbl4 <- basic_table(
+    show_colcounts = TRUE,
+    colcount_format = "xx (xx%)"
+  ) %>%
     split_cols_by("ARM") %>%
     build_table(DM)
   mf_tbl4_colcounts <- matrix_form(tbl4)$strings[2, ]
@@ -615,7 +674,8 @@ first_cont_rowvals <- function(tt) {
       content_table(
         tree_children(tt)[[1]]
       )
-    )[[1]])
+    )[[1]]
+  )
 }
 
 test_that("content extra args for summarize_row_groups works", {
@@ -623,53 +683,80 @@ test_that("content extra args for summarize_row_groups works", {
     in_rows(
       c(a, b),
       .formats = "xx - xx",
-      .labels = labelstr)
+      .labels = labelstr
+    )
   }
   ## specify single set of args for all columns
   l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX") %>%
-    summarize_row_groups(cfun = sfun,
-      extra_args = list(a = 9))
+    summarize_row_groups(
+      cfun = sfun,
+      extra_args = list(a = 9)
+    )
   tbl1 <- build_table(l, rawdat)
-  expect_identical(first_cont_rowvals(tbl1),
-    list(ARM1 = c(9, 6),
-      ARM2 = c(9, 6)))
+  expect_identical(
+    first_cont_rowvals(tbl1),
+    list(
+      ARM1 = c(9, 6),
+      ARM2 = c(9, 6)
+    )
+  )
 
   ## specify different arg for each column
   l2 <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX") %>%
-    summarize_row_groups(cfun = sfun,
-      extra_args = list(list(a = 9),
-        list(b = 3)))
+    summarize_row_groups(
+      cfun = sfun,
+      extra_args = list(
+        list(a = 9),
+        list(b = 3)
+      )
+    )
   tbl2 <- build_table(l2, rawdat)
-  expect_identical(first_cont_rowvals(tbl2),
-    list(ARM1 = c(9, 6),
-      ARM2 = c(5, 3)))
+  expect_identical(
+    first_cont_rowvals(tbl2),
+    list(
+      ARM1 = c(9, 6),
+      ARM2 = c(5, 3)
+    )
+  )
 
 
   ## specify arg for only one col
   l3 <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX") %>%
-    summarize_row_groups(cfun = sfun,
-      extra_args = list(list(a = 9)))
+    summarize_row_groups(
+      cfun = sfun,
+      extra_args = list(list(a = 9))
+    )
   tbl3 <- build_table(l3, rawdat)
-  expect_identical(first_cont_rowvals(tbl3),
-    list(ARM1 = c(9, 6),
-      ARM2 = c(5, 6)))
+  expect_identical(
+    first_cont_rowvals(tbl3),
+    list(
+      ARM1 = c(9, 6),
+      ARM2 = c(5, 6)
+    )
+  )
 
   ## works on root split
 
   l4 <- basic_table() %>%
     split_cols_by("ARM") %>%
-    summarize_row_groups(cfun = sfun,
-      extra_args = list(a = 9))
+    summarize_row_groups(
+      cfun = sfun,
+      extra_args = list(a = 9)
+    )
   tbl4 <- build_table(l4, rawdat)
-  expect_identical(row_values(tree_children(content_table(tbl4))[[1]]),
-    list(ARM1 = c(9, 6),
-      ARM2 = c(9, 6)))
+  expect_identical(
+    row_values(tree_children(content_table(tbl4))[[1]]),
+    list(
+      ARM1 = c(9, 6),
+      ARM2 = c(9, 6)
+    )
+  )
 })
 
 test_that(".df_row analysis function argument works", {
@@ -689,11 +776,19 @@ test_that(".df_row analysis function argument works", {
   narm1 <- sum(rawdat$ARM == "ARM1")
   narm2 <- sum(rawdat$ARM == "ARM2")
 
-  expect_identical(unname(lapply(rws, row_values)),
-    list(list(ARM1 = c(nmale, narm1),
-      ARM2 = c(nmale, narm2)),
-    list(ARM1 = c(nfemale, narm1),
-      ARM2 = c(nfemale, narm2))))
+  expect_identical(
+    unname(lapply(rws, row_values)),
+    list(
+      list(
+        ARM1 = c(nmale, narm1),
+        ARM2 = c(nmale, narm2)
+      ),
+      list(
+        ARM1 = c(nfemale, narm1),
+        ARM2 = c(nfemale, narm2)
+      )
+    )
+  )
 })
 
 test_that("analysis function arguments work with NA rows in data", {
@@ -731,7 +826,6 @@ test_that("analysis function arguments work with NA rows in data", {
 })
 
 test_that("analyze_colvars inclNAs works", {
-
   ## inclNAs
   test <- data.frame(
     a = c(1, 2),
@@ -782,20 +876,26 @@ test_that("analyze_colvars works generally", {
     analyze_colvars(afun = identity)
   tab2 <- build_table(l2, test)
 
-  colfuns <- list(function(x, labelstr) in_rows(summary = 5, .labels = "My Summary Row"),
+  colfuns <- list(
+    function(x, labelstr) in_rows(summary = 5, .labels = "My Summary Row"),
     function(x, labelstr) 6,
     function(x, labelstr) 7,
-    function(x, labelstr) 8)
+    function(x, labelstr) 8
+  )
 
   l3 <- basic_table() %>%
     split_cols_by_multivar(c("a", "b", "c", "d")) %>%
     summarize_row_groups(cfun = colfuns, format = "xx") %>%
     analyze_colvars(afun = identity)
   tab3 <- build_table(l3, test)
-  expect_identical(cell_values(content_table(tab3)),
-    list(a = 5, b = 6, c = 7, d = 8))
-  expect_identical(obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
-    c(summary = "My Summary Row"))
+  expect_identical(
+    cell_values(content_table(tab3)),
+    list(a = 5, b = 6, c = 7, d = 8)
+  )
+  expect_identical(
+    obj_label(collect_leaves(tab3, TRUE, TRUE)[[1]]),
+    c(summary = "My Summary Row")
+  )
 
   l4 <- basic_table() %>%
     split_cols_by_multivar(c("a", "b", "c", "d")) %>%
@@ -812,16 +912,24 @@ test_that("analyze_colvars works generally", {
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("AGE", "BMRKR1")) %>%
     split_rows_by("RACE") %>%
-    summarize_row_groups(cfun = list(function(x, labelstr) "first fun",
-      function(x, labelstr) "second fun"),
-    format = "xx")
+    summarize_row_groups(
+      cfun = list(
+        function(x, labelstr) "first fun",
+        function(x, labelstr) "second fun"
+      ),
+      format = "xx"
+    )
   tab5 <- build_table(l5, DM)
   toString(tab5)
   rws5 <- collect_leaves(tab5, TRUE, TRUE)
-  expect(all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
-    "Multiple content functions didn't recycle properly in nested context")
-  expect_identical(unname(cell_values(tab5)[[1]]),
-    rep(list("first fun", "second fun"), length.out = ncol(tab5)))
+  expect(
+    all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
+    "Multiple content functions didn't recycle properly in nested context"
+  )
+  expect_identical(
+    unname(cell_values(tab5)[[1]]),
+    rep(list("first fun", "second fun"), length.out = ncol(tab5))
+  )
 
 
   ## single column in split_cols_by_multivar and analyze_colvars
@@ -830,8 +938,10 @@ test_that("analyze_colvars works generally", {
     analyze_colvars(afun = mean)
   one_col_tbl <- build_table(one_col_lyt, iris)
 
-  expect_identical(cell_values(one_col_tbl),
-    list(Sepal.Width = mean(iris$Sepal.Width)))
+  expect_identical(
+    cell_values(one_col_tbl),
+    list(Sepal.Width = mean(iris$Sepal.Width))
+  )
 })
 
 
@@ -848,10 +958,14 @@ test_that("alt_counts_df works", {
 
   ## this inherently checks both that the correct counts (0, 1, 0) are
   ## retrieved and that they propogate to the summary functions
-  expect_identical(list("A: Drug X" = c(70, Inf), ## 70/0
-    "B: Placebo" = c(56, 56), ## 56/1
-    "C: Combination" = c(61, Inf)), ## 61/0
-  cell_values(tbl[1, ]))
+  expect_identical(
+    list(
+      "A: Drug X" = c(70, Inf), ## 70/0
+      "B: Placebo" = c(56, 56), ## 56/1
+      "C: Combination" = c(61, Inf)
+    ), ## 61/0
+    cell_values(tbl[1, ])
+  )
 
   ## breaks (with useful message) when given incompatible alt_counts_df
   expect_error(build_table(lyt, DM, iris), "Offending column subset expression")
@@ -882,14 +996,11 @@ test_that("deeply nested and uneven column layouts work", {
   ## printing machinery works
   str <- toString(tbl2)
   expect_identical(ncol(tbl2), 12L)
-
-
 })
 
 
 
 test_that("topleft label position works", {
-
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM") %>%
     ## add nested column split on SEX with value lables from gend_label
@@ -908,7 +1019,8 @@ test_that("topleft label position works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
-      label_pos = "topleft") %>%
+      label_pos = "topleft"
+    ) %>%
     ## Add count summary within FACTOR2 categories
     summarize_row_groups("FACTOR2") %>%
     ## Add analysis/data rows by analyzing AGE variable
@@ -917,10 +1029,14 @@ test_that("topleft label position works", {
     analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x), median = median(x)), format = "xx.xx")
 
   tab <- build_table(lyt, rawdat)
-  expect_identical(c("Ethnicity", "  Factor2"),
-    top_left(tab))
-  expect_identical(14L,
-    nrow(tab))
+  expect_identical(
+    c("Ethnicity", "  Factor2"),
+    top_left(tab)
+  )
+  expect_identical(
+    14L,
+    nrow(tab)
+  )
 
   ## https://github.com/insightsengineering/rtables/issues/657
   tab2 <- basic_table() %>%
@@ -932,8 +1048,10 @@ test_that("topleft label position works", {
     build_table(DM)
 
   ptab <- paginate_table(tab2)
-  expect_identical(top_left(ptab[[1]]),
-    c("Strata", "  Gender"))
+  expect_identical(
+    top_left(ptab[[1]]),
+    c("Strata", "  Gender")
+  )
 
   ## https://github.com/insightsengineering/rtables/issues/651
   lyt2 <- basic_table(show_colcounts = TRUE) %>%
@@ -952,8 +1070,10 @@ test_that("topleft label position works", {
   baddm$COUNTRY <- NA_character_
   ## brittle test because I couldn't figure out how to get the regex to handle newlines and check both the path
   ## part and primary message part
-  error_msg <- paste0("Page-by split resulted in zero pages (no observed values of split variable?). ",
-    "\n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n")
+  error_msg <- paste0(
+    "Page-by split resulted in zero pages (no observed values of split variable?). ",
+    "\n\tsplit: VarLevelSplit (COUNTRY)\n\toccured at path: SEX[F]\n"
+  )
   expect_error(build_table(lyt3, baddm), error_msg, fixed = TRUE)
 
   # Similar error if the problematic split is done on alt_counts_df (related to #651)
@@ -963,24 +1083,28 @@ test_that("topleft label position works", {
     split_rows_by("COUNTRY", split_fun = drop_split_levels, page_by = TRUE) %>%
     analyze("AGE", afun = function(x, .alt_df) mean(x))
 
-  error_msg2 <- paste0("Following error encountered in splitting alt_counts_df: ",
-    error_msg)
+  error_msg2 <- paste0(
+    "Following error encountered in splitting alt_counts_df: ",
+    error_msg
+  )
   expect_error(build_table(lyt4, DM, alt_counts_df = baddm), error_msg2, fixed = TRUE)
 })
 
 
 
 test_that(".spl_context works in content and analysis functions", {
-
   ageglobmean <- mean(DM$AGE)
   cfun <- function(df, labelstr, .spl_context) {
     stopifnot("A: Drug X.M" %in% names(.spl_context))
     lastrow <- .spl_context[nrow(.spl_context) - 1, ]
     in_rows(c(nrow(df), lastrow$cur_col_n),
       .names = labelstr,
-      .labels = sprintf("%s (%d)", labelstr,
-        nrow(lastrow$full_parent_df[[1]])),
-      .formats = "xx / xx")
+      .labels = sprintf(
+        "%s (%d)", labelstr,
+        nrow(lastrow$full_parent_df[[1]])
+      ),
+      .formats = "xx / xx"
+    )
   }
 
   afun <- function(x, .spl_context) {
@@ -990,9 +1114,12 @@ test_that(".spl_context works in content and analysis functions", {
     lastrow <- .spl_context[nrow(.spl_context), ]
     in_rows(c(sum(x >= ageglobmean), lastrow$cur_col_n),
       .names = "age_analysis",
-      .labels = sprintf("counts (out of %d)",
-        nrow(lastrow$full_parent_df[[1]])),
-      .formats = "xx / xx")
+      .labels = sprintf(
+        "counts (out of %d)",
+        nrow(lastrow$full_parent_df[[1]])
+      ),
+      .formats = "xx / xx"
+    )
   }
 
 
@@ -1011,49 +1138,70 @@ test_that(".spl_context works in content and analysis functions", {
 
   rwcount4 <- as.integer(gsub("[^0-9]", "", strmat[4, 1]))
   crowvals <- cell_values(tab, c("COUNTRY", "CHN", "@content"))
-  expect_equal(rwcount4,
-    sum(sapply(crowvals,
-      `[[`, 1)))
+  expect_equal(
+    rwcount4,
+    sum(sapply(
+      crowvals,
+      `[[`, 1
+    ))
+  )
 
-  expect_equal(crowvals[[1]][[1]],
-    cell_values(tab, c("COUNTRY", "CHN", "STRATA1", "A", "@content"))[[1]][[2]])
+  expect_equal(
+    crowvals[[1]][[1]],
+    cell_values(tab, c("COUNTRY", "CHN", "STRATA1", "A", "@content"))[[1]][[2]]
+  )
 
-  expect_equal(unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "@content")),
-    `[[`, 1L)),
-  unname(sapply(cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
-    `[[`, 2L)))
+  expect_equal(
+    unname(sapply(
+      cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "@content")),
+      `[[`, 1L
+    )),
+    unname(sapply(
+      cell_values(tab, c("COUNTRY", "USA", "STRATA1", "B", "AGE", "age_analysis")),
+      `[[`, 2L
+    ))
+  )
 })
 
 test_that("cut functions work", {
-
   ctnames <- c("young", "medium", "old")
   ## split_cols_by_cuts
   l <- basic_table() %>%
     split_cols_by("ARM") %>%
-    split_cols_by_cuts("AGE", split_label = "Age",
+    split_cols_by_cuts("AGE",
+      split_label = "Age",
       cuts = c(0, 25, 35, 1000),
-      cutlabels = ctnames) %>%
+      cutlabels = ctnames
+    ) %>%
     analyze(c("BMRKR2", "STRATA2")) %>%
     append_topleft("counts")
 
   tbl <- build_table(l, ex_adsl)
 
   chkvals <- cell_values(tbl, c("BMRKR2", "LOW"), c("ARM", "A: Drug X"))
-  expect_identical(unname(unlist(chkvals)),
-    c(nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE <= 25)),
+  expect_identical(
+    unname(unlist(chkvals)),
+    c(
+      nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE <= 25)),
       nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 25 & AGE <= 35)),
-      nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 35))))
+      nrow(subset(ex_adsl, ARM == "A: Drug X" & BMRKR2 == "LOW" & AGE > 35))
+    )
+  )
 
   mf <- matrix_form(tbl)
-  expect_identical(mf$strings[2, , drop = TRUE],
-    c("counts", rep(ctnames, 3)))
+  expect_identical(
+    mf$strings[2, , drop = TRUE],
+    c("counts", rep(ctnames, 3))
+  )
 
   lcm <- basic_table() %>%
     split_cols_by("ARM") %>%
-    split_cols_by_cuts("AGE", split_label = "Age",
+    split_cols_by_cuts("AGE",
+      split_label = "Age",
       cuts = c(0, 25, 35, 1000),
       cutlabels = c("young", "young+medium", "all"),
-      cumulative = TRUE) %>%
+      cumulative = TRUE
+    ) %>%
     analyze(c("BMRKR2", "STRATA2")) %>%
     append_topleft("counts")
 
@@ -1061,14 +1209,18 @@ test_that("cut functions work", {
 
   medpth <- c("BMRKR2", "MEDIUM")
   bpth <- c("ARM", "B: Placebo")
-  expect_identical(cumsum(unname(unlist(cell_values(tbl, medpth, bpth)))),
-    unname(unlist(cell_values(tblcm, medpth, bpth))))
+  expect_identical(
+    cumsum(unname(unlist(cell_values(tbl, medpth, bpth)))),
+    unname(unlist(cell_values(tblcm, medpth, bpth)))
+  )
   ## split_rows_by_cuts
   l2 <- basic_table() %>%
     split_cols_by("ARM") %>%
-    split_rows_by_cuts("AGE", split_label = "Age",
+    split_rows_by_cuts("AGE",
+      split_label = "Age",
       cuts = c(0, 25, 35, 1000),
-      cutlabels = ctnames) %>%
+      cutlabels = ctnames
+    ) %>%
     analyze("BMRKR2") %>%
     append_topleft("counts")
 
@@ -1077,15 +1229,19 @@ test_that("cut functions work", {
 
   mf2 <- matrix_form(tbl2)
 
-  expect_identical(mf2$strings[c(2, 6, 10), 1, drop = TRUE],
-    ctnames)
+  expect_identical(
+    mf2$strings[c(2, 6, 10), 1, drop = TRUE],
+    ctnames
+  )
 
 
   l2cm <- basic_table() %>%
     split_cols_by("ARM") %>%
-    split_rows_by_cuts("AGE", split_label = "Age",
+    split_rows_by_cuts("AGE",
+      split_label = "Age",
       cuts = c(0, 25, 35, 1000),
-      cutlabels = ctnames, cumulative = TRUE) %>%
+      cutlabels = ctnames, cumulative = TRUE
+    ) %>%
     analyze("BMRKR2") %>%
     append_topleft("counts")
 
@@ -1095,13 +1251,17 @@ test_that("cut functions work", {
   medlow <- c("AGE", "young", "BMRKR2", "HIGH")
   cpth <- c("ARM", "C: Combination")
   getvals <- function(tt) {
-    sapply(ctnames,
+    sapply(
+      ctnames,
       function(pth) {
         unname(unlist(cell_values(tt, c("AGE", pth, "BMRKR2", "HIGH"), cpth)))
-      })
+      }
+    )
   }
-  expect_identical(getvals(tbl2cm),
-    cumsum(getvals(tbl2)))
+  expect_identical(
+    getvals(tbl2cm),
+    cumsum(getvals(tbl2))
+  )
   # split_cols_by_quartiles
 
   l3 <- basic_table() %>%
@@ -1130,8 +1290,10 @@ test_that("cut functions work", {
 
   tbl3c <- build_table(l3c, ex_adsl)
 
-  expect_identical(unname(unlist(cell_values(tbl3))),
-    unname(unlist(cell_values(tbl3c))))
+  expect_identical(
+    unname(unlist(cell_values(tbl3))),
+    unname(unlist(cell_values(tbl3c)))
+  )
 
 
   l3c_cm <- basic_table() %>%
@@ -1157,8 +1319,10 @@ test_that("cut functions work", {
 
   names(valslst4) <- gsub("^(.*)\\.BMRKR2\\.(.*)$", "\\2.\\1", names(valslst4))
   valslst3 <- unlist(cell_values(tbl3c))
-  expect_identical(valslst3,
-    valslst4[names(valslst3)])
+  expect_identical(
+    valslst3,
+    valslst4[names(valslst3)]
+  )
 
   l4cm <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM") %>%
@@ -1174,16 +1338,15 @@ test_that("cut functions work", {
 
   names(valslst4cm) <- gsub("^(.*)\\.BMRKR2\\.(.*)$", "\\2.\\1", names(valslst4cm))
   valslst3cm <- unlist(cell_values(tbl3c_cm))
-  expect_identical(valslst3cm,
-    valslst4cm[names(valslst3cm)])
-
-
+  expect_identical(
+    valslst3cm,
+    valslst4cm[names(valslst3cm)]
+  )
 })
 
 ## https://github.com/insightsengineering/rtables/issues/323
 
 test_that("empty factor levels represented correctly when ref group is set", {
-
   df <- data.frame(
     val = 1:10,
     grp = factor(rep("a", 10), levels = c("a", "b"))
@@ -1196,12 +1359,13 @@ test_that("empty factor levels represented correctly when ref group is set", {
     build_table(df)
 
   expect_identical(ncol(tbl), 2L)
-
 })
 
 test_that("error on empty level of splitting variable", {
-  mydf <- data.frame(x = c("hi", "", "lo"), y = c(5, 10, 20),
-    stringsAsFactors = FALSE)
+  mydf <- data.frame(
+    x = c("hi", "", "lo"), y = c(5, 10, 20),
+    stringsAsFactors = FALSE
+  )
 
   mydf2 <- mydf
   mydf2$x <- factor(mydf2$x)
@@ -1209,19 +1373,27 @@ test_that("error on empty level of splitting variable", {
   lyt1 <- basic_table() %>%
     split_cols_by("x") %>%
     analyze("y")
-  expect_error(build_table(lyt1, mydf),
-    "Got empty string level in splitting variable x")
-  expect_error(build_table(lyt1, mydf2),
-    "Got empty string level in splitting variable x")
+  expect_error(
+    build_table(lyt1, mydf),
+    "Got empty string level in splitting variable x"
+  )
+  expect_error(
+    build_table(lyt1, mydf2),
+    "Got empty string level in splitting variable x"
+  )
 
   lyt2 <- basic_table() %>%
     split_rows_by("x") %>%
     analyze("y")
 
-  expect_error(build_table(lyt2, mydf),
-    "Got empty string level in splitting variable x")
-  expect_error(build_table(lyt2, mydf2),
-    "Got empty string level in splitting variable x")
+  expect_error(
+    build_table(lyt2, mydf),
+    "Got empty string level in splitting variable x"
+  )
+  expect_error(
+    build_table(lyt2, mydf2),
+    "Got empty string level in splitting variable x"
+  )
 })
 
 
@@ -1244,7 +1416,6 @@ test_that("error when afun gives differing numbers of rows is informative", {
 })
 
 test_that("warning when same name siblings", {
-
   lyt <- basic_table() %>%
     analyze("AGE", mean) %>%
     analyze("AGE", mean, var_labels = "AGE2")
@@ -1254,15 +1425,21 @@ test_that("warning when same name siblings", {
     "Non-unique sibling analysis table names"
   )
 
-  expect_identical(row_paths(tbl)[[3]][2],
-    "AGE2")
+  expect_identical(
+    row_paths(tbl)[[3]][2],
+    "AGE2"
+  )
 })
 
 test_that("error when inset < 0 or non-number", {
-  expect_error(basic_table(inset = -1),
-    "invalid table_inset value")
-  expect_error(expect_warning(basic_table(inset = "haha")),
-    "invalid table_inset value")
+  expect_error(
+    basic_table(inset = -1),
+    "invalid table_inset value"
+  )
+  expect_error(
+    expect_warning(basic_table(inset = "haha")),
+    "invalid table_inset value"
+  )
 })
 
 test_that("error when ref_group value not a level of var when using split_cols_by", {
@@ -1281,7 +1458,8 @@ test_that("counts_wpcts works as expected", {
       F = rcell(c(187, 187 / 400), format = "xx (xx.x%)"),
       M = rcell(c(169, 169 / 400), format = "xx (xx.x%)"),
       U = rcell(c(0, 0), format = "xx (xx.x%)"),
-      UNDIFFERENTIATED = rcell(c(0, 0), format = "xx (xx.x%)"))
+      UNDIFFERENTIATED = rcell(c(0, 0), format = "xx (xx.x%)")
+    )
   )
   expect_identical(rows_res, rows_exp)
 })
@@ -1310,9 +1488,10 @@ test_that("qtable works", {
   count_use_nms <- function(df, .spl_context, ...) {
     nm <- tail(.spl_context$value, 1)
     rcell(NROW(df), label = nm)
-
   }
-  t0b <- basic_table(show_colcounts = TRUE) %>% analyze(names(ex_adsl)[1], count) %>% build_table(ex_adsl)
+  t0b <- basic_table(show_colcounts = TRUE) %>%
+    analyze(names(ex_adsl)[1], count) %>%
+    build_table(ex_adsl)
   nice_comp_table(t0, t0b)
 
   t1 <- qtable(ex_adsl, row_vars = "ARM")
@@ -1349,8 +1528,10 @@ test_that("qtable works", {
     build_table(ex_adsl)
   nice_comp_table(t4, t4b)
 
-  t5 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
-    col_vars = c("ARM", "STRATA1"), avar = "AGE", afun = mean)
+  t5 <- qtable(ex_adsl,
+    row_vars = c("COUNTRY", "SEX"),
+    col_vars = c("ARM", "STRATA1"), avar = "AGE", afun = mean
+  )
 
   mean_use_nm <- function(x, .spl_context, ...) {
     rcell(mean(x, ...), format = "xx.xx", label = tail(.spl_context$value, 1))
@@ -1373,8 +1554,10 @@ test_that("qtable works", {
     build_table(ex_adsl)
   nice_comp_table(t6, t6b)
 
-  t7 <- suppressWarnings(qtable(ex_adsl, row_vars = "SEX",
-    col_vars = "ARM", avar = "AGE", afun = range))
+  t7 <- suppressWarnings(qtable(ex_adsl,
+    row_vars = "SEX",
+    col_vars = "ARM", avar = "AGE", afun = range
+  ))
   range_use_nms <- function(x, .spl_context, ...) {
     rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
   }
@@ -1387,13 +1570,17 @@ test_that("qtable works", {
     build_table(ex_adsl)
   nice_comp_table(t7, t7b)
 
-  t8 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+  t8 <- qtable(ex_adsl,
+    row_vars = c("COUNTRY", "SEX"),
     col_vars = c("ARM"), avar = "AGE", afun = mean,
-    summarize_groups = TRUE)
+    summarize_groups = TRUE
+  )
 
-  t9 <- qtable(ex_adsl, row_vars = c("COUNTRY", "SEX"),
+  t9 <- qtable(ex_adsl,
+    row_vars = c("COUNTRY", "SEX"),
     col_vars = c("ARM"), avar = "AGE", afun = summary_list,
-    summarize_groups = TRUE)
+    summarize_groups = TRUE
+  )
   t9b <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
@@ -1416,16 +1603,21 @@ test_that("qtable works", {
   expect_equal(top_left(t10), "AGE - fivenum3")
 
   mpf10 <- matrix_form(t10)
-  expect_equal(mf_strings(mpf10)[3:7, 1],
-    letters[1:5])
+  expect_equal(
+    mf_strings(mpf10)[3:7, 1],
+    letters[1:5]
+  )
 
   t11 <- qtable(
-    ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5]
+    ex_adsl,
+    row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5]
   )
   expect_equal(top_left(t11), "AGE - fivenum3")
   mpf11 <- matrix_form(t11)
-  expect_equal(mf_strings(mpf11)[4:8, 1],
-    letters[1:5])
+  expect_equal(
+    mf_strings(mpf11)[4:8, 1],
+    letters[1:5]
+  )
 
 
   t12 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
@@ -1439,13 +1631,21 @@ test_that("qtable works", {
   mpf13 <- matrix_form(t13)
   expect_equal(mf_strings(mpf13)[3, 1], "mylabel")
 
-  expect_error(qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
-    afun = mean, row_labels = c("ABC", "EFG", "HIJ")),
-  "does not agree with number of rows")
+  expect_error(
+    qtable(ex_adsl,
+      row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
+      afun = mean, row_labels = c("ABC", "EFG", "HIJ")
+    ),
+    "does not agree with number of rows"
+  )
 
-  expect_error(qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = fivenum3,
-    row_labels = "ABC"),
-  "does not agree with number of rows")
+  expect_error(
+    qtable(ex_adsl,
+      col_vars = "ARM", avar = "AGE", afun = fivenum3,
+      row_labels = "ABC"
+    ),
+    "does not agree with number of rows"
+  )
 })
 
 
@@ -1464,9 +1664,11 @@ test_that("No superfluous warning when ref group is set with custom split fun", 
   reorder_facets <- function(splret, spl, fulldf, ...) {
     # browser() if you enter here the order of splret seems already correct
     ord <- order(names(splret$values))
-    make_split_result(splret$values[ord],
+    make_split_result(
+      splret$values[ord],
       splret$datasplit[ord],
-      splret$labels[ord])
+      splret$labels[ord]
+    )
   }
 
   lyt <- basic_table() %>%

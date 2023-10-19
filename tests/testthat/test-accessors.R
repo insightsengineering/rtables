@@ -14,28 +14,40 @@ test_that("various accessors work at the layout/table level", {
   postd <- coltree(tbl)
 
   expect_identical(pred, postd)
-  expect_identical(col_extra_args(pred),
-    col_extra_args(postd))
+  expect_identical(
+    col_extra_args(pred),
+    col_extra_args(postd)
+  )
 
-  expect_identical(col_exprs(l, DM),
-    col_exprs(col_info(tbl)))
+  expect_identical(
+    col_exprs(l, DM),
+    col_exprs(col_info(tbl))
+  )
 
-  expect_identical(clayout(tbl),
-    postd)
+  expect_identical(
+    clayout(tbl),
+    postd
+  )
 
 
-  expect_identical(colcount_format(tbl),
-    "(N=xx)")
+  expect_identical(
+    colcount_format(tbl),
+    "(N=xx)"
+  )
 
   ## even when not displayed
   colcount_format(tbl) <- "xx"
-  expect_identical(colcount_format(tbl),
-    "xx")
+  expect_identical(
+    colcount_format(tbl),
+    "xx"
+  )
 
   ccounts <- col_counts(tbl)
 
-  expect_identical(col_counts(tbl, path = c("ARM", "B: Placebo", "multivars", "AGE")),
-    ccounts[3])
+  expect_identical(
+    col_counts(tbl, path = c("ARM", "B: Placebo", "multivars", "AGE")),
+    ccounts[3]
+  )
 
   newccs <- rep(7L, ncol(tbl))
   col_counts(tbl) <- newccs
@@ -43,16 +55,22 @@ test_that("various accessors work at the layout/table level", {
 
 
 
-  expect_identical(newccs,
-    col_counts(tbl))
+  expect_identical(
+    newccs,
+    col_counts(tbl)
+  )
 
   col_counts(tbl, path = c("ARM", "B: Placebo", "multivars", "BMRKR1")) <- 5L
-  expect_identical(rep(c(7L, 5L, 7L), times = c(3, 1, 2)),
-    col_counts(tbl))
+  expect_identical(
+    rep(c(7L, 5L, 7L), times = c(3, 1, 2)),
+    col_counts(tbl)
+  )
 
   col_total(tbl) <- 75L
-  expect_identical(col_total(tbl),
-    75L)
+  expect_identical(
+    col_total(tbl),
+    75L
+  )
 
 
 
@@ -64,8 +82,10 @@ test_that("various accessors work at the layout/table level", {
 
   disp_ccounts(tbl) <- !olddisp
 
-  expect_identical(!olddisp,
-    disp_ccounts(tbl))
+  expect_identical(
+    !olddisp,
+    disp_ccounts(tbl)
+  )
 
   l2 <- l
 
@@ -81,8 +101,10 @@ test_that("various accessors work at the layout/table level", {
 
 
   page_titles(tbl) <- "Woah a page title!"
-  expect_identical(page_titles(tbl),
-    "Woah a page title!")
+  expect_identical(
+    page_titles(tbl),
+    "Woah a page title!"
+  )
 
 
   tt_level <- rtables:::tt_level
@@ -98,8 +120,6 @@ test_that("various accessors work at the layout/table level", {
 })
 
 test_that("Accessors for Split objects work", {
-
-
   myspl <- VarLevelSplit("AGE", "My age yo",
     labels_var = "AGE2",
     cfun = list(identity),
@@ -110,7 +130,8 @@ test_that("Accessors for Split objects work", {
     indent_mod = 1,
     cindent_mod = 2,
     extra_args = list("hiya"),
-    child_labels = "default")
+    child_labels = "default"
+  )
 
   expect_identical(obj_label(myspl), "My age yo")
   obj_label(myspl) <- "new label"
@@ -137,37 +158,50 @@ test_that("Accessors for Split objects work", {
 
   varlbs <- c("age", "biomarker1")
   mvarspl <- MultiVarSplit(c("AGE", "BMRKR1"),
-    "My Multivar", varlabels = varlbs)
+    "My Multivar",
+    varlabels = varlbs
+  )
 
 
   spl_varnames <- rtables:::spl_varnames
   `spl_varnames<-` <- rtables:::`spl_varnames<-`
 
-  expect_identical(spl_varnames(mvarspl),
-    c("AGE", "BMRKR1"))
+  expect_identical(
+    spl_varnames(mvarspl),
+    c("AGE", "BMRKR1")
+  )
 
   spl_varnames(mvarspl) <- c("stuff1", "stuff2")
-  expect_identical(spl_varnames(mvarspl),
-    paste0("stuff", 1:2))
+  expect_identical(
+    spl_varnames(mvarspl),
+    paste0("stuff", 1:2)
+  )
 
   spl_varlabels <- rtables:::spl_varlabels
   `spl_varlabels<-` <- rtables:::`spl_varlabels<-`
 
-  expect_identical(spl_varlabels(mvarspl),
-    varlbs)
+  expect_identical(
+    spl_varlabels(mvarspl),
+    varlbs
+  )
 
   spl_varlabels(mvarspl) <- LETTERS[1:2]
-  expect_identical(spl_varlabels(mvarspl),
-    LETTERS[1:2])
+  expect_identical(
+    spl_varlabels(mvarspl),
+    LETTERS[1:2]
+  )
 
   mvarspl2 <- MultiVarSplit(c("A", "B"))
-  expect_identical(spl_varnames(mvarspl2),
-    spl_varlabels(mvarspl2))
+  expect_identical(
+    spl_varnames(mvarspl2),
+    spl_varlabels(mvarspl2)
+  )
 
   spl_varnames(mvarspl2) <- c("C", "D")
-  expect_identical(spl_varnames(mvarspl2),
-    spl_varlabels(mvarspl2))
-
+  expect_identical(
+    spl_varnames(mvarspl2),
+    spl_varlabels(mvarspl2)
+  )
 })
 
 test_that("header sep setting works", {
@@ -188,7 +222,4 @@ test_that("header sep setting works", {
   tbl2 <- tbl
   horizontal_sep(tbl2) <- "="
   hsep_test(tbl2, "=")
-
-
-
 })

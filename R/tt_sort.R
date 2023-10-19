@@ -10,10 +10,14 @@
 cont_n_allcols <- function(tt) {
   ctab <- content_table(tt)
   if (NROW(ctab) == 0)
-    stop("cont_n_allcols score function used at subtable [",
-      obj_name(tt), "] that has no content table.")
-  sum(sapply(row_values(tree_children(ctab)[[1]]),
-    function(cv) cv[1]))
+    stop(
+      "cont_n_allcols score function used at subtable [",
+      obj_name(tt), "] that has no content table."
+    )
+  sum(sapply(
+    row_values(tree_children(ctab)[[1]]),
+    function(cv) cv[1]
+  ))
 }
 
 #' @rdname score_funs
@@ -29,8 +33,10 @@ cont_n_onecol <- function(j) {
   function(tt) {
     ctab <- content_table(tt)
     if (NROW(ctab) == 0)
-      stop("cont_n_allcols score function used at subtable [",
-        obj_name(tt), "] that has no content table.")
+      stop(
+        "cont_n_allcols score function used at subtable [",
+        obj_name(tt), "] that has no content table."
+      )
     row_values(tree_children(ctab)[[1]])[[j]][1]
   }
 }
@@ -161,7 +167,8 @@ sort_at_path <- function(tt,
     if (curname == "*") {
       oldkids <- tree_children(subtree)
       oldnames <- vapply(oldkids, obj_name, "")
-      newkids <- lapply(seq_along(oldkids),
+      newkids <- lapply(
+        seq_along(oldkids),
         function(i) {
           sort_at_path(oldkids[[i]],
             path = curpath[-1],
@@ -170,8 +177,10 @@ sort_at_path <- function(tt,
             na.pos = na.pos,
             ## its ok to modify the "path" here because its only ever used for
             ## informative error reporting.
-            .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
-        })
+            .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")"))
+          )
+        }
+      )
       names(newkids) <- oldnames
       newtab <- subtree
       tree_children(newtab) <- newkids
@@ -201,15 +210,17 @@ sort_at_path <- function(tt,
       "First error: ", scores[[errs[1]]]$message,
       "\n\toccurred at path: ",
       paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
-      call. = FALSE)
-
+      call. = FALSE
+    )
   } else {
     scores <- unlist(scores)
   }
   if (!is.null(dim(scores)) ||
     length(scores) != length(kids))
-    stop("Score function does not appear to have return exactly one ",
-      "scalar value per child")
+    stop(
+      "Score function does not appear to have return exactly one ",
+      "scalar value per child"
+    )
   if (is.na(decreasing))
     decreasing <- if (is.character(scores)) FALSE else TRUE
   ord <- order(scores, na.last = (na.pos != "first"), decreasing = decreasing)

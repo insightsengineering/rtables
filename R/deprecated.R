@@ -8,7 +8,8 @@ add_analyzed_var <- function(lyt, var, label = var, afun,
     afun = afun,
     split_format = format,
     defrowlab = rowlabs,
-    inclNAs = inclNAs)
+    inclNAs = inclNAs
+  )
   .Deprecated("analyze")
 
   if (!nested &&
@@ -41,6 +42,5 @@ trim_zero_rows <- function(tbl) {
     identical(unname(unlist(row_values(x))), rep(0L, ncol(tbl)))
   }, NA, USE.NAMES = FALSE)
   tbl[!torm, , keep_topleft = TRUE]
-
 }
 # nocov end
