@@ -589,7 +589,7 @@ get_formatted_fnotes <- function(tt) {
         counts <- lapply(counts, function(x) c(x, 1))
       } else {
         stop(
-          "This 2d format is not supported for column counts.",
+          "This 2d format is not supported for column counts. ",
           "Please choose a 1d format or a 2d format that includes a % value."
         )
       }
