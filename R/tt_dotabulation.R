@@ -1382,7 +1382,7 @@ setMethod("set_def_child_ord", "VarLevWBaselineSplit",
     }
     if (!bline %in% vals) {
       stop(paste0(
-        'Reference group "', bline, '"', ' was not present in the levels of ', spl_payload(lyt), ' in the data.'
+        'Reference group "', bline, '"', " was not present in the levels of ", spl_payload(lyt), " in the data."
       ))
     }
     pos <- match(bline, vals)

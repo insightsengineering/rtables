@@ -705,8 +705,8 @@ test_that("analysis function arguments work with NA rows in data", {
   }
 
   df <- data.frame(
-    a_var = factor(c('a', NA, 'b', 'b', 'a', 'a', 'b', 'c', 'a', NA)),
-    b_var = factor(c(NA, NA, 'x', 'x', 'y', 'x', 'x', 'y', 'x', NA))
+    a_var = factor(c("a", NA, "b", "b", "a", "a", "b", "c", "a", NA)),
+    b_var = factor(c(NA, NA, "x", "x", "y", "x", "x", "y", "x", NA))
   )
 
   l <- basic_table() %>%
