@@ -458,6 +458,8 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 
+#' @rdname int_methods
+#' @param object a table object
 #' @export
 setGeneric("str", function(object, ...) {
   standardGeneric("str")
