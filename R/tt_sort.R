@@ -1,45 +1,45 @@
 #' Score functions for sorting `TableTrees`
-#' 
+#'
 #' @rdname score_funs
-#' 
+#'
 #' @inheritParams gen_args
 #' @return A single numeric value indicating score according to the relevant
 #'   metric for \code{tt}, to be used when sorting.
-#' 
+#'
 #' @export
 cont_n_allcols <- function(tt) {
-    ctab <- content_table(tt)
-    if(NROW(ctab) == 0)
-        stop("cont_n_allcols score function used at subtable [",
-             obj_name(tt), "] that has no content table.")
-    sum(sapply(row_values(tree_children(ctab)[[1]]),
-               function(cv) cv[1]))
+  ctab <- content_table(tt)
+  if(NROW(ctab) == 0)
+    stop("cont_n_allcols score function used at subtable [",
+      obj_name(tt), "] that has no content table.")
+  sum(sapply(row_values(tree_children(ctab)[[1]]),
+    function(cv) cv[1]))
 }
 
 #' @rdname score_funs
-#' 
+#'
 #' @param j numeric(1). Number of column used for scoring.
-#' 
-#' @seealso For examples and details please read main documentation 
-#'   [sort_at_path()] and relevant vignette 
+#'
+#' @seealso For examples and details please read main documentation
+#'   [sort_at_path()] and relevant vignette
 #'   (([Sorting and Pruning](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)))
-#' 
+#'
 #' @export
 cont_n_onecol <- function(j) {
-    function(tt) {
-        ctab <- content_table(tt)
-        if(NROW(ctab) == 0)
-            stop("cont_n_allcols score function used at subtable [",
-                 obj_name(tt), "] that has no content table.")
-        row_values(tree_children(ctab)[[1]])[[j]][1]
-    }
+  function(tt) {
+    ctab <- content_table(tt)
+    if(NROW(ctab) == 0)
+      stop("cont_n_allcols score function used at subtable [",
+        obj_name(tt), "] that has no content table.")
+    row_values(tree_children(ctab)[[1]])[[j]][1]
+  }
 }
 
 #' Sorting a Table at a Specific Path
-#' 
-#' @description Main sorting function to order the substructure of a `TableTree` 
+#'
+#' @description Main sorting function to order the substructure of a `TableTree`
 #'   at a particular Path in the table tree.
-#' 
+#'
 #' @inheritParams gen_args
 #' @param scorefun function. Scoring function, should accept the type of
 #'   children directly under the position at \code{path} (either `VTableTree`,
@@ -54,29 +54,29 @@ cont_n_onecol <- function(j) {
 #'   allowed values are \code{"last"}  and \code{"first"} which indicate where
 #'   they should be placed in the order.
 #' @param .prev_path character. Internal detail, do not set manually.
-#' 
+#'
 #' @return A `TableTree` with the same structure as \code{tt} with the exception
 #'   that the requested sorting has been done at \code{path}.
-#'   
-#' @details The \code{path} here can include the "wildcard" \code{"*"} as a step, 
+#'
+#' @details The \code{path} here can include the "wildcard" \code{"*"} as a step,
 #'   which translates roughly to *any* node/branching element and means
 #'   that each child at that step will be \emph{separately} sorted based on
 #'   \code{scorefun} and the remaining \code{path} entries. This can occur
-#'   multiple times in a path. 
-#'   
-#'   Note that sorting needs a deeper understanding of table structure in 
-#'   `rtables`. Please consider reading related vignette 
+#'   multiple times in a path.
+#'
+#'   Note that sorting needs a deeper understanding of table structure in
+#'   `rtables`. Please consider reading related vignette
 #'   ([Sorting and Pruning](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html))
 #'   and explore table structure with useful functions like [table_structure()]
-#'   and [row_paths_summary()]. It is also very important to understand the 
+#'   and [row_paths_summary()]. It is also very important to understand the
 #'   difference between "content" rows and "data" rows. The first one analyzes
-#'   and describes the split variable generally and is generated with 
-#'   [summarize_row_groups()], while the second one is commonly produced by 
+#'   and describes the split variable generally and is generated with
+#'   [summarize_row_groups()], while the second one is commonly produced by
 #'   calling one of the various [analyze()] instances.
-#'   
+#'
 #'   Built-in score functions are [cont_n_allcols()] and [cont_n_onecol()].
 #'   They are both working with content rows (coming from [summarize_row_groups()])
-#'   while a custom score function needs to be used on `DataRow`s. Here, some 
+#'   while a custom score function needs to be used on `DataRow`s. Here, some
 #'   useful descriptor and accessor functions (coming from related vignette):
 #'    - [cell_values()] - Retrieves a named list of a `TableRow` or
 #'        `TableTree` object's values.
@@ -89,53 +89,53 @@ cont_n_onecol <- function(j) {
 #'    - [tree_children()] - Retrieves a `TableTree` object's direct children
 #'      (either subtables, rows or possibly a mix thereof, though that
 #'      should not happen in practice).
-#'   
+#'
 #' @seealso [cont_n_allcols()] and [cont_n_onecol()]
-#' 
-#' @examples 
+#'
+#' @examples
 #' # Creating a table to sort
-#' 
+#'
 #' # Function that gives two statistics per table-tree "leaf"
 #' more_analysis_fnc <- function(x) {
 #'   in_rows(
-#'       "median" = median(x),
-#'       "mean" = mean(x),
-#'       .formats = "xx.x"
+#'     "median" = median(x),
+#'     "mean" = mean(x),
+#'     .formats = "xx.x"
 #'   )
 #' }
-#'   
+#'
 #' # Main layout of the table
 #' raw_lyt <- basic_table() %>%
-#'     split_cols_by("ARM") %>%
-#'     split_rows_by(
-#'         "RACE",
-#'         split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
-#'     ) %>%
-#'     summarize_row_groups() %>%
-#'     split_rows_by("STRATA1") %>%
-#'     summarize_row_groups() %>%
-#'     analyze("AGE", afun = more_analysis_fnc)
-#' 
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by(
+#'     "RACE",
+#'     split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
+#'   ) %>%
+#'   summarize_row_groups() %>%
+#'   split_rows_by("STRATA1") %>%
+#'   summarize_row_groups() %>%
+#'   analyze("AGE", afun = more_analysis_fnc)
+#'
 #' # Creating the table and pruning empty and NAs
 #' tbl <- build_table(raw_lyt, DM) %>%
-#'     prune_table() 
-#' 
+#'   prune_table()
+#'
 #' # Peek at the table structure to understand how it is built
 #' table_structure(tbl)
-#' 
+#'
 #' #  Sorting only ASIAN sub-table, or, in other words, sorting STRATA elements for
 #' # the ASIAN group/row-split. This uses content_table() accessor function as it
 #' # is a "ContentRow". In this case, we also base our sorting only on the second column.
 #' sort_at_path(tbl, c("ASIAN", "STRATA1"), cont_n_onecol(2))
-#' 
-#' # Custom scoring function that is working on "DataRow"s  
+#'
+#' # Custom scoring function that is working on "DataRow"s
 #' scorefun <- function(tt) {
 #'   # Here we could use browser()
 #'   sum(unlist(row_values(tt))) # Different accessor function
 #' }
 #' # Sorting mean and median for all the AGE leaves!
 #' sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
-#' 
+#'
 #' @export
 sort_at_path <- function(tt,
                          path,
@@ -143,83 +143,83 @@ sort_at_path <- function(tt,
                          decreasing = NA,
                          na.pos = c("omit", "last", "first"),
                          .prev_path = character()) {
-    if(NROW(tt) == 0)
-        return(tt)
+  if(NROW(tt) == 0)
+    return(tt)
 
-    ## XXX hacky fix this!!!
-    if(identical(obj_name(tt), path[1]))
-        path <- path[-1]
+  ## XXX hacky fix this!!!
+  if(identical(obj_name(tt), path[1]))
+    path <- path[-1]
 
-    curpath <- path
-    subtree <- tt
-    backpath <- c()
-    count <- 0
-    while(length(curpath) > 0) {
-        curname <- curpath[1]
-        ## we sort each child separately based on the score function
-        ## and the remaining path
-        if(curname == "*") {
-            oldkids <- tree_children(subtree)
-            oldnames <- vapply(oldkids, obj_name, "")
-            newkids <- lapply(seq_along(oldkids),
-                              function(i) {
-                sort_at_path(oldkids[[i]],
-                             path = curpath[-1],
-                             scorefun = scorefun,
-                             decreasing = decreasing,
-                             na.pos = na.pos,
-                             ## its ok to modify the "path" here because its only ever used for
-                             ## informative error reporting.
-                             .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
-                })
-            names(newkids) <- oldnames
-            newtab <- subtree
-            tree_children(newtab) <- newkids
-            if(length(backpath) > 0) {
-                ret <- recursive_replace(tt, backpath, value = newtab)
-            } else {
-                ret <- newtab
-            }
-            return(ret)
-        }
-        subtree <- tree_children(subtree)[[curname]]
-        backpath <- c(backpath, curpath[1])
-        curpath <- curpath[-1]
-        count <- count + 1
+  curpath <- path
+  subtree <- tt
+  backpath <- c()
+  count <- 0
+  while(length(curpath) > 0) {
+    curname <- curpath[1]
+    ## we sort each child separately based on the score function
+    ## and the remaining path
+    if(curname == "*") {
+      oldkids <- tree_children(subtree)
+      oldnames <- vapply(oldkids, obj_name, "")
+      newkids <- lapply(seq_along(oldkids),
+        function(i) {
+          sort_at_path(oldkids[[i]],
+            path = curpath[-1],
+            scorefun = scorefun,
+            decreasing = decreasing,
+            na.pos = na.pos,
+            ## its ok to modify the "path" here because its only ever used for
+            ## informative error reporting.
+            .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")))
+        })
+      names(newkids) <- oldnames
+      newtab <- subtree
+      tree_children(newtab) <- newkids
+      if(length(backpath) > 0) {
+        ret <- recursive_replace(tt, backpath, value = newtab)
+      } else {
+        ret <- newtab
+      }
+      return(ret)
     }
-    real_backpath <- path[seq_len(count)]
+    subtree <- tree_children(subtree)[[curname]]
+    backpath <- c(backpath, curpath[1])
+    curpath <- curpath[-1]
+    count <- count + 1
+  }
+  real_backpath <- path[seq_len(count)]
 
-    na.pos <- match.arg(na.pos)
-##    subtree <- tt_at_path(tt, path)
-    kids <- tree_children(subtree)
-    ## relax this to allow character "scores"
-    ## scores <- vapply(kids, scorefun, NA_real_)
-    scores <- lapply(kids, function(x) tryCatch(scorefun(x), error = function(e) e))
-    errs <- which(vapply(scores, is, class2 = "error", TRUE))
-    if(length(errs) > 0) {
-        stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",
-             "First error: ", scores[[errs[1]]]$message,
-             "\n\toccurred at path: ",
-             paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
-             call. = FALSE)
+  na.pos <- match.arg(na.pos)
+  ##    subtree <- tt_at_path(tt, path)
+  kids <- tree_children(subtree)
+  ## relax this to allow character "scores"
+  ## scores <- vapply(kids, scorefun, NA_real_)
+  scores <- lapply(kids, function(x) tryCatch(scorefun(x), error = function(e) e))
+  errs <- which(vapply(scores, is, class2 = "error", TRUE))
+  if(length(errs) > 0) {
+    stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",
+      "First error: ", scores[[errs[1]]]$message,
+      "\n\toccurred at path: ",
+      paste(c(.prev_path, real_backpath, names(kids)[errs[1]]), collapse = " -> "),
+      call. = FALSE)
 
-    } else {
-        scores <- unlist(scores)
-    }
-    if(!is.null(dim(scores)) ||
-       length(scores) != length(kids))
-        stop("Score function does not appear to have return exactly one ",
-             "scalar value per child")
-    if(is.na(decreasing))
-        decreasing <- if(is.character(scores)) FALSE else TRUE
-    ord <- order(scores, na.last = (na.pos != "first"), decreasing = decreasing)
-    newkids <- kids[ord]
-    if(anyNA(scores) && na.pos == "omit") { #we did na last here
-        newkids <- head(newkids, -1 * sum(is.na(scores)))
-    }
+  } else {
+    scores <- unlist(scores)
+  }
+  if(!is.null(dim(scores)) ||
+    length(scores) != length(kids))
+    stop("Score function does not appear to have return exactly one ",
+      "scalar value per child")
+  if(is.na(decreasing))
+    decreasing <- if(is.character(scores)) FALSE else TRUE
+  ord <- order(scores, na.last = (na.pos != "first"), decreasing = decreasing)
+  newkids <- kids[ord]
+  if(anyNA(scores) && na.pos == "omit") { #we did na last here
+    newkids <- head(newkids, -1 * sum(is.na(scores)))
+  }
 
-    newtree <- subtree
-    tree_children(newtree) <- newkids
-    tt_at_path(tt, path) <- newtree
-    tt
+  newtree <- subtree
+  tree_children(newtree) <- newkids
+  tt_at_path(tt, path) <- newtree
+  tt
 }

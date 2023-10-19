@@ -184,7 +184,7 @@ h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
     y
   } else {
     pval <- sum_anova[sum_anova$term == effect, ][["p.value"]]
-    
+
     ## Test the interaction effect
     pval_inter <- sum_anova[grep(":", sum_anova$term), ][["p.value"]]
     covar_test <- data.frame(

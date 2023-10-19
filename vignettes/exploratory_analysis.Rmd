@@ -91,10 +91,10 @@ below adds a row of 0s for `STRATA1` level "B" nested under the `SEX`
 level "UNDIFFERENTIATED".
 
 ```{r}
-qtable(ex_adsl, 
-       row_vars = c("SEX", "STRATA1"), 
-       col_vars = c("ARM", "STRATA2"), 
-       drop_levels = FALSE)
+qtable(ex_adsl,
+  row_vars = c("SEX", "STRATA1"),
+  col_vars = c("ARM", "STRATA2"),
+  drop_levels = FALSE)
 ```
 
 In contrast, `table()` cannot return a nested table. Rather it produces
@@ -102,14 +102,14 @@ a list of contingency tables when more than two variables are used as
 inputs.
 
 ```{r}
-table(ex_adsl$SEX, ex_adsl$STRATA1, ex_adsl$ARM, ex_adsl$STRATA2) 
+table(ex_adsl$SEX, ex_adsl$STRATA1, ex_adsl$ARM, ex_adsl$STRATA2)
 ```
 
 With some help from `stats::ftable()` the nested structure can be
 achieved in two steps.
 
 ```{r}
-t1 <- ftable(ex_adsl[, c("SEX", "STRATA1", "ARM", "STRATA2")]) 
+t1 <- ftable(ex_adsl[, c("SEX", "STRATA1", "ARM", "STRATA2")])
 ftable(t1, row.vars = c("SEX", "STRATA1"))
 ```
 
@@ -191,7 +191,7 @@ elements are named, the names are used as row labels.
 
 ```{r}
 fivenum2 <- function(x) {
-    setNames(as.list(fivenum(x)), c("min","Q1","MED","Q3","max"))
+  setNames(as.list(fivenum(x)), c("min","Q1","MED","Q3","max"))
 }
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum2)
 ```
@@ -201,10 +201,10 @@ function documentation for more details.
 
 ```{r}
 meansd_range = function(x) {
-    in_rows(
-        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-        "Range" = rcell(range(x), format = "xx - xx")
-    )
+  in_rows(
+    "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+    "Range" = rcell(range(x), format = "xx - xx")
+  )
 }
 
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = meansd_range)
@@ -219,10 +219,10 @@ each level of nesting. For example, compare these two tables:
 
 ```{r}
 qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
-      avar = "AGE", afun = mean)
+  avar = "AGE", afun = mean)
 
 qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
-       summarize_groups = TRUE, avar = "AGE", afun = mean)
+  summarize_groups = TRUE, avar = "AGE", afun = mean)
 ```
 
 In the second table, there are marginal summary rows for each level of the
@@ -243,10 +243,9 @@ subtitles and footnotes like so:
 
 ```{r}
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
-       title = "Strata 2 Summary", 
-       subtitle = paste0("STUDY ", ex_adsl$STUDYID[1]), 
-       main_footer = paste0("Date: ", as.character(Sys.Date())))
-
+  title = "Strata 2 Summary",
+  subtitle = paste0("STUDY ", ex_adsl$STUDYID[1]),
+  main_footer = paste0("Date: ", as.character(Sys.Date())))
 ```
 
 ## Summary

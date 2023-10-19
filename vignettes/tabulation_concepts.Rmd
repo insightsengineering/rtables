@@ -55,7 +55,7 @@ df <- tibble(
     r2 = add_subgroup(r1),
     y = as.numeric(2 * as.numeric(c1) - 3 * as.numeric(r1))
   ) %>%
-    select(c1, c2, r1, r2, x, y)
+  select(c1, c2, r1, r2, x, y)
 
 df
 ```
@@ -286,7 +286,7 @@ foo <- function(df, labelstr) {
 lyt7 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  summarize_row_groups(cfun = foo) 
+  summarize_row_groups(cfun = foo)
 
 tbl7 <- build_table(lyt7, df)
 tbl7
@@ -326,7 +326,7 @@ which is in contrast to:
 lyt10 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
-  analyze("y", afun = function(x) mean(x)) 
+  analyze("y", afun = function(x) mean(x))
 
 tbl10 <- build_table(lyt10, df)
 tbl10

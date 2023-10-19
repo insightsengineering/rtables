@@ -1,4 +1,3 @@
-
 #' Trimming and Pruning Criteria
 #'
 #' Criteria functions (and constructors thereof) for trimming and pruning
@@ -15,30 +14,30 @@
 #'   (\code{TRUE}) or pruned (\code{FALSE}) during pruning.
 #' @seealso [prune_table()], [trim_rows()]
 #' @export
-#' 
+#'
 #' @examples
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 #' adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
 #' adsl$BMRKR1 <- 0
-#' 
+#'
 #' tbl_to_prune <- basic_table() %>%
-#'     analyze("BMRKR1") %>%
-#'     split_cols_by("ARM") %>% 
-#'     split_rows_by("SEX") %>% 
-#'     summarize_row_groups() %>%
-#'     split_rows_by("STRATA1") %>%
-#'     summarize_row_groups() %>%
-#'     analyze("AGE") %>%
-#'     build_table(adsl)
-#' 
+#'   analyze("BMRKR1") %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX") %>%
+#'   summarize_row_groups() %>%
+#'   split_rows_by("STRATA1") %>%
+#'   summarize_row_groups() %>%
+#'   analyze("AGE") %>%
+#'   build_table(adsl)
+#'
 #' tbl_to_prune %>% prune_table(all_zero_or_na)
-#'    
+#'
 all_zero_or_na <- function(tr) {
-    if(!is(tr, "TableRow") || is(tr, "LabelRow"))
-        return(FALSE)
-    rvs <- unlist(unname(row_values(tr)))
-    all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
+  if(!is(tr, "TableRow") || is(tr, "LabelRow"))
+    return(FALSE)
+  rvs <- unlist(unname(row_values(tr)))
+  all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
 }
 
 #' @rdname trim_prune_funs
@@ -47,15 +46,15 @@ all_zero_or_na <- function(tr) {
 #'   contains only (non-missing) zero values.
 #'
 #' @export
-#' 
+#'
 #' @examples
 #' tbl_to_prune %>% prune_table(all_zero)
-#' 
+#'
 all_zero <- function(tr) {
-    if(!is(tr, "TableRow") || is(tr, "LabelRow"))
-        return(FALSE)
-    rvs <- unlist(unname(row_values(tr)))
-    isTRUE(all(rvs == 0))
+  if(!is(tr, "TableRow") || is(tr, "LabelRow"))
+    return(FALSE)
+  rvs <- unlist(unname(row_values(tr)))
+  isTRUE(all(rvs == 0))
 }
 #' Trim rows from a populated table without regard for table structure
 #' @inheritParams gen_args
@@ -69,39 +68,39 @@ all_zero <- function(tr) {
 #'   called on a \code{LabelRow} object. To avoid this, use the
 #'   structurally-aware \code{\link{prune_table}} machinery instead.
 #' @details This function will be deprecated in the future in favor of the more
-#'   elegant and versatile [prune_table()] function which can perform the 
-#'   same function as `trim_rows()` but is more powerful as it takes table 
+#'   elegant and versatile [prune_table()] function which can perform the
+#'   same function as `trim_rows()` but is more powerful as it takes table
 #'   structure into account.
 #' @export
 #' @seealso [prune_table()]
-#' 
+#'
 #' @examples
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
-#' 
+#'
 #' tbl_to_trim <- basic_table() %>%
-#'     analyze("BMRKR1") %>%
-#'     split_cols_by("ARM") %>% 
-#'     split_rows_by("SEX") %>% 
-#'     summarize_row_groups() %>%
-#'     split_rows_by("STRATA1") %>%
-#'     summarize_row_groups() %>%
-#'     analyze("AGE") %>%
-#'     build_table(adsl)
-#' 
+#'   analyze("BMRKR1") %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX") %>%
+#'   summarize_row_groups() %>%
+#'   split_rows_by("STRATA1") %>%
+#'   summarize_row_groups() %>%
+#'   analyze("AGE") %>%
+#'   build_table(adsl)
+#'
 #' tbl_to_trim %>% trim_rows()
-#' 
+#'
 #' tbl_to_trim %>% trim_rows(all_zero)
-#' 
+#'
 trim_rows <- function(tt, criteria = all_zero_or_na) {
-    rows <- collect_leaves(tt, TRUE, TRUE)
-    torm <- vapply(rows, criteria,
-                  NA, USE.NAMES = FALSE)
-    tt[!torm, , 
-       keep_topleft = TRUE, 
-       keep_titles = TRUE, 
-       keep_footers = TRUE, 
-       reindex_refs = TRUE]
+  rows <- collect_leaves(tt, TRUE, TRUE)
+  torm <- vapply(rows, criteria,
+    NA, USE.NAMES = FALSE)
+  tt[!torm, ,
+    keep_topleft = TRUE,
+    keep_titles = TRUE,
+    keep_footers = TRUE,
+    reindex_refs = TRUE]
 }
 
 #' @rdname trim_prune_funs
@@ -115,20 +114,20 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 #'   levels were present in the data).
 #'
 #' @export
-#' 
+#'
 #' @examples
 #' tbl_to_prune %>% prune_table(content_all_zeros_nas)
-#' 
+#'
 content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
-    ## this will be NULL if
-    ## tt is something that doesn't have a content table
-    ct <- content_table(tt)
-    ## NROW returns 0 for NULL.
-    if(NROW(ct) == 0 || nrow(ct) > 1)
-        return(FALSE)
+  ## this will be NULL if
+  ## tt is something that doesn't have a content table
+  ct <- content_table(tt)
+  ## NROW returns 0 for NULL.
+  if(NROW(ct) == 0 || nrow(ct) > 1)
+    return(FALSE)
 
-    cr <- tree_children(ct)[[1]]
-    criteria(cr)
+  cr <- tree_children(ct)[[1]]
+  criteria(cr)
 }
 
 
@@ -139,18 +138,18 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
 #'
 #' @export
 #' @rdname trim_prune_funs
-#' 
-#' @examples 
+#'
+#' @examples
 #' tbl_to_prune %>% prune_table(prune_empty_level)
-#' 
+#'
 prune_empty_level <- function(tt) {
-    if(is(tt, "TableRow"))
-        return(all_zero_or_na(tt))
+  if(is(tt, "TableRow"))
+    return(all_zero_or_na(tt))
 
-    if(content_all_zeros_nas(tt))
-        return(TRUE)
-    kids <- tree_children(tt)
-    length(kids) == 0
+  if(content_all_zeros_nas(tt))
+    return(TRUE)
+  kids <- tree_children(tt)
+  length(kids) == 0
 }
 
 #' @details \code{prune_zeros_only} behaves as \code{prune_empty_level} does,
@@ -158,18 +157,18 @@ prune_empty_level <- function(tt) {
 #'   non-missing zero values.
 #' @rdname trim_prune_funs
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' tbl_to_prune %>% prune_table(prune_zeros_only)
-#' 
+#'
 prune_zeros_only <- function(tt) {
-    if(is(tt, "TableRow"))
-        return(all_zero(tt))
+  if(is(tt, "TableRow"))
+    return(all_zero(tt))
 
-    if(content_all_zeros_nas(tt, criteria = all_zero))
-        return(TRUE)
-    kids <- tree_children(tt)
-    length(kids) == 0
+  if(content_all_zeros_nas(tt, criteria = all_zero))
+    return(TRUE)
+  kids <- tree_children(tt)
+  length(kids) == 0
 }
 
 #' @param min numeric(1). (`low_obs_pruner` only). Minimum aggregate count value.
@@ -180,31 +179,31 @@ prune_zeros_only <- function(tt) {
 #'
 #' @details \code{low_obs_pruner} is a \emph{constructor function} which, when
 #'   called, returns a pruning criteria function which will prune on content
-#'   rows by comparing sum or mean (dictated by \code{type}) of the count 
+#'   rows by comparing sum or mean (dictated by \code{type}) of the count
 #'   portions of the cell values (defined as the first value per cell regardless
 #'   of how many values per cell there are) against \code{min}.
 #'
 #' @rdname trim_prune_funs
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' min_prune <- low_obs_pruner(70, "sum")
 #' tbl_to_prune %>% prune_table(min_prune)
-#' 
+#'
 low_obs_pruner <- function(min, type = c("sum", "mean")) {
-    type <- match.arg(type)
-    function(tt) {
-        if(is(tt, "TableRow") ||
-           ## note the <- in there!!!
-           NROW(ctab <- content_table(tt)) != 1)
-            return(FALSE) ## only trimming on count content rows
-        ctr <- tree_children(ctab)[[1]]
-        vals <- sapply(row_values(ctr), function(v) v[[1]])
-        sumvals <- sum(vals)
-        if(type == "mean")
-            sumvals <- sumvals / length(vals)
-        sumvals < min
-    }
+  type <- match.arg(type)
+  function(tt) {
+    if(is(tt, "TableRow") ||
+      ## note the <- in there!!!
+      NROW(ctab <- content_table(tt)) != 1)
+      return(FALSE) ## only trimming on count content rows
+    ctr <- tree_children(ctab)[[1]]
+    vals <- sapply(row_values(ctr), function(v) v[[1]])
+    sumvals <- sum(vals)
+    if(type == "mean")
+      sumvals <- sumvals / length(vals)
+    sumvals < min
+  }
 }
 
 #' Recursively prune a `TableTree`
@@ -222,52 +221,52 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #'
 #' @export
 #'
-#' @seealso [prune_empty_level()] for details on this and several other basic 
+#' @seealso [prune_empty_level()] for details on this and several other basic
 #'   pruning functions included in the `rtables` package.
-#'   
-#' @examples 
+#'
+#' @examples
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
-#' 
+#'
 #' tbl_to_prune <- basic_table() %>%
-#'     split_cols_by("ARM") %>% 
-#'     split_rows_by("SEX") %>% 
-#'     summarize_row_groups() %>%
-#'     split_rows_by("STRATA1") %>%
-#'     summarize_row_groups() %>%
-#'     analyze("AGE") %>%
-#'     build_table(adsl)
-#' 
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("SEX") %>%
+#'   summarize_row_groups() %>%
+#'   split_rows_by("STRATA1") %>%
+#'   summarize_row_groups() %>%
+#'   analyze("AGE") %>%
+#'   build_table(adsl)
+#'
 #' tbl_to_prune %>% prune_table()
 #'
 prune_table <- function(tt,
                         prune_func = prune_empty_level,
                         stop_depth = NA_real_,
                         depth = 0) {
-    if(!is.na(stop_depth) && depth > stop_depth)
-        return(tt)
-    if(is(tt, "TableRow")) {
-        if(prune_func(tt))
-            tt <- NULL
-        return(tt)
-    }
+  if(!is.na(stop_depth) && depth > stop_depth)
+    return(tt)
+  if(is(tt, "TableRow")) {
+    if(prune_func(tt))
+      tt <- NULL
+    return(tt)
+  }
 
-    kids <- tree_children(tt)
+  kids <- tree_children(tt)
 
-    torm <- vapply(kids, function(tb) {
-        !is.null(tb) && prune_func(tb)
-    }, NA)
+  torm <- vapply(kids, function(tb) {
+    !is.null(tb) && prune_func(tb)
+  }, NA)
 
-    keepkids <- kids[!torm]
-    keepkids <- lapply(keepkids, prune_table,
-                      prune_func = prune_func,
-                      stop_depth = stop_depth,
-                      depth = depth + 1)
+  keepkids <- kids[!torm]
+  keepkids <- lapply(keepkids, prune_table,
+    prune_func = prune_func,
+    stop_depth = stop_depth,
+    depth = depth + 1)
 
-    keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
-    if(length(keepkids) > 0)
-        tree_children(tt) <- keepkids
-    else
-        tt <- NULL
-    tt
+  keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
+  if(length(keepkids) > 0)
+    tree_children(tt) <- keepkids
+  else
+    tt <- NULL
+  tt
 }

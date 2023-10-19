@@ -235,12 +235,12 @@ lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country", page_by = TRUE) %>%
-  split_rows_by("handed") %>%  
+  split_rows_by("handed") %>%
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
 cat(export_as_txt(tbl, page_type = "letter",
-                  page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
+  page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
 ```
 
 We go into more detail on page-by splits and how to control the

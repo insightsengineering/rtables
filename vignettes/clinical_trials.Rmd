@@ -304,7 +304,7 @@ ADSL_NA <- ADSL_M_F_l %>%
 lyt6 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex",
-                split_fun = drop_split_levels, child_labels = "visible") %>%
+    split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary) %>%
   analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
 
@@ -374,8 +374,8 @@ lyt9 <- basic_table() %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "hidden") %>%
   summarize_row_groups(cfun = function(df, labelstr, .N_col, ...) {
     in_rows(
-       rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
-       .labels = paste0(labelstr, ": count (perc.)")
+      rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
+      .labels = paste0(labelstr, ": count (perc.)")
     )
   })  %>%
   analyze("AGE", s_summary) %>%
@@ -465,18 +465,18 @@ ADSL2 <- data.frame(
 )
 
 l.adae <- mapply(ADSL2$USUBJID,
-                 ADSL2$ARM,
-                 ADSL2$SEX,
-                 ADSL2$AGE,
-                 FUN = function(id, arm, sex, age) {
-  n_ae <- sample(0:25, 1, prob = if (arm == "ARM A") weightsA else weightsB)
-  i <- sample(seq_len(nrow(lookup)), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10)) / 16)
-  lookup[i, ] %>%
-    mutate(
-      AESEQ = seq_len(n()),
-      USUBJID = id, ARM = arm, SEX = sex, AGE = age
-    )
-}, SIMPLIFY = FALSE)
+  ADSL2$ARM,
+  ADSL2$SEX,
+  ADSL2$AGE,
+  FUN = function(id, arm, sex, age) {
+    n_ae <- sample(0:25, 1, prob = if (arm == "ARM A") weightsA else weightsB)
+    i <- sample(seq_len(nrow(lookup)), size = n_ae, replace = TRUE, prob = c(6, rep(1, 10)) / 16)
+    lookup[i, ] %>%
+      mutate(
+        AESEQ = seq_len(n()),
+        USUBJID = id, ARM = arm, SEX = sex, AGE = age
+      )
+  }, SIMPLIFY = FALSE)
 
 ADAE2 <- do.call(rbind, l.adae)
 ADAE2 <- ADAE2 %>%
@@ -675,9 +675,9 @@ table_count_grade_once_per_id <- function(df,
   id_sel <- !duplicated(id)
 
   in_rows(
-      "--Any Grade--" = sum(id_sel),
-      .list =  as.list(table(grade[id_sel]))
-    )
+    "--Any Grade--" = sum(id_sel),
+    .list =  as.list(table(grade[id_sel]))
+  )
 }
 
 table_count_grade_once_per_id(ex_adae, grade_levels = 1:5)
@@ -690,15 +690,15 @@ been introduced so far:
 adae_grade_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("AETOXGR",
-          afun = table_count_grade_once_per_id,
-          extra_args = list(grade_levels = 1:5),
-          var_labels = "- Any adverse events -", show_labels = "visible") %>%
+    afun = table_count_grade_once_per_id,
+    extra_args = list(grade_levels = 1:5),
+    var_labels = "- Any adverse events -", show_labels = "visible") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
   summarize_row_groups(cfun = table_count_grade_once_per_id, format = "xx", indent_mod = 1) %>%
   split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2)  %>%
   analyze("AETOXGR",
-          afun = table_count_grade_once_per_id,
-          extra_args = list(grade_levels = 1:5), show_labels = "hidden")
+    afun = table_count_grade_once_per_id,
+    extra_args = list(grade_levels = 1:5), show_labels = "hidden")
 
 adae_grade_tbl <- build_table(adae_grade_lyt, ADAE2, alt_counts_df = ADSL2)
 adae_grade_tbl
@@ -718,14 +718,14 @@ Let's start with the first part which is fairly simple to derive:
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
   mutate(
-      rsp = factor(AVALC %in% c("CR", "PR"),
-                   levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
-      is_rsp = (rsp == "Responders")
+    rsp = factor(AVALC %in% c("CR", "PR"),
+      levels = c(TRUE, FALSE), labels = c("Responders", "Non-Responders")),
+    is_rsp = (rsp == "Responders")
   )
 
 s_proportion <- function(x, .N_col) {
   in_rows(.list = lapply(as.list(table(x)),
-                         function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
+    function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx.xx (xx.xx%)")))
 }
 
 rsp_lyt <- basic_table(show_colcounts = TRUE) %>%
@@ -750,10 +750,10 @@ s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
 
   if (.in_ref_col) {
     return(in_rows(
-        "Difference in Response Rates (%)" = rcell(numeric(0)),
-        "95% CI (Wald, with correction)" = rcell(numeric(0)),
-        "p-value (Chi-Squared Test)" = rcell(numeric(0)),
-        "Odds Ratio (95% CI)" = rcell(numeric(0))
+      "Difference in Response Rates (%)" = rcell(numeric(0)),
+      "95% CI (Wald, with correction)" = rcell(numeric(0)),
+      "p-value (Chi-Squared Test)" = rcell(numeric(0)),
+      "Odds Ratio (95% CI)" = rcell(numeric(0))
     ))
   }
 
@@ -773,17 +773,17 @@ s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
   )
 
   in_rows(
-      "Difference in Response Rates (%)" = non_ref_rcell((mean(x) - mean(.ref_group)) * 100,
-                                                         .in_ref_col, format = "xx.xx") ,
-      "95% CI (Wald, with correction)" = non_ref_rcell(fit$conf.int * 100,
-                                                       .in_ref_col, format = "(xx.xx, xx.xx)"),
-      "p-value (Chi-Squared Test)" = non_ref_rcell(fit$p.value,
-                                                   .in_ref_col, format = "x.xxxx | (<0.0001)"),
-      "Odds Ratio (95% CI)" = non_ref_rcell(c(
-          exp(stats::coef(fit_glm)[-1]),
-          exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
-      ),
-      .in_ref_col, format = "xx.xx (xx.xx - xx.xx)")
+    "Difference in Response Rates (%)" = non_ref_rcell((mean(x) - mean(.ref_group)) * 100,
+      .in_ref_col, format = "xx.xx") ,
+    "95% CI (Wald, with correction)" = non_ref_rcell(fit$conf.int * 100,
+      .in_ref_col, format = "(xx.xx, xx.xx)"),
+    "p-value (Chi-Squared Test)" = non_ref_rcell(fit$p.value,
+      .in_ref_col, format = "x.xxxx | (<0.0001)"),
+    "Odds Ratio (95% CI)" = non_ref_rcell(c(
+      exp(stats::coef(fit_glm)[-1]),
+      exp(stats::confint.default(fit_glm, level = .95)[-1, , drop = FALSE])
+    ),
+    .in_ref_col, format = "xx.xx (xx.xx - xx.xx)")
   )
 }
 
@@ -801,7 +801,7 @@ rsp_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp, show_labels = "visible",
-          var_labels = "Unstratified Response Analysis")
+    var_labels = "Unstratified Response Analysis")
 
 rsp_tbl2 <- build_table(rsp_lyt2, ADRS_BESRSPI)
 rsp_tbl2
@@ -831,7 +831,7 @@ rsp_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp,
-          show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
+    show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
   split_rows_by(
     var = "AVALC",
     split_fun = reorder_split_levels(neworder = c("CR", "PR", "SD", "NON CR/PD", "PD", "NE"), drlevels = TRUE),
@@ -868,7 +868,7 @@ rsp_lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
   analyze("is_rsp", s_unstrat_resp,
-          show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
+    show_labels = "visible", var_labels = "Unstratified Response Analysis") %>%
   split_rows_by(
     var = "AVALC",
     split_fun = keep_split_levels(c("CR", "PR", "SD", "PD"), reorder = TRUE),
@@ -913,13 +913,13 @@ the data to be used in the construction of this table.
 library(survival)
 
 adtte <- ex_adaette %>%
-    dplyr::filter(PARAMCD == "AETTE2", SAFFL == "Y")
+  dplyr::filter(PARAMCD == "AETTE2", SAFFL == "Y")
 
 # Add censoring to data for example
 adtte[adtte$AVAL > 1.0, ] <- adtte[adtte$AVAL > 1.0, ] %>% mutate(AVAL = 1.0, CNSR = 1)
 
 adtte2 <- adtte %>%
-    mutate(CNSDTDSC = ifelse(CNSDTDSC == "", "__none__", CNSDTDSC))
+  mutate(CNSDTDSC = ifelse(CNSDTDSC == "", "__none__", CNSDTDSC))
 ```
 
 The `adtte` dataset will be used in preparing the models while the
@@ -932,8 +932,8 @@ the overall unique subject counts and percentages within the data.
 
 ```{r}
 a_count_subjs <- function(x, .N_col) {
-    in_rows("Subjects with Adverse Events n (%)" = rcell(length(unique(x)) * c(1, 1 / .N_col),
-                                                         format = "xx (xx.xx%)"))
+  in_rows("Subjects with Adverse Events n (%)" = rcell(length(unique(x)) * c(1, 1 / .N_col),
+    format = "xx (xx.xx%)"))
 }
 ```
 
@@ -945,9 +945,9 @@ each censored subject.
 
 ```{r}
 cnsr_counter <- function(df, .var, .N_col) {
-    x <- df[!duplicated(df$USUBJID), .var]
-    x <- x[x != "__none__"]
-    lapply(table(x), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx (xx.xx%)"))
+  x <- df[!duplicated(df$USUBJID), .var]
+  x <- x[x != "__none__"]
+  lapply(table(x), function(xi) rcell(xi * c(1, 1 / .N_col), format = "xx (xx.xx%)"))
 }
 ```
 
@@ -968,24 +968,24 @@ column.
 cph <- coxph(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1, ties = "exact", data = adtte)
 
 a_cph <- function(df, .var, .in_ref_col, .ref_full, full_cox_fit) {
-    if (.in_ref_col) {
-        ret <- replicate(3, list(rcell(NULL)))
-    } else {
-        curtrt <- df[[.var]][1]
-        coefs <- coef(full_cox_fit)
-        sel_pos <- grep(curtrt, names(coefs), fixed = TRUE)
-        hrval <- exp(coefs[sel_pos])
-        sdf <- survdiff(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1,
-                        data = rbind(df, .ref_full))
-        pval <- (1 - pchisq(sdf$chisq, length(sdf$n) - 1)) / 2
-        ci_val <- exp(unlist(confint(full_cox_fit)[sel_pos, ]))
-        ret <- list(rcell(hrval, format = "xx.x"),
-                    rcell(ci_val, format = "(xx.x, xx.x)"),
-                    rcell(pval, format = "x.xxxx | (<0.0001)"))
-    }
-    in_rows(.list = ret, .names = c("Hazard ratio",
-                                    "95% confidence interval",
-                                    "p-value (one-sided stratified log rank)"))
+  if (.in_ref_col) {
+    ret <- replicate(3, list(rcell(NULL)))
+  } else {
+    curtrt <- df[[.var]][1]
+    coefs <- coef(full_cox_fit)
+    sel_pos <- grep(curtrt, names(coefs), fixed = TRUE)
+    hrval <- exp(coefs[sel_pos])
+    sdf <- survdiff(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1,
+      data = rbind(df, .ref_full))
+    pval <- (1 - pchisq(sdf$chisq, length(sdf$n) - 1)) / 2
+    ci_val <- exp(unlist(confint(full_cox_fit)[sel_pos, ]))
+    ret <- list(rcell(hrval, format = "xx.x"),
+      rcell(ci_val, format = "(xx.x, xx.x)"),
+      rcell(pval, format = "x.xxxx | (<0.0001)"))
+  }
+  in_rows(.list = ret, .names = c("Hazard ratio",
+    "95% confidence interval",
+    "p-value (one-sided stratified log rank)"))
 }
 ```
 
@@ -1000,27 +1000,27 @@ summary statistics.
 
 ```{r}
 surv_tbl <- as.data.frame(summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM,
-                                          data = adtte, conf.type = "log-log"))$table) %>%
-    dplyr::mutate(ACTARM = factor(gsub("ACTARM=", "", row.names(.)),
-                                  levels = levels(adtte$ACTARM)),
-                  ind = FALSE)
+  data = adtte, conf.type = "log-log"))$table) %>%
+  dplyr::mutate(ACTARM = factor(gsub("ACTARM=", "", row.names(.)),
+    levels = levels(adtte$ACTARM)),
+  ind = FALSE)
 
 a_tte <- function(df, .var,  kp_table) {
-    ind <- grep(df[[.var]][1], row.names(kp_table), fixed = TRUE)
-    minmax <- range(df[["AVAL"]])
-    mm_val_str <- format_value(minmax, format = "xx.x, xx.x")
-    rowfn <- list()
-    if (all(df$CNSR[df$AVAL == minmax[2]])) {
-        mm_val_str <- paste0(mm_val_str, "*")
-        rowfn <- "* indicates censoring"
-    }
-    in_rows(Median = kp_table[ind, "median", drop = TRUE],
-            "95% confidence interval" = unlist(kp_table[ind, c("0.95LCL", "0.95UCL")]),
-            "Min Max" = mm_val_str,
-            .formats = c("xx.xx",
-                         "xx.xx - xx.xx",
-                         "xx"),
-            .row_footnotes = list(NULL, NULL, rowfn))
+  ind <- grep(df[[.var]][1], row.names(kp_table), fixed = TRUE)
+  minmax <- range(df[["AVAL"]])
+  mm_val_str <- format_value(minmax, format = "xx.x, xx.x")
+  rowfn <- list()
+  if (all(df$CNSR[df$AVAL == minmax[2]])) {
+    mm_val_str <- paste0(mm_val_str, "*")
+    rowfn <- "* indicates censoring"
+  }
+  in_rows(Median = kp_table[ind, "median", drop = TRUE],
+    "95% confidence interval" = unlist(kp_table[ind, c("0.95LCL", "0.95UCL")]),
+    "Min Max" = mm_val_str,
+    .formats = c("xx.xx",
+      "xx.xx - xx.xx",
+      "xx"),
+    .row_footnotes = list(NULL, NULL, rowfn))
 }
 ```
 
@@ -1032,18 +1032,18 @@ to event analysis table.
 
 ```{r}
 lyt <- basic_table(show_colcounts = TRUE) %>%
-    ## Column faceting
-    split_cols_by("ARM", ref_group = "A: Drug X") %>%
-    ## Overall count
-    analyze("USUBJID", a_count_subjs, show_labels = "hidden") %>%
-    ## Censored subjects summary
-    analyze("CNSDTDSC", cnsr_counter, var_labels = "Censored Subjects", show_labels = "visible") %>%
-    ## Cox P-H analysis
-    analyze("ARM", a_cph, extra_args = list(full_cox_fit = cph), show_labels = "hidden") %>%
-    ## Time-to-event analysis
-    analyze("ARM", a_tte, var_labels = "Time to first adverse event", show_labels = "visible",
-            extra_args = list(kp_table = surv_tbl),
-            table_names = "kapmeier")
+  ## Column faceting
+  split_cols_by("ARM", ref_group = "A: Drug X") %>%
+  ## Overall count
+  analyze("USUBJID", a_count_subjs, show_labels = "hidden") %>%
+  ## Censored subjects summary
+  analyze("CNSDTDSC", cnsr_counter, var_labels = "Censored Subjects", show_labels = "visible") %>%
+  ## Cox P-H analysis
+  analyze("ARM", a_cph, extra_args = list(full_cox_fit = cph), show_labels = "hidden") %>%
+  ## Time-to-event analysis
+  analyze("ARM", a_tte, var_labels = "Time to first adverse event", show_labels = "visible",
+    extra_args = list(kp_table = surv_tbl),
+    table_names = "kapmeier")
 
 tbl_tte <- build_table(lyt, adtte2)
 ```
@@ -1067,8 +1067,8 @@ time-to-event analysis function (`a_tte`) is also displayed.
 
 ```{r}
 fnotes_at_path(tbl_tte,
-               c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")
-               ) <- "Product-limit (Kaplan-Meier) estimates."
+  c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")
+) <- "Product-limit (Kaplan-Meier) estimates."
 
 tbl_tte
 ```

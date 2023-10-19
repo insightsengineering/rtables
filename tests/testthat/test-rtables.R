@@ -1,4 +1,3 @@
-
 context("rtables")
 
 test_that("rtable design decisions", {
@@ -38,12 +37,12 @@ test_that("rtable design decisions", {
     rrow("95% CI", indent = 1, rcell(c(44.8, 67.4), format = "(xx.x, xx.x)", colspan = 2)))
 
   tbl
-    ## see redesign/breaking_changes.md
-    ## expect_identical(names(tbl), c("Treatment\nN=100", "Comparison\nN=300"))
-    expect_identical(names(tbl), c("Treatment", "Comparison"))
+  ## see redesign/breaking_changes.md
+  ## expect_identical(names(tbl), c("Treatment\nN=100", "Comparison\nN=300"))
+  expect_identical(names(tbl), c("Treatment", "Comparison"))
 
-    ## replace once the colspan rows are uncommented
-    expect_equal(dim(tbl), c(6, 2))
+  ## replace once the colspan rows are uncommented
+  expect_equal(dim(tbl), c(6, 2))
 
   expect_identical(row.names(tbl), c("A", "B", "", "this is a very long section header", "estimate", "95% CI"))
 
@@ -86,17 +85,17 @@ test_that("multi-header tables work", {
     rrowl(row.name = "row 1", 1:4),
     rrowl(row.name = "row 2", 4:1)
   )
-    ## printing it works
-   res <- toString(t1)
+  ## printing it works
+  res <- toString(t1)
   expect_equal(nrow(t1), 2)
   expect_equal(ncol(t1), 4)
-    expect_equal(names(t1), c("A", "A", "B", "B"))
+  expect_equal(names(t1), c("A", "A", "B", "B"))
 
-    t2 <- rtable(header = rheader(
-                     rrow(NULL, rcell("A"), rcell("B")),
-                     rrow(NULL, rcell(50L, format = "(N=xx)"), rcell(70L, format = "(N=xx)"))),
-                 rrowl("row 1", 1:2))
-    expect_identical(col_counts(t2), c(50L, 70L))
+  t2 <- rtable(header = rheader(
+    rrow(NULL, rcell("A"), rcell("B")),
+    rrow(NULL, rcell(50L, format = "(N=xx)"), rcell(70L, format = "(N=xx)"))),
+  rrowl("row 1", 1:2))
+  expect_identical(col_counts(t2), c(50L, 70L))
 
 })
 
@@ -128,29 +127,29 @@ test_that("test 3d format (estimate and CI)", {
 
 test_that("df_to_tt works", {
 
-    mttt <- df_to_tt(mtcars)
+  mttt <- df_to_tt(mtcars)
 
-    expect_identical(dim(mttt), dim(mtcars))
-    expect_identical(names(mttt), names(mtcars))
-    expect_identical(row.names(mttt), row.names(mtcars))
-    expect_equal(lapply(seq_along(mtcars[[1]]), function(i) unclass(mtcars[i, ])),
-                     unname(cell_values(mttt)), check.attributes = FALSE)
+  expect_identical(dim(mttt), dim(mtcars))
+  expect_identical(names(mttt), names(mtcars))
+  expect_identical(row.names(mttt), row.names(mtcars))
+  expect_equal(lapply(seq_along(mtcars[[1]]), function(i) unclass(mtcars[i, ])),
+    unname(cell_values(mttt)), check.attributes = FALSE)
 })
 
 test_that("non-ref-rcell works", {
 
-    expect_identical(format_rcell(non_ref_rcell(5, TRUE)), "")
-    expect_identical(format_rcell(non_ref_rcell(5, FALSE)), "5")
+  expect_identical(format_rcell(non_ref_rcell(5, TRUE)), "")
+  expect_identical(format_rcell(non_ref_rcell(5, FALSE)), "5")
 })
 
 test_that("rtablel works", {
 
-    tbl <- rtablel(c("hi", "there"),
-                   list(rrow("", 5, 6), rrow("B", 6, "")),
-                   list(rrow("C", 7, 8), rrow("what", 10, 11)))
-    expect_identical(dim(tbl), c(4L, 2L))
+  tbl <- rtablel(c("hi", "there"),
+    list(rrow("", 5, 6), rrow("B", 6, "")),
+    list(rrow("C", 7, 8), rrow("what", 10, 11)))
+  expect_identical(dim(tbl), c(4L, 2L))
 
 
-    expect_identical(unname(unlist(cell_values(tbl))),
-                     c("5", "6", "6", "", "7", "8", "10", "11"))
+  expect_identical(unname(unlist(cell_values(tbl))),
+    c("5", "6", "6", "", "7", "8", "10", "11"))
 })

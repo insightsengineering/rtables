@@ -20,12 +20,12 @@
 #' @examples
 #' cll <- CellValue(pi, format = "xx.xxx")
 #' format_rcell(cll)
-#' 
+#'
 #' # Cell values precedes the row values
 #' cll <- CellValue(pi, format = "xx.xxx")
 #' format_rcell(cll, pr_row_format = "xx.x")
-#' 
-#' # Similarly for NA values 
+#'
+#' # Similarly for NA values
 #' cll <- CellValue(NA, format = "xx.xxx", format_na_str = "This is THE NA")
 #' format_rcell(cll, pr_row_na_str = "This is NA")
 #'
@@ -40,16 +40,16 @@ format_rcell <- function(x, format,
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
   if (is.null(format) && !is.null(pr_row_format)) {
-      format <- pr_row_format
+    format <- pr_row_format
   }
   # Check for na_str from parent
   if (is.null(obj_na_str(x)) && !is.null(pr_row_na_str)) {
-      na_str <- pr_row_na_str
+    na_str <- pr_row_na_str
   }
 
   # Main call to external function or shell
   if (shell) {
-      return(format)
+    return(format)
   }
   format_value(rawvalues(x),
     format = format,

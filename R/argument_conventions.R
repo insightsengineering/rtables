@@ -163,8 +163,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param table_names character. Names for the tables representing each atomic
 #'   analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different
-#'   children resulting form this split. An error will rise if the selected split 
-#'   does not contain at least one value that is not `NA`. 
+#'   children resulting form this split. An error will rise if the selected split
+#'   does not contain at least one value that is not `NA`.
 #' @param format_na_str character(1). String which should be displayed when
 #'   formatted if this cell's value(s) are all NA.
 #' @inherit gen_args return
@@ -205,11 +205,11 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   when tabulating row group summaries.
 #' @param child_names character. Names to be given to the sub splits contained
 #'   by a compound split (typically a `AnalyzeMultiVars` split object).
-#' @param title character(1). Main title ([main_title()]) is a single string. 
+#' @param title character(1). Main title ([main_title()]) is a single string.
 #'   Ignored for subtables.
-#' @param subtitles character. Subtitles ([subtitles()]) can be vector of strings, where 
+#' @param subtitles character. Subtitles ([subtitles()]) can be vector of strings, where
 #'   every element is printed in a separate line. Ignored for subtables.
-#' @param main_footer character. Main global (non-referential) footer materials 
+#' @param main_footer character. Main global (non-referential) footer materials
 #'   ([main_footer()]). If it is a vector of strings, they will be printed on separate
 #'   lines.
 #' @param prov_footer character. Provenance-related global footer materials
@@ -240,11 +240,11 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #' @param .lst list. An already-collected list of arguments to be used instead
 #'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 #'   ignored if this is specified.
-#' @param row.name if \code{NULL} then an empty string is used as 
+#' @param row.name if \code{NULL} then an empty string is used as
 #'   \code{row.name} of the \code{\link{rrow}}.
-#' @param format character(1) or function. The format label (string) or 
-#'   formatter function to apply to the cell values passed via `...`. See 
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#' @param format character(1) or function. The format label (string) or
+#'   formatter function to apply to the cell values passed via `...`. See
+#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported
 #'   format labels.
 #' @param indent deprecated.
 #' @param inset integer(1). The table inset for the row or table being
