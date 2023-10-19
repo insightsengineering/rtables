@@ -1,9 +1,16 @@
-## rtables 0.6.4.9006
+## rtables 0.6.5.9000
+
+## rtables 0.6.5
 ### New Features
-* Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Added support for new line characters across rtables (titles, column names, row names, footers, and `na_str`).
+ * Modified top left information vertical alignment to stay at the bottom of the header.
 
 ### Bug Fixes
-* Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+ * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+
+### Miscellaneous
+ * Added slide decks for advanced training as internal files.
 
 ## rtables 0.6.4
 ### New Features
