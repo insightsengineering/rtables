@@ -66,7 +66,8 @@ lyt1 <- basic_table() %>%
   split_cols_by_cuts(
     "AGE",
     cuts = c(0, 30, 60, 100),
-    cutlabels = c("0-30 y.o.", "30-60 y.o.", "60-100 y.o.")) %>%
+    cutlabels = c("0-30 y.o.", "30-60 y.o.", "60-100 y.o.")
+  ) %>%
   analyze("SEX")
 
 build_table(lyt1, ex_adsl)
@@ -95,8 +96,9 @@ picky_splitter <- function(var) {
     if (length(vals) == 1)
       do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
     else
-      add_overall_level("Overall", label = "All Obs", first = FALSE)(df = df, spl = spl,
-        vals = orig_vals, trim = trim)
+      add_overall_level(
+        "Overall", label = "All Obs", first = FALSE
+      )(df = df, spl = spl, vals = orig_vals, trim = trim)
   }
 }
 
@@ -165,9 +167,11 @@ my_afun <- function(x, .spl_context) {
   valnum <- min(2L, as.integer(gsub("[^[:digit:]]*", "", val)))
   fstringpt <- paste0("xx.", strrep("x", valnum))
   fmt_mnsd <- sprintf("%s (%s)", fstringpt, fstringpt)
-  in_rows(n = n,
+  in_rows(
+    n = n,
     "Mean, SD" = c(meanval, sdval),
-    .formats = c(n = "xx", "Mean, SD" = fmt_mnsd))
+    .formats = c(n = "xx", "Mean, SD" = fmt_mnsd)
+  )
 }
 
 lyt <- basic_table() %>%

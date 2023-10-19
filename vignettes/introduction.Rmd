@@ -239,8 +239,7 @@ lyt <- basic_table() %>%
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
-cat(export_as_txt(tbl, page_type = "letter",
-  page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
+cat(export_as_txt(tbl, page_type = "letter", page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
 ```
 
 We go into more detail on page-by splits and how to control the

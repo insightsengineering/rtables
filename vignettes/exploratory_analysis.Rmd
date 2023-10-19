@@ -91,10 +91,12 @@ below adds a row of 0s for `STRATA1` level "B" nested under the `SEX`
 level "UNDIFFERENTIATED".
 
 ```{r}
-qtable(ex_adsl,
+qtable(
+  ex_adsl,
   row_vars = c("SEX", "STRATA1"),
   col_vars = c("ARM", "STRATA2"),
-  drop_levels = FALSE)
+  drop_levels = FALSE
+)
 ```
 
 In contrast, `table()` cannot return a nested table. Rather it produces
@@ -218,11 +220,15 @@ to the table the count of non-NA records of the analysis variable at
 each level of nesting. For example, compare these two tables:
 
 ```{r}
-qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
-  avar = "AGE", afun = mean)
+qtable(
+  ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
+  avar = "AGE", afun = mean
+)
 
-qtable(ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
-  summarize_groups = TRUE, avar = "AGE", afun = mean)
+qtable(
+  ex_adsl, row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
+  summarize_groups = TRUE, avar = "AGE", afun = mean
+)
 ```
 
 In the second table, there are marginal summary rows for each level of the
@@ -242,10 +248,12 @@ Tables generated with `qtable()` can include annotations such as titles,
 subtitles and footnotes like so:
 
 ```{r}
-qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
+qtable(
+  ex_adsl, row_vars = "STRATA2", col_vars = "ARM",
   title = "Strata 2 Summary",
   subtitle = paste0("STUDY ", ex_adsl$STUDYID[1]),
-  main_footer = paste0("Date: ", as.character(Sys.Date())))
+  main_footer = paste0("Date: ", as.character(Sys.Date()))
+)
 ```
 
 ## Summary

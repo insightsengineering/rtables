@@ -215,14 +215,18 @@ the inset of the table and main footer between the two tables.
 Without inset -
 ```{r}
 analysisfun <- function(x, ...) {
-  in_rows(row1 = 5,
+  in_rows(
+    row1 = 5,
     row2 = c(1, 2),
     .row_footnotes = list(row1 = "row 1 rfn"),
-    .cell_footnotes = list(row2 = "row 2 cfn"))
+    .cell_footnotes = list(row2 = "row 2 cfn")
+  )
 }
 
-lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
-  main_footer = "ha HA! Footer!", prov_footer = "provenaaaaance") %>%
+lyt <- basic_table(
+  title = "Title says Whaaaat", subtitles = "Oh, ok.",
+  main_footer = "ha HA! Footer!", prov_footer = "provenaaaaance"
+) %>%
   split_cols_by("ARM") %>%
   analyze("AGE", afun = analysisfun)
 
@@ -466,12 +470,15 @@ wide_tbl <- basic_table(
   title = "Title that is too long and also needs to be wrapped to a smaller width",
   subtitles = "Subtitle that is also long and also needs to be wrapped to a smaller width",
   main_footer = "Footnote that is wider than expected for this table.",
-  prov_footer = "Provenance footer material that is also wider than expected for this table.") %>%
+  prov_footer = "Provenance footer material that is also wider than expected for this table."
+) %>%
   split_cols_by("ARM") %>%
   split_rows_by("RACE", split_fun = drop_split_levels) %>%
-  analyze(c("AGE", "EOSDY"),
+  analyze(
+    c("AGE", "EOSDY"),
     na_str = "Very long cell contents to_be_wrapped_and_splitted",
-    inclNAs = TRUE) %>%
+    inclNAs = TRUE
+  ) %>%
   build_table(trimmed_data)
 
 wide_tbl
@@ -533,10 +540,12 @@ setting the same two arguments. In the following code, we set
 have a maximum width of 43 characters.
 
 ```{r}
-result_wrap_cells_tf <- toString(wide_tbl,
+result_wrap_cells_tf <- toString(
+  wide_tbl,
   widths = c(10, 8, 8, 8),
   tf_wrap = TRUE,
-  max_width = 43)
+  max_width = 43
+)
 matrix_wrap_cells_tf <- matrix(strsplit(result_wrap_cells_tf, "\n")[[1]], ncol = 1)
 matrix_wrap_cells_tf
 ```

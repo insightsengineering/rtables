@@ -186,20 +186,23 @@ tbl
 We can now spot check that the values are the same
 
 ```{r}
-frm_rtables_h <- cell_values(tbl, rowpath = c("country", "CAN", "handed", "Right", "@content"),
-  colpath = c("arm", "Arm B", "gender", "Female"))[[1]]
+frm_rtables_h <- cell_values(
+  tbl, rowpath = c("country", "CAN", "handed", "Right", "@content"),
+  colpath = c("arm", "Arm B", "gender", "Female")
+)[[1]]
 frm_rtables_h
 
 frm_dplyr_h <- full_dplyr %>%
-  filter(country == "CAN" & handed == "Right" & arm == "Arm B" &
-    gender == "Female") %>%
+  filter(country == "CAN" & handed == "Right" & arm == "Arm B" & gender == "Female") %>%
   select(c_h_count, c_h_percent)
 
 frm_dplyr_h
 
 
-frm_rtables_c <- cell_values(tbl, rowpath = c("country", "CAN", "@content"),
-  colpath = c("arm", "Arm A", "gender", "Male"))[[1]]
+frm_rtables_c <- cell_values(
+  tbl, rowpath = c("country", "CAN", "@content"),
+  colpath = c("arm", "Arm A", "gender", "Male")
+)[[1]]
 
 frm_rtables_c
 
