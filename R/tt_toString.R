@@ -393,11 +393,13 @@ get_ref_matrix <- function(tt) {
 get_formatted_fnotes <- function(tt) {
   colresfs <- unlist(make_col_df(tt, visible_only = FALSE)$col_fnotes)
   rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
-  lst <- c(colresfs,
-    unlist(lapply(rows,
-      function(r) unlist(c(row_footnotes(r), cell_footnotes(r)),
-        recursive = FALSE)),
-    recursive = FALSE))
+  lst <- c(
+    colresfs,
+    unlist(
+      lapply(rows, function(r) unlist(c(row_footnotes(r), cell_footnotes(r)), recursive = FALSE)), 
+      recursive = FALSE
+    )
+  )
 
   inds <- vapply(lst, ref_index, 1L)
   stopifnot(all(is.na(inds)) || !is.unsorted(inds))
@@ -539,7 +541,9 @@ get_formatted_fnotes <- function(tt) {
       } else {
         stop("This 2d format is not supported for column counts. Please choose a 1d format or a 2d format that includes a % value.")
       }
-    } else if (cfmt_dim == "3d") {stop("3d formats are not supported for column counts.")}
+    } else if (cfmt_dim == "3d") {
+      stop("3d formats are not supported for column counts.")
+    }
 
     body <- rbind(body, vapply(counts, format_rcell,
       character(1),

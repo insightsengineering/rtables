@@ -43,9 +43,9 @@ test_that("existing table in layout works", {
     split_cols_by("ARM") %>%
     ## add nested column split on SEX with value labels from gend_label
     split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-    analyze(c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
-      afun = function(x) list(mean = mean(x),
-        median = median(x)),
+    analyze(
+      c("AGE", "AGE"), c("Age Analysis", "Age Analysis Redux"),
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       table_names = c("AGE1", "AGE2")
     )
@@ -98,10 +98,12 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "visible") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx",
-    show_labels = "visible")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx",
+      show_labels = "visible"
+    )
 
   tabyes <- build_table(yeslabellyt, rawdat)
 
@@ -117,9 +119,11 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "default") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx"
+    )
 
   tabmiss <- build_table(misslabellyt, rawdat)
   expect_identical(row.names(tabmiss)[1:4],
@@ -134,10 +138,12 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "hidden") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx",
-    show_labels = "hidden")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx",
+      show_labels = "hidden"
+    )
 
 
   tabno <- build_table(nolabellyt, rawdat)
@@ -152,10 +158,12 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "hidden") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx",
-    show_labels = "visible")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx",
+      show_labels = "visible"
+    )
 
   tabmixed2 <- build_table(mixedlyt2, rawdat)
   expect_identical(row.names(tabmixed2)[1:4],
@@ -170,10 +178,12 @@ test_that("labelkids parameter works", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "visible") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx",
-    show_labels = "hidden")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx",
+      show_labels = "hidden"
+    )
 
   tabmixed <- build_table(mixedlyt, rawdat)
   expect_identical(row.names(tabmixed)[1:4],
@@ -189,10 +199,12 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       label_pos = "visible") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx",
-    show_labels = "hidden")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx",
+      show_labels = "hidden"
+    )
 
   varshowtab <- build_table(varshowlyt, rawdat)
   expect_identical(row.names(varshowtab)[1:4],
@@ -274,8 +286,9 @@ test_that("missing vars caught", {
     split_cols_by("ARM") %>%
     split_cols_by("SX", "Gender") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x),
-        median = median(x)), format = "xx.xx")
+      afun = function(x) list(mean = mean(x), median = median(x)), 
+      format = "xx.xx"
+    )
 
   expect_error(build_table(misscol, rawdat),
     "Split variable [[]SX[]] not found in data being tabulated.")
@@ -285,8 +298,9 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "gend_label") %>%
     split_rows_by("RACER", "ethn_label") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x),
-        median = median(x)), format = "xx.xx")
+      afun = function(x) list(mean = mean(x), median = median(x)), 
+      format = "xx.xx"
+    )
 
   expect_error(build_table(missrsplit, rawdat),
     "Split variable [[]RACER[]] not found in data being tabulated.")
@@ -296,8 +310,9 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "gend_label") %>%
     split_rows_by("RACE", "ethnNA_label") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x),
-        median = median(x)), format = "xx.xx")
+      afun = function(x) list(mean = mean(x), median = median(x)), 
+      format = "xx.xx"
+    )
 
   expect_error(build_table(missrsplit, rawdat),
     "Value label variable [[]ethnNA_label[]] not found in data being tabulated.")
@@ -307,8 +322,9 @@ test_that("missing vars caught", {
     split_cols_by("SEX", labels_var = "gend_label") %>%
     split_rows_by("RACE", labels_var = "ethn_label") %>%
     analyze("AGGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x),
-        median = median(x)), format = "xx.xx")
+      afun = function(x) list(mean = mean(x), median = median(x)), 
+      format = "xx.xx"
+    )
 
   expect_error(build_table(missavar, rawdat),
     ".*variable[(]s[)] [[]AGGE[]] not present in data. [(]AnalyzeVarSplit[)].*")
@@ -378,7 +394,7 @@ test_that("cfun args", {
     summarize_row_groups(cfun = cfun1)
 
   tbl <- build_table(lyt, rawdat)
-  capture.output({prout <- print(tbl)})
+  capture.output(prout <- print(tbl))
   expect_identical(prout, tbl)
 
   # first arg x
@@ -396,7 +412,7 @@ test_that("cfun args", {
     summarize_row_groups("AGE", cfun = cfun2)
 
   tbl <- build_table(lyt, rawdat)
-  capture.output({prout <- print(tbl)})
+  capture.output(prout <- print(tbl))
   expect_identical(prout, tbl)
 })
 
@@ -593,13 +609,14 @@ test_that("Colcounts work correctly", {
   expect_identical(mf_tbl4_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
 })
 
-first_cont_rowvals <- function(tt)
+first_cont_rowvals <- function(tt) {
   row_values(
     tree_children(
       content_table(
         tree_children(tt)[[1]]
       )
     )[[1]])
+}
 
 test_that("content extra args for summarize_row_groups works", {
   sfun <- function(x, labelstr, .N_col, a = 5, b = 6, c = 7) {
@@ -680,10 +697,12 @@ test_that(".df_row analysis function argument works", {
 })
 
 test_that("analysis function arguments work with NA rows in data", {
-  afun <- function(x, .df_row, ...) {list(
-    "number of rows in .df_row" = nrow(.df_row),
-    "length of x" = length(x)
-  )}
+  afun <- function(x, .df_row, ...) {
+    list(
+      "number of rows in .df_row" = nrow(.df_row),
+      "length of x" = length(x)
+    )
+  }
 
   df <- data.frame(
     a_var = factor(c('a', NA, 'b', 'b', 'a', 'a', 'b', 'c', 'a', NA)),
@@ -895,9 +914,7 @@ test_that("topleft label position works", {
     ## Add analysis/data rows by analyzing AGE variable
     ## Note afun is a function that returns 2 values in a named list
     ## this will create 2 data rows
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx")
+    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x), median = median(x)), format = "xx.xx")
 
   tab <- build_table(lyt, rawdat)
   expect_identical(c("Ethnicity", "  Factor2"),
@@ -1232,8 +1249,10 @@ test_that("warning when same name siblings", {
     analyze("AGE", mean) %>%
     analyze("AGE", mean, var_labels = "AGE2")
 
-  expect_warning({tbl <- build_table(lyt, DM)},
-    "Non-unique sibling analysis table names")
+  expect_warning(
+    tbl <- build_table(lyt, DM),
+    "Non-unique sibling analysis table names"
+  )
 
   expect_identical(row_paths(tbl)[[3]][2],
     "AGE2")
@@ -1249,8 +1268,10 @@ test_that("error when inset < 0 or non-number", {
 test_that("error when ref_group value not a level of var when using split_cols_by", {
   lyt <- basic_table() %>%
     split_cols_by("ARM", ref_group = "test_level")
-  expect_error({tbl <- build_table(lyt, DM)},
-    'Reference group "test_level" was not present in the levels of ARM in the data.')
+  expect_error(
+    tbl <- build_table(lyt, DM),
+    'Reference group "test_level" was not present in the levels of ARM in the data.'
+  )
 })
 
 test_that("counts_wpcts works as expected", {

@@ -110,10 +110,11 @@ make_big_lyt <- function() {
     ## Add analysis/data rows by analyzing AGE variable
     ## Note afun is a function that returns 2 values in a named list
     ## this will create 2 data rows
-    analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x),
-        median = median(x)),
-      format = "xx.xx") %>%
+    analyze(
+      "AGE", "Age Analysis",
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx"
+    ) %>%
     ## adding more analysis vars "compounds them", placing them at the same
     ## level of nesting as all previous analysis blocks, rather than
     ## attempting to further nest them

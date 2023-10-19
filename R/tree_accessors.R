@@ -1025,8 +1025,7 @@ setMethod("value_formats", "TableRow",
   function(obj, default) {
     if (!is.null(obj_format(obj)))
       default <- obj_format(obj)
-    formats <- lapply(row_cells(obj), function(x)
-      value_formats(x) %||% default)
+    formats <- lapply(row_cells(obj), function(x) value_formats(x) %||% default)
     formats
   })
 #' @rdname value_formats
@@ -1062,8 +1061,11 @@ setMethod("value_formats", "VTableTree",
 #' @name collect_leaves
 #' @export
 setGeneric("collect_leaves",
-  function(tt, incl.cont = TRUE, add.labrows = FALSE)
-    standardGeneric("collect_leaves"), signature = "tt")
+  function(tt, incl.cont = TRUE, add.labrows = FALSE) {
+    standardGeneric("collect_leaves")
+  }, 
+  signature = "tt"
+)
 
 #' @rdname int_methods
 #' @inheritParams collect_leaves
@@ -1123,9 +1125,10 @@ setMethod("collect_leaves", "NULL",
 #' @rdname int_methods
 #' @exportMethod collect_leaves
 setMethod("collect_leaves", "ANY",
-  function(tt, incl.cont, add.labrows)
-    stop("class ", class(tt), " does not inherit from VTree or VLeaf"))
-
+  function(tt, incl.cont, add.labrows) {
+    stop("class ", class(tt), " does not inherit from VTree or VLeaf")
+  }
+)
 
 n_leaves <- function(tt, ...) {
   length(collect_leaves(tt, ...))
@@ -1706,8 +1709,7 @@ setGeneric("col_counts", function(obj, path = NULL) standardGeneric("col_counts"
 #' @export
 #' @rdname col_accessors
 setMethod("col_counts", "InstantiatedColumnInfo",
-  function(obj, path = NULL)
-    obj@counts[.path_to_pos(path, obj, cols = TRUE)])
+  function(obj, path = NULL) obj@counts[.path_to_pos(path, obj, cols = TRUE)])
 
 #' @export
 #' @rdname col_accessors
@@ -2156,11 +2158,14 @@ setMethod("vars_in_layout", "SplitVector",
 
 #' @rdname vil
 setMethod("vars_in_layout", "Split",
-  function(lyt) vil_collapse(c(spl_payload(lyt),
+  function(lyt) {
+    vil_collapse(c(spl_payload(lyt),
     ## for an AllSplit/RootSplit
     ## doesn't have to be same as payload
     content_var(lyt),
-    spl_label_var(lyt))))
+    spl_label_var(lyt)))
+  }
+)
 
 #' @rdname vil
 setMethod("vars_in_layout", "CompoundSplit",
@@ -2541,8 +2546,9 @@ setGeneric("fnotes_at_path<-", function(obj,
                                         rowpath = NULL,
                                         colpath = NULL,
                                         reset_idx = TRUE,
-                                        value)
-  standardGeneric("fnotes_at_path<-"))
+                                        value) {
+  standardGeneric("fnotes_at_path<-")
+})
 
 ## non-null rowpath, null or non-null colpath
 #' @inheritParams fnotes_at_path<-

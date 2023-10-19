@@ -26,9 +26,7 @@ setMethod("spl_variable", "VarStaticCutSplit", function(spl) spl_payload(spl))
 #' @rdname spl_variable
 #' @export
 setMethod("spl_variable", "Split",
-  function(spl) stop("Split class ",
-    class(spl),
-    " not associated with a single variable.")
+  function(spl) stop("Split class ", class(spl), " not associated with a single variable.")
 )
 
 in_col_split <- function(spl_ctx) {

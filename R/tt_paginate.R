@@ -83,10 +83,11 @@ setMethod("nlines", "InstantiatedColumnInfo",
   function(x, colwidths, max_width) {
     h_rows <- .do_tbl_h_piece2(x)
     tl <- top_left(x) %||% rep("", length(h_rows))
-    main_nls <- vapply(seq_along(h_rows),
-      function(i) max(nlines(h_rows[[i]], colwidths = colwidths),
-        nlines(tl[i], colwidths = colwidths[1])),
-      1L)
+    main_nls <- vapply(
+      seq_along(h_rows),
+      function(i) max(nlines(h_rows[[i]], colwidths = colwidths), nlines(tl[i], colwidths = colwidths[1])),
+      1L
+    )
 
     ## lfs <- collect_leaves(coltree(x))
     ## depths <- sapply(lfs, function(l) length(pos_splits(l)))
@@ -359,11 +360,15 @@ setMethod("make_row_df", "LabelRow",
   })
 
 
-setGeneric("inner_col_df", function(ct, colwidths = NULL, visible_only = TRUE,
+setGeneric("inner_col_df", function(ct, 
+                                    colwidths = NULL, 
+                                    visible_only = TRUE,
                                     colnum = 0L,
                                     sibpos = NA_integer_,
                                     nsibs = NA_integer_,
-                                    ncolref = 0L) standardGeneric("inner_col_df"))
+                                    ncolref = 0L) {
+  standardGeneric("inner_col_df")
+})
 
 
 #' Column Layout Summary

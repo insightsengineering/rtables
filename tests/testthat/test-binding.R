@@ -191,8 +191,10 @@ test_that("cbinding table with counts and with NA counts works", {
 
 
   mytab <- rtable(header = "new column", rrow(NULL, 75))
-  expect_warning({res <- cbind_rtables(tbl, mytab)},
-    "Mixture of missing and non-missing column counts when creating column info")
+  expect_warning(
+    res <- cbind_rtables(tbl, mytab),
+    "Mixture of missing and non-missing column counts when creating column info"
+  )
 
   mform <- matrix_form(res)
   expect_identical(mform$strings[2, 4], "(N=129)")

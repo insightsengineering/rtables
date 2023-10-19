@@ -21,9 +21,11 @@ test_that("indents are correct in make_row_df", {
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx"
+    )
 
   t1 <- build_table(l1, rawdat)
   pgdf1 <- make_row_df(t1)
@@ -46,9 +48,12 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0) %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx", indent_mod = -1)
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx", 
+      indent_mod = -1
+    )
 
   t3 <- build_table(l3, rawdat)
   pgdf3 <- make_row_df(t3)
@@ -62,9 +67,12 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = -1) %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx", indent_mod = 1)
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx", 
+      indent_mod = 1
+    )
   t4 <- build_table(l4, rawdat)
   pagdf4 <- make_row_df(t4)
   expect_identical(rep(c(0, 0, 2, 2, 0, 2, 2), 2),
@@ -77,9 +85,12 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = -2) %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx", indent_mod = 1)
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx", 
+      indent_mod = 1
+    )
   t5 <- build_table(l5, rawdat)
   pgdf5 <- make_row_df(t5)
   expect_identical(rep(c(2, 1, 3, 3, 1, 3, 3), 2),
@@ -93,9 +104,12 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0) %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx", indent_mod = 0)
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx", 
+      indent_mod = 0
+    )
   t6 <- build_table(l6, rawdat)
   pgdf6 <- make_row_df(t6)
   expect_identical(c(0, rep(c(1, 2, 3, 3, 2, 3, 3), 2)),
@@ -115,9 +129,12 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0) %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx", indent_mod = 0)
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)),
+      format = "xx.xx", 
+      indent_mod = 0
+    )
   t7 <- build_table(l7, rawdat)
   pgdf7 <- make_row_df(t7)
   expect_identical(c(2, rep(c(1, 3, 4, 4, 3, 4, 4), 2)),

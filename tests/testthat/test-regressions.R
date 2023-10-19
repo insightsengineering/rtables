@@ -17,7 +17,7 @@ test_that("manually created label l rows are always visible",
 test_that("printing table with 0 rows works", {
   norows <- rtable(c("hi", "lo"))
   mf_rinfo(matrix_form(norows))
-  capture.output({prout <- print(norows)})
+  capture.output(prout <- print(norows))
   expect_identical(prout, norows)
 })
 
@@ -586,5 +586,5 @@ test_that("export_as_txt works when there are newlines in column labels (natural
     analyze_colvars(afun = mean) %>%
     build_table(formatters::ex_adlb)
 
-  expect_silent({tmp <- export_as_txt(tbl, lpp = 20)})
+  expect_silent(tmp <- export_as_txt(tbl, lpp = 20))
 })

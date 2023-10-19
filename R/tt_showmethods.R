@@ -69,9 +69,14 @@ setMethod("payloadmsg", "MultiVarSplit",
   function(spl) "var")
 
 setMethod("payloadmsg", "VarLevWBaselineSplit",
-  function(spl) paste0(spl_payload(spl), "[bsl ",
-    spl@ref_group_value, # XXX XXX
-    "]"))
+  function(spl) {
+    paste0(
+      spl_payload(spl), "[bsl ",
+      spl@ref_group_value, # XXX XXX
+      "]"
+    )
+  }
+)
 
 setMethod("payloadmsg", "ManualSplit",
   function(spl) "mnl")
@@ -150,10 +155,7 @@ setMethod("spltype_abbrev", "AnalyzeVarSplit",
   function(obj) "** analysis **")
 
 setMethod("spltype_abbrev", "CompoundSplit",
-  function(obj) paste("compound",
-    paste(sapply(spl_payload(obj),
-      spltype_abbrev), collapse = " ")
-  )
+  function(obj) paste("compound", paste(sapply(spl_payload(obj), spltype_abbrev), collapse = " "))
 )
 
 setMethod("spltype_abbrev", "AnalyzeMultiVars",

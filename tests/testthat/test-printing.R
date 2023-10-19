@@ -136,9 +136,11 @@ test_that("newline in column names and possibly cell values work", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       label_pos = "topleft") %>%
-    analyze("AGE", "Age Analysis", afun = function(x) list(mean = mean(x),
-      median = median(x)),
-    format = "xx.xx")
+    analyze(
+      "AGE", "Age Analysis", 
+      afun = function(x) list(mean = mean(x), median = median(x)), 
+      format = "xx.xx"
+    )
 
   tbl2 <- build_table(lyt2, rawdat2)
   matform2 <- matrix_form(tbl2)

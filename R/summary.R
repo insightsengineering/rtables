@@ -235,10 +235,12 @@ summarize_rows <- function(obj) {
 #'     format = "xx.xx")
 #'
 #' tbl <- build_table(lyt, iris2)
-
+#' 
 #' @rdname int_methods
-setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0)
-  standardGeneric("summarize_rows_inner"))
+setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0) {
+  standardGeneric("summarize_rows_inner")
+})
+
 #' @rdname int_methods
 setMethod("summarize_rows_inner", "TableTree",
   function(obj, depth = 0, indent = 0) {
@@ -438,8 +440,9 @@ is_empty_ElementaryTable <- function(x) {
 }
 
 #' @export
-setGeneric("str", function(object, ...)
-  standardGeneric("str"))
+setGeneric("str", function(object, ...) {
+  standardGeneric("str")
+})
 
 #' @rdname int_methods
 #' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the

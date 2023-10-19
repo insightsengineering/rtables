@@ -34,7 +34,11 @@ setMethod("c", "SplitVector", function(x, ...) {
 #' @rdname int_methods
 setGeneric("split_rows",
   function(lyt = NULL, spl, pos,
-           cmpnd_fun = AnalyzeMultiVars) standardGeneric("split_rows"))
+           cmpnd_fun = AnalyzeMultiVars) {
+    standardGeneric("split_rows")
+  }
+)
+
 #' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
   .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
@@ -102,8 +106,9 @@ setMethod("split_rows", "PreDataTableLayouts",
   })
 #' @rdname int_methods
 setMethod("split_rows", "ANY",
-  function(lyt, spl, pos) stop("nope. can't add a row split to that (",
-    class(lyt), "). contact the maintaner.")
+  function(lyt, spl, pos) {
+    stop("nope. can't add a row split to that (", class(lyt), "). contact the maintaner.")
+  }
 )
 
 #' @rdname int_methods
@@ -158,8 +163,11 @@ setMethod("cmpnd_last_rowsplit", "ANY",
 
 #' @rdname int_methods
 setGeneric("split_cols",
-  function(lyt = NULL, spl, pos)
-    standardGeneric("split_cols"))
+  function(lyt = NULL, spl, pos) {
+    standardGeneric("split_cols")
+  }
+)
+
 #' @rdname int_methods
 setMethod("split_cols", "NULL", function(lyt, spl, pos) {
   .Deprecated(msg = paste("Initializing layouts via NULL is deprecated,",
@@ -723,10 +731,14 @@ split_cols_by_quartiles <- function(lyt, var, split_label = var,
     var = var,
     split_label = split_label,
     cutfun = qtile_cuts,
-    cutlabelfun = function(x) c("[min, Q1]",
-      "(Q1, Q2]",
-      "(Q2, Q3]",
-      "(Q3, max]"),
+    cutlabelfun = function(x) {
+      c(
+        "[min, Q1]",
+        "(Q1, Q2]",
+        "(Q2, Q3]",
+        "(Q3, max]"
+      )
+    },
     nested = nested,
     extra_args = extra_args,
     cumulative = cumulative)
@@ -762,10 +774,14 @@ split_rows_by_quartiles <- function(lyt, var, split_label = var,
     format = format,
     na_str = na_str,
     cutfun = qtile_cuts,
-    cutlabelfun = function(x) c("[min, Q1]",
-      "(Q1, Q2]",
-      "(Q2, Q3]",
-      "(Q3, max]"),
+    cutlabelfun = function(x) {
+      c(
+        "[min, Q1]",
+        "(Q1, Q2]",
+        "(Q2, Q3]",
+        "(Q3, max]"
+      )
+    },
     nested = nested,
     child_labels = child_labels,
     extra_args = extra_args,
@@ -1249,7 +1265,11 @@ setGeneric(".add_row_summary",
            cna_str = "-",
            indent_mod = 0L,
            cvar = "",
-           extra_args = list()) standardGeneric(".add_row_summary"))
+           extra_args = list()) {
+    standardGeneric(".add_row_summary")
+  }
+)
+
 #' @rdname int_methods
 setMethod(".add_row_summary", "PreDataTableLayouts",
   function(lyt,

@@ -1161,8 +1161,10 @@ setMethod("head", "VTableTree",
 #' cvnolist <- value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
 #'   c("ARM", "B: Placebo", "SEX", "M"))
 #' stopifnot(identical(cvlist[[1]], cvnolist))
-setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
-  standardGeneric("cell_values"))
+setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE) {
+  standardGeneric("cell_values")
+})
+
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod cell_values
@@ -1195,8 +1197,10 @@ setMethod("cell_values", "LabelRow",
 
 #' @rdname cell_values
 #' @export
-setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL)
-  standardGeneric("value_at"))
+setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL) {
+  standardGeneric("value_at")
+})
+
 #' @rdname cell_values
 #' @exportMethod value_at
 setMethod("value_at", "VTableTree",

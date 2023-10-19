@@ -427,8 +427,8 @@ setMethod("check_validsplit", "CompoundSplit",
 ## default does nothing, add methods as they become
 ## required
 setMethod("check_validsplit", "Split",
-  function(spl, df)
-    invisible(NULL))
+  function(spl, df) invisible(NULL)
+)
 
 
 

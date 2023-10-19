@@ -39,8 +39,11 @@ test_that("Page by splitting works", {
     split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") %>%
     split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
     summarize_row_groups() %>%
-    analyze("AGE", afun = function(x, ...) in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.x (xx.x)"),
-      "range" = rcell(range(x), format = "xx.x - xx.x")))
+    analyze("AGE", afun = function(x, ...) {
+      in_rows("mean (sd)" = rcell(
+        c(mean(x), sd(x)), format = "xx.x (xx.x)"), "range" = rcell(range(x), format = "xx.x - xx.x")
+      )
+    })
 
   tbl2 <- build_table(lyt2, ex_adsl)
 

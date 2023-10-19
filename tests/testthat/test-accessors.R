@@ -91,8 +91,10 @@ test_that("various accessors work at the layout/table level", {
   expect_identical(tt_level(tbl), 1L)
 
   tt_level(tbl) <- 2
-  expect_error({table_inset(tbl) <- -1},
-    "invalid table_inset value")
+  expect_error(
+    table_inset(tbl) <- -1,
+    "invalid table_inset value"
+  )
 })
 
 test_that("Accessors for Split objects work", {

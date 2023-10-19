@@ -26,7 +26,7 @@ test_that("afun internals coverage", {
       n_unique = "xx - xx"))
 
 
-  foo <- function(x, .N_col, ...) {list(a = character(0))}
+  foo <- function(x, .N_col, ...) list(a = character(0))
   afoo <- make_afun(foo)
   expect_silent(afoo(factor(character(0)), .N_col = 100))
 

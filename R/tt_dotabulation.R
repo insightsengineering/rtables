@@ -1487,8 +1487,9 @@ setMethod("fix_analyze_vis", "SplitVector",
 
 # check_afun_cfun_params ----
 # This checks if the input params are used anywhere in cfun/afun
-setGeneric("check_afun_cfun_params", function(lyt, params)
-  standardGeneric("check_afun_cfun_params"))
+setGeneric("check_afun_cfun_params", function(lyt, params) {
+  standardGeneric("check_afun_cfun_params")
+})
 
 setMethod("check_afun_cfun_params", "PreDataTableLayouts",
   function(lyt, params) {

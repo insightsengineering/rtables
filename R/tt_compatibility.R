@@ -121,9 +121,7 @@ hrows_to_colinfo <- function(rows) {
   for (i in 2:nr) {
     psted <- paste_em_n(repvals, i - 1)
     spl <- split(repvals[[i]], psted)
-    if (!all(sapply(spl, function(x)
-      identical(x, spl[[1]])))) {
-
+    if (!all(sapply(spl, function(x) identical(x, spl[[1]])))) {
       fullnest <- FALSE
       break
     }

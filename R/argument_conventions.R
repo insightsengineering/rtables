@@ -71,9 +71,9 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
                      table_inset,
-                     ...) NULL
-
-
+                     ...) {
+  NULL
+}
 
 #' Layouting Function Arg Conventions
 #' @name lyt_args
@@ -177,7 +177,9 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
                      indent_mod, show_labels, label_pos, # visible_label,
                      var_labels, cvar,
                      table_names, topleft, align, page_by, page_prefix,
-                     format_na_str, section_div, na_str) NULL
+                     format_na_str, section_div, na_str) {
+  NULL
+}
 
 
 #' Constructor Arg Conventions
@@ -230,7 +232,9 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
                         trailing_sep, split_na_str,
-                        cna_str, inset, table_inset) NULL
+                        cna_str, inset, table_inset) {
+  NULL
+}
 
 #' Compatibility Arg Conventions
 #' @name compat_args

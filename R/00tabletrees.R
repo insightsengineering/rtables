@@ -954,9 +954,7 @@ setClassUnion("FunctionOrNULL", c("function", "NULL"))
 setClass("LayoutAxisTree", contains = "VLayoutTree",
   representation(summary_func = "FunctionOrNULL"),
   validity = function(object) {
-    all(sapply(object@children,
-      function(x)
-        is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf")))
+    all(sapply(object@children, function(x) is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf")))
   })
 
 setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ## "VNodeInfo",
