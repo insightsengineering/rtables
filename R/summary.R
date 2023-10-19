@@ -235,7 +235,7 @@ summarize_rows <- function(obj) {
 #'     format = "xx.xx")
 #'
 #' tbl <- build_table(lyt, iris2)
-#' 
+#'
 #' @rdname int_methods
 setGeneric("summarize_rows_inner", function(obj, depth = 0, indent = 0) {
   standardGeneric("summarize_rows_inner")

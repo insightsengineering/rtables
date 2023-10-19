@@ -1066,7 +1066,7 @@ setMethod("value_formats", "VTableTree",
 setGeneric("collect_leaves",
   function(tt, incl.cont = TRUE, add.labrows = FALSE) {
     standardGeneric("collect_leaves")
-  }, 
+  },
   signature = "tt"
 )
 

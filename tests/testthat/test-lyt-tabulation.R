@@ -99,7 +99,7 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "visible") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       show_labels = "visible"
@@ -120,7 +120,7 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "default") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
@@ -139,7 +139,7 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "hidden") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       show_labels = "hidden"
@@ -159,7 +159,7 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "hidden") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       show_labels = "visible"
@@ -179,7 +179,7 @@ test_that("labelkids parameter works", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label", child_labels = "visible") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       show_labels = "hidden"
@@ -200,7 +200,7 @@ test_that("labelkids parameter works", {
       labels_var = "fac2_label",
       label_pos = "visible") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx",
       show_labels = "hidden"
@@ -286,7 +286,7 @@ test_that("missing vars caught", {
     split_cols_by("ARM") %>%
     split_cols_by("SX", "Gender") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x), median = median(x)), 
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
 
@@ -298,7 +298,7 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "gend_label") %>%
     split_rows_by("RACER", "ethn_label") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x), median = median(x)), 
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
 
@@ -310,7 +310,7 @@ test_that("missing vars caught", {
     split_cols_by("SEX", "gend_label") %>%
     split_rows_by("RACE", "ethnNA_label") %>%
     analyze("AGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x), median = median(x)), 
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
 
@@ -322,7 +322,7 @@ test_that("missing vars caught", {
     split_cols_by("SEX", labels_var = "gend_label") %>%
     split_rows_by("RACE", labels_var = "ethn_label") %>%
     analyze("AGGE", "Age Analysis",
-      afun = function(x) list(mean = mean(x), median = median(x)), 
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
 

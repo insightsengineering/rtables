@@ -127,7 +127,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 
 #' Transform `rtable` to a list of matrices which can be used for outputting
 #'
-#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML 
+#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML
 #' it is useful to map the `rtable` to an in between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
@@ -396,7 +396,7 @@ get_formatted_fnotes <- function(tt) {
   lst <- c(
     colresfs,
     unlist(
-      lapply(rows, function(r) unlist(c(row_footnotes(r), cell_footnotes(r)), recursive = FALSE)), 
+      lapply(rows, function(r) unlist(c(row_footnotes(r), cell_footnotes(r)), recursive = FALSE)),
       recursive = FALSE
     )
   )

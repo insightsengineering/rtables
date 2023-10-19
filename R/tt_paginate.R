@@ -360,8 +360,8 @@ setMethod("make_row_df", "LabelRow",
   })
 
 
-setGeneric("inner_col_df", function(ct, 
-                                    colwidths = NULL, 
+setGeneric("inner_col_df", function(ct,
+                                    colwidths = NULL,
                                     visible_only = TRUE,
                                     colnum = 0L,
                                     sibpos = NA_integer_,
@@ -385,7 +385,7 @@ make_col_df <- function(tt,
   ctree <- coltree(tt) ## this is a null op if its already a coltree object
   rows <- inner_col_df(ctree,
     ## colwidths is currently unused anyway...  propose_column_widths(matrix_form(tt, indent_rownames=TRUE)),
-    colwidths = colwidths, 
+    colwidths = colwidths,
     visible_only = visible_only,
     colnum = 1L,
     sibpos = 1L,
@@ -525,7 +525,7 @@ setMethod("inner_col_df", "LayoutColTree",
 #'   - row-labels, table_inset, and top-left materials in the horizontal case
 #' 1. Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
 #' 2. Perform vertical pagination separately on each table generated in (1)
-#' 3. Perform horizontal pagination **on the entire table** and apply the results to each table 
+#' 3. Perform horizontal pagination **on the entire table** and apply the results to each table
 #'    page generated in (1)-(2)
 #' 4. Return a list of subtables representing full bi-directional pagination
 #'
@@ -608,7 +608,7 @@ pag_tt_indices <- function(tt, lpp = 15,
   hlines <- .header_rep_nlines(tt, colwidths = colwidths, max_width = max_width,
     verbose = verbose)
   ## if(any(nzchar(all_titles(tt)))) {
-  ##     tlines <- sum(nlines(all_titles(tt), colwidths = colwidths, max_width = max_width)) + 
+  ##     tlines <- sum(nlines(all_titles(tt), colwidths = colwidths, max_width = max_width)) +
   ##       length(wrap_txt(all_titles(tt), max_width = max_width)) +
   ##         dheight + 1L
   ## } else {

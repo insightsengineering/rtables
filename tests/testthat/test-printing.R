@@ -137,8 +137,8 @@ test_that("newline in column names and possibly cell values work", {
       labels_var = "fac2_label",
       label_pos = "topleft") %>%
     analyze(
-      "AGE", "Age Analysis", 
-      afun = function(x) list(mean = mean(x), median = median(x)), 
+      "AGE", "Age Analysis",
+      afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
 
@@ -461,7 +461,7 @@ test_that("Cell and column label wrapping works in printing", {
 
 
 test_that("row label indentation is kept even if there are newline characters", {
-  ANL <- DM %>% 
+  ANL <- DM %>%
     mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
     filter(ARM == "A: Drug X")
   ANL$ARM <- factor(ANL$ARM)

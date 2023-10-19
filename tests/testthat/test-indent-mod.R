@@ -22,7 +22,7 @@ test_that("indents are correct in make_row_df", {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label") %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
     )
@@ -49,9 +49,9 @@ test_that("indents are correct in make_row_df", {
       labels_var = "fac2_label",
       indent_mod = 0) %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx", 
+      format = "xx.xx",
       indent_mod = -1
     )
 
@@ -68,9 +68,9 @@ test_that("indents are correct in make_row_df", {
       labels_var = "fac2_label",
       indent_mod = -1) %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx", 
+      format = "xx.xx",
       indent_mod = 1
     )
   t4 <- build_table(l4, rawdat)
@@ -86,9 +86,9 @@ test_that("indents are correct in make_row_df", {
       labels_var = "fac2_label",
       indent_mod = -2) %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx", 
+      format = "xx.xx",
       indent_mod = 1
     )
   t5 <- build_table(l5, rawdat)
@@ -105,9 +105,9 @@ test_that("indents are correct in make_row_df", {
       labels_var = "fac2_label",
       indent_mod = 0) %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx", 
+      format = "xx.xx",
       indent_mod = 0
     )
   t6 <- build_table(l6, rawdat)
@@ -130,9 +130,9 @@ test_that("indents are correct in make_row_df", {
       labels_var = "fac2_label",
       indent_mod = 0) %>%
     analyze(
-      "AGE", "Age Analysis", 
+      "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
-      format = "xx.xx", 
+      format = "xx.xx",
       indent_mod = 0
     )
   t7 <- build_table(l7, rawdat)
