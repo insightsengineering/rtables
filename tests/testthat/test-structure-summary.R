@@ -48,7 +48,7 @@ test_that("vars_in_layout works", {
       "FACTOR2", # split_rows_by
       "fac2_label", # split_rows_by labels_var
       "AGE", # analyze
-      "VAR3") #analyze
+      "VAR3") # analyze
   )
 
   expect_identical(vars_in_layout(ManualSplit(c("A", "B"), label = "stuff")),

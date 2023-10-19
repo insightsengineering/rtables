@@ -37,7 +37,7 @@ test_that("various accessors work at the layout/table level", {
   expect_identical(col_counts(tbl, path = c("ARM", "B: Placebo", "multivars", "AGE")),
     ccounts[3])
 
-  newccs <-  rep(7L, ncol(tbl))
+  newccs <- rep(7L, ncol(tbl))
   col_counts(tbl) <- newccs
 
 

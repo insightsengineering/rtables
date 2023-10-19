@@ -40,7 +40,7 @@ test_that("table_shell works", {
   expect_identical(toString(tblsh),
     paste0(capture_output(table_shell(tbl)), "\n"))
 
-  tbl2 <-  rtable(c("A", "B"),
+  tbl2 <- rtable(c("A", "B"),
     rrow("Hiya",
       rcell(c(2, .2),
         format = function(x, ...) paste0(x)),

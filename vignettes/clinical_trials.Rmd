@@ -62,7 +62,7 @@ vignette is that the analysis function `afun` can specify multiple
 rows with the `in_rows()` function:
 
 ```{r}
-ADSL <- ex_adsl  # Example ADSL dataset
+ADSL <- ex_adsl # Example ADSL dataset
 
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -279,7 +279,7 @@ lyt5 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary, show_labels = "visible") %>%
-  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
+  analyze("BMRKR2", s_summary, nested = FALSE, show_labels = "visible")
 
 tbl5 <- build_table(lyt5, ADSL_M_F_l)
 tbl5
@@ -306,7 +306,7 @@ lyt6 <- basic_table(show_colcounts = TRUE) %>%
   split_rows_by("SEX", labels_var = "lbl_sex",
     split_fun = drop_split_levels, child_labels = "visible") %>%
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", s_summary, nested = FALSE,  show_labels = "visible")
+  analyze("BMRKR2", s_summary, nested = FALSE, show_labels = "visible")
 
 tbl6 <- build_table(lyt6, filter(ADSL_NA, SEX %in% c("M", "F")))
 tbl6
@@ -321,9 +321,9 @@ summarized with `summarize_row_groups()`, for example:
 lyt7 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
-  summarize_row_groups()  %>%
+  summarize_row_groups() %>%
   analyze("AGE", s_summary) %>%
-  analyze("BMRKR2", afun = s_summary, nested = FALSE,  show_labels = "visible")
+  analyze("BMRKR2", afun = s_summary, nested = FALSE, show_labels = "visible")
 
 tbl7 <- build_table(lyt7, filter(ADSL_NA, SEX %in% c("M", "F")))
 tbl7
@@ -353,9 +353,9 @@ lyt8 <- basic_table(show_colcounts = TRUE) %>%
       rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
       .labels = labelstr
     )
-  })  %>%
+  }) %>%
   analyze("AGE", s_summary) %>%
-  analyze("BEP01FL", afun = s_summary, nested = FALSE,  show_labels = "visible")
+  analyze("BEP01FL", afun = s_summary, nested = FALSE, show_labels = "visible")
 
 tbl8 <- build_table(lyt8, filter(ADSL_NA, SEX %in% c("M", "F")))
 tbl8
@@ -377,7 +377,7 @@ lyt9 <- basic_table() %>%
       rcell(nrow(df) * c(1, 1 / .N_col), format = "xx (xx.xx%)"),
       .labels = paste0(labelstr, ": count (perc.)")
     )
-  })  %>%
+  }) %>%
   analyze("AGE", s_summary) %>%
   analyze("BEP01FL", s_summary, nested = FALSE, show_labels = "visible")
 
@@ -564,7 +564,7 @@ We next calculate this information per system organ class:
 adae_soc_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", s_events_patients) %>%
-  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE)  %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", nested = FALSE) %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients)
 
 adae_soc_tbl <- build_table(adae_soc_lyt, ADAE2, alt_counts_df = ADSL2)
@@ -578,7 +578,7 @@ per level (using `rtab_inner`):
 ```{r}
 adae_soc_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
-  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", indent_mod = -1)
 
@@ -617,7 +617,7 @@ So the desired `AE` table is:
 ```{r}
 adae_soc_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
-  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1)  %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", afun = table_count_once_per_id, show_labels = "hidden", indent_mod = -1)
 
@@ -632,7 +632,7 @@ rows. This can be added with an initial `analyze()` call.
 adae_soc_lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", afun = s_events_patients) %>%
-  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1, section_div = "")  %>%
+  split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1, section_div = "") %>%
   summarize_row_groups("USUBJID", cfun = s_events_patients) %>%
   analyze("AEDECOD", table_count_once_per_id, show_labels = "hidden", indent_mod = -1)
 
@@ -676,7 +676,7 @@ table_count_grade_once_per_id <- function(df,
 
   in_rows(
     "--Any Grade--" = sum(id_sel),
-    .list =  as.list(table(grade[id_sel]))
+    .list = as.list(table(grade[id_sel]))
   )
 }
 
@@ -695,7 +695,7 @@ adae_grade_lyt <- basic_table(show_colcounts = TRUE) %>%
     var_labels = "- Any adverse events -", show_labels = "visible") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
   summarize_row_groups(cfun = table_count_grade_once_per_id, format = "xx", indent_mod = 1) %>%
-  split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2)  %>%
+  split_rows_by("AEDECOD", child_labels = "visible", indent_mod = -2) %>%
   analyze("AETOXGR",
     afun = table_count_grade_once_per_id,
     extra_args = list(grade_levels = 1:5), show_labels = "hidden")
@@ -774,7 +774,7 @@ s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
 
   in_rows(
     "Difference in Response Rates (%)" = non_ref_rcell((mean(x) - mean(.ref_group)) * 100,
-      .in_ref_col, format = "xx.xx") ,
+      .in_ref_col, format = "xx.xx"),
     "95% CI (Wald, with correction)" = non_ref_rcell(fit$conf.int * 100,
       .in_ref_col, format = "(xx.xx, xx.xx)"),
     "p-value (Chi-Squared Test)" = non_ref_rcell(fit$p.value,
@@ -850,13 +850,13 @@ the CI for `NE` we could do that as follows:
 ```{r}
 rsp_label <- function(x) {
   rsp_full_label <- c(
-    CR          = "Complete Response (CR)",
-    PR          = "Partial Response (PR)",
-    SD          = "Stable Disease (SD)",
+    CR = "Complete Response (CR)",
+    PR = "Partial Response (PR)",
+    SD = "Stable Disease (SD)",
     `NON CR/PD` = "Non-CR or Non-PD (NON CR/PD)",
-    PD          = "Progressive Disease (PD)",
-    NE          = "Not Evaluable (NE)",
-    Missing     = "Missing",
+    PD = "Progressive Disease (PD)",
+    NE = "Not Evaluable (NE)",
+    Missing = "Missing",
     `NE/Missing` = "Missing or unevaluable"
   )
   stopifnot(all(x %in% names(rsp_full_label)))
@@ -1005,7 +1005,7 @@ surv_tbl <- as.data.frame(summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM,
     levels = levels(adtte$ACTARM)),
   ind = FALSE)
 
-a_tte <- function(df, .var,  kp_table) {
+a_tte <- function(df, .var, kp_table) {
   ind <- grep(df[[.var]][1], row.names(kp_table), fixed = TRUE)
   minmax <- range(df[["AVAL"]])
   mm_val_str <- format_value(minmax, format = "xx.x, xx.x")

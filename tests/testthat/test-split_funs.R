@@ -185,7 +185,7 @@ test_that("Custom functions in multivar splits work", {
 
   uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     ret <- do_base_split(spl, df, vals, labels, trim)
-    if(NROW(df) == 0)
+    if (NROW(df) == 0)
       ret <- lapply(ret, function(x) x[1])
     ret
   }
@@ -271,7 +271,7 @@ test_that("make_split_fun works", {
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = mysplitfun) %>%
     analyze("AGE")
-  tbl <-  build_table(lyt, subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
+  tbl <- build_table(lyt, subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
 
   ccounts <- col_counts(tbl)
   expect_equal(ncol(tbl), 3L)
@@ -312,10 +312,10 @@ test_that("make_split_fun works", {
 
   ## overriding core core split functionality
   very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
-    make_split_result(c("stupid", "silly"), datasplit = list(df[1:10,], df[11:30,]), labels = c("first 10", "second 20"))
+    make_split_result(c("stupid", "silly"), datasplit = list(df[1:10, ], df[11:30, ]), labels = c("first 10", "second 20"))
   }
 
-  nonsense_splfun <-  make_split_fun(core_split = very_stupid_core,
+  nonsense_splfun <- make_split_fun(core_split = very_stupid_core,
     post = list(add_combo_facet("dumb", label = "thirty patients",
       levels = c("stupid", "silly"))))
   lyt4a <- basic_table() %>%
@@ -351,8 +351,8 @@ test_that("spl_variable works", {
       expect_identical(var, "ARM")
       vec <- df[[var]]
       bad <- vec == torem
-      df <- df[!bad,]
-      levs <- if(is.character(vec)) unique(vec) else levels(vec)
+      df <- df[!bad, ]
+      levs <- if (is.character(vec)) unique(vec) else levels(vec)
       df[[var]] <- factor(as.character(vec[!bad]), levels = setdiff(levs, torem))
       df
     }

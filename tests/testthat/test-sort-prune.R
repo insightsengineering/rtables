@@ -19,12 +19,12 @@ test_that("provided pruning functions work", {
   ## content_all_zeros_nas
   racecounts <- table(DM$RACE)
   racecounts <- setNames(as.integer(racecounts), names(racecounts))
-  expect_identical(sapply(tree_children(rawtable), content_all_zeros_nas), racecounts ==  0)
+  expect_identical(sapply(tree_children(rawtable), content_all_zeros_nas), racecounts == 0)
 })
 
 test_that("pruning and trimming work", {
   silly_prune <- function(tt) {
-    if(!is(tt, "TableRow") || is(tt, "LabelRow"))
+    if (!is(tt, "TableRow") || is(tt, "LabelRow"))
       return(FALSE)
     all_zero_or_na(tt)
   }
@@ -185,10 +185,10 @@ test_that("provided score functions throw informative errors when invalid and * 
     "Any Grade" = c("1", "2", "3", "4", "5"),
     "Grade 1-2" = c("1", "2"),
     "1" = "1",
-    "2"= "2",
+    "2" = "2",
     "Grade 3-4" = c("3", "4"),
-    "3"= "3",
-    "4"= "4",
+    "3" = "3",
+    "4" = "4",
     "Grade 5" = c("5")
   )
 
@@ -197,7 +197,7 @@ test_that("provided score functions throw informative errors when invalid and * 
     fvec <- unclass(df)[[.var]]
     newvals <- as.numeric(levels(fvec)[fvec])
     df$grade_num <- newvals
-    form <- as.formula(sprintf("grade_num ~ %s",  id))
+    form <- as.formula(sprintf("grade_num ~ %s", id))
     aggrdf <- stats::aggregate(form, data = df, FUN = max)
 
     in_rows(.list = lapply(grade_groups, function(x) {

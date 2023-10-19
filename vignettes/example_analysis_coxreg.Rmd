@@ -84,7 +84,7 @@ h_coxreg_inter_effect <- function(x,
     xval <- stats::median(x)
     effect_index <- !grepl(covar, names(betas))
     coef_hat <- betas[effect_index] + xval * betas[!effect_index]
-    coef_se <- sqrt(betas_var[effect_index] + xval ^ 2 * betas_var[!effect_index] + 2 * xval * betas_cov)
+    coef_se <- sqrt(betas_var[effect_index] + xval^2 * betas_var[!effect_index] + 2 * xval * betas_cov)
     q_norm <- stats::qnorm((1 + control$conf_level) / 2)
   } else {
     var_lvl <- paste0(effect, levels(data[[effect]])[-1]) # [-1]: reference level

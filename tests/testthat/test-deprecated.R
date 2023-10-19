@@ -76,7 +76,7 @@ test_that("add_colcounts format argument works", {
     add_colcounts(format = "xx (xx%)") %>%
     split_cols_by("ARM") %>%
     build_table(DM)
-  mf_tbl1_colcounts <- matrix_form(tbl1)$strings[2,]
+  mf_tbl1_colcounts <- matrix_form(tbl1)$strings[2, ]
   expect_identical(mf_tbl1_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
 
   # correct error message for 2d format without %

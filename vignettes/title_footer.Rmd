@@ -122,8 +122,8 @@ that number printed below the table during rendering.
 ```{r}
 afun <- function(df, .var, .spl_context) {
   val <- .spl_context$value[NROW(.spl_context)]
-  rw_fnotes <-  if(val == "C") list("This is strata level C for these patients") else list()
-  cl_fnotes <- if(val == "B" && df[1, "ARM", drop = TRUE] == "C: Combination")
+  rw_fnotes <- if (val == "C") list("This is strata level C for these patients") else list()
+  cl_fnotes <- if (val == "B" && df[1, "ARM", drop = TRUE] == "C: Combination")
     list("these Strata B patients got the drug combination") else list()
 
   in_rows(mean = mean(df[[.var]]),
@@ -165,7 +165,7 @@ those cannot be controlled within an analysis or content function.
 ```{r}
 ## from ?tolower example slightly modified
 .simpleCap <- function(x) {
-  if(length(x) > 1)
+  if (length(x) > 1)
     return(sapply(x, .simpleCap))
   s <- strsplit(tolower(x), " ")[[1]]
   paste(toupper(substring(s, 1, 1)), substring(s, 2),

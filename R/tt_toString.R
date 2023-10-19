@@ -40,7 +40,7 @@ NULL
 #' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx")
 #'
 #' tbl <- build_table(lyt, iris2)
 #'
@@ -84,7 +84,7 @@ setMethod("toString", "VTableTree", function(x,
 #' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx")
 #'
 #' tbl <- build_table(lyt, iris2)
 #' table_shell(tbl)
@@ -104,21 +104,21 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   matform <- matrix_form(tt, indent_rownames = TRUE)
   format_strs <- vapply(as.vector(matform$formats),
     function(x) {
-      if(inherits(x, "function"))
+      if (inherits(x, "function"))
         "<fnc>"
-      else if(inherits(x, "character"))
+      else if (inherits(x, "character"))
         x
       else
         stop("Don't know how to make a shell with formats of class: ", class(x))
     }, "")
 
   format_strs_mat <- matrix(format_strs, ncol = ncol(matform$strings))
-  format_strs_mat[,1] <- matform$strings[,1]
+  format_strs_mat[, 1] <- matform$strings[, 1]
   nlh <- mf_nlheader(matform)
-  format_strs_mat[seq_len(nlh),] <- matform$strings[seq_len(nlh),]
+  format_strs_mat[seq_len(nlh), ] <- matform$strings[seq_len(nlh), ]
 
   matform$strings <- format_strs_mat
-  if(is.null(widths))
+  if (is.null(widths))
     widths <- propose_column_widths(matform)
   toString(matform, widths = widths, col_gap = col_gap, hsep = hsep,
     tf_wrap = tf_wrap, max_width = max_width)
@@ -147,7 +147,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' \code{get_formatted_cells}. (Column labels are calculated using a
 #' non-exported internal function.
 #'
-#'@return A list with the following elements:
+#' @return A list with the following elements:
 #' \describe{
 #' \item{strings}{The content, as it should be printed, of the top-left
 #' material, column headers, row labels , and cell values of \code{tt}}
@@ -173,7 +173,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
 #'   analyze(c("Sepal.Length", "Petal.Width"),
-#'     afun = list_wrap_x(summary) , format = "xx.xx")
+#'     afun = list_wrap_x(summary), format = "xx.xx")
 #'
 #' lyt
 #'
@@ -215,7 +215,7 @@ setMethod("matrix_form", "VTableTree",
       matrix(1, nrow = 0, ncol = ncol(obj) + 1)
     }
 
-    body_aligns <- if(NROW(sr) == 0) {
+    body_aligns <- if (NROW(sr) == 0) {
       character()
     } else {
       cbind("left", get_cell_aligns(obj))
@@ -225,7 +225,7 @@ setMethod("matrix_form", "VTableTree",
 
     hdr_fmt_blank <- matrix("", nrow = nrow(header_content$body),
       ncol = ncol(header_content$body))
-    if(disp_ccounts(obj)) {
+    if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
     ## if(disp_ccounts(obj)) {
@@ -261,7 +261,7 @@ setMethod("matrix_form", "VTableTree",
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
-      if(length(x) == 0)
+      if (length(x) == 0)
         ""
       else
         paste(vapply(x, format_fnote_ref, ""), collapse = " ")
@@ -316,7 +316,7 @@ setMethod("matrix_form", "VTableTree",
     )
   })
 
-.quick_handle_nl <- function(str_v){
+.quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
     return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
   } else {
@@ -325,10 +325,10 @@ setMethod("matrix_form", "VTableTree",
 }
 
 .resolve_fn_symbol <- function(fn) {
-  if(!is(fn, "RefFootnote"))
+  if (!is(fn, "RefFootnote"))
     return(NULL)
   ret <- ref_symbol(fn)
-  if(is.na(ret))
+  if (is.na(ret))
     ret <- as.character(ref_index(fn))
   ret
 }
@@ -336,16 +336,16 @@ setMethod("matrix_form", "VTableTree",
 
 
 format_fnote_ref <- function(fn) {
-  if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
     return("")
-  else if(is.list(fn) && all(vapply(fn, is.list, TRUE)))
+  else if (is.list(fn) && all(vapply(fn, is.list, TRUE)))
     return(vapply(fn, format_fnote_ref, ""))
-  if(is.list(fn)) {
+  if (is.list(fn)) {
     inds <- unlist(lapply(unlist(fn), .resolve_fn_symbol))
   } else {
     inds <- .resolve_fn_symbol(fn)
   }
-  if(length(inds) > 0) {
+  if (length(inds) > 0) {
     paste0(" {", paste(unique(inds), collapse = ", "), "}")
   } else {
     ""
@@ -354,13 +354,13 @@ format_fnote_ref <- function(fn) {
 
 
 format_fnote_note <- function(fn) {
-  if(length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
     return(character())
-  if(is.list(fn)) {
+  if (is.list(fn)) {
     return(unlist(lapply(unlist(fn), format_fnote_note)))
   }
 
-  if(is(fn, "RefFootnote")) {
+  if (is(fn, "RefFootnote")) {
     paste0("{", .resolve_fn_symbol(fn), "} - ", ref_msg(fn))
   } else {
     NULL
@@ -377,7 +377,7 @@ format_fnote_note <- function(fn) {
 }
 
 get_ref_matrix <- function(tt) {
-  if(ncol(tt) == 0 || nrow(tt) == 0) {
+  if (ncol(tt) == 0 || nrow(tt) == 0) {
     return(matrix("", nrow = nrow(tt), ncol = ncol(tt) + 1L))
   }
   rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
@@ -435,7 +435,7 @@ get_formatted_fnotes <- function(tt) {
   ## all rows corresponding to one top-level column
   ## label and its children, then processes those
   ## with .do_header_chunk
-  while(length(remain) > 0) {
+  while (length(remain) > 0) {
     rw <- remain[1]
     inds <- coldf$leaf_indices[[rw]]
     endblock <- which(coldf$abs_pos == max(inds))
@@ -453,7 +453,7 @@ get_formatted_fnotes <- function(tt) {
 }
 .pad_end <- function(lst, padto, ncols) {
   curcov <- sum(vapply(lst, cell_cspan, 0L))
-  if(curcov == padto)
+  if (curcov == padto)
     return(lst)
 
   c(lst, list(rcell("", colspan = padto - curcov)))
@@ -464,7 +464,7 @@ get_formatted_fnotes <- function(tt) {
   lens <- vapply(chunks, length, 1L)
   padto <- max(lens)
   needpad <- lens != padto
-  if(all(!needpad))
+  if (all(!needpad))
     return(chunks)
 
   chunks[needpad] <- lapply(chunks[needpad],
@@ -504,7 +504,7 @@ get_formatted_fnotes <- function(tt) {
 
 
 .tbl_header_mat <- function(tt) {
-  rows <- .do_tbl_h_piece2(tt) ##(clyt)
+  rows <- .do_tbl_h_piece2(tt) ## (clyt)
   cinfo <- col_info(tt)
 
   nc <- ncol(tt)
@@ -552,9 +552,9 @@ get_formatted_fnotes <- function(tt) {
   tl <- top_left(cinfo)
   lentl <- length(tl)
   nli <- nrow(body)
-  if(lentl == 0) {
+  if (lentl == 0) {
     tl <- rep("", nli)
-  } else if(lentl > nli) {
+  } else if (lentl > nli) {
     tl_tmp <- paste0(tl, collapse = "\n")
     tl <- rep("", nli)
     tl[length(tl)] <- tl_tmp
@@ -589,7 +589,7 @@ get_formatted_fnotes <- function(tt) {
 #' tbl <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   split_cols_by("group") %>%
-#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx") %>%
+#'   analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx") %>%
 #'   build_table(iris2)
 #'
 #' get_formatted_cells(tbl)
@@ -610,7 +610,7 @@ setMethod("get_formatted_cells", "TableTree",
       ct <- lr[NULL, ]
     }
 
-    do.call(rbind, c(list(lr), list(ct),  els))
+    do.call(rbind, c(list(lr), list(ct), els))
   })
 
 #' @rdname gfc
@@ -649,7 +649,7 @@ setMethod("get_formatted_cells", "TableRow",
 setMethod("get_formatted_cells", "LabelRow",
   function(obj, shell = FALSE) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
-    vstr <- if(shell) "-" else ""
+    vstr <- if (shell) "-" else ""
     if (labelrow_visible(obj)) {
       matrix(rep(vstr, nc), ncol = nc)
     } else {
@@ -675,7 +675,7 @@ setMethod("get_cell_aligns", "TableTree",
       ct <- lr[NULL, ]
     }
 
-    do.call(rbind, c(list(lr), list(ct),  els))
+    do.call(rbind, c(list(lr), list(ct), els))
   })
 
 #' @rdname gfc
@@ -730,7 +730,7 @@ remove_consecutive_numbers <- function(x) {
   if (length(x) == 0) return(integer(0))
   if (!is.integer(x)) x <- as.integer(x)
 
-  x[c(TRUE, diff(x)  != 1)]
+  x[c(TRUE, diff(x) != 1)]
 }
 
 

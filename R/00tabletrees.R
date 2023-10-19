@@ -12,12 +12,12 @@
 ## null is ok here.
 check_ok_label <- function(lbl, multi_ok = FALSE) {
 
-  if(length(lbl) == 0) {
+  if (length(lbl) == 0) {
     return(TRUE)
   }
 
-  if(length(lbl) > 1) {
-    if(multi_ok)
+  if (length(lbl) > 1) {
+    if (multi_ok)
       return(all(vapply(lbl, check_ok_label, TRUE)))
     stop("got a label of length > 1")
   }
@@ -123,7 +123,7 @@ setClass("Split", contains = "VIRTUAL",
     ## NB this is the function which is applied to
     ## get the content rows for the CHILDREN of this
     ## split!!!
-    content_fun = "listOrNULL", ##functionOrNULL",
+    content_fun = "listOrNULL", ## functionOrNULL",
     content_format = "FormatSpec",
     content_na_str = "character",
     content_var = "character",
@@ -185,7 +185,7 @@ VarLevelSplit <- function(var,
     content_na_str = cna_str,
     split_fun = split_fun,
     split_format = split_format,
-    split_na_str =split_na_str,
+    split_na_str = split_na_str,
     value_order = NULL,
     label_children = .labelkids_helper(child_labels),
     extra_args = extra_args,
@@ -215,8 +215,8 @@ AllSplit <- function(split_label = "",
                      cvar = "",
                      cextra_args = list(),
                      ...) {
-  if(is.null(split_name)) {
-    if(nzchar(split_label))
+  if (is.null(split_name)) {
+    if (nzchar(split_label))
       split_name <- split_label
     else
       split_name <- "all obs"
@@ -304,7 +304,7 @@ ManualSplit <- function(levels, label, name = "manual",
 
 
 ## splits across which variables are being analynzed
-setClass("MultiVarSplit", contains = "CustomizableSplit", ##"Split",
+setClass("MultiVarSplit", contains = "CustomizableSplit", ## "Split",
   representation(var_labels = "character",
     var_names = "character"),
   validity = function(object) {
@@ -365,9 +365,9 @@ MultiVarSplit <- function(vars,
   ## no topleft allowed
   label_pos <- match.arg(label_pos, label_pos_values[-3])
   child_labels <- match.arg(child_labels)
-  if(length(vars) == 1 && grepl(":", vars))
+  if (length(vars) == 1 && grepl(":", vars))
     vars <- strsplit(vars, ":")[[1]]
-  if(length(varlabels) == 0) ## covers NULL and character()
+  if (length(varlabels) == 0) ## covers NULL and character()
     varlabels <- vars
   vnames <- varnames %||% .make_multivar_names(vars)
   stopifnot(length(vnames) == length(vars))
@@ -436,12 +436,12 @@ make_static_cut_split <- function(var,
                                   cumulative = FALSE,
                                   page_prefix = NA_character_,
                                   section_div = NA_character_) {
-  cls <- if(cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
+  cls <- if (cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
   check_ok_label(split_label)
 
   label_pos <- match.arg(label_pos, label_pos_values)
   child_labels <- match.arg(child_labels)
-  if(.is_cut_lab_lst(cuts)) {
+  if (.is_cut_lab_lst(cuts)) {
     cutlabels <- cuts[[2]]
     cuts <- cuts[[1]]
   }
@@ -582,9 +582,9 @@ AnalyzeVarSplit <- function(var,
 ) {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
-  if(!any(nzchar(defrowlab))) {
+  if (!any(nzchar(defrowlab))) {
     defrowlab <- as.character(substitute(afun))
-    if(length(defrowlab) > 1 || startsWith(defrowlab, "function("))
+    if (length(defrowlab) > 1 || startsWith(defrowlab, "function("))
       defrowlab <- ""
   }
   new("AnalyzeVarSplit",
@@ -720,7 +720,7 @@ AnalyzeMultiVars <- function(var,
   ##  show_kidlabs = .labelkids_helper(match.arg(child_labels))
   child_labels <- match.arg(child_labels)
   show_kidlabs <- child_labels
-  if(is.null(.payload)) {
+  if (is.null(.payload)) {
     nv <- length(var)
     defrowlab <- .repoutlst(defrowlab, nv)
     afun <- .repoutlst(afun, nv)
@@ -745,7 +745,7 @@ AnalyzeMultiVars <- function(var,
         label_pos = show_kidlabs,
         split_format = split_format,
         split_na_str = split_na_str
-      ), ##rvis),
+      ), ## rvis),
       SIMPLIFY = FALSE)
   } else {
     ## we're combining existing splits here
@@ -756,9 +756,9 @@ AnalyzeMultiVars <- function(var,
     ## and the child was at NA before
     pld <- lapply(pld,
       function(x) {
-        rvis <- label_position(x) ##labelrow_visible(x)
-        if(!identical(show_kidlabs, "default")) { ##is.na(show_kidlabs)) {
-          if(identical(rvis, "default")) ##ois.na(rvis))
+        rvis <- label_position(x) ## labelrow_visible(x)
+        if (!identical(show_kidlabs, "default")) { ## is.na(show_kidlabs)) {
+          if (identical(rvis, "default")) ## ois.na(rvis))
             rvis <- show_kidlabs
         }
         label_position(x) <- rvis
@@ -768,7 +768,7 @@ AnalyzeMultiVars <- function(var,
   if (length(pld) == 1) {
     ret <- pld[[1]]
   } else {
-    if(is.null(split_name))
+    if (is.null(split_name))
       split_name <- paste(c("ma", vapply(pld, obj_name, "")),
         collapse = "_")
     ret <- new("AnalyzeMultiVars",
@@ -796,7 +796,7 @@ AnalyzeMultiVars <- function(var,
 }
 setClass("VarLevWBaselineSplit", contains = "VarLevelSplit",
   representation(var = "character",
-    ref_group_value = "character"))#,
+    ref_group_value = "character")) # ,
 
 #' @rdname VarLevelSplit
 #' @export
@@ -807,7 +807,7 @@ VarLevWBaselineSplit <- function(var,
                                  split_fun = NULL,
                                  label_fstr = "%s - %s",
                                  ## not needed I Think...
-                                 cfun =  NULL,
+                                 cfun = NULL,
                                  cformat = NULL,
                                  cna_str = NA_character_,
                                  cvar = "",
@@ -869,7 +869,7 @@ VarLevWBaselineSplit <- function(var,
 
 TreePos <- function(spls = list(),
                     svals = list(),
-                    svlabels =  character(),
+                    svlabels = character(),
                     sub = NULL) {
   check_ok_label(svlabels, multi_ok = TRUE)
   svals <- make_splvalue_vec(vals = svals)
@@ -896,7 +896,7 @@ make_child_pos <- function(parpos,
                            newlab = newval,
                            newextra = list()) {
   if (!is(newval, "SplitValue"))
-    nsplitval <- SplitValue(newval, extr = newextra, label  = newlab)
+    nsplitval <- SplitValue(newval, extr = newextra, label = newlab)
   else
     nsplitval <- newval
   check_ok_label(newlab)
@@ -921,8 +921,8 @@ make_child_pos <- function(parpos,
 ## core basics
 setClass("VNodeInfo", contains = "VIRTUAL",
   representation(level = "integer",
-    name = "character"##,
-    ##label = "character"
+    name = "character" ## ,
+    ## label = "character"
 ))
 setClass("VTree", contains = c("VIRTUAL", "VNodeInfo"),
   representation(children = "list"))
@@ -930,7 +930,7 @@ setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
 
 
 ## Layout trees
-#setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
+# setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
 setClass("VLayoutLeaf", contains = c("VIRTUAL", "VLeaf"),
   representation(pos_in_tree = "TreePos",
     label = "character"))
@@ -959,7 +959,7 @@ setClass("LayoutAxisTree", contains = "VLayoutTree",
         is(x, "LayoutAxisTree") || is(x, "LayoutAxisLeaf")))
   })
 
-setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ##"VNodeInfo",
+setClass("LayoutAxisLeaf", contains = "VLayoutLeaf", ## "VNodeInfo",
   representation(func = "function",
     col_footnotes = "list"))
 
@@ -979,11 +979,11 @@ LayoutColTree <- function(lev = 0L,
                           summary_function = NULL,
                           disp_colcounts = FALSE,
                           colcount_format = "(N=xx)",
-                          footnotes = list()) {## ,
+                          footnotes = list()) { ## ,
   ## sub = expression(TRUE),
   ## svar = NA_character_,
   ## slab = NA_character_) {
-  if(is.null(spl))
+  if (is.null(spl))
     stop("LayoutColTree constructor got NULL for spl. ", # nocov
       "This should never happen. Please contact the maintainer.") # nocov
   footnotes <- make_ref_value(footnotes)
@@ -1007,10 +1007,10 @@ LayoutColLeaf <- function(lev = 0L,
                           tpos = TreePos()) {
   check_ok_label(label)
   new("LayoutColLeaf", level = lev, name = .chkname(name), label = label,
-    pos_in_tree = tpos##,
-    ##subset = sub#,
-    ##N_count = n,
-    ##splitvar = svar
+    pos_in_tree = tpos ## ,
+    ## subset = sub#,
+    ## N_count = n,
+    ## splitvar = svar
   )
 }
 
@@ -1028,7 +1028,7 @@ LayoutColLeaf <- function(lev = 0L,
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
 setClass("InstantiatedColumnInfo",
-  representation(tree_layout = "VLayoutNode", ##LayoutColTree",
+  representation(tree_layout = "VLayoutNode", ## LayoutColTree",
     subset_exprs = "list",
     cextra_args = "list",
     counts = "integer",
@@ -1079,7 +1079,7 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
       length(csubs), "], ",
       "treelyt [", nl, "], extras [", length(extras),
       "] and counts [", cnts, "].")
-  if(snas != 0  && snas != nleaves)
+  if (snas != 0 && snas != nleaves)
     warning("Mixture of missing and non-missing column counts when ",
       "creating column info.")
 
@@ -1107,7 +1107,7 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
 ## FIXME: if we ever actually need row spanning
 setClass("VTableNodeInfo", contains = c("VNodeInfo", "VIRTUAL"),
   representation(
-    ##col_layout = "VLayoutNode",
+    ## col_layout = "VLayoutNode",
     col_info = "InstantiatedColumnInfo",
     format = "FormatSpec",
     na_str = "character",
@@ -1159,23 +1159,23 @@ LabelRow <- function(lev = 1L,
 #' @rdname rowclasses
 #' @exportClass DataRow
 setClass("DataRow", contains = "TableRow",
-  representation(colspans = "integer")##,
-  ##pos_in_tree = "TableRowPos"),
+  representation(colspans = "integer") ## ,
+  ## pos_in_tree = "TableRowPos"),
   ##      validity = function(object) {
   ## lcsp = length(object@colspans)
   ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
-  ##}
+  ## }
 )
 
 #' @rdname rowclasses
 #' @exportClass ContentRow
 setClass("ContentRow", contains = "TableRow",
-  representation(colspans = "integer")##,
-  ##pos_in_tree = "TableRowPos"),
+  representation(colspans = "integer") ## ,
+  ## pos_in_tree = "TableRowPos"),
   ##      validity = function(object) {
   ## lcsp = length(object@colspans)
   ## length(lcsp ==  0) || lcsp == length(object@leaf_value)
-  ##}
+  ## }
 )
 
 #' @rdname rowclasses
@@ -1202,7 +1202,7 @@ setClass("LabelRow", contains = "TableRow",
                       indent_mod = 0L,
                       footnotes = list(),
                       table_inset = 0L) {
-  if ((missing(name) || is.null(name) || is.na(name) ||  nchar(name) == 0) &&
+  if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) &&
     !missing(label))
     name <- label
   vals <- lapply(vals, rcell)
@@ -1262,11 +1262,11 @@ setClass("VTableTree",
 setClassUnion("IntegerOrNull", c("integer", "NULL"))
 ## covered because it's ElementaryTable's validity method but covr misses it
 ## nocov start
-etable_validity  <- function(object) {
+etable_validity <- function(object) {
   kids <- tree_children(object)
   all(sapply(kids,
     function(k) {
-      (is(k, "DataRow") || is(k, "ContentRow"))}))###  &&
+      (is(k, "DataRow") || is(k, "ContentRow"))})) ###  &&
 }
 ## nocov end
 
@@ -1277,7 +1277,7 @@ etable_validity  <- function(object) {
 #' @rdname tabclasses
 setClass("ElementaryTable", contains = "VTableTree",
   representation(var_analyzed = "character"),
-  validity = etable_validity ##function(object) {
+  validity = etable_validity ## function(object) {
 )
 
 .enforce_valid_kids <- function(lst, colinfo) {
@@ -1393,8 +1393,8 @@ ttable_validity <- function(object) {
     function(x) is(x, "VTableTree") || is(x, "TableRow")))
 }
 
-.calc_cinfo <- function(cinfo, cont,  kids) {
-  if(!is.null(cinfo))
+.calc_cinfo <- function(cinfo, cont, kids) {
+  if (!is.null(cinfo))
     cinfo
   else if (!is.null(cont))
     col_info(cont)
@@ -1449,7 +1449,7 @@ TableTree <- function(kids = list(),
     col_info(labelrow) <- cinfo
   if ((is.null(cont) || nrow(cont) == 0) &&
     all(sapply(kids, is, "DataRow"))) {
-    if(!is.na(page_title))
+    if (!is.na(page_title))
       stop("Got a page title prefix for an Elementary Table")
     ## constructor takes care of recursive format application
     ElementaryTable(kids = kids,
@@ -1521,7 +1521,7 @@ TableTree <- function(kids = list(),
 
 setClass("SplitVector", contains = "list",
   validity = function(object) {
-    if (length(object)  >= 1)
+    if (length(object) >= 1)
       lst <- tail(object, 1)[[1]]
     else
       lst <- NULL
@@ -1573,7 +1573,7 @@ PreDataColLayout <- function(x = SplitVector(),
                              lst = list(x, ...),
                              disp_colcounts = FALSE,
                              colcount_format = "(N=xx)") {
-  ret <-  new("PreDataColLayout", lst, display_columncounts = disp_colcounts,
+  ret <- new("PreDataColLayout", lst, display_columncounts = disp_colcounts,
     columncount_format = colcount_format)
   ret@root_split <- rtsp
   ret
@@ -1639,14 +1639,14 @@ setClass("RefFootnote", representation(value = "character",
 
 
 RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
-  if(is(note, "RefFootnote"))
+  if (is(note, "RefFootnote"))
     return(note)
-  else if(length(note) == 0)
+  else if (length(note) == 0)
     return(NULL)
-  if(length(symbol) != 1L)
+  if (length(symbol) != 1L)
     stop("Referential footnote can only have a single string as its index.",
       " Got char vector of length ", length(index))
-  if(!is.na(symbol) &&
+  if (!is.na(symbol) &&
     (index == "NA" || grepl("[{}]", index)))
     stop("The string 'NA' and strings containing '{' or '}' cannot be used as ",
       "referential footnote index symbols. Got string '", index, "'.")
@@ -1674,7 +1674,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 ## indent_mod: indent modifier to be used for parent row
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
                       indent_mod = NULL, footnotes = NULL,
-                      align = NULL, format_na_str = NULL)  {
+                      align = NULL, format_na_str = NULL) {
 
   if (is.null(colspan))
     colspan <- 1L
@@ -1687,7 +1687,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
   if ((is.null(label) || is.na(label)) &&
     !is.null(obj_label(val)))
     label <- obj_label(val)
-  if(!is.list(footnotes))
+  if (!is.list(footnotes))
     footnotes <- lapply(footnotes, RefFootnote)
   check_ok_label(label)
   ret <- structure(list(val), format = format, colspan = colspan,
@@ -1757,7 +1757,7 @@ print.RowsVerticalSection <- function(x, ...) {
   print(data.frame(
     row_name = attr(x, "row_names", exact = TRUE),
     formatted_cell = vapply(x, format_rcell, character(1)),
-    indent_mod = indent_mod(x), ##vapply(x, indent_mod, numeric(1)),
+    indent_mod = indent_mod(x), ## vapply(x, indent_mod, numeric(1)),
     row_label = attr(x, "row_labels", exact = TRUE),
     stringsAsFactors = FALSE,
     row.names = NULL

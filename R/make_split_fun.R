@@ -33,21 +33,21 @@ setMethod("spl_variable", "Split",
 
 in_col_split <- function(spl_ctx) {
   identical(names(spl_ctx),
-    names(context_df_row( cinfo = NULL)))
+    names(context_df_row(cinfo = NULL)))
 }
 
 
 assert_splres_element <- function(pinfo, nm, len = NULL, component = NULL) {
   msg_2_append <- ""
-  if(!is.null(component)) {
+  if (!is.null(component)) {
     msg_2_append <- paste0("Invalid split function constructed by upstream call to ",
       "make_split_fun. Problem source: ",
       component, " argument.")
   }
-  if(!(nm %in% names(pinfo)))
+  if (!(nm %in% names(pinfo)))
     stop("Split result does not have required element: ", nm, ".",
       msg_2_append)
-  if(!is.null(len) && length(pinfo[[nm]]) != len)
+  if (!is.null(len) && length(pinfo[[nm]]) != len)
     stop("Split result element ", nm, " does not have required length ", len, ".",
       msg_2_append)
   TRUE
@@ -88,21 +88,21 @@ validate_split_result <- function(pinfo, component = NULL) {
 #'
 #' @examples
 #' splres <- make_split_result(values = c("hi", "lo"),
-#'   datasplit = list(hi = mtcars, lo = mtcars[1:10,]),
+#'   datasplit = list(hi = mtcars, lo = mtcars[1:10, ]),
 #'   labels = c("more data", "less data"))
 #'
 #' splres2 <- add_to_split_result(splres,
 #'   values = "med",
-#'   datasplit = list(med = mtcars[1:20,]),
+#'   datasplit = list(med = mtcars[1:20, ]),
 #'   labels = "kinda some data")
 #' @rdname make_split_result
 #' @export
 #' @family make_custom_split
 make_split_result <- function(values, datasplit, labels, extras = NULL) {
-  if(length(values) == 1 && is(datasplit, "data.frame"))
+  if (length(values) == 1 && is(datasplit, "data.frame"))
     datasplit <- list(datasplit)
   ret <- list(values = values, datasplit = datasplit, labels = labels)
-  if(!is.null(extras))
+  if (!is.null(extras))
     ret$extras <- extras
   .fixupvals(ret)
 }
@@ -208,7 +208,7 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #'     splret$labels[ord])
 #' }
 #'
-#' mysplitfun2 <-  make_split_fun(pre = list(drop_facet_levels),
+#' mysplitfun2 <- make_split_fun(pre = list(drop_facet_levels),
 #'   post = list(add_overall_facet("ALL", "All Arms"),
 #'     reorder_facets))
 #' basic_table(show_colcounts = TRUE) %>%
@@ -218,14 +218,14 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #'
 #' very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
 #'   make_split_result(c("stupid", "silly"),
-#'     datasplit = list(df[1:10,], df[11:30,]),
+#'     datasplit = list(df[1:10, ], df[11:30, ]),
 #'     labels = c("first 10", "second 20"))
 #' }
 #'
 #' dumb_30_facet <- add_combo_facet("dumb",
 #'   label = "thirty patients",
 #'   levels = c("stupid", "silly"))
-#' nonsense_splfun <-  make_split_fun(core_split = very_stupid_core,
+#' nonsense_splfun <- make_split_fun(core_split = very_stupid_core,
 #'   post = list(dumb_30_facet))
 #'
 #' ## recall core split overriding is not supported in column space
@@ -245,21 +245,21 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
            trim = FALSE,
            .spl_context) {
     orig_columns <- names(df)
-    for(pre_fn in pre) {
-      if(.can_take_spl_context(pre_fn))
+    for (pre_fn in pre) {
+      if (.can_take_spl_context(pre_fn))
         df <- pre_fn(df = df, spl = spl, vals = vals, labels = labels, .spl_context = .spl_context)
       else
         df <- pre_fn(df = df, spl = spl, vals = vals, labels = labels)
-      if(!is(df, "data.frame"))
+      if (!is(df, "data.frame"))
         stop("Error in custom split function, pre-split step did not return a data.frame. ",
           "See upstream call to make_split_fun for original source of error.")
     }
 
-    if(!all(orig_columns %in% names(df)))
+    if (!all(orig_columns %in% names(df)))
       stop("Preprocessing functions(s) in custom split function removed a column from the incoming data.",
         " This is not supported. See upstread make_split_fun call (pre argument) for original source of error.")
 
-    if(is.null(core_split)) {
+    if (is.null(core_split)) {
       ret <- do_base_split(spl = spl, df = df, vals = vals, labels = labels)
     } else if (!in_col_split(.spl_context)) {
       ret <- core_split(spl = spl, df = df, vals = vals, labels = labels, .spl_context)
@@ -269,8 +269,8 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
         "behavior is not currently supported in column space.")
     }
 
-    for(post_fn in post) {
-      if(.can_take_spl_context(post_fn))
+    for (post_fn in post) {
+      if (.can_take_spl_context(post_fn))
         ret <- post_fn(ret, spl = spl, .spl_context = .spl_context, fulldf = df)
       else
         ret <- post_fn(ret, spl = spl, fulldf = df)
@@ -339,7 +339,7 @@ add_overall_facet <- function(name, label, extra = list()) {
 #' @family make_custom_split
 trim_levels_in_facets <- function(innervar) {
   function(ret, ...) {
-    for(var in innervar) {
+    for (var in innervar) {
       ret$datasplit <- lapply(ret$datasplit, function(df) {
         df[[var]] <- factor(df[[var]])
         df
@@ -362,7 +362,7 @@ trim_levels_in_facets <- function(innervar) {
 #' @seealso make_split_fun
 #' @family make_custom_split
 drop_facet_levels <- function(df, spl, ...) {
-  if(!is(spl, "VarLevelSplit") || is.na(spl_payload(spl)))
+  if (!is(spl, "VarLevelSplit") || is.na(spl_payload(spl)))
     stop("Unable to determine faceting variable in drop_facet_levels application.")
   var <- spl_payload(spl)
   df[[var]] <- factor(df[[var]])

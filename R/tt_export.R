@@ -43,7 +43,7 @@ import_from_tsv <- function(file) {
   rawdf <- read.table(file, header = TRUE, sep = "\t")
   as.data.frame(lapply(rawdf,
     function(col) {
-      if(!any(grepl(.collapse_char, col, fixed = TRUE)))
+      if (!any(grepl(.collapse_char, col, fixed = TRUE)))
         col
       else
         I(strsplit(col, split = .collapse_char_esc))
@@ -53,15 +53,15 @@ import_from_tsv <- function(file) {
 }
 
 collapse_path <- function(paths) {
-  if(is.list(paths))
+  if (is.list(paths))
     return(vapply(paths, collapse_path, ""))
   paste(paths, collapse = .collapse_char)
 }
 
 collapse_values <- function(colvals) {
-  if(!is.list(colvals)) ## || all(vapply(colvals, length, 1L) == 1))
+  if (!is.list(colvals)) ## || all(vapply(colvals, length, 1L) == 1))
     return(colvals)
-  else if(all(vapply(colvals, length, 1L) == 1))
+  else if (all(vapply(colvals, length, 1L) == 1))
     return(unlist(colvals))
   vapply(colvals, paste, "", collapse = .collapse_char)
 }
@@ -132,7 +132,7 @@ do_data_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   pthlen <- length(pth)
   ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
-  if(pthlen %% 2 == 1) {
+  if (pthlen %% 2 == 1) {
     pth <- pth[-1 * (pthlen - 2)]
   }
   c(as.list(pth[seq_len(pthlen - 2)]),
@@ -146,7 +146,7 @@ do_data_row <- function(rdfrow, maxlen) {
 
 handle_rdf_row <- function(rdfrow, maxlen) {
   nclass <- rdfrow$node_class
-  if(rdfrow$path[[1]][1] == "root") {
+  if (rdfrow$path[[1]][1] == "root") {
     rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
     maxlen <- maxlen - 1
   }
@@ -171,7 +171,7 @@ result_df_specs <- function() {
 }
 
 lookup_result_df_specfun <- function(spec) {
-  if(!(spec %in% names(result_df_specs())))
+  if (!(spec %in% names(result_df_specs())))
     stop("unrecognized result data frame specification: ",
       spec,
       "If that specification is correct you may  need to update your version of rtables")
@@ -184,7 +184,7 @@ result_df_v0_experimental <- function(tt) {
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
   ## at this point.
-  if(nrow(tt) == 1 && length(raw_cvals) > 1)
+  if (nrow(tt) == 1 && length(raw_cvals) > 1)
     raw_cvals <- list(raw_cvals)
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
@@ -237,7 +237,7 @@ as_result_df <- function(tt, spec = "v0_experimental", ...) {
   rlw <- colwidths[1]
   colwidths <- colwidths[-1]
   donenc <- 0
-  while(donenc < nctot) {
+  while (donenc < nctot) {
     curnc <- NCOL(ptabs[[i]])
     ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
     colwidths <- colwidths[-1 * seq_len(curnc)]
@@ -328,13 +328,13 @@ export_as_pdf <- function(tt,
                           file,
                           page_type = "letter",
                           landscape = FALSE,
-                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
+                          pg_width = page_dim(page_type)[if (landscape) 2 else 1],
+                          pg_height = page_dim(page_type)[if (landscape) 1 else 2],
                           width = NULL,
                           height = NULL, # passed to pdf()
                           margins = c(4, 4, 4, 4),
                           font_family = "Courier",
-                          fontsize = 8,  # grid parameters
+                          fontsize = 8, # grid parameters
                           font_size = fontsize,
                           paginate = TRUE,
                           lpp = NULL,
@@ -347,20 +347,20 @@ export_as_pdf <- function(tt,
                           ... # passed to paginate_table
 ) {
   stopifnot(file_ext(file) != ".pdf")
-  if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+  if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
     stop("non-null colwidths argument must have length ncol(tt) + 1 [",
       ncol(tt) + 1, "], got length ", length(colwidths))
 
   gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
   ## soft deprecation. To become hard deprecation.
-  if(!is.null(height))
+  if (!is.null(height))
     pg_height <- height
 
-  if(!is.null(width))
+  if (!is.null(width))
     pg_width <- width
 
-  if(missing(font_size) && !missing(fontsize))
+  if (missing(font_size) && !missing(fontsize))
     font_size <- fontsize
 
   pdf(file = file, width = pg_width, height = pg_height)
@@ -368,16 +368,16 @@ export_as_pdf <- function(tt,
   grid.newpage()
   pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
-  cur_gpar <-  get.gpar()
+  cur_gpar <- get.gpar()
   if (is.null(lpp)) {
     lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
       (cur_gpar$cex * cur_gpar$lineheight)) - sum(margins[c(1, 3)]) # bottom, top
   }
-  if(is.null(cpp)) {
+  if (is.null(cpp)) {
     cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
       font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi) - sum(margins[c(2, 4)]) # left, right
   }
-  if(tf_wrap && is.null(max_width))
+  if (tf_wrap && is.null(max_width))
     max_width <- cpp
 
   tbls <- if (paginate) {

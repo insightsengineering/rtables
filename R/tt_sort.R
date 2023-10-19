@@ -9,7 +9,7 @@
 #' @export
 cont_n_allcols <- function(tt) {
   ctab <- content_table(tt)
-  if(NROW(ctab) == 0)
+  if (NROW(ctab) == 0)
     stop("cont_n_allcols score function used at subtable [",
       obj_name(tt), "] that has no content table.")
   sum(sapply(row_values(tree_children(ctab)[[1]]),
@@ -28,7 +28,7 @@ cont_n_allcols <- function(tt) {
 cont_n_onecol <- function(j) {
   function(tt) {
     ctab <- content_table(tt)
-    if(NROW(ctab) == 0)
+    if (NROW(ctab) == 0)
       stop("cont_n_allcols score function used at subtable [",
         obj_name(tt), "] that has no content table.")
     row_values(tree_children(ctab)[[1]])[[j]][1]
@@ -143,22 +143,22 @@ sort_at_path <- function(tt,
                          decreasing = NA,
                          na.pos = c("omit", "last", "first"),
                          .prev_path = character()) {
-  if(NROW(tt) == 0)
+  if (NROW(tt) == 0)
     return(tt)
 
   ## XXX hacky fix this!!!
-  if(identical(obj_name(tt), path[1]))
+  if (identical(obj_name(tt), path[1]))
     path <- path[-1]
 
   curpath <- path
   subtree <- tt
   backpath <- c()
   count <- 0
-  while(length(curpath) > 0) {
+  while (length(curpath) > 0) {
     curname <- curpath[1]
     ## we sort each child separately based on the score function
     ## and the remaining path
-    if(curname == "*") {
+    if (curname == "*") {
       oldkids <- tree_children(subtree)
       oldnames <- vapply(oldkids, obj_name, "")
       newkids <- lapply(seq_along(oldkids),
@@ -175,7 +175,7 @@ sort_at_path <- function(tt,
       names(newkids) <- oldnames
       newtab <- subtree
       tree_children(newtab) <- newkids
-      if(length(backpath) > 0) {
+      if (length(backpath) > 0) {
         ret <- recursive_replace(tt, backpath, value = newtab)
       } else {
         ret <- newtab
@@ -196,7 +196,7 @@ sort_at_path <- function(tt,
   ## scores <- vapply(kids, scorefun, NA_real_)
   scores <- lapply(kids, function(x) tryCatch(scorefun(x), error = function(e) e))
   errs <- which(vapply(scores, is, class2 = "error", TRUE))
-  if(length(errs) > 0) {
+  if (length(errs) > 0) {
     stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",
       "First error: ", scores[[errs[1]]]$message,
       "\n\toccurred at path: ",
@@ -206,15 +206,15 @@ sort_at_path <- function(tt,
   } else {
     scores <- unlist(scores)
   }
-  if(!is.null(dim(scores)) ||
+  if (!is.null(dim(scores)) ||
     length(scores) != length(kids))
     stop("Score function does not appear to have return exactly one ",
       "scalar value per child")
-  if(is.na(decreasing))
-    decreasing <- if(is.character(scores)) FALSE else TRUE
+  if (is.na(decreasing))
+    decreasing <- if (is.character(scores)) FALSE else TRUE
   ord <- order(scores, na.last = (na.pos != "first"), decreasing = decreasing)
   newkids <- kids[ord]
-  if(anyNA(scores) && na.pos == "omit") { #we did na last here
+  if (anyNA(scores) && na.pos == "omit") { # we did na last here
     newkids <- head(newkids, -1 * sum(is.na(scores)))
   }
 

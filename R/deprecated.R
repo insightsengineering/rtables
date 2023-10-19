@@ -1,4 +1,4 @@
-#nocov start
+# nocov start
 add_analyzed_var <- function(lyt, var, label = var, afun,
                              format = NULL,
                              rowlabs = "",
@@ -11,7 +11,7 @@ add_analyzed_var <- function(lyt, var, label = var, afun,
     inclNAs = inclNAs)
   .Deprecated("analyze")
 
-  if(!nested &&
+  if (!nested &&
     (is(last_rowsplit(lyt), "AnalyzeVarSplit") ||
       is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
     cmpnd_last_rowsplit(lyt, spl)

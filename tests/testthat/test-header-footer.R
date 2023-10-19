@@ -12,7 +12,7 @@ test_that("referential footnotes work", {
     split_cols_by("ARM") %>%
     analyze("AGE", afun = analysisfun)
 
-  result <-  build_table(lyt, ex_adsl)
+  result <- build_table(lyt, ex_adsl)
 
   rdf <- make_row_df(result)
   expect_identical(rdf[2, "nrowrefs"], 0L)
@@ -28,9 +28,9 @@ test_that("referential footnotes work", {
   expect_identical(cfn_out[2, 1][[1]],
     list(rtables:::RefFootnote("row 2 cfn", 2L)))
 
-  analysisfun2 <- function(x, cutoff,  ...) {
+  analysisfun2 <- function(x, cutoff, ...) {
     mn <- mean(x)
-    if(mn >= cutoff)
+    if (mn >= cutoff)
       cf <- list(mean = "Elevated group mean")
     else
       cf <- list()
@@ -71,7 +71,7 @@ test_that("post-processing addition of referential footnotes works", {
     colpath = c("ARM", "C: Combination")) <- "asian arm c content"
 
   fnotes_at_path(tb1, rowpath = c("RACE", "MULTIPLE", "@content", "MULTIPLE"),
-    colpath = NULL) <-  c("race multiple row fn 1", "race multiple row fn 2")
+    colpath = NULL) <- c("race multiple row fn 1", "race multiple row fn 2")
 
   fnotes_at_path(tb1, rowpath = NULL,
     colpath = c("ARM", "A: Drug X")) <- "drug x is a fake drug that isn't real"

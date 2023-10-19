@@ -33,7 +33,7 @@ test_that("export_as_txt works with wrapping", {
     max_width = 20, cpp = 80, verbose = TRUE)
   txtlns1 <- readLines(tmptxtf1)
   pagepos1 <- grep("\\\\s\\\\n", txtlns1)
-  expect_identical(pagepos1, 30L) ##c(30L, 58L))
+  expect_identical(pagepos1, 30L) ## c(30L, 58L))
 
   ## explicitly no vertical pagination (lpp = NULL)
   tmptxtf1b <- tempfile()
@@ -63,7 +63,7 @@ test_that("export_as_txt works with wrapping", {
     max_width = 20, verbose = TRUE))
   txtlns2 <- readLines(tmptxtf2)
   pagepos2 <- grep("\\\\s\\\\n", txtlns2)
-  expect_identical(pagepos2, 18L) ##c(26L, 50L))
+  expect_identical(pagepos2, 18L) ## c(26L, 50L))
 
   tmptxtf2b <- tempfile()
   expect_error(export_as_txt(tt_for_wrap,
@@ -123,7 +123,7 @@ test_that("tsv roundtripping for path_enriched_df", {
   newdf <- import_from_tsv(tmptsv)
 
   expect_true(all(sapply(newdf, is.list)))
-  expect_equal(unclass(newdf[1, 2]), #AsIs "class"
+  expect_equal(unclass(newdf[1, 2]), # AsIs "class"
     list(as.character(c(16,
       16 / sum(ex_adsl$ARM == "A: Drug X" &
         ex_adsl$SEX == "M")))))

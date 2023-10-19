@@ -226,7 +226,7 @@ lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
   split_cols_by("ARM") %>%
   analyze("AGE", afun = analysisfun)
 
-result <-  build_table(lyt, ex_adsl)
+result <- build_table(lyt, ex_adsl)
 result
 ```
 

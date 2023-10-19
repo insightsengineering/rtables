@@ -17,7 +17,7 @@
 #' row_paths(tbl)
 #' col_paths(tbl)
 #'
-#' cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
+#' cell_values(tbl, c("AGE", "Mean"), c("ARM", "B: Placebo"))
 #'
 #' @return a list of paths to each row/column within \code{x}
 #'
@@ -34,7 +34,7 @@ row_paths <- function(x) {
 #' @rdname make_col_row_df
 #' @export
 col_paths <- function(x) {
-  if(!is(coltree(x), "LayoutColTree"))
+  if (!is(coltree(x), "LayoutColTree"))
     stop("I don't know how to extract the column paths from an object of class ", class(x))
   make_col_df(x, visible_only = TRUE)$path
 }
@@ -72,7 +72,7 @@ col_paths <- function(x) {
 #'       rcell("b", colspan = 2)
 #'     ),
 #'     rrow("h2", "a", "b", "c", "d")),
-#'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2,1)
+#'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 #' )
 #' col_paths_summary(tbl2)
 row_paths_summary <- function(x) {
@@ -182,15 +182,15 @@ srow_df_names <- names(summarize_row_df_unclassed("hi", "hi", 0L, 0L, "hi", 0L, 
 summarize_row_df_empty <- NULL
 
 fast_rsummry_bind <- function(lst) {
-  if(length(lst) == 0) {
+  if (length(lst) == 0) {
     return(summarize_row_df_empty)
-  } else if(length(lst) == 1L) {
+  } else if (length(lst) == 1L) {
     return(as.data.frame(lst[[1]]))
   } else {
     res <- lapply(seq_along(srow_df_names),
       function(i) {
         do.call(c, lapply(lst, function(x) {
-          if(length(x) > 0) x[[i]] else x
+          if (length(x) > 0) x[[i]] else x
         }))
       })
     names(res) <- srow_df_names
@@ -246,7 +246,7 @@ setMethod("summarize_rows_inner", "TableTree",
     indent <- max(0L, indent + indent_mod(obj))
 
     lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
-    if(!is.null(lr))
+    if (!is.null(lr))
       ret <- list(lr)
     else
       ret <- list()
@@ -254,7 +254,7 @@ setMethod("summarize_rows_inner", "TableTree",
     indent <- indent + (!is.null(lr))
 
     ctab <- content_table(obj)
-    if(NROW(ctab)) {
+    if (NROW(ctab)) {
       ct <- summarize_rows_inner(ctab, depth = depth,
         indent = indent + indent_mod(ctab))
       ret <- c(ret, ct)
@@ -264,8 +264,8 @@ setMethod("summarize_rows_inner", "TableTree",
     kids <- tree_children(obj)
     els <- lapply(tree_children(obj), summarize_rows_inner,
       depth = depth + 1, indent = indent)
-    if(!are(kids, "TableRow")) {
-      if(!are(kids, "VTableTree")) {
+    if (!are(kids, "TableRow")) {
+      if (!are(kids, "VTableTree")) {
         ## hatchet job of a hack, wrap em just so we can unlist em all at
         ## the same level
         rowinds <- vapply(kids, is, NA, class2 = "TableRow")
@@ -287,7 +287,7 @@ setMethod("summarize_rows_inner", "ElementaryTable",
 
     indent <- max(0L, indent + indent_mod(obj))
     lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
-    if(!is.null(lr)) {
+    if (!is.null(lr)) {
       ret <- list(lr)
       indent <- indent + 1
     } else {
@@ -393,7 +393,7 @@ table_structure <- function(x, detail = c("subtable", "row")) {
   switch(
     detail,
     subtable = treestruct(x),
-    row =  table_structure_inner(x),
+    row = table_structure_inner(x),
     stop("unsupported level of detail ", detail)
   )
 
@@ -447,7 +447,7 @@ setGeneric("str", function(object, ...)
 #' appropriate for `VTableTree` objects.
 #' @export
 setMethod("str", "VTableTree",
-  function(object, max.level = 3L, ...){
+  function(object, max.level = 3L, ...) {
     utils::str(object, max.level = max.level, ...)
     warning("str provides a low level, implementation-detail-specific description of the TableTree object structure. ",
       "See table_structure(.) for a summary of table struture intended for end users.",
@@ -541,7 +541,7 @@ setMethod("table_structure_inner", "LabelRow",
     txtvis <- if (!obj_visible(obj)) " - <not visible>" else ""
 
     scat("labelrow: ", "[", obj_name(obj), "] (", obj_label(obj), ")",
-      txtvis,  indent = print_indent)
+      txtvis, indent = print_indent)
 
     obj_visible(obj)
   })

@@ -174,7 +174,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
                      split_name, split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
-                     indent_mod, show_labels, label_pos, #visible_label,
+                     indent_mod, show_labels, label_pos, # visible_label,
                      var_labels, cvar,
                      table_names, topleft, align, page_by, page_prefix,
                      format_na_str, section_div, na_str) NULL

@@ -26,21 +26,21 @@ match_extra_args <- function(f,
 
   ## specialized arguments that must be named in formals, cannot go
   ## anonymously into ...
-  if(!is.null(.var) && nzchar(.var))
+  if (!is.null(.var) && nzchar(.var))
     possargs <- c(possargs, list(.var = .var))
-  if(!is.null(.ref_group))
+  if (!is.null(.ref_group))
     possargs <- c(possargs, list(.ref_group = .ref_group))
-  if(!is.null(.alt_df_row))
+  if (!is.null(.alt_df_row))
     possargs <- c(possargs, list(.alt_df_row = .alt_df_row))
-  if(!is.null(.alt_df))
+  if (!is.null(.alt_df))
     possargs <- c(possargs, list(.alt_df = .alt_df))
-  if(!is.null(.ref_full))
+  if (!is.null(.ref_full))
     possargs <- c(possargs, list(.ref_full = .ref_full))
-  if(!is.null(.in_ref_col))
+  if (!is.null(.in_ref_col))
     possargs <- c(possargs, list(.in_ref_col = .in_ref_col))
 
   # Special case: .spl_context
-  if(!is.null(.spl_context) && !(".spl_context" %in% names(possargs)))
+  if (!is.null(.spl_context) && !(".spl_context" %in% names(possargs)))
     possargs <- c(possargs, list(.spl_context = .spl_context))
   else
     possargs$.spl_context <- NULL
@@ -49,9 +49,9 @@ match_extra_args <- function(f,
   formargs <- formals(f)
   formnms <- names(formargs)
   exnms <- names(extras)
-  if(is.null(formargs))
+  if (is.null(formargs))
     return(NULL)
-  else if("..." %in% names(formargs))
+  else if ("..." %in% names(formargs))
     formnms <- c(formnms, exnms[nzchar(exnms)])
   possargs[names(possargs) %in% formnms]
 }
@@ -91,27 +91,27 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
   }
 
   ## workaround for https://github.com/insightsengineering/rtables/issues/159
-  if(NROW(dfpart) > 0) {
+  if (NROW(dfpart) > 0) {
     inds <- eval(csub, envir = dfpart)
     dat <- dfpart[inds, , drop = FALSE]
   } else {
     dat <- dfpart
   }
-  if(!is.null(col) && !inclNAs)
+  if (!is.null(col) && !inclNAs)
     dat <- dat[!is.na(dat[[col]]), , drop = FALSE]
 
   fullrefcoldat <- cextr$.ref_full
-  if(!is.null(fullrefcoldat))
+  if (!is.null(fullrefcoldat))
     cextr$.ref_full <- NULL
   inrefcol <- cextr$.in_ref_col
-  if(!is.null(fullrefcoldat))
+  if (!is.null(fullrefcoldat))
     cextr$.in_ref_col <- NULL
 
   exargs <- c(cextr, splextra)
 
   ## behavior for x/df and ref-data (full and group)
   ## match
-  if(!is.null(col) && !takesdf) {
+  if (!is.null(col) && !takesdf) {
     dat <- dat[[col]]
     fullrefcoldat <- fullrefcoldat[[col]]
     baselinedf <- baselinedf[[col]]
@@ -141,8 +141,8 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
 
 
   val <- do.call(func, args)
-  if(!is(val, "RowsVerticalSection")) {
-    if(!is(val, "list"))
+  if (!is(val, "RowsVerticalSection")) {
+    if (!is(val, "list"))
       val <- list(val)
     ret <- in_rows(
       .list = val,
@@ -182,24 +182,24 @@ gen_rowvalues <- function(dfpart,
   colextras <- col_extra_args(cinfo, NULL)
   cpaths <- col_paths(cinfo)
   ## XXX I don't think this is used anywhere???
-  ##splextra = c(splextra, list(.spl_context = spl_context))
+  ## splextra = c(splextra, list(.spl_context = spl_context))
   totcount <- col_total(cinfo)
 
-  colleaves <-  collect_leaves(cinfo@tree_layout)
+  colleaves <- collect_leaves(cinfo@tree_layout)
 
 
   gotflist <- is.list(func)
 
   ## one set of named args to be applied to all columns
-  if(!is.null(names(splextra)))
+  if (!is.null(names(splextra)))
     splextra <- list(splextra)
   else
     length(splextra) <- ncol(cinfo)
 
 
-  if(!gotflist) {
+  if (!gotflist) {
     func <- list(func)
-  } else  if(length(splextra) == 1) {
+  } else if (length(splextra) == 1) {
     splextra <- rep(splextra, length.out = length(func))
   }
   ## if(length(func)) == 1 && names(spl)
@@ -208,10 +208,10 @@ gen_rowvalues <- function(dfpart,
   ## we are in analyze_colvars, so we have to match
   ## the exargs value by position for each column repeatedly
   ## across the higher level col splits.
-  if(!is.null(datcol) && is.na(datcol)) {
+  if (!is.null(datcol) && is.na(datcol)) {
     datcol <- character(length(colleaves))
     exargs <- vector("list", length(colleaves))
-    for(i in seq_along(colleaves)) {
+    for (i in seq_along(colleaves)) {
       x <- colleaves[[i]]
 
       pos <- tree_pos(x)
@@ -220,24 +220,24 @@ gen_rowvalues <- function(dfpart,
       ## so it has to match var numbers so strip the suffixes back off
       splvals <- strip_multivar_suffix(rawvalues(pos))
       n <- length(spls)
-      datcol[i] <- if(is(spls[[n]], "MultiVarSplit"))
+      datcol[i] <- if (is(spls[[n]], "MultiVarSplit"))
         splvals[n]
       else
         NA_character_
       argpos <- match(datcol[i], spl_payload(spls[[n]]))
       ## single bracket here because assigning NULL into a list removes
       ## the position entirely
-      exargs[i] <- if(argpos <= length(splextra))
+      exargs[i] <- if (argpos <= length(splextra))
         splextra[argpos] else list(NULL)
     }
     ## })
-    if(all(is.na(datcol)))
+    if (all(is.na(datcol)))
       datcol <- list(NULL)
-    else if(any(is.na(datcol)))
+    else if (any(is.na(datcol)))
       stop("mix of var and non-var columns with NA analysis rowvara")
   } else {
     exargs <- splextra
-    if(is.null(datcol))
+    if (is.null(datcol))
       datcol <- list(NULL)
     datcol <- rep(datcol, length(colexprs))
     ## if(gotflist)
@@ -247,7 +247,7 @@ gen_rowvalues <- function(dfpart,
   }
   allfuncs <- rep(func, length.out = length(colexprs))
 
-  if(is.null(takesdf))
+  if (is.null(takesdf))
     takesdf <- .takes_df(allfuncs)
 
   rawvals <- mapply(gen_onerv,
@@ -300,16 +300,16 @@ gen_rowvalues <- function(dfpart,
                               list(dfpart[0, ])),
                             inclNAs,
                             spl_context = context_df_row(cinfo = cinfo)) {
-  if(is.null(datcol) && !is.na(rvlab))
+  if (is.null(datcol) && !is.na(rvlab))
     stop("NULL datcol but non-na rowvar label")
-  if(!is.null(datcol) && !is.na(datcol)) {
-    if(! all(datcol %in% names(dfpart)))
+  if (!is.null(datcol) && !is.na(datcol)) {
+    if (!all(datcol %in% names(dfpart)))
       stop("specified analysis variable (", datcol,
         ") not present in data")
 
     rowvar <- datcol
   } else {
-    rowvar  <- NA_character_
+    rowvar <- NA_character_
   }
 
   rawvals <- gen_rowvalues(dfpart,
@@ -317,7 +317,7 @@ gen_rowvalues <- function(dfpart,
     datcol = datcol,
     cinfo = cinfo,
     func = func,
-    splextra =  splextra,
+    splextra = splextra,
     takesdf = takesdf,
     baselines = baselines,
     inclNAs = inclNAs,
@@ -329,11 +329,11 @@ gen_rowvalues <- function(dfpart,
   unqlens <- unique(lens)
   ## length 0 returns are ok to not match cause they are
   ## just empty space we can fill in as needed.
-  if(length(unqlens[unqlens > 0]) != 1L) {## length(unqlens) != 1 &&
+  if (length(unqlens[unqlens > 0]) != 1L) { ## length(unqlens) != 1 &&
     ## (0 %in% unqlens && length(unqlens) != 2)) {
     stop("Number of rows generated by analysis function do not match ",
       "across all columns. ",
-      if(!is.na(datcol) && is.character(dfpart[[datcol]]))
+      if (!is.na(datcol) && is.character(dfpart[[datcol]]))
         paste("\nPerhaps convert analysis variable", datcol,
           "to a factor?"))
   }
@@ -343,7 +343,7 @@ gen_rowvalues <- function(dfpart,
   ## default row labels
   ## this is guaranteed to be a RowsVerticalSection object.
   rv1col <- rawvals[[maxind]]
-  if(!is(rv1col, "RowsVerticalSection"))
+  if (!is(rv1col, "RowsVerticalSection"))
   ## nocov start
     stop("gen_rowvalues appears to have generated something that was not ",
       "a RowsVerticalSection object. Please contact the maintainer.")
@@ -351,12 +351,12 @@ gen_rowvalues <- function(dfpart,
   labels <- value_labels(rv1col)
 
   ncrows <- max(unqlens)
-  if(ncrows == 0)
+  if (ncrows == 0)
     return(list())
   stopifnot(ncrows > 0)
 
-  if(is.null(labels)) {
-    if(length(rawvals[[maxind]]) == length(defrowlabs))
+  if (is.null(labels)) {
+    if (length(rawvals[[maxind]]) == length(defrowlabs))
       labels <- defrowlabs
     else
       labels <- rep("", ncrows)
@@ -366,12 +366,12 @@ gen_rowvalues <- function(dfpart,
   nms <- value_names(rv1col)
   rfootnotes <- row_footnotes(rv1col)
 
-  imods <- indent_mod(rv1col) ##rv1col@indent_mods
+  imods <- indent_mod(rv1col) ## rv1col@indent_mods
   unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
 
   formatvec <- NULL
-  if(!is.null(format)) {
-    if(is.function(format))
+  if (!is.null(format)) {
+    if (is.function(format))
       format <- list(format)
     formatvec <- rep(format, length.out = ncrows)
   }
@@ -383,14 +383,14 @@ gen_rowvalues <- function(dfpart,
       colvals[[i]]
     })
     imod <- unique(vapply(rowvals, indent_mod, 0L))
-    if(length(imod) != 1)
+    if (length(imod) != 1)
       stop("Different cells in the same row appear to have been given ",
         "different indent_mod values")
     rowconstr(vals = rowvals,
       cinfo = cinfo,
       lev = lev,
       label = labels[i],
-      name = nms[i], ##labels[i], ## XXX this is probably wrong?!
+      name = nms[i], ## labels[i], ## XXX this is probably wrong?!
       var = rowvar,
       format = formatvec[[i]],
       indent_mod = imods[[i]] %||% 0L,
@@ -405,14 +405,14 @@ gen_rowvalues <- function(dfpart,
 
   formalnms <- names(formals(parent_cfun))
   ## note the <- here
-  if(!is.na(dotspos <- match("...", formalnms))) {
+  if (!is.na(dotspos <- match("...", formalnms))) {
     toremove <- dotspos
   } else {
     toremove <- NULL
   }
 
   labelstrpos <- match("labelstr", names(formals(parent_cfun)))
-  if(is.na(labelstrpos)) {
+  if (is.na(labelstrpos)) {
     stop("content function does not appear to accept the labelstr",
       "arguent")
   }
@@ -424,13 +424,13 @@ gen_rowvalues <- function(dfpart,
       formalnms, collapse = ", "),
     ", labelstr = clabelstr, ...)}")))
   formals(caller) <- c(formals(parent_cfun)[-labelstrpos],
-    alist("..." =)) # nolint
+    alist("..." = )) # nolint
   caller
 
 }
 
 # Makes content table xxx renaming
-.make_ctab <- function(df, lvl, ##treepos,
+.make_ctab <- function(df, lvl, ## treepos,
                        name,
                        label,
                        cinfo,
@@ -444,10 +444,10 @@ gen_rowvalues <- function(dfpart,
                        extra_args,
                        spl_context = context_df_row(cinfo = cinfo)) {
 
-  if(length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
+  if (length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L))
     cvar <- NULL
-  if(!is.null(parent_cfun)) {
-    ##cfunc <- .make_caller(parent_cfun, label)
+  if (!is.null(parent_cfun)) {
+    ## cfunc <- .make_caller(parent_cfun, label)
     cfunc <- lapply(parent_cfun, .make_caller, clabelstr = label)
     contkids <- tryCatch(.make_tablerows(df,
       lev = lvl,
@@ -462,7 +462,7 @@ gen_rowvalues <- function(dfpart,
       splextra = extra_args,
       spl_context = spl_context),
     error = function(e) e)
-    if(is(contkids, "error")) {
+    if (is(contkids, "error")) {
       stop("Error in content (summary) function: ", contkids$message,
         "\n\toccured at path: ",
         spl_context_to_disp_path(spl_context),
@@ -497,7 +497,7 @@ gen_rowvalues <- function(dfpart,
   stopifnot(is(spl, "VAnalyzeSplit"))
   check_validsplit(spl, df)
   defrlabel <- spl@default_rowlabel
-  if(nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
+  if (nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
     defrlabel <- partlabel
   }
   kids <- tryCatch(.make_tablerows(df,
@@ -513,7 +513,7 @@ gen_rowvalues <- function(dfpart,
     inclNAs = avar_inclNAs(spl),
     spl_context = spl_context),
   error = function(e) e)
-  if(is(kids, "error")) {
+  if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
       spl_payload(spl) %||% "colvars", "): ", kids$message,
       "\n\toccured at (row) path: ",
@@ -540,7 +540,7 @@ gen_rowvalues <- function(dfpart,
 #'   of them.
 #' @return list of children to place at this level
 #'
-setGeneric(".make_split_kids", function(spl, have_controws, make_lrow,  ...) {
+setGeneric(".make_split_kids", function(spl, have_controws, make_lrow, ...) {
   standardGeneric(".make_split_kids")})
 
 ## single AnalyzeSplit
@@ -559,7 +559,7 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
            nsibs = 0
   ) {
     spvis <- labelrow_visible(spl)
-    if(is.na(spvis))
+    if (is.na(spvis))
       spvis <- nsibs > 0
 
     ret <- .make_analyzed_tab(df = df,
@@ -580,10 +580,10 @@ setMethod(".make_split_kids", "VAnalyzeSplit",
 
 .set_kids_sect_sep <- function(lst, spl) {
   sect_sep <- spl_section_div(spl)
-  if(!is.na(sect_sep)) {
+  if (!is.na(sect_sep)) {
     lst <- lapply(lst,
       function(k) {
-        if(is(k, "VTableTree"))
+        if (is(k, "VTableTree"))
           trailing_sep(k) <- sect_sep
         k
       })
@@ -617,7 +617,7 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
 
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
-    if(!identical(make_lrow, FALSE) &&
+    if (!identical(make_lrow, FALSE) &&
       !have_controws &&
       length(kids) == 1) {
       ## we only analyzed one var so
@@ -628,12 +628,12 @@ setMethod(".make_split_kids", "AnalyzeMultiVars",
       return(kids[[1]])
     }
     ## this will be the variables
-    ##nms = sapply(spl_payload(spl), spl_payload)
+    ## nms = sapply(spl_payload(spl), spl_payload)
 
     nms <- vapply(kids, obj_name, "")
     labs <- vapply(kids, obj_label, "")
-    if(length(unique(nms))  != length(nms) &&
-      length(unique(nms))  != length(nms)) {
+    if (length(unique(nms)) != length(nms) &&
+      length(unique(nms)) != length(nms)) {
       warning("Non-unique sibling analysis table names. Using Labels ",
         "instead. Use the table_names argument to analyze to avoid ",
         "this when analyzing the same variable multiple times.",
@@ -663,7 +663,7 @@ setMethod(".make_split_kids", "Split",
            splvec, ## passed to recursive_applysplit
            df, ## used to apply split
            alt_df, ## used to apply split for alternative df
-           lvl,  ## used to calculate innerlev
+           lvl, ## used to calculate innerlev
            cinfo, ## used for sanity check
            baselines, ## used to calc new baselines
            spl_context) {
@@ -673,10 +673,10 @@ setMethod(".make_split_kids", "Split",
     ## these are SplitValue objects
     splvals <- rawpart[["values"]]
     partlabels <- rawpart[["labels"]]
-    if(is.factor(partlabels))
+    if (is.factor(partlabels))
       partlabels <- as.character(partlabels)
     nms <- unlist(value_names(splvals))
-    if(is.factor(nms))
+    if (is.factor(nms))
       nms <- as.character(nms)
 
     ##
@@ -695,7 +695,7 @@ setMethod(".make_split_kids", "Split",
     newbl_raw <- lapply(baselines, function(dat) {
 
       # If no ref_group is specified
-      if(is.null(dat)) return(NULL)
+      if (is.null(dat)) return(NULL)
 
       ## apply the same splitting on the
       bldataspl <- tryCatch(do_split(spl, dat, spl_context = spl_context)[["datasplit"]],
@@ -711,7 +711,7 @@ setMethod(".make_split_kids", "Split",
       ## we only keep the ones corresponding with actual data splits
       res <- lapply(names(dataspl),
         function(nm) {
-          if(nm %in% names(bldataspl))
+          if (nm %in% names(bldataspl))
             bldataspl[[nm]]
           else
             dataspl[[1]][0, ]
@@ -723,7 +723,7 @@ setMethod(".make_split_kids", "Split",
 
     newbaselines <- lapply(names(dataspl), function(nm) {
       lapply(newbl_raw, function(rawdat) {
-        if(nm %in% names(rawdat))
+        if (nm %in% names(rawdat))
           rawdat[[nm]]
         else
           rawdat[[1]][0, ]
@@ -823,7 +823,7 @@ setMethod(".make_split_kids", "Split",
         cvar = content_var(spl),
         baselines = baselines,
         cextra_args = content_extra_args(spl),
-        ##splval should still be retaining its name
+        ## splval should still be retaining its name
         spl_context = rbind(spl_context, rsplval))
     }, dfpart = dataspl,
     alt_dfpart = alt_dfpart,
@@ -846,7 +846,7 @@ setMethod(".make_split_kids", "Split",
       indent_mod = indent_mod(spl),
       page_title = ptitle_prefix(spl)
     )
-    ##kids = inner
+    ## kids = inner
     kids <- list(innertab)
     kids
   })
@@ -861,17 +861,17 @@ context_df_row <- function(split = character(),
     full_parent_df = I(full_parent_df),
     #     parent_cold_inds = I(parent_col_inds),
     stringsAsFactors = FALSE)
-  if(nrow(ret) > 0) {
+  if (nrow(ret) > 0) {
     ret$all_cols_n <- nrow(full_parent_df[[1]])
   } else {
     ret$all_cols_n <- integer() ## should this be numeric??? This never happens
   }
 
-  if(!is.null(cinfo)) {
-    if(nrow(ret) > 0)
+  if (!is.null(cinfo)) {
+    if (nrow(ret) > 0)
       colcols <- as.data.frame(lapply(col_exprs(cinfo), function(e) {
         vals <- eval(e, envir = full_parent_df[[1]])
-        if(identical(vals, TRUE))
+        if (identical(vals, TRUE))
           vals <- rep(vals, length.out = nrow(full_parent_df[[1]]))
         I(list(vals))
       }))
@@ -906,7 +906,7 @@ recursive_applysplit <- function(df,
                                  parent_sect_split = NA_character_
 ) {
   ## pre-existing table was added to the layout
-  if(length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
+  if (length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo"))
     return(splvec[[1]])
 
   ## the content function is the one from the PREVIOUS
@@ -930,13 +930,13 @@ recursive_applysplit <- function(df,
 
   nonroot <- lvl != 0L
 
-  if(is.na(make_lrow))
-    make_lrow <- if(nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
+  if (is.na(make_lrow))
+    make_lrow <- if (nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
   ## never print an empty row label for root.
-  if(make_lrow && partlabel == "" && !nonroot)
+  if (make_lrow && partlabel == "" && !nonroot)
     make_lrow <- FALSE
 
-  if(length(splvec) == 0L) {
+  if (length(splvec) == 0L) {
     kids <- list()
     imod <- 0L
     spl <- NULL
@@ -966,20 +966,20 @@ recursive_applysplit <- function(df,
     imod <- 0L
   } ## end length(splvec)
 
-  if(is.na(make_lrow))
-    make_lrow <- if(nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
+  if (is.na(make_lrow))
+    make_lrow <- if (nrow(ctab) > 0 || !nzchar(partlabel)) FALSE else TRUE
   ## never print an empty row label for root.
-  if(make_lrow && partlabel == "" && !nonroot)
+  if (make_lrow && partlabel == "" && !nonroot)
     make_lrow <- FALSE
 
   ## this is only true when called from build_table and the first split
   ## in (one of the) SplitVector is NOT an AnalyzeMultiVars split.
   ## in that case we would be "double creating" the structural
   ## subtable
-  if(no_outer_tbl) {
+  if (no_outer_tbl) {
     ret <- kids[[1]]
     indent_mod(ret) <- indent_mod(spl)
-  } else if(nrow(ctab) > 0L || length(kids) > 0L) {
+  } else if (nrow(ctab) > 0L || length(kids) > 0L) {
     ## previously we checked if the child had an identical label
     ## but I don't think thats needed anymore.
     tlabel <- partlabel
@@ -987,7 +987,7 @@ recursive_applysplit <- function(df,
     ret <- TableTree(cont = ctab,
       kids = kids,
       name = name,
-      label = tlabel, #partlabel,
+      label = tlabel, # partlabel,
       lev = lvl,
       iscontent = FALSE,
       labelrow = LabelRow(lev = lvl,
@@ -1094,7 +1094,7 @@ recursive_applysplit <- function(df,
 #' tbl4
 #'
 #' # with column counts calculated based on different data
-#' miniDM <- DM[sample(1:NROW(DM), 100),]
+#' miniDM <- DM[sample(1:NROW(DM), 100), ]
 #' tbl5 <- build_table(lyt3, DM, alt_counts_df = miniDM)
 #' tbl5
 #'
@@ -1103,11 +1103,11 @@ recursive_applysplit <- function(df,
 build_table <- function(lyt, df,
                         alt_counts_df = NULL,
                         col_counts = NULL,
-                        col_total = if(is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
+                        col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                         topleft = NULL,
                         hsep = default_hsep(),
                         ...) {
-  if(!is(lyt, "PreDataTableLayouts")) {
+  if (!is(lyt, "PreDataTableLayouts")) {
     stop("lyt must be a PreDataTableLayouts object. Got object of class ",
       class(lyt))
   }
@@ -1116,7 +1116,7 @@ build_table <- function(lyt, df,
   ## add a single overall column as the "most basic"
   ## table column structure that makes sense
   clyt <- clayout(lyt)
-  if(length(clyt) == 1 && length(clyt[[1]]) == 0) {
+  if (length(clyt) == 1 && length(clyt[[1]]) == 0) {
     clyt[[1]] <- add_overall_col(clyt[[1]], "")
     clayout(lyt) <- clyt
   }
@@ -1139,7 +1139,7 @@ build_table <- function(lyt, df,
     alt_counts_df = alt_counts_df,
     total = col_total,
     topleft)
-  if(!is.null(col_counts))
+  if (!is.null(col_counts))
     disp_ccounts(cinfo) <- TRUE
   rlyt <- rlayout(lyt)
   rtspl <- root_spl(rlyt)
@@ -1147,7 +1147,7 @@ build_table <- function(lyt, df,
     alt_df = NULL,
     name = "root",
     label = "",
-    cinfo = cinfo, ##cexprs, ctree,
+    cinfo = cinfo, ## cexprs, ctree,
     parent_cfun = content_fun(rtspl),
     format = content_format(rtspl),
     na_str = content_na_str(rtspl),
@@ -1156,7 +1156,7 @@ build_table <- function(lyt, df,
     extra_args = content_extra_args(rtspl))
   kids <- lapply(seq_along(rlyt), function(i) {
     splvec <- rlyt[[i]]
-    if(length(splvec) == 0)
+    if (length(splvec) == 0)
       return(NULL)
     firstspl <- splvec[[1]]
     nm <- obj_name(firstspl)
@@ -1184,10 +1184,10 @@ build_table <- function(lyt, df,
       no_outer_tbl = !is(firstspl, "AnalyzeMultiVars"))
   })
   kids <- kids[!sapply(kids, is.null)]
-  if(length(kids) > 0)
+  if (length(kids) > 0)
     names(kids) <- sapply(kids, obj_name)
 
-  if(nrow(ctab) == 0L &&
+  if (nrow(ctab) == 0L &&
     length(kids) == 1L &&
     is(kids[[1]], "VTableTree")) {
     tab <- kids[[1]]
@@ -1222,7 +1222,7 @@ build_table <- function(lyt, df,
   ## unused <- matrix_form(tab)
   tab <- update_ref_indexing(tab)
   horizontal_sep(tab) <- hsep
-  if(table_inset(lyt) > 0)
+  if (table_inset(lyt) > 0)
     table_inset(tab) <- table_inset(lyt)
   tab
 }
@@ -1233,10 +1233,10 @@ build_table <- function(lyt, df,
 # on the df.
 fix_one_split_var <- function(spl, df, char_ok = TRUE) {
   var <- spl_payload(spl)
-  if(!(var %in% names(df)))
+  if (!(var %in% names(df)))
     stop("Split variable [", var, "] not found in data being tabulated.")
   varvec <- df[[var]]
-  if(!is(varvec, "character") && !is.factor(varvec)) {
+  if (!is(varvec, "character") && !is.factor(varvec)) {
     message(sprintf(paste("Split var [%s] was not character or factor.",
       "Converting to factor"),
     var))
@@ -1248,11 +1248,11 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
       "factors.")
   }
 
-  if(is.factor(varvec))
+  if (is.factor(varvec))
     levs <- levels(varvec)
   else
     levs <- unique(varvec)
-  if(!all(nzchar(levs))) {
+  if (!all(nzchar(levs))) {
     stop("Got empty string level in splitting variable ", var,
       " This is not supported.\nIf display as an empty level is ",
       "desired use a value-labeling variable.")
@@ -1261,21 +1261,21 @@ fix_one_split_var <- function(spl, df, char_ok = TRUE) {
   ## handle label var
   lblvar <- spl_label_var(spl)
   have_lblvar <- !identical(var, lblvar)
-  if(have_lblvar) {
-    if(!(lblvar %in% names(df)))
+  if (have_lblvar) {
+    if (!(lblvar %in% names(df)))
       stop("Value label variable [", lblvar,
         "] not found in data being tabulated.")
     lblvec <- df[[lblvar]]
     tab <- table(varvec, lblvec)
 
-    if(any(rowSums(tab > 0) > 1) ||
+    if (any(rowSums(tab > 0) > 1) ||
       any(colSums(tab > 0) > 1))
       stop(sprintf(paste("There does not appear to be a 1-1",
         "correspondence between values in split var",
         "[%s] and label var [%s]"),
       var, lblvar))
 
-    if(!is(lblvec, "character") && !is.factor(lblvec)) {
+    if (!is(lblvec, "character") && !is.factor(lblvec)) {
       message(sprintf(paste("Split label var [%s] was not character or",
         "factor. Converting to factor"),
       var))
@@ -1306,7 +1306,7 @@ fix_split_vars_inner <- function(lyt, df, char_ok) {
   varspls <- allspls[sapply(allspls, is, "VarLevelSplit")]
   unqvarinds <- !duplicated(sapply(varspls, spl_payload))
   unqvarspls <- varspls[unqvarinds]
-  for(spl in unqvarspls)
+  for (spl in unqvarspls)
     df <- fix_one_split_var(spl, df, char_ok = char_ok)
 
   df
@@ -1345,11 +1345,11 @@ setMethod("set_def_child_ord", "ANY",
 
 setMethod("set_def_child_ord", "VarLevelSplit",
   function(lyt, df) {
-    if(!is.null(spl_child_order(lyt)))
+    if (!is.null(spl_child_order(lyt)))
       return(lyt)
 
     vec <- df[[spl_payload(lyt)]]
-    vals <- if(is.factor(vec))
+    vals <- if (is.factor(vec))
       levels(vec)
     else
       unique(vec)
@@ -1360,22 +1360,22 @@ setMethod("set_def_child_ord", "VarLevelSplit",
 setMethod("set_def_child_ord", "VarLevWBaselineSplit",
   function(lyt, df) {
     bline <- spl_ref_group(lyt)
-    if(!is.null(spl_child_order(lyt)) &&
+    if (!is.null(spl_child_order(lyt)) &&
       match(bline, spl_child_order(lyt), nomatch = -1) == 1L)
       return(lyt)
 
-    if(!is.null(split_fun(lyt))) {
+    if (!is.null(split_fun(lyt))) {
       ## expensive but sadly necessary, I think
       pinfo <- do_split(lyt, df, spl_context = context_df_row())
       vals <- sort(unlist(value_names(pinfo$values)))
     } else {
       vec <- df[[spl_payload(lyt)]]
-      vals <- if(is.factor(vec))
+      vals <- if (is.factor(vec))
         levels(vec)
       else
         unique(vec)
 
-      if(is.factor(vals)) {
+      if (is.factor(vals)) {
         ## this sorts the levels
         vals <- levels(relevel(droplevels(vals), bline))
       }
@@ -1400,7 +1400,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
     is(splvec, "SplitVector"))
 
 
-  if(lvl == length(splvec) + 1L) {
+  if (lvl == length(splvec) + 1L) {
     ## XXX this should be a LayoutColree I Think.
     nm <- unlist(tail(value_names(pos), 1)) %||% ""
     LayoutColLeaf(lev = lvl - 1L,
@@ -1410,7 +1410,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
     )
   } else {
     spl <- splvec[[lvl]]
-    nm <- if(is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos),
+    nm <- if (is.null(pos)) obj_name(spl) else unlist(tail(value_names(pos),
       1))
     rawpart <- do_split(spl, df, trim = FALSE,
       spl_context = spl_context)
@@ -1460,25 +1460,25 @@ setMethod("fix_analyze_vis", "PreDataRowLayout",
 setMethod("fix_analyze_vis", "SplitVector",
   function(lyt) {
     len <- length(lyt)
-    if(len == 0)
+    if (len == 0)
       return(lyt)
     lastspl <- lyt[[len]]
-    if(!(is(lastspl, "VAnalyzeSplit") ||
+    if (!(is(lastspl, "VAnalyzeSplit") ||
       is(lastspl, "AnalyzeMultivar")))
       return(lyt)
 
-    if(is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl))) {
+    if (is(lastspl, "VAnalyzeSplit") && is.na(labelrow_visible(lastspl))) {
       ##  labelrow_visible(lastspl) = FALSE
       labelrow_visible(lastspl) <- "hidden"
     } else if (is(lastspl, "AnalyzeMultiVar")) {
       pld <- spl_payload(lastspl)
       newpld <- lapply(pld, function(sp, havesibs) {
-        if(is.na(labelrow_visible(sp)))
+        if (is.na(labelrow_visible(sp)))
           labelrow_visible(sp) <- havesibs
       }, havesibs = len > 1)
       spl_payload(lastspl) <- newpld
       ## pretty sure this isn't needed...
-      if(is.na(label_kids(lastspl)))
+      if (is.na(label_kids(lastspl)))
         label_kids(lastspl) <- len > 1
     }
     lyt[[len]] <- lastspl
@@ -1538,12 +1538,12 @@ setMethod("check_afun_cfun_params", "Split",
 count <- function(df, ...) NROW(df)
 
 guess_format <- function(val) {
-  if(length(val) == 1) {
-    if(is.integer(val) || !is.numeric(val))
+  if (length(val) == 1) {
+    if (is.integer(val) || !is.numeric(val))
       "xx"
     else
       "xx.xx"
-  } else if(length(val) == 2) {
+  } else if (length(val) == 2) {
     "xx.x / xx.x"
   } else if (length(val) == 3) {
     "xx.x (xx.x - xx.x)"
@@ -1554,21 +1554,21 @@ guess_format <- function(val) {
 
 .quick_afun <- function(afun, lbls) {
 
-  if(.takes_df(afun)) {
+  if (.takes_df(afun)) {
     function(df, .spl_context, ...) {
-      if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
+      if (!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
         lbls <- tail(.spl_context$value, 1)
-      if(".spl_context" %in% names(formals(afun)))
+      if (".spl_context" %in% names(formals(afun)))
         res <- afun(df = df, .spl_context = .spl_context, ...)
       else
         res <- afun(df = df, ...)
-      if(is(res, "RowsVerticalSection")) {
+      if (is(res, "RowsVerticalSection")) {
         ret <- res
       } else {
-        if(!is.list(res)) {
+        if (!is.list(res)) {
           ret <- rcell(res, label = lbls, format = guess_format(res))
         } else {
-          if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+          if (!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
             names(res) <- lbls
           ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
         }
@@ -1577,19 +1577,19 @@ guess_format <- function(val) {
     }
   } else {
     function(x, .spl_context, ...) {
-      if(!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
+      if (!is.null(lbls) && length(lbls) == 1 && is.na(lbls))
         lbls <- tail(.spl_context$value, 1)
-      if(".spl_context" %in% names(formals(afun)))
+      if (".spl_context" %in% names(formals(afun)))
         res <- afun(x = x, .spl_context = .spl_context, ...)
       else
         res <- afun(x = x, ...)
-      if(is(res, "RowsVerticalSection")) {
+      if (is(res, "RowsVerticalSection")) {
         ret <- res
       } else {
-        if(!is.list(res)) {
+        if (!is.list(res)) {
           ret <- rcell(res, label = lbls, format = guess_format(res))
         } else {
-          if(!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
+          if (!is.null(lbls) && length(lbls) == length(res) && all(!is.na(lbls)))
             names(res) <- lbls
           ret <- in_rows(.list = res, .labels = names(res), .formats = vapply(res, guess_format, ""))
         }
@@ -1603,9 +1603,9 @@ guess_format <- function(val) {
 
 n_cells_res <- function(res) {
   ans <- 1L
-  if(is.list(res))
+  if (is.list(res))
     ans <- length(res)
-  else if(is(res, "RowsVerticalSection"))
+  else if (is(res, "RowsVerticalSection"))
     ans <- length(res$values) # XXX penetrating the abstraction
   ans
 }
@@ -1691,7 +1691,7 @@ qtable_layout <- function(data,
                           .default_rlabel = NULL) {
 
   subafun <- substitute(afun)
-  if(!is.null(.default_rlabel)) {
+  if (!is.null(.default_rlabel)) {
     dflt_row_lbl <- .default_rlabel
   } else if (is.name(subafun) &&
     is.function(afun) &&
@@ -1707,19 +1707,19 @@ qtable_layout <- function(data,
     )[[1]], afun)) {
     dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
   } else {
-    dflt_row_lbl <- if(is.null(avar)) "count" else avar
+    dflt_row_lbl <- if (is.null(avar)) "count" else avar
   }
 
-  if(is.null(afun))
+  if (is.null(afun))
     afun <- count
 
-  if(is.null(avar))
+  if (is.null(avar))
     avar <- names(data)[1]
   fakeres <- afun(data[[avar]], ...)
   multirow <- is.list(fakeres) || is(fakeres, "RowsVerticalSection") || summarize_groups
   ## this is before we plug in the default so if not specified by the user
   ## explicitly, row_labels is NULL at this point.
-  if(!is.null(row_labels) &&
+  if (!is.null(row_labels) &&
     length(row_labels) != n_cells_res(fakeres))
     stop("Length of row_labels (",
       length(row_labels),
@@ -1727,7 +1727,7 @@ qtable_layout <- function(data,
       n_cells_res(fakeres),
       ").")
 
-  if(is.null(row_labels))
+  if (is.null(row_labels))
     row_labels <- dflt_row_lbl
 
 
@@ -1737,27 +1737,27 @@ qtable_layout <- function(data,
     prov_footer = prov_footer,
     show_colcounts = show_colcounts)
 
-  for(var in col_vars)
+  for (var in col_vars)
     lyt <- split_cols_by(lyt, var)
 
-  for(var in head(row_vars, -1)) {
-    lyt <- split_rows_by(lyt, var, split_fun = if(drop_levels) drop_split_levels else NULL)
-    if(summarize_groups)
+  for (var in head(row_vars, -1)) {
+    lyt <- split_rows_by(lyt, var, split_fun = if (drop_levels) drop_split_levels else NULL)
+    if (summarize_groups)
       lyt <- summarize_row_groups(lyt)
   }
 
-  tleft <- if(multirow || length(row_vars) > 0) dflt_row_lbl else character()
-  if(length(row_vars) > 0 ) {
-    if(!multirow) {
+  tleft <- if (multirow || length(row_vars) > 0) dflt_row_lbl else character()
+  if (length(row_vars) > 0) {
+    if (!multirow) {
       ## in the single row in splitting case, we use the row label as the topleft
       ## and the split values as the row labels for a more compact apeparance
       tleft <- row_labels
       row_labels <- NA_character_
-      lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL, child_labels = "hidden")
+      lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if (drop_levels) drop_split_levels else NULL, child_labels = "hidden")
     } else {
-      lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if(drop_levels) drop_split_levels else NULL)
+      lyt <- split_rows_by(lyt, tail(row_vars, 1), split_fun = if (drop_levels) drop_split_levels else NULL)
     }
-    if(summarize_groups)
+    if (summarize_groups)
       lyt <- summarize_row_groups(lyt)
   }
   inner_afun <- .quick_afun(afun, row_labels)
@@ -1797,7 +1797,7 @@ qtable <- function(data,
     )[[1]], afun)) {
     dflt_row_lbl <- paste(avar, as.character(subafun), sep = " - ")
   } else {
-    dflt_row_lbl <- if(is.null(avar)) "count" else avar
+    dflt_row_lbl <- if (is.null(avar)) "count" else avar
   }
 
   lyt <- qtable_layout(data = data,

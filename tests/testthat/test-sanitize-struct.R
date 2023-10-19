@@ -21,7 +21,7 @@ test_that("table structure validation and sanitization work", {
   expect_identical(col_info(san_tab1),
     col_info(bad_tab1))
 
-  bad_lyt2 <-  basic_table() %>%
+  bad_lyt2 <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE") %>%
     split_rows_by("SEX") %>%

@@ -17,7 +17,7 @@ NULL
 #'
 #' @examples
 #'
-#' if(interactive()) {
+#' if (interactive()) {
 #'   sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
 #'     labels = c("S.L > 5", "S.L <= 5"))
 #'
@@ -61,7 +61,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   html_output <- if (is.null(y)) {
     x_tag
   } else {
-    tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
+    tags$div(class = "container-fluid", htmltools::tags$div(class = "row",
       tags$div(class = "col-xs-6", x_tag),
       tags$div(class = "col-xs-6", y_tag)
     ))
@@ -105,7 +105,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   )
 
   cat(
-    paste("<!DOCTYPE html>\n",  htmltools::doRenderTags(html_bs)),
+    paste("<!DOCTYPE html>\n", htmltools::doRenderTags(html_bs)),
     file = htmlFile, append = FALSE
   )
 

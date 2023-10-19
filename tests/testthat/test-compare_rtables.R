@@ -3,7 +3,7 @@ test_that("compare_rtables", {
   lyt <- make_big_lyt()
 
   ## hack to force all counts to "happen to be different"
-  dat <- rawdat[- which(rawdat$ARM == "ARM2")[1:9], ]
+  dat <- rawdat[-which(rawdat$ARM == "ARM2")[1:9], ]
   tab <- build_table(lyt, dat)
   cmp <- compare_rtables(tab, tab)
   expect_true(all(cmp == "."))

@@ -11,7 +11,7 @@ library(dplyr)
 
 ## eat the one-time warning
 suppressWarnings(formatters::default_hsep())
-makefakedat <- function(n  = 1000) {
+makefakedat <- function(n = 1000) {
   datadf <- data.frame(stringsAsFactors = FALSE,
     ARM = c("ARM1", sample(c("ARM1", "ARM2"), n - 1, replace = TRUE)),
     SEX = c("M", sample(c("M", "F"), n - 1, replace = TRUE)),
@@ -30,7 +30,7 @@ makefakedat <- function(n  = 1000) {
 
 
 makefakedat2 <- function(n = 1000) {
-  if(n %% 4 != 0) {
+  if (n %% 4 != 0) {
     stop("n not multiple of 4")
   }
 
@@ -49,7 +49,7 @@ makefakedat2 <- function(n = 1000) {
   mu <- 5 + (as.integer(factor(datadf$RACE)) +
     as.integer(factor(datadf$ARM)) +
     as.integer(factor(datadf$SEX))) / 2
-  datadf$VALUE <-  ifelse(datadf$VISIT == "BASELINE",
+  datadf$VALUE <- ifelse(datadf$VISIT == "BASELINE",
     5,
     5 + rnorm(n, mu, 4))
   datadf$PCTDIFF <- NA_real_
@@ -66,7 +66,7 @@ rawdat2 <- makefakedat2()
 
 ## used in multiple test files
 refcompmean <- function(x, .ref_group, .in_ref_col, ...) {
-  if(.in_ref_col)
+  if (.in_ref_col)
     val <- rcell(NULL)
   else
     val <- rcell(mean(x, ...) - mean(.ref_group, ...), format = "xx.xx")
@@ -173,7 +173,7 @@ tt_to_test_wrapping <- function() {
 
 tt_for_wrap <- tt_to_test_wrapping()
 
-tt_to_test_newline_chars <- function(){
+tt_to_test_newline_chars <- function() {
   set.seed(1)
   DM_trick <- DM %>%
     mutate(ARM2 = sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),

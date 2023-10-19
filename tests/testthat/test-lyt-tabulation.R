@@ -280,7 +280,7 @@ test_that("missing vars caught", {
   expect_error(build_table(misscol, rawdat),
     "Split variable [[]SX[]] not found in data being tabulated.")
 
-  missrsplit <-  basic_table() %>%
+  missrsplit <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by("SEX", "gend_label") %>%
     split_rows_by("RACER", "ethn_label") %>%
@@ -318,7 +318,7 @@ test_that("missing vars caught", {
 test_that("error localization works", {
 
   afun <- function(x, .spl_context) {
-    if(NROW(.spl_context) > 0 &&
+    if (NROW(.spl_context) > 0 &&
       .spl_context[NROW(.spl_context), "value", drop = TRUE] == "WHITE")
       stop("error for white statistics")
 
@@ -334,7 +334,7 @@ test_that("error localization works", {
     "Error[^)]*analysis function \\(var[^B]*BMRKR1\\): error for white statistics.*ARM\\[A: Drug X\\]->RACE\\[WHITE\\]")
   # nolint end
   cfun <- function(df, labelstr) {
-    if(labelstr == "B: Placebo")
+    if (labelstr == "B: Placebo")
       stop("placebos are bad")
     in_rows(val = 5)
   }
@@ -485,7 +485,7 @@ test_that("extra args works", {
       rcell(sum(c(NA, x > cutoff), na.rm = na.rm), format = "xx")
     })
 
-  l <-  basic_table() %>%
+  l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
     analyze_colvars(afun = colfuns)
@@ -495,7 +495,7 @@ test_that("extra args works", {
   tbl_noex <- build_table(l, rawdat2)
 
   ## one for each different function in colfuns, assigned correctly
-  l2 <-  basic_table() %>%
+  l2 <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
     analyze_colvars(afun = colfuns, extra_args = list(list(add = 5), list(cutoff = 100)))
@@ -504,7 +504,7 @@ test_that("extra args works", {
   tbl_ex <- build_table(l2, rawdat2)
 
   vals_noex <- row_values(tree_children(tbl_noex)[[1]])
-  vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
+  vals_ex <- row_values(tree_children(tbl_ex)[[1]])
 
   expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
     unlist(vals_ex[c(1, 3)]))
@@ -516,7 +516,7 @@ test_that("extra args works", {
     unname(unlist(vals_ex[c(2, 4)])))
 
   vals_noex <- row_values(tree_children(tbl_noex)[[1]])
-  vals_ex <-  row_values(tree_children(tbl_ex)[[1]])
+  vals_ex <- row_values(tree_children(tbl_ex)[[1]])
 
   expect_identical(unlist(vals_noex[c(1, 3)]) + 5,
     unlist(vals_ex[c(1, 3)]))
@@ -528,7 +528,7 @@ test_that("extra args works", {
     unname(unlist(vals_ex[c(2, 4)])))
 
   ## single argument passed to all functions
-  l2b <-  basic_table() %>%
+  l2b <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_multivar(c("VALUE", "PCTDIFF")) %>%
     analyze_colvars(afun = colfuns, extra_args = list(na.rm = FALSE))
@@ -589,7 +589,7 @@ test_that("Colcounts work correctly", {
     colcount_format = "xx (xx%)") %>%
     split_cols_by("ARM") %>%
     build_table(DM)
-  mf_tbl4_colcounts <- matrix_form(tbl4)$strings[2,]
+  mf_tbl4_colcounts <- matrix_form(tbl4)$strings[2, ]
   expect_identical(mf_tbl4_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
 })
 
@@ -643,7 +643,7 @@ test_that("content extra args for summarize_row_groups works", {
     list(ARM1 = c(9, 6),
       ARM2 = c(5, 6)))
 
-  ##works on root split
+  ## works on root split
 
   l4 <- basic_table() %>%
     split_cols_by("ARM") %>%
@@ -656,7 +656,7 @@ test_that("content extra args for summarize_row_groups works", {
 })
 
 test_that(".df_row analysis function argument works", {
-  afun <- function(x, labelstr = "", .N_col, .df_row)  {
+  afun <- function(x, labelstr = "", .N_col, .df_row) {
     rcell(c(nrow(.df_row), .N_col), format = "(xx.x, xx.x)")
   }
 
@@ -687,7 +687,7 @@ test_that("analysis function arguments work with NA rows in data", {
 
   df <- data.frame(
     a_var = factor(c('a', NA, 'b', 'b', 'a', 'a', 'b', 'c', 'a', NA)),
-    b_var = factor(c(NA,  NA, 'x', 'x', 'y', 'x', 'x', 'y', 'x', NA))
+    b_var = factor(c(NA, NA, 'x', 'x', 'y', 'x', 'x', 'y', 'x', NA))
   )
 
   l <- basic_table() %>%
@@ -829,9 +829,9 @@ test_that("alt_counts_df works", {
 
   ## this inherently checks both that the correct counts (0, 1, 0) are
   ## retrieved and that they propogate to the summary functions
-  expect_identical(list("A: Drug X" = c(70, Inf), ##70/0
+  expect_identical(list("A: Drug X" = c(70, Inf), ## 70/0
     "B: Placebo" = c(56, 56), ## 56/1
-    "C: Combination" = c(61, Inf)), ##61/0
+    "C: Combination" = c(61, Inf)), ## 61/0
   cell_values(tbl[1, ]))
 
   ## breaks (with useful message) when given incompatible alt_counts_df
@@ -923,7 +923,7 @@ test_that("topleft label position works", {
     split_cols_by("ARM") %>%
     split_rows_by("SEX", split_fun = drop_split_levels, page_by = TRUE) %>%
     analyze("AGE")
-  expect_error(build_table(lyt2, DM[0,]), "Page-by split resulted in zero")
+  expect_error(build_table(lyt2, DM[0, ]), "Page-by split resulted in zero")
 
   lyt3 <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM") %>%
@@ -988,7 +988,7 @@ test_that(".spl_context works in content and analysis functions", {
     summarize_row_groups(cfun = cfun) %>%
     analyze("AGE", afun = afun)
 
-  tab <-  build_table(lyt, DM)
+  tab <- build_table(lyt, DM)
 
   strmat <- matrix_form(tab)$strings
 
@@ -1089,13 +1089,13 @@ test_that("cut functions work", {
 
   l3 <- basic_table() %>%
     split_cols_by("ARM") %>%
-    split_cols_by_cutfun("AGE") %>% ##(quartiles("AGE", split_label = "Age") %>%
+    split_cols_by_cutfun("AGE") %>% ## (quartiles("AGE", split_label = "Age") %>%
     analyze("BMRKR2") %>%
     append_topleft("counts")
 
   tbl3 <- build_table(l3, ex_adsl)
 
-  l3b <-  basic_table() %>%
+  l3b <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_cuts("AGE", cuts = rtables:::qtile_cuts(ex_adsl$AGE)) %>%
     analyze("BMRKR2") %>%
@@ -1105,7 +1105,7 @@ test_that("cut functions work", {
 
   expect_identical(tbl3, tbl3b)
 
-  l3c <-  basic_table() %>%
+  l3c <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_quartiles("AGE") %>%
     analyze("BMRKR2") %>%
@@ -1117,7 +1117,7 @@ test_that("cut functions work", {
     unname(unlist(cell_values(tbl3c))))
 
 
-  l3c_cm <-  basic_table() %>%
+  l3c_cm <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by_quartiles("AGE", cumulative = TRUE) %>%
     analyze("BMRKR2") %>%
@@ -1334,7 +1334,7 @@ test_that("qtable works", {
   mean_use_nm <- function(x, .spl_context, ...) {
     rcell(mean(x, ...), format = "xx.xx", label = tail(.spl_context$value, 1))
   }
-  t5b <-  basic_table(show_colcounts = TRUE) %>%
+  t5b <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
     split_cols_by("STRATA1", split_fun = drop_split_levels) %>%
     split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
@@ -1344,7 +1344,7 @@ test_that("qtable works", {
     build_table(ex_adsl)
   nice_comp_table(t5, t5b)
   t6 <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
-  t6b <-  basic_table(show_colcounts = TRUE) %>%
+  t6b <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
     analyze("AGE", summary_list2) %>%
@@ -1356,7 +1356,7 @@ test_that("qtable works", {
     col_vars = "ARM", avar = "AGE", afun = range))
   range_use_nms <- function(x, .spl_context, ...) rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
 
-  t7b <-  basic_table(show_colcounts = TRUE) %>%
+  t7b <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
     split_rows_by("SEX", child_labels = "hidden", split_fun = drop_split_levels) %>%
     analyze("AGE", range_use_nms) %>%
@@ -1407,14 +1407,14 @@ test_that("qtable works", {
   ## compactness
   expect_equal(top_left(t12), "mylabel")
   mpf12 <- matrix_form(t12)
-  expect_equal(mf_strings(mpf12)[3:4,1], levels(ex_adsl$STRATA2))
+  expect_equal(mf_strings(mpf12)[3:4, 1], levels(ex_adsl$STRATA2))
 
   t13 <- qtable(ex_adsl, col_vars = "ARM", avar = "AGE", afun = mean, row_labels = "mylabel")
   expect_identical(top_left(t13), character())
   mpf13 <- matrix_form(t13)
   expect_equal(mf_strings(mpf13)[3, 1], "mylabel")
 
-  expect_error(qtable(ex_adsl , row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
+  expect_error(qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE",
     afun = mean, row_labels = c("ABC", "EFG", "HIJ")),
   "does not agree with number of rows")
 

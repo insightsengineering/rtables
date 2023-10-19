@@ -222,7 +222,7 @@ test_that("rbinding objects with only titles/footers for first object keeps them
   tbl_ab <- rbind(tbl_a, rrow("Total xx", ""), tbl_b)
   expect_identical(main_title(tbl_ab), "Title")
   expect_identical(subtitles(tbl_ab), c("S1", "S2"))
-  expect_identical(main_footer(tbl_ab),  c("F1", "F2"))
+  expect_identical(main_footer(tbl_ab), c("F1", "F2"))
   expect_identical(prov_footer(tbl_ab), c("PF1", "PF2"))
 })
 
@@ -237,6 +237,6 @@ test_that("rbinding objects with identical titles/footers keeps them", {
   tbl_ab <- rbind(tbl_a, tbl_b)
   expect_identical(main_title(tbl_ab), "Title")
   expect_identical(subtitles(tbl_ab), c("S1", "S2", "S3"))
-  expect_identical(main_footer(tbl_ab),  "Footer")
+  expect_identical(main_footer(tbl_ab), "Footer")
   expect_identical(prov_footer(tbl_ab), c("PF1", "PF2"))
 })

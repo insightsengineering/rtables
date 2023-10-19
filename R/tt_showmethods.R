@@ -3,15 +3,15 @@ treestruct <- function(obj, ind = 0L) {
   cat(rep(" ", times = ind),
     sprintf("[%s] %s", class(obj), obj_name(obj)),
     sep = "")
-  if(!is(obj, "ElementaryTable") && nrow(obj@content) > 0) {
+  if (!is(obj, "ElementaryTable") && nrow(obj@content) > 0) {
     crows <- nrow(content_table(obj))
-    ccols <- if(crows == 0) 0 else nc
+    ccols <- if (crows == 0) 0 else nc
     cat(sprintf(" [cont: %d x %d]",
       crows, ccols))
   }
-  if(is(obj, "VTableTree") && length(tree_children(obj))) {
+  if (is(obj, "VTableTree") && length(tree_children(obj))) {
     kids <- tree_children(obj)
-    if(are(kids, "TableRow")) {
+    if (are(kids, "TableRow")) {
       cat(sprintf(" (%d x %d)\n",
         length(kids), nc))
     } else {
@@ -103,7 +103,7 @@ layoutmsg <- function(obj) {
   pos <- tree_pos(obj)
   spllst <- pos_splits(pos)
   spvallst <- pos_splvals(pos)
-  if(is(obj, "LayoutAxisTree")) {
+  if (is(obj, "LayoutAxisTree")) {
     kids <- tree_children(obj)
     return(unlist(lapply(kids, layoutmsg)))
 
@@ -165,15 +165,15 @@ setMethod("spltype_abbrev", "AnalyzeColVarSplit",
 
 
 docat_splitvec <- function(object, indent = 0) {
-  if(indent > 0)
+  if (indent > 0)
     cat(rep(" ", times = indent), sep = "")
-  if(length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
+  if (length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
     tab <- object[[1]]
     msg <- sprintf("A Pre-Existing Table [%d x %d]",
       nrow(tab), ncol(tab))
   } else {
 
-    plds <- ploads_to_str(object) ##lapply(object, spl_payload))
+    plds <- ploads_to_str(object) ## lapply(object, spl_payload))
 
     tabbrev <- sapply(object, spltype_abbrev)
     msg <- paste(collapse = " -> ",
@@ -229,7 +229,7 @@ setMethod("show", "InstantiatedColumnInfo",
     cat("An InstantiatedColumnInfo object",
       "Columns:",
       layoutmsg,
-      if(disp_ccounts(object))
+      if (disp_ccounts(object))
         paste("ColumnCounts:\n",
           paste(col_counts(object),
             collapse = ", ")),

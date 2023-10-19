@@ -236,8 +236,8 @@ Suppose we wanted combinations levels for all non-white colors, and
 for white and black colors. We do this like so:
 
 ```{r}
-combodf <- tribble(~valname,    ~label,            ~levelcombo,         ~exargs,
-  "non-white", "Non-White",       c("black", "red"),   list(),
+combodf <- tribble(~valname, ~label, ~levelcombo, ~exargs,
+  "non-white", "Non-White", c("black", "red"), list(),
   "blackwhite", "Black or White", c("black", "white"), list())
 
 
@@ -322,7 +322,7 @@ rev_lev <- function(df, spl, vals, labels, ...) {
   ## spl_variable() gives us the variable
   var <- spl_variable(spl)
   vec <- df[[var]]
-  levs <- if(is.character(vec)) unique(vec) else levels(vec)
+  levs <- if (is.character(vec)) unique(vec) else levels(vec)
   df[[var]] <- factor(vec, levels = rev(levs))
   df
 }
@@ -332,8 +332,8 @@ rem_lev_facet <- function(torem) {
     var <- spl_variable(spl)
     vec <- df[[var]]
     bad <- vec == torem
-    df <- df[!bad,]
-    levs <- if(is.character(vec)) unique(vec) else levels(vec)
+    df <- df[!bad, ]
+    levs <- if (is.character(vec)) unique(vec) else levels(vec)
     df[[var]] <- factor(as.character(vec[!bad]), levels = setdiff(levs, torem))
     df
   }
@@ -394,10 +394,10 @@ machinery and has no meaningful statistical purpose.
 ```{r}
 silly_core_split <- function(spl, df, vals, labels, .spl_context) {
   make_split_result(c("first", "lowmid", "highmid", "last"),
-    datasplit = list(df[1:100,],
-      df[101:500,],
-      df[501:900,],
-      df[901:1000,]),
+    datasplit = list(df[1:100, ],
+      df[101:500, ],
+      df[501:900, ],
+      df[901:1000, ]),
     labels = c("first 100",
       "obs 101-500",
       "obs 501-900",

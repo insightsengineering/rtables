@@ -1,11 +1,11 @@
 context("Indent modifiers")
 
 test_that("indent modifiers propogated from analyze calls properly", {
-  lyt  <- basic_table() %>%
+  lyt <- basic_table() %>%
     analyze("Sepal.Width", afun = mean, show_labels = "visible") %>%
     analyze("Sepal.Width", afun = median, show_labels = "hidden", indent_mod = 2L,
       table_names = "SecondAge")
-  tab <-  build_table(lyt, iris)
+  tab <- build_table(lyt, iris)
   expect_equal(rtables:::indent_mod(tree_children(tab)[[2]]), 2L)
 
   expect_equal(make_row_df(tab)$indent, c(0, 1, 2))
@@ -55,7 +55,7 @@ test_that("indents are correct in make_row_df", {
   expect_identical(rep(c(0, 1, 1, 1, 1, 1, 1), 2),
     pgdf3$indent)
 
-  l4 <-  basic_table() %>%
+  l4 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
@@ -70,7 +70,7 @@ test_that("indents are correct in make_row_df", {
   expect_identical(rep(c(0, 0, 2, 2, 0, 2, 2), 2),
     pagdf4$indent)
 
-  l5 <-  basic_table() %>%
+  l5 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2) %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
     split_rows_by("FACTOR2", "Factor2",
@@ -85,7 +85,7 @@ test_that("indents are correct in make_row_df", {
   expect_identical(rep(c(2, 1, 3, 3, 1, 3, 3), 2),
     pgdf5$indent)
 
-  l6 <-  basic_table() %>%
+  l6 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 0,
       label_pos = "visible") %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
@@ -107,7 +107,7 @@ test_that("indents are correct in make_row_df", {
   ## children inherit table idnent mod, NOT content indent_mod, when thsoe two
   ## values are different.
 
-  l7 <-  basic_table() %>%
+  l7 <- basic_table() %>%
     split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2,
       label_pos = "visible") %>%
     summarize_row_groups("RACE", label_fstr = "%s (n)", indent_mod = -1) %>%
@@ -127,7 +127,7 @@ test_that("indents are correct in make_row_df", {
 test_that("getters and setters work", {
 
 
-  t0 <-  basic_table() %>%
+  t0 <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
     summarize_row_groups("STUDYID", label = "subgroup summary") %>%
@@ -182,7 +182,7 @@ test_that("clear_indent_mods works as desired", {
     analyze("AGE", indent_mod = -1L)
   tm <- build_table(lytm, ex_adae)
 
-  t0 <-  basic_table() %>%
+  t0 <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
     summarize_row_groups("STUDYID", label = "subgroup summary") %>%

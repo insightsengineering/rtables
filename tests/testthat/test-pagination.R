@@ -5,7 +5,7 @@ test_that("Page by splitting works", {
 
 
 
-  lyt <- basic_table(title = "big title")  %>%
+  lyt <- basic_table(title = "big title") %>%
     split_rows_by("SEX", page_by = TRUE) %>%
     analyze("AGE")
 
@@ -17,7 +17,7 @@ test_that("Page by splitting works", {
     levels(DM$SEX))
 
   expect_error({
-    basic_table(title = "big title")  %>%
+    basic_table(title = "big title") %>%
       analyze("AGE") %>%
       split_rows_by("SEX", page_by = TRUE) %>%
       analyze("AGE")},
@@ -60,7 +60,7 @@ test_that("export_as_txt prints split level header correctly when using page_by"
     split_rows_by("AVISIT", label_pos = "topleft",
       split_fun = keep_split_levels("SCREENING")) %>%
     analyze("AVAL") %>%
-    build_table(ex_adlb[ex_adlb$PARAMCD == "ALT",])
+    build_table(ex_adlb[ex_adlb$PARAMCD == "ALT", ])
   tbl_txt <- tbl %>% export_as_txt(lpp = 100)
 
   expect_true(grepl("^\naaa: ALT", tbl_txt))
@@ -73,7 +73,7 @@ test_that("export_as_txt prints split level header correctly when using page_by"
     split_rows_by("AVISIT", label_pos = "topleft",
       split_fun = keep_split_levels("SCREENING")) %>%
     analyze("AVAL") %>%
-    build_table(ex_adlb[ex_adlb$PARAMCD != "IGA",])
+    build_table(ex_adlb[ex_adlb$PARAMCD != "IGA", ])
   tbl_txt <- tbl %>% export_as_txt(lpp = 100)
 
   expect_true(grepl("^\naaa: ALT", tbl_txt))
@@ -82,7 +82,7 @@ test_that("export_as_txt prints split level header correctly when using page_by"
 
 test_that("vertical and horizontal pagination work", {
 
-  spoof_df <- data.frame(arm = factor(c("a", "b","c", "d", "e", "f")),
+  spoof_df <- data.frame(arm = factor(c("a", "b", "c", "d", "e", "f")),
     var1 = 6)
   simple_lyt <- basic_table() %>%
     split_cols_by("arm") %>%
@@ -142,7 +142,7 @@ test_that("vertical and horizontal pagination work", {
     lapply(cpag1, dim))
   ## ordering: horizontal pagination first then vertical in resulting list
   expect_equal(sapply(cpag1, names),
-    rep(c("a", "b", "c", "d", "e","f"), 10))
+    rep(c("a", "b", "c", "d", "e", "f"), 10))
 
   tt <- tt_to_export()
   main_title(tt) <- "main title"
@@ -274,7 +274,7 @@ test_that("cell and column wrapping works in pagination", {
 
   # propose_column_widths(matrix_form(tt_for_wrap, TRUE))
   pg_tbl_w_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL, colwidths = clw)
-  pg_tbl_no_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL,  verbose = TRUE)
+  pg_tbl_no_clw <- paginate_table(tt_for_wrap, lpp = lpp_tmp, cpp = NULL, verbose = TRUE)
   res1 <- toString(matrix_form(pg_tbl_no_clw[[1]], TRUE))
   res2 <- toString(matrix_form(tt_for_wrap, TRUE))
 
@@ -327,7 +327,7 @@ test_that("cell and column wrapping works in pagination", {
 })
 
 test_that("Pagination works with section dividers", {
-  lyt <- basic_table(title = "big title")  %>%
+  lyt <- basic_table(title = "big title") %>%
     split_rows_by("SEX", section_div = "~") %>%
     split_rows_by("ARM") %>%
     analyze("AGE")
@@ -350,7 +350,7 @@ test_that("Pagination works with section dividers", {
 
   expect_identical(
     paste0(export_as_txt(tail(ttlst[[1]], 1), hsep = "-", paginate = FALSE),
-      export_as_txt(head(ttlst[[2]], 1), hsep = "-" , paginate = FALSE)),
+      export_as_txt(head(ttlst[[2]], 1), hsep = "-", paginate = FALSE)),
     paste0(
       "big title\n\n--------------\n       all obs\n--------------\nMean    34.28 \n",
       "big title\n\n-----------\n    all obs\n-----------\nU          \n"

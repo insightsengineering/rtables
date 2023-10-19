@@ -168,7 +168,7 @@ test_that("make_afun .indent_mods argument works", {
   a_imod2 <- make_afun(a_imod, .indent_mods = c(nrow_df = 2L,
     .N_col = 1L))
   imodres2 <- a_imod2(iris, 5)
-  expect_identical(get_imods(imodres2), #vapply(imodres2, rtables:::indent_mod, 1L),
+  expect_identical(get_imods(imodres2), # vapply(imodres2, rtables:::indent_mod, 1L),
     c(nrow_df = 2L, .N_col = 1L, a = 1L, b = 2L))
 
   tbl <- basic_table() %>%
@@ -223,7 +223,7 @@ test_that("make_afun+build_table integration tests", {
   }
   a_summary <- make_afun(
     s_summary,
-    .labels = c(n = "n subjects"),  # only overwrite the label of the `n` statistics here.
+    .labels = c(n = "n subjects"), # only overwrite the label of the `n` statistics here.
     .formats = c(n = "xx",
       mean_sd = "xx.xx (xx.xx)",
       min_max = "xx.xx - xx.xx")
@@ -240,7 +240,7 @@ test_that("make_afun+build_table integration tests", {
       "My mean and SD",
       "Range"))
 
-  tbl2 <-  basic_table() %>%
+  tbl2 <- basic_table() %>%
     split_cols_by("Species") %>%
     analyze(
       "Sepal.Length",
@@ -285,7 +285,7 @@ test_that("make_afun+build_table integration tests", {
       "My mean and SD",
       "Range"))
 
-  tbl4 <-  basic_table() %>%
+  tbl4 <- basic_table() %>%
     split_cols_by("Species") %>%
     analyze(
       "Sepal.Length",
@@ -359,7 +359,7 @@ test_that("call-time ... passed down correctly by funs constructed by make_afun"
 test_that(".format_na_strs works in make_afun", {
   s_fun <- function(x, ...) list(stuff = NA)
 
-  afun <- make_afun(s_fun, .stats  = "stuff",
+  afun <- make_afun(s_fun, .stats = "stuff",
     .formats = list(stuff = "xx.x"),
     .format_na_strs = list(stuff = "wat"))
   res <- afun(1:10)

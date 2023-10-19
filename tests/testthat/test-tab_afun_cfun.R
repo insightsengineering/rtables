@@ -186,7 +186,7 @@ test_that("Error localization for missing split variable when done in alt_count_
 })
 
 test_that("Error localization for missmatch split variable when done in alt_count_df", {
-  afun_tmp <- function(x, .alt_df_row, .spl_context,...) {
+  afun_tmp <- function(x, .alt_df_row, .spl_context, ...) {
     # Important check that order is aligned even if source levels are not
     check_val <- unique(.alt_df_row$ARMCD)
     # This is something mysterious happening in splits for which if the values are all

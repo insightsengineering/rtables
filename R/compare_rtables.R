@@ -3,22 +3,22 @@
 #' Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 #' cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 #' should not be there. If `structure` is set to `TRUE`, \code{C} indicates
-#'columnar structure mismatch, \code{R} indicates row-structure mismatch, and
-#'\code{S} indicates mismatch in both row and column structure.
+#' columnar structure mismatch, \code{R} indicates row-structure mismatch, and
+#' \code{S} indicates mismatch in both row and column structure.
 #'
-#'@param object `rtable` to test
-#'@param expected `rtable` expected
-#'@param tol numerical tolerance
-#'@param comp.attr boolean. Compare format of cells. Other attributes are
+#' @param object `rtable` to test
+#' @param expected `rtable` expected
+#' @param tol numerical tolerance
+#' @param comp.attr boolean. Compare format of cells. Other attributes are
 #'  silently ignored.
-#'@param structure boolean. Should structure (in the form of column and row
+#' @param structure boolean. Should structure (in the form of column and row
 #'  paths to cells) be compared. Currently defaults to `FALSE`, but this is
 #'  subject to change in future versions.
 #'
-#'@note In its current form \code{compare_rtables} does not take structure into
-#'account, only row and cell position.
+#' @note In its current form \code{compare_rtables} does not take structure into
+#' account, only row and cell position.
 #'
-#'@return a matrix of class \code{"rtables_diff"} representing the differences
+#' @return a matrix of class \code{"rtables_diff"} representing the differences
 #'  between \code{object} and \code{expected} as described above.
 #' @export
 #'
@@ -29,7 +29,7 @@
 #'
 #' compare_rtables(object = t1, expected = t2)
 #'
-#' if(interactive()){
+#' if (interactive()) {
 #'   Viewer(t1, t2)
 #' }
 #'
@@ -102,7 +102,7 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
 
   X <- matrix(rep(".", dim_out[1] * dim_out[2]), ncol = dim_out[2])
   row.names(X) <- as.character(1:dim_out[1])
-  colnames(X) <-  as.character(1:dim_out[2])
+  colnames(X) <- as.character(1:dim_out[2])
 
   if (!identical(names(object), names(expected))) {
     attr(X, "info") <- "column names are not the same"
@@ -112,7 +112,7 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
     attr(X, "info") <- c(attr(X, "info"),
       "cell attributes have not been compared")
   }
-  if(!identical(row.names(object), row.names(expected)))
+  if (!identical(row.names(object), row.names(expected)))
     attr(X, "info") <- c(attr(X, "info"), "row labels are not the same")
 
   nro <- nrow(object)
@@ -120,18 +120,18 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
   nco <- ncol(object)
   nce <- ncol(expected)
 
-  if(nco < nce)
+  if (nco < nce)
     X[, seq(nco + 1, nce)] <- "-"
-  else if(nce < nco)
+  else if (nce < nco)
     X[, seq(nce + 1, nco)] <- "+"
-  if(nro < nre)
+  if (nro < nre)
     X[seq(nro + 1, nre), ] <- "-"
-  else if(nre < nro)
+  else if (nre < nro)
     X[seq(nre + 1, nro), ] <- "+"
 
   orig_object <- object # nolint
   orig_expected <- expected # nolint
-  if(nro != nre || nco != nce) {
+  if (nro != nre || nco != nce) {
     object <- object[1:min(nro, nre), 1:min(nco, nce), drop = FALSE]
     expected <- expected[1:min(nro, nre), 1:min(nco, nce), drop = FALSE]
     inner <- compare_rtables(object, expected, tol = tol, comp.attr = comp.attr, structure = structure)
@@ -145,7 +145,7 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
 
   orows <- cell_values(object, omit_labrows = FALSE)
   erows <- cell_values(expected, omit_labrows = FALSE)
-  if(nrow(object) == 1) {
+  if (nrow(object) == 1) {
     orows <- list(orows)
     erows <- list(erows)
   }
@@ -155,7 +155,7 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
   rpo <- row_paths(object)
   rpe <- row_paths(expected)
 
-  if(comp.attr) {
+  if (comp.attr) {
     ofmts <- value_formats(object)
     efmts <- value_formats(expected)
     ## dim(ofmts) <- NULL
@@ -169,18 +169,18 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
   }
 
 
-  if(structure) {
+  if (structure) {
     rp_mismatches <- !mapply(identical, x = rpo, y = rpe)
     cpo <- col_paths(object)
     cpe <- col_paths(expected)
     cp_mismatches <- !mapply(identical, x = cpo, y = cpe)
 
-    if(any(rp_mismatches))
+    if (any(rp_mismatches))
     # P for (row or column) path do not match
       X[rp_mismatches, ] <- "R"
-    if(any(cp_mismatches)) {
+    if (any(cp_mismatches)) {
       crep <- rep("C", nrow(X))
-      if(any(rp_mismatches))
+      if (any(rp_mismatches))
         crep[rp_mismatches] <- "P"
       X[, cp_mismatches] <- rep(crep, sum(cp_mismatches))
     }
@@ -234,14 +234,14 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
 ## }
 
 compare_value <- function(x, y, tol) {
-  if(identical(x, y) ||
+  if (identical(x, y) ||
     (is.numeric(x) && is.numeric(y) && max(abs(x - y)) <= tol))
     "."
   else
     "X"
 }
 compare_rrows <- function(row1, row2, tol, ncol) {
-  if(length(row1) == ncol &&
+  if (length(row1) == ncol &&
     length(row2) == ncol) {
     mapply(compare_value, x = row1, y = row2, tol = tol, USE.NAMES = FALSE)
   } else if (length(row1) == 0 &&

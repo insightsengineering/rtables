@@ -11,7 +11,7 @@ test_that("Result Data Frame generation works v0", {
 
   result_df <- as_result_df(tbl, spec_version)
   expect_identical(result_df[2, "ARM1.M"][[1]],
-    c(37, 37/256))
+    c(37, 37 / 256))
 
   expect_identical(nrow(tbl) - 8L,
     nrow(result_df))
@@ -26,7 +26,7 @@ test_that("Result Data Frame generation works v0", {
     analyze(c("AGE", "BMRKR2"))
 
   tbl2 <- build_table(lyt, ex_adsl)
-  result_df2 <- as_result_df(tbl2, spec_version )
+  result_df2 <- as_result_df(tbl2, spec_version)
 
   ## regression test
   expect_false(any(is.na(result_df2$spl_var_1)))

@@ -352,7 +352,7 @@ useful for introspection purposes are the `label`, `name`,
 information in the returned data.frame is used for pagination)
 
 ```{r}
-make_row_df(tbl)[,c("label", "name", "abs_rownumber", "path", "node_class")]
+make_row_df(tbl)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
 By default `make_row_df()` summarizes only visible rows, but setting
@@ -361,7 +361,7 @@ including the full hierarchy of subtables, including those that aren't
 represented directly by any visible rows:
 
 ```{r}
-make_row_df(tbl, visible_only = FALSE)[,c("label", "name", "abs_rownumber", "path", "node_class")]
+make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
 `make_col_df()` similarly accepts `visible_only`, though here the

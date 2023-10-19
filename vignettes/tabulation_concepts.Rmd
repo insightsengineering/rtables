@@ -149,7 +149,7 @@ lyt3 <- basic_table() %>%
   }, var_labels = "foo label") %>%
   analyze("x", function(x) {
     in_rows(
-      "more rows 1" =  rcell(median(x), format = "xx.x"),
+      "more rows 1" = rcell(median(x), format = "xx.x"),
       "even more rows 1" = rcell(IQR(x), format = "xx.xx")
     )
   }, var_labels = "bar label", format = "xx.xx")

@@ -27,7 +27,7 @@ test_sfundf <- function(df, .N_total) { # nocov start
       n_unique = c(.N_total, length(unique(x))))))
 } # nocov end
 
-test_afundf <-  make_afun(test_sfundf,
+test_afundf <- make_afun(test_sfundf,
   .labels = c("Min." = "Minimum",
     "1st Qu." = "1st Quartile",
     "3rd Qu." = "Third Quartile",

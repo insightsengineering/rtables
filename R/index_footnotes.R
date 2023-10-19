@@ -1,5 +1,5 @@
 .reindex_one_pos <- function(refs, cur_idx_fun) {
-  if(length(refs) == 0)
+  if (length(refs) == 0)
     return(refs)
 
   lapply(refs, function(refi) {
@@ -7,7 +7,7 @@
     ## special and don't get reindexed cause they're not numbered
     ## to begin with
     idx <- ref_index(refi)
-    if(is.na(idx) || !is.na(as.integer(idx)))
+    if (is.na(idx) || !is.na(as.integer(idx)))
       ref_index(refi) <- cur_idx_fun()
     refi
   })
@@ -22,7 +22,7 @@ setMethod(".idx_helper", "TableRow",
     row_footnotes(tr) <- .reindex_one_pos(row_footnotes(tr),
       cur_idx_fun)
 
-    cell_footnotes(tr) <- lapply(cell_footnotes(tr), ##crfs,
+    cell_footnotes(tr) <- lapply(cell_footnotes(tr), ## crfs,
       .reindex_one_pos,
       cur_idx_fun = cur_idx_fun
     )
@@ -31,7 +31,7 @@ setMethod(".idx_helper", "TableRow",
 
 setMethod(".idx_helper", "VTableTree",
   function(tr, cur_idx_fun) {
-    if(!labelrow_visible(tr)) {
+    if (!labelrow_visible(tr)) {
       stop("got a row footnote on a non-visible label row. this should never happen") # nocov
     }
     lr <- tt_labelrow(tr)
@@ -56,7 +56,7 @@ index_col_refs <- function(tt, cur_idx_fun) {
   col_fnotes_here(ctree) <- .reindex_one_pos(col_fnotes_here(ctree),
     cur_idx_fun)
 
-  if(is(ctree, "LayoutColTree"))
+  if (is(ctree, "LayoutColTree"))
     tree_children(ctree) <- lapply(tree_children(ctree),
       .index_col_refs_inner,
       cur_idx_fun = cur_idx_fun)
@@ -87,18 +87,18 @@ update_ref_indexing <- function(tt) {
     curind <<- curind + 1L
     curind
   }
-  if(ncol(tt) > 0)
-    tt <- index_col_refs(tt, cur_index) ##col_info(tt) <- index_col_refs(col_info(tt), cur_index)
+  if (ncol(tt) > 0)
+    tt <- index_col_refs(tt, cur_index) ## col_info(tt) <- index_col_refs(col_info(tt), cur_index)
   ## TODO when column refs are a thing we will
   ## still need to do those here before returning!!!
-  if(nrow(tt) == 0)
+  if (nrow(tt) == 0)
     return(tt)
 
 
   rdf <- make_row_df(tt)
 
   rdf <- rdf[rdf$nreflines > 0, ]
-  if(nrow(rdf) == 0)
+  if (nrow(rdf) == 0)
     return(tt)
 
   for (i in seq_len(nrow(rdf))) {

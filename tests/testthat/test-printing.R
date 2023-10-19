@@ -156,7 +156,7 @@ test_that("newline in column names and possibly cell values work", {
     split_rows_by("SEX") %>%
     analyze("AGE", afun = function(x) {
       mn <- round(mean(x), 2)
-      if(!is.nan(mn) && mn > mean(DM$AGE))
+      if (!is.nan(mn) && mn > mean(DM$AGE))
         val <- paste(mn, "  ^  ", sep = "\n")
       else
         val <- paste(mn)
@@ -204,7 +204,7 @@ test_that("alignment works", {
     gsub("—", horizontal_sep(aligntab),
       "         all obs\n————————————————\nleft     l      \nright          r\ncenter      c   \n"))
 
-  lyt2 <-  basic_table() %>%
+  lyt2 <- basic_table() %>%
     analyze("AGE", function(x) {
       in_rows(.list = list(left = "l", right = "r", center = "c"),
         .aligns = c(left = "left", right = "right", center = "center"))
@@ -284,12 +284,12 @@ test_that("Various Printing things work", {
   tab <- build_table(lyt, rawdat)
   ## treestruct(tab)
 
-  table_structure(tab, detail = "subtable") ##treestruct(tab)
-  table_structure(tab, detail = "row") ##treestruct(tab)
+  table_structure(tab, detail = "subtable") ## treestruct(tab)
+  table_structure(tab, detail = "row") ## treestruct(tab)
 
   ## this is not intended to be a valid layout, it just
   ## tries to hit every type of split for the print machinery
-  splvec <- rtables:::SplitVector(lst = list(##rtables:::NULLSplit(),
+  splvec <- rtables:::SplitVector(lst = list( ## rtables:::NULLSplit(),
     rtables:::AllSplit(split_label = "MyAll"),
     rtables:::RootSplit("MyRoot"),
     ManualSplit(c("0", "1", "2"), label = LETTERS[1:3]),
@@ -333,7 +333,7 @@ test_that("section_div works throughout", {
   tbl <- build_table(lyt, DM)
 
   mylns <- strsplit(toString(tbl), "\\n")[[1]]
-  expect_identical(mylns[9],  "                        ")
+  expect_identical(mylns[9], "                        ")
   expect_identical(mylns[12], "------------------------")
   expect_identical(length(mylns), 31L) ## sect div not printed for last one
 })

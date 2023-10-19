@@ -121,7 +121,7 @@ library(dplyr)
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
 
 biomarker_ave <- function(x, ...) {
-  val <- if(length(x) > 0) round(mean(x), 2) else "no data"
+  val <- if (length(x) > 0) round(mean(x), 2) else "no data"
   in_rows(
     "Biomarker 1 (mean)" = rcell(val)
   )

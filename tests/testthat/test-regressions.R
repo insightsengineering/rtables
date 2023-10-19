@@ -150,7 +150,7 @@ test_that("rcell on CellValue overrides attrs as necessary", {
   val <- CellValue(c(100, .5), format = "xx (xx.x%)", label = "oldlabel",
     colspan = 2L,
     indent_mod = 2L)
-  val2 <-  CellValue(c(100, .5), format = "xx (xx.xx%)", label = "new label",
+  val2 <- CellValue(c(100, .5), format = "xx (xx.xx%)", label = "new label",
     colspan = 3L,
     indent_mod = 3L)
   expect_identical(rcell(val, format = "xx (xx.xx%)", label = "new label",
@@ -205,7 +205,7 @@ test_that("calls to make_afun within loop work correctly", {
       afun <- make_afun(
         dummy_stats_function,
         .stats = "s_mean",
-        .labels =  c(s_mean = vv[i]), #set labels here to match variable name
+        .labels = c(s_mean = vv[i]), # set labels here to match variable name
         .formats = c(s_mean = "xx.x")
       )
 
@@ -269,7 +269,7 @@ test_that("cell_values works when you path all the way to the row", {
     split_cols_by("ARM") %>%
     analyze(c("SEX", "AGE")) %>%
     build_table(ex_adsl)
-  res <- cell_values(tbl, c("AGE", "Mean"),  c("ARM", "B: Placebo"))
+  res <- cell_values(tbl, c("AGE", "Mean"), c("ARM", "B: Placebo"))
   expect_identical(res[[1]], mean(subset(ex_adsl, ARM == "B: Placebo")$AGE))
 })
 
@@ -444,14 +444,14 @@ test_that("no max is -Inf warnings from make_row_df when content rows exist in p
 ## discovered while preparing response for https://github.com/insightsengineering/rtables/issues/307
 test_that("specifying function format with no cfun in summarize_row_groups works", {
 
-  formfun <- function(x, output) if(x[1] == 0) "0" else format_value(x, "xx (xx.x%)", output = output)
+  formfun <- function(x, output) if (x[1] == 0) "0" else format_value(x, "xx (xx.x%)", output = output)
 
   lyt <- basic_table() %>%
     split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-    split_rows_by("RACE", split_label = "Ethnicity", #5
+    split_rows_by("RACE", split_label = "Ethnicity", # 5
       label_pos = "topleft",
       split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
-    summarize_row_groups(format = formfun) %>%                       #4
+    summarize_row_groups(format = formfun) %>% # 4
     analyze("AGE", afun = mean, format = "xx.x")
 
   tbl <- build_table(lyt, DM[1:15, ]) # WHITE-F is 0  in the first 15 rows...
@@ -479,7 +479,7 @@ test_that("child_label = hidden does not affect tree structure/pathing", {
 
   tbl <- build_table(lyt, df)
 
-  lyt2 <-  basic_table() %>%
+  lyt2 <- basic_table() %>%
     split_cols_by("ARM", ref_group = "ARM A") %>%
     split_rows_by("FCT") %>%
     analyze("val", afun = s_test)
@@ -534,7 +534,7 @@ test_that("indent mod preserved when paginating between multi-analyses", {
 
   ## helper that omits the pct entirely if the count is 0
   count_pct <- function(x, .N_col, ...) {
-    if(x == 0) {
+    if (x == 0) {
       rcell(0, format = "xx")
     } else {
       rcell(c(x, x / .N_col), format = "xx (xx.x%)")
@@ -559,7 +559,7 @@ test_that("indent mod preserved when paginating between multi-analyses", {
   res <- paginate_table(tab, lpp = 10, verbose = TRUE)
 
   rdf <- make_row_df(res[[2]])
-  expect_equal(rdf$indent[2], #smoker row
+  expect_equal(rdf$indent[2], # smoker row
     0)
 })
 

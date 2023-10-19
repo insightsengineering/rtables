@@ -46,25 +46,25 @@ test_that("cell_values function works as desired", {
     c("ARM", "*", "SEX", "M"))
   expect_identical(cvres5, cvres4[seq(2, 6, by = 2)])
   ## all columns
-  cvres6 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
+  cvres6 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"))
 
   ## all columns for the Combination arm
-  cvres7 <-  cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"),
+  cvres7 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
     c("ARM", "C: Combination"))
 
   expect_identical(cvres6[5:6],
     cvres7)
 
-  cvres8 <- cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+  cvres8 <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
     c("ARM", "C: Combination", "SEX", "M"))
-  vares8 <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+  vares8 <- value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
     c("ARM", "C: Combination", "SEX", "M"))
   expect_identical(cvres8[[1]], vares8)
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B"),
+  expect_error(value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
     c("ARM", "C: Combination", "SEX", "M")))
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+  expect_error(value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
     c("ARM", "C: Combination", "SEX")))
-  expect_error(value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
+  expect_error(value_at(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE"),
     c("ARM", "C: Combination")))
 
   allrows <- collect_leaves(tbl, TRUE, TRUE)
@@ -348,7 +348,7 @@ test_that("label_at_path works", {
   tab5 <- tab
 
   newlab5 <- "race var label"
-  label_at_path(tab5, c("root", "RACE")) <-  newlab5
+  label_at_path(tab5, c("root", "RACE")) <- newlab5
   expect_identical(row.names(tab5), c(newlab5, orig_labs))
 
   rps <- row_paths(tab)
@@ -360,7 +360,7 @@ test_that("label_at_path works", {
   newthangalangs <- paste(orig_labs, "redux")
 
   tab7 <- tab
-  for(i in seq_along(orig_labs))
+  for (i in seq_along(orig_labs))
     label_at_path(tab7, rps[[i]]) <- newthangalangs[i]
 
   expect_identical(newthangalangs,

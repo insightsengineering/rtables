@@ -17,12 +17,12 @@ find_degen_struct <- function(tt) {
   degen <- list()
 
   recurse_check <- function(tti, path) {
-    if(is(tti, "VTableTree")) {
+    if (is(tti, "VTableTree")) {
       kids <- tree_children(tti)
-      if(length(kids) == 0) {
+      if (length(kids) == 0) {
         degen <<- c(degen, list(path))
       } else {
-        for(i in seq_along(kids)) {
+        for (i in seq_along(kids)) {
           recurse_check(kids[[i]], path = c(path, names(kids)[i]))
         }
       }
@@ -71,10 +71,10 @@ validate_table_struct <- function(tt) {
 
 ## XXX this doesn't handle content paths correctly
 .path_to_disp <- function(pth) {
-  if(length(pth) == 1)
+  if (length(pth) == 1)
     return(pth)
   has_cont <- any(pth == "@content")
-  if(has_cont) {
+  if (has_cont) {
     contpos <- which(pth == "@content")
     cont_disp <- paste(tail(pth, length(pth) - contpos + 1),
       collapse = "->")
@@ -85,8 +85,8 @@ validate_table_struct <- function(tt) {
 
   topaste <- character(0)
   fullpth <- pth
-  while(length(pth) > 0) {
-    if(length(pth) <= 1) {
+  while (length(pth) > 0) {
+    if (length(pth) <= 1) {
       topaste <- c(topaste, pth)
       pth <- character()
     } else {
@@ -109,7 +109,7 @@ make_degen_message <- function(degen_pths, tt) {
   msg <- sprintf(paste0("Invalid table - found %d (sub)structures which contain no data rows.",
     "\n\tThe first occured at path:  %s"),
   length(degen_pths), .path_to_disp(degen_pths[[1]]))
-  if(length(degen_pths) == 1 && length(degen_pths[[1]]) == 1) {
+  if (length(degen_pths) == 1 && length(degen_pths[[1]]) == 1) {
     msg <- paste(msg, "  Likely Cause: Empty data or first row split on variable with only NA values",
       sep = "\n")
   } else if (all(make_row_df(tt)$node_class %in% c("LabelRow", "ContentRow"))) {
@@ -127,14 +127,14 @@ make_degen_message <- function(degen_pths, tt) {
 #' Defaults to `FALSE`
 assert_valid_table <- function(tt, warn_only = FALSE) {
   degen_pths <- find_degen_struct(tt)
-  if(length(degen_pths) == 0)
+  if (length(degen_pths) == 0)
     return(TRUE)
 
   ## we failed, now we build an informative error/warning message
 
   msg <- make_degen_message(degen_pths, tt)
 
-  if(!warn_only)
+  if (!warn_only)
     stop(msg)
   warning(msg)
   return(FALSE)
@@ -188,12 +188,12 @@ sanitize_table_struct <- function(tt, empty_msg = "-- This Section Contains No D
     table_inset = table_inset(tt))
   degen_pths <- find_degen_struct(tt)
 
-  if(identical(degen_pths, list("root"))) {
+  if (identical(degen_pths, list("root"))) {
     tree_children(tt) <- list(empty_row = emptyrow)
     return(tt)
   }
 
-  for(pth in degen_pths) {
+  for (pth in degen_pths) {
     ## FIXME this shouldn't be necessary. why is it?
     tti <- tt_at_path(tt, path = pth)
     tree_children(tti) <- list(empty_section = emptyrow)

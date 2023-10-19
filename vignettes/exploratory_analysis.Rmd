@@ -70,7 +70,7 @@ generating the table. The code below will generate an error.
 
 ```{r, eval = FALSE}
 tmp_adsl <- ex_adsl
-tmp_adsl$new <- rep_len(c("","A", "B"), nrow(tmp_adsl))
+tmp_adsl$new <- rep_len(c("", "A", "B"), nrow(tmp_adsl))
 
 qtable(tmp_adsl, row_vars = "new")
 ```
@@ -191,7 +191,7 @@ elements are named, the names are used as row labels.
 
 ```{r}
 fivenum2 <- function(x) {
-  setNames(as.list(fivenum(x)), c("min","Q1","MED","Q3","max"))
+  setNames(as.list(fivenum(x)), c("min", "Q1", "MED", "Q3", "max"))
 }
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum2)
 ```

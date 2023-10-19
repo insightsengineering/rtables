@@ -1,12 +1,12 @@
 insert_brs <- function(vec) {
-  if(length(vec) == 1) {
+  if (length(vec) == 1) {
     ret <- list(vec)
   } else {
     nout <- length(vec) * 2 - 1
     ret <- vector("list", nout)
-    for(i in seq_along(vec)) {
+    for (i in seq_along(vec)) {
       ret[[2 * i - 1]] <- vec[i]
-      if(2 * i < nout) {
+      if (2 * i < nout) {
         ret[[2 * i]] <- tags$br()
       }
     }
@@ -38,8 +38,8 @@ div_helper <- function(lst, class) {
 #' tbl <- rtable(
 #'   header = LETTERS[1:3],
 #'   format = "xx",
-#'   rrow("r1", 1,2,3),
-#'   rrow("r2", 4,3,2, indent = 1),
+#'   rrow("r1", 1, 2, 3),
+#'   rrow("r2", 4, 3, 2, indent = 1),
 #'   rrow("r3", indent = 2)
 #' )
 #'
@@ -77,9 +77,9 @@ as_html <- function(x,
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
   cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)), ncol = nc)
 
-  for(i in unique(mat$line_grouping)) {
+  for (i in unique(mat$line_grouping)) {
     rows <- which(mat$line_grouping == i)
-    for(j in seq_len(ncol(mat$strings))) {
+    for (j in seq_len(ncol(mat$strings))) {
       curstrs <- mat$strings[rows, j]
       curspans <- mat$spans[rows, j]
       curaligns <- mat$aligns[rows, j]
@@ -87,12 +87,12 @@ as_html <- function(x,
       curspn <- unique(curspans)
       stopifnot(length(curspn) == 1)
       inhdr <- i <= nrh
-      tagfun <- if(inhdr) tags$th else tags$td
+      tagfun <- if (inhdr) tags$th else tags$td
       algn <- unique(curaligns)
       stopifnot(length(algn) == 1)
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
-        class = if(j > 1 || i > nrh) paste0("text-", algn),
+        class = if (j > 1 || i > nrh) paste0("text-", algn),
         colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
@@ -121,7 +121,7 @@ as_html <- function(x,
   if (any(!mat$display)) {
     # Check that expansion kept the same display info
     check_expansion <- c()
-    for(ii in unique(mat$line_grouping)) {
+    for (ii in unique(mat$line_grouping)) {
       rows <- which(mat$line_grouping == ii)
       check_expansion <- c(
         check_expansion,
@@ -179,9 +179,9 @@ as_html <- function(x,
 
   ## XXX this omits the divs entirely if they are empty. Do we want that or do
   ## we want them to be there but empty??
-  ftrlst <- list(if(length(mat$ref_footnotes) > 0) rfnotes,
-    if(length(main_footer(x)) > 0) mftr,
-    if(length(prov_footer(x)) > 0) pftr)
+  ftrlst <- list(if (length(mat$ref_footnotes) > 0) rfnotes,
+    if (length(main_footer(x)) > 0) mftr,
+    if (length(prov_footer(x)) > 0) pftr)
 
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
 
@@ -189,7 +189,7 @@ as_html <- function(x,
     ftrlst)
 
   div_helper(class = "rtables-all-parts-block",
-    list(#hdrtag,
+    list( # hdrtag,
       tabletag,
       ftrtag))
 }

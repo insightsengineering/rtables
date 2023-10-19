@@ -19,7 +19,7 @@ are <- function(object_collection, class2) {
   all(vapply(object_collection, is, logical(1), class2))
 }
 
-num_all_equal <- function(x, tol = .Machine$double.eps ^ 0.5) {
+num_all_equal <- function(x, tol = .Machine$double.eps^0.5) {
   stopifnot(is.numeric(x))
 
   if (length(x) == 1) return(TRUE)
@@ -57,7 +57,7 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 
 # Checking if function takes parameters
 func_takes <- function(func, params, is_first = FALSE) {
-  if(is.list(func))
+  if (is.list(func))
     return(lapply(func, func_takes, params = params, is_first = is_first))
   if (is.null(func) || !is(func, "function")) {
     # safe-net: should this fail instead?
@@ -84,13 +84,13 @@ func_takes <- function(func, params, is_first = FALSE) {
 spl_context_to_disp_path <- function(ctx) {
   ## this can happen in the first split in column space, but
   ## should never happen in row space
-  if(length(ctx$split) == 0)
+  if (length(ctx$split) == 0)
     return("root")
-  if(ctx$split[1] == "root" && ctx$value[1] == "root")
+  if (ctx$split[1] == "root" && ctx$value[1] == "root")
     ctx <- ctx[-1, ]
   ret <- paste(sprintf("%s[%s]", ctx[["split"]], ctx[["value"]]),
     collapse = "->")
-  if(length(ret) == 0 ||
+  if (length(ret) == 0 ||
     nchar(ret) == 0)
     ret <- "root"
   ret

@@ -90,7 +90,7 @@ picky_splitter <- function(var) {
     orig_vals <- vals
     if (is.null(vals)) {
       vec <- df[[var]]
-      vals <- if(is.factor(vec)) levels(vec) else unique(vec)
+      vals <- if (is.factor(vec)) levels(vec) else unique(vec)
     }
     if (length(vals) == 1)
       do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
@@ -197,9 +197,9 @@ my_afun <- function(x, .var, .spl_context) {
   ## your real logic would go here
   valnum <- min(2L, as.integer(gsub("[^[:digit:]]*", "", val)))
   fstringpt <- paste0("xx.", strrep("x", valnum))
-  fmt_mnsd <- if(show_it) sprintf("%s (%s)", fstringpt, fstringpt) else "xx"
-  in_rows(n = if(show_it) n, ## NULL otherwise
-    "Mean, SD" = if(show_it) c(meanval, sdval), ## NULL otherwise
+  fmt_mnsd <- if (show_it) sprintf("%s (%s)", fstringpt, fstringpt) else "xx"
+  in_rows(n = if (show_it) n, ## NULL otherwise
+    "Mean, SD" = if (show_it) c(meanval, sdval), ## NULL otherwise
     .formats = c(n = "xx", "Mean, SD" = fmt_mnsd)
   )
 }
@@ -229,9 +229,9 @@ my_afun <- function(x, .var, ref_rowgroup, .spl_context) {
   val <- .spl_context[nrow(.spl_context), "value"]
   ## we show it if its not a CHG within V1
   show_it <- val != ref_rowgroup || .var != "CHG"
-  fmt_mnsd <- if(show_it) "xx.x (xx.x)" else "xx"
-  in_rows(n = if(show_it) n, ## NULL otherwise
-    "Mean, SD" = if(show_it) c(meanval, sdval), ## NULL otherwise
+  fmt_mnsd <- if (show_it) "xx.x (xx.x)" else "xx"
+  in_rows(n = if (show_it) n, ## NULL otherwise
+    "Mean, SD" = if (show_it) c(meanval, sdval), ## NULL otherwise
     .formats = c(n = "xx", "Mean, SD" = fmt_mnsd)
   )
 }
