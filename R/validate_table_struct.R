@@ -71,8 +71,9 @@ validate_table_struct <- function(tt) {
 
 ## XXX this doesn't handle content paths correctly
 .path_to_disp <- function(pth) {
-  if (length(pth) == 1)
+  if (length(pth) == 1) {
     return(pth)
+  }
   has_cont <- any(pth == "@content")
   if (has_cont) {
     contpos <- which(pth == "@content")
@@ -135,15 +136,17 @@ make_degen_message <- function(degen_pths, tt) {
 #' Defaults to `FALSE`
 assert_valid_table <- function(tt, warn_only = FALSE) {
   degen_pths <- find_degen_struct(tt)
-  if (length(degen_pths) == 0)
+  if (length(degen_pths) == 0) {
     return(TRUE)
+  }
 
   ## we failed, now we build an informative error/warning message
 
   msg <- make_degen_message(degen_pths, tt)
 
-  if (!warn_only)
+  if (!warn_only) {
     stop(msg)
+  }
   warning(msg)
   return(FALSE)
 }

@@ -34,8 +34,9 @@
 #' tbl_to_prune %>% prune_table(all_zero_or_na)
 #'
 all_zero_or_na <- function(tr) {
-  if (!is(tr, "TableRow") || is(tr, "LabelRow"))
+  if (!is(tr, "TableRow") || is(tr, "LabelRow")) {
     return(FALSE)
+  }
   rvs <- unlist(unname(row_values(tr)))
   all(is.na(rvs) | rvs == 0 | !is.finite(rvs))
 }
@@ -51,8 +52,9 @@ all_zero_or_na <- function(tr) {
 #' tbl_to_prune %>% prune_table(all_zero)
 #'
 all_zero <- function(tr) {
-  if (!is(tr, "TableRow") || is(tr, "LabelRow"))
+  if (!is(tr, "TableRow") || is(tr, "LabelRow")) {
     return(FALSE)
+  }
   rvs <- unlist(unname(row_values(tr)))
   isTRUE(all(rvs == 0))
 }
@@ -126,8 +128,9 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
   ## tt is something that doesn't have a content table
   ct <- content_table(tt)
   ## NROW returns 0 for NULL.
-  if (NROW(ct) == 0 || nrow(ct) > 1)
+  if (NROW(ct) == 0 || nrow(ct) > 1) {
     return(FALSE)
+  }
 
   cr <- tree_children(ct)[[1]]
   criteria(cr)
@@ -146,11 +149,13 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
 #' tbl_to_prune %>% prune_table(prune_empty_level)
 #'
 prune_empty_level <- function(tt) {
-  if (is(tt, "TableRow"))
+  if (is(tt, "TableRow")) {
     return(all_zero_or_na(tt))
+  }
 
-  if (content_all_zeros_nas(tt))
+  if (content_all_zeros_nas(tt)) {
     return(TRUE)
+  }
   kids <- tree_children(tt)
   length(kids) == 0
 }
@@ -165,11 +170,13 @@ prune_empty_level <- function(tt) {
 #' tbl_to_prune %>% prune_table(prune_zeros_only)
 #'
 prune_zeros_only <- function(tt) {
-  if (is(tt, "TableRow"))
+  if (is(tt, "TableRow")) {
     return(all_zero(tt))
+  }
 
-  if (content_all_zeros_nas(tt, criteria = all_zero))
+  if (content_all_zeros_nas(tt, criteria = all_zero)) {
     return(TRUE)
+  }
   kids <- tree_children(tt)
   length(kids) == 0
 }
@@ -202,8 +209,9 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
     ctr <- tree_children(ctab)[[1]]
     vals <- sapply(row_values(ctr), function(v) v[[1]])
     sumvals <- sum(vals)
-    if (type == "mean")
+    if (type == "mean") {
       sumvals <- sumvals / length(vals)
+    }
     sumvals < min
   }
 }
@@ -245,11 +253,13 @@ prune_table <- function(tt,
                         prune_func = prune_empty_level,
                         stop_depth = NA_real_,
                         depth = 0) {
-  if (!is.na(stop_depth) && depth > stop_depth)
+  if (!is.na(stop_depth) && depth > stop_depth) {
     return(tt)
+  }
   if (is(tt, "TableRow")) {
-    if (prune_func(tt))
+    if (prune_func(tt)) {
       tt <- NULL
+    }
     return(tt)
   }
 
@@ -267,9 +277,10 @@ prune_table <- function(tt,
   )
 
   keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
-  if (length(keepkids) > 0)
+  if (length(keepkids) > 0) {
     tree_children(tt) <- keepkids
-  else
+  } else {
     tt <- NULL
+  }
   tt
 }

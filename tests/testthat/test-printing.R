@@ -195,10 +195,11 @@ test_that("newline in column names and possibly cell values work", {
     split_rows_by("SEX") %>%
     analyze("AGE", afun = function(x) {
       mn <- round(mean(x), 2)
-      if (!is.nan(mn) && mn > mean(DM$AGE))
+      if (!is.nan(mn) && mn > mean(DM$AGE)) {
         val <- paste(mn, "  ^  ", sep = "\n")
-      else
+      } else {
         val <- paste(mn)
+      }
       in_rows(my_row_label = rcell(val,
         format = "xx"
       ))

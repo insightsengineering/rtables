@@ -222,8 +222,9 @@ setMethod(
 
 
 docat_splitvec <- function(object, indent = 0) {
-  if (indent > 0)
+  if (indent > 0) {
     cat(rep(" ", times = indent), sep = "")
+  }
   if (length(object) == 1L && is(object[[1]], "VTableNodeInfo")) {
     tab <- object[[1]]
     msg <- sprintf(
@@ -297,13 +298,14 @@ setMethod(
     cat("An InstantiatedColumnInfo object",
       "Columns:",
       layoutmsg,
-      if (disp_ccounts(object))
+      if (disp_ccounts(object)) {
         paste(
           "ColumnCounts:\n",
           paste(col_counts(object),
             collapse = ", "
           )
-        ),
+        )
+      },
       "",
       sep = "\n"
     )

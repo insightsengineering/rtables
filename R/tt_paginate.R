@@ -44,8 +44,9 @@ setMethod(
         cur_fcells <- tail(cur_fcells, -1 * spi)
         cur_colwidths <- tail(cur_colwidths, -1 * spi)
       }
-      if (have_cw)
+      if (have_cw) {
         colwidths <- c(colwidths[1], new_colwidths)
+      }
       fcells <- new_fcells
     }
 
@@ -65,11 +66,12 @@ setMethod(
 setMethod(
   "nlines", "LabelRow",
   function(x, colwidths, max_width) {
-    if (labelrow_visible(x))
+    if (labelrow_visible(x)) {
       nlines(strsplit(obj_label(x), "\n", fixed = TRUE)[[1]], max_width = colwidths[1]) +
         sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width)))
-    else
+    } else {
       0L
+    }
   }
 )
 
@@ -129,8 +131,9 @@ col_dfrow <- function(col,
                       leaf_indices = cnum,
                       span = length(leaf_indices),
                       col_fnotes = list()) {
-  if (is.null(pth))
+  if (is.null(pth)) {
     pth <- pos_to_path(tree_pos(col))
+  }
   data.frame(
     stringsAsFactors = FALSE,
     name = nm,
@@ -198,11 +201,12 @@ setMethod(
     indent <- indent + indent_mod(tt)
     ## retained for debugging info
     orig_rownum <- rownum # nolint
-    if (incontent)
+    if (incontent) {
       path <- c(path, "@content")
-    else if (length(path) > 0 || nzchar(obj_name(tt))) ## don't add "" for root
-    ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root # nolint
+    } else if (length(path) > 0 || nzchar(obj_name(tt))) { ## don't add "" for root
+      ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root # nolint
       path <- c(path, obj_name(tt))
+    }
 
     ret <- list()
     ## note this is the **table** not the label row
@@ -303,8 +307,9 @@ setMethod(
     }
 
     ret <- do.call(rbind, ret)
-    if (!is.na(trailing_sep(tt)))
+    if (!is.na(trailing_sep(tt))) {
       ret$trailing_sep[nrow(ret)] <- trailing_sep(tt)
+    }
     ret
   }
 )
@@ -384,8 +389,9 @@ setMethod(
         max_width = max_width
       ))
     )
-    if (!labelrow_visible(tt))
+    if (!labelrow_visible(tt)) {
       ret <- ret[0, ]
+    }
     ret
   }
 )
@@ -505,11 +511,12 @@ setMethod(
     tlines <- 0
   }
   ret <- cinfo_lines + tlines
-  if (verbose)
+  if (verbose) {
     message(
       "Lines required for header content: ",
       ret, " (col info: ", cinfo_lines, ", titles: ", tlines, ")"
     )
+  }
   ret
 }
 
@@ -527,12 +534,13 @@ setMethod(
     flines <- flines + dl_contrib + 1L
   }
 
-  if (verbose)
+  if (verbose) {
     message(
       "Determining lines required for footer content",
       if (have_cfnotes) " [column fnotes present]",
       ": ", flines, " lines"
     )
+  }
 
   flines
 }
@@ -611,9 +619,11 @@ setMethod(
 #'   } else if (is.factor(x)) {
 #'     vs <- as.list(table(x))
 #'     do.call(in_rows, lapply(vs, rcell, format = "xx"))
-#'   } else (
-#'     stop("type not supported")
-#'   )
+#'   } else {
+#'     (
+#'       stop("type not supported")
+#'     )
+#'   }
 #' }
 #'
 #'
@@ -678,11 +688,12 @@ pag_tt_indices <- function(tt, lpp = 15,
   )
   ## row lines per page
   rlpp <- lpp - hlines - flines
-  if (verbose)
+  if (verbose) {
     message(
       "Adjusted Lines Per Page: ",
       rlpp, " (original lpp: ", lpp, ")"
     )
+  }
   pagdf <- make_row_df(tt, colwidths, max_width = max_width)
 
   pag_indices_inner(pagdf,
@@ -799,15 +810,19 @@ paginate_table <- function(tt,
       landscape = landscape
     )
 
-    if (non_null_na(lpp))
+    if (non_null_na(lpp)) {
       lpp <- pg_lcpp$lpp
-    if (is.na(cpp))
+    }
+    if (is.na(cpp)) {
       cpp <- pg_lcpp$cpp
+    }
   } else {
-    if (non_null_na(cpp))
+    if (non_null_na(cpp)) {
       cpp <- NULL
-    if (non_null_na(lpp))
+    }
+    if (non_null_na(lpp)) {
       lpp <- 70
+    }
   }
 
   if (is.null(colwidths)) {
@@ -815,8 +830,9 @@ paginate_table <- function(tt,
   }
 
   if (!tf_wrap) {
-    if (!is.null(max_width))
+    if (!is.null(max_width)) {
       warning("tf_wrap is FALSE - ignoring non-null max_width value.")
+    }
     max_width <- NULL
   } else if (is.null(max_width)) {
     max_width <- cpp
@@ -824,8 +840,9 @@ paginate_table <- function(tt,
     ## XXX this 3 is column sep width!!!!!!!
     max_width <- sum(colwidths) + 3 * (length(colwidths) - 1)
   }
-  if (!is.null(cpp) && !is.null(max_width) && max_width > cpp)
+  if (!is.null(cpp) && !is.null(max_width) && max_width > cpp) {
     warning("max_width specified is wider than characters per page width (cpp).")
+  }
 
   ## taken care of in vert_pag_indices now
   ## if(!is.null(cpp))

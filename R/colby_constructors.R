@@ -55,10 +55,11 @@ setMethod(
     tmp <- if (pos <= length(lyt)) {
       split_rows(lyt[[pos]], spl, pos, cmpnd_fun)
     } else {
-      if (pos != 1 && has_force_pag(spl))
+      if (pos != 1 && has_force_pag(spl)) {
         stop("page_by splits cannot have top-level siblings",
           call. = FALSE
         )
+      }
       SplitVector(spl)
     }
     lyt[[pos]] <- tmp
@@ -81,10 +82,11 @@ setMethod(
     ##     return(cmpnd_last_rowsplit(lyt, spl, cmpnd_fun))
     ## }
 
-    if (has_force_pag(spl) && length(lyt) > 0 && !has_force_pag(lyt[[length(lyt)]]))
+    if (has_force_pag(spl) && length(lyt) > 0 && !has_force_pag(lyt[[length(lyt)]])) {
       stop("page_by splits cannot be nested within non-page_by splits",
         call. = FALSE
       )
+    }
     tmp <- c(unclass(lyt), spl)
     SplitVector(lst = tmp)
   }
@@ -381,10 +383,11 @@ setMethod(
 setMethod(
   ".tl_indent_inner", "PreDataRowLayout",
   function(lyt) {
-    if (length(lyt) == 0 || length(lyt[[1]]) == 0)
+    if (length(lyt) == 0 || length(lyt[[1]]) == 0) {
       0L
-    else
+    } else {
       .tl_indent_inner(lyt[[length(lyt)]])
+    }
   }
 )
 
@@ -397,10 +400,11 @@ setMethod(
 
 
 .tl_indent <- function(lyt, nested = TRUE) {
-  if (!nested)
+  if (!nested) {
     0L
-  else
+  } else {
     .tl_indent_inner(lyt)
+  }
 }
 
 
@@ -1203,10 +1207,11 @@ get_acolvar_vars <- function(lyt) {
   vec <- clyt[[1]]
   vcls <- vapply(vec, class, "")
   pos <- which(vcls == "MultiVarSplit")
-  if (length(pos) > 0)
+  if (length(pos) > 0) {
     spl_payload(vec[[pos]])
-  else
+  } else {
     "non_multivar"
+  }
 }
 
 
@@ -1505,15 +1510,17 @@ setMethod(
 
 .count_raw_constr <- function(var, format, label_fstr) {
   function(df, labelstr = "") {
-    if (grepl("%s", label_fstr, fixed = TRUE))
+    if (grepl("%s", label_fstr, fixed = TRUE)) {
       label <- sprintf(label_fstr, labelstr)
-    else
+    } else {
       label <- label_fstr
+    }
     if (is(df, "data.frame")) {
-      if (!is.null(var) && nzchar(var))
+      if (!is.null(var) && nzchar(var)) {
         cnt <- sum(!is.na(df[[var]]))
-      else
+      } else {
         cnt <- nrow(df)
+      }
     } else { # df is the data column vector
       cnt <- sum(!is.na(df))
     }
@@ -1527,15 +1534,17 @@ setMethod(
 
 .count_wpcts_constr <- function(var, format, label_fstr) {
   function(df, labelstr = "", .N_col) {
-    if (grepl("%s", label_fstr, fixed = TRUE))
+    if (grepl("%s", label_fstr, fixed = TRUE)) {
       label <- sprintf(label_fstr, labelstr)
-    else
+    } else {
       label <- label_fstr
+    }
     if (is(df, "data.frame")) {
-      if (!is.null(var) && nzchar(var))
+      if (!is.null(var) && nzchar(var)) {
         cnt <- sum(!is.na(df[[var]]))
-      else
+      } else {
         cnt <- nrow(df)
+      }
     } else { # df is the data column vector
       cnt <- sum(!is.na(df))
     }
@@ -1551,13 +1560,15 @@ setMethod(
 }
 
 .validate_cfuns <- function(fun) {
-  if (is.list(fun))
+  if (is.list(fun)) {
     return(unlist(lapply(fun, .validate_cfuns)))
+  }
 
   frmls <- formals(fun)
   ls_pos <- match("labelstr", names(frmls))
-  if (is.na(ls_pos))
+  if (is.na(ls_pos)) {
     stop("content functions must explicitly accept a 'labelstr' argument")
+  }
 
   list(fun)
 }
@@ -1573,12 +1584,13 @@ setMethod(
 #'
 #' counts_wpcts(DM$SEX, 400)
 counts_wpcts <- function(x, .N_col) {
-  if (!is.factor(x))
+  if (!is.factor(x)) {
     stop(
       "using the 'counts_wpcts' analysis function requires factor data ",
       "to guarantee equal numbers of rows across all collumns, got class ",
       class(x), "."
     )
+  }
   ret <- table(x)
   in_rows(.list = lapply(ret, function(y) rcell(y * c(1, 1 / .N_col), format = "xx (xx.x%)")))
 }
@@ -1710,8 +1722,9 @@ summarize_row_groups <- function(lyt,
 #' tbl
 #'
 add_colcounts <- function(lyt, format = "(N=xx)") {
-  if (is.null(lyt))
+  if (is.null(lyt)) {
     lyt <- PreDataTableLayouts()
+  }
   disp_ccounts(lyt) <- TRUE
   colcount_format(lyt) <- format
   lyt
@@ -1894,8 +1907,9 @@ setMethod(
 #' tbl2
 #'
 manual_cols <- function(..., .lst = list(...)) {
-  if (is.null(names(.lst)))
+  if (is.null(names(.lst))) {
     names(.lst) <- paste("colsplit", seq_along(.lst))
+  }
 
   splvec <- SplitVector(lst = mapply(ManualSplit,
     levels = .lst,
@@ -2039,8 +2053,9 @@ basic_table <- function(title = "",
                         colcount_format = "(N=xx)",
                         inset = 0L) {
   inset <- as.integer(inset)
-  if (is.na(inset) || inset < 0L)
+  if (is.na(inset) || inset < 0L) {
     stop("Got invalid table_inset value, must be an integer > 0")
+  }
   ret <- PreDataTableLayouts(
     title = title,
     subtitles = subtitles,
@@ -2048,8 +2063,9 @@ basic_table <- function(title = "",
     prov_footer = prov_footer,
     table_inset = as.integer(inset)
   )
-  if (show_colcounts)
+  if (show_colcounts) {
     ret <- add_colcounts(ret, format = colcount_format)
+  }
   ret
 }
 

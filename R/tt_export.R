@@ -44,25 +44,28 @@ import_from_tsv <- function(file) {
   as.data.frame(lapply(
     rawdf,
     function(col) {
-      if (!any(grepl(.collapse_char, col, fixed = TRUE)))
+      if (!any(grepl(.collapse_char, col, fixed = TRUE))) {
         col
-      else
+      } else {
         I(strsplit(col, split = .collapse_char_esc))
+      }
     }
   ))
 }
 
 collapse_path <- function(paths) {
-  if (is.list(paths))
+  if (is.list(paths)) {
     return(vapply(paths, collapse_path, ""))
+  }
   paste(paths, collapse = .collapse_char)
 }
 
 collapse_values <- function(colvals) {
-  if (!is.list(colvals)) ## || all(vapply(colvals, length, 1L) == 1))
+  if (!is.list(colvals)) { ## || all(vapply(colvals, length, 1L) == 1))
     return(colvals)
-  else if (all(vapply(colvals, length, 1L) == 1))
+  } else if (all(vapply(colvals, length, 1L) == 1)) {
     return(unlist(colvals))
+  }
   vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
@@ -110,8 +113,9 @@ do_label_row <- function(rdfrow, maxlen) {
 make_result_df_md_colnames <- function(maxlen) {
   spllen <- floor((maxlen - 2) / 2)
   ret <- character()
-  if (spllen > 0)
+  if (spllen > 0) {
     ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+  }
   ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
 }
 
@@ -173,12 +177,13 @@ result_df_specs <- function() {
 }
 
 lookup_result_df_specfun <- function(spec) {
-  if (!(spec %in% names(result_df_specs())))
+  if (!(spec %in% names(result_df_specs()))) {
     stop(
       "unrecognized result data frame specification: ",
       spec,
       "If that specification is correct you may  need to update your version of rtables"
     )
+  }
   result_df_specs()[[spec]]
 }
 
@@ -187,8 +192,9 @@ result_df_v0_experimental <- function(tt) {
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
   ## at this point.
-  if (nrow(tt) == 1 && length(raw_cvals) > 1)
+  if (nrow(tt) == 1 && length(raw_cvals) > 1) {
     raw_cvals <- list(raw_cvals)
+  }
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
   rdf <- make_row_df(tt)
@@ -355,23 +361,27 @@ export_as_pdf <- function(tt,
                           colwidths = propose_column_widths(matrix_form(tt, TRUE)),
                           ...) { # passed to paginate_table
   stopifnot(file_ext(file) != ".pdf")
-  if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
+  if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1) {
     stop(
       "non-null colwidths argument must have length ncol(tt) + 1 [",
       ncol(tt) + 1, "], got length ", length(colwidths)
     )
+  }
 
   gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
   ## soft deprecation. To become hard deprecation.
-  if (!is.null(height))
+  if (!is.null(height)) {
     pg_height <- height
+  }
 
-  if (!is.null(width))
+  if (!is.null(width)) {
     pg_width <- width
+  }
 
-  if (missing(font_size) && !missing(fontsize))
+  if (missing(font_size) && !missing(fontsize)) {
     font_size <- fontsize
+  }
 
   pdf(file = file, width = pg_width, height = pg_height)
   on.exit(dev.off())
@@ -390,8 +400,9 @@ export_as_pdf <- function(tt,
         font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi
     ) - sum(margins[c(2, 4)]) # left, right
   }
-  if (tf_wrap && is.null(max_width))
+  if (tf_wrap && is.null(max_width)) {
     max_width <- cpp
+  }
 
   tbls <- if (paginate) {
     paginate_table(tt,

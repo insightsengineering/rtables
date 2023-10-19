@@ -61,10 +61,11 @@ setMethod(
 setMethod(
   "ncol", "TableRow",
   function(x) {
-    if (!no_colinfo(x))
+    if (!no_colinfo(x)) {
       ncol(col_info(x))
-    else
+    } else {
       length(spanned_values(x))
+    }
   }
 )
 
@@ -232,10 +233,11 @@ setMethod(
 setMethod(
   "next_cpos", "PreDataColLayout",
   function(obj, nested) {
-    if (nested || length(obj[[length(obj)]]) == 0)
+    if (nested || length(obj[[length(obj)]]) == 0) {
       length(obj)
-    else
+    } else {
       length(obj) + 1L
+    }
   }
 )
 #' @rdname int_methods
@@ -252,20 +254,22 @@ setMethod(
 setMethod(
   "last_rowsplit", "SplitVector",
   function(obj) {
-    if (length(obj) == 0)
+    if (length(obj) == 0) {
       NULL
-    else
+    } else {
       obj[[length(obj)]]
+    }
   }
 )
 #' @rdname int_methods
 setMethod(
   "last_rowsplit", "PreDataRowLayout",
   function(obj) {
-    if (length(obj) == 0)
+    if (length(obj) == 0) {
       NULL
-    else
+    } else {
       last_rowsplit(obj[[length(obj)]])
+    }
   }
 )
 #' @rdname int_methods
@@ -498,10 +502,11 @@ setMethod(
   function(obj, value) {
     lr <- tt_labelrow(obj)
     obj_label(lr) <- value
-    if (!is.na(value) && nzchar(value))
+    if (!is.na(value) && nzchar(value)) {
       labelrow_visible(lr) <- TRUE
-    else if (is.na(value))
+    } else if (is.na(value)) {
       labelrow_visible(lr) <- FALSE
+    }
     tt_labelrow(obj) <- lr
     obj
   }
@@ -522,8 +527,9 @@ setGeneric("tt_labelrow<-", function(obj, value) standardGeneric("tt_labelrow<-"
 setMethod(
   "tt_labelrow<-", c("VTableTree", "LabelRow"),
   function(obj, value) {
-    if (no_colinfo(value))
+    if (no_colinfo(value)) {
       col_info(value) <- col_info(obj)
+    }
     obj@labelrow <- value
     obj
   }
@@ -987,8 +993,9 @@ setMethod(
 setMethod(
   "spanned_values<-", "LabelRow",
   function(obj, value) {
-    if (!is.null(value))
+    if (!is.null(value)) {
       stop("Label rows can't have non-null cell values, got", value)
+    }
     obj
   }
 )
@@ -1060,8 +1067,9 @@ setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 setMethod("obj_na_str", "Split", function(obj) obj@split_na_str)
 
 .no_na_str <- function(x) {
-  if (!is.character(x))
+  if (!is.character(x)) {
     x <- obj_na_str(x)
+  }
   length(x) == 0 || all(is.na(x))
 }
 
@@ -1075,13 +1083,16 @@ setGeneric("set_format_recursive", function(obj, format, na_str, override = FALS
 setMethod(
   "set_format_recursive", "TableRow",
   function(obj, format, na_str, override = FALSE) {
-    if (is.null(format) && .no_na_str(na_str))
+    if (is.null(format) && .no_na_str(na_str)) {
       return(obj)
+    }
 
-    if ((is.null(obj_format(obj)) && !is.null(format)) || override)
+    if ((is.null(obj_format(obj)) && !is.null(format)) || override) {
       obj_format(obj) <- format
-    if ((.no_na_str(obj) && !.no_na_str(na_str)) || override)
+    }
+    if ((.no_na_str(obj) && !.no_na_str(na_str)) || override) {
       obj_na_str(obj) <- na_str
+    }
     lcells <- row_cells(obj)
     lvals <- lapply(lcells, function(x) {
       if (!is.null(x) && (override || is.null(obj_format(x)))) {
@@ -1105,13 +1116,16 @@ setMethod(
   "set_format_recursive", "VTableTree",
   function(obj, format, na_str, override = FALSE) {
     force(format)
-    if (is.null(format) && .no_na_str(na_str))
+    if (is.null(format) && .no_na_str(na_str)) {
       return(obj)
+    }
 
-    if ((is.null(obj_format(obj)) && !is.null(format)) || override)
+    if ((is.null(obj_format(obj)) && !is.null(format)) || override) {
       obj_format(obj) <- format
-    if ((.no_na_str(obj) && !.no_na_str(na_str)) || override)
+    }
+    if ((.no_na_str(obj) && !.no_na_str(na_str)) || override) {
       obj_na_str(obj) <- na_str
+    }
 
     kids <- tree_children(obj)
     kids <- lapply(kids, function(x, format2, na_str2, oride) {
@@ -1184,8 +1198,9 @@ setMethod(
 setMethod(
   "value_formats", "TableRow",
   function(obj, default) {
-    if (!is.null(obj_format(obj)))
+    if (!is.null(obj_format(obj))) {
       default <- obj_format(obj)
+    }
     formats <- lapply(row_cells(obj), function(x) value_formats(x) %||% default)
     formats
   }
@@ -1201,8 +1216,9 @@ setMethod(
 setMethod(
   "value_formats", "VTableTree",
   function(obj, default) {
-    if (!is.null(obj_format(obj)))
+    if (!is.null(obj_format(obj))) {
       default <- obj_format(obj)
+    }
     rws <- collect_leaves(obj, TRUE, TRUE)
     formatrws <- lapply(rws, value_formats, default = default)
     mat <- do.call(rbind, formatrws)
@@ -1481,11 +1497,12 @@ setMethod(
 setMethod(
   "indent_mod<-", "RowsVerticalSection",
   function(obj, value) {
-    if (length(value) != 1 && length(value) != length(obj))
+    if (length(value) != 1 && length(value) != length(obj)) {
       stop(
         "When setting indent mods on a RowsVerticalSection the value ",
         "must have length 1 or the number of rows"
       )
+    }
     attr(obj, "indent_mods") <- as.integer(value)
     obj
 
@@ -1851,8 +1868,9 @@ setGeneric(
 setMethod(
   "coltree", "InstantiatedColumnInfo",
   function(obj, df = NULL, rtpos = TreePos()) {
-    if (!is.null(df))
+    if (!is.null(df)) {
       warning("Ignoring df argument and retrieving already-computed LayoutColTree")
+    }
     obj@tree_layout
   }
 )
@@ -1881,15 +1899,16 @@ setMethod(
         )
       }
     )
-    if (length(kids) == 1)
+    if (length(kids) == 1) {
       res <- kids[[1]]
-    else
+    } else {
       res <- LayoutColTree(
         lev = 0L,
         kids = kids,
         tpos = rtpos,
         spl = RootSplit()
       )
+    }
     disp_ccounts(res) <- disp_ccounts(obj)
     res
   }
@@ -1953,8 +1972,9 @@ setMethod(
 setMethod(
   "col_exprs", "PreDataColLayout",
   function(obj, df = NULL) {
-    if (is.null(df))
+    if (is.null(df)) {
       stop("can't determine col_exprs without data")
+    }
     ct <- coltree(obj, df = df)
     make_col_subsets(ct, df = df)
   }
@@ -1965,8 +1985,9 @@ setMethod(
 setMethod(
   "col_exprs", "InstantiatedColumnInfo",
   function(obj, df = NULL) {
-    if (!is.null(df))
+    if (!is.null(df)) {
       warning("Ignoring df method when extracted precomputed column subsetting expressions.")
+    }
     obj@subset_exprs
   }
 )
@@ -1977,8 +1998,9 @@ setGeneric("col_extra_args", function(obj, df = NULL) standardGeneric("col_extra
 setMethod(
   "col_extra_args", "InstantiatedColumnInfo",
   function(obj, df) {
-    if (!is.null(df))
+    if (!is.null(df)) {
       warning("Ignorning df when retrieving already-computed column extra arguments.")
+    }
     obj@cextra_args
   }
 )
@@ -1998,8 +2020,9 @@ setMethod(
 setMethod(
   "col_extra_args", "LayoutColTree",
   function(obj, df) {
-    if (!is.null(df))
+    if (!is.null(df)) {
       warning("Ignoring df argument and returning already calculated extra arguments")
+    }
     get_col_extras(obj)
   }
 )
@@ -2007,8 +2030,9 @@ setMethod(
 setMethod(
   "col_extra_args", "LayoutColLeaf",
   function(obj, df) {
-    if (!is.null(df))
+    if (!is.null(df)) {
       warning("Ignoring df argument and returning already calculated extra arguments")
+    }
 
     get_pos_extra(pos = tree_pos(obj))
   }
@@ -2351,10 +2375,11 @@ setMethod(
 #' @aliases as.vector,VTableTree-method
 setMethod("as.vector", "VTableTree", function(x, mode) {
   stopifnot(nrow(x) == 1L)
-  if (nrow(content_table(x)) == 1L)
+  if (nrow(content_table(x)) == 1L) {
     tab <- content_table(x)
-  else
+  } else {
     tab <- x
+  }
   as.vector(tree_children(tab)[[1]], mode = mode)
 })
 
@@ -2433,8 +2458,9 @@ setMethod(
     oldvnms <- spl_varnames(object)
     oldvlbls <- spl_varlabels(object)
     object@var_names <- value
-    if (identical(oldvnms, oldvlbls))
+    if (identical(oldvnms, oldvlbls)) {
       spl_varlabels(object) <- value
+    }
     object
   }
 )
@@ -2707,10 +2733,11 @@ setMethod(
 
 
 make_ref_value <- function(value) {
-  if (is(value, "RefFootnote"))
+  if (is(value, "RefFootnote")) {
     value <- list(value)
-  else if (!is.list(value) || any(!sapply(value, is, "RefFootnote")))
+  } else if (!is.list(value) || any(!sapply(value, is, "RefFootnote"))) {
     value <- lapply(value, RefFootnote)
+  }
   value
 }
 
@@ -2819,15 +2846,17 @@ setMethod(
 )
 
 .cfn_set_helper <- function(obj, value) {
-  if (length(value) != ncol(obj))
+  if (length(value) != ncol(obj)) {
     stop("Did not get the right number of footnote ref values for cell_footnotes<- on a full row.")
+  }
 
   row_cells(obj) <- mapply(
     function(cell, fns) {
-      if (is.list(fns))
+      if (is.list(fns)) {
         cell_footnotes(cell) <- lapply(fns, RefFootnote)
-      else
+      } else {
         cell_footnotes(cell) <- list(RefFootnote(fns))
+      }
       cell
     },
     cell = row_cells(obj),
@@ -3044,8 +3073,9 @@ setMethod(
     rw <- tt_at_path(obj, rowpath)
     .fnote_set_inner(rw, colpath) <- value
     tt_at_path(obj, rowpath) <- rw
-    if (reset_idx)
+    if (reset_idx) {
       obj <- update_ref_indexing(obj)
+    }
     obj
   }
 )
@@ -3058,8 +3088,9 @@ setMethod(
     cinfo <- col_info(obj)
     .fnote_set_inner(cinfo, colpath) <- value
     col_info(obj) <- cinfo
-    if (reset_idx)
+    if (reset_idx) {
       obj <- update_ref_indexing(obj)
+    }
     obj
   }
 )
@@ -3191,10 +3222,12 @@ setMethod(
 setMethod(
   "table_inset<-", "VTableNodeInfo", ## "VTableTree",
   function(obj, value) {
-    if (!is.integer(value))
+    if (!is.integer(value)) {
       value <- as.integer(value)
-    if (is.na(value) || value < 0)
+    }
+    if (is.na(value) || value < 0) {
       stop("Got invalid table_inset value, must be an integer > 0")
+    }
     cont <- content_table(obj)
     if (NROW(cont) > 0) {
       table_inset(cont) <- value
@@ -3219,10 +3252,12 @@ setMethod(
 setMethod(
   "table_inset<-", "PreDataTableLayouts",
   function(obj, value) {
-    if (!is.integer(value))
+    if (!is.integer(value)) {
       value <- as.integer(value)
-    if (is.na(value) || value < 0)
+    }
+    if (is.na(value) || value < 0) {
       stop("Got invalid table_inset value, must be an integer > 0")
+    }
 
     obj@table_inset <- value
     obj
@@ -3244,10 +3279,12 @@ setMethod(
 setMethod(
   "table_inset<-", "InstantiatedColumnInfo",
   function(obj, value) {
-    if (!is.integer(value))
+    if (!is.integer(value)) {
       value <- as.integer(value)
-    if (is.na(value) || value < 0)
+    }
+    if (is.na(value) || value < 0) {
       stop("Got invalid table_inset value, must be an integer > 0")
+    }
     obj@table_inset <- value
     obj
   }

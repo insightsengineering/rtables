@@ -34,8 +34,9 @@ row_paths <- function(x) {
 #' @rdname make_col_row_df
 #' @export
 col_paths <- function(x) {
-  if (!is(coltree(x), "LayoutColTree"))
+  if (!is(coltree(x), "LayoutColTree")) {
     stop("I don't know how to extract the column paths from an object of class ", class(x))
+  }
   make_col_df(x, visible_only = TRUE)$path
 }
 
@@ -80,8 +81,9 @@ col_paths <- function(x) {
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
-  if (nrow(x) == 0)
+  if (nrow(x) == 0) {
     return("rowname     node_class       path\n---------------------\n")
+  }
 
   pagdf <- make_row_df(x, visible_only = TRUE)
   row.names(pagdf) <- NULL
@@ -256,10 +258,11 @@ setMethod(
     indent <- max(0L, indent + indent_mod(obj))
 
     lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
-    if (!is.null(lr))
+    if (!is.null(lr)) {
       ret <- list(lr)
-    else
+    } else {
       ret <- list()
+    }
 
     indent <- indent + (!is.null(lr))
 
@@ -409,8 +412,7 @@ setMethod(
 table_structure <- function(x, detail = c("subtable", "row")) {
   detail <- match.arg(detail)
 
-  switch(
-    detail,
+  switch(detail,
     subtable = treestruct(x),
     row = table_structure_inner(x),
     stop("unsupported level of detail ", detail)

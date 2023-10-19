@@ -9,11 +9,12 @@
 #' @export
 cont_n_allcols <- function(tt) {
   ctab <- content_table(tt)
-  if (NROW(ctab) == 0)
+  if (NROW(ctab) == 0) {
     stop(
       "cont_n_allcols score function used at subtable [",
       obj_name(tt), "] that has no content table."
     )
+  }
   sum(sapply(
     row_values(tree_children(ctab)[[1]]),
     function(cv) cv[1]
@@ -32,11 +33,12 @@ cont_n_allcols <- function(tt) {
 cont_n_onecol <- function(j) {
   function(tt) {
     ctab <- content_table(tt)
-    if (NROW(ctab) == 0)
+    if (NROW(ctab) == 0) {
       stop(
         "cont_n_allcols score function used at subtable [",
         obj_name(tt), "] that has no content table."
       )
+    }
     row_values(tree_children(ctab)[[1]])[[j]][1]
   }
 }
@@ -149,12 +151,14 @@ sort_at_path <- function(tt,
                          decreasing = NA,
                          na.pos = c("omit", "last", "first"),
                          .prev_path = character()) {
-  if (NROW(tt) == 0)
+  if (NROW(tt) == 0) {
     return(tt)
+  }
 
   ## XXX hacky fix this!!!
-  if (identical(obj_name(tt), path[1]))
+  if (identical(obj_name(tt), path[1])) {
     path <- path[-1]
+  }
 
   curpath <- path
   subtree <- tt
@@ -215,13 +219,15 @@ sort_at_path <- function(tt,
   } else {
     scores <- unlist(scores)
   }
-  if (!is.null(dim(scores)) || length(scores) != length(kids))
+  if (!is.null(dim(scores)) || length(scores) != length(kids)) {
     stop(
       "Score function does not appear to have return exactly one ",
       "scalar value per child"
     )
-  if (is.na(decreasing))
+  }
+  if (is.na(decreasing)) {
     decreasing <- if (is.character(scores)) FALSE else TRUE
+  }
   ord <- order(scores, na.last = (na.pos != "first"), decreasing = decreasing)
   newkids <- kids[ord]
   if (anyNA(scores) && na.pos == "omit") { # we did na last here

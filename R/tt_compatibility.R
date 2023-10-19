@@ -13,10 +13,11 @@
 #'
 rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
   vals <- list(...)
-  if (is.null(row.name))
+  if (is.null(row.name)) {
     row.name <- ""
-  else if (!is(row.name, "character"))
+  } else if (!is(row.name, "character")) {
     stop("row.name must be NULL or a character string")
+  }
   if (length(vals) == 0L) {
     LabelRow(
       lev = as.integer(indent),
@@ -187,10 +188,11 @@ hrows_to_colinfo <- function(rows) {
 #' h2
 #'
 rheader <- function(..., format = "xx", .lst = NULL) {
-  if (!is.null(.lst))
+  if (!is.null(.lst)) {
     args <- .lst
-  else
+  } else {
     args <- list(...)
+  }
   rrows <- if (length(args) == 1 && !is(args[[1]], "TableRow")) {
     list(rrowl(row.name = NULL, val = args[[1]], format = format))
   } else if (are(args, "TableRow")) {
@@ -203,8 +205,9 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 
 .char_to_hrows <- function(hdr) {
   nlfnd <- grep("\n", hdr, fixed = TRUE)
-  if (length(nlfnd) == 0)
+  if (length(nlfnd) == 0) {
     return(list(rrowl(NULL, hdr)))
+  }
 
   stopifnot(length(nlfnd) == length(hdr))
   raw <- strsplit(hdr, "\n", fixed = TRUE)
@@ -320,13 +323,15 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'
 rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
                    inset = 0L) {
-  if (is.character(header))
-    header <- .char_to_hrows(header) # list(rrowl(NULL, header))
+  if (is.character(header)) {
+    header <- .char_to_hrows(header)
+  } # list(rrowl(NULL, header))
   if (is.list(header)) {
-    if (are(header, "TableRow"))
+    if (are(header, "TableRow")) {
       colinfo <- hrows_to_colinfo(header)
-    else if (are(header, "list"))
+    } else if (are(header, "list")) {
       colinfo <- do.call(rheader, header)
+    }
   } else if (is(header, "InstantiatedColumnInfo")) {
     colinfo <- header
   } else if (is(header, "TableRow")) {
@@ -337,8 +342,9 @@ rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
 
   body <- list(...)
   ## XXX this shouldn't be needed. hacky
-  if (length(body) == 1 && is.list(body[[1]]))
+  if (length(body) == 1 && is.list(body[[1]])) {
     body <- body[[1]]
+  }
   if (are(body, "ElementaryTable") &&
     all(sapply(body, function(tb) {
       nrow(tb) == 1 && obj_name(tb) == ""
@@ -388,8 +394,9 @@ only_first_annot <- function(all_annots) {
 #' @param gap deprecated. Ignored.
 #' @param check_headers deprecated. Ignored.
 rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
-  if (!check_headers)
+  if (!check_headers) {
     warning("check_headers = FALSE is no longer supported, ignoring.")
+  }
 
   firstcols <- col_info(x[[1]])
   i <- 1
@@ -491,7 +498,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #'   )
 #' )
 #'
-#' mtbl2 <- with(subset(iris, Species == 'setosa'), rtable(
+#' mtbl2 <- with(subset(iris, Species == "setosa"), rtable(
 #'   header = rheader(
 #'     rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan = 2)),
 #'     rrow(NULL, "mean", "median", "mean", "median")
@@ -547,8 +554,9 @@ combine_cinfo <- function(..., new_total = NULL) {
 
   newctree <- LayoutColTree(kids = ctrees)
   newcounts <- unlist(lapply(cinfs, col_counts))
-  if (is.null(new_total))
+  if (is.null(new_total)) {
     new_total <- sum(newcounts)
+  }
   newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
   newexargs <- unlist(lapply(cinfs, col_extra_args), recursive = FALSE) %||% vector("list", length(newcounts))
   newdisp <- any(vapply(cinfs, disp_ccounts, NA))
@@ -556,8 +564,9 @@ combine_cinfo <- function(..., new_total = NULL) {
   newtl <- character()
   if (!are(tabs, "TableRow")) {
     alltls <- alltls[vapply(alltls, function(x) length(x) > 0, NA)] ## these are already enforced to all be the same
-    if (length(alltls) > 0)
+    if (length(alltls) > 0) {
       newtl <- alltls[[1]]
+    }
   }
   InstantiatedColumnInfo(
     treelyt = newctree,
@@ -572,12 +581,13 @@ combine_cinfo <- function(..., new_total = NULL) {
 }
 
 nz_len_els <- function(lst) {
-  if (is(lst, "list"))
+  if (is(lst, "list")) {
     lst[vapply(lst, function(x) length(x) > 0, NA)]
-  else if (is(lst, "character"))
+  } else if (is(lst, "character")) {
     lst[nzchar(lst)]
-  else
+  } else {
     lst
+  }
 }
 has_one_unq <- function(x) {
   length(unique(nz_len_els(x))) <= 1
@@ -585,10 +595,11 @@ has_one_unq <- function(x) {
 
 
 classvec <- function(lst, enforce_one = TRUE) {
-  if (enforce_one)
+  if (enforce_one) {
     vapply(lst, class, "")
-  else
+  } else {
     lapply(lst, class)
+  }
 }
 
 chk_cbindable_many <- function(lst) {
@@ -597,26 +608,30 @@ chk_cbindable_many <- function(lst) {
   ## that I can think of right now, so we do the
   ## broken wrong thing instead :(
   if (are(lst, "TableRow")) {
-    if (!has_one_unq(classvec(lst)))
+    if (!has_one_unq(classvec(lst))) {
       stop("Cannot cbind different types of TableRow objects together")
+    }
     return(TRUE)
   }
   ## if(!are(lst, "VTableTree")
   ##     stop("Not all elements to be bound are TableTrees or TableRows")
 
   nrs <- vapply(lst, NROW, 1L)
-  if (!has_one_unq(nrs))
+  if (!has_one_unq(nrs)) {
     stop("Not all elements to be bound have matching numbers of rows")
+  }
 
   tls <- lapply(lst, top_left)
-  if (!has_one_unq(tls[vapply(tls, function(x) length(x) > 0, NA)]))
+  if (!has_one_unq(tls[vapply(tls, function(x) length(x) > 0, NA)])) {
     stop(
       "Elements to be bound have differing top-left content: ",
       paste(which(!duplicated(tls)), collapse = " ")
     )
+  }
 
-  if (all(vapply(lst, function(x) nrow(x) == 0, NA)))
+  if (all(vapply(lst, function(x) nrow(x) == 0, NA))) {
     return(TRUE)
+  }
 
   rns <- matrix(vapply(lst, row.names, rep("", nrs[[1]])),
     nrow = nrs[[1]]
@@ -635,11 +650,12 @@ chk_cbindable_many <- function(lst) {
   )
 
   rwsok <- apply(rwclsmat, 1, has_one_unq)
-  if (!all(rwsok))
+  if (!all(rwsok)) {
     stop(
       "Mismatching row classes found for rows: ",
       paste(which(!rwsok), collapse = " ")
     )
+  }
   TRUE
 }
 
@@ -789,8 +805,9 @@ setMethod(
   avars <- c(obj_avar(x), unlist(lapply(.list, obj_avar), recursive = FALSE))
   avars <- avars[!is.na(avars)]
 
-  if (length(unique(avars)) > 1)
+  if (length(unique(avars)) > 1) {
     stop("Got rows that don't analyze the same variable")
+  }
 
 
   xlst <- c(list(x), .list)
@@ -879,10 +896,12 @@ setMethod(
 chk_compat_cinfos <- function(tt1, tt2) {
   nc1 <- ncol(tt1)
   nc2 <- ncol(tt2)
-  if (nc1 != nc2 && nc1 > 0 && nc2 > 0)
+  if (nc1 != nc2 && nc1 > 0 && nc2 > 0) {
     stop("Column structures contain different non-zero numbers of columns: ", nc1, ", ", nc2)
-  if (no_colinfo(tt1) || no_colinfo(tt2))
+  }
+  if (no_colinfo(tt1) || no_colinfo(tt2)) {
     return(TRUE)
+  }
   ci1 <- col_info(tt1)
   ci2 <- col_info(tt2)
   ## this will enforce same length and
@@ -981,8 +1000,9 @@ insert_rrow <- function(tbl, rrow, at = 1,
     at >= 1 && at <= nrow(tbl) + 1
   )
   chk_compat_cinfos(tbl, rrow)
-  if (no_colinfo(rrow))
+  if (no_colinfo(rrow)) {
     col_info(rrow) <- col_info(tbl)
+  }
 
   if (at == 1) {
     return(rbindl_rtables(list(rrow, tbl),
@@ -1008,19 +1028,21 @@ insert_rrow <- function(tbl, rrow, at = 1,
   numkids <- length(kids)
   kidnrs <- sapply(kids, nrow)
   cumpos <- pos + cumsum(kidnrs)
-  contnr <- if (is(tt, "TableTree"))
+  contnr <- if (is(tt, "TableTree")) {
     nrow(content_table(tt))
-  else
+  } else {
     0
+  }
   contnr <- contnr + as.numeric(labelrow_visible(tt))
 
 
   totnr <- nrow(tt)
   endpos <- pos + totnr
   atend <- !islab && endpos == at - 1
-  if (at == pos + 1  && islab) {
-    if (labelrow_visible(tt))
+  if (at == pos + 1 && islab) {
+    if (labelrow_visible(tt)) {
       stop("Inserting a label row at a position that already has a label row is not currently supported")
+    }
     tt_labelrow(tt) <- row
     return(tt)
   }
@@ -1071,10 +1093,11 @@ insert_rrow <- function(tbl, rrow, at = 1,
         kids[aft]
       )
     } else { # kid is not a table row
-      newpos <- if (ind == 1)
+      newpos <- if (ind == 1) {
         pos + contnr
-      else
+      } else {
         cumpos[ind - 1]
+      }
 
       kids[[ind]] <- recurse_insert(thekid,
         row,

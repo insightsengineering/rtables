@@ -93,13 +93,14 @@ picky_splitter <- function(var) {
       vec <- df[[var]]
       vals <- if (is.factor(vec)) levels(vec) else unique(vec)
     }
-    if (length(vals) == 1)
+    if (length(vals) == 1) {
       do_base_split(spl = spl, df = df, vals = vals, labels = labels, trim = trim)
-    else
+    } else {
       add_overall_level(
         "Overall",
         label = "All Obs", first = FALSE
       )(df = df, spl = spl, vals = orig_vals, trim = trim)
+    }
   }
 }
 

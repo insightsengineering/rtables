@@ -32,8 +32,9 @@
 #' indent(m_tbl, 2)
 #'
 indent <- function(x, by = 1) {
-  if (nrow(x) == 0 || by == 0)
+  if (nrow(x) == 0 || by == 0) {
     return(x)
+  }
 
   indent_mod(x) <- indent_mod(x) + by
   x

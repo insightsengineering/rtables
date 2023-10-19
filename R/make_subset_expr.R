@@ -8,13 +8,14 @@ setMethod(
   function(spl, val) {
     v <- unlist(rawvalues(val))
     ## XXX if we're including all levels should even missing be included?
-    if (is(v, "AllLevelsSentinel"))
+    if (is(v, "AllLevelsSentinel")) {
       as.expression(bquote((!is.na(.(a))), list(a = as.name(spl_payload(spl)))))
-    else
+    } else {
       as.expression(bquote((!is.na(.(a)) & .(a) %in% .(b)), list(
         a = as.name(spl_payload(spl)),
         b = v
       )))
+    }
   }
 )
 
@@ -30,13 +31,14 @@ setMethod(
 setMethod(
   "make_subset_expr", "AnalyzeVarSplit",
   function(spl, val) {
-    if (avar_inclNAs(spl))
+    if (avar_inclNAs(spl)) {
       expression(TRUE)
-    else
+    } else {
       as.expression(bquote(
         !is.na(.(a)),
         list(a = as.name(spl_payload(spl)))
       ))
+    }
   }
 )
 
@@ -134,10 +136,11 @@ setMethod(
 
 .combine_subset_exprs <- function(ex1, ex2) {
   if (is.null(ex1) || identical(ex1, expression(TRUE))) {
-    if (is.expression(ex2) && !identical(ex2, expression(TRUE)))
+    if (is.expression(ex2) && !identical(ex2, expression(TRUE))) {
       return(ex2)
-    else
+    } else {
       return(expression(TRUE))
+    }
   }
   stopifnot(is.expression(ex1), is.expression(ex2))
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
@@ -161,8 +164,9 @@ get_pos_extra <- function(svals = pos_splvals(pos),
   ret <- list()
   for (i in seq_along(svals)) {
     extrs <- splv_extra(svals[[i]])
-    if (any(names(ret) %in% names(extrs)))
+    if (any(names(ret) %in% names(extrs))) {
       stop("same extra argument specified at multiple levels of nesting. Not currently supported")
+    }
     ret <- c(ret, extrs)
   }
   ret
@@ -206,8 +210,9 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   ## this will work whether clayout is pre or post
   ## data
   clayout <- clayout(lyt)
-  if (is.null(topleft))
+  if (is.null(topleft)) {
     topleft <- top_left(lyt)
+  }
   ctree <- coltree(clayout, df = df, rtpos = rtpos)
 
   cexprs <- make_col_subsets(ctree, df)
@@ -220,13 +225,14 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   if (is.null(counts)) {
     counts <- rep(NA_integer_, length(cexprs))
   } else {
-    if (length(counts) != length(cexprs))
+    if (length(counts) != length(cexprs)) {
       stop(
         "Length of overriding counts must equal number of columns. Got ",
         length(counts), " values for ", length(cexprs), " columns. ",
         "Use NAs to specify that the default counting machinery should be ",
         "used for that position."
       )
+    }
     counts <- as.integer(counts)
   }
 
@@ -244,7 +250,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
       0
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
-      if (is(vec, "try-error"))
+      if (is(vec, "try-error")) {
         stop(sprintf(
           paste(
             counts_df_name, "appears",
@@ -255,15 +261,18 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
           ), deparse(ex[[1]]),
           conditionMessage(attr(vec, "condition"))
         ))
-      if (is(vec, "numeric"))
-        length(vec) ## sum(is.na(.)) ????
-      else if (is(vec, "logical"))
+      }
+      if (is(vec, "numeric")) {
+        length(vec)
+      } else if (is(vec, "logical")) { ## sum(is.na(.)) ????
         sum(vec, na.rm = TRUE)
+      }
     }
   })
   counts[calcpos] <- calccounts[calcpos]
-  if (is.null(total))
+  if (is.null(total)) {
     total <- sum(counts)
+  }
   format <- colcount_format(lyt)
   InstantiatedColumnInfo(
     treelyt = ctree,

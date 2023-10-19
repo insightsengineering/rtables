@@ -40,10 +40,11 @@ test_that("referential footnotes work", {
 
   analysisfun2 <- function(x, cutoff, ...) {
     mn <- mean(x)
-    if (mn >= cutoff)
+    if (mn >= cutoff) {
       cf <- list(mean = "Elevated group mean")
-    else
+    } else {
       cf <- list()
+    }
     in_rows(
       mean = mean(x),
       range = range(x),

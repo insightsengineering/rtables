@@ -24,8 +24,9 @@ test_that("provided pruning functions work", {
 
 test_that("pruning and trimming work", {
   silly_prune <- function(tt) {
-    if (!is(tt, "TableRow") || is(tt, "LabelRow"))
+    if (!is(tt, "TableRow") || is(tt, "LabelRow")) {
       return(FALSE)
+    }
     all_zero_or_na(tt)
   }
 

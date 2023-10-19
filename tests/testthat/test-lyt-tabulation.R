@@ -369,8 +369,9 @@ test_that("missing vars caught", {
 # https://github.com/insightsengineering/rtables/issues/329
 test_that("error localization works", {
   afun <- function(x, .spl_context) {
-    if (NROW(.spl_context) > 0 && .spl_context[NROW(.spl_context), "value", drop = TRUE] == "WHITE")
+    if (NROW(.spl_context) > 0 && .spl_context[NROW(.spl_context), "value", drop = TRUE] == "WHITE") {
       stop("error for white statistics")
+    }
 
     in_rows(myrow = 5)
   }
@@ -386,8 +387,9 @@ test_that("error localization works", {
   )
   # nolint end
   cfun <- function(df, labelstr) {
-    if (labelstr == "B: Placebo")
+    if (labelstr == "B: Placebo") {
       stop("placebos are bad")
+    }
     in_rows(val = 5)
   }
 

@@ -156,7 +156,7 @@ Finally, we `left_join()` the two levels of summary to get a data.frame containi
 set of values which make up the body of our table (note, however, they are not in the same order):
 
 ```{r}
-full_dplyr <- left_join(c_h_df, c_df) %>% ungroup
+full_dplyr <- left_join(c_h_df, c_df) %>% ungroup()
 ```
 
 Alternatively, we could calculate only the counts in `c_h_df`, and use

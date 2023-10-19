@@ -110,12 +110,13 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   format_strs <- vapply(
     as.vector(matform$formats),
     function(x) {
-      if (inherits(x, "function"))
+      if (inherits(x, "function")) {
         "<fnc>"
-      else if (inherits(x, "character"))
+      } else if (inherits(x, "character")) {
         x
-      else
+      } else {
         stop("Don't know how to make a shell with formats of class: ", class(x))
+      }
     }, ""
   )
 
@@ -125,8 +126,9 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   format_strs_mat[seq_len(nlh), ] <- matform$strings[seq_len(nlh), ]
 
   matform$strings <- format_strs_mat
-  if (is.null(widths))
+  if (is.null(widths)) {
     widths <- propose_column_widths(matform)
+  }
   toString(matform,
     widths = widths, col_gap = col_gap, hsep = hsep,
     tf_wrap = tf_wrap, max_width = max_width
@@ -278,10 +280,11 @@ setMethod(
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
-      if (length(x) == 0)
+      if (length(x) == 0) {
         ""
-      else
+      } else {
         paste(vapply(x, format_fnote_ref, ""), collapse = " ")
+      }
     }, ""), ncol = ncol(body))
     body_ref_strs <- get_ref_matrix(obj)
 
@@ -350,21 +353,24 @@ setMethod(
 }
 
 .resolve_fn_symbol <- function(fn) {
-  if (!is(fn, "RefFootnote"))
+  if (!is(fn, "RefFootnote")) {
     return(NULL)
+  }
   ret <- ref_symbol(fn)
-  if (is.na(ret))
+  if (is.na(ret)) {
     ret <- as.character(ref_index(fn))
+  }
   ret
 }
 
 
 
 format_fnote_ref <- function(fn) {
-  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE)))) {
     return("")
-  else if (is.list(fn) && all(vapply(fn, is.list, TRUE)))
+  } else if (is.list(fn) && all(vapply(fn, is.list, TRUE))) {
     return(vapply(fn, format_fnote_ref, ""))
+  }
   if (is.list(fn)) {
     inds <- unlist(lapply(unlist(fn), .resolve_fn_symbol))
   } else {
@@ -379,8 +385,9 @@ format_fnote_ref <- function(fn) {
 
 
 format_fnote_note <- function(fn) {
-  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE))))
+  if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE)))) {
     return(character())
+  }
   if (is.list(fn)) {
     return(unlist(lapply(unlist(fn), format_fnote_note)))
   }
@@ -483,8 +490,9 @@ get_formatted_fnotes <- function(tt) {
 }
 .pad_end <- function(lst, padto, ncols) {
   curcov <- sum(vapply(lst, cell_cspan, 0L))
-  if (curcov == padto)
+  if (curcov == padto) {
     return(lst)
+  }
 
   c(lst, list(rcell("", colspan = padto - curcov)))
 }
@@ -494,8 +502,9 @@ get_formatted_fnotes <- function(tt) {
   lens <- vapply(chunks, length, 1L)
   padto <- max(lens)
   needpad <- lens != padto
-  if (all(!needpad))
+  if (all(!needpad)) {
     return(chunks)
+  }
 
   chunks[needpad] <- lapply(
     chunks[needpad],
@@ -793,7 +802,9 @@ remove_consecutive_numbers <- function(x) {
   # actually should be integer
   stopifnot(is.wholenumber(x), is.numeric(x), !is.unsorted(x))
 
-  if (length(x) == 0) return(integer(0))
+  if (length(x) == 0) {
+    return(integer(0))
+  }
   if (!is.integer(x)) x <- as.integer(x)
 
   x[c(TRUE, diff(x) != 1)]
@@ -922,7 +933,8 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @examples
 #'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
-#' cat(mat_as_string(mat)); cat("\n")
+#' cat(mat_as_string(mat))
+#' cat("\n")
 mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep()) {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 

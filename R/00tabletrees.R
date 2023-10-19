@@ -16,8 +16,9 @@ check_ok_label <- function(lbl, multi_ok = FALSE) {
   }
 
   if (length(lbl) > 1) {
-    if (multi_ok)
+    if (multi_ok) {
       return(all(vapply(lbl, check_ok_label, TRUE)))
+    }
     stop("got a label of length > 1")
   }
 
@@ -92,15 +93,18 @@ setClass("SplitValue",
 
 SplitValue <- function(val, extr = list(), label = val) {
   if (is(val, "SplitValue")) {
-    if (length(splv_extra(val)) > 0)
+    if (length(splv_extra(val)) > 0) {
       extr <- c(splv_extra(val), extr)
+    }
     splv_extra(val) <- extr
     return(val)
   }
-  if (!is(extr, "list"))
+  if (!is(extr, "list")) {
     extr <- list(extr)
-  if (!is(label, "character"))
+  }
+  if (!is(label, "character")) {
     label <- as.character(label)
+  }
   check_ok_label(label)
   new("SplitValue",
     value = val,
@@ -194,8 +198,9 @@ VarLevelSplit <- function(var,
                           page_prefix = NA_character_,
                           section_div = NA_character_) {
   child_labels <- match.arg(child_labels)
-  if (is.null(labels_var))
+  if (is.null(labels_var)) {
     labels_var <- var
+  }
   check_ok_label(split_label)
   new("VarLevelSplit",
     payload = var,
@@ -238,10 +243,11 @@ AllSplit <- function(split_label = "",
                      cextra_args = list(),
                      ...) {
   if (is.null(split_name)) {
-    if (nzchar(split_label))
+    if (nzchar(split_label)) {
       split_name <- split_label
-    else
+    } else {
       split_name <- "all obs"
+    }
   }
   check_ok_label(split_label)
   new("AllSplit",
@@ -358,8 +364,9 @@ setClass("MultiVarSplit",
 
 .make_multivar_names <- function(vars) {
   dups <- duplicated(vars)
-  if (!any(dups))
+  if (!any(dups)) {
     return(vars)
+  }
   dupvars <- unique(vars[dups])
   ret <- vars
   for (v in dupvars) {
@@ -402,10 +409,12 @@ MultiVarSplit <- function(vars,
   ## no topleft allowed
   label_pos <- match.arg(label_pos, label_pos_values[-3])
   child_labels <- match.arg(child_labels)
-  if (length(vars) == 1 && grepl(":", vars))
+  if (length(vars) == 1 && grepl(":", vars)) {
     vars <- strsplit(vars, ":")[[1]]
-  if (length(varlabels) == 0) ## covers NULL and character()
+  }
+  if (length(varlabels) == 0) { ## covers NULL and character()
     varlabels <- vars
+  }
   vnames <- varnames %||% .make_multivar_names(vars)
   stopifnot(length(vnames) == length(vars))
   new("MultiVarSplit",
@@ -488,11 +497,13 @@ make_static_cut_split <- function(var,
     cutlabels <- cuts[[2]]
     cuts <- cuts[[1]]
   }
-  if (is.unsorted(cuts, strictly = TRUE))
+  if (is.unsorted(cuts, strictly = TRUE)) {
     stop("invalid cuts vector. not sorted unique values.")
+  }
 
-  if (is.null(cutlabels) && !is.null(names(cuts)))
-    cutlabels <- names(cuts)[-1] ## XXX is this always right?
+  if (is.null(cutlabels) && !is.null(names(cuts))) {
+    cutlabels <- names(cuts)[-1]
+  } ## XXX is this always right?
 
   new(cls,
     payload = var,
@@ -641,8 +652,9 @@ AnalyzeVarSplit <- function(var,
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
   if (!any(nzchar(defrowlab))) {
     defrowlab <- as.character(substitute(afun))
-    if (length(defrowlab) > 1 || startsWith(defrowlab, "function("))
+    if (length(defrowlab) > 1 || startsWith(defrowlab, "function(")) {
       defrowlab <- ""
+    }
   }
   new("AnalyzeVarSplit",
     payload = var,
@@ -717,27 +729,32 @@ setClass("CompoundSplit",
 setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 
 .repoutlst <- function(x, nv) {
-  if (!is.function(x) && length(x) == nv)
+  if (!is.function(x) && length(x) == nv) {
     return(x)
-  if (!is(x, "list"))
+  }
+  if (!is(x, "list")) {
     x <- list(x)
+  }
   rep(x, length.out = nv)
 }
 
 
 .uncompound <- function(csplit) {
-  if (is(csplit, "list"))
+  if (is(csplit, "list")) {
     return(unlist(lapply(csplit, .uncompound)))
+  }
 
-  if (!is(csplit, "CompoundSplit"))
+  if (!is(csplit, "CompoundSplit")) {
     return(csplit)
+  }
 
   pld <- spl_payload(csplit)
   done <- all(!vapply(pld, is, TRUE, class2 = "CompoundSplit"))
-  if (done)
+  if (done) {
     pld
-  else
+  } else {
     unlist(lapply(pld, .uncompound))
+  }
 }
 
 strip_compound_name <- function(obj) {
@@ -827,8 +844,9 @@ AnalyzeMultiVars <- function(var,
       function(x) {
         rvis <- label_position(x) ## labelrow_visible(x)
         if (!identical(show_kidlabs, "default")) { ## is.na(show_kidlabs)) {
-          if (identical(rvis, "default")) ## ois.na(rvis))
+          if (identical(rvis, "default")) { ## ois.na(rvis))
             rvis <- show_kidlabs
+          }
         }
         label_position(x) <- rvis
         x
@@ -838,10 +856,11 @@ AnalyzeMultiVars <- function(var,
   if (length(pld) == 1) {
     ret <- pld[[1]]
   } else {
-    if (is.null(split_name))
+    if (is.null(split_name)) {
       split_name <- paste(c("ma", vapply(pld, obj_name, "")),
         collapse = "_"
       )
+    }
     ret <- new("AnalyzeMultiVars",
       payload = pld,
       split_label = "",
@@ -923,8 +942,9 @@ VarLevWBaselineSplit <- function(var,
 
 
 .chkname <- function(nm) {
-  if (is.null(nm))
+  if (is.null(nm)) {
     nm <- ""
+  }
   if (length(nm) != 1) {
     stop("name is not of length one")
   } else if (is.na(nm)) {
@@ -976,10 +996,11 @@ make_child_pos <- function(parpos,
                            newval,
                            newlab = newval,
                            newextra = list()) {
-  if (!is(newval, "SplitValue"))
+  if (!is(newval, "SplitValue")) {
     nsplitval <- SplitValue(newval, extr = newextra, label = newlab)
-  else
+  } else {
     nsplitval <- newval
+  }
   check_ok_label(newlab)
   newpos <- TreePos(
     spls = c(pos_splits(parpos), newspl),
@@ -1088,11 +1109,12 @@ LayoutColTree <- function(lev = 0L,
   ## sub = expression(TRUE),
   ## svar = NA_character_,
   ## slab = NA_character_) {
-  if (is.null(spl))
+  if (is.null(spl)) {
     stop(
       "LayoutColTree constructor got NULL for spl. ", # nocov
       "This should never happen. Please contact the maintainer."
-    ) # nocov
+    )
+  } # nocov
   footnotes <- make_ref_value(footnotes)
   check_ok_label(label)
   new("LayoutColTree",
@@ -1185,18 +1207,20 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
 
   nleaves <- length(leaves)
   snas <- sum(is.na(cnts))
-  if (length(csubs) != nleaves || length(extras) != nleaves || length(cnts) != nleaves)
+  if (length(csubs) != nleaves || length(extras) != nleaves || length(cnts) != nleaves) {
     stop(
       "Mismatching number of columns indicated by: csubs [",
       length(csubs), "], ",
       "treelyt [", nl, "], extras [", length(extras),
       "] and counts [", cnts, "]."
     )
-  if (snas != 0 && snas != nleaves)
+  }
+  if (snas != 0 && snas != nleaves) {
     warning(
       "Mixture of missing and non-missing column counts when ",
       "creating column info."
     )
+  }
 
   new("InstantiatedColumnInfo",
     tree_layout = treelyt,
@@ -1330,14 +1354,17 @@ setClass("LabelRow",
                       indent_mod = 0L,
                       footnotes = list(),
                       table_inset = 0L) {
-  if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label))
+  if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label
+  }
   vals <- lapply(vals, rcell)
   rlabels <- unique(unlist(lapply(vals, obj_label)))
-  if ((missing(label) || is.null(label) || identical(label, "")) && sum(nzchar(rlabels)) == 1)
+  if ((missing(label) || is.null(label) || identical(label, "")) && sum(nzchar(rlabels)) == 1) {
     label <- rlabels[nzchar(rlabels)]
-  if (missing(cspan) && !is.null(unlist(lapply(vals, cell_cspan))))
+  }
+  if (missing(cspan) && !is.null(unlist(lapply(vals, cell_cspan)))) {
     cspan <- vapply(vals, cell_cspan, 0L)
+  }
 
   check_ok_label(label)
   rw <- new(klass,
@@ -1421,17 +1448,18 @@ setClass("ElementaryTable",
     lst <- lapply(
       lst,
       function(x) {
-        if (no_colinfo(x))
+        if (no_colinfo(x)) {
           col_info(x) <- colinfo
-        ## split functions from function factories (e.g. add_combo_levels)
-        ## have different environments so we can't use identical here
-        ## all.equal requires the **values within the closures** to be the
-        ## same but not the actual enclosing environments.
-        else if (!identical(colinfo, col_info(x), ignore.environment = TRUE))
+        } else if (!identical(colinfo, col_info(x), ignore.environment = TRUE)) {
+          ## split functions from function factories (e.g. add_combo_levels)
+          ## have different environments so we can't use identical here
+          ## all.equal requires the **values within the closures** to be the
+          ## same but not the actual enclosing environments.
           stop(
             "attempted to add child with non-matching, non-empty ",
             "column info to an existing table"
           )
+        }
         x
       }
     )
@@ -1443,8 +1471,9 @@ setClass("ElementaryTable",
     }))) {
     lst <- unlist(lapply(lst, function(tb) tree_children(tb)[[1]]))
   }
-  if (length(lst) == 0)
+  if (length(lst) == 0) {
     return(list())
+  }
   ## names
   realnames <- sapply(lst, obj_name)
   lstnames <- names(lst)
@@ -1492,14 +1521,16 @@ ElementaryTable <- function(kids = list(),
                             inset = 0L) {
   check_ok_label(label)
   if (is.null(cinfo)) {
-    if (length(kids) > 0)
+    if (length(kids) > 0) {
       cinfo <- col_info(kids[[1]])
-    else
+    } else {
       cinfo <- EmptyColInfo
+    }
   }
 
-  if (no_colinfo(labelrow))
+  if (no_colinfo(labelrow)) {
     col_info(labelrow) <- cinfo
+  }
   kids <- .enforce_valid_kids(kids, cinfo)
   tab <- new("ElementaryTable",
     children = kids,
@@ -1535,14 +1566,15 @@ ttable_validity <- function(object) {
 }
 
 .calc_cinfo <- function(cinfo, cont, kids) {
-  if (!is.null(cinfo))
+  if (!is.null(cinfo)) {
     cinfo
-  else if (!is.null(cont))
+  } else if (!is.null(cont)) {
     col_info(cont)
-  else if (length(kids) >= 1)
+  } else if (length(kids) >= 1) {
     col_info(kids[[1]])
-  else
+  } else {
     EmptyColInfo
+  }
 }
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live
@@ -1589,13 +1621,16 @@ TableTree <- function(kids = list(),
   cinfo <- .calc_cinfo(cinfo, cont, kids)
 
   kids <- .enforce_valid_kids(kids, cinfo)
-  if (isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0)
+  if (isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0) {
     stop("Got table tree with content table and content position")
-  if (no_colinfo(labelrow))
+  }
+  if (no_colinfo(labelrow)) {
     col_info(labelrow) <- cinfo
+  }
   if ((is.null(cont) || nrow(cont) == 0) && all(sapply(kids, is, "DataRow"))) {
-    if (!is.na(page_title))
+    if (!is.na(page_title)) {
       stop("Got a page title prefix for an Elementary Table")
+    }
     ## constructor takes care of recursive format application
     ElementaryTable(
       kids = kids,
@@ -1671,10 +1706,11 @@ TableTree <- function(kids = list(),
 setClass("SplitVector",
   contains = "list",
   validity = function(object) {
-    if (length(object) >= 1)
+    if (length(object) >= 1) {
       lst <- tail(object, 1)[[1]]
-    else
+    } else {
       lst <- NULL
+    }
     all(sapply(head(object, -1), is, "Split")) &&
       (is.null(lst) || is(lst, "Split") || is(lst, "VTableNodeInfo"))
   }
@@ -1683,16 +1719,19 @@ setClass("SplitVector",
 SplitVector <- function(x = NULL,
                         ...,
                         lst = list(...)) {
-  if (!is.null(x))
+  if (!is.null(x)) {
     lst <- unlist(c(list(x), lst), recursive = FALSE)
+  }
   new("SplitVector", lst)
 }
 
 avar_noneorlast <- function(vec) {
-  if (!is(vec, "SplitVector"))
+  if (!is(vec, "SplitVector")) {
     return(FALSE)
-  if (length(vec) == 0)
+  }
+  if (length(vec) == 0) {
     return(TRUE)
+  }
   isavar <- which(sapply(vec, is, "AnalyzeVarSplit"))
   (length(isavar) == 0) || (length(isavar) == 1 && isavar == length(vec))
 }
@@ -1809,20 +1848,23 @@ setClass("RefFootnote", representation(
 
 
 RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
-  if (is(note, "RefFootnote"))
+  if (is(note, "RefFootnote")) {
     return(note)
-  else if (length(note) == 0)
+  } else if (length(note) == 0) {
     return(NULL)
-  if (length(symbol) != 1L)
+  }
+  if (length(symbol) != 1L) {
     stop(
       "Referential footnote can only have a single string as its index.",
       " Got char vector of length ", length(index)
     )
-  if (!is.na(symbol) && (index == "NA" || grepl("[{}]", index)))
+  }
+  if (!is.na(symbol) && (index == "NA" || grepl("[{}]", index))) {
     stop(
       "The string 'NA' and strings containing '{' or '}' cannot be used as ",
       "referential footnote index symbols. Got string '", index, "'."
     )
+  }
 
   new("RefFootnote", value = note, index = index, symbol = symbol)
 }
@@ -1848,18 +1890,22 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
                       indent_mod = NULL, footnotes = NULL,
                       align = NULL, format_na_str = NULL) {
-  if (is.null(colspan))
+  if (is.null(colspan)) {
     colspan <- 1L
-  if (!is.null(colspan) && !is(colspan, "integer"))
+  }
+  if (!is.null(colspan) && !is(colspan, "integer")) {
     colspan <- as.integer(colspan)
+  }
   ## if we're not given a label but the value has one associated with
   ## it we use that.
   ## NB: we need to be able to override a non-empty label with an empty one
   ## so we can't have "" mean "not given a label" here
-  if ((is.null(label) || is.na(label)) && !is.null(obj_label(val)))
+  if ((is.null(label) || is.na(label)) && !is.null(obj_label(val))) {
     label <- obj_label(val)
-  if (!is.list(footnotes))
+  }
+  if (!is.list(footnotes)) {
     footnotes <- lapply(footnotes, RefFootnote)
+  }
   check_ok_label(label)
   ret <- structure(list(val),
     format = format, colspan = colspan,
@@ -1902,13 +1948,15 @@ RowsVerticalSection <- function(values,
   if (is.null(labels)) {
     labels <- names(values)
   }
-  if (is.null(names) && all(nzchar(labels)))
+  if (is.null(names) && all(nzchar(labels))) {
     names <- labels
-  else if (is.null(labels) && !is.null(names))
+  } else if (is.null(labels) && !is.null(names)) {
     labels <- names
+  }
 
-  if (!is.null(indent_mods))
+  if (!is.null(indent_mods)) {
     indent_mods <- as.integer(indent_mods)
+  }
   check_ok_label(labels, multi_ok = TRUE)
   structure(values,
     class = "RowsVerticalSection", row_names = names,

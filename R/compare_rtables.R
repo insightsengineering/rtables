@@ -117,22 +117,25 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
       "cell attributes have not been compared"
     )
   }
-  if (!identical(row.names(object), row.names(expected)))
+  if (!identical(row.names(object), row.names(expected))) {
     attr(X, "info") <- c(attr(X, "info"), "row labels are not the same")
+  }
 
   nro <- nrow(object)
   nre <- nrow(expected)
   nco <- ncol(object)
   nce <- ncol(expected)
 
-  if (nco < nce)
+  if (nco < nce) {
     X[, seq(nco + 1, nce)] <- "-"
-  else if (nce < nco)
+  } else if (nce < nco) {
     X[, seq(nce + 1, nco)] <- "+"
-  if (nro < nre)
+  }
+  if (nro < nre) {
     X[seq(nro + 1, nre), ] <- "-"
-  else if (nre < nro)
+  } else if (nre < nro) {
     X[seq(nre + 1, nro), ] <- "+"
+  }
 
   orig_object <- object # nolint
   orig_expected <- expected # nolint
@@ -182,12 +185,14 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
     cpe <- col_paths(expected)
     cp_mismatches <- !mapply(identical, x = cpo, y = cpe)
 
-    if (any(rp_mismatches)) # P for (row or column) path do not match
+    if (any(rp_mismatches)) { # P for (row or column) path do not match
       X[rp_mismatches, ] <- "R"
+    }
     if (any(cp_mismatches)) {
       crep <- rep("C", nrow(X))
-      if (any(rp_mismatches))
+      if (any(rp_mismatches)) {
         crep[rp_mismatches] <- "P"
+      }
       X[, cp_mismatches] <- rep(crep, sum(cp_mismatches))
     }
   }
@@ -240,10 +245,11 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
 ## }
 
 compare_value <- function(x, y, tol) {
-  if (identical(x, y) || (is.numeric(x) && is.numeric(y) && max(abs(x - y)) <= tol))
+  if (identical(x, y) || (is.numeric(x) && is.numeric(y) && max(abs(x - y)) <= tol)) {
     "."
-  else
+  } else {
     "X"
+  }
 }
 compare_rrows <- function(row1, row2, tol, ncol) {
   if (length(row1) == ncol && length(row2) == ncol) {
