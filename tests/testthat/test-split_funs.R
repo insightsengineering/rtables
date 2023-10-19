@@ -312,7 +312,9 @@ test_that("make_split_fun works", {
 
   ## overriding core core split functionality
   very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
-    make_split_result(c("stupid", "silly"), datasplit = list(df[1:10, ], df[11:30, ]), labels = c("first 10", "second 20"))
+    make_split_result(
+      c("stupid", "silly"), datasplit = list(df[1:10, ], df[11:30, ]), labels = c("first 10", "second 20")
+    )
   }
 
   nonsense_splfun <- make_split_fun(core_split = very_stupid_core,

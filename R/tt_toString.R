@@ -127,8 +127,8 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 
 #' Transform `rtable` to a list of matrices which can be used for outputting
 #'
-#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
-#' map the `rtable` to an in between state with the formatted cells in a matrix form.
+#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML 
+#' it is useful to map the `rtable` to an in between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in
@@ -539,7 +539,10 @@ get_formatted_fnotes <- function(tt) {
       if (grepl("%", cformat)) {
         counts <- lapply(counts, function(x) c(x, 1))
       } else {
-        stop("This 2d format is not supported for column counts. Please choose a 1d format or a 2d format that includes a % value.")
+        stop(
+          "This 2d format is not supported for column counts.",
+          "Please choose a 1d format or a 2d format that includes a % value."
+        )
       }
     } else if (cfmt_dim == "3d") {
       stop("3d formats are not supported for column counts.")

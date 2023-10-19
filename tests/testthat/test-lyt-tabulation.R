@@ -1375,7 +1375,9 @@ test_that("qtable works", {
 
   t7 <- suppressWarnings(qtable(ex_adsl, row_vars = "SEX",
     col_vars = "ARM", avar = "AGE", afun = range))
-  range_use_nms <- function(x, .spl_context, ...) rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
+  range_use_nms <- function(x, .spl_context, ...) {
+    rcell(suppressWarnings(range(x)), label = tail(.spl_context$value, 1), format = "xx.x / xx.x")
+  }
 
   t7b <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = drop_split_levels, child_labels = "hidden") %>%
@@ -1417,7 +1419,9 @@ test_that("qtable works", {
   expect_equal(mf_strings(mpf10)[3:7, 1],
     letters[1:5])
 
-  t11 <- qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5])
+  t11 <- qtable(
+    ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = fivenum3, row_labels = letters[1:5]
+  )
   expect_equal(top_left(t11), "AGE - fivenum3")
   mpf11 <- matrix_form(t11)
   expect_equal(mf_strings(mpf11)[4:8, 1],

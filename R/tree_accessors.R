@@ -919,7 +919,10 @@ setMethod("obj_na_str", "Split", function(obj) obj@split_na_str)
 }
 
 #' @rdname int_methods
-setGeneric("set_format_recursive", function(obj, format, na_str, override = FALSE) standardGeneric("set_format_recursive"))
+setGeneric("set_format_recursive", function(obj, format, na_str, override = FALSE) {
+  standardGeneric("set_format_recursive")
+})
+
 #' @rdname int_methods
 #' @param override logical(1).
 setMethod("set_format_recursive", "TableRow",
