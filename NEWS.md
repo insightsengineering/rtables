@@ -1,4 +1,4 @@
-## rtables 0.6.5.9002
+## rtables 0.6.5.9003
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
 
