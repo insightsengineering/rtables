@@ -24,14 +24,19 @@ Manual column declaration
 \examples{
 # simple one level column space
 rows <- lapply(1:5, function(i) {
-   DataRow(rep(i, times  = 3))})
+  DataRow(rep(i, times = 3))
+})
 tbl <- TableTree(kids = rows, cinfo = manual_cols(split = c("a", "b", "c")))
 tbl
 
 # manually declared nesting
-tbl2 <- TableTree(kids = list(DataRow(as.list(1:4))),
-                 cinfo = manual_cols(Arm = c("Arm A", "Arm B"),
-                                     Gender = c("M", "F")))
+tbl2 <- TableTree(
+  kids = list(DataRow(as.list(1:4))),
+  cinfo = manual_cols(
+    Arm = c("Arm A", "Arm B"),
+    Gender = c("M", "F")
+  )
+)
 tbl2
 
 }

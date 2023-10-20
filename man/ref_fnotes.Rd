@@ -59,8 +59,8 @@ Get and set referential footnotes on aspects of a built table
 \examples{
 # How to add referencial footnotes after having created a table
 lyt <- basic_table() \%>\%
-    split_rows_by("SEX", page_by = TRUE) \%>\%
-    analyze("AGE")
+  split_rows_by("SEX", page_by = TRUE) \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl <- trim_rows(tbl)

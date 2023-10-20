@@ -67,8 +67,8 @@ lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze("AGE", afun = function(x) {
     in_rows(
-       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-       "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+      "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "Range" = rcell(range(x), format = "xx.xx - xx.xx")
     )
   })
 

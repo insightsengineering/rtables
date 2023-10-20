@@ -29,8 +29,8 @@ NULL
 
 export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
                           value_fun = collapse_values) {
-    df <- path_enriched_df(tt, path_fun = path_fun, value_fun = value_fun)
-    write.table(df, file, sep = "\t")
+  df <- path_enriched_df(tt, path_fun = path_fun, value_fun = value_fun)
+  write.table(df, file, sep = "\t")
 }
 
 
@@ -40,30 +40,33 @@ export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
 ##' @export
 ##' @rdname tsv_io
 import_from_tsv <- function(file) {
-    rawdf <- read.table(file, header = TRUE, sep = "\t")
-    as.data.frame(lapply(rawdf,
-                         function(col) {
-        if(!any(grepl(.collapse_char, col, fixed = TRUE)))
-            col
-        else
-            I(strsplit(col, split = .collapse_char_esc))
-    }))
-
-
+  rawdf <- read.table(file, header = TRUE, sep = "\t")
+  as.data.frame(lapply(
+    rawdf,
+    function(col) {
+      if (!any(grepl(.collapse_char, col, fixed = TRUE))) {
+        col
+      } else {
+        I(strsplit(col, split = .collapse_char_esc))
+      }
+    }
+  ))
 }
 
 collapse_path <- function(paths) {
-    if(is.list(paths))
-        return(vapply(paths, collapse_path, ""))
-    paste(paths, collapse = .collapse_char)
+  if (is.list(paths)) {
+    return(vapply(paths, collapse_path, ""))
+  }
+  paste(paths, collapse = .collapse_char)
 }
 
 collapse_values <- function(colvals) {
-    if(!is.list(colvals)) ## || all(vapply(colvals, length, 1L) == 1))
-        return(colvals)
-    else if(all(vapply(colvals, length, 1L) == 1))
-        return(unlist(colvals))
-    vapply(colvals, paste, "", collapse = .collapse_char)
+  if (!is.list(colvals)) { ## || all(vapply(colvals, length, 1L) == 1))
+    return(colvals)
+  } else if (all(vapply(colvals, length, 1L) == 1)) {
+    return(unlist(colvals))
+  }
+  vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
 #' Transform `TableTree` object to Path-Enriched data.frame
@@ -87,77 +90,79 @@ collapse_values <- function(colvals) {
 #'
 #' tbl <- build_table(lyt, ex_adsl)
 #' path_enriched_df(tbl)
-
 path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_values) {
-    rdf <- make_row_df(tt)
-    cdf <- make_col_df(tt)
-    cvs <- as.data.frame(do.call(rbind, cell_values(tt)))
-    cvs <- as.data.frame(lapply(cvs, value_fun))
-    row.names(cvs) <- NULL
-    colnames(cvs) <- path_fun(cdf$path)
-    preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
-    cbind.data.frame(row_path = preppaths, cvs)
-
+  rdf <- make_row_df(tt)
+  cdf <- make_col_df(tt)
+  cvs <- as.data.frame(do.call(rbind, cell_values(tt)))
+  cvs <- as.data.frame(lapply(cvs, value_fun))
+  row.names(cvs) <- NULL
+  colnames(cvs) <- path_fun(cdf$path)
+  preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
+  cbind.data.frame(row_path = preppaths, cvs)
 }
 
 do_label_row <- function(rdfrow, maxlen) {
-    pth <- rdfrow$path[[1]]
-    c(as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-      list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
+  pth <- rdfrow$path[[1]]
+  c(
+    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
 }
 
 
 make_result_df_md_colnames <- function(maxlen) {
-    spllen <- floor((maxlen - 2) / 2)
-    ret <- character()
-    if (spllen > 0)
-        ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
-    ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
+  spllen <- floor((maxlen - 2) / 2)
+  ret <- character()
+  if (spllen > 0) {
+    ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+  }
+  ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
 }
 
 
 do_content_row <- function(rdfrow, maxlen) {
-    pth <- rdfrow$path[[1]]
+  pth <- rdfrow$path[[1]]
 
-    contpos <- which(pth == "@content")
+  contpos <- which(pth == "@content")
 
-    seq_before <- seq_len(contpos - 1)
+  seq_before <- seq_len(contpos - 1)
 
-    c(as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
-      list(tail(pth, 1)),
-      list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class))
+  c(
+    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+    list(tail(pth, 1)),
+    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
+  )
 }
 
 do_data_row <- function(rdfrow, maxlen) {
-
-    pth <- rdfrow$path[[1]]
-    pthlen <- length(pth)
-    ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
-    if(pthlen %% 2 == 1) {
-        pth <- pth[-1 * (pthlen - 2)]
-    }
-    c(as.list(pth[seq_len(pthlen - 2)]),
-      replicate(maxlen - pthlen, list(NA_character_)),
-      as.list(tail(pth, 2)),
-      list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class))
-
-
+  pth <- rdfrow$path[[1]]
+  pthlen <- length(pth)
+  ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
+  if (pthlen %% 2 == 1) {
+    pth <- pth[-1 * (pthlen - 2)]
+  }
+  c(
+    as.list(pth[seq_len(pthlen - 2)]),
+    replicate(maxlen - pthlen, list(NA_character_)),
+    as.list(tail(pth, 2)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
 }
 
 
 handle_rdf_row <- function(rdfrow, maxlen) {
-    nclass <- rdfrow$node_class
-    if(rdfrow$path[[1]][1] == "root") {
-        rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
-        maxlen <- maxlen - 1
-    }
-    ret <- switch(nclass,
-           LabelRow = do_label_row(rdfrow, maxlen),
-           ContentRow = do_content_row(rdfrow, maxlen),
-           DataRow = do_data_row(rdfrow, maxlen),
-           stop("Unrecognized node type in row dataframe, unable to generate result data frame")
-           )
-    setNames(ret, make_result_df_md_colnames(maxlen))
+  nclass <- rdfrow$node_class
+  if (rdfrow$path[[1]][1] == "root") {
+    rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
+    maxlen <- maxlen - 1
+  }
+  ret <- switch(nclass,
+    LabelRow = do_label_row(rdfrow, maxlen),
+    ContentRow = do_content_row(rdfrow, maxlen),
+    DataRow = do_data_row(rdfrow, maxlen),
+    stop("Unrecognized node type in row dataframe, unable to generate result data frame")
+  )
+  setNames(ret, make_result_df_md_colnames(maxlen))
 }
 
 
@@ -168,36 +173,47 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 #' @examples
 #' result_df_specs()
 result_df_specs <- function() {
-   list(v0_experimental = result_df_v0_experimental)
+  list(v0_experimental = result_df_v0_experimental)
 }
 
 lookup_result_df_specfun <- function(spec) {
-    if(!(spec %in% names(result_df_specs())))
-        stop("unrecognized result data frame specification: ",
-             spec,
-             "If that specification is correct you may  need to update your version of rtables")
-    result_df_specs()[[spec]]
+  if (!(spec %in% names(result_df_specs()))) {
+    stop(
+      "unrecognized result data frame specification: ",
+      spec,
+      "If that specification is correct you may  need to update your version of rtables"
+    )
+  }
+  result_df_specs()[[spec]]
 }
 
 result_df_v0_experimental <- function(tt) {
-
-    raw_cvals <- cell_values(tt)
-    ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
-    ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
-    ## at this point.
-    if(nrow(tt) == 1 && length(raw_cvals) > 1)
-        raw_cvals <- list(raw_cvals)
-    cellvals <- as.data.frame(do.call(rbind, raw_cvals))
-    row.names(cellvals) <- NULL
-    rdf <- make_row_df(tt)
-    df <- cbind(rdf[rdf$node_class != "LabelRow",
-                    c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")],
-                cellvals)
-    maxlen <- max(lengths(df$path))
-    metadf <- do.call(rbind.data.frame, lapply(seq_len(NROW(df)),
-                                               function(ii) handle_rdf_row(df[ii, ], maxlen = maxlen)))
-    cbind(metadf[metadf$node_class != "LabelRow", ],
-          cellvals)
+  raw_cvals <- cell_values(tt)
+  ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
+  ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
+  ## at this point.
+  if (nrow(tt) == 1 && length(raw_cvals) > 1) {
+    raw_cvals <- list(raw_cvals)
+  }
+  cellvals <- as.data.frame(do.call(rbind, raw_cvals))
+  row.names(cellvals) <- NULL
+  rdf <- make_row_df(tt)
+  df <- cbind(
+    rdf[
+      rdf$node_class != "LabelRow",
+      c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")
+    ],
+    cellvals
+  )
+  maxlen <- max(lengths(df$path))
+  metadf <- do.call(rbind.data.frame, lapply(
+    seq_len(NROW(df)),
+    function(ii) handle_rdf_row(df[ii, ], maxlen = maxlen)
+  ))
+  cbind(
+    metadf[metadf$node_class != "LabelRow", ],
+    cellvals
+  )
 }
 
 #' Generate a Result Data Frame
@@ -218,34 +234,32 @@ result_df_v0_experimental <- function(tt) {
 #' @examples
 #'
 #' lyt <- basic_table() %>%
-#'     split_cols_by("ARM") %>%
-#'     split_rows_by("STRATA1") %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("STRATA1") %>%
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
 #' as_result_df(tbl)
 as_result_df <- function(tt, spec = "v0_experimental", ...) {
-
-    result_df_fun <- lookup_result_df_specfun(spec)
-    result_df_fun(tt, ...)
+  result_df_fun <- lookup_result_df_specfun(spec)
+  result_df_fun(tt, ...)
 }
 
 .split_colwidths <- function(ptabs, nctot, colwidths) {
+  ret <- list()
+  i <- 1L
 
-    ret <- list()
-    i <- 1L
-
-    rlw <- colwidths[1]
-    colwidths <- colwidths[-1]
-    donenc <- 0
-    while(donenc < nctot) {
-        curnc <- NCOL(ptabs[[i]])
-        ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
-        colwidths <- colwidths[-1 * seq_len(curnc)]
-        donenc <- donenc + curnc
-        i <- i + 1
-    }
-    ret
+  rlw <- colwidths[1]
+  colwidths <- colwidths[-1]
+  donenc <- 0
+  while (donenc < nctot) {
+    curnc <- NCOL(ptabs[[i]])
+    ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
+    colwidths <- colwidths[-1 * seq_len(curnc)]
+    donenc <- donenc + curnc
+    i <- i + 1
+  }
+  ret
 }
 
 ### Migrated to formatters.
@@ -329,13 +343,13 @@ export_as_pdf <- function(tt,
                           file,
                           page_type = "letter",
                           landscape = FALSE,
-                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
+                          pg_width = page_dim(page_type)[if (landscape) 2 else 1],
+                          pg_height = page_dim(page_type)[if (landscape) 1 else 2],
                           width = NULL,
                           height = NULL, # passed to pdf()
                           margins = c(4, 4, 4, 4),
                           font_family = "Courier",
-                          fontsize = 8,  # grid parameters
+                          fontsize = 8, # grid parameters
                           font_size = fontsize,
                           paginate = TRUE,
                           lpp = NULL,
@@ -345,90 +359,107 @@ export_as_pdf <- function(tt,
                           tf_wrap = TRUE,
                           max_width = NULL,
                           colwidths = propose_column_widths(matrix_form(tt, TRUE)),
-                          ... # passed to paginate_table
-) {
-    stopifnot(file_ext(file) != ".pdf")
-    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
-        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
-             ncol(tt) + 1, "], got length ", length(colwidths))
+                          ...) { # passed to paginate_table
+  stopifnot(file_ext(file) != ".pdf")
+  if (!is.null(colwidths) && length(colwidths) != ncol(tt) + 1) {
+    stop(
+      "non-null colwidths argument must have length ncol(tt) + 1 [",
+      ncol(tt) + 1, "], got length ", length(colwidths)
+    )
+  }
 
-    gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
+  gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
 
-    ## soft deprecation. To become hard deprecation.
-    if(!is.null(height))
-        pg_height <- height
+  ## soft deprecation. To become hard deprecation.
+  if (!is.null(height)) {
+    pg_height <- height
+  }
 
-    if(!is.null(width))
-        pg_width <- width
+  if (!is.null(width)) {
+    pg_width <- width
+  }
 
-    if(missing(font_size) && !missing(fontsize))
-        font_size <- fontsize
+  if (missing(font_size) && !missing(fontsize)) {
+    font_size <- fontsize
+  }
 
-    pdf(file = file, width = pg_width, height = pg_height)
-    on.exit(dev.off())
-    grid.newpage()
-    pushViewport(plotViewport(margins = margins, gp = gp_plot))
+  pdf(file = file, width = pg_width, height = pg_height)
+  on.exit(dev.off())
+  grid.newpage()
+  pushViewport(plotViewport(margins = margins, gp = gp_plot))
 
-    cur_gpar <-  get.gpar()
-    if (is.null(lpp)) {
-        lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                     (cur_gpar$cex * cur_gpar$lineheight)) - sum(margins[c(1, 3)]) # bottom, top
+  cur_gpar <- get.gpar()
+  if (is.null(lpp)) {
+    lpp <- floor(
+      convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) / (cur_gpar$cex * cur_gpar$lineheight)
+    ) - sum(margins[c(1, 3)]) # bottom, top
+  }
+  if (is.null(cpp)) {
+    cpp <- floor(
+      convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
+        font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi
+    ) - sum(margins[c(2, 4)]) # left, right
+  }
+  if (tf_wrap && is.null(max_width)) {
+    max_width <- cpp
+  }
+
+  tbls <- if (paginate) {
+    paginate_table(tt,
+      lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width,
+      colwidths = colwidths, ...
+    )
+  } else {
+    list(tt)
+  }
+  stbls <- lapply(lapply(
+    tbls,
+    function(tbl_i) {
+      cinds <- c(1, .figure_out_colinds(tbl_i, tt) + 1L)
+      toString(tbl_i,
+        widths = colwidths[cinds], hsep = hsep,
+        indent_size = indent_size, tf_wrap = tf_wrap,
+        max_width = max_width
+      )
     }
-    if(is.null(cpp)) {
-        cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-                     font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi) - sum(margins[c(2, 4)]) # left, right
+  ), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
+  gtbls <- lapply(stbls, function(txt) {
+    textGrob(
+      label = txt,
+      x = unit(0, "npc"), y = unit(1, "npc"),
+      just = c("left", "top")
+    )
+  })
+
+  npages <- length(gtbls)
+  exceeds_width <- rep(FALSE, npages)
+  exceeds_height <- rep(FALSE, npages)
+
+  for (i in seq_along(gtbls)) {
+    g <- gtbls[[i]]
+
+    if (i > 1) {
+      grid.newpage()
+      pushViewport(plotViewport(margins = margins, gp = gp_plot))
     }
-    if(tf_wrap && is.null(max_width))
-        max_width <- cpp
 
-    tbls <- if (paginate) {
-                paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, 
-                               colwidths = colwidths, ...)
-            } else {
-                list(tt)
-            }
-    stbls <- lapply(lapply(tbls,
-                           function(tbl_i) {
-        cinds <- c(1, .figure_out_colinds(tbl_i, tt) + 1L)
-        toString(tbl_i, widths = colwidths[cinds], hsep = hsep,
-                 indent_size = indent_size, tf_wrap = tf_wrap,
-                 max_width = max_width)
-    }), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
-    gtbls <- lapply(stbls, function(txt) {
-        textGrob(
-            label = txt,
-            x = unit(0, "npc"), y = unit(1, "npc"),
-            just = c("left", "top")
-        )
-    })
-
-    npages <- length(gtbls)
-    exceeds_width <- rep(FALSE, npages)
-    exceeds_height <- rep(FALSE, npages)
-
-    for (i in seq_along(gtbls)) {
-        g <- gtbls[[i]]
-
-        if (i > 1) {
-            grid.newpage()
-            pushViewport(plotViewport(margins = margins, gp = gp_plot))
-        }
-
-        if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) >
-            convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) {
-            exceeds_height[i] <- TRUE
-            warning("height of page ", i, " exceeds the available space")
-        }
-        if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) >
-            convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) {
-            exceeds_width[i] <- TRUE
-            warning("width of page ", i, " exceeds the available space")
-        }
-
-        grid.draw(g)
+    if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) >
+      convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) { # nolint
+      exceeds_height[i] <- TRUE
+      warning("height of page ", i, " exceeds the available space")
     }
-     list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, 
-          lpp = lpp, cpp = cpp)
+    if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) >
+      convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) { # nolint
+      exceeds_width[i] <- TRUE
+      warning("width of page ", i, " exceeds the available space")
+    }
+
+    grid.draw(g)
+  }
+  list(
+    file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height,
+    lpp = lpp, cpp = cpp
+  )
 }
 # Flextable and docx -----------------------------------------------------------
 #' Export as word document
@@ -731,29 +762,29 @@ tt_to_flextable <- function(tt,
   # want this, and it depends on the size of the table, it is not another
   # row with different columns -> All of this should be fixed at source (in toString)
   if (hnum > 1) { # otherwise nothing to do
-      det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
-      has_nclab <- apply(det_nclab, 1, any)
-      if (isFALSE(counts_in_newline) && any(has_nclab)) {
-        whsnc <- which(has_nclab) # which rows have it
-        what_is_nclab <- det_nclab[whsnc, ]
-        
-        # condition for popping the interested row by merging the upper one
-        hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
-          hdr[whsnc, what_is_nclab],
-          sep = " "
-        )
-        hdr[whsnc - 1, what_is_nclab] <- ""
-        
-        # We can remove the row if they are all ""
-        row_to_pop <- whsnc - 1
-        if (all(!nzchar(hdr[row_to_pop, ]))) {
-          hdr <- hdr[-row_to_pop, , drop = FALSE]
-          spans <- spans[-row_to_pop, , drop = FALSE]
-          body <- body[-row_to_pop, , drop = FALSE]
-          mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
-          hnum <- hnum - 1
-        }
+    det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
+    has_nclab <- apply(det_nclab, 1, any)
+    if (isFALSE(counts_in_newline) && any(has_nclab)) {
+      whsnc <- which(has_nclab) # which rows have it
+      what_is_nclab <- det_nclab[whsnc, ]
+
+      # condition for popping the interested row by merging the upper one
+      hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
+        hdr[whsnc, what_is_nclab],
+        sep = " "
+      )
+      hdr[whsnc - 1, what_is_nclab] <- ""
+
+      # We can remove the row if they are all ""
+      row_to_pop <- whsnc - 1
+      if (all(!nzchar(hdr[row_to_pop, ]))) {
+        hdr <- hdr[-row_to_pop, , drop = FALSE]
+        spans <- spans[-row_to_pop, , drop = FALSE]
+        body <- body[-row_to_pop, , drop = FALSE]
+        mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
+        hnum <- hnum - 1
       }
+    }
   }
 
   flx <- flx %>%
@@ -817,8 +848,7 @@ tt_to_flextable <- function(tt,
   }
 
   # Title lines (after theme for problems with lines)
-  if (titles_as_header &&
-    length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
+  if (titles_as_header && length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
     real_titles <- all_titles(tt)
     real_titles <- real_titles[nzchar(real_titles)]
     flx <- flextable::add_header_lines(flx, values = real_titles, top = TRUE) %>%
@@ -939,8 +969,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
       for (bi in seq_along(bold_manual)) {
         bld_tmp <- bold_manual[[bi]]
         checkmate::assert_list(bld_tmp)
-        if (!all(c("i", "j") %in% names(bld_tmp)) ||
-          !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
+        if (!all(c("i", "j") %in% names(bld_tmp)) || !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
           stop(
             "Found an allowed section for manual bold (", names(bold_manual)[bi],
             ") that was not a named list with i (row) and j (col) integer vectors."

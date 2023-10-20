@@ -29,8 +29,8 @@ A row object of the context-appropriate type (label or data)
 \code{rrowl}
 }
 \examples{
-rrowl("a", c(1,2,3), format = "xx")
-rrowl("a", c(1,2,3), c(4,5,6), format = "xx")
+rrowl("a", c(1, 2, 3), format = "xx")
+rrowl("a", c(1, 2, 3), c(4, 5, 6), format = "xx")
 
 
 rrowl("N", table(iris$Species))
@@ -41,8 +41,8 @@ x <- tapply(iris$Sepal.Length, iris$Species, mean, simplify = FALSE)
 rrow(row.name = "row 1", x)
 rrow("ABC", 2, 3)
 
-rrowl(row.name = "row 1", c(1, 2), c(3,4))
-rrow(row.name = "row 2", c(1, 2), c(3,4))
+rrowl(row.name = "row 1", c(1, 2), c(3, 4))
+rrow(row.name = "row 2", c(1, 2), c(3, 4))
 }
 \seealso{
 Other compatibility: 
