@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,21 +61,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -104,7 +89,7 @@
                         <h4 data-toc-skip class="author">Emily de la Rua
 and Gabriel Becker</h4>
             
-            <h4 data-toc-skip class="date">2023-10-19</h4>
+            <h4 data-toc-skip class="date">2023-10-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/example_analysis_coxreg.Rmd" class="external-link"><code>vignettes/example_analysis_coxreg.Rmd</code></a></small>
       <div class="d-none name"><code>example_analysis_coxreg.Rmd</code></div>
@@ -225,7 +210,7 @@ a separate row.</p>
 <span>    <span class="va">xval</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>    <span class="va">effect_index</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">covar</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">betas</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">coef_hat</span> <span class="op">&lt;-</span> <span class="va">betas</span><span class="op">[</span><span class="va">effect_index</span><span class="op">]</span> <span class="op">+</span> <span class="va">xval</span> <span class="op">*</span> <span class="va">betas</span><span class="op">[</span><span class="op">!</span><span class="va">effect_index</span><span class="op">]</span></span>
-<span>    <span class="va">coef_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">betas_var</span><span class="op">[</span><span class="va">effect_index</span><span class="op">]</span> <span class="op">+</span> <span class="va">xval</span> <span class="op">^</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">betas_var</span><span class="op">[</span><span class="op">!</span><span class="va">effect_index</span><span class="op">]</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">xval</span> <span class="op">*</span> <span class="va">betas_cov</span><span class="op">)</span></span>
+<span>    <span class="va">coef_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">betas_var</span><span class="op">[</span><span class="va">effect_index</span><span class="op">]</span> <span class="op">+</span> <span class="va">xval</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="va">betas_var</span><span class="op">[</span><span class="op">!</span><span class="va">effect_index</span><span class="op">]</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">xval</span> <span class="op">*</span> <span class="va">betas_cov</span><span class="op">)</span></span>
 <span>    <span class="va">q_norm</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">control</span><span class="op">$</span><span class="va">conf_level</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="va">var_lvl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">effect</span>, <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">effect</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># [-1]: reference level</span></span>
@@ -310,7 +295,7 @@ information to be processed and displayed within our output table.</p>
 <span>  <span class="va">control</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>pval_method <span class="op">=</span> <span class="st">"wald"</span>, ties <span class="op">=</span> <span class="st">"exact"</span>, conf_level <span class="op">=</span> <span class="fl">0.95</span>, interaction <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>  <span class="va">test_statistic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>wald <span class="op">=</span> <span class="st">"Wald"</span>, likelihood <span class="op">=</span> <span class="st">"LR"</span><span class="op">)</span><span class="op">[</span><span class="va">control</span><span class="op">$</span><span class="va">pval_method</span><span class="op">]</span></span>
 <span>  <span class="va">mod_aov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">withCallingHandlers</a></span><span class="op">(</span></span>
-<span>    expr <span class="op">=</span> <span class="op">{</span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">Anova</a></span><span class="op">(</span><span class="va">mod</span>, test.statistic <span class="op">=</span> <span class="va">test_statistic</span>, type <span class="op">=</span> <span class="st">"III"</span><span class="op">)</span><span class="op">}</span>,</span>
+<span>    expr <span class="op">=</span> <span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">Anova</a></span><span class="op">(</span><span class="va">mod</span>, test.statistic <span class="op">=</span> <span class="va">test_statistic</span>, type <span class="op">=</span> <span class="st">"III"</span><span class="op">)</span>,</span>
 <span>    message <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">invokeRestart</a></span><span class="op">(</span><span class="st">"muffleMessage"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="va">msum</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>, <span class="st">"order"</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span>, conf.int <span class="op">=</span> <span class="va">control</span><span class="op">$</span><span class="va">conf_level</span><span class="op">)</span> <span class="kw">else</span> <span class="va">mod_aov</span></span>
@@ -336,7 +321,7 @@ information to be processed and displayed within our output table.</p>
 <span>    <span class="va">y</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="va">pval</span> <span class="op">&lt;-</span> <span class="va">sum_anova</span><span class="op">[</span><span class="va">sum_anova</span><span class="op">$</span><span class="va">term</span> <span class="op">==</span> <span class="va">effect</span>, <span class="op">]</span><span class="op">[[</span><span class="st">"p.value"</span><span class="op">]</span><span class="op">]</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co">## Test the interaction effect</span></span>
 <span>    <span class="va">pval_inter</span> <span class="op">&lt;-</span> <span class="va">sum_anova</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">":"</span>, <span class="va">sum_anova</span><span class="op">$</span><span class="va">term</span><span class="op">)</span>, <span class="op">]</span><span class="op">[[</span><span class="st">"p.value"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">covar_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>

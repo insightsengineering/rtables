@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,21 +43,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -135,13 +120,14 @@ be used within the tabulation framework.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">combodf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="op">~</span><span class="va">valname</span>, <span class="op">~</span><span class="va">label</span>, <span class="op">~</span><span class="va">levelcombo</span>, <span class="op">~</span><span class="va">exargs</span>,</span></span>
-<span class="r-in"><span>    <span class="st">"A_B"</span>, <span class="st">"Arms A+B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A: Drug X"</span>, <span class="st">"B: Placebo"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="st">"A_C"</span>, <span class="st">"Arms A+C"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A: Drug X"</span>, <span class="st">"C: Combination"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">~</span><span class="va">valname</span>, <span class="op">~</span><span class="va">label</span>, <span class="op">~</span><span class="va">levelcombo</span>, <span class="op">~</span><span class="va">exargs</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"A_B"</span>, <span class="st">"Arms A+B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A: Drug X"</span>, <span class="st">"B: Placebo"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"A_C"</span>, <span class="st">"Arms A+C"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A: Drug X"</span>, <span class="st">"C: Combination"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span></span></span>
@@ -151,11 +137,15 @@ be used within the tabulation framework.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mean     34.91       33.02          34.57         34.03      34.73  </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>,</span></span>
-<span class="r-in"><span>                  split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span>,</span></span>
-<span class="r-in"><span>                                               keep_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A_B"</span>,</span></span>
-<span class="r-in"><span>                                                               <span class="st">"A_C"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>,</span></span>
+<span class="r-in"><span>    split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span>,</span></span>
+<span class="r-in"><span>      keep_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"A_B"</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"A_C"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt1</span>, <span class="va">DM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl1</span></span></span>
@@ -165,19 +155,21 @@ be used within the tabulation framework.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mean    34.03      34.73  </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">smallerDM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">DM</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>                        <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^(A|B)"</span>, <span class="va">ARM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^(A|B)"</span>, <span class="va">ARM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span>,</span></span>
-<span class="r-in"><span>                  split_fun <span class="op">=</span> <span class="fu"><a href="add_overall_level.html">add_overall_level</a></span><span class="op">(</span><span class="st">"SEX_ALL"</span>, <span class="st">"All Genders"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span>,</span></span>
+<span class="r-in"><span>    split_fun <span class="op">=</span> <span class="fu"><a href="add_overall_level.html">add_overall_level</a></span><span class="op">(</span><span class="st">"SEX_ALL"</span>, <span class="st">"All Genders"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">lyt3</span> <span class="op">&lt;-</span>  <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>,</span></span>
-<span class="r-in"><span>                  split_fun <span class="op">=</span> <span class="fu"><a href="add_overall_level.html">add_overall_level</a></span><span class="op">(</span><span class="st">"SEX_ALL"</span>, <span class="st">"All Genders"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, split_fun <span class="op">=</span> <span class="fu">add_combo_levels</span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>,</span></span>
+<span class="r-in"><span>    split_fun <span class="op">=</span> <span class="fu"><a href="add_overall_level.html">add_overall_level</a></span><span class="op">(</span><span class="st">"SEX_ALL"</span>, <span class="st">"All Genders"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">smallerDM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl3</span></span></span>

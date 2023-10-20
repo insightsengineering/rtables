@@ -14,7 +14,7 @@ those default splits can be further manipulated."><!-- mathjax --><script src="h
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,21 +47,6 @@ those default splits can be further manipulated."><!-- mathjax --><script src="h
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -134,20 +119,24 @@ function, see <code><a href="custom_split_funs.html">custom_split_funs</a></code
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">uneven_splfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">spl</span>, <span class="va">vals</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">labels</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">trim</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">do_base_split</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span>, <span class="va">vals</span>, <span class="va">labels</span>, <span class="va">trim</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-in"><span>        <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ret</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="va">ret</span></span></span>
+<span class="r-in"><span>  <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">do_base_split</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span>, <span class="va">vals</span>, <span class="va">labels</span>, <span class="va">trim</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ret</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span>  <span class="va">ret</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by_multivar.html">split_cols_by_multivar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"AESEQ"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                           varlabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="st">"E"</span>, <span class="st">"BMR1"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                           split_fun <span class="op">=</span> <span class="va">uneven_splfun</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze_colvars.html">analyze_colvars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>USUBJID <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         AESEQ <span class="op">=</span> <span class="va">max</span>,</span></span>
-<span class="r-in"><span>                         BMRKR1 <span class="op">=</span> <span class="va">mean</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by_multivar.html">split_cols_by_multivar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"AESEQ"</span>, <span class="st">"BMRKR1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    varlabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="st">"E"</span>, <span class="st">"BMR1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    split_fun <span class="op">=</span> <span class="va">uneven_splfun</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze_colvars.html">analyze_colvars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    USUBJID <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    AESEQ <span class="op">=</span> <span class="va">max</span>,</span></span>
+<span class="r-in"><span>    BMRKR1 <span class="op">=</span> <span class="va">mean</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">ex_adae</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ARM</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span></span></span>

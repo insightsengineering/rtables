@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,21 +61,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -145,7 +130,7 @@ generators:</p>
 <span>    r2 <span class="op">=</span> <span class="fu">add_subgroup</span><span class="op">(</span><span class="va">r1</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">c1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">r1</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">c1</span>, <span class="va">c2</span>, <span class="va">r1</span>, <span class="va">r2</span>, <span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">c1</span>, <span class="va">c2</span>, <span class="va">r1</span>, <span class="va">r2</span>, <span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span></span></code></pre></div>
 <pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 100 × 6</span></span></span>
@@ -257,7 +242,7 @@ with <code><a href="../reference/in_rows.html">in_rows()</a></code>:</p>
 <span>  <span class="op">}</span>, var_labels <span class="op">=</span> <span class="st">"foo label"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
-<span>      <span class="st">"more rows 1"</span> <span class="op">=</span>  <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>,</span>
+<span>      <span class="st">"more rows 1"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>,</span>
 <span>      <span class="st">"even more rows 1"</span> <span class="op">=</span> <span class="fu"><a href="../reference/rcell.html">rcell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>, var_labels <span class="op">=</span> <span class="st">"bar label"</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span>
@@ -420,7 +405,7 @@ have to use:</p>
 <span><span class="va">lyt7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"c1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"r1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="va">foo</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>cfun <span class="op">=</span> <span class="va">foo</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt7</span>, <span class="va">df</span><span class="op">)</span></span>
 <span><span class="va">tbl7</span></span></code></pre></div>
@@ -472,7 +457,7 @@ in the function body. Let’s try some alternatives returning to
 <code class="sourceCode R"><span><span class="va">lyt10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"c1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"r1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"y"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"y"</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt10</span>, <span class="va">df</span><span class="op">)</span></span>
 <span><span class="va">tbl10</span></span></code></pre></div>

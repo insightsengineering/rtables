@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,21 +61,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -104,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-10-19</h4>
+            <h4 data-toc-skip class="date">2023-10-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
@@ -356,12 +341,11 @@ declared via <code>page_by = TRUE</code> within a call to
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"arm"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"gender"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"country"</span>, page_by <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  </span>
+<span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"handed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">df</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, page_type <span class="op">=</span> <span class="st">"letter"</span>,</span>
-<span>                  page_break <span class="op">=</span> <span class="st">"\n\n~~~~~~ Page Break ~~~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/export_as_txt.html" class="external-link">export_as_txt</a></span><span class="op">(</span><span class="va">tbl</span>, page_type <span class="op">=</span> <span class="st">"letter"</span>, page_break <span class="op">=</span> <span class="st">"\n\n~~~~~~ Page Break ~~~~~~\n\n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># </span></span>
 <span><span class="co"># country: CAN</span></span>
 <span><span class="co"># </span></span>
@@ -518,7 +502,7 @@ summarizes the structure at the subtable level.</p>
 <span><span class="co">#     [ElementaryTable] age (1 x 4)</span></span></code></pre>
 <p>When the <code>detail</code> argument is set to <code>"row"</code>,
 however, it provides a more detailed row-level summary, which acts as a
-useful alternative to how we might normally use the <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code>
+useful alternative to how we might normally use the <code><a href="../reference/int_methods.html">str()</a></code>
 function to interrogate compound nested lists.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span>, detail <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
@@ -602,7 +586,7 @@ the table’s structure. Most useful for introspection purposes are the
 <code>path</code> and <code>node_class</code> columns (the remainder of
 information in the returned data.frame is used for pagination)</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label  name abs_rownumber         path node_class</span></span>
 <span><span class="co"># 1    CAN   CAN             1 country,.... ContentRow</span></span>
 <span><span class="co"># 2   Left  Left             2 country,.... ContentRow</span></span>
@@ -620,7 +604,7 @@ structural summary of the table, including the full hierarchy of
 subtables, including those that aren’t represented directly by any
 visible rows:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label          name abs_rownumber         path      node_class</span></span>
 <span><span class="co"># 1              country            NA      country       TableTree</span></span>
 <span><span class="co"># 2                  CAN            NA country, CAN       TableTree</span></span>

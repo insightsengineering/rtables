@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,21 +61,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -104,7 +89,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini, Abinaya Yogasekaram, and Gabriel Becker</h4>
             
-            <h4 data-toc-skip class="date">2023-10-19</h4>
+            <h4 data-toc-skip class="date">2023-10-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/custom_appearance.Rmd" class="external-link"><code>vignettes/custom_appearance.Rmd</code></a></small>
       <div class="d-none name"><code>custom_appearance.Rmd</code></div>
@@ -394,18 +379,22 @@ the inset of the table and main footer between the two tables.</p>
 <p>Without inset -</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span>row1 <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>            row2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>            .row_footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>row1 <span class="op">=</span> <span class="st">"row 1 rfn"</span><span class="op">)</span>,</span>
-<span>            .cell_footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>row2 <span class="op">=</span> <span class="st">"row 2 cfn"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
+<span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
+<span>    row1 <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    row2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    .row_footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>row1 <span class="op">=</span> <span class="st">"row 1 rfn"</span><span class="op">)</span>,</span>
+<span>    .cell_footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>row2 <span class="op">=</span> <span class="st">"row 2 cfn"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Title says Whaaaat"</span>, subtitles <span class="op">=</span> <span class="st">"Oh, ok."</span>,</span>
-<span>                   main_footer <span class="op">=</span> <span class="st">"ha HA! Footer!"</span>, prov_footer <span class="op">=</span> <span class="st">"provenaaaaance"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">analysisfun</span><span class="op">)</span></span>
+<span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
+<span>  title <span class="op">=</span> <span class="st">"Title says Whaaaat"</span>, subtitles <span class="op">=</span> <span class="st">"Oh, ok."</span>,</span>
+<span>  main_footer <span class="op">=</span> <span class="st">"ha HA! Footer!"</span>, prov_footer <span class="op">=</span> <span class="st">"provenaaaaance"</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">analysisfun</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ex_adsl</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ex_adsl</span><span class="op">)</span></span>
 <span><span class="va">result</span></span></code></pre></div>
 <pre><code><span><span class="co"># Title says Whaaaat</span></span>
 <span><span class="co"># Oh, ok.</span></span>
@@ -791,7 +780,7 @@ rows.</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, show_labels <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
 <span><span class="co">#                (N=121)            (N=106)            (N=129)     </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
@@ -820,7 +809,7 @@ Override this by setting the <code>show_labels</code> argument as
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
 <span><span class="co">#                (N=121)            (N=106)            (N=129)     </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
@@ -938,23 +927,26 @@ section we aim to render this table with a reduced width since the table
 has very wide contents in several cells, labels, and titles/footers.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trimmed_data</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trimmed_data</span><span class="op">$</span><span class="va">ARM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Incredibly long column name to be wrapped"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trimmed_data</span><span class="op">$</span><span class="va">ARM</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"This_column_name_should_be_split_somewhere"</span></span>
 <span></span>
 <span><span class="va">wide_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Title that is too long and also needs to be wrapped to a smaller width"</span>,</span>
-<span>    subtitles <span class="op">=</span> <span class="st">"Subtitle that is also long and also needs to be wrapped to a smaller width"</span>,</span>
-<span>    main_footer <span class="op">=</span> <span class="st">"Footnote that is wider than expected for this table."</span>,</span>
-<span>    prov_footer <span class="op">=</span> <span class="st">"Provenance footer material that is also wider than expected for this table."</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"EOSDY"</span><span class="op">)</span>,</span>
-<span>            na_str <span class="op">=</span> <span class="st">"Very long cell contents to_be_wrapped_and_splitted"</span>,</span>
-<span>            inclNAs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">trimmed_data</span><span class="op">)</span></span>
+<span>  title <span class="op">=</span> <span class="st">"Title that is too long and also needs to be wrapped to a smaller width"</span>,</span>
+<span>  subtitles <span class="op">=</span> <span class="st">"Subtitle that is also long and also needs to be wrapped to a smaller width"</span>,</span>
+<span>  main_footer <span class="op">=</span> <span class="st">"Footnote that is wider than expected for this table."</span>,</span>
+<span>  prov_footer <span class="op">=</span> <span class="st">"Provenance footer material that is also wider than expected for this table."</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="st">"EOSDY"</span><span class="op">)</span>,</span>
+<span>    na_str <span class="op">=</span> <span class="st">"Very long cell contents to_be_wrapped_and_splitted"</span>,</span>
+<span>    inclNAs <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">trimmed_data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">wide_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co"># Title that is too long and also needs to be wrapped to a smaller width</span></span>
@@ -1075,10 +1067,12 @@ the same two arguments. In the following code, we set
 <code>max_width = 43</code> so that the rendered table and all of its
 annotations have a maximum width of 43 characters.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result_wrap_cells_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/tostring.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">wide_tbl</span>,</span>
-<span>                                 widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span>,</span>
-<span>                                 tf_wrap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                 max_width <span class="op">=</span> <span class="fl">43</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result_wrap_cells_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/tostring.html" class="external-link">toString</a></span><span class="op">(</span></span>
+<span>  <span class="va">wide_tbl</span>,</span>
+<span>  widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span>,</span>
+<span>  tf_wrap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  max_width <span class="op">=</span> <span class="fl">43</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">matrix_wrap_cells_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">result_wrap_cells_tf</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">matrix_wrap_cells_tf</span></span></code></pre></div>
 <pre><code><span><span class="co">#       [,1]                                         </span></span>

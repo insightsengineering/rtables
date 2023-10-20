@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,21 +43,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -141,13 +126,15 @@ is undefined and should not be relied upon.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>label_fstr <span class="op">=</span> <span class="st">"Overall (N)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, split_label <span class="op">=</span> <span class="st">"Ethnicity"</span>, labels_var <span class="op">=</span> <span class="st">"ethn_lab"</span>,</span></span>
-<span class="r-in"><span>                  split_fun <span class="op">=</span> <span class="va">drop_split_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"RACE"</span>, label_fstr <span class="op">=</span> <span class="st">"%s (n)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, var_labels <span class="op">=</span> <span class="st">"Age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span>label_fstr <span class="op">=</span> <span class="st">"Overall (N)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>,</span></span>
+<span class="r-in"><span>    split_label <span class="op">=</span> <span class="st">"Ethnicity"</span>, labels_var <span class="op">=</span> <span class="st">"ethn_lab"</span>,</span></span>
+<span class="r-in"><span>    split_fun <span class="op">=</span> <span class="va">drop_split_levels</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="st">"RACE"</span>, label_fstr <span class="op">=</span> <span class="st">"%s (n)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, var_labels <span class="op">=</span> <span class="st">"Age"</span>, afun <span class="op">=</span> <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">vars_in_layout</span><span class="op">(</span><span class="va">lyt</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ARM"      "SEX"      "RACE"     "ethn_lab" "AGE"     </span>

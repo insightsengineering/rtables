@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,21 +43,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5-rc1">v0.6.5-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4-rc1">v0.6.4-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1-rc1">v0.6.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -223,12 +208,12 @@ the final pair of examples below.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">s_foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span>, <span class="va">a</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">b</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      nrow_df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      .N_col <span class="op">=</span> <span class="va">.N_col</span>,</span></span>
-<span class="r-in"><span>      a <span class="op">=</span> <span class="va">a</span>,</span></span>
-<span class="r-in"><span>      b <span class="op">=</span> <span class="va">b</span></span></span>
-<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    nrow_df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    .N_col <span class="op">=</span> <span class="va">.N_col</span>,</span></span>
+<span class="r-in"><span>    a <span class="op">=</span> <span class="va">a</span>,</span></span>
+<span class="r-in"><span>    b <span class="op">=</span> <span class="va">b</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">s_foo</span><span class="op">(</span><span class="va">iris</span>, <span class="fl">40</span><span class="op">)</span></span></span>
@@ -245,11 +230,14 @@ the final pair of examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">a_foo</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">s_foo</span>, b <span class="op">=</span> <span class="fl">4</span>,</span></span>
-<span class="r-in"><span> .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"xx.xx"</span>, <span class="st">".N_col"</span> <span class="op">=</span> <span class="st">"xx."</span>, a <span class="op">=</span> <span class="st">"xx"</span>, b <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"Nrow df"</span>,</span></span>
-<span class="r-in"><span>             <span class="st">".N_col"</span> <span class="op">=</span> <span class="st">"n in cols"</span>, a <span class="op">=</span> <span class="st">"a value"</span>, b <span class="op">=</span> <span class="st">"b value"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> .indent_mods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="fl">2L</span>, a <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a_foo</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">s_foo</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"xx.xx"</span>, <span class="st">".N_col"</span> <span class="op">=</span> <span class="st">"xx."</span>, a <span class="op">=</span> <span class="st">"xx"</span>, b <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    nrow_df <span class="op">=</span> <span class="st">"Nrow df"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">".N_col"</span> <span class="op">=</span> <span class="st">"n in cols"</span>, a <span class="op">=</span> <span class="st">"a value"</span>, b <span class="op">=</span> <span class="st">"b value"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .indent_mods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="fl">2L</span>, a <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">a_foo</span><span class="op">(</span><span class="va">iris</span>, .N_col <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></span>
@@ -270,21 +258,27 @@ the final pair of examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        a              1          1        a value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        b            4.0          0        b value</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#grouping and further customization</span></span></span>
+<span class="r-in"><span><span class="co"># grouping and further customization</span></span></span>
 <span class="r-in"><span><span class="va">s_grp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">.N_col</span>, <span class="va">a</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">b</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      nrow_df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      .N_col <span class="op">=</span> <span class="va">.N_col</span>,</span></span>
-<span class="r-in"><span>      letters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">a</span>,</span></span>
-<span class="r-in"><span>                     b <span class="op">=</span> <span class="va">b</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    nrow_df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    .N_col <span class="op">=</span> <span class="va">.N_col</span>,</span></span>
+<span class="r-in"><span>    letters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      a <span class="op">=</span> <span class="va">a</span>,</span></span>
+<span class="r-in"><span>      b <span class="op">=</span> <span class="va">b</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="va">a_grp</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">s_grp</span>, b <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>                   .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"row count"</span>,</span></span>
-<span class="r-in"><span>                               .N_col <span class="op">=</span> <span class="st">"count in column"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"xx."</span>, .N_col <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   .indent_mod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>letters <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   .ungroup_stats <span class="op">=</span><span class="st">"letters"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a_grp</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">s_grp</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    nrow_df <span class="op">=</span> <span class="st">"row count"</span>,</span></span>
+<span class="r-in"><span>    .N_col <span class="op">=</span> <span class="st">"count in column"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>nrow_df <span class="op">=</span> <span class="st">"xx."</span>, .N_col <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .indent_mod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>letters <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .ungroup_stats <span class="op">=</span> <span class="st">"letters"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">a_grp</span><span class="op">(</span><span class="va">iris</span>, <span class="fl">40</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
@@ -293,8 +287,10 @@ the final pair of examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   .N_col             40          0 count in column</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        a              1          1               a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        b              3          1               b</span>
-<span class="r-in"><span><span class="va">a_aftergrp</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">a_grp</span>, .stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nrow_df"</span>, <span class="st">"b"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a_aftergrp</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">a_grp</span>,</span></span>
+<span class="r-in"><span>  .stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nrow_df"</span>, <span class="st">"b"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">a_aftergrp</span><span class="op">(</span><span class="va">iris</span>, <span class="fl">40</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
@@ -303,13 +299,14 @@ the final pair of examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        b              3          0         b</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">s_ref</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.in_ref_col</span>, <span class="va">.ref_group</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>         mean_diff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span></span></span>
-<span class="r-in"><span>       <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    mean_diff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.ref_group</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a_ref</span> <span class="op">&lt;-</span> <span class="fu">make_afun</span><span class="op">(</span><span class="va">s_ref</span>,</span></span>
-<span class="r-in"><span>                   .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> mean_diff <span class="op">=</span> <span class="st">"Mean Difference from Ref"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean_diff <span class="op">=</span> <span class="st">"Mean Difference from Ref"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">a_ref</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>, .in_ref_col <span class="op">=</span> <span class="cn">TRUE</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RowsVerticalSection (in_rows) object print method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
@@ -320,7 +317,6 @@ the final pair of examples below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    row_name    formatted_cell indent_mod                row_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 mean_diff 0.343333333333334          0 Mean Difference from Ref</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
