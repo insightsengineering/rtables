@@ -49,8 +49,10 @@ rtable(
 sel <- iris$Species == "setosa"
 mtbl <- rtable(
   header = rheader(
-    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
-         rcell("Petal.Length", colspan=2)),
+    rrow(
+      row.name = NULL, rcell("Sepal.Length", colspan = 2),
+      rcell("Petal.Length", colspan = 2)
+    ),
     rrow(NULL, "mean", "median", "mean", "median")
   ),
   rrow(
@@ -92,12 +94,12 @@ names(tbl)
 tbl[1, ]
 tbl[, 1]
 
-tbl[1,2]
+tbl[1, 2]
 tbl[2, 1]
 
-tbl[3,2]
-tbl[5,1]
-tbl[5,2]
+tbl[3, 2]
+tbl[5, 1]
+tbl[5, 2]
 
 # # Data Structure methods
 dim(tbl)
@@ -112,7 +114,6 @@ tbl2 <- rtable(
   c("A", "B", "C", "D", "E"),
   format = "xx",
   rrow("r1", 1, 2, 3, 4, 5),
-
   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 )
 

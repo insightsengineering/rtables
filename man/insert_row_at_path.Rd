@@ -37,13 +37,16 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, DM)
 
-tbl2 <- insert_row_at_path(tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
-                          rrow("new row", 555))
+tbl2 <- insert_row_at_path(
+  tbl, c("COUNTRY", "CHN", "AGE", "Mean"),
+  rrow("new row", 555)
+)
 tbl2
 
 tbl3 <- insert_row_at_path(tbl2, c("COUNTRY", "CHN", "AGE", "Mean"),
-                          rrow("new row redux", 888),
-                          after = TRUE)
+  rrow("new row redux", 888),
+  after = TRUE
+)
 tbl3
 }
 \seealso{

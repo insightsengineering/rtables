@@ -84,7 +84,7 @@ h_coxreg_inter_effect <- function(x,
     xval <- stats::median(x)
     effect_index <- !grepl(covar, names(betas))
     coef_hat <- betas[effect_index] + xval * betas[!effect_index]
-    coef_se <- sqrt(betas_var[effect_index] + xval ^ 2 * betas_var[!effect_index] + 2 * xval * betas_cov)
+    coef_se <- sqrt(betas_var[effect_index] + xval^2 * betas_var[!effect_index] + 2 * xval * betas_cov)
     q_norm <- stats::qnorm((1 + control$conf_level) / 2)
   } else {
     var_lvl <- paste0(effect, levels(data[[effect]])[-1]) # [-1]: reference level
@@ -158,7 +158,7 @@ h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
   control <- list(pval_method = "wald", ties = "exact", conf_level = 0.95, interaction = FALSE)
   test_statistic <- c(wald = "Wald", likelihood = "LR")[control$pval_method]
   mod_aov <- withCallingHandlers(
-    expr = {car::Anova(mod, test.statistic = test_statistic, type = "III")},
+    expr = car::Anova(mod, test.statistic = test_statistic, type = "III"),
     message = function(m) invokeRestart("muffleMessage")
   )
   msum <- if (!any(attr(stats::terms(mod), "order") == 2)) summary(mod, conf.int = control$conf_level) else mod_aov
@@ -184,7 +184,7 @@ h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
     y
   } else {
     pval <- sum_anova[sum_anova$term == effect, ][["p.value"]]
-    
+
     ## Test the interaction effect
     pval_inter <- sum_anova[grep(":", sum_anova$term), ][["p.value"]]
     covar_test <- data.frame(

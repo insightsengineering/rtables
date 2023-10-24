@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
+# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables.png" align="right" height="200" width="200"/></a>
 
 <!-- start badges -->
 
@@ -204,8 +204,9 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 ### Advanced rtables Training
 
 - Part 1
-  [Slides](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing)
-- Part 2 - Forthcoming
+  [Slides](inst/extdata/Advanced_rtables_part1.pdf)
+- Part 2 
+  [Slides](inst/extdata/Advanced_rtables_part2.pdf)
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 

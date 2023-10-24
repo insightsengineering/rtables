@@ -55,36 +55,50 @@ lyt <- basic_table() \%>\%
 
 library(dplyr) ## for mutate
 tbl <- build_table(lyt, DM \%>\%
-    mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
+  mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 
 row_paths_summary(tbl)
 col_paths_summary(tbl)
 
-cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"),
-            c("ARM", "A: Drug X", "SEX", "F"))
+cell_values(
+  tbl, c("RACE", "ASIAN", "STRATA1", "B"),
+  c("ARM", "A: Drug X", "SEX", "F")
+)
 
 # it's also possible to access multiple values by being less specific
-cell_values(tbl, c("RACE", "ASIAN", "STRATA1"),
-            c("ARM", "A: Drug X", "SEX", "F"))
+cell_values(
+  tbl, c("RACE", "ASIAN", "STRATA1"),
+  c("ARM", "A: Drug X", "SEX", "F")
+)
 cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 
 
 ## any arm, male columns from the ASIAN content (i.e. summary) row
-cell_values(tbl, c("RACE", "ASIAN", "@content"),
-            c("ARM", "B: Placebo", "SEX", "M"))
-cell_values(tbl, c("RACE", "ASIAN", "@content"),
-            c("ARM", "*", "SEX", "M"))
+cell_values(
+  tbl, c("RACE", "ASIAN", "@content"),
+  c("ARM", "B: Placebo", "SEX", "M")
+)
+cell_values(
+  tbl, c("RACE", "ASIAN", "@content"),
+  c("ARM", "*", "SEX", "M")
+)
 
 ## all columns
-cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"))
+cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B"))
 
 ## all columns for the Combination arm
-cell_values(tbl,  c("RACE", "ASIAN", "STRATA1", "B"),
-            c("ARM", "C: Combination"))
+cell_values(
+  tbl, c("RACE", "ASIAN", "STRATA1", "B"),
+  c("ARM", "C: Combination")
+)
 
-cvlist <- cell_values(tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
-                      c("ARM", "B: Placebo", "SEX", "M"))
-cvnolist <- value_at(tbl,  c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
-                     c("ARM", "B: Placebo", "SEX", "M"))
+cvlist <- cell_values(
+  tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+  c("ARM", "B: Placebo", "SEX", "M")
+)
+cvnolist <- value_at(
+  tbl, c("RACE", "ASIAN", "STRATA1", "B", "AGE", "Mean"),
+  c("ARM", "B: Placebo", "SEX", "M")
+)
 stopifnot(identical(cvlist[[1]], cvnolist))
 }

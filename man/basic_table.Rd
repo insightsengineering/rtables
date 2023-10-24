@@ -15,13 +15,18 @@ basic_table(
 )
 }
 \arguments{
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
+every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
@@ -49,15 +54,20 @@ a percent component, the value component for the percent is always populated
 with \code{1} (i.e. 100\%). 1d formats are used to render the counts exactly as they
 normally would be, while 2d formats which don't include a percent, and all 3d
 formats result in an error. Formats in the form of functions are not supported for
-\code{colcount} format. See \code{\link[formatters]{list_valid_format_labels}} for
+\code{colcount} format. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for
 the list of valid format labels to select from.
 }
 \note{
-Because percent components in \code{colcount_format} are \emph{always}
+\itemize{
+\item Because percent components in \code{colcount_format} are \emph{always}
 populated with the value 1, we can get arguably strange results, such as
 that individual arm columns and a combined "all patients" column all
 list "100\%" as their percentage, even though the individual arm columns
 represent strict subsets of the all patients column.
+\item Note that subtitles (\code{\link[=subtitles]{subtitles()}}) and footers (\code{\link[=main_footer]{main_footer()}} and \code{\link[=prov_footer]{prov_footer()}})
+that spans more than one line can be supplied as a character vector to maintain
+indentation on multiple lines.
+}
 }
 \examples{
 
@@ -67,19 +77,25 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, DM)
 tbl
 
-lyt2 <- basic_table(title = "Title of table",
-                   subtitles = c("a number", "of subtitles"),
-                   main_footer = "test footer",
-                   prov_footer = paste("test.R program, executed at",
-                                       Sys.time())) \%>\%
+lyt2 <- basic_table(
+  title = "Title of table",
+  subtitles = c("a number", "of subtitles"),
+  main_footer = "test footer",
+  prov_footer = paste(
+    "test.R program, executed at",
+    Sys.time()
+  )
+) \%>\%
   split_cols_by("ARM") \%>\%
   analyze("AGE", mean)
 
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
-lyt3 <- basic_table(show_colcounts = TRUE,
-                    colcount_format = "xx. (xx.\%)") \%>\%
+lyt3 <- basic_table(
+  show_colcounts = TRUE,
+  colcount_format = "xx. (xx.\%)"
+) \%>\%
   split_cols_by("ARM")
 
 }

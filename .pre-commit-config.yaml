@@ -2,7 +2,7 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9019
+    rev: v0.3.2.9023
     hooks: 
     -   id: roxygenize
         # roxygen requires loading pkg -> add dependencies from DESCRIPTION
@@ -52,7 +52,7 @@ repos:
     -   id: no-debug-statement
     -   id: deps-in-desc
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks: 
     -   id: check-added-large-files
         args: ['--maxkb=200']
@@ -61,7 +61,7 @@ repos:
     -   id: end-of-file-fixer
         exclude: '\.Rd'
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
-    rev: v1.5.1
+    rev: v1.6.1
     hooks:
     # Only reuiqred when https://pre-commit.ci is used for config validation
     -   id: check-pre-commit-ci-config

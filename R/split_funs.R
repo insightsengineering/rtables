@@ -10,23 +10,35 @@
 
 
 
-setGeneric(".applysplit_rawvals",
-           function(spl, df) standardGeneric(".applysplit_rawvals"))
+setGeneric(
+  ".applysplit_rawvals",
+  function(spl, df) standardGeneric(".applysplit_rawvals")
+)
 
-setGeneric(".applysplit_datapart",
-           function(spl, df, vals) standardGeneric(".applysplit_datapart"))
+setGeneric(
+  ".applysplit_datapart",
+  function(spl, df, vals) standardGeneric(".applysplit_datapart")
+)
 
-setGeneric(".applysplit_extras",
-           function(spl, df, vals) standardGeneric(".applysplit_extras"))
+setGeneric(
+  ".applysplit_extras",
+  function(spl, df, vals) standardGeneric(".applysplit_extras")
+)
 
-setGeneric(".applysplit_partlabels",
-           function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels"))
+setGeneric(
+  ".applysplit_partlabels",
+  function(spl, df, vals, labels) standardGeneric(".applysplit_partlabels")
+)
 
-setGeneric("check_validsplit",
-           function(spl, df) standardGeneric("check_validsplit"))
+setGeneric(
+  "check_validsplit",
+  function(spl, df) standardGeneric("check_validsplit")
+)
 
-setGeneric(".applysplit_ref_vals",
-          function(spl, df, vals) standardGeneric(".applysplit_ref_vals"))
+setGeneric(
+  ".applysplit_ref_vals",
+  function(spl, df, vals) standardGeneric(".applysplit_ref_vals")
+)
 
 #' @name custom_split_funs
 #' @rdname custom_split_funs
@@ -127,91 +139,104 @@ NULL
 ## do various cleaning, and naming, plus
 ## ensure partinfo$values contains SplitValue objects only
 .fixupvals <- function(partinfo) {
-    if(is.factor(partinfo$labels))
-        partinfo$labels <- as.character(partinfo$labels)
+  if (is.factor(partinfo$labels)) {
+    partinfo$labels <- as.character(partinfo$labels)
+  }
 
-    vals <- partinfo$values
-    if(is.factor(vals))
-        vals <- levels(vals)[vals]
-    extr <- partinfo$extras
-    dpart <- partinfo$datasplit
-    labels <- partinfo$labels
-    if(is.null(labels)) {
-        if(!is.null(names(vals)))
-            labels <- names(vals)
-        else if(!is.null(names(dpart)))
-            labels <- names(dpart)
-        else if (!is.null(names(extr)))
-            labels <- names(extr)
+  vals <- partinfo$values
+  if (is.factor(vals)) {
+    vals <- levels(vals)[vals]
+  }
+  extr <- partinfo$extras
+  dpart <- partinfo$datasplit
+  labels <- partinfo$labels
+  if (is.null(labels)) {
+    if (!is.null(names(vals))) {
+      labels <- names(vals)
+    } else if (!is.null(names(dpart))) {
+      labels <- names(dpart)
+    } else if (!is.null(names(extr))) {
+      labels <- names(extr)
     }
+  }
 
-    if(is.null(vals) && !is.null(extr))
-        vals <- seq_along(extr)
+  if (is.null(vals) && !is.null(extr)) {
+    vals <- seq_along(extr)
+  }
 
-    if(length(vals) == 0) {
-        stopifnot(length(extr) == 0)
-        return(partinfo)
+  if (length(vals) == 0) {
+    stopifnot(length(extr) == 0)
+    return(partinfo)
+  }
+  ## length(vals) > 0 from here down
+
+  if (are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
+    if (!is.null(extr)) {
+      ## in_ref_cols is in here for some reason even though its already in the SplitValue object.
+      ## https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598
+      ## the if is a bandaid.
+      ## XXX FIXME RIGHT
+      sq <- seq_along(vals)
+      if (any(vapply(sq, function(i) !all(names(extr[[i]]) %in% names(splv_extra(vals[[i]]))), TRUE))) {
+        warning(
+          "Got a partinfo list with values that are ",
+          "already SplitValue objects and non-null extras ",
+          "element. This shouldn't happen"
+        )
+      }
     }
-    ## length(vals) > 0 from here down
-
-    if(are(vals, "SplitValue") && !are(vals, "LevelComboSplitValue")) {
-        if(!is.null(extr)) {
-            warning("Got a partinfo list with values that are ",
-                    "already SplitValue objects and non-null extras ",
-                    "element. This shouldn't happen")
-        }
-    } else {
-        if(is.null(extr))
-            extr <- rep(list(list()), length(vals))
-        vals <- make_splvalue_vec(vals, extr, labels = labels)
+  } else {
+    if (is.null(extr)) {
+      extr <- rep(list(list()), length(vals))
     }
-    ## we're done with this so take it off
-    partinfo$extras <- NULL
+    vals <- make_splvalue_vec(vals, extr, labels = labels)
+  }
+  ## we're done with this so take it off
+  partinfo$extras <- NULL
 
-    vnames <- value_names(vals)
-    names(vals) <- vnames
-    partinfo$values <- vals
+  vnames <- value_names(vals)
+  names(vals) <- vnames
+  partinfo$values <- vals
 
-    if(!identical(names(dpart), vnames)) {
-        names(dpart) <- vnames
-        partinfo$datasplit <- dpart
-    }
+  if (!identical(names(dpart), vnames)) {
+    names(dpart) <- vnames
+    partinfo$datasplit <- dpart
+  }
 
 
-    partinfo$labels <- labels
+  partinfo$labels <- labels
 
-    stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
-    partinfo
+  stopifnot(length(unique(sapply(partinfo, NROW))) == 1)
+  partinfo
 }
 
 .add_ref_extras <- function(spl, df, partinfo) {
-    ## this is only the .in_ref_col booleans
-    refvals <- .applysplit_ref_vals(spl, df, partinfo$values)
-    ref_ind <- which(unlist(refvals))
-    stopifnot(length(ref_ind) == 1)
+  ## this is only the .in_ref_col booleans
+  refvals <- .applysplit_ref_vals(spl, df, partinfo$values)
+  ref_ind <- which(unlist(refvals))
+  stopifnot(length(ref_ind) == 1)
 
-    vnames <- value_names(partinfo$values)
-    if(is.null(partinfo$extras)) {
-        names(refvals) <- vnames
-        partinfo$extras <- refvals
-    } else {
-        newextras <- mapply(function(old, incol, ref_full) {
-            c(old, list(.in_ref_col = incol,
-                        .ref_full = ref_full))
-            },
-            old = partinfo$extras,
-            incol = unlist(refvals),
-            MoreArgs = list(ref_full = partinfo$datasplit[[ref_ind]]),
-                            SIMPLIFY = FALSE)
-        names(newextras) <- vnames
-        partinfo$extras <- newextras
-    }
-    partinfo
-}
-
-func_takes <- function(fun, argname, truefordots = FALSE) {
-    fnames <- names(formals(fun))
-    argname %in% fnames || (truefordots && "..." %in% fnames)
+  vnames <- value_names(partinfo$values)
+  if (is.null(partinfo$extras)) {
+    names(refvals) <- vnames
+    partinfo$extras <- refvals
+  } else {
+    newextras <- mapply(
+      function(old, incol, ref_full) {
+        c(old, list(
+          .in_ref_col = incol,
+          .ref_full = ref_full
+        ))
+      },
+      old = partinfo$extras,
+      incol = unlist(refvals),
+      MoreArgs = list(ref_full = partinfo$datasplit[[ref_ind]]),
+      SIMPLIFY = FALSE
+    )
+    names(newextras) <- vnames
+    partinfo$extras <- newextras
+  }
+  partinfo
 }
 
 #' Apply Basic Split (For Use In Custom Split Functions)
@@ -235,28 +260,34 @@ func_takes <- function(fun, argname, truefordots = FALSE) {
 #' @examples
 #'
 #' uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-#'     ret <- do_base_split(spl, df, vals, labels, trim)
-#'     if(NROW(df) == 0)
-#'         ret <- lapply(ret, function(x) x[1])
-#'     ret
+#'   ret <- do_base_split(spl, df, vals, labels, trim)
+#'   if (NROW(df) == 0) {
+#'     ret <- lapply(ret, function(x) x[1])
+#'   }
+#'   ret
 #' }
 #'
 #' lyt <- basic_table() %>%
-#'     split_cols_by("ARM") %>%
-#'     split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
-#'                            varlabels = c("N", "E", "BMR1"),
-#'                            split_fun = uneven_splfun) %>%
-#'     analyze_colvars(list(USUBJID = function(x, ...) length(unique(x)),
-#'                          AESEQ = max,
-#'                          BMRKR1 = mean))
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
+#'     varlabels = c("N", "E", "BMR1"),
+#'     split_fun = uneven_splfun
+#'   ) %>%
+#'   analyze_colvars(list(
+#'     USUBJID = function(x, ...) length(unique(x)),
+#'     AESEQ = max,
+#'     BMRKR1 = mean
+#'   ))
 #'
 #' tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 #' tbl
 do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
-    spl2 <- spl
-    split_fun(spl2) <- NULL
-    do_split(spl2, df = df, vals = vals, labels = labels, trim = trim,
-             spl_context = NULL)
+  spl2 <- spl
+  split_fun(spl2) <- NULL
+  do_split(spl2,
+    df = df, vals = vals, labels = labels, trim = trim,
+    spl_context = NULL
+  )
 }
 
 
@@ -267,113 +298,139 @@ do_split <- function(spl,
                      labels = NULL,
                      trim = FALSE,
                      spl_context) {
-    ## this will error if, e.g., df doesn't have columns
-    ## required by spl, or generally any time the spl
-    ## can't be applied to df
-    check_validsplit(spl, df)
-    ## note the <- here!!!
-    if(!is.null(splfun <- split_fun(spl))) {
-        ## Currently the contract is that split_functions take df, vals, labels and
-        ## return list(values=., datasplit=., labels = .), optionally with
-        ## an additional extras element
-        if(func_takes(splfun, ".spl_context")) {
-            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim,
-                                   .spl_context = spl_context),
-                            error = function(e) e) ## rawvalues(spl_context ))
-        } else {
-            ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim),
-                            error = function(e) e)
-        }
-        if(is(ret, "error")) {
-            stop("Error applying custom split function: ", ret$message, "\n\tsplit: ",
-                 class(spl), " (", payloadmsg(spl), ")\n",
-                 "\toccured at path: ",
-                 spl_context_to_disp_path(spl_context), "\n")
-        }
+  ## this will error if, e.g., df doesn't have columns
+  ## required by spl, or generally any time the spl
+  ## can't be applied to df
+  check_validsplit(spl, df)
+  ## note the <- here!!!
+  if (!is.null(splfun <- split_fun(spl))) {
+    ## Currently the contract is that split_functions take df, vals, labels and
+    ## return list(values=., datasplit=., labels = .), optionally with
+    ## an additional extras element
+    if (func_takes(splfun, ".spl_context")) {
+      ret <- tryCatch(
+        splfun(df, spl, vals, labels,
+          trim = trim,
+          .spl_context = spl_context
+        ),
+        error = function(e) e
+      ) ## rawvalues(spl_context ))
     } else {
-        ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
+      ret <- tryCatch(splfun(df, spl, vals, labels, trim = trim),
+        error = function(e) e
+      )
     }
+    if (is(ret, "error")) {
+      stop(
+        "Error applying custom split function: ", ret$message, "\n\tsplit: ",
+        class(spl), " (", payloadmsg(spl), ")\n",
+        "\toccured at path: ",
+        spl_context_to_disp_path(spl_context), "\n"
+      )
+    }
+  } else {
+    ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
+  }
 
-    ## this adds .ref_full and .in_ref_col
-    if(is(spl, "VarLevWBaselineSplit"))
-        ret <- .add_ref_extras(spl, df, ret)
+  ## this adds .ref_full and .in_ref_col
+  if (is(spl, "VarLevWBaselineSplit")) {
+    ret <- .add_ref_extras(spl, df, ret)
+  }
 
-    ## this:
-    ## - guarantees that ret$values contains SplitValue objects
-    ## - removes the extras element since its redundant after the above
-    ## - Ensures datasplit and values lists are named according to labels
-    ## - ensures labels are character not factor
-    ret <- .fixupvals(ret)
-
-    ret
+  ## this:
+  ## - guarantees that ret$values contains SplitValue objects
+  ## - removes the extras element since its redundant after the above
+  ## - Ensures datasplit and values lists are named according to labels
+  ## - ensures labels are character not factor
+  ret <- .fixupvals(ret)
+  ## we didn't put this in .fixupvals because that get called withint he split functions
+  ## created by make_split_fun and its not clear this check should be happening then.
+  if (has_force_pag(spl) && length(ret$datasplit) == 0) { ## this means it's page_by=TRUE
+    stop(
+      "Page-by split resulted in zero pages (no observed values of split variable?). \n\tsplit: ",
+      class(spl), " (", payloadmsg(spl), ")\n",
+      "\toccured at path: ",
+      spl_context_to_disp_path(spl_context), "\n"
+    )
+  }
+  ret
 }
 
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
+  if (is.null(vals)) {
+    vals <- .applysplit_rawvals(spl, df)
+  }
+  extr <- .applysplit_extras(spl, df, vals)
 
-    if(is.null(vals))
-        vals <- .applysplit_rawvals(spl, df)
-    extr <- .applysplit_extras(spl, df, vals)
+  if (is.null(vals)) {
+    return(list(
+      values = list(),
+      datasplit = list(),
+      labels = list(),
+      extras = list()
+    ))
+  }
 
-    if(is.null(vals)) {
-        return(list(values = list(),
-                    datasplit = list(),
-                    labels = list(),
-                    extras = list()))
+  dpart <- .applysplit_datapart(spl, df, vals)
+
+  if (is.null(labels)) {
+    labels <- .applysplit_partlabels(spl, df, vals, labels)
+  } else {
+    stopifnot(names(labels) == names(vals))
+  }
+  ## get rid of columns that would not have any
+  ## observations.
+  ##
+  ## But only if there were any rows to start with
+  ## if not we're in a manually constructed table
+  ## column tree
+  if (trim) {
+    hasdata <- sapply(dpart, function(x) nrow(x) > 0)
+    if (nrow(df) > 0 && length(dpart) > sum(hasdata)) { # some empties
+      dpart <- dpart[hasdata]
+      vals <- vals[hasdata]
+      extr <- extr[hasdata]
+      labels <- labels[hasdata]
     }
+  }
 
-    dpart <- .applysplit_datapart(spl, df, vals)
-
-    if(is.null(labels))
-        labels <- .applysplit_partlabels(spl, df, vals, labels)
-    else
-        stopifnot(names(labels) == names(vals))
-    ## get rid of columns that would not have any
-    ## observations.
-    ##
-    ## But only if there were any rows to start with
-    ## if not we're in a manually constructed table
-    ## column tree
-    if(trim) {
-        hasdata <- sapply(dpart, function(x) nrow(x) > 0)
-        if(nrow(df) > 0 && length(dpart) > sum(hasdata)) { #some empties
-            dpart <- dpart[hasdata]
-            vals <- vals[hasdata]
-            extr <- extr[hasdata]
-            labels <- labels[hasdata]
-        }
-    }
-
-    if(is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
-        vord <- seq_along(vals)
-    } else {
-        vord <- match(spl_child_order(spl),
-                     vals)
-        vord <- vord[!is.na(vord)]
-    }
+  if (is.null(spl_child_order(spl)) || is(spl, "AllSplit")) {
+    vord <- seq_along(vals)
+  } else {
+    vord <- match(
+      spl_child_order(spl),
+      vals
+    )
+    vord <- vord[!is.na(vord)]
+  }
 
 
-    ## FIXME: should be an S4 object, not a list
-    ret <- list(values = vals[vord],
-               datasplit = dpart[vord],
-               labels = labels[vord],
-               extras = extr[vord])
-    ret
+  ## FIXME: should be an S4 object, not a list
+  ret <- list(
+    values = vals[vord],
+    datasplit = dpart[vord],
+    labels = labels[vord],
+    extras = extr[vord]
+  )
+  ret
 }
 
 
 .checkvarsok <- function(spl, df) {
-
-    vars <- spl_payload(spl)
-    ## could be multiple vars in the future?
-    ## no reason not to make that work here now.
-    if(!all(vars %in% names(df)))
-        stop(" variable(s) [",
-             paste(setdiff(vars, names(df)),
-                   collapse = ", "),
-             "] not present in data. (",
-             class(spl), ")")
-    invisible(NULL)
-
+  vars <- spl_payload(spl)
+  ## could be multiple vars in the future?
+  ## no reason not to make that work here now.
+  if (!all(vars %in% names(df))) {
+    stop(
+      " variable(s) [",
+      paste(setdiff(vars, names(df)),
+        collapse = ", "
+      ),
+      "] not present in data. (",
+      class(spl), ")"
+    )
+  }
+  invisible(NULL)
 }
 
 ### Methods to verify a split appears to be valid, applicable
@@ -385,102 +442,128 @@ do_split <- function(spl,
 
 
 
-setMethod("check_validsplit", "VarLevelSplit",
-          function(spl, df) {
+setMethod(
+  "check_validsplit", "VarLevelSplit",
+  function(spl, df) {
     .checkvarsok(spl, df)
-})
+  }
+)
 
 
-setMethod("check_validsplit", "MultiVarSplit",
-
-          function(spl, df) {
+setMethod(
+  "check_validsplit", "MultiVarSplit",
+  function(spl, df) {
     .checkvarsok(spl, df)
-})
+  }
+)
 
-setMethod("check_validsplit", "VAnalyzeSplit",
-
-          function(spl, df) {
-    if(!is.na(spl_payload(spl))) {
-        .checkvarsok(spl, df)
+setMethod(
+  "check_validsplit", "VAnalyzeSplit",
+  function(spl, df) {
+    if (!is.na(spl_payload(spl))) {
+      .checkvarsok(spl, df)
     } else {
-        TRUE
+      TRUE
     }
-})
+  }
+)
 
-setMethod("check_validsplit", "CompoundSplit",
-          function(spl, df) {
+setMethod(
+  "check_validsplit", "CompoundSplit",
+  function(spl, df) {
     all(sapply(spl_payload(spl), df))
-})
+  }
+)
 
 
 
 
 ## default does nothing, add methods as they become
 ## required
-setMethod("check_validsplit", "Split",
-          function(spl, df)
-    invisible(NULL))
+setMethod(
+  "check_validsplit", "Split",
+  function(spl, df) invisible(NULL)
+)
 
 
 
-setMethod(".applysplit_rawvals", "VarLevelSplit",
-          function(spl, df) {
+setMethod(
+  ".applysplit_rawvals", "VarLevelSplit",
+  function(spl, df) {
     varvec <- df[[spl_payload(spl)]]
-    if(is.factor(varvec))
-        levels(varvec)
-    else
-        unique(varvec)
-})
+    if (is.factor(varvec)) {
+      levels(varvec)
+    } else {
+      unique(varvec)
+    }
+  }
+)
 
-setMethod(".applysplit_rawvals", "MultiVarSplit",
-          function(spl, df) {
-##    spl_payload(spl)
+setMethod(
+  ".applysplit_rawvals", "MultiVarSplit",
+  function(spl, df) {
+    ##    spl_payload(spl)
     spl_varnames(spl)
-})
+  }
+)
 
-setMethod(".applysplit_rawvals", "AllSplit",
-          function(spl, df) obj_name(spl)) #"all obs")
+setMethod(
+  ".applysplit_rawvals", "AllSplit",
+  function(spl, df) obj_name(spl)
+) # "all obs")
 
-setMethod(".applysplit_rawvals", "ManualSplit",
-          function(spl, df) spl@levels)
+setMethod(
+  ".applysplit_rawvals", "ManualSplit",
+  function(spl, df) spl@levels
+)
 
 
 ## setMethod(".applysplit_rawvals", "NULLSplit",
 ##           function(spl, df) "")
 
-setMethod(".applysplit_rawvals", "VAnalyzeSplit",
-          function(spl, df) spl_payload(spl))
+setMethod(
+  ".applysplit_rawvals", "VAnalyzeSplit",
+  function(spl, df) spl_payload(spl)
+)
 
 
 ## formfactor here is gross we're gonna have ot do this
 ## all again in tthe data split part :-/
-setMethod(".applysplit_rawvals", "VarStaticCutSplit",
-          function(spl, df) {
+setMethod(
+  ".applysplit_rawvals", "VarStaticCutSplit",
+  function(spl, df) {
     spl_cutlabels(spl)
-})
+  }
+)
 
 
-setMethod(".applysplit_datapart", "VarLevelSplit",
-          function(spl, df, vals) {
-    if(!(spl_payload(spl) %in% names(df))) {
-        stop("Attempted to split on values of column (", spl_payload(spl),
-             ") not present in the data")
+setMethod(
+  ".applysplit_datapart", "VarLevelSplit",
+  function(spl, df, vals) {
+    if (!(spl_payload(spl) %in% names(df))) {
+      stop(
+        "Attempted to split on values of column (", spl_payload(spl),
+        ") not present in the data"
+      )
     }
     ret <- lapply(seq_along(vals), function(i) {
-        df[df[[spl_payload(spl)]] == vals[[i]], ]
+      spl_col <- df[[spl_payload(spl)]]
+      df[!is.na(spl_col) & spl_col == vals[[i]], ]
     })
     names(ret) <- as.character(vals)
     ret
-})
+  }
+)
 
 
-setMethod(".applysplit_datapart", "MultiVarSplit",
-          function(spl, df, vals) {
+setMethod(
+  ".applysplit_datapart", "MultiVarSplit",
+  function(spl, df, vals) {
     allvnms <- spl_varnames(spl)
-    if(!is.null(vals) && !identical(allvnms, vals)) {
-        incl <- match(vals, allvnms)
+    if (!is.null(vals) && !identical(allvnms, vals)) {
+      incl <- match(vals, allvnms)
     } else {
-        incl <- seq_along(allvnms)
+      incl <- seq_along(allvnms)
     }
     vars <- spl_payload(spl)[incl]
     ## don't remove  nas
@@ -490,14 +573,19 @@ setMethod(".applysplit_datapart", "MultiVarSplit",
     ret <- rep(list(df), length(vars))
     names(ret) <- vals
     ret
-})
+  }
+)
 
-setMethod(".applysplit_datapart", "AllSplit",
-          function(spl, df, vals) list(df))
+setMethod(
+  ".applysplit_datapart", "AllSplit",
+  function(spl, df, vals) list(df)
+)
 
 ## ## not sure I need this
-setMethod(".applysplit_datapart", "ManualSplit",
-          function(spl, df, vals) rep(list(df), times = length(vals)))
+setMethod(
+  ".applysplit_datapart", "ManualSplit",
+  function(spl, df, vals) rep(list(df), times = length(vals))
+)
 
 
 
@@ -505,29 +593,35 @@ setMethod(".applysplit_datapart", "ManualSplit",
 ##           function(spl, df, vals) list(df[FALSE,]))
 
 
-setMethod(".applysplit_datapart", "VarStaticCutSplit",
-          function(spl, df, vals) {
-  #  lbs = spl_cutlabels(spl)
+setMethod(
+  ".applysplit_datapart", "VarStaticCutSplit",
+  function(spl, df, vals) {
+    #  lbs = spl_cutlabels(spl)
     var <- spl_payload(spl)
     varvec <- df[[var]]
     cts <- spl_cuts(spl)
-    cfct <- cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
+    cfct <- cut(varvec, cts, include.lowest = TRUE) # , labels = lbs)
     split(df, cfct, drop = FALSE)
-})
+  }
+)
 
 
-setMethod(".applysplit_datapart", "CumulativeCutSplit",
-          function(spl, df, vals) {
-  #  lbs = spl_cutlabels(spl)
+setMethod(
+  ".applysplit_datapart", "CumulativeCutSplit",
+  function(spl, df, vals) {
+    #  lbs = spl_cutlabels(spl)
     var <- spl_payload(spl)
     varvec <- df[[var]]
     cts <- spl_cuts(spl)
-    cfct <- cut(varvec, cts, include.lowest = TRUE)#, labels = lbs)
-    ret <- lapply(seq_len(length(levels(cfct))),
-                  function(i) df[as.integer(cfct) <= i, ])
+    cfct <- cut(varvec, cts, include.lowest = TRUE) # , labels = lbs)
+    ret <- lapply(
+      seq_len(length(levels(cfct))),
+      function(i) df[as.integer(cfct) <= i, ]
+    )
     names(ret) <- levels(cfct)
     ret
-})
+  }
+)
 
 ## XXX TODO *CutSplit Methods
 
@@ -537,47 +631,55 @@ nullsentinel <- new("NullSentinel")
 noarg <- function() nullsentinel
 
 ## Extras generation methods
-setMethod(".applysplit_extras", "Split",
-          function(spl, df, vals) {
+setMethod(
+  ".applysplit_extras", "Split",
+  function(spl, df, vals) {
     splex <- split_exargs(spl)
     nvals <- length(vals)
     lapply(seq_len(nvals), function(vpos) {
-        one_ex <- lapply(splex, function(arg) {
-            if(length(arg) >= vpos)
-                arg[[vpos]]
-            else
-                noarg()
-            })
-        names(one_ex) <- names(splex)
-        one_ex <- one_ex[!sapply(one_ex, is, "NullSentinel")]
-        one_ex
+      one_ex <- lapply(splex, function(arg) {
+        if (length(arg) >= vpos) {
+          arg[[vpos]]
+        } else {
+          noarg()
+        }
+      })
+      names(one_ex) <- names(splex)
+      one_ex <- one_ex[!sapply(one_ex, is, "NullSentinel")]
+      one_ex
     })
+  }
+)
 
-})
 
 
+setMethod(
+  ".applysplit_ref_vals", "Split",
+  function(spl, df, vals) rep(list(NULL), length(vals))
+)
 
-setMethod(".applysplit_ref_vals", "Split",
-          function(spl, df, vals) rep(list(NULL), length(vals)))
-
-setMethod(".applysplit_ref_vals", "VarLevWBaselineSplit",
-          function(spl, df, vals) {
-    bl_level <- spl@ref_group_value #XXX XXX
+setMethod(
+  ".applysplit_ref_vals", "VarLevWBaselineSplit",
+  function(spl, df, vals) {
+    bl_level <- spl@ref_group_value # XXX XXX
     vnames <- value_names(vals)
     ret <- lapply(vnames, function(vl) {
-        list(.in_ref_col = vl == bl_level)
+      list(.in_ref_col = vl == bl_level)
     })
     names(ret) <- vnames
     ret
-})
+  }
+)
 
 ## XXX TODO FIXME
-setMethod(".applysplit_partlabels", "Split",
-          function(spl, df, vals, labels) as.character(vals))
+setMethod(
+  ".applysplit_partlabels", "Split",
+  function(spl, df, vals, labels) as.character(vals)
+)
 
-setMethod(".applysplit_partlabels", "VarLevelSplit",
-          function(spl, df, vals, labels) {
-
+setMethod(
+  ".applysplit_partlabels", "VarLevelSplit",
+  function(spl, df, vals, labels) {
     varname <- spl_payload(spl)
     vlabelname <- spl_labelvar(spl)
     varvec <- df[[varname]]
@@ -585,48 +687,55 @@ setMethod(".applysplit_partlabels", "VarLevelSplit",
     ## this is called after a short-circuit return in .apply_split_inner in that
     ## case
     ## so vals is guaranteed to be non-null here
-    if(is.null(labels)) {
-        if(varname == vlabelname) {
-            labels <- vals
-        } else {
-            labfact <- is.factor(df[[vlabelname]])
-            lablevs <- if(labfact) levels(df[[vlabelname]]) else NULL
-            labels <- sapply(vals, function(v) {
-                vlabel <- unique(df[varvec == v,
-                                   vlabelname, drop = TRUE])
-                ## TODO remove this once 1-to-1 value-label map is enforced
-                ## elsewhere.
-                stopifnot(length(vlabel) < 2)
-                if(length(vlabel) == 0)
-                vlabel <- ""
-                else if(labfact)
-                    vlabel <- lablevs[vlabel]
-                vlabel
-            })
-        }
+    if (is.null(labels)) {
+      if (varname == vlabelname) {
+        labels <- vals
+      } else {
+        labfact <- is.factor(df[[vlabelname]])
+        lablevs <- if (labfact) levels(df[[vlabelname]]) else NULL
+        labels <- sapply(vals, function(v) {
+          vlabel <- unique(df[varvec == v, vlabelname, drop = TRUE])
+          ## TODO remove this once 1-to-1 value-label map is enforced
+          ## elsewhere.
+          stopifnot(length(vlabel) < 2)
+          if (length(vlabel) == 0) {
+            vlabel <- ""
+          } else if (labfact) {
+            vlabel <- lablevs[vlabel]
+          }
+          vlabel
+        })
+      }
     }
     names(labels) <- as.character(vals)
     labels
-})
+  }
+)
 
-setMethod(".applysplit_partlabels", "MultiVarSplit",
-          function(spl, df, vals, labels) value_labels(spl))
+setMethod(
+  ".applysplit_partlabels", "MultiVarSplit",
+  function(spl, df, vals, labels) value_labels(spl)
+)
 
 
 make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
-    if(length(vals) == 0)
-        return(vals)
+  if (length(vals) == 0) {
+    return(vals)
+  }
 
-    if(is(extrs, "AsIs"))
-        extrs <- unclass(extrs)
-    ## if(are(vals, "SplitValue")) {
+  if (is(extrs, "AsIs")) {
+    extrs <- unclass(extrs)
+  }
+  ## if(are(vals, "SplitValue")) {
 
-    ##     return(vals)
-    ## }
+  ##     return(vals)
+  ## }
 
-    mapply(SplitValue, val = vals, extr = extrs,
-           label = labels,
-           SIMPLIFY = FALSE)
+  mapply(SplitValue,
+    val = vals, extr = extrs,
+    label = labels,
+    SIMPLIFY = FALSE
+  )
 }
 
 
@@ -654,27 +763,32 @@ NULL
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("COUNTRY",
-#'                 split_fun = remove_split_levels(c("USA", "CAN",
-#'                                                   "CHE", "BRA"))) %>%
+#'     split_fun = remove_split_levels(c(
+#'       "USA", "CAN",
+#'       "CHE", "BRA"
+#'     ))
+#'   ) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
 remove_split_levels <- function(excl) {
-    stopifnot(is.character(excl))
-    function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-        var <- spl_payload(spl)
-        df2 <- df[!(df[[var]] %in% excl), ]
-        if(is.factor(df2[[var]])) {
-          levels <- levels(df2[[var]])
-          levels <- levels[!(levels %in% excl)]
-          df2[[var]] <- factor(df2[[var]], levels = levels)
-        }
-        .apply_split_inner(spl, df2, vals = vals,
-                           labels = labels,
-                           trim = trim)
+  stopifnot(is.character(excl))
+  function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    var <- spl_payload(spl)
+    df2 <- df[!(df[[var]] %in% excl), ]
+    if (is.factor(df2[[var]])) {
+      levels <- levels(df2[[var]])
+      levels <- levels[!(levels %in% excl)]
+      df2[[var]] <- factor(df2[[var]], levels = levels)
     }
+    .apply_split_inner(spl, df2,
+      vals = vals,
+      labels = labels,
+      trim = trim
+    )
+  }
 }
 
 #' @rdname split_funcs
@@ -687,26 +801,33 @@ remove_split_levels <- function(excl) {
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("COUNTRY",
-#'                 split_fun = keep_split_levels(c("USA", "CAN", "BRA"))) %>%
+#'     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
+#'   ) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 keep_split_levels <- function(only, reorder = TRUE) {
-    function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-        var <- spl_payload(spl)
-        varvec <- df[[var]]
-        if(is.factor(varvec) && !all(only %in% levels(varvec)))
-            stop("Attempted to keep invalid factor level(s) in split ",
-                 setdiff(only, levels(varvec)))
-        df2 <- df[df[[var]] %in% only, ]
-        if(reorder)
-            df2[[var]] <- factor(df2[[var]], levels = only)
-        spl_child_order(spl) <- only
-        .apply_split_inner(spl, df2, vals = only,
-                           labels = labels,
-                           trim = trim)
+  function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    var <- spl_payload(spl)
+    varvec <- df[[var]]
+    if (is.factor(varvec) && !all(only %in% levels(varvec))) {
+      stop(
+        "Attempted to keep invalid factor level(s) in split ",
+        setdiff(only, levels(varvec))
+      )
     }
+    df2 <- df[df[[var]] %in% only, ]
+    if (reorder) {
+      df2[[var]] <- factor(df2[[var]], levels = only)
+    }
+    spl_child_order(spl) <- only
+    .apply_split_inner(spl, df2,
+      vals = only,
+      labels = labels,
+      trim = trim
+    )
+  }
 }
 
 #' @rdname split_funcs
@@ -725,17 +846,19 @@ drop_split_levels <- function(df,
                               vals = NULL,
                               labels = NULL,
                               trim = FALSE) {
-    var <- spl_payload(spl)
-    df2 <- df
-    df2[[var]] <- factor(df[[var]])
-    lblvar <- spl_label_var(spl)
-    if(!is.null(lblvar)) {
-        df2[[lblvar]] <- factor(df[[lblvar]])
-    }
+  var <- spl_payload(spl)
+  df2 <- df
+  df2[[var]] <- factor(df[[var]])
+  lblvar <- spl_label_var(spl)
+  if (!is.null(lblvar)) {
+    df2[[lblvar]] <- factor(df[[lblvar]])
+  }
 
-    .apply_split_inner(spl, df2, vals = vals,
-                       labels = labels,
-                       trim = trim)
+  .apply_split_inner(spl, df2,
+    vals = vals,
+    labels = labels,
+    trim = trim
+  )
 }
 
 #' @rdname split_funcs
@@ -776,25 +899,26 @@ drop_and_remove_levels <- function(excl) {
 reorder_split_levels <- function(neworder,
                                  newlabels = neworder,
                                  drlevels = TRUE) {
-    if(length(neworder) != length(newlabels)) {
-        stop("Got mismatching lengths for neworder and newlabels.")
+  if (length(neworder) != length(newlabels)) {
+    stop("Got mismatching lengths for neworder and newlabels.")
+  }
+  function(df, spl, trim, ...) {
+    df2 <- df
+    valvec <- df2[[spl_payload(spl)]]
+    vals <- if (is.factor(valvec)) levels(valvec) else unique(valvec)
+    if (!drlevels) {
+      neworder <- c(neworder, setdiff(vals, neworder))
     }
-    function(df, spl,  trim, ...) {
-        df2 <- df
-        valvec <- df2[[spl_payload(spl)]]
-        vals <- if(is.factor(valvec)) levels(valvec) else unique(valvec)
-        if(!drlevels)
-            neworder <- c(neworder, setdiff(vals, neworder))
-        df2[[spl_payload(spl)]] <- factor(valvec, levels = neworder)
-        if(drlevels) {
-            orig_order <- neworder
-            df2[[spl_payload(spl)]] <- droplevels(df2[[spl_payload(spl)]])
-            neworder <- levels(df2[[spl_payload(spl)]])
-            newlabels <- newlabels[orig_order %in% neworder]
-        }
-        spl_child_order(spl) <- neworder
-        .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)
+    df2[[spl_payload(spl)]] <- factor(valvec, levels = neworder)
+    if (drlevels) {
+      orig_order <- neworder
+      df2[[spl_payload(spl)]] <- droplevels(df2[[spl_payload(spl)]])
+      neworder <- levels(df2[[spl_payload(spl)]])
+      newlabels <- newlabels[orig_order %in% neworder]
     }
+    spl_child_order(spl) <- neworder
+    .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)
+  }
 }
 
 
@@ -807,32 +931,38 @@ reorder_split_levels <- function(neworder,
 #'   Defaults to \code{TRUE}
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
-    myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-        if(!drop_outlevs)
-            ret <- .apply_split_inner(spl, df, vals = vals,
-                                      labels = labels, trim = trim)
-        else
-            ret <- drop_split_levels(df = df, spl = spl, vals = vals,
-                                     labels = labels, trim = trim)
-
-        ret$datasplit <- lapply(ret$datasplit, function(x) {
-            coldat <- x[[innervar]]
-            if(is(coldat, "character")) {
-                if(!is.null(vals))
-                    lvs <- vals
-                else
-                    lvs <- unique(coldat)
-                coldat <- factor(coldat, levels = lvs) ## otherwise
-            } else {
-                coldat <- droplevels(coldat)
-            }
-            x[[innervar]] <- coldat
-            x
-        })
-        ret$labels <- as.character(ret$labels) # TODO
-        ret
+  myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    if (!drop_outlevs) {
+      ret <- .apply_split_inner(spl, df,
+        vals = vals,
+        labels = labels, trim = trim
+      )
+    } else {
+      ret <- drop_split_levels(
+        df = df, spl = spl, vals = vals,
+        labels = labels, trim = trim
+      )
     }
-    myfun
+
+    ret$datasplit <- lapply(ret$datasplit, function(x) {
+      coldat <- x[[innervar]]
+      if (is(coldat, "character")) {
+        if (!is.null(vals)) {
+          lvs <- vals
+        } else {
+          lvs <- unique(coldat)
+        }
+        coldat <- factor(coldat, levels = lvs) ## otherwise
+      } else {
+        coldat <- droplevels(coldat)
+      }
+      x[[innervar]] <- coldat
+      x
+    })
+    ret$labels <- as.character(ret$labels) # TODO
+    ret
+  }
+  myfun
 }
 
 .add_combo_part_info <- function(part,
@@ -842,26 +972,27 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
                                  label,
                                  extras,
                                  first = TRUE) {
-
-    value <- LevelComboSplitValue(valuename, extras, combolevels = levels,
-                                  label = label)
-    newdat <- setNames(list(df), valuename)
-    newval <- setNames(list(value), valuename)
-    newextra <- setNames(list(extras), valuename)
-    if(first) {
-        part$datasplit <- c(newdat, part$datasplit)
-        part$values <- c(newval, part$values)
-        part$labels <- c(setNames(label, valuename), part$labels)
-        part$extras <- c(newextra, part$extras)
-    } else {
-        part$datasplit <- c(part$datasplit, newdat)
-        part$values <- c(part$values, newval)
-        part$labels <- c(part$labels, setNames(label, valuename))
-        part$extras <- c(part$extras, newextra)
-    }
-    ## not needed even in custom split function case.
-    ##   part = .fixupvals(part)
-    part
+  value <- LevelComboSplitValue(valuename, extras,
+    combolevels = levels,
+    label = label
+  )
+  newdat <- setNames(list(df), valuename)
+  newval <- setNames(list(value), valuename)
+  newextra <- setNames(list(extras), valuename)
+  if (first) {
+    part$datasplit <- c(newdat, part$datasplit)
+    part$values <- c(newval, part$values)
+    part$labels <- c(setNames(label, valuename), part$labels)
+    part$extras <- c(newextra, part$extras)
+  } else {
+    part$datasplit <- c(part$datasplit, newdat)
+    part$values <- c(part$values, newval)
+    part$labels <- c(part$labels, setNames(label, valuename))
+    part$extras <- c(part$extras, newextra)
+  }
+  ## not needed even in custom split function case.
+  ##   part = .fixupvals(part)
+  part
 }
 
 #' Add an virtual 'overall' level to split
@@ -881,19 +1012,21 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #' @examples
 #'
 #' lyt <- basic_table() %>%
-#'    split_cols_by("ARM", split_fun = add_overall_level("All Patients",
-#'                                                       first = FALSE)) %>%
-#'    analyze("AGE")
+#'   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
+#'     first = FALSE
+#'   )) %>%
+#'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
 #' lyt2 <- basic_table() %>%
-#'    split_cols_by("ARM") %>%
-#'    split_rows_by("RACE",
-#'                  split_fun = add_overall_level("All Ethnicities")) %>%
-#'    summarize_row_groups(label_fstr = "%s (n)") %>%
-#'    analyze("AGE")
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("RACE",
+#'     split_fun = add_overall_level("All Ethnicities")
+#'   ) %>%
+#'   summarize_row_groups(label_fstr = "%s (n)") %>%
+#'   analyze("AGE")
 #' lyt2
 #'
 #' tbl2 <- build_table(lyt2, DM)
@@ -904,14 +1037,17 @@ add_overall_level <- function(valname = "Overall",
                               extra_args = list(),
                               first = TRUE,
                               trim = FALSE) {
-    combodf <- data.frame(valname = valname,
-                          label = label,
-                          levelcombo = I(list(select_all_levels)),
-                          exargs = I(list(extra_args)),
-                          stringsAsFactors = FALSE)
-    add_combo_levels(combodf,
-                     trim = trim, first = first)
-    }
+  combodf <- data.frame(
+    valname = valname,
+    label = label,
+    levelcombo = I(list(select_all_levels)),
+    exargs = I(list(extra_args)),
+    stringsAsFactors = FALSE
+  )
+  add_combo_levels(combodf,
+    trim = trim, first = first
+  )
+}
 
 setClass("AllLevelsSentinel", contains = "character")
 
@@ -936,41 +1072,48 @@ select_all_levels <- new("AllLevelsSentinel")
 #' @examples
 #' library(tibble)
 #' combodf <- tribble(
-#'     ~valname, ~label, ~levelcombo, ~exargs,
-#'     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
-#'     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
+#'   ~valname, ~label, ~levelcombo, ~exargs,
+#'   "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
+#'   "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
+#' )
 #'
 #' lyt <- basic_table(show_colcounts = TRUE) %>%
-#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'     analyze("AGE")
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
 #' lyt1 <- basic_table(show_colcounts = TRUE) %>%
-#'     split_cols_by("ARM",
-#'                   split_fun = add_combo_levels(combodf,
-#'                                                keep_levels = c("A_B",
-#'                                                                "A_C"))) %>%
-#'     analyze("AGE")
+#'   split_cols_by("ARM",
+#'     split_fun = add_combo_levels(combodf,
+#'       keep_levels = c(
+#'         "A_B",
+#'         "A_C"
+#'       )
+#'     )
+#'   ) %>%
+#'   analyze("AGE")
 #'
 #' tbl1 <- build_table(lyt1, DM)
 #' tbl1
 #'
 #' smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
-#'                         grepl("^(A|B)", ARM)))
+#'   grepl("^(A|B)", ARM)))
 #' lyt2 <- basic_table(show_colcounts = TRUE) %>%
-#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) %>%
-#'     split_cols_by("SEX",
-#'                   split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
-#'     analyze("AGE")
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) %>%
+#'   split_cols_by("SEX",
+#'     split_fun = add_overall_level("SEX_ALL", "All Genders")
+#'   ) %>%
+#'   analyze("AGE")
 #'
-#' lyt3 <-  basic_table(show_colcounts = TRUE) %>%
-#'     split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-#'     split_rows_by("SEX",
-#'                   split_fun = add_overall_level("SEX_ALL", "All Genders")) %>%
-#'     summarize_row_groups() %>%
-#'     analyze("AGE")
+#' lyt3 <- basic_table(show_colcounts = TRUE) %>%
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#'   split_rows_by("SEX",
+#'     split_fun = add_overall_level("SEX_ALL", "All Genders")
+#'   ) %>%
+#'   summarize_row_groups() %>%
+#'   analyze("AGE")
 #'
 #' tbl3 <- build_table(lyt3, smallerDM)
 #' tbl3
@@ -978,39 +1121,46 @@ add_combo_levels <- function(combosdf,
                              trim = FALSE,
                              first = FALSE,
                              keep_levels = NULL) {
-    myfun <- function(df, spl, vals = NULL, labels = NULL, ...) {
-        if(is(spl, "MultiVarSplit"))
-            stop("Combining levels of a MultiVarSplit does not make sense.",
-                 call. = FALSE) # nocov
-        ret <- .apply_split_inner(spl, df, vals = vals,
-                                  labels = labels, trim = trim)
-        for(i in seq_len(nrow(combosdf))) {
-            lcombo <- combosdf[i, "levelcombo", drop = TRUE][[1]]
-            spld <- spl_payload(spl)
-            if(is(lcombo, "AllLevelsSentinel"))
-                subdf <- df
-            else if (is(spl, "VarLevelSplit")) {
-                 subdf <- df[df[[spld]] %in% lcombo, ]
-            } else { ## this covers non-var splits, e.g. Cut-based splits
-                stopifnot(all(lcombo %in% c(ret$labels, ret$vals)))
-                subdf <- do.call(rbind,
-                                 ret$datasplit[names(ret$datasplit) %in% lcombo |
-                                                     ret$vals %in% lcombo])
-            }
-            ret <- .add_combo_part_info(ret, subdf,
-                                       combosdf[i, "valname", drop = TRUE],
-                                       lcombo,
-                                       combosdf[i, "label", drop = TRUE],
-                                       combosdf[i, "exargs", drop = TRUE][[1]],
-                                       first)
-        }
-        if(!is.null(keep_levels)) {
-            keep_inds <- value_names(ret$values) %in% keep_levels
-            ret <- lapply(ret, function(x) x[keep_inds])
-        }
-
-        ret
+  myfun <- function(df, spl, vals = NULL, labels = NULL, ...) {
+    if (is(spl, "MultiVarSplit")) {
+      stop("Combining levels of a MultiVarSplit does not make sense.",
+        call. = FALSE
+      )
+    } # nocov
+    ret <- .apply_split_inner(spl, df,
+      vals = vals,
+      labels = labels, trim = trim
+    )
+    for (i in seq_len(nrow(combosdf))) {
+      lcombo <- combosdf[i, "levelcombo", drop = TRUE][[1]]
+      spld <- spl_payload(spl)
+      if (is(lcombo, "AllLevelsSentinel")) {
+        subdf <- df
+      } else if (is(spl, "VarLevelSplit")) {
+        subdf <- df[df[[spld]] %in% lcombo, ]
+      } else { ## this covers non-var splits, e.g. Cut-based splits
+        stopifnot(all(lcombo %in% c(ret$labels, ret$vals)))
+        subdf <- do.call(
+          rbind,
+          ret$datasplit[names(ret$datasplit) %in% lcombo | ret$vals %in% lcombo]
+        )
+      }
+      ret <- .add_combo_part_info(
+        ret, subdf,
+        combosdf[i, "valname", drop = TRUE],
+        lcombo,
+        combosdf[i, "label", drop = TRUE],
+        combosdf[i, "exargs", drop = TRUE][[1]],
+        first
+      )
     }
+    if (!is.null(keep_levels)) {
+      keep_inds <- value_names(ret$values) %in% keep_levels
+      ret <- lapply(ret, function(x) x[keep_inds])
+    }
+
+    ret
+  }
   myfun
 }
 
@@ -1044,92 +1194,105 @@ add_combo_levels <- function(combosdf,
 #' @export
 #' @examples
 #' map <- data.frame(
-#'     LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
-#'     PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
-#'     ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
-#'     stringsAsFactors = FALSE
+#'   LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
+#'   PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
+#'   ANRIND = c("LOW", "LOW", "HIGH", "HIGH"),
+#'   stringsAsFactors = FALSE
 #' )
 #'
 #' lyt <- basic_table() %>%
-#'     split_rows_by("LBCAT") %>%
-#'     split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
-#'     analyze("ANRIND")
+#'   split_rows_by("LBCAT") %>%
+#'   split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+#'   analyze("ANRIND")
 #' tbl <- build_table(lyt, ex_adlb)
 trim_levels_to_map <- function(map = NULL) {
+  if (is.null(map) || any(sapply(map, class) != "character")) {
+    stop(
+      "No map dataframe was provided or not all of the columns are of ",
+      "type character."
+    )
+  }
 
-    if (is.null(map) || any(sapply(map, class) != "character"))
-        stop("No map dataframe was provided or not all of the columns are of ",
-             "type character.")
+  myfun <- function(df,
+                    spl,
+                    vals = NULL,
+                    labels = NULL,
+                    trim = FALSE,
+                    .spl_context) {
+    allvars <- colnames(map)
+    splvar <- spl_payload(spl)
 
-    myfun <- function(df,
-                      spl,
-                      vals = NULL,
-                      labels = NULL,
-                      trim = FALSE,
-                      .spl_context) {
+    allvmatches <- match(.spl_context$split, allvars)
+    outvars <- allvars[na.omit(allvmatches)]
+    ## invars are variables present in data, but not in
+    ## previous or current splits
+    invars <- intersect(
+      setdiff(allvars, c(outvars, splvar)),
+      names(df)
+    )
+    ## allvarord <- c(na.omit(allvmatches), ## appear in prior splits
+    ##                which(allvars == splvar), ## this split
+    ##                allvars[-1*na.omit(allvmatches)]) ## "outvars"
 
-        allvars <- colnames(map)
-        splvar <- spl_payload(spl)
+    ## allvars <- allvars[allvarord]
+    ## outvars <- allvars[-(which(allvars == splvar):length(allvars))]
+    if (length(outvars) > 0) {
+      indfilters <- vapply(outvars, function(ivar) {
+        obsval <- .spl_context$value[match(ivar, .spl_context$split)]
+        sprintf("%s == '%s'", ivar, obsval)
+      }, "")
 
-        allvmatches <- match(.spl_context$split, allvars)
-        outvars <- allvars[na.omit(allvmatches)]
-        ## invars are variables present in data, but not in
-        ## previous or current splits
-        invars <- intersect(setdiff(allvars, c(outvars, splvar)),
-                            names(df))
-        ## allvarord <- c(na.omit(allvmatches), ## appear in prior splits
-        ##                which(allvars == splvar), ## this split
-        ##                allvars[-1*na.omit(allvmatches)]) ## "outvars"
+      allfilters <- paste(indfilters, collapse = " & ")
+      map <- map[eval(parse(text = allfilters), envir = map), ]
+    }
+    map_splvarpos <- which(names(map) == splvar)
+    nondup <- !duplicated(map[[splvar]])
+    ksl_fun <- keep_split_levels(
+      only = map[[splvar]][nondup],
+      reorder = TRUE
+    )
+    ret <- ksl_fun(df, spl, vals, labels, trim = trim)
 
-        ## allvars <- allvars[allvarord]
-        ## outvars <- allvars[-(which(allvars == splvar):length(allvars))]
-        if(length(outvars) > 0) {
-            indfilters <- vapply(outvars, function(ivar) {
-                obsval <- .spl_context$value[match(ivar, .spl_context$split)]
-                sprintf("%s == '%s'", ivar, obsval)
-            }, "")
-
-            allfilters <- paste(indfilters, collapse = " & ")
-            map <- map[eval(parse(text = allfilters), envir = map), ]
-        }
-        map_splvarpos <- which(names(map) == splvar)
-        nondup <- !duplicated(map[[splvar]])
-        ksl_fun <- keep_split_levels(only = map[[splvar]][nondup],
-                                     reorder = TRUE)
-        ret <- ksl_fun(df, spl, vals, labels, trim = trim)
-
-        if(length(ret$datasplit) == 0) {
-            msg <- paste(sprintf("%s[%s]", .spl_context$split, .spl_context$value),
-                         collapse = "->")
-            stop("map does not allow any values present in data for split ",
-                 "variable ", splvar,
-                 " under the following parent splits:\n\t", msg)
-        }
-
-        ## keep non-split (inner) variables levels
-        ret$datasplit <- lapply(ret$values, function(splvar_lev) {
-            df3 <- ret$datasplit[[splvar_lev]]
-            curmap <- map[map[[map_splvarpos]] == splvar_lev, ]
-            ## loop through inner variables
-            for (iv in invars) { ##setdiff(colnames(map), splvar)) {
-                iv_lev <- df3[[iv]]
-                levkeep <- as.character(unique(curmap[[iv]]))
-                if (is.factor(iv_lev) && !all(levkeep %in% levels(iv_lev)))
-                    stop("Attempted to keep invalid factor level(s) in split ",
-                         setdiff(levkeep, levels(iv_lev)))
-
-                df3 <- df3[iv_lev %in% levkeep, , drop = FALSE]
-
-                if (is.factor(iv_lev))
-                    df3[[iv]] <- factor(as.character(df3[[iv]]),
-                                        levels = levkeep)
-            }
-
-            df3
-        })
-        names(ret$datasplit) <- ret$values
-        ret
+    if (length(ret$datasplit) == 0) {
+      msg <- paste(sprintf("%s[%s]", .spl_context$split, .spl_context$value),
+        collapse = "->"
+      )
+      stop(
+        "map does not allow any values present in data for split ",
+        "variable ", splvar,
+        " under the following parent splits:\n\t", msg
+      )
     }
 
-    myfun
+    ## keep non-split (inner) variables levels
+    ret$datasplit <- lapply(ret$values, function(splvar_lev) {
+      df3 <- ret$datasplit[[splvar_lev]]
+      curmap <- map[map[[map_splvarpos]] == splvar_lev, ]
+      ## loop through inner variables
+      for (iv in invars) { ## setdiff(colnames(map), splvar)) {
+        iv_lev <- df3[[iv]]
+        levkeep <- as.character(unique(curmap[[iv]]))
+        if (is.factor(iv_lev) && !all(levkeep %in% levels(iv_lev))) {
+          stop(
+            "Attempted to keep invalid factor level(s) in split ",
+            setdiff(levkeep, levels(iv_lev))
+          )
+        }
+
+        df3 <- df3[iv_lev %in% levkeep, , drop = FALSE]
+
+        if (is.factor(iv_lev)) {
+          df3[[iv]] <- factor(as.character(df3[[iv]]),
+            levels = levkeep
+          )
+        }
+      }
+
+      df3
+    })
+    names(ret$datasplit) <- ret$values
+    ret
+  }
+
+  myfun
 }

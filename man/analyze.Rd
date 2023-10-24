@@ -107,30 +107,7 @@ being tabulated
 In addition to differentiation on the first argument, the analysis function
 can optionally accept a number of other parameters which, \emph{if and only
 if} present in the formals will be passed to the function by the tabulation
-machinery. These are as follows:
-
-\describe{
-\item{.N_col}{column-wise N (column count) for the full column being
-tabulated within}
-\item{.N_total}{overall N (all observation count, defined as sum of column
-counts) for the tabulation}
-\item{.N_row}{row-wise N (row group count) for the group of observations
-being analyzed (i.e. with no column-based subsetting)}
-\item{.df_row}{ data.frame for observations in the row group being analyzed
-(i.e. with no column-based subsetting)}
-\item{.var}{variable that is analyzed}
-\item{.ref_group}{data.frame or vector of subset corresponding to the
-\code{ref_group} column including subsetting defined by row-splitting.
-Optional and only required/meaningful if a \code{ref_group} column has been
-defined}
-\item{.ref_full}{data.frame or vector of subset corresponding to the
-\code{ref_group} column without subsetting defined by row-splitting. Optional
-and only required/meaningful if a \code{ref_group} column has been defined}
-\item{.in_ref_col}{boolean indicates if calculation is done for cells
-within the reference column}
-\item{.spl_context}{data.frame, each row gives information about a
-previous/'ancestor' split state. see below}
-}
+machinery. These are listed and described in \code{\link{additional_fun_params}}.
 }
 \note{
 None of the arguments described in the Details section
@@ -142,61 +119,24 @@ must be calculated within \code{afun} based on a combination
 of extra arguments and the unmodified values provided by the
 tabulation framework.
 }
-\section{.spl_context Details}{
-
-The \code{.spl_context} \code{data.frame} gives information about the subsets of data
-corresponding to the splits within-which the current \code{analyze} action is
-nested. Taken together, these correspond to the path that the resulting (set
-of) rows the analysis function is creating, although the information is in a
-slightly different form. Each split (which correspond to groups of rows in
-the resulting table), as well as the initial 'root' "split", is represented
-via the following columns:
-\describe{
-\item{split}{The name of the split (often the variable being split in the
-simple case)}
-\item{value}{The string representation of the value at that split}
-\item{full_parent_df}{a dataframe containing the full data (i.e. across all
-columns) corresponding to the path defined by the combination of \code{split}
-and \code{value} of this row \emph{and all rows above this row}}
-\item{all_cols_n}{the number of observations  corresponding to this row
-grouping (union of all columns)}
-\item{\emph{(row-split and analyze contexts only)} <1 column for each
-column in the table structure}{ These list columns (named the same as
-\code{names(col_exprs(tab))}) contain logical vectors corresponding to
-the subset of this row's \code{full_parent_df} corresponding to that column}
-\item{cur_col_subset}{List column containing logical vectors indicating the
-subset of that row's \code{full_parent_df} for the column currently being
-created by the analysis function}
-\item{cur_col_n}{integer column containing the observation counts for that
-split}
-}
-
-\emph{note Within analysis functions that accept \code{.spl_context}, the
-\code{all_cols_n} and \code{cur_col_n} columns of the dataframe will contain the 'true'
-observation counts corresponding to the row-group and row-group x column
-subsets of the data. These numbers will not, and currently cannot, reflect
-alternate column observation counts provided by the \code{alt_counts_df},
-\code{col_counts} or \code{col_total} arguments to \code{\link{build_table}}}
-}
-
 \examples{
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 lyt
 
 tbl <- build_table(lyt, DM)
 tbl
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("Species") \%>\%
-    analyze(head(names(iris), -1), afun = function(x) {
-        list(
-            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-            "range" = rcell(diff(range(x)), format = "xx.xx")
-        )
-    })
+  split_cols_by("Species") \%>\%
+  analyze(head(names(iris), -1), afun = function(x) {
+    list(
+      "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = rcell(diff(range(x)), format = "xx.xx")
+    )
+  })
 lyt2
 
 tbl2 <- build_table(lyt2, iris)

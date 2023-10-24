@@ -86,17 +86,17 @@ adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
 adsl$BMRKR1 <- 0
 
 tbl_to_prune <- basic_table() \%>\%
-    analyze("BMRKR1") \%>\%
-    split_cols_by("ARM") \%>\% 
-    split_rows_by("SEX") \%>\% 
-    summarize_row_groups() \%>\%
-    split_rows_by("STRATA1") \%>\%
-    summarize_row_groups() \%>\%
-    analyze("AGE") \%>\%
-    build_table(adsl)
+  analyze("BMRKR1") \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX") \%>\%
+  summarize_row_groups() \%>\%
+  split_rows_by("STRATA1") \%>\%
+  summarize_row_groups() \%>\%
+  analyze("AGE") \%>\%
+  build_table(adsl)
 
 tbl_to_prune \%>\% prune_table(all_zero_or_na)
-   
+
 tbl_to_prune \%>\% prune_table(all_zero)
 
 tbl_to_prune \%>\% prune_table(content_all_zeros_nas)

@@ -30,10 +30,10 @@ Setting \code{NULL} at a defined path removes the corresponding sub table.
 \examples{
 # Accessing sub table.
 lyt <- basic_table() \%>\%
-   split_cols_by("ARM") \%>\%
-   split_rows_by("SEX") \%>\%
-   split_rows_by("BMRKR2") \%>\%
-   analyze("AGE")
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX") \%>\%
+  split_rows_by("BMRKR2") \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, ex_adsl) \%>\% prune_table()
 sub_tbl <- tt_at_path(tbl, path = c("SEX", "F", "BMRKR2"))
@@ -45,9 +45,9 @@ tbl2
 
 # Setting sub table.
 lyt3 <- basic_table() \%>\%
-   split_cols_by("ARM") \%>\%
-   split_rows_by("SEX") \%>\%
-   analyze("BMRKR2")
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX") \%>\%
+  analyze("BMRKR2")
 
 tbl3 <- build_table(lyt3, ex_adsl) \%>\% prune_table()
 

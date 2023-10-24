@@ -65,7 +65,8 @@ structure created by this function(subtable, content table, or row)
 corresponds to the unmodified default behavior.}
 
 \item{page_by}{logical(1). Should pagination be forced between different
-children resulting form this split.}
+children resulting form this split. An error will rise if the selected split
+does not contain at least one value that is not \code{NA}.}
 
 \item{page_prefix}{character(1). Prefix, to be appended with the split value,
 when forcing pagination between the children of this split/table}
@@ -136,51 +137,55 @@ their outputs.
 \examples{
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
-    analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
+  analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by("RACE") \%>\%
-    analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_rows_by("RACE") \%>\%
+  analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
 lyt3 <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by("SEX") \%>\%
-    summarize_row_groups(label_fstr = "Overall (N)") \%>\%
-    split_rows_by("RACE", split_label = "Ethnicity", labels_var = "ethn_lab",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
-    analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_cols_by("SEX") \%>\%
+  summarize_row_groups(label_fstr = "Overall (N)") \%>\%
+  split_rows_by("RACE",
+    split_label = "Ethnicity", labels_var = "ethn_lab",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups("RACE", label_fstr = "\%s (n)") \%>\%
+  analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
 lyt3
 
 library(dplyr)
 DM2 <- DM \%>\%
-    filter(SEX \%in\% c("M", "F")) \%>\%
-    mutate(
-        SEX = droplevels(SEX),
-        gender_lab = c("F" = "Female", "M" = "Male",
-                       "U" = "Unknown",
-                       "UNDIFFERENTIATED" = "Undifferentiated")[SEX],
-        ethn_lab = c(
-            "ASIAN" = "Asian",
-            "BLACK OR AFRICAN AMERICAN" = "Black or African American",
-            "WHITE" = "White",
-            "AMERICAN INDIAN OR ALASKA NATIVE" = "American Indian or Alaska Native",
-             "MULTIPLE" = "Multiple",
-             "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" =
-                 "Native Hawaiian or Other Pacific Islander",
-             "OTHER" = "Other", "UNKNOWN" = "Unknown"
-        )[RACE]
-    )
+  filter(SEX \%in\% c("M", "F")) \%>\%
+  mutate(
+    SEX = droplevels(SEX),
+    gender_lab = c(
+      "F" = "Female", "M" = "Male",
+      "U" = "Unknown",
+      "UNDIFFERENTIATED" = "Undifferentiated"
+    )[SEX],
+    ethn_lab = c(
+      "ASIAN" = "Asian",
+      "BLACK OR AFRICAN AMERICAN" = "Black or African American",
+      "WHITE" = "White",
+      "AMERICAN INDIAN OR ALASKA NATIVE" = "American Indian or Alaska Native",
+      "MULTIPLE" = "Multiple",
+      "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" =
+        "Native Hawaiian or Other Pacific Islander",
+      "OTHER" = "Other", "UNKNOWN" = "Unknown"
+    )[RACE]
+  )
 
 tbl3 <- build_table(lyt3, DM2)
 tbl3

@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-strategy: ["min", "release", "max"]
+        test-strategy: ["min_cohort", "min_isolated", "release", "max"]
     uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
     name: Dependency Test - ${{ matrix.test-strategy }} 🔢
     secrets:
@@ -30,4 +30,4 @@ jobs:
     name: CRAN Status Monitor 📺
     uses: insightsengineering/r.pkg.template/.github/workflows/cran-status.yaml@main
     with:
-      issue-assignees: "shajoezhu,Melkiades,edelarua,gmbecker,ayogasekaram"
+      issue-assignees: "shajoezhu,Melkiades,edelarua,ayogasekaram"

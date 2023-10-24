@@ -43,6 +43,8 @@ is subject to change in future releases.
 }
 \examples{
 validate_table_struct(rtable("hahaha"))
-\dontrun{assert_valid_table(rtable("oops"))}
+\dontrun{
+assert_valid_table(rtable("oops"))
+}
 
 }

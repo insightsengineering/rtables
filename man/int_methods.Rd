@@ -42,6 +42,7 @@
 \alias{summarize_rows_inner,TableRow-method}
 \alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
+\alias{str}
 \alias{str,VTableTree-method}
 \alias{table_structure_inner,TableTree-method}
 \alias{table_structure_inner,ElementaryTable-method}
@@ -475,6 +476,8 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 \S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+str(object, ...)
 
 \S4method{str}{VTableTree}(object, max.level = 3L, ...)
 
@@ -1144,7 +1147,7 @@ not match a formal argument of the tabulation function.}
 
 \item{print_indent}{indent for print}
 
-\item{object}{The object to modify in-place}
+\item{object}{a table object}
 
 \item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
 \code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
@@ -1220,10 +1223,13 @@ iris2 <- iris \%>\%
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
-  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
-          format = "xx.xx")
+  analyze(c("Sepal.Length", "Petal.Width"),
+    afun = list_wrap_x(summary),
+    format = "xx.xx"
+  )
 
 tbl <- build_table(lyt, iris2)
+
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl

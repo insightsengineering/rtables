@@ -1,5 +1,50 @@
-## rtables 0.6.2.9002
+## rtables 0.6.5.9003
+### Miscellaneous
+ * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+
+## rtables 0.6.5
+### New Features
+ * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Added support for new line characters across rtables (titles, column names, row names, footers, and `na_str`).
+ * Modified top left information vertical alignment to stay at the bottom of the header.
+
+### Bug Fixes
+ * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+
+### Miscellaneous
+ * Added slide decks for advanced training as internal files.
+
+## rtables 0.6.4
+### New Features
+ * Added support for `.docx` exports with `export_as_docx()`.
+ * Expanded support for `flextable` customization with theme function specific for word documents (`theme_docx_default()`).
+
+### Bug Fixes
+* Fixed bug causing all-`NA` rows to be included in every `.df_row` split.
+
+### Miscellaneous
+ * Specified minimal version of package dependencies.
+
+## rtables 0.6.3
+### New Features
+ * Analysis functions (`cfun/afun`) can use new parameters to extend analysis calculations: `.alt_df_row` and `.alt_df` give access to `alt_counts_df` across columns, while `.all_col_exprs` and `.all_col_counts` contains global information about all columns.
+ * Binding objects via `rbind` will retain titles/footer information if identical in all objects or only present in the first object being bound.
+
+### Enhancements
+ * Analysis functions (`cfun/afun`) have more information about current column split; `.spl_context` has access to `cur_col_id`, `cur_col_expr`, `cur_col_split`, and `cur_col_split_val`.
+ * Added vignette on exploratory analysis with `qtable`.
+ * Extracted `qtable_layout` from `qtable`.
+
+### Bug Fixes
+ * Page-by splits which generate zero facets (and thus tables which would have zero pages when rendered) now throw an informative error at table build time.
+ * Removed superfluous warning which arose for custom split functions when reference group is is set (https://github.com/insightsengineering/rtables/issues/707#issuecomment-1678810598).
+ * Fixed `qtable` labeling via `row_labels` ([#698](https://github.com/insightsengineering/rtables/issues/698)).
+ * Error catching and test coverage for cases where `alt_counts_df` presents different splits from `df`.
+ 
+### Miscellaneous
  * Cleaned up spelling in documentation ([#685](https://github.com/insightsengineering/rtables/issues/685))
+ * Custom appearance vignette updated with decimal alignment support.
+ * Alignment checks have been moved into `formatters`: `formatters::check_aligns` superseded internal function `chk_rtables_align` and `formatters::list_valid_aligns` superseded `rtables_aligns`.
 
 ## rtables 0.6.2
  * Fixed major regressions for `page_by` machinery caused by migration to `formatters` 0.5.1 pagination framework.
@@ -7,7 +52,7 @@
  * Fixed a bug when dropping `var` levels but not `lblvar` levels.
  * Added checks to catch bad labels (with {}) and throw informative error.
  * Added `qtable` function to create a table with a single top-level structure in both row and column dimensions  involving faceting by 0 or more variables in each.
- * Added `as_result_df` function to flattern a table into a dataframe.
+ * Added `as_result_df` function to flatten a table into a dataframe.
  * Added `sanitize_table_struct`, `validate_table_struct`, `find_degen_struct` to support degenerative table rendering.
 
 ## rtables 0.6.1
