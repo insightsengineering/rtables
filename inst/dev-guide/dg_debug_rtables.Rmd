@@ -15,81 +15,65 @@ knit: (function(inputFile, encoding) {
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Disclaimer
+## Debugging
 
-Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`.
+This is a short and not-comprehensive guide to debugging `rtables`. It is to be considered, though, of general validity and of personal use.
 
----
-
-This is a not-so-short and not-comprehensive guide to debugging `rtables`. It is to be considered, though, of general validity and of personal use.
-
--=-=-=- Notes from meeting
-In general code must be in a way that:
+#### Coding in Practice
 -> it is easy to read and find problems
 -> it is not clever, because it is impossible to debug
 
-* Coding Error, code does not do what you intended -> Bug in the punch card
-* Unexpected Input. Defensive programming FAIL FAST FAIL LOUD -> useful and not too consuming
-* Bug in Dependency -> never use 
+#### Some Definitions
+* __Coding Error__ - Code does not do what you intended -> Bug in the punch card
+* __Unexpected Input__ - Defensive programming FAIL FAST FAIL LOUD (FFFL) -> useful and not too time consuming
+* __Bug in Dependency__ -> never use dependencies if you can!
 
-e.g. of FFFL
-as close as possible to the source
-* bad inputs should be found very early
+#### Considerations About FFFL
+Errors should be as close as possible to the source. For example, bad inputs should be found very early. The worst possible example is a software that is silently giving incorrect results. Common things that we can catch early are missing values, column `length == 0`,  or `length > 1`.
 
-
-Worst: silently giving incorrect results
-
-common things that we can catch early
-missing values/column length == 0 or length > 1
-
-ROBUSTNESS: refuse to do stuff that can be very problematic
-
-WHAT TO DO
+#### General Suggestions
+* Robust code base does not attempt doing possibly problematic operations.
 * Read Error Messages
-debugcall you can add the signature (formals)
-trace is powerful because you can add the reaction)
-tracer is very good, at where it happens
+* `debugcall` you can add the signature (formals)
+* `trace` is powerful because you can add the reaction
+* `tracer` is very good and precise to find where it happens
 
-options(error=recover) is the best way to debug
-core tool when developing/debugging
+`options(error = recover)` is one of the best tools to debug at it is a core tool when developing that allows you to step into any point of the function call sequence.
 
-dump.frames and debugger
-it saves it to a file or an object and then you call debugger to step in it
-as you did recover. You save the global form
+`dump.frames` and `debugger`: it saves it to a file or an object and then you call debugger to step in it
+as you did recover.
 
-warn global option
-<0 ignored
-0 top level function call
-1 immediately as they occur
->=2 throws errors
+#### `warn` Global Option
+- `<0` ignored
+- `0` top level function call
+- `1` immediately as they occur
+- `>=2` throws errors
 
-<<- for recover or debugger gives it to the global environment
+`<<-` for `recover` or `debugger` gives it to the global environment
 
-lo-fi debugging
-PRINT / CAT
-print position of a function you get to then you get to a point where it breaks
+#### lo-fi debugging
+* PRINT / CAT is always a low level debugging that can be used. It is helpful for server jobs where maybe only terminal or console output is available and no `browser()` can be used. For example, you can print the position or state of a function at a certain point untill you find the break point.
+* comment blocks -> does not work with pipes (you can use `identity()` it is a step that does nothing but does not break the pipes)
+* `browser()` bombing
 
-comment blocks -> does not work with pipes (use identity() it is a step
-that does nothing but does not break the pipes)
+#### Regression Tests
+Almost every bug should become a regression test.
 
-browser bombing
+#### Debugging with Pipes
+* Pipes are better to write code but horrible to debug
+* T in pipe `%T>%` does print it midway
+* `debug_pipe()` -> it is like the T pipe going into browser()
 
-regression tests
-almost every bug should become a regression test
+#### Shiny Debugging
+More difficult due to reactivity.
 
-debugging with pipes
--> pipes are better to write code but horrible to debug
 
-T pipe %T>% does print it midway
-
-debug_pipe -> it is like the T pipe going into browser()
-
-Shiny debugging is more difficult due to reactivity
-
+#### General Suggestion
 DO NOT BE CLEVER WITH CODE - ONLY IF YOU HAVE TO, CLEVER IS ALSO SUBJECTIVE 
 AND IT WILL CHANGE WITH TIME
--=-=-=-
 
+
+## Debugging in `rtables`
 
 We invite the smart developer to use the provided examples as a way to get an "interactive" and dynamic vision of the internal algorithms, as they are routinely executed when constructing tables with `rtables`. This is achieved by using `browser()` and `debugonce()` on internal and exported functions (`rtables:::` or `rtables::`), as we will see in a moment. We invite also the continuous and autonomous exploration of the multiple `S3` and `S4` objects that constitute the complexity and power of `rtables`. To do so we will use the following useful functions:
 
