@@ -60,29 +60,36 @@ ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the
 ## count of >.5 for the second.
-colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
-                function(x) rcell(sum(x > .5), format = "xx"))
+colfuns <- list(
+  function(x) rcell(mean(x), format = "xx.x"),
+  function(x) rcell(sum(x > .5), format = "xx")
+)
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("value", "pctdiff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups() \%>\%
-    analyze_colvars(afun = colfuns)
+  split_cols_by("ARM") \%>\%
+  split_cols_by_multivar(c("value", "pctdiff")) \%>\%
+  split_rows_by("RACE",
+    split_label = "ethnicity",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  analyze_colvars(afun = colfuns)
 lyt
 
 tbl <- build_table(lyt, ANL)
 tbl
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("value", "pctdiff"),
-                           varlabels = c("Measurement", "Pct Diff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups() \%>\%
-    analyze_colvars(afun = mean, format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_cols_by_multivar(c("value", "pctdiff"),
+    varlabels = c("Measurement", "Pct Diff")
+  ) \%>\%
+  split_rows_by("RACE",
+    split_label = "ethnicity",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  analyze_colvars(afun = mean, format = "xx.xx")
 
 tbl2 <- build_table(lyt2, ANL)
 tbl2

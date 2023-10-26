@@ -34,8 +34,8 @@ Returns a matrix of formats for the cells in a table
 \examples{
 
 lyt <- basic_table() \%>\%
-split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
-analyze("AGE")
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 value_formats(tbl)

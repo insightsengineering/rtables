@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - devel
 
 jobs:
   audit:
@@ -23,7 +22,7 @@ jobs:
       sd-direction: upstream
   coverage:
     if: github.event_name == 'pull_request'
-    name: Coverage 📔 
+    name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}

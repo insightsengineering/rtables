@@ -94,58 +94,69 @@ a_summary3 <- make_afun(a_summary, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
 
 
 s_foo <- function(df, .N_col, a = 1, b = 2) {
-   list(
-      nrow_df = nrow(df),
-      .N_col = .N_col,
-      a = a,
-      b = b
-   )
+  list(
+    nrow_df = nrow(df),
+    .N_col = .N_col,
+    a = a,
+    b = b
+  )
 }
 
 s_foo(iris, 40)
 
-a_foo <- make_afun(s_foo, b = 4,
- .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
- .labels = c(nrow_df = "Nrow df",
-             ".N_col" = "n in cols", a = "a value", b = "b value"),
- .indent_mods = c(nrow_df = 2L, a = 1L)
+a_foo <- make_afun(s_foo,
+  b = 4,
+  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
+  .labels = c(
+    nrow_df = "Nrow df",
+    ".N_col" = "n in cols", a = "a value", b = "b value"
+  ),
+  .indent_mods = c(nrow_df = 2L, a = 1L)
 )
 
 a_foo(iris, .N_col = 40)
 a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
 a_foo2(iris, .N_col = 40)
 
-#grouping and further customization
+# grouping and further customization
 s_grp <- function(df, .N_col, a = 1, b = 2) {
-   list(
-      nrow_df = nrow(df),
-      .N_col = .N_col,
-      letters = list(a = a,
-                     b = b)
-   )
+  list(
+    nrow_df = nrow(df),
+    .N_col = .N_col,
+    letters = list(
+      a = a,
+      b = b
+    )
+  )
 }
-a_grp <- make_afun(s_grp, b = 3,
-                   .labels = c(nrow_df = "row count",
-                               .N_col = "count in column"),
-                   .formats = c(nrow_df = "xx.", .N_col = "xx."),
-                   .indent_mod = c(letters = 1L),
-                   .ungroup_stats ="letters")
+a_grp <- make_afun(s_grp,
+  b = 3,
+  .labels = c(
+    nrow_df = "row count",
+    .N_col = "count in column"
+  ),
+  .formats = c(nrow_df = "xx.", .N_col = "xx."),
+  .indent_mod = c(letters = 1L),
+  .ungroup_stats = "letters"
+)
 a_grp(iris, 40)
-a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"),
-                        .formats = c(b = "xx."))
+a_aftergrp <- make_afun(a_grp,
+  .stats = c("nrow_df", "b"),
+  .formats = c(b = "xx.")
+)
 a_aftergrp(iris, 40)
 
 s_ref <- function(x, .in_ref_col, .ref_group) {
-   list(
-         mean_diff = mean(x) - mean(.ref_group)
-       )
+  list(
+    mean_diff = mean(x) - mean(.ref_group)
+  )
 }
 
 a_ref <- make_afun(s_ref,
-                   .labels = c( mean_diff = "Mean Difference from Ref"))
+  .labels = c(mean_diff = "Mean Difference from Ref")
+)
 a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
-
 
 }
 \seealso{

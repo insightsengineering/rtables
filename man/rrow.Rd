@@ -30,7 +30,7 @@ row
 }
 \examples{
 
-rrow("ABC", c(1,2), c(3,2), format = "xx (xx.\%)")
+rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.\%)")
 rrow("")
 
 }

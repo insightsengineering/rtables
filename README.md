@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables_logo_small.png" align="right" /></a>
+# rtables <a href='https://github.com/insightsengineering/rtables'><img src="man/figures/rtables.png" align="right" height="200" width="200"/></a>
 
 <!-- start badges -->
 
