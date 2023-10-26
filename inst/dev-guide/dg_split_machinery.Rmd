@@ -22,19 +22,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Any code or prose which appears in a version of this vignette on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide reflects very important pieces of the split machinery that are unlikely to change. We anyway invite the reader to think always that the current code may have drifted from the following document, and it is always the best practice to read directly the code on `main`.
 
+Please keep in mind that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and a couple of on-going transformations that could look different in the future.
+
+Being this a working document that may be subjected to both deprecation and updates, we keep `xxx` comments to indicate placeholders for TODOs and warnings that needs further work. 
 
 ## Introduction
 
 The scope of this vignette is understanding how `rtables` creates facets by splitting the incoming data into hierarchical groups that go from the root node to singular `rcell`s. The latter level, also called leaf-level, contains the final partition that is subjected to the analysis functions. More details from the user perspective can be found in relevant vignette `vignette("split_functions")` and function documentation like `?split_rows_by` and `?split_funcs`.
 
-The following vignette will describe how the split machinery works for the row domain. Further information on how columns are defined will follow soon. 
-
-NB: we must remind the reader that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and a couple of on-going transformations that could look different in the future.
-
+The following vignette will describe how the split machinery works for the row domain. Further information on how columns will have a dedicated vignette. 
 
 ## Process and Methods
 
-As always, we encourage the reader to familiarize with `vignette("dg_debug_rtables")` before going further. This document has a general validity, even if it has been tailored to study and understand complex packages like `rtables`.
+Beforehand, we encourage the reader to familiarize with `vignette("dg_debug_rtables")`. This document is generally valid for R programming, but has been tailored to study and understand complex packages that rely heavily on S3 and S4 object programming like `rtables`.
 
 Here, we explore and study the split machinery with a growing amount of complexity, always following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
 
@@ -790,15 +790,11 @@ trace(what = "do_split",
 untrace(what = "do_split", 
         where = asNamespace("rtables"))
 ```
-As we have demonstrated, all the above seems like impossible cases, and are to be 
-considered as vestigial and deprecated heritage.
+As we have demonstrated, all the above seems like impossible cases, and are to be considered as vestigial and deprecated heritage.
 
-Final examples with `MultiVarSplit` & `CompoundSplit`
-xxx CompoundSplit is used when you have an analyze with multiple variables or MultiVarSplit (nope it is a different thing, it is a single split that generates facets with different variables) makes a special AnalyzeMultiVars (inherits from CompoundSplit). AnalyzeMultiVars is for analyzing the same facets multiple times. MultiVarColSplit works with analyze_colvars, it is a different object. 
-.set_kids_sect_sep adds things between children (can be set from split)
-xxx
-
-xxx file issue for multiple analyze_colvars
+### Final examples with `MultiVarSplit` & `CompoundSplit`
+This final part of this chapter is still under construction, hence, the unspecific mentions and the to do list.
+xxx `CompoundSplit` generates facets from one variable (e.g. cumulative distributions) while `MultiVarSplit` uses different variables for the split. See `AnalyzeMultiVars`, which inherits from `CompoundSplit` for more details on how it analyzes the same facets multiple times. `MultiVarColSplit` works with `analyze_colvars`, which is a different discussion. `.set_kids_sect_sep` adds things between children (can be set from split).
 
 Firstly, we want to see how `MultiVarSplit` class behaves for an example case taken from
 `?split_rows_by_multivar`.
@@ -830,7 +826,7 @@ untrace(what = "do_split",
 
 If we print them out, we will notice that the two groups (one called "SEX" and the other "STRATA1") are identical along the columns. This is because no subgroup was actually created. This is an interesting way to personalize splits and with the help of custom split functions and their split context, also to have widely different subgroups in the table.
 
-We grasp the occasion to explain that with `xxx` comments we indicate placeholders for TODOs and warnings that needs further work. We invite the reader to try to understand why `split_rows_by_multivar` can have other row splits under it (see `xxx` comment in the previous code), while `split_cols_by_multivar` does not. It is a known bug at the moment, and we would be pleased to have a fix. The issues are often linked in the code by their code number (e.g. `#690`).
+We invite the reader to try to understand why `split_rows_by_multivar` can have other row splits under it (see `xxx` comment in the previous code), while `split_cols_by_multivar` does not. It is a known bug at the moment, and we would be pleased to have a fix. The issues are often linked in the code by their code number (e.g. `#690`).
 
 Lastly, we will briefly show an example of a split with cut function and how to replace it and solve the problem with empty age groups we had before. In the following, we propose the same simplified situation:
 
