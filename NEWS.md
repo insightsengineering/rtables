@@ -1,4 +1,29 @@
-## rtables 0.6.3.9000
+## rtables 0.6.5.9003
+### Miscellaneous
+ * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+
+## rtables 0.6.5
+### New Features
+ * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Added support for new line characters across rtables (titles, column names, row names, footers, and `na_str`).
+ * Modified top left information vertical alignment to stay at the bottom of the header.
+
+### Bug Fixes
+ * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+
+### Miscellaneous
+ * Added slide decks for advanced training as internal files.
+
+## rtables 0.6.4
+### New Features
+ * Added support for `.docx` exports with `export_as_docx()`.
+ * Expanded support for `flextable` customization with theme function specific for word documents (`theme_docx_default()`).
+
+### Bug Fixes
+* Fixed bug causing all-`NA` rows to be included in every `.df_row` split.
+
+### Miscellaneous
+ * Specified minimal version of package dependencies.
 
 ## rtables 0.6.3
 ### New Features

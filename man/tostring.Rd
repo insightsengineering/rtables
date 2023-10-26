@@ -43,6 +43,11 @@ a string representation of \code{x} as it appears when printed.
 \description{
 Transform a complex object into a string representation ready
 to be printed or written to a plain-text file
+
+All objects that are printed to console pass by \code{toString}. This function allows
+fundamental formatting specifications for the final output, like column widths and
+relative wrapping (\code{width}), title and footer wrapping (\code{tf_wrap = TRUE} and
+\code{max_width}), or horizontal separator character (e.g. \code{hsep = "+"}).
 }
 \details{
 Manual insertion of newlines is not supported when \code{tf_wrap} is on
@@ -62,9 +67,12 @@ iris2 <- iris \%>\%
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
-  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary) , format = "xx.xx")
+  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx")
 
 tbl <- build_table(lyt, iris2)
 
 cat(toString(tbl, col_gap = 3))
+}
+\seealso{
+\code{\link[formatters:wrap_string]{wrap_string()}}
 }

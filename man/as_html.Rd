@@ -40,8 +40,8 @@ The returned \code{html} object can be immediately used in \code{shiny} and \cod
 tbl <- rtable(
   header = LETTERS[1:3],
   format = "xx",
-  rrow("r1", 1,2,3),
-  rrow("r2", 4,3,2, indent = 1),
+  rrow("r1", 1, 2, 3),
+  rrow("r2", 4, 3, 2, indent = 1),
   rrow("r3", indent = 2)
 )
 
@@ -54,4 +54,5 @@ as_html(tbl, class_td = "aaa")
 \dontrun{
 Viewer(tbl)
 }
+
 }

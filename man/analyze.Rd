@@ -122,21 +122,21 @@ tabulation framework.
 \examples{
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    analyze("AGE", afun = list_wrap_x(summary) , format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 lyt
 
 tbl <- build_table(lyt, DM)
 tbl
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("Species") \%>\%
-    analyze(head(names(iris), -1), afun = function(x) {
-        list(
-            "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-            "range" = rcell(diff(range(x)), format = "xx.xx")
-        )
-    })
+  split_cols_by("Species") \%>\%
+  analyze(head(names(iris), -1), afun = function(x) {
+    list(
+      "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = rcell(diff(range(x)), format = "xx.xx")
+    )
+  })
 lyt2
 
 tbl2 <- build_table(lyt2, iris)

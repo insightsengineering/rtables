@@ -2,10 +2,17 @@
 % Please edit documentation in R/tt_export.R
 \name{tt_to_flextable}
 \alias{tt_to_flextable}
-\title{Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}}
+\alias{theme_docx_default}
+\title{Create a \code{FlexTable} from an \code{rtables} table}
 \usage{
 tt_to_flextable(
   tt,
+  theme = theme_docx_default(tt),
+  border = flextable::fp_border_default(width = 0.5),
+  indent_size = NULL,
+  titles_as_header = TRUE,
+  footers_as_text = FALSE,
+  counts_in_newline = FALSE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
@@ -15,13 +22,50 @@ tt_to_flextable(
   max_width = cpp,
   total_width = 10
 )
+
+theme_docx_default(
+  tt = NULL,
+  font = "Arial",
+  font_size = 9,
+  bold = c("header", "content_rows", "label_rows"),
+  bold_manual = NULL,
+  border = flextable::fp_border_default(width = 0.5)
+)
 }
 \arguments{
 \item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
-\item{paginate}{logical(1). Should \code{tt} be paginated and exported as
-multiple \code{flextables}. Defaults to \code{FALSE}}
+\item{theme}{function(1). Defaults to \code{theme_docx_default(tt)}. It expects a
+a theme function that is designed internally as a function of a \code{flextable} object
+and changes its layout and style. If set to \code{NULL}, it will produce a table similar
+to \code{rtables} default.}
+
+\item{border}{\code{officer} border object. Defaults to \code{officer::fp_border(width = 0.5)}.}
+
+\item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
+\code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
+by 2 mm (5.67 pt) as default.}
+
+\item{titles_as_header}{logical(1). Defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the
+table is self-contained as it makes additional header rows for \code{\link[=main_title]{main_title()}}
+string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). \code{FALSE} is suggested
+for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above
+the table. Same style is applied.}
+
+\item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
+the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
+used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
+Same style is applied, but with a smaller font.}
+
+\item{counts_in_newline}{logical(1). Defaults to \code{FALSE}. In \code{rtables} text printing
+(\code{\link[formatters:tostring]{formatters::toString()}}), the column counts, i.e. \code{(N=xx)}, is always on a new line.
+We noticed that for \code{docx} exports could be necessary to have it on the same line.}
+
+\item{paginate}{logical(1). If you need \code{.docx} export and you use
+\code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation
+between the two mechanisms is not guaranteed. This option splits \code{tt} in different
+"pages" as multiple \code{flextables}. Defaults to \code{FALSE}.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -45,28 +89,76 @@ the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
-\code{flextable(s)}. Defaults to 5.}
+\code{flextable(s)}. Defaults to 10.}
+
+\item{font}{character(1). Defaults to \code{"Arial"}. If the font is not vailable, \code{flextable}
+default is used.}
+
+\item{font_size}{integer(1). Positive integerish value that defaults to 9.}
+
+\item{bold}{character vector. It can be any combination of \code{c("header", "content_rows", "label_rows")}. The first one renders all column names bold (not \code{topleft} content).
+Second and third option use \code{\link[=make_row_df]{make_row_df()}} to render content or/and label
+rows as bold.}
+
+\item{bold_manual}{named list. List of indexes lists. See example for needed structure.
+Accepted groupings/names are \code{c("header", "body")}.}
 }
 \value{
-a \code{flextable} object
+a \code{flextable} object.
 }
 \description{
-Create a \code{FlexTable} object representing an \code{rtables} \code{TableTree}
+Principally used for export (\code{\link[=export_as_docx]{export_as_docx()}}), this function produces a \code{flextable}
+from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style will be used. Otherwise,
+\code{\link[=theme_docx_default]{theme_docx_default()}} will produce a \code{.docx}-friendly table.
 }
+\section{Functions}{
+\itemize{
+\item \code{theme_docx_default()}: main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
+
+}}
 \examples{
 analysisfun <- function(x, ...) {
-    in_rows(row1 = 5,
-            row2 = c(1, 2),
-            .row_footnotes = list(row1 = "row 1 - row footnote"),
-            .cell_footnotes = list(row2 = "row 2 - cell footnote"))
+  in_rows(
+    row1 = 5,
+    row2 = c(1, 2),
+    .row_footnotes = list(row1 = "row 1 - row footnote"),
+    .cell_footnotes = list(row2 = "row 2 - cell footnote")
+  )
 }
 
-lyt <- basic_table(title = "Title says Whaaaat", subtitles = "Oh, ok.",
-               main_footer = "ha HA! Footer!") \%>\%
-split_cols_by("ARM") \%>\%
-analyze("AGE", afun = analysisfun)
+lyt <- basic_table(
+  title = "Title says Whaaaat", subtitles = "Oh, ok.",
+  main_footer = "ha HA! Footer!"
+) \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = analysisfun)
 
-tbl <-  build_table(lyt, ex_adsl)
-ft <- tt_to_flextable(tbl)
-ft
+tbl <- build_table(lyt, ex_adsl)
+# rtables style
+tt_to_flextable(tbl, theme = NULL)
+
+tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
+
+# Custom theme
+special_bold <- list(
+  "header" = list("i" = 1, "j" = c(1, 3)),
+  "body" = list("i" = c(1, 2), "j" = 1)
+)
+custom_theme <- theme_docx_default(tbl,
+  font_size = 10,
+  font = "Brush Script MT",
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  bold = NULL,
+  bold_manual = special_bold
+)
+tt_to_flextable(tbl,
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  theme = custom_theme
+)
+
+}
+\seealso{
+\code{\link[=export_as_docx]{export_as_docx()}}
+
+\code{\link[=export_as_docx]{export_as_docx()}}
 }

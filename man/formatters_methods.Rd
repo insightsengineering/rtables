@@ -235,6 +235,6 @@ and should not be set during a top-level call
 }
 \note{
 the technically present root tree node is excluded from the summary returned by
-both \code{make_row_df} and \code{make_col_df}, as it is simply the
+both \code{make_row_df} and \code{make_col_df} (see \code{rtables::make_col_df}), as it is simply the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }

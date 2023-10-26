@@ -115,8 +115,11 @@ their outputs.
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("COUNTRY",
-                split_fun = remove_split_levels(c("USA", "CAN",
-                                                  "CHE", "BRA"))) \%>\%
+    split_fun = remove_split_levels(c(
+      "USA", "CAN",
+      "CHE", "BRA"
+    ))
+  ) \%>\%
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
@@ -125,7 +128,8 @@ tbl
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("COUNTRY",
-                split_fun = keep_split_levels(c("USA", "CAN", "BRA"))) \%>\%
+    split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
+  ) \%>\%
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

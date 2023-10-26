@@ -42,41 +42,48 @@ be used within the tabulation framework.
 \examples{
 library(tibble)
 combodf <- tribble(
-    ~valname, ~label, ~levelcombo, ~exargs,
-    "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
-    "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list())
+  ~valname, ~label, ~levelcombo, ~exargs,
+  "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
+  "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
+)
 
 lyt <- basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-    analyze("AGE")
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 lyt1 <- basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM",
-                  split_fun = add_combo_levels(combodf,
-                                               keep_levels = c("A_B",
-                                                               "A_C"))) \%>\%
-    analyze("AGE")
+  split_cols_by("ARM",
+    split_fun = add_combo_levels(combodf,
+      keep_levels = c(
+        "A_B",
+        "A_C"
+      )
+    )
+  ) \%>\%
+  analyze("AGE")
 
 tbl1 <- build_table(lyt1, DM)
 tbl1
 
 smallerDM <- droplevels(subset(DM, SEX \%in\% c("M", "F") &
-                        grepl("^(A|B)", ARM)))
+  grepl("^(A|B)", ARM)))
 lyt2 <- basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf[1,])) \%>\%
-    split_cols_by("SEX",
-                  split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
-    analyze("AGE")
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) \%>\%
+  split_cols_by("SEX",
+    split_fun = add_overall_level("SEX_ALL", "All Genders")
+  ) \%>\%
+  analyze("AGE")
 
-lyt3 <-  basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
-    split_rows_by("SEX",
-                  split_fun = add_overall_level("SEX_ALL", "All Genders")) \%>\%
-    summarize_row_groups() \%>\%
-    analyze("AGE")
+lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) \%>\%
+  split_rows_by("SEX",
+    split_fun = add_overall_level("SEX_ALL", "All Genders")
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  analyze("AGE")
 
 tbl3 <- build_table(lyt3, smallerDM)
 tbl3
