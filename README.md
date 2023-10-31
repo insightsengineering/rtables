@@ -210,14 +210,13 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
-- [Slides](https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48)
+- [Slides](inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)
 
 ### R Adoption Series
 
 - [R Adoption Series presentation
   2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
-- Slides: <https://github.com/gmbecker/rtables_radoption_webinar>
-  (index.html)
+- [Slides](inst/extdata/r_adoption_slides.pdf)
 
 ### New (Current) Layouting and Tabulation Framework (v.0.3+)
 
