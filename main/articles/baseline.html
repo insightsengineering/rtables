@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9004</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,21 +61,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-
-
-
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -104,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-10-20</h4>
+            <h4 data-toc-skip class="date">2023-10-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/baseline.Rmd" class="external-link"><code>vignettes/baseline.Rmd</code></a></small>
       <div class="d-none name"><code>baseline.Rmd</code></div>
@@ -153,9 +138,9 @@ placebo arm and the other arms:</p>
 <span></span>
 <span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span>
 <span><span class="va">tbl2</span></span></code></pre></div>
-<pre><code><span><span class="co">#                          B: Placebo   A: Drug X   C: Combination</span></span>
+<pre><code><span><span class="co">#                          A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># Difference of Averages      0.00        1.89           1.55</span></span></code></pre>
+<span><span class="co"># Difference of Averages     1.89         0.00           1.55</span></span></code></pre>
 <p>Note that the column order has changed and the reference group is
 displayed in the first column.</p>
 <p>In cases where we want cells to be blank in the reference column,
@@ -176,9 +161,9 @@ argument:</p>
 <span></span>
 <span><span class="va">tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">DM</span><span class="op">)</span></span>
 <span><span class="va">tbl3</span></span></code></pre></div>
-<pre><code><span><span class="co">#                          B: Placebo   A: Drug X   C: Combination</span></span>
+<pre><code><span><span class="co">#                          A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># Difference of Averages                  1.89           1.55</span></span></code></pre>
+<span><span class="co"># Difference of Averages     1.89                        1.55</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, ref_group <span class="op">=</span> <span class="st">"B: Placebo"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -194,10 +179,10 @@ argument:</p>
 <span></span>
 <span><span class="va">tbl4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt4</span>, <span class="va">DM</span><span class="op">)</span></span>
 <span><span class="va">tbl4</span></span></code></pre></div>
-<pre><code><span><span class="co">#                          B: Placebo   A: Drug X   C: Combination</span></span>
+<pre><code><span><span class="co">#                          A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># Difference of Averages                  1.89           1.55     </span></span>
-<span><span class="co"># another row                              aaa           aaa</span></span></code></pre>
+<span><span class="co"># Difference of Averages     1.89                        1.55     </span></span>
+<span><span class="co"># another row                 aaa                        aaa</span></span></code></pre>
 <p>You can see which arguments are available for <code>afun</code> in
 the manual for <code><a href="../reference/analyze.html">analyze()</a></code>.</p>
 </div>
@@ -220,17 +205,17 @@ the column with or without row splitting. For example:</p>
 <span></span>
 <span><span class="va">tbl5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt5</span>, <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">DM</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">tbl5</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                B: Placebo   A: Drug X   C: Combination</span></span>
-<span><span class="co">#                                 (N=106)      (N=121)       (N=129)    </span></span>
+<pre><code><span><span class="co">#                                A: Drug X   B: Placebo   C: Combination</span></span>
+<span><span class="co">#                                 (N=121)     (N=106)        (N=129)    </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                     </span></span>
-<span><span class="co">#   is reference (.in_ref_col)      TRUE        FALSE         FALSE     </span></span>
-<span><span class="co">#   ref cell N (.ref_group)          56          56             56      </span></span>
-<span><span class="co">#   ref column N (.ref_full)        106          106           106      </span></span>
+<span><span class="co">#   is reference (.in_ref_col)     FALSE        TRUE          FALSE     </span></span>
+<span><span class="co">#   ref cell N (.ref_group)         56           56             56      </span></span>
+<span><span class="co">#   ref column N (.ref_full)        106         106            106      </span></span>
 <span><span class="co"># M                                                                     </span></span>
-<span><span class="co">#   is reference (.in_ref_col)      TRUE        FALSE         FALSE     </span></span>
-<span><span class="co">#   ref cell N (.ref_group)          50          50             50      </span></span>
-<span><span class="co">#   ref column N (.ref_full)        106          106           106</span></span></code></pre>
+<span><span class="co">#   is reference (.in_ref_col)     FALSE        TRUE          FALSE     </span></span>
+<span><span class="co">#   ref cell N (.ref_group)         50           50             50      </span></span>
+<span><span class="co">#   ref column N (.ref_full)        106         106            106</span></span></code></pre>
 <p>The data assigned to <code>.ref_full</code> is the full data of the
 reference column whereas the data assigned to <code>.ref_group</code>
 respects the subsetting defined by row-splitting and hence is from the
