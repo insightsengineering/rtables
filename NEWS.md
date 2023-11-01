@@ -1,4 +1,4 @@
-## rtables 0.6.5.9006
+## rtables 0.6.5.9007
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
 
