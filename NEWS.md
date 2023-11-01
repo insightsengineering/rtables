@@ -17,6 +17,9 @@
 ### Miscellaneous
  * Added slide decks for advanced training as internal files.
 
+### Miscellaneous
+* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
+
 ## rtables 0.6.4
 ### New Features
  * Added support for `.docx` exports with `export_as_docx()`.
