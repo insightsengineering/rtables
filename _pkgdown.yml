@@ -2,7 +2,6 @@ url: https://insightsengineering.github.io/rtables
 
 template:
   package: nesttemplate
-  assets: inst/dev-guide/dg-out
 
 navbar:
   structure:
