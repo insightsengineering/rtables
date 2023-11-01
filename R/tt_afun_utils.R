@@ -6,9 +6,9 @@
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
 #' @param x ANY. Cell value.
-#' @param format character(1) or function. The format label (string) or 
-#'   `formatters` function to apply to `x`. See 
-#'   [formatters::list_valid_format_labels()] for currently supported 
+#' @param format character(1) or function. The format label (string) or
+#'   `formatters` function to apply to `x`. See
+#'   [formatters::list_valid_format_labels()] for currently supported
 #'   format labels.
 #' @param label character(1). Label or `NULL`. If non-null, it will be looked at
 #'   when determining row labels.
@@ -27,42 +27,54 @@ rcell <- function(x,
                   footnotes = NULL,
                   align = NULL,
                   format_na_str = NULL) {
-    if(!is.null(align))
-        check_aligns(align)
-    if(is(x, "CellValue")) {
-        if(!is.null(label))
-            obj_label(x) <- label
-        if(colspan != 1L)
-            cell_cspan(x) <- colspan
-        if(!is.null(indent_mod))
-            indent_mod(x) <- indent_mod
-        if(!is.null(format))
-            obj_format(x) <- format
-        if(!is.null(footnotes))
-            cell_footnotes(x) <- lapply(footnotes, RefFootnote)
-        if(!is.null(format_na_str))
-            obj_na_str(x) <- format_na_str
-        ret <- x
-    } else {
-        if(is.null(label))
-            label <- obj_label(x)
-        if(is.null(format))
-            format <- obj_format(x)
-        if(is.null(indent_mod))
-            indent_mod <- indent_mod(x)
-        footnotes <- lapply(footnotes, RefFootnote)
-        ret <- CellValue(val = x,
-                         format = format,
-                         colspan = colspan,
-                         label = label,
-                         indent_mod = indent_mod,
-                         footnotes = footnotes,
-                         format_na_str = format_na_str
-        )# RefFootnote(footnote))
+  if (!is.null(align)) {
+    check_aligns(align)
+  }
+  if (is(x, "CellValue")) {
+    if (!is.null(label)) {
+      obj_label(x) <- label
     }
-    if(!is.null(align))
-        cell_align(ret) <- align
-    ret
+    if (colspan != 1L) {
+      cell_cspan(x) <- colspan
+    }
+    if (!is.null(indent_mod)) {
+      indent_mod(x) <- indent_mod
+    }
+    if (!is.null(format)) {
+      obj_format(x) <- format
+    }
+    if (!is.null(footnotes)) {
+      cell_footnotes(x) <- lapply(footnotes, RefFootnote)
+    }
+    if (!is.null(format_na_str)) {
+      obj_na_str(x) <- format_na_str
+    }
+    ret <- x
+  } else {
+    if (is.null(label)) {
+      label <- obj_label(x)
+    }
+    if (is.null(format)) {
+      format <- obj_format(x)
+    }
+    if (is.null(indent_mod)) {
+      indent_mod <- indent_mod(x)
+    }
+    footnotes <- lapply(footnotes, RefFootnote)
+    ret <- CellValue(
+      val = x,
+      format = format,
+      colspan = colspan,
+      label = label,
+      indent_mod = indent_mod,
+      footnotes = footnotes,
+      format_na_str = format_na_str
+    ) # RefFootnote(footnote))
+  }
+  if (!is.null(align)) {
+    cell_align(ret) <- align
+  }
+  ret
 }
 
 #' @details \code{non_ref_rcell} provides the common \emph{blank for cells in
@@ -76,14 +88,16 @@ rcell <- function(x,
 #' @rdname rcell
 #' @export
 non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
-                         label = NULL, indent_mod = NULL,
-                         refval = NULL,
-                         align = "center",
-                         format_na_str = NULL) {
-    val <- if(is_ref) refval else x
-    rcell(val, format = format, colspan = colspan, label = label,
-          indent_mod = indent_mod, align = align,
-          format_na_str = format_na_str)
+                          label = NULL, indent_mod = NULL,
+                          refval = NULL,
+                          align = "center",
+                          format_na_str = NULL) {
+  val <- if (is_ref) refval else x
+  rcell(val,
+    format = format, colspan = colspan, label = label,
+    indent_mod = indent_mod, align = align,
+    format_na_str = format_na_str
+  )
 }
 
 
@@ -108,7 +122,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #'   is `"center"`. See [formatters::list_valid_aligns()] for currently supported
 #'   alignments.
 #' @param .format_na_strs character or NULL. NA strings for the cells
-#' 
+#'
 #' @note
 #'   In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`].
@@ -130,11 +144,11 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", afun = function(x) {
 #'     in_rows(
-#'        "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-#'        "Range" = rcell(range(x), format = "xx.xx - xx.xx")
+#'       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+#'       "Range" = rcell(range(x), format = "xx.xx - xx.xx")
 #'     )
 #'   })
-#' 
+#'
 #' tbl <- build_table(lyt, ex_adsl)
 #' tbl
 #'
@@ -146,98 +160,122 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .row_footnotes = list(NULL),
                     .aligns = NULL,
                     .format_na_strs = NULL) {
-    if(is.function(.formats))
-        .formats <- list(.formats)
+  if (is.function(.formats)) {
+    .formats <- list(.formats)
+  }
 
-    l <- c(list(...), .list)
+  l <- c(list(...), .list)
 
-    if (missing(.names) && missing(.labels)) {
-        if (length(l) > 0 && is.null(names(l)))
-            stop("need a named list")
-        else
-            .names <- names(l)
-        stopifnot(!anyNA(.names))
-    }
-
-
-    if(length(l) == 0) {
-        if(length(.labels) > 0 ||
-           length(.formats) > 0 ||
-           length(.names) > 0 ||
-           length(.indent_mods) > 0 ||
-           length(.format_na_strs) > 0)
-            stop("in_rows got 0 rows but length >0 of at least one of ",
-                 ".labels, .formats, .names, .indent_mods, .format_na_strs. ",
-                 "Does your analysis/summary function handle the 0 row ",
-                 "df/length 0 x case?")
-        l2 <- list()
+  if (missing(.names) && missing(.labels)) {
+    if (length(l) > 0 && is.null(names(l))) {
+      stop("need a named list")
     } else {
-        if(is.null(.formats))
-            .formats <- list(NULL)
-        stopifnot(is.list(.cell_footnotes))
-        if(length(.cell_footnotes) != length(l)) {
-            .cell_footnotes <- c(.cell_footnotes,
-                                 setNames(rep(list(character()),
-                                              length.out = length(setdiff(names(l),
-                                                                          names(.cell_footnotes)))),
-                                          setdiff(names(l),
-                                                  names(.cell_footnotes))))
-            .cell_footnotes <- .cell_footnotes[names(l)]
-        }
-        if(is.null(.aligns))
-            .aligns <- list(NULL)
-        l2 <- mapply(rcell, x = l, format = .formats,
-                     footnotes = .cell_footnotes %||% list(NULL),
-                     align = .aligns,
-                     format_na_str = .format_na_strs %||% list(NULL),
-                     SIMPLIFY = FALSE)
+      .names <- names(l)
     }
-    if(is.null(.labels)) {
-        objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
-        if(any(nzchar(objlabs)))
-            .labels <- objlabs
-    }
-
-    if(is.null(.names) && !is.null(names(l)))
-        .names <- names(l)
-    stopifnot(is.list(.row_footnotes))
-    if(length(.row_footnotes) != length(l2)) {
-        tmp <- .row_footnotes
-        .row_footnotes <- vector("list", length(l2))
-        pos <- match(names(tmp), .names)
-        nonna <- which(!is.na(pos))
-        .row_footnotes[pos] <- tmp[nonna]
-        #        length(.row_footnotes) <- length(l2)
-    }
-    ret <- RowsVerticalSection(l2, names = .names,
-                               labels = .labels,
-                               indent_mods = .indent_mods,
-                               formats = .formats,
-                               footnotes = .row_footnotes,
-                               format_na_strs = .format_na_strs)
-    ## if(!is.null(.names))
-    ##     names(l2) <- .names
-    ## else
-    ##     names(l2) <- names(l)
-    if(length(ret) == 0) NULL else ret
+    stopifnot(!anyNA(.names))
+  }
 
 
- ##   if (length(l) == 0) NULL else l
+  if (length(l) == 0) {
+    if (
+      length(.labels) > 0 ||
+        length(.formats) > 0 ||
+        length(.names) > 0 ||
+        length(.indent_mods) > 0 ||
+        length(.format_na_strs) > 0
+    ) {
+      stop(
+        "in_rows got 0 rows but length >0 of at least one of ",
+        ".labels, .formats, .names, .indent_mods, .format_na_strs. ",
+        "Does your analysis/summary function handle the 0 row ",
+        "df/length 0 x case?"
+      )
+    }
+    l2 <- list()
+  } else {
+    if (is.null(.formats)) {
+      .formats <- list(NULL)
+    }
+    stopifnot(is.list(.cell_footnotes))
+    if (length(.cell_footnotes) != length(l)) {
+      .cell_footnotes <- c(
+        .cell_footnotes,
+        setNames(
+          rep(list(character()),
+            length.out = length(setdiff(
+              names(l),
+              names(.cell_footnotes)
+            ))
+          ),
+          setdiff(
+            names(l),
+            names(.cell_footnotes)
+          )
+        )
+      )
+      .cell_footnotes <- .cell_footnotes[names(l)]
+    }
+    if (is.null(.aligns)) {
+      .aligns <- list(NULL)
+    }
+    l2 <- mapply(rcell,
+      x = l, format = .formats,
+      footnotes = .cell_footnotes %||% list(NULL),
+      align = .aligns,
+      format_na_str = .format_na_strs %||% list(NULL),
+      SIMPLIFY = FALSE
+    )
+  }
+  if (is.null(.labels)) {
+    objlabs <- vapply(l2, function(x) obj_label(x) %||% "", "")
+    if (any(nzchar(objlabs))) {
+      .labels <- objlabs
+    }
+  }
+
+  if (is.null(.names) && !is.null(names(l))) {
+    .names <- names(l)
+  }
+  stopifnot(is.list(.row_footnotes))
+  if (length(.row_footnotes) != length(l2)) {
+    tmp <- .row_footnotes
+    .row_footnotes <- vector("list", length(l2))
+    pos <- match(names(tmp), .names)
+    nonna <- which(!is.na(pos))
+    .row_footnotes[pos] <- tmp[nonna]
+    #        length(.row_footnotes) <- length(l2)
+  }
+  ret <- RowsVerticalSection(l2,
+    names = .names,
+    labels = .labels,
+    indent_mods = .indent_mods,
+    formats = .formats,
+    footnotes = .row_footnotes,
+    format_na_strs = .format_na_strs
+  )
+  ## if(!is.null(.names))
+  ##     names(l2) <- .names
+  ## else
+  ##     names(l2) <- names(l)
+  if (length(ret) == 0) NULL else ret
+
+
+  ##   if (length(l) == 0) NULL else l
 }
 
 
 
 .validate_nms <- function(vals, .stats, arg) {
-    if (!is.null(arg)) {
-        if (is.null(names(arg))) {
-            stopifnot(length(arg) == length(.stats))
-            names(arg) <- names(vals)
-        } else {
-            lblpos <- match(names(arg), names(vals))
-            stopifnot(!anyNA(lblpos))
-        }
+  if (!is.null(arg)) {
+    if (is.null(names(arg))) {
+      stopifnot(length(arg) == length(.stats))
+      names(arg) <- names(vals)
+    } else {
+      lblpos <- match(names(arg), names(vals))
+      stopifnot(!anyNA(lblpos))
     }
-    arg
+  }
+  arg
 }
 
 
@@ -310,58 +348,69 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'
 #'
 #' s_foo <- function(df, .N_col, a = 1, b = 2) {
-#'    list(
-#'       nrow_df = nrow(df),
-#'       .N_col = .N_col,
-#'       a = a,
-#'       b = b
-#'    )
+#'   list(
+#'     nrow_df = nrow(df),
+#'     .N_col = .N_col,
+#'     a = a,
+#'     b = b
+#'   )
 #' }
 #'
 #' s_foo(iris, 40)
 #'
-#' a_foo <- make_afun(s_foo, b = 4,
-#'  .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
-#'  .labels = c(nrow_df = "Nrow df",
-#'              ".N_col" = "n in cols", a = "a value", b = "b value"),
-#'  .indent_mods = c(nrow_df = 2L, a = 1L)
+#' a_foo <- make_afun(s_foo,
+#'   b = 4,
+#'   .formats = c(nrow_df = "xx.xx", ".N_col" = "xx.", a = "xx", b = "xx.x"),
+#'   .labels = c(
+#'     nrow_df = "Nrow df",
+#'     ".N_col" = "n in cols", a = "a value", b = "b value"
+#'   ),
+#'   .indent_mods = c(nrow_df = 2L, a = 1L)
 #' )
 #'
 #' a_foo(iris, .N_col = 40)
 #' a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
 #' a_foo2(iris, .N_col = 40)
 #'
-#' #grouping and further customization
+#' # grouping and further customization
 #' s_grp <- function(df, .N_col, a = 1, b = 2) {
-#'    list(
-#'       nrow_df = nrow(df),
-#'       .N_col = .N_col,
-#'       letters = list(a = a,
-#'                      b = b)
-#'    )
+#'   list(
+#'     nrow_df = nrow(df),
+#'     .N_col = .N_col,
+#'     letters = list(
+#'       a = a,
+#'       b = b
+#'     )
+#'   )
 #' }
-#' a_grp <- make_afun(s_grp, b = 3,
-#'                    .labels = c(nrow_df = "row count",
-#'                                .N_col = "count in column"),
-#'                    .formats = c(nrow_df = "xx.", .N_col = "xx."),
-#'                    .indent_mod = c(letters = 1L),
-#'                    .ungroup_stats ="letters")
+#' a_grp <- make_afun(s_grp,
+#'   b = 3,
+#'   .labels = c(
+#'     nrow_df = "row count",
+#'     .N_col = "count in column"
+#'   ),
+#'   .formats = c(nrow_df = "xx.", .N_col = "xx."),
+#'   .indent_mod = c(letters = 1L),
+#'   .ungroup_stats = "letters"
+#' )
 #' a_grp(iris, 40)
-#' a_aftergrp <- make_afun(a_grp, .stats = c("nrow_df", "b"),
-#'                         .formats = c(b = "xx."))
+#' a_aftergrp <- make_afun(a_grp,
+#'   .stats = c("nrow_df", "b"),
+#'   .formats = c(b = "xx.")
+#' )
 #' a_aftergrp(iris, 40)
 #'
 #' s_ref <- function(x, .in_ref_col, .ref_group) {
-#'    list(
-#'          mean_diff = mean(x) - mean(.ref_group)
-#'        )
+#'   list(
+#'     mean_diff = mean(x) - mean(.ref_group)
+#'   )
 #' }
 #'
 #' a_ref <- make_afun(s_ref,
-#'                    .labels = c( mean_diff = "Mean Difference from Ref"))
+#'   .labels = c(mean_diff = "Mean Difference from Ref")
+#' )
 #' a_ref(iris$Sepal.Length, .in_ref_col = TRUE, 1:10)
 #' a_ref(iris$Sepal.Length, .in_ref_col = FALSE, 1:10)
-#'
 #'
 make_afun <- function(fun,
                       .stats = NULL,
@@ -372,194 +421,220 @@ make_afun <- function(fun,
                       .format_na_strs = NULL,
                       ...,
                       .null_ref_cells = ".in_ref_col" %in% names(formals(fun))) {
+  ## there is a LOT more computing-on-the-language hackery in here that I
+  ## would prefer, but currently this is the way I see to do everything we
+  ## want to do.
 
-    ## there is a LOT more computing-on-the-language hackery in here that I
-    ## would prefer, but currently this is the way I see to do everything we
-    ## want to do.
+  ## too clever by three-quarters (because half wasn't enough)
+  ## gross scope hackery
+  fun_args <- force(list(...))
+  fun_fnames <- names(formals(fun))
 
-    ## too clever by three-quarters (because half wasn't enough)
-    ## gross scope hackery
-    fun_args <- force(list(...))
-    fun_fnames <- names(formals(fun))
+  ## force EVERYTHING otherwise calling this within loops is the stuff of
+  ## nightmares
+  force(.stats)
+  force(.formats)
+  force(.format_na_strs)
+  force(.labels)
+  force(.indent_mods)
+  force(.ungroup_stats)
+  force(.null_ref_cells) ## this one probably isn't needed?
 
-    ## force EVERYTHING otherwise calling this within loops is the stuff of
-    ## nightmares
-    force(.stats)
-    force(.formats)
-    force(.format_na_strs)
-    force(.labels)
-    force(.indent_mods)
-    force(.ungroup_stats)
-    force(.null_ref_cells) ## this one probably isn't needed?
+  ret <- function(x, ...) { ## remember formals get clobbered here
 
-    ret <- function(x, ...) { ## remember formals get clobbered here
-
-        ## this helper will grab the value and wrap it in a named list if
-        ## we need the variable and return list() otherwise.
-        ## We define it in here so that the scoping hackery works correctly
-        .if_in_formals <- function(nm, ifnot = list(), named_lwrap = TRUE) {
-            val <- if(nm %in% fun_fnames) get(nm) else ifnot
-            if(named_lwrap && !identical(val, ifnot))
-                setNames(list(val), nm)
-            else
-                val
-        }
-
-        custargs <- fun_args
-
-        ## special handling cause I need it at the bottom as well
-        in_rc_argl <- .if_in_formals(".in_ref_col")
-        .in_ref_col <- if(length(in_rc_argl) > 0) in_rc_argl[[1]] else FALSE
-
-        sfunargs <- c(
-            ## these are either named lists containing the arg, or list()
-            ## depending on whether fun accept the argument or not
-            .if_in_formals("x"),
-            .if_in_formals("df"),
-            .if_in_formals(".N_col"),
-            .if_in_formals(".N_total"),
-            .if_in_formals(".N_row"),
-            .if_in_formals(".ref_group"),
-            in_rc_argl,
-            .if_in_formals(".df_row"),
-            .if_in_formals(".var"),
-            .if_in_formals(".ref_full")
-        )
-
-        allvars <- setdiff(fun_fnames, c("...", names(sfunargs)))
-        ## values int he actual call to this function override customization
-        ## done by the constructor. evalparse is to avoid a "... in wrong context" NOTE
-        if("..." %in% fun_fnames) {
-            exargs <- eval(parser_helper(text = "list(...)"))
-            custargs[names(exargs)] <- exargs
-            allvars <- unique(c(allvars, names(custargs)))
-        }
-
-        for(var in allvars) {
-            ## not missing, i.e. specified in the direct call, takes precedence
-            if(var %in% fun_fnames &&
-               eval(parser_helper(text = paste0("!missing(", var, ")"))))
-                sfunargs[[var]] <- get(var)
-            ## not specified in the call, but specified in the constructor
-            else if(var %in% names(custargs))
-                sfunargs[[var]] <- custargs[[var]]
-            ## else left out so we hit the original default we inherited from fun
-        }
-
-        rawvals <- do.call(fun, sfunargs)
-
-        ## note single brackets here so its a list
-        ## no matter what. thats important!
-        final_vals <- if (is.null(.stats)) rawvals else rawvals[.stats]
-
-        if (!is.list(rawvals))
-            stop("make_afun expects a function fun that always returns a list")
-        if(!is.null(.stats))
-            stopifnot(all(.stats %in% names(rawvals)))
-        else
-            .stats <- names(rawvals)
-        if(!is.null(.ungroup_stats) &&
-           !all(.ungroup_stats %in% .stats)) {
-            stop("Stats specified for ungrouping not included in non-null .stats list: ",
-                 setdiff(.ungroup_stats, .stats))
-        }
-
-        .labels <- .validate_nms(final_vals, .stats, .labels)
-        .formats <- .validate_nms(final_vals, .stats, .formats)
-        .indent_mods <- .validate_nms(final_vals, .stats, .indent_mods)
-        .format_na_strs <- .validate_nms(final_vals, .stats, .format_na_strs)
-
-        final_labels <- value_labels(final_vals)
-        final_labels[names(.labels)] <- .labels
-
-        final_formats <- lapply(final_vals, obj_format)
-        final_formats[names(.formats)] <- .formats
-
-        final_format_na_strs <- lapply(final_vals, obj_na_str)
-        final_format_na_strs[names(.format_na_strs)] <- .format_na_strs
-
-        if(is(final_vals, "RowsVerticalSection"))
-            final_imods <- indent_mod(final_vals)
-        else
-            final_imods <- vapply(final_vals, indent_mod, 1L)
-        final_imods[names(.indent_mods)] <- .indent_mods
-
-        if(!is.null(.ungroup_stats)) {
-            for(nm in .ungroup_stats) {
-                tmp <- final_vals[[nm]]
-                if(is(tmp, "CellValue"))
-                    tmp <- tmp[[1]] ## unwrap it
-                final_vals <- insert_replace(final_vals, nm, tmp)
-                stopifnot(all(nzchar(names(final_vals))))
-
-                final_labels <- insert_replace(final_labels,
-                                               nm,
-                                               setNames(value_labels(tmp),
-                                                        names(tmp))
-                                               )
-                final_formats <- insert_replace(final_formats,
-                                                nm,
-                                                setNames(rep(final_formats[nm],
-                                                             length.out = length(tmp)),
-                                                         names(tmp))
-                                                )
-                final_format_na_strs <- insert_replace(final_format_na_strs,
-                                                nm,
-                                                setNames(rep(final_format_na_strs[nm],
-                                                             length.out = length(tmp)),
-                                                         names(tmp))
-                                                )
-                final_imods <- insert_replace(final_imods,
-                                              nm,
-                                              setNames(rep(final_imods[nm],
-                                                           length.out = length(tmp)),
-                                                       names(tmp))
-                                              )
-            }
-        }
-        rcells <- mapply(function(x, f, l, na_str) {
-            if(is(x, "CellValue")) {
-                obj_label(x) <- l
-                obj_format(x) <- f
-                obj_na_str(x) <- na_str
-#                indent_mod(x) <- im
-                x
-            } else if(.null_ref_cells) {
-                non_ref_rcell(x, is_ref = .in_ref_col,
-                              format = f, label = l,
-                              format_na_str = na_str)#, indent_mod = im)
-            } else {
-                rcell(x, format = f, label = l, format_na_str = na_str)#, indent_mod = im)
-            }
-        }, f = final_formats, x = final_vals,
-        l = final_labels,
-        na_str = final_format_na_strs,
-#        im = final_imods,
-        SIMPLIFY = FALSE)
-        in_rows(.list = rcells, .indent_mods = final_imods) ##, .labels = .labels)
+    ## this helper will grab the value and wrap it in a named list if
+    ## we need the variable and return list() otherwise.
+    ## We define it in here so that the scoping hackery works correctly
+    .if_in_formals <- function(nm, ifnot = list(), named_lwrap = TRUE) {
+      val <- if (nm %in% fun_fnames) get(nm) else ifnot
+      if (named_lwrap && !identical(val, ifnot)) {
+        setNames(list(val), nm)
+      } else {
+        val
+      }
     }
-    formals(ret) <- formals(fun)
-    ret
+
+    custargs <- fun_args
+
+    ## special handling cause I need it at the bottom as well
+    in_rc_argl <- .if_in_formals(".in_ref_col")
+    .in_ref_col <- if (length(in_rc_argl) > 0) in_rc_argl[[1]] else FALSE
+
+    sfunargs <- c(
+      ## these are either named lists containing the arg, or list()
+      ## depending on whether fun accept the argument or not
+      .if_in_formals("x"),
+      .if_in_formals("df"),
+      .if_in_formals(".N_col"),
+      .if_in_formals(".N_total"),
+      .if_in_formals(".N_row"),
+      .if_in_formals(".ref_group"),
+      in_rc_argl,
+      .if_in_formals(".df_row"),
+      .if_in_formals(".var"),
+      .if_in_formals(".ref_full")
+    )
+
+    allvars <- setdiff(fun_fnames, c("...", names(sfunargs)))
+    ## values int he actual call to this function override customization
+    ## done by the constructor. evalparse is to avoid a "... in wrong context" NOTE
+    if ("..." %in% fun_fnames) {
+      exargs <- eval(parser_helper(text = "list(...)"))
+      custargs[names(exargs)] <- exargs
+      allvars <- unique(c(allvars, names(custargs)))
+    }
+
+    for (var in allvars) {
+      ## not missing, i.e. specified in the direct call, takes precedence
+      if (var %in% fun_fnames && eval(parser_helper(text = paste0("!missing(", var, ")")))) {
+        sfunargs[[var]] <- get(var)
+      } else if (var %in% names(custargs)) { ## not specified in the call, but specified in the constructor
+        sfunargs[[var]] <- custargs[[var]]
+      }
+      ## else left out so we hit the original default we inherited from fun
+    }
+
+    rawvals <- do.call(fun, sfunargs)
+
+    ## note single brackets here so its a list
+    ## no matter what. thats important!
+    final_vals <- if (is.null(.stats)) rawvals else rawvals[.stats]
+
+    if (!is.list(rawvals)) {
+      stop("make_afun expects a function fun that always returns a list")
+    }
+    if (!is.null(.stats)) {
+      stopifnot(all(.stats %in% names(rawvals)))
+    } else {
+      .stats <- names(rawvals)
+    }
+    if (!is.null(.ungroup_stats) && !all(.ungroup_stats %in% .stats)) {
+      stop(
+        "Stats specified for ungrouping not included in non-null .stats list: ",
+        setdiff(.ungroup_stats, .stats)
+      )
+    }
+
+    .labels <- .validate_nms(final_vals, .stats, .labels)
+    .formats <- .validate_nms(final_vals, .stats, .formats)
+    .indent_mods <- .validate_nms(final_vals, .stats, .indent_mods)
+    .format_na_strs <- .validate_nms(final_vals, .stats, .format_na_strs)
+
+    final_labels <- value_labels(final_vals)
+    final_labels[names(.labels)] <- .labels
+
+    final_formats <- lapply(final_vals, obj_format)
+    final_formats[names(.formats)] <- .formats
+
+    final_format_na_strs <- lapply(final_vals, obj_na_str)
+    final_format_na_strs[names(.format_na_strs)] <- .format_na_strs
+
+    if (is(final_vals, "RowsVerticalSection")) {
+      final_imods <- indent_mod(final_vals)
+    } else {
+      final_imods <- vapply(final_vals, indent_mod, 1L)
+    }
+    final_imods[names(.indent_mods)] <- .indent_mods
+
+    if (!is.null(.ungroup_stats)) {
+      for (nm in .ungroup_stats) {
+        tmp <- final_vals[[nm]]
+        if (is(tmp, "CellValue")) {
+          tmp <- tmp[[1]]
+        } ## unwrap it
+        final_vals <- insert_replace(final_vals, nm, tmp)
+        stopifnot(all(nzchar(names(final_vals))))
+
+        final_labels <- insert_replace(
+          final_labels,
+          nm,
+          setNames(
+            value_labels(tmp),
+            names(tmp)
+          )
+        )
+        final_formats <- insert_replace(
+          final_formats,
+          nm,
+          setNames(
+            rep(final_formats[nm],
+              length.out = length(tmp)
+            ),
+            names(tmp)
+          )
+        )
+        final_format_na_strs <- insert_replace(
+          final_format_na_strs,
+          nm,
+          setNames(
+            rep(final_format_na_strs[nm],
+              length.out = length(tmp)
+            ),
+            names(tmp)
+          )
+        )
+        final_imods <- insert_replace(
+          final_imods,
+          nm,
+          setNames(
+            rep(final_imods[nm],
+              length.out = length(tmp)
+            ),
+            names(tmp)
+          )
+        )
+      }
+    }
+    rcells <- mapply(
+      function(x, f, l, na_str) {
+        if (is(x, "CellValue")) {
+          obj_label(x) <- l
+          obj_format(x) <- f
+          obj_na_str(x) <- na_str
+          #                indent_mod(x) <- im
+          x
+        } else if (.null_ref_cells) {
+          non_ref_rcell(x,
+            is_ref = .in_ref_col,
+            format = f, label = l,
+            format_na_str = na_str
+          ) # , indent_mod = im)
+        } else {
+          rcell(x, format = f, label = l, format_na_str = na_str) # , indent_mod = im)
+        }
+      },
+      f = final_formats, x = final_vals,
+      l = final_labels,
+      na_str = final_format_na_strs,
+      #        im = final_imods,
+      SIMPLIFY = FALSE
+    )
+    in_rows(.list = rcells, .indent_mods = final_imods) ## , .labels = .labels)
+  }
+  formals(ret) <- formals(fun)
+  ret
 }
 
 
 insert_replace <- function(x, nm, newvals = x[[nm]]) {
-    i <-  match(nm, names(x))
-    if(is.na(i))
-        stop("name not found")
-    bef <- if(i > 1) 1:(i - 1) else numeric()
-    aft <- if(i < length(x)) (i + 1) : length(x) else numeric()
-    ret <- c(x[bef], newvals, x[aft])
-    names(ret) <- c(names(x)[bef], names(newvals), names(x)[aft])
-    ret
+  i <- match(nm, names(x))
+  if (is.na(i)) {
+    stop("name not found")
+  }
+  bef <- if (i > 1) 1:(i - 1) else numeric()
+  aft <- if (i < length(x)) (i + 1):length(x) else numeric()
+  ret <- c(x[bef], newvals, x[aft])
+  names(ret) <- c(names(x)[bef], names(newvals), names(x)[aft])
+  ret
 }
 
 parser_helper <- function(text, envir = parent.frame(2)) {
-    parse(text = text, keep.source = FALSE)
+  parse(text = text, keep.source = FALSE)
 }
 
 
 length_w_name <- function(x, .parent_splval) {
-    in_rows(length(x),
-            .names = value_labels(.parent_splval))
+  in_rows(length(x),
+    .names = value_labels(.parent_splval)
+  )
 }

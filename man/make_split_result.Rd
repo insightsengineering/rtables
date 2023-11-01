@@ -40,14 +40,17 @@ list is as the rtables internals expect it, most of which are not
 relevant to end users.
 }
 \examples{
-splres <- make_split_result(values = c("hi", "lo"),
-    datasplit = list(hi = mtcars, lo = mtcars[1:10,]),
-    labels = c("more data", "less data"))
+splres <- make_split_result(
+  values = c("hi", "lo"),
+  datasplit = list(hi = mtcars, lo = mtcars[1:10, ]),
+  labels = c("more data", "less data")
+)
 
 splres2 <- add_to_split_result(splres,
-    values = "med",
-    datasplit = list(med = mtcars[1:20,]),
-    labels = "kinda some data")
+  values = "med",
+  datasplit = list(med = mtcars[1:20, ]),
+  labels = "kinda some data"
+)
 }
 \seealso{
 Other make_custom_split: 

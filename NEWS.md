@@ -1,9 +1,21 @@
-## rtables 0.6.4.9003
+## rtables 0.6.5.9006
 ### New Features
-* Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Removed `ref_group` reordering in column splits so not to change the order.
+
+### Miscellaneous
+ * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+
+## rtables 0.6.5
+### New Features
+ * Added support for white spaces in all labels and text by redesigning of wrapping functions in `formatters`.
+ * Added support for new line characters across rtables (titles, column names, row names, footers, and `na_str`).
+ * Modified top left information vertical alignment to stay at the bottom of the header.
 
 ### Bug Fixes
-* Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+ * Fixed a bug causing `Viewer` and `as_html` to fail when new line characters were added.
+
+### Miscellaneous
+ * Added slide decks for advanced training as internal files.
 
 ### Miscellaneous
 * Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.

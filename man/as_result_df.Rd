@@ -30,8 +30,8 @@ not be called via \code{::}
 \examples{
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_rows_by("STRATA1") \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("STRATA1") \%>\%
   analyze(c("AGE", "BMRKR2"))
 
 tbl <- build_table(lyt, ex_adsl)
