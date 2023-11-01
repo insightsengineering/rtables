@@ -82,6 +82,7 @@ articles:
     
   - title: Developer Guide
     desc: Articles intended for developer use only.
+    contents:
     # *REF1* Dev Guide items
     - dev-guide/dg_split_machinery
     - dev-guide/dg_tabulation

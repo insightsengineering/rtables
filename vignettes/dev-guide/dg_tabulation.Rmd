@@ -2,12 +2,7 @@
 title: "Tabulation"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output:
-  html_document:
-    theme: spacelab
-    toc: true
-    toc_float:
-      collapsed: false
+output: html_document
 editor_options:
   chunk_output_type: console
 ---
@@ -28,7 +23,7 @@ Being that this a working document that may be subjected to both deprecation and
 
 ## Introduction
 
-Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to data. The layout object, with all of its splits (see xxx link split machinery article) and `analyze`s, can be applied to different data to produce valid tables. This process happens principally within the `tt_dotabulation.R` file and the user-facing function `build_table` that resides in it. We will occasionally use functions and methods that are present in other files, like `colby_construction.R` or `make_subset_expr.R`. We assume the reader is already familiar with the documentation for `build_table`. We suggest reading the split machinery vignette (xxx link) prior to this one, as it is instrumental in understanding how the layout object, which is essentially built out of splits, is tabulated when data is supplied.
+Tabulation in `rtables` is a process that takes a pre-defined layout and applies it to data. The layout object, with all of its splits and `analyze`s, can be applied to different data to produce valid tables. This process happens principally within the `tt_dotabulation.R` file and the user-facing function `build_table` that resides in it. We will occasionally use functions and methods that are present in other files, like `colby_construction.R` or `make_subset_expr.R`. We assume the reader is already familiar with the documentation for `build_table`. We suggest reading the [Split Machinery vignette](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_split_machinery.html) prior to this one, as it is instrumental in understanding how the layout object, which is essentially built out of splits, is tabulated when data is supplied.
 
 ## Tabulation
 
@@ -70,7 +65,7 @@ lyt@.Data # might not preserve the names # it works only when it is another clas
 # We suggest doing extensive testing about these behaviors in order to do choose the appropriate one
 ```
 
-Along with the various checks and defensive programming, we find `PreDataAxisLayout` which is a virtual class that both row and column layouts inherit from. Virtual classes are handy for group classes that need to share things like labels or functions that need to be applicable to their relative classes. See more information about the `rtables` class hierarchy in the dedicated article here (xxx add).
+Along with the various checks and defensive programming, we find `PreDataAxisLayout` which is a virtual class that both row and column layouts inherit from. Virtual classes are handy for group classes that need to share things like labels or functions that need to be applicable to their relative classes. See more information about the `rtables` class hierarchy in the dedicated article [here](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_table_hierarchy.html).
 
 Now, we continue with `build_table`. After the checks, we notice `TreePos()` which is a constructor for an object that retains a representation of the tree position along with split values and labels. This is mainly used by `create_colinfo`, which we enter now with `debugonce(create_colinfo)`. This function creates the object that represents the column splits and everything else that may be related to the columns. In particular, the column counts are calculated in this function. The parameter inputs are as follows:
 
