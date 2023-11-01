@@ -19,6 +19,7 @@
 ^\.pre-commit-config\.yaml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
+^pkgdown$
 ^doc$
 ^docs$
 ^logs$
