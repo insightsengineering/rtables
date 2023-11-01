@@ -14,14 +14,12 @@ navbar:
     dev-guide:
       text: Developer Guide
       menu:
-        - text: Debugging in {rtables} and Beyond
-          href: ../inst/dev-guide/dg_debug_rtables.html
         - text: Split Machinery
           href: ../inst/dev-guide/dg_split_machinery.html
-        - text: Table Hierarchy
-          href: ../inst/dev-guide/dg_table_hierarchy.html
         - text: Tabulation
           href: ../inst/dev-guide/dg_tabulation.html
+        - text: Debugging in {rtables} and Beyond
+          href: ../inst/dev-guide/dg_debug_rtables.html
 
 articles:
   - title: Getting Started
