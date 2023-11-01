@@ -19,7 +19,7 @@ navbar:
           href: dg_split_machinery.html
         - text: Tabulation
           href: dg_tabulation.html
-        - text: Debugging in \{rtables\} and Beyond
+        - text: Debugging in {rtables} and Beyond
           href: dg_debug_rtables.html
 
 articles:
