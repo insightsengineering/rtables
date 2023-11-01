@@ -11,7 +11,7 @@
 
 <meta name="author" content="Davide Garolini" />
 
-<meta name="date" content="2023-10-12" />
+<meta name="date" content="2023-11-01" />
 
 <title>Tabulation</title>
 
@@ -1511,179 +1511,199 @@ font-size: 0.95em;
 
 <h1 class="title toc-ignore">Tabulation</h1>
 <h4 class="author">Davide Garolini</h4>
-<h4 class="date">2023-10-12</h4>
+<h4 class="date">2023-11-01</h4>
 
 </div>
 
 
 <div id="disclaimer" class="section level2">
 <h2>Disclaimer</h2>
-<p>Any code or prose which appears in a version of this vignette on the
+<p>This article is intended for use by developers only and will contain
+low-level explanations of the topics covered. For user-friendly
+vignettes, please see the <a href="https://insightsengineering.github.io/rtables/main/articles/index.html">Articles</a>
+page on the <code>rtables</code> website.</p>
+<p>Any code or prose which appears in the version of this article on the
 <code>main</code> branch of the repository may reflect a specific state
-of things that can be more or less recent. This guide reflects very
-important pieces of the split machinery that are unlikely to change. We
-anyway invite the reader to think always that the current code may have
-drifted from the following document, and it is always the best practice
-to read directly the code on <code>main</code>. (xxx we should insert it
-automatically)</p>
+of things that can be more or less recent. This guide describes very
+important aspects of the tabulation process that are unlikely to change.
+Regardless, we invite the reader to keep in mind that the current
+repository code may have drifted from the following material in this
+document, and it is always the best practice to read the code directly
+on <code>main</code>.</p>
+<p>Please keep in mind that <code>rtables</code> is still under active
+development, and it has seen the efforts of multiple contributors across
+different years. Therefore, there may be legacy mechanisms and ongoing
+transformations that could look different in the future.</p>
+<p>Being that this a working document that may be subjected to both
+deprecation and updates, we keep <code>xxx</code> comments to indicate
+placeholders for warnings and to-do’s that need further work.</p>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Tabulation in <code>rtables</code> is a process that takes a
-pre-defined layout and applies it to the data. The layout object, with
-all its splits (see <code>vignette(&quot;dg_split_machinery&quot;)</code>) and
+pre-defined layout and applies it to data. The layout object, with all
+of its splits (see xxx link split machinery article) and
 <code>analyze</code>s, can be applied to different data to produce valid
-tables. This process is happening principally inside the file
-<code>tt_dotabulation.R</code> and its principal user-facing function
-<code>build_table</code> that resides in it. We will sometimes see
-functions and methods that are present in other files like
+tables. This process happens principally within the
+<code>tt_dotabulation.R</code> file and the user-facing function
+<code>build_table</code> that resides in it. We will occasionally use
+functions and methods that are present in other files, like
 <code>colby_construction.R</code> or <code>make_subset_expr.R</code>. We
-assume any reader is already familiar with the documentation related to
-<code>build_table</code>. Also, we suggest reading first the vignette
-regarding the split machinery
-(<code>vignette(&quot;dg_split_machinery&quot;)</code>), as it is instrumental in
-understanding how the layout object, which is built principally of
-splits, is tabulated when data is applied.</p>
-<p>This time, we enter in <em>medias res</em> into
-<code>build_table</code> to see how it is meant to work.</p>
-<pre class="r"><code># rtables 6.2.0
+assume the reader is already familiar with the documentation for
+<code>build_table</code>. We suggest reading the split machinery
+vignette (xxx link) prior to this one, as it is instrumental in
+understanding how the layout object, which is essentially built out of
+splits, is tabulated when data is supplied.</p>
+</div>
+<div id="tabulation" class="section level2">
+<h2>Tabulation</h2>
+<p>We enter into <code>build_table</code> using <code>debugonce</code>
+to see how it works.</p>
+<pre class="r"><code># rtables 0.6.2
 library(rtables)
 debugonce(build_table)
 
 # A very simple layout
-lyt &lt;- basic_table() %&gt;% 
-    split_rows_by(&quot;STRATA1&quot;) %&gt;% 
-    split_rows_by(&quot;SEX&quot;, split_fun = drop_split_levels) %&gt;% 
-    split_cols_by(&quot;ARM&quot;) %&gt;% 
-    analyze(&quot;BMRKR1&quot;)
+lyt &lt;- basic_table() %&gt;%
+  split_rows_by(&quot;STRATA1&quot;) %&gt;%
+  split_rows_by(&quot;SEX&quot;, split_fun = drop_split_levels) %&gt;%
+  split_cols_by(&quot;ARM&quot;) %&gt;%
+  analyze(&quot;BMRKR1&quot;)
+
 # lyt must be a PreDataTableLayouts object
 is(lyt, &quot;PreDataTableLayouts&quot;)
 
 lyt %&gt;% build_table(DM)</code></pre>
-<p>Now lets see the interior of our <code>build_table</code>, After
-initial check that the layout is a pre-data table layout, it is checked
-if the coulmn layout is defined (<code>clayout</code> accessor), i.e. it
+<p>Now let’s look within our <code>build_table</code> call. After the
+initial check that the layout is a pre-data table layout, it checks if
+the column layout is defined (<code>clayout</code> accessor), i.e. it
 does not have any column split. If that is the case, a
 <code>All obs</code> column is added automatically with all
 observations. After this, there are a couple of defensive programming
-calls that do checks and fixtures as we finally have the data. These
-divide in two kinds: the one that are mainly concerning the layout,
-which are defined as generics and the one concerning the data that is
-instead a function as it is not dependent on the layout class. Indeed,
-the layout is structured and can be divided in <code>clayout</code> and
-<code>rlayout</code> (column and row layout). The first one is used to
-create <code>cinfo</code> which is the general object and container of
-the column splits and information. The second one contains the
-obligatory all data split, i.e. the root split (accessible with
-<code>root_spl</code>), and the row splits’ vectors which are iterative
-splits in the row space. In the following we consider first the checks
-and defensive programming.</p>
-<pre class="r"><code>    ## do checks and defensive programming now that we have the data
-    lyt &lt;- fix_dyncuts(lyt, df) # Now that I have the data, I create the splits that depends on data
-    lyt &lt;- set_def_child_ord(lyt, df) # With the data I set the same order for all splits
-    lyt &lt;- fix_analyze_vis(lyt) # Checks if the analyze last split should be visible
-    # If there is only one you will not get the variable name otherwise you get it if you
-    # have multivar. Default is NA. You can do it now only because you are sure to
-    # have the whole layout.
-    df &lt;- fix_split_vars(lyt, df, char_ok = is.null(col_counts)) 
-    # checks if split vars are present
-    
-    lyt[] # preserve names and it is just warning if longer, and repeats the value if only one
-    lyt@.Data # might not preserve the names # it works only when it is another class that inherits from lists
-    # We suggest to do extensive testing about these behaviors in order to do choose
-    # the appropriate one</code></pre>
-<p>Along the various checks and defensive programming, we found
+calls that do checks and transformations as we finally have the data.
+These can be divided into two categories: those that mainly concern the
+layout, which are defined as generics, and those that concern the data,
+which are instead a function as they are not dependent on the layout
+class. Indeed, the layout is structured and can be divided into
+<code>clayout</code> and <code>rlayout</code> (column and row layout).
+The first one is used to create <code>cinfo</code>, which is the general
+object and container of the column splits and information. The second
+one contains the obligatory all data split, i.e. the root split
+(accessible with <code>root_spl</code>), and the row splits’ vectors
+which are iterative splits in the row space. In the following, we
+consider the initial checks and defensive programming.</p>
+<pre class="r"><code>## do checks and defensive programming now that we have the data
+lyt &lt;- fix_dyncuts(lyt, df) # Create the splits that depends on data
+lyt &lt;- set_def_child_ord(lyt, df) # With the data I set the same order for all splits
+lyt &lt;- fix_analyze_vis(lyt) # Checks if the analyze last split should be visible
+# If there is only one you will not get the variable name, otherwise you get it if you
+# have multivar. Default is NA. You can do it now only because you are sure to
+# have the whole layout.
+df &lt;- fix_split_vars(lyt, df, char_ok = is.null(col_counts))
+# checks if split vars are present
+
+lyt[] # preserve names - warning if names longer, repeats the name value if only one
+lyt@.Data # might not preserve the names # it works only when it is another class that inherits from lists
+# We suggest doing extensive testing about these behaviors in order to do choose the appropriate one</code></pre>
+<p>Along with the various checks and defensive programming, we find
 <code>PreDataAxisLayout</code> which is a virtual class that both row
-and cols layouts inherit from. Virtual classes are handy for group
-classes that need to share common things like labels or functions that
-need to be applicable to their relative classes. Check more information
-about <code>rtables</code> class hierarchy in the dedicated dev vignette
-(xxx add).</p>
-<p>Now, we continue with <code>build_table</code>. We notice after the
-checks <code>TreePos()</code> which is a constructor for an oject that
+and column layouts inherit from. Virtual classes are handy for group
+classes that need to share things like labels or functions that need to
+be applicable to their relative classes. See more information about the
+<code>rtables</code> class hierarchy in the dedicated article here (xxx
+add).</p>
+<p>Now, we continue with <code>build_table</code>. After the checks, we
+notice <code>TreePos()</code> which is a constructor for an object that
 retains a representation of the tree position along with split values
-and labels. This is mainly used by <code>create_colinfo</code> that we
-decide to enter now with <code>debugonce(create_colinfo)</code>. This
-function creates the object that represent the column splits and
-everything else that may be related with the columns. In particular, in
-this function the column counts are calculated. The parameter inputs are
-as follows:</p>
-<pre class="r"><code>cinfo &lt;- create_colinfo(lyt, # Main layout with col splits info
-                        df, # df used for splits and col counts if no alt_counts_df is present
-                        rtpos, # TreePos (does not change in out of this function)
-                        counts = col_counts, # If we want to overwrite the calculations with df/alt_counts_df
-                        alt_counts_df = alt_counts_df, # alternative data for col counts
-                        total = col_total, # calculated from build_table inputs (nrow of df or alt_counts_df)
-                        topleft) # topleft information added into build_table</code></pre>
+and labels. This is mainly used by <code>create_colinfo</code>, which we
+enter now with <code>debugonce(create_colinfo)</code>. This function
+creates the object that represents the column splits and everything else
+that may be related to the columns. In particular, the column counts are
+calculated in this function. The parameter inputs are as follows:</p>
+<pre class="r"><code>cinfo &lt;- create_colinfo(
+  lyt, # Main layout with col split info
+  df, # df used for splits and col counts if no alt_counts_df is present
+  rtpos, # TreePos (does not change out of this function)
+  counts = col_counts, # If we want to overwrite the calculations with df/alt_counts_df
+  alt_counts_df = alt_counts_df, # alternative data for col counts
+  total = col_total, # calculated from build_table inputs (nrow of df or alt_counts_df)
+  topleft # topleft information added into build_table
+)</code></pre>
 <p><code>create_colinfo</code> is in <code>make_subset_expr.R</code>.
 Here, we see that if <code>topleft</code> is present in
 <code>build_table</code>, it will override the one in <code>lyt</code>.
 Entering <code>create_colinfo</code>, we will see the following
 calls:</p>
-<pre class="r"><code>    clayout &lt;- clayout(lyt) # Extracts column split and info
-    if(is.null(topleft))
-        topleft &lt;- top_left(lyt) # If top_left is not present in build_table, it is took from lyt
-    ctree &lt;- coltree(clayout, df = df, rtpos = rtpos) # Main constructor of LayoutColTree 
-    # The above is referenced as generic and principally represented as 
-    # setMethod(&quot;coltree&quot;, &quot;PreDataColLayout&quot;, (located in `tree_accessor.R`).
-    # This is a call that restructure information from clayout and df and rtpos 
-    # to get a more compact column tree layout. Part of this design is related 
-    # to past implementations.
+<pre class="r"><code>clayout &lt;- clayout(lyt) # Extracts column split and info
 
-    cexprs &lt;- make_col_subsets(ctree, df) # extracts expressions in a compact fashion. WARNING, 
-                                          # removing NAs at this step is automatic. This should 
-                                          # be coupled with a warning for NAs in the split (xxx)
-    colextras &lt;- col_extra_args(ctree) # retrieves extra_args from the tree. It may be not used</code></pre>
-<p>Next in the function there is the creation of the column counts. For
-now this happens only at the leaf level but it can be certainly
-calculated for all levels independently (this is current issue in
+if (is.null(topleft)) {
+  topleft &lt;- top_left(lyt) # If top_left is not present in build_table, it is taken from lyt
+}
+
+ctree &lt;- coltree(clayout, df = df, rtpos = rtpos) # Main constructor of LayoutColTree
+# The above is referenced as generic and principally represented as
+# setMethod(&quot;coltree&quot;, &quot;PreDataColLayout&quot;, (located in `tree_accessor.R`).
+# This is a call that restructures information from clayout, df, and rtpos
+# to get a more compact column tree layout. Part of this design is related
+# to past implementations.
+
+cexprs &lt;- make_col_subsets(ctree, df) # extracts expressions in a compact fashion.
+# WARNING: removing NAs at this step is automatic. This should
+# be coupled with a warning for NAs in the split (xxx)
+
+colextras &lt;- col_extra_args(ctree) # retrieves extra_args from the tree. It may not be used</code></pre>
+<p>Next in the function is the determination of the column counts.
+Currently, this happens only at the leaf level, but it can certainly be
+calculated independently for all levels (this is an open issue in
 <code>rtables</code>, i.e. how to print other levels’ totals).
-Precedence for col counts may be not documented (xxx todo). Original use
-case is that you split events while the column counts is the number of
-patients and not events. First only counts as vector was added, but it
-is often the case that you have the possibility to add
-<code>alt_counts_df</code>. Finally the <code>cinfo</code> object is
-created (<code>InstantiatedColumnInfo</code>) with all the above
-information.</p>
-<p>Now, if we continue in <code>build_table</code> we hit
-<code>.make_ctab</code> for a root split. This is a general initial
-procedure that generates the needed root split as a content row. Indeed
-<code>ctab</code> stays for content row which is a row that has only a
-label in it. From the documentation regarding
-<code>summarize_row_groups</code>, you know that this is the way
-<code>rtables</code> defines label rows, i.e. as content rows.
-<code>.make_ctab</code> is very close to the actual creation of the
-table row which is done with <code>.make_tablerows</code>. Note that
-this function also uses <code>parent_cfun</code> and
+Precedence for column counts may be not documented (xxx todo). The main
+use case is when you are analyzing a participation-level dataset, with
+multiple records per subject, and you would like to retain the total
+numbers of subjects per column, often taken from a subject-level
+dataset, to use as column counts. Originally, counts were only able to
+be added as a vector, but it is often the case that users would like the
+possibility to use <code>alt_counts_df</code>. The <code>cinfo</code>
+object (<code>InstantiatedColumnInfo</code>) is created with all the
+above information.</p>
+<p>If we continue inside <code>build_table</code>, we see
+<code>.make_ctab</code> used to make a root split. This is a general
+procedure that generates the initial root split as a content row.
+<code>ctab</code> is applied to this content row, which is a row that
+contains only a label. From <code>?summarize_row_groups</code>, you know
+that this is how <code>rtables</code> defines label rows, i.e. as
+content rows. <code>.make_ctab</code> is very similar to the function
+that actual creates the table rows, <code>.make_tablerows</code>. Note
+that this function uses <code>parent_cfun</code> and
 <code>.make_caller</code> to retrieve the content function inserted in
-above levels. We split here what is the structural handling of the table
-object and the rows creation engine that are divided by
-<code>.make_tablerows</code> call. If you search the whole package, you
-will find that this function is called only twice, once in
+above levels. Here we split the structural handling of the table object
+and the row-creation engine, which are divided by a
+<code>.make_tablerows</code> call. If you search the package, you will
+find that this function is only called twice, once in
 <code>.make_ctab</code> and once in <code>.make_analyzed_tab</code>.
 These two are the final elements of the table construction: the creation
 of rows.</p>
 <p>Going back to <code>build_table</code>, you will see that the row
-layout is actually a list of split vectors. The fundamental line
-<code>kids &lt;- lapply(seq_along(rlyt), function(i) {</code> allows us
+layout is actually a list of split vectors. The fundamental line,
+<code>kids &lt;- lapply(seq_along(rlyt), function(i) {</code>, allows us
 to appreciate this. Going forward we see how
 <code>recursive_applysplit</code> is applied to each split vector. It
-may be worth it to check how, in our test case, this vector looks
-like.</p>
-<pre class="r"><code># rtables 6.2.0
-
+may be worthwhile to check what this vector looks like in our test
+case.</p>
+<pre class="r"><code># rtables 0.6.2
 # A very simple layout
-lyt &lt;- basic_table() %&gt;% 
-    split_rows_by(&quot;STRATA1&quot;) %&gt;% 
-    split_rows_by(&quot;SEX&quot;, split_fun = drop_split_levels) %&gt;% 
-    split_cols_by(&quot;ARM&quot;) %&gt;% 
-    analyze(&quot;BMRKR1&quot;)
+lyt &lt;- basic_table() %&gt;%
+  split_rows_by(&quot;STRATA1&quot;) %&gt;%
+  split_rows_by(&quot;SEX&quot;, split_fun = drop_split_levels) %&gt;%
+  split_cols_by(&quot;ARM&quot;) %&gt;%
+  analyze(&quot;BMRKR1&quot;)
+
 rlyt &lt;- rtables:::rlayout(lyt)
 str(rlyt, max.level = 2)
+
 Formal class &#39;PreDataRowLayout&#39; [package &quot;rtables&quot;] with 2 slots
   ..@ .Data     :List of 2 # rlyt is a rtables object (PreDataRowLayout) that is also a list!
   ..@ root_split:Formal class &#39;RootSplit&#39; [package &quot;rtables&quot;] with 17 slots # another object!
-  # If you do summarize_row_groups before anything you act on the root split. We need this to 
+  # If you do summarize_row_groups before anything you act on the root split. We need this to
   # have a place for the content that is valid for the whole table.
 
 str(rtables:::root_spl(rlyt), max.level = 2) # it is still a split
@@ -1695,21 +1715,22 @@ Formal class &#39;SplitVector&#39; [package &quot;rtables&quot;] with 1 slot
   .. ..$ :Formal class &#39;VarLevelSplit&#39; [package &quot;rtables&quot;] with 20 slots
   .. ..$ :Formal class &#39;AnalyzeMultiVars&#39; [package &quot;rtables&quot;] with 17 slots</code></pre>
 <p>The last print is very informative. We can see from the layout
-construction that this object is built with 2 <code>VarLevelSplit</code>
-on the rows and one final <code>AnalyzeMultiVars</code> which is the
-leaf analysis split that has the final level rows. The second split
-vector is the following <code>AnalyzeVarSplit</code>.</p>
-<p>xxx to get multiple split vectors you need to break the nesting with
-<code>nest = FALSE</code> or by adding a <code>split_rows_by</code>
-after an <code>analyze</code> call.</p>
-<pre class="r"><code># rtables 6.2.0
+construction that this object is built with 2
+<code>VarLevelSplit</code>s on the rows and one final
+<code>AnalyzeMultiVars</code>, which is the leaf analysis split that has
+the final level rows. The second split vector is the following
+<code>AnalyzeVarSplit</code>.</p>
+<p>xxx To get multiple split vectors, you need to escape the nesting
+with <code>nest = FALSE</code> or by adding a <code>split_rows_by</code>
+call after an <code>analyze</code> call.</p>
+<pre class="r"><code># rtables 0.6.2
 str(rlyt[[2]], max.level = 5)
 Formal class &#39;SplitVector&#39; [package &quot;rtables&quot;] with 1 slot
   ..@ .Data:List of 1
   .. ..$ :Formal class &#39;AnalyzeVarSplit&#39; [package &quot;rtables&quot;] with 21 slots
-  .. .. .. ..@ analysis_fun           :function (x, ...)  
+  .. .. .. ..@ analysis_fun           :function (x, ...)
   .. .. .. .. ..- attr(*, &quot;srcref&quot;)= &#39;srcref&#39; int [1:8] 1723 5 1732 5 5 5 4198 4207
-  .. .. .. .. .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilealias&#39;, &#39;srcfile&#39; &lt;environment: 0x560d8e67b750&gt; 
+  .. .. .. .. .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilealias&#39;, &#39;srcfile&#39; &lt;environment: 0x560d8e67b750&gt;
   .. .. .. ..@ default_rowlabel       : chr &quot;Var3 Counts&quot;
   .. .. .. ..@ include_NAs            : logi FALSE
   .. .. .. ..@ var_label_position     : chr &quot;default&quot;
@@ -1718,10 +1739,10 @@ Formal class &#39;SplitVector&#39; [package &quot;rtables&quot;] with 1 slot
   .. .. .. ..@ split_label            : chr &quot;Var3 Counts&quot;
   .. .. .. ..@ split_format           : NULL
   .. .. .. ..@ split_na_str           : chr NA
-  .. .. .. ..@ split_label_position   : chr(0) 
+  .. .. .. ..@ split_label_position   : chr(0)
   .. .. .. ..@ content_fun            : NULL
   .. .. .. ..@ content_format         : NULL
-  .. .. .. ..@ content_na_str         : chr(0) 
+  .. .. .. ..@ content_na_str         : chr(0)
   .. .. .. ..@ content_var            : chr &quot;&quot;
   .. .. .. ..@ label_children         : logi FALSE
   .. .. .. ..@ extra_args             : list()
@@ -1732,57 +1753,57 @@ Formal class &#39;SplitVector&#39; [package &quot;rtables&quot;] with 1 slot
   .. .. .. ..@ child_section_div      : chr NA</code></pre>
 <p>Continuing in <code>recursive_applysplit</code>, this is made up of
 two main calls: one to <code>.make_ctab</code> which makes the content
-row and calculates the counts if specified so, and
+row and calculates the counts if specified, and
 <code>.make_split_kids</code>. This eventually contains
-<code>recursive_applysplit</code> if the split vector is built of
-<code>Split</code> that are not <code>analyze</code> splits. Indeed,
-here, it being a generic is very handy to switch between different
-downstream processes. In our case (<code>rlyt[[1]]</code>), we will call
-the method <code>getMethod(&quot;.make_split_kids&quot;, &quot;Split&quot;)</code> twice
-before getting to the analysis split. There, we can have a (xxx) multi
-variable split which would apply <code>.make_split_kids</code> to each
-of its elements, in turns calling the main
+<code>recursive_applysplit</code> which is applied if the split vector
+is built of <code>Split</code>s that are not <code>analyze</code>
+splits. It being a generic is very handy here to switch between
+different downstream processes. In our case (<code>rlyt[[1]]</code>) we
+will call the method <code>getMethod(&quot;.make_split_kids&quot;, &quot;Split&quot;)</code>
+twice before getting to the analysis split. There, we have a (xxx)
+multi-variable split which applies <code>.make_split_kids</code> to each
+of its elements, in turn calling the main
 <code>getMethod(&quot;.make_split_kids&quot;, &quot;VAnalyzeSplit&quot;)</code> which would
 in turn go to <code>.make_analyzed_tab</code>.</p>
-<p>There are interesting edge cases here for different split cases like
-<code>split_by_multivars</code> and when one of the splits has a
-reference group. In the code here, it is called <code>baseline</code>
-internally. If we follow this variable across the function layers we
-will see that where the split (<code>do_split</code>) happens (in
-<code>getMethod(&quot;.make_split_kids&quot;, &quot;Split&quot;)</code>), we have a second
-split for the reference group. This is done so to have available this in
-each row, to calculate, for example, differences with reference
-group.</p>
+<p>There are interesting edge cases here for different split cases, like
+<code>split_by_multivars</code> or when one of the splits has a
+reference group. In the internal code here, it is called
+<code>baseline</code>. If we follow this variable across the function
+layers, we will see that where the split (<code>do_split</code>) happens
+(in <code>getMethod(&quot;.make_split_kids&quot;, &quot;Split&quot;)</code>) we have a
+second split for the reference group. This is done to make this
+available in each row to calculate, for example, differences from the
+reference group.</p>
 <p>Now we move towards <code>.make_tablerows</code>, and here analysis
-functions become key, i.e. is the place where these are applied and
-analyzed. First of all, the external <code>tryCatch</code> is used to
-cache errors at a higher level, so to differentiate the two major
-blocks. The function parameters are quite intuitive, with the exception
-of <code>spl_context</code>. This is a fundamental parameter, that helps
-keeping information about the splits that can be visible from analysis
-functions. Follow up and down this value and you will see that is
-brought and updated everywhere a split happens, except for columns.
-Column-related information is added last, when in <code>gen_onerv</code>
-which is the lowest level, where one result value is produced. From
-<code>.make_tablerows</code> we go to <code>gen_rowvalues</code>, beside
-some row and referential footers handling. <code>gen_rowvalues</code>
-unpacks the <code>cinfo</code> object and crosses it with the arriving
-row split information to generate rows. In particular
-<code>rawvals &lt;- mapply(gen_onerv,</code> maps the columns to
-generate a list of values corresponding to a table row. Looking at the
-final if in <code>gen_onerv</code> we see that
-<code>if(!is(val, &quot;RowsVerticalSection&quot;))</code> the function
-<code>in_rows</code> is called. We invite to read what are the building
-blocks of that and why <code>.make_tablerows</code> has the following
-function <code>rowconstr</code> that other is not if the constructor of
-a data row <code>DataRow</code> or a <code>ContentRow</code> depending
-if it is called from <code>.make_ctab</code> or
+functions become key as this is the place where these are applied and
+analyzed. First, the external <code>tryCatch</code> is used to cache
+errors at a higher level, so as to differentiate the two major blocks.
+The function parameters here are quite intuitive, with the exception of
+<code>spl_context</code>. This is a fundamental parameter that keeps
+information about splits so that it can be visible from analysis
+functions. If you look into this value, you will see that is carried and
+updated everywhere a split happens, except for columns. Column-related
+information is added last, when in <code>gen_onerv</code>, which is the
+lowest level where one result value is produced. From
+<code>.make_tablerows</code> we go to <code>gen_rowvalues</code>, aside
+from some row and referential footers handling.
+<code>gen_rowvalues</code> unpacks the <code>cinfo</code> object and
+crosses it with the arriving row split information to generate rows. In
+particular, <code>rawvals &lt;- mapply(gen_onerv,</code> maps the
+columns to generate a list of values corresponding to a table row.
+Looking at the final <code>if</code> in <code>gen_onerv</code> we see
+<code>if (!is(val, &quot;RowsVerticalSection&quot;))</code> and the function
+<code>in_rows</code> is called. We invite the reader to explore what the
+building blocks of <code>in_rows</code> are, and how
+<code>.make_tablerows</code> constructs a data row
+(<code>DataRow</code>) or a content row (<code>ContentRow</code>)
+depending on whether it is called from <code>.make_ctab</code> or
 <code>.make_analyzed_tab</code>.</p>
 <p><code>.make_tablerows</code> either makes a content table or an
-“analysis table” <code>gen_rowvalues</code> generates a list of stacks
+“analysis table”. <code>gen_rowvalues</code> generates a list of stacks
 (<code>RowsVerticalSection</code>, more than one rows potentially!) for
-each column</p>
-<p>to add: conceptual part -&gt; calculating things by column and
+each column.</p>
+<p>To add: conceptual part -&gt; calculating things by column and
 putting them side by side and slicing them by rows and putting it
 together -&gt; rtables is row dominant</p>
 </div>

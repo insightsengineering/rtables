@@ -11,7 +11,7 @@
 
 <meta name="author" content="Davide Garolini" />
 
-<meta name="date" content="2023-10-12" />
+<meta name="date" content="2023-11-01" />
 
 <title>Debugging in rtables and Beyond</title>
 
@@ -377,99 +377,143 @@ display: none;
 <h1 class="title toc-ignore">Debugging in <code>rtables</code> and
 Beyond</h1>
 <h4 class="author">Davide Garolini</h4>
-<h4 class="date">2023-10-12</h4>
+<h4 class="date">2023-11-01</h4>
 
 </div>
 
 
-<div id="disclaimer" class="section level2">
-<h2>Disclaimer</h2>
-<p>Any code or prose which appears in a version of this vignette on the
-<code>main</code> branch of the repository may reflect a specific state
-of things that can be more or less recent. This guide reflects very
-important pieces of the split machinery that are unlikely to change. We
-anyway invite the reader to think always that the current code may have
-drifted from the following document, and it is always the best practice
-to read directly the code on <code>main</code>.</p>
-<hr />
-<p>This is a not-so-short and not-comprehensive guide to debugging
-<code>rtables</code>. It is to be considered, though, of general
-validity and of personal use.</p>
-<p>-=-=-=- Notes from meeting In general code must be in a way that:
--&gt; it is easy to read and find problems -&gt; it is not clever,
-because it is impossible to debug</p>
+<div id="debugging" class="section level2">
+<h2>Debugging</h2>
+<p>This is a short and non-comprehensive guide to debugging
+<code>rtables</code>. Regardless, it is to be considered valid for
+personal use at your discretion.</p>
+<div id="coding-in-practice" class="section level4">
+<h4>Coding in Practice</h4>
 <ul>
-<li>Coding Error, code does not do what you intended -&gt; Bug in the
-punch card</li>
-<li>Unexpected Input. Defensive programming FAIL FAST FAIL LOUD -&gt;
-useful and not too consuming</li>
-<li>Bug in Dependency -&gt; never use</li>
+<li>It is easy to read and find problems</li>
+<li>It is not clever if it is impossible to debug</li>
 </ul>
-<p>e.g. of FFFL as close as possible to the source * bad inputs should
-be found very early</p>
-<p>Worst: silently giving incorrect results</p>
-<p>common things that we can catch early missing values/column length ==
-0 or length &gt; 1</p>
-<p>ROBUSTNESS: refuse to do stuff that can be very problematic</p>
-<p>WHAT TO DO * Read Error Messages debugcall you can add the signature
-(formals) trace is powerful because you can add the reaction) tracer is
-very good, at where it happens</p>
-<p>options(error=recover) is the best way to debug core tool when
-developing/debugging</p>
-<p>dump.frames and debugger it saves it to a file or an object and then
-you call debugger to step in it as you did recover. You save the global
-form</p>
-<p>warn global option &lt;0 ignored 0 top level function call 1
-immediately as they occur &gt;=2 throws errors</p>
-<p>&lt;&lt;- for recover or debugger gives it to the global
-environment</p>
-<p>lo-fi debugging PRINT / CAT print position of a function you get to
-then you get to a point where it breaks</p>
-<p>comment blocks -&gt; does not work with pipes (use identity() it is a
-step that does nothing but does not break the pipes)</p>
-<p>browser bombing</p>
-<p>regression tests almost every bug should become a regression test</p>
-<p>debugging with pipes -&gt; pipes are better to write code but
-horrible to debug</p>
-<p>T pipe %T&gt;% does print it midway</p>
-<p>debug_pipe -&gt; it is like the T pipe going into browser()</p>
-<p>Shiny debugging is more difficult due to reactivity</p>
+</div>
+<div id="some-definitions" class="section level4">
+<h4>Some Definitions</h4>
+<ul>
+<li><strong>Coding Error</strong> - Code does not do what you intended
+-&gt; Bug in the punch card</li>
+<li><strong>Unexpected Input</strong> - Defensive programming FAIL FAST
+FAIL LOUD (FFFL) -&gt; useful and not too time consuming</li>
+<li><strong>Bug in Dependency</strong> -&gt; never use dependencies if
+you can!</li>
+</ul>
+</div>
+<div id="considerations-about-fffl" class="section level4">
+<h4>Considerations About FFFL</h4>
+<p>Errors should be as close as possible to the source. For example, bad
+inputs should be found very early. The worst possible example is a
+software that is silently giving incorrect results. Common things that
+we can catch early are missing values, column <code>length == 0</code>,
+or <code>length &gt; 1</code>.</p>
+</div>
+<div id="general-suggestions" class="section level4">
+<h4>General Suggestions</h4>
+<ul>
+<li>Robust code base does not attempt doing possibly problematic
+operations.</li>
+<li>Read Error Messages</li>
+<li><code>debugcall</code> you can add the signature (formals)</li>
+<li><code>trace</code> is powerful because you can add the reaction</li>
+<li><code>tracer</code> is very good and precise to find where it
+happens</li>
+</ul>
+<p><code>options(error = recover)</code> is one of the best tools to
+debug at it is a core tool when developing that allows you to step into
+any point of the function call sequence.</p>
+<p><code>dump.frames</code> and <code>debugger</code>: it saves it to a
+file or an object and then you call debugger to step in it as you did
+recover.</p>
+</div>
+<div id="warn-global-option" class="section level4">
+<h4><code>warn</code> Global Option</h4>
+<ul>
+<li><code>&lt;0</code> ignored</li>
+<li><code>0</code> top level function call</li>
+<li><code>1</code> immediately as they occur</li>
+<li><code>&gt;=2</code> throws errors</li>
+</ul>
+<p><code>&lt;&lt;-</code> for <code>recover</code> or
+<code>debugger</code> gives it to the global environment</p>
+</div>
+<div id="lo-fi-debugging" class="section level4">
+<h4>lo-fi debugging</h4>
+<ul>
+<li>PRINT / CAT is always a low level debugging that can be used. It is
+helpful for server jobs where maybe only terminal or console output is
+available and no <code>browser()</code> can be used. For example, you
+can print the position or state of a function at a certain point untill
+you find the break point.</li>
+<li>comment blocks -&gt; does not work with pipes (you can use
+<code>identity()</code> it is a step that does nothing but does not
+break the pipes)</li>
+<li><code>browser()</code> bombing</li>
+</ul>
+</div>
+<div id="regression-tests" class="section level4">
+<h4>Regression Tests</h4>
+<p>Almost every bug should become a regression test.</p>
+</div>
+<div id="debugging-with-pipes" class="section level4">
+<h4>Debugging with Pipes</h4>
+<ul>
+<li>Pipes are better to write code but horrible to debug</li>
+<li>T in pipe <code>%T&gt;%</code> does print it midway</li>
+<li><code>debug_pipe()</code> -&gt; it is like the T pipe going into
+browser()</li>
+</ul>
+</div>
+<div id="shiny-debugging" class="section level4">
+<h4>Shiny Debugging</h4>
+<p>More difficult due to reactivity.</p>
+</div>
+<div id="general-suggestion" class="section level4">
+<h4>General Suggestion</h4>
 <p>DO NOT BE CLEVER WITH CODE - ONLY IF YOU HAVE TO, CLEVER IS ALSO
-SUBJECTIVE AND IT WILL CHANGE WITH TIME -=-=-=-</p>
+SUBJECTIVE AND IT WILL CHANGE WITH TIME.</p>
+</div>
+</div>
+<div id="debugging-in-rtables" class="section level2">
+<h2>Debugging in <code>rtables</code></h2>
 <p>We invite the smart developer to use the provided examples as a way
-to get an “interactive” and dynamic vision of the internal algorithms,
-as they are routinely executed when constructing tables with
+to get an “interactive” and dynamic view of the internal algorithms as
+they are routinely executed when constructing tables with
 <code>rtables</code>. This is achieved by using <code>browser()</code>
 and <code>debugonce()</code> on internal and exported functions
 (<code>rtables:::</code> or <code>rtables::</code>), as we will see in a
-moment. We invite also the continuous and autonomous exploration of the
+moment. We invite you to continuously and autonomously explore the
 multiple <code>S3</code> and <code>S4</code> objects that constitute the
-complexity and power of <code>rtables</code>. To do so we will use the
-following useful functions:</p>
+complexity and power of <code>rtables</code>. To do so, we will use the
+following functions:</p>
 <ul>
 <li><code>methods(generic_function)</code>: This function lists the
 methods that are available for a generic function. Specifically for
 <code>S4</code> generic functions,
-<code>showMethods(generic_function)</code> is giving a more detailed
+<code>showMethods(generic_function)</code> gives more detailed
 information about each method (e.g. inheritance).</li>
 <li><code>class(object)</code>: This function returns the class of an
 object. If the class is not one of the built-in classes in R, you can
 use this information to search for its documentation and examples.
-Indeed, <code>help(class)</code> may be informative, as it will call the
+<code>help(class)</code> may be informative as it will call the
 documentation of the specific class. Similarly, the <code>?</code>
-operator will call the disambiguation page that delivers you to
-different <code>S4</code> methods. For <code>S3</code> methods it is
-necessary to postfix the class name with a dot
-(e.g. <code>?summary.lm</code>).</li>
-<li><code>getClass(class)</code>: This describes in a compact way the
-type of class, the slots that it has, and the relationships that it may
-have with the other classes that may inherit or be inherited by it. With
-<code>getClass(object)</code>, instead, we can see to which values the
-slots of the object are assigned. It is possible to use
-<code>str(object, max.level = 2)</code> to see a less formal and more
+operator will bring up the documentation page for different
+<code>S4</code> methods. For <code>S3</code> methods it is necessary to
+postfix the class name with a dot (e.g. <code>?summary.lm</code>).</li>
+<li><code>getClass(class)</code>: This describes the type of class in a
+compact way, the slots that it has, and the relationships that it may
+have with the other classes that may inherit from or be inherited by it.
+With <code>getClass(object)</code> we can see to which values the slots
+of the object are assigned. It is possible to use
+<code>str(object, max.level = 2)</code> to see less formal and more
 compact descriptions of the slots, but it may be problematic when there
 are one or more objects in the class slots. Hence, the maximum number of
-level should always be limited to 2 or 3 (<code>max.level = 2</code>).
+levels should always be limited to 2 or 3 (<code>max.level = 2</code>).
 Similarly, <code>attributes()</code> can be used to retrieve some
 information, but we need to remember that storing important variables in
 this way is not encouraged. Information regarding the type of class can
@@ -477,17 +521,17 @@ be retrieved with <code>mode()</code> and indirectly by
 <code>summary()</code> and <code>is.S4()</code>.
 *<code>getAnywhere(function)</code> is very useful to get the source
 code of internal functions and specific generics. It works very well
-with <code>S3</code> methods, and will in any case display for each of
-the found methods, its relevant namespace. Similarly,
+with <code>S3</code> methods, and will display the relevant namespace
+for each of the methods found. Similarly,
 <code>getMethod(S4_generic, S4_class)</code> can retrieve the source
-code of <code>S4</code> methods that are specific to a class.</li>
+code of class-specific <code>S4</code> methods.</li>
 <li><code>eval(debugcall(generic_function(obj)))</code>: this is a very
-useful way to browser a <code>S4</code> method defined specifically for
-a defined object without having to manually insert
-<code>browser()</code> into the code. It is also possible to do
-similarly with R &gt; 3.4.0 where <code>debug*()</code> calls can have
-the triggering signature (class) specified. Both of these are modern and
-simplified wrappers of tracing function <code>trace()</code>.</li>
+useful way to browse a <code>S4</code> method, specifically for a
+defined object, without having to manually insert <code>browser()</code>
+into the code. It is also possible to do similarly with R &gt; 3.4.0
+where <code>debug*()</code> calls can have the triggering signature
+(class) specified. Both of these are modern and simplified wrappers of
+the tracing function <code>trace()</code>.</li>
 </ul>
 </div>
 
