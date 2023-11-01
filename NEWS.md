@@ -1,4 +1,4 @@
-## rtables 0.6.5.9005
+## rtables 0.6.5.9007
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
 
@@ -16,6 +16,9 @@
 
 ### Miscellaneous
  * Added slide decks for advanced training as internal files.
+
+### Miscellaneous
+* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
 
 ## rtables 0.6.4
 ### New Features
