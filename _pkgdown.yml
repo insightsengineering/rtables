@@ -2,6 +2,7 @@ url: https://insightsengineering.github.io/rtables
 
 template:
   package: nesttemplate
+  assets: inst/dev-guide/dg-out
 
 navbar:
   structure:
@@ -15,11 +16,11 @@ navbar:
       text: Developer Guide
       menu:
         - text: Split Machinery
-          href: ../inst/dev-guide/dg_split_machinery.html
+          href: dg_split_machinery.html
         - text: Tabulation
-          href: ../inst/dev-guide/dg_tabulation.html
-        - text: Debugging in {rtables} and Beyond
-          href: ../inst/dev-guide/dg_debug_rtables.html
+          href: dg_tabulation.html
+        - text: Debugging in \{rtables\} and Beyond
+          href: dg_debug_rtables.html
 
 articles:
   - title: Getting Started

@@ -11,7 +11,7 @@ output:
 editor_options: 
   chunk_output_type: console
 knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "./dg-out")})
 ---
 
 ```{r setup, include=FALSE}
