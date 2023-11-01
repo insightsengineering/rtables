@@ -8,10 +8,8 @@ output:
     toc: true
     toc_float:
       collapsed: false
-editor_options: 
+editor_options:
   chunk_output_type: console
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +24,7 @@ Any code or prose which appears in the version of this article on the `main` bra
 
 Please keep in mind that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and ongoing transformations that could look different in the future.
 
-Being that this a working document that may be subjected to both deprecation and updates, we keep `xxx` comments to indicate placeholders for warnings and to-do's that need further work. 
+Being that this a working document that may be subjected to both deprecation and updates, we keep `xxx` comments to indicate placeholders for warnings and to-do's that need further work.
 
 ## Introduction
 
@@ -180,7 +178,7 @@ Formal class 'SplitVector' [package "rtables"] with 1 slot
   .. .. .. ..@ child_section_div      : chr NA
 ```
 
-Continuing in `recursive_applysplit`, this is made up of two main calls: one to `.make_ctab` which makes the content row and calculates the counts if specified, and `.make_split_kids`. This eventually contains `recursive_applysplit` which is applied if the split vector is built of `Split`s that are not `analyze` splits. It being a generic is very handy here to switch between different downstream processes. In our case (`rlyt[[1]]`) we will call the method `getMethod(".make_split_kids", "Split")` twice before getting to the analysis split. There, we have a (xxx) multi-variable split which applies `.make_split_kids` to each of its elements, in turn calling the main `getMethod(".make_split_kids", "VAnalyzeSplit")` which would in turn go to `.make_analyzed_tab`. 
+Continuing in `recursive_applysplit`, this is made up of two main calls: one to `.make_ctab` which makes the content row and calculates the counts if specified, and `.make_split_kids`. This eventually contains `recursive_applysplit` which is applied if the split vector is built of `Split`s that are not `analyze` splits. It being a generic is very handy here to switch between different downstream processes. In our case (`rlyt[[1]]`) we will call the method `getMethod(".make_split_kids", "Split")` twice before getting to the analysis split. There, we have a (xxx) multi-variable split which applies `.make_split_kids` to each of its elements, in turn calling the main `getMethod(".make_split_kids", "VAnalyzeSplit")` which would in turn go to `.make_analyzed_tab`.
 
 There are interesting edge cases here for different split cases, like `split_by_multivars` or when one of the splits has a reference group. In the internal code here, it is called `baseline`. If we follow this variable across the function layers, we will see that where the split (`do_split`) happens (in `getMethod(".make_split_kids", "Split")`) we have a second split for the reference group. This is done to make this available in each row to calculate, for example, differences from the reference group.
 
@@ -189,4 +187,4 @@ Now we move towards `.make_tablerows`, and here analysis functions become key as
 `.make_tablerows` either makes a content table or an "analysis table".
 `gen_rowvalues` generates a list of stacks (`RowsVerticalSection`, more than one rows potentially!) for each column.
 
-To add: conceptual part -> calculating things by column and putting them side by side and slicing them by rows and putting it together -> rtables is row dominant 
+To add: conceptual part -> calculating things by column and putting them side by side and slicing them by rows and putting it together -> rtables is row dominant.
