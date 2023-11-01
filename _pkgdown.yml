@@ -4,10 +4,42 @@ template:
   package: nesttemplate
 
 navbar:
-  type: default
-  right:
-    - icon: fa-github fa-lg
+  structure:
+    left: [reference, articles, dev-guide, news, reports]
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github fa-lg
       href: https://github.com/insightsengineering/rtables
+    dev-guide:
+      text: Developer Guide
+      menu:
+        # Go to *REF1* below in this config and add any
+        # additional topics that you may add here,
+        # as you need to do so due to a pkgdown limitation.
+        - text: Split Machinery
+          href: articles/dev-guide/dg_split_machinery.html
+        - text: Tabulation
+          href: articles/dev-guide/dg_tabulation.html
+        - text: Debugging in {rtables} and Beyond
+          href: articles/dev-guide/dg_debug_rtables.html
+
+repo:
+  url:
+    home: https://github.com/insightsengineering/rtables/
+    source: https://github.com/insightsengineering/rtables/blob/main/
+    issue: https://github.com/insightsengineering/rtables/issues/
+    user: https://github.com/
+news:
+  cran_dates: true
+
+authors:
+  before: "We define *authors* as those who are actively maintaining the code base, and *contributors* as those who made a significant contribution in the past. For all acknowledgements, see the eponymous section in the [Home Page](https://insightsengineering.github.io/rtables/)."
+  footer:
+    roles: [aut, ctb, cre, fnd]
+    text: "Developed by"
+  sidebar:
+    roles: [aut]
 
 articles:
   - title: Getting Started
@@ -15,7 +47,7 @@ articles:
     contents:
     - introduction
     - exploratory_analysis
-    
+
   - title: Clinical Trials
     navbar: Clinical Trials
     contents:
@@ -28,23 +60,27 @@ articles:
     - custom_appearance
     - title_footer
     - sorting_pruning
-    
+
   - title: \{rtables\} Concepts
     contents:
     - subsetting_tables
     - split_functions
     - format_precedence
-    - tabulation_concepts  
+    - tabulation_concepts
 
   - title: Advanced Usage
     contents:
     - advanced_usage
     - example_analysis_coxreg
-    
+
   - title: Other
     contents:
     - manual_table_construction
     - tabulation_dplyr
+    # *REF1* Dev Guide items
+    - 'dev-guide/dg_split_machinery'
+    - 'dev-guide/dg_tabulation'
+    - 'dev-guide/dg_debug_rtables'
 
 reference:
 <<<<<<< HEAD
@@ -64,7 +100,7 @@ reference:
     - compat_args
     - gen_args
     - sf_args
-    
+
   - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
     contents:
@@ -80,7 +116,7 @@ reference:
     - split_cols_by_multivar
     - split_rows_by_multivar
     - analyze_colvars
-    - split_cols_by_cuts 
+    - split_cols_by_cuts
     - add_overall_col
     - add_existing_table
     - formatters::table_inset
@@ -96,7 +132,7 @@ reference:
     - spl_context
     - spl_context_to_disp_path
     - counts_wpcts
-    
+
   - title: Split Functions
     contents:
     - add_overall_level
@@ -125,7 +161,7 @@ reference:
     contents:
     - format_rcell
     - value_formats
-     
+
   - title: Table Structure Information
     contents:
     - dim,VTableNodeInfo-method
@@ -157,7 +193,7 @@ reference:
     - validate_table_struct
     - sanitize_table_struct
     - find_degen_struct
-    
+
   - title: Sorting and Pruning
     contents:
     - prune_table
@@ -166,9 +202,9 @@ reference:
     - trim_rows
     - sort_at_path
     - cont_n_allcols
-    
+
   - title: Compatibility Layer
-    desc: These functions provide some backwards compatibility to the previous 
+    desc: These functions provide some backwards compatibility to the previous
           (pre 2021) `rtables` framework.
     contents:
     - rtable
@@ -179,8 +215,8 @@ reference:
     - rrowl
     - indent
     - df_to_tt
-    
-    
+
+
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:
