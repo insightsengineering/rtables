@@ -8,7 +8,7 @@ output:
     toc: true
     toc_float:
       collapsed: false
-editor_options: 
+editor_options:
   chunk_output_type: console
 knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
@@ -26,7 +26,7 @@ Any code or prose which appears in the version of this article on the `main` bra
 
 Please keep in mind that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and ongoing transformations that could look different in the future.
 
-Being that this a working document that may be subjected to both deprecation and updates, we keep `xxx` comments to indicate placeholders for warnings and to-do's that need further work. 
+Being that this a working document that may be subjected to both deprecation and updates, we keep `xxx` comments to indicate placeholders for warnings and to-do's that need further work.
 
 ## Introduction
 
@@ -38,7 +38,7 @@ The following article will describe how the split machinery works in the row dom
 
 Beforehand, we encourage the reader to familiarize themselves with the Debugging in `rtables`(xxx link here) article from the `rtables` Developers Guide. This document is generally valid for R programming, but has been tailored to study and understand complex packages that rely heavily on S3 and S4 object programming like `rtables`.
 
-Here, we explore and study the split machinery with a growing amount of complexity, following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works. 
+Here, we explore and study the split machinery with a growing amount of complexity, following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works.
 
 In practice, the majority of the split engine resides in the source file `R/split_funs.R`, with occasional incursion into `R/make_split_fun.R` for custom split function creation and rarer references to other more general tabulation files.
 
@@ -133,11 +133,11 @@ We will see where and how input parameters are used. The most important paramete
 
 ### Checks and Classes
 
-We will start by looking at the first function called from `do_split`. This will give us a good overview of how the split itself is defined. This function is, of course, the check function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe the split-class hierarchy step-by-step, but we invite the reader to explore this further on their own as well. 
+We will start by looking at the first function called from `do_split`. This will give us a good overview of how the split itself is defined. This function is, of course, the check function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe the split-class hierarchy step-by-step, but we invite the reader to explore this further on their own as well.
 
-Let's first search the package for `check_validsplit`. You will find that it is defined as a generic in `R/split_funs.R`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is by using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (by convention virtual classes start with "V") defines the main parent of the analysis split which we discuss in detail in the related vignette `vignette()` (xxx). From this, we can see that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, the main `R/tt_dotabulation.R` source file. This is again something related to making "analyze" rows as it mainly checks for `VAnalyzeSplit` (link to tabulation dev guide xxx). We will discuss the other classes as they appear in our examples (link to class hierarchy xxx). 
+Let's first search the package for `check_validsplit`. You will find that it is defined as a generic in `R/split_funs.R`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is by using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (by convention virtual classes start with "V") defines the main parent of the analysis split which we discuss in detail in the related vignette `vignette()` (xxx). From this, we can see that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, the main `R/tt_dotabulation.R` source file. This is again something related to making "analyze" rows as it mainly checks for `VAnalyzeSplit` (link to tabulation dev guide xxx). We will discuss the other classes as they appear in our examples (link to class hierarchy xxx).
 
-For the moment, we see with `class(spl)` (from the main `do_split` function) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we produce the following: 
+For the moment, we see with `class(spl)` (from the main `do_split` function) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we produce the following:
 
 ```
 # rtables 0.6.2
@@ -495,7 +495,7 @@ slots_vls[!(names(slots_vls) %in% names(slots_cs))]
 
 Remember to always check the constructor and class definition in `R/00tabletrees.R` if exploratory tools do not suffice. Now, `check_validsplit(spl, df)` will use a different method than before (`getMethod("check_validsplit", "VarLevelSplit")`). It uses the internal utility function `.checkvarsok` to check if `vars`, i.e. the `payload`, is actually present in `names(df)`.
 
-The next relevant function will be `.apply_split_inner`, and we will exactly what changes using `debugonce(.apply_split_inner)`. Of course, this function is called directly as no custom split function is provided. Since parameter `vals` is not specified (`NULL`), the split values are retrieved from `df` by using the split payload to select specific columns (`varvec <- df[[spl_payload(spl)]]`). Whenever no split values are specified they are retrieved from the selected column as unique values (`character`) or levels (`factor`). 
+The next relevant function will be `.apply_split_inner`, and we will exactly what changes using `debugonce(.apply_split_inner)`. Of course, this function is called directly as no custom split function is provided. Since parameter `vals` is not specified (`NULL`), the split values are retrieved from `df` by using the split payload to select specific columns (`varvec <- df[[spl_payload(spl)]]`). Whenever no split values are specified they are retrieved from the selected column as unique values (`character`) or levels (`factor`).
 
 Next, `.applysplit_datapart` creates a named list of facets or data subsets. In this case, the result is actually a mutually exclusive partition of the data. This is because we did not specify any split values and as such the column content was retrieved via `unique` (in case of a character vector) or `levels` (in case of factors). `.applysplit_partlabels` is a bit less linear as it has to take into account the possibility of having specified labels in the payload. Instead of looking at the function source code with `getMethod(".applysplit_partlabels", "VarLevelSplit")`, we can enter the `S4` generic function in debugging mode as follows:
 
@@ -694,7 +694,7 @@ simple_table(DM, f_brakes_if(split_col = "STRATA1")) # works!
 # occurred at path: root
 ```
 
-Now we will take a moment to dwell on the machinery included in `rtables` to create custom split functions. Before doing so, please read the relevant documentation at `?make_split_fun`. Most of the pre-made split functions included in `rtables` are or will be written with `make_split_fun` as it is a more stable constructor for such functions than was previously used. We invite the reader to take a look at `make_split_fun.R`. The majority of the functions here should be understandable with the knowledge you have gained from this guide so far. It is important to note that if no core split function is specified, which is commonly the case, `make_split_fun` calls `do_base_split` directly, which is a minimal wrapper of the well-known `do_split`. `drop_facet_levels`, for example, is a pre-processing function that at its core simply removes empty factor levels from the split "column", thus avoiding showing empty lines. 
+Now we will take a moment to dwell on the machinery included in `rtables` to create custom split functions. Before doing so, please read the relevant documentation at `?make_split_fun`. Most of the pre-made split functions included in `rtables` are or will be written with `make_split_fun` as it is a more stable constructor for such functions than was previously used. We invite the reader to take a look at `make_split_fun.R`. The majority of the functions here should be understandable with the knowledge you have gained from this guide so far. It is important to note that if no core split function is specified, which is commonly the case, `make_split_fun` calls `do_base_split` directly, which is a minimal wrapper of the well-known `do_split`. `drop_facet_levels`, for example, is a pre-processing function that at its core simply removes empty factor levels from the split "column", thus avoiding showing empty lines.
 
 It is also possible to provide a list of functions, as it can be seen in the examples of `?make_split_fun`. Note that pre- and post-processing requires a list as input to support the possibility of combining multiple functions. In contrast, the core splitting function must be a single function call as it is not expected to have stacked features. This rarely needs to be modified and the majority of the included split functions work with pre- or post-processing. Included post-processing functions are interesting as they interact with the split object, e.g. by reordering the facets or by adding an overall facet (`add_overall_facet`). The attentive reader will have noticed that the core function relies on `do_split` and many of the post-processing functions rely on `make_split_result`, which is the best way to get the correct split return structure. Note that modifying the core split only works in the row space at the moment.
 

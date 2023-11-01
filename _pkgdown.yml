@@ -15,11 +15,11 @@ navbar:
       text: Developer Guide
       menu:
         - text: Split Machinery
-          href: ../inst/dev-guide/dg_split_machinery.html
+          href: dev-guide/dg_split_machinery.html
         - text: Tabulation
-          href: ../inst/dev-guide/dg_tabulation.html
+          href: dev-guide/dg_tabulation.html
         - text: Debugging in {rtables} and Beyond
-          href: ../inst/dev-guide/dg_debug_rtables.html
+          href: dev-guide/dg_debug_rtables.html
 
 articles:
   - title: Getting Started
@@ -27,7 +27,7 @@ articles:
     contents:
     - introduction
     - exploratory_analysis
-    
+
   - title: Clinical Trials
     navbar: Clinical Trials
     contents:
@@ -40,19 +40,19 @@ articles:
     - custom_appearance
     - title_footer
     - sorting_pruning
-    
+
   - title: \{rtables\} Concepts
     contents:
     - subsetting_tables
     - split_functions
     - format_precedence
-    - tabulation_concepts  
+    - tabulation_concepts
 
   - title: Advanced Usage
     contents:
     - advanced_usage
     - example_analysis_coxreg
-    
+
   - title: Other
     contents:
     - manual_table_construction
@@ -67,7 +67,7 @@ reference:
     - compat_args
     - gen_args
     - sf_args
-    
+
   - title: Layout and Tabulation
     desc: Functions for declaring layout and tabulation
     contents:
@@ -83,7 +83,7 @@ reference:
     - split_cols_by_multivar
     - split_rows_by_multivar
     - analyze_colvars
-    - split_cols_by_cuts 
+    - split_cols_by_cuts
     - add_overall_col
     - add_existing_table
     - formatters::table_inset
@@ -99,7 +99,7 @@ reference:
     - spl_context
     - spl_context_to_disp_path
     - counts_wpcts
-    
+
   - title: Split Functions
     contents:
     - add_overall_level
@@ -128,7 +128,7 @@ reference:
     contents:
     - format_rcell
     - value_formats
-     
+
   - title: Table Structure Information
     contents:
     - dim,VTableNodeInfo-method
@@ -160,7 +160,7 @@ reference:
     - validate_table_struct
     - sanitize_table_struct
     - find_degen_struct
-    
+
   - title: Sorting and Pruning
     contents:
     - prune_table
@@ -169,9 +169,9 @@ reference:
     - trim_rows
     - sort_at_path
     - cont_n_allcols
-    
+
   - title: Compatibility Layer
-    desc: These functions provide some backwards compatibility to the previous 
+    desc: These functions provide some backwards compatibility to the previous
           (pre 2021) `rtables` framework.
     contents:
     - rtable
@@ -182,8 +182,8 @@ reference:
     - rrowl
     - indent
     - df_to_tt
-    
-    
+
+
   - title: Output Functions
     desc: These functions create ascii or html representations of the table
     contents:

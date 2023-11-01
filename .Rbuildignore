@@ -26,3 +26,4 @@
 ^staged_dependencies\.yaml$
 ^temp$
 ~$
+^vignettes/dev-guide$
