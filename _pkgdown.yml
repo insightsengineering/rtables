@@ -21,6 +21,8 @@ navbar:
           href: articles/dev-guide/dg_split_machinery.html
         - text: Tabulation
           href: articles/dev-guide/dg_tabulation.html
+        - text: Table Hierarchy
+          href: articles/dev-guide/dg_table_hierarchy.html        
         - text: Debugging in {rtables} and Beyond
           href: articles/dev-guide/dg_debug_rtables.html
 
@@ -77,21 +79,16 @@ articles:
     contents:
     - manual_table_construction
     - tabulation_dplyr
+    
+  - title: Developer Guide
+    desc: Articles intended for developer use only.
     # *REF1* Dev Guide items
-    - 'dev-guide/dg_split_machinery'
-    - 'dev-guide/dg_tabulation'
-    - 'dev-guide/dg_debug_rtables'
+    - dev-guide/dg_split_machinery
+    - dev-guide/dg_tabulation
+    - dev-guide/dg_table_hierarchy
+    - dev-guide/dg_debug_rtables
 
 reference:
-<<<<<<< HEAD
-
-  - title: For Developers
-    desc: Vignettes aimed at package developers
-    contents:
-    - dg_table_hierarchy
-    
-=======
->>>>>>> main
   - title: Argument Conventions
     desc: The following dummy functions are unexported and used to document argument conventions in the framework.
     contents:

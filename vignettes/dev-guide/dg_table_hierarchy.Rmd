@@ -2,25 +2,22 @@
 title: "Table Hierarchy"
 author: "Abinaya Yogasekaram"
 date: "`r Sys.Date()`"
-output:
-  html_document:
-    theme: spacelab
-    toc: true
-    toc_float:
-      collapsed: false
+output: html_document
 editor_options: 
   chunk_output_type: console
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = ".")})
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Disclaimer
+## Disclaimer
 
-This vignette is currently under development.
+This article is intended for use by developers only and will contain low-level explanations of the topics covered. For user-friendly vignettes, please see the [Articles](https://insightsengineering.github.io/rtables/main/articles/index.html) page on the `rtables` website.
+
+Any code or prose which appears in the version of this article on the `main` branch of the repository may reflect a specific state of things that can be more or less recent. This guide describes very important aspects of table hierarchy that are unlikely to change. Regardless, we invite the reader to keep in mind that the current repository code may have drifted from the following material in this document, and it is always the best practice to read the code directly on `main`.
+
+Please keep in mind that `rtables` is still under active development, and it has seen the efforts of multiple contributors across different years. Therefore, there may be legacy mechanisms and ongoing transformations that could look different in the future.
 
 ## Introduction
 
