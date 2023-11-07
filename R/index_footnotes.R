@@ -118,7 +118,7 @@ update_ref_indexing <- function(tt) {
   }
 
   for (i in seq_len(nrow(rdf))) {
-    path <- rdf$path[[i]]
+    path <- unname(rdf$path[[i]])
     tt_at_path(tt, path) <-
       .idx_helper(
         tt_at_path(tt, path),
