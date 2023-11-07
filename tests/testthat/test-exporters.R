@@ -246,6 +246,18 @@ test_that("as_html Viewer with newline test", {
   options(oldo)
 })
 
+test_that("as_html does not trim whitespace", {
+  tbl <- rtable(
+    header = LETTERS[1:3],
+    format = "xx",
+    rrow("  r1", 1, 2, 3),
+    rrow(" r 2  ", 4, 3, 2, indent = 1),
+    rrow("r3   ", indent = 2)
+  )
+  html_tbl <- as_html(tbl)
+  html_parts <- html_tbl$children[[1]][[1]]$children
+  expect_true(all(sapply(1:4, function(x) html_parts[[x]]$attribs$style == "white-space:pre;")))
+})
 
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
