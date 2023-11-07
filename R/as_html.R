@@ -147,6 +147,7 @@ as_html <- function(x,
   rows <- apply(cells, 1, function(row) {
     tags$tr(
       class = class_tr,
+      style = "white-space:pre;",
       Filter(function(x) !identical(x, NA_integer_), row)
     )
   })
