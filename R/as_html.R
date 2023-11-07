@@ -152,12 +152,14 @@ as_html <- function(x,
     )
   })
 
+  hsep_line <- tags$hr(class = "solid")
+
   hdrtag <- div_helper(
     class = "rtables-titles-block",
     list(
       div_helper(
         class = "rtables-main-titles-block",
-        lapply(main_title(x), tags$p,
+        lapply(main_title(x), tags$b,
           class = "rtables-main-title"
         )
       ),
@@ -179,7 +181,7 @@ as_html <- function(x,
         class = class_table,
         tags$caption(sprintf("(\\#tag:%s)", link_label),
           style = "caption-side:top;",
-          .noWS = "after-begin", hdrtag
+          .noWS = "after-begin"
         )
       )
     )
@@ -210,10 +212,13 @@ as_html <- function(x,
   ## we want them to be there but empty??
   ftrlst <- list(
     if (length(mat$ref_footnotes) > 0) rfnotes,
+    if (length(mat$ref_footnotes) > 0) hsep_line,
     if (length(main_footer(x)) > 0) mftr,
+    if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(),
     if (length(prov_footer(x)) > 0) pftr
   )
 
+  if (length(ftrlst) > 0) ftrlst <- c(list(hsep_line), ftrlst)
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
 
   ftrtag <- div_helper(
@@ -223,7 +228,8 @@ as_html <- function(x,
 
   div_helper(
     class = "rtables-all-parts-block",
-    list( # hdrtag,
+    list(
+      hdrtag,
       tabletag,
       ftrtag
     )
