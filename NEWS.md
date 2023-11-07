@@ -4,6 +4,8 @@
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+ * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
+ * Whitespace is not trimmed when rendering tables with `as_html`.
 
 ## rtables 0.6.5
 ### New Features
@@ -16,9 +18,6 @@
 
 ### Miscellaneous
  * Added slide decks for advanced training as internal files.
-
-### Miscellaneous
-* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
 
 ## rtables 0.6.4
 ### New Features
