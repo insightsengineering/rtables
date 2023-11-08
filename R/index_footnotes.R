@@ -101,11 +101,10 @@ update_ref_indexing <- function(tt) {
   #   curind
   # }
   
-  browser()
-  rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
-  row_fnotes <- unlist(lapply(rows, row_footnotes))
-  cell_fnotes <- unlist(lapply(rows, cell_footnotes))
-  unique_fnotes <- unique(sapply(c(row_fnotes, cell_fnotes), ref_msg))
+  row_fnotes <- row_footnotes(tt)
+  cell_fnotes <- cell_footnotes(tt)
+  all_fns <- unlist(t(cbind(row_fnotes, cell_fnotes)))
+  unique_fnotes <- unique(sapply(all_fns, ref_msg))
   
   cur_index_new <- function(ref_fn) {
     match(ref_msg(ref_fn), unique_fnotes)
