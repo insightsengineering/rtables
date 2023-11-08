@@ -11,7 +11,8 @@ as_html(
   class_tr = NULL,
   class_td = NULL,
   class_th = NULL,
-  link_label = NULL
+  link_label = NULL,
+  bold_main_title = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ as_html(
 \item{class_th}{class for \code{th} tag}
 
 \item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
+
+\item{bold_main_title}{whether the main title should be in bold. Defaults to \code{FALSE}.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.

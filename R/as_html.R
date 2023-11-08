@@ -30,6 +30,7 @@ div_helper <- function(lst, class) {
 #' @param class_th class for `th` tag
 #' @param width width
 #' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
+#' @param bold_main_title whether the main title should be in bold. Defaults to `FALSE`.
 #'
 #' @return A \code{shiny.tag} object representing \code{x} in HTML.
 #'
@@ -61,7 +62,8 @@ as_html <- function(x,
                     class_tr = NULL,
                     class_td = NULL,
                     class_th = NULL,
-                    link_label = NULL) {
+                    link_label = NULL,
+                    bold_main_title = FALSE) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -159,7 +161,7 @@ as_html <- function(x,
     list(
       div_helper(
         class = "rtables-main-titles-block",
-        lapply(main_title(x), tags$b,
+        lapply(main_title(x), if (bold_main_title) tags$b else tags$p,
           class = "rtables-main-title"
         )
       ),
