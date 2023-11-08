@@ -95,7 +95,7 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
-  col_fnotes <- c(list(row_lbls = list()), lapply(tree_children(coltree(tt)), col_fnotes_here))
+  col_fnotes <- c(list(row_fnotes = list()), col_fnotes_here(tt))
   row_fnotes <- row_footnotes(tt)
   cell_fnotes <- cell_footnotes(tt)
   all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))
