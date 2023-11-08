@@ -9,7 +9,7 @@
     ## to begin with
     idx <- ref_index(refi)
     if (is.na(idx) || !is.na(as.integer(idx))) {
-      ref_index(refi) <- cur_idx_fun()
+      ref_index(refi) <- cur_idx_fun(refi)
     }
     refi
   })
@@ -95,13 +95,24 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
-  curind <- 0L
-  cur_index <- function() {
-    curind <<- curind + 1L
-    curind
+  # curind <- 0L
+  # cur_index <- function() {
+  #   curind <<- curind + 1L
+  #   curind
+  # }
+  
+  browser()
+  rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = TRUE)
+  row_fnotes <- unlist(lapply(rows, row_footnotes))
+  cell_fnotes <- unlist(lapply(rows, cell_footnotes))
+  unique_fnotes <- unique(sapply(c(row_fnotes, cell_fnotes), ref_msg))
+  
+  cur_index_new <- function(ref_fn) {
+    match(ref_msg(ref_fn), unique_fnotes)
   }
+  
   if (ncol(tt) > 0) {
-    tt <- index_col_refs(tt, cur_index)
+    tt <- index_col_refs(tt, cur_index_new)
   } ## col_info(tt) <- index_col_refs(col_info(tt), cur_index)
   ## TODO when column refs are a thing we will
   ## still need to do those here before returning!!!
@@ -122,7 +133,7 @@ update_ref_indexing <- function(tt) {
     tt_at_path(tt, path) <-
       .idx_helper(
         tt_at_path(tt, path),
-        cur_index
+        cur_index_new
       )
   }
   tt
