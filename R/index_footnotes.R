@@ -96,23 +96,18 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' @export
 update_ref_indexing <- function(tt) {
   col_fnotes <- c(list(row_lbls = list()), lapply(tree_children(coltree(tt)), col_fnotes_here))
-  # cur_index <- function() {
-  #   curind <<- curind + 1L
-  #   curind
-  # }
-  
   row_fnotes <- row_footnotes(tt)
   cell_fnotes <- cell_footnotes(tt)
   all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))
   all_fns <- unlist(t(all_fns))
   unique_fnotes <- unique(sapply(all_fns, ref_msg))
   
-  cur_index_new <- function(ref_fn) {
+  cur_index <- function(ref_fn) {
     match(ref_msg(ref_fn), unique_fnotes)
   }
   
   if (ncol(tt) > 0) {
-    tt <- index_col_refs(tt, cur_index_new)
+    tt <- index_col_refs(tt, cur_index)
   } ## col_info(tt) <- index_col_refs(col_info(tt), cur_index)
   ## TODO when column refs are a thing we will
   ## still need to do those here before returning!!!
@@ -133,7 +128,7 @@ update_ref_indexing <- function(tt) {
     tt_at_path(tt, path) <-
       .idx_helper(
         tt_at_path(tt, path),
-        cur_index_new
+        cur_index
       )
   }
   tt
