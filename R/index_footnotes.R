@@ -95,7 +95,7 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
-  # curind <- 0L
+  col_fnotes <- c(list(row_lbls = list()), lapply(tree_children(coltree(tt)), col_fnotes_here))
   # cur_index <- function() {
   #   curind <<- curind + 1L
   #   curind
@@ -103,7 +103,8 @@ update_ref_indexing <- function(tt) {
   
   row_fnotes <- row_footnotes(tt)
   cell_fnotes <- cell_footnotes(tt)
-  all_fns <- unlist(t(cbind(row_fnotes, cell_fnotes)))
+  all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))
+  all_fns <- unlist(t(all_fns))
   unique_fnotes <- unique(sapply(all_fns, ref_msg))
   
   cur_index_new <- function(ref_fn) {
