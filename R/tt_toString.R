@@ -299,6 +299,32 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
+
+    # xxx \n in page titles are not working atm (I think)
+    # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
+    ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
+    pag_titles <- page_titles(obj)   
+    
+    ## consolidate ref footnotes
+    if (length(ref_fnotes) > 0) {
+      u_ref_fnotes <- unique(gsub("\\{[0-9]*\\} - ", "", ref_fnotes))
+      if (length(u_ref_fnotes) != length(ref_fnotes)) {
+        ref_fnote_gps <- lapply(u_ref_fnotes, grep, x = ref_fnotes)
+        ref_fnote_gps <- setNames(
+          lapply(
+            ref_fnote_gps, 
+            function(x) paste0("\\{(", paste0(gsub("\\{([0-9]*)\\}.*", "\\1", ref_fnotes[x]), collapse = "|"), ")\\}")
+          ), 
+          paste0("\\{", seq_along(ref_fnote_gps), "\\}")
+        )
+        for (i in seq_along(ref_fnote_gps)) {
+          body <- apply(body, 1:2, function(cell) gsub(ref_fnote_gps[[i]], names(ref_fnote_gps[i]), cell))
+          ref_fnotes <- gsub(ref_fnote_gps[[i]], names(ref_fnote_gps[i]), ref_fnotes)
+        }
+        ref_fnotes <- unique(ref_fnotes)
+      }
+    }
+
     # Solve \n in titles
     if (any(grepl("\n", all_titles(obj)))) {
       if (any(grepl("\n", main_title(obj)))) {
@@ -313,11 +339,6 @@ setMethod(
     # Solve \n in footers
     main_footer(obj) <- .quick_handle_nl(main_footer(obj))
     prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
-
-    # xxx \n in page titles are not working atm (I think)
-    # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
-    ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
-    pag_titles <- page_titles(obj)
 
     MatrixPrintForm(
       strings = body,
