@@ -2904,6 +2904,20 @@ setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
   obj
 })
 
+#' @export
+#' @rdname int_methods
+setMethod(
+  "col_fnotes_here", "VTableTree",
+  function(obj) {
+    ctree <- coltree(obj)
+    cols <- tree_children(ctree)
+    while (all(sapply(cols, is, "LayoutColTree"))) {
+      cols <- lapply(cols, tree_children)
+      cols <- unlist(cols, recursive = FALSE)
+    }
+    lapply(cols, col_fnotes_here)
+  }
+)
 
 #' @export
 #' @rdname ref_fnotes

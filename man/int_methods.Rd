@@ -319,6 +319,7 @@
 \alias{col_fnotes_here,LayoutColLeaf-method}
 \alias{col_fnotes_here<-,LayoutColTree-method}
 \alias{col_fnotes_here<-,LayoutColLeaf-method}
+\alias{col_fnotes_here,VTableTree-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
 \alias{ref_symbol,RefFootnote-method}
@@ -1030,6 +1031,8 @@ spl_varnames(object) <- value
 \S4method{col_fnotes_here}{LayoutColTree}(obj) <- value
 
 \S4method{col_fnotes_here}{LayoutColLeaf}(obj) <- value
+
+\S4method{col_fnotes_here}{VTableTree}(obj)
 
 \S4method{ref_index}{RefFootnote}(obj)
 
