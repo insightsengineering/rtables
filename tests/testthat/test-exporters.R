@@ -255,7 +255,7 @@ test_that("as_html does not trim whitespace", {
     rrow("r3   ", indent = 2)
   )
   html_tbl <- as_html(tbl)
-  html_parts <- html_tbl$children[[1]][[1]]$children
+  html_parts <- html_tbl$children[[1]][[2]]$children
   expect_true(all(sapply(1:4, function(x) html_parts[[x]]$attribs$style == "white-space:pre;")))
 })
 
