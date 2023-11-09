@@ -1,6 +1,7 @@
 ## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Added `bold` argument to `as_html` to bold specified elements in rendered HTML output.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
