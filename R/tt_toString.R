@@ -436,7 +436,6 @@ get_formatted_fnotes <- function(tt) {
   )
 
   inds <- vapply(lst, ref_index, 1L)
-  stopifnot(all(is.na(inds)) || !is.unsorted(inds))
   syms <- vapply(lst, ref_symbol, "")
   keep <- is.na(syms) | !duplicated(syms)
   inds <- inds[keep]

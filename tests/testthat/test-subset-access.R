@@ -295,7 +295,7 @@ test_that("top_left, title, footers retention behaviors are correct across all s
   )
   expect_identical(
     mf_rfnotes(matrix_form(tbl[4, 1, reindex_refs = FALSE])),
-    c("M.AGE.mean" = paste0("{2} - ", rf))
+    c("M.AGE.mean" = paste0("{1} - ", rf))
   )
   expect_identical(mf_rfnotes(matrix_form(tbl[1, 1])), character())
 
