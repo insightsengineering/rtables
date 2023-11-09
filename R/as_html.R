@@ -26,13 +26,14 @@ div_helper <- function(lst, class) {
 #' @param x `rtable` object
 #' @param class_table class for `table` tag
 #' @param class_tr class for `tr` tag
-#' @param class_td class for `td` tag
 #' @param class_th class for `th` tag
 #' @param width width
-#' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
-#' @param bold_main_title whether the main title should be in bold. Defaults to `FALSE`.
+#' @param link_label link anchor label (not including `tab:` prefix) for the table.
+#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`, 
+#'   `"header"`, `"row_labels"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows). 
+#'   Defaults to `"header"`.
 #'
-#' @return A \code{shiny.tag} object representing \code{x} in HTML.
+#' @return A `shiny.tag` object representing `x` in HTML.
 #'
 #' @examples
 #'
@@ -48,7 +49,7 @@ div_helper <- function(lst, class) {
 #'
 #' as_html(tbl, class_table = "table", class_tr = "row")
 #'
-#' as_html(tbl, class_td = "aaa")
+#' as_html(tbl)
 #'
 #' \dontrun{
 #' Viewer(tbl)
@@ -60,10 +61,9 @@ as_html <- function(x,
                     width = NULL,
                     class_table = "table table-condensed table-hover",
                     class_tr = NULL,
-                    class_td = NULL,
                     class_th = NULL,
                     link_label = NULL,
-                    bold_main_title = FALSE) {
+                    bold = c("header")) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -94,6 +94,7 @@ as_html <- function(x,
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
         class = if (j > 1 || i > nrh) paste0("text-", algn),
+        style = if (inhdr && !"header" %in% bold) "font-weight: normal;",
         colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
@@ -110,14 +111,40 @@ as_html <- function(x,
     SIMPLIFY = FALSE
   )
 
-  # indent row names
+  # row labels style
   for (i in seq_len(nrow(x))) {
     indent <- mat$row_info$indent[i]
-    if (indent > 0) {
+    if (indent > 0) { # indentation
       cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
-        style = paste0("padding-left: ", indent * 3, "ch")
+        style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
+    if ("row_labels" %in% bold) { # font weight
+      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i + nrh, 1][[1]],
+        style = paste0("font-weight: bold;")
+      )
+    }
+  }
+  
+  # label rows style
+  if ("label_rows" %in% bold) {
+    which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
+    cells[which_lbl_rows + nrh, ] <- lapply(
+      cells[which_lbl_rows + nrh, ],
+      htmltools::tagAppendAttributes,
+      style = "font-weight: bold;"
+    )
+  }
+  
+  # content rows style
+  if ("content_rows" %in% bold) {
+    which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
+    cells[which_cntnt_rows + nrh, ] <- lapply(
+      cells[which_cntnt_rows + nrh, ],
+      htmltools::tagAppendAttributes,
+      style = "font-weight: bold;"
+    )
   }
 
   if (any(!mat$display)) {
@@ -161,13 +188,13 @@ as_html <- function(x,
     list(
       div_helper(
         class = "rtables-main-titles-block",
-        lapply(main_title(x), if (bold_main_title) tags$b else tags$p,
+        lapply(main_title(x), if ("main_title" %in% bold) tags$b else tags$p,
           class = "rtables-main-title"
         )
       ),
       div_helper(
         class = "rtables-subtitles-block",
-        lapply(subtitles(x), tags$p,
+        lapply(subtitles(x), if ("subtitles" %in% bold) tags$b else tags$p,
           class = "rtables-subtitle"
         )
       )
@@ -216,11 +243,11 @@ as_html <- function(x,
     if (length(mat$ref_footnotes) > 0) rfnotes,
     if (length(mat$ref_footnotes) > 0) hsep_line,
     if (length(main_footer(x)) > 0) mftr,
-    if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(),
+    if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(), # line break
     if (length(prov_footer(x)) > 0) pftr
   )
 
-  if (length(ftrlst) > 0) ftrlst <- c(list(hsep_line), ftrlst)
+  if (!is.null(unlist(ftrlst))) ftrlst <- c(list(hsep_line), ftrlst)
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
 
   ftrtag <- div_helper(

@@ -9,10 +9,9 @@ as_html(
   width = NULL,
   class_table = "table table-condensed table-hover",
   class_tr = NULL,
-  class_td = NULL,
   class_th = NULL,
   link_label = NULL,
-  bold_main_title = FALSE
+  bold = c("header")
 )
 }
 \arguments{
@@ -24,13 +23,13 @@ as_html(
 
 \item{class_tr}{class for \code{tr} tag}
 
-\item{class_td}{class for \code{td} tag}
-
 \item{class_th}{class for \code{th} tag}
 
-\item{link_label}{link anchor label (not including \code{tab:} prefix) for the table.}
+\item{link_label}{link anchor label (not including \verb{tab:} prefix) for the table.}
 
-\item{bold_main_title}{whether the main title should be in bold. Defaults to \code{FALSE}.}
+\item{bold}{elements in table output that should be bold. Options are \code{"main_title"}, \code{"subtitles"},
+\code{"header"}, \code{"row_labels"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label rows).
+Defaults to \code{"header"}.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
@@ -52,7 +51,7 @@ as_html(tbl)
 
 as_html(tbl, class_table = "table", class_tr = "row")
 
-as_html(tbl, class_td = "aaa")
+as_html(tbl)
 
 \dontrun{
 Viewer(tbl)
