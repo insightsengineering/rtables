@@ -1,6 +1,7 @@
 ## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Duplicate referential footnotes are consolidated when tables are rendered.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
