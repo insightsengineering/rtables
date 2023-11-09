@@ -29,8 +29,8 @@ div_helper <- function(lst, class) {
 #' @param class_th class for `th` tag
 #' @param width width
 #' @param link_label link anchor label (not including `tab:` prefix) for the table.
-#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`, 
-#'   `"header"`, `"row_labels"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows). 
+#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
+#'   `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows).
 #'   Defaults to `"header"`.
 #' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
 #'
@@ -50,7 +50,7 @@ div_helper <- function(lst, class) {
 #'
 #' as_html(tbl, class_table = "table", class_tr = "row")
 #'
-#' as_html(tbl, bold = c("header", "row_labels"))
+#' as_html(tbl, bold = c("header", "row_names"))
 #'
 #' \dontrun{
 #' Viewer(tbl)
@@ -107,13 +107,13 @@ as_html <- function(x,
   ## special casing hax for top_left. We probably want to do this better someday
   cells[1:nrh, 1] <- mapply(
     FUN = function(x, algn) {
-      tags$th(x, class = class_th, style = "white-space:pre;")
+      tags$th(x, class = class_th, style = "white-space: pre;")
     },
     x = mat$strings[1:nrh, 1],
     algn = mat$aligns[1:nrh, 1],
     SIMPLIFY = FALSE
   )
-  
+
   if (header_sep_line) {
     cells[nrh][[1]] <- htmltools::tagAppendAttributes(
       cells[nrh, 1][[1]],
@@ -129,14 +129,14 @@ as_html <- function(x,
         style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
-    if ("row_labels" %in% bold) { # font weight
+    if ("row_names" %in% bold) { # font weight
       cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(
         cells[i + nrh, 1][[1]],
         style = paste0("font-weight: bold;")
       )
     }
   }
-  
+
   # label rows style
   if ("label_rows" %in% bold) {
     which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
@@ -146,7 +146,7 @@ as_html <- function(x,
       style = "font-weight: bold;"
     )
   }
-  
+
   # content rows style
   if ("content_rows" %in% bold) {
     which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))

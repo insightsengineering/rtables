@@ -29,7 +29,7 @@ as_html(
 \item{link_label}{link anchor label (not including \verb{tab:} prefix) for the table.}
 
 \item{bold}{elements in table output that should be bold. Options are \code{"main_title"}, \code{"subtitles"},
-\code{"header"}, \code{"row_labels"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label rows).
+\code{"header"}, \code{"row_names"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label rows).
 Defaults to \code{"header"}.}
 
 \item{header_sep_line}{whether a black line should be printed to under the table header. Defaults to \code{TRUE}.}
@@ -54,7 +54,7 @@ as_html(tbl)
 
 as_html(tbl, class_table = "table", class_tr = "row")
 
-as_html(tbl, bold = c("header", "row_labels"))
+as_html(tbl, bold = c("header", "row_names"))
 
 \dontrun{
 Viewer(tbl)
