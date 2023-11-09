@@ -2915,7 +2915,10 @@ setMethod(
       cols <- lapply(cols, tree_children)
       cols <- unlist(cols, recursive = FALSE)
     }
-    lapply(cols, col_fnotes_here)
+    all_col_fnotes <- lapply(cols, col_fnotes_here)
+    if (is.null(unlist(all_col_fnotes))) return(NULL)
+    
+    return(all_col_fnotes)
   }
 )
 
