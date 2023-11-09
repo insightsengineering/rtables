@@ -11,7 +11,8 @@ as_html(
   class_tr = NULL,
   class_th = NULL,
   link_label = NULL,
-  bold = c("header")
+  bold = c("header"),
+  header_sep_line = TRUE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ as_html(
 \item{bold}{elements in table output that should be bold. Options are \code{"main_title"}, \code{"subtitles"},
 \code{"header"}, \code{"row_labels"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label rows).
 Defaults to \code{"header"}.}
+
+\item{header_sep_line}{whether a black line should be printed to under the table header. Defaults to \code{TRUE}.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
@@ -51,7 +54,7 @@ as_html(tbl)
 
 as_html(tbl, class_table = "table", class_tr = "row")
 
-as_html(tbl)
+as_html(tbl, bold = c("header", "row_labels"))
 
 \dontrun{
 Viewer(tbl)

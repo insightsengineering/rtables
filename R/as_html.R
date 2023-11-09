@@ -32,6 +32,7 @@ div_helper <- function(lst, class) {
 #' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`, 
 #'   `"header"`, `"row_labels"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows). 
 #'   Defaults to `"header"`.
+#' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
@@ -49,7 +50,7 @@ div_helper <- function(lst, class) {
 #'
 #' as_html(tbl, class_table = "table", class_tr = "row")
 #'
-#' as_html(tbl)
+#' as_html(tbl, bold = c("header", "row_labels"))
 #'
 #' \dontrun{
 #' Viewer(tbl)
@@ -63,7 +64,8 @@ as_html <- function(x,
                     class_tr = NULL,
                     class_th = NULL,
                     link_label = NULL,
-                    bold = c("header")) {
+                    bold = c("header"),
+                    header_sep_line = TRUE) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -95,6 +97,7 @@ as_html <- function(x,
         class = if (inhdr) class_th else class_tr,
         class = if (j > 1 || i > nrh) paste0("text-", algn),
         style = if (inhdr && !"header" %in% bold) "font-weight: normal;",
+        style = if (i == nrh && header_sep_line) "border-bottom: 1px solid black;",
         colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
@@ -110,6 +113,13 @@ as_html <- function(x,
     algn = mat$aligns[1:nrh, 1],
     SIMPLIFY = FALSE
   )
+  
+  if (header_sep_line) {
+    cells[nrh][[1]] <- htmltools::tagAppendAttributes(
+      cells[nrh, 1][[1]],
+      style = "border-bottom: 1px solid black;"
+    )
+  }
 
   # row labels style
   for (i in seq_len(nrow(x))) {
@@ -176,7 +186,7 @@ as_html <- function(x,
   rows <- apply(cells, 1, function(row) {
     tags$tr(
       class = class_tr,
-      style = "white-space:pre;",
+      style = "white-space: pre;",
       Filter(function(x) !identical(x, NA_integer_), row)
     )
   })
@@ -209,7 +219,7 @@ as_html <- function(x,
       list(
         class = class_table,
         tags$caption(sprintf("(\\#tag:%s)", link_label),
-          style = "caption-side:top;",
+          style = "caption-side: top;",
           .noWS = "after-begin"
         )
       )
