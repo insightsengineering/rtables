@@ -529,6 +529,11 @@ test_that("Pagination works with referential footnotes", {
     colpath = c("ARM", "C: Combination", "SEX", "M")
   ) <- "2 Cell footnote"
   fnotes_at_path(tt, rowpath = c("STRATA1", "A", "RACE", "ASIAN")) <- "1 Row footnote"
+  fnotes_at_path(
+    tt, 
+    rowpath = c("STRATA1", "B", "RACE", "WHITE", "AGE", "mean (sd)"), 
+    colpath = c("ARM", "B: Placebo", "SEX", "F")
+  ) <- "2 Cell footnote"
 
   main_title(tt) <- "title with a\nnewline"
   main_footer(tt) <- "wrapped footer with\nnewline"
