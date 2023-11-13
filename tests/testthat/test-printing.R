@@ -681,3 +681,23 @@ test_that("Support for newline characters in all the parts", {
   out <- strsplit(export_as_txt(tt_for_nl, file = NULL, hsep = "-"), "\\n")[[1]]
   expect_identical(out, expected)
 })
+
+test_that("Separators and wrapping work together", {
+    ## formatters issue #221
+    df <- data.frame(cat = c( "really long thing its so long",
+                             "reasonable thing",
+                             "short"),
+                     value = c(6, 3, 10))
+    
+    lyt <- basic_table() %>%
+        split_rows_by("cat", section_div = " ") %>%
+        analyze("value")
+    
+    tbl <- build_table(lyt, df)
+    
+    expect_silent(toString(tbl))
+    
+    cw <- propose_column_widths(tbl)
+    cw[1] <- 11
+    expect_silent(toString(tbl, widths = cw))
+})
