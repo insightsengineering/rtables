@@ -63,8 +63,8 @@ index_col_refs <- function(tt, cur_idx_fun) {
 
 
 .index_col_refs_inner <- function(ctree, cur_idx_fun) {
-  col_fnotes_here(ctree) <- .reindex_one_pos(
-    col_fnotes_here(ctree),
+  col_footnotes(ctree) <- .reindex_one_pos(
+    col_footnotes(ctree),
     cur_idx_fun
   )
 
@@ -75,9 +75,9 @@ index_col_refs <- function(tt, cur_idx_fun) {
     )
   }
   ctree
-  ## cfs <- col_fnotes_here(ctree)
+  ## cfs <- col_footnotes(ctree)
   ## if(length(unlist(cfs)) > 0) {
-  ##     col_fnotes_here(ctree) <- .reindex_one_pos(lapply(cfs,
+  ##     col_footnotes(ctree) <- .reindex_one_pos(lapply(cfs,
   ##                                      function(refs) lapply(refs, function(refi) {
 }
 
@@ -95,7 +95,7 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
-  col_fnotes <- c(list(row_fnotes = list()), col_fnotes_here(tt))
+  col_fnotes <- c(list(row_fnotes = list()), col_footnotes(tt))
   row_fnotes <- row_footnotes(tt)
   cell_fnotes <- cell_footnotes(tt)
   all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))

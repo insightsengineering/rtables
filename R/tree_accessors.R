@@ -2877,29 +2877,49 @@ setMethod("cell_footnotes<-", "ContentRow",
   definition = .cfn_set_helper
 )
 
+# Deprecated methods
 #' @export
 #' @rdname ref_fnotes
 setGeneric("col_fnotes_here", function(obj) standardGeneric("col_fnotes_here"))
 #' @export
-#' @rdname int_methods
-setMethod("col_fnotes_here", c("LayoutColTree"), function(obj) obj@col_footnotes)
-#' @export
-#' @rdname int_methods
-setMethod("col_fnotes_here", c("LayoutColLeaf"), function(obj) obj@col_footnotes)
-
+#' @rdname ref_fnotes
+setMethod("col_fnotes_here", "ANY", function(obj) {
+  warning("col_fnotes_here is deprecated since {rtables} version 0.6.5.9011. Please use col_footnotes instead.")
+  col_footnotes(obj)
+})
 #' @export
 #' @rdname ref_fnotes
 setGeneric("col_fnotes_here<-", function(obj, value) standardGeneric("col_fnotes_here<-"))
 #' @export
 #' @rdname int_methods
-setMethod("col_fnotes_here<-", "LayoutColTree", function(obj, value) {
+setMethod("col_fnotes_here<-", "ANY", function(obj, value) {
+  warning("col_fnotes_here<- is deprecated since {rtables} version 0.6.5.9011. Please use col_footnotes<- instead.")
+  col_footnotes(obj) <- value
+})
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("col_footnotes", function(obj) standardGeneric("col_footnotes"))
+#' @export
+#' @rdname int_methods
+setMethod("col_footnotes", "LayoutColTree", function(obj) obj@col_footnotes)
+#' @export
+#' @rdname int_methods
+setMethod("col_footnotes", "LayoutColLeaf", function(obj) obj@col_footnotes)
+
+#' @export
+#' @rdname ref_fnotes
+setGeneric("col_footnotes<-", function(obj, value) standardGeneric("col_footnotes<-"))
+#' @export
+#' @rdname int_methods
+setMethod("col_footnotes<-", "LayoutColTree", function(obj, value) {
   obj@col_footnotes <- make_ref_value(value)
   obj
 })
 
 #' @export
 #' @rdname int_methods
-setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
+setMethod("col_footnotes<-", "LayoutColLeaf", function(obj, value) {
   obj@col_footnotes <- make_ref_value(value)
   obj
 })
@@ -2907,7 +2927,7 @@ setMethod("col_fnotes_here<-", "LayoutColLeaf", function(obj, value) {
 #' @export
 #' @rdname int_methods
 setMethod(
-  "col_fnotes_here", "VTableTree",
+  "col_footnotes", "VTableTree",
   function(obj) {
     ctree <- coltree(obj)
     cols <- tree_children(ctree)
@@ -2915,7 +2935,7 @@ setMethod(
       cols <- lapply(cols, tree_children)
       cols <- unlist(cols, recursive = FALSE)
     }
-    all_col_fnotes <- lapply(cols, col_fnotes_here)
+    all_col_fnotes <- lapply(cols, col_footnotes)
     if (is.null(unlist(all_col_fnotes))) return(NULL)
     
     return(all_col_fnotes)
