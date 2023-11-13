@@ -1,9 +1,11 @@
-## rtables 0.6.5.9003
+## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+ * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
+ * Whitespace is not trimmed when rendering tables with `as_html`.
 
 ## rtables 0.6.5
 ### New Features

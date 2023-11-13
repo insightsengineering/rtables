@@ -19,6 +19,7 @@
 ^\.pre-commit-config\.yaml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
+^pkgdown$
 ^doc$
 ^docs$
 ^logs$
@@ -26,3 +27,4 @@
 ^staged_dependencies\.yaml$
 ^temp$
 ~$
+^vignettes/dev-guide$
