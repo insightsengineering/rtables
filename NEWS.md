@@ -7,6 +7,7 @@
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
  * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
  * Whitespace is not trimmed when rendering tables with `as_html`.
+ * Started deprecation cycle for `col_fnotes_here` to be replaced with `col_footnotes`.
 
 ## rtables 0.6.5
 ### New Features
