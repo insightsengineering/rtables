@@ -207,7 +207,6 @@ setMethod(
       ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root # nolint
       path <- c(path, obj_name(tt))
     }
-
     ret <- list()
     ## note this is the **table** not the label row
     if (!visible_only) {

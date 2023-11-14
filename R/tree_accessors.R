@@ -3182,10 +3182,7 @@ setMethod(
 )
 
 
-setGeneric(
-  "spl_section_div<-",
-  function(obj, value) standardGeneric("spl_section_div<-")
-)
+setGeneric("spl_section_div<-", function(obj, value) standardGeneric("spl_section_div<-"))
 
 setMethod(
   "spl_section_div<-", "Split",

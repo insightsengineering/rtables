@@ -486,7 +486,8 @@ gen_rowvalues <- function(dfpart,
 }
 
 # Makes content table xxx renaming
-.make_ctab <- function(df, lvl, ## treepos,
+.make_ctab <- function(df, 
+                       lvl, ## treepos,
                        name,
                        label,
                        cinfo,
@@ -579,6 +580,9 @@ gen_rowvalues <- function(dfpart,
     ),
     error = function(e) e
   )
+  
+  kids <- .set_kids_section_div(kids, spl)
+  
   if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
       spl_payload(spl) %||% "colvars", "): ", kids$message,
@@ -652,15 +656,15 @@ setMethod(
   }
 )
 
-.set_kids_sect_sep <- function(lst, spl) {
+# Adding section_divisors to TableRow
+.set_kids_section_div <- function(lst, spl) {
   sect_sep <- spl_section_div(spl)
   if (!is.na(sect_sep)) {
     lst <- lapply(
       lst,
       function(k) {
-        if (is(k, "VTableTree")) {
-          trailing_sep(k) <- sect_sep
-        }
+        # only for DataRow or ContentRow anyway
+        trailing_sep(k) <- sect_sep
         k
       }
     )
@@ -686,12 +690,8 @@ setMethod(
       have_controws = have_controws,
       make_lrow = make_lrow,
       spl_context = spl_context,
-      ...,
-      section_sep = spl_section_div(spl)
+      ...
     ))
-
-
-
 
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
@@ -724,7 +724,6 @@ setMethod(
       }, k = kids, nm = labs, SIMPLIFY = FALSE)
       nms <- labs
     }
-    kids <- .set_kids_sect_sep(kids, spl)
 
     nms[is.na(nms)] <- ""
 
@@ -941,8 +940,7 @@ setMethod(
       splval = splvals,
       SIMPLIFY = FALSE
     ))
-
-    inner <- .set_kids_sect_sep(inner, spl)
+    
     ## This is where we need to build the structural tables
     ## even if they are invisible becasue their labels are not
     ## not shown.
@@ -951,7 +949,8 @@ setMethod(
       name = obj_name(spl),
       labelrow = LabelRow(
         label = obj_label(spl),
-        vis = isTRUE(vis_label(spl))
+        vis = isTRUE(vis_label(spl)),
+        trailing_section_div = spl_section_div(spl)
       ),
       cinfo = cinfo,
       iscontent = FALSE,
@@ -1108,7 +1107,6 @@ recursive_applysplit <- function(df,
     ## previously we checked if the child had an identical label
     ## but I don't think thats needed anymore.
     tlabel <- partlabel
-
     ret <- TableTree(
       cont = ctab,
       kids = kids,
