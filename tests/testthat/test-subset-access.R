@@ -287,15 +287,15 @@ test_that("top_left, title, footers retention behaviors are correct across all s
   # referential footnotes
   expect_identical(
     mf_rfnotes(matrix_form(tbl[2, 1])),
-    c("F.AGE.mean" = paste0("{1} - ", rf))
+    paste0("{1} - ", rf)
   )
   expect_identical(
     mf_rfnotes(matrix_form(tbl[4, 1])),
-    c("M.AGE.mean" = paste0("{1} - ", rf))
+    paste0("{1} - ", rf)
   )
   expect_identical(
     mf_rfnotes(matrix_form(tbl[4, 1, reindex_refs = FALSE])),
-    c("M.AGE.mean" = paste0("{1} - ", rf))
+    paste0("{1} - ", rf)
   )
   expect_identical(mf_rfnotes(matrix_form(tbl[1, 1])), character())
 

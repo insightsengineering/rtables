@@ -548,21 +548,25 @@ test_that("Pagination works with referential footnotes", {
   main_footer(tt) <- "this is an extra long table main footer and should also be wrapped"
   
   res <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
-  expect_equal(length(res), 2)
+  expect_equal(length(res), 4)
   
   ref_fn_res1 <- matrix_form(res[[1]])$ref_fnote_df
   expect_equal(ref_fn_res1$msg, "1 Row footnote")
-  expect_equal(ref_fn_res1$ref_index, "1")
+  expect_equal(ref_fn_res1$ref_index, 1)
+  expect_equal(ref_fn_res1$symbol, "1")
   
   ref_fn_res2 <- matrix_form(res[[2]])$ref_fnote_df
   expect_equal(ref_fn_res2$msg, c("1 Row footnote", "2 Cell footnote"))
-  expect_equal(ref_fn_res2$ref_index, c("1", "2"))
+  expect_equal(ref_fn_res2$ref_index, 1:2)
+  expect_equal(ref_fn_res2$symbol, c("1", "2"))
   
   ref_fn_res3 <- matrix_form(res[[3]])$ref_fnote_df
-  expect_equal(ref_fn_res3$msg, "3 Row footnote")
-  expect_equal(ref_fn_res3$ref_index, "3")
+  expect_equal(ref_fn_res3$msg, c("3 Row footnote", "2 Cell footnote"))
+  expect_equal(ref_fn_res3$ref_index, 1:2)
+  expect_equal(ref_fn_res3$symbol, c("3", "2"))
   
   ref_fn_res4 <- matrix_form(res[[4]])$ref_fnote_df
   expect_equal(ref_fn_res4$msg, "3 Row footnote")
-  expect_equal(ref_fn_res4$ref_index, "3")
+  expect_equal(ref_fn_res4$ref_index, 1)
+  expect_equal(ref_fn_res4$symbol, "3")
 })
