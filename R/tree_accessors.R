@@ -2884,7 +2884,11 @@ setGeneric("col_fnotes_here", function(obj) standardGeneric("col_fnotes_here"))
 #' @export
 #' @rdname ref_fnotes
 setMethod("col_fnotes_here", "ANY", function(obj) {
-  warning("col_fnotes_here is deprecated since {rtables} version 0.6.5.9011. Please use col_footnotes instead.")
+  .Deprecated(
+    new = "col_footnotes",
+    old = "col_fnotes_here",
+    msg = "col_fnotes_here was deprecated in {rtables} version 0.6.5.9011. Please use col_footnotes instead."
+  )
   col_footnotes(obj)
 })
 #' @export
@@ -2893,16 +2897,22 @@ setGeneric("col_fnotes_here<-", function(obj, value) standardGeneric("col_fnotes
 #' @export
 #' @rdname int_methods
 setMethod("col_fnotes_here<-", "ANY", function(obj, value) {
-  warning("col_fnotes_here<- is deprecated since {rtables} version 0.6.5.9011. Please use col_footnotes<- instead.")
+  .Deprecated(
+    new = "col_footnotes<-",
+    old = "col_fnotes_here<-",
+    msg = "col_fnotes_here<- was deprecated in {rtables} version 0.6.5.9011. Please use col_footnotes<- instead."
+  )
   col_footnotes(obj) <- value
 })
 
 #' @export
 #' @rdname ref_fnotes
 setGeneric("col_footnotes", function(obj) standardGeneric("col_footnotes"))
+
 #' @export
 #' @rdname int_methods
 setMethod("col_footnotes", "LayoutColTree", function(obj) obj@col_footnotes)
+
 #' @export
 #' @rdname int_methods
 setMethod("col_footnotes", "LayoutColLeaf", function(obj) obj@col_footnotes)
@@ -2910,6 +2920,7 @@ setMethod("col_footnotes", "LayoutColLeaf", function(obj) obj@col_footnotes)
 #' @export
 #' @rdname ref_fnotes
 setGeneric("col_footnotes<-", function(obj, value) standardGeneric("col_footnotes<-"))
+
 #' @export
 #' @rdname int_methods
 setMethod("col_footnotes<-", "LayoutColTree", function(obj, value) {
