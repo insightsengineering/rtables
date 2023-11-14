@@ -3291,37 +3291,22 @@ setMethod(
 )
 
 
-
-setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
-
-setMethod(
-  "spl_section_div", "Split",
-  function(obj) obj@child_section_div
-)
-
-
-setGeneric(
-  "spl_section_div<-",
-  function(obj, value) standardGeneric("spl_section_div<-")
-)
-
-setMethod(
-  "spl_section_div<-", "Split",
-  function(obj, value) {
-    obj@child_section_div <- value
-    obj
-  }
-)
-
-
-
 setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
-
 setMethod("trailing_sep", "VTableTree", function(obj) obj@trailing_section_div)
+setMethod("trailing_sep", "LabelRow", function(obj) obj@trailing_section_div)
+setMethod("trailing_sep", "TableRow", function(obj) obj@trailing_section_div)
+
 
 setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
-
 setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+setMethod("trailing_sep<-", "LabelRow", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+setMethod("trailing_sep<-", "TableRow", function(obj, value) {
   obj@trailing_section_div <- value
   obj
 })
@@ -3329,7 +3314,7 @@ setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
 ## setGeneric("apply_kids_section_sep",
 ##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))
 
-## ## eleemntary tables can only have rows and they can't have
+## ## elementary tables can only have rows and they can't have
 ## ## trailing separators
 ## setMethod("apply_kids_section_sep", "ElementaryTable",
 ##           function(tbl, sep) tbl)

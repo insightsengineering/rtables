@@ -306,11 +306,7 @@ setMethod(
       ret <- c(ret, list(kiddfs))
     }
 
-    ret <- do.call(rbind, ret)
-    if (!is.na(trailing_sep(tt))) {
-      ret$trailing_sep[nrow(ret)] <- trailing_sep(tt)
-    }
-    ret
+    do.call(rbind, ret)
   }
 )
 
@@ -349,7 +345,8 @@ setMethod(
       ## these two are unlist calls cause they come in lists even with no footnotes
       nrowrefs = length(rrefs),
       ncellrefs = length(unlist(crefs)),
-      nreflines = reflines
+      nreflines = reflines,
+      trailing_sep = trailing_sep(tt)
     )
     ret
   }
@@ -387,10 +384,11 @@ setMethod(
       nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
         colwidths = colwidths,
         max_width = max_width
-      ))
+      )),
+      trailing_sep = trailing_sep(tt)
     )
     if (!labelrow_visible(tt)) {
-      ret <- ret[0, ]
+      ret <- ret[0, , drop = FALSE]
     }
     ret
   }

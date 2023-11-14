@@ -18,7 +18,8 @@ LabelRow(
   vis = !is.na(label) && nzchar(label),
   cinfo = EmptyColInfo,
   indent_mod = 0L,
-  table_inset = 0L
+  table_inset = 0L,
+  trailing_section_div = NA_character_
 )
 
 .tablerow(
@@ -34,7 +35,8 @@ LabelRow(
   klass,
   indent_mod = 0L,
   footnotes = list(),
-  table_inset = 0L
+  table_inset = 0L,
+  trailing_section_div = NA_character_
 )
 
 DataRow(...)

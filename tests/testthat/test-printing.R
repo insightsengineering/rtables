@@ -683,7 +683,7 @@ test_that("Support for newline characters in all the parts", {
 })
 
 test_that("Separators and wrapping work together", {
-    ## formatters issue #221
+    ## formatters#221 (bug with wrapping) and #762 (analyze allows it)
     df <- data.frame(cat = c( "really long thing its so long",
                              "reasonable thing",
                              "short"),
@@ -691,7 +691,7 @@ test_that("Separators and wrapping work together", {
     
     lyt <- basic_table() %>%
         split_rows_by("cat", section_div = " ") %>%
-        analyze("value")
+        analyze("value", section_div = " ")
     
     tbl <- build_table(lyt, df)
     

@@ -647,7 +647,8 @@ AnalyzeVarSplit <- function(var,
                             extra_args = list(),
                             indent_mod = 0L,
                             label_pos = "default",
-                            cvar = "") {
+                            cvar = "",
+                            section_div = NA_character_) {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
   if (!any(nzchar(defrowlab))) {
@@ -674,7 +675,7 @@ AnalyzeVarSplit <- function(var,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = section_div
   ) ## no content_extra_args
 }
 
@@ -696,7 +697,8 @@ AnalyzeColVarSplit <- function(afun,
                                extra_args = list(),
                                indent_mod = 0L,
                                label_pos = "default",
-                               cvar = "") {
+                               cvar = "",
+                               section_div = NA_character_) {
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
   new("AnalyzeColVarSplit",
     payload = NA_character_,
@@ -716,7 +718,7 @@ AnalyzeColVarSplit <- function(afun,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = section_div
   ) ## no content_extra_args
 }
 
@@ -828,7 +830,8 @@ AnalyzeMultiVars <- function(var,
         indent_mod = indent_mod,
         label_pos = show_kidlabs,
         split_format = split_format,
-        split_na_str = split_na_str
+        split_na_str = split_na_str,
+        section_div = section_div
       ), ## rvis),
       SIMPLIFY = FALSE
     )
@@ -1264,7 +1267,8 @@ setClass("TableRow",
     var_analyzed = "character",
     ##         var_label = "character",
     label = "character",
-    row_footnotes = "list"
+    row_footnotes = "list",
+    trailing_section_div = "character"
   )
 )
 
@@ -1286,7 +1290,8 @@ LabelRow <- function(lev = 1L,
                      vis = !is.na(label) && nzchar(label),
                      cinfo = EmptyColInfo,
                      indent_mod = 0L,
-                     table_inset = 0L) {
+                     table_inset = 0L, 
+                     trailing_section_div = NA_character_) {
   check_ok_label(label)
   new("LabelRow",
     leaf_value = list(),
@@ -1299,7 +1304,8 @@ LabelRow <- function(lev = 1L,
     col_info = cinfo,
     visible = vis,
     indent_modifier = as.integer(indent_mod),
-    table_inset = as.integer(table_inset)
+    table_inset = as.integer(table_inset),
+    trailing_section_div = trailing_section_div
   )
 }
 
@@ -1353,7 +1359,8 @@ setClass("LabelRow",
                       klass,
                       indent_mod = 0L,
                       footnotes = list(),
-                      table_inset = 0L) {
+                      table_inset = 0L, 
+                      trailing_section_div = NA_character_) {
   if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label
   }
@@ -1380,7 +1387,8 @@ setClass("LabelRow",
     na_str = NA_character_,
     indent_modifier = indent_mod,
     row_footnotes = footnotes,
-    table_inset = table_inset
+    table_inset = table_inset,
+    trailing_section_div = trailing_section_div
   )
   rw <- set_format_recursive(rw, format, na_str, FALSE)
   rw
