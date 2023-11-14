@@ -2,19 +2,16 @@
 % Please edit documentation in R/Viewer.R
 \name{Viewer}
 \alias{Viewer}
-\title{Display an \code{\link{rtable}} object in the Viewer pane in \code{RStudio} or in a
-browser}
+\title{Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a browser}
 \usage{
-Viewer(x, y = NULL, row.names.bold = FALSE, ...)
+Viewer(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})}
+\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \link{htmltools})}
 
 \item{y}{optional second argument of same type as \code{x}}
 
-\item{row.names.bold}{row.names.bold boolean, make \code{row.names} bold}
-
-\item{...}{arguments passed to \code{as_html}}
+\item{...}{arguments passed to \code{\link{as_html}}}
 }
 \value{
 not meaningful. Called for the side effect of opening a browser or viewer pane.

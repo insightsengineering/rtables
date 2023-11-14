@@ -255,8 +255,34 @@ test_that("as_html does not trim whitespace", {
     rrow("r3   ", indent = 2)
   )
   html_tbl <- as_html(tbl)
-  html_parts <- html_tbl$children[[1]][[1]]$children
-  expect_true(all(sapply(1:4, function(x) html_parts[[x]]$attribs$style == "white-space:pre;")))
+  html_parts <- html_tbl$children[[1]][[2]]$children
+  expect_true(all(sapply(1:4, function(x) "white-space: pre;" %in% html_parts[[x]]$attribs)))
+})
+
+test_that("as_html bolding works", {
+  tbl <- rtable(
+    header = LETTERS[1:3],
+    format = "xx",
+    rrow("  r1", 1, 2, 3),
+    rrow(" r 2  ", 4, 3, 2, indent = 1),
+    rrow("r3   ", indent = 2)
+  )
+  html_tbl <- as_html(tbl, bold = "row_names")
+  html_parts <- html_tbl$children[[1]][[2]]$children
+  expect_true(all(sapply(2:4, function(x) "font-weight: bold;" %in% html_parts[[x]]$children[[1]][[1]]$attribs)))
+})
+
+test_that("as_html header line works", {
+  tbl <- rtable(
+    header = LETTERS[1:3],
+    format = "xx",
+    rrow("  r1", 1, 2, 3),
+    rrow(" r 2  ", 4, 3, 2, indent = 1),
+    rrow("r3   ", indent = 2)
+  )
+  html_tbl <- as_html(tbl, header_sep_line = TRUE)
+  html_parts <- html_tbl$children[[1]][[2]]$children[[1]]$children[[1]]
+  expect_true(all(sapply(1:4, function(x) "border-bottom: 1px solid black;" %in% html_parts[[x]]$attribs)))
 })
 
 ## https://github.com/insightsengineering/rtables/issues/308
