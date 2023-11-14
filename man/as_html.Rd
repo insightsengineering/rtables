@@ -12,13 +12,16 @@ as_html(
   class_th = NULL,
   link_label = NULL,
   bold = c("header"),
-  header_sep_line = TRUE
+  header_sep_line = TRUE,
+  no_spaces_between_cells = FALSE
 )
 }
 \arguments{
 \item{x}{\code{rtable} object}
 
-\item{width}{width}
+\item{width}{a string to indicate the desired width of the table. Common input formats include a
+percentage of the viewer window width (e.g. \code{"100\%"}) or a distance value (e.g. \code{"300px"}).
+Defaults to \code{NULL}.}
 
 \item{class_table}{class for \code{table} tag}
 
@@ -33,6 +36,8 @@ as_html(
 Defaults to \code{"header"}.}
 
 \item{header_sep_line}{whether a black line should be printed to under the table header. Defaults to \code{TRUE}.}
+
+\item{no_spaces_between_cells}{whether spaces between table cells should be collapsed. Defaults to \code{FALSE}.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.

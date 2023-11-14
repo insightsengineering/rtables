@@ -27,12 +27,15 @@ div_helper <- function(lst, class) {
 #' @param class_table class for `table` tag
 #' @param class_tr class for `tr` tag
 #' @param class_th class for `th` tag
-#' @param width width
+#' @param width a string to indicate the desired width of the table. Common input formats include a 
+#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). 
+#'   Defaults to `NULL`.
 #' @param link_label link anchor label (not including `tab:` prefix) for the table.
 #' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
 #'   `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows).
 #'   Defaults to `"header"`.
 #' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
+#' @param no_spaces_between_cells whether spaces between table cells should be collapsed. Defaults to `FALSE`.
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
@@ -65,7 +68,8 @@ as_html <- function(x,
                     class_th = NULL,
                     link_label = NULL,
                     bold = c("header"),
-                    header_sep_line = TRUE) {
+                    header_sep_line = TRUE,
+                    no_spaces_between_cells = FALSE) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -218,6 +222,10 @@ as_html <- function(x,
       rows,
       list(
         class = class_table,
+        style = paste(
+          if (no_spaces_between_cells) "border-collapse: collapse;", 
+          if (!is.null(width)) paste("width:", width)
+        ),
         tags$caption(sprintf("(\\#tag:%s)", link_label),
           style = "caption-side: top;",
           .noWS = "after-begin"
