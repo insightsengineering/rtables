@@ -101,11 +101,11 @@ update_ref_indexing <- function(tt) {
   all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))
   all_fns <- unlist(t(all_fns))
   unique_fnotes <- unique(sapply(all_fns, ref_msg))
-  
+
   cur_index <- function(ref_fn) {
     match(ref_msg(ref_fn), unique_fnotes)
   }
-  
+
   if (ncol(tt) > 0) {
     tt <- index_col_refs(tt, cur_index)
   } ## col_info(tt) <- index_col_refs(col_info(tt), cur_index)

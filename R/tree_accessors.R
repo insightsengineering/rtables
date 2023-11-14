@@ -2947,8 +2947,10 @@ setMethod(
       cols <- unlist(cols, recursive = FALSE)
     }
     all_col_fnotes <- lapply(cols, col_footnotes)
-    if (is.null(unlist(all_col_fnotes))) return(NULL)
-    
+    if (is.null(unlist(all_col_fnotes))) {
+      return(NULL)
+    }
+
     return(all_col_fnotes)
   }
 )

@@ -519,52 +519,52 @@ test_that("Pagination works with referential footnotes", {
         "range" = rcell(range(x), format = "xx.x - xx.x")
       )
     })
-  
+
   tt <- build_table(lyt, ex_adsl)
-  
+
   fnotes_at_path(tt, rowpath = c("STRATA1", "B", "RACE", "WHITE")) <- "3 Row footnote"
   fnotes_at_path(
-    tt, 
-    rowpath = c("STRATA1", "A", "RACE", "WHITE", "AGE", "range"), 
+    tt,
+    rowpath = c("STRATA1", "A", "RACE", "WHITE", "AGE", "range"),
     colpath = c("ARM", "C: Combination", "SEX", "M")
   ) <- "2 Cell footnote"
   fnotes_at_path(tt, rowpath = c("STRATA1", "A", "RACE", "ASIAN")) <- "1 Row footnote"
   fnotes_at_path(
-    tt, 
-    rowpath = c("STRATA1", "B", "RACE", "WHITE", "AGE", "mean (sd)"), 
+    tt,
+    rowpath = c("STRATA1", "B", "RACE", "WHITE", "AGE", "mean (sd)"),
     colpath = c("ARM", "B: Placebo", "SEX", "F")
   ) <- "2 Cell footnote"
 
   main_title(tt) <- "title with a\nnewline"
   main_footer(tt) <- "wrapped footer with\nnewline"
-  
+
   res <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
   expect_identical(main_title(res[[1]]), main_title(res[[2]]))
   expect_identical(main_title(res[[1]]), main_title(tt))
   expect_identical(main_footer(res[[1]]), main_footer(res[[2]]))
   expect_identical(main_footer(res[[1]]), main_footer(tt))
-  
+
   main_title(tt) <- "this is a long long table title that should be wrapped to a new line"
   main_footer(tt) <- "this is an extra long table main footer and should also be wrapped"
-  
+
   res <- expect_silent(paginate_table(tt, cpp = 60, tf_wrap = TRUE))
   expect_equal(length(res), 4)
-  
+
   ref_fn_res1 <- matrix_form(res[[1]])$ref_fnote_df
   expect_equal(ref_fn_res1$msg, "1 Row footnote")
   expect_equal(ref_fn_res1$ref_index, 1)
   expect_equal(ref_fn_res1$symbol, "1")
-  
+
   ref_fn_res2 <- matrix_form(res[[2]])$ref_fnote_df
   expect_equal(ref_fn_res2$msg, c("1 Row footnote", "2 Cell footnote"))
   expect_equal(ref_fn_res2$ref_index, 1:2)
   expect_equal(ref_fn_res2$symbol, c("1", "2"))
-  
+
   ref_fn_res3 <- matrix_form(res[[3]])$ref_fnote_df
   expect_equal(ref_fn_res3$msg, c("3 Row footnote", "2 Cell footnote"))
   expect_equal(ref_fn_res3$ref_index, 1:2)
   expect_equal(ref_fn_res3$symbol, c("3", "2"))
-  
+
   ref_fn_res4 <- matrix_form(res[[4]])$ref_fnote_df
   expect_equal(ref_fn_res4$msg, "3 Row footnote")
   expect_equal(ref_fn_res4$ref_index, 1)
