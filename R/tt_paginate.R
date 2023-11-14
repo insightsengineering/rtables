@@ -208,6 +208,7 @@ setMethod(
       path <- c(path, obj_name(tt))
     }
     ret <- list()
+    
     ## note this is the **table** not the label row
     if (!visible_only) {
       ret <- c(

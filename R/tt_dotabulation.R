@@ -499,7 +499,8 @@ gen_rowvalues <- function(dfpart,
                        inclNAs,
                        alt_df,
                        extra_args,
-                       spl_context = context_df_row(cinfo = cinfo)) {
+                       spl_context = context_df_row(cinfo = cinfo),
+                       section_div = NA_character_) {
   if (length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L)) {
     cvar <- NULL
   }
@@ -529,6 +530,11 @@ gen_rowvalues <- function(dfpart,
         spl_context_to_disp_path(spl_context),
         call. = FALSE
       )
+    }
+    
+    # Adding section_div to the content row(table)
+    if (!is.na(section_div)) {
+      contkids <- .set_kids_section_div(contkids, section_div)
     }
   } else {
     contkids <- list()
@@ -581,7 +587,7 @@ gen_rowvalues <- function(dfpart,
     error = function(e) e
   )
   
-  kids <- .set_kids_section_div(kids, spl)
+  kids <- .set_kids_section_div(kids, spl_section_div(spl))
   
   if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
@@ -657,13 +663,11 @@ setMethod(
 )
 
 # Adding section_divisors to TableRow
-.set_kids_section_div <- function(lst, spl) {
-  sect_sep <- spl_section_div(spl)
+.set_kids_section_div <- function(lst, sect_sep) {
   if (!is.na(sect_sep)) {
     lst <- lapply(
       lst,
       function(k) {
-        # only for DataRow or ContentRow anyway
         trailing_sep(k) <- sect_sep
         k
       }
@@ -929,7 +933,8 @@ setMethod(
           baselines = baselines,
           cextra_args = content_extra_args(spl),
           ## splval should still be retaining its name
-          spl_context = rbind(spl_context, rsplval)
+          spl_context = rbind(spl_context, rsplval),
+          section_div = spl_section_div(spl)
         )
       },
       dfpart = dataspl,
@@ -949,8 +954,7 @@ setMethod(
       name = obj_name(spl),
       labelrow = LabelRow(
         label = obj_label(spl),
-        vis = isTRUE(vis_label(spl)),
-        trailing_section_div = spl_section_div(spl)
+        vis = isTRUE(vis_label(spl))
       ),
       cinfo = cinfo,
       iscontent = FALSE,
@@ -1020,7 +1024,8 @@ recursive_applysplit <- function(df,
                                  ),
                                  spl_context = context_df_row(cinfo = cinfo),
                                  no_outer_tbl = FALSE,
-                                 parent_sect_split = NA_character_) {
+                                 parent_sect_split = NA_character_,
+                                 section_div = NA_character_) {
   ## pre-existing table was added to the layout
   if (length(splvec) == 1L && is(splvec[[1]], "VTableNodeInfo")) {
     return(splvec[[1]])
@@ -1042,9 +1047,9 @@ recursive_applysplit <- function(df,
     cvar = cvar,
     alt_df = alt_df,
     extra_args = cextra_args,
-    spl_context = spl_context
+    spl_context = spl_context,
+    section_div = section_div
   )
-
 
   nonroot <- lvl != 0L
 
@@ -1118,7 +1123,8 @@ recursive_applysplit <- function(df,
         lev = lvl,
         label = tlabel,
         cinfo = cinfo,
-        vis = make_lrow
+        vis = make_lrow,
+        trailing_section_div = section_div
       ),
       cinfo = cinfo,
       indent_mod = imod

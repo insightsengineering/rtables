@@ -3118,7 +3118,7 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 })
 
 
-
+## Horizontal separator --------------------------------------------------------
 #' Access or recursively set header-body separator for tables
 #'
 #' @inheritParams gen_args
@@ -3173,17 +3173,15 @@ setMethod(
 )
 
 
-
+## Section dividers ------------------------------------------------------------
+# Used for splits
 setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
-
 setMethod(
   "spl_section_div", "Split",
   function(obj) obj@child_section_div
 )
 
-
 setGeneric("spl_section_div<-", function(obj, value) standardGeneric("spl_section_div<-"))
-
 setMethod(
   "spl_section_div<-", "Split",
   function(obj, value) {
@@ -3191,8 +3189,22 @@ setMethod(
     obj
   }
 )
+# Used for table parts
+setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
+setMethod("trailing_sep", "LabelRow", function(obj) obj@trailing_section_div)
+setMethod("trailing_sep", "TableRow", function(obj) obj@trailing_section_div)
 
+setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
+setMethod("trailing_sep<-", "LabelRow", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+setMethod("trailing_sep<-", "TableRow", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
 
+## formatters methods ----------------------------------------------------------
 #' @rdname formatters_methods
 #' @export
 setMethod(
@@ -3288,25 +3300,6 @@ setMethod(
 )
 
 
-setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
-setMethod("trailing_sep", "VTableTree", function(obj) obj@trailing_section_div)
-setMethod("trailing_sep", "LabelRow", function(obj) obj@trailing_section_div)
-setMethod("trailing_sep", "TableRow", function(obj) obj@trailing_section_div)
-
-
-setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
-setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
-  obj@trailing_section_div <- value
-  obj
-})
-setMethod("trailing_sep<-", "LabelRow", function(obj, value) {
-  obj@trailing_section_div <- value
-  obj
-})
-setMethod("trailing_sep<-", "TableRow", function(obj, value) {
-  obj@trailing_section_div <- value
-  obj
-})
 
 ## setGeneric("apply_kids_section_sep",
 ##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))

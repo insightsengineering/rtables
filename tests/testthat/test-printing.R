@@ -682,22 +682,51 @@ test_that("Support for newline characters in all the parts", {
   expect_identical(out, expected)
 })
 
-test_that("Separators and wrapping work together", {
-    ## formatters#221 (bug with wrapping) and #762 (analyze allows it)
-    df <- data.frame(cat = c( "really long thing its so long",
-                             "reasonable thing",
-                             "short"),
-                     value = c(6, 3, 10))
-    
-    lyt <- basic_table() %>%
-        split_rows_by("cat", section_div = " ") %>%
-        analyze("value", section_div = " ")
-    
-    tbl <- build_table(lyt, df)
-    
-    expect_silent(toString(tbl))
-    
-    cw <- propose_column_widths(tbl)
-    cw[1] <- 11
-    expect_silent(toString(tbl, widths = cw))
+test_that("Separators and wrapping work together with getter and setters", {
+  ## formatters#221 (bug with wrapping) and #762 (analyze allows it)
+  df <- data.frame(
+    cat = c(
+      "really long thing its so long"
+    ),
+    value = c(6, 3, 10)
+  )
+  fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+
+  lyt <- basic_table() %>%
+    split_rows_by("cat", section_div = "~") 
+  
+  lyt1 <- lyt %>%
+    analyze("value", afun = fast_afun, section_div = " ")
+  
+  lyt2 <- lyt %>%
+    summarize_row_groups() %>% 
+    analyze("value", afun = fast_afun, section_div = " ")
+
+  tbl1 <- build_table(lyt1, df)
+  tbl2 <- build_table(lyt2, df)
+  mf1 <- matrix_form(tbl1)
+  mf2 <- matrix_form(tbl2)
+  expect_identical(mf1$row_info$trailing_sep, mf2$row_info$trailing_sep)
+  expect_identical(mf1$row_info$trailing_sep, c("~", " ", " "))
+  
+  exp1 <- c(
+    "             all obs",
+    "————————————————————",
+    "really              ",
+    "long thing          ",
+    "its so              ",
+    "long                ",
+    "~~~~~~~~~~~~~~~~~~~~",
+    "  m             6   ",
+    "                    ",
+    "  m/2           5   "
+  )
+
+  cw <- propose_column_widths(tbl)
+  cw[1] <- ceiling(cw[1] / 3)
+  expect_identical(strsplit(toString(tbl1, widths = cw), "\n")[[1]], exp1)
+  
+  # Setter and getter 
+  rtables::get_section_divisors(tbl1)
+  
 })

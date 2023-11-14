@@ -1,6 +1,11 @@
 ## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Section divisors can be set also for analysis rows.
+ * Added setter and getter for section dividers.
+ 
+### Bug Fixes
+ * Fixed a bug that was failing when wrapping and section dividers where used at the same time.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
