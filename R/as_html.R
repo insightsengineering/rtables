@@ -85,15 +85,16 @@ as_html <- function(x,
   cells <- matrix(rep(list(list()), (nlh + nrow(x)) * (nc)), ncol = nc)
 
   for (i in seq_len(nrow(mat$strings))) {
-    # rows <- which(mat$line_grouping == i)
     for (j in seq_len(ncol(mat$strings))) {
       curstrs <- mat$strings[i, j]
+      curspn <- mat$spans[i, j]
+      algn <- mat$aligns[i, j]
+
       inhdr <- i <= nlh
       tagfun <- if (inhdr) tags$th else tags$td
-      
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
-        class = if (j > 1 || i > nlh) paste0("text-", algn),
+        style = paste0("text-align: ", algn, ";"),
         style = if (inhdr && !"header" %in% bold) "font-weight: normal;",
         style = if (i == nlh && header_sep_line) "border-bottom: 1px solid black;",
         colspan = if (curspn != 1) curspn,
@@ -101,16 +102,6 @@ as_html <- function(x,
       )
     }
   }
-
-  ## special casing hax for top_left. We probably want to do this better someday
-  cells[1:nlh, 1] <- mapply(
-    FUN = function(x, algn) {
-      tags$th(x, class = class_th, style = "white-space: pre;")
-    },
-    x = mat$strings[1:nlh, 1],
-    algn = mat$aligns[1:nlh, 1],
-    SIMPLIFY = FALSE
-  )
 
   if (header_sep_line) {
     cells[nlh][[1]] <- htmltools::tagAppendAttributes(
