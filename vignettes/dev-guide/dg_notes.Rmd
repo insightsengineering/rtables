@@ -48,4 +48,37 @@ getClass("Split")
 
 This can be updated only by related layout functions. The most important, that are covered by tests are `analyze` and `split_rows_by`.
 
-Now it is relevant to understand where this information is saved in the table object built by `build_table`. To do that we need to see where it is present and how it is assigned. Let's go bacj to `00tabletree.R`
+Now it is relevant to understand where this information is saved in the table object built by `build_table`. To do that we need to see where it is present and how it is assigned. Let's go back to `00tabletree.R`and look for `trailing_section_div`. As classes definitions goes, you will notice from the search that `trailing_section_div` is present in the virtual classes `TableRow` and `VTableTree`. In the following is the class hierarchy that makes `trailing_section_div:
+
+```{r}
+getClass("TableRow")
+# Extends: 
+# Class "VLeaf", directly
+# Class "VTableNodeInfo", directly
+# Class "VNodeInfo", by class "VLeaf", distance 2
+# 
+# Known Subclasses: "DataRow", "ContentRow", "LabelRow"
+
+getClass("VTableTree")
+# Extends: 
+# Class "VTableNodeInfo", directly
+# Class "VTree", directly
+# Class "VTitleFooter", directly
+# Class "VNodeInfo", by class "VTableNodeInfo", distance 2
+# 
+# Known Subclasses: "ElementaryTable", "TableTree"
+```
+
+Now, to understand why only these two have this feature, lets see the structure of a table built with section dividers:
+
+```{r}
+lyt <- basic_table() %>%
+    split_rows_by("ARM", section_div = "-") %>%
+    split_rows_by("STRATA1", section_div = " ") %>%
+    analyze("AGE")
+
+tbl <- build_table(lyt, DM)
+
+tbl
+```
+

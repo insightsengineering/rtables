@@ -219,7 +219,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current
 #'   level. In post-processing, this can be achieved with [`fnotes_at_path<-`].
-#' @param trailing_sep character(1). String which will be used as a section
+#' @param trailing_section_div character(1). String which will be used as a section
 #'   divider after the printing of the last row contained in this (sub)-table,
 #'   unless that row is also the last table row to be printed overall, or
 #'   `NA_character_` for none (the default). When generated via layouting, this
@@ -231,7 +231,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         cspan, label_pos, cindent_mod, cvar, label, cextra_args,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
-                        trailing_sep, split_na_str,
+                        trailing_section_div, split_na_str,
                         cna_str, inset, table_inset) {
   NULL
 }

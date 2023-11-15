@@ -563,7 +563,7 @@ gen_rowvalues <- function(dfpart,
                                lvl,
                                baselines,
                                spl_context,
-                               section_sep = NA_character_) {
+                               trailing_section_div = NA_character_) {
   stopifnot(is(spl, "VAnalyzeSplit"))
   check_validsplit(spl, df)
   defrlabel <- spl@default_rowlabel
@@ -607,7 +607,7 @@ gen_rowvalues <- function(dfpart,
     format = obj_format(spl),
     na_str = obj_na_str(spl),
     indent_mod = indent_mod(spl),
-    trailing_sep = section_sep
+    trailing_section_div = trailing_section_div
   )
 
   labelrow_visible(ret) <- dolab
@@ -663,12 +663,12 @@ setMethod(
 )
 
 # Adding section_divisors to TableRow
-.set_kids_section_div <- function(lst, sect_sep) {
+.set_kids_section_div <- function(lst, trailing_section_div_char) {
   if (!is.na(sect_sep)) {
     lst <- lapply(
       lst,
       function(k) {
-        trailing_sep(k) <- sect_sep
+        trailing_section_div(k) <- trailing_section_div_char
         k
       }
     )

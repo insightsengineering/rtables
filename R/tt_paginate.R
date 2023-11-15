@@ -346,7 +346,7 @@ setMethod(
       nrowrefs = length(rrefs),
       ncellrefs = length(unlist(crefs)),
       nreflines = reflines,
-      trailing_sep = trailing_sep(tt)
+      trailing_sep = trailing_section_div(tt)
     )
     ret
   }
@@ -385,7 +385,7 @@ setMethod(
         colwidths = colwidths,
         max_width = max_width
       )),
-      trailing_sep = trailing_sep(tt)
+      trailing_sep = trailing_section_div(tt)
     )
     if (!labelrow_visible(tt)) {
       ret <- ret[0, , drop = FALSE]

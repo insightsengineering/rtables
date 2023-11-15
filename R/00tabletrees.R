@@ -1520,7 +1520,7 @@ ElementaryTable <- function(kids = list(),
                             main_footer = character(),
                             prov_footer = character(),
                             hsep = default_hsep(),
-                            trailing_sep = NA_character_,
+                            trailing_section_div = NA_character_,
                             inset = 0L) {
   check_ok_label(label)
   if (is.null(cinfo)) {
@@ -1554,7 +1554,7 @@ ElementaryTable <- function(kids = list(),
     main_footer = main_footer,
     provenance_footer = prov_footer,
     horizontal_sep = hsep,
-    trailing_section_div = trailing_sep
+    trailing_section_div = trailing_section_div
   )
   tab <- set_format_recursive(tab, format, na_str, FALSE)
   table_inset(tab) <- as.integer(inset)
@@ -1618,7 +1618,7 @@ TableTree <- function(kids = list(),
                       prov_footer = character(),
                       page_title = NA_character_,
                       hsep = default_hsep(),
-                      trailing_sep = NA_character_,
+                      trailing_section_div = NA_character_,
                       inset = 0L) {
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
@@ -1651,7 +1651,7 @@ TableTree <- function(kids = list(),
       main_footer = main_footer,
       prov_footer = prov_footer,
       hsep = hsep,
-      trailing_sep = trailing_sep,
+      trailing_section_div = trailing_section_div,
       inset = inset
     )
   } else {
@@ -1673,7 +1673,7 @@ TableTree <- function(kids = list(),
       provenance_footer = prov_footer,
       page_title_prefix = page_title,
       horizontal_sep = "-",
-      trailing_section_div = trailing_sep
+      trailing_section_div = trailing_section_div
     ) ## this is overridden below to get recursiveness
     tab <- set_format_recursive(tab, format, na_str, FALSE)
 

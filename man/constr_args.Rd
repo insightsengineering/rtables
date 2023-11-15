@@ -27,7 +27,7 @@ constr_args(
   page_title,
   page_prefix,
   section_div,
-  trailing_sep,
+  trailing_section_div,
   split_na_str,
   cna_str,
   inset,
@@ -102,7 +102,7 @@ when forcing pagination between the children of this split/table}
 divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
-\item{trailing_sep}{character(1). String which will be used as a section
+\item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
 unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this

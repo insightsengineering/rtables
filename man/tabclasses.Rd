@@ -27,7 +27,7 @@ ElementaryTable(
   main_footer = character(),
   prov_footer = character(),
   hsep = default_hsep(),
-  trailing_sep = NA_character_,
+  trailing_section_div = NA_character_,
   inset = 0L
 )
 
@@ -52,7 +52,7 @@ TableTree(
   prov_footer = character(),
   page_title = NA_character_,
   hsep = default_hsep(),
-  trailing_sep = NA_character_,
+  trailing_section_div = NA_character_,
   inset = 0L
 )
 }
@@ -112,7 +112,7 @@ between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning).}
 
-\item{trailing_sep}{character(1). String which will be used as a section
+\item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
 unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this

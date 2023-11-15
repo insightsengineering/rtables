@@ -3190,16 +3190,16 @@ setMethod(
   }
 )
 # Used for table parts
-setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
-setMethod("trailing_sep", "LabelRow", function(obj) obj@trailing_section_div)
-setMethod("trailing_sep", "TableRow", function(obj) obj@trailing_section_div)
+setGeneric("trailing_section_div", function(obj) standardGeneric("trailing_section_div"))
+setMethod("trailing_section_div", "LabelRow", function(obj) obj@trailing_section_div)
+setMethod("trailing_section_div", "TableRow", function(obj) obj@trailing_section_div)
 
-setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
-setMethod("trailing_sep<-", "LabelRow", function(obj, value) {
+setGeneric("trailing_section_div<-", function(obj, value) standardGeneric("trailing_section_div<-"))
+setMethod("trailing_section_div<-", "LabelRow", function(obj, value) {
   obj@trailing_section_div <- value
   obj
 })
-setMethod("trailing_sep<-", "TableRow", function(obj, value) {
+setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
   obj@trailing_section_div <- value
   obj
 })
@@ -3313,7 +3313,7 @@ setMethod(
 ##    kds <- lapply(tree_children(tbl),
 ##                   function(kid) {
 ##         if(is(kid, "VTableTree"))
-##             trailing_sep(kid) <- sep
+##             trailing_section_div(kid) <- sep
 ##         kid
 ##     })
 
