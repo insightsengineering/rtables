@@ -1,9 +1,13 @@
-## rtables 0.6.5.9009
+## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` argument to print a horizontal line under the table header in rendered HTML output.
+ 
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+ * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
+ * Whitespace is not trimmed when rendering tables with `as_html`.
 
 ## rtables 0.6.5
 ### New Features
@@ -16,9 +20,6 @@
 
 ### Miscellaneous
  * Added slide decks for advanced training as internal files.
-
-### Miscellaneous
-* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
 
 ## rtables 0.6.4
 ### New Features

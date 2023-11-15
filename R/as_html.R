@@ -26,12 +26,18 @@ div_helper <- function(lst, class) {
 #' @param x `rtable` object
 #' @param class_table class for `table` tag
 #' @param class_tr class for `tr` tag
-#' @param class_td class for `td` tag
 #' @param class_th class for `th` tag
-#' @param width width
-#' @param link_label link anchor label (not including \code{tab:} prefix) for the table.
+#' @param width a string to indicate the desired width of the table. Common input formats include a 
+#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). 
+#'   Defaults to `NULL`.
+#' @param link_label link anchor label (not including `tab:` prefix) for the table.
+#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
+#'   `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows).
+#'   Defaults to `"header"`.
+#' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
+#' @param no_spaces_between_cells whether spaces between table cells should be collapsed. Defaults to `FALSE`.
 #'
-#' @return A \code{shiny.tag} object representing \code{x} in HTML.
+#' @return A `shiny.tag` object representing `x` in HTML.
 #'
 #' @examples
 #'
@@ -47,7 +53,7 @@ div_helper <- function(lst, class) {
 #'
 #' as_html(tbl, class_table = "table", class_tr = "row")
 #'
-#' as_html(tbl, class_td = "aaa")
+#' as_html(tbl, bold = c("header", "row_names"))
 #'
 #' \dontrun{
 #' Viewer(tbl)
@@ -59,9 +65,11 @@ as_html <- function(x,
                     width = NULL,
                     class_table = "table table-condensed table-hover",
                     class_tr = NULL,
-                    class_td = NULL,
                     class_th = NULL,
-                    link_label = NULL) {
+                    link_label = NULL,
+                    bold = c("header"),
+                    header_sep_line = TRUE,
+                    no_spaces_between_cells = FALSE) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
@@ -92,6 +100,8 @@ as_html <- function(x,
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
         class = if (j > 1 || i > nrh) paste0("text-", algn),
+        style = if (inhdr && !"header" %in% bold) "font-weight: normal;",
+        style = if (i == nrh && header_sep_line) "border-bottom: 1px solid black;",
         colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
@@ -101,21 +111,54 @@ as_html <- function(x,
   ## special casing hax for top_left. We probably want to do this better someday
   cells[1:nrh, 1] <- mapply(
     FUN = function(x, algn) {
-      tags$th(x, class = class_th, style = "white-space:pre;")
+      tags$th(x, class = class_th, style = "white-space: pre;")
     },
     x = mat$strings[1:nrh, 1],
     algn = mat$aligns[1:nrh, 1],
     SIMPLIFY = FALSE
   )
 
-  # indent row names
+  if (header_sep_line) {
+    cells[nrh][[1]] <- htmltools::tagAppendAttributes(
+      cells[nrh, 1][[1]],
+      style = "border-bottom: 1px solid black;"
+    )
+  }
+
+  # row labels style
   for (i in seq_len(nrow(x))) {
     indent <- mat$row_info$indent[i]
-    if (indent > 0) {
+    if (indent > 0) { # indentation
       cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
-        style = paste0("padding-left: ", indent * 3, "ch")
+        style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
+    if ("row_names" %in% bold) { # font weight
+      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i + nrh, 1][[1]],
+        style = paste0("font-weight: bold;")
+      )
+    }
+  }
+
+  # label rows style
+  if ("label_rows" %in% bold) {
+    which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
+    cells[which_lbl_rows + nrh, ] <- lapply(
+      cells[which_lbl_rows + nrh, ],
+      htmltools::tagAppendAttributes,
+      style = "font-weight: bold;"
+    )
+  }
+
+  # content rows style
+  if ("content_rows" %in% bold) {
+    which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
+    cells[which_cntnt_rows + nrh, ] <- lapply(
+      cells[which_cntnt_rows + nrh, ],
+      htmltools::tagAppendAttributes,
+      style = "font-weight: bold;"
+    )
   }
 
   if (any(!mat$display)) {
@@ -147,22 +190,25 @@ as_html <- function(x,
   rows <- apply(cells, 1, function(row) {
     tags$tr(
       class = class_tr,
+      style = "white-space: pre;",
       Filter(function(x) !identical(x, NA_integer_), row)
     )
   })
+
+  hsep_line <- tags$hr(class = "solid")
 
   hdrtag <- div_helper(
     class = "rtables-titles-block",
     list(
       div_helper(
         class = "rtables-main-titles-block",
-        lapply(main_title(x), tags$p,
+        lapply(main_title(x), if ("main_title" %in% bold) tags$b else tags$p,
           class = "rtables-main-title"
         )
       ),
       div_helper(
         class = "rtables-subtitles-block",
-        lapply(subtitles(x), tags$p,
+        lapply(subtitles(x), if ("subtitles" %in% bold) tags$b else tags$p,
           class = "rtables-subtitle"
         )
       )
@@ -176,9 +222,13 @@ as_html <- function(x,
       rows,
       list(
         class = class_table,
+        style = paste(
+          if (no_spaces_between_cells) "border-collapse: collapse;", 
+          if (!is.null(width)) paste("width:", width)
+        ),
         tags$caption(sprintf("(\\#tag:%s)", link_label),
-          style = "caption-side:top;",
-          .noWS = "after-begin", hdrtag
+          style = "caption-side: top;",
+          .noWS = "after-begin"
         )
       )
     )
@@ -209,10 +259,13 @@ as_html <- function(x,
   ## we want them to be there but empty??
   ftrlst <- list(
     if (length(mat$ref_footnotes) > 0) rfnotes,
+    if (length(mat$ref_footnotes) > 0) hsep_line,
     if (length(main_footer(x)) > 0) mftr,
+    if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(), # line break
     if (length(prov_footer(x)) > 0) pftr
   )
 
+  if (!is.null(unlist(ftrlst))) ftrlst <- c(list(hsep_line), ftrlst)
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
 
   ftrtag <- div_helper(
@@ -222,7 +275,8 @@ as_html <- function(x,
 
   div_helper(
     class = "rtables-all-parts-block",
-    list( # hdrtag,
+    list(
+      hdrtag,
       tabletag,
       ftrtag
     )
