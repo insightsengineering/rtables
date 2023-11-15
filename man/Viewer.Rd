@@ -7,7 +7,7 @@
 Viewer(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \link{htmltools})}
+\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools} package)}
 
 \item{y}{optional second argument of same type as \code{x}}
 
