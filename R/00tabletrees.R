@@ -1,5 +1,4 @@
-## Split types
-## -----------
+## Split types -----------------------------------------------------------------
 ## variable: split on distinct values of a variable
 ## all: include all observations (root 'split')
 ## rawcut: cut on static values of a variable
@@ -1018,8 +1017,7 @@ make_child_pos <- function(parpos,
 }
 
 
-###
-### Virtual Classes
+# Virtual Classes for Tree Nodes and Layouts =================================
 ###
 ### Virtual class hiearchy for the various types of
 ### trees in use in the S4 implementation of the TableTree
@@ -1151,7 +1149,7 @@ LayoutColLeaf <- function(lev = 0L,
 
 
 
-## Instantiated column info class
+## Instantiated column info class ==============================================
 ##
 ## This is so we don't need multiple arguments
 ## in the recursive functions that track
@@ -1239,10 +1237,7 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
 }
 
 
-
-
-
-## TableTrees
+## TableTrees and row classes ==================================================
 ## XXX Rowspans as implemented dont really work
 ## they're aren't attached to the right data structures
 ## during conversions.

@@ -23,6 +23,29 @@ This is a collection of notes divided by issues and it is a working document tha
 
 ## `section_div` notes
 
-Everything in the layout is built over split objects, that reside in `00_tabletrees.R`. There `section_div` is defined internally in each split object as `child_section_div` and assigned to `NA_character` as default. 
+Everything in the layout is built over split objects, that reside in `00_tabletrees.R`. There `section_div` is defined internally in each split object as `child_section_div` and assigned to `NA_character` as default. This needs to be in all split objects that need to have a separator divisor. Object-wise, the virtual class `Split` contains `section_div` and it has the following subclasses. I tagged with "X" constructor that allows for `section_div` to be assigned to a value different than `NA_character`, and "NX" otherwise.
 
 ```{r}
+library(rtables)
+getClass("Split")
+# Known Subclasses: 
+#? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
+# Class "AllSplit", directly            # NX
+# Class "VarStaticCutSplit", directly   # X via make_static_cut_split
+# Class "VarDynCutSplit", directly      # X
+# Class "VAnalyzeSplit", directly       # X
+#? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)
+# Class "VarLevelSplit", by class "CustomizableSplit", distance 2            # X
+# Class "MultiVarSplit", by class "CustomizableSplit", distance 2            # X
+# Class "RootSplit", by class "AllSplit", distance 2                         # NX
+# Class "ManualSplit", by class "AllSplit", distance 2                       # X
+# Class "CumulativeCutSplit", by class "VarStaticCutSplit", distance 2       # X via make_static_cut_split
+# Class "AnalyzeVarSplit", by class "VAnalyzeSplit", distance 2         # Virtual
+# Class "AnalyzeColVarSplit", by class "VAnalyzeSplit", distance 2           # X
+# Class "AnalyzeMultiVars", by class "CompoundSplit", distance 2             # X
+# Class "VarLevWBaselineSplit", by class "VarLevelSplit", distance 3         # NX
+```
+
+This can be updated only by related layout functions. The most important, that are covered by tests are `analyze` and `split_rows_by`.
+
+Now it is relevant to understand where this information is saved in the table object built by `build_table`. To do that we need to see where it is present and how it is assigned. Let's go bacj to `00tabletree.R`
