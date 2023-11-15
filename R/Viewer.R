@@ -5,7 +5,7 @@ NULL
 #'
 #' The table will be displayed using the bootstrap styling for tables.
 #'
-#' @param x object of class `rtable` or `shiny.tag` (defined in [htmltools])
+#' @param x object of class `rtable` or `shiny.tag` (defined in `htmltools` package)
 #' @param y optional second argument of same type as `x`
 #' @param ... arguments passed to [`as_html`]
 #'
