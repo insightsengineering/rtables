@@ -2953,10 +2953,6 @@ setMethod(
 )
 
 
-
-
-
-
 #' @export
 #' @rdname ref_fnotes
 setGeneric("ref_msg", function(obj) standardGeneric("ref_msg"))
@@ -3017,7 +3013,6 @@ setMethod(
     ttrp
   }
 )
-
 
 
 #' @param rowpath character or NULL. Path within row structure. \code{NULL}
@@ -3189,12 +3184,18 @@ setMethod(
     obj
   }
 )
-# Used for table parts
+
+# Used for table object parts
 setGeneric("trailing_section_div", function(obj) standardGeneric("trailing_section_div"))
+setMethod("trailing_section_div", "VTableTree", function(obj) obj@trailing_section_div)
 setMethod("trailing_section_div", "LabelRow", function(obj) obj@trailing_section_div)
 setMethod("trailing_section_div", "TableRow", function(obj) obj@trailing_section_div)
 
 setGeneric("trailing_section_div<-", function(obj, value) standardGeneric("trailing_section_div<-"))
+setMethod("trailing_section_div<-", "VTableTree", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
 setMethod("trailing_section_div<-", "LabelRow", function(obj, value) {
   obj@trailing_section_div <- value
   obj
@@ -3204,6 +3205,64 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
   obj
 })
 
+# section_div getter from table object
+setGeneric("section_div", function(obj) standardGeneric("section_div"))
+setMethod("section_div", "VTableTree", function(obj) {
+  if (labelrow_visible(obj)) {
+    section_div <- trailing_section_div(obj)
+    labelrow_div <- trailing_section_div(tt_labelrow(obj))
+    rest_of_tree <- section_div(tree_children(obj))
+    
+    # Case it is the section itself and not the labels to have a trailing sep
+    if (!is.na(section_div)) {
+      rest_of_tree[length(rest_of_tree)] <- section_div
+    }
+    unname(c(labelrow_div, rest_of_tree))
+  } else {
+    unname(section_div(tree_children(obj)))
+  }
+})
+setMethod("section_div", "list", function(obj) {
+  unlist(lapply(obj, section_div))
+})
+setMethod("section_div", "TableRow", function(obj) {
+  trailing_section_div(obj)
+})
+
+# section_div setter from table object
+setGeneric("section_div<-", function(obj, value) standardGeneric("section_div<-"))
+setMethod("section_div<-", "VTableTree", function(obj, value) {
+  char_v <- as.character(value)
+  browser()
+  .check_char_vector_for_section_div(char_v, nrow(tbl))
+  if (labelrow_visible(obj)) {
+    trailing_section_div(tt_labelrow(obj)) <- char_v[1]
+    if (length(char_v) > 1) {
+      section_div(tree_children(obj)) <- char_v[-1]
+    }
+  } else {
+    section_div(tree_children(obj)) <- char_v
+  }
+})
+setMethod("section_div<-", "list", function(obj, value) {
+  for (i in seq_along(obj)) {
+    section_div(obj[[i]]) <- value
+  }
+})
+setMethod("section_div<-", c("TableRow", "LabelRow"), function(obj, value) {
+  trailing_section_div(obj) <- value
+})
+
+.check_char_vector_for_section_div <- function(char_v, len) {
+  if (length(char_v) != len) {
+    stop("Length of section_div must be equal to the number of rows in the table")
+  }
+  nchar_check_v <- nchar(char_v)
+  if (any(nchar_check_v > 1, na.rm = TRUE)) {
+    stop("section_div must be a vector of single characters or NAs")
+  }
+}
+
 ## formatters methods ----------------------------------------------------------
 #' @rdname formatters_methods
 #' @export
@@ -3211,7 +3270,6 @@ setMethod(
   "table_inset", "VTableNodeInfo", ## VTableTree",
   function(obj) obj@table_inset
 )
-
 
 #' @rdname formatters_methods
 #' @export
@@ -3224,7 +3282,6 @@ setMethod(
 ## #' @export
 ## setMethod("table_inset", "InstantiatedColumnInfo",
 ##           function(obj) obj@table_inset)
-
 
 #' @rdname formatters_methods
 #' @export
@@ -3255,7 +3312,6 @@ setMethod(
   }
 )
 
-
 #' @rdname formatters_methods
 #' @export
 setMethod(
@@ -3273,16 +3329,6 @@ setMethod(
   }
 )
 
-## covered now by VTableNodeInfo method
-
-## #' @rdname formatters_methods
-## #' @export
-## setMethod("table_inset<-", "TableRow",
-##           function(obj, value) {
-##     obj@table_inset <- value
-##     obj
-## })
-
 #' @rdname formatters_methods
 #' @export
 setMethod(
@@ -3298,25 +3344,3 @@ setMethod(
     obj
   }
 )
-
-
-
-## setGeneric("apply_kids_section_sep",
-##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))
-
-## ## elementary tables can only have rows and they can't have
-## ## trailing separators
-## setMethod("apply_kids_section_sep", "ElementaryTable",
-##           function(tbl, sep) tbl)
-## setMethod("apply_kids_section_sep", "TableTree",
-##           function(tbl, sep) {
-##    kds <- lapply(tree_children(tbl),
-##                   function(kid) {
-##         if(is(kid, "VTableTree"))
-##             trailing_section_div(kid) <- sep
-##         kid
-##     })
-
-##     tree_children(tbl) <- kds
-##     tbl
-## })

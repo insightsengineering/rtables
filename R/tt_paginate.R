@@ -306,7 +306,13 @@ setMethod(
       ret <- c(ret, list(kiddfs))
     }
 
-    do.call(rbind, ret)
+    ret <- do.call(rbind, ret)
+    
+    # Case where it is Elementary table or VTableTree (not LabelRow)
+    if (!is.na(trailing_section_div(tt))) {
+      ret$trailing_sep[nrow(ret)] <- trailing_section_div(tt)
+    }
+    ret
   }
 )
 

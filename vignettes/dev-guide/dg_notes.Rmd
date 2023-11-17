@@ -73,16 +73,21 @@ Now, to understand why only these two have this feature, lets see the structure 
 
 ```{r}
 lyt <- basic_table() %>%
-    split_rows_by("ARM", section_div = "-") %>%
-    split_rows_by("STRATA1", section_div = " ") %>%
-    analyze("AGE", section_div = "+")
+    split_rows_by("ARM", section_div = "+") %>%
+    split_rows_by("STRATA1", section_div = "") %>%
+    analyze("AGE", 
+            afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)), 
+            format = list("Mean" = "xx.", "Standard deviation" = "xx."), 
+            section_div = "~")
 
 tbl <- build_table(lyt, DM)
 
 print(tbl)
 print(class(tbl)) # TableTree
 methods("trailing_section_div")
-# [1] trailing_section_div,LabelRow-method trailing_section_div,TableRow-method
+# [1] trailing_section_div,LabelRow-method   
+# trailing_section_div,TableRow-method   
+# trailing_section_div,VTableTree-method
 ```
 
 In the above, we show that trailing_section_div has methods for `TableRow` virtual object and `LabelRow`. We are going to add again `TableTree` as we need to have section div (xxx reformat as it will be).

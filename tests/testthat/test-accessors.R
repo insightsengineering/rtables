@@ -223,3 +223,7 @@ test_that("header sep setting works", {
   horizontal_sep(tbl2) <- "="
   hsep_test(tbl2, "=")
 })
+
+test_that("section_div getter and setter works", {
+  expect_identical(get_section_div(tbl), make_row_df(tbl)$trailing_sep)
+})
