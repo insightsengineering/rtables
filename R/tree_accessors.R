@@ -3233,24 +3233,27 @@ setMethod("section_div", "TableRow", function(obj) {
 setGeneric("section_div<-", function(obj, value) standardGeneric("section_div<-"))
 setMethod("section_div<-", "VTableTree", function(obj, value) {
   char_v <- as.character(value)
-  browser()
-  .check_char_vector_for_section_div(char_v, nrow(tbl))
+  .check_char_vector_for_section_div(char_v, nrow(obj))
   if (labelrow_visible(obj)) {
     trailing_section_div(tt_labelrow(obj)) <- char_v[1]
-    if (length(char_v) > 1) {
-      section_div(tree_children(obj)) <- char_v[-1]
-    }
+    section_div(tree_children(obj)) <- char_v[-1]
   } else {
     section_div(tree_children(obj)) <- char_v
   }
+  obj
 })
 setMethod("section_div<-", "list", function(obj, value) {
+  char_v <- as.character(value)
   for (i in seq_along(obj)) {
-    section_div(obj[[i]]) <- value
+    list_element_size <- nrow(obj[[i]])
+    init <- (i - 1) * list_element_size + 1
+    chunk_of_char_v_to_take <- seq(init, init + list_element_size - 1)
+    section_div(obj[[i]]) <- char_v[chunk_of_char_v_to_take]
   }
 })
 setMethod("section_div<-", c("TableRow", "LabelRow"), function(obj, value) {
   trailing_section_div(obj) <- value
+  obj
 })
 
 .check_char_vector_for_section_div <- function(char_v, len) {
