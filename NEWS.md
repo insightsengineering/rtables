@@ -8,6 +8,7 @@
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
+ * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` argument to print a horizontal line under the table header in rendered HTML output.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
